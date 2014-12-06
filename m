@@ -1,63 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Dec 2014 13:29:46 +0100
-Subject: [Buildroot] [PATCH 3/3 v3] fs/ext2: add option to specify a
-	filesystem label
-In-Reply-To: <cover.1417868913.git.yann.morin.1998@free.fr>
-References: <cover.1417868913.git.yann.morin.1998@free.fr>
-Message-ID: <0244e2c2f1c3933e110df8478544efafe66c7e5c.1417868913.git.yann.morin.1998@free.fr>
+Date: Sat, 6 Dec 2014 13:44:41 +0100
+Subject: [Buildroot] [PATCH 4/4] pkg-download: check hasahes for locally
+ cached files
+In-Reply-To: <20141203185157.GG4152@free.fr>
+References: <cover.1417475935.git.yann.morin.1998@free.fr>
+ <e1cc728a60b6a250ea395ee429dba7f470b1f8a8.1417475935.git.yann.morin.1998@free.fr>
+ <20141202093148.1a1f7db7@free-electrons.com>
+ <20141203185157.GG4152@free.fr>
+Message-ID: <20141206124441.GC9544@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Filesystems of the ext familly can carry a filesystem label.
-Add an option for the user to specify such a label.
+Thomas, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: K?roly Kasza <kaszak@gmail.com>
+On 2014-12-03 19:51 +0100, Yann E. MORIN spake thusly:
+> On 2014-12-02 09:31 +0100, Thomas Petazzoni spake thusly:
+> > On Tue,  2 Dec 2014 00:24:09 +0100, Yann E. MORIN wrote:
+> > > In some cases, upstream just update their releases in-place, without
+> > > renaming them. When that package is updated in Buildroot, a new hash to
+> > > match the new upstream release is included in the corresponding .hash
+> > > file.
+> > > 
+> > > As a consequence, users who previously downloaded that package's tarball
+> > > with an older version of Buildroot, will get stuck with an old archive
+> > > for that package, and after updating their Buildroot copy, will be greeted
+> > > with a failed download, due to the local file not matching the new
+> > > hashes.
+> > > 
+> > > So, to avoid this situation, check the hashes prior to doing the
+> > > download. If the hashes match, consider the locally cached file genuine,
+> > > and do not download it. However, if the locally cached file does not
+> > > match the known hashes we have for it, it is promptly removed, and a
+> > > download is re-attempted.
+> > 
+> > So in essence, from now on, at each build, we are re-checking the
+> > hashes, while previously they were checked only when the file was
+> > downloaded. Not that great for build time, but well, again maybe the
+> > time to check the hashes is negligible compared to the build time. And
+> > we can assume that a big tarball, which takes a certain time to hash,
+> > will also contain a lot of source code to build, so the time to
+> > calculate the hash is proportional to the build time of the package. So
+> > if you're ready to spend several minutes to build Qt, you're probably
+> > ready to wait a few more seconds to calculate the hash of the Qt
+> > tarball each time.
+> 
+> I just hashed a 231MiB tarball (qt-everywhere-opensource-src-4.8.6.tar.gz)
+> and it takes (wall-clock time, core-i5 @2.5GHz):
+>   - cache-cold sha1  : 1.914s
+>   - cache-hot  sha1  : 0.762s
+>   - cache-hot  sha256: 1.270s
+> 
+> (cache-cold sha256 is not easily done, I'd have to either umount /home
+> or reboot...)
+> 
+> Needless to say this is negligible when compared to the build time of Qt
+> (I do not have the numbers available for now, but I doubt it would be
+> less than 30 seconds on my machine).
+> 
+> I will add those numbers in the commit log next time I respin.
 
----
-Changes v2 -> v3:
-  - fix quoting for when the label contains a space  (K?roly)
----
- fs/ext2/Config.in | 3 +++
- fs/ext2/ext2.mk   | 8 ++++++++
- 2 files changed, 11 insertions(+)
+Please also note that this in fact does not change the current
+behaviour. Even today, we are checking the hashes for locally cached
+files, so this solution adds no overhead.
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 8751b62..5b1cd0c 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -41,6 +41,9 @@ config BR2_TARGET_ROOTFS_EXT2_REV
- 	default 0   if BR2_TARGET_ROOTFS_EXT2_2r0
- 	default 1   if !BR2_TARGET_ROOTFS_EXT2_2r0
- 
-+config BR2_TARGET_ROOTFS_EXT2_LABEL
-+	string "filesystem label"
-+
- config BR2_TARGET_ROOTFS_EXT2_BLOCKS
- 	int "size in blocks (leave at 0 for auto calculation)"
- 	default 0
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 96b7a4a..1cac72e 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -18,6 +18,14 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
- EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
- endif
- 
-+# Not qstrip-ing the variable, because it may contain spaces, but we must
-+# qstrip it when checking. Furthermore, we need to further quote it, so
-+# that the quotes do not get eaten by the echo statement when creating the
-+# fakeroot script
-+ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
-+EXT2_OPTS += -l '$(BR2_TARGET_ROOTFS_EXT2_LABEL)'
-+endif
-+
- ROOTFS_EXT2_DEPENDENCIES = host-mke2img
- 
- define ROOTFS_EXT2_CMD
+To understand why, here's a summary of what happened before and after
+thise series:
+
+    before:                         after:
+
+    check if file is cached         check if the file is cached
+    if not cached,                  if cached,
+        download the file               check the hashes
+    check the hashes                    if match,
+                                            stop
+                                        rm cached file
+                                    downlaod file
+                                    check hashes
+
+So, as you can see, in case the file is already cached locally, and the
+hashes match, we don't do much more than today, except the checks are
+not done in the same order, which allows us to attempt a re-download in
+case of hash mismatch.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
