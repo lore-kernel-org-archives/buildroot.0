@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Dec 2014 19:20:32 +0100
-Subject: [Buildroot] [PATCH 1/3 v3] package/mke2img: new package
-In-Reply-To: <7e35d73bbeb1b9e6d4cc1b1a3142fbfa4ab572d7.1417868913.git.yann.morin.1998@free.fr>
+Date: Sat, 6 Dec 2014 19:21:52 +0100
+Subject: [Buildroot] [PATCH 2/3 v3] fs/ext2: use the new mke2img host
+ package
+In-Reply-To: <00d5e727f0799ef11b4fb935d8f80bb2206002fc.1417868913.git.yann.morin.1998@free.fr>
 References: <cover.1417868913.git.yann.morin.1998@free.fr>
- <7e35d73bbeb1b9e6d4cc1b1a3142fbfa4ab572d7.1417868913.git.yann.morin.1998@free.fr>
-Message-ID: <20141206192032.7f46d261@free-electrons.com>
+ <00d5e727f0799ef11b4fb935d8f80bb2206002fc.1417868913.git.yann.morin.1998@free.fr>
+Message-ID: <20141206192152.6eca4567@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +14,27 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sat,  6 Dec 2014 13:29:44 +0100, Yann E. MORIN wrote:
-
-> This new script is highly modeled from the existing genext2fs.sh, but
-> was slightly refreshed, and a new, supposedly sane set of options has
-> been choosen for the features we need (see above), and some new options
-> were added, too, rather than relying on the arguments order or
-> environment variables:
->   -b <nb-blocks>    number of blocks in the filesystem
->   -i <nb-inodes>    number of inodes in the filesystem
->   -r <pc-reserved>  percentage of reserved blocks
-> * -d <root-dir>     directory containing the root of the filesystem
-> * -o <img-file>     output image file
-> * -G <ext-gen>      extfs generation: 2, 3, or 4
-> * -R <ext-rev>      ext2 revision: 0 or 1 (1 is assumed for ext3 and ext4)
->   -l <label>        filesystem label
->   -u <uid>          filesystem UUID; if not specified, a random one is used
+On Sat,  6 Dec 2014 13:29:45 +0100, Yann E. MORIN wrote:
+> And get rid of the old genext2fs.sh wrapper.
 > 
-> * Mandatory options
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Tested-by: Karoly Kasza <kaszak@gmail.com>
+> Reviewed-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+>  fs/ext2/ext2.mk      |  13 +++---
+>  fs/ext2/genext2fs.sh | 121 ---------------------------------------------------
+>  2 files changed, 5 insertions(+), 129 deletions(-)
+>  delete mode 100755 fs/ext2/genext2fs.sh
 
-What about putting this in a "help" of the mke2img tool, or at least in
-the comment header at the beginning of the script?
-
-> +    # genext2fs does not generate a UUID, but fsck will whine if one is
-> +    # is missing, so we need to add a UUID.
-
-duplicate "is".
-
-> +    # Of course, this has to happend _before_ we run fsck.
-
-happend -> happen
-
-> +    # Also, some ext4 metadata are based on the UUID, so we must
-> +    # set it before we can convert the filesystem to ext4.
-> +    # If the user did not specify a UUID, we generate a random one.
-> +    # Although a random UUID may seem bad for reproducibility, there
-> +    # already are so many things that are not reproducible in a
-
-s/already are/are already/
-
-Other than that, looks good.
-
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  (on x86-64 in qemu, tested an ext4 filesystem with only the ext4
  kernel driver compiled in, and then tested an ext2 filesystem with
  only the ext2 kernel driver compiled in).
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
