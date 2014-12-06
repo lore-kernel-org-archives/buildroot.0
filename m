@@ -1,46 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Dec 2014 16:24:09 +0100
-Subject: [Buildroot] [PATCH 2/3] package/tvheadend: Fix inclusion of DVB
- frequency tables in bundled build
-In-Reply-To: <1417878033-29169-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1417878033-29169-1-git-send-email-bernd.kuhls@t-online.de>
- <1417878033-29169-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141206162409.4cc62957@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 6 Dec 2014 16:24:00 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libnss: need dynamic library
+	support
+In-Reply-To: <20141206161900.77525f04@free-electrons.com>
+References: <1417871738-13421-1-git-send-email-s.martin49@gmail.com>
+ <1417871738-13421-2-git-send-email-s.martin49@gmail.com>
+ <20141206161900.77525f04@free-electrons.com>
+Message-ID: <CAHXCMMJRb4sTn8ym+ctc3FTWMj8ZAwaaN0iwuP2i=ahNUTe1_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On Sat, Dec 6, 2014 at 4:19 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Samuel Martin,
+>
+> On Sat,  6 Dec 2014 14:15:38 +0100, Samuel Martin wrote:
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/e01733c4b8c23f62e2081f0c4aadc16e22c4a2c4/
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  package/libnss/Config.in | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+>> index 690f928..d57c7a2 100644
+>> --- a/package/libnss/Config.in
+>> +++ b/package/libnss/Config.in
+>> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+>>       depends on BR2_LARGEFILE
+>>       depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+>>       depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+>> +     depends on !BR2_PREFER_STATIC_LIB
+>
+> What about the reverse dependencies, such as ecryptfs-utils?
 
-On Sat,  6 Dec 2014 16:00:32 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/tvheadend.mk |    3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index e0ce160..7d0ae08 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -58,6 +58,9 @@ define TVHEADEND_CONFIGURE_CMDS
->  endef
->  
->  define TVHEADEND_BUILD_CMDS
-> +	$(INSTALL) -d $(@D)/data/dvb-scan
-> +	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
-> +	touch $(@D)/data/dvb-scan/.stamp
->  	$(MAKE) -C $(@D)
->  endef
+oops! I missed that. I'll respin the patch
 
-This probably needs a little comment in the code.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
