@@ -1,20 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Dec 2014 12:13:53 +0100
-Subject: [Buildroot] [PATCH 3/9 v2] docs/manual: document the new variable
-	FOO_UPSTREAM_SOURCE
+Date: Sat,  6 Dec 2014 12:13:54 +0100
+Subject: [Buildroot] [PATCH 4/9 v2] pkg-infra: add support for GitHub as a
+	forge
 In-Reply-To: <cover.1417863715.git.yann.morin.1998@free.fr>
 References: <cover.1417863715.git.yann.morin.1998@free.fr>
-Message-ID: <32f7fa03dafe834f9d38336ac788879d3610e4a0.1417863715.git.yann.morin.1998@free.fr>
+Message-ID: <6c9c989b7b9f384e400786d17b6251708c07edc2.1417863715.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the documentation for the new _UPSTREAM_SOURCE variable.
-Explain that the local filename is to be used in the .hash file.
+Our github helper currently uses a download scheme that is not
+guaranteed to be stable over the long run. So, we have a github helper
+that generates the correct _SITE value, so we can change it in a single
+place, rather than touch all the packages.
 
-Fix a .Note section marking at the same time.
+This URL scheme is not stable, but GitHub publishes an API for dealing
+with the content hosted on GitHub:
+    https://developer.github.com/v3/
+
+This API defines a stable end-point for downloading any abitrary commit
+from a repository:
+    https://developer.github.com/v3/repos/contents/#get-archive-link
+
+    GET /repos/:owner/:repo/:archive_format/:ref
+
+Switching to using the API implies we can no longer use the github
+helper, because all it can do is only return an URL. But the way the
+GitHub API works means we have to set both FOO_UPSTREAM_SOURCE and
+FOO_SITE for a package, because the remote name is only $(FOO_VERSION).
+
+The only way to continue using our github helper would be to make it
+generate Makefile code to set two variables. This is not nice, as this
+would be the only thing in the package infra to rely on generating
+Makefile code.
+
+Also, the API is rate-limited, and allows only 60 un-authenticated
+requests per hour. This is not acceptable for Buildroot, as a user may
+well select more than 60 packages coming from GitHub (we currently have
+111 GitHub-hosted packages).
+
+Also, some other forges (like Gitorious, Google code...) may need a
+download scheme that is closer to the GitHub API scheme (Gitorious) than
+what we currently have with _SOURCE and _SITE, and thus require the use
+of _UPSTREAM_SOURCE as well.
+
+Introduce a "forge" as a new concept for specifying the upstream
+location, whereby the package can tell the type of forge and the
+forge-related path of the repository. This is in turned interpreted by
+the package infrastructure, which uses it to internally set the
+appropriate variables to the appropriate values:
+
+    FOO_FORGE = forge-name
+    FOO_FORGE_PATH = user/repository
+
+This patch introduces GitHub as the first such "forge" we support.
+Packages will be converted over in a subsequent patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -23,65 +65,26 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Baruch Siach <baruch@tkos.co.il>
-
 ---
-Changes v1 -> v2:
-  - add blurb in .hash file, that the filename is the local one, not the
-    remote one  (Baruch)
----
- docs/manual/adding-packages-directory.txt |  8 +++++++-
- docs/manual/adding-packages-generic.txt   | 12 ++++++++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 0ea03f9..07f6427 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -390,6 +390,11 @@ hash, each line being space-separated, with these three fields:
- ** for +sha512+, 128 hexadecimal characters
- * the name of the file, without any directory component
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 30bce59..dd67b51 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -353,6 +353,12 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_VERSION = custom
+ endif
  
-+.Note
-+If the remote and the local filenames differ, you must use the local
-+filename, that is the filename referenced in +LIBFOO_SOURCE+, not the one
-+referenced in +LIBFOO_UPSTREAM_SOURCE+.
++ifndef $(2)_SITE
++ifeq ($$($(2)_FORGE),github)
++$(2)_SITE = https://github.com/$$($(2)_FORGE_PATH)/archive/$$($(2)_VERSION)
++endif # github
++endif
 +
- Lines starting with a +#+ sign are considered comments, and ignored. Empty
- lines are ignored.
- 
-@@ -403,7 +408,8 @@ best to add all those hashes in the +.hash+ file. If upstream does not
- provide any hash, then compute at least one yourself, and mention this in a
- comment line above the hashes.
- 
--*Note:* the number of spaces does not matter, so one can use spaces to
-+.Note
-+The number of spaces does not matter, so one can use spaces to
- properly align the different fields.
- 
- The example below defines a +sha1+ and a +sha256+ published by upstream for
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 67a7453..69d1cfa 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -211,6 +211,18 @@ information is (assuming the package name is +libfoo+) :
-   +libfoo-$(LIBFOO_VERSION).tar.gz+. +
-   Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
- 
-+* +LIBFOO_UPSTREAM_SOURCE+ may contain the name of the tarball as
-+  known by upstream. If +HOST_LIBFOO_UPSTREAM_SOURCE+ is not specified,
-+  it defaults to +LIBFOO_UPSTREAM_SOURCE+. If none is specified, then
-+  the value is assumed to be the same as +LIBFOO_SOURCE+.
-+
-+.Note
-++LIBFOO_SOURCE+ is the filename Buildroot will save the tarball as,
-+while +LIBFOO_UPSTREAM_SOURCE+ is the name by which upstream names
-+that tarball. The two are usually the same, except in very rare cases
-+where upstream has a strange naming convention, so you normally should
-+not have to set +LIBFOO_UPSTREAM_SOURCE+.
-+
- * +LIBFOO_PATCH+ may contain a space-separated list of patch file
-   names, that will be downloaded from the same location as the tarball
-   indicated in +LIBFOO_SOURCE+, and then applied to the package source
+ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $$($(3)_SOURCE)
 -- 
 1.9.1
