@@ -1,30 +1,20 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Dec 2014 12:13:52 +0100
-Subject: [Buildroot] [PATCH 2/9 v2] pkg-infra: differentiate remote tarball
-	name from local filename
+Date: Sat,  6 Dec 2014 12:13:53 +0100
+Subject: [Buildroot] [PATCH 3/9 v2] docs/manual: document the new variable
+	FOO_UPSTREAM_SOURCE
 In-Reply-To: <cover.1417863715.git.yann.morin.1998@free.fr>
 References: <cover.1417863715.git.yann.morin.1998@free.fr>
-Message-ID: <bef744df6da6d00760218ff688449f2bb3fdeb4f.1417863715.git.yann.morin.1998@free.fr>
+Message-ID: <32f7fa03dafe834f9d38336ac788879d3610e4a0.1417863715.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some upstreams may use a naming scheme that does not fit well in how
-Buildroot wants to handle filenames.
+Add the documentation for the new _UPSTREAM_SOURCE variable.
+Explain that the local filename is to be used in the .hash file.
 
-For example, GitHub used to have a scheme like:
-    https://github.com/USER/REPO/archive/VERSION.tar.gz
-
-which means we would have a local file named VERSION.tar.gz, when we
-want to have PKG-VERSION.tar.gz
-
-Other forges are also known to have similar schemes. Google Code, for
-example, may also use similarly named files.
-
-Introduce a new variable, FOO_UPSTREAM_SOURCE, which the package may set
-in that case. If not set, it defaults to FOO_SOURCE.
+Fix a .Note section marking at the same time.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
@@ -33,52 +23,65 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
 
 ---
-Note:
-
-A suggested alternative would be to specify the local filename if it
-were to be different from upstream, adding the new variable as
-FOO_LOCAL_SOURCE (or whatever it would be named).
-
-I believe this is not an appropriate solution, because I believe we
-want to show that it is *upstream* doing things weirdly, not us. Using
-the alternative would convey the message that we, Buildroot, are doing
-something weird, which is really not the case.
-
-Besides, I think users should only be concerned about the local
-filename, and thus the value of FOO_SOURCE should really be the filename
-users have to manipulate, always. Having a second, optional variable
-holding the filename risks making it less straightforward in the users'
-eyes.
+Changes v1 -> v2:
+  - add blurb in .hash file, that the filename is the local one, not the
+    remote one  (Baruch)
 ---
- package/pkg-generic.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-directory.txt |  8 +++++++-
+ docs/manual/adding-packages-generic.txt   | 12 ++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9643a30..30bce59 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -84,7 +84,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 		done ; \
- 	fi
- endif
--	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
-+	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_UPSTREAM_SOURCE),$($(PKG)_SOURCE)))
- 	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),\
- 		$(if $(findstring ://,$(p)),\
-@@ -361,6 +361,10 @@ ifndef $(2)_SOURCE
-  endif
- endif
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 0ea03f9..07f6427 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -390,6 +390,11 @@ hash, each line being space-separated, with these three fields:
+ ** for +sha512+, 128 hexadecimal characters
+ * the name of the file, without any directory component
  
-+ifndef $(2)_UPSTREAM_SOURCE
-+  $(2)_UPSTREAM_SOURCE = $$($(2)_SOURCE)
-+endif
++.Note
++If the remote and the local filenames differ, you must use the local
++filename, that is the filename referenced in +LIBFOO_SOURCE+, not the one
++referenced in +LIBFOO_UPSTREAM_SOURCE+.
 +
- ifndef $(2)_PATCH
-  ifdef $(3)_PATCH
-   $(2)_PATCH = $$($(3)_PATCH)
+ Lines starting with a +#+ sign are considered comments, and ignored. Empty
+ lines are ignored.
+ 
+@@ -403,7 +408,8 @@ best to add all those hashes in the +.hash+ file. If upstream does not
+ provide any hash, then compute at least one yourself, and mention this in a
+ comment line above the hashes.
+ 
+-*Note:* the number of spaces does not matter, so one can use spaces to
++.Note
++The number of spaces does not matter, so one can use spaces to
+ properly align the different fields.
+ 
+ The example below defines a +sha1+ and a +sha256+ published by upstream for
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 67a7453..69d1cfa 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -211,6 +211,18 @@ information is (assuming the package name is +libfoo+) :
+   +libfoo-$(LIBFOO_VERSION).tar.gz+. +
+   Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
+ 
++* +LIBFOO_UPSTREAM_SOURCE+ may contain the name of the tarball as
++  known by upstream. If +HOST_LIBFOO_UPSTREAM_SOURCE+ is not specified,
++  it defaults to +LIBFOO_UPSTREAM_SOURCE+. If none is specified, then
++  the value is assumed to be the same as +LIBFOO_SOURCE+.
++
++.Note
+++LIBFOO_SOURCE+ is the filename Buildroot will save the tarball as,
++while +LIBFOO_UPSTREAM_SOURCE+ is the name by which upstream names
++that tarball. The two are usually the same, except in very rare cases
++where upstream has a strange naming convention, so you normally should
++not have to set +LIBFOO_UPSTREAM_SOURCE+.
++
+ * +LIBFOO_PATCH+ may contain a space-separated list of patch file
+   names, that will be downloaded from the same location as the tarball
+   indicated in +LIBFOO_SOURCE+, and then applied to the package source
 -- 
 1.9.1
