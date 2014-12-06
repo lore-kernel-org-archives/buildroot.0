@@ -1,44 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Dec 2014 13:20:54 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] fs/ext2: add option to specify a
- filesystem label
-In-Reply-To: <CABbD_XBqeKXndB6LSPqwrOe=xQazQXPVrW4ujK_XP_qsXDSQAA@mail.gmail.com>
-References: <cover.1417730349.git.yann.morin.1998@free.fr>
- <d98afa0b717cf9585358913fd3d97ba6101d2a2b.1417730349.git.yann.morin.1998@free.fr>
- <CABbD_XBqeKXndB6LSPqwrOe=xQazQXPVrW4ujK_XP_qsXDSQAA@mail.gmail.com>
-Message-ID: <20141206122054.GB9544@free.fr>
+Date: Sat,  6 Dec 2014 13:29:42 +0100
+Subject: [Buildroot] [PATCH 0/3 v3] fs/ext2: misc enhancements (branch
+	yem/fs-vol-id)
+Message-ID: <cover.1417868913.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-K?roly, All,
+Hello All!
 
-On 2014-12-06 12:59 +0100, K?roly Kasza spake thusly:
-> --- a/fs/ext2/ext2.mk
-> > +++ b/fs/ext2/ext2.mk
-> > @@ -18,6 +18,12 @@ ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
-> >  EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
-> >  endif
-> >
-> > +# Not qstrip-ing the variable, because it may contain spaces,
-> > +# but we must qstrip it when checking.
-> > +ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EXT2_LABEL)),)
-> > +EXT2_OPTS += -l $(BR2_TARGET_ROOTFS_EXT2_LABEL)
-> >
-> 
-> Unfortunately this won't work with labels with spaces in them.
-> I recommend using escaped quotation marks like this:
-> 
-> +EXT2_OPTS += -l \"$(BR2_TARGET_ROOTFS_EXT2_LABEL)\"
+This series enhances the fs/ext2 generation.
+Not much to say beside the individual commit logs... ;-)
 
-Damit... Right, I'll fix and respin.
+Changes v2 -> v3:
+  - fix quoting for labels with a space in them  (K?roly)
 
-Thanks! :-)
+Changes v1 -> v2:
+  - move our genext2fs.sh wrapper and make it a proper host package,
+    with extensive tweaks to the code  (Thomas)
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit c5f0e93d2cc6107cce249e1f11158aeccb4a3449:
+
+  rp-pppoe: install default conf file (2014-12-03 23:26:21 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/fs-vol-id
+
+for you to fetch changes up to 0244e2c2f1c3933e110df8478544efafe66c7e5c:
+
+  fs/ext2: add option to specify a filesystem label (2014-12-06 13:26:58 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/mke2img: new package
+      fs/ext2: use the new mke2img host package
+      fs/ext2: add option to specify a filesystem label
+
+ fs/ext2/Config.in              |   6 +-
+ fs/ext2/ext2.mk                |  19 ++++--
+ fs/ext2/genext2fs.sh           | 121 ---------------------------------
+ package/Config.in.host         |   1 +
+ package/mke2img/Config.in.host |   9 +++
+ package/mke2img/mke2img        | 148 +++++++++++++++++++++++++++++++++++++++++
+ package/mke2img/mke2img.mk     |  14 ++++
+ 7 files changed, 188 insertions(+), 130 deletions(-)
+ delete mode 100755 fs/ext2/genext2fs.sh
+ create mode 100644 package/mke2img/Config.in.host
+ create mode 100755 package/mke2img/mke2img
+ create mode 100644 package/mke2img/mke2img.mk
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
