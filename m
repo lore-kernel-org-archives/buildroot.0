@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 06 Dec 2014 18:08:00 +0100
-Subject: [Buildroot] [PATCHv2 12/12] Add option for paranoid unsafe path
- checking
-In-Reply-To: <1417470913-1280-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 06 Dec 2014 18:23:22 +0100
+Subject: [Buildroot] [PATCHv2 03/12] binutils/2.23: add patch to warn
+ about unsafe library paths
+In-Reply-To: <1417470913-1280-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470913-1280-13-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <548337F0.5090300@openwide.fr>
+ <1417470913-1280-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54833B8A.5070401@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,98 +15,68 @@ To: buildroot@busybox.net
 Hi Thomas,
 
 Le 01/12/2014 22:55, Thomas Petazzoni a ?crit :
-> This commit adds a Config.in option to the "Build options" submenu to
-> enable paranoid checking of unsafe paths. This mechanism is added as
-> an option so that when we'll enable it in the autobuilders, people
-> trying to reproduce the build failures will be able to do so by just
-> downloading the configuration file. If instead we were leaving this
-> feature as an environment variable, everyone would have to remember to
-> pass this environment variable to reproduce build issues. And certain
-> build issues triggered by paranoid unsafe patch checking may not be
-> visible in the build output, for example when they happen during the
-> execution of configure scripts.
-> 
-> Since this option is fairly advanced, a new submenu inside "Build
-> options" is created, for Advanced options.
+> This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
+> that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
+> etc.). The patch was adapted to binutils 2.23, and modified to support
+> the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
+> instead of just warn when unsafe paths are used. Even though erroring
+> out can be chosen by passing --error-poison-system-directories, we are
+> not sure this option in LDFLAGS will always be passed, so having an
+> environment variable guarantees it will always be passed, and also
+> allows to have an identical behavior to the external toolchain
+> wrapper.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  Config.in           | 20 ++++++++++++++++++++
->  package/Makefile.in |  4 ++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/Config.in b/Config.in
-> index 1aa1080..3374e0f 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -569,6 +569,26 @@ config BR2_GLOBAL_PATCH_DIR
->  	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
->  	  then all *.patch files in the directory will be applied.
->  
-> +menu "Advanced"
-> +
-> +config BR2_COMPILER_PARANOID_UNSAFE_PATH
-> +	bool "paranoid check of library/header paths"
-> +	help
-> +	  By default, when this option is disabled, when the Buildroot
-> +	  cross-compiler will encounter an unsafe library or header
-> +	  path (such as /usr/include, or /usr/lib), the compiler will
-> +	  display a warning.
-> +
-> +	  By enabling this option, this warning is turned into an
-> +	  error, which will completely abort the build when such
-> +	  unsafe paths are encountered.
-> +
-> +	  Note that this mechanism is available for both the internal
-> +	  toolchain (through gcc and binutils patches) and external
-> +	  toolchain backends (through the external toolchain wrapper).
-> +
-> +endmenu
-> +
->  endmenu
->  
->  source "toolchain/Config.in"
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 36ecf0b..f60b08d 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -398,6 +398,10 @@ else
->  SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
->  endif
->  
-> +ifeq ($(BR2_COMPILER_PARANOID_UNSAFE_PATH),y)
-> +export BR_COMPILER_PARANOID_UNSAFE_PATH=enabled
-> +endif
-> +
->  include package/pkg-download.mk
->  include package/pkg-autotools.mk
->  include package/pkg-cmake.mk
-> 
 
-Sorry, I haven't yet tested the others patches with an internal
-toolchain.
-
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 
-Tested with an external x86 toolchain with iprutils package selected.
+Tested with the following internal toolchain
 
-$ make O=test/paranoid  iprutils-rebuild
+BR2_i386=y
+BR2_ARCH="i686"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ARCH="i686"
+BR2_ARCH_HAS_ATOMICS=y
+BR2_x86_i686=y
 
-The build stop if BR2_COMPILER_PARANOID_UNSAFE_PATH has been selected
-in the Buildroot configuration. Otherwise the build continue with the
-following warning:
+BR2_COMPILER_PARANOID_UNSAFE_PATH=y
 
-/home/naourr/git/buildroot/test/paranoid/host/usr/bin/i686-pc-linux-gnu-gcc
+BR2_TOOLCHAIN=y
+BR2_TOOLCHAIN_USES_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT=y
+
+BR2_KERNEL_HEADERS_3_17=y
+BR2_DEFAULT_KERNEL_HEADERS="3.17.4"
+
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc"
+BR2_PACKAGE_GLIBC=y
+BR2_GLIBC_VERSION_2_20=y
+BR2_GLIBC_VERSION_STRING="2.20"
+
+BR2_BINUTILS_VERSION_2_23_2=y
+BR2_BINUTILS_VERSION="2.23.2"
+
+BR2_GCC_VERSION_4_8_X=y
+BR2_GCC_VERSION="4.8.3"
+
+$ make O=test/paranoid-3/ iprutils
+
+/home/naourr/git/buildroot/test/paranoid-3/host/usr/bin/i686-buildroot-linux-gnu-gcc
 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
 -Wall -DIPR_MAJOR_RELEASE=2 -DIPR_MINOR_RELEASE=4 -DIPR_FIX_LEVEL=2
 -DIPR_FIX_DATE='"(June 10, 2014)"' -DIPR_VERSION_STR='"2.4.2 (June 10, 2014)"'
 -DIPR_RELEASE=1 -I. -I/usr/include/ncurses -o iprlib.o -c iprlib.c
-i686-pc-linux-gnu-gcc: WARNING: unsafe header/library path used in
-cross-compilation: '/usr/include/ncurses'
 
-Thanks,
+cc1: erreur: include location "/usr/include/ncurses" is unsafe for
+cross-compilation [-Werror=poison-system-directories]
+
+cc1: some warnings being treated as errors
+make[1]: *** [iprlib.o] Erreur 1
+
+Thanks
+
 -- 
 Romain Naour
 
