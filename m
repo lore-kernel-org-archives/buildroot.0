@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Dec 2014 19:21:52 +0100
-Subject: [Buildroot] [PATCH 2/3 v3] fs/ext2: use the new mke2img host
- package
-In-Reply-To: <00d5e727f0799ef11b4fb935d8f80bb2206002fc.1417868913.git.yann.morin.1998@free.fr>
+Date: Sat, 6 Dec 2014 19:23:25 +0100
+Subject: [Buildroot] [PATCH 3/3 v3] fs/ext2: add option to specify a
+ filesystem label
+In-Reply-To: <0244e2c2f1c3933e110df8478544efafe66c7e5c.1417868913.git.yann.morin.1998@free.fr>
 References: <cover.1417868913.git.yann.morin.1998@free.fr>
- <00d5e727f0799ef11b4fb935d8f80bb2206002fc.1417868913.git.yann.morin.1998@free.fr>
-Message-ID: <20141206192152.6eca4567@free-electrons.com>
+ <0244e2c2f1c3933e110df8478544efafe66c7e5c.1417868913.git.yann.morin.1998@free.fr>
+Message-ID: <20141206192325.5cb5da30@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,13 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sat,  6 Dec 2014 13:29:45 +0100, Yann E. MORIN wrote:
-> And get rid of the old genext2fs.sh wrapper.
+On Sat,  6 Dec 2014 13:29:46 +0100, Yann E. MORIN wrote:
+> Filesystems of the ext familly can carry a filesystem label.
+> Add an option for the user to specify such a label.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Tested-by: Karoly Kasza <kaszak@gmail.com>
-> Reviewed-by: Karoly Kasza <kaszak@gmail.com>
-> ---
->  fs/ext2/ext2.mk      |  13 +++---
->  fs/ext2/genext2fs.sh | 121 ---------------------------------------------------
->  2 files changed, 5 insertions(+), 129 deletions(-)
->  delete mode 100755 fs/ext2/genext2fs.sh
+> Cc: K?roly Kasza <kaszak@gmail.com>
 
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
