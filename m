@@ -1,86 +1,418 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon,  8 Dec 2014 00:53:11 +0100
-Subject: [Buildroot] [PATCH 0/5 v3] pkg-download: check hashes before the
-	download (branch yem/download-hash)
-Message-ID: <cover.1417996302.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/5 v3] suppot/download: add option parsing to
+	the download wrapper
+In-Reply-To: <cover.1417996302.git.yann.morin.1998@free.fr>
+References: <cover.1417996302.git.yann.morin.1998@free.fr>
+Message-ID: <c30f5d760bb3c1fb90e028aa443fc6489343891e.1417996302.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Instead of relying on argument ordering, use actual options in the
+download wrapper.
 
-This series introduces a way to check hashes prior to doing a download.
+Download backends (bzr, cp, hg...) are left as-is, because it does not
+make sense to complexifies them, since they are almost very trivial
+shell scripts, and adding option parsing would be really overkill.
 
-This is required for when upstream silently update their release tarballs
-without renaming them, and the user is left with a stray locally cached
-tarball that no longer match the hashes with have for that package.
-
-In so doing, this series:
-  - moves the check for a cached file into the wrapper;
-  - moves the post-download check for hashes into the wrapper;
-  - adds a pre-download check for hashes in the wrapper.
-
-Doing the pre-download checks in the Makefile, like the post-download
-checks were done, made the Makefile a bit harder to read. On the other
-hand, we have a download wrapper shell script, so it is easier to do
-trickey stuff in there (shell syntax) than in the Makefile (make syntax
-can become unreadable pretty fast).
-
-This has a side effect of cleaning up the pkg-download.mk Makefile, too,
-but that was not the goal.
-
-The check for host packages was not working; this series also fixes that.
-
-
-Changes v2 -> v3:
-  - fix checking hashes for host packages
-  - fix left-over line continuations
-
-Changes v1 -> v2:
-  - add options parsing to the wrapper  (Thomas)
-  - typoes  (Thomas)
-  - rename the wrapper to dl-wrapper so it looks better in the traces,
-    and it is not confused with another wrapper
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 0fb5dee3e6a78afba125e613e943db16d82046e3:
-
-  package/gcc: set e5500 and e6500 version mask (2014-12-07 23:47:22 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/download-hash
-
-for you to fetch changes up to ac4eef89b5bac135b130b833de5712c3cca0e9b7:
-
-  pkg-download: check hashes for locally cached files (2014-12-08 00:50:10 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      suppot/download: add option parsing to the download wrapper
-      pkg-download: check for already downloaded file in the download wrapper
-      pkg-download: verify the hashes from the download wrapper
-      pkg-download: fix checking hash for host packages
-      pkg-download: check hashes for locally cached files
-
- package/pkg-download.mk     |  78 +++++++++---------
- support/download/check-hash |  14 ++--
- support/download/dl-wrapper | 191 ++++++++++++++++++++++++++++++++++++++++++++
- support/download/wrapper    |  99 -----------------------
- 4 files changed, 236 insertions(+), 146 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-download.mk     |  42 ++++++-----
+ support/download/dl-wrapper | 166 ++++++++++++++++++++++++++++++++++++++++++++
+ support/download/wrapper    |  99 --------------------------
+ 3 files changed, 192 insertions(+), 115 deletions(-)
  create mode 100755 support/download/dl-wrapper
  delete mode 100755 support/download/wrapper
 
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index f3409bd..e76bb38 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -18,6 +18,8 @@ export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ 
++DL_WRAPPER = support/download/dl-wrapper
++
+ # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+ # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+ # external-deps target.
+@@ -95,8 +97,9 @@ endef
+ # problems
+ define DOWNLOAD_GIT
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/wrapper git \
+-		$(DL_DIR)/$($(PKG)_SOURCE) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
++		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_BASE_NAME)
+@@ -115,8 +118,9 @@ endef
+ 
+ define DOWNLOAD_BZR
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/wrapper bzr \
+-		$(DL_DIR)/$($(PKG)_SOURCE) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
++		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_BASE_NAME)
+@@ -132,8 +136,9 @@ endef
+ 
+ define DOWNLOAD_CVS
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/wrapper cvs \
+-		$(DL_DIR)/$($(PKG)_SOURCE) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
++		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-- \
+ 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_RAWNAME) \
+@@ -151,8 +156,9 @@ endef
+ 
+ define DOWNLOAD_SVN
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/wrapper svn \
+-		$(DL_DIR)/$($(PKG)_SOURCE) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
++		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_BASE_NAME)
+@@ -171,8 +177,9 @@ endef
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/wrapper scp \
+-		$(DL_DIR)/$(2) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
++		-o $(DL_DIR)/$(2) \
++		-- \
+ 		'$(call stripurischeme,$(call qstrip,$(1)))' && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+@@ -188,8 +195,9 @@ endef
+ 
+ define DOWNLOAD_HG
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/wrapper hg \
+-		$(DL_DIR)/$($(PKG)_SOURCE) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
++		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+ 		$($(PKG)_BASE_NAME)
+@@ -208,8 +216,9 @@ endef
+ 
+ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/wrapper wget \
+-		$(DL_DIR)/$(2) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
++		-o $(DL_DIR)/$(2) \
++		-- \
+ 		'$(call qstrip,$(1))' && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+@@ -224,8 +233,9 @@ endef
+ 
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/wrapper cp \
+-		$(DL_DIR)/$(2) \
++	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
++		-o $(DL_DIR)/$(2) \
++		-- \
+ 		$(call stripurischeme,$(call qstrip,$(1))) && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+new file mode 100755
+index 0000000..b1b9158
+--- /dev/null
++++ b/support/download/dl-wrapper
+@@ -0,0 +1,166 @@
++#!/usr/bin/env bash
++
++# This script is a wrapper to the other download backends.
++# Its role is to ensure atomicity when saving downloaded files
++# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
++# failed downloads.
++#
++# Call it with:
++#   -b BACKEND  name of the backend (eg. cvs, git, cp...)
++#   -o FILE     full path to the file in which to save the download
++#   --          everything after '--' are options for the backend
++# Environment:
++#   BUILD_DIR: the path to Buildroot's build dir
++
++# To avoid cluttering BR2_DL_DIR, we download to a trashable
++# location, namely in $(BUILD_DIR).
++# Then, we move the downloaded file to a temporary file in the
++# same directory as the final output file.
++# This allows us to finally atomically rename it to its final
++# name.
++# If anything goes wrong, we just remove all the temporaries
++# created so far.
++
++# We want to catch any unexpected failure, and exit immediately.
++set -e
++
++main() {
++    local OPT OPTARG
++    local backend output
++
++    # Parse our options; anythong after '--' is for the backend
++    # Sop we only care to -b (backend) and -o (output file)
++    while getopts :hb:o: OPT; do
++        case "${OPT}" in
++        h)  help; exit 0;;
++        b)  backend="${OPTARG}";;
++        o)  output="${OPTARG}";;
++        :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
++        \?) error "unknown option '%s'\n" "${OPTARG}";;
++        esac
++    done
++    # Forget our options, and keep only those for the backend
++    shift $((OPTIND-1))
++
++    if [ -z "${backend}" ]; then
++        error "no backend specified, use -b\n"
++    fi
++    if [ -z "${output}" ]; then
++        error "no output specified, use -o\n"
++    fi
++
++    # tmpd is a temporary directory in which backends may store intermediate
++    # by-products of the download.
++    # tmpf is the file in which the backends should put the downloaded content.
++    # tmpd is located in $(BUILD_DIR), so as not to clutter the (precious)
++    # $(BR2_DL_DIR)
++    # We let the backends create tmpf, so they are able to set whatever
++    # permission bits they want (although we're only really interested in
++    # the executable bit.)
++    tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
++    tmpf="${tmpd}/output"
++
++    # Helpers expect to run in a directory that is *really* trashable, so
++    # they are free to create whatever files and/or sub-dirs they might need.
++    # Doing the 'cd' here rather than in all backends is easier.
++    cd "${tmpd}"
++
++    # If the backend fails, we can just remove the temporary directory to
++    # remove all the cruft it may have left behind. Then we just exit in
++    # error too.
++    if ! "${OLDPWD}/support/download/${backend}" "${tmpf}" "${@}"; then
++        rm -rf "${tmpd}"
++        exit 1
++    fi
++
++    # cd back to free the temp-dir, so we can remove it later
++    cd "${OLDPWD}"
++
++    # tmp_output is in the same directory as the final output, so we can
++    # later move it atomically.
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
++
++    # 'mktemp' creates files with 'go=-rwx', so the files are not accessible
++    # to users other than the one doing the download (and root, of course).
++    # This can be problematic when a shared BR2_DL_DIR is used by different
++    # users (e.g. on a build server), where all users may write to the shared
++    # location, since other users would not be allowed to read the files
++    # another user downloaded.
++    # So, we restore the 'go' access rights to a more sensible value, while
++    # still abiding by the current user's umask. We must do that before the
++    # final 'mv', so just do it now.
++    # Some backends (cp and scp) may create executable files, so we need to
++    # carry the executable bit if needed.
++    [ -x "${tmpf}" ] && new_mode=755 || new_mode=644
++    new_mode=$( printf "%04o" $((0${new_mode} & ~0$(umask))) )
++    chmod ${new_mode} "${tmp_output}"
++
++    # We must *not* unlink tmp_output, otherwise there is a small window
++    # during which another download process may create the same tmp_output
++    # name (very, very unlikely; but not impossible.)
++    # Using 'cp' is not reliable, since 'cp' may unlink the destination file
++    # if it is unable to open it with O_WRONLY|O_TRUNC; see:
++    #   http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cp.html
++    # Since the destination filesystem can be anything, it might not support
++    # O_TRUNC, so 'cp' would unlink it first.
++    # Use 'cat' and append-redirection '>>' to save to the final location,
++    # since that is the only way we can be 100% sure of the behaviour.
++    if ! cat "${tmpf}" >>"${tmp_output}"; then
++        rm -rf "${tmpd}" "${tmp_output}"
++        exit 1
++    fi
++    rm -rf "${tmpd}"
++
++    # tmp_output and output are on the same filesystem, so POSIX guarantees
++    # that 'mv' is atomic, because it then uses rename() that POSIX mandates
++    # to be atomic, see:
++    #   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
++    if ! mv -f "${tmp_output}" "${output}"; then
++        rm -f "${tmp_output}"
++        exit 1
++    fi
++}
++
++help() {
++    cat <<_EOF_
++NAME
++    ${my_name} - downlaod wrapper for Buildroot
++
++SYNOPSIS
++    ${my_name} [OPTION]... -- [BACKEND OPTION]...
++
++DESCRIPTION
++    Wrapper script around different download mechanisms. Ensure that
++    concurrent downloads do not conflict, that partial downloads are
++    properly evicted without leaving temporary files, and that access
++    rights are maintained.
++
++    -h  This help text.
++
++    -b BACKEND
++        Wrap the specified BACKEND. Known backends are:
++            bzr     Bazaar
++            cp      local files via simple copy
++            cvs     Concurrent Versions System
++            git     git
++            hg      Mercurial
++            scp     remote files via Secure copy
++            svn     Subversion
++            wget    remote files via HTTP download
++
++    -o FILE
++        Store the downloaded archive in FILE.
++
++  Exit status:
++    0   if OK
++    !0  in case of error
++_EOF_
++}
++
++trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
++warn()   { trace "${@}" >&2; }
++errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
++error()  { errorN 1 "${@}"; }
++
++my_name="${0##*/}"
++main "${@}"
+diff --git a/support/download/wrapper b/support/download/wrapper
+deleted file mode 100755
+index 320a37e..0000000
+--- a/support/download/wrapper
++++ /dev/null
+@@ -1,99 +0,0 @@
+-#!/usr/bin/env bash
+-
+-# This script is a wrapper to the other download helpers.
+-# Its role is to ensure atomicity when saving downloaded files
+-# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
+-# failed downloads.
+-#
+-# Call it with:
+-#   $1: name of the helper (eg. cvs, git, cp...)
+-#   $2: full path to the file in which to save the download
+-#   $*: additional arguments to the helper in $1
+-# Environment:
+-#   BUILD_DIR: the path to Buildroot's build dir
+-
+-# To avoid cluttering BR2_DL_DIR, we download to a trashable
+-# location, namely in $(BUILD_DIR).
+-# Then, we move the downloaded file to a temporary file in the
+-# same directory as the final output file.
+-# This allows us to finally atomically rename it to its final
+-# name.
+-# If anything goes wrong, we just remove all the temporaries
+-# created so far.
+-
+-# We want to catch any unexpected failure, and exit immediately.
+-set -e
+-
+-helper="${1}"
+-output="${2}"
+-shift 2
+-
+-# tmpd is a temporary directory in which helpers may store intermediate
+-# by-products of the download.
+-# tmpf is the file in which the helpers should put the downloaded content.
+-# tmpd is located in $(BUILD_DIR), so as not to clutter the (precious)
+-# $(BR2_DL_DIR)
+-# We let the helpers create tmpf, so they are able to set whatever
+-# permission bits they want (although we're only really interested in
+-# the executable bit.)
+-tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+-tmpf="${tmpd}/output"
+-
+-# Helpers expect to run in a directory that is *really* trashable, so
+-# they are free to create whatever files and/or sub-dirs they might need.
+-# Doing the 'cd' here rather than in all helpers is easier.
+-cd "${tmpd}"
+-
+-# If the helper fails, we can just remove the temporary directory to
+-# remove all the cruft it may have left behind. Then we just exit in
+-# error too.
+-if ! "${OLDPWD}/support/download/${helper}" "${tmpf}" "${@}"; then
+-    rm -rf "${tmpd}"
+-    exit 1
+-fi
+-
+-# cd back to free the temp-dir, so we can remove it later
+-cd "${OLDPWD}"
+-
+-# tmp_output is in the same directory as the final output, so we can
+-# later move it atomically.
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+-
+-# 'mktemp' creates files with 'go=-rwx', so the files are not accessible
+-# to users other than the one doing the download (and root, of course).
+-# This can be problematic when a shared BR2_DL_DIR is used by different
+-# users (e.g. on a build server), where all users may write to the shared
+-# location, since other users would not be allowed to read the files
+-# another user downloaded.
+-# So, we restore the 'go' access rights to a more sensible value, while
+-# still abiding by the current user's umask. We must do that before the
+-# final 'mv', so just do it now.
+-# Some helpers (cp and scp) may create executable files, so we need to
+-# carry the executable bit if needed.
+-[ -x "${tmpf}" ] && new_mode=755 || new_mode=644
+-new_mode=$( printf "%04o" $((0${new_mode} & ~0$(umask))) )
+-chmod ${new_mode} "${tmp_output}"
+-
+-# We must *not* unlink tmp_output, otherwise there is a small window
+-# during which another download process may create the same tmp_output
+-# name (very, very unlikely; but not impossible.)
+-# Using 'cp' is not reliable, since 'cp' may unlink the destination file
+-# if it is unable to open it with O_WRONLY|O_TRUNC; see:
+-#   http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cp.html
+-# Since the destination filesystem can be anything, it might not support
+-# O_TRUNC, so 'cp' would unlink it first.
+-# Use 'cat' and append-redirection '>>' to save to the final location,
+-# since that is the only way we can be 100% sure of the behaviour.
+-if ! cat "${tmpf}" >>"${tmp_output}"; then
+-    rm -rf "${tmpd}" "${tmp_output}"
+-    exit 1
+-fi
+-rm -rf "${tmpd}"
+-# tmp_output and output are on the same filesystem, so POSIX guarantees
+-# that 'mv' is atomic, because it then uses rename() that POSIX mandates
+-# to be atomic, see:
+-#   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
+-if ! mv "${tmp_output}" "${output}"; then
+-    rm -f "${tmp_output}"
+-    exit 1
+-fi
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
