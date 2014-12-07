@@ -1,66 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 21:32:01 +0100
-Subject: [Buildroot] [git commit] docs/manual: document the new patch naming
-	convention
-Message-ID: <20141207203205.C65B18011D@busybox.osuosl.org>
+Date: Sun, 7 Dec 2014 21:32:42 +0100
+Subject: [Buildroot] [git commit] btrfs-progs: bump to version 3.17.3
+Message-ID: <20141207203246.C24E08011D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e7d179f83228204f832b2f474c669bfdab889a3
+commit: http://git.buildroot.net/buildroot/commit/?id=dd5543200da6e8432f4b3f8e87a02ca76bbcedaf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To ease generating patches, we now use a naming convention that is in
-line with what git-format-patch does, that is:
-  - do not prefix patches with the package name
-  - prefix patches with a 4-digit mber
-  - start numbering at 0001
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/patch-policy.txt |   21 ++++++++++++++-------
- 1 files changed, 14 insertions(+), 7 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash |    2 +-
+ package/btrfs-progs/btrfs-progs.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 745f58d..6e27e71 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -31,16 +31,23 @@ Most patches are provided within Buildroot, in the package
- directory; these typically aim to fix cross-compilation, libc support,
- or other such issues.
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index f030c17..4ef14a3 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	50ecc724a41a6ec9e37a0fbb134d336bdafd7fa24ec69de0c591c211da4456c6	btrfs-progs-v3.17.2.tar.xz
++sha256	e7bd9ff8d95b515973d3a1255c17fd481bcd75e4420f00c6c9c99489d1ddac2c	btrfs-progs-v3.17.3.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index b13f227..ec54746 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--These patch files should be named +<packagename>-<number>-<description>.patch+.
--
--A +series+ file, as used by +quilt+, may also be added in the
--package directory. In that case, the +series+ file defines the patch
--application order.
-+These patch files should be named +<number>-<description>.patch+.
- 
- .Notes
- - The patch files coming with Buildroot should not contain any package version
--reference in their filename.
--- The field +<number>+ in the patch file name refers to the 'apply order'.
-+  reference in their filename.
-+- The field +<number>+ in the patch file name refers to the 'apply order',
-+  and shall start at 1; It is preferred to pad the number with zeros up to 4
-+  digits, like 'git-format-patch' does. E.g.: +0001-foobar-the-buz.patch+
-+- Previously, it was mandatory for patches to be prefixed with the name of
-+  the package, like +<package>-<number>-<description>.patch+, but that is
-+  no longer the case. Existing packages will be fixed as time passes. 'Do
-+  not prefix patches with the package name.'
-+- Previously, a +series+ file, as used by +quilt+, could also be added in
-+  the package directory. In that case, the +series+ file defines the patch
-+  application order. This is deprecated, and will be removed in the future.
-+  'Do not use a series file.'
-+
- 
- ==== Global patch directory
- 
+-BTRFS_PROGS_VERSION = 3.17.2
++BTRFS_PROGS_VERSION = 3.17.3
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
