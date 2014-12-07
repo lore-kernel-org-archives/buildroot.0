@@ -1,29 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 21:23:18 +0100
-Subject: [Buildroot] [git commit] fconfig: add hash file
-Message-ID: <20141207202324.68123800F5@busybox.osuosl.org>
+Date: Sun, 7 Dec 2014 21:23:13 +0100
+Subject: [Buildroot] [git commit] fconfig: remove redundant CFLAGS/LDFLAGS
+Message-ID: <20141207202324.5C1B3800F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2bdc53c8cd513d42e7503bccd48433813a38dea
+commit: http://git.buildroot.net/buildroot/commit/?id=8f8e71ee6e8b24d1854c91b993b61c19711f8a2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add locally computed hash file for fconfig.
+CFLAGS and LDFLAGS are already passed as part of
+$(TARGET_CONFIGURE_OPTS).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/fconfig/fconfig.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/fconfig/fconfig.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/fconfig/fconfig.hash b/package/fconfig/fconfig.hash
-new file mode 100644
-index 0000000..eae26e2
---- /dev/null
-+++ b/package/fconfig/fconfig.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 4ff0e8f07e35e46b705c0dbe9d9544ede01ea092a69e3f7db03e55a3f2bb8eb7 fconfig-20080329.tar.gz
+diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
+index 7f7faad..509fc2c 100644
+--- a/package/fconfig/fconfig.mk
++++ b/package/fconfig/fconfig.mk
+@@ -12,9 +12,7 @@ FCONFIG_LICENSE = GPLv2+
+ FCONFIG_LICENSE_FILES = fconfig.c
+ 
+ define FCONFIG_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)"
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define FCONFIG_INSTALL_TARGET_CMDS
