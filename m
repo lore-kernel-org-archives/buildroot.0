@@ -1,69 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Dec 2014 12:02:38 +0100
-Subject: [Buildroot] [PATCH 5/5 v2] pkg-download: check hashes for locally
-	cached files
-In-Reply-To: <cover.1417949583.git.yann.morin.1998@free.fr>
-References: <cover.1417949583.git.yann.morin.1998@free.fr>
-Message-ID: <661d8a00260bcabd71bf7dad6ae4f1a7d3b919e9.1417949583.git.yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  7 Dec 2014 12:09:33 +0100
+Subject: [Buildroot] [PATCH v3] package/libnss: need dynamic library support
+Message-ID: <1417950573-15679-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases, upstream just update their releases in-place, without
-renaming them. When that package is updated in Buildroot, a new hash to
-match the new upstream release is included in the corresponding .hash
-file.
+Fixes:
+  http://autobuild.buildroot.net/results/e01733c4b8c23f62e2081f0c4aadc16e22c4a2c4/
 
-As a consequence, users who previously downloaded that package's tarball
-with an older version of Buildroot, will get stuck with an old archive
-for that package, and after updating their Buildroot copy, will be greeted
-with a failed download, due to the local file not matching the new
-hashes.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-So, to avoid this situation, check the hashes prior to doing the
-download. If the hashes match, consider the locally cached file genuine,
-and do not download it. However, if the locally cached file does not
-match the known hashes we have for it, it is promptly removed, and a
-download is re-attempted.
-
-Note: this does not add any overhead compared to the previous situation,
-because we were already checking hashes of localy cached files. It just
-changes the order in which we do the checks. For the records, here is the
-overhead of hashing a 231MiB file (qt-everywhere-opensource-src-4.8.6.tar.gz)
-on a core-i5 @2.5GHz:
-
-            cache-cold  cache-hot
-    sha1      1.914s      0.762s
-    sha256    2.109s      1.270s
-
-But again, this overhead already existed before this patch.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- support/download/dl-wrapper | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+changes v2->v3:
+- fix typo (Baruch)
+- fix 'depends on'
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 5552547..ad0ed46 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -56,7 +56,11 @@ main() {
+changes v1->v2:
+- update 'depends on' in libnss' reverse dependencies (ThomasP)
+---
+ package/ecryptfs-utils/Config.in | 6 ++++--
+ package/libnss/Config.in         | 6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 0d912c7..16c0d69 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
++	depends on !BR2_PREFER_STATIC_LIB # libnss
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+@@ -29,8 +30,9 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
  
-     # If the output file already exists, do not download it again
-     if [ -e "${output}" ]; then
--        exit 0
-+        if support/download/check-hash "${hfile}" "${output}" "${output##*/}"; then
-+            exit 0
-+        fi
-+        rm -f "${output}"
-+        printf "Re-downloading '%s'...\n" "${output##*/}"
-     fi
+ 	  http://ecryptfs.org
  
-     # tmpd is a temporary directory in which backends may store intermediate
+-comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar"
++comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar, dynamic library"
+ 	depends on !BR2_avr32 && !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		BR2_PREFER_STATIC_LIB
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 690f928..4e8792c 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_LIBNSS
+ 
+ 	  http://www.mozilla.org/projects/security/pki/nss/
+ 
+-comment "libnss needs a toolchain w/ largefile, threads"
++comment "libnss needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_PREFER_STATIC_LIB
 -- 
-1.9.1
+2.1.3
