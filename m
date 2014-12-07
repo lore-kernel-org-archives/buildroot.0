@@ -1,81 +1,117 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 21:44:46 +0100
-Subject: [Buildroot] [PATCHv2] qtuio: add error handling to for loop
-In-Reply-To: <1417644344-3116-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417644344-3116-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141207204446.GA10809@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 21:53:01 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: V1.0 configure ffmpeg with
+ --enable-libfreetype if libfreetype package is enabled
+In-Reply-To: <548262C1.7080000@ou.edu>
+References: <548262C1.7080000@ou.edu>
+Message-ID: <20141207215301.06e6dffb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Steve Kenton,
 
-On 2014-12-03 23:05 +0100, Thomas Petazzoni spake thusly:
-> Also remove unneeded sub-shell usage in the build and installation
-> steps. It is kept for the configure step as it is actually useful, and
-> works fine because "|| exit 1" is outside the sub-shell.
+Thanks for your contribution! There are a few issues in your submission
+though, so you'll see some comments below. If you could rework your
+patch and send an updated version, it would be nice.
+
+First, the title is a bit too long, and should not contain a version
+number, so the title should be something like:
+
+	ffmpeg: enable freetype support
+
+On Fri, 05 Dec 2014 19:58:25 -0600, Steve Kenton wrote:
+> [Buildroot][PATCH] ffmpeg: V1.0 configure ffmpeg with --enable-libfreetype if libfreetype package is enabled
+
+There is no need to repeat the title in the commit log itself.
+
+> I needed ffmpeg on the target configured using --enable-libfreetype and using "Additional parameters for ./configure" missed the dependency.
+> Modeled on the blocks above and below it in ffmpeg.mk - let me know if the order is important and I need to move it somewhere else.
+
+Please wrap the commit log to a reasonable length (~80 characters or
+so). Also don't put some "personal" comments in the commit log. If you
+have some personal comments to make, they must go after the "---" line
+so that they don't get committed, only seen during review.
+
+In terms of order, alphabetic ordering is usually preferred.
+
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+> 
+
+This empty new line is not needed.
+
 > ---
-> Changes v1 -> v2:
->  * Remove unneeded sub-shell usage, noticed by Yann E. Morin.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/qtuio/qtuio.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-> index 9925f84..5fa10a7 100644
-> --- a/package/qtuio/qtuio.mk
-> +++ b/package/qtuio/qtuio.mk
-> @@ -19,7 +19,7 @@ QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
->  ifeq ($(BR2_QTUIO_EXAMPLES),y)
->  define QTUIO_CONFIGURE_EXAMPLES
->  	for example in $(QTUIO_EXAMPLES) ; do \
-> -		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
-> +		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) || exit 1; \
->  	done
->  endef
+> diff -ru buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.11/package/ffmpeg/ffmpeg.mk
+> --- buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk
+> +++ buildroot-2014.11/package/ffmpeg/ffmpeg.mk
+> @@ -50,7 +50,6 @@
+>  	--disable-libopencv \
+>  	--disable-libdc1394 \
+>  	--disable-libfaac \
+> -	--disable-libfreetype \
+>  	--disable-libgsm \
+>  	--disable-libmp3lame \
+>  	--disable-libnut \
+> @@ -229,6 +228,13 @@
+>  FFMPEG_CONF_OPTS += --disable-libvpx
 >  endif
-> @@ -32,7 +32,7 @@ endef
->  ifeq ($(BR2_QTUIO_EXAMPLES),y)
->  define QTUIO_BUILD_EXAMPLES
->  	for example in $(QTUIO_EXAMPLES) ; do \
-> -		($(MAKE) -C $(@D)/examples/$${example}) ; \
-> +		$(MAKE) -C $(@D)/examples/$${example} || exit 1; \
->  	done
->  endef
->  endif
-> @@ -46,7 +46,7 @@ endef
->  ifeq ($(BR2_QTUIO_EXAMPLES),y)
->  define QTUIO_INSTALL_EXAMPLES
->  	for example in $(QTUIO_EXAMPLES) ; do \
-> -		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
-> +		$(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example} || exit 1 ; \
->  	done
->  endef
->  endif
-> -- 
-> 2.1.0
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
+> +FFMPEG_CONF_OPTS += --enable-libfreetype
+> +FFMPEG_DEPENDENCIES += freetype
+> +else
+> +FFMPEG_CONF_OPTS += --disable-libfreetype
+> +endif
 
+This looks good, except that it fails to build with uClibc, because the
+freetype support in ffmpeg uses "fenv", which isn't available on uClibc
+except on x86 and x86-64:
+
+CC	libavfilter/vf_drawtext.o
+CC	libavfilter/vf_extractplanes.o
+CC	libavfilter/vf_elbg.o
+CC	libavfilter/vf_edgedetect.o
+CC	libavfilter/vf_fade.o
+libavfilter/vf_drawtext.c:40:18: fatal error: fenv.h: No such file or directory
+ #include <fenv.h>
+
+Generated with the following configuration:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_FFMPEG=y
+BR2_PACKAGE_FREETYPE=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+So we would need to make sure the freetype support gets only enabled if
+the toolchain does not use uClibc or if we're on x86 or x86-64. I'm
+starting to wonder if we don't need a BR2_TOOLCHAIN_HAS_FENV knob,
+because we have the same problem in the python-numpy package. Or at
+least some ffmpeg sub-options to enable freetype support, which could
+depend on the appropriate options.
+
+Can you resend an updated version of your patch to fix those issues?
+
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
