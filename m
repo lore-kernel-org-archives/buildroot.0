@@ -1,38 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 22:51:06 +0100
-Subject: [Buildroot] [PATCH v4 next 0/5]  Improve silent builds
-In-Reply-To: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20141207215106.GI10809@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 22:52:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix static linking
+ with OpenSSL enabled
+In-Reply-To: <20141207211025.GC10809@free.fr>
+References: <1417289292-7006-1-git-send-email-bernd.kuhls@t-online.de>
+ <20141207211025.GC10809@free.fr>
+Message-ID: <20141207225254.3cc97f02@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Dear Yann E. MORIN,
 
-On 2014-11-24 14:56 +0100, Fabio Porcedda spake thusly:
-> This patch set improves silent builds.
+On Sun, 7 Dec 2014 22:10:25 +0100, Yann E. MORIN wrote:
+
+> I'm not too fond of the way this is handled. I'd prefer we get something
+> like:
 > 
-> Silent builds are nice when top-level parallel make is being used to
-> reduce the output clutter.
+>     MINIDLNA_LIBS = -lavformat -lavcodec -lavutil -logg
+>     MINIDLAN_LIBS += $(if $(BR2_PACKAGE_OPENSSL),-lssl -lcrypto)
+>     MINIDLAN_LIBS += -lz -lpthread -lm
+> 
+>     MINIDLNA_CONF_ENV = LIBS='$(MINIDLNA_LIBS)'
 
-Will you rework this series taking into account the comment Thomas and I
-made on your first patch?
+Agreed, with maybe "$(MINIDLNA_LIBS)" instead of simple quotes.
 
-In the meantime, I've marked your patches as "Changes Requested" in our
-Patchwork.
+A further possible improvement would be to switch to use pkg-config
+instead, so that this becomes more maintainable :-)
 
-Thank you!
+Thanks!
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
