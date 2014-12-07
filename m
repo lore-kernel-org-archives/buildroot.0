@@ -1,30 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 07 Dec 2014 20:17:46 -0300
-Subject: [Buildroot] [RFC PATCH 0/2] Add Freescale e5500 & e6500 support
-In-Reply-To: <20141207234835.4fac269f@free-electrons.com>
-References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
- <20141207234835.4fac269f@free-electrons.com>
-Message-ID: <5484E01A.7080802@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Dec 2014 00:18:45 +0100
+Subject: [Buildroot] [PATCH v2] xbmc-pvr-addons: Bump version
+In-Reply-To: <1414356597-27279-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414356597-27279-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141207231845.GN10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/07/2014 07:48 PM, Thomas Petazzoni wrote:
+Maxime, All,
 
-> Patches applied. I must say I'm a bit confused by why we exclude PP64le
-> for those new platforms. Is there theoretically something that would
-> prevent those from being used in LE mode?
+On 2014-10-26 21:49 +0100, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+> v1 -> v2:
+>    - The correct cset is the HEAD of the Gotham branch.
+> ---
+>  package/xbmc-pvr-addons/xbmc-pvr-addons.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+> index bfcb7ed..a20af85 100644
+> --- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+> +++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+> @@ -6,7 +6,7 @@
+>  
+>  # This cset is on the branch 'gotham'
+>  # When XBMC is updated, then this should be updated to the corresponding branch
+> -XBMC_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
+> +XBMC_PVR_ADDONS_VERSION = f7d9b42b2f1795a467093acb9c120b9c361ffbc4
 
-As far i was able to find out without hardware the fsl ppc64 SOCs aren't
-able to boot in LE mode.
-It's like ARM, if the peripherals aren't ready for it even though the
-CPU itself can do so it won't work right.
-For example for pseries there's the pseries_le_defconfig, for the fsl 64
-bit chips there's corenet64_smp_defconfig but no LE counterpart.
-Even though CONFIG_CPU_LITTLE_ENDIAN can be toggled for said config i
-wasn't able to find anything related to actually booting that (and it's
-a pretty generic option).
-So i "erred" on the safe side.
-Regards.
+There is a newer cset now:
+    b43305e30f92c6dedb602a5a5d2212f8ccfbc260
+
+Regards,
+Yann E. MORIN.
+
+>  XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
+>  XBMC_PVR_ADDONS_LICENSE = GPLv3+
+>  XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+> -- 
+> 2.1.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
