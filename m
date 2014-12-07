@@ -1,47 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 21:27:49 +0100
-Subject: [Buildroot] [git commit] package/nginx: disallow AIO support on arc
-Message-ID: <20141207202801.B8012800F7@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Dec 2014 21:28:15 +0100
+Subject: [Buildroot] [PATCH v2] rp-pppoe: install helper scripts
+In-Reply-To: <1417848158-5198-1-git-send-email-bluemrp9@gmail.com>
+References: <1417848158-5198-1-git-send-email-bluemrp9@gmail.com>
+Message-ID: <20141207202815.GC3902@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e935d6079f8d0d91a3ec6c5aba45c97de47f5c98
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ryan, All,
 
-The nginx AIO support cannot build on arc, because it hardcodes
-the usage of SYS_eventfd(), while it should just use eventfd() from
-the C library.
+On 2014-12-05 22:42 -0800, Ryan Coe spake thusly:
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
-Fixes:
-  http://autobuild.buildroot.org/results/f3e/f3e2c7a937517a5444f8c6cc0b02692af897b3e0/
-
-[Thomas: adjust comment as suggested by Yann.]
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nginx/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index c2a6af1..e5d20af 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -17,9 +17,11 @@ if BR2_PACKAGE_NGINX
- config BR2_PACKAGE_NGINX_FILE_AIO
- 	bool "file AIO support"
- 	# Does not build, because nginx hardcodes using SYS_eventfd,
--	# but it's not available on AArch64, only eventfd() is.
--	# See https://bugs.launchpad.net/linaro-aarch64/+bug/1160013
-+	# but it's available on neither AArch64 nor ARC where only
-+	# eventfd() is available.  See
-+	# https://bugs.launchpad.net/linaro-aarch64/+bug/1160013
- 	depends on !BR2_aarch64
-+	depends on !BR2_arc
- 
- config BR2_PACKAGE_NGINX_HTTP
- 	bool "http server"
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>   - add missing pppoe-status script to install list
+>  package/rp-pppoe/rp-pppoe.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+> index 70b4437..5cb4960 100644
+> --- a/package/rp-pppoe/rp-pppoe.mk
+> +++ b/package/rp-pppoe/rp-pppoe.mk
+> @@ -11,6 +11,8 @@ RP_PPPOE_LICENSE_FILES = doc/LICENSE
+>  RP_PPPOE_DEPENDENCIES = pppd
+>  RP_PPPOE_SUBDIR = src
+>  RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
+> +RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
+> +	pppoe-status pppoe-stop
+>  RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
+>  RP_PPPOE_CONF_OPTS = --disable-debugging
+>  RP_PPPOE_CONF_ENV = \
+> @@ -23,6 +25,9 @@ define RP_PPPOE_INSTALL_TARGET_CMDS
+>  	for ff in $(RP_PPPOE_TARGET_FILES); do \
+>  		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+>  	done
+> +	for ff in $(RP_PPPOE_TARGET_SCRIPTS); do \
+> +		$(INSTALL) -m 0755 $(@D)/scripts/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
+> +	done
+>  endef
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.2.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
