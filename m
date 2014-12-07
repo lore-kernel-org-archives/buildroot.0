@@ -1,52 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Dec 2014 00:10:40 +0100
-Subject: [Buildroot] [PATCH 4/5 v2] pkg-download: verify the hashes from
- the download wrapper
-In-Reply-To: <70023398f1201f12b64802bdc16fd0711dc97050.1417949583.git.yann.morin.1998@free.fr>
-References: <cover.1417949583.git.yann.morin.1998@free.fr>
- <70023398f1201f12b64802bdc16fd0711dc97050.1417949583.git.yann.morin.1998@free.fr>
-Message-ID: <20141207231040.GM10809@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Dec 2014 00:05:05 +0100
+Subject: [Buildroot] [git commit] package/mutt: specify the mailpath
+Message-ID: <20141207231120.8C4B3800E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: http://git.buildroot.net/buildroot/commit/?id=18ebf0e5e1e495cad670c085e5932c09cd84ae3b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-12-07 12:02 +0100, Yann E. MORIN spake thusly:
-> Instead of repeating the check in our download rules, delegate the check
-> of the hashes to the download wrapper.
-[--SNIP--]
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 9192950..b3ddfe3 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-[--SNIP--]
-> @@ -174,9 +167,9 @@ endef
->  define DOWNLOAD_SCP
->  	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
->  		-o $(DL_DIR)/$(2) \
-> +		-H $(PKGDIR)/$($(PKG)_NAME).hash \
->  		-- \
->  		'$(call stripurischeme,$(call qstrip,$(1)))' && \
+mutt's ./configure looks for different paths for where to look for
+incoming mails.
 
-Damn, left-over bug... :-( Uncommitted file. Forgot git add... :-(
+This is absolutely worng in the case of cross-compilation, because the
+path it may find on the host may not exist on the target.
 
-Marking this series as "Changes requested", because we suddenly
-uncovered another hash-related bug (especially without that series),
-which happens for host packages for which the tarball is broken: hashes
-are not checked for host packages...
+Not only that, but some host may not even have any of the paths
+./configure looks for.
 
-I'll investigate that problem before I respin the series...
+Fix that by specifying the mailpath, and set it to the value documented
+in the FHS [0]
 
-Regards,
-Yann E. MORIN.
+Since Buildroot only guarantees /tmp to be writable, make /var/mail a
+symlink to /tmp .
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[0] http://refspecs.linuxfoundation.org/FHS_2.3/fhs-2.3.html#VARMAILUSERMAILBOXFILES
+
+Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mutt/mutt.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index b4f18b0..92457a1 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -57,4 +57,11 @@ MUTT_CONF_ENV += \
+ 	mutt_cv_iconv_good=yes \
+ 	mutt_cv_iconv_nontrans=no
+ 
++MUTT_CONF_OPTS += --with-mailpath=/var/mail
++
++define MUTT_VAR_MAIL
++	ln -sf /tmp $(TARGET_DIR)/var/mail
++endef
++MUTT_POST_INSTALL_TARGET_HOOKS += MUTT_VAR_MAIL
++
+ $(eval $(autotools-package))
