@@ -1,33 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:48:46 +0100
-Subject: [Buildroot] [PATCH v2 2/3] libz160: fix dependencies
-In-Reply-To: <1417252360-10929-3-git-send-email-jezz@sysmic.org>
-References: <1417252360-10929-1-git-send-email-jezz@sysmic.org>
- <1417252360-10929-3-git-send-email-jezz@sysmic.org>
-Message-ID: <20141207224846.26c3fb1f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Dec 2014 22:51:06 +0100
+Subject: [Buildroot] [PATCH v4 next 0/5]  Improve silent builds
+In-Reply-To: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20141207215106.GI10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Fabio, All,
 
-On Sat, 29 Nov 2014 10:12:39 +0100, J?r?me Pouiller wrote:
-> libz160 is provided as binary. We need EABI toolchain with glibc to use
-> it.
+On 2014-11-24 14:56 +0100, Fabio Porcedda spake thusly:
+> This patch set improves silent builds.
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/freescale-imx/libz160/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Silent builds are nice when top-level parallel make is being used to
+> reduce the output clutter.
 
-Applied, after tweaking the comments as suggested by Yann.
+Will you rework this series taking into account the comment Thomas and I
+made on your first patch?
 
-Thanks,
+In the meantime, I've marked your patches as "Changes Requested" in our
+Patchwork.
 
-Thomas
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
