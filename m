@@ -1,191 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:06:55 +0100
-Subject: [Buildroot] [git commit] fs/ext2: use the new mke2img host package
-Message-ID: <20141207210727.3247D800FE@busybox.osuosl.org>
+Date: Sun, 7 Dec 2014 22:07:44 +0100
+Subject: [Buildroot] [PATCH 0/3 v4] fs/ext2: misc enhancements (branch
+ yem/fs-vol-id)
+In-Reply-To: <cover.1417905401.git.yann.morin.1998@free.fr>
+References: <cover.1417905401.git.yann.morin.1998@free.fr>
+Message-ID: <20141207220744.3ad766b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6831e5e97e5a766308a2a9b1b085bb6cb77339b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-And get rid of the old genext2fs.sh wrapper.
+On Sat,  6 Dec 2014 23:40:02 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Karoly Kasza <kaszak@gmail.com>
-Reviewed-by: Karoly Kasza <kaszak@gmail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/ext2/ext2.mk      |   13 ++---
- fs/ext2/genext2fs.sh |  121 --------------------------------------------------
- 2 files changed, 5 insertions(+), 129 deletions(-)
+> Yann E. MORIN (3):
+>       package/mke2img: new package
+>       fs/ext2: use the new mke2img host package
+>       fs/ext2: add option to specify a filesystem label
 
-diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-index 425f7bf..96b7a4a 100644
---- a/fs/ext2/ext2.mk
-+++ b/fs/ext2/ext2.mk
-@@ -4,27 +4,24 @@
- #
- ################################################################################
- 
--EXT2_OPTS :=
-+EXT2_OPTS = -G $(BR2_TARGET_ROOTFS_EXT2_GEN) -R $(BR2_TARGET_ROOTFS_EXT2_REV)
- 
- ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)),0)
- EXT2_OPTS += -b $(BR2_TARGET_ROOTFS_EXT2_BLOCKS)
- endif
- 
- ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_INODES)),0)
--EXT2_OPTS += -N $(BR2_TARGET_ROOTFS_EXT2_INODES)
-+EXT2_OPTS += -i $(BR2_TARGET_ROOTFS_EXT2_INODES)
- endif
- 
- ifneq ($(strip $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)),0)
--EXT2_OPTS += -m $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
-+EXT2_OPTS += -r $(BR2_TARGET_ROOTFS_EXT2_RESBLKS)
- endif
- 
--ROOTFS_EXT2_DEPENDENCIES = host-genext2fs host-e2fsprogs
--
--EXT2_ENV = GEN=$(BR2_TARGET_ROOTFS_EXT2_GEN)
--EXT2_ENV += REV=$(BR2_TARGET_ROOTFS_EXT2_REV)
-+ROOTFS_EXT2_DEPENDENCIES = host-mke2img
- 
- define ROOTFS_EXT2_CMD
--	PATH=$(BR_PATH) $(EXT2_ENV) fs/ext2/genext2fs.sh -d $(TARGET_DIR) $(EXT2_OPTS) $@
-+	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
- endef
- 
- rootfs-ext2-symlink:
-diff --git a/fs/ext2/genext2fs.sh b/fs/ext2/genext2fs.sh
-deleted file mode 100755
-index 6f7b075..0000000
---- a/fs/ext2/genext2fs.sh
-+++ /dev/null
-@@ -1,121 +0,0 @@
--#!/bin/sh
--# genext2fs wrapper calculating needed blocks/inodes values if not specified
--set -e
--
--export LC_ALL=C
--
--CALC_BLOCKS=1
--CALC_INODES=1
--EXT_OPTS=
--EXT_OPTS_O=
--
--while getopts x:d:D:b:i:N:m:g:e:zfqUPhVv f
--do
--    case $f in
--	b) CALC_BLOCKS=0 ;;
--	N) CALC_INODES=0; INODES=$OPTARG ;;
--	d) TARGET_DIR=$OPTARG ;;
--    esac
--done
--eval IMG="\"\${${OPTIND}}\""
--
--# calculate needed inodes
--if [ $CALC_INODES -eq 1 ];
--then
--    INODES=$(find $TARGET_DIR | wc -l)
--    INODES=$(expr $INODES + 400)
--    set -- $@ -N $INODES
--fi
--
--# calculate needed blocks
--if [ $CALC_BLOCKS -eq 1 ];
--then
--    # size ~= superblock, block+inode bitmaps, inodes (8 per block), blocks
--    # we scale inodes / blocks with 10% to compensate for bitmaps size + slack
--    BLOCKS=$(du -s -c -k $TARGET_DIR | grep total | sed -e "s/total//")
--    BLOCKS=$(expr 500 + \( $BLOCKS + $INODES / 8 \) \* 11 / 10)
--    # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks) for
--    # the journal if ext3/4
--    # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
--    if [ ${GEN} -ge 3 ]; then
--        BLOCKS=$(expr 1300 + $BLOCKS )
--    fi
--    set -- $@ -b $BLOCKS
--fi
--
--e2tunefsck() {
--    # genext2fs does not generate a UUID, but fsck will whine if one is
--    # is missing, so we need to add a UUID.
--    # Of course, this has to happend _before_ we run fsck.
--    # Also, some ext4 metadata are based on the UUID, so we must
--    # set it before we can convert the filesystem to ext4.
--    # Although a random UUID may seem bad for reproducibility, there
--    # already are so many things that are not reproducible in a
--    # filesystem: file dates, file ordering, content of the files...
--    tune2fs -U random "${IMG}"
--
--    # Upgrade the filesystem
--    if [ $# -ne 0 ]; then
--        tune2fs "$@" "${IMG}"
--    fi
--
--    # After changing filesystem options, running fsck is required
--    # (see: man tune2fs). Running e2fsck in other cases will ensure
--    # coherency of the filesystem, although it is not required.
--    # 'e2fsck -pDf' means:
--    #  - automatically repair
--    #  - optimise and check for duplicate entries
--    #  - force checking
--    # Sending output to oblivion, as e2fsck can be *very* verbose,
--    # especially with filesystems generated by genext2fs.
--    # Exit codes 1 & 2 are OK, it means fs errors were successfully
--    # corrected, hence our little trick with $ret.
--    ret=0
--    e2fsck -pDf "${IMG}" >/dev/null || ret=$?
--    case ${ret} in
--       0|1|2) ;;
--       *)   exit ${ret};;
--    esac
--    printf "\ne2fsck was successfully run on '%s' (ext%d)\n\n"  \
--           "${IMG##*/}" "${GEN}"
--
--    # Remove count- and time-based checks, they are not welcome
--    # on embedded devices, where they can cause serious boot-time
--    # issues by tremendously slowing down the boot.
--    tune2fs -c 0 -i 0 "${IMG}"
--}
--
--# Check we know what generation to generate
--case "${GEN}:${REV}" in
--    2:0|2:1|3:1|4:1)
--	;;
--    *)
--	printf "%s: unknown ext generation '%s' and/or revision '%s'\n" \
--	       "${0##*/}" "${GEN}" "${REV}" >&2
--	exit 1
--	;;
--esac
--
--# Upgrade to rev1 if needed
--if [ ${REV} -ge 1 ]; then
--    EXT_OPTS_O="${EXT_OPTS_O},filetype"
--fi
--
--# Add a journal for ext3 and above
--if [ ${GEN} -ge 3 ]; then
--    EXT_OPTS="${EXT_OPTS} -j -J size=1"
--fi
--
--# Add ext4 specific features
--if [ ${GEN} -ge 4 ]; then
--    EXT_OPTS_O="${EXT_OPTS_O},extents,uninit_bg,dir_index"
--fi
--
--# Add our -O options (there will be at most one leading comma, remove it)
--if [ -n "${EXT_OPTS_O}" ]; then
--    EXT_OPTS="${EXT_OPTS} -O ${EXT_OPTS_O#,}"
--fi
--
--# Generate and upgrade the filesystem
--genext2fs "$@"
--e2tunefsck ${EXT_OPTS}
+Series applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
