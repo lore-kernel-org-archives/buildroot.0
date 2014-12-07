@@ -1,35 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:11:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: Add patch to
- fix build error with musl
-In-Reply-To: <1417644227-16408-1-git-send-email-jkrause@posteo.de>
-References: <1417644227-16408-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141207221114.1dccf63c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Dec 2014 22:12:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix static linking
+In-Reply-To: <1417289621-17415-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1417289621-17415-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141207211244.GD10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Bernd, All,
 
-On Wed,  3 Dec 2014 23:03:47 +0100, J?rg Krause wrote:
-> Add a patch to allow building wpa_supplicant with the musl C library.
+On 2014-11-29 20:33 +0100, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/6bd/6bd8c009056beb67092abd6d18064500302dcecb/
 > 
-> Building wpa_supplicant with the musl C library fails since musl does not
-> define type names such as '__uint32_t'. To support building wpa_supplicant
-> with the musl C library use the integer types declared in the ISO C standard
-> header file <stdint.h>.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> This patch depends on http://patchwork.ozlabs.org/patch/416006/
 > 
-> Patch is sent upstream:
-> http://lists.shmoo.com/pipermail/hostap/2014-December/031464.html
+>  package/minidlna/minidlna.mk |    4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+> index 3a0ca35..d483e1c 100644
+> --- a/package/minidlna/minidlna.mk
+> +++ b/package/minidlna/minidlna.mk
+> @@ -18,8 +18,10 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>  # the configure script / Makefile forgets to link with some of the dependent
+>  # libraries breaking static linking, so help it along
+>  MINIDLNA_CONF_ENV = \
+> -	LIBS='-lavformat -lavcodec -lavutil -logg \
+> +	LIBS='-lavformat -lavcodec -lavutil -logg -lvorbis -lvorbisenc \
+> +		$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl) -lexif \
+>  		$(if $(BR2_PACKAGE_OPENSSL),-lssl -lcrypto) \
+> +		$(if $(BR2_PACKAGE_OPUS),-lswresample -lopus) \
 
-Applied, thanks.
+Ofd course, this should be adapted with the previous comment to your
+previous patch.
 
-Thomas
+But hold on on it, I'd like Thomas P. to ack my comment before you work
+on it...
+
+Regards,
+Yann E. MORIN.
+
+>  		-lz -lpthread -lm'
+>  else
+>  MINIDLNA_CONF_OPTS = \
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
