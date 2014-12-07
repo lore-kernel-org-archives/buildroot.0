@@ -1,32 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:04:41 +0100
-Subject: [Buildroot] [PATCH] python-webpy: depend on Python 2.x only
-In-Reply-To: <1417729017-6395-1-git-send-email-yegorslists@googlemail.com>
-References: <1417729017-6395-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20141207220441.1966c272@free-electrons.com>
+Date: Sun, 7 Dec 2014 22:05:26 +0100
+Subject: [Buildroot] [git commit] package/binutils: fix comment dependencies
+Message-ID: <20141207210547.19E4C8002D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=f6486432ec72ef663d287bc374501a4133aa87e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  4 Dec 2014 22:36:57 +0100, Yegor Yefremov wrote:
-> webpy is still not ported to Python 3, so enable only
-> for Python 2.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-webpy/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+[Thomas: re-adjust dependencies, according to Yann's comment.]
 
-Applied, thanks. I've added a reference to the corresponding
-autobuilder failure. Please try to include such references in future
-patches. Thanks a lot!
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 50c38b6..64d0a09 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -23,4 +23,4 @@ endif
+ 
+ comment "binutils needs a toolchain w/ wchar"
+ 	depends on !BR2_aarch64 && !BR2_nios2
+-	depends on BR2_USE_WCHAR
++	depends on !BR2_USE_WCHAR
