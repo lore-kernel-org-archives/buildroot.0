@@ -1,49 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 21:36:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/binutils: fix comment
- dependencies
-In-Reply-To: <1417727462-10875-1-git-send-email-romain.naour@openwide.fr>
-References: <1417727462-10875-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141207203652.GD3902@free.fr>
+Date: Sun, 7 Dec 2014 21:39:44 +0100
+Subject: [Buildroot] [PATCH] w_scan: bump version to 20141122
+In-Reply-To: <1417714796-65316-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1417714796-65316-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141207203944.GE3902@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Vicente, All,
 
-On 2014-12-04 22:11 +0100, Romain Naour spake thusly:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/binutils/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 2014-12-04 17:39 +0000, Vicente Olivert Riera spake thusly:
+> - Bump version to 20141122
+> - Add a hash file
 > 
-> diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-> index 50c38b6..fb037ef 100644
-> --- a/package/binutils/Config.in
-> +++ b/package/binutils/Config.in
-> @@ -22,5 +22,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
->  endif
->  
->  comment "binutils needs a toolchain w/ wchar"
-> -	depends on !BR2_aarch64 && !BR2_nios2
-> -	depends on BR2_USE_WCHAR
-> +	depends on !BR2_aarch64 || !BR2_nios2
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Nope. Architecture dependency must be the same as for the package
-symbol, so we must keep the '&&' here, like there is for
-BR2_PACKAGE_BINUTILS.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> +	depends on !BR2_USE_WCHAR
-
-Yes.
+Hash manually checked.
 
 Regards,
 Yann E. MORIN.
 
+> ---
+>  package/w_scan/w_scan.hash |    2 ++
+>  package/w_scan/w_scan.mk   |    2 +-
+>  2 files changed, 3 insertions(+), 1 deletions(-)
+>  create mode 100644 package/w_scan/w_scan.hash
+> 
+> diff --git a/package/w_scan/w_scan.hash b/package/w_scan/w_scan.hash
+> new file mode 100644
+> index 0000000..4c336f3
+> --- /dev/null
+> +++ b/package/w_scan/w_scan.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  b6d7c9ab997c53a0b0d92e8390f313cc3b82ee8ece1756b4e526119fd5ba09b4  w_scan-20141122.tar.bz2
+> diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
+> index 44f3193..3ec84ed 100644
+> --- a/package/w_scan/w_scan.mk
+> +++ b/package/w_scan/w_scan.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -W_SCAN_VERSION = 20140118
+> +W_SCAN_VERSION = 20141122
+>  W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
+>  W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
+>  W_SCAN_LICENSE = GPLv2+
 > -- 
-> 1.9.3
+> 1.7.1
 > 
 > _______________________________________________
 > buildroot mailing list
@@ -57,3 +67,10 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141207/f179c577/attachment.asc>
