@@ -1,37 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 23:02:07 +0100
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: bump to v3.7.1
-In-Reply-To: <1417623505-5767-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1417623505-5767-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20141207230207.77875d75@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Dec 2014 23:03:38 +0100
+Subject: [Buildroot] [PATCH v4 next 0/5] Improve silent builds
+In-Reply-To: <CAHkwnC88+=HVSW0C96nt-qkdAfpd26pT44kTgEAOgYWGgE_TDg@mail.gmail.com>
+References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
+ <20141207215106.GI10809@free.fr>
+ <CAHkwnC88+=HVSW0C96nt-qkdAfpd26pT44kTgEAOgYWGgE_TDg@mail.gmail.com>
+Message-ID: <20141207220338.GJ10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Fabio, All,
 
-On Wed,  3 Dec 2014 17:18:25 +0100, Angelo Compagnucci wrote:
-> The main difference with v3.6.2 is that this patch calls "make defconfig"
-> before make.
-> "make defconfig" is called by the Makefile with .config file,
-> so the original logic isn't changed.
-> Calling "make defconfig" is required to correctly prepare dependencies file.
+On 2014-12-07 22:54 +0100, Fabio Porcedda spake thusly:
+> On Sun, Dec 7, 2014 at 10:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Fabio, All,
+> >
+> > On 2014-11-24 14:56 +0100, Fabio Porcedda spake thusly:
+> >> This patch set improves silent builds.
+> >>
+> >> Silent builds are nice when top-level parallel make is being used to
+> >> reduce the output clutter.
+> >
+> > Will you rework this series taking into account the comment Thomas and I
+> > made on your first patch?
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  boot/at91bootstrap3/at91bootstrap3.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Sure, i will do that when i have enough time to do that, right now i'm
+> quite busy.
 
-Thanks, I've applied your patch, but I've changed the logic: instead of
-calling this "defconfig" target, I've changed the <pkg>_CONFIGURE_CMDS
-step to use 'make <blabla>_defconfig', which is more logical.
+No problem, thank you! :-)
 
-Thanks!
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
