@@ -1,42 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun,  7 Dec 2014 23:54:49 +0100
-Subject: [Buildroot] [PATCH 6/6] gst1-libav: bump version
-In-Reply-To: <1417992889-11344-1-git-send-email-peter@korsgaard.com>
-References: <1417992889-11344-1-git-send-email-peter@korsgaard.com>
-Message-ID: <1417992889-11344-7-git-send-email-peter@korsgaard.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Sun, 07 Dec 2014 14:56:15 -0800
+Subject: [Buildroot] [PATCH 1/1] lighttpd: install fastcgi config for php
+In-Reply-To: <20141207235043.01177f0c@free-electrons.com>
+References: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
+ <20141207235043.01177f0c@free-electrons.com>
+Message-ID: <5484DB0F.5070300@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thomas, Floris, All,
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 957db83..346698d 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/gstreamer-announce/2014-September/000329.html
--sha256	833229d2b1aad6549ad0297435516508cc3ac47b166d6393ecdffc34c31a01d3	gst-libav-1.4.3.tar.xz
-+# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-November/050375.html
-+sha256	2ec7285e5ec6731963b0955487cceb9eb04e285ca682f3ef575996c068cde8aa  gst-libav-1.4.4.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 1772530..ffa9cad 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_LIBAV_VERSION = 1.4.3
-+GST1_LIBAV_VERSION = 1.4.4
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
- 
--- 
-2.1.3
+On 12/07/2014 02:50 PM, Thomas Petazzoni wrote:
+> Dear Ryan Coe,
+>
+> On Tue,  2 Dec 2014 14:35:24 -0800, Ryan Coe wrote:
+>> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+>> ---
+>>   package/lighttpd/fastcgi.conf |  7 +++++++
+>>   package/lighttpd/lighttpd.mk  | 11 +++++++++++
+>>   2 files changed, 18 insertions(+)
+>>   create mode 100644 package/lighttpd/fastcgi.conf
+> Seeing the feedback from Floris Bos on this patch, I marked your patch
+> as 'Rejected' in our patch tracking system. Please work with Floris on
+> a variant of your patch that takes into account also his use case
+> (maybe by making the fastcgi installation optional?).
+>
+> Thanks!
+>
+> Thomas
+
+Yes, of course.  This makes sense.
