@@ -1,62 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Dec 2014 00:21:19 +0100
-Subject: [Buildroot] [PATCH 37/51] xbmc-addon-xvdr: Change comments on
- VERSION
-In-Reply-To: <1414349157-22749-37-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-37-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20141207232118.GO10809@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Dec 2014 00:21:43 +0100
+Subject: [Buildroot] [RFC PATCH 0/2] Add Freescale e5500 & e6500 support
+In-Reply-To: <5484E01A.7080802@zacarias.com.ar>
+References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141207234835.4fac269f@free-electrons.com>
+ <5484E01A.7080802@zacarias.com.ar>
+Message-ID: <20141208002143.55b94d12@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+Dear Gustavo Zacarias,
 
-On 2014-10-26 19:45 +0100, Maxime Hadjinlian spake thusly:
-> The cset points actually to HEAD of the Gotham branch, change the
-> comment to reflect that.
+On Sun, 07 Dec 2014 20:17:46 -0300, Gustavo Zacarias wrote:
+
+> > Patches applied. I must say I'm a bit confused by why we exclude PP64le
+> > for those new platforms. Is there theoretically something that would
+> > prevent those from being used in LE mode?
 > 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> As far i was able to find out without hardware the fsl ppc64 SOCs aren't
+> able to boot in LE mode.
+> It's like ARM, if the peripherals aren't ready for it even though the
+> CPU itself can do so it won't work right.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hum, right. I worked on an ARM platform that does support both LE and
+BE. For most things, there is no need for any sort of BE/LE handling at
+the peripheral level, except maybe for DMA descriptors shared by the
+CPU and device (even though the CPU could do the effort of doing things
+LE even if the system is running BE).
 
-Regards,
-Yann E. MORIN.
+> For example for pseries there's the pseries_le_defconfig, for the fsl 64
+> bit chips there's corenet64_smp_defconfig but no LE counterpart.
+> Even though CONFIG_CPU_LITTLE_ENDIAN can be toggled for said config i
+> wasn't able to find anything related to actually booting that (and it's
+> a pretty generic option).
+> So i "erred" on the safe side.
 
-> ---
->  package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-> index a4d9624..d51d2c5 100644
-> --- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-> +++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-> @@ -4,9 +4,8 @@
->  #
->  ################################################################################
->  
-> -# This cset is on master. When a Gotham branch is made, we should
-> -# follow it, as incompatible changes in the plugins API can happen
-> -# on the master branch.
-> +# This cset is the HEAD of the xbmc-gotham master. It will need to change when
-> +# XBMC is updated.
->  XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
->  XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
->  XBMC_ADDON_XVDR_LICENSE = GPLv2+
-> -- 
-> 2.1.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Ok, works for me.
 
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
