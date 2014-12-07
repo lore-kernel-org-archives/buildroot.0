@@ -1,32 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 00:20:08 +0100
-Subject: [Buildroot] Patchwork review evening (this week!)
-Message-ID: <20141208002008.18756fac@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Dec 2014 00:21:19 +0100
+Subject: [Buildroot] [PATCH 37/51] xbmc-addon-xvdr: Change comments on
+ VERSION
+In-Reply-To: <1414349157-22749-37-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-37-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141207232118.GO10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Maxime, All,
 
-In order to help with killing a bit of the patchwork backlog, I'm
-proposing to have a "patchwork review evening". The idea is that a
-group of Buildroot developers join on IRC for a few hours in the
-evening, and we go through a list of patches or patch series that are
-'complex' and try to take some decision about them.
+On 2014-10-26 19:45 +0100, Maxime Hadjinlian spake thusly:
+> The cset points actually to HEAD of the Gotham branch, change the
+> comment to reflect that.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-I've put up a list of possible dates this week at
-http://doodle.com/kinfzn5xhg7i35g2. The proposed time is 8 PM CET, but
-it can be adjusted to be a bit earlier or later.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We'll try to prepare the meeting by setting up a list of patches to be
-discussed.
+Regards,
+Yann E. MORIN.
 
-Thanks for your participation,
+> ---
+>  package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+> index a4d9624..d51d2c5 100644
+> --- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+> +++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
+> @@ -4,9 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -# This cset is on master. When a Gotham branch is made, we should
+> -# follow it, as incompatible changes in the plugins API can happen
+> -# on the master branch.
+> +# This cset is the HEAD of the xbmc-gotham master. It will need to change when
+> +# XBMC is updated.
+>  XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
+>  XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
+>  XBMC_ADDON_XVDR_LICENSE = GPLv2+
+> -- 
+> 2.1.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
