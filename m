@@ -1,69 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Dec 2014 00:53:15 +0100
-Subject: [Buildroot] [PATCH 5/5 v3] pkg-download: check hashes for locally
-	cached files
+Date: Mon,  8 Dec 2014 00:53:14 +0100
+Subject: [Buildroot] [PATCH 4/5 v3] pkg-download: fix checking hash for host
+	packages
 In-Reply-To: <cover.1417996302.git.yann.morin.1998@free.fr>
 References: <cover.1417996302.git.yann.morin.1998@free.fr>
-Message-ID: <ac4eef89b5bac135b130b833de5712c3cca0e9b7.1417996302.git.yann.morin.1998@free.fr>
+Message-ID: <9841e53593037a2530080dfea00b426b7e95b8c7.1417996302.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases, upstream just update their releases in-place, without
-renaming them. When that package is updated in Buildroot, a new hash to
-match the new upstream release is included in the corresponding .hash
-file.
+Currently, we use $($(PKG)_NAME) to find the hash file.
 
-As a consequence, users who previously downloaded that package's tarball
-with an older version of Buildroot, will get stuck with an old archive
-for that package, and after updating their Buildroot copy, will be greeted
-with a failed download, due to the local file not matching the new
-hashes.
+but for host package, $(PKG) is host-foo, which would have us look for
+host-foo.hash, while the hash file is really foo.hash.
 
-So, to avoid this situation, check the hashes prior to doing the
-download. If the hashes match, consider the locally cached file genuine,
-and do not download it. However, if the locally cached file does not
-match the known hashes we have for it, it is promptly removed, and a
-download is re-attempted.
+Fix that by using the raw name of the package, $($(PKG)_RAWNAME).
 
-Note: this does not add any overhead compared to the previous situation,
-because we were already checking hashes of localy cached files. It just
-changes the order in which we do the checks. For the records, here is the
-overhead of hashing a 231MiB file (qt-everywhere-opensource-src-4.8.6.tar.gz)
-on a core-i5 @2.5GHz:
-
-            cache-cold  cache-hot
-    sha1      1.914s      0.762s
-    sha256    2.109s      1.270s
-
-But again, this overhead already existed before this patch.
-
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- support/download/dl-wrapper | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index fdb49db..d66715f 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -56,7 +56,11 @@ main() {
- 
-     # If the output file already exists, do not download it again
-     if [ -e "${output}" ]; then
--        exit 0
-+        if support/download/check-hash "${hfile}" "${output}" "${output##*/}"; then
-+            exit 0
-+        fi
-+        rm -f "${output}"
-+        printf "Re-downloading '%s'...\n" "${output##*/}"
-     fi
- 
-     # tmpd is a temporary directory in which backends may store intermediate
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 407e8c8..ba72fc1 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -87,7 +87,7 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ define DOWNLOAD_GIT
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -108,7 +108,7 @@ endef
+ define DOWNLOAD_BZR
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -126,7 +126,7 @@ endef
+ define DOWNLOAD_CVS
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -146,7 +146,7 @@ endef
+ define DOWNLOAD_SVN
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -167,7 +167,7 @@ endef
+ define DOWNLOAD_SCP
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
+ 		-o $(DL_DIR)/$(2) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		'$(call stripurischeme,$(call qstrip,$(1)))'
+ endef
+@@ -184,7 +184,7 @@ endef
+ define DOWNLOAD_HG
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -205,7 +205,7 @@ endef
+ define DOWNLOAD_WGET
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
+ 		-o $(DL_DIR)/$(2) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		'$(call qstrip,$(1))'
+ endef
+@@ -221,7 +221,7 @@ endef
+ define DOWNLOAD_LOCALFILES
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
+ 		-o $(DL_DIR)/$(2) \
+-		-H $(PKGDIR)/$($(PKG)_NAME).hash \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$(call stripurischeme,$(call qstrip,$(1)))
+ endef
 -- 
 1.9.1
