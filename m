@@ -1,36 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 23:43:12 +0100
-Subject: [Buildroot] [PATCH v2] package/network-manager: Enable service
- under systemd
-In-Reply-To: <1417510419-9400-1-git-send-email-nroach44@gmail.com>
-References: <1417510419-9400-1-git-send-email-nroach44@gmail.com>
-Message-ID: <20141207234312.67acc5df@free-electrons.com>
+Date: Sun, 7 Dec 2014 23:47:22 +0100
+Subject: [Buildroot] [git commit] package/gcc: set e5500 and e6500 version
+	mask
+Message-ID: <20141207224728.8AC0F7F94C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nathaniel Roach,
+commit: http://git.buildroot.net/buildroot/commit/?id=0fb5dee3e6a78afba125e613e943db16d82046e3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  2 Dec 2014 16:53:39 +0800, Nathaniel Roach wrote:
-> Previously NetworkManager had to be enabled and started on the
-> first boot manually or by a script.
-> 
-> Add install define with the commands to setup the required
-> service files for automatic start.
-> 
-> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-> ---
-> Changes v1 -> v2
->   - Corrected the symlinks so they point to the correct files,
-> 	ensuring the dispatcher service works
+Freescale e5500 and e6500 cores are supported for versions >= 4.8
+So filter out all of the older versions to avoid build failures.
 
-Thanks, applied. It would be good if some systemd person such as Eric
-Le Bihan could have a look.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 9d08ccb..ff48af1 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -30,7 +30,8 @@ choice
+ 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
+ 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
+ 		# Broken or unsupported PPC cores
+-		depends on !BR2_powerpc_power8
++		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
++			!BR2_powerpc_power8
+ 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
+ 		depends on !BR2_sparc_leon3
+ 		# Broken or unsupported X86 cores
+@@ -49,7 +50,8 @@ choice
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_pj4
+ 		# Broken or unsupported PPC cores
+-		depends on !BR2_powerpc_power8
++		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
++			!BR2_powerpc_power8
+ 		# SPARC -mcpu=leon3 appeared in gcc 4.8.3
+ 		depends on !BR2_sparc_leon3
+ 		# Broken or unsupported x86 cores
