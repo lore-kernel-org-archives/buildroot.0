@@ -1,34 +1,64 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 7 Dec 2014 22:54:50 +0100
-Subject: [Buildroot] [PATCH v4 next 0/5] Improve silent builds
-In-Reply-To: <20141207215106.GI10809@free.fr>
-References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
- <20141207215106.GI10809@free.fr>
-Message-ID: <CAHkwnC88+=HVSW0C96nt-qkdAfpd26pT44kTgEAOgYWGgE_TDg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 23:00:34 +0100
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump to v3.7.1
+Message-ID: <20141207220123.2A5C280137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 7, 2014 at 10:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Fabio, All,
->
-> On 2014-11-24 14:56 +0100, Fabio Porcedda spake thusly:
->> This patch set improves silent builds.
->>
->> Silent builds are nice when top-level parallel make is being used to
->> reduce the output clutter.
->
-> Will you rework this series taking into account the comment Thomas and I
-> made on your first patch?
+commit: http://git.buildroot.net/buildroot/commit/?id=b2b5425a07f1ba5102b10d6d9541224f3a05906b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Sure, i will do that when i have enough time to do that, right now i'm
-quite busy.
+Change to use the _defconfig targets of at91bootstrap3 build system
+when a defconfig is used.
 
-> In the meantime, I've marked your patches as "Changes Requested" in our
-> Patchwork.
+[Thomas: adjust to make a better use of at91bootstrap3 defconfig
+mechanism.]
 
-BR
--- 
-Fabio Porcedda
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/at91bootstrap3/at91bootstrap3.mk |   16 +++++++---------
+ 1 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index bc8d912..098e7bf 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AT91BOOTSTRAP3_VERSION = v3.6.2
++AT91BOOTSTRAP3_VERSION = v3.7.1
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ 
+ AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+@@ -29,19 +29,17 @@ AT91BOOTSTRAP3_POST_PATCH_HOOKS += AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
+ endif
+ 
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+-AT91BOOTSTRAP3_SOURCE_CONFIG = \
+-	$(@D)/board/*/$(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
++define AT91BOOTSTRAP3_CONFIGURE_CMDS
++	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) $(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
++endef
+ else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+-AT91BOOTSTRAP3_SOURCE_CONFIG = $(AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)
+-endif
+-
+ define AT91BOOTSTRAP3_CONFIGURE_CMDS
+-	cp $(AT91BOOTSTRAP3_SOURCE_CONFIG) $(@D)/.config
+-	$(SED) 's/image.bin/uImage/' $(@D)/.config
++	cp $(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE) $(@D)/.config
+ endef
++endif
+ 
+ define AT91BOOTSTRAP3_BUILD_CMDS
+-	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) boot
++	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
