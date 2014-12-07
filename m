@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 21:28:22 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nginx: disallow AIO support on
- arc
-In-Reply-To: <1417871738-13421-1-git-send-email-s.martin49@gmail.com>
-References: <1417871738-13421-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20141207212822.5fb1d702@free-electrons.com>
+Date: Sun, 7 Dec 2014 21:29:12 +0100
+Subject: [Buildroot] [git commit] libv4l: bump to version 1.6.2
+Message-ID: <20141207203002.4C4A3800F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=eb43b5f6f9d710d60d6fe6a6107044be5ec307b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  6 Dec 2014 14:15:37 +0100, Samuel Martin wrote:
-> The nginx AIO support cannot build on arc, because it hardcodes
-> the usage of SYS_eventfd(), while it should just use eventfd() from
-> the C library.
-> 
-> Fixes:
->   http://autobuild.buildroot.org/results/f3e/f3e2c7a937517a5444f8c6cc0b02692af897b3e0/
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/nginx/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libv4l/libv4l.hash |    3 +--
+ package/libv4l/libv4l.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Thanks, applied after slightly tweaking the comment as suggested by
-Yann.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 80e677a..609cfbc 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha1	e0b74818e6f4a4b8974e152f4c00bec6c62265e5  v4l-utils-1.6.0.tar.bz2
+-sha256	6054d3120c67a1524993e699b3b02036c817bb000b742c332682163966dc7605  v4l-utils-1.6.0.tar.bz2
++sha256 d3d6eb1f0204fb11f3d318bfca35d5f73cc077f88fac7665a47856a16496be7d  v4l-utils-1.6.2.tar.bz2
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 63dd5d2..94c7031 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBV4L_VERSION = 1.6.0
++LIBV4L_VERSION = 1.6.2
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
