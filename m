@@ -1,73 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Dec 2014 12:39:32 +0100
-Subject: [Buildroot] [PATCH 6/6 v3] package/weston: add support for the RDP
-	compositor
-In-Reply-To: <cover.1417952276.git.yann.morin.1998@free.fr>
-References: <cover.1417952276.git.yann.morin.1998@free.fr>
-Message-ID: <60f5963bb803d787a63918b0425798e7463984ff.1417952276.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 13:04:38 +0100
+Subject: [Buildroot] [PATCH 2/5 v2] suppot/download: add option parsing
+ to the download wrapper
+In-Reply-To: <7f3140282a6843b4d229d873a1e7076573df9a2f.1417949583.git.yann.morin.1998@free.fr>
+References: <cover.1417949583.git.yann.morin.1998@free.fr>
+ <7f3140282a6843b4d229d873a1e7076573df9a2f.1417949583.git.yann.morin.1998@free.fr>
+Message-ID: <20141207130438.35328feb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the RDP compositor, one can run a headless machine to serve remote
-clients, using the RDP protocol.
+Dear Yann E. MORIN,
 
-Add an option to enable the rdp-backend.
+On Sun,  7 Dec 2014 12:02:35 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- package/weston/Config.in | 17 +++++++++++++++++
- package/weston/weston.mk |  7 +++++++
- 2 files changed, 24 insertions(+)
+> +help() {
+> +    cat <<_EOF_
+> +NAME
+> +    ${my_name} - downlaod wrapper for Buildroot
+> +
+> +SYNOPSIS
+> +    ${my_name} [OPTION]... -- [BACKEND OPTION]...
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index cf242d1..1d29ea3 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -40,6 +40,23 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 
-+config BR2_PACKAGE_WESTON_RDP
-+	bool "RDP compositor"
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+	help
-+	  This enables the RDP backend, which allows accessing weston
-+	  through the network with any RDP-compliant client.
-+
-+	  Please note that one must pass those options to weston for RDP
-+	  to be functional:
-+	    --rdp-tls-cert=/path/to/server.crt
-+	    --rdp-tls-key=/path/to/server.key
-+
-+	  By default, Buildroot installs such files in /etc/freerdp/server/
-+	  so you may want to change them in a post-build script or a rootfs
-+	  overlay.
-+
- comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
- 	depends on BR2_arm
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 9964b90..2829a10 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -32,6 +32,13 @@ else
- WESTON_CONF_OPTS += --disable-libinput-backend
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
-+WESTON_DEPENDENCIES += freerdp
-+WESTON_CONF_OPTS += --enable-rdp-compositor
-+else
-+WESTON_CONF_OPTS += --disable-rdp-compositor
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
+Why do you create help text that look like man pages? It is very
+unusual, most Unix commands don't have a help text that look like a man
+page.
+
+I had the same reflexion on the mke2img thing.
+
+> +DESCRIPTIOM
+
+DESCRIPTION
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
