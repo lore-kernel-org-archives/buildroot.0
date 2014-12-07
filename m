@@ -1,44 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 23:03:38 +0100
-Subject: [Buildroot] [PATCH v4 next 0/5] Improve silent builds
-In-Reply-To: <CAHkwnC88+=HVSW0C96nt-qkdAfpd26pT44kTgEAOgYWGgE_TDg@mail.gmail.com>
-References: <1416837422-1977-1-git-send-email-fabio.porcedda@gmail.com>
- <20141207215106.GI10809@free.fr>
- <CAHkwnC88+=HVSW0C96nt-qkdAfpd26pT44kTgEAOgYWGgE_TDg@mail.gmail.com>
-Message-ID: <20141207220338.GJ10809@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 23:04:01 +0100
+Subject: [Buildroot] [PATCH] configs: add sample for freescale p2020ds
+In-Reply-To: <1417635538-17557-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1417635538-17557-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141207230401.375c7b9f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Dear Gustavo Zacarias,
 
-On 2014-12-07 22:54 +0100, Fabio Porcedda spake thusly:
-> On Sun, Dec 7, 2014 at 10:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Fabio, All,
-> >
-> > On 2014-11-24 14:56 +0100, Fabio Porcedda spake thusly:
-> >> This patch set improves silent builds.
-> >>
-> >> Silent builds are nice when top-level parallel make is being used to
-> >> reduce the output clutter.
-> >
-> > Will you rework this series taking into account the comment Thomas and I
-> > made on your first patch?
-> 
-> Sure, i will do that when i have enough time to do that, right now i'm
-> quite busy.
+On Wed,  3 Dec 2014 16:38:58 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  board/freescale/p2020ds/linux-3.12.config          | 374 +++++++++++++++++++++
+>  .../p2020ds/linux-fix-c6187597-breakage.patch      |  51 +++
+>  board/freescale/p2020ds/readme.txt                 |  40 +++
+>  configs/freescale_p2020ds_defconfig                |  26 ++
+>  4 files changed, 491 insertions(+)
+>  create mode 100644 board/freescale/p2020ds/linux-3.12.config
+>  create mode 100644 board/freescale/p2020ds/linux-fix-c6187597-breakage.patch
+>  create mode 100644 board/freescale/p2020ds/readme.txt
+>  create mode 100644 configs/freescale_p2020ds_defconfig
 
-No problem, thank you! :-)
+Applied, thanks.
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
