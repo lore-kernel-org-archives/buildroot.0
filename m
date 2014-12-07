@@ -1,35 +1,48 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Sun, 07 Dec 2014 14:56:15 -0800
-Subject: [Buildroot] [PATCH 1/1] lighttpd: install fastcgi config for php
-In-Reply-To: <20141207235043.01177f0c@free-electrons.com>
-References: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
- <20141207235043.01177f0c@free-electrons.com>
-Message-ID: <5484DB0F.5070300@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 23:48:53 +0100
+Subject: [Buildroot] [git commit] avahi: add optional dbus-python support
+Message-ID: <20141207230011.E4BA880131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Floris, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=7e6e181ba894ec644ca0f807a437f97d91c76b59
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 12/07/2014 02:50 PM, Thomas Petazzoni wrote:
-> Dear Ryan Coe,
->
-> On Tue,  2 Dec 2014 14:35:24 -0800, Ryan Coe wrote:
->> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
->> ---
->>   package/lighttpd/fastcgi.conf |  7 +++++++
->>   package/lighttpd/lighttpd.mk  | 11 +++++++++++
->>   2 files changed, 18 insertions(+)
->>   create mode 100644 package/lighttpd/fastcgi.conf
-> Seeing the feedback from Floris Bos on this patch, I marked your patch
-> as 'Rejected' in our patch tracking system. Please work with Floris on
-> a variant of your patch that takes into account also his use case
-> (maybe by making the fastcgi installation optional?).
->
-> Thanks!
->
-> Thomas
+Without this, the python support doesn't do anything.
 
-Yes, of course.  This makes sense.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/avahi/avahi.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 4e5dbc6..e42f78d 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -71,7 +71,6 @@ AVAHI_CONF_OPTS = \
+ 		--disable-qt3 \
+ 		--disable-qt4 \
+ 		--disable-gdbm \
+-		--disable-python-dbus \
+ 		--disable-pygtk \
+ 		--disable-mono \
+ 		--disable-monodoc \
+@@ -144,6 +143,14 @@ else
+ AVAHI_CONF_OPTS += --disable-python
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DBUS_PYTHON),y)
++AVAHI_CONF_OPTS += --enable-python-dbus
++AVAHI_CONF_ENV  += py_cv_mod_dbus_=yes
++AVAHI_DEPENDENCIES += dbus-python
++else
++AVAHI_CONF_OPTS += --disable-python-dbus
++endif
++
+ AVAHI_MAKE_OPTS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+ 
+ define AVAHI_USERS
