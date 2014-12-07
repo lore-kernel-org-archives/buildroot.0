@@ -1,87 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 11:47:37 +0100
-Subject: [Buildroot] [PATCH 4/4] pkg-download: check hasahes for locally
- cached files
-In-Reply-To: <20141206135309.016c7151@free-electrons.com>
-References: <cover.1417475935.git.yann.morin.1998@free.fr>
- <e1cc728a60b6a250ea395ee429dba7f470b1f8a8.1417475935.git.yann.morin.1998@free.fr>
- <20141202093148.1a1f7db7@free-electrons.com>
- <20141203185157.GG4152@free.fr> <20141206124441.GC9544@free.fr>
- <20141206135309.016c7151@free-electrons.com>
-Message-ID: <20141207104737.GA3794@free.fr>
+Date: Sun,  7 Dec 2014 12:02:34 +0100
+Subject: [Buildroot] [PATCH 0/5 v2] pkg-download: check hashes before the
+	download (branch yem/download-hash)
+Message-ID: <cover.1417949583.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello All!
 
-On 2014-12-06 13:53 +0100, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> define DOWNLOAD_WGET
->         test -e $(DL_DIR)/$(2) || \
->         $(EXTRA_ENV) support/download/wrapper wget \
->                 $(DL_DIR)/$(2) \
->                 '$(call qstrip,$(1))' && \
->         $(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
-> endef
-> 
-> 
-> Hum, the construct 
-> 
-> 	test -e <foo> || download && check-hash
+This series introduces a way to check hashes prior to doing a download.
 
-Well, in shell, the || and && operators have the same priority. In fact,
-POSIX does not state that there should be any priority or that there
-should be one. The phrasing in POSIX is very ambiguous:
+This is required for when upstream silently update their release tarballs
+without renaming them, and the user is left with a stray locally cached
+tarball that no longer match the hashes with have for that package.
 
-    AND Lists
+In so doing, this series:
+  - moves the check for a cached file into the wrapper;
+  - moves the post-download check for hashes into the wrapper;
+  - adds a pre-download check for hashes in the wrapper.
 
-    The control operator "&&" denotes an AND list. The format shall be:
+Doing the pre-download checks in the Makefile, like the post-download
+checks were done, made the Makefile a bit harder to read. On the other
+hand, we have a download wrapper shell script, so it is easier to do
+trickey stuff in there (shell syntax) than in the Makefile (make syntax
+can become unreadable pretty fast).
 
-        command1 [ && command2] ...
+This has a side effect of cleaning up the pkg-download.mk Makefile, too,
+but that was not the goal.
 
-    First command1 shall be executed. If its exit status is zero, command2
-    shall be executed, and so on, until a command has a non-zero exit status
-    or there are no more commands left to execute. The commands are expanded
-    only if they are executed.
 
-    Exit Status
+Changes v1 -> v2:
+  - add options parsing to the wrapper  (Thomas)
+  - typoes  (Thomas)
+  - rename the wrapper to dl-wrapper so it looks better in the traces,
+    and it is not confused with another wrapper
 
-    The exit status of an AND list shall be the exit status of the last
-    command that is executed in the list.
-
-    OR Lists
-
-    The control operator "||" denotes an OR List. The format shall be:
-
-        command1 [ || command2] ...
-
-    First, command1 shall be executed. If its exit status is non-zero,
-    command2 shall be executed, and so on, until a command has a zero exit
-    status or there are no more commands left to execute.
-
-    Exit Status
-
-    The exit status of an OR list shall be the exit status of the last
-    command that is executed in the list.
-
-So, if one wants priority to be allied, one should use a compund
-command, either {compound-list;} or (compound-list).
-
-Yes, this sucks.
-
-The advantage of moving that to the download wrapper makes the Makefile
-code shrink considerably and makes it easier to read, since we get rid
-of these AND-OR lists, we are non-trivial to read.
-
-(Note: I too was very surprised that || and && do not have a priority,
-and was bitten by it more often than not in the past; still today I do
-this mistake quite often.)
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit c5f0e93d2cc6107cce249e1f11158aeccb4a3449:
+
+  rp-pppoe: install default conf file (2014-12-03 23:26:21 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/download-hash
+
+for you to fetch changes up to 661d8a00260bcabd71bf7dad6ae4f1a7d3b919e9:
+
+  pkg-download: check hashes for locally cached files (2014-12-07 11:48:06 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      pkg-download: fix arguments to hash checking script
+      suppot/download: add option parsing to the download wrapper
+      pkg-download: check for already downloaded file in the download wrapper
+      pkg-download: verify the hashes from the download wrapper
+      pkg-download: check hashes for locally cached files
+
+ package/pkg-download.mk     |  72 ++++++++---------
+ support/download/check-hash |  18 +++--
+ support/download/dl-wrapper | 191 ++++++++++++++++++++++++++++++++++++++++++++
+ support/download/wrapper    |  99 -----------------------
+ 4 files changed, 235 insertions(+), 145 deletions(-)
+ create mode 100755 support/download/dl-wrapper
+ delete mode 100755 support/download/wrapper
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
