@@ -1,75 +1,68 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  7 Dec 2014 12:09:33 +0100
-Subject: [Buildroot] [PATCH v3] package/libnss: need dynamic library support
-Message-ID: <1417950573-15679-1-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  7 Dec 2014 12:39:26 +0100
+Subject: [Buildroot] [PATCH 0/6 v3] weston: new freerdp backend (branch
+	yem/freerdp)
+Message-ID: <cover.1417952276.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/e01733c4b8c23f62e2081f0c4aadc16e22c4a2c4/
+Hello All!
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+This series adds the RDP backend to Weston. As a side effect, it cleans
+up and enhances FreeRDP.
 
----
-changes v2->v3:
-- fix typo (Baruch)
-- fix 'depends on'
 
-changes v1->v2:
-- update 'depends on' in libnss' reverse dependencies (ThomasP)
----
- package/ecryptfs-utils/Config.in | 6 ++++--
- package/libnss/Config.in         | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+Changes v2 -> v3:
+  - rework completely the depednencies on X11 libraries  (Samuel)
+  - only install keys when the server is enabled  (Samuel)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 0d912c7..16c0d69 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
-+	depends on !BR2_PREFER_STATIC_LIB # libnss
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-@@ -29,8 +30,9 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 
- 	  http://ecryptfs.org
- 
--comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar"
-+comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar, dynamic library"
- 	depends on !BR2_avr32 && !BR2_microblaze
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		BR2_PREFER_STATIC_LIB
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index 690f928..4e8792c 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Network Security Services (NSS) is a set of libraries designed
- 	  to support development of security-enabled client and server
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_LIBNSS
- 
- 	  http://www.mozilla.org/projects/security/pki/nss/
- 
--comment "libnss needs a toolchain w/ largefile, threads"
-+comment "libnss needs a toolchain w/ largefile, threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_PREFER_STATIC_LIB
+Changes v1 -> v2:
+  - new package python-lxml, needed for opengl-registry (Tomas P.)
+  - cleanup opengl-registry and nvidia-driver  (Thomas P.)
+  - drop applied patches  (Thomas P.)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit c5f0e93d2cc6107cce249e1f11158aeccb4a3449:
+
+  rp-pppoe: install default conf file (2014-12-03 23:26:21 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot 
+
+for you to fetch changes up to 60f5963bb803d787a63918b0425798e7463984ff:
+
+  package/weston: add support for the RDP compositor (2014-12-07 12:37:40 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      pacakge/freerdp: disable building the manpages
+      package/freerdp: do not forcibly depend on X.Org
+      package/freerdp: add options to enable/disable server and/or client
+      package/freerdp: also install to staging
+      package/freerdp: install server key and certificate
+      package/weston: add support for the RDP compositor
+
+ package/Config.in                                  |  2 +-
+ package/freerdp/Config.in                          | 29 ++++++--
+ .../freerdp-0002-fix-building-shared-libs.patch    | 23 ++++++
+ package/freerdp/freerdp.mk                         | 84 +++++++++++++++++++++-
+ package/weston/Config.in                           | 17 +++++
+ package/weston/weston.mk                           |  7 ++
+ 6 files changed, 154 insertions(+), 8 deletions(-)
+ create mode 100644 package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+
 -- 
-2.1.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
