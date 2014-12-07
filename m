@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:00:43 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/minidlna: disable broken
- toolchains on nios2
-In-Reply-To: <1417343090-11192-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1417343090-11192-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141207220043.70229140@free-electrons.com>
+Date: Sun, 7 Dec 2014 22:03:39 +0100
+Subject: [Buildroot] [git commit] python-webpy: depend on Python 2.x only
+Message-ID: <20141207210409.3C97D8012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=e8885df5a127e4416f1747b055ea8b300256e59c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Nov 2014 11:24:50 +0100, Bernd Kuhls wrote:
-> minidlna triggers the _gp bug:
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/77875/
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/712/71230ee530a41b3611cd4526f0f010f9c2ef25eb/
-> http://autobuild.buildroot.net/results/79c/79cbae4dab3ad712bc20c752fdd91e168eade9fe/
-> http://autobuild.buildroot.net/results/df7/df7da91985a7bf2b05093bae7379ef22362a44fc/
-> and many others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: added changelog
-> v2: disable only the affected toolchains, not the whole platform (Thomas)
+webpy is still not ported to Python 3, so enable only for Python 2.
 
-Applied, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ http://autobuild.buildroot.org/results/e6b/e6bdb8e0ab6daa027a01507861ecde47338a11a8/
+
+[Thomas: add autobuilder reference.]
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-webpy/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/python-webpy/Config.in b/package/python-webpy/Config.in
+index 1e90892..e9a5121 100644
+--- a/package/python-webpy/Config.in
++++ b/package/python-webpy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_WEBPY
+ 	bool "python-webpy"
++	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  web.py is a web framework for Python that is as simple as it is
+ 	  powerful.
