@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:47:54 +0100
-Subject: [Buildroot] [git commit] libz160: fix dependencies
-Message-ID: <20141207214813.EA1C0800F9@busybox.osuosl.org>
+Date: Sun, 7 Dec 2014 22:48:46 +0100
+Subject: [Buildroot] [PATCH v2 2/3] libz160: fix dependencies
+In-Reply-To: <1417252360-10929-3-git-send-email-jezz@sysmic.org>
+References: <1417252360-10929-1-git-send-email-jezz@sysmic.org>
+ <1417252360-10929-3-git-send-email-jezz@sysmic.org>
+Message-ID: <20141207224846.26c3fb1f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b9e234de7a32bf692228cdc9669dc7bb41af12a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?r?me Pouiller,
 
-libz160 is provided as binary. We need EABI toolchain with glibc to use
-it.
+On Sat, 29 Nov 2014 10:12:39 +0100, J?r?me Pouiller wrote:
+> libz160 is provided as binary. We need EABI toolchain with glibc to use
+> it.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/freescale-imx/libz160/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-[Thomas: adjust dependency comment according to Yann suggestions.]
+Applied, after tweaking the comments as suggested by Yann.
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/freescale-imx/libz160/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/package/freescale-imx/libz160/Config.in b/package/freescale-imx/libz160/Config.in
-index f956cce..cfbfb79 100644
---- a/package/freescale-imx/libz160/Config.in
-+++ b/package/freescale-imx/libz160/Config.in
-@@ -1,5 +1,10 @@
- config BR2_PACKAGE_LIBZ160
- 	bool "libz160"
-+	depends on BR2_ARM_EABI
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  An API for user space programs to perform 2D accelerated graphics
- 	  operations on AMD GPU (included for examples in iMX5x chipsets)
-+
-+comment "libz160 needs an EABI toolchain w/ (e)glibc"
-+	depends on !BR2_ARM_EABI || !BR2_TOOLCHAIN_USES_GLIBC
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
