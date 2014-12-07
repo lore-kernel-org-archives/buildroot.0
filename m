@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 22:44:32 +0100
-Subject: [Buildroot] [PATCH branch/next] libassuan: bump version to 2.1.3
-In-Reply-To: <1417190663-35264-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1417190663-35264-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141207214432.GF10809@free.fr>
+Date: Sun, 7 Dec 2014 22:46:12 +0100
+Subject: [Buildroot] [PATCH branch/next] pinentry: bump version to 0.9.0
+In-Reply-To: <1417190979-53042-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1417190979-53042-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141207214611.GG10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,13 @@ To: buildroot@busybox.net
 
 Vicente, All,
 
-On 2014-11-28 16:04 +0000, Vicente Olivert Riera spake thusly:
-> - Bump version to 2.1.3
-> - Update the hash value
+On 2014-11-28 16:09 +0000, Vicente Olivert Riera spake thusly:
+> - Bump version to 0.9.0
+> - Add a hash file
 > 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Manually downloaded, and hash manually verified.
+Manually downloaded and manually verified the hash
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -26,32 +26,32 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libassuan/libassuan.hash |    4 ++--
->  package/libassuan/libassuan.mk   |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/pinentry/pinentry.hash |    2 ++
+>  package/pinentry/pinentry.mk   |    2 +-
+>  2 files changed, 3 insertions(+), 1 deletions(-)
+>  create mode 100644 package/pinentry/pinentry.hash
 > 
-> diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
-> index d875389..15a4a82 100644
-> --- a/package/libassuan/libassuan.hash
-> +++ b/package/libassuan/libassuan.hash
-> @@ -1,2 +1,2 @@
-> -# Locally calculated after checking pgp signature
-> -sha256	39f8a7c9349aaaf7ccd937b90660153ec4d2d4df2465018754e5bcae5b1db77b	libassuan-2.1.2.tar.bz2
+> diff --git a/package/pinentry/pinentry.hash b/package/pinentry/pinentry.hash
+> new file mode 100644
+> index 0000000..851c721
+> --- /dev/null
+> +++ b/package/pinentry/pinentry.hash
+> @@ -0,0 +1,2 @@
 > +# From https://www.gnupg.org/download/integrity_check.html
-> +sha1  56ac91973c2818a91d4f16ed48265a2b5daf45d3  libassuan-2.1.3.tar.bz2
-> diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-> index 1c2a4f2..b86f086 100644
-> --- a/package/libassuan/libassuan.mk
-> +++ b/package/libassuan/libassuan.mk
+> +sha1  f8e5c774c35fbb91d84e82559baf76f6b4513236  pinentry-0.9.0.tar.bz2
+> diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+> index 39358a7..56e8e71 100644
+> --- a/package/pinentry/pinentry.mk
+> +++ b/package/pinentry/pinentry.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBASSUAN_VERSION = 2.1.2
-> +LIBASSUAN_VERSION = 2.1.3
->  LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
->  LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
->  LIBASSUAN_LICENSE = LGPLv2.1+ (library), GPLv3 (tests, doc)
+> -PINENTRY_VERSION = 0.8.3
+> +PINENTRY_VERSION = 0.9.0
+>  PINENTRY_SOURCE = pinentry-$(PINENTRY_VERSION).tar.bz2
+>  PINENTRY_SITE = ftp://ftp.gnupg.org/gcrypt/pinentry
+>  PINENTRY_LICENSE = GPLv2+
 > -- 
 > 1.7.1
 > 
@@ -73,4 +73,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 819 bytes
 Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141207/1d74403d/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141207/c877dede/attachment.asc>
