@@ -1,41 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  7 Dec 2014 20:09:04 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default version to 3.17.6
-In-Reply-To: <1417993744-10058-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417993744-10058-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1417993744-10058-2-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Dec 2014 00:10:40 +0100
+Subject: [Buildroot] [PATCH 4/5 v2] pkg-download: verify the hashes from
+ the download wrapper
+In-Reply-To: <70023398f1201f12b64802bdc16fd0711dc97050.1417949583.git.yann.morin.1998@free.fr>
+References: <cover.1417949583.git.yann.morin.1998@free.fr>
+ <70023398f1201f12b64802bdc16fd0711dc97050.1417949583.git.yann.morin.1998@free.fr>
+Message-ID: <20141207231040.GM10809@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 541b32f..c2818c9 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.17.4"
-+	bool "3.17.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.17.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.17.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On 2014-12-07 12:02 +0100, Yann E. MORIN spake thusly:
+> Instead of repeating the check in our download rules, delegate the check
+> of the hashes to the download wrapper.
+[--SNIP--]
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 9192950..b3ddfe3 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+[--SNIP--]
+> @@ -174,9 +167,9 @@ endef
+>  define DOWNLOAD_SCP
+>  	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
+>  		-o $(DL_DIR)/$(2) \
+> +		-H $(PKGDIR)/$($(PKG)_NAME).hash \
+>  		-- \
+>  		'$(call stripurischeme,$(call qstrip,$(1)))' && \
+
+Damn, left-over bug... :-( Uncommitted file. Forgot git add... :-(
+
+Marking this series as "Changes requested", because we suddenly
+uncovered another hash-related bug (especially without that series),
+which happens for host packages for which the tarball is broken: hashes
+are not checked for host packages...
+
+I'll investigate that problem before I respin the series...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.0.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
