@@ -1,70 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Dec 2014 21:12:27 +0100
-Subject: [Buildroot] [PATCH 1/3] package/tvheadend: Rework CFLAGS
- handling for liburiparser
-In-Reply-To: <1417878033-29169-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1417878033-29169-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141207201227.GA3902@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Dec 2014 21:21:53 +0100
+Subject: [Buildroot] [git commit] package/libnss: need dynamic library
+	support
+Message-ID: <20141207202159.59403800F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=40a53388ea297308dbfd2397f71c935bc0515a49
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-12-06 16:00 +0100, Bernd Kuhls spake thusly:
-> Suggested by Thomas:
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/100646
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+  http://autobuild.buildroot.net/results/e01733c4b8c23f62e2081f0c4aadc16e22c4a2c4/
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ecryptfs-utils/Config.in |    6 ++++--
+ package/libnss/Config.in         |    6 ++++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tvheadend/tvheadend.mk |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index f593b3f..e0ce160 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -32,9 +32,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
->  TVHEADEND_DEPENDENCIES += libiconv
->  endif
->  
-> +TVHEADEND_CFLAGS = $(TARGET_CFLAGS)
->  ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
->  TVHEADEND_DEPENDENCIES += liburiparser
-> -TVHEADEND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)"
-> +TVHEADEND_CFLAGS += $(if $(BR2_USE_WCHAR),,-DURI_NO_UNICODE)
->  endif
->  
->  TVHEADEND_DEPENDENCIES += dtv-scan-tables
-> @@ -43,7 +44,7 @@ define TVHEADEND_CONFIGURE_CMDS
->  	(cd $(@D);						\
->  		$(TARGET_CONFIGURE_OPTS)			\
->  		$(TARGET_CONFIGURE_ARGS)			\
-> -		$(TVHEADEND_CONF_ENV)				\
-> +		CFLAGS="$(TVHEADEND_CFLAGS)"			\
->  		./configure					\
->  			--prefix=/usr				\
->  			--arch="$(ARCH)"			\
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 0d912c7..16c0d69 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
++	depends on !BR2_PREFER_STATIC_LIB # libnss
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+@@ -29,8 +30,9 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 
+ 	  http://ecryptfs.org
+ 
+-comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar"
++comment "ecryptfs-utils needs a toolchain w/ largefile, threads, wchar, dynamic library"
+ 	depends on !BR2_avr32 && !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		BR2_PREFER_STATIC_LIB
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 690f928..4e8792c 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_LIBNSS
+ 
+ 	  http://www.mozilla.org/projects/security/pki/nss/
+ 
+-comment "libnss needs a toolchain w/ largefile, threads"
++comment "libnss needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_PREFER_STATIC_LIB
