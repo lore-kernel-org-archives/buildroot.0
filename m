@@ -1,31 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 21:32:23 +0100
-Subject: [Buildroot] [PATCH v2] docs/manual: document the new patch
- naming convention
-In-Reply-To: <1417802784-20713-1-git-send-email-yann.morin.1998@free.fr>
-References: <1417802784-20713-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141207213223.1d950f0c@free-electrons.com>
+Date: Sun, 7 Dec 2014 21:32:53 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.17.3
+In-Reply-To: <1417781537-18796-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1417781537-18796-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141207213253.5b38f295@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gustavo Zacarias,
 
-On Fri,  5 Dec 2014 19:06:24 +0100, Yann E. MORIN wrote:
-> To ease generating patches, we now use a naming convention that is in
-> line with what git-format-patch does, that is:
->   - do not prefix patches with the package name
->   - prefix patches with a 4-digit mber
->   - start numbering at 0001
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Samuel Martin <s.martin49@gmail.com>
+On Fri,  5 Dec 2014 09:12:17 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/btrfs-progs/btrfs-progs.hash | 2 +-
+>  package/btrfs-progs/btrfs-progs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks!
 
