@@ -1,39 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 22:52:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix static linking
- with OpenSSL enabled
-In-Reply-To: <20141207211025.GC10809@free.fr>
-References: <1417289292-7006-1-git-send-email-bernd.kuhls@t-online.de>
- <20141207211025.GC10809@free.fr>
-Message-ID: <20141207225254.3cc97f02@free-electrons.com>
+Date: Sun, 7 Dec 2014 22:48:57 +0100
+Subject: [Buildroot] [git commit] libassuan: bump version to 2.1.3
+Message-ID: <20141207215307.E4BA280136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=9d57c13edc1c27ffa767a5115f77351ae9b41ab3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 7 Dec 2014 22:10:25 +0100, Yann E. MORIN wrote:
+- Bump version to 2.1.3
+- Update the hash value
 
-> I'm not too fond of the way this is handled. I'd prefer we get something
-> like:
-> 
->     MINIDLNA_LIBS = -lavformat -lavcodec -lavutil -logg
->     MINIDLAN_LIBS += $(if $(BR2_PACKAGE_OPENSSL),-lssl -lcrypto)
->     MINIDLAN_LIBS += -lz -lpthread -lm
-> 
->     MINIDLNA_CONF_ENV = LIBS='$(MINIDLNA_LIBS)'
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libassuan/libassuan.hash |    4 ++--
+ package/libassuan/libassuan.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Agreed, with maybe "$(MINIDLNA_LIBS)" instead of simple quotes.
-
-A further possible improvement would be to switch to use pkg-config
-instead, so that this becomes more maintainable :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index d875389..15a4a82 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	39f8a7c9349aaaf7ccd937b90660153ec4d2d4df2465018754e5bcae5b1db77b	libassuan-2.1.2.tar.bz2
++# From https://www.gnupg.org/download/integrity_check.html
++sha1  56ac91973c2818a91d4f16ed48265a2b5daf45d3  libassuan-2.1.3.tar.bz2
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 1c2a4f2..b86f086 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASSUAN_VERSION = 2.1.2
++LIBASSUAN_VERSION = 2.1.3
+ LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPLv2.1+ (library), GPLv3 (tests, doc)
