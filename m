@@ -1,26 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 23:49:06 +0100
-Subject: [Buildroot] [PATCH] avahi: add optional dbus-python support
-In-Reply-To: <1417536901-29177-1-git-send-email-peter@korsgaard.com>
-References: <1417536901-29177-1-git-send-email-peter@korsgaard.com>
-Message-ID: <20141207234906.50efb3f2@free-electrons.com>
+Date: Sun, 7 Dec 2014 23:50:43 +0100
+Subject: [Buildroot] [PATCH 1/1] lighttpd: install fastcgi config for php
+In-Reply-To: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
+References: <1417559724-25091-1-git-send-email-bluemrp9@gmail.com>
+Message-ID: <20141207235043.01177f0c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Ryan Coe,
 
-On Tue,  2 Dec 2014 17:15:01 +0100, Peter Korsgaard wrote:
-> Without this, the python support doesn't do anything.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Tue,  2 Dec 2014 14:35:24 -0800, Ryan Coe wrote:
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 > ---
->  package/avahi/avahi.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>  package/lighttpd/fastcgi.conf |  7 +++++++
+>  package/lighttpd/lighttpd.mk  | 11 +++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/lighttpd/fastcgi.conf
 
-Applied, thanks.
+Seeing the feedback from Floris Bos on this patch, I marked your patch
+as 'Rejected' in our patch tracking system. Please work with Floris on
+a variant of your patch that takes into account also his use case
+(maybe by making the fastcgi installation optional?).
+
+Thanks!
 
 Thomas
 -- 
