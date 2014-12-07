@@ -1,54 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 21:53:57 +0100
-Subject: [Buildroot] [git commit] qtuio: add error handling to for loop
-Message-ID: <20141207205511.F410380100@busybox.osuosl.org>
+Date: Sun, 7 Dec 2014 21:54:27 +0100
+Subject: [Buildroot] [git commit] docs: fix typo in cmake-package
+	documentation
+Message-ID: <20141207205512.094C07FC13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=abed1cec06ca6fbb14c28f5407cbc513ac29c39a
+commit: http://git.buildroot.net/buildroot/commit/?id=5be88854d009dbed95097f7965994b7eb6c95955
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove unneeded sub-shell usage in the build and installation
-steps. It is kept for the configure step as it is actually useful, and
-works fine because "|| exit 1" is outside the sub-shell.
+The cmake-package documentation was referring to
+BR2_PREFER_STATIC_LIBS, while the option is actually named
+BR2_PREFER_STATIC_LIB. This commit fixes this mistake.
 
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qtuio/qtuio.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-cmake.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-index 9925f84..5fa10a7 100644
---- a/package/qtuio/qtuio.mk
-+++ b/package/qtuio/qtuio.mk
-@@ -19,7 +19,7 @@ QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_CONFIGURE_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) ; \
-+		(cd $(@D)/examples/$${example} && $(TARGET_MAKE_ENV) $(QT_QMAKE)) || exit 1; \
- 	done
- endef
- endif
-@@ -32,7 +32,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_BUILD_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(MAKE) -C $(@D)/examples/$${example}) ; \
-+		$(MAKE) -C $(@D)/examples/$${example} || exit 1; \
- 	done
- endef
- endif
-@@ -46,7 +46,7 @@ endef
- ifeq ($(BR2_QTUIO_EXAMPLES),y)
- define QTUIO_INSTALL_EXAMPLES
- 	for example in $(QTUIO_EXAMPLES) ; do \
--		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
-+		$(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example} || exit 1 ; \
- 	done
- endef
- endif
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index 02f1dbb..097cf63 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -102,7 +102,7 @@ typical packages will therefore only use a few of them.
+ 
+ ** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
+ ** +CMAKE_INSTALL_PREFIX+;
+-** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIBS+;
++** +BUILD_SHARED_LIBS+ is driven by +BR2_PREFER_STATIC_LIB+;
+ ** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
+ ** +BUILD_EXAMPLE+, +BUILD_EXAMPLES+ are disabled;
+ ** +BUILD_TEST+, +BUILD_TESTS+, +BUILD_TESTING+ are disabled.
