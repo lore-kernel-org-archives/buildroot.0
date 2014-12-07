@@ -1,64 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Dec 2014 23:00:34 +0100
-Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump to v3.7.1
-Message-ID: <20141207220123.2A5C280137@busybox.osuosl.org>
+Date: Sun, 7 Dec 2014 23:02:07 +0100
+Subject: [Buildroot] [PATCH] boot/at91bootstrap3: bump to v3.7.1
+In-Reply-To: <1417623505-5767-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1417623505-5767-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20141207230207.77875d75@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2b5425a07f1ba5102b10d6d9541224f3a05906b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Angelo Compagnucci,
 
-Change to use the _defconfig targets of at91bootstrap3 build system
-when a defconfig is used.
+On Wed,  3 Dec 2014 17:18:25 +0100, Angelo Compagnucci wrote:
+> The main difference with v3.6.2 is that this patch calls "make defconfig"
+> before make.
+> "make defconfig" is called by the Makefile with .config file,
+> so the original logic isn't changed.
+> Calling "make defconfig" is required to correctly prepare dependencies file.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  boot/at91bootstrap3/at91bootstrap3.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-[Thomas: adjust to make a better use of at91bootstrap3 defconfig
-mechanism.]
+Thanks, I've applied your patch, but I've changed the logic: instead of
+calling this "defconfig" target, I've changed the <pkg>_CONFIGURE_CMDS
+step to use 'make <blabla>_defconfig', which is more logical.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/at91bootstrap3/at91bootstrap3.mk |   16 +++++++---------
- 1 files changed, 7 insertions(+), 9 deletions(-)
+Thanks!
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index bc8d912..098e7bf 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AT91BOOTSTRAP3_VERSION = v3.6.2
-+AT91BOOTSTRAP3_VERSION = v3.7.1
- AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
- 
- AT91BOOTSTRAP3_INSTALL_IMAGES = YES
-@@ -29,19 +29,17 @@ AT91BOOTSTRAP3_POST_PATCH_HOOKS += AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
- endif
- 
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
--AT91BOOTSTRAP3_SOURCE_CONFIG = \
--	$(@D)/board/*/$(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
-+define AT91BOOTSTRAP3_CONFIGURE_CMDS
-+	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) $(AT91BOOTSTRAP3_DEFCONFIG)_defconfig
-+endef
- else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
--AT91BOOTSTRAP3_SOURCE_CONFIG = $(AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)
--endif
--
- define AT91BOOTSTRAP3_CONFIGURE_CMDS
--	cp $(AT91BOOTSTRAP3_SOURCE_CONFIG) $(@D)/.config
--	$(SED) 's/image.bin/uImage/' $(@D)/.config
-+	cp $(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE) $(@D)/.config
- endef
-+endif
- 
- define AT91BOOTSTRAP3_BUILD_CMDS
--	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D) boot
-+	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPTS) -C $(@D)
- endef
- 
- define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
