@@ -1,23 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 07 Dec 2014 20:13:14 -0300
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{17, 14, 12,
- 10}.x series
-In-Reply-To: <20141208001237.07b479f1@free-electrons.com>
-References: <1417993744-10058-1-git-send-email-gustavo@zacarias.com.ar>
- <20141208001237.07b479f1@free-electrons.com>
-Message-ID: <5484DF0A.2060505@zacarias.com.ar>
+Date: Sun, 07 Dec 2014 20:17:46 -0300
+Subject: [Buildroot] [RFC PATCH 0/2] Add Freescale e5500 & e6500 support
+In-Reply-To: <20141207234835.4fac269f@free-electrons.com>
+References: <1416266092-6465-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141207234835.4fac269f@free-electrons.com>
+Message-ID: <5484E01A.7080802@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/07/2014 08:12 PM, Thomas Petazzoni wrote:
+On 12/07/2014 07:48 PM, Thomas Petazzoni wrote:
 
->> -	default "3.17.4"	if BR2_KERNEL_HEADERS_3_17
->> +	default "3.17.6"	if BR2_KERNEL_HEADERS_3_17
-> 
-> What! We missed updating from .4 to .5 ! :-)
+> Patches applied. I must say I'm a bit confused by why we exclude PP64le
+> for those new platforms. Is there theoretically something that would
+> prevent those from being used in LE mode?
 
-Luckily, since 3.17.5 was screwed up ;)
+As far i was able to find out without hardware the fsl ppc64 SOCs aren't
+able to boot in LE mode.
+It's like ARM, if the peripherals aren't ready for it even though the
+CPU itself can do so it won't work right.
+For example for pseries there's the pseries_le_defconfig, for the fsl 64
+bit chips there's corenet64_smp_defconfig but no LE counterpart.
+Even though CONFIG_CPU_LITTLE_ENDIAN can be toggled for said config i
+wasn't able to find anything related to actually booting that (and it's
+a pretty generic option).
+So i "erred" on the safe side.
 Regards.
