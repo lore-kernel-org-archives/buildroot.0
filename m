@@ -1,42 +1,45 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 8 Dec 2014 16:51:43 +0000
-Subject: [Buildroot] [PATCH branch/next] pinentry: bump version to 0.9.0
-In-Reply-To: <20141208171919.14471823@free-electrons.com>
-References: <1417190979-53042-1-git-send-email-Vincent.Riera@imgtec.com>	<20141208102220.7a8242d2@free-electrons.com>	<548577F0.5020700@imgtec.com>	<5485C831.4090205@imgtec.com>	<20141208165219.313b9967@free-electrons.com>	<5485CD80.2080705@imgtec.com>
- <20141208171919.14471823@free-electrons.com>
-Message-ID: <5485D71F.8080708@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 8 Dec 2014 17:52:39 +0100
+Subject: [Buildroot] [PATCH 0/24 v3] ejabberd: XMPP server (branch
+ yem/ejabberd)
+In-Reply-To: <CAJtjsKYdgLhoNujsxrKA1C4yKdvBZFvSfCz-yEC=p7BsPvRy+g@mail.gmail.com>
+References: <cover.1415751395.git.yann.morin.1998@free.fr>
+ <20141122211947.2d556071@free-electrons.com>
+ <CAJtjsKYdgLhoNujsxrKA1C4yKdvBZFvSfCz-yEC=p7BsPvRy+g@mail.gmail.com>
+Message-ID: <20141208175239.20fb0274@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Johan Oudinet,
 
-On 12/08/2014 04:19 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Mon, 8 Dec 2014 16:10:40 +0000, Vicente Olivert Riera wrote:
-> 
->> I can send a patch to pinentry to make the accessibility part optional.
->> Do you prefer I mark my current patch as rejected and do another one
->> including the patch for making the accessibility part optional instead
->> of modifying packages/qt/qt.mk?
-> 
-> I was suggesting to make the accessibility feature in Qt optional, and
-> then have the pinentry package select this option in Qt.
+On Mon, 8 Dec 2014 17:33:13 +0100, Johan Oudinet wrote:
 
-Well..., that's another valid option, yes, but I prefer to fix pinentry
-upstream and leave the qt package as is. I have sent a patch for that:
+> I've looked into Yann's branch and made some modifications to fix the
+> compilation and runtime errors.
+> I've also find out and fix the issue with erl_interface, which ld does
+> not find if we compile an erlang library after finalizing make once:
+> It's because rebar was looking for such libraries in $(TARGET_DIR)
+> instead of $(STAGING_DIR), and libraries in TARGET_DIR are deleted by
+> the target-finalize Makefile rule.
+> How should I share these modifications? I guess I cannot push to
+> Yann's git repository.
+> Should I send again a patch series, even though Yann has not finished
+> its review yet?
 
-http://lists.gnupg.org/pipermail/gnupg-devel/2014-December/029182.html
+You should sync with Yann on this. I guess it would be easier if you
+posted new iterations of the patch series, but please coordinate with
+Yann about this.
 
-Let's see if it gets merged soon and we can backport it.
+If you're available in the evenings, feel free to come on #buildroot on
+Freenode to discuss this with Yann and me.
 
-Cheers,
+Best regards,
+
+Thomas
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
