@@ -1,70 +1,42 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 8 Dec 2014 17:33:13 +0100
-Subject: [Buildroot] [PATCH 0/24 v3] ejabberd: XMPP server (branch
-	yem/ejabberd)
-In-Reply-To: <20141122211947.2d556071@free-electrons.com>
-References: <cover.1415751395.git.yann.morin.1998@free.fr>
- <20141122211947.2d556071@free-electrons.com>
-Message-ID: <CAJtjsKYdgLhoNujsxrKA1C4yKdvBZFvSfCz-yEC=p7BsPvRy+g@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 8 Dec 2014 16:51:43 +0000
+Subject: [Buildroot] [PATCH branch/next] pinentry: bump version to 0.9.0
+In-Reply-To: <20141208171919.14471823@free-electrons.com>
+References: <1417190979-53042-1-git-send-email-Vincent.Riera@imgtec.com>	<20141208102220.7a8242d2@free-electrons.com>	<548577F0.5020700@imgtec.com>	<5485C831.4090205@imgtec.com>	<20141208165219.313b9967@free-electrons.com>	<5485CD80.2080705@imgtec.com>
+ <20141208171919.14471823@free-electrons.com>
+Message-ID: <5485D71F.8080708@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, All,
+Dear Thomas Petazzoni,
 
-On Sat, Nov 22, 2014 at 9:19 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Wed, 12 Nov 2014 01:26:05 +0100, Yann E. MORIN wrote:
->
->> ----------------------------------------------------------------
->> Johan Oudinet (14):
->>       package/pkg-rebar: new infrastructure
->>       erlang-goldrush: new package.
->>       erlang-lager: new package.
->>       erlang-p1-zlib: new package.
->>       erlang-p1-yaml: new package.
->>       erlang-p1-xml: new package.
->>       erlang-p1-utils: new package.
->>       erlang-p1-tls: new package.
->>       erlang-p1-stun: new package.
->>       erlang-p1-stringprep: new package.
->>       erlang-p1-sip: new package.
->>       erlang-p1-iconv: new package.
->>       erlang-p1-cache-tab: new package.
->>       ejabberd: new package.
->>
->> Yann E. MORIN (10):
->>       pkg-autotools: move common macros
->>       pkg-autotools: re-order cleaning up the host dependencies
->>       pkg-autotools: commonalise the libtool patching code
->>       pkg-autotools: move the libtool patching call out of the autoreconf hook
->>       pkg-autotools: remove redundant shell conditional
->>       pkg-autotools: fold the libtool patching code directly into the hook
->>       pkg-autotools: only apply libtool patch at the right moment
->
-> I've applied all the pkg-autotools patches of this series. As discussed
-> on IRC, I've changed back the authorship of patches 1, 3, 4 to Johan,
-> who is actually the author of those patches.
->
-> I haven't yet looked at the rest of the series, but at least it's 7
-> less patches for you to carry in your branch.
+On 12/08/2014 04:19 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+> 
+> On Mon, 8 Dec 2014 16:10:40 +0000, Vicente Olivert Riera wrote:
+> 
+>> I can send a patch to pinentry to make the accessibility part optional.
+>> Do you prefer I mark my current patch as rejected and do another one
+>> including the patch for making the accessibility part optional instead
+>> of modifying packages/qt/qt.mk?
+> 
+> I was suggesting to make the accessibility feature in Qt optional, and
+> then have the pinentry package select this option in Qt.
 
-Thanks Thomas for having applied these patches.
+Well..., that's another valid option, yes, but I prefer to fix pinentry
+upstream and leave the qt package as is. I have sent a patch for that:
 
-I've looked into Yann's branch and made some modifications to fix the
-compilation and runtime errors.
-I've also find out and fix the issue with erl_interface, which ld does
-not find if we compile an erlang library after finalizing make once:
-It's because rebar was looking for such libraries in $(TARGET_DIR)
-instead of $(STAGING_DIR), and libraries in TARGET_DIR are deleted by
-the target-finalize Makefile rule.
-How should I share these modifications? I guess I cannot push to
-Yann's git repository.
-Should I send again a patch series, even though Yann has not finished
-its review yet?
+http://lists.gnupg.org/pipermail/gnupg-devel/2014-December/029182.html
 
-Best regards,
+Let's see if it gets merged soon and we can backport it.
+
+Cheers,
 -- 
-Johan
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
