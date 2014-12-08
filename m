@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 08 Dec 2014 23:51:44 +0100
-Subject: [Buildroot] [PATCHv2 04/12] binutils/2.22: add patch to warn
- about unsafe library paths
-In-Reply-To: <1417470913-1280-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 08 Dec 2014 23:52:21 +0100
+Subject: [Buildroot] [PATCHv2 06/12] gcc/4.9: add patch to warn about
+ unsafe header paths
+In-Reply-To: <1417470913-1280-7-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470913-1280-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54862B80.7070102@openwide.fr>
+ <1417470913-1280-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54862BA5.2020109@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,16 @@ To: buildroot@busybox.net
 Hi Thomas,
 
 Le 01/12/2014 22:55, Thomas Petazzoni a ?crit :
-> This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
-> that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
-> etc.). The patch was adapted to binutils 2.22, and modified to support
-> the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
-> instead of just warn when unsafe paths are used. Even though erroring
-> out can be chosen by passing --error-poison-system-directories, we are
-> not sure this option in LDFLAGS will always be passed, so having an
-> environment variable guarantees it will always be passed, and also
-> allows to have an identical behavior to the external toolchain
-> wrapper.
+> This commit adds a patch to gcc borrowed from CodeSourcery/Yocto that
+> warns about unsafe include paths (i.e /usr/include,
+> /usr/local/include, etc.). The patch was adapted to gcc 4.9.1, and
+> modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH environment
+> variable to error out instead of just warn when unsafe paths are
+> used. Even though erroring out can be chosen by passing
+> -Werror=poison-system-directories, we are not sure this option in
+> CFLAGS will always be passed, so having an environment variable
+> guarantees it will always be passed, and also allows to have an
+> identical behavior to the external toolchain wrapper.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
@@ -55,29 +55,29 @@ BR2_PACKAGE_GLIBC=y
 BR2_GLIBC_VERSION_2_20=y
 BR2_GLIBC_VERSION_STRING="2.20"
 
-BR2_BINUTILS_VERSION_2_22=y
-BR2_BINUTILS_VERSION="2.22"
+BR2_BINUTILS_VERSION_2_24=y
+BR2_BINUTILS_VERSION="2.24"
 
-BR2_GCC_VERSION_4_7_X=y
-BR2_GCC_VERSION="4.7.4"
+BR2_GCC_VERSION_4_9_X=y
+BR2_GCC_VERSION="4.9.2"
 
-and lmbench poisoned by LDFLAGS="-L/usr/lib $(LMBENCH_LDFLAGS)"
+$ make O=test/paranoid-2/ iprutils
 
-$ make O=test/paranoid-4/ lmbench
-
-/home/naourr/git/buildroot/test/paranoid-4/host/usr/bin/i686-buildroot-linux-gnu-gcc
+/home/naourr/git/buildroot/test/paranoid-2/host/usr/bin/i686-buildroot-linux-gnu-gcc
 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
--DHAVE_off64_t -DHAVE_lseek64 -DRUSAGE -DHAVE_uint=1 -DHAVE_int64_t=1
--DHAVE_pmap_clnt_h -DHAVE_socklen_t -DHAVE_DRAND48 -DHAVE_SCHED_SETAFFINITY=1
--L/usr/lib  -o ../bin/i686/msleep msleep.c
+-Wall -DIPR_MAJOR_RELEASE=2 -DIPR_MINOR_RELEASE=4 -DIPR_FIX_LEVEL=2
+-DIPR_FIX_DATE='"(June 10, 2014)"' -DIPR_VERSION_STR='"2.4.2 (June 10, 2014)"'
+-DIPR_RELEASE=1 -I. -I/usr/include/ncurses -o iprlib.o -c iprlib.c
 
-/home/naourr/git/buildroot/test/paranoid-4/host/usr/lib/gcc/i686-buildroot-linux-gnu/4.7.4/../../../../i686-buildroot-linux-gnu/bin/ld:
-error: library search path "/usr/lib" is unsafe for cross-compilation
+cc1: erreur: include location "/usr/include/ncurses" is unsafe for
+cross-compilation [-Werror=poison-system-directories]
 
-gmake[2]: *** [../bin/i686/msleep] Erreur 1
+cc1: some warnings being treated as errors
+make[1]: *** [iprlib.o] Erreur 1
 
-Thanks,
--- 
+Thanks
+
+--
 Romain Naour
 
 OPEN WIDE Ing?nierie - Paris
