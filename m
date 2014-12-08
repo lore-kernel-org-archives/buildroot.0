@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 08 Dec 2014 23:52:21 +0100
-Subject: [Buildroot] [PATCHv2 06/12] gcc/4.9: add patch to warn about
+Date: Mon, 08 Dec 2014 23:52:35 +0100
+Subject: [Buildroot] [PATCHv2 07/12] gcc/4.8: add patch to warn about
  unsafe header paths
-In-Reply-To: <1417470913-1280-7-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1417470913-1280-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470913-1280-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54862BA5.2020109@openwide.fr>
+ <1417470913-1280-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54862BB3.1000401@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +17,7 @@ Hi Thomas,
 Le 01/12/2014 22:55, Thomas Petazzoni a ?crit :
 > This commit adds a patch to gcc borrowed from CodeSourcery/Yocto that
 > warns about unsafe include paths (i.e /usr/include,
-> /usr/local/include, etc.). The patch was adapted to gcc 4.9.1, and
+> /usr/local/include, etc.). The patch was adapted to gcc 4.8.3, and
 > modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH environment
 > variable to error out instead of just warn when unsafe paths are
 > used. Even though erroring out can be chosen by passing
@@ -55,15 +55,15 @@ BR2_PACKAGE_GLIBC=y
 BR2_GLIBC_VERSION_2_20=y
 BR2_GLIBC_VERSION_STRING="2.20"
 
-BR2_BINUTILS_VERSION_2_24=y
-BR2_BINUTILS_VERSION="2.24"
+BR2_BINUTILS_VERSION_2_23_2=y
+BR2_BINUTILS_VERSION="2.23.2"
 
-BR2_GCC_VERSION_4_9_X=y
-BR2_GCC_VERSION="4.9.2"
+BR2_GCC_VERSION_4_8_X=y
+BR2_GCC_VERSION="4.8.3"
 
-$ make O=test/paranoid-2/ iprutils
+$ make O=test/paranoid-3/ iprutils
 
-/home/naourr/git/buildroot/test/paranoid-2/host/usr/bin/i686-buildroot-linux-gnu-gcc
+/home/naourr/git/buildroot/test/paranoid-3/host/usr/bin/i686-buildroot-linux-gnu-gcc
 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
 -Wall -DIPR_MAJOR_RELEASE=2 -DIPR_MINOR_RELEASE=4 -DIPR_FIX_LEVEL=2
 -DIPR_FIX_DATE='"(June 10, 2014)"' -DIPR_VERSION_STR='"2.4.2 (June 10, 2014)"'
@@ -77,7 +77,8 @@ make[1]: *** [iprlib.o] Erreur 1
 
 Thanks
 
---
+
+-- 
 Romain Naour
 
 OPEN WIDE Ing?nierie - Paris
