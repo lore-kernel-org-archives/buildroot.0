@@ -1,45 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  8 Dec 2014 19:41:04 +0100
-Subject: [Buildroot] [PATCH] package/mke2img: always create sparse files
-Message-ID: <1418064064-30506-1-git-send-email-yann.morin.1998@free.fr>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Mon, 8 Dec 2014 20:11:27 +0100
+Subject: [Buildroot] python libraries and x86_64 distribution
+Message-ID: <20141208201127.4ea79391@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the user specifies a number of blocks (and we do not auto-compute
-them), the generated filesystem can be quite large with large zones with
-only zeroes in them.
+Hi,
+I've compiled buildroot with the support of python-pygame for a ARM32 based
+board. When I launch an application using this library the message bellow is
+produced.
 
-Thus, always create the filesystem as a sparse file.
+python: symbol 'Py_InitModule4_64': can't resolve symbol
+Traceback (most recent call last):
+  File "freqshow.py", line 28, in <module>
+    import pygame
+  File "/usr/lib64/python2.7/site-packages/pygame/__init__.py", line 99, in
+<module> from pygame.base import *
+ImportError: unknown dlopen() error
 
-Sparse files behave the same as normal files, except those long runs of
-zeroes do not actually use space on the (host) filesystem. Also, this
-should not break current behaviour, as neither cp nor dd nor cat preserve
-sparseness by default. So users relying on the zeroed parts to actually
-be written won;t see a change. Users that were expressly using cp or dd
-to copy files to a sparse destination will however see a little bit of
-improvements, as the zeroed out parts won't even be read from disk.
+My distribution is an gentoo 64 bit.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mke2img/mke2img | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Has someone already have this problem?
 
-diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-index 9c56bc2..b186290 100755
---- a/package/mke2img/mke2img
-+++ b/package/mke2img/mke2img
-@@ -98,7 +98,7 @@ main() {
-     fi
- 
-     # Generate the filesystem
--    genext2fs_opts=( -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
-+    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
-     if [ -n "${nb_res_blocks}" ]; then
-         genext2fs_opts+=( -m ${nb_res_blocks} )
-     fi
--- 
-1.9.1
+Thank you
+
+Gwen
