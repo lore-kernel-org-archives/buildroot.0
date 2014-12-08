@@ -1,46 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 22:32:21 +0100
-Subject: [Buildroot] [git commit] support/scripts/dependencies.sh: improve
-	g++ test to avoid misleading output
-Message-ID: <20141208213302.91AF180148@busybox.osuosl.org>
+Date: Mon, 8 Dec 2014 22:33:57 +0100
+Subject: [Buildroot] [PATCH 1/2] Avoid misleading error output caused by
+ missing shell quotes
+In-Reply-To: <1415799105-27566-1-git-send-email-debian@jstimpfle.de>
+References: <1415799105-27566-1-git-send-email-debian@jstimpfle.de>
+Message-ID: <20141208223357.3975d73e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1607dc7dfc2c5397ff6b67ebd18d25c6184f650
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jens Stimpfle,
 
-When g++ is not installed, a misleading error message turns up because
-of a bad combination of an unquoted shell variable and control flow.
+On Wed, 12 Nov 2014 13:31:44 +0000, Jens Stimpfle wrote:
+> Signed-off-by: Jens Stimpfle <debian@jstimpfle.de>
 
- ~/buildroot$ make
- You may have to install 'g++' on your build machine
- /home/testuser/buildroot/support/dependencies/dependencies.sh: 136: [: -lt: unexpected operator
+Thanks, both patches applied, with several fixes to the commit log and
+code, as suggested by Yann E. Morin. See:
 
-[Thomas:
-  - fixed commit log, as per the suggestion of Yann E. Morin.
-  - don't change existing empty new lines, suggested by Yann.
-  - use positive logic in the newly added test, suggested by Yann.]
+http://git.buildroot.net/buildroot/commit/?id=d1607dc7dfc2c5397ff6b67ebd18d25c6184f650
+http://git.buildroot.net/buildroot/commit/?id=94c6417e703d7cd923d50e4974ad555a377ffa02
 
-Signed-off-by: Jens Stimpfle <debian@jstimpfle.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/dependencies/dependencies.sh |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index af5ce0e..44e212d 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -133,7 +133,9 @@ if [ ! -z "$CXXCOMPILER" ] ; then
- 		echo
- 		echo "You may have to install 'g++' on your build machine"
- 	fi
-+fi
- 
-+if [ -n "$CXXCOMPILER_VERSION" ] ; then
- 	CXXCOMPILER_MAJOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/\..*//g")
- 	CXXCOMPILER_MINOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/^$CXXCOMPILER_MAJOR\.//g" -e "s/\..*//g")
- 	if [ $CXXCOMPILER_MAJOR -lt 3 -o $CXXCOMPILER_MAJOR -eq 2 -a $CXXCOMPILER_MINOR -lt 95 ] ; then
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
