@@ -1,47 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 22:37:42 +0100
-Subject: [Buildroot] [PATCH v5] Add support for Flattened Image Trees
-In-Reply-To: <1412343834-2532-1-git-send-email-yegorslists@googlemail.com>
-References: <1412343834-2532-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20141208223742.226b35ed@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 08 Dec 2014 22:55:55 +0100
+Subject: [Buildroot] [PATCHv2 03/12] binutils/2.23: add patch to warn
+ about unsafe library paths
+In-Reply-To: <54833B8A.5070401@openwide.fr>
+References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417470913-1280-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <54833B8A.5070401@openwide.fr>
+Message-ID: <54861E6B.803@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Hello,
 
-On Fri,  3 Oct 2014 15:43:54 +0200, Yegor Yefremov wrote:
-> This patch introduces a new file system image type FIT. User
-> can specify one or more *.its files, that will be compiled and
-> copied into images or installed into /boot directory.
+Le 06/12/2014 18:23, Romain Naour a ?crit :
+> Hi Thomas,
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Le 01/12/2014 22:55, Thomas Petazzoni a ?crit :
+>> This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
+>> that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
+>> etc.). The patch was adapted to binutils 2.23, and modified to support
+>> the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
+>> instead of just warn when unsafe paths are used. Even though erroring
+>> out can be chosen by passing --error-poison-system-directories, we are
+>> not sure this option in LDFLAGS will always be passed, so having an
+>> environment variable guarantees it will always be passed, and also
+>> allows to have an identical behavior to the external toolchain
+>> wrapper.
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> ---
+> 
+> Tested-by: Romain Naour <romain.naour@openwide.fr>
+> 
+> Tested with the following internal toolchain
 
-Sorry for the long delay getting back to you about this. We discussed
-this patch at the D?sseldorf Buildroot Meeting, and it was decided that
-it was not the effort supporting generating FIT images directly in
-Buildroot:
+Please ignore this email, I accidentally sent the mail...
 
- * Depending on whether you want a FIT image that bundles your
-   kernel+DTB and sits in your filesystem, or a FIT image that
-   actually bundles your filesystem, it would have to be generated at a
-   completely different time (first case should be handled as a normal
-   Buildroot package, second case more as a filesystem image).
-
- * It's all about calling a single mkimage command, which can easily be
-   enabled for the host in the "Host utilities" menu of Buildroot, and
-   then called from either a post-build or a post-image script
-   depending on your use-case.
-
-Therefore, we've decided to mark your patch as 'Rejected' in patchwork.
-Thanks nonetheless for your contribution!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Romain Naour
