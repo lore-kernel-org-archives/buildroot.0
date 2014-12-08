@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 22:32:35 +0100
-Subject: [Buildroot] [git commit] support/scripts/dependencies.sh: cleanup
-	the output of the 32 bits gcc test
-Message-ID: <20141208213302.9A3847FCED@busybox.osuosl.org>
+Date: Mon, 8 Dec 2014 22:32:21 +0100
+Subject: [Buildroot] [git commit] support/scripts/dependencies.sh: improve
+	g++ test to avoid misleading output
+Message-ID: <20141208213302.91AF180148@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94c6417e703d7cd923d50e4974ad555a377ffa02
+commit: http://git.buildroot.net/buildroot/commit/?id=d1607dc7dfc2c5397ff6b67ebd18d25c6184f650
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The screen is cluttered when we build for 32 bit target and 32 bit gcc
-is missing.
+When g++ is not installed, a misleading error message turns up because
+of a bad combination of an unquoted shell variable and control flow.
 
-  ~/buildroot$ make
-  [...]
-  /usr/bin/ld: cannot find crt1.o: No such file or directory
-  /usr/bin/ld: cannot find crti.o: No such file or directory
-  /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc.a when searching for -lgcc
-  /usr/bin/ld: cannot find -lgcc
-  /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc_s.so when searching for -lgcc_s
-  /usr/bin/ld: cannot find -lgcc_s
-  /usr/bin/ld: cannot find -lc
-  /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc.a when searching for -lgcc
-  /usr/bin/ld: cannot find -lgcc
-  /usr/bin/ld: skipping incompatible /usr/lib/gcc/x86_64-linux-gnu/4.9/libgcc_s.so when searching for -lgcc_s
-  /usr/bin/ld: cannot find -lgcc_s
-  /usr/bin/ld: cannot find crtn.o: No such file or directory
-  collect2: error: ld returned 1 exit status
-  [...]
-  Your Buildroot configuration needs a compiler capable of building 32 bits binaries.
+ ~/buildroot$ make
+ You may have to install 'g++' on your build machine
+ /home/testuser/buildroot/support/dependencies/dependencies.sh: 136: [: -lt: unexpected operator
 
-The final note is enough, and adding 2>/dev/null to the gcc test
-invocation is also more consistent with the rest of the script. The
-patch makes the '/usr/bin/ld:' and 'collect2:' lines go away.
+[Thomas:
+  - fixed commit log, as per the suggestion of Yann E. Morin.
+  - don't change existing empty new lines, suggested by Yann.
+  - use positive logic in the newly added test, suggested by Yann.]
 
 Signed-off-by: Jens Stimpfle <debian@jstimpfle.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/dependencies/dependencies.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ support/dependencies/dependencies.sh |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
 diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 44e212d..52305e1 100755
+index af5ce0e..44e212d 100755
 --- a/support/dependencies/dependencies.sh
 +++ b/support/dependencies/dependencies.sh
-@@ -227,7 +227,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- fi
- 
- if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
--	if ! echo "int main(void) {}" | gcc -m32 -x c - -o /dev/null ; then
-+	if ! echo "int main(void) {}" | gcc -m32 -x c - -o /dev/null 2>/dev/null; then
+@@ -133,7 +133,9 @@ if [ ! -z "$CXXCOMPILER" ] ; then
  		echo
- 		echo "Your Buildroot configuration needs a compiler capable of building 32 bits binaries."
- 		echo "If you're running a Debian/Ubuntu distribution, install the gcc-multilib package."
+ 		echo "You may have to install 'g++' on your build machine"
+ 	fi
++fi
+ 
++if [ -n "$CXXCOMPILER_VERSION" ] ; then
+ 	CXXCOMPILER_MAJOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/\..*//g")
+ 	CXXCOMPILER_MINOR=$(echo $CXXCOMPILER_VERSION | sed -e "s/^$CXXCOMPILER_MAJOR\.//g" -e "s/\..*//g")
+ 	if [ $CXXCOMPILER_MAJOR -lt 3 -o $CXXCOMPILER_MAJOR -eq 2 -a $CXXCOMPILER_MINOR -lt 95 ] ; then
