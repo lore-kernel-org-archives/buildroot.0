@@ -1,40 +1,42 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 8 Dec 2014 13:27:47 +0000
-Subject: [Buildroot] [PATCH] autobuild-run: Do not build civetweb with a
- known non-working external MIPS toolchain
-In-Reply-To: <20141208134645.21b6db36@free-electrons.com>
-References: <1418042095-29450-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141208134645.21b6db36@free-electrons.com>
-Message-ID: <5485A753.6090905@imgtec.com>
+Date: Mon, 8 Dec 2014 14:51:51 +0000
+Subject: [Buildroot] [PATCH] wget: bump version to 1.16.1
+Message-ID: <1418050311-61693-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/08/2014 12:46 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Mon, 8 Dec 2014 12:34:55 +0000, Vicente Olivert Riera wrote:
-> 
->> +    # This MIPS uClibc toolchain fails to build the civetweb package
->> +    if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
->> +       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.08.tar.bz2"\n' in configlines:
->> +        return False
-> 
-> I have just updated the BR toolchains used by the autobuilders, so the
-> version is now 2014.11 and not 2014.08.
-> 
-> Maybe some other exceptions in the autobuild-run script need to be
-> updated as well.
+- Bump version to 1.16.1
+- Update hash file
 
-Ok, I will check all the MIPS exceptions with the new toolchains to
-check if they are still needed. Thanks.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/wget/wget.hash |    2 +-
+ package/wget/wget.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Cheers,
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 8ef92bf..f9a274e 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	9261dd090a17687b6dc0682a257e90a926def15624b650e8f799af57e5c8b0e7	wget-1.16.tar.xz
++sha256	2b96c707ee15fe847f5bc2f872a7a530dca803b927a750419b44f50803e14d33  wget-1.16.1.tar.xz
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index e50981e..b19c987 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.16
++WGET_VERSION = 1.16.1
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_LICENSE = GPLv3+
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+1.7.1
