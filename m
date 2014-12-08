@@ -1,32 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Dec 2014 23:25:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: Add eventfd_read() and
- eventfd_write()
-In-Reply-To: <1414183436-6964-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1414183436-6964-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20141208222547.GE4105@free.fr>
+Date: Mon, 8 Dec 2014 23:37:29 +0100
+Subject: [Buildroot] Patchwork review evening (this week!)
+In-Reply-To: <20141208002008.18756fac@free-electrons.com>
+References: <20141208002008.18756fac@free-electrons.com>
+Message-ID: <20141208223729.GF4105@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Thomas, All,
 
-On 2014-10-24 22:43 +0200, Bernd Kuhls spake thusly:
-> Needed for upcoming eventfd support in Kodi:
-> https://github.com/FernetMenta/xbmc/commit/1030119691a67511b6e9a27abdec474525de8d26
+On 2014-12-08 00:20 +0100, Thomas Petazzoni spake thusly:
+> In order to help with killing a bit of the patchwork backlog, I'm
+> proposing to have a "patchwork review evening". The idea is that a
+> group of Buildroot developers join on IRC for a few hours in the
+> evening, and we go through a list of patches or patch series that are
+> 'complex' and try to take some decision about them.
+> 
+> I've put up a list of possible dates this week at
+> http://doodle.com/kinfzn5xhg7i35g2. The proposed time is 8 PM CET, but
+> it can be adjusted to be a bit earlier or later.
 
-As Peter said, we do not like to carry feature patches in Buildroot.
+Thomas, the poll highlights Thursday as the best date, with 5
+participants, and Tuesday as the second-best with 4 participants.
 
-If Kodi really requires eventfd, we'll have to mark it incompatible with
-uClibc in Buildroot. Kodi is already a big beast all by itself, so the
-oversize of glibc would not be that noticeable when compared to Kodi.
+I believe Tuesday would be better because Peter is available, so he can
+do his maintainer job to arbitrate on dubious patches...
 
-Also, your use-case is a bit weird: you said you're using the fli4l
-project to run Kodi on it. We failed to see the relation with Buildroot.
+If Samuel and J?r?me stil want to join on Thurday, I can be present as
+well and we can further work on more patches.
 
-As such, we're marking this patch "Rejected" in Patchwork.
+Sounds like a deal?
+
+> We'll try to prepare the meeting by setting up a list of patches to be
+> discussed.
+
+I've created an etherpad with some patches to work on:
+    https://etherpad.fr/p/Buildroot-Patchwork
+
+The list is not complete, and nothing prevents anyone from looking at
+it, and acting on it before the review session. ;-)
 
 Regards,
 Yann E. MORIN.
