@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 10:21:50 +0100
-Subject: [Buildroot] [PATCH] w_scan: bump version to 20141122
-In-Reply-To: <1417714796-65316-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1417714796-65316-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141208102150.73cc6e2a@free-electrons.com>
+Date: Mon, 8 Dec 2014 10:22:20 +0100
+Subject: [Buildroot] [PATCH branch/next] pinentry: bump version to 0.9.0
+In-Reply-To: <1417190979-53042-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1417190979-53042-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141208102220.7a8242d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,23 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Thu, 4 Dec 2014 17:39:56 +0000, Vicente Olivert Riera wrote:
-> - Bump version to 20141122
+On Fri, 28 Nov 2014 16:09:39 +0000, Vicente Olivert Riera wrote:
+> - Bump version to 0.9.0
 > - Add a hash file
 > 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/w_scan/w_scan.hash |    2 ++
->  package/w_scan/w_scan.mk   |    2 +-
+>  package/pinentry/pinentry.hash |    2 ++
+>  package/pinentry/pinentry.mk   |    2 +-
 >  2 files changed, 3 insertions(+), 1 deletions(-)
->  create mode 100644 package/w_scan/w_scan.hash
+>  create mode 100644 package/pinentry/pinentry.hash
 
 Apparently causes some build failures:
-http://autobuild.buildroot.org/results/d75/d755df306bf22e78f7d3304191250b3f66a8e634/build-end.log.
+http://autobuild.buildroot.org/results/314/314de324a09f64f8b95882ca169c77847d75680c/build-end.log.
 
 Can you have a look?
+
+Thanks!
 
 Thomas
 -- 
