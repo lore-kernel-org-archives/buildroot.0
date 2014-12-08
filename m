@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 08 Dec 2014 23:52:38 +0100
-Subject: [Buildroot] [PATCHv2 09/12] gcc/4.7: add patch to warn about
- unsafe header paths
-In-Reply-To: <1417470913-1280-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 08 Dec 2014 23:55:07 +0100
+Subject: [Buildroot] [PATCHv2 11/12] binutils: enable poison system
+ directories option
+In-Reply-To: <1417470913-1280-12-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470913-1280-10-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54862BB6.8040306@openwide.fr>
+ <1417470913-1280-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54862C4B.2020805@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,69 +15,33 @@ To: buildroot@busybox.net
 Hi Thomas,
 
 Le 01/12/2014 22:55, Thomas Petazzoni a ?crit :
-> This commit adds a patch to gcc borrowed from CodeSourcery/Yocto that
-> warns about unsafe include paths (i.e /usr/include,
-> /usr/local/include, etc.). The patch was adapted to gcc 4.7.4, and
-> modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH environment
-> variable to error out instead of just warn when unsafe paths are
-> used. Even though erroring out can be chosen by passing
-> -Werror=poison-system-directories, we are not sure this option in
-> CFLAGS will always be passed, so having an environment variable
-> guarantees it will always be passed, and also allows to have an
-> identical behavior to the external toolchain wrapper.
+> This commit enables the poison system directories option, which is now
+> available thanks to the binutils patches that have been added.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
+>  package/binutils/binutils.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index b8dab5d..9a9bb94 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -68,6 +68,7 @@ HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
+>  			--target=$(GNU_TARGET_NAME) \
+>  			--disable-shared --enable-static \
+>  			--with-sysroot=$(STAGING_DIR) \
+> +			--enable-poison-system-directories \
+>  			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+>  			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+>  
+> 
 
+Acked-by: Romain Naour <romain.naour@openwide.fr>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 
-Tested with the following internal toolchain
-
-BR2_i386=y
-BR2_ARCH="i686"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_ARCH="i686"
-BR2_ARCH_HAS_ATOMICS=y
-BR2_x86_i686=y
-
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-
-BR2_TOOLCHAIN=y
-BR2_TOOLCHAIN_USES_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT=y
-
-BR2_KERNEL_HEADERS_3_17=y
-BR2_DEFAULT_KERNEL_HEADERS="3.17.4"
-
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc"
-BR2_PACKAGE_GLIBC=y
-BR2_GLIBC_VERSION_2_20=y
-BR2_GLIBC_VERSION_STRING="2.20"
-
-BR2_BINUTILS_VERSION_2_22=y
-BR2_BINUTILS_VERSION="2.22"
-
-BR2_GCC_VERSION_4_7_X=y
-BR2_GCC_VERSION="4.7.4"
-
-$ make O=test/paranoid-4/ iprutils
-
-/home/naourr/git/buildroot/test/paranoid-4/host/usr/bin/i686-buildroot-linux-gnu-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os
--Wall -DIPR_MAJOR_RELEASE=2 -DIPR_MINOR_RELEASE=4 -DIPR_FIX_LEVEL=2
--DIPR_FIX_DATE='"(June 10, 2014)"' -DIPR_VERSION_STR='"2.4.2 (June 10, 2014)"'
--DIPR_RELEASE=1 -I. -I/usr/include/ncurses -o iprlib.o -c iprlib.c
-
-cc1: erreur: include location "/usr/include/ncurses" is unsafe for
-cross-compilation [-Werror=poison-system-directories]
-
-cc1: some warnings being treated as errors
-gzip -f -c iprconfig.8 > iprconfig.8.gz
-make[1]: *** [iprlib.o] Erreur 1
-
-Thanks
-
+Thanks,
 -- 
 Romain Naour
 
