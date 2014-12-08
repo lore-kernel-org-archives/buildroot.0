@@ -1,53 +1,44 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 08 Dec 2014 23:55:07 +0100
-Subject: [Buildroot] [PATCHv2 11/12] binutils: enable poison system
- directories option
-In-Reply-To: <1417470913-1280-12-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417470913-1280-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470913-1280-12-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54862C4B.2020805@openwide.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon,  8 Dec 2014 23:55:29 +0100
+Subject: [Buildroot] [PATCH v2 1/6] package/mpd: bump to version 0.19.6
+Message-ID: <1418079329-27477-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Also update hash file.
 
-Le 01/12/2014 22:55, Thomas Petazzoni a ?crit :
-> This commit enables the poison system directories option, which is now
-> available thanks to the binutils patches that have been added.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/binutils/binutils.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index b8dab5d..9a9bb94 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -68,6 +68,7 @@ HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
->  			--target=$(GNU_TARGET_NAME) \
->  			--disable-shared --enable-static \
->  			--with-sysroot=$(STAGING_DIR) \
-> +			--enable-poison-system-directories \
->  			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
->  			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
->  
-> 
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+Changes v1 -> v2:
+  - Update hash file
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
-
-Thanks,
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index f8dc05f..02590fa 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e621e05e7d0e92690f7a1b6ee6f1e502a4d009c69caa4907519282ca571f72cf	mpd-0.19.5.tar.xz
++sha256	fac25376ee46b89249ee28a1ae13b2d5d1df7ff62464340c33c077015364d1e0	mpd-0.19.6.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index c80de41..3be2ae5 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).5
++MPD_VERSION = $(MPD_VERSION_MAJOR).6
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
-Romain Naour
-
-OPEN WIDE Ing?nierie - Paris
-23/25, rue Daviel| 75013 PARIS
-http://ingenierie.openwide.fr
-
-Le blog des technologies libres et embarqu?es :
-http://www.linuxembedded.fr
+2.1.3
