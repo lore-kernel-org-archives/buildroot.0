@@ -1,41 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 23:43:20 +0100
-Subject: [Buildroot] Patchwork review evening (this week!)
-In-Reply-To: <20141208223729.GF4105@free.fr>
-References: <20141208002008.18756fac@free-electrons.com>
- <20141208223729.GF4105@free.fr>
-Message-ID: <20141208234320.2abb595a@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon,  8 Dec 2014 23:44:50 +0100
+Subject: [Buildroot] [PATCH 2/6] package/mpd: fix typo
+In-Reply-To: <1418078694-26331-1-git-send-email-jkrause@posteo.de>
+References: <1418078694-26331-1-git-send-email-jkrause@posteo.de>
+Message-ID: <1418078694-26331-2-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix little type: it's UPnP, not UPnp.
 
-On Mon, 8 Dec 2014 23:37:29 +0100, Yann E. MORIN wrote:
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/mpd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Thomas, the poll highlights Thursday as the best date, with 5
-> participants, and Tuesday as the second-best with 4 participants.
-> 
-> I believe Tuesday would be better because Peter is available, so he can
-> do his maintainer job to arbitrate on dubious patches...
-
-Yes, good idea. So let's meet tomorrow starting at around 8 PM CET or
-so, on IRC.
-
-> I've created an etherpad with some patches to work on:
->     https://etherpad.fr/p/Buildroot-Patchwork
-> 
-> The list is not complete, and nothing prevents anyone from looking at
-> it, and acting on it before the review session. ;-)
-
-I'll try to add more tomorrow.
-
-Thanks!
-
-Thomas
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 1d38b1a..4097f52 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -279,7 +279,7 @@ config BR2_PACKAGE_MPD_TCP
+ 	  on different machines (the usual scenario).
+ 
+ config BR2_PACKAGE_MPD_UPNP
+-	bool "UPnp"
++	bool "UPnP"
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBUPNP
+ 	help
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.3
