@@ -1,41 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Dec 2014 13:10:06 +0100
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.8.7.3
-Message-ID: <20141208121431.90FDB7FFF6@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 8 Dec 2014 12:34:55 +0000
+Subject: [Buildroot] [PATCH] autobuild-run: Do not build civetweb with a
+	known non-working external MIPS toolchain
+Message-ID: <1418042095-29450-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebdfdd9c1f2324d15748c06b4a8aa1546ae93fb8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This MIPS uClibc toolchain doesn't have the needed fix in order to build
+the civetweb package statically for uClibc. It fails with messages like
+these ones:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ libdl.c:(.text+0x1840): undefined reference to `TLS_DTPREL_VALUE'
+ libdl.c:(.text+0x1884): undefined reference to `TLS_TPREL_VALUE'
+
+This is due to certain missing fixes in uClibc, as built by Crosstool-NG.
+
+Related:
+  http://lists.uclibc.org/pipermail/uclibc/2013-April/047708.html
+  http://git.buildroot.net/buildroot/commit/?id=c0b4c45780e4ffe23101a407e7c4cde22e27815a
+
+Fixes:
+  http://autobuild.buildroot.net/results/9b5/9b5a5f5e1c4331d6ba44a12f66f74d950ee69ada/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ scripts/autobuild-run |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 26516c9..31906b9 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1  175283383d010709f76fdd13cb0c8c3c329a1c67  sqlite-autoconf-3080702.tar.gz
-+sha1	5cbe9aa4af1b32787045a251dba6debee3f061c0	sqlite-autoconf-3080703.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index aba788e..7513c33 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3080702
-+SQLITE_VERSION = 3080703
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 993c578..4ac0c7b 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -310,6 +310,10 @@ def fixup_config(instance, sysinfo):
+     if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
++    # This MIPS uClibc toolchain fails to build the civetweb package
++    if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.08.tar.bz2"\n' in configlines:
++        return False
+     # This MIPS ctng toolchain fails to build the python3 package
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+-- 
+1.7.1
