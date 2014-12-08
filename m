@@ -1,62 +1,40 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 8 Dec 2014 23:17:58 +0100
-Subject: [Buildroot] [PATCH 5/6 v3] package/freerdp: install server key
-	and certificate
-In-Reply-To: <c356f0fac7be952421a754fc8168ecd3a30b19be.1417952276.git.yann.morin.1998@free.fr>
-References: <cover.1417952276.git.yann.morin.1998@free.fr>
- <c356f0fac7be952421a754fc8168ecd3a30b19be.1417952276.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMJGJVq1LSVf5zkK42fPi0H=LxN-buxZ56TNNBiaHwD9Ng@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Dec 2014 23:25:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Add eventfd_read() and
+ eventfd_write()
+In-Reply-To: <1414183436-6964-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1414183436-6964-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141208222547.GE4105@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 7, 2014 at 12:39 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> This is mandatory for an RDP server to have a key and a certificate,
-> otherwise clients will refuse to connect to that server.
->
-> We install the key and certificate bundled in FreeRDP. The user can
-> install its own set using a post-build script if needed.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
+Bernd, All,
 
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+On 2014-10-24 22:43 +0200, Bernd Kuhls spake thusly:
+> Needed for upcoming eventfd support in Kodi:
+> https://github.com/FernetMenta/xbmc/commit/1030119691a67511b6e9a27abdec474525de8d26
 
->
-> ---
-> Changes v2 -> v3:
->   - only install the keys when the server is enabled  (Samuel)
-> ---
->  package/freerdp/freerdp.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> index 67f9960..2fa880f 100644
-> --- a/package/freerdp/freerdp.mk
-> +++ b/package/freerdp/freerdp.mk
-> @@ -48,6 +48,15 @@ endif
->
->  ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
->  FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
-> +# Install the server key and certificate, so that a client can connect.
-> +# A user can override them with its own in a post-build script, if needed.
-> +define FREERDP_INSTALL_KEYS
-> +       $(INSTALL) -D $(@D)/server/X11/server.key \
-> +                     $(TARGET_DIR)/etc/freerdp/keys/server.key
-> +       $(INSTALL) -D $(@D)/server/X11/server.crt \
-> +                     $(TARGET_DIR)/etc/freerdp/keys/server.crt
-> +endef
-> +FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
->  else
->  FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
->  endif
-> --
-> 1.9.1
->
+As Peter said, we do not like to carry feature patches in Buildroot.
 
+If Kodi really requires eventfd, we'll have to mark it incompatible with
+uClibc in Buildroot. Kodi is already a big beast all by itself, so the
+oversize of glibc would not be that noticeable when compared to Kodi.
 
+Also, your use-case is a bit weird: you said you're using the fli4l
+project to run Kodi on it. We failed to see the relation with Buildroot.
+
+As such, we're marking this patch "Rejected" in Patchwork.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
