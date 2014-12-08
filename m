@@ -1,285 +1,138 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Date: Sun,  7 Dec 2014 19:39:39 -0500
-Subject: [Buildroot] [PATCH v2] ola: bump to 0.9.3
-Message-ID: <1417999179-29370-1-git-send-email-simon.marchi@polymtl.ca>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  8 Dec 2014 08:30:14 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-12-07
+Message-ID: <20141208073014.D131F1010F0@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This update requires a few changes. First, good news, the patches that you
-guys have submitted to OLA have been merged, so we can drop those.
+Build statistics for 2014-12-07
+===============================
 
-Less good news: OLA now builds a small protoc wrapper (ola_protoc) that is
-built and executed at compile-time on the host. If we don't change anything,
-ola_protoc is built with the target toolchain and therefore can't run on the
-host. Explanation for ola_protoc is here
+        success : 174
+       failures : 71 
+       timeouts : 4  
+          TOTAL : 249
 
-To solve this, I created a package host-ola, which builds and provides an
-ola_protoc for the host. It tries to disable as much as possible of things
-that we won't need at configure time. Only ola_protoc is built and installed
-so it's not that long.
+Classification of failures by reason
+====================================
 
-The change has been built-tested only.
+               host-zlib-1.2.8 | 12
+                    zlib-1.2.8 | 8 
+  toolchain-external-undefined | 7 
+              fconfig-20080329 | 6 
+                  guile-2.0.11 | 5 
+ltrace-0896ce554f80afdcba81... | 3 
+             python-webpy-0.37 | 3 
+                    liblo-0.26 | 3 
+                  thrift-0.9.1 | 2 
+              wireshark-1.12.2 | 2 
+                   nginx-1.6.2 | 1 
+                 libsoxr-0.1.1 | 1 
+            modplugtools-0.5.3 | 1 
+                    ruby-2.1.5 | 1 
+                 mpg123-1.21.0 | 1 
+freerdp-440916eae2e07463912... | 1 
+            lttng-libust-2.5.1 | 1 
+                 openocd-0.5.0 | 1 
+               libcap-ng-0.7.4 | 1 
+                 gnuplot-4.6.6 | 1 
+                 webkit-1.11.5 | 1 
+zmqpp-36413487f05b165dfc82a... | 1 
+               libsigsegv-2.10 | 1 
+ti-utils-06dbdb2727354b5f3a... | 1 
+checking size of uintmax_t.... | 1 
+             alsa-utils-1.0.28 | 1 
+                xapp_xfs-1.1.4 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+                     vlc-2.1.5 | 1 
+                 gnupg2-2.0.26 | 1 
+                  sispmctl-3.1 | 1 
+           libmemcached-1.0.18 | 1 
+                libexif-0.6.21 | 1 
+                    exiv2-0.24 | 1 
 
-[1] https://github.com/OpenLightingProject/ola/blob/master/protoc/ola-protoc.cpp#L20
+Detail of failures
+===================
 
-Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+     powerpc |              alsa-utils-1.0.28 | NOK | http://autobuild.buildroot.net/results/d72f31bab907c7485d03db4597d01fd759277db4/
+         arm | checking size of uintmax_t.... | TIM | http://autobuild.buildroot.net/results/9dd773b488263094657a69deaad85d4fb34a88ec/
+        bfin |                     exiv2-0.24 | NOK | http://autobuild.buildroot.net/results/2b28a6e57aabed8ae10da3c029152f2c352b6757/
+     powerpc |               fconfig-20080329 | NOK | http://autobuild.buildroot.net/results/487c907900c3292653b6b7dc7c2b0f3841d4449a/
+         arm |               fconfig-20080329 | NOK | http://autobuild.buildroot.net/results/f61b264ebf2c4aac8cb4b03c0722cbd92c6b117d/
+        i686 |               fconfig-20080329 | NOK | http://autobuild.buildroot.net/results/13d100a13b396e3ce5fbc94d6e4d4874c3c6aeed/
+         arm |               fconfig-20080329 | NOK | http://autobuild.buildroot.net/results/30b8fefb6cf2f7ae225537ae8ac7836eeee9a4f3/
+         arc |               fconfig-20080329 | NOK | http://autobuild.buildroot.net/results/cb2e905e604eb1942c22a6446858ba868ee2a387/
+        bfin |               fconfig-20080329 | NOK | http://autobuild.buildroot.net/results/4bda5ec46e1535defe80b37bb2e69974e2cc8d3c/
+         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/b6052280f92a319bbd585ec87d844aa9c8954ff4/
+         arm |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/ad723c299c149ed524ceb6527209089cd1f9f982/
+    mips64el |                  gnuplot-4.6.6 | NOK | http://autobuild.buildroot.net/results/5f11d04086a5e28ac21d43c973a184a3f88ab60a/
+         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/53daa9434f78a85e7f693a8f0aa68607b89bb59e/
+     powerpc |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/64198ebfecca5c76c8452ac0b7128d2ab00e71a3/
+         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/565e5b613e125d4557bfcefd41d28644f3d6ab35/
+     powerpc |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/bf716169aef4a6449991a62ada8de8e8fb107aba/
+     powerpc |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/755efb6bb7f526aeac618a99fed9bb761c51b527/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/1a12621d1942cf0e57515dfc6b79c5278bc6c60b/
+microblazeel |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/5e49a885067308809b8bd443fd31f6308731d465/
+        i486 |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/b54ef69553d0040f84ead336d31d864fd4cc6f67/
+         arm |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/cb2828647296105e75e9055e072a12a0692875c3/
+microblazeel |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/c27e8407ffe72b73f44d77c20874510a3970da5e/
+      x86_64 |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/8ddb3b61f9b814d19b2b3072aa32578c4544109a/
+         arm |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/19f369af54137cc4dc3fc05d219cdf746984ee88/
+        mips |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/a944244c25406ab5e3f5d5c881178e7b25e1183a/
+      x86_64 |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/e00bd85a681e0c9ee657a02665fb9a9a59fce424/
+        i686 |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/bad8eb94ad1dd2fce21708f527f8430e15165b81/
+      x86_64 |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/3bf33047224b2cf52698d0db48a3823a058076e7/
+microblazeel |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/1a9643f8633db038d4fe5ca4a32e4d52e70a3a1a/
+         arm |                host-zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/3675fb5d3aaff8b1e7144bddd024704f522865e6/
+       nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/1ca8482dc78138330742071374976f21060f95d7/
+     powerpc |                 libexif-0.6.21 | NOK | http://autobuild.buildroot.net/results/d572a64b5988ee64d240ea4f7228c528cc33fef7/
+         arm |                     liblo-0.26 | NOK | http://autobuild.buildroot.net/results/a8519c798f31d8f7b4152168c9fd56e9f2aa3c2c/
+         arm |                     liblo-0.26 | NOK | http://autobuild.buildroot.net/results/ab01cba1825e47777fc3f39db399a558395ba8e9/
+      mipsel |                     liblo-0.26 | NOK | http://autobuild.buildroot.net/results/b6167aee249fe8d8fbed1c784fe0fb0aaf63b0bf/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/58698e59331f46dd5be5c29d9901c53b73218eaf/
+       nios2 |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/a567e0c9cf8479beda04e553aff11e2c34bc7b3b/
+         arc |                  libsoxr-0.1.1 | NOK | http://autobuild.buildroot.net/results/91325bb8ee5697ac8d687ec85c1b6b1f655e4f2d/
+         arm | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/5f25e7d0ad8b2096f3b6be58e3618752bd34a62d/
+     powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/0ee7e5cd0724191ffa9e8958e4c8a0ccb4be7843/
+         arm | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/6dbc1ae00d76ad26418af81b5c746fa19d4d104b/
+        i686 |             lttng-libust-2.5.1 | NOK | http://autobuild.buildroot.net/results/3d996dfb3f67a6c30718cb99cc904011294dfcff/
+      x86_64 |             modplugtools-0.5.3 | NOK | http://autobuild.buildroot.net/results/2bb5a85d4f7f7a10ed63d0f27af92fecb816bc14/
+     powerpc |                  mpg123-1.21.0 | NOK | http://autobuild.buildroot.net/results/b8be1a50d913c8696a3f63d79204cb1f2e8e9a08/
+         arc |                    nginx-1.6.2 | NOK | http://autobuild.buildroot.net/results/771b96f222ba0aa36253741991d1250dfdac87e6/
+        bfin |                  openocd-0.5.0 | NOK | http://autobuild.buildroot.net/results/d42f7d9331be116d1356489410f66cd2b6a58d43/
+     powerpc |              python-webpy-0.37 | NOK | http://autobuild.buildroot.net/results/132217cf1e5d7288002f73d1b7b55b21e17a499c/
+     powerpc |              python-webpy-0.37 | NOK | http://autobuild.buildroot.net/results/e6bdb8e0ab6daa027a01507861ecde47338a11a8/
+        i686 |              python-webpy-0.37 | NOK | http://autobuild.buildroot.net/results/65b08e1fa362258d93259147348cd847d13e61ed/
+      mipsel |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/74b0a3f30590e3a12541d4ea405032b552ce4431/
+      mipsel |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/bb163921413ab85500f421f80a85ba8cef7f2990/
+        bfin |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/42f224e58cfd0dd55c875aa58e0e46a9493d6a79/
+        bfin |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/eeacc29dac058139c532bc26eb869bdd13a960e0/
+    mips64el | ti-utils-06dbdb2727354b5f3a... | TIM | http://autobuild.buildroot.net/results/21418a9884394c1f8f57fd16cdaf462554137afc/
+         arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/82d17caa242ac6a5a116aa4963bb857f0307d005/
+         arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/ae2c587f7037ffae3ef950f67aa63c6572842143/
+        bfin |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/0aa1e39270f46393ddad2c926758b2303d4cfcbc/
+         arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/3f87ffd93f02764a5fd4a2aa39a886c42b87be2b/
+         arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/d923cbef155c852f11fcc4f2d5bde855c6963063/
+     powerpc |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/7be8ac68ee63e4afc75965a7d06e56d94db4d23f/
+         arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/111b6c8de0b6f1223b43e204449cb1f72cf0e01f/
+         arm |                      vlc-2.1.5 | NOK | http://autobuild.buildroot.net/results/4a95efc50402010368420775cdfd843b9ad941ec/
+         arm |                  webkit-1.11.5 | TIM | http://autobuild.buildroot.net/results/11af1dd21e42d147fc8997deafd190081b265e82/
+      x86_64 |               wireshark-1.12.2 | TIM | http://autobuild.buildroot.net/results/8d2dc394d0fc0d935d160ad825309f08349b6fdf/
+         arm |               wireshark-1.12.2 | NOK | http://autobuild.buildroot.net/results/d1c72130d7b6024996317c265caa06e80bfa8df8/
+microblazeel |                 xapp_xfs-1.1.4 | NOK | http://autobuild.buildroot.net/results/260f40e09f07b7b7bbb95a9d6d08b36e20bcbcec/
+    mips64el |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/2dff230546fe74cbc05e8750758ddbdcecb76ce0/
+         arm |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/ce5331ffbda4bd217aebad277a2f2f3f1ab2dc91/
+        bfin |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/797b517096d59a0bfbede5fd3e281d9a82190622/
+     powerpc |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/55750fd22966455098abaeab948db01f2bef81f8/
+       nios2 |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/8730b4110bd2ad1efd6f1632f14069f02a47f4e7/
+         sh4 |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/8c33837d2b3b469c4795727f7ca0891c2fd356b9/
+         sh4 |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/8055a3c56a67d576dca87e235b9e9e4f5d267e18/
+    mips64el |                     zlib-1.2.8 | NOK | http://autobuild.buildroot.net/results/61c840de60f7675f0989d7602fdb64f478d6064a/
+        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/f618cac4f238903f41e484711e6c43a9b1ab3bf9/
 
----
 
-New in v2:
-
-* Fixed formatting.
-* Added OLA_AUTORECONF, since we get the code directly from github.
-* Use HOST_OLA_MAKE_OPTS instead of HOST_OLA_MAKE.
-* Use full path in install.
----
- package/ola/ola-0001-fix-build-warning.patch       | 27 --------
- ...002-move-python-sub-check-to-configure.ac.patch | 48 -------------
- ...k-for-python-module-for-cross-compilation.patch | 81 ----------------------
- package/ola/ola.mk                                 | 33 +++++++--
- 4 files changed, 27 insertions(+), 162 deletions(-)
- delete mode 100644 package/ola/ola-0001-fix-build-warning.patch
- delete mode 100644 package/ola/ola-0002-move-python-sub-check-to-configure.ac.patch
- delete mode 100644 package/ola/ola-0003-fix-check-for-python-module-for-cross-compilation.patch
-
-diff --git a/package/ola/ola-0001-fix-build-warning.patch b/package/ola/ola-0001-fix-build-warning.patch
-deleted file mode 100644
-index 1fdb58f..0000000
---- a/package/ola/ola-0001-fix-build-warning.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Fix build on 64 bits architectures
--
--This upstream patch fixes a warning that, due to -Werror, is causing
--build failures on 64 bits architectures.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--commit ea375582b0bfee93d66608ffc807078ffc48e961
--Author: Simon Newton <nomis52@gmail.com>
--Date:   Wed Oct 30 09:23:49 2013 -0700
--
--    * Avoid a compiler warning
--
--diff --git a/plugins/e131/e131/PreamblePacker.cpp b/plugins/e131/e131/PreamblePacker.cpp
--index ef29e18..8dfcc72 100644
----- a/plugins/e131/e131/PreamblePacker.cpp
--+++ b/plugins/e131/e131/PreamblePacker.cpp
--@@ -77,7 +77,8 @@ const uint8_t *PreamblePacker::Pack(const PDUBlock<PDU> &pdu_block,
--   if (!m_send_buffer)
--     Init();
-- 
---  unsigned int size = MAX_DATAGRAM_SIZE - sizeof(ACN_HEADER);
--+  unsigned int size = MAX_DATAGRAM_SIZE -
--+      static_cast<unsigned int>(sizeof(ACN_HEADER));
--   if (!pdu_block.Pack(m_send_buffer + sizeof(ACN_HEADER), &size)) {
--     OLA_WARN << "Failed to pack E1.31 PDU";
--     return NULL;
-diff --git a/package/ola/ola-0002-move-python-sub-check-to-configure.ac.patch b/package/ola/ola-0002-move-python-sub-check-to-configure.ac.patch
-deleted file mode 100644
-index 1a79035..0000000
---- a/package/ola/ola-0002-move-python-sub-check-to-configure.ac.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--commit 673a7602a6bf7a6aa8a8461ebd9362d59f6e21df
--Author: Yann E. MORIN <yann.morin.1998@free.fr>
--Date:   Tue Jan 14 21:37:51 2014 +0100
--
--    configure: move python sub-check to configure.ac
--    
--    We do not want to re-test the python name for each Python module
--    we want to check for.
--    
--    Even if we only check for one Python module right now, this is
--    good practice overall.
--    
--    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Sent upstream, awaiting for response...
--
--diff --git a/config/ax_python_module.m4 b/config/ax_python_module.m4
--index bd70a06..96dd1ab 100644
----- a/config/ax_python_module.m4
--+++ b/config/ax_python_module.m4
--@@ -25,11 +25,6 @@
-- 
-- AU_ALIAS([AC_PYTHON_MODULE], [AX_PYTHON_MODULE])
-- AC_DEFUN([AX_PYTHON_MODULE],[
---    if test -z $PYTHON;
---    then
---        PYTHON="python"
---    fi
---    PYTHON_NAME=`basename $PYTHON`
--     AC_MSG_CHECKING($PYTHON_NAME module: $1)
-- 	$PYTHON -c "import $1" 2>/dev/null
-- 	if test $? -eq 0;
--diff --git a/configure.ac b/configure.ac
--index 1efedf1..5f6f604 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -530,6 +530,10 @@ AM_CONDITIONAL(INSTALL_RDM_TESTS, test "${enable_rdm_tests}" = "yes")
-- 
-- if test "${enable_python_libs}" = "yes"; then
--  AM_PATH_PYTHON(2.6)
--+ if test -z $PYTHON; then
--+  PYTHON="python"
--+ fi
--+ PYTHON_NAME=`basename $PYTHON`
--  AX_PYTHON_MODULE("google.protobuf", "fatal")
-- fi
-- 
-diff --git a/package/ola/ola-0003-fix-check-for-python-module-for-cross-compilation.patch b/package/ola/ola-0003-fix-check-for-python-module-for-cross-compilation.patch
-deleted file mode 100644
-index 436974d..0000000
---- a/package/ola/ola-0003-fix-check-for-python-module-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,81 +0,0 @@
--commit ea985068c2d699ffb5b353de090f7ded713c08a7
--Author: Yann E. MORIN <yann.morin.1998@free.fr>
--Date:   Tue Jan 14 21:38:27 2014 +0100
--
--    configure: add option for user to override checks for Python modules
--    
--    The check for google.protobuf is inherently flawed for cross-compilation,
--    as it uses the host Python to check for target modules.
--    
--    In this case, it is not possible to check for a Pyhon modules altogether,
--    and we need to rely on the user to properly tell us whether we do or do
--    not have google.protobuf.
--    
--    This is done by adding am autoconf cache variable:
--        ac_cv_have_pymod_google_protobuf
--    
--    which can be set to:
--      - yes     : force the test to be true
--      - no      : force the test to be false
--      - (empty) : let the test decide
--    
--    This is then used in AX_PYTHON_MODULE to override the test.
--    
--    Currently, only the google.protobuf Python module is checked for, but
--    the same could be done later on of other Python modules that may be
--    added in the future, of course.
--    
--    Fixes configure-errors like:
--        http://autobuild.buildroot.net/results/e63/e634d5f0cee3967caffaa6e7ada8c0968e3eff63/build-end.log
--    
--    Also fixes some under-quotation in the python module check.
--    
--    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Sent upstream, awaiting for response...
--
--diff --git a/config/ax_python_module.m4 b/config/ax_python_module.m4
--index 96dd1ab..2910e88 100644
----- a/config/ax_python_module.m4
--+++ b/config/ax_python_module.m4
--@@ -25,20 +25,17 @@
-- 
-- AU_ALIAS([AC_PYTHON_MODULE], [AX_PYTHON_MODULE])
-- AC_DEFUN([AX_PYTHON_MODULE],[
---    AC_MSG_CHECKING($PYTHON_NAME module: $1)
-- 	$PYTHON -c "import $1" 2>/dev/null
-- 	if test $? -eq 0;
-- 	then
---		AC_MSG_RESULT(yes)
---		eval AS_TR_CPP(HAVE_PYMOD_$1)=yes
--+		eval AS_TR_CPP([HAVE_PYMOD_$1])=yes
-- 	else
---		AC_MSG_RESULT(no)
---		eval AS_TR_CPP(HAVE_PYMOD_$1)=no
--+		eval AS_TR_CPP([HAVE_PYMOD_$1])=no
-- 		#
-- 		if test -n "$2"
-- 		then
---			AC_MSG_ERROR(failed to find required module $1)
---			exit 1
--+			AC_MSG_ERROR([failed to find required module $1])
-- 		fi
-- 	fi
--+	AC_MSG_RESULT([AS_TR_CPP([HAVE_PYMOD_$1])])
-- ])
--diff --git a/configure.ac b/configure.ac
--index 5f6f604..5994d06 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -534,7 +534,9 @@ if test "${enable_python_libs}" = "yes"; then
--   PYTHON="python"
--  fi
--  PYTHON_NAME=`basename $PYTHON`
--- AX_PYTHON_MODULE("google.protobuf", "fatal")
--+ AC_CACHE_CHECK([$PYTHON_NAME module: google.protobuf],
--+    [ac_cv_have_pymod_google_protobuf],
--+    [AX_PYTHON_MODULE([google.protobuf], [fatal])])
-- fi
-- 
-- # Maybe build the logic sniffer tools
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index 95810c1..8e9d1fc 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -4,18 +4,16 @@
- #
- ################################################################################
- 
--OLA_VERSION = 0.8.33
--OLA_SITE = https://open-lighting.googlecode.com/files
-+OLA_VERSION = 0.9.3
-+OLA_SITE = $(call github,OpenLightingProject,ola,$(OLA_VERSION))
- 
- OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
- OLA_LICENSE_FILES = LICENCE GPL LGPL
- OLA_INSTALL_STAGING = YES
--
--# We modify configure.ac, so we need to autoreconf
- OLA_AUTORECONF = YES
- 
- # util-linux provides uuid lib
--OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex
-+OLA_DEPENDENCIES = protobuf util-linux host-bison host-flex host-ola
- 
- OLA_CONF_OPTS = \
- 	ac_cv_have_pymod_google_protobuf=yes \
-@@ -24,7 +22,29 @@ OLA_CONF_OPTS = \
- 	--disable-unittests \
- 	--disable-root-check \
- 	--disable-java-libs \
--	--disable-fatal-warnings
-+	--disable-fatal-warnings \
-+	--with-ola-protoc=$(HOST_DIR)/usr/bin/ola_protoc
-+
-+# When building the host part, disable as much as possible to speed up
-+# the configure step and avoid missing host dependencies.
-+HOST_OLA_CONF_OPTS = \
-+	--disable-all-plugins \
-+	--disable-slp \
-+	--disable-osc \
-+	--disable-uart \
-+	--disable-libusb \
-+	--disable-libftdi \
-+	--disable-http  \
-+	--disable-examples \
-+	--disable-unittests \
-+	--disable-doxygen-html \
-+	--disable-doxygen-doc
-+
-+# On the host side, we only need ola_protoc, so build and install this only.
-+HOST_OLA_MAKE_OPTS = protoc/ola_protoc
-+define HOST_OLA_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/protoc/ola_protoc $(HOST_DIR)/usr/bin/ola_protoc
-+endef
- 
- # sets where to find python libs built for target and required by ola
- OLA_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-@@ -149,3 +169,4 @@ OLA_CONF_OPTS += --disable-usbpro
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
 -- 
-2.1.3
+http://autobuild.buildroot.net
