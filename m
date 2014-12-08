@@ -1,57 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Dec 2014 08:52:25 +0100
-Subject: [Buildroot] [git commit] pkg-download: VERIFY_HASH: use same hash
-	file for host and target downloads
-Message-ID: <20141208075330.0542F80144@busybox.osuosl.org>
+Date: Mon, 8 Dec 2014 08:56:09 +0100
+Subject: [Buildroot] [PATCH 0/6] bump gstreamer1 packages
+In-Reply-To: <1417992889-11344-1-git-send-email-peter@korsgaard.com>
+References: <1417992889-11344-1-git-send-email-peter@korsgaard.com>
+Message-ID: <CACXmViYWCN=Zi-oLBpMcXfVdPeeLnpnMT+k2AD7-nVv7pRPfUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf902845e7c23da7acddd82dc591255e4657d730
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, Dec 7, 2014 at 11:54 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> This series bumps the various gstreamer 1.x packages to the latest stable
+> bugfix release (1.4.4).
+>
+> gst-omx and gst1-validate have not seen any new releases, so those are not
+> touched.
 
-Fixes (or atleast stops the build with a saner description):
-http://autobuild.buildroot.net/results/1a9/1a9643f8633db038d4fe5ca4a32e4d52e70a3a1a/
+Committed series, thanks.
 
-We're using the same sources for host and target downloads, so it makes
-sense to use the same <pkg>.hash file as well to ensure the host version
-gets verified without us having to maintain a seperate host-<pkg>.hash file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-download.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index f3409bd..190b5b7 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -174,7 +174,7 @@ define DOWNLOAD_SCP
- 	$(EXTRA_ENV) support/download/wrapper scp \
- 		$(DL_DIR)/$(2) \
- 		'$(call stripurischeme,$(call qstrip,$(1)))' && \
--	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_RAWNAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_SCP
-@@ -211,7 +211,7 @@ define DOWNLOAD_WGET
- 	$(EXTRA_ENV) support/download/wrapper wget \
- 		$(DL_DIR)/$(2) \
- 		'$(call qstrip,$(1))' && \
--	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_RAWNAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_WGET
-@@ -227,7 +227,7 @@ define DOWNLOAD_LOCALFILES
- 	$(EXTRA_ENV) support/download/wrapper cp \
- 		$(DL_DIR)/$(2) \
- 		$(call stripurischeme,$(call qstrip,$(1))) && \
--	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_RAWNAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_LOCALFILES
+-- 
+Bye, Peter Korsgaard
