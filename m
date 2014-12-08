@@ -1,28 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Dec 2014 23:04:40 +0100
-Subject: [Buildroot] [PATCH] thrift: bump to version 0.9.2
-In-Reply-To: <1417806762-24225-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417806762-24225-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141208230440.505d70ba@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 8 Dec 2014 23:04:21 +0100
+Subject: [Buildroot] [PATCH] package/mke2img: always create sparse files
+In-Reply-To: <1418064064-30506-1-git-send-email-yann.morin.1998@free.fr>
+References: <1418064064-30506-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+Nhztq+d6YU9DDOvSUjYV7ot0f5pyEF2EkDhO-gbLqNA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On Mon, Dec 8, 2014 at 7:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> When the user specifies a number of blocks (and we do not auto-compute
+> them), the generated filesystem can be quite large with large zones with
+> only zeroes in them.
+>
+> Thus, always create the filesystem as a sparse file.
+>
+> Sparse files behave the same as normal files, except those long runs of
+> zeroes do not actually use space on the (host) filesystem. Also, this
+> should not break current behaviour, as neither cp nor dd nor cat preserve
+> sparseness by default. So users relying on the zeroed parts to actually
+> be written won;t see a change. Users that were expressly using cp or dd
+> to copy files to a sparse destination will however see a little bit of
+> improvements, as the zeroed out parts won't even be read from disk.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Fri,  5 Dec 2014 16:12:42 -0300, Gustavo Zacarias wrote:
-> Drop patches that are upstream.
-> Add hash file.
-> Tweak autoreconf patch since README is now missing as well.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Applied, thanks!
+> ---
+>  package/mke2img/mke2img | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+> index 9c56bc2..b186290 100755
+> --- a/package/mke2img/mke2img
+> +++ b/package/mke2img/mke2img
+> @@ -98,7 +98,7 @@ main() {
+>      fi
+>
+>      # Generate the filesystem
+> -    genext2fs_opts=( -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
+> +    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
+>      if [ -n "${nb_res_blocks}" ]; then
+>          genext2fs_opts+=( -m ${nb_res_blocks} )
+>      fi
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
