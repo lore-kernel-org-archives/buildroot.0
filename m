@@ -1,39 +1,127 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Dec 2014 16:44:51 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.7.4
-Message-ID: <1418154291-11136-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 9 Dec 2014 20:46:37 +0100
+Subject: [Buildroot] [git commit] usbutils: bump to version 008
+Message-ID: <20141209194711.75CC48010D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=7d925ffcbfd5d78707c5fc87bc4dc52df0b57e58
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 31906b9..57269fe 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
+Now uses hwdb from libudev for usb information.
+Drop all redundant/obsolete dependencies and cleanup hooks.
+Don't install to staging, it's pointless, it provides no libraries at
+all and it doesn't bundle usb.ids any more.
+
+[Thomas: change 'comment' in Config.in to match what's recommended in
+the Buildroot manual.]
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/usbutils/Config.in     |   18 +++---------------
+ package/usbutils/usbutils.hash |    2 +-
+ package/usbutils/usbutils.mk   |   33 ++-------------------------------
+ 3 files changed, 6 insertions(+), 47 deletions(-)
+
+diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
+index a64e674..7920ab8 100644
+--- a/package/usbutils/Config.in
++++ b/package/usbutils/Config.in
+@@ -1,24 +1,12 @@
+ config BR2_PACKAGE_USBUTILS
+ 	bool "usbutils"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_PACKAGE_HAS_UDEV # needs hwdb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  USB enumeration utilities
+ 
+ 	  http://linux-usb.sourceforge.net/
+ 
+-if BR2_PACKAGE_USBUTILS
+-
+-config BR2_PACKAGE_USBUTILS_ZLIB
+-	bool "compressed data support"
+-	select BR2_PACKAGE_ZLIB
+-	help
+-	  Enable use of zlib for a compressed usb.ids.gz
+-	  This makes the data file smaller if you're not using a compressed
+-	  filesystem, but it also makes lsusb slower since it has
+-	  to decompress the file every time it's run.
+-
+-endif
+-
+-comment "usbutils needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "usbutils needs needs udev /dev management and toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/usbutils/usbutils.hash b/package/usbutils/usbutils.hash
+index 6023f39..37c829a 100644
+--- a/package/usbutils/usbutils.hash
++++ b/package/usbutils/usbutils.hash
 @@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	5cbe9aa4af1b32787045a251dba6debee3f061c0	sqlite-autoconf-3080703.tar.gz
-+sha1	70ca0b8884a6b145b7f777724670566e2b4f3cde	sqlite-autoconf-3080704.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 7513c33..f010ee3 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
+ # From https://www.kernel.org/pub/linux/utils/usb/usbutils/sha256sums.asc
+-sha256	7593a01724bbc0fd9fe48e62bc721ceb61c76654f1d7b231b3c65f6dfbbaefa4	usbutils-007.tar.xz
++sha256	44741af0bae9d402a0ef160a29b2fa700bb656ab5e0a4b3343d51249c2a44c8c	usbutils-008.tar.xz
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index 0e9b52f..56fa0ba 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,20 +4,13 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3080703
-+SQLITE_VERSION = 3080704
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2014
- SQLITE_LICENSE = Public domain
--- 
-2.0.4
+-USBUTILS_VERSION = 007
++USBUTILS_VERSION = 008
+ USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.xz
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+-USBUTILS_DEPENDENCIES = host-pkgconf libusb
+-USBUTILS_INSTALL_STAGING = YES
++USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
+ USBUTILS_LICENSE = GPLv2+
+ USBUTILS_LICENSE_FILES = COPYING
+ 
+-ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+-	USBUTILS_DEPENDENCIES += zlib
+-else
+-	USBUTILS_CONF_OPTS = --disable-zlib
+-endif
+-
+ # Build after busybox since it's got a lightweight lsusb
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	USBUTILS_DEPENDENCIES += busybox
+@@ -34,30 +27,8 @@ endif
+ 
+ define USBUTILS_TARGET_CLEANUP
+ 	rm -f $(TARGET_DIR)/usr/bin/usb-devices
+-	rm -f $(TARGET_DIR)/usr/sbin/update-usbids.sh
+-	rm -f $(TARGET_DIR)/usr/share/pkgconfig/usbutils.pc
+ endef
+ 
+ USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_TARGET_CLEANUP
+ 
+-define USBUTILS_REMOVE_UNCOMPRESSED_IDS
+-	rm -f $(TARGET_DIR)/usr/share/usb.ids
+-endef
+-
+-define USBUTILS_REMOVE_COMPRESSED_IDS
+-	rm -f $(TARGET_DIR)/usr/share/usb.ids.gz
+-endef
+-
+-ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+-USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_UNCOMPRESSED_IDS
+-else
+-USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_COMPRESSED_IDS
+-endif
+-
+-define USBUTILS_REMOVE_DEVFILES
+-	rm -f $(TARGET_DIR)/usr/bin/libusb-config
+-endef
+-
+-USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_DEVFILES
+-
+ $(eval $(autotools-package))
