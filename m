@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 19:18:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] python-docopt: new package
-In-Reply-To: <1418120893-27306-1-git-send-email-alvaro.gamez@hazent.com>
-References: <1418120893-27306-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20141209191838.55dd455e@free-electrons.com>
+Date: Tue, 9 Dec 2014 19:18:55 +0100
+Subject: [Buildroot] [git commit] package/mpd: bump to version 0.19.6
+Message-ID: <20141209182941.AD65980152@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alvaro G. M,
+commit: http://git.buildroot.net/buildroot/commit/?id=4ff68999edc80635845fb17d918e48ff65c5e40f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Dec 2014 11:28:13 +0100, Alvaro G. M wrote:
-> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+Also update hash file.
 
-Applied, thanks. I did a small number of changes, though:
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpd/mpd.hash |    2 +-
+ package/mpd/mpd.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    [Thomas:
-      - Remove dependency on python || python3, as we did for all other
-        python modules that work with both Python 2 and Python 3.
-      - Rewrap help text.
-      - Add <pkg>_LICENSE_FILES value.]
-
-See
-http://git.buildroot.net/buildroot/commit/?id=765b7e1995fac384d26de269e33ad48697ed747a
-for the final commit.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index f8dc05f..02590fa 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e621e05e7d0e92690f7a1b6ee6f1e502a4d009c69caa4907519282ca571f72cf	mpd-0.19.5.tar.xz
++sha256	fac25376ee46b89249ee28a1ae13b2d5d1df7ff62464340c33c077015364d1e0	mpd-0.19.6.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index c80de41..3be2ae5 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).5
++MPD_VERSION = $(MPD_VERSION_MAJOR).6
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
