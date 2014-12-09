@@ -1,90 +1,52 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  9 Dec 2014 14:46:52 +0100
-Subject: [Buildroot] [PATCH v5 14/15] qmx6_defconfig: update
+Date: Tue,  9 Dec 2014 14:46:49 +0100
+Subject: [Buildroot] [PATCH v5 11/15] Vivante drivers: bump to version
+	3.10.17-1.0.1
 In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
 References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1418132813-32642-15-git-send-email-jezz@sysmic.org>
+Message-ID: <1418132813-32642-12-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update kernel
-- Add u-boot configuration
-- 6q_bootscript.txt is no more needed by new version of u-boot
-
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- board/congatec/qmx6/6q_bootscript.txt |  2 --
- board/congatec/qmx6/post-build.sh     |  7 -------
- configs/qmx6_defconfig                | 25 +++++++++++++++++++++----
- 3 files changed, 21 insertions(+), 13 deletions(-)
- delete mode 100644 board/congatec/qmx6/6q_bootscript.txt
- delete mode 100755 board/congatec/qmx6/post-build.sh
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           | 5 +++--
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
-deleted file mode 100644
-index 1382220..0000000
---- a/board/congatec/qmx6/6q_bootscript.txt
-+++ /dev/null
-@@ -1,2 +0,0 @@
--set bootargs console=ttymxc1,115200 root=/dev/mmcblk0p1 rootwait consoleblank=0
--${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
-diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
-deleted file mode 100755
-index 92251a5..0000000
---- a/board/congatec/qmx6/post-build.sh
-+++ /dev/null
-@@ -1,7 +0,0 @@
--#!/bin/sh
--
--TARGET_DIR=$1
--BOARD_DIR="$(dirname $0)"
--
--mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" \
--    -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-index 143e058..ff035a9 100644
---- a/configs/qmx6_defconfig
-+++ b/configs/qmx6_defconfig
-@@ -1,16 +1,33 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.0.101"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
-+
-+# Notice you need a recent version of u-boot (with DT support) to be able
-+# to boot this kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
-+# Last version of branch cgt_imx_3.10.17_1.0.0
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
- BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Change boardname depending of your product number
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
-+
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_3=y
-+
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 501b124..e07e5ca 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
++GPU_VIV_BIN_MX6Q_BASE_VERSION = 3.10.17-1.0.1
+ ifeq ($(BR2_ARM_EABIHF),y)
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-hfp
++GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-hfp
+ else
+-GPU_VIV_BIN_MX6Q_VERSION = $(FREESCALE_IMX_VERSION)-sfp
++GPU_VIV_BIN_MX6Q_VERSION = $(GPU_VIV_BIN_MX6Q_BASE_VERSION)-sfp
+ endif
+ GPU_VIV_BIN_MX6Q_SITE = $(FREESCALE_IMX_SITE)
+ GPU_VIV_BIN_MX6Q_SOURCE = gpu-viv-bin-mx6q-$(GPU_VIV_BIN_MX6Q_VERSION).bin
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index 0a62110..f5a5477 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = gpu-viv-bin-mx6q xserver_xorg-server \
 -- 
 1.9.1
