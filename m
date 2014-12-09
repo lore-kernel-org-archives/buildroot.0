@@ -1,40 +1,63 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Tue,  9 Dec 2014 02:44:36 +0100
-Subject: [Buildroot] [PATCH 2/2] package/musl: remove obsolete setting of
-	prefix
-In-Reply-To: <1418089476-15360-1-git-send-email-jkrause@posteo.de>
-References: <1418089476-15360-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1418089476-15360-2-git-send-email-jkrause@posteo.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 9 Dec 2014 08:02:47 +0200
+Subject: [Buildroot] [PATCH] ltrace: disable elfutils unwinding when
+ libunwind is used
+In-Reply-To: <20141207220014.1d0dede0@free-electrons.com>
+References: <8b0ae63676267c7fb215344ddb2ef959eaaf165d.1417763393.git.baruch@tkos.co.il>
+ <20141207220014.1d0dede0@free-electrons.com>
+Message-ID: <20141209060247.GJ2440@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the config option '--libdir=/lib' makes the setting of prefix to an
-empty path obsolete in MUSL_INSTALL_TARGET_CMDS.
+Hi Thomas,
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/musl/musl.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Sun, Dec 07, 2014 at 10:00:14PM +0100, Thomas Petazzoni wrote:
+> On Fri,  5 Dec 2014 09:09:53 +0200, Baruch Siach wrote:
+> > ltrace can't use both.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/a3c/a3c1647578cdeda3aaf672084a9a893f06dbad26/
+> > http://autobuild.buildroot.net/results/fdb/fdb7e760faeda77b263a6dac3e322a25b53e67ff/
+> > http://autobuild.buildroot.net/results/70a/70a0614ca7baf6a46898834a87cd46865f6e3385/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/ltrace/ltrace.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+> > index 5c9549f4019b..61e0fb7d57be 100644
+> > --- a/package/ltrace/ltrace.mk
+> > +++ b/package/ltrace/ltrace.mk
+> > @@ -21,7 +21,7 @@ LTRACE_POST_PATCH_HOOKS += LTRACE_CREATE_CONFIG_M4
+> >  # We don't normally do so for uClibc and we can't know if it's external
+> >  ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+> >  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
+> > -LTRACE_CONF_OPTS += --with-libunwind=yes
+> > +LTRACE_CONF_OPTS += --with-libunwind=yes --with-elfutils=no
+> 
+> While I agree with the analysis, I don't agree with the proposed fix:
+> ltrace selects elfutils unconditionally (see Config.in), so it is quite
+> weird to see ltrace not using it in the end. So I believe the Config.in
+> *and* ltrace dependencies should be updated to reflect the fact that
+> either unwind or elfutils can be used.
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 3a45575..1f1af05 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -40,11 +40,9 @@ define MUSL_INSTALL_STAGING_CMDS
- 		DESTDIR=$(STAGING_DIR) install-libs install-tools install-headers
- endef
- 
--# prefix is set to an empty value to get the C library installed in
--# /lib and not /usr/lib
- define MUSL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		DESTDIR=$(TARGET_DIR) prefix= install-libs
-+		DESTDIR=$(TARGET_DIR) install-libs
- 	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o Scrt1.o)
- endef
- 
+It turns out that --with-elfutils=no is a misnomer. ltrace depends on libelf 
+regardless of --with-elfutils, so we must have elfutils both in Config.in and 
+in LTRACE_DEPENDENCIES. The only effect of --with-elfutils is on unwinding 
+back-end. Quoting configure.ac:
+
+  AS_HELP_STRING([--with-elfutils], [Use elfutils libdwfl unwinding support]),
+
+I'll send a revised version of this patch with a better commit log, and a 
+comment in the code explaining this weirdness.
+
+baruch
+
 -- 
-2.1.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
