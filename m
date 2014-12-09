@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 08:45:45 +0100
-Subject: [Buildroot] [PATCH v2 1/6] package/mpd: bump to version 0.19.6
-In-Reply-To: <1418079329-27477-1-git-send-email-jkrause@posteo.de>
-References: <1418079329-27477-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141209084545.6996ffd5@free-electrons.com>
+Date: Tue, 9 Dec 2014 08:50:30 +0100
+Subject: [Buildroot] Patchwork review evening (this week!)
+In-Reply-To: <87388pvjgo.fsf@dell.be.48ers.dk>
+References: <20141208002008.18756fac@free-electrons.com>
+ <20141208223729.GF4105@free.fr>
+ <20141208234320.2abb595a@free-electrons.com>
+ <87388pvjgo.fsf@dell.be.48ers.dk>
+Message-ID: <20141209085030.4d592933@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Peter Korsgaard,
 
-On Mon,  8 Dec 2014 23:55:29 +0100, J?rg Krause wrote:
-> Also update hash file.
+On Mon, 08 Dec 2014 23:56:55 +0100, Peter Korsgaard wrote:
+
+>  > Yes, good idea. So let's meet tomorrow starting at around 8 PM CET or
+>  > so, on IRC.
 > 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> Great. I'll most likely be a bit delayed though (20:30 -> 20:45).
 
-Please don't resend partial series, always resend the entire series.
-Now it's very confusing because for 1/6 we have a v2, but not for the
-other patches.
+Yann also cannot join early. So let's say the 20:00 -> 21:00 will be
+the warm-up session, mainly dedicated to collecting topics to discuss,
+organizing them, before we get to the real discussion.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
