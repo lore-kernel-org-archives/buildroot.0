@@ -1,87 +1,86 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  9 Dec 2014 14:46:53 +0100
-Subject: [Buildroot] [PATCH v5 15/15] qmx6_qt5_demo_defconfig: new defconfig
+Date: Tue,  9 Dec 2014 14:46:44 +0100
+Subject: [Buildroot] [PATCH v5 06/15] gpu-viv-bin-mx6q: change output
+	selection mechanism
 In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
 References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1418132813-32642-16-git-send-email-jezz@sysmic.org>
+Message-ID: <1418132813-32642-7-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new defconfig is based on qmx6_defconfig. In add:
-- it enable support for graphical drivers
-- it enable Qt5 (eglfs)
+  - Move output selection to Config.in. It easier to add new
+    backends selection (wayland, directfb, ...).
+  - Remove useless build time dependencies xlib_libXdamage
+    and xlib_libXext (gpu-viv-bin-mx6q is provided as binary
+    package)
+  - Also create libraries symbolic links with version numbers.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- configs/qmx6_qt5_demo_defconfig | 57 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 configs/qmx6_qt5_demo_defconfig
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in    |  5 +++++
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk            | 21 +++++++++------------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/configs/qmx6_qt5_demo_defconfig b/configs/qmx6_qt5_demo_defconfig
-new file mode 100644
-index 0000000..22c6e15
---- /dev/null
-+++ b/configs/qmx6_qt5_demo_defconfig
-@@ -0,0 +1,57 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+index 904b011..489e68e 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+@@ -45,6 +45,11 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
+ 
+ endchoice
+ 
++config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT
++	string
++	default "x11" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
++	default "fb" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
 +
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+
-+# kernel
-+# Notice you need a recent version of u-boot (with DT support) to be able
-+# to boot this kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-+# Last version of branch cgt_imx_3.10.17_1.0.0
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
-+BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Graphics drivers
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-+BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
-+BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB=y
-+
-+# Enable Qt5
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-+BR2_PACKAGE_QT5BASE_PNG=y
-+
-+# u-boot
-+# Change boardname depending of your product number
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
-+
-+# Images
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_3=y
-+
-+# Usefull host packages
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "gpu-viv-bin-mx6q"
+ 
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index 7895023..501b124 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -19,14 +19,7 @@ GPU_VIV_BIN_MX6Q_LICENSE_FILES = EULA
+ GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
+ 
+ GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+-
+-# DirectFB is not supported (wrong version)
+-ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
+-GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
+-GPU_VIV_BIN_MX6Q_LIB_TARGET = x11
+-else
+-GPU_VIV_BIN_MX6Q_LIB_TARGET = fb
+-endif
++GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
+ 
+ define GPU_VIV_BIN_MX6Q_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE))
+@@ -37,13 +30,17 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE GLESv2; do \
+-		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+-			$(@D)/usr/lib/lib$${lib}.so; \
+-	done
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
++	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libEGL.so
++	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libEGL.so.1
++	ln -sf libEGL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libEGL.so.1.0
++	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGLESv2.so
++	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGLESv2.so.2
++	ln -sf libGLESv2-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGLESv2.so.2.0.0
++	ln -sf libVIVANTE-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libVIVANTE.so
++	ln -sf libGAL-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so $(@D)/usr/lib/libGAL.so
+ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
 -- 
 1.9.1
