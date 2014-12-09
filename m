@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 20:16:43 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mpd: enable OSS support
-In-Reply-To: <1418078694-26331-6-git-send-email-jkrause@posteo.de>
-References: <1418078694-26331-1-git-send-email-jkrause@posteo.de>
- <1418078694-26331-6-git-send-email-jkrause@posteo.de>
-Message-ID: <20141209201643.0c091f4c@free-electrons.com>
+Date: Tue, 9 Dec 2014 20:17:10 +0100
+Subject: [Buildroot] [PATCH] thrift: disable tutorial(s)
+In-Reply-To: <1418152385-21365-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1418152385-21365-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141209201710.3b49c909@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Gustavo Zacarias,
 
-On Mon,  8 Dec 2014 23:44:54 +0100, J?rg Krause wrote:
-> Add support for the OSS (Open Sound System).
+On Tue,  9 Dec 2014 16:13:05 -0300, Gustavo Zacarias wrote:
+> The tutorials don't pass pedantic mode hence causing failures.
+> And we don't care about tutorials anyway, disable them to save time as
+> well. Fixes.
+> http://autobuild.buildroot.net/results/f68/f68d537e623f565000ca966372a7c0277f4e3888/
 > 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/thrift/thrift.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Applied, after adjusting the commit title: the commit is not enabling
-OSS support, it's adding an option to enable or disable the OSS
-support. And in practice it actually disables it: it was enabled by
-default by the mpd configure.ac script, unless --disable-oss is passed.
-Now that we have the option which defaults to not enabled, the OSS
-support will be disabled by default. I believe this is good as on most
-Linux systems, ALSA is now used for audio, and OSS is deprecated.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
