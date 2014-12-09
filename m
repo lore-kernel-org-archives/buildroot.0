@@ -1,27 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 09 Dec 2014 09:21:44 -0300
-Subject: [Buildroot] [PATCH 1/1] ncurses: add support for 256 colors
-In-Reply-To: <1418122710-27852-1-git-send-email-tbultel@free.fr>
-References: <1418122710-27852-1-git-send-email-tbultel@free.fr>
-Message-ID: <5486E958.9070404@zacarias.com.ar>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Tue, 9 Dec 2014 14:20:06 +0100
+Subject: [Buildroot] [PATCH] package/mke2img: always create sparse files
+In-Reply-To: <CAHXCMM+Nhztq+d6YU9DDOvSUjYV7ot0f5pyEF2EkDhO-gbLqNA@mail.gmail.com>
+References: <1418064064-30506-1-git-send-email-yann.morin.1998@free.fr>
+ <CAHXCMM+Nhztq+d6YU9DDOvSUjYV7ot0f5pyEF2EkDhO-gbLqNA@mail.gmail.com>
+Message-ID: <CABbD_XAm7d19sFkHF8Lbv9wWeW=KZN4f8mWA6dx1oNWmab6ZWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/09/2014 07:58 AM, Thierry Bultel wrote:
+Hi Yann, Thomas, Samuel, list,
 
-> +config BR2_PACKAGE_NCURSES_EXT_COLORS
-> +	bool "ncurses extended colors"
-> +	select BR2_PACKAGE_NCURSES_WCHAR
-> +	depends on BR2_USE_WCHAR
-> +	help
-> +	  compile for 256-color support
-> +
+On Mon, Dec 8, 2014 at 11:04 PM, Samuel Martin <s.martin49@gmail.com> wrote:
 
-Hi.
-Do you know the size delta between this option enabled and disabled?
-I'm asking because it might not be even worth an option.
-Thanks.
-Regards.
+> On Mon, Dec 8, 2014 at 7:41 PM, Yann E. MORIN <yann.morin.1998@free.fr>
+> wrote:
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+>
+
+Tested-by: Karoly Kasza <kaszak@gmail.com>
+Reviewed-by: Karoly Kasza <kaszak@gmail.com>
+
+Tested with the same configs as the previous 3 (except w/ kernel 3.18),
+successfully built different rootfs.ext images and booted them.
+Tested with master branch, x86_64 arch in QEMU, internal toolchain GCC
+4.9.2 w/ uclibc, Linux 3.18.
+
+Regards,
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141209/8698db16/attachment.html>
