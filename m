@@ -1,40 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 00:04:00 +0100
-Subject: [Buildroot] [PATCH v5 1/1] set simple network setup via the
- system configuration submenu
-In-Reply-To: <1418114924-18826-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1418114924-18826-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <20141210000400.35feddd5@free-electrons.com>
+Date: Wed, 10 Dec 2014 00:05:08 +0100
+Subject: [Buildroot] [git commit] poppler: Add option for Qt support
+Message-ID: <20141209230749.E935780195@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?my Rosen,
+commit: http://git.buildroot.net/buildroot/commit/?id=fb79843453704ae68cf8d91e2a9cd5359d0b1027
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Dec 2014 09:48:44 +0100, J?r?my Rosen wrote:
-> This patch allows the setup of simple /etc/network/interfaces (or
-> /etc/systemd/network/80-buildroot.network if networkd is enabled) via the
-> configuration menus instead of using an overlay
+Add an option to build the libpoppler-qt4 library.
 
-So, we discussed this tonight during the patchwork review with Yann,
-Peter and Samuel, and the general opinion is that this is too
-complicated, and we don't want to handle all those cases through
-configuration options, and we instead want to leave that to
-project-specific customization through a rootfs overlay or a post-build
-script.
+[Thomas: slightly adjust the Config.in file, by:
+  - Using an if BR2_PACKAGE_POPPLER ... endif block instead of a depends
+    on BR2_PACKAGE_POPPLER for the new option.
+  - Rewording the option prompt, since there's no need to indicate that
+    the Qt support is for poppler since we're already a sub-option of
+    poppler.]
 
-However, we would be willing to accept a patch that adds a single
-string option that allows to specify one network interface on which
-DHCP should be used. It would basically add "inet <foo> dhcp"
-to /etc/network/interfaces if non-empty, and otherwise do nothing. The
-default should be nothing, so that we keep the existing behavior.
+Signed-off-by: Alan Ott <alan@signal11.us>
+Suggested-by: Jeremie Scheer <jeremie.scheer@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Best regards,
+merge
+---
+ package/poppler/Config.in  |   12 ++++++++++++
+ package/poppler/poppler.mk |    7 +++++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+index fce296d..5166e15 100644
+--- a/package/poppler/Config.in
++++ b/package/poppler/Config.in
+@@ -10,5 +10,17 @@ config BR2_PACKAGE_POPPLER
+ 
+ 	  http://poppler.freedesktop.org/
+ 
++if BR2_PACKAGE_POPPLER
++
++config BR2_PACKAGE_POPPLER_QT
++	bool "Qt support"
++	depends on BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT_GUI
++	select BR2_PACKAGE_QT_XML
++	help
++	  Build Qt support into the Poppler library
++
++endif
++
+ comment "poppler needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index e4fee3f..a52b079 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -61,4 +61,11 @@ else
+ 	POPPLER_CONF_OPTS += --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_POPPLER_QT),y)
++	POPPLER_DEPENDENCIES += qt
++	POPPLER_CONF_OPTS += --enable-poppler-qt4
++else
++	POPPLER_CONF_OPTS += --disable-poppler-qt4
++endif
++
+ $(eval $(autotools-package))
