@@ -1,28 +1,41 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Tue, 09 Dec 2014 02:22:24 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain/helpers.mk: fix check-musl
-In-Reply-To: <20141208222147.002c438a@free-electrons.com>
-References: <1417648439-10146-1-git-send-email-jkrause@posteo.de>
- <20141208203200.4ca75210@free-electrons.com>
- <1418073423.2353.13.camel@posteo.de>
- <20141208222147.002c438a@free-electrons.com>
-Message-ID: <1418088144.441.1.camel@posteo.de>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Tue,  9 Dec 2014 02:44:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/musl: fix C library installation
+	directory
+Message-ID: <1418089476-15360-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mo, 2014-12-08 at 22:21 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Mon, 08 Dec 2014 22:17:03 +0100, J?rg Krause wrote:
-> 
-> > > Do you want to have a look into this?
-> > 
-> > I'm not a toolchain expert, but I will have a look at it.
-> 
-> It might either be that we need --prefix=/ in musl.mk, or maybe
-> --prefix=/usr --libdir=/lib or something like that.
+Set the installation path for the libraries to /lib instead of /usr/lib.
 
---libdir=/lib does the trick. Many thanks! I will prepare a patch soon.
+This fixes an issue when building a toolchain with the musl library by
+the internal toolchain backend of Buildroot in the first step and import this
+toolchain later as a custom external toolchain in a second step. For this use
+case check-musl in toolchain/helpers.mk failed because it did not find the 
+libc or libm in sysroot/lib.
+
+This patch superseeds: [PATCH 1/1] toolchain/helpers.mk: fix check-musl
+http://patchwork.ozlabs.org/patch/417587/
+
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/musl/musl.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index fb4327d..3a45575 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -27,6 +27,7 @@ define MUSL_CONFIGURE_CMDS
+ 			--target=$(GNU_TARGET_NAME) \
+ 			--host=$(GNU_TARGET_NAME) \
+ 			--prefix=/usr \
++			--libdir=/lib \
+ 			--disable-gcc-wrapper)
+ endef
+ 
+-- 
+2.1.3
