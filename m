@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 Dec 2014 12:40:01 +0100
-Subject: [Buildroot] [git commit] lighttpd: disable static build
-Message-ID: <20141209133124.3BCCF80096@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 12:32:44 +0100
+Subject: [Buildroot] [git commit] ltrace: disable elfutils unwinding when
+	libunwind is used
+Message-ID: <20141209133124.25B3280096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c77fbc3a4631b82bc28787c45a941ee0c47104ce
+commit: http://git.buildroot.net/buildroot/commit/?id=2c81e8e779b42d81bb3f05b764e9654a0feef64b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lighttpd modules support code requires shared libraries support.
+ltrace can't use both. Use --with-elfutils=no to disable use of elfutils
+(libdwfl) for unwinding.
 
-The scons based build system seems to be support static link of modules, but
-we currently don't use scons for lighttpd.
+Note that elfutils (libelf) is still a mandatory dependency regardless of
+--with-elfutils.
 
 Fixes:
-http://autobuild.buildroot.net/results/39c/39c027bf6b76a0f9c15a184f449dadacfaefe980/
+http://autobuild.buildroot.net/results/a3c/a3c1647578cdeda3aaf672084a9a893f06dbad26/
+http://autobuild.buildroot.net/results/fdb/fdb7e760faeda77b263a6dac3e322a25b53e67ff/
+http://autobuild.buildroot.net/results/70a/70a0614ca7baf6a46898834a87cd46865f6e3385/
 
-[Peter: move to top of file to fix indentation of sub options]
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lighttpd/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/ltrace/ltrace.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index a5abf7e..0d794c9 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -1,6 +1,11 @@
-+comment "lighttpd needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_LIGHTTPD
- 	bool "lighttpd"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  lighttpd a secure, fast, compliant and very flexible web-server
- 	  which has been optimized for high-performance environments. It
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 5c9549f..7f00ce3 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -21,7 +21,9 @@ LTRACE_POST_PATCH_HOOKS += LTRACE_CREATE_CONFIG_M4
+ # We don't normally do so for uClibc and we can't know if it's external
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
+-LTRACE_CONF_OPTS += --with-libunwind=yes
++# --with-elfutils only selects unwinding support backend. elfutils is a
++# mandatory dependency regardless.
++LTRACE_CONF_OPTS += --with-libunwind=yes --with-elfutils=no
+ LTRACE_DEPENDENCIES += libunwind
+ else
+ LTRACE_CONF_OPTS += --with-libunwind=no
