@@ -1,64 +1,87 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  9 Dec 2014 14:46:46 +0100
-Subject: [Buildroot] [PATCH v5 08/15] libdrm: fix support for xserver with
-	Vivante drivers
+Date: Tue,  9 Dec 2014 14:46:53 +0100
+Subject: [Buildroot] [PATCH v5 15/15] qmx6_qt5_demo_defconfig: new defconfig
 In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
 References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1418132813-32642-9-git-send-email-jezz@sysmic.org>
+Message-ID: <1418132813-32642-16-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This new defconfig is based on qmx6_defconfig. In add:
+- it enable support for graphical drivers
+- it enable Qt5 (eglfs)
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/libdrm/0001-update-arm.patch | 37 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/libdrm/0001-update-arm.patch
+ configs/qmx6_qt5_demo_defconfig | 57 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 configs/qmx6_qt5_demo_defconfig
 
-diff --git a/package/libdrm/0001-update-arm.patch b/package/libdrm/0001-update-arm.patch
+diff --git a/configs/qmx6_qt5_demo_defconfig b/configs/qmx6_qt5_demo_defconfig
 new file mode 100644
-index 0000000..8c874bb
+index 0000000..22c6e15
 --- /dev/null
-+++ b/package/libdrm/0001-update-arm.patch
-@@ -0,0 +1,37 @@
-+[Adapted from yocto project]
++++ b/configs/qmx6_qt5_demo_defconfig
+@@ -0,0 +1,57 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
 +
-+Add ARM support into xf86arm.h.  This provides support for Xorg interface.
-+Without this the vivante samples will hang during close requiring a reboot
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
 +
-+Upstream-Status: Pending
++# kernel
++# Notice you need a recent version of u-boot (with DT support) to be able
++# to boot this kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
++# Last version of branch cgt_imx_3.10.17_1.0.0
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
++BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +
-+Signed-off-by: Lauren Post <lauren.post@freescale.com>
-+Signed-off-by: Evan Kotara <evan.kotara@freescale.com>
++# Graphics drivers
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
++BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
++BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB=y
 +
-+diff --git a/xf86drm.h b/xf86drm.h
-+--- a/xf86drm.h
-++++ b/xf86drm.h
-+@@ -461,6 +461,23 @@ do {	register unsigned int __old __asm("
-+ 		: "cr0", "memory");			\
-+ 	} while (0)
-+ 
-++#elif defined(__arm__)
-++       #undef DRM_DEV_MODE
-++       #define DRM_DEV_MODE     (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
-++
-++       #define DRM_CAS(lock,old,new,__ret)             \
-++       do {                                            \
-++               __asm__ __volatile__ (                  \
-++                       "1: ldrex %0, [%1]\n"           \
-++                       "   teq %0, %2\n"               \
-++                       "   ite eq\n"                   \
-++                       "   strexeq %0, %3, [%1]\n"     \
-++                       "   movne   %0, #1\n"           \
-++               : "=&r" (__ret)                         \
-++               : "r" (lock), "r" (old), "r" (new)      \
-++               : "cc","memory");                       \
-++       } while (0)
-++
-+ #endif /* architecture */
-+ #endif /* __GNUC__ >= 2 */
-+ 
++# Enable Qt5
++BR2_PACKAGE_QT5=y
++BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
++BR2_PACKAGE_QT5BASE_GUI=y
++BR2_PACKAGE_QT5BASE_EGLFS=y
++BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
++BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
++BR2_PACKAGE_QT5BASE_PNG=y
++
++# u-boot
++# Change boardname depending of your product number
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
++
++# Images
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_3=y
++
++# Usefull host packages
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 1.9.1
