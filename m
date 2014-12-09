@@ -1,35 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 Dec 2014 12:33:58 +0100
-Subject: [Buildroot] [PATCH v2] ltrace: disable elfutils unwinding when
-	libunwind is used
-In-Reply-To: <7c0664a803bc2302dabed5243c09d57528ea3c4c.1418105508.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 9 Dec 2014 08:11:48 +0200")
-References: <7c0664a803bc2302dabed5243c09d57528ea3c4c.1418105508.git.baruch@tkos.co.il>
-Message-ID: <87d27tt5uh.fsf@dell.be.48ers.dk>
+Date: Tue, 09 Dec 2014 12:35:14 +0100
+Subject: [Buildroot] [PATCH] libsoxr: add a hash file
+In-Reply-To: <1418118978-30412-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Tue, 9 Dec 2014 09:56:18 +0000")
+References: <1418118978-30412-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <878uiht5sd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > ltrace can't use both. Use --with-elfutils=no to disable use of elfutils
- > (libdwfl) for unwinding.
+ > It will clarify errors like this:
+ >   http://autobuild.buildroot.net/results/923/923d4ba849839beca89f427687bbd903d6037b15/
 
- > Note that elfutils (libelf) is still a mandatory dependency regardless of
- > --with-elfutils.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/a3c/a3c1647578cdeda3aaf672084a9a893f06dbad26/
- > http://autobuild.buildroot.net/results/fdb/fdb7e760faeda77b263a6dac3e322a25b53e67ff/
- > http://autobuild.buildroot.net/results/70a/70a0614ca7baf6a46898834a87cd46865f6e3385/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2:
- > 	* Improve commit log; note that elfutils is a dependency anyway
- > 	* Add code comment
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
