@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 20:15:08 +0100
-Subject: [Buildroot] [PATCH 5/6] package/mpd: enable neighbor discovery
- support
-In-Reply-To: <1418078694-26331-5-git-send-email-jkrause@posteo.de>
+Date: Tue, 9 Dec 2014 20:16:43 +0100
+Subject: [Buildroot] [PATCH 6/6] package/mpd: enable OSS support
+In-Reply-To: <1418078694-26331-6-git-send-email-jkrause@posteo.de>
 References: <1418078694-26331-1-git-send-email-jkrause@posteo.de>
- <1418078694-26331-5-git-send-email-jkrause@posteo.de>
-Message-ID: <20141209201508.0168241a@free-electrons.com>
+ <1418078694-26331-6-git-send-email-jkrause@posteo.de>
+Message-ID: <20141209201643.0c091f4c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +13,20 @@ To: buildroot@busybox.net
 
 Dear J?rg Krause,
 
-On Mon,  8 Dec 2014 23:44:53 +0100, J?rg Krause wrote:
-> Enable support for neighbor discovery useful in Samba and UPnP networks.
+On Mon,  8 Dec 2014 23:44:54 +0100, J?rg Krause wrote:
+> Add support for the OSS (Open Sound System).
 > 
 > Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  package/mpd/Config.in | 10 ++++++++++
->  package/mpd/mpd.mk    |  6 ++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index 901902b..57ed434 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -269,6 +269,16 @@ config BR2_PACKAGE_MPD_AVAHI_SUPPORT
->  comment "avahi support needs a toolchain w/ dynamic library"
->  	depends on BR2_PREFER_STATIC_LIB
->  
-> +config BR2_PACKAGE_MPD_NEIGHBOR_DISCOVERY_SUPPORT
-> +	bool "neighbor discovery support"
-> +	help
-> +	  Enable support for neighbor discovery.
-> +	  This option may be used in conjunction with the plugin samba to
-> +	  provide a list of SMB/CIFS servers or with the plugin UPnP to provide
-> +	  a list of UPnP servers on the local network.
-> +	  The neighbor plugin needs configuration in mpd.conf. For further
-> +	  information take a look at the MPD documentation.
 
-After looking a bit at the MPD configure.ac script and Makefile.am, it
-appeared to me that this feature doesn't do anything useful if there
-isn't either smbclient or upnp support enabled, so I made this option
-depends on smbclient or upnp support.
+Applied, after adjusting the commit title: the commit is not enabling
+OSS support, it's adding an option to enable or disable the OSS
+support. And in practice it actually disables it: it was enabled by
+default by the mpd configure.ac script, unless --disable-oss is passed.
+Now that we have the option which defaults to not enabled, the OSS
+support will be disabled by default. I believe this is good as on most
+Linux systems, ALSA is now used for audio, and OSS is deprecated.
 
-Applied with this change, thanks.
+Thanks,
 
 Thomas
 -- 
