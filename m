@@ -1,40 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 00:08:15 +0100
-Subject: [Buildroot] [PATCH 0/2] Updates to Poppler
-In-Reply-To: <1413143813-26783-1-git-send-email-alan@signal11.us>
-References: <20140406120221.5a5fd253@skate>
- <1413143813-26783-1-git-send-email-alan@signal11.us>
-Message-ID: <20141210000815.7f6b45a0@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 10 Dec 2014 00:16:01 +0100
+Subject: [Buildroot] [PATCH] fs: allow to specify compression options
+In-Reply-To: <1417626653-13516-1-git-send-email-vincent.stehle@freescale.com>
+References: <1417626653-13516-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <20141209231601.GA4248@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alan Ott,
+Vincent, All,
 
-On Sun, 12 Oct 2014 15:56:51 -0400, Alan Ott wrote:
-> These changes were proposed by Jeremie Scheer <jeremie.scheer@armadeus.com>
-> earlier this year.
+On 2014-12-03 18:10 +0100, Vincent Stehl? spake thusly:
+> Add $BR2_TARGET_ROOTFS_xxx_OPTS options to allow changing the rootfs
+> compression options.
 > 
-> Alan Ott (2):
->   poppler: Add option for Qt support
->   poppler: Install files into staging
-> 
->  package/poppler/Config.in  | 9 +++++++++
->  package/poppler/poppler.mk | 8 ++++++++
->  2 files changed, 17 insertions(+)
+> This allows to trade compression ratio versus compression speed for example.
 
-Thanks, both patches committed. I've done some minor changes on the
-first patch in the Config.in file, see:
+Thank you for your contribution!
 
-  http://git.buildroot.net/buildroot/commit/?id=fb79843453704ae68cf8d91e2a9cd5359d0b1027
-  http://git.buildroot.net/buildroot/commit/?id=ed592d6e02275c4402f477693195d941a481e67d
+However, we would prefer that compression option be simply removed for
+all filesystems, except for squashfs and jffs2 for which compression is
+intrinsic to the filesystem.
 
-Thanks,
+Would you mind to work on this, please?
 
-Thomas
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
