@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 20:16:59 +0100
-Subject: [Buildroot] [git commit] thrift: disable tutorial(s)
-Message-ID: <20141209193409.EF0C380161@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 20:34:40 +0100
+Subject: [Buildroot] [PATCH 0/3] slang: fix static builds
+In-Reply-To: <1418125881-7915-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1418125881-7915-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141209203440.53026bbb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e50e0a0096fa06ead9d94a5ed6f26621f9e7eaea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-The tutorials don't pass pedantic mode hence causing failures.
-And we don't care about tutorials anyway, disable them to save time as
-well. Fixes.
-http://autobuild.buildroot.net/results/f68/f68d537e623f565000ca966372a7c0277f4e3888/
+On Tue, 9 Dec 2014 11:51:18 +0000, Vicente Olivert Riera wrote:
+> - Rename current patches to follow the new name convention.
+> - Adapt upstream patches to allow building only the static library and a
+>   static version of slsh.
+> - Use specific build and install commands when doing static builds.
+> 
+> Vicente Olivert Riera (3):
+>   slang: rename patches to follow the new name convention
+>   slang: add adapted upstream patches for static builds
+>   slang: use specific build and install commands for static builds
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/thrift/thrift.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+All three patches applied, thanks. The last two patches could have been
+only one since they are both needed to fix the static linking problem.
 
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 5c350dd..955e9ec 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -12,9 +12,11 @@ HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl host-pkgconf \
- 	host-zlib host-bison host-flex
- THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
- 	--with-boost=$(STAGING_DIR) \
--	--disable-tests
-+	--disable-tests \
-+	--disable-tutorial
- HOST_THRIFT_CONF_OPTS = --with-sysroot=$(HOST_DIR) \
--	--disable-tests
-+	--disable-tests \
-+	--disable-tutorial
- THRIFT_AUTORECONF = YES
- THRIFT_LICENSE = Apache-2.0
- THRIFT_LICENSE_FILES = LICENSE
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
