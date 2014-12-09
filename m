@@ -1,49 +1,31 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 9 Dec 2014 20:56:26 +0100
-Subject: [Buildroot] [PATCH] support/script/scancpan: remove duplicated
-	dependency
-In-Reply-To: <20141209203539.3d07e284@free-electrons.com>
-References: <1418153523-10972-1-git-send-email-francois.perrad@gadz.org>
- <20141209203539.3d07e284@free-electrons.com>
-Message-ID: <CAB0FRsvqEKVDX59Sdcz2wQQ+NKqL44LNsW4nKxP0ah_Ua5wtsQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 09 Dec 2014 17:04:00 -0300
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: let init script
+ cleanup stale pidfile
+In-Reply-To: <1416068836-4053-1-git-send-email-jkrause@posteo.de>
+References: <1416068836-4053-1-git-send-email-jkrause@posteo.de>
+Message-ID: <548755B0.6020002@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-12-09 20:35 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Tue,  9 Dec 2014 20:32:03 +0100, Francois Perrad wrote:
->> dependency from metacpan comes as a list of module
->> which is transformed in a list of distribution for BR.
->> different modules could be included in the same distribution,
->> so duplication is possible.
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Thanks. Could you give an example of a CPAN module which exhibits the
-> issue, so non-Perl people like me can test the effect of your patch?
->
-> Thanks!
->
+On 11/15/2014 01:27 PM, J?rg Krause wrote:
 
-An example with a CPAN module which is not in BR
+> dnsmasq does not clean up its pidfile after termination. Do this manually.
+> 
+> Supersedes: [PATCH 1/1] package/dnsmasq: cleanup run-time files in init script
+> https://patchwork.ozlabs.org/patch/411015/
 
-   $ support/scripts/scancpan -f HTTP-Daemon
-
-Without the patch, its dependency on HTTP-Message is duplicated.
-
-Fran?ois
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hi.
+Does it fix anything in particular other than looks?
+Looking at the dnsmasq source it does an unlink() on successful
+startup/fork so any previous pidfile doesn't bother it at all.
+I was about to say "i'd like to see the start-stop-daemon invocation
+changed" but then i realized that it doesn't remove the pidfile either,
+so basically any "start-stop-daemon -K -q -x" in any initscript
+"suffers" from this "problem".
+So even if the pidfile is on permanent storage i don't see how this can
+cause issues.
+Regards.
