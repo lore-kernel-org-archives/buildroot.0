@@ -1,48 +1,22 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  9 Dec 2014 13:25:26 +0200
-Subject: [Buildroot] [PATCH] lighttpd: disable static build
-Message-ID: <fc38f617245821399908d9f8f0a64a8fcdf3b164.1418124326.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 09 Dec 2014 12:32:49 +0100
+Subject: [Buildroot] [PATCH] libcgicc: bump to version 3.2.16
+In-Reply-To: <1418083732-10076-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 8 Dec 2014 21:08:52 -0300")
+References: <1418083732-10076-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87h9x5t5we.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lighttpd modules support code requires shared libraries support.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-The scons based build system seems to be support static link of modules, but
-we currently don't use scons for lighttpd.
+ > Also add hash file.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Fixes:
-http://autobuild.buildroot.net/results/39c/39c027bf6b76a0f9c15a184f449dadacfaefe980/
+Committed, thanks.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/lighttpd/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
-index a5abf7ea0850..f0e1c7f22f99 100644
---- a/package/lighttpd/Config.in
-+++ b/package/lighttpd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIGHTTPD
- 	bool "lighttpd"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  lighttpd a secure, fast, compliant and very flexible web-server
- 	  which has been optimized for high-performance environments. It
-@@ -12,6 +13,10 @@ config BR2_PACKAGE_LIGHTTPD
- 
- 	  http://www.lighttpd.net/
- 
-+comment "lighttpd needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PREFER_STATIC_LIB
-+
- if BR2_PACKAGE_LIGHTTPD
- 
- config BR2_PACKAGE_LIGHTTPD_OPENSSL
 -- 
-2.1.3
+Bye, Peter Korsgaard
