@@ -1,9 +1,9 @@
 From: kiwi <gregd72002@gmail.com>
-Date: Tue,  9 Dec 2014 21:23:23 +0000
-Subject: [Buildroot] [PATCH 3/8] Adding libnice
+Date: Tue,  9 Dec 2014 21:23:24 +0000
+Subject: [Buildroot] [PATCH 4/8] Adding libsrtp
 In-Reply-To: <1418160208-1569-1-git-send-email-gregd72002@gmail.com>
 References: <1418160208-1569-1-git-send-email-gregd72002@gmail.com>
-Message-ID: <1418160208-1569-3-git-send-email-gregd72002@gmail.com>
+Message-ID: <1418160208-1569-4-git-send-email-gregd72002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,71 +14,40 @@ From: Gregory Dymarek <gregd72002@gmail.com>
 
 Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
 ---
- package/libnice/Config.in                            |  8 ++++++++
- .../libnice/libnice-0001-build-IPV6_RECVERR.patch    | 20 ++++++++++++++++++++
- package/libnice/libnice.mk                           | 13 +++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/libnice/Config.in
- create mode 100644 package/libnice/libnice-0001-build-IPV6_RECVERR.patch
- create mode 100644 package/libnice/libnice.mk
+ package/libsrtp/Config.in  |  6 ++++++
+ package/libsrtp/libsrtp.mk | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/libsrtp/Config.in
+ create mode 100644 package/libsrtp/libsrtp.mk
 
-diff --git a/package/libnice/Config.in b/package/libnice/Config.in
+diff --git a/package/libsrtp/Config.in b/package/libsrtp/Config.in
 new file mode 100644
-index 0000000..240e3e7
+index 0000000..073f811
 --- /dev/null
-+++ b/package/libnice/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBNICE
-+	bool "libnice"
-+	select BR2_PACKAGE_LIBGLIB2
++++ b/package/libsrtp/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBSRTP
++	bool "libsrtp"
 +	help
-+	  Adds libnice - The GLib ICE implementation
-+	  Libnice is an implementation of the IETF's Interactive Connectivity Establishment (ICE) standard (RFC 5245) and the Session Traversal Utilities for NAT (STUN) standard (RFC 5389).
-+	  
-+	  http://nice.freedesktop.org/wiki/
-diff --git a/package/libnice/libnice-0001-build-IPV6_RECVERR.patch b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
++	  Adds libsrtp - Secure RTP (SRTP) Reference Implementation
++
++	  https://github.com/cisco/libsrtp
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
 new file mode 100644
-index 0000000..39ef617
+index 0000000..2af6a02
 --- /dev/null
-+++ b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
-@@ -0,0 +1,20 @@
-+diff -rupN libnice-0.1.8.orig/stun/usages/bind.c libnice-0.1.8/stun/usages/bind.c
-+--- libnice-0.1.8.orig/stun/usages/bind.c	2014-09-22 18:01:28.000000000 +0100
-++++ libnice-0.1.8/stun/usages/bind.c	2014-12-01 13:28:32.144707407 +0000
-+@@ -257,12 +257,16 @@ static int stun_socket (int family, int
-+     int yes = 1;
-+     switch (family)
-+     {
-++#ifdef IP_RECVERR
-+       case AF_INET:
-+         setsockopt (fd, SOL_IP, IP_RECVERR, &yes, sizeof (yes));
-++#endif
-+         break;
-++#ifdef IPV6_RECVERR
-+       case AF_INET6:
-+         setsockopt (fd, SOL_IPV6, IPV6_RECVERR, &yes, sizeof (yes));
-+         break;
-++#endif
-+       default:
-+         /* Nothing to do. */
-+         break;
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
-new file mode 100644
-index 0000000..f3339bb
---- /dev/null
-+++ b/package/libnice/libnice.mk
-@@ -0,0 +1,13 @@
++++ b/package/libsrtp/libsrtp.mk
+@@ -0,0 +1,12 @@
 +#############################################################
 +#
-+# libnice 
++# libsrtp
 +#
 +#############################################################
-+LIBNICE_VERSION = 0.1.8
-+LIBNICE_SITE = http://nice.freedesktop.org/releases/
-+LIBNICE_DEPENDENCIES = libglib2
-+LIBNICE_INSTALL_STAGING = YES
-+LIBNICE_LICENSE = LGPLv2.1+
-+LIBNICE_LICENSE_FILE = COPYING.MPL COPYING.LGPL
++LIBSRTP_VERSION = v1.5.0
++LIBSRTP_SITE_METHOD = git
++LIBSRTP_INSTALL_STAGING = YES
++LIBSRTP_LICENSE = BSD-3c 
++LIBSRTP_LICENSE_FILE = LICENSE
 +
 +$(eval $(autotools-package))
 -- 
