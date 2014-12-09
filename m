@@ -1,47 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 19:32:18 +0100
-Subject: [Buildroot] [git commit] package/mpd: make all package names in
-	help text uppercase
-Message-ID: <20141209183233.92FD08016A@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 19:33:46 +0100
+Subject: [Buildroot] [git commit] package/mpd: fix line length for help text
+Message-ID: <20141209183523.AE58980166@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc8fa8205d177619bc128468b255fb99f4626813
+commit: http://git.buildroot.net/buildroot/commit/?id=7c1c333ff6037cbbc120471e4e2dfe0f57714087
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make the package name uppercase to be consistent in all the help texts.
+Make help text lines not longer as 80 characters (one tab weights
+eight chars).
+
+[Thomas: rewrap more help text.]
 
 Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpd/Config.in |   21 +++++++++++++--------
+ 1 files changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 4097f52..3435b05 100644
+index 3435b05..4da9fa5 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -273,9 +273,9 @@ config BR2_PACKAGE_MPD_TCP
- 	bool "tcp sockets"
- 	default y
+@@ -51,7 +51,8 @@ config BR2_PACKAGE_MPD_LIBSOXR
+ 	select BR2_PACKAGE_LIBSOXR
  	help
--	  Enable mpd to listen on tcp sockets.
-+	  Enable MPD to listen on tcp sockets.
+ 	  Enable libsoxr resampler support.
+-	  The SoX Resampler library performs software sample-rate conversion.
++	  The SoX Resampler library performs software sample-rate
++	  conversion.
  
--	  You want this on if mpd and the client(s) work
-+	  You want this on if MPD and the client(s) work
- 	  on different machines (the usual scenario).
+ comment "Decoder plugins"
  
- config BR2_PACKAGE_MPD_UPNP
-@@ -283,7 +283,7 @@ config BR2_PACKAGE_MPD_UPNP
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBUPNP
+@@ -65,8 +66,8 @@ config BR2_PACKAGE_MPD_AUDIOFILE
+ config BR2_PACKAGE_MPD_DSD
+ 	bool "dsd"
  	help
--	  Enable mpd UPnP client support.
-+	  Enable MPD UPnP client support.
+-	  Enable Digital Speech Decoder (DSD) support to play audio files encoded
+-	  in a digital speech format.
++	  Enable Digital Speech Decoder (DSD) support to play audio
++	  files encoded in a digital speech format.
  
- endif
+ config BR2_PACKAGE_MPD_FAAD2
+ 	bool "faad2"
+@@ -82,7 +83,8 @@ config BR2_PACKAGE_MPD_FFMPEG
+ 	depends on BR2_INET_IPV6
+ 	help
+ 	  Enable ffmpeg input support.
+-	  Select this if you want to play back files supported by ffmpeg.
++	  Select this if you want to play back files supported by
++	  ffmpeg.
  
+ comment "ffmpeg support needs a toolchain w/ largefile, IPv6"
+ 	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
+@@ -145,7 +147,8 @@ config BR2_PACKAGE_MPD_TREMOR
+ 	select BR2_PACKAGE_TREMOR
+ 	help
+ 	  Enable vorbis input support.
+-	  Select this if you want to play back OGG files on softfloat targets.
++	  Select this if you want to play back OGG files on softfloat
++	  targets.
+ 
+ config BR2_PACKAGE_MPD_VORBIS
+ 	bool "vorbis"
+@@ -153,7 +156,8 @@ config BR2_PACKAGE_MPD_VORBIS
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	help
+ 	  Enable vorbis input/streaming support.
+-	  Select this if you want to play back OGG files on hardfloat targets.
++	  Select this if you want to play back OGG files on hardfloat
++	  targets.
+ 
+ config BR2_PACKAGE_MPD_WAVPACK
+ 	bool "wavpack"
+@@ -263,8 +267,9 @@ config BR2_PACKAGE_MPD_AVAHI_SUPPORT
+ 	select BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
+ 	help
+ 	  Enable Avahi (zeroconf) support.
+-	  Select this for multicast DNS/DNS-SD service discovery support. This allows
+-	  MPD to publish service information on a local network.
++	  Select this for multicast DNS/DNS-SD service discovery
++	  support. This allows MPD to publish service information on a
++	  local network.
+ 
+ comment "avahi support needs a toolchain w/ dynamic library"
+ 	depends on BR2_PREFER_STATIC_LIB
