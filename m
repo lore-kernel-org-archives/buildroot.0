@@ -1,75 +1,34 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  9 Dec 2014 14:46:42 +0100
-Subject: [Buildroot] [PATCH v5 04/15] gpu-viv-bin-mx6q: fix GLESv2 support
+Date: Tue,  9 Dec 2014 14:46:50 +0100
+Subject: [Buildroot] [PATCH v5 12/15] nitrogen6x_defconfig: bump kernel to
+	3.10.17_1.0.1_ga
 In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
 References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1418132813-32642-5-git-send-email-jezz@sysmic.org>
+Message-ID: <1418132813-32642-13-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with:
-    QMX6 board +
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_CUSTOM_GIT=y
-    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
-    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-    BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
-    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
-    BR2_PACKAGE_QT5=y
-    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-    BR2_PACKAGE_QT5BASE_EXAMPLES=y
-    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-    BR2_PACKAGE_QT5BASE_EGLFS=y
-    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-    BR2_PACKAGE_QT5BASE_GIF=y
-    BR2_PACKAGE_QT5BASE_JPEG=y
-    BR2_PACKAGE_QT5BASE_PNG=y
-    BR2_PACKAGE_QT5QUICKCONTROLS=y
-    BR2_PACKAGE_FREESCALE_IMX=y
-    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
-    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
-
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ configs/nitrogen6x_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index 1158e42..eb54b80 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -37,12 +37,13 @@ endef
- # Make sure these commands are idempotent.
- define GPU_VIV_BIN_MX6Q_BUILD_CMDS
- 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
--	for lib in EGL GAL VIVANTE; do \
-+	for lib in EGL GAL VIVANTE GLESv2; do \
- 		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
- 			$(@D)/usr/lib/lib$${lib}.so; \
- 	done
--	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
- 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
-+	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
-+	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
- endef
- 
- define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
-@@ -73,7 +74,7 @@ endif
- define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
- 	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
- 	cp -a $(@D)/usr/lib $(TARGET_DIR)/usr
--	for lib in EGL GAL VIVANTE; do \
-+	for lib in EGL GAL VIVANTE GLESv2; do \
- 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
- 			case $$f in \
- 				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index e56bd60..d75f780 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -26,7 +26,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/898627a/linux-imx6-898627a.tar.gz"
++# Last version of branch boundary-imx_3.10.17_1.0.1_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/ea957c5/linux-imx6-ea957c5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
 -- 
 1.9.1
