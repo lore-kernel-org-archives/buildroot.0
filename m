@@ -1,43 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 Dec 2014 14:29:35 +0100
-Subject: [Buildroot] [git commit] package/musl: fix C library installation
-	directory
-Message-ID: <20141209133124.503DA800B3@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue,  9 Dec 2014 14:46:39 +0100
+Subject: [Buildroot] [PATCH v5 01/15] mesa3d: Give possibility to external
+	backends to enable DRI/Gallium
+In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
+References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1418132813-32642-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c492abf96e9e022d717e1902501056b7b614c388
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Set the installation path for the libraries to /lib instead of /usr/lib.
-
-This fixes an issue when building a toolchain with the musl library by
-the internal toolchain backend of Buildroot in the first step and import this
-toolchain later as a custom external toolchain in a second step. For this use
-case check-musl in toolchain/helpers.mk failed because it did not find the
-libc or libm in sysroot/lib.
-
-This patch superseeds: [PATCH 1/1] toolchain/helpers.mk: fix check-musl
-http://patchwork.ozlabs.org/patch/417587/
-
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/musl/musl.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/mesa3d/mesa3d.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index fb4327d..3a45575 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -27,6 +27,7 @@ define MUSL_CONFIGURE_CMDS
- 			--target=$(GNU_TARGET_NAME) \
- 			--host=$(GNU_TARGET_NAME) \
- 			--prefix=/usr \
-+			--libdir=/lib \
- 			--disable-gcc-wrapper)
- endef
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 8dfad6c..898254d 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -64,7 +64,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
  
+-ifeq ($(MESA3D_GALLIUM_DRIVERS-y),)
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-gallium-drivers
+ else
+@@ -73,7 +73,7 @@ MESA3D_CONF_OPTS += \
+ 	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
+ endif
+ 
+-ifeq ($(MESA3D_DRI_DRIVERS-y),)
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-dri-drivers --without-dri --disable-dri3
+ else
+-- 
+1.9.1
