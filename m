@@ -1,87 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 20:50:26 +0100
-Subject: [Buildroot] [git commit] website: Javascript code cleanup
-Message-ID: <20141209195104.3615F7FC3A@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 20:51:35 +0100
+Subject: [Buildroot] [PATCH 1/3] website: Remove debug message
+In-Reply-To: <1414972696-10647-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414972696-10647-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20141209205135.4e3ff566@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de6d6b945407c6a81396a27cdc8e206706a685d8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-By inversing the "if (!result.error)" we gain one level of indent.
-Also moving variable declarations into a more correct block of code.
+On Mon,  3 Nov 2014 00:58:14 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/js/buildroot.js |   53 +++++++++++++++++++++++++------------------------
- 1 files changed, 27 insertions(+), 26 deletions(-)
+All three patches applied. On the last two, I've made some minor edits
+to the commit title.
 
-diff --git a/docs/js/buildroot.js b/docs/js/buildroot.js
-index dd6ca6e..83a3ac0 100644
---- a/docs/js/buildroot.js
-+++ b/docs/js/buildroot.js
-@@ -1,33 +1,34 @@
- function load_activity(feedurl, divid) {
-     var feed = new google.feeds.Feed(feedurl);
-+    var container = document.getElementById(divid);
-+    var loaded = 0;
-+    var nb_display = 8;
-     feed.setNumEntries(30);
-     feed.load(function(result) {
--        if (!result.error) {
--            var container = document.getElementById(divid);
--            var loaded = 0;
--            var nb_display = 8;
--            for (var i = 0; i < result.feed.entries.length; i++) {
--                var entry = result.feed.entries[i];
--                if (entry.title.indexOf("git commit") != -1)
--                    continue;
--                loaded += 1;
--                if (loaded > nb_display)
--                    break;
--                var div = document.createElement("p");
--                var link = document.createElement("a");
--                var d = new Date(entry.publishedDate);
--                var data = '[' + d.toLocaleDateString() + '] ' + entry.title
--                var text = document.createTextNode(data);
--                link.appendChild(text);
--                link.title = entry.title;
--                link.href = entry.link
--                div.appendChild(link);
--                container.appendChild(div);
--            }
--            var empty = nb_display - loaded;
--            for (var i = 0; i < empty; i++) {
--                container.appendChild(document.createElement("p"));
--            }
-+        if (result.error) {
-+        	return;
-+        }
-+        for (var i = 0; i < result.feed.entries.length; i++) {
-+            var entry = result.feed.entries[i];
-+            if (entry.title.indexOf("git commit") != -1)
-+                continue;
-+            loaded += 1;
-+            if (loaded > nb_display)
-+                break;
-+            var div = document.createElement("p");
-+            var link = document.createElement("a");
-+            var d = new Date(entry.publishedDate);
-+            var data = '[' + d.toLocaleDateString() + '] ' + entry.title
-+            var text = document.createTextNode(data);
-+            link.appendChild(text);
-+            link.title = entry.title;
-+            link.href = entry.link
-+            div.appendChild(link);
-+            container.appendChild(div);
-+        }
-+        var empty = nb_display - loaded;
-+        for (var i = 0; i < empty; i++) {
-+            container.appendChild(document.createElement("p"));
-         }
-     });
- }
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
