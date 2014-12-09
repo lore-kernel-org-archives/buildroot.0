@@ -1,95 +1,37 @@
-From: kiwi <gregd72002@gmail.com>
-Date: Tue,  9 Dec 2014 21:23:28 +0000
-Subject: [Buildroot] [PATCH 8/8] Adding entries to Config.in and
-	Config.in.host
-In-Reply-To: <1418160208-1569-1-git-send-email-gregd72002@gmail.com>
-References: <1418160208-1569-1-git-send-email-gregd72002@gmail.com>
-Message-ID: <1418160208-1569-8-git-send-email-gregd72002@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Tue, 09 Dec 2014 22:35:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: let init script
+ cleanup stale pidfile
+In-Reply-To: <548755B0.6020002@zacarias.com.ar>
+References: <1416068836-4053-1-git-send-email-jkrause@posteo.de>
+ <548755B0.6020002@zacarias.com.ar>
+Message-ID: <1418160957.1422.38.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gregory Dymarek <gregd72002@gmail.com>
+On Di, 2014-12-09 at 17:04 -0300, Gustavo Zacarias wrote:
+> On 11/15/2014 01:27 PM, J?rg Krause wrote:
+> 
+> > dnsmasq does not clean up its pidfile after termination. Do this manually.
+> > 
+> > Supersedes: [PATCH 1/1] package/dnsmasq: cleanup run-time files in init script
+> > https://patchwork.ozlabs.org/patch/411015/
+> 
+> Hi.
+> Does it fix anything in particular other than looks?
+> Looking at the dnsmasq source it does an unlink() on successful
+> startup/fork so any previous pidfile doesn't bother it at all.
+> I was about to say "i'd like to see the start-stop-daemon invocation
+> changed" but then i realized that it doesn't remove the pidfile either,
+> so basically any "start-stop-daemon -K -q -x" in any initscript
+> "suffers" from this "problem".
+> So even if the pidfile is on permanent storage i don't see how this can
+> cause issues.
+> Regards.
+> 
 
-Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
----
- package/Config.in      | 7 +++++++
- package/Config.in.host | 1 +
- 2 files changed, 8 insertions(+)
-
-diff --git a/package/Config.in b/package/Config.in
-index dd3a46e..f3af26c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -115,6 +115,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/gawk/Config.in"
- endif
-+	source "package/gengetopt/Config.in"
- 	source "package/gettext/Config.in"
- 	source "package/git/Config.in"
- 	source "package/gperf/Config.in"
-@@ -821,6 +822,7 @@ menu "Networking"
- 	source "package/libmnl/Config.in"
- 	source "package/libmodbus/Config.in"
- 	source "package/libndp/Config.in"
-+	source "package/libnice/Config.in"
- 	source "package/libnetfilter_acct/Config.in"
- 	source "package/libnetfilter_conntrack/Config.in"
- 	source "package/libnetfilter_cthelper/Config.in"
-@@ -839,6 +841,7 @@ menu "Networking"
- 	source "package/libshairplay/Config.in"
- 	source "package/libshout/Config.in"
- 	source "package/libsoup/Config.in"
-+	source "package/libsrtp/Config.in"
- 	source "package/libstrophe/Config.in"
- 	source "package/libtirpc/Config.in"
- 	source "package/libtorrent/Config.in"
-@@ -846,6 +849,7 @@ menu "Networking"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
- 	source "package/libvncserver/Config.in"
-+	source "package/libwebsock/Config.in"
- 	source "package/libwebsockets/Config.in"
- 	source "package/neon/Config.in"
- 	source "package/nss-mdns/Config.in"
-@@ -856,6 +860,7 @@ menu "Networking"
- 	source "package/rtmpdump/Config.in"
- 	source "package/slirp/Config.in"
- 	source "package/snmppp/Config.in"
-+	source "package/sofia-sip/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
- 	source "package/wvstreams/Config.in"
-@@ -874,6 +879,7 @@ menu "Other"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cppcms/Config.in"
-+	source "package/ding-libs/Config.in"
- 	source "package/eigen/Config.in"
- 	source "package/elfutils/Config.in"
- 	source "package/fftw/Config.in"
-@@ -1047,6 +1053,7 @@ endif
- 	source "package/iptraf-ng/Config.in"
- 	source "package/iputils/Config.in"
- 	source "package/iw/Config.in"
-+	source "package/janus-gateway/Config.in"
- 	source "package/kismet/Config.in"
- 	source "package/knock/Config.in"
- 	source "package/leafnode2/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 0b7bc36..dd89bd3 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -8,6 +8,7 @@ menu "Host utilities"
- 	source "package/e2tools/Config.in.host"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
-+	source "package/gengetopt/Config.in.host"
- 	source "package/genpart/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/mke2img/Config.in.host"
--- 
-1.9.1
+I want to check in a script if the dnsmasq daemon is running by testing
+for the existence of the pid file.
