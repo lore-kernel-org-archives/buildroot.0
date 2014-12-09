@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  9 Dec 2014 15:34:20 +0100
-Subject: [Buildroot] [PATCH v4 15/17] erlang-p1-iconv: new package.
+Date: Tue,  9 Dec 2014 15:34:21 +0100
+Subject: [Buildroot] [PATCH v4 16/17] erlang-p1-cache-tab: new package.
 In-Reply-To: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
 References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1418135662-773-16-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1418135662-773-17-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +14,54 @@ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                          |  1 +
- package/erlang-p1-iconv/Config.in          |  6 ++++++
- package/erlang-p1-iconv/erlang-p1-iconv.mk | 19 +++++++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/erlang-p1-iconv/Config.in
- create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
+ package/Config.in                                  |  1 +
+ package/erlang-p1-cache-tab/Config.in              |  6 ++++++
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk | 13 +++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/erlang-p1-cache-tab/Config.in
+ create mode 100644 package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 132c2a8..3ddc78b 100644
+index 3ddc78b..22393ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -396,6 +396,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-iconv/Config.in"
++	source "package/erlang-p1-cache-tab/Config.in"
+ 	source "package/erlang-p1-iconv/Config.in"
  	source "package/erlang-p1-sip/Config.in"
  	source "package/erlang-p1-stringprep/Config.in"
- 	source "package/erlang-p1-stun/Config.in"
-diff --git a/package/erlang-p1-iconv/Config.in b/package/erlang-p1-iconv/Config.in
+diff --git a/package/erlang-p1-cache-tab/Config.in b/package/erlang-p1-cache-tab/Config.in
 new file mode 100644
-index 0000000..53876bf
+index 0000000..6d1f889
 --- /dev/null
-+++ b/package/erlang-p1-iconv/Config.in
++++ b/package/erlang-p1-cache-tab/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ERLANG_P1_ICONV
-+	bool "erlang-p1-iconv"
++config BR2_PACKAGE_ERLANG_P1_CACHE_TAB
++	bool "erlang-p1-cache-tab"
 +	depends on BR2_PACKAGE_ERLANG
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  Erlang interface to libiconv
-diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
++	  Erlang library implementing cache tables
+diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
 new file mode 100644
-index 0000000..d28ff39
+index 0000000..0f0b637
 --- /dev/null
-+++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
-@@ -0,0 +1,19 @@
++++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-p1-iconv
++# erlang-p1-cache-tab
 +#
 +################################################################################
 +
-+ERLANG_P1_ICONV_VERSION = dff5ee5
-+ERLANG_P1_ICONV_SITE = $(call github,processone,eiconv,$(ERLANG_P1_ICONV_VERSION))
-+ERLANG_P1_ICONV_LICENSE = GPLv2+
-+ERLANG_P1_ICONV_LICENSE_FILES = COPYING
-+ERLANG_P1_ICONV_DEPENDENCIES = erlang
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+ERLANG_P1_ICONV_DEPENDENCIES += libiconv
-+endif
-+
-+ERLANG_P1_ICONV_CONFIGURE = YES
++ERLANG_P1_CACHE_TAB_VERSION = 7b89d6a
++ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
++ERLANG_P1_CACHE_TAB_LICENSE = GPLv2+
++ERLANG_P1_CACHE_TAB_LICENSE_FILES = COPYING
++ERLANG_P1_CACHE_TAB_DEPENDENCIES = erlang erlang-p1-utils
 +
 +$(eval $(rebar-package))
 -- 
