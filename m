@@ -1,66 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 19:49:21 +0100
-Subject: [Buildroot] [git commit] package/mpd: enable neighbor discovery
-	support
-Message-ID: <20141209184955.3B4C67FD52@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 19:50:20 +0100
+Subject: [Buildroot] [git commit] package/mpd: add option to enable or
+	disable OSS support
+Message-ID: <20141209185101.8426F80057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=761ca24c3bcec7cf7d328c2ce127bca6a3fa5670
+commit: http://git.buildroot.net/buildroot/commit/?id=25c083b4475756b557910b7c5233f8ae2efdee2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable support for neighbor discovery useful in Samba and UPnP networks.
+By default, the OSS support is enabled, which may not necessarily be
+useful on most Linux systems that use ALSA.
 
-[Thomas: add dependency on smbclient or upnp plugin, without which the
-neighbor discovery support isn't very useful.]
+[Thomas: tweak commit title and log.]
 
 Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/Config.in |   12 ++++++++++++
+ package/mpd/Config.in |    5 +++++
  package/mpd/mpd.mk    |    6 ++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 4da9fa5..db77ddf 100644
+index db77ddf..0e115f6 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -274,6 +274,18 @@ config BR2_PACKAGE_MPD_AVAHI_SUPPORT
- comment "avahi support needs a toolchain w/ dynamic library"
- 	depends on BR2_PREFER_STATIC_LIB
+@@ -245,6 +245,11 @@ comment "jack support needs a toolchain w/ largefile"
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_LARGEFILE
  
-+config BR2_PACKAGE_MPD_NEIGHBOR_DISCOVERY_SUPPORT
-+	bool "neighbor discovery support"
-+	depends on BR2_PACKAGE_MPD_LIBSMBCLIENT || BR2_PACKAGE_MPD_UPNP
++config BR2_PACKAGE_MPD_OSS
++	bool "oss"
 +	help
-+	  Enable support for neighbor discovery.
-+	  This option can be used in conjunction with the smbclient
-+	  plugin to provide a list of SMB/CIFS servers or with the
-+	  UPnP plugin to provide a list of UPnP servers on the local
-+	  network.  The neighbor plugin needs configuration in
-+	  mpd.conf. For further information take a look at the MPD
-+	  documentation.
++	  Enable OSS (Open Sound System) output support.
 +
- config BR2_PACKAGE_MPD_TCP
- 	bool "tcp sockets"
- 	default y
+ config BR2_PACKAGE_MPD_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 3be2ae5..85bbe8b 100644
+index 85bbe8b..132ad44 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -162,6 +162,12 @@ else
- MPD_CONF_OPTS += --disable-mpc
+@@ -175,6 +175,12 @@ else
+ MPD_CONF_OPTS += --disable-opus
  endif
  
-+ifeq ($(BR2_PACKAGE_MPD_NEIGHBOR_DISCOVERY_SUPPORT),y)
-+MPD_CONF_OPTS += --enable-neighbor-plugins
++ifeq ($(BR2_PACKAGE_MPD_OSS),y)
++MPD_CONF_OPTS += --enable-oss
 +else
-+MPD_CONF_OPTS += --disable-neighbor-plugins
++MPD_CONF_OPTS += --disable-oss
 +endif
 +
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
- MPD_DEPENDENCIES += opus libogg
- MPD_CONF_OPTS += --enable-opus
+ ifeq ($(BR2_PACKAGE_MPD_PULSEAUDIO),y)
+ MPD_DEPENDENCIES += pulseaudio
+ MPD_CONF_OPTS += --enable-pulse
