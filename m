@@ -1,42 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 9 Dec 2014 17:57:28 +0200
-Subject: [Buildroot] [PATCH 1/1] screen: add support for 256 colors
-In-Reply-To: <54871795.2010403@imgtec.com>
-References: <1418138819-19772-1-git-send-email-tbultel@free.fr>
- <54871795.2010403@imgtec.com>
-Message-ID: <20141209155728.GL2440@tarshish>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Tue,  9 Dec 2014 17:03:24 +0100
+Subject: [Buildroot] [PATCH v2 0/3] New image target (x86/x64): raw disk
+	image
+Message-ID: <1418141008-18739-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente, Thierry,
+Hi list,
 
-On Tue, Dec 09, 2014 at 03:39:01PM +0000, Vicente Olivert Riera wrote:
-> On 12/09/2014 03:26 PM, Thierry Bultel wrote:
-> 
-> >  define SCREEN_INSTALL_SCREENRC
-> > -	$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc
-> > +	if [ ! -f $(TARGET_DIR)/etc/screenrc ]; then \
-> > +		$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc; \
-> > +	fi
-> >  endef
-> >  
-> >  SCREEN_POST_INSTALL_TARGET_HOOKS += SCREEN_INSTALL_SCREENRC
-> 
-> This part is not related with adding support for 256 colors, so, why
-> don't you send a separate patch for it? Or at least, state in your
-> commit message you are fixing a little issue with the 'screenrc' file
-> installation. But I would say that a separate patch would be better.
+These 3 patches allow the building of a new target for x86 and x64.
+The "raw" image is a disk image, with a valid partition table and
+MBR, that can directly written to a disk and will boot, or the file
+is bootable in QEMU. Also cloud providers who use KVM (like Google)
+should accept this as their VM image format.
 
-I don't think the change in this separate patch is desired. We have just 
-recently (commit 963bbf266bfebc [screen: install configuration file 
-unconditionally]) switched to unconditional install of the config file.
+Regards,
+Karoly
 
-baruch
+Changes v1 -> v2:
+  - package/util-linux: minimal wording
+  - fs/rawimg: separated script into new host package like mke2img
+  - package/mkrawimg: new host package
+
+Karoly Kasza (3):
+  util-linux: enable host fdisk
+  package/mkrawimg: new package
+  fs/rawimg: new rootfs target
+
+ fs/Config.in                                       |    1 +
+ fs/rawimg/Config.in                                |   15 ++++++++
+ fs/rawimg/rawimg.mk                                |   13 +++++++
+ package/Config.in.host                             |    1 +
+ package/mkrawimg/Config.in.host                    |   13 +++++++
+ package/mkrawimg/mkrawimg                          |   38 ++++++++++++++++++++
+ package/mkrawimg/mkrawimg.mk                       |   14 ++++++++
+ package/util-linux/Config.in.host                  |    9 +++++
+ .../util-linux/util-linux-004-enable-fdisk.patch   |   34 ++++++++++++++++++
+ package/util-linux/util-linux.mk                   |    5 +++
+ 10 files changed, 143 insertions(+)
+ create mode 100644 fs/rawimg/Config.in
+ create mode 100644 fs/rawimg/rawimg.mk
+ create mode 100644 package/mkrawimg/Config.in.host
+ create mode 100755 package/mkrawimg/mkrawimg
+ create mode 100644 package/mkrawimg/mkrawimg.mk
+ create mode 100644 package/util-linux/util-linux-004-enable-fdisk.patch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.10.4
