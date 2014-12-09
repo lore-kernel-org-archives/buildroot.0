@@ -1,40 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 Dec 2014 14:29:52 +0100
-Subject: [Buildroot] [git commit] package/musl: remove obsolete setting of
-	prefix
-Message-ID: <20141209133124.5B395800B3@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 14:30:37 +0100
+Subject: [Buildroot] [git commit] configs/qemu: update to the latest
+	kernel/headers versions
+Message-ID: <20141209133124.6DA8B800B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=424abf2f1b238cfe822a8457497ca8c89536108b
+commit: http://git.buildroot.net/buildroot/commit/?id=3a4b97bfb06ecabf2849aae0b308396dd8aac8ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Using the config option '--libdir=/lib' makes the setting of prefix to an
-empty path obsolete in MUSL_INSTALL_TARGET_CMDS.
-
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/musl.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../x86/{linux-3.17.config => linux-3.18.config}   |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ configs/qemu_aarch64_virt_defconfig                |   10 +++++-----
+ configs/qemu_arm_nuri_defconfig                    |    4 ++--
+ configs/qemu_arm_versatile_defconfig               |   10 +++++-----
+ configs/qemu_arm_vexpress_defconfig                |    8 ++++----
+ configs/qemu_microblazebe_mmu_defconfig            |   10 +++++-----
+ configs/qemu_microblazeel_mmu_defconfig            |   10 +++++-----
+ configs/qemu_mips64_malta_defconfig                |   10 +++++-----
+ configs/qemu_mips64el_malta_defconfig              |   10 +++++-----
+ configs/qemu_mips_malta_defconfig                  |   10 +++++-----
+ configs/qemu_mipsel_malta_defconfig                |   10 +++++-----
+ configs/qemu_ppc64_pseries_defconfig               |    8 ++++----
+ configs/qemu_ppc_g3beige_defconfig                 |   10 +++++-----
+ configs/qemu_ppc_mpc8544ds_defconfig               |    8 ++++----
+ configs/qemu_ppc_virtex_ml507_defconfig            |    8 ++++----
+ configs/qemu_sh4_r2d_defconfig                     |   10 +++++-----
+ configs/qemu_sparc_ss10_defconfig                  |   10 +++++-----
+ configs/qemu_x86_64_defconfig                      |   10 +++++-----
+ configs/qemu_x86_defconfig                         |   10 +++++-----
+ configs/qemu_xtensa_lx60_defconfig                 |   10 +++++-----
+ 33 files changed, 88 insertions(+), 88 deletions(-)
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 3a45575..1f1af05 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -40,11 +40,9 @@ define MUSL_INSTALL_STAGING_CMDS
- 		DESTDIR=$(STAGING_DIR) install-libs install-tools install-headers
- endef
- 
--# prefix is set to an empty value to get the C library installed in
--# /lib and not /usr/lib
- define MUSL_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		DESTDIR=$(TARGET_DIR) prefix= install-libs
-+		DESTDIR=$(TARGET_DIR) install-libs
- 	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o Scrt1.o)
- endef
- 
+Patch is too large, so refusing to show it
