@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 00:01:11 +0100
-Subject: [Buildroot] [PATCH] uclibc: enable
- UCLIBC_HAS_STRING_GENERIC_OPT in all configs
-In-Reply-To: <1415804684-17297-1-git-send-email-abrodkin@synopsys.com>
-References: <1415804684-17297-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20141210000111.08086fdd@free-electrons.com>
+Date: Wed, 10 Dec 2014 00:04:00 +0100
+Subject: [Buildroot] [PATCH v5 1/1] set simple network setup via the
+ system configuration submenu
+In-Reply-To: <1418114924-18826-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1418114924-18826-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20141210000400.35feddd5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear J?r?my Rosen,
 
-On Wed, 12 Nov 2014 18:04:44 +0300, Alexey Brodkin wrote:
+On Tue,  9 Dec 2014 09:48:44 +0100, J?r?my Rosen wrote:
+> This patch allows the setup of simple /etc/network/interfaces (or
+> /etc/systemd/network/80-buildroot.network if networkd is enabled) via the
+> configuration menus instead of using an overlay
 
-> Also since the option in question is default in uClibc I don't expect if
-> enabled back (it was silently disabled in http://git.buildroot.net/buildroot/commit/?id=cfbf8abc33d86a0cf5c1bb3e0817a22009b7f301 on introduction of NPTL in uClibc
-> by Khem Raj) it to introduce problems.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Anton Kolesov <anton.kolesov@synopsys.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Khem Raj <raj.khem@gmail.com>
-> ---
->  package/uclibc/uClibc-0.9.31.config   | 2 +-
->  package/uclibc/uClibc-0.9.33.config   | 2 +-
->  package/uclibc/uClibc-snapshot.config | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+So, we discussed this tonight during the patchwork review with Yann,
+Peter and Samuel, and the general opinion is that this is too
+complicated, and we don't want to handle all those cases through
+configuration options, and we instead want to leave that to
+project-specific customization through a rootfs overlay or a post-build
+script.
 
-We discussed this tonight with Peter, and the general opinion is that
-since the uClibc developers recommend to have this enabled, it is good
-to have it, so I've just applied your patch. Thanks!
+However, we would be willing to accept a patch that adds a single
+string option that allows to specify one network interface on which
+DHCP should be used. It would basically add "inet <foo> dhcp"
+to /etc/network/interfaces if non-empty, and otherwise do nothing. The
+default should be nothing, so that we keep the existing behavior.
+
+Best regards,
 
 Thomas
 -- 
