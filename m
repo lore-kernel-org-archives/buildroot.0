@@ -1,73 +1,48 @@
-From: Thierry Bultel <tbultel@free.fr>
-Date: Tue,  9 Dec 2014 11:58:30 +0100
-Subject: [Buildroot] [PATCH 1/1] ncurses: add support for 256 colors
-Message-ID: <1418122710-27852-1-git-send-email-tbultel@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  9 Dec 2014 13:25:26 +0200
+Subject: [Buildroot] [PATCH] lighttpd: disable static build
+Message-ID: <fc38f617245821399908d9f8f0a64a8fcdf3b164.1418124326.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thierry Bultel <tbultel@free.fr>
----
- package/ncurses/Config.in  |  7 +++++++
- package/ncurses/ncurses.mk | 14 +++++++++++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+lighttpd modules support code requires shared libraries support.
 
-diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-index 44713f9..8d0a4b7 100644
---- a/package/ncurses/Config.in
-+++ b/package/ncurses/Config.in
-@@ -38,4 +38,11 @@ config BR2_PACKAGE_NCURSES_TARGET_PROGS
+The scons based build system seems to be support static link of modules, but
+we currently don't use scons for lighttpd.
+
+Fixes:
+http://autobuild.buildroot.net/results/39c/39c027bf6b76a0f9c15a184f449dadacfaefe980/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lighttpd/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index a5abf7ea0850..f0e1c7f22f99 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIGHTTPD
+ 	bool "lighttpd"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_PREFER_STATIC_LIB
  	help
- 	  Include ncurses programs in target (clear, reset, tput, ...)
+ 	  lighttpd a secure, fast, compliant and very flexible web-server
+ 	  which has been optimized for high-performance environments. It
+@@ -12,6 +13,10 @@ config BR2_PACKAGE_LIGHTTPD
  
-+config BR2_PACKAGE_NCURSES_EXT_COLORS
-+	bool "ncurses extended colors"
-+	select BR2_PACKAGE_NCURSES_WCHAR
-+	depends on BR2_USE_WCHAR
-+	help
-+	  compile for 256-color support
+ 	  http://www.lighttpd.net/
+ 
++comment "lighttpd needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PREFER_STATIC_LIB
 +
- endif
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index e7bd967..262ac94 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -12,7 +12,7 @@ HOST_NCURSES_DEPENDENCIES =
- NCURSES_PROGS = clear infocmp tabs tic toe tput tset
- NCURSES_LICENSE = MIT with advertising clause
- NCURSES_LICENSE_FILES = README
--NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
-+NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)$(NCURSES_ABI_VERSION)-config
+ if BR2_PACKAGE_LIGHTTPD
  
- NCURSES_CONF_OPTS = \
- 	$(if $(BR2_PREFER_STATIC_LIB),--without-shared,--with-shared) \
-@@ -107,6 +107,17 @@ define NCURSES_INSTALL_TARGET_PROGS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_NCURSES_EXT_COLORS),y)
-+NCURSES_CONF_OPTS += --enable-ext-colors
-+NCURSES_ABI_VERSION = 6
-+define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
-+	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
-+	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
-+endef
-+else
-+NCURSES_ABI_VERSION = 5
-+endif
-+
- define NCURSES_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	$(NCURSES_INSTALL_TARGET_LIBS)
-@@ -117,6 +128,7 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
-+	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
+ config BR2_PACKAGE_LIGHTTPD_OPENSSL
 -- 
-1.9.1
+2.1.3
