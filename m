@@ -1,32 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Dec 2014 20:17:10 +0100
-Subject: [Buildroot] [PATCH] thrift: disable tutorial(s)
-In-Reply-To: <1418152385-21365-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1418152385-21365-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141209201710.3b49c909@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  9 Dec 2014 20:32:03 +0100
+Subject: [Buildroot] [PATCH] support/script/scancpan: remove duplicated
+	dependency
+Message-ID: <1418153523-10972-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+dependency from metacpan comes as a list of module
+which is transformed in a list of distribution for BR.
+different modules could be included in the same distribution,
+so duplication is possible.
 
-On Tue,  9 Dec 2014 16:13:05 -0300, Gustavo Zacarias wrote:
-> The tutorials don't pass pedantic mode hence causing failures.
-> And we don't care about tutorials anyway, disable them to save time as
-> well. Fixes.
-> http://autobuild.buildroot.net/results/f68/f68d537e623f565000ca966372a7c0277f4e3888/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/thrift/thrift.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ support/scripts/scancpan | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 0eac132..590c215 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -558,8 +558,8 @@ sub fetch {
+         my $manifest = get_manifest( $result->{author}, $name, $result->{version} );
+         $need_dlopen{$name} = is_xs( $manifest );
+         $license_files{$name} = find_license_files( $manifest );
+-        my @deps_build = ();
+-        my @deps_runtime = ();
++        my %build = ();
++        my %runtime = ();
+         my $mb;
+         foreach my $dep (@{$result->{dependency}}) {
+             my $modname = ${$dep}{module};
+@@ -578,19 +578,19 @@ sub fetch {
+             next if !$recommend && ${$dep}{relationship} ne q{requires};
+             my $distname = $mcpan->module( $modname )->{distribution};
+             if (${$dep}{phase} eq q{runtime}) {
+-                push @deps_runtime, $distname;
++                $runtime{$distname} = 1;
+             }
+             else { # configure, build
+-                push @deps_build, $distname;
++                $build{$distname} = 1;
+             }
+         }
+-        unshift @deps_build, q{Module-Build} if $mb;
+-        $deps_build{$name} = \@deps_build;
+-        $deps_runtime{$name} = \@deps_runtime;
+-        foreach my $distname (@deps_build) {
++        $build{q{Module-Build}} = 1 if $mb;
++        $deps_build{$name} = [keys %build];
++        $deps_runtime{$name} = [keys %runtime];
++        foreach my $distname (@{$deps_build{$name}}) {
+             fetch( $distname, 0, 1 );
+         }
+-        foreach my $distname (@deps_runtime) {
++        foreach my $distname (@{$deps_runtime{$name}}) {
+             fetch( $distname, $need_target, $need_host );
+             $need_dlopen{$name} ||= $need_dlopen{$distname};
+         }
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
