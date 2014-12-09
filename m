@@ -1,89 +1,75 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  9 Dec 2014 14:46:41 +0100
-Subject: [Buildroot] [PATCH v5 03/15] gpu-viv-bin-mx6q: fix compiling issues
-	with EGL_API_FB
+Date: Tue,  9 Dec 2014 14:46:42 +0100
+Subject: [Buildroot] [PATCH v5 04/15] gpu-viv-bin-mx6q: fix GLESv2 support
 In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
 References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1418132813-32642-4-git-send-email-jezz@sysmic.org>
+Message-ID: <1418132813-32642-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To compile with Vivante header and use framebuffer, it is necessary to
-pass option -DEGL_API_FB. This option is declared in pkg-config file of
-Vivante library. But many packages (especialy qt5 components) does not
-consider these flags.
-
-So instead of patching every packages that use EGL, it is more
-convenient to patch Vivante headers.
-
-This commit add #define EGL_API_FB on top of eglvivante.h when
-necessary.
+Tested with:
+    QMX6 board +
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_GIT=y
+    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
+    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+    BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
+    BR2_PACKAGE_QT5=y
+    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+    BR2_PACKAGE_QT5BASE_EXAMPLES=y
+    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+    BR2_PACKAGE_QT5BASE_EGLFS=y
+    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+    BR2_PACKAGE_QT5BASE_GIF=y
+    BR2_PACKAGE_QT5BASE_JPEG=y
+    BR2_PACKAGE_QT5BASE_PNG=y
+    BR2_PACKAGE_QT5QUICKCONTROLS=y
+    BR2_PACKAGE_FREESCALE_IMX=y
+    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
- package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
- 4 files changed, 9 insertions(+), 7 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-index c984247..d1d09a0 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-@@ -7,4 +7,4 @@ Name: egl
- Description: Freescale gpu-viv-bin-mx6q implementation of EGL
- Version: 1.0
- Libs: -L${libdir} -lGAL -lEGL
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-index 7cfb5e7..74ce792 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-@@ -7,4 +7,4 @@ Name: glesv2
- Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
- Version: 2.0
- Libs: -L${libdir} -lGAL -lEGL -lGLESv2
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
 diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index bc44e38..1158e42 100644
+index 1158e42..eb54b80 100644
 --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
 +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -47,14 +47,16 @@ endef
- 
- define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
- 	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
-+	if [ $(GPU_VIV_BIN_MX6Q_LIB_TARGET) == fb ]; then \
-+		$(SED) '/#define EGLAPIENTRY/ a \
-+			#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
-+			#define EGL_API_FB \n\
-+			#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
-+	fi
- 	for lib in egl glesv2 vg; do \
- 		$(INSTALL) -m 0644 -D \
- 			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
- 			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
--			$(SED) "s/-DEGL_API_FB=1//" \
--				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--		fi; \
+@@ -37,12 +37,13 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+ 			$(@D)/usr/lib/lib$${lib}.so; \
  	done
+-	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
  endef
  
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-index fb14005..677a7ee 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-@@ -7,4 +7,4 @@ Name: vg
- Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
- Version: 1.1
- Libs: -L${libdir} -lGAL -lEGL -lOpenVG
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+@@ -73,7 +74,7 @@ endif
+ define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
+ 	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
+ 	cp -a $(@D)/usr/lib $(TARGET_DIR)/usr
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
+ 				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
 -- 
 1.9.1
