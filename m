@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 Dec 2014 12:31:39 +0100
-Subject: [Buildroot] [git commit] libcgicc: bump to version 3.2.16
-Message-ID: <20141209133124.1CCFE800B3@busybox.osuosl.org>
+Date: Tue, 9 Dec 2014 14:29:35 +0100
+Subject: [Buildroot] [git commit] package/musl: fix C library installation
+	directory
+Message-ID: <20141209133124.503DA800B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66eece01cfbce2da44a9d28ce7d4a26149f5e078
+commit: http://git.buildroot.net/buildroot/commit/?id=c492abf96e9e022d717e1902501056b7b614c388
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+Set the installation path for the libraries to /lib instead of /usr/lib.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This fixes an issue when building a toolchain with the musl library by
+the internal toolchain backend of Buildroot in the first step and import this
+toolchain later as a custom external toolchain in a second step. For this use
+case check-musl in toolchain/helpers.mk failed because it did not find the
+libc or libm in sysroot/lib.
+
+This patch superseeds: [PATCH 1/1] toolchain/helpers.mk: fix check-musl
+http://patchwork.ozlabs.org/patch/417587/
+
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcgicc/libcgicc.hash |    2 ++
- package/libcgicc/libcgicc.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/musl/musl.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcgicc/libcgicc.hash b/package/libcgicc/libcgicc.hash
-new file mode 100644
-index 0000000..313478d
---- /dev/null
-+++ b/package/libcgicc/libcgicc.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	d94a2b5dec6d5eb6f05f114e2c7a64aeb7da71708ebe7b5f32bd6ebde1dfbc96	cgicc-3.2.16.tar.bz2
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index 447b2a5..1c36d42 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index fb4327d..3a45575 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -27,6 +27,7 @@ define MUSL_CONFIGURE_CMDS
+ 			--target=$(GNU_TARGET_NAME) \
+ 			--host=$(GNU_TARGET_NAME) \
+ 			--prefix=/usr \
++			--libdir=/lib \
+ 			--disable-gcc-wrapper)
+ endef
  
--LIBCGICC_VERSION = 3.2.15
-+LIBCGICC_VERSION = 3.2.16
- LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
--LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
-+LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.bz2
- LIBCGICC_LICENSE = LGPLv3+ (library), GFDL1.2+ (docs)
- LIBCGICC_LICENSE_FILES = COPYING.LIB COPYING.DOC
- LIBCGICC_INSTALL_STAGING = YES
