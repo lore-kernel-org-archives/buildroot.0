@@ -1,64 +1,45 @@
 From: Thierry Bultel <tbultel@free.fr>
-Date: Tue, 09 Dec 2014 15:38:49 +0100
-Subject: [Buildroot] questions about xdriver_xf86-video-imx-viv
-In-Reply-To: <1981204.idyJZvJsiF@aquila>
-References: <mailman.17.1417521604.17695.buildroot@busybox.net>
- <5486C8A5.3060006@free.fr> <1981204.idyJZvJsiF@aquila>
-Message-ID: <54870979.5060509@free.fr>
+Date: Tue, 09 Dec 2014 15:48:03 +0100
+Subject: [Buildroot] [PATCH 1/1] ncurses: add support for 256 colors
+In-Reply-To: <5486E958.9070404@zacarias.com.ar>
+References: <1418122710-27852-1-git-send-email-tbultel@free.fr>
+ <5486E958.9070404@zacarias.com.ar>
+Message-ID: <54870BA3.2010205@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 09/12/2014 14:28, J?r?me Pouiller a ?crit :
-> On Tuesday 09 December 2014 11:02:13 Thierry Bultel wrote:
->> Jerome,
->>
->> I was also currently attempting to bring the work from yocto to
->> buildroot. I do not have a working board, yet, since we are migrating
->> our BSP from 3.0.35 to 3.10.17. Thus I am only preparing the
->> integration, but cannot test at the moment.
->>
->> There is something I do not understand.
->> With the previous version of xdriver_xf86-video-imx-viv ,
->> the build in the DRI directory was producing a libdri.so, which
->> was loaded by xserver.
->>
->> For what I see, only $(@D)/EXA/src is built now.
->>
->> libdri.so is not needed anymore ?
-> DRI directory provided by Vivante is used to provide OpenGL API. At the
-> beginning I tried to make it works.
+Le 09/12/2014 13:21, Gustavo Zacarias a ?crit :
+> On 12/09/2014 07:58 AM, Thierry Bultel wrote:
 >
-> Finally, comparing with Yocto, I found Yocto did not compile nor use DRI
-> provided by Vivante[1].
+>> +config BR2_PACKAGE_NCURSES_EXT_COLORS
+>> +	bool "ncurses extended colors"
+>> +	select BR2_PACKAGE_NCURSES_WCHAR
+>> +	depends on BR2_USE_WCHAR
+>> +	help
+>> +	  compile for 256-color support
+>> +
 >
-> I remember I finally saw somewhere[2] OpenGL support was broken. It convinces
-> me to not work any more on this topic.
->
->> Also, when you say: " This driver should
->> +	  also be able to provide Desktop OpenGL implementation but, this
->> +	  feature seems broken for a while."
->>
->> does that mean that windowed 3D does not work, but that only full screen
->> does ?
+> Hi.
+> Do you know the size delta between this option enabled and disabled?
+> I'm asking because it might not be even worth an option.
+> Thanks.
+> Regards.
 >
 
-Thanks, we use OpenGLES so that should make it.
-I looking forward to seeing your patches accepted.
+Hi, the size delta is quite small:
 
-Regards
+256 colors:
+
+-rwxr-xr-x 1 thierry thierry 210K d?c.   9 14:23 
+output/target/usr/lib/libncursesw.so.6.0
+
+std colors:
+
+-rwxr-xr-x 1 thierry thierry 202K d?c.   9 15:46 
+output/target/usr/lib/libncursesw.so.5.9
+
+
 Thierry
-
-> Windowed 3D works if you use OpenGLES API. You can also use software
-> rendering (swrast) provided by mesa3d (this is solution provided by
-> Yocto), but I don't think we can consider this is a solution.
->
->
-> [1] See
-> meta-fsl-arm/recipes-graphics/xorg-driver/xf86-video-imxfb-vivante_3.10.17-1.0.1.bb
->
-> [2] maybe there:
-> http://permalink.gmane.org/gmane.linux.embedded.yocto.meta-freescale/8260
->
