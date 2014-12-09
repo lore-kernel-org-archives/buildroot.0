@@ -1,8 +1,7 @@
 From: Thierry Bultel <tbultel@free.fr>
-Date: Tue,  9 Dec 2014 16:01:33 +0100
-Subject: [Buildroot] [PATCH 1/1] makes host-qemu buildable without qemu on
-	target
-Message-ID: <1418137293-13629-1-git-send-email-tbultel@free.fr>
+Date: Tue,  9 Dec 2014 16:09:19 +0100
+Subject: [Buildroot] [PATCH 1/1] xterm: add support for 256 colors
+Message-ID: <1418137759-12514-1-git-send-email-tbultel@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +10,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thierry Bultel <tbultel@free.fr>
 ---
- package/Config.in.host      | 1 +
- package/qemu/Config.in.host | 4 ++++
- 2 files changed, 5 insertions(+)
- create mode 100644 package/qemu/Config.in.host
+ package/xterm/Config.in | 9 +++++++++
+ package/xterm/xterm.mk  | 4 ++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 0b7bc36..6ddcb2c 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -23,5 +23,6 @@ menu "Host utilities"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
-+	source "package/qemu/Config.in.host"
+diff --git a/package/xterm/Config.in b/package/xterm/Config.in
+index e17d2c6..7dd4311 100644
+--- a/package/xterm/Config.in
++++ b/package/xterm/Config.in
+@@ -8,3 +8,12 @@ config BR2_PACKAGE_XTERM
+ 	  xterm terminal emulator
  
- endmenu
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-new file mode 100644
-index 0000000..de35458
---- /dev/null
-+++ b/package/qemu/Config.in.host
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_HOST_QEMU
-+	bool "host qemu"
+ 	  http://invisible-island.net/xterm/
++
++if BR2_PACKAGE_XTERM
++
++config BR2_PACKAGE_XTERM_256_COLOR
++	bool "xterm 256 colors"
 +	help
-+	  Qemu-host
++	   enable 256-color support
++	
++endif
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 9c6bd21..11d6cf4 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -12,4 +12,8 @@ XTERM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
+ XTERM_LICENSE = MIT
+ XTERM_LICENSE_FILES = version.c
+ 
++ifeq ($(BR2_PACKAGE_XTERM_256_COLOR),y)
++XTERM_CONF_OPTS += --enable-256-color
++endif
++
+ $(eval $(autotools-package))
 -- 
 1.9.1
