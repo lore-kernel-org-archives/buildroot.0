@@ -1,14 +1,14 @@
 From: kiwi <gregd72002@gmail.com>
-Date: Tue,  9 Dec 2014 20:58:59 +0000
-Subject: [Buildroot] [PATCH 1/7] Adding janus-gateway and dependencies
-Message-ID: <1418158739-863-1-git-send-email-gregd72002@gmail.com>
+Date: Tue,  9 Dec 2014 21:00:41 +0000
+Subject: [Buildroot] [PATCH 2/7] Adding janus-gateway and dependencies
+Message-ID: <1418158841-1003-1-git-send-email-gregd72002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds ding-libs
+This adds gengetopt
 
 To be included:
 ding-libs
