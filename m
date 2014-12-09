@@ -1,10 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  9 Dec 2014 15:34:06 +0100
-Subject: [Buildroot] [PATCH v4 01/17] package/erlang: export EI_VSN so other
-	packages can use it
+Date: Tue,  9 Dec 2014 15:34:07 +0100
+Subject: [Buildroot] [PATCH v4 02/17] package/erlang-rebar: new host package
 In-Reply-To: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
 References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1418135662-773-2-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1418135662-773-3-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +12,69 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Packages that depend on Erlang may need the Erlang Interface Version
-(aka EI_VSN), so just export it.
+rebar is used to compile Erlang packages.
 
-We do export a static value instead of looking in the file, to avoid
-spawning a shell every time the variable is dereferenced.
+We need  host variant so as to be able to provide it to Erlang packages
+that do not bundle their own version, or bundle a broken version.
 
+Since this is a host-only package, used only internally, we do not
+provide a Kconfig option for it. Packages that need it will depend on
+it.
+
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[yann.morin.1998 at free.fr: extract host-rebar to its own patch]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+
+---
+Changes v2 -> v3:
+  - fix dependencies  (Arnout)
+  - fix download location
+  - add licencing info
+  - add comments
+
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang/erlang.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/erlang-rebar/erlang-rebar.mk | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/erlang-rebar/erlang-rebar.mk
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index ef0e0a2..54e5a56 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# See note below when updating Erlang
- ERLANG_VERSION = 17.3
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
-@@ -13,6 +14,10 @@ ERLANG_LICENSE = EPL
- ERLANG_LICENSE_FILES = EPLICENCE
- ERLANG_INSTALL_STAGING = YES
- 
-+# Whenever updating Erlang, this value should be updated as well, to the
-+# value of EI_VSN in the file lib/erl_interface/vsn.mk
-+ERLANG_EI_VSN = 3.7.18
+diff --git a/package/erlang-rebar/erlang-rebar.mk b/package/erlang-rebar/erlang-rebar.mk
+new file mode 100644
+index 0000000..f29eb75
+--- /dev/null
++++ b/package/erlang-rebar/erlang-rebar.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# erlang-rebar
++#
++################################################################################
 +
- # The configure checks for these functions fail incorrectly
- ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
- 
++ERLANG_REBAR_VERSION = 2.5.1
++
++# Upstream publishes a release, but we can not use it as it is a release of
++# a generated rebar script, when we want the sources. So we have to use the
++# gihub helper in this case.
++ERLANG_REBAR_SITE = $(call github,rebar,rebar,$(ERLANG_REBAR_VERSION))
++
++# Although the file LICENSE state Apache-2.0, a lot (if not all) the files
++# in src/ bear the MIT licence.
++ERLANG_LICENSE = Apache-2.0, MIT
++ERLANG_LICENSE_FILES = LICENSE
++
++# We do not have a target variant, so just define the dependencies,
++# configure and build commands for the host variant.
++HOST_ERLANG_REBAR_DEPENDENCIES = host-erlang
++
++define HOST_ERLANG_REBAR_BUILD_CMDS
++	cd $(@D) && $(HOST_MAKE_ENV) $(MAKE)
++endef
++
++define HOST_ERLANG_REBAR_INSTALL_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/rebar $(HOST_DIR)/usr/bin/rebar
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.1.0
