@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 10 Dec 2014 23:53:46 +0100
-Subject: [Buildroot] [PATCH v3 01/12] toolchain-external: instrument wrapper
-	to warn about unsafe paths
+Date: Wed, 10 Dec 2014 23:53:47 +0100
+Subject: [Buildroot] [PATCH v3 02/12] binutils/2.24: add patch to warn about
+	unsafe library paths
 In-Reply-To: <1418252037-26636-1-git-send-email-romain.naour@openwide.fr>
 References: <1418252037-26636-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1418252037-26636-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1418252037-26636-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,122 +13,308 @@ To: buildroot@busybox.net
 
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-The CodeSourcery toolchains have a very interesting feature: they warn
-the user when an unsafe header or library path is used, i.e a path
-that will lead host headers or libraries to leak into the build.
-
-This commit adds a similar functionality into our external toolchain
-wrapper, so that it can be used with all external toolchains, and can
-also be tuned as needed. By default, the external toolchain wrapper
-now gives warnings such as:
-
-  arm-linux-gcc: WARNING: unsafe header/library path used in cross-compilation: '-I /usr/foo'
-  arm-linux-gcc: WARNING: unsafe header/library path used in cross-compilation: '-L /usr/bleh'
-
-but the compilation continues successfully. One can then easily grep
-in his build log to search for occurences of this message.
-
-Optionally, if BR_COMPILER_PARANOID_UNSAFE_PATH is defined in the
-environment to a non empty value, the external wrapper will instead
-error out and abort the compilation.
+This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
+that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
+etc.). The patch was adapted to binutils 2.24, and modified to support
+the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
+instead of just warn when unsafe paths are used. Even though erroring
+out can be chosen by passing --error-poison-system-directories, we are
+not sure this option in LDFLAGS will always be passed, so having an
+environment variable guarantees it will always be passed, and also
+allows to have an identical behavior to the external toolchain
+wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v3: remove empty line in ext-toolchain-wrapper.c (Romain Naour)
----
- .../toolchain-external/ext-toolchain-wrapper.c     | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ .../2.24/600-poison-system-directories.patch       | 279 +++++++++++++++++++++
+ 1 file changed, 279 insertions(+)
+ create mode 100644 package/binutils/2.24/600-poison-system-directories.patch
 
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index f459a7e..faf977b 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -15,11 +15,13 @@
-  * kind, whether express or implied.
-  */
- 
-+#define _GNU_SOURCE
- #include <stdio.h>
- #include <string.h>
- #include <limits.h>
- #include <unistd.h>
- #include <stdlib.h>
-+#include <errno.h>
- 
- static char path[PATH_MAX];
- static char sysroot[PATH_MAX];
-@@ -69,6 +71,25 @@ static char *predef_args[] = {
- #endif
- };
- 
-+static void check_unsafe_path(const char *path, int paranoid)
-+{
-+	char **c;
-+	static char *unsafe_paths[] = {
-+		"/lib", "/usr/include", "/usr/lib", "/usr/local/include", "/usr/local/lib", NULL,
-+	};
+diff --git a/package/binutils/2.24/600-poison-system-directories.patch b/package/binutils/2.24/600-poison-system-directories.patch
+new file mode 100644
+index 0000000..6a3bf6b
+--- /dev/null
++++ b/package/binutils/2.24/600-poison-system-directories.patch
+@@ -0,0 +1,279 @@
++Patch adapted to binutils 2.23.2 and extended to use
++BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
 +
-+	for (c = unsafe_paths; *c != NULL; c++) {
-+		if (!strncmp(path, *c, strlen(*c))) {
-+			fprintf(stderr, "%s: %s: unsafe header/library path used in cross-compilation: '%s'\n",
-+				program_invocation_short_name,
-+				paranoid ? "ERROR" : "WARNING", path);
-+			if (paranoid)
-+				exit(1);
-+			continue;
-+		}
-+	}
-+}
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
- int main(int argc, char **argv)
- {
- 	char **args, **cur;
-@@ -76,6 +97,8 @@ int main(int argc, char **argv)
- 	char *progpath = argv[0];
- 	char *basename;
- 	char *env_debug;
-+	char *paranoid_wrapper;
-+	int paranoid;
- 	int ret, i, count = 0, debug;
- 
- 	/* Calculate the relative paths */
-@@ -172,6 +195,35 @@ int main(int argc, char **argv)
- 	}
- #endif /* ARCH || CPU */
- 
-+	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-+	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
-+		paranoid = 1;
-+	else
-+		paranoid = 0;
++Upstream-Status: Inappropriate [distribution: codesourcery]
 +
-+	/* Check for unsafe library and header paths */
-+	for (i = 1; i < argc; i++) {
++Patch originally created by Mark Hatle, forward-ported to
++binutils 2.21 by Scott Garman.
 +
-+		/* Skip options that do not start with -I and -L */
-+		if (strncmp(argv[i], "-I", 2) && strncmp(argv[i], "-L", 2))
-+			continue;
++purpose:  warn for uses of system directories when cross linking
 +
-+		/* We handle two cases: first the case where -I/-L and
-+		 * the path are separated by one space and therefore
-+		 * visible as two separate options, and then the case
-+		 * where they are stuck together forming one single
-+		 * option.
-+		 */
-+		if (argv[i][2] == '\0') {
-+			i++;
-+			if (i == argc)
-+				continue;
-+			check_unsafe_path(argv[i], paranoid);
-+		} else {
-+			check_unsafe_path(argv[i] + 2, paranoid);
-+		}
-+	}
++Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
 +
- 	/* append forward args */
- 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
- 	cur += argc - 1;
++2008-07-02  Joseph Myers  <joseph@codesourcery.com>
++
++    ld/
++    * ld.h (args_type): Add error_poison_system_directories.
++    * ld.texinfo (--error-poison-system-directories): Document.
++    * ldfile.c (ldfile_add_library_path): Check
++    command_line.error_poison_system_directories.
++    * ldmain.c (main): Initialize
++    command_line.error_poison_system_directories.
++    * lexsup.c (enum option_values): Add
++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
++    (ld_options): Add --error-poison-system-directories.
++    (parse_args): Handle new option.
++
++2007-06-13  Joseph Myers  <joseph@codesourcery.com>
++
++    ld/
++    * config.in: Regenerate.
++    * ld.h (args_type): Add poison_system_directories.
++    * ld.texinfo (--no-poison-system-directories): Document.
++    * ldfile.c (ldfile_add_library_path): Check
++    command_line.poison_system_directories.
++    * ldmain.c (main): Initialize
++    command_line.poison_system_directories.
++    * lexsup.c (enum option_values): Add
++    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
++    (ld_options): Add --no-poison-system-directories.
++    (parse_args): Handle new option.
++
++2007-04-20  Joseph Myers  <joseph@codesourcery.com>
++
++    Merge from Sourcery G++ binutils 2.17:
++
++    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
++    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
++    ld/
++    * configure.in (--enable-poison-system-directories): New option.
++    * configure, config.in: Regenerate.
++    * ldfile.c (ldfile_add_library_path): If
++    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
++    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
++
++Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
++Signed-off-by: Scott Garman <scott.a.garman@intel.com>
++
++Index: b/ld/config.in
++===================================================================
++--- a/ld/config.in
+++++ b/ld/config.in
++@@ -11,6 +11,9 @@
++    language is requested. */
++ #undef ENABLE_NLS
++ 
+++/* Define to warn for use of native system library directories */
+++#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+++
++ /* Additional extension a shared object might have. */
++ #undef EXTRA_SHLIB_EXTENSION
++ 
++Index: b/ld/configure
++===================================================================
++--- a/ld/configure
+++++ b/ld/configure
++@@ -774,6 +774,7 @@
++ enable_targets
++ enable_64_bit_bfd
++ with_sysroot
+++enable_poison_system_directories
++ enable_gold
++ enable_got
++ enable_werror
++@@ -1429,6 +1430,8 @@
++ 			  (and sometimes confusing) to the casual installer
++   --enable-targets        alternative target configurations
++   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+++  --enable-poison-system-directories
+++                          warn for use of native system library directories
++   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
++   --enable-got=<type>     GOT handling scheme (target, single, negative,
++                           multigot)
++@@ -4339,7 +4342,18 @@
++ fi
++ 
++ 
+++# Check whether --enable-poison-system-directories was given.
+++if test "${enable_poison_system_directories+set}" = set; then :
+++  enableval=$enable_poison_system_directories;
+++else
+++  enable_poison_system_directories=no
+++fi
+++
+++if test "x${enable_poison_system_directories}" = "xyes"; then
++ 
+++$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+++
+++fi
++ 
++ # Check whether --enable-got was given.
++ if test "${enable_got+set}" = set; then :
++Index: b/ld/configure.in
++===================================================================
++--- a/ld/configure.in
+++++ b/ld/configure.in
++@@ -87,6 +87,16 @@
++ AC_SUBST(TARGET_SYSTEM_ROOT)
++ AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
++ 
+++AC_ARG_ENABLE([poison-system-directories],
+++         AS_HELP_STRING([--enable-poison-system-directories],
+++                [warn for use of native system library directories]),,
+++         [enable_poison_system_directories=no])
+++if test "x${enable_poison_system_directories}" = "xyes"; then
+++  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+++       [1],
+++       [Define to warn for use of native system library directories])
+++fi
+++
++ dnl Use --enable-gold to decide if this linker should be the default.
++ dnl "install_as_default" is set to false if gold is the default linker.
++ dnl "installed_linker" is the installed BFD linker name.
++Index: b/ld/ldfile.c
++===================================================================
++--- a/ld/ldfile.c
+++++ b/ld/ldfile.c
++@@ -116,6 +116,23 @@
++     new_dirs->name = concat (ld_sysroot, name + 1, (const char *) NULL);
++   else
++     new_dirs->name = xstrdup (name);
+++
+++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+++  if (command_line.poison_system_directories
+++  && ((!strncmp (name, "/lib", 4))
+++      || (!strncmp (name, "/usr/lib", 8))
+++      || (!strncmp (name, "/usr/local/lib", 14))
+++      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+++   {
+++     if (command_line.error_poison_system_directories)
+++       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++     else
+++       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+++            "cross-compilation\n"), name);
+++   }
+++#endif
+++
++ }
++ 
++ /* Try to open a BFD for a lang_input_statement.  */
++Index: b/ld/ld.h
++===================================================================
++--- a/ld/ld.h
+++++ b/ld/ld.h
++@@ -180,6 +180,14 @@
++   /* If TRUE we'll just print the default output on stdout.  */
++   bfd_boolean print_output_format;
++ 
+++  /* If TRUE (the default) warn for uses of system directories when
+++     cross linking.  */
+++  bfd_boolean poison_system_directories;
+++
+++  /* If TRUE (default FALSE) give an error for uses of system
+++     directories when cross linking instead of a warning.  */
+++  bfd_boolean error_poison_system_directories;
+++
++   /* Big or little endian as set on command line.  */
++   enum endian_enum endian;
++ 
++Index: b/ld/ldmain.c
++===================================================================
++--- a/ld/ldmain.c
+++++ b/ld/ldmain.c
++@@ -266,6 +266,8 @@
++   command_line.warn_mismatch = TRUE;
++   command_line.warn_search_mismatch = TRUE;
++   command_line.check_section_addresses = -1;
+++  command_line.poison_system_directories = TRUE;
+++  command_line.error_poison_system_directories = FALSE;
++ 
++   /* We initialize DEMANGLING based on the environment variable
++      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
++Index: b/ld/ld.texinfo
++===================================================================
++--- a/ld/ld.texinfo
+++++ b/ld/ld.texinfo
++@@ -2175,6 +2175,18 @@
++ 
++ Passing @code{none} for @var{style} disables the setting from any
++ @code{--build-id} options earlier on the command line.
+++
+++ at kindex --no-poison-system-directories
+++ at item --no-poison-system-directories
+++Do not warn for @option{-L} options using system directories such as
+++ at file{/usr/lib} when cross linking.  This option is intended for use
+++in chroot environments when such directories contain the correct
+++libraries for the target system rather than the host.
+++
+++ at kindex --error-poison-system-directories
+++ at item --error-poison-system-directories
+++Give an error instead of a warning for @option{-L} options using
+++system directories when cross linking.
++ @end table
++ 
++ @c man end
++Index: b/ld/lexsup.c
++===================================================================
++--- a/ld/lexsup.c
+++++ b/ld/lexsup.c
++@@ -507,6 +507,14 @@
++     OPTION_IGNORE_UNRESOLVED_SYMBOL},
++     '\0', N_("SYMBOL"),
++     N_("Unresolved SYMBOL will not cause an error or warning"), TWO_DASHES },
+++  { {"no-poison-system-directories", no_argument, NULL,
+++     OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Do not warn for -L options using system directories"),
+++    TWO_DASHES },
+++  { {"error-poison-system-directories", no_argument, NULL,
+++    +     OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+++    '\0', NULL, N_("Give an error for -L options using system directories"),
+++    TWO_DASHES },
++ };
++ 
++ #define OPTION_COUNT ARRAY_SIZE (ld_options)
++@@ -519,6 +527,7 @@
++   int ingroup = 0;
++   char *default_dirlist = NULL;
++   char *shortopts;
+++  char *BR_paranoid_env;
++   struct option *longopts;
++   struct option *really_longopts;
++   int last_optind;
++@@ -1442,9 +1451,21 @@
++               einfo (_("%P%X: --hash-size needs a numeric argument\n"));
++           }
++           break;
+++
+++   case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+++     command_line.poison_system_directories = FALSE;
+++     break;
+++
+++   case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+++     command_line.error_poison_system_directories = TRUE;
+++     break;
++ 	}
++     }
++ 
+++  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+++  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+++    command_line.error_poison_system_directories = TRUE;
+++
++   while (ingroup)
++     {
++       lang_leave_group ();
++Index: b/ld/ldlex.h
++===================================================================
++--- a/ld/ldlex.h
+++++ b/ld/ldlex.h
++@@ -138,6 +138,8 @@
++   OPTION_DEFAULT_SCRIPT,
++   OPTION_PRINT_OUTPUT_FORMAT,
++   OPTION_IGNORE_UNRESOLVED_SYMBOL,
+++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
++ };
++ 
++ /* The initial parser states.  */
 -- 
 1.9.3
