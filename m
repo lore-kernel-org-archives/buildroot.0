@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 21:49:48 +0100
-Subject: [Buildroot] [git commit] mtr: bump to version 0.86 and use github
-	call
-Message-ID: <20141210205014.41DC7800B2@busybox.osuosl.org>
+Date: Wed, 10 Dec 2014 21:52:07 +0100
+Subject: [Buildroot] [PATCH v2 1/1] mtr: bump to version 0.86 and use
+ github call
+In-Reply-To: <1418177637-28038-1-git-send-email-vsergeev@kumunetworks.com>
+References: <1418177455-27127-1-git-send-email-vsergeev@kumunetworks.com>
+ <1418177637-28038-1-git-send-email-vsergeev@kumunetworks.com>
+Message-ID: <20141210215207.384d34ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f1e016d7da35873b55cd24b67a1282d728bd74ae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Ivan Sergeev,
 
-[Thomas: remove useless --without-glib option, as noticed by Vincent.]
+On Tue,  9 Dec 2014 18:13:57 -0800, Ivan Sergeev wrote:
+> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+> ---
+>  package/mtr/mtr.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mtr/mtr.mk |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+Thanks, I've applied your patch, after removing the --without-glib
+option that is no longer useful.
 
-diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
-index aa4d883..3f73a5f 100644
---- a/package/mtr/mtr.mk
-+++ b/package/mtr/mtr.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--MTR_VERSION = 0.85
--MTR_SITE = ftp://ftp.bitwizard.nl/mtr
--MTR_CONF_OPTS = --without-gtk --without-glib
-+MTR_VERSION = v0.86
-+MTR_SITE = $(call github,traviscross,mtr,$(MTR_VERSION))
-+MTR_AUTORECONF = YES
-+MTR_CONF_OPTS = --without-gtk
- MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
- MTR_LICENSE = GPLv2
- MTR_LICENSE_FILES = COPYING
+Also, if you have some time to work on mtr, it would be good to get rid
+of the ugly:
+
+# uClibc has res_ninit but not res_nmkquery
+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+define MTR_DISABLE_RES_NINIT
+        $(SED) 's/#ifdef res_ninit/#if 0/' \
+                $(@D)/dns.c
+endef
+endif
+
+MTR_POST_PATCH_HOOKS += MTR_DISABLE_RES_NINIT
+
+that we have in package/mtr/mtr.mk. To do this, some improvements to
+configure.ac are needed to detect if the C library has res_ninit() and
+res_nmkquery(). Feel free to work this out with upstream :-)
+
+Thanks!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
