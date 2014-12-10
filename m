@@ -1,75 +1,85 @@
-From: Andrey Rodionov <ravonereal@gmail.com>
-Date: Wed, 10 Dec 2014 19:39:19 +0300
-Subject: [Buildroot] Can't run Weston. Gtk 3.14, Wayland 1.6
-Message-ID: <CANjMeV+DBdmFGx+T0C-Odaby0r3kHdROkk099n+-ak6giTnDMg@mail.gmail.com>
+From: =?ISO-8859-15?B?Qmr2cm4=?= Kirchner <bjoern@am-soft.de>
+Date: Wed, 10 Dec 2014 17:26:18 +0100
+Subject: [Buildroot] [PATCH 6/8] Adding sofia-sip
+In-Reply-To: <1418160208-1569-6-git-send-email-gregd72002@gmail.com>
+References: <1418160208-1569-1-git-send-email-gregd72002@gmail.com>
+ <1418160208-1569-6-git-send-email-gregd72002@gmail.com>
+Message-ID: <20141210172618.56940b3a@tux.kirchner>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Gregory,
 
-My device on ARM9 CPU, has only touchscreen, no keyboard. I try to use on
-it GTK3 and Wayland as backend, compiled with Buildroot2014.11.
+Am Tue,  9 Dec 2014 21:23:26 +0000
+schrieb kiwi <gregd72002@gmail.com>:
+
+> From: Gregory Dymarek <gregd72002@gmail.com>
+> 
+> Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
+> ---
+>  package/sofia-sip/Config.in    |  6 ++++++
+>  package/sofia-sip/sofia-sip.mk | 18 ++++++++++++++++++
+>  2 files changed, 24 insertions(+)
+>  create mode 100644 package/sofia-sip/Config.in
+>  create mode 100644 package/sofia-sip/sofia-sip.mk
+> 
+
+there was already a patch to include sofia-sip quite some time ago:
+http://lists.busybox.net/pipermail/buildroot/2012-January/049258.html
+
+I don't now why it never got accepted, but I use sofia-sip quite some
+time based on this patch, but with an old buildroot version (2012.08).
+
+This patch had additional configuration options to select SSL support
+and glib2 support. And there was a patch included which fixed a bug
+in an include file introduced with the sofia-sip 1.12.11 release.
+
+Supposedly the above mentioned patch to buildroot will not work out
+of the box with a current version of buildroot. Maybe you want to
+use this patch as inspiration for your patch to make it better suitable
+for a more generic use.
 
 
-Start Weston:
-openvt -c 2 -s -- weston --backend=/usr/lib/weston/fbdev-backend.so
---tty=2  --log=/tmp/weston.log
+Regards
 
+Bj?rn
 
-weston.log:
-Date: 1970-01-01 UTC
-[00:17:31.159] weston 1.6.0
-               http://wayland.freedesktop.org/
-               Bug reports to:
-https://bugs.freedesktop.org/enter_bug.cgi?product=Wayland&component=weston&version=1.6.0
-               Build: 1.5.93-5-g2858cc2 configure.ac: bump version to 1.6.0
-(2014-09-19 13:40:14 +0300)
-[00:17:31.161] OS: Linux, 3.2.1, #312 PREEMPT Wed Dec 10 12:57:07 MSK 2014,
-armv5tejl
-[00:17:31.162] warning: XDG_RUNTIME_DIR "/tmp" is not configured
-correctly.  Unix access mode must be 0700 (current mode is 777),
-and must be owned by the user (current owner is UID 0).
-Refer to your distribution on how to get it, or
-http://www.freedesktop.org/wiki/Specifications/basedir-spec
-on how to implement it.
-[00:17:31.165] Starting with no config file.
-[00:17:31.166] Loading module '/usr/lib/weston/fbdev-backend.so'
-[00:17:31.213] initializing fbdev backend
-[00:17:31.217] Creating fbdev output.
-[00:17:31.218] Opening fbdev frame buffer.
-[00:17:31.218] Calculating pixman format from:
-                - type: 0 (aux: 0)
-                - visual: 2
-                - bpp: 24 (grayscale: 0)
-                - red: offset: 16, length: 8, MSB: 0
-                - green: offset: 8, length: 8, MSB: 0
-                - blue: offset: 0, length: 8, MSB: 0
-                - transp: offset: 0, length: 0, MSB: 0
-[00:17:31.220] Mapping fbdev frame buffer.
-[00:17:31.222] fbdev output 480??272 px
-               guessing 60 Hz and 96 dpi
-[00:17:31.231] launching '/usr/libexec/weston-keyboard'
-[00:17:31.237] input device ADS7846 Touchscreen, /dev/input/event0 is a
-touch device
-[00:17:31.239] Compositor capabilities:
-               arbitrary surface rotation: yes
-               screen capture uses y-flip: yes
-[00:17:31.254] Loading module '/usr/lib/weston/desktop-shell.so'
-[00:17:31.438] launching '/usr/libexec/weston-desktop-shell'
-[00:17:32.561] input_method died, respawning...
-[00:17:32.562] launching '/usr/libexec/weston-keyboard'
-[00:17:32.919] Error: /usr/libexec/weston-desktop-shell apparently cannot
-run at all.
-               Quitting...[00:17:32.940] Destroying fbdev output.
-[00:17:32.941] Disabling fbdev output.
-[00:17:32.941] Destroying fbdev frame buffer.
-
-What problem with the launch of Weston?
-
-Andrey.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141210/029c04a5/attachment.html>
+> diff --git a/package/sofia-sip/Config.in b/package/sofia-sip/Config.in
+> new file mode 100644
+> index 0000000..3d85ffc
+> --- /dev/null
+> +++ b/package/sofia-sip/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_SOFIA_SIP
+> +	bool "sofia-sip"
+> +	help
+> +	  Adds Sofia-SIP - an open-source SIP User-Agent library,
+> compliant with the IETF RFC3261 specification +
+> +	  http://sofia-sip.sourceforge.net
+> diff --git a/package/sofia-sip/sofia-sip.mk
+> b/package/sofia-sip/sofia-sip.mk new file mode 100644
+> index 0000000..5258844
+> --- /dev/null
+> +++ b/package/sofia-sip/sofia-sip.mk
+> @@ -0,0 +1,18 @@
+> +#############################################################
+> +#
+> +# sofiasip
+> +#
+> +#############################################################
+> +SOFIA_SIP_VERSION = 1.12.11
+> +SOFIA_SIP_SITE =
+> http://downloads.sourceforge.net/project/sofia-sip/sofia-sip/$(SOFIA_SIP_VERSION)
+> +SOFIA_SIP_INSTALL_STAGING = YES +SOFIA_SIP_LICENSE = LGPLv2.1+ 
+> +SOFIA_SIP_LICENSE_FILE = COPYING COPYRIGHTS
+> +
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
+> +	SOFIA_SIP_CONF_OPTS = --enable-ip6
+> +else
+> +	SOFIA_SIP_CONF_OPTS = --disable-ip6
+> +endif
+> +
+> +$(eval $(autotools-package))
