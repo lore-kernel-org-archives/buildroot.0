@@ -1,59 +1,58 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 10 Dec 2014 14:59:32 +0000
-Subject: [Buildroot] [PATCH] libsvgtiny: disable -Werror
-Message-ID: <1418223572-2456-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 10 Dec 2014 15:07:01 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-12-09
+In-Reply-To: <20141210073016.44F67101C84@stock.ovh.net>
+References: <20141210073016.44F67101C84@stock.ovh.net>
+Message-ID: <54886195.5080109@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc-2.20 includes some changes to the include/features.h file
-introduced by this commit:
+On 12/10/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-12-09
 
-  https://sourceware.org/git/?p=glibc.git;a=commit;h=ade40b10ff5fa59a318cf55b9d8414b758e8df78
+>       mipsel |                     bwm-ng-0.6 | NOK | http://autobuild.buildroot.net/results/f22888d87659dda8ff75f25490eab0a68f02bc9b/
 
-Those changes make libsvgtiny fail because some warnings are thrown and
-the build system is using the -Werror option. We disable this to be able
-to build it, or otherwise we will see errors like this one:
+Download problem? Patch sent to add a hash file:
+  http://patchwork.ozlabs.org/patch/419551/
 
-GPERF: src/colors.gperf
-COMPILE: build-Linux-Linux-release-lib-static/src_colors.c
-In file included from
-/br/output/host/usr/mipsel-buildroot-linux-gnu/sysroot/usr/include/string.h:25:0,
-		 from src/colors.gperf:16:
-/br/output/host/usr/mipsel-buildroot-linux-gnu/sysroot/usr/include/features.h:148:3:
-error: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use
-_DEFAULT_SOURCE" [-Werror=cpp]
+>       mipsel |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/55327fff5888392fce235b12f18e673b0f12a46f/
 
-and this one:
+Reported upstream:
+  http://lists.uclibc.org/pipermail/uclibc/2014-October/048699.html
 
-In file included from src/colors.gperf:18:0:
-/home/ldap/vriera/work/mips-buildroots/mips32/output/build/libsvgtiny-12121/src/svgtiny_internal.h:71:0:
-error: "strndup" redefined [-Werror]
+>       mipsel |                  gnupg2-2.0.26 | NOK | http://autobuild.buildroot.net/results/9aaca74dd3a1f82e12358530db4d5d17eb833f7f/
 
-Fixes:
-  http://autobuild.buildroot.net/results/3dd/3dd700405055750262738f867eb5aa08531f5781/
+Patch sent to fix the problem:
+  http://patchwork.ozlabs.org/patch/419632/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
----
- package/libsvgtiny/libsvgtiny.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+>     mips64el |               libsvgtiny-12121 | NOK | http://autobuild.buildroot.net/results/3dd700405055750262738f867eb5aa08531f5781/
 
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index a2d494e..2c33f79 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -25,4 +25,9 @@ define LIBSVGTINY_INSTALL_TARGET_CMDS
- 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) install
- endef
- 
-+define LIBSVGTINY_DISABLE_WERROR
-+	$(SED) 's/-Werror//' $(@D)/Makefile
-+endef
-+LIBSVGTINY_POST_CONFIGURE_HOOKS += LIBSVGTINY_DISABLE_WERROR
-+
- $(eval $(generic-package))
+Patch sent to fix the problem:
+  http://patchwork.ozlabs.org/patch/419693/
+
+>       mipsel |                lighttpd-1.4.35 | NOK | http://autobuild.buildroot.net/results/39c027bf6b76a0f9c15a184f449dadacfaefe980/
+
+Already fixed by:
+
+http://git.buildroot.net/buildroot/commit/?id=c77fbc3a4631b82bc28787c45a941ee0c47104ce
+
+>     mips64el |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/b7861dadf6e9f21ee0341ecc3762693a44b6b3e9/
+
+I can't reproduce this even using the same config file.
+
+>       mipsel |                wvstreams-4.6.1 | NOK | http://autobuild.buildroot.net/results/6735c7386c5f3300db072cf4b54a3696bc5b00af/
+
+Building shared objects when doing static builds. Reported upstream:
+  https://code.google.com/p/wvstreams/issues/detail?id=42
+
+Best regards,
 -- 
-1.7.1
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
