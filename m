@@ -1,82 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Dec 2014 20:23:33 -0300
-Subject: [Buildroot] [PATCH] ipset: bump to version 6.24
-Message-ID: <1418253813-19934-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 11 Dec 2014 00:39:51 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/openpowerlink: bump to
+ version 1.8.5
+In-Reply-To: <20141211001820.613b289b@free-electrons.com>
+References: <1418246696-27658-1-git-send-email-romain.naour@openwide.fr>
+ <20141211001820.613b289b@free-electrons.com>
+Message-ID: <5488D9C7.40405@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...Make_global.am-Don-t-include-host-headers.patch | 29 ----------------------
- package/ipset/ipset.hash                           |  4 +--
- package/ipset/ipset.mk                             |  3 ++-
- 3 files changed, 4 insertions(+), 32 deletions(-)
- delete mode 100644 package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
+Hi Thomas,
 
-diff --git a/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch b/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
-deleted file mode 100644
-index f880979..0000000
---- a/package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 1f1b5ed5e8402214a6516a380247123e6dd75d2a Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 28 Oct 2014 00:19:25 +0200
--Subject: [PATCH] Make_global.am: Don't include host headers
--
--This is bad for cross compilation.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
-- Make_global.am | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/Make_global.am b/Make_global.am
--index 25c4d64715c7..11ea1c333186 100644
----- a/Make_global.am
--+++ b/Make_global.am
--@@ -71,8 +71,7 @@
-- #            curr:rev:age
-- LIBVERSION = 8:0:5
-- 
---AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include \
---	-I/usr/local/include
--+AM_CPPFLAGS = $(kinclude_CFLAGS) $(all_includes) -I$(top_srcdir)/include
-- 
-- AM_CFLAGS = -std=gnu99
-- 
---- 
--2.1.1
--
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 12d61b9..9a79180 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,2 +1,2 @@
--# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.23.tar.bz2.md5sum.txt
--md5	38581e52b47c94a67940351af6ea8d8c	ipset-6.23.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.24.tar.bz2.md5sum.txt
-+md5	8831b8f01458bf2abacc222884195a62	ipset-6.24.tar.bz2
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index d3dbc67..be327ec 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 6.23
-+IPSET_VERSION = 6.24
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
- IPSET_CONF_OPTS = --with-kmod=no
-+# For 0001-Do-not-pass-Werror-when-enable-debug-is-used.patch
- IPSET_AUTORECONF = YES
- IPSET_LICENSE = GPLv2
- IPSET_LICENSE_FILES = COPYING
+Le 11/12/2014 00:18, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Wed, 10 Dec 2014 22:24:54 +0100, Romain Naour wrote:
+>> Remove upstream commit
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>> v2: First bump the vertion to avoid to rename the existing patch.
+>> ---
+>>  ...-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch | 28 ----------------------
+>>  package/openpowerlink/openpowerlink.mk             |  2 +-
+>>  2 files changed, 1 insertion(+), 29 deletions(-)
+>>  delete mode 100644 package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
+> 
+> Applied, thanks. I don't know if it's related to the bump, but it's
+> showing here a message that might be worth investigating:
+> 
+> CMake Warning at /home/thomas/projets/buildroot/output/host/usr/share/cmake-3.0/Modules/FindQt4.cmake:616 (message):
+>   /usr/bin/qmake reported QT_INSTALL_LIBS as "/usr/lib/x86_64-linux-gnu" but
+>   QtCore could not be found there.  Qt is NOT installed correctly for the
+>   target build environment.
+> Call Stack (most recent call first):
+>   CMakeLists.txt:72 (FIND_PACKAGE)
+> 
+
+Qt is only needed for the demo named "demo_mn_qt", but Qt is always checked even
+if this demo is disabled.
+Ok, it's an annoying warning, I'll send a patch upstream.
+
+For real Openpowerlink use case, Qt is not needed.
+
+Best regards,
 -- 
-2.0.4
+Romain Naour
+
+OPEN WIDE Ing?nierie - Paris
+23/25, rue Daviel| 75013 PARIS
+http://ingenierie.openwide.fr
+
+Le blog des technologies libres et embarqu?es :
+http://www.linuxembedded.fr
