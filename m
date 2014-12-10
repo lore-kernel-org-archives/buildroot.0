@@ -1,129 +1,110 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Dec 2014 19:05:32 +0100
-Subject: [Buildroot] [PATCH v2 3/3] fs/rawimg: new rootfs target
-In-Reply-To: <1418141008-18739-4-git-send-email-kaszak@gmail.com>
-References: <1418141008-18739-1-git-send-email-kaszak@gmail.com>
- <1418141008-18739-4-git-send-email-kaszak@gmail.com>
-Message-ID: <20141210180532.GC3926@free.fr>
+Date: Wed, 10 Dec 2014 19:42:19 +0100
+Subject: [Buildroot] [PATCH v3 0/3] [RFC] Reinstall Targets
+In-Reply-To: <1417188306-9035-1-git-send-email-rdkehn@yahoo.com>
+References: <1417188306-9035-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20141210184219.GD3926@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Karoly, All,
+Doug, All,
 
-On 2014-12-09 17:03 +0100, Karoly Kasza spake thusly:
-> Rootfs target to call the new mkrawimg package.
+On 2014-11-28 09:25 -0600, Doug Kehn spake thusly:
+> This RFC proposes adding the following targets to pkg-generic.mk:
+>     <package>-reinstall
+>     <package>-reinstall-target
+>     <package>-reinstall-staging
+>     <package>-reinstall-images
+>     <package>-reinstall-host
+> 
+> These targets remove the package's .stamp_*_installed file to allow the
+> reinstall to execute.  The only method I presently know of to reinstall a
+> package is to make <package>-rebuild.  The proposed targets allow a package
+> reinstall without, unnecessarily incurring a rebuild of the package.
 
-We (Peter, Thomas P., Samuel and I) discussed your patch during the
-Patchwork cleanup session yesterday. We came up to the following
-conclusion.
+We've discussed this series during the Patchwork cleanupsession
+yesterday.
 
-We believe this is trying to cover a very specific use-case, and should
-better be done in a post-image script.
+Peter was concerned about the overhead of those new rules, so it was
+decided I would do some testing before/after this pach was applied.
 
-Basically, we believe that Buildroot should not try to be too smart
-about the filesystem generation. We offer a set of options to build
-basic filesystem images for basic use-cases, as a mean to get
-kick-started more easily and for simple systems.
+Here are the results of my testing.
 
-However, more complex filesystem layouts ought to be outside the scope
-of what Buildroot should try to automate, given the unlimited
-combinations that may exist.
+All testing was done on the same machine, Core-i5 @2.5GHz, 12GiB RAM,
+and Samsung 840pro SSD, machine otherwise compeltely idle. Before
+running the tests, I warmed the cache with: tar cf - . >/dev/null
 
-We are however willing to add host packages that provide the tools
-required for generating various filesystems or manipulating various
-partition types (some of them are already present in the "Host
-utilities" sub-menu) and delegate to the user to provide one or more
-post-image scripts that can use those tools and assemble the required
-filesystem and/or disk images from the rootfs.tar tarball.
+All tests were run on top of ed592d6: poppler: Install files into staging
+(master at the time I did the tests). Tests were out-of-tree, and the
+output was consigned to oblivion with >/dev/null an executed in the
+displayed sequence.
 
-Another point in the conclusion was that we should provide some sample
-post-image scripts that users can have a look at to see how to write
-their own.
+                                            Before      After
 
-As an aside, I add a personal note that was not discussed yesterday: we
-should document in the manual all of the above.
+  * make defconfig                           1.28        1.27
+    make defconfig                           0.34        0.34
+    [disable luajit]
+    make help                                2.72        2.79
 
-As a consequence, we've marked your two patches as Rejected on
-Patchwork:
-  - [2/3] package/mkrawimg: new package
-  - [3/3] fs/rawimg: new rootfs target
+  * make defconfig allyespackageconfig       1.34        1.38
+    make defconfig allyespackageconfig       0.44        0.44
+    [disable luajit]
+    make help                                2.77        2.87
+    [switch to external toolchain, make allyespackageconfig, disable luajit]
+    make toolchain                          21.05       21.73
 
-Thank you for your numerous contributions so far, they are much
-appreciated! :-)
+[*] marks starting from a clean output directory.
+
+I had to disable luajit, because both it and lua are providers of
+luainterpreter.
+
+So, it seems the overhead is negligible.
+
+So, the conclusion is: OK! ;-)
+
+I'll do some further review on the code a bit later, but otherwise we
+decided to accept that feature.
+
+Thank you!
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> In addition to allowing a reinstall to staging and/or target output
+> directories, the proposed targets allow selected packages to be
+> installed to a different 'target' directory.  For example, I attempt to
+> keep software updates as small as possible; therefore, I cherry-pick
+> files to include in the update package.  If I know packages foo and bar
+> have been updated, the following will install those packages to a
+> directory that can be further processed to generate the desired update
+> package.
+> 
+> make TARGET_DIR=${PWD}/update foo-reinstall-target
+> 
+> make TARGET_DIR=${PWD}/update bar-reinstall-target
+> 
+> Doug Kehn (3):
+>   pkg-generic.mk: reinstall targets
+>   manual: reinstall targets
+>   manual: style update
+> 
+>  docs/manual/package-make-target.txt | 26 ++++++++++++++++++++------
+>  package/pkg-generic.mk              | 22 ++++++++++++++++++++++
+>  2 files changed, 42 insertions(+), 6 deletions(-)
+> 
 > ---
+> Changes v2 -> v3:
+>   - Move style updates to separate patch (requested by Thomos)
 > 
 > Changes v1 -> v2:
->   - Removed script into new mkrawimg package.
+>   - Reworked to include reinstall target (requested by Thomas)
+>   - Updated documentation
 > 
->  fs/Config.in        |    1 +
->  fs/rawimg/Config.in |   15 +++++++++++++++
->  fs/rawimg/rawimg.mk |   13 +++++++++++++
->  3 files changed, 29 insertions(+)
->  create mode 100644 fs/rawimg/Config.in
->  create mode 100644 fs/rawimg/rawimg.mk
-> 
-> diff --git a/fs/Config.in b/fs/Config.in
-> index 5853113..36961db 100644
-> --- a/fs/Config.in
-> +++ b/fs/Config.in
-> @@ -8,6 +8,7 @@ source "fs/initramfs/Config.in"
->  source "fs/iso9660/Config.in"
->  source "fs/jffs2/Config.in"
->  source "fs/romfs/Config.in"
-> +source "fs/rawimg/Config.in"
->  source "fs/squashfs/Config.in"
->  source "fs/tar/Config.in"
->  source "fs/ubifs/Config.in"
-> diff --git a/fs/rawimg/Config.in b/fs/rawimg/Config.in
-> new file mode 100644
-> index 0000000..68b518e
-> --- /dev/null
-> +++ b/fs/rawimg/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_TARGET_ROOTFS_RAWIMG
-> +	bool "raw disk image"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	depends on BR2_LINUX_KERNEL
-> +	select BR2_PACKAGE_HOST_MKRAWIMG
-> +	select BR2_LINUX_KERNEL_INSTALL_TARGET
-> +	select BR2_TARGET_ROOTFS_EXT2
-> +	help
-> +	  Build a bootable raw disk image, that can be booted in a VM (e.g. QEMU),
-> +	  or directly written to disk. Creates a valid partition table with MBR,
-> +	  and one primary ext* partition.
-> +
-> +comment "raw disk image needs a Linux kernel to be built"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	depends on !BR2_LINUX_KERNEL
-> diff --git a/fs/rawimg/rawimg.mk b/fs/rawimg/rawimg.mk
-> new file mode 100644
-> index 0000000..c0a720d
-> --- /dev/null
-> +++ b/fs/rawimg/rawimg.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# Build the raw disk image
-> +#
-> +################################################################################
-> +
-> +ROOTFS_RAWIMG_DEPENDENCIES = rootfs-ext2 host-mkrawimg
-> +
-> +define ROOTFS_RAWIMG_CMD
-> +	PATH=$(BR_PATH) mkrawimg $(BINARIES_DIR) $@
-> +endef
-> +
-> +$(eval $(call ROOTFS_TARGET,rawimg))
 > -- 
-> 1.7.10.4
+> 1.9.1
 > 
 > _______________________________________________
 > buildroot mailing list
