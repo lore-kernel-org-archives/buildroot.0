@@ -1,34 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 22:31:29 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
-In-Reply-To: <20141210212821.GI3926@free.fr>
-References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141210205715.GE3926@free.fr>
- <20141210221006.5ab0d254@free-electrons.com>
- <20141210212821.GI3926@free.fr>
-Message-ID: <20141210223129.358afb43@free-electrons.com>
+Date: Wed, 10 Dec 2014 23:11:57 +0100
+Subject: [Buildroot] [PATCH 0/2] qemu: allow selection of host qemu-user
+	from menuconfig
+Message-ID: <1418249519-15794-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hello,
 
-On Wed, 10 Dec 2014 22:28:21 +0100, Yann E. MORIN wrote:
+This patch series is a respin of those old patches posted by Frank
+Hunleth.
 
-> Yes, the GPL gobbles up the LGPL, because of its stronger requirements.
-> But licensing wise, they are both applicable licenses.
-> 
-> Even worse in this case, the resulting combination is probably just
-> LGPLv2.1+, since the only compiled file is LGPLv2.1+.
+The first patch is almost unchanged (just refreshed on top of the
+current master) and creates a menuconfig entry in 'Host utilities' to
+enable Qemu.
 
-Ah, indeed if the only compiled files are LGPLv2.1+, then the
-<pkg>_LICENSE should state that, because it's quite important. Usually
-something like LGPLv2.1+ (library), GPLv2+ (<some other stuff>).
+The second patch is inspired by
+http://patchwork.ozlabs.org/patch/319108/ (from Frank as well), but
+has a completely different implementation, which I find nicer (based
+on make code, plus the check is done much earlier, plus we don't need
+to depend on the toolchain package). Ideas on how to make the 'make'
+checks nicer are welcome.
+
+This set of patches superseds:
+
+  http://patchwork.ozlabs.org/patch/319108/ (from Frank)
+  http://patchwork.ozlabs.org/patch/299014/ (from Frank)
+  http://patchwork.ozlabs.org/patch/419140/ (from Thierry Bultel)
+
+Comments welcome.
 
 Thomas
+
+Frank Hunleth (1):
+  qemu: add to host utilities menu
+
+Thomas Petazzoni (1):
+  qemu: add host/target Linux version check
+
+ package/Config.in.host      |  1 +
+ package/qemu/Config.in.host |  8 ++++++++
+ package/qemu/qemu.mk        | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/qemu/Config.in.host
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
