@@ -1,213 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 21:23:00 +0100
-Subject: [Buildroot] [git commit] util-linux: add security patch for
-	CVE-2014-9114
-Message-ID: <20141210202305.AFC5B7FFA6@busybox.osuosl.org>
+Date: Wed, 10 Dec 2014 21:23:18 +0100
+Subject: [Buildroot] [PATCH] util-linux: add security patch for
+ CVE-2014-9114
+In-Reply-To: <1418242481-2458-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1418242481-2458-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141210212318.22dca16b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d980cd6a73e866b63949a76a9106689522e2e21
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Fixes CVE-2014-9114 - command injection flaw in blkid.
-See https://bugzilla.redhat.com/show_bug.cgi?id=1168485
-Patch upstream.
+On Wed, 10 Dec 2014 17:14:41 -0300, Gustavo Zacarias wrote:
+> Fixes CVE-2014-9114 - command injection flaw in blkid.
+> See https://bugzilla.redhat.com/show_bug.cgi?id=1168485
+> Patch upstream.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...f-no-ms-as.patch => 0001-sscanf-no-ms-as.patch} |    0
- ...ch => 0002-program-invocation-short-name.patch} |    0
- ...ine-mkostemp-for-older-version-of-uClibc.patch} |    0
- package/util-linux/0004-fix-CVE-2014-9114.patch    |  168 ++++++++++++++++++++
- 4 files changed, 168 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/util-linux/util-linux-001-sscanf-no-ms-as.patch b/package/util-linux/0001-sscanf-no-ms-as.patch
-similarity index 100%
-rename from package/util-linux/util-linux-001-sscanf-no-ms-as.patch
-rename to package/util-linux/0001-sscanf-no-ms-as.patch
-diff --git a/package/util-linux/util-linux-002-program-invocation-short-name.patch b/package/util-linux/0002-program-invocation-short-name.patch
-similarity index 100%
-rename from package/util-linux/util-linux-002-program-invocation-short-name.patch
-rename to package/util-linux/0002-program-invocation-short-name.patch
-diff --git a/package/util-linux/util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch b/package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
-similarity index 100%
-rename from package/util-linux/util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
-rename to package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
-diff --git a/package/util-linux/0004-fix-CVE-2014-9114.patch b/package/util-linux/0004-fix-CVE-2014-9114.patch
-new file mode 100644
-index 0000000..95cb1c5
---- /dev/null
-+++ b/package/util-linux/0004-fix-CVE-2014-9114.patch
-@@ -0,0 +1,168 @@
-+From 89e90ae7b2826110ea28c1c0eb8e7c56c3907bdc Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Thu, 27 Nov 2014 13:39:35 +0100
-+Subject: [PATCH] libblkid: care about unsafe chars in cache
-+
-+The high-level libblkid API uses /run/blkid/blkid.tab cache to
-+store probing results. The cache format is
-+
-+   <device NAME="value" ...>devname</device>
-+
-+and unfortunately the cache code does not escape quotation marks:
-+
-+   # mkfs.ext4 -L 'AAA"BBB'
-+
-+   # cat /run/blkid/blkid.tab
-+   ...
-+   <device ... LABEL="AAA"BBB" ...>/dev/sdb1</device>
-+
-+such string is later incorrectly parsed and blkid(8) returns
-+nonsenses. And for use-cases like
-+
-+   # eval $(blkid -o export /dev/sdb1)
-+
-+it's also insecure.
-+
-+Note that mount, udevd and blkid -p are based on low-level libblkid
-+API, it bypass the cache and directly read data from the devices.
-+
-+The current udevd upstream does not depend on blkid(8) output at all,
-+it's directly linked with the library and all unsafe chars are encoded by
-+\x<hex> notation.
-+
-+   # mkfs.ext4 -L 'X"`/tmp/foo` "' /dev/sdb1
-+   # udevadm info --export-db | grep LABEL
-+   ...
-+   E: ID_FS_LABEL=X__/tmp/foo___
-+   E: ID_FS_LABEL_ENC=X\x22\x60\x2ftmp\x2ffoo\x60\x20\x22
-+
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ libblkid/src/read.c | 21 ++++++++++++++++++---
-+ libblkid/src/save.c | 22 +++++++++++++++++++++-
-+ misc-utils/blkid.8  |  5 ++++-
-+ misc-utils/blkid.c  |  4 ++--
-+ 4 files changed, 45 insertions(+), 7 deletions(-)
-+
-+diff --git a/libblkid/src/read.c b/libblkid/src/read.c
-+index 0e91c9c..81ab0df 100644
-+--- a/libblkid/src/read.c
-++++ b/libblkid/src/read.c
-+@@ -252,15 +252,30 @@ static int parse_token(char **name, char **value, char **cp)
-+ 	*value = skip_over_blank(*value + 1);
-+ 
-+ 	if (**value == '"') {
-+-		end = strchr(*value + 1, '"');
-+-		if (!end) {
-++		char *p = end = *value + 1;
-++
-++		/* convert 'foo\"bar'  to 'foo"bar' */
-++		while (*p) {
-++			if (*p == '\\') {
-++				p++;
-++				*end = *p;
-++			} else {
-++				*end = *p;
-++				if (*p == '"')
-++					break;
-++			}
-++			p++;
-++			end++;
-++		}
-++
-++		if (*end != '"') {
-+ 			DBG(READ, ul_debug("unbalanced quotes at: %s", *value));
-+ 			*cp = *value;
-+ 			return -BLKID_ERR_CACHE;
-+ 		}
-+ 		(*value)++;
-+ 		*end = '\0';
-+-		end++;
-++		end = ++p;
-+ 	} else {
-+ 		end = skip_over_word(*value);
-+ 		if (*end) {
-+diff --git a/libblkid/src/save.c b/libblkid/src/save.c
-+index 8216f09..5e8bbee 100644
-+--- a/libblkid/src/save.c
-++++ b/libblkid/src/save.c
-+@@ -26,6 +26,21 @@
-+ 
-+ #include "blkidP.h"
-+ 
-++
-++static void save_quoted(const char *data, FILE *file)
-++{
-++	const char *p;
-++
-++	fputc('"', file);
-++	for (p = data; p && *p; p++) {
-++		if ((unsigned char) *p == 0x22 ||		/* " */
-++		    (unsigned char) *p == 0x5c)			/* \ */
-++			fputc('\\', file);
-++
-++		fputc(*p, file);
-++	}
-++	fputc('"', file);
-++}
-+ static int save_dev(blkid_dev dev, FILE *file)
-+ {
-+ 	struct list_head *p;
-+@@ -43,9 +58,14 @@ static int save_dev(blkid_dev dev, FILE *file)
-+ 
-+ 	if (dev->bid_pri)
-+ 		fprintf(file, " PRI=\"%d\"", dev->bid_pri);
-++
-+ 	list_for_each(p, &dev->bid_tags) {
-+ 		blkid_tag tag = list_entry(p, struct blkid_struct_tag, bit_tags);
-+-		fprintf(file, " %s=\"%s\"", tag->bit_name,tag->bit_val);
-++
-++		fputc(' ', file);			/* space between tags */
-++		fputs(tag->bit_name, file);		/* tag NAME */
-++		fputc('=', file);			/* separator between NAME and VALUE */
-++		save_quoted(tag->bit_val, file);	/* tag "VALUE" */
-+ 	}
-+ 	fprintf(file, ">%s</device>\n", dev->bid_name);
-+ 
-+diff --git a/misc-utils/blkid.8 b/misc-utils/blkid.8
-+index 156a14b..c95b833 100644
-+--- a/misc-utils/blkid.8
-++++ b/misc-utils/blkid.8
-+@@ -200,7 +200,10 @@ partitions.  This output format is \fBDEPRECATED\fR.
-+ .TP
-+ .B export
-+ print key=value pairs for easy import into the environment; this output format
-+-is automatically enabled when I/O Limits (\fB-i\fR option) are requested
-++is automatically enabled when I/O Limits (\fB-i\fR option) are requested.
-++
-++The non-printing characters are encoded by ^ and M- notation and all
-++potentially unsafe characters are escaped.
-+ .RE
-+ .TP
-+ .BI \-O " offset"
-+diff --git a/misc-utils/blkid.c b/misc-utils/blkid.c
-+index a6ca660..1bd8646 100644
-+--- a/misc-utils/blkid.c
-++++ b/misc-utils/blkid.c
-+@@ -306,7 +306,7 @@ static void print_value(int output, int num, const char *devname,
-+ 			printf("DEVNAME=%s\n", devname);
-+ 		fputs(name, stdout);
-+ 		fputs("=", stdout);
-+-		safe_print(value, valsz, NULL);
-++		safe_print(value, valsz, " \\\"'$`<>");
-+ 		fputs("\n", stdout);
-+ 
-+ 	} else {
-+@@ -315,7 +315,7 @@ static void print_value(int output, int num, const char *devname,
-+ 		fputs(" ", stdout);
-+ 		fputs(name, stdout);
-+ 		fputs("=\"", stdout);
-+-		safe_print(value, valsz, "\"");
-++		safe_print(value, valsz, "\"\\");
-+ 		fputs("\"", stdout);
-+ 	}
-+ }
-+-- 
-+2.0.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
