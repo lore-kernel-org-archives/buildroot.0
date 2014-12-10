@@ -1,29 +1,27 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 10 Dec 2014 10:52:42 +0000
-Subject: [Buildroot] [PATCH] bwm-ng: add a hash file
-Message-ID: <1418208762-59111-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 10 Dec 2014 11:28:01 +0000
+Subject: [Buildroot] [PATCH] uclibc: enable
+ UCLIBC_HAS_STRING_GENERIC_OPT in all configs
+In-Reply-To: <20141210000111.08086fdd@free-electrons.com>
+References: <1415804684-17297-1-git-send-email-abrodkin@synopsys.com>
+ <20141210000111.08086fdd@free-electrons.com>
+Message-ID: <1418210881.2160.1.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It will clarify errors like this one:
-  http://autobuild.buildroot.net/results/f22/f22888d87659dda8ff75f25490eab0a68f02bc9b/
+On Wed, 2014-12-10 at 00:01 +0100, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+>
+> We discussed this tonight with Peter, and the general opinion is that
+> since the uClibc developers recommend to have this enabled, it is good
+> to have it, so I've just applied your patch. Thanks!
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/bwm-ng/bwm-ng.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
- create mode 100644 package/bwm-ng/bwm-ng.hash
+Good to know.
+Hopefully it will be beneficial for Buildroot users.
 
-diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
-new file mode 100644
-index 0000000..6bb8355
---- /dev/null
-+++ b/package/bwm-ng/bwm-ng.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c1134358e268329d438b0996399003b0f0b966034fb4b5b138761c2f3c62ffdd  bwm-ng-0.6.tar.gz
--- 
-1.7.1
+And thanks for taking care.
+
+-Alexey
