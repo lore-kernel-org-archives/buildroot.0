@@ -1,44 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Dec 2014 23:19:39 +0100
-Subject: [Buildroot] [PATCH 1/8] Adding janus-gateway and dependencies
-In-Reply-To: <20141210213815.6f06e336@free-electrons.com>
-References: <1418160208-1569-1-git-send-email-gregd72002@gmail.com>
- <54887D2A.3030706@imgtec.com>
- <CAEbDrgk4gmjkchtdMTor_RQp_KEqdUBJRHjUAf_6qj_g-wuQkw@mail.gmail.com>
- <54888208.1000901@imgtec.com>
- <20141210213815.6f06e336@free-electrons.com>
-Message-ID: <20141210221939.GJ3926@free.fr>
+Date: Wed, 10 Dec 2014 23:22:59 +0100
+Subject: [Buildroot] [PATCH 1/1] util-linux: rename patches to follow
+ the new name convention
+In-Reply-To: <5488661E.10704@imgtec.com>
+References: <1418217249-55637-1-git-send-email-kaszak@gmail.com>
+ <5488629F.6010401@imgtec.com>
+ <CABbD_XAEd=6=15Mm8kQC7keOERhrOZUfL+0fcv3j8uD=+k1oCg@mail.gmail.com>
+ <5488661E.10704@imgtec.com>
+Message-ID: <20141210222259.GK3926@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Vicente, All,
 
-On 2014-12-10 21:38 +0100, Thomas Petazzoni spake thusly:
-> Dear Vicente Olivert Riera,
-> 
-> On Wed, 10 Dec 2014 17:25:28 +0000, Vicente Olivert Riera wrote:
-> 
-> > On 12/10/2014 05:23 PM, Gregory Dymarek wrote:
-> > > Do you need hashes for GIT/SVN checkouts?
-> > 
-> > Well, you are downloading a tarball which should be always the same, no?
-> 
-> No, for git and svn you are not downloading a tarball. We are cloning
-> the Git repository or checkouting the SVN repository, and then making a
-> tarball out of it.
+On 2014-12-10 15:26 +0000, Vicente Olivert Riera spake thusly:
+> On 12/10/2014 03:21 PM, K?roly Kasza wrote:
+> > Wouldn't be better to do all packages in one run of "git mv"-s?
 
-But inthis case, we're not doing a git-clone, we;re using a snapshot.
-Which should by the way be using the github helper, rather than the
-manaul _SITE method.
+Yes, there's a patch from Samuel doing that with a (Python!) script.
 
-> I don't think we have any guarantee that the tarball
-> created on the different machines will be the same, due to the file
-> timestamps.
+> I'm not sure, because there are lots of patches in the patchwork queue
+> which may be touch some package-patches, so if you send a patch to
+> rename all package-patches for all buildroot packages, there could be
+> lots of patches that couldn't be applied as they are. I think it's
+> better to fix one package at a time, but that's only my opinion, I could
+> be wrong.
 
-No we do not.
+Well, except if one really want to bust his number of commits, there is
+no reason to do so.
+
+Yesterday during the Patchwork cleanup session, Peter agreed on using
+Samuel's script to rename all patches in one go.
 
 Regards,
 Yann E. MORIN.
