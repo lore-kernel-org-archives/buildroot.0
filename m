@@ -1,31 +1,28 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Dec 2014 21:40:06 -0300
-Subject: [Buildroot] [PATCH] wget: add host-pkgconf dependency
-Message-ID: <1418172006-18113-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  9 Dec 2014 21:40:40 -0300
+Subject: [Buildroot] [PATCH] usbutils: drop double needs from comment
+Message-ID: <1418172040-18323-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Uses pkgconfig since 1.16.1+ to find libraries.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wget/wget.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/usbutils/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index b19c987..bd8e378 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -7,6 +7,7 @@
- WGET_VERSION = 1.16.1
- WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
-+WGET_DEPENDENCIES = host-pkgconf
- WGET_LICENSE = GPLv3+
- WGET_LICENSE_FILES = COPYING
+diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
+index 7920ab8..923853a 100644
+--- a/package/usbutils/Config.in
++++ b/package/usbutils/Config.in
+@@ -8,5 +8,5 @@ config BR2_PACKAGE_USBUTILS
  
+ 	  http://linux-usb.sourceforge.net/
+ 
+-comment "usbutils needs needs udev /dev management and toolchain w/ threads"
++comment "usbutils needs udev /dev management and toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
 -- 
 2.0.4
