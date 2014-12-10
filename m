@@ -1,34 +1,38 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Thu, 11 Dec 2014 00:18:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.0.2
-Message-ID: <1418253529-10179-1-git-send-email-jkrause@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Dec 2014 00:19:05 +0100
+Subject: [Buildroot] [PATCH v3 00/12] Paranoid header and library path
+ checking
+In-Reply-To: <1418252037-26636-1-git-send-email-romain.naour@openwide.fr>
+References: <1418252037-26636-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141211001905.1e89025f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libuv has moved to github.com/libuv/libuv
+Dear Romain Naour,
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/libuv/libuv.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, 10 Dec 2014 23:53:45 +0100, Romain Naour wrote:
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 08bf8c5..33f8d2c 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v0.11.29
--LIBUV_SITE = $(call github,joyent,libuv,$(LIBUV_VERSION))
-+LIBUV_VERSION = v1.0.2
-+LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
- LIBUV_AUTORECONF = YES
+> Thomas Petazzoni (12):
+>   toolchain-external: instrument wrapper to warn about unsafe paths
+>   binutils/2.24: add patch to warn about unsafe library paths
+>   binutils/2.23: add patch to warn about unsafe library paths
+>   binutils/2.22: add patch to warn about unsafe library paths
+>   binutils/arc-2014.08: add patch to warn about unsafe library paths
+>   gcc/4.9: add patch to warn about unsafe header paths
+>   gcc/4.8: add patch to warn about unsafe header paths
+>   gcc/arc-2014.08: add patch to warn about unsafe header paths
+>   gcc/4.7: add patch to warn about unsafe header paths
+>   gcc: enable poison system directories option
+>   binutils: enable poison system directories option
+>   Add option for paranoid unsafe path checking
+
+Series applied! Thanks a lot for re-spinning to fix the latest issues.
+
+Thomas
 -- 
-2.1.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
