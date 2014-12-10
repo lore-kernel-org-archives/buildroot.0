@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 19:59:05 +0100
-Subject: [Buildroot] [PATCH v2 1/1] mtr: bump to version 0.86 and use
- github call
-In-Reply-To: <548876B8.6060104@imgtec.com>
-References: <1418177455-27127-1-git-send-email-vsergeev@kumunetworks.com>
- <1418177637-28038-1-git-send-email-vsergeev@kumunetworks.com>
- <548876B8.6060104@imgtec.com>
-Message-ID: <20141210195905.21b94034@free-electrons.com>
+Date: Wed, 10 Dec 2014 20:01:26 +0100
+Subject: [Buildroot] [git commit] barebox: bump to version 2014.12.0
+Message-ID: <20141210190135.420F780154@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=4ca4fd5921284a7aaf561dc12283e43f1fb6d42f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Dec 2014 16:37:12 +0000, Vicente Olivert Riera wrote:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/barebox/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> Also, while you are doing the version bump, why not adding a hash file
-> as well:
-> 
-> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-hash
-
-Are you sure it makes sense to have hash files for github downloads?
-
-There were some patches from Maxime Hadjinlian to remove hash files for
-github-sourced packages.
-
-Also, when you reply to someone on the list, you should reply both to
-the person (as To:) and the list (as Cc:). This will make sure the
-person you reply to actually sees the message, and your message is not
-mixed in the fairly heavy flow of e-mails that goes through the list.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index f534f98..45970f2 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2014.11.0"
++	bool "2014.12.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2014.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
