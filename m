@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Dec 2014 22:03:19 +0100
-Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
-In-Reply-To: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 10 Dec 2014 22:05:38 +0100
+Subject: [Buildroot] [PATCH v2 2/4] menu-cache: new package
+In-Reply-To: <1416583990-35169-2-git-send-email-Vincent.Riera@imgtec.com>
 References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141210210319.GF3926@free.fr>
+ <1416583990-35169-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141210210538.GG3926@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,56 @@ To: buildroot@busybox.net
 
 Vicente, All,
 
-Some further review I previously missed...
-
 On 2014-11-21 15:33 +0000, Vicente Olivert Riera spake thusly:
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 [--SNIP--]
-> diff --git a/package/libfm-extra/Config.in b/package/libfm-extra/Config.in
+> diff --git a/package/menu-cache/menu-cache.hash b/package/menu-cache/menu-cache.hash
 > new file mode 100644
-> index 0000000..f0e0b63
+> index 0000000..3b9e5c4
 > --- /dev/null
-> +++ b/package/libfm-extra/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBFM_EXTRA
-> +	bool "libfm-extra"
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +	depends on BR2_USE_MMU # libglib2
-> +	help
-> +	  The libfm-extra package contains a library and other files
-> +	  required by menu-cache-gen libexec of menu-cache-1.0.0
+> +++ b/package/menu-cache/menu-cache.hash
+> @@ -0,0 +1,2 @@
+> +# From http://blog.lxde.org/?p=1299
+> +sha1  e7b3854109f9826472cf9795e924acebe5e27861  menu-cache-1.0.0.tar.xz
+> diff --git a/package/menu-cache/menu-cache.mk b/package/menu-cache/menu-cache.mk
+> new file mode 100644
+> index 0000000..a8ff21b
+> --- /dev/null
+> +++ b/package/menu-cache/menu-cache.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# menu-cache
+> +#
+> +################################################################################
 > +
-> +	  http://wiki.lxde.org/en/Libfm
-> +
-> +comment "libfm-extra needs a toolchain w/ wchar, threads, C++"
+> +MENU_CACHE_VERSION_MAJOR = 1.0
+> +MENU_CACHE_VERSION_MINOR = 0
 
-"C++" is not needed. Stray copy-paste? ;-)
+Drop the _MINOR variable.
+
+> +MENU_CACHE_VERSION = $(MENU_CACHE_VERSION_MAJOR).$(MENU_CACHE_VERSION_MINOR)
+
+MENU_CACHE_VERSION = $(MENU_CACHE_VERSION_MAJOR).0
 
 Regards,
 Yann E. MORIN.
+
+> +MENU_CACHE_SOURCE = menu-cache-$(MENU_CACHE_VERSION).tar.xz
+> +MENU_CACHE_SITE = http://sourceforge.net/projects/lxde/files/menu-cache/$(MENU_CACHE_VERSION_MAJOR)
+> +MENU_CACHE_DEPENDENCIES = libfm-extra libglib2
+> +MENU_CACHE_LICENSE = LGPLv2.1
+> +MENU_CACHE_LICENSE_FILES = COPYING
+> +MENU_CACHE_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
