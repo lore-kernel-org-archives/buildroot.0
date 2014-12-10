@@ -1,20 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 11 Dec 2014 00:05:52 +0100
-Subject: [Buildroot] [git commit] gcc/4.9: add patch to warn about unsafe
+Subject: [Buildroot] [git commit] gcc/4.7: add patch to warn about unsafe
 	header paths
-Message-ID: <20141210230619.4A0017FA91@busybox.osuosl.org>
+Message-ID: <20141210230619.622F37FA91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc3fa082e0308d8eda8a486e3a395a38f5219665
+commit: http://git.buildroot.net/buildroot/commit/?id=5b7a4ffd500523b630d7b6a9629d6691d23ece34
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This commit adds a patch to gcc borrowed from CodeSourcery/Yocto that
 warns about unsafe include paths (i.e /usr/include,
-/usr/local/include, etc.). The patch was adapted to gcc 4.9.1, and
+/usr/local/include, etc.). The patch was adapted to gcc 4.7.4, and
 modified to support the BR_COMPILER_PARANOID_UNSAFE_PATH environment
 variable to error out instead of just warn when unsafe paths are
 used. Even though erroring out can be chosen by passing
@@ -26,21 +26,21 @@ identical behavior to the external toolchain wrapper.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 ---
- .../4.9.2/910-gcc-poison-system-directories.patch  |  207 ++++++++++++++++++++
+ .../4.7.4/910-gcc-poison-system-directories.patch  |  207 ++++++++++++++++++++
  1 files changed, 207 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/4.9.2/910-gcc-poison-system-directories.patch b/package/gcc/4.9.2/910-gcc-poison-system-directories.patch
+diff --git a/package/gcc/4.7.4/910-gcc-poison-system-directories.patch b/package/gcc/4.7.4/910-gcc-poison-system-directories.patch
 new file mode 100644
-index 0000000..975f01f
+index 0000000..bc2d5c6
 --- /dev/null
-+++ b/package/gcc/4.9.2/910-gcc-poison-system-directories.patch
++++ b/package/gcc/4.7.4/910-gcc-poison-system-directories.patch
 @@ -0,0 +1,207 @@
 +From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
 +From: Khem Raj <raj.khem@gmail.com>
 +Date: Fri, 29 Mar 2013 08:59:00 +0400
 +Subject: [PATCH 16/35] gcc: poison-system-directories
 +
-+Adapted to Buildroot and gcc 4.9.1 by Thomas Petazzoni, especially the
++Adapted to Buildroot and gcc 4.7.4 by Thomas Petazzoni, especially the
 +addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
 +
 +Signed-off-by: Khem Raj <raj.khem@gmail.com>
@@ -62,9 +62,9 @@ index 0000000..975f01f
 +===================================================================
 +--- a/gcc/common.opt
 ++++ b/gcc/common.opt
-+@@ -603,6 +603,10 @@
-+ Common Var(pedantic) Warning
-+ Issue warnings needed for strict compliance to the standard
++@@ -585,6 +585,10 @@
++ Common Var(warn_padded) Warning
++ Warn when padding is required to align structure members
 + 
 ++Wpoison-system-directories
 ++Common Var(flag_poison_system_directories) Init(1) Warning
@@ -77,7 +77,7 @@ index 0000000..975f01f
 +===================================================================
 +--- a/gcc/config.in
 ++++ b/gcc/config.in
-+@@ -138,6 +138,12 @@
++@@ -144,6 +144,12 @@
 + #endif
 + 
 + 
@@ -94,24 +94,24 @@ index 0000000..975f01f
 +===================================================================
 +--- a/gcc/configure
 ++++ b/gcc/configure
-+@@ -929,6 +929,7 @@
++@@ -918,6 +918,7 @@
++ with_system_zlib
 + enable_maintainer_mode
-+ enable_link_mutex
 + enable_version_specific_runtime_libs
 ++enable_poison_system_directories
 + enable_plugin
-+ enable_host_shared
 + enable_libquadmath_support
-+@@ -1657,6 +1658,8 @@
++ with_linker_hash_style
++@@ -1632,6 +1633,8 @@
 +   --enable-version-specific-runtime-libs
 +                           specify that runtime libraries should be installed
 +                           in a compiler-specific directory
 ++  --enable-poison-system-directories
 ++                          warn for use of native system header directories
 +   --enable-plugin         enable plugin support
-+   --enable-host-shared    build host code as shared libraries
 +   --disable-libquadmath-support
-+@@ -27765,6 +27768,19 @@
++                           disable libquadmath support for Fortran
++@@ -27186,6 +27189,19 @@
 + fi
 + 
 + 
@@ -135,7 +135,7 @@ index 0000000..975f01f
 +===================================================================
 +--- a/gcc/configure.ac
 ++++ b/gcc/configure.ac
-+@@ -5411,6 +5411,16 @@
++@@ -5037,6 +5037,16 @@
 +                 [specify that runtime libraries should be
 +                  installed in a compiler-specific directory])])
 + 
@@ -161,10 +161,10 @@ index 0000000..975f01f
 + -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
 + -Wpointer-arith  -Wno-pointer-to-int-cast @gol
 ++-Wno-poison-system-directories @gol
-+ -Wredundant-decls  -Wno-return-local-addr @gol
++ -Wredundant-decls @gol
 + -Wreturn-type  -Wsequence-point  -Wshadow @gol
-+ -Wsign-compare  -Wsign-conversion -Wfloat-conversion @gol
-+@@ -4209,6 +4210,14 @@
++ -Wsign-compare  -Wsign-conversion  -Wstack-protector @gol
++@@ -3880,6 +3881,14 @@
 +  for most targets, it is made up of code and thus requires the stack
 +  to be made executable in order for the program to work properly.
 + 
@@ -183,23 +183,23 @@ index 0000000..975f01f
 +===================================================================
 +--- a/gcc/gcc.c
 ++++ b/gcc/gcc.c
-+@@ -770,6 +770,8 @@
-+    "%{fuse-ld=*:-fuse-ld=%*}\
-+     %X %{o*} %{e*} %{N} %{n} %{r}\
-+     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}} " VTABLE_VERIFICATION_SPEC " \
++@@ -674,6 +674,8 @@
++     %{flto} %{flto=*} %l " LINK_PIE_SPEC \
++    "%X %{o*} %{e*} %{N} %{n} %{r}\
++     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}}\
 ++    %{Wno-poison-system-directories:--no-poison-system-directories}\
 ++    %{Werror=poison-system-directories:--error-poison-system-directories}\
-+     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
++     %{static:} %{L*} %(mfwrap) %(link_libgcc) %o\
 +     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
-+     %{fcilkplus:%:include(libcilkrts.spec)%(link_cilkrts)}\
-+@@ -4034,6 +4036,12 @@
++     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
++@@ -3907,6 +3909,12 @@
 +       gcc_assert (!compare_debug_opt);
 +     }
 + 
 ++  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
 ++  if (temp && strlen(temp) > 0)
 ++    {
-++      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+++      save_switch("-Werror=poison-system-directories", 0, NULL, false);
 ++    }
 ++
 +   /* Set up the search paths.  We add directories that we expect to
@@ -209,7 +209,7 @@ index 0000000..975f01f
 +===================================================================
 +--- a/gcc/incpath.c
 ++++ b/gcc/incpath.c
-+@@ -28,6 +28,7 @@
++@@ -30,6 +30,7 @@
 + #include "intl.h"
 + #include "incpath.h"
 + #include "cppdefault.h"
@@ -217,7 +217,7 @@ index 0000000..975f01f
 + 
 + /* Microsoft Windows does not natively support inodes.
 +    VMS has non-numeric inodes.  */
-+@@ -382,6 +383,24 @@
++@@ -373,6 +374,24 @@
 + 	}
 +       fprintf (stderr, _("End of search list.\n"));
 +     }
