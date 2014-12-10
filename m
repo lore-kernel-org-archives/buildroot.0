@@ -1,30 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Dec 2014 21:24:23 +0100
-Subject: [Buildroot] [PATCH] jasper: add a patch fixing CVE-2014-9029
-In-Reply-To: <a441c888e8a3be335e70d5b307eda34afe16012c.1418237843.git.baruch@tkos.co.il>
-References: <a441c888e8a3be335e70d5b307eda34afe16012c.1418237843.git.baruch@tkos.co.il>
-Message-ID: <20141210212423.1193433d@free-electrons.com>
+Date: Wed, 10 Dec 2014 21:25:04 +0100
+Subject: [Buildroot] [git commit] wget: add host-pkgconf dependency
+Message-ID: <20141210202513.E986A80168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=ca0a1844aed988969a85de590435deb48289ca0a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Dec 2014 20:57:23 +0200, Baruch Siach wrote:
-> See http://www.ocert.org/advisories/ocert-2014-009.html for the details.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/jasper/0001-fix-CVE-2014-9029.patch | 36 +++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/jasper/0001-fix-CVE-2014-9029.patch
+Uses pkgconfig since 1.16.1+ to find libraries.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wget/wget.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index b19c987..bd8e378 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -7,6 +7,7 @@
+ WGET_VERSION = 1.16.1
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
++WGET_DEPENDENCIES = host-pkgconf
+ WGET_LICENSE = GPLv3+
+ WGET_LICENSE_FILES = COPYING
+ 
