@@ -1,144 +1,53 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 10 Dec 2014 22:24:55 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/openpowerlink: do not override
-	CMAKE_SYSTEM_PROCESSOR
-In-Reply-To: <1418246696-27658-1-git-send-email-romain.naour@openwide.fr>
-References: <1418246696-27658-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1418246696-27658-2-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 10 Dec 2014 22:28:21 +0100
+Subject: [Buildroot] [PATCH v2 1/4] libfm-extra: new package
+In-Reply-To: <20141210221006.5ab0d254@free-electrons.com>
+References: <1416583990-35169-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20141210205715.GE3926@free.fr>
+ <20141210221006.5ab0d254@free-electrons.com>
+Message-ID: <20141210212821.GI3926@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
+Thomas, All,
 
-This commit must be applied after "pkg-cmake.mk: Set CMAKE_SYSTEM_PROCESSOR"
-http://patchwork.ozlabs.org/patch/411789/
+On 2014-12-10 22:10 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 10 Dec 2014 21:57:15 +0100, Yann E. MORIN wrote:
+> 
+> > Also, the only file that seem to get compiled is:
+> >     src/extra/fm-xml-file.c
+> > 
+> > for which the header states it is LGPLv2.1+.
+> > 
+> > So, even if there's only the COPYING for the GPLv2 and that we only
+> > compile an LGPLv2.1+ file, I'd state both licenses.
+> 
+> I'm not sure here: since some files of the library are under the GPL,
+> the library as a whole is under the GPL, even though some parts of it
+> are under other licenses.
 
-v2: rework the regex (Samuel Martin)
----
- ...a-better-regex-for-cmake-system-processor.patch | 89 ++++++++++++++++++++++
- package/openpowerlink/openpowerlink.mk             | 10 ---
- 2 files changed, 89 insertions(+), 10 deletions(-)
- create mode 100644 package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
+Yes, the GPL gobbles up the LGPL, because of its stronger requirements.
+But licensing wise, they are both applicable licenses.
 
-diff --git a/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch b/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
-new file mode 100644
-index 0000000..6fd1990
---- /dev/null
-+++ b/package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
-@@ -0,0 +1,89 @@
-+From 9fd3aef2f9bb7a2b05b6823281bb5c988fa25149 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Mon, 17 Nov 2014 23:27:05 +0100
-+Subject: [PATCH 1/2] [FIX] use a better regex for CMAKE_SYSTEM_PROCESSOR
-+
-+According to CMake doc, CMAKE_SYSTEM_PROCESSOR is set to the
-+output of the command "uname -p" (in fact it is the output of "uname
-+-m"). This is only true for native compilation.
-+
-+In the case of cross-compilation, the CMake code does not set anything,
-+it just expects the CMAKE_SYSTEM_* variables to be set in the
-+toolchain file.
-+
-+Add a test matching the patern "^i.86$" and keep the old one "x86" for
-+compatibility.
-+By doing that, factorize this test using "^(i.86|x86(_64)?)$".
-+
-+Thanks to Samuel Martin [1]
-+[1] http://lists.busybox.net/pipermail/buildroot/2014-November/112163.html
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt         | 15 ++++-----------
-+ .../X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt  | 15 ++++-----------
-+ 2 files changed, 8 insertions(+), 22 deletions(-)
-+
-+diff --git a/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt b/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
-+index 271ecdc..b49ef53 100644
-+--- a/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
-++++ b/Examples/X86/Linux/gnu/demo_kernel/CMakeLists.txt
-+@@ -154,21 +154,14 @@ SET(MODULE_SOURCE_FILES
-+     ${POWERLINK_SOURCE_DIR}/ObjDicts/${OBJDICT}/Objdict.c
-+ )
-+ 
-+-IF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-++IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$")
-+     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-+-
-+-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL arm
-+-        OR CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
-++ELSEIF (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-+     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amiarm.c)
-+-
-+-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL i686
-+-    OR CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
-+-    SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-+-
-+-ELSE (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-++ELSE (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$")
-+     MESSAGE(FATAL_ERROR
-+             "ami: CMAKE_SYSTEM_PROCESSOR is set to ${CMAKE_SYSTEM_PROCESSOR}. Valid targets are (x86, x86_64, arm, armv7l, i686).")
-+-ENDIF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-++ENDIF (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$")
-+ 
-+ SET(MODULE_FILE
-+     ${MODULE_NAME}.ko
-+diff --git a/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt b/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
-+index 1b47c76..f534a4d 100644
-+--- a/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
-++++ b/Examples/X86/Linux/gnu/powerlink_kernel_module/CMakeLists.txt
-+@@ -171,21 +171,14 @@ ELSE(CFG_POWERLINK_EDRV STREQUAL "I210")
-+     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/Target/X86/Linux/gnu/generic/TimerHighReskX86.c)
-+ ENDIF(CFG_POWERLINK_EDRV STREQUAL "I210")
-+ 
-+-IF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-++IF (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$")
-+     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-+-
-+-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL arm
-+-        OR CMAKE_SYSTEM_PROCESSOR STREQUAL armv7l)
-++ELSEIF (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-+     SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amiarm.c)
-+-
-+-ELSEIF (   CMAKE_SYSTEM_PROCESSOR STREQUAL i686
-+-	OR CMAKE_SYSTEM_PROCESSOR STREQUAL x86_64)
-+-    SET(MODULE_SOURCE_FILES ${MODULE_SOURCE_FILES} ${POWERLINK_SOURCE_DIR}/EplStack/amix86.c)
-+-
-+-ELSE (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-++ELSE (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$")
-+     MESSAGE(FATAL_ERROR
-+             "ami: CMAKE_SYSTEM_PROCESSOR is set to ${CMAKE_SYSTEM_PROCESSOR}. Valid targets are (x86, x86_64, arm, armv7l, i686).")
-+-ENDIF (CMAKE_SYSTEM_PROCESSOR STREQUAL x86)
-++ENDIF (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86|x86(_64)?)$")
-+ 
-+ SET(MODULE_FILE
-+     ${MODULE_NAME}.ko
-+-- 
-+1.9.3
-+
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index dcaf386..37cc90e 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -11,16 +11,6 @@ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
- OPENPOWERLINK_LICENSE_FILES = license.txt
- OPENPOWERLINK_INSTALL_STAGING = YES
- 
--ifeq ($(BR2_i386),y)
--OPENPOWERLINK_ARCH = x86
--endif
--
--ifeq ($(BR2_x86_64),y)
--OPENPOWERLINK_ARCH = x86_64
--endif
--
--OPENPOWERLINK_CONF_OPTS = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
--
- # There is no shared lib in openpowerlink,
- # so force static lib to build libpowerlink.a
- OPENPOWERLINK_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
+Even worse in this case, the resulting combination is probably just
+LGPLv2.1+, since the only compiled file is LGPLv2.1+.
+
+So, I'd prefer we stride on the safe side, and include both licenses,
+and delegate to the user (and/or his legal team) the decision as to what
+license is applicable.
+
+We are not lawyer, and this is a complicated matter.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
