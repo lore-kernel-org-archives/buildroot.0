@@ -1,129 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 11 Dec 2014 00:05:52 +0100
-Subject: [Buildroot] [git commit] toolchain-external: instrument wrapper to
-	warn about unsafe paths
-Message-ID: <20141210230619.16DE480174@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Add option for paranoid unsafe path
+	checking
+Message-ID: <20141210230619.7C7EC7FA91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5aa205eba4063ddf17a2e11420eea2a8aa7536a5
+commit: http://git.buildroot.net/buildroot/commit/?id=4ac8f78d3771a7d444234d637b043159c2b12243
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The CodeSourcery toolchains have a very interesting feature: they warn
-the user when an unsafe header or library path is used, i.e a path
-that will lead host headers or libraries to leak into the build.
+This commit adds a Config.in option to the "Build options" submenu to
+enable paranoid checking of unsafe paths. This mechanism is added as
+an option so that when we'll enable it in the autobuilders, people
+trying to reproduce the build failures will be able to do so by just
+downloading the configuration file. If instead we were leaving this
+feature as an environment variable, everyone would have to remember to
+pass this environment variable to reproduce build issues. And certain
+build issues triggered by paranoid unsafe patch checking may not be
+visible in the build output, for example when they happen during the
+execution of configure scripts.
 
-This commit adds a similar functionality into our external toolchain
-wrapper, so that it can be used with all external toolchains, and can
-also be tuned as needed. By default, the external toolchain wrapper
-now gives warnings such as:
-
-  arm-linux-gcc: WARNING: unsafe header/library path used in cross-compilation: '-I /usr/foo'
-  arm-linux-gcc: WARNING: unsafe header/library path used in cross-compilation: '-L /usr/bleh'
-
-but the compilation continues successfully. One can then easily grep
-in his build log to search for occurences of this message.
-
-Optionally, if BR_COMPILER_PARANOID_UNSAFE_PATH is defined in the
-environment to a non empty value, the external wrapper will instead
-error out and abort the compilation.
+Since this option is fairly advanced, a new submenu inside "Build
+options" is created, for Advanced options.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 ---
- .../toolchain-external/ext-toolchain-wrapper.c     |   52 ++++++++++++++++++++
- 1 files changed, 52 insertions(+), 0 deletions(-)
+ Config.in           |   20 ++++++++++++++++++++
+ package/Makefile.in |    4 ++++
+ 2 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index f459a7e..faf977b 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -15,11 +15,13 @@
-  * kind, whether express or implied.
-  */
+diff --git a/Config.in b/Config.in
+index 1aa1080..3374e0f 100644
+--- a/Config.in
++++ b/Config.in
+@@ -569,6 +569,26 @@ config BR2_GLOBAL_PATCH_DIR
+ 	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
+ 	  then all *.patch files in the directory will be applied.
  
-+#define _GNU_SOURCE
- #include <stdio.h>
- #include <string.h>
- #include <limits.h>
- #include <unistd.h>
- #include <stdlib.h>
-+#include <errno.h>
++menu "Advanced"
++
++config BR2_COMPILER_PARANOID_UNSAFE_PATH
++	bool "paranoid check of library/header paths"
++	help
++	  By default, when this option is disabled, when the Buildroot
++	  cross-compiler will encounter an unsafe library or header
++	  path (such as /usr/include, or /usr/lib), the compiler will
++	  display a warning.
++
++	  By enabling this option, this warning is turned into an
++	  error, which will completely abort the build when such
++	  unsafe paths are encountered.
++
++	  Note that this mechanism is available for both the internal
++	  toolchain (through gcc and binutils patches) and external
++	  toolchain backends (through the external toolchain wrapper).
++
++endmenu
++
+ endmenu
  
- static char path[PATH_MAX];
- static char sysroot[PATH_MAX];
-@@ -69,6 +71,25 @@ static char *predef_args[] = {
- #endif
- };
+ source "toolchain/Config.in"
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 36ecf0b..f60b08d 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -398,6 +398,10 @@ else
+ SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
+ endif
  
-+static void check_unsafe_path(const char *path, int paranoid)
-+{
-+	char **c;
-+	static char *unsafe_paths[] = {
-+		"/lib", "/usr/include", "/usr/lib", "/usr/local/include", "/usr/local/lib", NULL,
-+	};
++ifeq ($(BR2_COMPILER_PARANOID_UNSAFE_PATH),y)
++export BR_COMPILER_PARANOID_UNSAFE_PATH=enabled
++endif
 +
-+	for (c = unsafe_paths; *c != NULL; c++) {
-+		if (!strncmp(path, *c, strlen(*c))) {
-+			fprintf(stderr, "%s: %s: unsafe header/library path used in cross-compilation: '%s'\n",
-+				program_invocation_short_name,
-+				paranoid ? "ERROR" : "WARNING", path);
-+			if (paranoid)
-+				exit(1);
-+			continue;
-+		}
-+	}
-+}
-+
- int main(int argc, char **argv)
- {
- 	char **args, **cur;
-@@ -76,6 +97,8 @@ int main(int argc, char **argv)
- 	char *progpath = argv[0];
- 	char *basename;
- 	char *env_debug;
-+	char *paranoid_wrapper;
-+	int paranoid;
- 	int ret, i, count = 0, debug;
- 
- 	/* Calculate the relative paths */
-@@ -172,6 +195,35 @@ int main(int argc, char **argv)
- 	}
- #endif /* ARCH || CPU */
- 
-+	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-+	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
-+		paranoid = 1;
-+	else
-+		paranoid = 0;
-+
-+	/* Check for unsafe library and header paths */
-+	for (i = 1; i < argc; i++) {
-+
-+		/* Skip options that do not start with -I and -L */
-+		if (strncmp(argv[i], "-I", 2) && strncmp(argv[i], "-L", 2))
-+			continue;
-+
-+		/* We handle two cases: first the case where -I/-L and
-+		 * the path are separated by one space and therefore
-+		 * visible as two separate options, and then the case
-+		 * where they are stuck together forming one single
-+		 * option.
-+		 */
-+		if (argv[i][2] == '\0') {
-+			i++;
-+			if (i == argc)
-+				continue;
-+			check_unsafe_path(argv[i], paranoid);
-+		} else {
-+			check_unsafe_path(argv[i] + 2, paranoid);
-+		}
-+	}
-+
- 	/* append forward args */
- 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
- 	cur += argc - 1;
+ include package/pkg-download.mk
+ include package/pkg-autotools.mk
+ include package/pkg-cmake.mk
