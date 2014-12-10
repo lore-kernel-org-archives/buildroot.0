@@ -1,113 +1,71 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 10 Dec 2014 22:24:56 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/openpowerlink: enable dynamic
-	build
-In-Reply-To: <1418246696-27658-1-git-send-email-romain.naour@openwide.fr>
-References: <1418246696-27658-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1418246696-27658-3-git-send-email-romain.naour@openwide.fr>
+Date: Wed, 10 Dec 2014 22:24:54 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/openpowerlink: bump to version
+	1.8.5
+Message-ID: <1418246696-27658-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove the install hook, all static libraries are
-removed from TARGET_DIR/usr/lib by target-finalize target
+Remove upstream commit
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: new patch
+v2: First bump the vertion to avoid to rename the existing patch.
 ---
- ...-fix-user-space-stack-enable-shared-build.patch | 54 ++++++++++++++++++++++
- package/openpowerlink/openpowerlink.mk             | 10 +---
- 2 files changed, 55 insertions(+), 9 deletions(-)
- create mode 100644 package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch
+ ...-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch | 28 ----------------------
+ package/openpowerlink/openpowerlink.mk             |  2 +-
+ 2 files changed, 1 insertion(+), 29 deletions(-)
+ delete mode 100644 package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
 
-diff --git a/package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch b/package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch
-new file mode 100644
-index 0000000..2345594
---- /dev/null
-+++ b/package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch
-@@ -0,0 +1,54 @@
-+From 9c11eef037dc1137ab7a4656e45afde7d1a615c4 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 22 Nov 2014 16:38:01 +0100
-+Subject: [PATCH 2/2] [FIX]: user space stack: enable dynamic build
-+
-+The build fail if BUILD_SHARED_LIBS is set to ON.
-+
-+Depending on BUILD_SHARED_LIBS, link with STATIC or SHARED.
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt b/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
-+index 40b7756..27360f2 100644
-+--- a/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
-++++ b/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
-+@@ -93,7 +93,13 @@ ENDIF(CFG_STORE_RESTORE)
-+ #
-+ # Set type of library
-+ #
-+-IF (WIN32)
-++IF (UNIX)
-++    IF (BUILD_SHARED_LIBS)
-++        SET(LIB_TYPE "SHARED")
-++    ELSE (BUILD_SHARED_LIBS)
-++        SET(LIB_TYPE "STATIC")
-++    ENDIF(BUILD_SHARED_LIBS)
-++ELSEIF (WIN32)
-+     IF(CFG_X86_WINDOWS_DLL)
-+         SET(LIB_TYPE "SHARED")
-+     ELSE(CFG_X86_WINDOWS_DLL)
-+@@ -313,7 +319,7 @@ ENDIF ()
-+ # Define library source code
-+ #
-+ IF (UNIX)
-+-    ADD_LIBRARY(powerlink ${LIB_SOURCES} ${LIB_SOURCES_KERNEL} ${LIB_SOURCES_USER} ${LIB_HEADERS} ${LIB_HEADERS_KERNEL} ${LIB_HEADERS_USER} ${LIB_OBJDICT})
-++    ADD_LIBRARY(powerlink ${LIB_TYPE} ${LIB_SOURCES} ${LIB_SOURCES_KERNEL} ${LIB_SOURCES_USER} ${LIB_HEADERS} ${LIB_HEADERS_KERNEL} ${LIB_HEADERS_USER} ${LIB_OBJDICT})
-+ 
-+     SET_PROPERTY(TARGET powerlink
-+                  PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
-+@@ -330,7 +336,7 @@ ENDIF ()
-+ # Installation
-+ #
-+ IF (UNIX)
-+-    INSTALL(TARGETS powerlink ARCHIVE DESTINATION lib)
-++    INSTALL(TARGETS powerlink ARCHIVE DESTINATION lib LIBRARY DESTINATION lib COMPONENT library)
-+ ELSEIF (WIN32)
-+     IF (CFG_X86_WINDOWS_DLL)
-+         INSTALL(TARGETS openPOWERLINK RUNTIME DESTINATION bin)
-+-- 
-+1.9.3
-+
+diff --git a/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch b/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
+deleted file mode 100644
+index bed878e..0000000
+--- a/package/openpowerlink/openpowerlink-0001-Fix-Linux-Powerlink-user-lib-add-INSTALL.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From cb6c4ff053e72f7fe5954894aebe2c0d94120b2d Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Thu, 3 Oct 2013 23:22:17 +0200
+-Subject: [PATCH 5/5] [FIX] Linux Powerlink user lib: add INSTALL
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt b/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
+-index e67d573..40b7756 100644
+---- a/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
+-+++ b/Examples/X86/Generic/powerlink_user_lib/CMakeLists.txt
+-@@ -329,7 +329,9 @@ ENDIF ()
+- #
+- # Installation
+- #
+--IF (WIN32)
+-+IF (UNIX)
+-+    INSTALL(TARGETS powerlink ARCHIVE DESTINATION lib)
+-+ELSEIF (WIN32)
+-     IF (CFG_X86_WINDOWS_DLL)
+-         INSTALL(TARGETS openPOWERLINK RUNTIME DESTINATION bin)
+-     ENDIF (CFG_X86_WINDOWS_DLL)
+---
+-1.8.4
+-
 diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 37cc90e..31c533e 100644
+index 7ad3eca..dcaf386 100644
 --- a/package/openpowerlink/openpowerlink.mk
 +++ b/package/openpowerlink/openpowerlink.mk
-@@ -11,20 +11,12 @@ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
- OPENPOWERLINK_LICENSE_FILES = license.txt
- OPENPOWERLINK_INSTALL_STAGING = YES
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# There is no shared lib in openpowerlink,
--# so force static lib to build libpowerlink.a
--OPENPOWERLINK_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
--
--OPENPOWERLINK_CONF_OPTS += -DCFG_DEBUG_LVL=$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
-+OPENPOWERLINK_CONF_OPTS = -DCFG_DEBUG_LVL=$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
- 
- ifeq ($(BR2_PACKAGE_OPENPOWERLINK_LIBPCAP),y)
- #  use the user space stack (libpcap)
- OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_STACK=OFF
- OPENPOWERLINK_DEPENDENCIES = libpcap
--define OPENPOWERLINK_REMOVE_LIB
--	rm $(TARGET_DIR)/usr/lib/libpowerlink.a
--endef
--OPENPOWERLINK_POST_INSTALL_TARGET_HOOKS += OPENPOWERLINK_REMOVE_LIB
- else
- # use the kernel stack
- OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_STACK=ON \
+-OPENPOWERLINK_VERSION = V1.08.4
++OPENPOWERLINK_VERSION = V1.08.5
+ OPENPOWERLINK_SITE = http://git.code.sf.net/p/openpowerlink/code
+ OPENPOWERLINK_SITE_METHOD = git
+ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
 -- 
 1.9.3
