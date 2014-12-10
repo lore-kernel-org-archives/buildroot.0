@@ -1,81 +1,46 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 10 Dec 2014 17:15:47 -0300
-Subject: [Buildroot] [PATCH v2] openocd 0.8.0
-In-Reply-To: <54889A46.8030103@integrazionetotale.it>
-References: <1417379718-8575-1-git-send-email-claudio.laurita@integrazionetotale.it>
- <54876789.8090404@vanguardiasur.com.ar>
- <54889A46.8030103@integrazionetotale.it>
-Message-ID: <5488A9F3.4040607@vanguardiasur.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Dec 2014 20:01:55 +0100
+Subject: [Buildroot] [git commit] squid: bump to version 3.4.10
+Message-ID: <20141210202044.AA8AA801CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=7ee21d3e804b2b9da13fa6ffb8b460f5325711fe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/squid.hash |    6 +++---
+ package/squid/squid.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 12/10/2014 04:08 PM, Claudio Laurita wrote:
-> Il 09/12/2014 22:20, Ezequiel Garcia ha scritto:
->> Hi Claudio,
->>
->> Shouldn't this patch have a proper commit log?
-> Hi Ezequiel
-> thank you for your comments.
-> This is my first "official" proposal, so, please, guide me through the
-> right "formal" steps.
-
-As far as I can see, the patch was more or less OK.
-
-You only needed a nice commit log. Maybe you can take a look at other
-patches being sent to the mailing list and see how that's done.
-
-[..]
->> Are you sure it's correct to tie a host dependency
->> to a target option?
-> Absolutely not.
-> It's a mistake that I only partially corrected from the first version of
-> the patch.
-> Originally I assumed that the host part was to be built with the same
-> options of the target part.
-> Thomas Petazzoni pointed out this bad mistake, but I forgot to correct
-> this part. Sorry.
-
-Sure, no problem. It's normal to make mistakes, don't be so hard on yourself.
-
->> On the other side, the commit fails to build here:
->>
->> configure: error: hidapi is required for the CMSIS-DAP Compliant Debugger
->> package/pkg-generic.mk:167: recipe for target
->> '/home/zeta/buildroot/ciaa/output/build/host-openocd-0.8.0/.stamp_configured'
->> failed
->> make: ***
->> [/home/zeta/buildroot/ciaa/output/build/host-openocd-0.8.0/.stamp_configured]
->> Error 1
-> I really apologize for that. The host part is a disaster.
-> I was totally concentrated on the target part. Shame on me.
-> 
-
-No problem.
-
->> Any chance we bump openocd with a less invasive patch?
-> I really didn't want to be invasive, trust me.
-> But the actual package recipe manages only a minimal part of the options
-> offered, even at the time of version 5.
-> I simply tried to make a full recipe to exploit all the actual potential
-> of the package, as I needed it for my project.
-> Maybe it's not a good idea. Let's talk about that and find the right way
-> to go.
-> But note that the deleted package patches are simply useless with the
-> actual code, so they are to be deleted anyway. And this is a very big
-> part of the patch.
-> 
-> I will try to clean all the mistakes in the host part and submit a third
-> version of the patch in a couple of days.
-
-That sounds great. Maybe you can begin with a simpler patch and work
-from there.
-
-If you Cc me, I can give you a hand testing your work.
--- 
-Ezequiel Garcia, VanguardiaSur
-www.vanguardiasur.com.ar
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 8bc8dbd..26ed5af 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.4/squid-3.4.9.tar.xz.asc
+-md5	497e5be7b3430d12667628296760beca	squid-3.4.9.tar.xz
+-sha1	7d652e2f3794e15302d36700a167f16d24ad6cd5	squid-3.4.9.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.4/squid-3.4.10.tar.xz.asc
++md5	3136edfe9bc2458e725671b0d2455702	squid-3.4.10.tar.xz
++sha1	52fb374fd6293978f8002ae994353fbe75d28a98	squid-3.4.10.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 306b2a3..1224369 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.4
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).9
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).10
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
