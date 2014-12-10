@@ -1,36 +1,38 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Wed, 10 Dec 2014 14:14:09 +0100
-Subject: [Buildroot] [PATCH 1/1] util-linux: rename patches to follow the
-	new name convention
-Message-ID: <1418217249-55637-1-git-send-email-kaszak@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 10 Dec 2014 14:44:55 +0000
+Subject: [Buildroot] [PATCH] dhcpcd; bump to version 6.6.5
+In-Reply-To: <1418205993-7649-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1418205993-7649-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <54885C67.1070408@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Gustavo Zacarias,
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
----
- ...{util-linux-001-sscanf-no-ms-as.patch => 001-sscanf-no-ms-as.patch} |    0
- ...cation-short-name.patch => 002-program-invocation-short-name.patch} |    0
- ...patch => 003-c.h-define-mkostemp-for-older-version-of-uClibc.patch} |    0
- 3 files changed, 0 insertions(+), 0 deletions(-)
- rename package/util-linux/{util-linux-001-sscanf-no-ms-as.patch => 001-sscanf-no-ms-as.patch} (100%)
- rename package/util-linux/{util-linux-002-program-invocation-short-name.patch => 002-program-invocation-short-name.patch} (100%)
- rename package/util-linux/{util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch => 003-c.h-define-mkostemp-for-older-version-of-uClibc.patch} (100%)
+- Built fine for MIPS
+- Hash checking OK
+- Files installed in the right place and built for the right
+  architecture
 
-diff --git a/package/util-linux/util-linux-001-sscanf-no-ms-as.patch b/package/util-linux/001-sscanf-no-ms-as.patch
-similarity index 100%
-rename from package/util-linux/util-linux-001-sscanf-no-ms-as.patch
-rename to package/util-linux/001-sscanf-no-ms-as.patch
-diff --git a/package/util-linux/util-linux-002-program-invocation-short-name.patch b/package/util-linux/002-program-invocation-short-name.patch
-similarity index 100%
-rename from package/util-linux/util-linux-002-program-invocation-short-name.patch
-rename to package/util-linux/002-program-invocation-short-name.patch
-diff --git a/package/util-linux/util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch b/package/util-linux/003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
-similarity index 100%
-rename from package/util-linux/util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
-rename to package/util-linux/003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+dhcpcd-6.6.5.tar.bz2: OK (sha256:
+62efd1c7fa162f7277b8a09089065f726e5d4dd45f426bb5db06e879e068bbe0)
+
+$ file output/target/sbin/dhcpcd
+output/target/sbin/dhcpcd: ELF 32-bit MSB executable, MIPS, MIPS32 rel2
+version 1, dynamically linked (uses shared libs), for GNU/Linux 2.6.32,
+with unknown capability 0x41000000 = 0xf676e75, with unknown capability
+0x10000 = 0x70403, not stripped
+
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Best regards,
 -- 
-1.7.10.4
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
