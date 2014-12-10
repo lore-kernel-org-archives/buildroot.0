@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Dec 2014 07:06:15 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.4.10
-Message-ID: <1418205975-7390-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 10 Dec 2014 07:06:33 -0300
+Subject: [Buildroot] [PATCH] dhcpcd; bump to version 6.6.5
+Message-ID: <1418205993-7649-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/dhcpcd/dhcpcd.hash | 2 +-
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 8bc8dbd..26ed5af 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.4/squid-3.4.9.tar.xz.asc
--md5	497e5be7b3430d12667628296760beca	squid-3.4.9.tar.xz
--sha1	7d652e2f3794e15302d36700a167f16d24ad6cd5	squid-3.4.9.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.4/squid-3.4.10.tar.xz.asc
-+md5	3136edfe9bc2458e725671b0d2455702	squid-3.4.10.tar.xz
-+sha1	52fb374fd6293978f8002ae994353fbe75d28a98	squid-3.4.10.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 306b2a3..1224369 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 851849b..31ac05d 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	67ba7cfe96089150da8e12badbcc5853daefce39417364887984948bad0a37d0	dhcpcd-6.6.4.tar.bz2
++sha256	62efd1c7fa162f7277b8a09089065f726e5d4dd45f426bb5db06e879e068bbe0	dhcpcd-6.6.5.tar.bz2
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index dc663a8..ec7d0e0 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.4
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).9
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).10
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-DHCPCD_VERSION = 6.6.4
++DHCPCD_VERSION = 6.6.5
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
 -- 
 2.0.4
