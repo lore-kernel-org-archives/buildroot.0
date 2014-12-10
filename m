@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 10 Dec 2014 23:53:47 +0100
-Subject: [Buildroot] [PATCH v3 02/12] binutils/2.24: add patch to warn about
+Date: Wed, 10 Dec 2014 23:53:48 +0100
+Subject: [Buildroot] [PATCH v3 03/12] binutils/2.23: add patch to warn about
 	unsafe library paths
 In-Reply-To: <1418252037-26636-1-git-send-email-romain.naour@openwide.fr>
 References: <1418252037-26636-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1418252037-26636-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1418252037-26636-4-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 This commit adds a patch to binutils borrowed from CodeSourcery/Yocto
 that warns about unsafe library paths (i.e /usr/lib, /usr/local/lib,
-etc.). The patch was adapted to binutils 2.24, and modified to support
+etc.). The patch was adapted to binutils 2.23, and modified to support
 the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable to error out
 instead of just warn when unsafe paths are used. Even though erroring
 out can be chosen by passing --error-poison-system-directories, we are
@@ -27,15 +27,15 @@ wrapper.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 ---
- .../2.24/600-poison-system-directories.patch       | 279 +++++++++++++++++++++
+ .../2.23.2/600-poison-system-directories.patch     | 279 +++++++++++++++++++++
  1 file changed, 279 insertions(+)
- create mode 100644 package/binutils/2.24/600-poison-system-directories.patch
+ create mode 100644 package/binutils/2.23.2/600-poison-system-directories.patch
 
-diff --git a/package/binutils/2.24/600-poison-system-directories.patch b/package/binutils/2.24/600-poison-system-directories.patch
+diff --git a/package/binutils/2.23.2/600-poison-system-directories.patch b/package/binutils/2.23.2/600-poison-system-directories.patch
 new file mode 100644
-index 0000000..6a3bf6b
+index 0000000..780e48e
 --- /dev/null
-+++ b/package/binutils/2.24/600-poison-system-directories.patch
++++ b/package/binutils/2.23.2/600-poison-system-directories.patch
 @@ -0,0 +1,279 @@
 +Patch adapted to binutils 2.23.2 and extended to use
 +BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
@@ -114,7 +114,7 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/configure
 ++++ b/ld/configure
-+@@ -774,6 +774,7 @@
++@@ -773,6 +773,7 @@
 + enable_targets
 + enable_64_bit_bfd
 + with_sysroot
@@ -122,7 +122,7 @@ index 0000000..6a3bf6b
 + enable_gold
 + enable_got
 + enable_werror
-+@@ -1429,6 +1430,8 @@
++@@ -1428,6 +1429,8 @@
 + 			  (and sometimes confusing) to the casual installer
 +   --enable-targets        alternative target configurations
 +   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
@@ -131,7 +131,7 @@ index 0000000..6a3bf6b
 +   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
 +   --enable-got=<type>     GOT handling scheme (target, single, negative,
 +                           multigot)
-+@@ -4339,7 +4342,18 @@
++@@ -4338,7 +4341,18 @@
 + fi
 + 
 + 
@@ -154,7 +154,7 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/configure.in
 ++++ b/ld/configure.in
-+@@ -87,6 +87,16 @@
++@@ -70,6 +70,16 @@
 + AC_SUBST(TARGET_SYSTEM_ROOT)
 + AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
 + 
@@ -203,7 +203,7 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/ld.h
 ++++ b/ld/ld.h
-+@@ -180,6 +180,14 @@
++@@ -203,6 +203,14 @@
 +   /* If TRUE we'll just print the default output on stdout.  */
 +   bfd_boolean print_output_format;
 + 
@@ -222,10 +222,10 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/ldmain.c
 ++++ b/ld/ldmain.c
-+@@ -266,6 +266,8 @@
-+   command_line.warn_mismatch = TRUE;
++@@ -265,6 +265,8 @@
 +   command_line.warn_search_mismatch = TRUE;
 +   command_line.check_section_addresses = -1;
++   command_line.disable_target_specific_optimizations = -1;
 ++  command_line.poison_system_directories = TRUE;
 ++  command_line.error_poison_system_directories = FALSE;
 + 
@@ -235,7 +235,7 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/ld.texinfo
 ++++ b/ld/ld.texinfo
-+@@ -2175,6 +2175,18 @@
++@@ -2154,6 +2154,18 @@
 + 
 + Passing @code{none} for @var{style} disables the setting from any
 + @code{--build-id} options earlier on the command line.
@@ -258,22 +258,22 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/lexsup.c
 ++++ b/ld/lexsup.c
-+@@ -507,6 +507,14 @@
-+     OPTION_IGNORE_UNRESOLVED_SYMBOL},
-+     '\0', N_("SYMBOL"),
-+     N_("Unresolved SYMBOL will not cause an error or warning"), TWO_DASHES },
++@@ -498,6 +498,14 @@
++     TWO_DASHES },
++   { {"wrap", required_argument, NULL, OPTION_WRAP},
++     '\0', N_("SYMBOL"), N_("Use wrapper functions for SYMBOL"), TWO_DASHES },
 ++  { {"no-poison-system-directories", no_argument, NULL,
 ++     OPTION_NO_POISON_SYSTEM_DIRECTORIES},
 ++    '\0', NULL, N_("Do not warn for -L options using system directories"),
 ++    TWO_DASHES },
 ++  { {"error-poison-system-directories", no_argument, NULL,
-++    +     OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+++     OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
 ++    '\0', NULL, N_("Give an error for -L options using system directories"),
 ++    TWO_DASHES },
 + };
 + 
 + #define OPTION_COUNT ARRAY_SIZE (ld_options)
-+@@ -519,6 +527,7 @@
++@@ -510,6 +518,7 @@
 +   int ingroup = 0;
 +   char *default_dirlist = NULL;
 +   char *shortopts;
@@ -281,7 +281,7 @@ index 0000000..6a3bf6b
 +   struct option *longopts;
 +   struct option *really_longopts;
 +   int last_optind;
-+@@ -1442,9 +1451,21 @@
++@@ -1427,9 +1436,21 @@
 +               einfo (_("%P%X: --hash-size needs a numeric argument\n"));
 +           }
 +           break;
@@ -307,10 +307,10 @@ index 0000000..6a3bf6b
 +===================================================================
 +--- a/ld/ldlex.h
 ++++ b/ld/ldlex.h
-+@@ -138,6 +138,8 @@
++@@ -136,6 +136,8 @@
++ #endif /* ENABLE_PLUGINS */
 +   OPTION_DEFAULT_SCRIPT,
 +   OPTION_PRINT_OUTPUT_FORMAT,
-+   OPTION_IGNORE_UNRESOLVED_SYMBOL,
 ++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
 ++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
 + };
