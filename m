@@ -1,42 +1,29 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 10 Dec 2014 10:22:19 +0000
-Subject: [Buildroot] [PATCH 0/3] slang: fix static builds
-In-Reply-To: <20141209203440.53026bbb@free-electrons.com>
-References: <1418125881-7915-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141209203440.53026bbb@free-electrons.com>
-Message-ID: <54881EDB.208@imgtec.com>
+Date: Wed, 10 Dec 2014 10:52:42 +0000
+Subject: [Buildroot] [PATCH] bwm-ng: add a hash file
+Message-ID: <1418208762-59111-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+It will clarify errors like this one:
+  http://autobuild.buildroot.net/results/f22/f22888d87659dda8ff75f25490eab0a68f02bc9b/
 
-On 12/09/2014 07:34 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Tue, 9 Dec 2014 11:51:18 +0000, Vicente Olivert Riera wrote:
->> - Rename current patches to follow the new name convention.
->> - Adapt upstream patches to allow building only the static library and a
->>   static version of slsh.
->> - Use specific build and install commands when doing static builds.
->>
->> Vicente Olivert Riera (3):
->>   slang: rename patches to follow the new name convention
->>   slang: add adapted upstream patches for static builds
->>   slang: use specific build and install commands for static builds
-> 
-> All three patches applied, thanks. The last two patches could have been
-> only one since they are both needed to fix the static linking problem.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/bwm-ng/bwm-ng.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+ create mode 100644 package/bwm-ng/bwm-ng.hash
 
-Well..., yeah, but it's easier to review, and the series is still
-bisectable :P
-
-Cheers,
+diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
+new file mode 100644
+index 0000000..6bb8355
+--- /dev/null
++++ b/package/bwm-ng/bwm-ng.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  c1134358e268329d438b0996399003b0f0b966034fb4b5b138761c2f3c62ffdd  bwm-ng-0.6.tar.gz
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+1.7.1
