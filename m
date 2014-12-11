@@ -1,10 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 22:54:00 +0100
-Subject: [Buildroot] [PATCH 0/8] Improving static/shared library
- selection
-In-Reply-To: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141211225400.6c4c5a16@free-electrons.com>
+Date: Thu, 11 Dec 2014 23:50:08 +0100
+Subject: [Buildroot] [PATCHv2 0/3] Improved static/shared library handling
+Message-ID: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +10,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  3 Dec 2014 22:41:27 +0100, Thomas Petazzoni wrote:
+This series contains the remaining patches for the improved
+static/shared library handling.
 
-> Thomas Petazzoni (8):
->   docs: fix typo in cmake-package documentation
+Changes since v1:
 
-This one was already applied.
+ * On the first patch, take into account the various comments made by
+   Yann (on the commit log, on defining a 'bool' type for the choice,
+   on the prompts for the options of the choice, on the help texts,
+   etc.)
 
->   Rename BR2_PREFER_STATIC_LIB to BR2_STATIC_LIBS
->   arch: FDPIC is not supported on m68k
->   arch: ensure BR2_BINFMT_ELF is really used
->   arch: introduce BR2_BINFMT_SUPPORTS_SHARED
->   ncurses: speed up host build by disabling static library building
+ * Split out the ncurses changes in another patch.
 
-I've applied up to this point now.
-
->   Turn the static lib option into a choice with more options
->   Build shared libraries only as the default
-
-I'll respin those two ones, because Yann had comments.
+ * Add Acked-by from Yann on the patch making "shared only" the
+   default.
 
 Thanks,
 
 Thomas
+
+Thomas Petazzoni (3):
+  Turn the static lib option into a choice with more options
+  ncurses: better handling for shared/static library
+  Build shared libraries only as the default
+
+ Config.in                  | 45 ++++++++++++++++++++++++++++++++++++---------
+ arch/Config.in             |  1 -
+ package/Makefile.in        |  4 +++-
+ package/ncurses/ncurses.mk |  9 ++++++++-
+ 4 files changed, 47 insertions(+), 12 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
