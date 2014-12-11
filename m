@@ -1,74 +1,273 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Dec 2014 23:52:08 +0100
-Subject: [Buildroot] [PATCH 4/4 v5] pkg-download: check hashes for locally
-	cached files
-In-Reply-To: <cover.1418337531.git.yann.morin.1998@free.fr>
-References: <cover.1418337531.git.yann.morin.1998@free.fr>
-Message-ID: <06b4eb57a7671f63c52d7a71bfc141682fdb0e38.1418337531.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Dec 2014 23:59:25 +0100
+Subject: [Buildroot] [git commit] pkg-download: verify the hashes from the
+	download wrapper
+Message-ID: <20141211225952.4EA9E803BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases, upstream just update their releases in-place, without
-renaming them. When that package is updated in Buildroot, a new hash to
-match the new upstream release is included in the corresponding .hash
-file.
+commit: http://git.buildroot.net/buildroot/commit/?id=9b88c604843ee176bb82d3d2185b0663837920e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As a consequence, users who previously downloaded that package's tarball
-with an older version of Buildroot, will get stuck with an old archive
-for that package, and after updating their Buildroot copy, will be greeted
-with a failed download, due to the local file not matching the new
-hashes.
+Instead of repeating the check in our download rules, delegate the check
+of the hashes to the download wrapper.
 
-Also, an upstream would sometime serve us HTML garbage instead of the
-actual tarball we requested, like SourceForge does from time for as-yet
-unknown reasons.
+This needs three different changes:
 
-So, to avoid this situation, check the hashes prior to doing the
-download. If the hashes match, consider the locally cached file genuine,
-and do not download it. However, if the locally cached file does not
-match the known hashes we have for it, it is promptly removed, and a
-download is re-attempted.
+  - add a new argument to the download wrapper, that is the full path to
+    the hash file; if the hash file does not exist, that does not change
+    the current behaviour, as the existence of the hash file is checked
+    for in the check-hash script;
 
-Note: this does not add any overhead compared to the previous situation,
-because we were already checking hashes of locally cached files. It just
-changes the order in which we do the checks. For the records, here is the
-overhead of hashing a 231MiB file (qt-everywhere-opensource-src-4.8.6.tar.gz)
-on a core-i5 @2.5GHz:
+  - add a third argument to the check-hash script, to be the basename of
+    the file to check; this is required because we no longer check the
+    final file with the final filename, but an intermediate file with a
+    temporary filename;
 
-            cache-cold  cache-hot
-    sha1      1.914s      0.762s
-    sha256    2.109s      1.270s
+  - do the actual call to the check-hash script from within the download
+    wrapper.
 
-But again, this overhead already existed before this patch.
+This further paves the way to doing pre-download checks of the hashes
+for the locally cached files.
+
+Note: this patch removes the check for hashes for already downloaded
+files, since the wrapper script exits early. The behaviour to check
+localy cached files will be restored and enhanced in the following
+patch.
+
+[Thomas: fix minor typo in comment.]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/download/dl-wrapper | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/pkg-download.mk     |   28 +++++++++++-----------------
+ support/download/check-hash |   19 ++++++++++++-------
+ support/download/dl-wrapper |   19 +++++++++++++++++--
+ 3 files changed, 40 insertions(+), 26 deletions(-)
 
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index c021e92..ba72fc1 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -60,17 +60,6 @@ domainseparator = $(if $(1),$(1),/)
+ # github(user,package,version): returns site of GitHub repository
+ github = https://github.com/$(1)/$(2)/archive/$(3)
+ 
+-# Helper for checking a tarball's checksum
+-# If the hash does not match, remove the incorrect file
+-# $(1): the path to the file with the hashes
+-# $(2): the full path to the file to check
+-define VERIFY_HASH
+-	if ! support/download/check-hash $(1) $(2) $(if $(QUIET),>/dev/null); then \
+-		rm -f $(2); \
+-		exit 1; \
+-	fi
+-endef
+-
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
+ # of the source repository for their corresponding SCM,
+@@ -98,6 +87,7 @@ endef
+ define DOWNLOAD_GIT
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -118,6 +108,7 @@ endef
+ define DOWNLOAD_BZR
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -135,6 +126,7 @@ endef
+ define DOWNLOAD_CVS
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -154,6 +146,7 @@ endef
+ define DOWNLOAD_SVN
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -174,9 +167,9 @@ endef
+ define DOWNLOAD_SCP
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
+ 		-o $(DL_DIR)/$(2) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+-		'$(call stripurischeme,$(call qstrip,$(1)))' && \
+-	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_RAWNAME).hash,$(DL_DIR)/$(2))
++		'$(call stripurischeme,$(call qstrip,$(1)))'
+ endef
+ 
+ define SOURCE_CHECK_SCP
+@@ -191,6 +184,7 @@ endef
+ define DOWNLOAD_HG
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+ 		$($(PKG)_SITE) \
+ 		$($(PKG)_DL_VERSION) \
+@@ -211,9 +205,9 @@ endef
+ define DOWNLOAD_WGET
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
+ 		-o $(DL_DIR)/$(2) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+-		'$(call qstrip,$(1))' && \
+-	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_RAWNAME).hash,$(DL_DIR)/$(2))
++		'$(call qstrip,$(1))'
+ endef
+ 
+ define SOURCE_CHECK_WGET
+@@ -227,9 +221,9 @@ endef
+ define DOWNLOAD_LOCALFILES
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
+ 		-o $(DL_DIR)/$(2) \
++		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		-- \
+-		$(call stripurischeme,$(call qstrip,$(1))) && \
+-	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_RAWNAME).hash,$(DL_DIR)/$(2))
++		$(call stripurischeme,$(call qstrip,$(1)))
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
+diff --git a/support/download/check-hash b/support/download/check-hash
+index 13e361a..b59fd2a 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -4,10 +4,15 @@ set -e
+ # Helper to check a file matches its known hash
+ # Call it with:
+ #   $1: the path of the file containing all the the expected hashes
+-#   $2: the full path to the file to check
++#   $2: the full path to the temporary file that was downloaded, and
++#       that is to be checked
++#   $3: the final basename of the file, to which it will be ultimately
++#       saved as, to be able to match it to the corresponding hashes
++#       in the .hash file
+ 
+ h_file="${1}"
+ file="${2}"
++base="${3}"
+ 
+ # Does the hash-file exist?
+ if [ ! -f "${h_file}" ]; then
+@@ -30,7 +35,7 @@ check_one_hash() {
+         sha224|sha256|sha384|sha512)    ;;
+         *) # Unknown hash, exit with error
+             printf "ERROR: unknown hash '%s' for '%s'\n"  \
+-                   "${_h}" "${_file##*/}" >&2
++                   "${_h}" "${base}" >&2
+             exit 1
+             ;;
+     esac
+@@ -38,11 +43,11 @@ check_one_hash() {
+     # Do the hashes match?
+     _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
+     if [ "${_hash}" = "${_known}" ]; then
+-        printf "%s: OK (%s: %s)\n" "${_file##*/}" "${_h}" "${_hash}"
++        printf "%s: OK (%s: %s)\n" "${base}" "${_h}" "${_hash}"
+         return 0
+     fi
+ 
+-    printf "ERROR: %s has wrong %s hash:\n" "${_file##*/}" "${_h}" >&2
++    printf "ERROR: %s has wrong %s hash:\n" "${base}" "${_h}" >&2
+     printf "ERROR: expected: %s\n" "${_known}" >&2
+     printf "ERROR: got     : %s\n" "${_hash}" >&2
+     printf "ERROR: Incomplete download, or man-in-the-middle (MITM) attack\n" >&2
+@@ -59,7 +64,7 @@ while read t h f; do
+             continue
+             ;;
+         *)
+-            if [ "${f}" = "${file##*/}" ]; then
++            if [ "${f}" = "${base}" ]; then
+                 check_one_hash "${t}" "${h}" "${file}"
+                 : $((nb_checks++))
+             fi
+@@ -69,9 +74,9 @@ done <"${h_file}"
+ 
+ if [ ${nb_checks} -eq 0 ]; then
+     if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+-        printf "ERROR: No hash found for %s\n" "${file}" >&2
++        printf "ERROR: No hash found for %s\n" "${base}" >&2
+         exit 1
+     else
+-        printf "WARNING: No hash found for %s\n" "${file}" >&2
++        printf "WARNING: No hash found for %s\n" "${base}" >&2
+     fi
+ fi
 diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index f0cdd73..cced8f6 100755
+index dc5b4b0..f0cdd73 100755
 --- a/support/download/dl-wrapper
 +++ b/support/download/dl-wrapper
-@@ -49,7 +49,11 @@ main() {
+@@ -21,14 +21,15 @@ set -e
+ 
+ main() {
+     local OPT OPTARG
+-    local backend output
++    local backend output hfile
+ 
+     # Parse our options; anything after '--' is for the backend
+-    while getopts :hb:o: OPT; do
++    while getopts :hb:o:H: OPT; do
+         case "${OPT}" in
+         h)  help; exit 0;;
+         b)  backend="${OPTARG}";;
+         o)  output="${OPTARG}";;
++        H)  hfile="${OPTARG}";;
+         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+         \?) error "unknown option '%s'\n" "${OPTARG}";;
+         esac
+@@ -42,6 +43,9 @@ main() {
+     if [ -z "${output}" ]; then
+         error "no output specified, use -o\n"
+     fi
++    if [ -z "${hfile}" ]; then
++        error "no hash-file specified, use -H\n"
++    fi
  
      # If the output file already exists, do not download it again
      if [ -e "${output}" ]; then
--        exit 0
-+        if support/download/check-hash "${hfile}" "${output}" "${output##*/}"; then
-+            exit 0
-+        fi
-+        rm -f "${output}"
-+        printf "Re-downloading '%s'...\n" "${output##*/}"
-     fi
+@@ -75,6 +79,13 @@ main() {
+     # cd back to free the temp-dir, so we can remove it later
+     cd "${OLDPWD}"
  
-     # tmpd is a temporary directory in which backends may store intermediate
--- 
-1.9.1
++    # Check if the downloaded file is sane, and matches the stored hashes
++    # for that file
++    if ! support/download/check-hash "${hfile}" "${tmpf}" "${output##*/}"; then
++        rm -rf "${tmpd}"
++        exit 1
++    fi
++
+     # tmp_output is in the same directory as the final output, so we can
+     # later move it atomically.
+     tmp_output="$(mktemp "${output}.XXXXXX")"
+@@ -150,6 +161,10 @@ DESCRIPTION
+     -o FILE
+         Store the downloaded archive in FILE.
+ 
++    -H FILE
++        Use FILE to read hashes from, and check them against the downloaded
++        archive.
++
+   Exit status:
+     0   if OK
+     !0  in case of error
