@@ -1,51 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 23:50:10 +0100
-Subject: [Buildroot] [PATCHv2 2/3] ncurses: better handling for
-	shared/static library
+Date: Thu, 11 Dec 2014 23:50:11 +0100
+Subject: [Buildroot] [PATCHv2 3/3] Build shared libraries only as the default
 In-Reply-To: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1418338211-1595-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1418338211-1595-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we have clear options for the three cases of shared only,
-static only and shared+static, let's use them in ncurses to pass the
-appropriate --{with,without}-{shared,normal} options.
+Now that we have more options in terms of static/shared libraries,
+switch from the existing default of building both shared and static
+libraries to building shared libraries only (of course only on
+platforms that support shared libraries).
+
+Building both shared and static takes time (since the shared objects
+must be built with -fPIC, while static objects are generally built
+without, as -fPIC has some performance impact) and consumes a little
+bit more disk space.
+
+For example, a static+shared build of libglib2 takes 1 minutes and 59
+seconds, with a final build directory of 96 MB. A shared-only build of
+libglib2 takes only 1 minutes and 31 seconds (almost a 25% reduction
+of the build time), and the final build directory weights 89 MB (a
+reduction of almost 8%).
+
+So, switching to a shared library only build brings some useful build
+time and build size benefits.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/ncurses/ncurses.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 645c25c..f54f379 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -15,7 +15,6 @@ NCURSES_LICENSE_FILES = README
- NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
+diff --git a/Config.in b/Config.in
+index a647283..53142ce 100644
+--- a/Config.in
++++ b/Config.in
+@@ -528,7 +528,7 @@ comment "enabling Stack Smashing Protection requires support in the toolchain"
+ choice
  
- NCURSES_CONF_OPTS = \
--	$(if $(BR2_STATIC_LIBS),--without-shared,--with-shared) \
- 	--without-cxx \
- 	--without-cxx-binding \
- 	--without-ada \
-@@ -36,6 +35,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	NCURSES_DEPENDENCIES += busybox
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+NCURSES_CONF_OPTS += --without-shared --with-normal
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+NCURSES_CONF_OPTS += --with-shared --without-normal
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+NCURSES_CONF_OPTS += --with-shared --with-normal
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
- NCURSES_LIB_SUFFIX = w
+ 	bool "libraries"
+-	default BR2_SHARED_STATIC_LIBS if BR2_BINFMT_SUPPORTS_SHARED
++	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+ 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
+ 	help
+ 	  Select the type of libraries you want to use on the target.
 -- 
 2.1.0
