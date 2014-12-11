@@ -1,38 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Dec 2014 00:08:23 +0100
-Subject: [Buildroot] [PATCH] triggerhappy: new package
-In-Reply-To: <1418079328-15550-1-git-send-email-peter@korsgaard.com>
-References: <1418079328-15550-1-git-send-email-peter@korsgaard.com>
-Message-ID: <20141212000823.72d27f28@free-electrons.com>
+Date: Fri, 12 Dec 2014 00:09:32 +0100
+Subject: [Buildroot] [git commit] ncurses: better handling for shared/static
+	library
+Message-ID: <20141211230954.3FE297FD6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+commit: http://git.buildroot.net/buildroot/commit/?id=41a18724021be815e175b012fa94d5e69d4b862d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  8 Dec 2014 23:55:28 +0100, Peter Korsgaard wrote:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/Config.in                    |  1 +
->  package/triggerhappy/Config.in       | 10 +++++++++
->  package/triggerhappy/S10triggerhappy | 40 ++++++++++++++++++++++++++++++++++++
->  package/triggerhappy/triggerhappy.mk | 37 +++++++++++++++++++++++++++++++++
->  4 files changed, 88 insertions(+)
->  create mode 100644 package/triggerhappy/Config.in
->  create mode 100755 package/triggerhappy/S10triggerhappy
->  create mode 100644 package/triggerhappy/triggerhappy.mk
+Now that we have clear options for the three cases of shared only,
+static only and shared+static, let's use them in ncurses to pass the
+appropriate --{with,without}-{shared,normal} options.
 
-Thanks, applied, with two small changes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/ncurses/ncurses.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-    [Thomas:
-      - add BR2_USE_MMU dependency, since fork() is used
-      - rename do_start() and do_stop() to just start() and stop(), as we
-        do in most init scripts in Buildroot.]
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 645c25c..f54f379 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -15,7 +15,6 @@ NCURSES_LICENSE_FILES = README
+ NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
+ 
+ NCURSES_CONF_OPTS = \
+-	$(if $(BR2_STATIC_LIBS),--without-shared,--with-shared) \
+ 	--without-cxx \
+ 	--without-cxx-binding \
+ 	--without-ada \
+@@ -36,6 +35,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	NCURSES_DEPENDENCIES += busybox
+ endif
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++NCURSES_CONF_OPTS += --without-shared --with-normal
++else ifeq ($(BR2_SHARED_LIBS),y)
++NCURSES_CONF_OPTS += --with-shared --without-normal
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++NCURSES_CONF_OPTS += --with-shared --with-normal
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ NCURSES_CONF_OPTS += --enable-widec
+ NCURSES_LIB_SUFFIX = w
