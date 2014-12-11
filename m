@@ -1,69 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Dec 2014 19:24:48 +0100
-Subject: [Buildroot] [PATCH 4/4 v4] pkg-download: check hashes for locally
-	cached files
-In-Reply-To: <cover.1418322200.git.yann.morin.1998@free.fr>
-References: <cover.1418322200.git.yann.morin.1998@free.fr>
-Message-ID: <0301f2d3c762f8815c7c6dc25ed5ea8307275305.1418322200.git.yann.morin.1998@free.fr>
+Date: Thu, 11 Dec 2014 19:44:00 +0100
+Subject: [Buildroot] [PATCH 2/8] Rename BR2_PREFER_STATIC_LIB to
+ BR2_STATIC_LIBS
+In-Reply-To: <1417642895-29606-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417642895-29606-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141211184400.GB4199@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases, upstream just update their releases in-place, without
-renaming them. When that package is updated in Buildroot, a new hash to
-match the new upstream release is included in the corresponding .hash
-file.
+Thomas, All,
 
-As a consequence, users who previously downloaded that package's tarball
-with an older version of Buildroot, will get stuck with an old archive
-for that package, and after updating their Buildroot copy, will be greeted
-with a failed download, due to the local file not matching the new
-hashes.
+On 2014-12-03 22:41 +0100, Thomas Petazzoni spake thusly:
+> Since a while, the semantic of BR2_PREFER_STATIC_LIB has been changed
+> from "prefer static libraries when possible" to "use only static
+> libraries". The former semantic didn't make much sense, since the user
+> had absolutely no control/idea of which package would use static
+> libraries, and which packages would not. Therefore, for quite some
+> time, we have been starting to enforce that BR2_PREFER_STATIC_LIB
+> should really build everything with static libraries.
+> 
+> As a consequence, this patch renames BR2_PREFER_STATIC_LIB to
+> BR2_STATIC_LIBS, and adjust the Config.in option accordingly.
+> 
+> This also helps preparing the addition of other options to select
+> shared, shared+static or just static.
+> 
+> Note that we have verified that this commit can be reproduced by
+> simply doing a global rename of BR2_PREFER_STATIC_LIB to
+> BR2_STATIC_LIBS plus adding BR2_PREFER_STATIC_LIB to Config.in.legacy.
 
-So, to avoid this situation, check the hashes prior to doing the
-download. If the hashes match, consider the locally cached file genuine,
-and do not download it. However, if the locally cached file does not
-match the known hashes we have for it, it is promptly removed, and a
-download is re-attempted.
+This patch no longer applies to crda and mpd because they were slightly
+changed:
+  - crda: switched from "depends on !nios2" to "depends on !nios2_toolchains"
+  - mpd : help text for avahi slightly reworded.
 
-Note: this does not add any overhead compared to the previous situation,
-because we were already checking hashes of localy cached files. It just
-changes the order in which we do the checks. For the records, here is the
-overhead of hashing a 231MiB file (qt-everywhere-opensource-src-4.8.6.tar.gz)
-on a core-i5 @2.5GHz:
+Missing packages because newer than this patch:
+  - ecryptfs-utils  (Config.in x2)
+  - libnss          (Config.in x2)
+  - lighttpd        (Config.in x2)
+  - python-pam      (Config.in x2)
+  - slang           (slang.mk  x1)
 
-            cache-cold  cache-hot
-    sha1      1.914s      0.762s
-    sha256    2.109s      1.270s
+Otherwise I gues you atomated this bulk rename, so I only checked a few
+packages, choosen randomly.
 
-But again, this overhead already existed before this patch.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- support/download/dl-wrapper | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index fdb49db..d66715f 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -56,7 +56,11 @@ main() {
- 
-     # If the output file already exists, do not download it again
-     if [ -e "${output}" ]; then
--        exit 0
-+        if support/download/check-hash "${hfile}" "${output}" "${output##*/}"; then
-+            exit 0
-+        fi
-+        rm -f "${output}"
-+        printf "Re-downloading '%s'...\n" "${output##*/}"
-     fi
- 
-     # tmpd is a temporary directory in which backends may store intermediate
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
