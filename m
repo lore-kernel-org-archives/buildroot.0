@@ -1,43 +1,80 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 12 Dec 2014 00:27:46 +0100
-Subject: [Buildroot] [PATCH 2/3] iprutils: Don't include host headers
+Date: Fri, 12 Dec 2014 00:27:47 +0100
+Subject: [Buildroot] [PATCH 3/3] iprutils: bump to version 2.4.5
 In-Reply-To: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>
 References: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1418340467-29999-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1418340467-29999-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-ERROR: unsafe header/library path used in cross-compilation: '/usr/include/ncurses'
+Rebase patch 0003 on top of 2.4.5 release.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/iprutils/iprutils.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ ...x-static-build-by-passing-the-libraries-i.patch | 27 +++++++++++++++++-----
+ package/iprutils/iprutils.mk                       |  2 +-
+ 2 files changed, 22 insertions(+), 7 deletions(-)
 
+diff --git a/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+index e176ab6..5ea7d1b 100644
+--- a/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
++++ b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+@@ -1,4 +1,8 @@
+-iprutils: Fix static build by passing the libraries in the right order
++From 1f62dd91314b0ce6378aeafb2a03566002036326 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Thu, 11 Dec 2014 23:36:55 +0100
++Subject: [PATCH 3/3] iprutils: Fix static build by passing the libraries in
++ the right order
+ 
+ This mistake was causing failures like this one:
+ 
+@@ -7,14 +11,25 @@ m_post.c:(.text+0x60): undefined reference to `wattr_on'
+ http://autobuild.buildroot.net/results/500/5004e7b230635e0605acdd17d2b7d2d01fc5075c/build-end.log
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---- iprutils-2.4.2/Makefile.orig	2014-09-17 18:14:52.435367860 +0100
+-+++ iprutils-2.4.2/Makefile	2014-09-17 18:15:09.367652526 +0100
+-@@ -16,7 +16,7 @@ TAR = cd .. && tar -zcpf iprutils-$(UTIL
++[Romain: rebase on top of 2.4.5]
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 66c4942..18cea94 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -16,7 +16,7 @@ TAR = cd .. && tar -zcpf iprutils-$(UTILS_VER)-src.tgz --exclude .git --exclude
+  all: iprconfig iprupdate iprdump iprinit iprdbg docs 
+  
+  iprconfig: iprconfig.c iprlib.o iprconfig.h
+--	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lncurses -lmenu
+-+	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lmenu -lncurses
++-	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lncurses -lmenu -lm
+++	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lmenu -lncurses -lm
+  
+  iprupdate: iprupdate.c iprlib.o
+  	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprupdate iprlib.o iprupdate.c $(LDFLAGS)
++-- 
++1.9.3
++
 diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-index 53516b6..0721fbf 100644
+index 0721fbf..0f9ec2a 100644
 --- a/package/iprutils/iprutils.mk
 +++ b/package/iprutils/iprutils.mk
-@@ -12,11 +12,14 @@ IPRUTILS_LICENSE = Common Public License Version 1.0
- IPRUTILS_LICENSE_FILES = LICENSE
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define IPRUTILS_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		INCLUDEDIR="-I. -I$(STAGING_DIR)/usr/include/ncurses" \
-+		-C $(@D) all
- endef
- 
- define IPRUTILS_INSTALL_TARGET_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) INSTALL_MOD_PATH=$(TARGET_DIR) -C $(@D) install
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) INSTALL_MOD_PATH=$(TARGET_DIR) \
-+		-C $(@D) install
- endef
- 
- $(eval $(generic-package))
+-IPRUTILS_VERSION = 2.4.2
++IPRUTILS_VERSION = 2.4.5
+ IPRUTILS_SITE = http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
+ IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
+ IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
 -- 
 1.9.3
