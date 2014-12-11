@@ -1,124 +1,145 @@
-From: Thierry Bultel <tbultel@free.fr>
-Date: Thu, 11 Dec 2014 21:52:50 +0100
-Subject: [Buildroot] systemd: syslog.socket fails
-In-Reply-To: <CAGrucu1SpBB0J-9wVynW1q_PA=VFgSxkMAkv8T_cM-jyAW3SJw@mail.gmail.com>
-References: <5489C246.9020805@free.fr>
- <CAGrucu1SpBB0J-9wVynW1q_PA=VFgSxkMAkv8T_cM-jyAW3SJw@mail.gmail.com>
-Message-ID: <548A0422.1080400@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Dec 2014 22:03:01 +0100
+Subject: [Buildroot] [PATCH 1/4 v4] suppot/download: add option parsing
+ to the download wrapper
+In-Reply-To: <20141211213749.637df4c2@free-electrons.com>
+References: <cover.1418322200.git.yann.morin.1998@free.fr>
+ <204467c4c3722faed45db924c489ad768ed1ae33.1418322200.git.yann.morin.1998@free.fr>
+ <20141211213749.637df4c2@free-electrons.com>
+Message-ID: <20141211210301.GL4199@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 11/12/2014 18:26, Andr? Erdmann a ?crit :
-> Hi Thierry,
->
-> 2014-12-11 17:11 GMT+01:00 Thierry Bultel <tbultel@free.fr>:
->> Hi,
->>
->> I am using rsyslog + systemd, and rsyslog does not start, because it fails
->> to start the syslog.socket
->>
->> This can be shown in this single case:
->>
->> root at buildroot:~>systemctl start syslog.socket
->> Job for syslog.socket failed. See 'systemctl status syslog.socket' and
->> 'journalctl -xn' for details.
->>
->> root at buildroot:~>journalctl -xn
->> -- Logs begin at Thu 2014-12-11 15:52:42 UTC, end at Thu 2014-12-11 16:14:45
->> UTC. --
->> Dec 11 16:03:52 buildroot-stack104 systemd[1]: Socket service syslog.service
->> not loaded, refusing.
->> Dec 11 16:03:52 buildroot-stack104 systemd[1]: Failed to listen on Syslog
->> Socket.
->> -- Subject: Unit syslog.socket has failed
->> -- Defined-By: systemd
->> -- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel
->> --
->> -- Unit syslog.socket has failed.
->>
->> As a workaround (inspired from systemd-journald.socket),
->> adding :
->>
->> Service=syslog.service
->>
->> ... at the end of /lib/systemd/system/syslog.socket makes it work (though I
->> have no idea why, at the present time)
->>
->
-> That's because socket units need a service unit with the same base
-> name (syslog.service here) and that file doesn't exist on your system.
-> It can be overridden with Service=rsyslog.service ("syslog.service":
-> typo?), as you've already done. The 'proper' way is to create a
-> syslog.service symlink in /etc/systemd/system:
->
-> ln -s /lib/systemd/system/rsyslog.service /etc/systemd/system/syslog.service
->
-> "systemctl enable rsyslog.service" would also create this symlink (and
-> another one in /etc/systemd/system/multi-user.target.wants/ that
-> enables the service).
->
-> Alternatively, rather than editing syslog.socket directly, create
-> /etc/systemd/system/syslog.socket.d/05-provider.conf with the
-> following two lines:
->
-> [Socket]
-> Service=rsyslog.service
->
->
-> Either variant should work (don't forget to run "systemctl daemon-reload").
->
+On 2014-12-11 21:37 +0100, Thomas Petazzoni spake thusly:
+> Typo in title: suppot -> support
 
-Thanks,
-that was the trick indeed.
+Suppot de Satan! :-)
 
-So the problem is that buildroot shoud create that link when installing
-rsyslog to target, when systemd is the chose init system.
+> On Thu, 11 Dec 2014 19:24:45 +0100, Yann E. MORIN wrote:
+> > Instead of relying on argument ordering, use actual options in the
+> > download wrapper.
+> > 
+> > Download backends (bzr, cp, hg...) are left as-is, because it does not
+> > make sense to complexifies them, since they are almost very trivial
+> 
+> complexifies -> complexify.
 
-Also, that seems to me related to the 7.6.7 package itself, that may be 
-broken, but
-the $(@D)/platform/redhat/rsyslog.conf that is provided leads to a lot
-of parsing errors:
+Da.
 
-rsyslogd: action 'rsyslog_conf' treated as ':omusrmsg:rsyslog_conf' - 
-please change syntax, 'rsyslog_conf' will not be supported in the future 
-[try http://www.rsyslog.com/e/2184 ]
-rsyslogd: user name 'rsyslog_...' too long - ignored
-rsyslogd: error during parsing file /etc/rsyslog.conf, on or before line 
-7: warnings occured in file '/etc/rsyslog.conf' around line 7 [try 
-http://www.rsyslog.com/e/2207 ]
-rsyslogd: action '*' treated as ':omusrmsg:*' - please change syntax, 
-'*' will not be supported in the future [try http://www.rsyslog.com/e/2184 ]
-rsyslogd: error during parsing file /etc/rsyslog.conf, on or before line 
-8: warnings occured in file '/etc/rsyslog.conf' around line 8 [try 
-http://www.rsyslog.com/e/2207 ]
-rsyslogd: action 'or' treated as ':omusrmsg:or' - please change syntax, 
-'or' will not be supported in the future [try 
-http://www.rsyslog.com/e/2184 ]
-rsyslogd: error during parsing file /etc/rsyslog.conf, on or before line 
-8: warnings occured in file '/etc/rsyslog.conf' around line 8 [try 
-http://www.rsyslog.com/e/2207 ]
-rsyslogd: action 'latest' treated as ':omusrmsg:latest' - please change 
-syntax, 'latest' will not be supported in the future [try 
-http://www.rsyslog.com/e/2184 ]
-rsyslogd: error during parsing file /etc/rsyslog.conf, on or before line 
-8: warnings occured in file '/etc/rsyslog.conf' around line 8 [try 
-http://www.rsyslog.com/e/2207 ]
+> > shell scripts, and adding option parsing would be really overkill.
+> 
+> You could have mentioned that the commit also renames the script. I
+> thought it was the case in earlier versions of this patch series.
 
-...
+So did I. Will add it on the next respin...
 
-Cheers
-Thierry
+> > diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+> > new file mode 100755
+> > index 0000000..b1b9158
+> > --- /dev/null
+> > +++ b/support/download/dl-wrapper
+> > @@ -0,0 +1,166 @@
+> > +#!/usr/bin/env bash
+> > +
+> > +# This script is a wrapper to the other download backends.
+> > +# Its role is to ensure atomicity when saving downloaded files
+> > +# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
+> > +# failed downloads.
+> > +#
+> > +# Call it with:
+> > +#   -b BACKEND  name of the backend (eg. cvs, git, cp...)
+> > +#   -o FILE     full path to the file in which to save the download
+> > +#   --          everything after '--' are options for the backend
+> > +# Environment:
+> > +#   BUILD_DIR: the path to Buildroot's build dir
+> 
+> With this in place, do we still need the -h option and the fake man
+> page?
 
->> http://cgit.freedesktop.org/systemd/systemd/tree/units/syslog.socket does
->> not have such a hack ...
->>
->> Any ideas ?
->> Thierry
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Are get rid of it and keep the help text? ;-)
+
+[--SNIP--]
+> > +main() {
+> > +    local OPT OPTARG
+> > +    local backend output
+> > +
+> > +    # Parse our options; anythong after '--' is for the backend
+> 
+> anything
+
+Ack.
+
+> > +    # Sop we only care to -b (backend) and -o (output file)
+> 
+> Sop?
+
+s/p//
+
+> Maybe:
+> 
+>        # We only care about -b, -h and -o
+
+Or just remove it, it's a carry-over from the previous script...
+
+[--SNIP--]
+> > +    tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+> 
+> No space after ( and before ).
+
+Ack for it and the following ones.
+
+[--SNIP--]
+> > +    if ! "${OLDPWD}/support/download/${backend}" "${tmpf}" "${@}"; then
+> > +        rm -rf "${tmpd}"
+> 
+> How is it possible to remove ${tmpd} here, since we are cd'ed into this
+> directory?
+
+Well, nothing prevents the removal of a directory that still has an open
+fd to it, no more than anything prevents the removal of a file that
+still has an open fd to it. It is marked "deleted" in the VFS so nothing
+can access it anymore, nor create new entries in it...
+
+    mkdir -p ~/foo/bar
+    cd ~/foo/bar
+    rm -rf ~/foo/bar
+    echo buz >baz
+
+And see what happens! ;-)
+
+[--SNIP--]
+> > +help() {
+> > +    cat <<_EOF_
+> > +NAME
+> > +    ${my_name} - downlaod wrapper for Buildroot
+> 
+> download
+
+Ack.
+
+> > +
+> > +SYNOPSIS
+> > +    ${my_name} [OPTION]... -- [BACKEND OPTION]...
+> > +
+> > +DESCRIPTION
+> > +    Wrapper script around different download mechanisms. Ensure that
+> 
+> Ensures
+
+Ack.
+
+Thanks for the review! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
