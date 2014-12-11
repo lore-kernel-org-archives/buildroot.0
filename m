@@ -1,82 +1,57 @@
-From: =?UTF-8?Q?Andr=C3=A9_Erdmann?= <dywi@mailerd.de>
-Date: Thu, 11 Dec 2014 18:26:02 +0100
-Subject: [Buildroot] systemd: syslog.socket fails
-In-Reply-To: <5489C246.9020805@free.fr>
-References: <5489C246.9020805@free.fr>
-Message-ID: <CAGrucu1SpBB0J-9wVynW1q_PA=VFgSxkMAkv8T_cM-jyAW3SJw@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 11 Dec 2014 17:39:46 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-12-10
+In-Reply-To: <20141211073016.EFDC7100E7A@stock.ovh.net>
+References: <20141211073016.EFDC7100E7A@stock.ovh.net>
+Message-ID: <5489D6E2.1010002@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thierry,
+On 12/11/2014 07:30 AM, Thomas Petazzoni wrote:
+>       mipsel |             kismet-2013-03-R1b | NOK | http://autobuild.buildroot.net/results/965a3e345dc0a432043b72581bff7d33561fbe0c/
 
-2014-12-11 17:11 GMT+01:00 Thierry Bultel <tbultel@free.fr>:
-> Hi,
->
-> I am using rsyslog + systemd, and rsyslog does not start, because it fails
-> to start the syslog.socket
->
-> This can be shown in this single case:
->
-> root at buildroot:~>systemctl start syslog.socket
-> Job for syslog.socket failed. See 'systemctl status syslog.socket' and
-> 'journalctl -xn' for details.
->
-> root at buildroot:~>journalctl -xn
-> -- Logs begin at Thu 2014-12-11 15:52:42 UTC, end at Thu 2014-12-11 16:14:45
-> UTC. --
-> Dec 11 16:03:52 buildroot-stack104 systemd[1]: Socket service syslog.service
-> not loaded, refusing.
-> Dec 11 16:03:52 buildroot-stack104 systemd[1]: Failed to listen on Syslog
-> Socket.
-> -- Subject: Unit syslog.socket has failed
-> -- Defined-By: systemd
-> -- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel
-> --
-> -- Unit syslog.socket has failed.
->
-> As a workaround (inspired from systemd-journald.socket),
-> adding :
->
-> Service=syslog.service
->
-> ... at the end of /lib/systemd/system/syslog.socket makes it work (though I
-> have no idea why, at the present time)
->
+This failure is caused because in the configure script Kismet tries to
+do a compile test to check for pcap_open_live(). This works for shared
+builds because is very common the host machine has installed the shared
+library of libpcap. But when building for static, is very unlikely
+having the static library of libpcap installed on the host, so that
+compilation test (which runs in the host machine) fails.
 
-That's because socket units need a service unit with the same base
-name (syslog.service here) and that file doesn't exist on your system.
-It can be overridden with Service=rsyslog.service ("syslog.service":
-typo?), as you've already done. The 'proper' way is to create a
-syslog.service symlink in /etc/systemd/system:
+Given that kismet depends on libpcap, we can ensure that the pcap
+library installed on the target will be fine, so we can workaround this
+error by removing the compile tests (there are three of them) from the
+configure script. And that would be a patch to fix Kismet when
+cross-compiling.
 
-ln -s /lib/systemd/system/rsyslog.service /etc/systemd/system/syslog.service
+However, after doing that, we will face more problems. The first one
+will be one related of a missing "-pthread" option:
 
-"systemctl enable rsyslog.service" would also create this symlink (and
-another one in /etc/systemd/system/multi-user.target.wants/ that
-enables the service).
+/br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libnl-3.a(socket.o):
+In function `release_local_port':
+socket.c:(.text+0x120): undefined reference to `pthread_rwlock_wrlock'
+[...]
 
-Alternatively, rather than editing syslog.socket directly, create
-/etc/systemd/system/syslog.socket.d/05-provider.conf with the
-following two lines:
+We could fix that just by adding this to the kismet.mk file:
 
-[Socket]
-Service=rsyslog.service
+KISMET_CONF_ENV = LIBS="-pthread"
 
+But that's not enough. We will face more problems like this one:
 
-Either variant should work (don't forget to run "systemctl daemon-reload").
+/br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libpcap.a(pcap-canusb-linux.o):
+In function `canusb_close':
+pcap-canusb-linux.c:(.text+0xec): undefined reference to `libusb_close'
 
-> http://cgit.freedesktop.org/systemd/systemd/tree/units/syslog.socket does
-> not have such a hack ...
->
-> Any ideas ?
-> Thierry
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+So, at this point I don't know if it would be better to just disable
+kismet for static builds. What do you think?
 
+Cheers,
 -- 
-Andr?
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
