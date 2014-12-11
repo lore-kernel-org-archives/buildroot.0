@@ -1,62 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 22:50:40 +0100
-Subject: [Buildroot] [git commit] arch: introduce BR2_BINFMT_SUPPORTS_SHARED
-Message-ID: <20141211215300.B77FE80193@busybox.osuosl.org>
+Date: Thu, 11 Dec 2014 22:52:32 +0100
+Subject: [Buildroot] [git commit] ncurses: speed up host build by disabling
+	static library building
+Message-ID: <20141211215300.C9BDE80193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b85837e5d6d2b49fb97b86af362b84aa4669af6a
+commit: http://git.buildroot.net/buildroot/commit/?id=f8639c79d8f8af4ac01176e64d69062ac4644561
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation for the refactoring of the static/shared library
-support, we add a BR2_BINFMT_SUPPORTS_SHARED hidden option that binary
-formats supporting shared libraries should select.
+For the host variant of packages, we normally only build the shared
+libraries. However, ncurses uses non-standard options to select
+between shared/static and therefore the host variant was building both
+of them, even though the static libraries were unused.
+
+By passing --without-normal, we disable the build of static
+libraries. It saves a bit of disk space, and on my laptop,
+host-ncurses takes 26 seconds to build instead of 40 seconds.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- arch/Config.in |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/ncurses/ncurses.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index c05e5d7..c7bef5d 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -251,6 +251,10 @@ config BR2_GCC_TARGET_MODE
- config BR2_ARCH_HAS_ATOMICS
- 	bool
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 1ce3818..645c25c 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -145,7 +145,8 @@ HOST_NCURSES_CONF_OPTS = \
+ 	--without-manpages \
+ 	--without-cxx \
+ 	--without-cxx-binding \
+-	--without-ada
++	--without-ada \
++	--without-normal
  
-+# Must be selected by binary formats that support shared libraries.
-+config BR2_BINFMT_SUPPORTS_SHARED
-+	bool
-+
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
-@@ -261,6 +265,7 @@ choice
- config BR2_BINFMT_ELF
- 	bool "ELF"
- 	depends on !BR2_bfin && !BR2_m68k
-+	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  ELF (Executable and Linkable Format) is a format for libraries and
- 	  executables used across different architectures and operating
-@@ -269,6 +274,7 @@ config BR2_BINFMT_ELF
- config BR2_BINFMT_FDPIC
- 	bool "FDPIC"
- 	depends on BR2_bfin
-+	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  ELF FDPIC binaries are based on ELF, but allow the individual load
- 	  segments of a binary to be located in memory independently of each
-@@ -307,6 +313,7 @@ config BR2_BINFMT_FLAT_SEP_DATA
- config BR2_BINFMT_FLAT_SHARED
- 	bool "Shared binary"
- 	depends on BR2_bfin || BR2_m68k
-+	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  Allow to load and link indiviual FLAT binaries at run time.
- 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
