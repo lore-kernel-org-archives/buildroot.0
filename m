@@ -1,23 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 23:58:44 +0100
-Subject: [Buildroot] [git commit] pkg-download: check for already downloaded
-	file in the download wrapper
-Message-ID: <20141211225952.440AE7FA1F@busybox.osuosl.org>
+Date: Thu, 11 Dec 2014 23:59:41 +0100
+Subject: [Buildroot] [git commit] pkg-download: check hashes for locally
+	cached files
+Message-ID: <20141211225952.5D0F9803BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2685937e06d6ede44b88b223e02b38b3ff66a53c
+commit: http://git.buildroot.net/buildroot/commit/?id=9bb7d10eeadf4aebefde672de0b81e0d321fb5b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of repeating the same test again and again in all our download
-rules, just delegate the check for an already downloaded file to the
-download wrapper.
+In some cases, upstream just update their releases in-place, without
+renaming them. When that package is updated in Buildroot, a new hash to
+match the new upstream release is included in the corresponding .hash
+file.
 
-This clears up the path for doing the hash checks on a cached file
-before the download.
+As a consequence, users who previously downloaded that package's tarball
+with an older version of Buildroot, will get stuck with an old archive
+for that package, and after updating their Buildroot copy, will be greeted
+with a failed download, due to the local file not matching the new
+hashes.
+
+Also, an upstream would sometime serve us HTML garbage instead of the
+actual tarball we requested, like SourceForge does from time for as-yet
+unknown reasons.
+
+So, to avoid this situation, check the hashes prior to doing the
+download. If the hashes match, consider the locally cached file genuine,
+and do not download it. However, if the locally cached file does not
+match the known hashes we have for it, it is promptly removed, and a
+download is re-attempted.
+
+Note: this does not add any overhead compared to the previous situation,
+because we were already checking hashes of locally cached files. It just
+changes the order in which we do the checks. For the records, here is the
+overhead of hashing a 231MiB file (qt-everywhere-opensource-src-4.8.6.tar.gz)
+on a core-i5 @2.5GHz:
+
+            cache-cold  cache-hot
+    sha1      1.914s      0.762s
+    sha256    2.109s      1.270s
+
+But again, this overhead already existed before this patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -26,91 +52,23 @@ Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-download.mk     |    8 --------
- support/download/dl-wrapper |    5 +++++
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ support/download/dl-wrapper |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 8424eca..c021e92 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -96,7 +96,6 @@ endef
- # Messages for the type of clone used are provided to ease debugging in case of
- # problems
- define DOWNLOAD_GIT
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
- 		-- \
-@@ -117,7 +116,6 @@ endef
- 
- 
- define DOWNLOAD_BZR
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
- 		-- \
-@@ -135,7 +133,6 @@ define SHOW_EXTERNAL_DEPS_BZR
- endef
- 
- define DOWNLOAD_CVS
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
- 		-- \
-@@ -155,7 +152,6 @@ define SHOW_EXTERNAL_DEPS_CVS
- endef
- 
- define DOWNLOAD_SVN
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
- 		-- \
-@@ -176,7 +172,6 @@ endef
- # Note that filepath is relative to the user's home directory, so you may want
- # to prepend the path with a slash: scp://[user@]host:/absolutepath
- define DOWNLOAD_SCP
--	test -e $(DL_DIR)/$(2) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
- 		-o $(DL_DIR)/$(2) \
- 		-- \
-@@ -194,7 +189,6 @@ endef
- 
- 
- define DOWNLOAD_HG
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
- 		-- \
-@@ -215,7 +209,6 @@ endef
- 
- 
- define DOWNLOAD_WGET
--	test -e $(DL_DIR)/$(2) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
- 		-o $(DL_DIR)/$(2) \
- 		-- \
-@@ -232,7 +225,6 @@ define SHOW_EXTERNAL_DEPS_WGET
- endef
- 
- define DOWNLOAD_LOCALFILES
--	test -e $(DL_DIR)/$(2) || \
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
- 		-o $(DL_DIR)/$(2) \
- 		-- \
 diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index f1bb73a..dc5b4b0 100755
+index f0cdd73..cced8f6 100755
 --- a/support/download/dl-wrapper
 +++ b/support/download/dl-wrapper
-@@ -43,6 +43,11 @@ main() {
-         error "no output specified, use -o\n"
+@@ -49,7 +49,11 @@ main() {
+ 
+     # If the output file already exists, do not download it again
+     if [ -e "${output}" ]; then
+-        exit 0
++        if support/download/check-hash "${hfile}" "${output}" "${output##*/}"; then
++            exit 0
++        fi
++        rm -f "${output}"
++        printf "Re-downloading '%s'...\n" "${output##*/}"
      fi
  
-+    # If the output file already exists, do not download it again
-+    if [ -e "${output}" ]; then
-+        exit 0
-+    fi
-+
      # tmpd is a temporary directory in which backends may store intermediate
-     # by-products of the download.
-     # tmpf is the file in which the backends should put the downloaded content.
