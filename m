@@ -1,35 +1,43 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 12 Dec 2014 00:27:45 +0100
-Subject: [Buildroot] [PATCH 1/3] iprutils: rename patches to follow the new
-	name convention
-Message-ID: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>
+Date: Fri, 12 Dec 2014 00:27:46 +0100
+Subject: [Buildroot] [PATCH 2/3] iprutils: Don't include host headers
+In-Reply-To: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>
+References: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1418340467-29999-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ERROR: unsafe header/library path used in cross-compilation: '/usr/include/ncurses'
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- ...iprutils-0001-Don-t-use-gettext.patch => 0001-Don-t-use-gettext.patch} | 0
- ...nviro.patch => 0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch} | 0
- ...ies-i.patch => 0003-Fix-static-build-by-passing-the-libraries-i.patch} | 0
- 3 files changed, 0 insertions(+), 0 deletions(-)
- rename package/iprutils/{iprutils-0001-Don-t-use-gettext.patch => 0001-Don-t-use-gettext.patch} (100%)
- rename package/iprutils/{iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch => 0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch} (100%)
- rename package/iprutils/{iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch => 0003-Fix-static-build-by-passing-the-libraries-i.patch} (100%)
+ package/iprutils/iprutils.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/iprutils/iprutils-0001-Don-t-use-gettext.patch b/package/iprutils/0001-Don-t-use-gettext.patch
-similarity index 100%
-rename from package/iprutils/iprutils-0001-Don-t-use-gettext.patch
-rename to package/iprutils/0001-Don-t-use-gettext.patch
-diff --git a/package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch b/package/iprutils/0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
-similarity index 100%
-rename from package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
-rename to package/iprutils/0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
-diff --git a/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
-similarity index 100%
-rename from package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
-rename to package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+index 53516b6..0721fbf 100644
+--- a/package/iprutils/iprutils.mk
++++ b/package/iprutils/iprutils.mk
+@@ -12,11 +12,14 @@ IPRUTILS_LICENSE = Common Public License Version 1.0
+ IPRUTILS_LICENSE_FILES = LICENSE
+ 
+ define IPRUTILS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		INCLUDEDIR="-I. -I$(STAGING_DIR)/usr/include/ncurses" \
++		-C $(@D) all
+ endef
+ 
+ define IPRUTILS_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) INSTALL_MOD_PATH=$(TARGET_DIR) -C $(@D) install
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) INSTALL_MOD_PATH=$(TARGET_DIR) \
++		-C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.9.3
