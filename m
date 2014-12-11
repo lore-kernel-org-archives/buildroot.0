@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 19:53:03 +0100
-Subject: [Buildroot] [PATCH 1/2] libsvgtiny: rename patches to follow
- the new name convention
-In-Reply-To: <1418298801-47799-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1418298801-47799-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141211195303.4738bead@free-electrons.com>
+Date: Thu, 11 Dec 2014 19:53:31 +0100
+Subject: [Buildroot] [PATCH v2] gnupg2: fix linking with intl
+In-Reply-To: <1418299611-50833-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1418299611-50833-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141211195331.48f6f7c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,13 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Thu, 11 Dec 2014 11:53:20 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2: this patch did not exist in v1
-> 
->  ...ntfs.patch => 0001-disable-debug-printfs.patch} |    0
->  ...e-builddir.patch => 0002-create-builddir.patch} |    0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/libsvgtiny/{libsvgtiny-01-disable-debug-printfs.patch => 0001-disable-debug-printfs.patch} (100%)
->  rename package/libsvgtiny/{libsvgtiny-02-create-builddir.patch => 0002-create-builddir.patch} (100%)
+On Thu, 11 Dec 2014 12:06:51 +0000, Vicente Olivert Riera wrote:
 
-Both patches applied, thanks.
+> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
+> +GNUPG2_DEPENDENCIES += gettext
+> +GNUPG2_CONF_ENV += LIBS=-lintl
+
+Are you sure we need this LIBS part when glibc is used?
 
 Thomas
 -- 
