@@ -1,133 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Dec 2014 00:09:02 +0100
-Subject: [Buildroot] [git commit] Turn the static lib option into a choice
-	with more options
-Message-ID: <20141211230954.3763F800BF@busybox.osuosl.org>
+Date: Fri, 12 Dec 2014 00:13:07 +0100
+Subject: [Buildroot] [PATCHv2 0/3] Improved static/shared library
+ handling
+In-Reply-To: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141212001307.14e0dfa9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=158001f57b47a3fb439ad9093b6703c7edf3f842
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This commit turns the single static option into a choice, which offers
-various possibilities:
+On Thu, 11 Dec 2014 23:50:08 +0100, Thomas Petazzoni wrote:
 
- 1. Build and use static libraries only;
- 2. Build both shared and static libraries, but use shared libraries;
- 3. Build and use shared libraries only.
+> Thomas Petazzoni (3):
+>   Turn the static lib option into a choice with more options
+>   ncurses: better handling for shared/static library
+>   Build shared libraries only as the default
 
-On most platforms, (2) is currently the default, and kept as the
-default in this commit. Of course, on certain platforms (Blackfin,
-m68k), only option (1) will be available.
+Series applied, with the minor comment on PATCH 1/3 from Yann addressed.
 
-In addition to the introduction of the Config.in options, this commit
-also:
+As you can imagine PATCH 3/3 might cause quite a bit of autobuilder
+failures. Do not hesitate to monitor them and help fix them if needed.
 
- * Removes the 'select BR2_STATIC_LIBS' from 'BR2_BINFMT_FLAT', since
-   with the use of a choice, we are guaranteed that BR2_STATIC_LIBS
-   will be selected when the binary format is BR2_BINFMT_FLAT, since
-   BR2_STATIC_LIBS will be the only possible solution in the choice.
+Thanks!
 
- * Changes package/Makefile.in to use the proper
-   --{enable,disable}-{shared,static} options for autotools packages.
-
-[Thomas: remove useless empty newline right after 'choice'. Noticed by
-Yann E. Morin.]
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- Config.in           |   44 +++++++++++++++++++++++++++++++++++---------
- arch/Config.in      |    1 -
- package/Makefile.in |    4 +++-
- 3 files changed, 38 insertions(+), 11 deletions(-)
-
-diff --git a/Config.in b/Config.in
-index cdc5f0f..4592139 100644
---- a/Config.in
-+++ b/Config.in
-@@ -525,19 +525,45 @@ config BR2_ENABLE_SSP
- comment "enabling Stack Smashing Protection requires support in the toolchain"
- 	depends on !BR2_TOOLCHAIN_HAS_SSP
- 
-+choice
-+	bool "libraries"
-+	default BR2_SHARED_STATIC_LIBS if BR2_BINFMT_SUPPORTS_SHARED
-+	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
-+	help
-+	  Select the type of libraries you want to use on the target.
-+
-+	  The default is to build dynamic libraries and use those on
-+	  the target filesystem, except when the architecture and/or
-+	  the selected binary format does not support shared
-+	  libraries.
-+
- config BR2_STATIC_LIBS
--	bool "build statically linked applications, no dynamic libraries"
-+	bool "static only"
- 	help
--	  Build all applications for the target statically linked.
--	  This potentially increases your filesystem size and should only be
--	  used if you know what you do.
-+	  Build and use only static libraries. No shared libraries
-+	  will be instaled on the target. This potentially increases
-+	  your code size and should only be used if you know what you
-+	  are doing. Note that some packages may not be available when
-+	  this option is enabled, due to their need for dynamic
-+	  library support.
- 
--	  Note that some applications cannot be build statically and so are
--	  intentionally disabled.
-+config BR2_SHARED_LIBS
-+	bool "shared only"
-+	depends on BR2_BINFMT_SUPPORTS_SHARED
-+	help
-+	  Build and use only shared libraries. This is the recommended
-+	  solution as it saves space and build time.
-+
-+config BR2_SHARED_STATIC_LIBS
-+	bool "both static and shared"
-+	depends on BR2_BINFMT_SUPPORTS_SHARED
-+	help
-+	  Build both shared and static libraries, but link executables
-+	  dynamically. While building both shared and static libraries
-+	  take more time and more disk space, having static libraries
-+	  may be useful to link some of the applications statically.
- 
--	  The default (if this option is disabled) is to build dynamic
--	  libraries and dynamically link applications to use those on the
--	  target filesystem.
-+endchoice
- 
- 
- config BR2_PACKAGE_OVERRIDE_FILE
-diff --git a/arch/Config.in b/arch/Config.in
-index d06ab5e..890e7e2 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -284,7 +284,6 @@ config BR2_BINFMT_FDPIC
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
- 	depends on BR2_bfin || BR2_m68k
--	select BR2_STATIC_LIBS
- 	help
- 	  FLAT binary is a relatively simple and lightweight executable format
- 	  based on the original a.out format. It is widely used in environment
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 50f86ad..a63a2e8 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -394,7 +394,9 @@ SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
- TARGET_CFLAGS += -static
- TARGET_CXXFLAGS += -static
- TARGET_LDFLAGS += -static
--else
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+SHARED_STATIC_LIBS_OPTS = --disable-static --enable-shared
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
