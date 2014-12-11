@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 09:59:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.0.2
-In-Reply-To: <1418253529-10179-1-git-send-email-jkrause@posteo.de>
-References: <1418253529-10179-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141211095942.600b11ec@free-electrons.com>
+Date: Thu, 11 Dec 2014 09:59:51 +0100
+Subject: [Buildroot] [PATCH] ipset: bump to version 6.24
+In-Reply-To: <1418253813-19934-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1418253813-19934-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141211095951.2203bf67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Gustavo Zacarias,
 
-On Thu, 11 Dec 2014 00:18:49 +0100, J?rg Krause wrote:
-> libuv has moved to github.com/libuv/libuv
-> 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+On Wed, 10 Dec 2014 20:23:33 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libuv/libuv.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  ...Make_global.am-Don-t-include-host-headers.patch | 29 ----------------------
+>  package/ipset/ipset.hash                           |  4 +--
+>  package/ipset/ipset.mk                             |  3 ++-
+>  3 files changed, 4 insertions(+), 32 deletions(-)
+>  delete mode 100644 package/ipset/0002-Make_global.am-Don-t-include-host-headers.patch
 
-Applied, thanks, after fixing the Config.in help text as suggested by
-Baruch.
+Applied, thanks.
 
 Thomas
 -- 
