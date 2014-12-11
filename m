@@ -1,32 +1,47 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Thu, 11 Dec 2014 16:58:31 +0100
-Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: bump to version 2.5
-In-Reply-To: <1418313511-12701-1-git-send-email-jkrause@posteo.de>
-References: <1418313511-12701-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1418313511-12701-2-git-send-email-jkrause@posteo.de>
+From: Thierry Bultel <tbultel@free.fr>
+Date: Thu, 11 Dec 2014 17:11:50 +0100
+Subject: [Buildroot] systemd: syslog.socket fails
+Message-ID: <5489C246.9020805@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/ffmpeg/ffmpeg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 784d8b3..1820dc4 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.4.4
-+FFMPEG_VERSION = 2.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+I am using rsyslog + systemd, and rsyslog does not start, because it 
+fails to start the syslog.socket
+
+This can be shown in this single case:
+
+root at buildroot:~>systemctl start syslog.socket
+Job for syslog.socket failed. See 'systemctl status syslog.socket' and 
+'journalctl -xn' for details.
+
+root at buildroot:~>journalctl -xn
+-- Logs begin at Thu 2014-12-11 15:52:42 UTC, end at Thu 2014-12-11 
+16:14:45 UTC. --
+Dec 11 16:03:52 buildroot-stack104 systemd[1]: Socket service 
+syslog.service not loaded, refusing.
+Dec 11 16:03:52 buildroot-stack104 systemd[1]: Failed to listen on 
+Syslog Socket.
+-- Subject: Unit syslog.socket has failed
+-- Defined-By: systemd
+-- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel
 -- 
-2.1.3
+-- Unit syslog.socket has failed.
+
+As a workaround (inspired from systemd-journald.socket),
+adding :
+
+Service=syslog.service
+
+... at the end of /lib/systemd/system/syslog.socket makes it work 
+(though I have no idea why, at the present time)
+
+http://cgit.freedesktop.org/systemd/systemd/tree/units/syslog.socket 
+does not have such a hack ...
+
+Any ideas ?
+Thierry
