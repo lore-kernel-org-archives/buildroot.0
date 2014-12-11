@@ -1,30 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 22:50:09 +0100
-Subject: [Buildroot] [PATCH 4/8] arch: ensure BR2_BINFMT_ELF is really
- used
-In-Reply-To: <20141211200708.GE4199@free.fr>
-References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417642895-29606-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141211200708.GE4199@free.fr>
-Message-ID: <20141211225009.49b138c2@free-electrons.com>
+Date: Thu, 11 Dec 2014 22:51:12 +0100
+Subject: [Buildroot] [git commit] arch: remove superfluous arch dependencies
+	on BR2_BINFMT_FLAT_*
+Message-ID: <20141211215300.BFCAA80193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=375c77ad4e597bc5c67a151d722b5063322bbb46
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 11 Dec 2014 21:07:08 +0100, Yann E. MORIN wrote:
+As noted by Yann E. Morin, those dependencies are unneeded, since FLAT
+can anyway only be used on m68k and Blackfin.
 
-> Even though BR2_BINFMT_ELF is never used, but we need it in the choice.
-> Just out of curiosity, do you plan on needing it in a future patch?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-Well it is needed in PATCH 5/8 to make sure that
-BR2_BINFMT_SUPPORTS_SHARED is selected on ELF based systems.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in b/arch/Config.in
+index c7bef5d..d06ab5e 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -305,14 +305,12 @@ config BR2_BINFMT_FLAT_ONE
+ 
+ config BR2_BINFMT_FLAT_SEP_DATA
+ 	bool "Separate data and code region"
+-	depends on BR2_bfin || BR2_m68k
+ 	help
+ 	  Allow for the data and text segments to be separated and placed in
+ 	  different regions of memory.
+ 
+ config BR2_BINFMT_FLAT_SHARED
+ 	bool "Shared binary"
+-	depends on BR2_bfin || BR2_m68k
+ 	select BR2_BINFMT_SUPPORTS_SHARED
+ 	help
+ 	  Allow to load and link indiviual FLAT binaries at run time.
