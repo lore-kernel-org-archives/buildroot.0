@@ -1,27 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 19:53:31 +0100
-Subject: [Buildroot] [PATCH v2] gnupg2: fix linking with intl
-In-Reply-To: <1418299611-50833-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1418299611-50833-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20141211195331.48f6f7c4@free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Thu, 11 Dec 2014 19:59:43 +0100
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: bump to version 2.5
+In-Reply-To: <XnsA400B126B8B0CberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1418313511-12701-1-git-send-email-jkrause@posteo.de>
+ <1418313511-12701-2-git-send-email-jkrause@posteo.de>
+ <XnsA400B126B8B0CberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <1418324383.1007.1.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
-
-On Thu, 11 Dec 2014 12:06:51 +0000, Vicente Olivert Riera wrote:
-
-> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> +GNUPG2_DEPENDENCIES += gettext
-> +GNUPG2_CONF_ENV += LIBS=-lintl
-
-Are you sure we need this LIBS part when glibc is used?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Do, 2014-12-11 at 17:24 +0100, Bernd Kuhls wrote:
+> =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause-1KBjaw7Xf1
+> +zQB+pC5nmwQ at public.gmane.org> wrote in news:1418313511-12701-2-git-send-
+> email-jkrause at posteo.de:
+> 
+> > -FFMPEG_VERSION = 2.4.4
+> > +FFMPEG_VERSION = 2.5
+> 
+> Hi,
+> 
+> ffmpeg.hash also needs an update.
+> Otherwise the patch is ok, Kodi rc3 still works with it after adjusting the 
+> kodi-specific ffmpeg patch, therefore
+> 
+> Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+Ah, I missed the warning: No hash found. I will send a new version.
