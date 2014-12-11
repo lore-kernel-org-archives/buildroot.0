@@ -1,44 +1,68 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Thu, 11 Dec 2014 20:08:46 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/ffmpeg: bump to version 2.5
-Message-ID: <1418324926-31726-1-git-send-email-jkrause@posteo.de>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Thu, 11 Dec 2014 21:04:31 +0100
+Subject: [Buildroot] [PATCH] python-markdown: add new package
+Message-ID: <1418328271-30112-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version and update hash file.
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
-Changes v1 -> v2:
-  - Update hash file
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                          |  1 +
+ package/python-markdown/Config.in          |  6 ++++++
+ package/python-markdown/python-markdown.mk | 15 +++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/python-markdown/Config.in
+ create mode 100644 package/python-markdown/python-markdown.mk
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 4363ce1..b45d375 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9ad041c0201fb8b2605c5c5c0259c373c793c32cfc96f7315fca67e900494afc ffmpeg-2.4.4.tar.bz2
-+sha256 148cfd694b60245f9116f5932f3f60bb6dba47bcfef395cdda7a7d8ed48d57ac  ffmpeg-2.5.tar.bz2
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 784d8b3..1820dc4 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.4.4
-+FFMPEG_VERSION = 2.5
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index f41e332..f62c787 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -510,6 +510,7 @@ menu "external python modules"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-mad/Config.in"
++	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-msgpack/Config.in"
+diff --git a/package/python-markdown/Config.in b/package/python-markdown/Config.in
+new file mode 100644
+index 0000000..e5e164e
+--- /dev/null
++++ b/package/python-markdown/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_MARKDOWN
++	bool "python-markdown"
++	help
++	  This is a Python implementation of John Gruber's Markdown 
++
++	  https://pypi.python.org/pypi/Markdown
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+new file mode 100644
+index 0000000..28d9a07
+--- /dev/null
++++ b/package/python-markdown/python-markdown.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-markdown
++#
++################################################################################
++
++PYTHON_MARKDOWN_VERSION = 2.5.2
++PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
++PYTHON_MARKDOWN_SITE = http://pypi.python.org/packages/source/M/Markdown
++PYTHON_MARKDOWN_LICENSE = BSD License
++PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
++PYTHON_MARKDOWN_SETUP_TYPE = distutils
++
++$(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-2.1.3
+2.0.4
