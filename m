@@ -1,34 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Dec 2014 00:13:07 +0100
-Subject: [Buildroot] [PATCHv2 0/3] Improved static/shared library
- handling
-In-Reply-To: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1418338211-1595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141212001307.14e0dfa9@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 12 Dec 2014 00:27:45 +0100
+Subject: [Buildroot] [PATCH 1/3] iprutils: rename patches to follow the new
+	name convention
+Message-ID: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...iprutils-0001-Don-t-use-gettext.patch => 0001-Don-t-use-gettext.patch} | 0
+ ...nviro.patch => 0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch} | 0
+ ...ies-i.patch => 0003-Fix-static-build-by-passing-the-libraries-i.patch} | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/iprutils/{iprutils-0001-Don-t-use-gettext.patch => 0001-Don-t-use-gettext.patch} (100%)
+ rename package/iprutils/{iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch => 0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch} (100%)
+ rename package/iprutils/{iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch => 0003-Fix-static-build-by-passing-the-libraries-i.patch} (100%)
 
-On Thu, 11 Dec 2014 23:50:08 +0100, Thomas Petazzoni wrote:
-
-> Thomas Petazzoni (3):
->   Turn the static lib option into a choice with more options
->   ncurses: better handling for shared/static library
->   Build shared libraries only as the default
-
-Series applied, with the minor comment on PATCH 1/3 from Yann addressed.
-
-As you can imagine PATCH 3/3 might cause quite a bit of autobuilder
-failures. Do not hesitate to monitor them and help fix them if needed.
-
-Thanks!
-
-Thomas
+diff --git a/package/iprutils/iprutils-0001-Don-t-use-gettext.patch b/package/iprutils/0001-Don-t-use-gettext.patch
+similarity index 100%
+rename from package/iprutils/iprutils-0001-Don-t-use-gettext.patch
+rename to package/iprutils/0001-Don-t-use-gettext.patch
+diff --git a/package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch b/package/iprutils/0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
+similarity index 100%
+rename from package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
+rename to package/iprutils/0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
+diff --git a/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+similarity index 100%
+rename from package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
+rename to package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
