@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 22:52:32 +0100
-Subject: [Buildroot] [git commit] ncurses: speed up host build by disabling
-	static library building
-Message-ID: <20141211215300.C9BDE80193@busybox.osuosl.org>
+Date: Thu, 11 Dec 2014 22:48:57 +0100
+Subject: [Buildroot] [git commit] arch: FDPIC is not supported on m68k
+Message-ID: <20141211215300.A703F8032E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8639c79d8f8af4ac01176e64d69062ac4644561
+commit: http://git.buildroot.net/buildroot/commit/?id=c149083f933b7e60f606e6e6ffe478c37538bc37
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For the host variant of packages, we normally only build the shared
-libraries. However, ncurses uses non-standard options to select
-between shared/static and therefore the host variant was building both
-of them, even though the static libraries were unused.
-
-By passing --without-normal, we disable the build of static
-libraries. It saves a bit of disk space, and on my laptop,
-host-ncurses takes 26 seconds to build instead of 40 seconds.
+The current binfmt selection in arch/Config.in allows to select FDPIC
+on m68k, which is incorrect. This commit fixes that, and makes sure
+FDPIC is the default on Blackfin, while FLAT is the default on m68k.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/ncurses/ncurses.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ arch/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 1ce3818..645c25c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -145,7 +145,8 @@ HOST_NCURSES_CONF_OPTS = \
- 	--without-manpages \
- 	--without-cxx \
- 	--without-cxx-binding \
--	--without-ada
-+	--without-ada \
-+	--without-normal
+diff --git a/arch/Config.in b/arch/Config.in
+index 2779ab6..3bac187 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -255,7 +255,8 @@ config BR2_ARCH_HAS_ATOMICS
+ choice
+ 	prompt "Target Binary Format"
+ 	depends on BR2_bfin || BR2_m68k
+-	default BR2_BINFMT_FDPIC
++	default BR2_BINFMT_FDPIC if BR2_bfin
++	default BR2_BINFMT_FLAT if BR2_m68k
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ config BR2_BINFMT_ELF
+ 	bool "ELF"
+@@ -267,7 +268,7 @@ config BR2_BINFMT_ELF
+ 
+ config BR2_BINFMT_FDPIC
+ 	bool "FDPIC"
+-	depends on BR2_bfin || BR2_m68k
++	depends on BR2_bfin
+ 	help
+ 	  ELF FDPIC binaries are based on ELF, but allow the individual load
+ 	  segments of a binary to be located in memory independently of each
