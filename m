@@ -1,92 +1,116 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Dec 2014 23:52:04 +0100
-Subject: [Buildroot] [PATCH 0/4 v5] pkg-download: check hashes before the
-	download (branch yem/download-hash)
-Message-ID: <cover.1418337531.git.yann.morin.1998@free.fr>
+Date: Thu, 11 Dec 2014 23:52:06 +0100
+Subject: [Buildroot] [PATCH 2/4 v5] pkg-download: check for already
+	downloaded file in the download wrapper
+In-Reply-To: <cover.1418337531.git.yann.morin.1998@free.fr>
+References: <cover.1418337531.git.yann.morin.1998@free.fr>
+Message-ID: <1a5c19dcd6ab7bc036d2e25009a6178a2e0bce53.1418337531.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Instead of repeating the same test again and again in all our download
+rules, just delegate the check for an already downloaded file to the
+download wrapper.
 
-This series introduces a way to check hashes prior to doing a download.
+This clears up the path for doing the hash checks on a cached file
+before the download.
 
-This is required for when upstream silently update their release tarballs
-without renaming them, and the user is left with a stray locally cached
-tarball that no longer match the hashes with have for that package.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-download.mk     | 8 --------
+ support/download/dl-wrapper | 5 +++++
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-In so doing, this series:
-  - moves the check for a cached file into the wrapper;
-  - moves the post-download check for hashes into the wrapper;
-  - adds a pre-download check for hashes in the wrapper.
-
-Doing the pre-download checks in the Makefile, like the post-download
-checks were done, made the Makefile a bit harder to read. On the other
-hand, we have a download wrapper shell script, so it is easier to do
-trickey stuff in there (shell syntax) than in the Makefile (make syntax
-can become unreadable pretty fast).
-
-This has a side effect of cleaning up the pkg-download.mk Makefile, too,
-but that was not the goal.
-
-
-Changes v4 -> v5:
-  - clarify the arguments to the check-hash script  (Thomas)
-  - typoes and space-damage  (Thomas)
-
-Changes v3 -> v4:
-  - remove patch about checking hashes for host-packages (already applied
-    differently by Peter)
-  - rebased on top of current master
-
-Changes v2 -> v3:
-  - fix checking hashes for host packages
-  - fix left-over line continuations
-
-Changes v1 -> v2:
-  - add options parsing to the wrapper  (Thomas)
-  - typoes  (Thomas)
-  - rename the wrapper to dl-wrapper so it looks better in the traces,
-    and it is not confused with another wrapper
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit f8639c79d8f8af4ac01176e64d69062ac4644561:
-
-  ncurses: speed up host build by disabling static library building (2014-12-11 22:52:32 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/download-hash
-
-for you to fetch changes up to 06b4eb57a7671f63c52d7a71bfc141682fdb0e38:
-
-  pkg-download: check hashes for locally cached files (2014-12-11 23:36:23 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      support/download: add option parsing to the download wrapper
-      pkg-download: check for already downloaded file in the download wrapper
-      pkg-download: verify the hashes from the download wrapper
-      pkg-download: check hashes for locally cached files
-
- package/pkg-download.mk     |  78 +++++++++---------
- support/download/check-hash |  19 +++--
- support/download/dl-wrapper | 189 ++++++++++++++++++++++++++++++++++++++++++++
- support/download/wrapper    |  99 -----------------------
- 4 files changed, 238 insertions(+), 147 deletions(-)
- create mode 100755 support/download/dl-wrapper
- delete mode 100755 support/download/wrapper
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 8424eca..c021e92 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -96,7 +96,6 @@ endef
+ # Messages for the type of clone used are provided to ease debugging in case of
+ # problems
+ define DOWNLOAD_GIT
+-	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+ 		-- \
+@@ -117,7 +116,6 @@ endef
+ 
+ 
+ define DOWNLOAD_BZR
+-	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+ 		-- \
+@@ -135,7 +133,6 @@ define SHOW_EXTERNAL_DEPS_BZR
+ endef
+ 
+ define DOWNLOAD_CVS
+-	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+ 		-- \
+@@ -155,7 +152,6 @@ define SHOW_EXTERNAL_DEPS_CVS
+ endef
+ 
+ define DOWNLOAD_SVN
+-	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+ 		-- \
+@@ -176,7 +172,6 @@ endef
+ # Note that filepath is relative to the user's home directory, so you may want
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
+-	test -e $(DL_DIR)/$(2) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b scp \
+ 		-o $(DL_DIR)/$(2) \
+ 		-- \
+@@ -194,7 +189,6 @@ endef
+ 
+ 
+ define DOWNLOAD_HG
+-	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+ 		-- \
+@@ -215,7 +209,6 @@ endef
+ 
+ 
+ define DOWNLOAD_WGET
+-	test -e $(DL_DIR)/$(2) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
+ 		-o $(DL_DIR)/$(2) \
+ 		-- \
+@@ -232,7 +225,6 @@ define SHOW_EXTERNAL_DEPS_WGET
+ endef
+ 
+ define DOWNLOAD_LOCALFILES
+-	test -e $(DL_DIR)/$(2) || \
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
+ 		-o $(DL_DIR)/$(2) \
+ 		-- \
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index f1bb73a..dc5b4b0 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -43,6 +43,11 @@ main() {
+         error "no output specified, use -o\n"
+     fi
+ 
++    # If the output file already exists, do not download it again
++    if [ -e "${output}" ]; then
++        exit 0
++    fi
++
+     # tmpd is a temporary directory in which backends may store intermediate
+     # by-products of the download.
+     # tmpf is the file in which the backends should put the downloaded content.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
