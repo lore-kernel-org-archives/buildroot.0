@@ -1,137 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Dec 2014 22:03:01 +0100
-Subject: [Buildroot] [PATCH 1/4 v4] suppot/download: add option parsing
- to the download wrapper
-In-Reply-To: <20141211213749.637df4c2@free-electrons.com>
+Date: Thu, 11 Dec 2014 22:12:42 +0100
+Subject: [Buildroot] [PATCH 3/4 v4] pkg-download: verify the hashes from
+ the download wrapper
+In-Reply-To: <20141211214209.6df5e210@free-electrons.com>
 References: <cover.1418322200.git.yann.morin.1998@free.fr>
- <204467c4c3722faed45db924c489ad768ed1ae33.1418322200.git.yann.morin.1998@free.fr>
- <20141211213749.637df4c2@free-electrons.com>
-Message-ID: <20141211210301.GL4199@free.fr>
+ <d0dd46117de298b684c5fc90f5e4efe0d160d3b7.1418322200.git.yann.morin.1998@free.fr>
+ <20141211214209.6df5e210@free-electrons.com>
+Message-ID: <20141211211242.GM4199@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-12-11 21:37 +0100, Thomas Petazzoni spake thusly:
-> Typo in title: suppot -> support
+Thomas, All,
 
-Suppot de Satan! :-)
-
-> On Thu, 11 Dec 2014 19:24:45 +0100, Yann E. MORIN wrote:
-> > Instead of relying on argument ordering, use actual options in the
-> > download wrapper.
-> > 
-> > Download backends (bzr, cp, hg...) are left as-is, because it does not
-> > make sense to complexifies them, since they are almost very trivial
+On 2014-12-11 21:42 +0100, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
 > 
-> complexifies -> complexify.
-
-Da.
-
-> > shell scripts, and adding option parsing would be really overkill.
+> On Thu, 11 Dec 2014 19:24:47 +0100, Yann E. MORIN wrote:
 > 
-> You could have mentioned that the commit also renames the script. I
-> thought it was the case in earlier versions of this patch series.
-
-So did I. Will add it on the next respin...
-
-> > diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-> > new file mode 100755
-> > index 0000000..b1b9158
-> > --- /dev/null
-> > +++ b/support/download/dl-wrapper
-> > @@ -0,0 +1,166 @@
-> > +#!/usr/bin/env bash
-> > +
-> > +# This script is a wrapper to the other download backends.
-> > +# Its role is to ensure atomicity when saving downloaded files
-> > +# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
-> > +# failed downloads.
-> > +#
-> > +# Call it with:
-> > +#   -b BACKEND  name of the backend (eg. cvs, git, cp...)
-> > +#   -o FILE     full path to the file in which to save the download
-> > +#   --          everything after '--' are options for the backend
-> > +# Environment:
-> > +#   BUILD_DIR: the path to Buildroot's build dir
+> > diff --git a/support/download/check-hash b/support/download/check-hash
+> > index 13e361a..b41a87e 100755
+> > --- a/support/download/check-hash
+> > +++ b/support/download/check-hash
+> > @@ -5,9 +5,11 @@ set -e
+> >  # Call it with:
+> >  #   $1: the path of the file containing all the the expected hashes
+> >  #   $2: the full path to the file to check
+> > +#   $3: the basename of the file to check
+> >  
+> >  h_file="${1}"
+> >  file="${2}"
+> > +base="${3}"
 > 
-> With this in place, do we still need the -h option and the fake man
-> page?
-
-Are get rid of it and keep the help text? ;-)
-
-[--SNIP--]
-> > +main() {
-> > +    local OPT OPTARG
-> > +    local backend output
-> > +
-> > +    # Parse our options; anythong after '--' is for the backend
+> I was very confused here by $2 and $3. If you have "the full path to
+> the file to check", why would you need "the basename of the file to
+> check" as argument. I believe this should be clarified:
 > 
-> anything
-
-Ack.
-
-> > +    # Sop we only care to -b (backend) and -o (output file)
+>  $2: the full path to the temporary file that was downloaded, and that
+>      should be checked
 > 
-> Sop?
-
-s/p//
-
-> Maybe:
+>  $3: the name of the real file we are downloading. Used only for
+>      messages, as we are in fact checking a temporary file, and waiting
+>      for this temporary file to be fully downloaded and checked before
+>      renaming it to the real file name.
 > 
->        # We only care about -b, -h and -o
+> Of course, feel free to reword this in a better way.
 
-Or just remove it, it's a carry-over from the previous script...
+Ah yes, this is slightly tricky.
 
-[--SNIP--]
-> > +    tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+The problem is that the .hash files contain the name of the local
+tarballs, while the file we check is a temnporary file with an arbitrary
+name.
+
+So we have to know both the name, with full path, of the actual file we
+are checking; we get in in $(2). And we need to know what hash to check
+it against, so we need the final name it will be saved as; we get it via
+$(3).
+
+But your wording is pretty much OK, except the part about "just mesages",
+since we really need it, as you later saw...
+
+> > -            if [ "${f}" = "${file##*/}" ]; then
+> > +            if [ "${f}" = "${base}" ]; then
 > 
-> No space after ( and before ).
+> Hum, so it is not only used for display. So you need to reword the
+> above.
 
-Ack for it and the following ones.
+Nope. Yup. ;-)
 
-[--SNIP--]
-> > +    if ! "${OLDPWD}/support/download/${backend}" "${tmpf}" "${@}"; then
-> > +        rm -rf "${tmpd}"
+> >      # tmp_output is in the same directory as the final output, so we can
+> >      # later move it atomically.
+> >      tmp_output="$( mktemp "${output}.XXXXXX" )"
+> > @@ -147,7 +159,7 @@ DESCRIPTION
+> >              bzr     Bazaar
+> >              cp      local files via simple copy
+> >              cvs     Concurrent Versions System
+> > -            git     git
+> > +            git     Git
 > 
-> How is it possible to remove ${tmpd} here, since we are cd'ed into this
-> directory?
+> Should be part of a previous patch.
 
-Well, nothing prevents the removal of a directory that still has an open
-fd to it, no more than anything prevents the removal of a file that
-still has an open fd to it. It is marked "deleted" in the VFS so nothing
-can access it anymore, nor create new entries in it...
+Yup, my mistake, I did not ammend the correct patch.
 
-    mkdir -p ~/foo/bar
-    cd ~/foo/bar
-    rm -rf ~/foo/bar
-    echo buz >baz
-
-And see what happens! ;-)
-
-[--SNIP--]
-> > +help() {
-> > +    cat <<_EOF_
-> > +NAME
-> > +    ${my_name} - downlaod wrapper for Buildroot
+> >              hg      Mercurial
+> >              scp     remote files via Secure copy
 > 
-> download
+> Maybe you want to capitalize "Local files..." and "Remote files..." as
+> well, for consistency.
 
-Ack.
+Well, I did capitalise the names as they appear on their respective
+homepages.
 
-> > +
-> > +SYNOPSIS
-> > +    ${my_name} [OPTION]... -- [BACKEND OPTION]...
-> > +
-> > +DESCRIPTION
-> > +    Wrapper script around different download mechanisms. Ensure that
-> 
-> Ensures
+Git is written "Git", cvs is "COncurrent Versions System" and so on...
 
-Ack.
+I should rename "remote files via Secure copy" to "Secure copyt of
+remote files", and so on...
 
-Thanks for the review! :-)
+I'll rework all that.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
