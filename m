@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 22:48:57 +0100
-Subject: [Buildroot] [git commit] arch: FDPIC is not supported on m68k
-Message-ID: <20141211215300.A703F8032E@busybox.osuosl.org>
+Date: Thu, 11 Dec 2014 22:53:24 +0100
+Subject: [Buildroot] [PATCH 5/8] arch: introduce
+ BR2_BINFMT_SUPPORTS_SHARED
+In-Reply-To: <20141211201243.GG4199@free.fr>
+References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417642895-29606-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141211201243.GG4199@free.fr>
+Message-ID: <20141211225324.6dc8c261@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c149083f933b7e60f606e6e6ffe478c37538bc37
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-The current binfmt selection in arch/Config.in allows to select FDPIC
-on m68k, which is incorrect. This commit fixes that, and makes sure
-FDPIC is the default on Blackfin, while FLAT is the default on m68k.
+On Thu, 11 Dec 2014 21:12:43 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- arch/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+> While at it, I noticed that those depends are completely superfluous,
+> because FLAT can only be selected for bfin || m68k anyway, and the
+> choice itself already depends on FLAT, which itself depends on bfin ||
+> m68k.
+> 
+> So, this "depends on" (as well as the one in the previous option) could
+> be removed entirely, I guess.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 2779ab6..3bac187 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -255,7 +255,8 @@ config BR2_ARCH_HAS_ATOMICS
- choice
- 	prompt "Target Binary Format"
- 	depends on BR2_bfin || BR2_m68k
--	default BR2_BINFMT_FDPIC
-+	default BR2_BINFMT_FDPIC if BR2_bfin
-+	default BR2_BINFMT_FLAT if BR2_m68k
- 
- config BR2_BINFMT_ELF
- 	bool "ELF"
-@@ -267,7 +268,7 @@ config BR2_BINFMT_ELF
- 
- config BR2_BINFMT_FDPIC
- 	bool "FDPIC"
--	depends on BR2_bfin || BR2_m68k
-+	depends on BR2_bfin
- 	help
- 	  ELF FDPIC binaries are based on ELF, but allow the individual load
- 	  segments of a binary to be located in memory independently of each
+Indeed. I've added a separate patch doing this.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
