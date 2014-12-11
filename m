@@ -1,32 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Dec 2014 19:49:06 +0100
-Subject: [Buildroot] [PATCH 2/8] Rename BR2_PREFER_STATIC_LIB to
- BR2_STATIC_LIBS
-In-Reply-To: <20141211184400.GB4199@free.fr>
-References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417642895-29606-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141211184400.GB4199@free.fr>
-Message-ID: <20141211194906.2eff5d6f@free-electrons.com>
+Date: Thu, 11 Dec 2014 19:49:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/fdk-aac: bump to version 0.1.3
+In-Reply-To: <1418313511-12701-1-git-send-email-jkrause@posteo.de>
+References: <1418313511-12701-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20141211194918.1363f4c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear J?rg Krause,
 
-On Thu, 11 Dec 2014 19:44:00 +0100, Yann E. MORIN wrote:
+On Thu, 11 Dec 2014 16:58:30 +0100, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> ---
+>  package/fdk-aac/fdk-aac.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Otherwise I gues you atomated this bulk rename, so I only checked a few
-> packages, choosen randomly.
-
-Yes, see the commit log:
-
-"""
-Note that we have verified that this commit can be reproduced by
-simply doing a global rename of BR2_PREFER_STATIC_LIB to
-BR2_STATIC_LIBS plus adding BR2_PREFER_STATIC_LIB to Config.in.legacy.
-"""
+Applied, thanks.
 
 Thomas
 -- 
