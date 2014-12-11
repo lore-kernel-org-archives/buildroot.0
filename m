@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Dec 2014 21:46:49 +0100
-Subject: [Buildroot] [PATCH 7/8] Turn the static lib option into a
- choice with more options
-In-Reply-To: <1417642895-29606-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Dec 2014 21:49:31 +0100
+Subject: [Buildroot] [PATCH 8/8] Build shared libraries only as the
+ default
+In-Reply-To: <1417642895-29606-9-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1417642895-29606-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417642895-29606-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141211204649.GJ4199@free.fr>
+ <1417642895-29606-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141211204931.GK4199@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,200 +15,52 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-12-03 22:41 +0100, Thomas Petazzoni spake thusly:
-> This commit turns the single static option into a choice, which offers
-> various possibilities:
+> Now that we have more options in terms of static/shared libraries,
+> switch from the existing default of building both shared and static
+> libraries to building shared libraries only (of course only on
+> platforms that support shared libraries).
 > 
->  1. Build and use static libraries only;
->  2. Build both shared and static libraries, but used shared libraries;
-
-s/used/use/
-
->  3. Build and use shared libraries only.
+> Building both shared and static takes time (since the shared objects
+> must be built with -fPIC, while static objects are generally built
+> without, as -fPIC has some performance impact) and consumes a little
+> bit more disk space.
 > 
-> On most platforms, (2) is currently the default, and kept as the
-> default in this commit. Of course, on certain platforms (Blackfin,
-> m68k), only option (1) will be available.
+> For example, a static+shared build of libglib2 takes 1 minutes and 59
+> seconds, with a final build directory of 96 MB. A shared-only build of
+> libglib2 takes only 1 minutes and 31 seconds (almost a 25% reduction
+> of the build time), and the final build directory weights 89 MB (a
+> reduction of almost 8%).
 > 
-> In addition to the introduction of the Config.in options, this commit
-> also:
-> 
->  * Remove the 'select BR2_STATIC_LIBS' from 'BR2_BINFMT_FLAT', since
-
-Remove_s_
-
->    with the use of a choice, we are guaranteed that BR2_STATIC_LIBS
->    will be selected when the binary format is BR2_BINFMT_FLAT, since
->    BR2_STATIC_LIBS will be the only possible solution in the choice.
-> 
->  * Changes package/Makefile.in to use the proper
->    --{enable,disable}-{shared,static} options for autotools packages.
-> 
->  * Changes the ncurses package to use the proper combination of
->    --{with,without}-shared and --{with,without}-normal.
+> So, switching to a shared library only build brings some useful build
+> time and build size benefits.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Config.in                  | 39 ++++++++++++++++++++++++++++++---------
->  arch/Config.in             |  1 -
->  package/Makefile.in        |  4 +++-
->  package/ncurses/ncurses.mk |  9 ++++++++-
->  4 files changed, 41 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index fefa54e..e31f820 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -525,19 +525,40 @@ config BR2_ENABLE_SSP
->  comment "enabling Stack Smashing Protection requires support in the toolchain"
->  	depends on !BR2_TOOLCHAIN_HAS_SSP
->  
-> +choice
-> +
 
-I guess this is missing a 'bool' type. ;-)
+I wonder how many opackages that will break... Let's say we apply it and
+let the autobuilders do their hjob! :-)
 
-> +	prompt "libraries"
-> +	default BR2_SHARED_STATIC_LIBS if BR2_BINFMT_SUPPORTS_SHARED
-> +	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
-> +
->  config BR2_STATIC_LIBS
-> -	bool "build statically linked applications, no dynamic libraries"
-> +	bool "static libraries only"
-
-Please be consistent in the prompt: here you have "libraries", but in
-the two next ones, you have "libs".
-
-Since the prompt of the choice already is "libraries", I'd make the
-prompt of options be just:
-    "static only"
-    "shared only"
-    "both shared and static"
-
->  	help
-> -	  Build all applications for the target statically linked.
-> -	  This potentially increases your filesystem size and should only be
-> -	  used if you know what you do.
-> +	  Build and use only static libraries. No shared libraries
-> +	  will be instaled on the target. This potentially increases
-> +	  your code size and should only be used if you know what you
-> +	  do.
-
-...what you are doing.
-
-
->          The default is to build dynamic libraries and use those
-> +	  on the target filesystem.
-
-I think this part whould be in the help text of the choice itself:
-
-    choice
-        bool "Libraries"
-        default ...
-        help
-          Select the type of libraries you want to use on the target.
-
-          The default is to build both shared and static libraries, but
-          only use shared libraries.
-
-          [ More stuff like you know how to write so well! ;-) ]
-
-
->                               Note that some packages may not be
-> +	  available when this option is enabled, due to their need of
-
-...need for...
-
-> +	  dynamic library support.
-> -	  Note that some applications cannot be build statically and so are
-> -	  intentionally disabled.
-> +config BR2_SHARED_LIBS
-> +	bool "shared libs only"
-> +	depends on BR2_BINFMT_SUPPORTS_SHARED
-> +	help
-> +	  Build and use only shared libraries. This is the recommended
-> +	  solution as it saves space and build time.
->  
-> -	  The default (if this option is disabled) is to build dynamic
-> -	  libraries and dynamically link applications to use those on the
-> -	  target filesystem.
-> +config BR2_SHARED_STATIC_LIBS
-> +	bool "static and shared libs"
-> +	depends on BR2_BINFMT_SUPPORTS_SHARED
-> +	help
-> +	  Build both shared and static libraries, but link executables
-> +	  dynamically. While building both shared and static libraries
-> +	  take more time and more disk space, having static libraries
-> +	  may be useful to link some of the applications statically.
-> +
-> +endchoice
->  
->  
->  config BR2_PACKAGE_OVERRIDE_FILE
-> diff --git a/arch/Config.in b/arch/Config.in
-> index c7bef5d..2f98237 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -284,7 +284,6 @@ config BR2_BINFMT_FDPIC
->  config BR2_BINFMT_FLAT
->  	bool "FLAT"
->  	depends on BR2_bfin || BR2_m68k
-> -	select BR2_STATIC_LIBS
->  	help
->  	  FLAT binary is a relatively simple and lightweight executable format
->  	  based on the original a.out format. It is widely used in environment
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 49a158e..dbaa8af 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -394,7 +394,9 @@ SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
->  TARGET_CFLAGS += -static
->  TARGET_CXXFLAGS += -static
->  TARGET_LDFLAGS += -static
-> -else
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +SHARED_STATIC_LIBS_OPTS = --disable-static --enable-shared
-> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
->  SHARED_STATIC_LIBS_OPTS = --enable-static --enable-shared
->  endif
->  
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-
-I was wondering if this should not be part of a spearate patch.
-
-Without that ncurses bit, but the above applied, the behaviour of
-ncurses does not change, does it?  If indeed it does not, then that
-changes to ncurses is not required to tintroduce the new shared/static
-choice.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> index 645c25c..f54f379 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -15,7 +15,6 @@ NCURSES_LICENSE_FILES = README
->  NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
+> ---
+>  Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index e31f820..7dd4c86 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -528,7 +528,7 @@ comment "enabling Stack Smashing Protection requires support in the toolchain"
+>  choice
 >  
->  NCURSES_CONF_OPTS = \
-> -	$(if $(BR2_STATIC_LIBS),--without-shared,--with-shared) \
->  	--without-cxx \
->  	--without-cxx-binding \
->  	--without-ada \
-> @@ -36,6 +35,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
->  	NCURSES_DEPENDENCIES += busybox
->  endif
+>  	prompt "libraries"
+> -	default BR2_SHARED_STATIC_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+> +	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+>  	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
 >  
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +NCURSES_CONF_OPTS += --without-shared --with-normal
-> +else ifeq ($(BR2_SHARED_LIBS),y)
-> +NCURSES_CONF_OPTS += --with-shared --without-normal
-> +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-> +NCURSES_CONF_OPTS += --with-shared --with-normal
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
->  NCURSES_CONF_OPTS += --enable-widec
->  NCURSES_LIB_SUFFIX = w
+>  config BR2_STATIC_LIBS
 > -- 
 > 2.1.0
 > 
