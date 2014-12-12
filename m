@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Dec 2014 21:04:56 +0100
-Subject: [Buildroot] [PATCH v5 11/11] autobuild-run: catch KeyboardInterrupt
-	in the same way as SIGTERM
+Date: Fri, 12 Dec 2014 21:04:51 +0100
+Subject: [Buildroot] [PATCH v5 06/11] autobuild-run: set LC_ALL=C to not use
+	locale settings of host machine
 In-Reply-To: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1418414696-32584-12-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1418414696-32584-7-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,42 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Do not handle a keyboard interrupt (SIGINT) in any different way than a
-SIGTERM signal (kill). In both cases, the entire process tree of the
-autobuild-run process should be killed.
+If the host machine running autobuild-run happens to have set a
+non-English locale, the error messages will be displayed in that
+language too. For public results like those generated in the Buildroot
+autobuilders, this is a problem.
+
+Therefore, set LC_ALL to a fixed locale (C) at the beginning of the script.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- scripts/autobuild-run | 2 ++
- 1 file changed, 2 insertions(+)
+ scripts/autobuild-run | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 3c448bd..c8ce918 100755
+index ab53d3f..d085029 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -701,6 +701,7 @@ def main():
-         """Kill all children"""
+@@ -48,8 +48,6 @@
+ #   of just using the last 500 lines of the build log, search the
+ #   start of the build of the failing package.
+ #
+-# - Add LC_ALL=C where appropriate.
+-#
+ # - Include the config.log file (when it exists) in the tarball for
+ #   failed builds when the failure occurs on an autotools package.
+ #
+@@ -602,6 +600,11 @@ def merge(dict_1, dict_2):
+                 for key in set(dict_2) | set(dict_1))
  
-         # uninstall signal handler to prevent being called for all subprocesses
-+        signal.signal(signal.SIGINT, signal.SIG_IGN)
-         signal.signal(signal.SIGTERM, signal.SIG_DFL)
+ def main():
++
++    # Avoid locale settings of autobuilder machine leaking in, for example
++    # showing error messages in another language.
++    os.environ['LC_ALL'] = 'C'
++
+     check_version()
+     sysinfo = SystemInfo()
  
-         # stop all instances to prevent new children to be spawned
-@@ -740,6 +741,7 @@ def main():
-         p.start()
-         processes.append(p)
- 
-+    signal.signal(signal.SIGINT, sigterm_handler)
-     signal.signal(signal.SIGTERM, sigterm_handler)
- 
-     for p in processes:
 -- 
 1.8.5.1
