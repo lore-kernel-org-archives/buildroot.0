@@ -1,9 +1,9 @@
 From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Fri, 12 Dec 2014 15:42:45 +0000
-Subject: [Buildroot] [PATCH v2 5/7] Adding libwebsock
+Date: Fri, 12 Dec 2014 15:42:44 +0000
+Subject: [Buildroot] [PATCH v2 4/7] Adding libsrtp
 In-Reply-To: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
 References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
-Message-ID: <1418398967-2183-6-git-send-email-gregd72002@gmail.com>
+Message-ID: <1418398967-2183-5-git-send-email-gregd72002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
 ---
- package/Config.in                  |  1 +
- package/libwebsock/Config.in       |  6 ++++++
- package/libwebsock/libwebsock.hash |  1 +
- package/libwebsock/libwebsock.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/libwebsock/Config.in
- create mode 100644 package/libwebsock/libwebsock.hash
- create mode 100644 package/libwebsock/libwebsock.mk
+ package/Config.in            |  1 +
+ package/libsrtp/Config.in    |  5 +++++
+ package/libsrtp/libsrtp.hash |  1 +
+ package/libsrtp/libsrtp.mk   | 13 +++++++++++++
+ 4 files changed, 20 insertions(+)
+ create mode 100644 package/libsrtp/Config.in
+ create mode 100644 package/libsrtp/libsrtp.hash
+ create mode 100644 package/libsrtp/libsrtp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 501f505..77430b9 100644
+index e8c973e..501f505 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -851,6 +851,7 @@ menu "Networking"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
- 	source "package/libvncserver/Config.in"
-+	source "package/libwebsock/Config.in"
- 	source "package/libwebsockets/Config.in"
- 	source "package/neon/Config.in"
- 	source "package/nss-mdns/Config.in"
-diff --git a/package/libwebsock/Config.in b/package/libwebsock/Config.in
+@@ -843,6 +843,7 @@ menu "Networking"
+ 	source "package/libshairplay/Config.in"
+ 	source "package/libshout/Config.in"
+ 	source "package/libsoup/Config.in"
++	source "package/libsrtp/Config.in"
+ 	source "package/libstrophe/Config.in"
+ 	source "package/libtirpc/Config.in"
+ 	source "package/libtorrent/Config.in"
+diff --git a/package/libsrtp/Config.in b/package/libsrtp/Config.in
 new file mode 100644
-index 0000000..427b3fd
+index 0000000..b81e9cf
 --- /dev/null
-+++ b/package/libwebsock/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBWEBSOCK
-+	bool "libwebsock"
-+	select BR2_PACKAGE_LIBEVENT
++++ b/package/libsrtp/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_LIBSRTP
++	bool "libsrtp"
 +	help
-+	Adds libwebsock
-+	https://github.com/payden/libwebsock
-diff --git a/package/libwebsock/libwebsock.hash b/package/libwebsock/libwebsock.hash
++	Adds libsrtp
++	https://github.com/cisco/libsrtp
+diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
 new file mode 100644
-index 0000000..2250c09
+index 0000000..18f3eea
 --- /dev/null
-+++ b/package/libwebsock/libwebsock.hash
++++ b/package/libsrtp/libsrtp.hash
 @@ -0,0 +1 @@
-+sha256,ac459d1de0205f8aedf2fd10a48cb02a06acb127c3403001670a839502e02afd
-diff --git a/package/libwebsock/libwebsock.mk b/package/libwebsock/libwebsock.mk
++sha256,aefb6c068b201a051585976526e9795bb74d8540446657559622d31d0d755cbb
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
 new file mode 100644
-index 0000000..f82b553
+index 0000000..7c76785
 --- /dev/null
-+++ b/package/libwebsock/libwebsock.mk
-@@ -0,0 +1,22 @@
++++ b/package/libsrtp/libsrtp.mk
+@@ -0,0 +1,13 @@
 +#############################################################
 +#
-+# libwebsock
++# libsrtp
 +#
 +#############################################################
-+LIBWEBSOCK_VERSION = 3c1615eeadb0b582b63851073bfe3e5132f31ebc 
-+LIBWEBSOCK_SITE_METHOD = git
-+LIBWEBSOCK_SITE = https://github.com/payden/libwebsock.git
-+LIBWEBSOCK_DEPENDENCIES = libevent
-+LIBWEBSOCK_AUTORECONF = YES
-+LIBWEBSOCK_INSTALL_STAGING = YES
-+LIBWEBSOCK_LICENSE = LGPLv3
-+LIBWEBSOCK_LICENSE_FILES = COPYING
-+
-+LIBWEBSOCK_CFLAGS = $(TARGET_CFLAGS)
-+LIBWEBSOCK_LIBS += -lpthread -levent
-+
-+LIBWEBSOCK_CONF_ENV += \
-+        CFLAGS="$(LIBWEBSOCK_CFLAGS)" \
-+        LIBS="$(LIBWEBSOCK_LIBS)"
++LIBSRTP_VERSION = v1.5.0
++LIBSRTP_SITE_METHOD = git
++#LIBSRTP_SITE = https://github.com/cisco/libsrtp/
++#LIBSRTP_AUTORECONF = YES
++LIBSRTP_INSTALL_STAGING = YES
++LIBSRTP_LICENSE = BSD-3c 
 +
 +$(eval $(autotools-package))
 -- 
