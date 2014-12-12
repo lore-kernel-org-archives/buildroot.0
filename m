@@ -1,16 +1,18 @@
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Date: Fri, 12 Dec 2014 21:16:00 +0100
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 12 Dec 2014 21:18:04 +0100
 Subject: [Buildroot] [PATCH v5 10/11] autobuild-run: kill all children
 	on SIGTERM
 In-Reply-To: <1418414696-32584-11-git-send-email-patrickdepinguin@gmail.com>
 References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
  <1418414696-32584-11-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LV3+LqRZCH143cVED3xxUFvPZqn5g69UVOeOcxSRZ=gAg@mail.gmail.com>
+Message-ID: <CAAXf6LXUuMMFROkBRAaBYsO04mYwT+wgQwTFcrx1sDLS-Xz6UQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+[now with the buildroot-subscribed address]
 
 On Fri, Dec 12, 2014 at 9:04 PM, Thomas De Schampheleire
 <patrickdepinguin@gmail.com> wrote:
@@ -37,11 +39,7 @@ On Fri, Dec 12, 2014 at 9:04 PM, Thomas De Schampheleire
 > Lastly, the signal handler would be called for all instances, which is
 > not intended, so prevent that by uninstalling the signal handler as a
 > first step of the handler itself.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  scripts/autobuild-run | 39 ++++++++++++++++++++++++++++++++++++---
->  1 file changed, 36 insertions(+), 3 deletions(-)
+
 
 Some notes here:
 
