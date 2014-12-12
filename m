@@ -1,58 +1,43 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 13 Dec 2014 00:16:00 +0100
-Subject: [Buildroot] [PATCH 03/14] boot/uboot.mk: Add uboot-menuconfig and
-	friends
-In-Reply-To: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1418426171-3483-4-git-send-email-jkrause@posteo.de>
+Date: Sat, 13 Dec 2014 00:15:57 +0100
+Subject: [Buildroot] [PATCH 00/14] Add support for U-Boots Kbuild & Kconfig
+	build system
+Message-ID: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the uboot-menuconfig and friends make targets.
+This patch series adds to the bootloader Das U-Boot:
+  * Update to the latest stable version 2014.10
+  * Support for its Kbuild & Kconfig build system
+  * Documentation in the manual
+  * Fixes and adjustments to the packages infrastructure
 
-uboot-update-config is not supported since U-Boot uses up to three .config 
-files (.config, spl/.config, tpl/.config) for board configuration. Furthermore
-U-Boot provides its own custom defconfig format.
+J?rg Krause (14):
+  boot/uboot: bump to version 2014.10
+  boot/uboot: Add support for Kconfig build system
+  boot/uboot.mk: Add uboot-menuconfig and friends
+  boot/uboot.mk: Remove obsolete CONFIG_NOSOFTFLOAT flag
+  boot/uboot.mk: Replace TARGET_CONFIGURE_OPTS with TARGET_MAKE_ENV
+  boot/uboot.mk: Replace UBOOT_MAKE_OPTS with UBOOT_MAKE_FLAGS
+  boot/uboot.mk: Make make action single-line
+  boot/uboot/Config.in: Fix BR2_TARGET_UBOOT_SPL
+  boot/uboot/Config.in: Fix BR2_TARGET_UBOOT_SPL_NAME
+  boot/uboot/uboot.mk: Strip quotes from BR2_TARGET_UBOOT_SPL_NAME
+  docs/manual/make-tips.mk: Add uboot documentation
+  docs/manual/customize-configuration.txt: Add uboot documentation
+  docs/manual/customize-quick-guide.txt: Add uboot documentation
+  docs/manual/configure-other-components.txt: Add uboot documentation
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- boot/uboot/uboot.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ boot/uboot/Config.in                       | 50 +++++++++++++++++++---------
+ boot/uboot/uboot.mk                        | 52 +++++++++++++++++++++++-------
+ docs/manual/configure-other-components.txt | 11 +++++++
+ docs/manual/customize-configuration.txt    |  8 ++---
+ docs/manual/customize-quick-guide.txt      |  2 ++
+ docs/manual/make-tips.txt                  |  2 ++
+ 6 files changed, 94 insertions(+), 31 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 17565e4..72603e0 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -177,6 +177,7 @@ endif
- $(eval $(generic-package))
- 
- ifeq ($(BR2_TARGET_UBOOT),y)
-+
- # Checks to give errors that the user can understand
- ifeq ($(filter source,$(MAKECMDGOALS)),)
- 
-@@ -214,4 +215,19 @@ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
- endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
- 
- endif # filter source
-+
-+uboot-menuconfig uboot-xconfig uboot-gconfig uboot-nconfig: uboot-configure
-+	$(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_FLAGS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-+	rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
-+
-+uboot-savedefconfig: uboot-configure
-+	$(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_FLAGS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-+
-+ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
-+uboot-update-defconfig: uboot-savedefconfig
-+	cp -f $(UBOOT_DIR)/defconfig $(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)
-+else
-+uboot-update-defconfig: ;
-+endif
-+
- endif # BR2_TARGET_UBOOT
 -- 
 2.1.3
