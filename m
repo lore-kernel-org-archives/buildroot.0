@@ -1,96 +1,149 @@
-From: Thierry Bultel <tbultel@free.fr>
-Date: Fri, 12 Dec 2014 22:24:39 +0100
-Subject: [Buildroot] [PATCH v3 1/2] Added mpd-mpc, mpc client to mpd
-Message-ID: <1418419480-7570-1-git-send-email-tbultel@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Dec 2014 22:27:48 +0100
+Subject: [Buildroot] [PATCH] package/nettle: fix shared-only build
+Message-ID: <1418419668-13558-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changeset f1d3e09 (Build shared libraries only as the default) broke the
+nettle package.
+
+nettle really wants to statically link its tools, examples and testsuite
+against its own libraries. But for a shared-only build, static libraries
+are not even built, so the build breaks when trying to link any of them.
+
+Fix that in two ways:
+
+  - the proper way, by using whatever libraries are available, with a
+    preference toward using shared libraries;
+
+  - disabling both examples and testsuite since we do not need them.
+
+Fixes numerous build failures:
+    http://autobuild.buildroot.net/results/e93/e93da743c5b84b1bb6274aeee3fe3b52962c560c/
+    http://autobuild.buildroot.net/results/51d/51d0138ff39c45603315dcedf1f654c18604e1a8/
+    http://autobuild.buildroot.net/results/521/521d979658e402103f1a18fcfeab3f9705f0c000/
+    ...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
+ package/nettle/0001-fix-shared-only-build.patch    | 75 ++++++++++++++++++++++
+ .../nettle/0002-disable-testsuite-examples.patch   | 20 ++++++
+ 2 files changed, 95 insertions(+)
+ create mode 100644 package/nettle/0001-fix-shared-only-build.patch
+ create mode 100644 package/nettle/0002-disable-testsuite-examples.patch
 
-Changes v2 -> v3
-  - dependency to host-pkgconf (noticed by J?rg Krause)
-  - optional dependency to libiconv
-  - configure environnement for C99 compiler
-
-Changes v1 -> v2
-  - No needed dependency to mpd (suggested by Thomas)
-  - Added hash and license information
-
-Signed-off-by: Thierry Bultel <tbultel@free.fr>
----
- package/Config.in            |  1 +
- package/mpd-mpc/Config.in    |  7 +++++++
- package/mpd-mpc/mpd-mpc.hash |  2 ++
- package/mpd-mpc/mpd-mpc.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/mpd-mpc/Config.in
- create mode 100644 package/mpd-mpc/mpd-mpc.hash
- create mode 100644 package/mpd-mpc/mpd-mpc.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index dd3a46e..74ac5b1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -19,6 +19,7 @@ menu "Audio and video applications"
- 	source "package/madplay/Config.in"
- 	source "package/modplugtools/Config.in"
- 	source "package/mpd/Config.in"
-+	source "package/mpd-mpc/Config.in"
- 	source "package/mpg123/Config.in"
- 	source "package/mplayer/Config.in"
- 	source "package/musepack/Config.in"
-diff --git a/package/mpd-mpc/Config.in b/package/mpd-mpc/Config.in
+diff --git a/package/nettle/0001-fix-shared-only-build.patch b/package/nettle/0001-fix-shared-only-build.patch
 new file mode 100644
-index 0000000..1debc83
+index 0000000..3c9b186
 --- /dev/null
-+++ b/package/mpd-mpc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MPD_MPC
-+	bool "mpd-mpc"
-+	select BR2_PACKAGE_LIBMPDCLIENT
-+	help
-+	  A minimalist command line interface to MPD.
++++ b/package/nettle/0001-fix-shared-only-build.patch
+@@ -0,0 +1,75 @@
++static/shared: use available libraries when linking our tools/examples/testsuite
 +
-+	  http://www.musicpd.org/clients/mpc/
-diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
++For a shared-only build, static libraries do not exist, so the build fails as
++soon as we try to link either of our tools, examples or testsuite utils.
++
++Use whatever libraries are available, with a preference toward using shared
++libraries.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN nettle-2.7.1.orig/config.make.in nettle-2.7.1/config.make.in
++--- nettle-2.7.1.orig/config.make.in	2013-05-28 16:21:53.000000000 +0200
+++++ nettle-2.7.1/config.make.in	2014-12-12 19:56:07.031292752 +0100
++@@ -30,6 +30,8 @@
++ PACKAGE_VERSION = @PACKAGE_VERSION@
++ 
++ SHLIBCFLAGS = @SHLIBCFLAGS@
+++ at IF_STATIC@LIBS_EXT = .a
+++ at IF_SHARED@LIBS_EXT = .so
++ 
++ LIBNETTLE_MAJOR = @LIBNETTLE_MAJOR@
++ LIBNETTLE_MINOR = @LIBNETTLE_MINOR@
++diff -durN nettle-2.7.1.orig/tools/Makefile.in nettle-2.7.1/tools/Makefile.in
++--- nettle-2.7.1.orig/tools/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+++++ nettle-2.7.1/tools/Makefile.in	2014-12-12 19:57:12.499805574 +0100
++@@ -34,19 +34,19 @@
++ DISTFILES = $(SOURCES) Makefile.in input.h misc.h output.h parse.h
++ 
++ sexp_conv_OBJS = $(sexp_conv_SOURCES:.c=.$(OBJEXT)) $(getopt_OBJS)
++-sexp-conv$(EXEEXT): $(sexp_conv_OBJS) ../libnettle.a
+++sexp-conv$(EXEEXT): $(sexp_conv_OBJS) ../libnettle$(LIBS_EXT)
++ 	$(LINK) $(sexp_conv_OBJS) -lnettle $(LIBS) -o $@
++ 
++-nettle-lfib-stream$(EXEEXT): nettle-lfib-stream.$(OBJEXT) ../libnettle.a
+++nettle-lfib-stream$(EXEEXT): nettle-lfib-stream.$(OBJEXT) ../libnettle$(LIBS_EXT)
++ 	$(LINK) nettle-lfib-stream.$(OBJEXT) -lnettle $(LIBS) -o $@
++ 
++ pkcs1_conv_OBJS = $(pkcs1_conv_SOURCES:.c=.$(OBJEXT)) $(getopt_OBJS)
++-pkcs1-conv$(EXEEXT): $(pkcs1_conv_OBJS) ../libnettle.a ../libhogweed.a
+++pkcs1-conv$(EXEEXT): $(pkcs1_conv_OBJS) ../libnettle$(LIBS_EXT) ../libhogweed$(LIBS_EXT)
++ 	$(LINK) $(pkcs1_conv_OBJS) -lhogweed -lnettle $(LIBS) -o $@
++ 
++ # FIXME: Avoid linking with gmp
++ nettle_hash_OBJS = $(nettle_hash_SOURCES:.c=.$(OBJEXT)) $(getopt_OBJS)
++-nettle-hash$(EXEEXT): $(nettle_hash_OBJS) ../libnettle.a
+++nettle-hash$(EXEEXT): $(nettle_hash_OBJS) ../libnettle$(LIBS_EXT)
++ 	$(LINK) $(nettle_hash_OBJS) -lnettle $(LIBS) -o $@
++ 
++ 
++diff -durN nettle-2.7.1.orig/examples/Makefile.in nettle-2.7.1/examples/Makefile.in
++--- nettle-2.7.1.orig/examples/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+++++ nettle-2.7.1/examples/Makefile.in	2014-12-12 21:54:48.286251022 +0100
++@@ -117,8 +117,8 @@
++ 	-lhogweed -lnettle $(BENCH_LIBS) $(LIBS) $(OPENSSL_LIBFLAGS) \
++ 	-o hogweed-benchmark$(EXEEXT)
++ 
++-$(TARGETS) : io.$(OBJEXT) ../libnettle.a
++-$(HOGWEED_TARGETS): ../libhogweed.a
+++$(TARGETS) : io.$(OBJEXT) ../libnettle$(LIBS_EXT)
+++$(HOGWEED_TARGETS): ../libhogweed$(LIBS_EXT)
++ 
++ check: $(TS_ALL)
++ 	LD_LIBRARY_PATH=../.lib PATH="../.lib:$$PATH" srcdir="$(srcdir)" \
++diff -durN nettle-2.7.1.orig/testsuite/Makefile.in nettle-2.7.1/testsuite/Makefile.in
++--- nettle-2.7.1.orig/testsuite/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+++++ nettle-2.7.1/testsuite/Makefile.in	2014-12-12 21:55:30.414814549 +0100
++@@ -96,7 +96,7 @@
++ include $(srcdir)/.test-rules.make
++ 
++ $(TARGETS) $(EXTRA_TARGETS): testutils.$(OBJEXT) ../nettle-internal.$(OBJEXT) \
++-	../libnettle.a @IF_HOGWEED@ ../libhogweed.a
+++	../libnettle$(LIBS_EXT) @IF_HOGWEED@ ../libhogweed$(LIBS_EXT)
++ 
++ # For use as, e.g.,
++ #
+diff --git a/package/nettle/0002-disable-testsuite-examples.patch b/package/nettle/0002-disable-testsuite-examples.patch
 new file mode 100644
-index 0000000..d1fa7b1
+index 0000000..82d97d5
 --- /dev/null
-+++ b/package/mpd-mpc/mpd-mpc.hash
-@@ -0,0 +1,2 @@
-+# No upstream hashes for the following:
-+sha1 dd1577cfff1d8324bc27c97fb26d88b845118800  mpc-0.26.tar.xz
-diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
-new file mode 100644
-index 0000000..70eab69
---- /dev/null
-+++ b/package/mpd-mpc/mpd-mpc.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# mpd-mpc
-+#
-+################################################################################
++++ b/package/nettle/0002-disable-testsuite-examples.patch
+@@ -0,0 +1,20 @@
++Makefile: disable testsuite and example
 +
-+MPD_MPC_VERSION_MAJOR = 0
-+MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).26
-+MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
-+MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
-+MPD_MPC_LICENSE = GPLv2+
-+MPD_MPC_LICENSE_FILES = COPYING
-+MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
-+MPD_MPC_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
++We do not need them in the context of Buildroot.
 +
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+MPD_MPC_DEPENDENCIES += libiconv
-+MPD_MPC_CONF_OPTS += --enable-iconv
-+else
-+MPD_MPC_CONF_OPTS += --disable-iconv
-+endif
++Also, they break for a shared-only build (but it's fixed in patch 0001).
 +
-+$(eval $(autotools-package))
++Signed-off-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN nettle-2.7.1.orig/Makefile.in nettle-2.7.1/Makefile.in
++--- nettle-2.7.1.orig/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+++++ nettle-2.7.1/Makefile.in	2014-12-12 19:57:12.499805574 +0100
++@@ -16,7 +16,7 @@
++ 
++ OPT_ASM_SOURCES = @OPT_ASM_SOURCES@
++ 
++-SUBDIRS = tools testsuite examples
+++SUBDIRS = tools
++ 
++ include config.make
++ 
 -- 
 1.9.1
