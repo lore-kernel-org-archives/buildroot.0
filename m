@@ -1,59 +1,41 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 13 Dec 2014 00:16:01 +0100
-Subject: [Buildroot] [PATCH 04/14] boot/uboot.mk: Remove obsolete
-	CONFIG_NOSOFTFLOAT flag
+Date: Sat, 13 Dec 2014 00:15:58 +0100
+Subject: [Buildroot] [PATCH 01/14] boot/uboot: bump to version 2014.10
 In-Reply-To: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
 References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1418426171-3483-5-git-send-email-jkrause@posteo.de>
+Message-ID: <1418426171-3483-2-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This flag seems to be obsolete. There is no piece of code in the U-Boot source
-tree referencing CONFIG_NOSOFTFLOAT.
-
-Unfortunatly it's not documented here. Maybe it's about this old workaround:
-http://lists.denx.de/pipermail/u-boot/2007-March/020282.html
-
-However, this patch has been declined:
-http://www.denx.de/wiki/view/U-Boot/PatchStatus?rev=1.27
-
 Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
- boot/uboot/uboot.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ boot/uboot/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 72603e0..1af7e52 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -58,7 +58,6 @@ endif
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 46d1109..f7c4374 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
- UBOOT_ARCH = $(KERNEL_ARCH)
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2014.07"
++	bool "2014.10"
  
--UBOOT_CONFIGURE_OPTS += CONFIG_NOSOFTFLOAT=1
- UBOOT_MAKE_OPTS += \
- 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 	ARCH=$(UBOOT_ARCH)
-@@ -102,7 +101,7 @@ endif
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -63,7 +63,7 @@ endif
  
- define UBOOT_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 $(UBOOT_SOURCE_CONFIG) $(UBOOT_DIR)/configs/buildroot_defconfig
--	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
-+	$(TARGET_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
- 		buildroot_config
- 	rm $(UBOOT_DIR)/configs/buildroot_defconfig
-@@ -122,7 +121,7 @@ define UBOOT_CONFIGURE_CMDS
- endef
- 
- define UBOOT_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
-+	$(TARGET_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
- 		$(UBOOT_MAKE_TARGET)
- endef
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2014.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2014.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
 -- 
 2.1.3
