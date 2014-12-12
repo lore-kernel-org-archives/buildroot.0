@@ -1,27 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Dec 2014 12:06:32 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-12-10
-In-Reply-To: <548AC92B.8060705@imgtec.com>
-References: <20141211073016.EFDC7100E7A@stock.ovh.net>
- <5489D6E2.1010002@imgtec.com> <20141211175508.GQ2440@tarshish>
- <5489DB5F.2000101@imgtec.com> <548AC92B.8060705@imgtec.com>
-Message-ID: <20141212120632.6015df71@free-electrons.com>
+Date: Fri, 12 Dec 2014 12:07:34 +0100
+Subject: [Buildroot] buildroot 2014.11, custom gcc version
+In-Reply-To: <2249171418381492@web19h.yandex.ru>
+References: <2249171418381492@web19h.yandex.ru>
+Message-ID: <20141212120734.1b735708@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Nikita Orlov,
 
-On Fri, 12 Dec 2014 10:53:31 +0000, Vicente Olivert Riera wrote:
+On Fri, 12 Dec 2014 13:51:32 +0300, Nikita Orlov wrote:
 
-> As you can see, -ncurses and -lpanel are passed in the compile line,
-> so..., I don't know what to do now :/
+> How to choose custom gcc version in latest buildroot?
+> It seems for some reason such feature was deleted from buildroot.
+> 
+> Are there any right way to add this feature, not using dirty hacks?
 
-Trying changing the order of -lncurses and -lpanel, for static linking,
-the order is important.
+For any package, you can specify a custom source directory by using
+<pkg>_OVERRIDE_SRCDIR, see "8.11.6. Using Buildroot during development"
+in http://buildroot.org/downloads/manual/manual.html.
+
+Best regards,
 
 Thomas
 -- 
