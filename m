@@ -1,9 +1,9 @@
 From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Fri, 12 Dec 2014 15:42:46 +0000
-Subject: [Buildroot] [PATCH v2 6/7] Adding sofia-sip
+Date: Fri, 12 Dec 2014 15:42:47 +0000
+Subject: [Buildroot] [PATCH v2 7/7] Adding janus-gateway
 In-Reply-To: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
 References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
-Message-ID: <1418398967-2183-7-git-send-email-gregd72002@gmail.com>
+Message-ID: <1418398967-2183-8-git-send-email-gregd72002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,114 +13,104 @@ To: buildroot@busybox.net
 Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
 ---
  package/Config.in                                  |  1 +
- package/sofia-sip/Config.in                        |  5 ++++
- ...ag.h-reintroduce-soatag_local_sdp_str_ref.patch | 26 ++++++++++++++++++
- package/sofia-sip/sofia-sip.hash                   |  1 +
- package/sofia-sip/sofia-sip.mk                     | 31 ++++++++++++++++++++++
- 5 files changed, 64 insertions(+)
- create mode 100644 package/sofia-sip/Config.in
- create mode 100644 package/sofia-sip/sofia-sip-1.12.11-0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
- create mode 100644 package/sofia-sip/sofia-sip.hash
- create mode 100644 package/sofia-sip/sofia-sip.mk
+ package/janus-gateway/Config.in                    | 13 +++++++++++
+ .../janus-gateway-0001-disable-ssp.patch           | 12 ++++++++++
+ package/janus-gateway/janus-gateway.hash           |  1 +
+ package/janus-gateway/janus-gateway.mk             | 27 ++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
+ create mode 100644 package/janus-gateway/Config.in
+ create mode 100644 package/janus-gateway/janus-gateway-0001-disable-ssp.patch
+ create mode 100644 package/janus-gateway/janus-gateway.hash
+ create mode 100644 package/janus-gateway/janus-gateway.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 77430b9..316d899 100644
+index 316d899..f02d695 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -862,6 +862,7 @@ menu "Networking"
- 	source "package/rtmpdump/Config.in"
- 	source "package/slirp/Config.in"
- 	source "package/snmppp/Config.in"
-+	source "package/sofia-sip/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
- 	source "package/wvstreams/Config.in"
-diff --git a/package/sofia-sip/Config.in b/package/sofia-sip/Config.in
+@@ -1055,6 +1055,7 @@ endif
+ 	source "package/iptraf-ng/Config.in"
+ 	source "package/iputils/Config.in"
+ 	source "package/iw/Config.in"
++	source "package/janus-gateway/Config.in"
+ 	source "package/kismet/Config.in"
+ 	source "package/knock/Config.in"
+ 	source "package/leafnode2/Config.in"
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
 new file mode 100644
-index 0000000..d9045b5
+index 0000000..3a201ba
 --- /dev/null
-+++ b/package/sofia-sip/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_SOFIA_SIP
-+	bool "sofia-sip"
++++ b/package/janus-gateway/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_JANUS_GATEWAY
++	bool "janus-gateway"
++	select BR2_PACKAGE_LIBMICROHTTPD
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_LIBNICE
++	select BR2_PACKAGE_SOFIA_SIP
++	select BR2_PACKAGE_LIBSRTP
++	select BR2_PACKAGE_DING_LIBS
++	select BR2_PACKAGE_LIBWEBSOCK
++	select BR2_PACKAGE_HOST_GENGETOPT
 +	help
-+	Adds Sofia-SIP Library
-+	http://sofia-sip.sourceforge.net
-diff --git a/package/sofia-sip/sofia-sip-1.12.11-0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch b/package/sofia-sip/sofia-sip-1.12.11-0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
++	Adds janusgateway: 
++	https://github.com/meetecho/janus-gateway
+diff --git a/package/janus-gateway/janus-gateway-0001-disable-ssp.patch b/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
 new file mode 100644
-index 0000000..2d52348
+index 0000000..5de8b3b
 --- /dev/null
-+++ b/package/sofia-sip/sofia-sip-1.12.11-0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
-@@ -0,0 +1,26 @@
-+From bcd0f17fd83f2dfe570a3ab17249a5c7290b27f2 Mon Sep 17 00:00:00 2001
-+From: Pekka Pessi <Pekka.Pessi@nokia.com>
-+Date: Thu, 24 Mar 2011 14:45:21 +0200
-+Subject: [PATCH] soa_tag.h: reintroduce soatag_local_sdp_str_ref
-+
-+Thanks to Erik Habicht <e.habicht@thiesen.com> for spotting it
-+---
-+ libsofia-sip-ua/soa/sofia-sip/soa_tag.h |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/libsofia-sip-ua/soa/sofia-sip/soa_tag.h b/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
-+index 723ca02..d9448d6 100644
-+--- a/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
-++++ b/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
-+@@ -118,7 +118,7 @@ SOFIAPUBVAR tag_typedef_t soatag_local_sdp_ref;
-+ SOFIAPUBVAR tag_typedef_t soatag_local_sdp_str;
-+ #define SOATAG_LOCAL_SDP_STR_REF(x) \
-+   soatag_local_sdp_str_ref, tag_str_vr(&(x))
-+-SOFIAPUBVAR tag_typedef_t soatag_session_sdp_str_ref;
-++SOFIAPUBVAR tag_typedef_t soatag_local_sdp_str_ref;
++++ b/package/janus-gateway/janus-gateway-0001-disable-ssp.patch
+@@ -0,0 +1,12 @@
++diff -rupN janus-gateway-master.orig/Makefile.am janus-gateway-master/Makefile.am
++--- janus-gateway-master.orig/Makefile.am	2014-11-27 14:36:31.000000000 +0000
+++++ janus-gateway-master/Makefile.am	2014-12-01 16:39:50.551935028 +0000
++@@ -14,7 +14,7 @@ AM_CFLAGS += -Wredundant-decls  # sophia
++ # some fairly big refactoring though, which can wait.
++ # AM_CFLAGS += -Wshadow -Wstrict-aliasing=2
 + 
-+ #define SOATAG_AF(x)             soatag_af, tag_int_v((x))
-+ SOFIAPUBVAR tag_typedef_t soatag_af;
-+-- 
-+1.7.7
-+
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
++-AM_CFLAGS += -fstack-protector-all -g -ggdb -fPIC -rdynamic
+++AM_CFLAGS += -g -ggdb -fPIC -rdynamic
++ 
++ # FIXME: make docs work with distcheck
++ DISTCHECK_CONFIGURE_FLAGS = --disable-docs --enable-post-processing
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
 new file mode 100644
-index 0000000..4f352c3
+index 0000000..8be5bb2
 --- /dev/null
-+++ b/package/sofia-sip/sofia-sip.hash
++++ b/package/janus-gateway/janus-gateway.hash
 @@ -0,0 +1 @@
-+sha256,2b01bc2e1826e00d1f7f57d29a2854b15fd5fe24695e47a14a735d195dd37c81
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
++sha256,3e90f67810f78255042d3ab857629b510009052b6a334af4b80701cf2a824874
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
 new file mode 100644
-index 0000000..6be04f5
+index 0000000..277a38c
 --- /dev/null
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -0,0 +1,31 @@
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -0,0 +1,27 @@
 +#############################################################
 +#
-+# sofiasip
++# janus-gateway
 +#
 +#############################################################
-+SOFIA_SIP_VERSION = 1.12.11
-+SOFIA_SIP_SOURCE = sofia-sip-$(SOFIA_SIP_VERSION).tar.gz 
-+SOFIA_SIP_SITE = http://downloads.sourceforge.net/project/sofia-sip/sofia-sip/$(SOFIA_SIP_VERSION) 
-+SOFIA_SIP_INSTALL_STAGING = YES
++JANUS_GATEWAY_VERSION = c632c1e9da5ffd8c34df6086a1aa5a8511a2a02d
++JANUS_GATEWAY_SITE_METHOD = git
++JANUS_GATEWAY_SITE = https://github.com/meetecho/janus-gateway.git
++JANUS_GATEWAY_LICENSE = GPLv3
++JANUS_GATEWAY_LICENSE_FILES = COPYING
 +
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
-+else
-+	SOFIA_SIP_CONF_OPTS = --disable-ip6
-+endif
++JANUS_GATEWAY_DEPENDENCIES = host-pkgconf libmicrohttpd jansson libnice sofia-sip libsrtp ding-libs libwebsock host-gengetopt
 +
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+# If doxygen is not installed on the host, documentation won't be generated.
-+	SOFIA_SIP_CONF_OPTS += --with-doxygen=no
-+endif
++# Straight out of the repository, no ./configure
++JANUS_GATEWAY_AUTORECONF = YES
++ 
++define JANUS_GATEWAY_M4
++        mkdir -p $(@D)/m4
++endef
++JANUS_GATEWAY_POST_PATCH_HOOKS += JANUS_GATEWAY_M4
 +
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+        SOFIA_SIP_CONF_OPTS += --with-glib
-+        SOFIA_SIP_DEPENDENCIES += libglib2
-+else
-+        SOFIA_SIP_CONF_OPTS += --without-glib
-+endif
++JANUS_GATEWAY_CONF_OPTS = --disable-data-channels \
++				--disable-rabbitmq 
 +
-+ifneq ($(BR2_ENABLE_DEBUG),y)
-+        SOFIA_SIP_CONF_OPTS += --enable-ndebug
-+endif
++JANUS_GATEWAY_MAKE=$(MAKE1)
++
 +$(eval $(autotools-package))
 -- 
 1.9.1
