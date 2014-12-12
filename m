@@ -1,36 +1,102 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 12 Dec 2014 12:27:26 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-12-10
-In-Reply-To: <20141212120632.6015df71@free-electrons.com>
-References: <20141211073016.EFDC7100E7A@stock.ovh.net>	<5489D6E2.1010002@imgtec.com>	<20141211175508.GQ2440@tarshish>	<5489DB5F.2000101@imgtec.com>	<548AC92B.8060705@imgtec.com>
- <20141212120632.6015df71@free-electrons.com>
-Message-ID: <548ADF2E.3020405@imgtec.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 12 Dec 2014 08:56:58 -0500
+Subject: [Buildroot] [PATCH 2/2] qemu: add host/target Linux version
+	check
+In-Reply-To: <1418249519-15794-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1418249519-15794-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1418249519-15794-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CA+-urNTBN6oJNjw-v6GXSBy-w6tkzg2wrtpBNQN0-m4Wm1L16w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hi Thomas,
 
-On 12/12/2014 11:06 AM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Fri, 12 Dec 2014 10:53:31 +0000, Vicente Olivert Riera wrote:
-> 
->> As you can see, -ncurses and -lpanel are passed in the compile line,
->> so..., I don't know what to do now :/
-> 
-> Trying changing the order of -lncurses and -lpanel, for static linking,
-> the order is important.
+On Wed, Dec 10, 2014 at 5:11 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Raise an error if the host is using an older kernel than the target.
+> Since qemu-user passes emulated system calls to the host kernel,
+> this prevents usage of qemu-user in situations where those system
+> calls will fail.
+>
+> This is based on an original patch from Frank Hunleth
+> <fhunleth@troodon-software.com>, but completely rewritten in a
+> different way:
+>
+>  * Instead of using shell based testing, we use pure make tests, which
+>    allows to detect the problem not when host-qemu starts to build,
+>    but at the very beginning of the entire Buildroot build.
+>
+>  * Instead of looking at $(STAGING_DIR)/usr/include/linux/version.h
+>    (which requires having a dependency on the 'toolchain' package,
+>    which is a bit unusual for a host package), we use the
+>    BR2_TOOLCHAIN_HEADERS_AT_LEAST Config.in option which tells us the
+>    version of the kernel headers used in the toolchain.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Yes, that did the trick. I will send a patch soon. Thanks!
+Thanks for revisiting and improving the old host-qemu patch. I'm using
+your new changes to qemu.mk right now and everything seems to work as
+expected. So,
 
-Cheers,
+Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
+
+Thanks,
+Frank
+
+> ---
+>  package/qemu/qemu.mk | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 9cff5ed..6c5ddf3 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -59,6 +59,34 @@ HOST_QEMU_ARCH = ppc
+>  endif
+>  HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
+>
+> +ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
+> +HOST_QEMU_HOST_SYSTEM_TYPE = $(shell uname -s)
+> +ifneq ($(HOST_QEMU_HOST_SYSTEM_TYPE),Linux)
+> +$(error "qemu-user can only be used on Linux hosts")
+> +endif
+> +
+> +HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR = $(shell uname -r | cut -f1 -d'.')
+> +HOST_QEMU_HOST_SYSTEM_VERSION_MINOR = $(shell uname -r | cut -f2 -d'.')
+> +HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f1 -d'.')
+> +HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f2 -d'.')
+> +HOST_QEMU_COMPARE_VERSION_MAJOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR) && echo OK)
+> +HOST_QEMU_COMPARE_VERSION_MINOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MINOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR) && echo OK)
+> +
+> +#
+> +# The principle of qemu-user is that it emulates the instructions of
+> +# the target architecture when running the binary, and then when this
+> +# binary does a system call, it converts this system call into a
+> +# system call on the host machine. This mechanism makes an assumption:
+> +# that the target binary will not do system calls that do not exist on
+> +# the host. This basically requires that the target binary should be
+> +# built with kernel headers that are older or the same as the kernel
+> +# version running on the host machine.
+> +#
+> +ifneq ($(HOST_QEMU_COMPARE_VERSION_MAJOR)$(HOST_QEMU_COMPARE_VERSION_MINOR),OKOK)
+> +$(error "Refusing to build qemu-user: target Linux version newer than host's.")
+> +endif
+> +endif
+> +
+>  define HOST_QEMU_CONFIGURE_CMDS
+>         cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+>                 --target-list="$(HOST_QEMU_TARGETS)"    \
+> --
+> 2.1.0
+>
+
+
 -- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Frank Hunleth
+Troodon Software LLC
+Embedded Software Development
+http://troodon-software.com/
