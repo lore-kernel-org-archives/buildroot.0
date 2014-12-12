@@ -1,63 +1,31 @@
-From: Ivan Sergeev <vsergeev@kumunetworks.com>
-Date: Fri, 12 Dec 2014 13:43:29 -0800
-Subject: [Buildroot] [PATCH v2 1/1] mtr: bump to version 0.86 and use
- github call
-In-Reply-To: <548876B8.6060104@imgtec.com>
-References: <1418177455-27127-1-git-send-email-vsergeev@kumunetworks.com>
- <1418177637-28038-1-git-send-email-vsergeev@kumunetworks.com>
- <548876B8.6060104@imgtec.com>
-Message-ID: <CAPyrzo1wDQLBA7fQsU8jXmDXmfJ68F7+3fhaWcQrEhypg0S5rg@mail.gmail.com>
+From: Thierry Bultel <tbultel@free.fr>
+Date: Fri, 12 Dec 2014 23:38:06 +0100
+Subject: [Buildroot] dbus build fails since the bump of systemd to version
+	218
+Message-ID: <548B6E4E.104@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Hi,
 
-Thanks, sure. I'll look out for stale configure options and keep things in
-sync with patchwork next time around.
+Since the bump, there are undefined symbols when building dbus-1.8.10:
 
-Thanks,
-~vsergeev
-Ivan Sergeev
+  CCLD     dbus-daemon
+   CCLD     dbus-daemon-launch-helper
+/shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so: 
+undefined reference to `__stop_BUS_ERROR_MAP'
+/shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so: 
+undefined reference to `__start_BUS_ERROR_MAP'
+collect2: error: ld returned 1 exit status
+/shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so: 
+undefined reference to `__stop_BUS_ERROR_MAP'
+/shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so: 
+undefined reference to `__start_BUS_ERROR_MAP'
+collect2: error: ld returned 1 exit status
 
-On Wed, Dec 10, 2014 at 8:37 AM, Vicente Olivert Riera <
-Vincent.Riera@imgtec.com> wrote:
 
-> Dear Ivan Sergeev,
->
-> just a few things:
->
-> On 12/10/2014 02:13 AM, Ivan Sergeev wrote:
-> >  MTR_CONF_OPTS = --without-gtk --without-glib
->
-> The '--without-glib' option doesn't exist in the configure script. You
-> can remove it.
->
-> Also, while you are doing the version bump, why not adding a hash file
-> as well:
->
->
-> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-hash
->
-> Could you please mark the previous versions of this patch as
-> 'superseded' in patchwork?
->
-> And finally, could you please state what changes you make between versions?
->
-> Best regards,
-> --
-> Vicente Olivert Riera
-> Graduate Software Engineer, MIPS Platforms
-> Imagination Technologies Limited
-> t: +44 (0)113 2429814
-> www.imgtec.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141212/3f243b6c/attachment-0001.html>
+Regards
+Thierry
