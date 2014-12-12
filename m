@@ -1,63 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Dec 2014 08:44:34 +0100
-Subject: [Buildroot] [git commit] upmpdcli: use start() / stop() in init
-	script like elsewhere
-Message-ID: <20141212074528.46C7E7F9D2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Dec 2014 08:54:59 +0100
+Subject: [Buildroot] [PATCH] triggerhappy: new package
+In-Reply-To: <87d27ps4db.fsf@dell.be.48ers.dk>
+References: <1418079328-15550-1-git-send-email-peter@korsgaard.com>
+ <20141212000823.72d27f28@free-electrons.com>
+ <87d27ps4db.fsf@dell.be.48ers.dk>
+Message-ID: <20141212085459.73f16901@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e561eda373d1725a65018c325e1d9e6d34ca8cc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Other init scripts in Buildroot use start()/stop() instead of
-do_start()/do_stop(), so change it here as well for consistency
+On Fri, 12 Dec 2014 08:40:16 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/upmpdcli/S99upmpdcli |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+> I believe I just copied the init script from the upmpdcli package, so we
+> do have a few init scripts using do_start/do_stop:
+> 
+> git grep -l do_s package/**/S*
+> package/rpi-userland/S94vcfiled
+> package/transmission/S92transmission
+> package/upmpdcli/S99upmpdcli
+> 
+> So I'll fix those up for consistency. Thanks!
 
-diff --git a/package/upmpdcli/S99upmpdcli b/package/upmpdcli/S99upmpdcli
-index 314ea32..07b10a6 100644
---- a/package/upmpdcli/S99upmpdcli
-+++ b/package/upmpdcli/S99upmpdcli
-@@ -9,14 +9,14 @@ DAEMON_ARGS="-D -c $CONFFILE"
- # Sanity checks
- test -f $DAEMON || exit 0
- 
--do_start() {
-+start() {
-         echo -n "Starting $NAME: "
-         start-stop-daemon --start --quiet --background --exec $DAEMON \
-                 -- $DAEMON_ARGS \
-                 && echo "OK" || echo "FAIL"
- }
- 
--do_stop() {
-+stop() {
-         echo -n "Stopping $NAME: "
-         start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-                 && echo "OK" || echo "FAIL"
-@@ -24,15 +24,15 @@ do_stop() {
- 
- case "$1" in
-         start)
--                do_start
-+                start
-                 ;;
-         stop)
--                do_stop
-+                stop
-                 ;;
-         restart)
--                do_stop
-+                stop
-                 sleep 1
--                do_start
-+                start
-                 ;;
-         *)
-                 echo "Usage: $0 {start|stop|restart}"
+Yes, we do have a few using do_start/do_stop, but I did a quick poll:
+there were 3 or 4 using do_start/do_end, and dozens using start/stop.
+So the trend was pretty clear.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
