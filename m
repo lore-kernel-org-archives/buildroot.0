@@ -1,68 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Dec 2014 23:46:21 +0100
-Subject: [Buildroot] [PATCH 1/1] ncurses: add support for 256 colors
-In-Reply-To: <548B6F7D.8030902@free.fr>
-References: <1418122710-27852-1-git-send-email-tbultel@free.fr>
- <5486E958.9070404@zacarias.com.ar> <54870BA3.2010205@free.fr>
- <20141211181431.GA4199@free.fr> <548B6F7D.8030902@free.fr>
-Message-ID: <20141212224621.GA3882@free.fr>
+Date: Fri, 12 Dec 2014 23:51:33 +0100
+Subject: [Buildroot] [PATCH] package/collectd: fix build without libgcrypt
+Message-ID: <1418424693-10108-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thierry, All,
+In case lthe libgcrypt development files are present on the host system,
+collectd's ./configure will mistakenly try to use them and will call the
+host system's libgcrypt-config, thus leading it to use path to the host
+system includes and libraries.
 
-On 2014-12-12 23:43 +0100, Thierry Bultel spake thusly:
-> Le 11/12/2014 19:14, Yann E. MORIN a ?crit :
-> >On 2014-12-09 15:48 +0100, Thierry Bultel spake thusly:
-> >>Le 09/12/2014 13:21, Gustavo Zacarias a ?crit :
-> >>>On 12/09/2014 07:58 AM, Thierry Bultel wrote:
-> >>>
-> >>>>+config BR2_PACKAGE_NCURSES_EXT_COLORS
-> >>>>+	bool "ncurses extended colors"
-> >>>>+	select BR2_PACKAGE_NCURSES_WCHAR
-> >>>>+	depends on BR2_USE_WCHAR
-> >>>>+	help
-> >>>>+	  compile for 256-color support
-> >>>>+
-> >>>
-> >>>Hi.
-> >>>Do you know the size delta between this option enabled and disabled?
-> >>>I'm asking because it might not be even worth an option.
-> >>>Thanks.
-> >>>Regards.
-> >>>
-> >>
-> >>Hi, the size delta is quite small:
-> >>
-> >>256 colors:
-> >>
-> >>-rwxr-xr-x 1 thierry thierry 210K d?c.   9 14:23
-> >>output/target/usr/lib/libncursesw.so.6.0
-> >>
-> >>std colors:
-> >>
-> >>-rwxr-xr-x 1 thierry thierry 202K d?c.   9 15:46
-> >>output/target/usr/lib/libncursesw.so.5.9
-> >
-> >Then, I'd say we just enable it by default, since the size delta is
-> >negligible (~4%).
-> >
-> 
-> Shall I then repost the patch with 256 colors enabled by default ?
+Fix that in two ways:
+  - explicitly disable libgcrypt support when libgcrypt is not enabled;
+  - pass the complete path to libgcrypt-config when libgcrypt is enabled.
 
-Yes. Just repeat in the commit log the size values you observed as a
-reason not to make it an option.
+However, collectd's configure.ac is uterly broken. The code in
+configure.ac has special code to check for libgcrypt-config, and use
+whatever is provided via --with-libgcrypt=/path/to/libgcrypt-config. But
+that is promptly forgotten because they then call the AM_PATH_LIBGCRYPT
+macro, that just does it all again from scratch, and does not use the
+value previously found.
 
-Regards,
-Yann E. MORIN.
+Instead, we set LIBGCRYPT_CONFIG in the environment and point it to our
+own libgcrypt-config.
 
+Should fix numerous build issues:
+    http://autobuild.buildroot.net/results/ad4/ad408aef5fb92fe9e031c7dbaf6999776b40ace4/
+    http://autobuild.buildroot.net/results/967/96735bfa91bcf2e3dff89f69c0a12ed406e9efb9/
+    ...
+    http://autobuild.buildroot.net/results/3bd/3bdd9bdffb1d55414787d38fc2656d7a3391a957/
+    ...
+
+(the first two are with the paranoid wrapper, the third one was before
+the paranoid wrapper.)
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+
+---
+To be noted: even though this fixes the afore-mentioned issues, there
+are potentially more failures lurking around the corner:
+    checking for Python CPPFLAGS... /usr/include/python2.7
+Fun times ahead... :-/
+---
+ package/collectd/collectd.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 4647bd5..dce2b23 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -134,6 +134,9 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ 	COLLECTD_DEPENDENCIES += libgcrypt
+ 	COLLECTD_CONF_OPTS += --with-libgcrypt=$(STAGING_DIR)/usr
++	COLLECTD_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
++else
++	COLLECTD_CONF_OPTS += --with-libgcrypt=no
+ endif
+ 
+ # released software should not break on minor warnings
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
