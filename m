@@ -1,43 +1,59 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 13 Dec 2014 00:15:57 +0100
-Subject: [Buildroot] [PATCH 00/14] Add support for U-Boots Kbuild & Kconfig
-	build system
-Message-ID: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
+Date: Sat, 13 Dec 2014 00:16:01 +0100
+Subject: [Buildroot] [PATCH 04/14] boot/uboot.mk: Remove obsolete
+	CONFIG_NOSOFTFLOAT flag
+In-Reply-To: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
+References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
+Message-ID: <1418426171-3483-5-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series adds to the bootloader Das U-Boot:
-  * Update to the latest stable version 2014.10
-  * Support for its Kbuild & Kconfig build system
-  * Documentation in the manual
-  * Fixes and adjustments to the packages infrastructure
+This flag seems to be obsolete. There is no piece of code in the U-Boot source
+tree referencing CONFIG_NOSOFTFLOAT.
 
-J?rg Krause (14):
-  boot/uboot: bump to version 2014.10
-  boot/uboot: Add support for Kconfig build system
-  boot/uboot.mk: Add uboot-menuconfig and friends
-  boot/uboot.mk: Remove obsolete CONFIG_NOSOFTFLOAT flag
-  boot/uboot.mk: Replace TARGET_CONFIGURE_OPTS with TARGET_MAKE_ENV
-  boot/uboot.mk: Replace UBOOT_MAKE_OPTS with UBOOT_MAKE_FLAGS
-  boot/uboot.mk: Make make action single-line
-  boot/uboot/Config.in: Fix BR2_TARGET_UBOOT_SPL
-  boot/uboot/Config.in: Fix BR2_TARGET_UBOOT_SPL_NAME
-  boot/uboot/uboot.mk: Strip quotes from BR2_TARGET_UBOOT_SPL_NAME
-  docs/manual/make-tips.mk: Add uboot documentation
-  docs/manual/customize-configuration.txt: Add uboot documentation
-  docs/manual/customize-quick-guide.txt: Add uboot documentation
-  docs/manual/configure-other-components.txt: Add uboot documentation
+Unfortunatly it's not documented here. Maybe it's about this old workaround:
+http://lists.denx.de/pipermail/u-boot/2007-March/020282.html
 
- boot/uboot/Config.in                       | 50 +++++++++++++++++++---------
- boot/uboot/uboot.mk                        | 52 +++++++++++++++++++++++-------
- docs/manual/configure-other-components.txt | 11 +++++++
- docs/manual/customize-configuration.txt    |  8 ++---
- docs/manual/customize-quick-guide.txt      |  2 ++
- docs/manual/make-tips.txt                  |  2 ++
- 6 files changed, 94 insertions(+), 31 deletions(-)
+However, this patch has been declined:
+http://www.denx.de/wiki/view/U-Boot/PatchStatus?rev=1.27
 
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ boot/uboot/uboot.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 72603e0..1af7e52 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -58,7 +58,6 @@ endif
+ 
+ UBOOT_ARCH = $(KERNEL_ARCH)
+ 
+-UBOOT_CONFIGURE_OPTS += CONFIG_NOSOFTFLOAT=1
+ UBOOT_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+ 	ARCH=$(UBOOT_ARCH)
+@@ -102,7 +101,7 @@ endif
+ 
+ define UBOOT_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 $(UBOOT_SOURCE_CONFIG) $(UBOOT_DIR)/configs/buildroot_defconfig
+-	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
++	$(TARGET_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+ 		buildroot_config
+ 	rm $(UBOOT_DIR)/configs/buildroot_defconfig
+@@ -122,7 +121,7 @@ define UBOOT_CONFIGURE_CMDS
+ endef
+ 
+ define UBOOT_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
++	$(TARGET_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+ 		$(UBOOT_MAKE_TARGET)
+ endef
 -- 
 2.1.3
