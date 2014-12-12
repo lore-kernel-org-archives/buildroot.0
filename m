@@ -1,30 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Dec 2014 10:06:53 +0100
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 12 Dec 2014 10:11:52 +0100 (CET)
 Subject: [Buildroot] B2_EXTERNAL and patches
 In-Reply-To: <trinity-73676462-8b93-436d-9361-468b01882a1f-1418374738886@3capp-gmx-bs63>
-References: <trinity-73676462-8b93-436d-9361-468b01882a1f-1418374738886@3capp-gmx-bs63>
-Message-ID: <20141212100653.54e396c9@free-electrons.com>
+Message-ID: <2020988860.29161610.1418375512251.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Kuemmel,
+you might want to look at https://github.com/Openwide-Ingenierie/buildroot-submodule which is meant to solve that sort of problems.
 
-On Fri, 12 Dec 2014 09:58:58 +0100, Peter Kuemmel wrote:
+each variant will share the patch directroy by default, but you can override that on a per-variant basis
 
-> I would like use one minimal patched Builroot release in one branch for multiple projects,
-> so is it also possible to maintain different patches for a packages in different external folders?
-> Or could the selecition of patches be controlled by a configuration file?
-> (the different pachtes are necessary because of differenr kernel versions)
+Cordialement 
 
-You want to have a look at BR2_GLOBAL_PATCH_DIR.
+J?r?my Rosen 
++33 (0)1 42 68 28 04
 
-Best regards,
+fight key loggers : write some perl using vim 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75013 Paris - France
+www.openwide.fr
+
+
+
+
+
+----- Mail original -----
+> I would like use one minimal patched Builroot release in one branch
+> for multiple projects,
+> so is it also possible to maintain different patches for a packages
+> in different external folders?
+> Or could the selecition of patches be controlled by a configuration
+> file?
+> (the different pachtes are necessary because of differenr kernel
+> versions)
+> 
+> Peter
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
