@@ -1,33 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Dec 2014 00:23:55 +0100
-Subject: [Buildroot] [PATCH] package/libtirpc: add hash file
-Message-ID: <1418426635-23889-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 13 Dec 2014 00:28:16 +0100
+Subject: [Buildroot] [PATCH 2/3] iprutils: Don't include host headers
+In-Reply-To: <20141212095824.2c30720f@free-electrons.com>
+References: <1418340467-29999-1-git-send-email-romain.naour@openwide.fr>	<1418340467-29999-2-git-send-email-romain.naour@openwide.fr>
+ <20141212095824.2c30720f@free-electrons.com>
+Message-ID: <548B7A10.2030105@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Should fix autobuild failures due to SourceForce sending garbage from
-time to time:
-    http://autobuild.buildroot.net/results/acc/acc086e04da324621c715962585dbdd80e04b74e/
-    http://autobuild.buildroot.net/results/acc/acc086e04da324621c715962585dbdd80e04b74e/
-    http://autobuild.buildroot.net/results/ca0/ca084460c06f5b69ad35080cd347554a2c53f2a8/
+Hi Thomas,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
----
- package/libtirpc/libtirpc.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/libtirpc/libtirpc.hash
+Le 12/12/2014 09:58, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Fri, 12 Dec 2014 00:27:46 +0100, Romain Naour wrote:
+>> Fixes:
+>> ERROR: unsafe header/library path used in cross-compilation: '/usr/include/ncurses'
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/iprutils/iprutils.mk | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+>> index 53516b6..0721fbf 100644
+>> --- a/package/iprutils/iprutils.mk
+>> +++ b/package/iprutils/iprutils.mk
+>> @@ -12,11 +12,14 @@ IPRUTILS_LICENSE = Common Public License Version 1.0
+>>  IPRUTILS_LICENSE_FILES = LICENSE
+>>  
+>>  define IPRUTILS_BUILD_CMDS
+>> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+>> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+>> +		INCLUDEDIR="-I. -I$(STAGING_DIR)/usr/include/ncurses" \
+>> +		-C $(@D) all
+> 
+> Thanks. Shouldn't we instead patch the Makefile itself, and submit the
+> change upstream?
+> 
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-new file mode 100644
-index 0000000..34fb0af
---- /dev/null
-+++ b/package/libtirpc/libtirpc.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 45c3e21dfc23a5ba501f9dfc6671678316fdfdb8355a1ec404ae2aa2f81943a1  libtirpc-0.2.4.tar.bz2
--- 
-1.9.1
+It seems that Viencent's patches are not yet commited in iprutils.
+So, I'll push all patches to my sourceforge account and post a message
+in the forum.
+
+Best regards,
+Romain Naour
