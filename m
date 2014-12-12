@@ -1,35 +1,33 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 13 Dec 2014 00:16:06 +0100
-Subject: [Buildroot] [PATCH 09/14] boot/uboot/Config.in: Fix
-	BR2_TARGET_UBOOT_SPL_NAME
-In-Reply-To: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1418426171-3483-10-git-send-email-jkrause@posteo.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 13 Dec 2014 00:23:55 +0100
+Subject: [Buildroot] [PATCH] package/libtirpc: add hash file
+Message-ID: <1418426635-23889-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Point out that the SPL name is an image name.
+Should fix autobuild failures due to SourceForce sending garbage from
+time to time:
+    http://autobuild.buildroot.net/results/acc/acc086e04da324621c715962585dbdd80e04b74e/
+    http://autobuild.buildroot.net/results/acc/acc086e04da324621c715962585dbdd80e04b74e/
+    http://autobuild.buildroot.net/results/ca0/ca084460c06f5b69ad35080cd347554a2c53f2a8/
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- boot/uboot/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libtirpc/libtirpc.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libtirpc/libtirpc.hash
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 801ea2d..5ba34c0 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -243,7 +243,7 @@ config BR2_TARGET_UBOOT_SPL
- 	  into DDR.
- 
- config BR2_TARGET_UBOOT_SPL_NAME
--	string "U-Boot SPL target name"
-+	string "U-Boot SPL binary image name"
- 	default "spl/u-boot-spl.bin"
- 	depends on BR2_TARGET_UBOOT_SPL
- 	help
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+new file mode 100644
+index 0000000..34fb0af
+--- /dev/null
++++ b/package/libtirpc/libtirpc.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 45c3e21dfc23a5ba501f9dfc6671678316fdfdb8355a1ec404ae2aa2f81943a1  libtirpc-0.2.4.tar.bz2
 -- 
-2.1.3
+1.9.1
