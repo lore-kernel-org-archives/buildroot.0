@@ -1,9 +1,9 @@
 From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Fri, 12 Dec 2014 15:42:43 +0000
-Subject: [Buildroot] [PATCH v2 3/7] Adding libnice
+Date: Fri, 12 Dec 2014 15:42:45 +0000
+Subject: [Buildroot] [PATCH v2 5/7] Adding libwebsock
 In-Reply-To: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
 References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
-Message-ID: <1418398967-2183-4-git-send-email-gregd72002@gmail.com>
+Message-ID: <1418398967-2183-6-git-send-email-gregd72002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,89 +12,72 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
 ---
- package/Config.in                                    |  1 +
- package/libnice/Config.in                            |  6 ++++++
- .../libnice/libnice-0001-build-IPV6_RECVERR.patch    | 20 ++++++++++++++++++++
- package/libnice/libnice.hash                         |  1 +
- package/libnice/libnice.mk                           | 11 +++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/libnice/Config.in
- create mode 100644 package/libnice/libnice-0001-build-IPV6_RECVERR.patch
- create mode 100644 package/libnice/libnice.hash
- create mode 100644 package/libnice/libnice.mk
+ package/Config.in                  |  1 +
+ package/libwebsock/Config.in       |  6 ++++++
+ package/libwebsock/libwebsock.hash |  1 +
+ package/libwebsock/libwebsock.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/libwebsock/Config.in
+ create mode 100644 package/libwebsock/libwebsock.hash
+ create mode 100644 package/libwebsock/libwebsock.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 49fb8b3..e8c973e 100644
+index 501f505..77430b9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -824,6 +824,7 @@ menu "Networking"
- 	source "package/libmnl/Config.in"
- 	source "package/libmodbus/Config.in"
- 	source "package/libndp/Config.in"
-+	source "package/libnice/Config.in"
- 	source "package/libnetfilter_acct/Config.in"
- 	source "package/libnetfilter_conntrack/Config.in"
- 	source "package/libnetfilter_cthelper/Config.in"
-diff --git a/package/libnice/Config.in b/package/libnice/Config.in
+@@ -851,6 +851,7 @@ menu "Networking"
+ 	source "package/libupnpp/Config.in"
+ 	source "package/liburiparser/Config.in"
+ 	source "package/libvncserver/Config.in"
++	source "package/libwebsock/Config.in"
+ 	source "package/libwebsockets/Config.in"
+ 	source "package/neon/Config.in"
+ 	source "package/nss-mdns/Config.in"
+diff --git a/package/libwebsock/Config.in b/package/libwebsock/Config.in
 new file mode 100644
-index 0000000..1ff8560
+index 0000000..427b3fd
 --- /dev/null
-+++ b/package/libnice/Config.in
++++ b/package/libwebsock/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBNICE
-+	bool "libnice"
-+	select BR2_PACKAGE_LIBGLIB2
++config BR2_PACKAGE_LIBWEBSOCK
++	bool "libwebsock"
++	select BR2_PACKAGE_LIBEVENT
 +	help
-+	Adds libnice - The GLib ICE implementation
-+	http://nice.freedesktop.org/wiki/
-diff --git a/package/libnice/libnice-0001-build-IPV6_RECVERR.patch b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
++	Adds libwebsock
++	https://github.com/payden/libwebsock
+diff --git a/package/libwebsock/libwebsock.hash b/package/libwebsock/libwebsock.hash
 new file mode 100644
-index 0000000..39ef617
+index 0000000..2250c09
 --- /dev/null
-+++ b/package/libnice/libnice-0001-build-IPV6_RECVERR.patch
-@@ -0,0 +1,20 @@
-+diff -rupN libnice-0.1.8.orig/stun/usages/bind.c libnice-0.1.8/stun/usages/bind.c
-+--- libnice-0.1.8.orig/stun/usages/bind.c	2014-09-22 18:01:28.000000000 +0100
-++++ libnice-0.1.8/stun/usages/bind.c	2014-12-01 13:28:32.144707407 +0000
-+@@ -257,12 +257,16 @@ static int stun_socket (int family, int
-+     int yes = 1;
-+     switch (family)
-+     {
-++#ifdef IP_RECVERR
-+       case AF_INET:
-+         setsockopt (fd, SOL_IP, IP_RECVERR, &yes, sizeof (yes));
-++#endif
-+         break;
-++#ifdef IPV6_RECVERR
-+       case AF_INET6:
-+         setsockopt (fd, SOL_IPV6, IPV6_RECVERR, &yes, sizeof (yes));
-+         break;
-++#endif
-+       default:
-+         /* Nothing to do. */
-+         break;
-diff --git a/package/libnice/libnice.hash b/package/libnice/libnice.hash
-new file mode 100644
-index 0000000..39f15d9
---- /dev/null
-+++ b/package/libnice/libnice.hash
++++ b/package/libwebsock/libwebsock.hash
 @@ -0,0 +1 @@
-+sha256,9da7f09909902d535389d929c3e4d69129528fb18438a6c8565ec812d9904ddf
-diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
++sha256,ac459d1de0205f8aedf2fd10a48cb02a06acb127c3403001670a839502e02afd
+diff --git a/package/libwebsock/libwebsock.mk b/package/libwebsock/libwebsock.mk
 new file mode 100644
-index 0000000..dd7f7a4
+index 0000000..f82b553
 --- /dev/null
-+++ b/package/libnice/libnice.mk
-@@ -0,0 +1,11 @@
++++ b/package/libwebsock/libwebsock.mk
+@@ -0,0 +1,22 @@
 +#############################################################
 +#
-+# libnice 
++# libwebsock
 +#
 +#############################################################
-+LIBNICE_VERSION = 0.1.8
-+LIBNICE_SITE = http://nice.freedesktop.org/releases/
-+LIBNICE_DEPENDENCIES = libglib2
-+LIBNICE_INSTALL_STAGING = YES
++LIBWEBSOCK_VERSION = 3c1615eeadb0b582b63851073bfe3e5132f31ebc 
++LIBWEBSOCK_SITE_METHOD = git
++LIBWEBSOCK_SITE = https://github.com/payden/libwebsock.git
++LIBWEBSOCK_DEPENDENCIES = libevent
++LIBWEBSOCK_AUTORECONF = YES
++LIBWEBSOCK_INSTALL_STAGING = YES
++LIBWEBSOCK_LICENSE = LGPLv3
++LIBWEBSOCK_LICENSE_FILES = COPYING
++
++LIBWEBSOCK_CFLAGS = $(TARGET_CFLAGS)
++LIBWEBSOCK_LIBS += -lpthread -levent
++
++LIBWEBSOCK_CONF_ENV += \
++        CFLAGS="$(LIBWEBSOCK_CFLAGS)" \
++        LIBS="$(LIBWEBSOCK_LIBS)"
 +
 +$(eval $(autotools-package))
 -- 
