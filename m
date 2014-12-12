@@ -1,49 +1,48 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 13 Dec 2014 00:16:05 +0100
-Subject: [Buildroot] [PATCH 08/14] boot/uboot/Config.in: Fix
-	BR2_TARGET_UBOOT_SPL
+Date: Sat, 13 Dec 2014 00:16:04 +0100
+Subject: [Buildroot] [PATCH 07/14] boot/uboot.mk: Make make action
+	single-line
 In-Reply-To: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
 References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1418426171-3483-9-git-send-email-jkrause@posteo.de>
+Message-ID: <1418426171-3483-8-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building an SPL image depends on the board configuration. This option
-does not enable the SPL build, but only copies the built SPL image to
-the binary images folder. The current help text is misleading.
+Cosmetic after removing and renaming of variables.
 
 Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
- boot/uboot/Config.in | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ boot/uboot/uboot.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8a5bebc..801ea2d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -232,13 +232,15 @@ config BR2_TARGET_UBOOT_ETH1ADDR
- endif # BR2_TARGET_UBOOT_NETWORK
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index f1307f6..c786986 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -101,9 +101,7 @@ endif
  
- config BR2_TARGET_UBOOT_SPL
--	bool "U-Boot SPL support"
-+	bool "Install U-Boot SPL binary image"
- 	depends on !BR2_TARGET_XLOADER
- 	help
--	  Enable the U-Boot SPL support. SPL is a first stage
--	  bootloader loaded into internal memory in charge of
--	  enabling and configuring the external memory (DDR),
--	  and load the u-boot program into DDR.
-+	  Install the U-Boot SPL binary image to the images
-+	  directory.
-+	  SPL is a first stage bootloader loaded into internal
-+	  memory in charge of enabling and configuring the
-+	  external memory (DDR), and load the u-boot program
-+	  into DDR.
+ define UBOOT_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 $(UBOOT_SOURCE_CONFIG) $(UBOOT_DIR)/configs/buildroot_defconfig
+-	$(TARGET_MAKE_ENV) 	\
+-		$(MAKE) -C $(@D) $(UBOOT_MAKE_FLAGS)		\
+-		buildroot_config
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_MAKE_FLAGS) buildroot_config
+ 	rm $(UBOOT_DIR)/configs/buildroot_defconfig
+ 	@echo >> $(@D)/include/config.h
+ 	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(@D)/include/config.h
+@@ -121,9 +119,7 @@ define UBOOT_CONFIGURE_CMDS
+ endef
  
- config BR2_TARGET_UBOOT_SPL_NAME
- 	string "U-Boot SPL target name"
+ define UBOOT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) 	\
+-		$(MAKE) -C $(@D) $(UBOOT_MAKE_FLAGS) 		\
+-		$(UBOOT_MAKE_TARGET)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(UBOOT_MAKE_FLAGS) $(UBOOT_MAKE_TARGET)
+ endef
+ 
+ define UBOOT_BUILD_OMAP_IFT
 -- 
 2.1.3
