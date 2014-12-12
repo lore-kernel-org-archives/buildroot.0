@@ -1,102 +1,139 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 12 Dec 2014 08:56:58 -0500
-Subject: [Buildroot] [PATCH 2/2] qemu: add host/target Linux version
-	check
-In-Reply-To: <1418249519-15794-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1418249519-15794-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1418249519-15794-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CA+-urNTBN6oJNjw-v6GXSBy-w6tkzg2wrtpBNQN0-m4Wm1L16w@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 12 Dec 2014 14:48:00 +0000
+Subject: [Buildroot] [PATCH 1/2] kismet: Remove libpcap compile tests to fix
+	cross-compiling
+Message-ID: <1418395681-40434-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+These compile tests are run on the host machine which may have or may
+not have libpcap installed, so we are relying on the host machine to
+determine if we have to stop the build process due to a missing pcap
+library. Given that Kismet already depends on libpcap we can be sure
+that library will be installed in our target. So, for these two reasons
+we can remove these compile tests from the configure script.
 
-On Wed, Dec 10, 2014 at 5:11 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Raise an error if the host is using an older kernel than the target.
-> Since qemu-user passes emulated system calls to the host kernel,
-> this prevents usage of qemu-user in situations where those system
-> calls will fail.
->
-> This is based on an original patch from Frank Hunleth
-> <fhunleth@troodon-software.com>, but completely rewritten in a
-> different way:
->
->  * Instead of using shell based testing, we use pure make tests, which
->    allows to detect the problem not when host-qemu starts to build,
->    but at the very beginning of the entire Buildroot build.
->
->  * Instead of looking at $(STAGING_DIR)/usr/include/linux/version.h
->    (which requires having a dependency on the 'toolchain' package,
->    which is a bit unusual for a host package), we use the
->    BR2_TOOLCHAIN_HEADERS_AT_LEAST Config.in option which tells us the
->    version of the kernel headers used in the toolchain.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+  http://autobuild.buildroot.net/results/965/965a3e345dc0a432043b72581bff7d33561fbe0c/
 
-Thanks for revisiting and improving the old host-qemu patch. I'm using
-your new changes to qemu.mk right now and everything seems to work as
-expected. So,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...pcap-compile-tests-to-fix-cross-compiling.patch |  104 ++++++++++++++++++++
+ 1 files changed, 104 insertions(+), 0 deletions(-)
+ create mode 100644 package/kismet/0003-Remove-libpcap-compile-tests-to-fix-cross-compiling.patch
 
-Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
-
-Thanks,
-Frank
-
-> ---
->  package/qemu/qemu.mk | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 9cff5ed..6c5ddf3 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -59,6 +59,34 @@ HOST_QEMU_ARCH = ppc
->  endif
->  HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
->
-> +ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
-> +HOST_QEMU_HOST_SYSTEM_TYPE = $(shell uname -s)
-> +ifneq ($(HOST_QEMU_HOST_SYSTEM_TYPE),Linux)
-> +$(error "qemu-user can only be used on Linux hosts")
-> +endif
-> +
-> +HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR = $(shell uname -r | cut -f1 -d'.')
-> +HOST_QEMU_HOST_SYSTEM_VERSION_MINOR = $(shell uname -r | cut -f2 -d'.')
-> +HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f1 -d'.')
-> +HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f2 -d'.')
-> +HOST_QEMU_COMPARE_VERSION_MAJOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR) && echo OK)
-> +HOST_QEMU_COMPARE_VERSION_MINOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MINOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR) && echo OK)
-> +
-> +#
-> +# The principle of qemu-user is that it emulates the instructions of
-> +# the target architecture when running the binary, and then when this
-> +# binary does a system call, it converts this system call into a
-> +# system call on the host machine. This mechanism makes an assumption:
-> +# that the target binary will not do system calls that do not exist on
-> +# the host. This basically requires that the target binary should be
-> +# built with kernel headers that are older or the same as the kernel
-> +# version running on the host machine.
-> +#
-> +ifneq ($(HOST_QEMU_COMPARE_VERSION_MAJOR)$(HOST_QEMU_COMPARE_VERSION_MINOR),OKOK)
-> +$(error "Refusing to build qemu-user: target Linux version newer than host's.")
-> +endif
-> +endif
-> +
->  define HOST_QEMU_CONFIGURE_CMDS
->         cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
->                 --target-list="$(HOST_QEMU_TARGETS)"    \
-> --
-> 2.1.0
->
-
-
+diff --git a/package/kismet/0003-Remove-libpcap-compile-tests-to-fix-cross-compiling.patch b/package/kismet/0003-Remove-libpcap-compile-tests-to-fix-cross-compiling.patch
+new file mode 100644
+index 0000000..d41c64e
+--- /dev/null
++++ b/package/kismet/0003-Remove-libpcap-compile-tests-to-fix-cross-compiling.patch
+@@ -0,0 +1,104 @@
++Remove libpcap compile tests to fix cross-compiling
++
++These compile tests are run on the host machine which may have or may
++not have libpcap installed, so we are relying on the host machine to
++determine if we have to stop the build process due to a missing pcap
++library. Given that Kismet already depends on libpcap we can be sure
++that library will be installed in our target. So, for these two reasons
++we can remove these compile tests from the configure script.
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++diff -rup a/configure b/configure
++--- a/configure	2014-12-11 16:35:36.979059147 +0000
+++++ b/configure	2014-12-11 16:43:54.175647454 +0000
++@@ -6265,29 +6265,7 @@ if eval \${$as_ac_Lib+:} false; then :
++ else
++   ac_check_lib_save_LIBS=$LIBS
++ LIBS="-l${pcaplib}  $LIBS"
++-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++-/* end confdefs.h.  */
++-
++-/* Override any GCC internal prototype to avoid an error.
++-   Use char because int might match the return type of a GCC
++-   builtin and then its argument prototype would still apply.  */
++-#ifdef __cplusplus
++-extern "C"
++-#endif
++-char pcap_open_live ();
++-int
++-main ()
++-{
++-return pcap_open_live ();
++-  ;
++-  return 0;
++-}
++-_ACEOF
++-if ac_fn_c_try_link "$LINENO"; then :
++   eval "$as_ac_Lib=yes"
++-else
++-  eval "$as_ac_Lib=no"
++-fi
++ rm -f core conftest.err conftest.$ac_objext \
++     conftest$ac_exeext conftest.$ac_ext
++ LIBS=$ac_check_lib_save_LIBS
++@@ -6337,29 +6315,7 @@ if ${ac_cv_lib_pcap_pcap_setnonblock+:} 
++ else
++   ac_check_lib_save_LIBS=$LIBS
++ LIBS="-lpcap  $LIBS"
++-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++-/* end confdefs.h.  */
++-
++-/* Override any GCC internal prototype to avoid an error.
++-   Use char because int might match the return type of a GCC
++-   builtin and then its argument prototype would still apply.  */
++-#ifdef __cplusplus
++-extern "C"
++-#endif
++-char pcap_setnonblock ();
++-int
++-main ()
++-{
++-return pcap_setnonblock ();
++-  ;
++-  return 0;
++-}
++-_ACEOF
++-if ac_fn_c_try_link "$LINENO"; then :
++   ac_cv_lib_pcap_pcap_setnonblock=yes
++-else
++-  ac_cv_lib_pcap_pcap_setnonblock=no
++-fi
++ rm -f core conftest.err conftest.$ac_objext \
++     conftest$ac_exeext conftest.$ac_ext
++ LIBS=$ac_check_lib_save_LIBS
++@@ -6385,29 +6341,7 @@ if eval \${$as_ac_Lib+:} false; then :
++ else
++   ac_check_lib_save_LIBS=$LIBS
++ LIBS="-l${pcaplib}  $LIBS"
++-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++-/* end confdefs.h.  */
++-
++-/* Override any GCC internal prototype to avoid an error.
++-   Use char because int might match the return type of a GCC
++-   builtin and then its argument prototype would still apply.  */
++-#ifdef __cplusplus
++-extern "C"
++-#endif
++-char pcap_get_selectable_fd ();
++-int
++-main ()
++-{
++-return pcap_get_selectable_fd ();
++-  ;
++-  return 0;
++-}
++-_ACEOF
++-if ac_fn_c_try_link "$LINENO"; then :
++   eval "$as_ac_Lib=yes"
++-else
++-  eval "$as_ac_Lib=no"
++-fi
++ rm -f core conftest.err conftest.$ac_objext \
++     conftest$ac_exeext conftest.$ac_ext
++ LIBS=$ac_check_lib_save_LIBS
 -- 
-Frank Hunleth
-Troodon Software LLC
-Embedded Software Development
-http://troodon-software.com/
+1.7.1
