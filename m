@@ -1,82 +1,82 @@
 From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Fri, 12 Dec 2014 15:42:40 +0000
-Subject: [Buildroot] [PATCH v2 0/7] Adding janus-gateway and dependencies
-Message-ID: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
+Date: Fri, 12 Dec 2014 15:42:41 +0000
+Subject: [Buildroot] [PATCH v2 1/7] Adding ding-libs
+In-Reply-To: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
+References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
+Message-ID: <1418398967-2183-2-git-send-email-gregd72002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2 of janus-gateway and dependencies.
-
-Changelog:
-- added sha256
-- restructured patches to include Config.in changes for each package separately
-- incorporated ealier work on sofia-sip from http://lists.busybox.net/pipermail/buildroot/2012-January/049258.html
-
-Gregory Dymarek (7):
-  Adding ding-libs
-  Adding gengetopt
-  Adding libnice
-  Adding libsrtp
-  Adding libwebsock
-  Adding sofia-sip
-  Adding janus-gateway
-
- package/Config.in                                  |  7 +++++
- package/Config.in.host                             |  1 +
- package/ding-libs/Config.in                        |  9 +++++++
- package/ding-libs/ding-libs.hash                   |  1 +
- package/ding-libs/ding-libs.mk                     | 17 ++++++++++++
- package/gengetopt/Config.in                        |  6 +++++
- package/gengetopt/Config.in.host                   |  6 +++++
- package/gengetopt/gengetopt.hash                   |  1 +
- package/gengetopt/gengetopt.mk                     | 16 +++++++++++
- package/janus-gateway/Config.in                    | 13 +++++++++
- .../janus-gateway-0001-disable-ssp.patch           | 12 +++++++++
- package/janus-gateway/janus-gateway.hash           |  1 +
- package/janus-gateway/janus-gateway.mk             | 27 +++++++++++++++++++
- package/libnice/Config.in                          |  6 +++++
- .../libnice/libnice-0001-build-IPV6_RECVERR.patch  | 20 ++++++++++++++
- package/libnice/libnice.hash                       |  1 +
- package/libnice/libnice.mk                         | 11 ++++++++
- package/libsrtp/Config.in                          |  5 ++++
- package/libsrtp/libsrtp.hash                       |  1 +
- package/libsrtp/libsrtp.mk                         | 13 +++++++++
- package/libwebsock/Config.in                       |  6 +++++
- package/libwebsock/libwebsock.hash                 |  1 +
- package/libwebsock/libwebsock.mk                   | 22 +++++++++++++++
- package/sofia-sip/Config.in                        |  5 ++++
- ...ag.h-reintroduce-soatag_local_sdp_str_ref.patch | 26 ++++++++++++++++++
- package/sofia-sip/sofia-sip.hash                   |  1 +
- package/sofia-sip/sofia-sip.mk                     | 31 ++++++++++++++++++++++
- 27 files changed, 266 insertions(+)
+Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
+---
+ package/Config.in                |  1 +
+ package/ding-libs/Config.in      |  9 +++++++++
+ package/ding-libs/ding-libs.hash |  1 +
+ package/ding-libs/ding-libs.mk   | 17 +++++++++++++++++
+ 4 files changed, 28 insertions(+)
  create mode 100644 package/ding-libs/Config.in
  create mode 100644 package/ding-libs/ding-libs.hash
  create mode 100644 package/ding-libs/ding-libs.mk
- create mode 100644 package/gengetopt/Config.in
- create mode 100644 package/gengetopt/Config.in.host
- create mode 100644 package/gengetopt/gengetopt.hash
- create mode 100644 package/gengetopt/gengetopt.mk
- create mode 100644 package/janus-gateway/Config.in
- create mode 100644 package/janus-gateway/janus-gateway-0001-disable-ssp.patch
- create mode 100644 package/janus-gateway/janus-gateway.hash
- create mode 100644 package/janus-gateway/janus-gateway.mk
- create mode 100644 package/libnice/Config.in
- create mode 100644 package/libnice/libnice-0001-build-IPV6_RECVERR.patch
- create mode 100644 package/libnice/libnice.hash
- create mode 100644 package/libnice/libnice.mk
- create mode 100644 package/libsrtp/Config.in
- create mode 100644 package/libsrtp/libsrtp.hash
- create mode 100644 package/libsrtp/libsrtp.mk
- create mode 100644 package/libwebsock/Config.in
- create mode 100644 package/libwebsock/libwebsock.hash
- create mode 100644 package/libwebsock/libwebsock.mk
- create mode 100644 package/sofia-sip/Config.in
- create mode 100644 package/sofia-sip/sofia-sip-1.12.11-0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
- create mode 100644 package/sofia-sip/sofia-sip.hash
- create mode 100644 package/sofia-sip/sofia-sip.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 48be2df..9e3f11b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -876,6 +876,7 @@ menu "Other"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+ 	source "package/cppcms/Config.in"
++	source "package/ding-libs/Config.in"
+ 	source "package/eigen/Config.in"
+ 	source "package/elfutils/Config.in"
+ 	source "package/fftw/Config.in"
+diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
+new file mode 100644
+index 0000000..7c7a17f
+--- /dev/null
++++ b/package/ding-libs/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DING_LIBS
++	bool "ding-libs"
++#	depends on BR2_TOOLCHAIN_BUILDROOT_LOCALE 
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	help
++	Adds ding-libs 
++	https://git.fedorahosted.org/git/ding-libs.git
++
+diff --git a/package/ding-libs/ding-libs.hash b/package/ding-libs/ding-libs.hash
+new file mode 100644
+index 0000000..cf21585
+--- /dev/null
++++ b/package/ding-libs/ding-libs.hash
+@@ -0,0 +1 @@
++sha256,639984a57d6f936a6551c842712619692febaebf4515033fc929620a241ffa6a
+diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
+new file mode 100644
+index 0000000..582b9be
+--- /dev/null
++++ b/package/ding-libs/ding-libs.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# ding-libs
++#
++#############################################################
++DING_LIBS_VERSION = 0_4_0
++DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
++DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot 
++#DING_LIBS_DEPENDENCIES = BR2_TOOLCHAIN_BUILDROOT_LOCALE
++DING_LIBS_DEPENDENCIES = $(if !$(BR2_ENABLE_LOCALE),libiconv) $(if $(BR2_NEEDS_GETTEXT),gettext) 
++DING_LIBS_AUTORECONF = YES
++DING_LIBS_INSTALL_STAGING = YES
++DING_LIBS_LICENSE = GPLv3
++DING_LIBS_LICENSE_FILES = COPYING
++DING_LIBS_MAKE=$(MAKE1)
++
++$(eval $(autotools-package))
 -- 
 1.9.1
