@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Dec 2014 21:04:50 +0100
-Subject: [Buildroot] [PATCH v5 05/11] autobuild-run: check-requirements does
-	not need to know the login details
+Date: Fri, 12 Dec 2014 21:04:52 +0100
+Subject: [Buildroot] [PATCH v5 07/11] autobuild-run: improve the logic to
+	generate build-end.log
 In-Reply-To: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1418414696-32584-6-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1418414696-32584-8-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,102 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-check-requirements simply has to know if the results have to be sent, so
-it can check on some extra requirements. The username and password are
-irrelevant here.
-This commit introduces a boolean variable upload to hide these details.
+This patch makes the generation of build-end.log more intelligent, by
+not simply adding the 500 last lines, but instead capture the entire
+output of the failed package.
+
+If no failure reason can be found (possibly a good run) or the start for
+that package cannot be found, use the 500 last lines as fallback.
+
+The logic to find the failed package is taken from the result import
+script web/import.inc.php. If needed, the search range of the last 3
+lines could be extended.
+
+Note that the package-version string extracted from the build log is
+split on the last hyphen into a tuple (package, version). This is
+needed to find back the beginning of that package's build (where the
+package name is separated from the version with a space, not a hyphen).
+However, this logic will fail to work when the version also contains a
+hyphen, for example lmbench-3.0-a9. In this case, the resulting tuple
+will be (lmbench-3.0,a9) and the text searched in the build log
+'>>> lmbench-3.0 a9' (which will not be found). In this case, the
+fallback of the last 500 lines will be used.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- scripts/autobuild-run | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ scripts/autobuild-run | 53 ++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 46 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 4fc883a..ab53d3f 100755
+index d085029..32466e8 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -120,12 +120,12 @@ def check_version():
-         print "ERROR: script version too old, please upgrade."
-         sys.exit(1)
- 
--def check_requirements(http_login, http_password):
-+def check_requirements(upload=False):
-     devnull = open(os.devnull, "w")
-     needed_progs = ["make", "git", "gcc", "timeout"]
-     missing_requirements = False
- 
--    if http_login and http_password:
-+    if upload:
-         needed_progs.append("curl")
- 
-     for prog in needed_progs:
-@@ -517,7 +517,7 @@ def send_results(result, **kwargs):
-         log_write(log, "ERROR: could not make results tarball")
-         sys.exit(1)
- 
--    if kwargs['http_login'] and kwargs['http_password']:
-+    if kwargs['upload']:
-         # Submit results. Yes, Python has some HTTP libraries, but
-         # none of the ones that are part of the standard library can
-         # upload a file without writing dozens of lines of code.
-@@ -612,10 +612,15 @@ def main():
-         # merge config/args, priority given to config
-         args = merge(ini_config, args)
- 
--    check_requirements(args['--http-login'], args['--http-password'])
--    if args['--http-login'] is None or args['--http-password'] is None:
-+    # http_login/password could theoretically be allowed as empty, so check
-+    # explicitly on None.
-+    upload = (args['--http-login'] is not None) \
-+                and (args['--http-password'] is not None)
-+    check_requirements(upload)
-+    if not upload:
-         print "WARN: due to the lack of http login/password details, results will not be submitted"
-         print "WARN: tarballs of results will be kept locally only"
+@@ -44,10 +44,6 @@
+ #
+ # TODO:
+ #
+-# - Improve the logic that generates the 'build-end.log' file. Instead
+-#   of just using the last 500 lines of the build log, search the
+-#   start of the build of the failing package.
+-#
+ # - Include the config.log file (when it exists) in the tarball for
+ #   failed builds when the failure occurs on an autotools package.
+ #
+@@ -491,9 +487,52 @@ def send_results(result, **kwargs):
+     subprocess.call(["git log master -n 1 --pretty=format:%%H > %s" % \
+                      os.path.join(resultdir, "gitid")],
+                     shell=True, cwd=srcdir)
+-    subprocess.call(["tail -500 %s > %s" % \
+-                     (os.path.join(outputdir, "logfile"), os.path.join(resultdir, "build-end.log"))],
+-                    shell=True)
 +
-     def sigterm_handler(signum, frame):
-         os.killpg(os.getpgid(os.getpid()), signal.SIGTERM)
-         sys.exit(1)
-@@ -628,7 +633,8 @@ def main():
-                 http_login = args['--http-login'],
-                 http_password = args['--http-password'],
-                 submitter = args['--submitter'],
--                make_opts = args['--make-opts']
-+                make_opts = args['--make-opts'],
-+                upload = upload
-             ))
-         p.start()
-         processes.append(p)
++    def get_failure_reason():
++        # Output is a tuple (package, version), or None.
++
++        lastlines = subprocess.check_output(["tail", "-n", "3",
++                        os.path.join(outputdir, "logfile")]).splitlines()
++
++        import re
++        regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
++        for line in lastlines:
++            m = regexp.search(line)
++            if m:
++                return m.group(1).rsplit('-', 1)
++
++        # not found
++        return None
++
++    def extract_end_log(resultfile):
++        """Save the last part of the build log, starting from the failed package"""
++
++        def extract_last_500_lines():
++            subprocess.call(["tail -500 %s > %s" % \
++                             (os.path.join(outputdir, "logfile"), resultfile)],
++                            shell=True)
++
++        reason = get_failure_reason()
++        if not reason:
++            extract_last_500_lines()
++        else:
++            import mmap
++            f = open(os.path.join(outputdir, "logfile"), 'r')
++            mf = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
++            mf.seek(0)
++            # Search for first action on the failed package
++            offset = mf.find('>>> %s' % ' '.join(reason))
++            if offset != -1:
++                with open(resultfile, "w") as endlog:
++                    endlog.write(mf[offset:])
++            else:
++                # not found, use last 500 lines as fallback
++                extract_last_500_lines()
++
++            mf.close()
++            f.close()
++
++    extract_end_log(os.path.join(resultdir, "build-end.log"))
+ 
+     resultf = open(os.path.join(resultdir, "status"), "w+")
+     if result == 0:
 -- 
 1.8.5.1
