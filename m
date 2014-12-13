@@ -1,35 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Dec 2014 22:31:57 +0100
-Subject: [Buildroot] [git commit] liblo: add hash file
-Message-ID: <20141213213408.BD77E801F9@busybox.osuosl.org>
+Date: Sat, 13 Dec 2014 22:37:59 +0100
+Subject: [Buildroot] [PATCH v2] package/opkg: disable tests and manpages
+In-Reply-To: <1418477307-17867-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 13 Dec 2014 14:28:27 +0100")
+References: <1418477307-17867-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87a92rqlhk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b08c503b244d371159082ab540fd17df09b4fc2e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/579/579df46b1fdb46fa5ec0fd28324cf28b7c06b5bb/
-http://autobuild.buildroot.net/results/f20/f2023b000b3ef8d459bba04a29f58be88246cb46/
-http://autobuild.buildroot.net/results/e2a/e2acf1f0355df709836e92e4382019b6e8f77978/
-http://autobuild.buildroot.net/results/5b9/5b9c2a678a0950def2aeaf7e5809386c5923e974/
+ > Changeset f1d3e09 (Build shared libraries only as the default) broke the
+ > opkg package.
 
-And many more.
+ > opkg wants to link its testsuite statically with the internal libopkg.
+ > But in a shared-only build, there is no static library.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/liblo/liblo.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ > Since for Buildroot we do not care about tests, just disable them.
 
-diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
-new file mode 100644
-index 0000000..a4e01a6
---- /dev/null
-+++ b/package/liblo/liblo.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/liblo/files/liblo/0.26/
-+sha1	21942c8f19e9829b5842cb85352f98c49dfbc823  liblo-0.26.tar.gz
-+md5	5351de14262560e15e7f23865293b16f  liblo-0.26.tar.gz
+ > Fixes numerous build failures;
+ >     http://autobuild.buildroot.net/results/ddf/ddf4b38c1df73b00b76be71db3f1eb8b1d932c55/
+ >     http://autobuild.buildroot.net/results/c1c/c1c9a21b6583c9ef3ddd32681bb13cf91a218e8c/
+ >     http://autobuild.buildroot.net/results/284/284bf7d6f9cebf8633143ca1ce15154de941805f/
+ >     ...
+
+ > Disable manpages at the same time.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+
+ > ---
+ > Note: we could also easily patch the Makefiles to not require a static
+ > link, and that works quite well, too. But upstream has changed quite a
+ > lot in this respect, so that change would not be upstreamable. Better
+ > just disable tests as we do not use them anyway.
+
+ > ---
+ > Changes v1 -> v2:
+ >   - add patch description
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
