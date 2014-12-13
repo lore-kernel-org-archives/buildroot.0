@@ -1,47 +1,33 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 13 Dec 2014 20:04:08 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
-	with pkg-config
-In-Reply-To: <20141105081505.58f2d26c@free-electrons.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
- <20141026164155.4c1bc8db@free-electrons.com>
- <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
- <CAEYzJUEV=Z5yb6+DS_vZ9NuOjtsTfX0KGU5jYFa8wjMRt=v8dw@mail.gmail.com>
- <20141026222449.315ce1ff@free-electrons.com>
- <CAEYzJUHHES_QH2Ozh9DmgpTFiGsj0-9siv3TgPAyPbBZ2_VKgw@mail.gmail.com>
- <CAEYzJUFLbUpMUnEQ3MoZPRW3MQx9EzyFOwEVQkRyU_PP0tRHJg@mail.gmail.com>
- <20141105081505.58f2d26c@free-electrons.com>
-Message-ID: <CAEYzJUEPxw12Ws4-eSu5=TgTfVKmJ1YJ6dFOt8YO0=hZuT1g1w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 13 Dec 2014 20:08:39 +0100
+Subject: [Buildroot] [PATCH 1/1] liblinear: new package
+In-Reply-To: <1418496294-20519-1-git-send-email-romain.naour@openwide.fr>
+References: <1418496294-20519-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141213190839.GD4198@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 5 November 2014 at 08:15, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Bj?rn Forsman,
->
-> On Wed, 5 Nov 2014 08:10:26 +0100, Bj?rn Forsman wrote:
->
->> Are you able to help with synchronizing linux/upstream kconfig with
->> Buildroot? (See my failed attempt above.)
->>
->> If you have no time, just let me know, and I'll add a patch in
->> support/kconfig/patches/ instead of doing a full sync.
->
-> I personally don't have the time this week, and I also know Yann is
-> very busy as well this week. We might be able to help with that, but
-> not before this WE or next week.
+Romain, All,
 
-It's been a few weeks now, just thought I'd check in and see if you
-guys (Thomas, Yann) have some time now to look at synchronizing
-kconfig with upstream.
+On 2014-12-13 19:44 +0100, Romain Naour spake thusly:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I'm in no rush, so just let me know whether you'd like to postpone or
-if I should just add this change as a separate patch file in the
-support/kconfig/patches/ directory.
+As seen on IRC, I'll get this patch in my branch with other fixes for
+nmap. So, I'm marking this patch as "Deferred" in Patchwork.
 
-Best regards,
-Bj?rn Forsman
+Thank you! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
