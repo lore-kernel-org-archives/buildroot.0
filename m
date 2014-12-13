@@ -1,52 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Dec 2014 22:13:09 +0100
-Subject: [Buildroot] [git commit] pcre: add a patch fixing CVE-2014-8964
-Message-ID: <20141213212028.DF676800DE@busybox.osuosl.org>
+Date: Sat, 13 Dec 2014 22:31:57 +0100
+Subject: [Buildroot] [git commit] liblo: add hash file
+Message-ID: <20141213213408.BD77E801F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=753a2937f663d6e7dc630319ae903dc595b0ddd9
+commit: http://git.buildroot.net/buildroot/commit/?id=b08c503b244d371159082ab540fd17df09b4fc2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch taken from the Debian package.
+Fixes:
+http://autobuild.buildroot.net/results/579/579df46b1fdb46fa5ec0fd28324cf28b7c06b5bb/
+http://autobuild.buildroot.net/results/f20/f2023b000b3ef8d459bba04a29f58be88246cb46/
+http://autobuild.buildroot.net/results/e2a/e2acf1f0355df709836e92e4382019b6e8f77978/
+http://autobuild.buildroot.net/results/5b9/5b9c2a678a0950def2aeaf7e5809386c5923e974/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+And many more.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcre/0003-fix-CVE-2014-8964.patch |   25 +++++++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ package/liblo/liblo.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/pcre/0003-fix-CVE-2014-8964.patch b/package/pcre/0003-fix-CVE-2014-8964.patch
+diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
 new file mode 100644
-index 0000000..bfc5860
+index 0000000..a4e01a6
 --- /dev/null
-+++ b/package/pcre/0003-fix-CVE-2014-8964.patch
-@@ -0,0 +1,25 @@
-+Description: CVE-2014-8964, heap buffer overflow
-+ Heap buffer overflow if an assertion with a zero minimum repeat is used as
-+ the condition in a conditional group.
-+Origin: upstream http://bugs.exim.org/show_bug.cgi?id=1546
-+Bug: http://bugs.exim.org/show_bug.cgi?id=1546
-+Applied-Upstream: Yes, after 8.36
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
-+--- a/pcre_exec.c
-++++ b/pcre_exec.c
-+@@ -1404,8 +1404,11 @@
-+         condition = TRUE;
-+ 
-+         /* Advance ecode past the assertion to the start of the first branch,
-+-        but adjust it so that the general choosing code below works. */
-++        but adjust it so that the general choosing code below works. If the
-++	assertion has a quantifier that allows zero repeats we must skip over
-++	the BRAZERO. This is a lunatic thing to do, but somebody did! */
-+ 
-++	if (*ecode == OP_BRAZERO) ecode++;
-+         ecode += GET(ecode, 1);
-+         while (*ecode == OP_ALT) ecode += GET(ecode, 1);
-+         ecode += 1 + LINK_SIZE - PRIV(OP_lengths)[condcode];
++++ b/package/liblo/liblo.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/liblo/files/liblo/0.26/
++sha1	21942c8f19e9829b5842cb85352f98c49dfbc823  liblo-0.26.tar.gz
++md5	5351de14262560e15e7f23865293b16f  liblo-0.26.tar.gz
