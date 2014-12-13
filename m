@@ -1,39 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Dec 2014 22:48:41 +0100
-Subject: [Buildroot] dbus build fails since the bump of systemd to
-	version 218
-In-Reply-To: <548B6E4E.104@free.fr> (Thierry Bultel's message of "Fri, 12 Dec
- 2014 23:38:06 +0100")
-References: <548B6E4E.104@free.fr>
-Message-ID: <87wq5vp6fa.fsf@dell.be.48ers.dk>
+Date: Sat, 13 Dec 2014 22:40:22 +0100
+Subject: [Buildroot] [git commit] boa: add a hash file
+Message-ID: <20141213214904.B48717FE28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thierry" == Thierry Bultel <tbultel@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=768a0eb7910acc502cb3f0e6329a708cda899af6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi,
- > Since the bump, there are undefined symbols when building dbus-1.8.10:
+It will clarify errors like this one:
+  http://autobuild.buildroot.net/results/b71/b71084d67d33e80cde9478dcf5a89511479cb95e/
 
- >  CCLD     dbus-daemon
- >   CCLD     dbus-daemon-launch-helper
- > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
- > undefined reference to `__stop_BUS_ERROR_MAP'
- > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
- > undefined reference to `__start_BUS_ERROR_MAP'
- > collect2: error: ld returned 1 exit status
- > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
- > undefined reference to `__stop_BUS_ERROR_MAP'
- > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
- > undefined reference to `__start_BUS_ERROR_MAP'
- > collect2: error: ld returned 1 exit status
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/boa/boa.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-What toolchain is this? According to upstream it is could be because of
-a binutils bug:
-
-https://www.marshut.net/kttspt/build-error-with-218-undefined-reference-to-start-bus-error-map.html
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/boa/boa.hash b/package/boa/boa.hash
+new file mode 100644
+index 0000000..37760fd
+--- /dev/null
++++ b/package/boa/boa.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  02c51bf25f29d56e641b662f0767759654c28d88ec31f55c5a73d57edfe13cf6  boa-0.94.14rc21.tar.gz
