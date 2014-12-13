@@ -1,53 +1,122 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 13 Dec 2014 20:34:04 +0200
-Subject: [Buildroot] [PATCH 2/2] pcre: add a patch fixing CVE-2014-8964
-In-Reply-To: <65f6d701d05bfb6c2cce52beef094c5674bdfa06.1418495644.git.baruch@tkos.co.il>
-References: <65f6d701d05bfb6c2cce52beef094c5674bdfa06.1418495644.git.baruch@tkos.co.il>
-Message-ID: <586e5679f6558f2fcb303d6fc8f38b071b0d128c.1418495644.git.baruch@tkos.co.il>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 13 Dec 2014 19:44:54 +0100
+Subject: [Buildroot] [PATCH 1/1] liblinear: new package
+Message-ID: <1418496294-20519-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch taken from the Debian package.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pcre/0003-fix-CVE-2014-8964.patch | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/pcre/0003-fix-CVE-2014-8964.patch
+ package/Config.in                                  |  1 +
+ .../0001-blas-don-t-overwrite-ar-options.patch     | 35 ++++++++++++++++++++++
+ package/liblinear/Config.in                        |  7 +++++
+ package/liblinear/liblinear.mk                     | 26 ++++++++++++++++
+ 4 files changed, 69 insertions(+)
+ create mode 100644 package/liblinear/0001-blas-don-t-overwrite-ar-options.patch
+ create mode 100644 package/liblinear/Config.in
+ create mode 100644 package/liblinear/liblinear.mk
 
-diff --git a/package/pcre/0003-fix-CVE-2014-8964.patch b/package/pcre/0003-fix-CVE-2014-8964.patch
+diff --git a/package/Config.in b/package/Config.in
+index 48be2df..511271c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -901,6 +901,7 @@ menu "Other"
+ 	source "package/libgc/Config.in"
+ 	source "package/libglib2/Config.in"
+ 	source "package/libical/Config.in"
++	source "package/liblinear/Config.in"
+ 	source "package/libnspr/Config.in"
+ 	source "package/libpfm4/Config.in"
+ 	source "package/libplist/Config.in"
+diff --git a/package/liblinear/0001-blas-don-t-overwrite-ar-options.patch b/package/liblinear/0001-blas-don-t-overwrite-ar-options.patch
 new file mode 100644
-index 000000000000..bfc586034ed2
+index 0000000..5d1ef3f
 --- /dev/null
-+++ b/package/pcre/0003-fix-CVE-2014-8964.patch
-@@ -0,0 +1,25 @@
-+Description: CVE-2014-8964, heap buffer overflow
-+ Heap buffer overflow if an assertion with a zero minimum repeat is used as
-+ the condition in a conditional group.
-+Origin: upstream http://bugs.exim.org/show_bug.cgi?id=1546
-+Bug: http://bugs.exim.org/show_bug.cgi?id=1546
-+Applied-Upstream: Yes, after 8.36
++++ b/package/liblinear/0001-blas-don-t-overwrite-ar-options.patch
+@@ -0,0 +1,35 @@
++From cae4c3b80fee0f3637d70f6d33946888c8105637 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 13 Dec 2014 17:16:58 +0100
++Subject: [PATCH 1/1] blas: don't overwrite ar options
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++ar's rcv options get lost when AR is passed on
++the command line.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
-+--- a/pcre_exec.c
-++++ b/pcre_exec.c
-+@@ -1404,8 +1404,11 @@
-+         condition = TRUE;
++ blas/Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/blas/Makefile b/blas/Makefile
++index 895fd24..78cec9a 100644
++--- a/blas/Makefile
+++++ b/blas/Makefile
++@@ -1,4 +1,4 @@
++-AR     = ar rcv
+++AR     = ar
++ RANLIB = ranlib 
 + 
-+         /* Advance ecode past the assertion to the start of the first branch,
-+-        but adjust it so that the general choosing code below works. */
-++        but adjust it so that the general choosing code below works. If the
-++	assertion has a quantifier that allows zero repeats we must skip over
-++	the BRAZERO. This is a lunatic thing to do, but somebody did! */
++ HEADERS = blas.h blasp.h
++@@ -8,7 +8,7 @@ CFLAGS = $(OPTFLAGS)
++ FFLAGS = $(OPTFLAGS)
 + 
-++	if (*ecode == OP_BRAZERO) ecode++;
-+         ecode += GET(ecode, 1);
-+         while (*ecode == OP_ALT) ecode += GET(ecode, 1);
-+         ecode += 1 + LINK_SIZE - PRIV(OP_lengths)[condcode];
++ blas: $(FILES) $(HEADERS)
++-	$(AR) blas.a $(FILES)  
+++	$(AR) rcv blas.a $(FILES)  
++ 	$(RANLIB) blas.a
++ 
++ clean:
++-- 
++1.9.3
++
+diff --git a/package/liblinear/Config.in b/package/liblinear/Config.in
+new file mode 100644
+index 0000000..08e8365
+--- /dev/null
++++ b/package/liblinear/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBLINEAR
++	bool "liblinear"
++	help
++	  liblinear is a linear classifier for data with millions of instances and
++	  features.
++
++	  http://www.csie.ntu.edu.tw/~cjlin/liblinear/
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+new file mode 100644
+index 0000000..7120659
+--- /dev/null
++++ b/package/liblinear/liblinear.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# liblinear
++#
++################################################################################
++
++LIBLINEAR_VERSION = 1.96
++LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear/$(LIBLINEAR_VERSION_MAJOR)
++LIBLINEAR_LICENSE = BSD-3c
++LIBLINEAR_LICENSE_FILES = COPYING
++
++define LIBLINEAR_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) lib
++endef
++
++# We don't install programs train and predict which are used for training and
++# testing.
++LIBLINEAR_INSTALL_TARGET = NO
++LIBLINEAR_INSTALL_STAGING = YES
++
++define LIBLINEAR_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/linear.h $(STAGING_DIR)/usr/include/linear.h
++	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.2 $(STAGING_DIR)/usr/lib/liblinear.so.2
++endef
++
++$(eval $(generic-package))
 -- 
-2.1.3
+1.9.3
