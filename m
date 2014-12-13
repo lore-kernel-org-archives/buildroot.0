@@ -1,64 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Dec 2014 16:40:07 +0100
-Subject: [Buildroot] [PATCH 03/14] nmap: bump to version 6.40
-In-Reply-To: <1394483194-17592-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1394483194-17592-1-git-send-email-gustavo@zacarias.com.ar>
- <1394483194-17592-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141213154007.GC4198@free.fr>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Sat, 13 Dec 2014 16:48:50 +0100
+Subject: [Buildroot] [v3,
+	12/12] Add option for paranoid unsafe path checking
+In-Reply-To: <548C5892.3070304@openwide.fr>
+References: <1418429047.1462.11.camel@posteo.de>
+ <548B8601.8050109@openwide.fr> <1418479863.2167.3.camel@posteo.de>
+ <548C5892.3070304@openwide.fr>
+Message-ID: <1418485730.2167.11.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
-
-Rviving an old thread...
-
-On 2014-03-10 17:26 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/nmap/nmap.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Sa, 2014-12-13 at 16:17 +0100, Romain Naour wrote:
+> Hi J?rg,
 > 
-> diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-> index 47e4cfc..4ed39bf 100644
-> --- a/package/nmap/nmap.mk
-> +++ b/package/nmap/nmap.mk
-> @@ -4,13 +4,13 @@
->  #
->  ################################################################################
->  
-> -NMAP_VERSION = 6.01
-> +NMAP_VERSION = 6.40
->  NMAP_SITE = http://nmap.org/dist
->  NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
->  NMAP_DEPENDENCIES = libpcap pcre
->  NMAP_CONF_OPT = --without-liblua --without-zenmap \
->  	--with-libdnet=included --with-liblinear=included \
-> -	--with-libpcre="$(STAGING_DIR)/usr"
-> +	--with-libpcre="$(STAGING_DIR)/usr" --without-ncat
-
-Why did you disable ncat?
-
-Regards,
-Yann E. MORIN.
-
->  NMAP_LICENSE = GPLv2
->  NMAP_LICENSE_FILES = COPYING
->  
-> -- 
-> 1.8.3.2
+> Le 13/12/2014 15:11, J?rg Krause a ?crit :
+> > On Sa, 2014-12-13 at 01:19 +0100, Romain Naour wrote:
+> >> Hello J?rg,
+> >>
+> >> Le 13/12/2014 01:04, J?rg Krause a ?crit :
+> >>> Hi Romain Naour,
+> >>>
+> >>> what should I do if a package build fails because of an unsafe path
+> >>> error? Propose a patch for the package?
+> >>>
+> >>
+> >> Yes, you needs patch the package's build system to remove the host path.
+> > 
+> > Many thanks! So hostpad and wpa_supplicant need patches.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> You're welcome.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Many thanks for the invitation :)
+
+> I didn't know that these packages were problems with the paranoid wrapper.
+
+make[1]: Entering directory
+'/home/joerg/Work/buildroot/output/build/wpa_supplicant-2.3/wpa_supplicant'
+arm-linux-gcc: WARNING: unsafe header/library path used in
+cross-compilation: '/usr/include/libnl3'
+
+> 
+> > 
+> >>
+> >> This error appear if one of the following paths is used during the
+> >> cross-compilation:
+> >> "/lib"
+> >> "/usr/include"
+> >> "/usr/lib"
+> >> "/usr/local/include"
+> >> "/usr/local/lib"
+> > 
+> > One more question: Why are these pathes unsafe for cross-compilation?
+> 
+> You have a good example here: 
+> http://autobuild.buildroot.net/results/da0/da018caa1b79369bdff41d23b8696bc673625e1b/build-end.log
+> 
+> perl-gd try to link with the host (x86_64) libraries wile cross-compiling for mipsel target.
+> It also include host headers path /usr/include
+> 
+> This is this kind of error we want to avoid before adding a new package or bumping version.
+> 
+I see. So instead of eg "/usr/include" "/include" should be used? And
+instead of "/lib" "/"?
