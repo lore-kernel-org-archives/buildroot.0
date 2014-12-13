@@ -1,26 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Dec 2014 22:38:38 +0100
-Subject: [Buildroot] [PATCH] package/libtirpc: add hash file
-In-Reply-To: <1418426635-23889-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 13 Dec 2014 00:23:55 +0100")
-References: <1418426635-23889-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <8761dfqlgh.fsf@dell.be.48ers.dk>
+Date: Sat, 13 Dec 2014 22:40:50 +0100
+Subject: [Buildroot] [PATCH] boa: add a hash file
+In-Reply-To: <1418378340-40737-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 12 Dec 2014 09:59:00 +0000")
+References: <1418378340-40737-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <871to3qlct.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Should fix autobuild failures due to SourceForce sending garbage from
- > time to time:
- >     http://autobuild.buildroot.net/results/acc/acc086e04da324621c715962585dbdd80e04b74e/
- >     http://autobuild.buildroot.net/results/acc/acc086e04da324621c715962585dbdd80e04b74e/
- >     http://autobuild.buildroot.net/results/ca0/ca084460c06f5b69ad35080cd347554a2c53f2a8/
+ > It will clarify errors like this one:
+ >   http://autobuild.buildroot.net/results/b71/b71084d67d33e80cde9478dcf5a89511479cb95e/
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Peter Korsgaard <jacmet@uclibc.org>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
