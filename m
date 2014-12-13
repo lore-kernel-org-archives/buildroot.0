@@ -1,66 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 00:13:12 +0100
-Subject: [Buildroot] [PATCH] package/mono: fixing shared/static handling
-In-Reply-To: <1418508052-25062-1-git-send-email-angelo.compagnucci@gmail.com>
- (Angelo Compagnucci's message of "Sat, 13 Dec 2014 23:00:52 +0100")
-References: <1418508052-25062-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <87sigjp2if.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Dec 2014 00:14:40 +0100
+Subject: [Buildroot] [git commit] prboom: fix static linking
+Message-ID: <20141213231637.CF790803D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f80033bbe7106c9e7447a52bbf83638ac12b8d69
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Mono should always be compiled with --enable-static, this patch forces
- > --enable-static also in case of shared only libraries.
+Fixes:
+http://autobuild.buildroot.net/results/97b/97bb50add010e44aca8fcb079d8df9270d3cae45/
+http://autobuild.buildroot.net/results/a96/a969fd15a652df96c2414cf0c5f2e345d38e6e6c/
+http://autobuild.buildroot.net/results/9ba/9ba92c01b2c6b6eae2dcda60c2b80d66d2002d4b/
+http://autobuild.buildroot.net/results/776/776394ba89070ee2fa6e81585078df0a0e2ae3f2/
 
-Why? If it is really required, then mono should depend on
-!BR2_SHARED_LIBS and show a comment to inform the user that it needs
-static library support.
+And many more.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/e739d64011fb6a24ccbef136d75944f3bd2eba03/
- > http://autobuild.buildroot.net/results/7ebe6909da859507639f57da2d4fee46efc062d4/
- > http://autobuild.buildroot.net/results/03c2243080b026b0c6f4bb64e7dc8dc359f0c8c2/
- > http://autobuild.buildroot.net/results/406bf830ae84cf9ce4afd5a4ddc265197df42b44/
- > http://autobuild.buildroot.net/results/894a3e0627244b5e1980c3840629b4627999d252/
- > http://autobuild.buildroot.net/results/2dad2609834564060dc090919c128b45e289102e/
- > http://autobuild.buildroot.net/results/46de32cbe68b614763a72303490515f80cfe5bfd/
- > http://autobuild.buildroot.net/results/b167d2660ca37b896ceb8f1372d88eda6d6397d7/
- > http://autobuild.buildroot.net/results/17b6aee3d0aaf425412f9f5d89de665de9efedb8/
- > http://autobuild.buildroot.net/results/af9e5203299819085441fb6ee27e027d58f220b3/
- > http://autobuild.buildroot.net/results/138e5bd9bd0e2ad6de13278b446d1a48a9b64b17/
- > http://autobuild.buildroot.net/results/b77d52aaa5face5d5b8afe39f9a32a51b1df500f/
+SDL_mixer uses symbols from SDL, but ends up after it on the link cmdline,
+breaking static linking. Fix it by forcing the SDL libs at the very end.
 
- > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
- > ---
- >  package/mono/mono.mk | 3 ++-
- >  1 file changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/prboom/prboom.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- > diff --git a/package/mono/mono.mk b/package/mono/mono.mk
- > index baf205a..3d50ac1 100644
- > --- a/package/mono/mono.mk
- > +++ b/package/mono/mono.mk
- > @@ -24,7 +24,8 @@ MONO_CONF_OPTS = --disable-gtk-doc \
- >  	--disable-libraries \
- >  	--with-ikvm-native=no \
- >  	--enable-minimal=aot,profiler,debug \
- > -	--disable-mcs-build
- > +	--disable-mcs-build \
- > +	--enable-static
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index c39b5a3..7f9d6a0 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -15,6 +15,12 @@ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
+ endif
  
- >  # The libraries have been built by the host-mono build. Since they are
- >  # architecture-independent, we simply copy them to the target.
- > -- 
- > 1.9.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_STATIC_LIBS),y)
++# SDL_mixer uses symbols from SDL, but ends up after it on the link
++# cmdline. Fix it by forcing the SDL libs at the very end
++PRBOOM_CONF_ENV += LIBS="$(shell $(STAGING_DIR)/usr/bin/sdl-config --static-libs)"
++endif
++
+ PRBOOM_CONF_OPTS = \
+ 		--oldincludedir=$(STAGING_DIR)/usr/include \
+ 		--with-sdl-prefix=$(STAGING_DIR)/usr \
