@@ -1,45 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Dec 2014 10:05:32 +0100
-Subject: [Buildroot] [PATCH] package/nettle: fix shared-only build
-In-Reply-To: <1418419668-13558-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 12 Dec 2014 22:27:48 +0100")
-References: <1418419668-13558-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87zjarrkbn.fsf@dell.be.48ers.dk>
+Date: Sat, 13 Dec 2014 10:06:07 +0100
+Subject: [Buildroot] [PATCH] erlang: bump to version 17.4
+In-Reply-To: <1418411483-29636-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Fri, 12 Dec 2014 14:11:23 -0500")
+References: <1418411483-29636-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87vblfrkao.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
- > Changeset f1d3e09 (Build shared libraries only as the default) broke the
- > nettle package.
+ > Erlang/OTP 17.4 is a service release on the 17 track with mostly bug
+ > fixes, but it does contain a number of new features and characteristics
+ > improvements as well.
 
- > nettle really wants to statically link its tools, examples and testsuite
- > against its own libraries. But for a shared-only build, static libraries
- > are not even built, so the build breaks when trying to link any of them.
+ > Some highlights of the release are:
 
- > Fix that in two ways:
+ >   - eldap: Nearly all TCP options are possible to give in the
+ >     eldap:open/2 call.
+ >   - ssh: Added API functions ptty_alloc/3 and ptty_alloc/4, to allocate a
+ >     pseudo tty.
+ >   - ssl: Handle servers that may send an empty SNI extension to the client.
 
- >   - the proper way, by using whatever libraries are available, with a
- >     preference toward using shared libraries;
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
- >   - disabling both examples and testsuite since we do not need them.
-
- > Fixes numerous build failures:
- >     http://autobuild.buildroot.net/results/e93/e93da743c5b84b1bb6274aeee3fe3b52962c560c/
- >     http://autobuild.buildroot.net/results/51d/51d0138ff39c45603315dcedf1f654c18604e1a8/
- >     http://autobuild.buildroot.net/results/521/521d979658e402103f1a18fcfeab3f9705f0c000/
- >     ...
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Peter Korsgaard <jacmet@uclibc.org>
- > ---
- >  package/nettle/0001-fix-shared-only-build.patch    | 75 ++++++++++++++++++++++
-
-Committed, thanks - Don't forget to send the patch upstream.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
