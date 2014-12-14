@@ -1,74 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Dec 2014 22:44:14 +0100
-Subject: [Buildroot] [git commit] blktrace: really fix parallel build
- issue
-In-Reply-To: <20141214205926.B40ED7FDC7@busybox.osuosl.org>
-References: <20141214205926.B40ED7FDC7@busybox.osuosl.org>
-Message-ID: <20141214214414.GF4121@free.fr>
+Date: Sun, 14 Dec 2014 23:27:45 +0100
+Subject: [Buildroot] [PATCH] pinentry: Fix pinentry-qt4 build failure
+In-Reply-To: <1418053293-64672-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1418053293-64672-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141214222745.GG4121@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Vicente, All,
 
-On 2014-12-14 21:56 +0100, Peter Korsgaard spake thusly:
-> commit: http://git.buildroot.net/buildroot/commit/?id=6b706679b576502272b4d82a9e5b996630ea991c
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2014-12-08 15:41 +0000, Vicente Olivert Riera spake thusly:
+> - pinentry-qt4 needs Qt with accessibility support, so remove the
+> '-no-accessibility' configure option in the 'package/qt/qt.mk' file to
+> build Qt with accessibility support. Otherwise the build process will
+> fail showing errors like these ones:
+> 
+> pinentrydialog.moc:9:52: fatal error:
+> ../../../s/pinentry/qt4/pinentrydialog.h: No such file or directory
+> 
+> main.cpp: In function 'int qt_cmd_handler(pinentry_t)':
+> main.cpp:220:51: error: 'class QAbstractButton' has no member named
+> 'setAccessibleDescription'
+> 
+> - The options to disable pinentry-gtk(1) and pinentry-qt(3) are no
+> longer needed.
+> 
+> - The include paths in the .moc files under the 'pinentry-0.9.0/qt4'
+> directory are wrong. Add a patch to fix it so we avoid a build failure
+> like this one:
+> 
+> In file included from pinentryconfirm.cpp:52:0:
+> pinentryconfirm.moc:9:53: fatal error:
+> ../../../s/pinentry/qt4/pinentryconfirm.h: No such file or directory
+>  #include "../../../s/pinentry/qt4/pinentryconfirm.h"
+> 
+> This issue has been reported upstream:
+>   https://bugs.g10code.com/gnupg/issue1784
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/dd4/dd47b3ca17bdb597d6b12de6b381cf5f25abaf71/
-> http://autobuild.buildroot.net/results/a84/a842234fbdc8f65d48089b90ee23523540a7091f/
-> http://autobuild.buildroot.net/results/e63/e6351692ad6aef397e68ffdf107f3a85e4490015/
-> 
-> And many more.
-> 
-> Commit a21163aed (package/blktrace: do not build in parallel) tried to fix
-> the parallel build issue, but the package doesn't use the autotools package
-> infrastructure so BLKTRACE_MAKE isn't used.  Instead replace the explicit
-> $(MAKE) calls with $(MAKE1).
-> 
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/blktrace/blktrace.mk |    6 ++----
->  1 files changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/blktrace/blktrace.mk b/package/blktrace/blktrace.mk
-> index 8f3dbab..c193375 100644
-> --- a/package/blktrace/blktrace.mk
-> +++ b/package/blktrace/blktrace.mk
-> @@ -10,14 +10,12 @@ BLKTRACE_DEPENDENCIES = libaio
->  BLKTRACE_LICENSE = GPLv2+
->  BLKTRACE_LICENSE_FILES = COPYING
->  
-> -BLKTRACE_MAKE = $(MAKE1)
-> -
->  define BLKTRACE_BUILD_CMDS
-> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> +	$(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+>   http://autobuild.buildroot.org/results/314/314de324a09f64f8b95882ca169c77847d75680c/
 
-Damn, I was not able to reproduce the error on my machine, so I assumed
-it was working.
+I was working on those build failures that happen since pinentry was
+bumped to 0.9.0.
 
-Thanks for fixing this...
+I was about to send my patches when I decided to look at the mailing
+list, and found this mail of yours.
+
+Well, I'm OK with the changes, since I've done the same.
+
+However, this patch is doing many different things:
+  - fixes the incorrect include paths;
+  - fixes the build without Qt accessibility;
+  - does not disable accessibility in Qt;
+  - removes superfluous configure options
+
+This should be two separate patches.
+
+I'll shortly send what I have, and you can take them and respin if you
+think I forgot something.
+
+For one, I have included your no-accessibility patch that was since
+accepted upstream, so I'll use that instead of forcefully enabling
+accessibility in Qt. And as you previously discussed with Thomas P.,
+this should probably be an option in Qt; accessib8ility should not
+always be enabled.
 
 Regards,
 Yann E. MORIN.
-
->  endef
->  
->  define BLKTRACE_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) install \
-> +	$(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS) install \
->  		DESTDIR=$(TARGET_DIR) prefix=/usr
->  endef
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
