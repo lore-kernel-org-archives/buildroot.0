@@ -1,45 +1,95 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 11:36:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: Add eventfd_read() and
-	eventfd_write()
-References: <1414183436-6964-1-git-send-email-bernd.kuhls@t-online.de>
- <20141208222547.GE4105@free.fr>
-Message-ID: <XnsA403761AE234DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Dec 2014 12:51:31 +0100
+Subject: [Buildroot] [PATCH] package/nmap: fix shared-only build
+Message-ID: <1418557891-24865-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Changeset f1d3e09 (Build shared libraries only as the default) broke the
+nmap package.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20141208222547.GE4105 at free.fr:
+nmap builds an internal version of libdnet, and tries to statically link
+against it. Of course, this breaks for shared-only builds, since in that
+case there is no static lib ever built.
 
-> Bernd, All,
-> 
-> On 2014-10-24 22:43 +0200, Bernd Kuhls spake thusly:
->> Needed for upcoming eventfd support in Kodi:
->> 
-https://github.com/FernetMenta/xbmc/commit/1030119691a67511b6e9a27abdec474
-525de8d26
-> 
-> As Peter said, we do not like to carry feature patches in Buildroot.
-> 
-> If Kodi really requires eventfd, we'll have to mark it incompatible with
-> uClibc in Buildroot. Kodi is already a big beast all by itself, so the
-> oversize of glibc would not be that noticeable when compared to Kodi.
+Using an external libdnet is not really an option:
 
-the patch I mentioned is currently not included in Kodi 14.0rc3-Helix so 
-there is no need to either tweak dependencies or add my patch to uclibc 
-atm. Let?s hope it will stay that way ;)
+  - libdnet comes from dnprogs, from the linux-decnet project;
+    unfortunately, their build-system is not ammenable to
+    cross-compilation, and is a real pain to deal with;
 
-> Also, your use-case is a bit weird: you said you're using the fli4l
-> project to run Kodi on it. We failed to see the relation with Buildroot.
+  - nmap's bundled libdnet is anyway heavily modified, which precludes
+    using an external libdnet.
 
-The build system for the fli4l project is based on buildroot, they 
-regularly sync with upstream[1].
+Fix that by considering libdnet to be a purely internal library, and by
+configuring it with --enable-static, always.
 
-Regards, Bernd
+nmap's ./configure uses AC_CONFIG_SUBDIRS() to configure the libdnet
+sub-directory; AC_CONFIG_SUBDIRS() calls ./configure in all the
+sub-directories it is passed as arguments. Unfortunately, it is not
+possible to specify extra ./configure arguments whith AC_CONFIG_SUBDIRS.
 
-[1] https://ssl.nettworks.org/bugs/browse/FFL-1084
+We are using an autoconf trick, which is, when configuring
+sub-directories with AC_CONFIG_SUBDIRS(), it will first try to execute
+configure.gnu if it exists, before it fallbacks to running plain
+configure. See:
+    https://www.gnu.org/software/autoconf/manual/autoconf.html#Subdirectories
+
+So, we provide a configure.gnu that is just a wrapper around the real
+configure, which sole purpose is to append --enable-static when calling
+the real configure.
+
+Note1: since this libdnet is considered a purely internal library, we
+also always pass --disable-shared, since it is not needed at all.
+
+Note2: since this libdnet is considered a purely internal library, it
+should not be exposed to other packages, and thus nmap does not install
+it, neither in target nor in staging, neither static nor shared, which
+is what we want.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
+---
+ package/nmap/0001-libdnet-wrapper-configure.patch | 11 +++++++++++
+ package/nmap/nmap.mk                              |  5 +++++
+ 2 files changed, 16 insertions(+)
+ create mode 100644 package/nmap/0001-libdnet-wrapper-configure.patch
+
+diff --git a/package/nmap/0001-libdnet-wrapper-configure.patch b/package/nmap/0001-libdnet-wrapper-configure.patch
+new file mode 100644
+index 0000000..a85242a
+--- /dev/null
++++ b/package/nmap/0001-libdnet-wrapper-configure.patch
+@@ -0,0 +1,11 @@
++libdnet: always build a static library
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff --git a/libdnet-stripped/configure.gnu b/libdnet-stripped/configure.gnu
++--- /dev/null
+++++ b/libdnet-stripped/configure.gnu
++@@ -0,0 +1,3 @@
+++#!/bin/sh
+++
+++exec "${0%.gnu}" "${@}" --enable-static --disable-shared
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 938de25..58370b5 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -14,6 +14,11 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ NMAP_LICENSE = GPLv2
+ NMAP_LICENSE_FILES = COPYING
+ 
++define NMAP_WRAPPER_EXEC
++	chmod +x $(@D)/libdnet-stripped/configure.gnu
++endef
++NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
+ NMAP_DEPENDENCIES += openssl
+-- 
+1.9.1
