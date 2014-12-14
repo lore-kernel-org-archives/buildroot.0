@@ -1,34 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 10:53:31 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/tvheadend: rename patches to new
-	convention
-In-Reply-To: <1418550811-15547-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1418550811-15547-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1418550811-15547-3-git-send-email-bernd.kuhls@t-online.de>
+From: Thierry Bultel <tbultel@free.fr>
+Date: Sun, 14 Dec 2014 11:14:59 +0100
+Subject: [Buildroot] dbus build fails since the bump of systemd to
+	version 218
+In-Reply-To: <87wq5vp6fa.fsf@dell.be.48ers.dk>
+References: <548B6E4E.104@free.fr> <87wq5vp6fa.fsf@dell.be.48ers.dk>
+Message-ID: <548D6323.3010102@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le 13/12/2014 22:48, Peter Korsgaard a ?crit :
+>>>>>> "Thierry" == Thierry Bultel <tbultel@free.fr> writes:
+>
+>   > Hi,
+>   > Since the bump, there are undefined symbols when building dbus-1.8.10:
+>
+>   >  CCLD     dbus-daemon
+>   >   CCLD     dbus-daemon-launch-helper
+>   > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
+>   > undefined reference to `__stop_BUS_ERROR_MAP'
+>   > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
+>   > undefined reference to `__start_BUS_ERROR_MAP'
+>   > collect2: error: ld returned 1 exit status
+>   > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
+>   > undefined reference to `__stop_BUS_ERROR_MAP'
+>   > /shared/buildroot_community/buildroot/output/host/usr/i586-buildroot-linux-gnu/sysroot/usr/lib/libsystemd.so:
+>   > undefined reference to `__start_BUS_ERROR_MAP'
+>   > collect2: error: ld returned 1 exit status
+>
+> What toolchain is this? According to upstream it is could be because of
+> a binutils bug:
+>
+> https://www.marshut.net/kttspt/build-error-with-218-undefined-reference-to-start-bus-error-map.html
+>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: initial version
 
- ...{tvheadend-002-no-check_config.patch => 0001-no-check_config.patch} |    0
- .../{tvheadend-003-remove-werror.patch => 0002-remove-werror.patch}    |    0
- 2 files changed, 0 insertions(+), 0 deletions(-)
- rename package/tvheadend/{tvheadend-002-no-check_config.patch => 0001-no-check_config.patch} (100%)
- rename package/tvheadend/{tvheadend-003-remove-werror.patch => 0002-remove-werror.patch} (100%)
+This happens with buildroot toolchain, eglibc 2.18, gcc-4.8.x, binutils 2.22
 
-diff --git a/package/tvheadend/tvheadend-002-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
-similarity index 100%
-rename from package/tvheadend/tvheadend-002-no-check_config.patch
-rename to package/tvheadend/0001-no-check_config.patch
-diff --git a/package/tvheadend/tvheadend-003-remove-werror.patch b/package/tvheadend/0002-remove-werror.patch
-similarity index 100%
-rename from package/tvheadend/tvheadend-003-remove-werror.patch
-rename to package/tvheadend/0002-remove-werror.patch
--- 
-1.7.10.4
+It does not happen with binutils-2.23.2 and binutils-2.24
