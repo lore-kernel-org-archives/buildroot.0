@@ -1,87 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 14 Dec 2014 17:49:20 +0100
-Subject: [Buildroot] [PATCH 2/5] package/ncurses: fix shared-only libs
-In-Reply-To: <4568871b23d156c89631a83942d49e0116e9b4ad.1418572993.git.yann.morin.1998@free.fr>
-References: <cover.1418572993.git.yann.morin.1998@free.fr>
- <4568871b23d156c89631a83942d49e0116e9b4ad.1418572993.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMLCTNuLe-6Lt7_J22Oe47K7aemA6DHY4ROYM8RAHrk5kA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Dec 2014 17:50:47 +0100
+Subject: [Buildroot] [PATCH v2] legacy: update the BR2_PREFER_STATIC_LIB
+	option
+In-Reply-To: <1418574264-25196-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 14 Dec 2014 17:24:24 +0100")
+References: <1418574264-25196-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87bnn6p448.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-On Sun, Dec 14, 2014 at 5:04 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> For a shared-only build, do not create the symlinks to the static
-> libraries, sonce they do not exist.
+ > Since the refactoring of the type of libraries in the target filesystem,
+ > these options belong to a choice, and the default is "shared only".
 
-s/sonce/since/
+ > The former option BR2_PREFER_STATIC_LIB has been moved in the legacy
+ > menu, and only selects the BR2_STATIC_LIBS ("static only") option.
+ > However, because BR2_STATIC_LIBS belongs to a choice, when
+ > BR2_PREFER_STATIC_LIB is selected, it does not affect the choice.
+ > So, existing Buildroot configurations, which have BR2_PREFER_STATIC_LIB
+ > set, will silently end with BR2_SHARED_LIBS ("shared only") enabled.
 
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/ncurses/ncurses.mk | 20 +++++++++-----------
->  1 file changed, 9 insertions(+), 11 deletions(-)
->
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index f54f379..ec64663 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -47,8 +47,7 @@ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
->  NCURSES_CONF_OPTS += --enable-widec
->  NCURSES_LIB_SUFFIX = w
->
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -define NCURSES_LINK_LIBS
-> +define NCURSES_LINK_LIBS_STATIC
->         for lib in $(NCURSES_LIBS-y); do \
->                 ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
->                         $(1)/usr/lib/$${lib}.a; \
-> @@ -56,23 +55,22 @@ define NCURSES_LINK_LIBS
->         ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
->                 $(1)/usr/lib/libcurses.a
->  endef
-> -else
-> -define NCURSES_LINK_LIBS
-> +
-> +define NCURSES_LINK_LIBS_SHARED
->         for lib in $(NCURSES_LIBS-y); do \
-> -               ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
-> -                       $(1)/usr/lib/$${lib}.a; \
->                 ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
->                         $(1)/usr/lib/$${lib}.so; \
->         done
-> -       ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
-> -               $(1)/usr/lib/libcurses.a
->         ln -sf libncurses$(NCURSES_LIB_SUFFIX).so \
->                 $(1)/usr/lib/libcurses.so
->  endef
-> -endif
->
-> -NCURSES_LINK_TARGET_LIBS = $(call NCURSES_LINK_LIBS, $(TARGET_DIR))
-> -NCURSES_LINK_STAGING_LIBS = $(call NCURSES_LINK_LIBS, $(STAGING_DIR))
-> +NCURSES_LINK_TARGET_LIBS = \
-> +       $(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR))) \
-> +       $(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(TARGET_DIR)))
-> +NCURSES_LINK_STAGING_LIBS = \
-> +       $(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR))) \
-> +       $(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(STAGING_DIR)))
->
->  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
->
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > So, the backward compatibility is not kept.
 
-Otherwise:
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+ > Besides, the legacy BR2_PREFER_STATIC_LIB option does not select
+ > BR2_LEGACY, so the user is not notified of this legacy option, and the
+ > build silently continues with some undesired changes.
+
+ > This patch removes the inefficient BR2_STATIC_LIBS selection, correctly
+ > selects the BR2_LEGACY option and extend the help message so the user
+ > can easily know how to update his/her Buildroot configuration.
+
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ > ---
+ > changes v1->v2:
+ > - fix typos in commit log
+ > - update A/R/T tags
+
+Committed, thanks.
 
 -- 
-Samuel
+Bye, Peter Korsgaard
