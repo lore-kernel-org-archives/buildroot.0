@@ -1,245 +1,263 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 14 Dec 2014 23:47:24 +0100
-Subject: [Buildroot] [PATCH 1/1]  package/gdb: fix shared-only build
-Message-ID: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 15 Dec 2014 00:02:11 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5cinex: Add new
+ Qt5CinematicExperience package.
+In-Reply-To: <1415095550-26839-1-git-send-email-pierre.lemagourou@openwide.fr>
+References: <1415095550-26839-1-git-send-email-pierre.lemagourou@openwide.fr>
+Message-ID: <20141214230211.GH4121@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- When --disable-static is given to the gdb's main configure script,
- it also disable the static build of bundled libraries like bfd, readline
- and opcodes, which must be build statically.
+Pierre, All,
 
- Fixes:
- http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
- http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
- http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
- http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
- http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
+(Thomas, a question for you toward the end.)
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/gdb/0001-bfd-force-static-build.patch      | 79 +++++++++++++++++++++
- package/gdb/0002-readline-force-static-build.patch | 34 +++++++++
- .../gdb/0003-libopcodes-force-static-build.patch   | 80 ++++++++++++++++++++++
- 3 files changed, 193 insertions(+)
- create mode 100644 package/gdb/0001-bfd-force-static-build.patch
- create mode 100644 package/gdb/0002-readline-force-static-build.patch
- create mode 100644 package/gdb/0003-libopcodes-force-static-build.patch
+On 2014-11-04 11:05 +0100, pierre.lemagourou at openwide.fr spake thusly:
+> From: Pierre Le Magourou <pierre.lemagourou@openwide.fr>
 
-diff --git a/package/gdb/0001-bfd-force-static-build.patch b/package/gdb/0001-bfd-force-static-build.patch
-new file mode 100644
-index 0000000..eb20aa6
---- /dev/null
-+++ b/package/gdb/0001-bfd-force-static-build.patch
-@@ -0,0 +1,79 @@
-+From 458f8381d47deea7312963b098efca13bfcf1ae0 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 14 Dec 2014 17:03:49 +0100
-+Subject: [PATCH 1/3] bfd: force static build
-+
-+When --disable-static is given to the main configure script,
-+it also disable the static build of bundled libraries like bfd.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile.in | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index bf06dce..492bdbf 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -3004,6 +3004,7 @@ configure-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption}  \
-++	  --enable-static --disable-shared \
-+ 	  || exit 1
-+ @endif bfd
-+ 
-+@@ -3037,6 +3038,7 @@ configure-stage1-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  $(STAGE1_CONFIGURE_FLAGS)
-+ @endif bfd-bootstrap
-+ 
-+@@ -3069,6 +3071,7 @@ configure-stage2-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGE2_CONFIGURE_FLAGS)
-+ @endif bfd-bootstrap
-+@@ -3102,6 +3105,7 @@ configure-stage3-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGE3_CONFIGURE_FLAGS)
-+ @endif bfd-bootstrap
-+@@ -3135,6 +3139,7 @@ configure-stage4-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGE4_CONFIGURE_FLAGS)
-+ @endif bfd-bootstrap
-+@@ -3168,6 +3173,7 @@ configure-stageprofile-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGEprofile_CONFIGURE_FLAGS)
-+ @endif bfd-bootstrap
-+@@ -3201,6 +3207,7 @@ configure-stagefeedback-bfd:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGEfeedback_CONFIGURE_FLAGS)
-+ @endif bfd-bootstrap
-+-- 
-+1.9.3
-+
-diff --git a/package/gdb/0002-readline-force-static-build.patch b/package/gdb/0002-readline-force-static-build.patch
-new file mode 100644
-index 0000000..381006f
---- /dev/null
-+++ b/package/gdb/0002-readline-force-static-build.patch
-@@ -0,0 +1,34 @@
-+From ec9db3cc518fb0dbaa5982573c2203a8618bf994 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 14 Dec 2014 17:25:09 +0100
-+Subject: [PATCH 2/3] readline: force static build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When --disable-static is given to the main configure script,
-+it also disable the static build of bundled libraries like readline
-+
-+Fixes:
-+No rule to make target ?? ../readline/libreadline.a ??, needed by ?? gdb ??.
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 492bdbf..5378995 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -24746,6 +24746,7 @@ configure-readline:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption}  \
-++	  --enable-static --disable-shared \
-+ 	  || exit 1
-+ @endif readline
-+ 
-+-- 
-+1.9.3
-+
-diff --git a/package/gdb/0003-libopcodes-force-static-build.patch b/package/gdb/0003-libopcodes-force-static-build.patch
-new file mode 100644
-index 0000000..1f1bd09
---- /dev/null
-+++ b/package/gdb/0003-libopcodes-force-static-build.patch
-@@ -0,0 +1,80 @@
-+From b82d3918cc7dd4c758848ba596f6577c5486ba48 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 14 Dec 2014 17:42:15 +0100
-+Subject: [PATCH 3/3] libopcodes: force static build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When --disable-static is given to the main configure script,
-+it also disable the static build of bundled libraries like opcodes.
-+
-+Fixes:
-+No rule to make target ?? ../opcodes/libopcodes.a ??, needed by ?? gdb ??.
-+---
-+ Makefile.in | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 5378995..ecea16c 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -3883,6 +3883,7 @@ configure-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption}  \
-++	  --enable-static --disable-shared \
-+ 	  || exit 1
-+ @endif opcodes
-+ 
-+@@ -3916,6 +3917,7 @@ configure-stage1-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  $(STAGE1_CONFIGURE_FLAGS)
-+ @endif opcodes-bootstrap
-+ 
-+@@ -3948,6 +3950,7 @@ configure-stage2-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGE2_CONFIGURE_FLAGS)
-+ @endif opcodes-bootstrap
-+@@ -3981,6 +3984,7 @@ configure-stage3-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGE3_CONFIGURE_FLAGS)
-+ @endif opcodes-bootstrap
-+@@ -4014,6 +4018,7 @@ configure-stage4-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGE4_CONFIGURE_FLAGS)
-+ @endif opcodes-bootstrap
-+@@ -4047,6 +4052,7 @@ configure-stageprofile-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGEprofile_CONFIGURE_FLAGS)
-+ @endif opcodes-bootstrap
-+@@ -4080,6 +4086,7 @@ configure-stagefeedback-opcodes:
-+ 	$(SHELL) $${libsrcdir}/configure \
-+ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
-+ 	  --target=${target_alias} $${srcdiroption} \
-++	  --enable-static --disable-shared \
-+ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
-+ 	  $(STAGEfeedback_CONFIGURE_FLAGS)
-+ @endif opcodes-bootstrap
-+-- 
-+1.9.3
-+
+Thank you for your contribution. Sorry for the delay in reviewing this
+patch; here is my review...
+
+Mostly eye-candy, but I have not done a build-time test so far.
+
+> Signed-off-by: Pierre Le Magourou <pierre.lemagourou@openwide.fr>
+> ---
+> v0: Initial commit
+>  qt5cinex is a package for Qt5 Cinematic Experience demo. This
+>  application demonstrates the power of Qt5 and few of the new additions
+>  available in QtQuick 2.0.
+
+A changelog for the first submission is not ncessary. But what you wrote
+could well have gone either in the commit log itself, or even in the
+help entry, especially since that's the introductory sentence on the
+upstream website.
+
+> ---
+>  package/Config.in                                  |  1 +
+>  package/qt5cinex/Config.in                         | 26 +++++++++
+>  ...nex-0001-Fix-execution-problem-with-Qt5.3.patch | 62 ++++++++++++++++++++++
+>  package/qt5cinex/qt5cinex.hash                     |  8 +++
+>  package/qt5cinex/qt5cinex.mk                       | 37 +++++++++++++
+>  5 files changed, 134 insertions(+)
+>  create mode 100644 package/qt5cinex/Config.in
+>  create mode 100644 package/qt5cinex/qt5cinex-0001-Fix-execution-problem-with-Qt5.3.patch
+>  create mode 100644 package/qt5cinex/qt5cinex.hash
+>  create mode 100644 package/qt5cinex/qt5cinex.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 28cf703..d91860c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -190,6 +190,7 @@ comment "Graphic applications"
+>  	source "package/gnuplot/Config.in"
+>  	source "package/jhead/Config.in"
+>  	source "package/mesa3d-demos/Config.in"
+> +	source "package/qt5cinex/Config.in"
+>  	source "package/rrdtool/Config.in"
+>  
+>  comment "Graphic libraries"
+> diff --git a/package/qt5cinex/Config.in b/package/qt5cinex/Config.in
+> new file mode 100644
+> index 0000000..4490bcd
+> --- /dev/null
+> +++ b/package/qt5cinex/Config.in
+> @@ -0,0 +1,26 @@
+> +comment "Qt5 Cinematic Experience needs Qt5 graphical effects"
+> +	depends on !BR2_PACKAGE_QT5GRAPHICALEFFECTS
+> +
+> +config BR2_PACKAGE_QT5CINEX
+> +	bool "Qt5 Cinematic Experience"
+> +	depends on BR2_PACKAGE_QT5GRAPHICALEFFECTS
+> +	select BR2_PACKAGE_QT5BASE_NETWORK
+> +	select BR2_PACKAGE_QT5BASE_PNG
+> +	select BR2_PACKAGE_QT5BASE_WIDGETS
+> +	select BR2_PACKAGE_QT5BASE_EGLFS
+
+You need to propagate the dependencies of EGLFS, like so:
+
+    depends on BR2_PACKAGE_HAS_LIBEGL # eglfs
+    depends on BR2_PACKAGE_QT5_GL_AVAILABLE # eglfs
+
+> +
+
+No empty line.
+
+> +	help
+> +	  UX demo application that shows some graphical features of Qt5.
+> +	  The name 'Cinematic Experience' reflects how it's possible to build
+> +	  user interfaces with increased dynamics.
+> +
+> +	  http://quitcoding.com/?page=work#cinex
+
+As said above, we like to replicate whatever first few sentences are on
+the upstream website, so you could just replicate it here, like so:
+
+    help
+      This application demonstrates the power of Qt5 and few of the new
+      additions available in QtQuick 2.0.
+
+      http://quitcoding.com/?page=work#cinex
+
+> +if BR2_PACKAGE_QT5CINEX
+> +
+> +config BR2_PACKAGE_QT5CINEX_RPI
+> +	bool "RaspberryPI Edition"
+
+This should at least "depends on BR2_arm".
+
+Also, does it use either or both of rpi-userland or rpi-firmware at
+build time or at runtime?
+
+If so, you should add proper dependencies, for example:
+
+- if build or runtime dependency, add in Config.in:
+    config BR2_PACKAGE_QT5CINEX_RPI
+        bool "RaspberryPI Edition"
+        depends on BR2_PACKAGE_RPI_USERLAND
+
+- if runtime dependency, add in qt5cinex.mk:
+    QT5CINEX_RPI_DEPENDENCIES += rpi-userland
+
+(but that's just an example.)
+
+> +	help
+> +	  High definifition version of the application optimised for Raspberry PI cards.
+
+Keep lines below ~72 chars.
+
+> +endif
+> diff --git a/package/qt5cinex/qt5cinex-0001-Fix-execution-problem-with-Qt5.3.patch b/package/qt5cinex/qt5cinex-0001-Fix-execution-problem-with-Qt5.3.patch
+> new file mode 100644
+> index 0000000..48e0c83
+> --- /dev/null
+> +++ b/package/qt5cinex/qt5cinex-0001-Fix-execution-problem-with-Qt5.3.patch
+
+Not your fault, but we now mandate patches to be named like git patches,
+i.e.: 0001-Fix-execution-problem-with-Qt5.3.patch        
+
+> @@ -0,0 +1,62 @@
+> +From 6ecfcf724522fa37a695a4612f4638c2890d29f9 Mon Sep 17 00:00:00 2001
+> +From: Pierre Le Magourou <pierre.lemagourou@openwide.fr>
+> +Date: Thu, 23 Oct 2014 17:41:08 +0200
+> +Subject: [PATCH] Fix execution problem with Qt5.3.
+> +
+> +This patch has been inspired from Open Embedded meta-qt5.
+
+You should also SoB your patches.
+
+[--SNIP--]
+> diff --git a/package/qt5cinex/qt5cinex.hash b/package/qt5cinex/qt5cinex.hash
+> new file mode 100644
+> index 0000000..e84c31d
+> --- /dev/null
+> +++ b/package/qt5cinex/qt5cinex.hash
+> @@ -0,0 +1,8 @@
+> +# No upstream hashes for this file.
+> +sha256 0dd602983ced5f7c0cfd5ad0fbfe2b0b7e3c9ff715e4ef23eef818ccc2b6c60b Qt5_CinematicExperience_rpi_1.0.tgz
+> +sha1   a68d7c5f133d380f9a8b85cfd617deb6b8cc99e2                         Qt5_CinematicExperience_rpi_1.0.tgz
+> +md5    935a5db0a6b2a72c67236e72f52be7d1                                 Qt5_CinematicExperience_rpi_1.0.tgz
+> +
+> +sha256 0e547e0259667915a24e84ade5efdcd0c553f81786734452c2c8dbce19a19f44 Qt5_CinematicExperience_1.0.tgz
+> +sha1   8c746a64c458b5c9ff3c6d01f284875d3aa11dcb                         Qt5_CinematicExperience_1.0.tgz
+> +md5    1c4f9bf5411c985fc5d3dbfc5d826a29                                 Qt5_CinematicExperience_1.0.tgz
+
+So, does the comment "No upstream hashes for this file." applies to both
+editions, or just the RPi one? The fact that the lines are spearated
+seem to imply it's only for the RPi, but upstream really has no hash for
+either that I could find. Can you reword this so it is obvious the
+comment applies to both, please?
+
+> diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
+> new file mode 100644
+> index 0000000..3bedf9c
+> --- /dev/null
+> +++ b/package/qt5cinex/qt5cinex.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# qt5cinex
+> +#
+> +################################################################################
+> +
+> +QT5CINEX_VERSION = 1.0
+> +QT5CINEX_RPI = ""
+
+No need to initialise to empty, that's the default.
+
+> +QT5CINEX_SITE = http://quitcoding.com/download/
+> +
+> +ifeq ($(BR2_PACKAGE_QT5CINEX_RPI),y)
+> +	QT5CINEX_RPI = "rpi_"
+
+No indentation.
+
+> +endif
+> +
+> +QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_RPI)$(QT5CINEX_VERSION).tgz
+> +QT5CINEX_DEPENDENCIES = qt5base qt5declarative
+> +
+> +QT5CINEX_LICENSE = CC-BY-3.0
+> +QT5CINEX_LICENSE_FILE = README
+> +
+> +define QT5CINEX_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+
+No need for putting the command between parenthesis.
+Note: indentation here is OK.)
+
+> +endef
+> +
+> +define QT5CINEX_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QT5CINEX_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/Qt5_CinematicExperience \
+> +	  $(TARGET_DIR)/opt/Qt5_CinematicExperience/Qt5_CinematicExperience
+
+We install nothing in /opt. Just install executables in /usr/bin.
+
+> +	$(INSTALL) -D -m 0664 $(@D)/Qt5_CinematicExperience.qml \
+> +	  $(TARGET_DIR)/opt/Qt5_CinematicExperience/Qt5_CinematicExperience.qml
+> +	cp -dpfr $(@D)/content $(TARGET_DIR)/opt/Qt5_CinematicExperience/content
+
+Well, I'm no Qt guy, but from the above I guess the content/ dir and
+the qml file have to be in the same place as the excutable, right?
+
+If so, I would suggest you install all them (content, qml and
+executable) somewhere in /usr/share/Qt5/Qt5Cinex  (use your imagination
+to find a better name if you can think of one ;-) ), and add a small
+script in /usr/bin/qt5cinex-demo (ditto for the name) whith just his:
+
+    #!/bin/sh
+    exec /usr/share/Qt5/Qt5Cinex/Qt5_CinematicExperience "$@"
+
+(and chnod it 755. of course.)
+
+But hold on before doing it, I'd like another Qt guy some feedback on
+this. Thomas?
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.1.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
