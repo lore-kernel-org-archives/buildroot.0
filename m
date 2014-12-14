@@ -1,61 +1,95 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 14 Dec 2014 17:08:30 +0100
-Subject: [Buildroot] [PATCH] legacy: update the BR2_PREFER_STATIC_LIB option
-Message-ID: <1418573310-24250-1-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Dec 2014 17:13:48 +0100
+Subject: [Buildroot] [PATCH] legacy: update the BR2_PREFER_STATIC_LIB
+	option
+In-Reply-To: <1418573310-24250-1-git-send-email-s.martin49@gmail.com>
+References: <1418573310-24250-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20141214161348.GB4121@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the refactoring of the type of libraries in the target filesystem,
-these options belong to a choice, and the default is "shared only".
+Samuel, All,
 
-The former option BR2_PREFER_STATIC_LIB has been moved in the legacy
-menu, and only selects the BR2_STATIC_LIBS ("static only") option.
-However, because BR2_STATIC_LIBS belongs to a choice, when
-BR2_PREFER_STATIC_LIB is selected, it does not affect the choice.
-So, existing Buildroot configurations, which have BR2_PREFER_STATIC_LIB
-set, will silently end with BR2_SHARED_LIBS ("shared only") enabled.
+On 2014-12-14 17:08 +0100, Samuel Martin spake thusly:
+> Since the refactoring of the type of libraries in the target filesystem,
+> these options belong to a choice, and the default is "shared only".
+> 
+> The former option BR2_PREFER_STATIC_LIB has been moved in the legacy
+> menu, and only selects the BR2_STATIC_LIBS ("static only") option.
+> However, because BR2_STATIC_LIBS belongs to a choice, when
+> BR2_PREFER_STATIC_LIB is selected, it does not affect the choice.
+> So, existing Buildroot configurations, which have BR2_PREFER_STATIC_LIB
+> set, will silently end with BR2_SHARED_LIBS ("shared only") enabled.
+> 
+> So, the backward compatibility is not kept.
+> 
+> Besides, the legacy BR2_PREFER_STATIC_LIB option doesn not select
 
-So, the backward compatibility is not kept.
+s/doesn/does/
 
-Besides, the legacy BR2_PREFER_STATIC_LIB option doesn not select
-BR2_LEGACY, so the user is not notify of this legacy option, and the
-build silently continues with some undesired changes.
+> BR2_LEGACY, so the user is not notify of this legacy option, and the
 
-This patch removes the inefficient BR2_STATIC_LIBS selection, correctly
-selects the BR2_LEGACY option and extend the hepl message so the user
-can easily know how to update his/her Buildroot configuration.
+s/notify/notified/
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in.legacy | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> build silently continues with some undesired changes.
+> 
+> This patch removes the inefficient BR2_STATIC_LIBS selection, correctly
+> selects the BR2_LEGACY option and extend the hepl message so the user
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 09c025c..a969662 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -104,13 +104,16 @@ comment "Legacy options removed in 2015.02"
- 
- config BR2_PREFER_STATIC_LIB
- 	bool "static library option renamed"
--	select BR2_STATIC_LIBS
-+	select BR2_LEGACY
- 	help
- 	  The BR2_PREFER_STATIC_LIB was renamed to BR2_STATIC_LIBS. It
- 	  highlights the fact that the option no longer "prefers"
- 	  static libraries, but "enforces" static libraries (i.e
- 	  shared libraries are completely unused).
- 
-+	  Take care of updating the type of libraries you want under the
-+	  "Build options" menu.
-+
- comment "Legacy options removed in 2014.11"
- 
- config BR2_x86_generic
+s/hepl/help/
+
+It seems I'm not the only one to suffer from kebord dislexia. Hehe! ;-)
+
+> can easily know how to update his/her Buildroot configuration.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Otherwise:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Config.in.legacy | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 09c025c..a969662 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -104,13 +104,16 @@ comment "Legacy options removed in 2015.02"
+>  
+>  config BR2_PREFER_STATIC_LIB
+>  	bool "static library option renamed"
+> -	select BR2_STATIC_LIBS
+> +	select BR2_LEGACY
+>  	help
+>  	  The BR2_PREFER_STATIC_LIB was renamed to BR2_STATIC_LIBS. It
+>  	  highlights the fact that the option no longer "prefers"
+>  	  static libraries, but "enforces" static libraries (i.e
+>  	  shared libraries are completely unused).
+>  
+> +	  Take care of updating the type of libraries you want under the
+> +	  "Build options" menu.
+> +
+>  comment "Legacy options removed in 2014.11"
+>  
+>  config BR2_x86_generic
+> -- 
+> 2.1.3
+> 
+
 -- 
-2.1.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
