@@ -1,34 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 19:55:17 +0100
-Subject: [Buildroot] [git commit] iprutils: rename patches to follow the new
-	name convention
-Message-ID: <20141214194750.692FF7FFC7@busybox.osuosl.org>
+Date: Sun, 14 Dec 2014 20:47:31 +0100
+Subject: [Buildroot] [git commit] iprutils: bump to version 2.4.5
+Message-ID: <20141214194750.806AE803EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=336a8458154a6c9d4642e1ee7616cd60dce36959
+commit: http://git.buildroot.net/buildroot/commit/?id=ab6170ce67d36dfeda067e32c2a94c0e564e8357
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Rebase patch 0003 on top of 2.4.5 release.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-gettext.patch => 0001-Don-t-use-gettext.patch} |    0
- ...ow-CFLAGS-to-be-extended-from-the-enviro.patch} |    0
- ...-static-build-by-passing-the-libraries-i.patch} |    0
- 3 files changed, 0 insertions(+), 0 deletions(-)
+ ...x-static-build-by-passing-the-libraries-i.patch |   27 +++++++++++++++----
+ package/iprutils/iprutils.mk                       |    2 +-
+ 2 files changed, 22 insertions(+), 7 deletions(-)
 
-diff --git a/package/iprutils/iprutils-0001-Don-t-use-gettext.patch b/package/iprutils/0001-Don-t-use-gettext.patch
-similarity index 100%
-rename from package/iprutils/iprutils-0001-Don-t-use-gettext.patch
-rename to package/iprutils/0001-Don-t-use-gettext.patch
-diff --git a/package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch b/package/iprutils/0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
-similarity index 100%
-rename from package/iprutils/iprutils-0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
-rename to package/iprutils/0002-Allow-CFLAGS-to-be-extended-from-the-enviro.patch
-diff --git a/package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
-similarity index 100%
-rename from package/iprutils/iprutils-0003-Fix-static-build-by-passing-the-libraries-i.patch
-rename to package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+diff --git a/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+index e176ab6..5ea7d1b 100644
+--- a/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
++++ b/package/iprutils/0003-Fix-static-build-by-passing-the-libraries-i.patch
+@@ -1,4 +1,8 @@
+-iprutils: Fix static build by passing the libraries in the right order
++From 1f62dd91314b0ce6378aeafb2a03566002036326 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Thu, 11 Dec 2014 23:36:55 +0100
++Subject: [PATCH 3/3] iprutils: Fix static build by passing the libraries in
++ the right order
+ 
+ This mistake was causing failures like this one:
+ 
+@@ -7,14 +11,25 @@ m_post.c:(.text+0x60): undefined reference to `wattr_on'
+ http://autobuild.buildroot.net/results/500/5004e7b230635e0605acdd17d2b7d2d01fc5075c/build-end.log
+ 
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---- iprutils-2.4.2/Makefile.orig	2014-09-17 18:14:52.435367860 +0100
+-+++ iprutils-2.4.2/Makefile	2014-09-17 18:15:09.367652526 +0100
+-@@ -16,7 +16,7 @@ TAR = cd .. && tar -zcpf iprutils-$(UTIL
++[Romain: rebase on top of 2.4.5]
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 66c4942..18cea94 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -16,7 +16,7 @@ TAR = cd .. && tar -zcpf iprutils-$(UTILS_VER)-src.tgz --exclude .git --exclude
+  all: iprconfig iprupdate iprdump iprinit iprdbg docs 
+  
+  iprconfig: iprconfig.c iprlib.o iprconfig.h
+--	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lncurses -lmenu
+-+	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lmenu -lncurses
++-	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lncurses -lmenu -lm
+++	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprconfig iprconfig.c iprlib.o $(LDFLAGS) -lform -lpanel -lmenu -lncurses -lm
+  
+  iprupdate: iprupdate.c iprlib.o
+  	$(CC) $(CFLAGS) $(INCLUDEDIR) -o iprupdate iprlib.o iprupdate.c $(LDFLAGS)
++-- 
++1.9.3
++
+diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+index 35bffa3..e3f3a37 100644
+--- a/package/iprutils/iprutils.mk
++++ b/package/iprutils/iprutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPRUTILS_VERSION = 2.4.2
++IPRUTILS_VERSION = 2.4.5
+ IPRUTILS_SITE = http://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION)
+ IPRUTILS_SOURCE = iprutils-$(IPRUTILS_VERSION)-src.tgz
+ IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils
