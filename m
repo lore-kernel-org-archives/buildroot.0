@@ -1,90 +1,93 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 14:08:10 +0100
-Subject: [Buildroot] [RFC/PATCH v8 01/17] package/libcec: Bump to version
-	2.2.0
-In-Reply-To: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1418562506-16669-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 14 Dec 2014 14:08:09 +0100
+Subject: [Buildroot] [RFC/PATCH v8 00/17] package/kodi: Bump version to
+	14.0rc3-Helix
+Message-ID: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi Helix depends on libcec >= 2.2.0
+This patchset is a RFC and not meant to be committed to buildroot git yet.
 
-Removed libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
-applied upstream: https://github.com/Pulse-Eight/libcec/commit/485660f
+The follow-up version of XBMC 13.x-Gotham will be called Kodi, its rc3 was
+released December, 9th.
 
-Renamed remaining patch according to new naming convention.
+In order to prepare this version bump I am sharing my patchset as an RFC, two
+preparatory patches each to rename the packages, splitted for easier review, and
+one patch each for the real version bumps.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...i-warning.patch => 0001-no-psabi-warning.patch} |    0
- ...gistering-a-callback-that-wasn-t-register.patch |   36 --------------------
- package/libcec/libcec.mk                           |    2 +-
- 3 files changed, 1 insertion(+), 37 deletions(-)
- rename package/libcec/{libcec-0002-no-psabi-warning.patch => 0001-no-psabi-warning.patch} (100%)
- delete mode 100644 package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
+Regards, Bernd
 
-diff --git a/package/libcec/libcec-0002-no-psabi-warning.patch b/package/libcec/0001-no-psabi-warning.patch
-similarity index 100%
-rename from package/libcec/libcec-0002-no-psabi-warning.patch
-rename to package/libcec/0001-no-psabi-warning.patch
-diff --git a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch b/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
-deleted file mode 100644
-index 41d93aa..0000000
---- a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 78e52d55d6fc079b9a96d1a663d1991d9a0f2a2b Mon Sep 17 00:00:00 2001
--From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
--Date: Wed, 7 May 2014 08:41:27 +0200
--Subject: [PATCH] Fix unregistering a callback that wasn't register
--
--This patchs fixes an asserts that get's thrown when you start XBMC and thus
--prevents it from starting.
--The asserts you'll endup getting is:
--assertion failure:
--[...]/interface/vmcs_host/vc_vchi_tvservice.c:430:vc_tv_unregister_callback():done
--
--Found: https://github.com/raspberrypi/userland/issues/159
--
--Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-----
-- src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
--index 76c61b3..1eb6417 100644
----- a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
--+++ b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
--@@ -353,7 +353,9 @@ void CRPiCECAdapterCommunication::Close(void)
--     else
--       return;
--   }
---  vc_tv_unregister_callback(rpi_tv_callback);
--+
--+  if (m_bInitialised)
--+    vc_tv_unregister_callback(rpi_tv_callback);
--
--   UnregisterLogicalAddress();
--
----
--1.9.2
--
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 5a889b9..8bdc9ea 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = libcec-2.1.4-repack
-+LIBCEC_VERSION = libcec-2.2.0-repack
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPLv2+
- LIBCEC_LICENSE_FILES = COPYING
+v8: - rebased
+    - bumped Kodi to 14.0rc3-Helix
+    - bumped kodi-pvr-addons
+    - bumped kodi-audioencoder-flac
+    - rebased kodi specific ffmpeg-patches against ffmpeg-2.5
+
+v7: - rebased
+    - bumped Kodi to 14.0b5-Helix
+    - bumped kodi-pvr-addons
+
+v6: - rebased
+    - bumped Kodi to 14.0b3-Helix
+    - bumped audioencoder addons
+    - renamed xbmc-pvr-addons to kodi-pvr-addons
+    - renamed xbmc-addon-xvdr to kodi-addon-xvdr
+    - bumped kodi-pvr-addons, removed dependencies to boost & mysql
+
+v5: - rebased
+    - bumped Kodi to 14.0b2-Helix
+    - bumped libcec to 2.2.0, Helix depends on this version
+    - bumped audioencoder addons
+
+v4: - rebased
+    - renamed package/kodi-audioencoder-wav/kodi-audioencoder-flac.mk to
+      package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+    - added option BR2_PACKAGE_KODI_OPTICALDRIVE to enable support for optical
+      drives
+    - audioencoder addons depend in BR2_PACKAGE_KODI_OPTICALDRIVE, see
+      https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/virtual/mediacenter/package.mk#L46
+
+v3: - rebased
+    - added audioenconder addons, Kodi now needs to be installed to STAGING_DIR
+    - kodi: removed dependency to flac, backported from upstream master
+    - bumped xbmc-pvr-addons
+    - bumped xbmc-addon-xvdr
+    - note: kodi specific ffmpeg-patches no longer depend on
+            http://patchwork.ozlabs.org/patch/396911/
+            patch was committed to buildroot
+
+v2: - rebased: - _CONF_OPT -> _CONF_OPTS
+    - added notes to "Rename XBMC to Kodi"-patches, they are meant to be committed
+      together (Yann)
+    - kodi specific ffmpeg-patches are now a seperate commit (Yann),
+      depends on http://patchwork.ozlabs.org/patch/396911/
+    - ffmpeg is now compiled dynamically, ported from
+      https://github.com/OpenELEC/OpenELEC.tv/commit/ba586280
+
+Bernd Kuhls (17):
+  package/libcec: Bump to version 2.2.0
+  package/ffmpeg: Add Kodi patchset
+  Rename XBMC to Kodi - part I - move files
+  Rename XBMC to Kodi - part II - rename variables
+  package/kodi: Bump version to 14.0rc3-Helix
+  Rename xbmc-pvr-addons to kodi-pvr-addons - part I - move files
+  Rename xbmc-pvr-addons to kodi-pvr-addons - part II - rename
+    variables
+  package/kodi-pvr-addons: Bump version for Helix-compatibility
+  Rename xbmc-addon-xvdr to kodi-addon-xvdr - part I - move files
+  Rename xbmc-addon-xvdr to kodi-addon-xvdr - part II - rename
+    variables
+  package/kodi-addon-xvdr: Bump version for Helix-compatibility
+  package/kodi: New option to enable support for optical drives
+  package/kodi: Enable install to STAGING_DIR, needed for audioencoder
+    addons
+  package/kodi-audioencoder-flac: New package
+  package/kodi-audioencoder-lame: New package
+  package/kodi-audioencoder-vorbis: New package
+  package/kodi-audioencoder-wav: New package
+
 -- 
 1.7.10.4
