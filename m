@@ -1,95 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Dec 2014 12:51:31 +0100
-Subject: [Buildroot] [PATCH] package/nmap: fix shared-only build
-Message-ID: <1418557891-24865-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Dec 2014 13:16:38 +0100
+Subject: [Buildroot] [PATCH] package/mono: fixing shared/static handling
+In-Reply-To: <CA+TH9VnvmaZRiLX2Rke6_bezKUdxYCWiQoOsOvkRKg94m8L0cQ@mail.gmail.com>
+ (Angelo Compagnucci's message of "Sun, 14 Dec 2014 09:33:32 +0100")
+References: <1418508052-25062-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87sigjp2if.fsf@dell.be.48ers.dk>
+ <CA+TH9VnvmaZRiLX2Rke6_bezKUdxYCWiQoOsOvkRKg94m8L0cQ@mail.gmail.com>
+Message-ID: <87oar6pgt5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changeset f1d3e09 (Build shared libraries only as the default) broke the
-nmap package.
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-nmap builds an internal version of libdnet, and tries to statically link
-against it. Of course, this breaks for shared-only builds, since in that
-case there is no static lib ever built.
+ > Hi Peter
+ > 2014-12-14 0:13 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+ >>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+ >> 
+ >> > Mono should always be compiled with --enable-static, this patch forces
+ >> > --enable-static also in case of shared only libraries.
+ >> 
+ >> Why? If it is really required, then mono should depend on
+ >> !BR2_SHARED_LIBS and show a comment to inform the user that it needs
+ >> static library support.
 
-Using an external libdnet is not really an option:
+ > Mono doesn't really uses shared libraries at all, it ships its own
+ > glibc (eglib)
 
-  - libdnet comes from dnprogs, from the linux-decnet project;
-    unfortunately, their build-system is not ammenable to
-    cross-compilation, and is a real pain to deal with;
+I don't know much about mono, but does this 'eglib' refer to the (GNU)
+C-library or the GNOME glib?
 
-  - nmap's bundled libdnet is anyway heavily modified, which precludes
-    using an external libdnet.
+From here it sounds like the latter:
+http://www.mono-project.com/archived/eglib/
 
-Fix that by considering libdnet to be a purely internal library, and by
-configuring it with --enable-static, always.
+ > and its own libmono library, It should be compiled
+ > statically for this reason, you can find further details here:
+ > http://www.mono-project.com/docs/compiling-mono/unsupported-advanced-compile-options/#static-vs-dynamic-mono
+ > Before the new shared/static handling, --enable-static was always
+ > passed as a configure option.
 
-nmap's ./configure uses AC_CONFIG_SUBDIRS() to configure the libdnet
-sub-directory; AC_CONFIG_SUBDIRS() calls ./configure in all the
-sub-directories it is passed as arguments. Unfortunately, it is not
-possible to specify extra ./configure arguments whith AC_CONFIG_SUBDIRS.
+As far as I read that, they *RECOMMEND* that you link it statically.,
+but it should also work when linking dynamically.
 
-We are using an autoconf trick, which is, when configuring
-sub-directories with AC_CONFIG_SUBDIRS(), it will first try to execute
-configure.gnu if it exists, before it fallbacks to running plain
-configure. See:
-    https://www.gnu.org/software/autoconf/manual/autoconf.html#Subdirectories
+ > Before the new shared/static handling, --enable-static was always
+ > passed as a configure option.
 
-So, we provide a configure.gnu that is just a wrapper around the real
-configure, which sole purpose is to append --enable-static when calling
-the real configure.
+Indeed. The point of the new handling is to ensure that only the shared
+variant is built (so save build time).
 
-Note1: since this libdnet is considered a purely internal library, we
-also always pass --disable-shared, since it is not needed at all.
+With that said, I did a quick test and I couldn't get it to work with
+--with-static_mono=no, and as it isn't supported by upstream just
+sticking with static might be the best approach.
 
-Note2: since this libdnet is considered a purely internal library, it
-should not be exposed to other packages, and thus nmap does not install
-it, neither in target nor in staging, neither static nor shared, which
-is what we want.
+Looking at how E.G. Debian does it, it seems like they also link
+mono(-sgen) statically:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@openwide.fr>
----
- package/nmap/0001-libdnet-wrapper-configure.patch | 11 +++++++++++
- package/nmap/nmap.mk                              |  5 +++++
- 2 files changed, 16 insertions(+)
- create mode 100644 package/nmap/0001-libdnet-wrapper-configure.patch
+https://packages.debian.org/jessie/mono-runtime-sgen
 
-diff --git a/package/nmap/0001-libdnet-wrapper-configure.patch b/package/nmap/0001-libdnet-wrapper-configure.patch
-new file mode 100644
-index 0000000..a85242a
---- /dev/null
-+++ b/package/nmap/0001-libdnet-wrapper-configure.patch
-@@ -0,0 +1,11 @@
-+libdnet: always build a static library
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff --git a/libdnet-stripped/configure.gnu b/libdnet-stripped/configure.gnu
-+--- /dev/null
-++++ b/libdnet-stripped/configure.gnu
-+@@ -0,0 +1,3 @@
-++#!/bin/sh
-++
-++exec "${0%.gnu}" "${@}" --enable-static --disable-shared
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 938de25..58370b5 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -14,6 +14,11 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- NMAP_LICENSE = GPLv2
- NMAP_LICENSE_FILES = COPYING
- 
-+define NMAP_WRAPPER_EXEC
-+	chmod +x $(@D)/libdnet-stripped/configure.gnu
-+endef
-+NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
- NMAP_DEPENDENCIES += openssl
+They do provide a libmono package:
+
+https://packages.debian.org/jessie/libmono-2.0-1
+
+But none of the other mono packages seem to use it, so it's presumably
+for embedding mono in an application:
+
+apt-cache rdepends libmono-2.0-1
+libmono-2.0-1
+Reverse Depends:
+  libmono-2.0-1:i386
+  mono-complete
+
 -- 
-1.9.1
+Venlig hilsen,
+Peter Korsgaard 
