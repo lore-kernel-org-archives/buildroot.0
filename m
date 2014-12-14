@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Dec 2014 17:04:39 +0100
-Subject: [Buildroot] [PATCH 4/5] package/ncurses: trim leading 'lib' from
-	definition of libs to install
+Date: Sun, 14 Dec 2014 17:04:40 +0100
+Subject: [Buildroot] [PATCH 5/5] pckage/ncurses: fix pkg-config files for
+	ncursesw
 In-Reply-To: <cover.1418572993.git.yann.morin.1998@free.fr>
 References: <cover.1418572993.git.yann.morin.1998@free.fr>
-Message-ID: <da5996121c716e1e4c35f27a44446dab642c2734.1418572993.git.yann.morin.1998@free.fr>
+Message-ID: <50b4b144f7de56b1d0a60ec133c6fbf89c265dc3.1418572993.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +14,47 @@ To: buildroot@busybox.net
 Currently, ncurses creates symlinks from the non-'w' variants to the
 equivalent 'w' variant, but forgets to do so for pkg-config files.
 
-To be able to share the same list between the libraries and the
-pkg-config files to symlink, just trim the 'lib' prefix of libraries in
-the definition, and just add it back at the time we need it.
+Do that for the pkg-config files too.
+
+Should fix numerous autobuild failures:
+    http://autobuild.buildroot.net/results/3c4/3c44dfc6e3f151bef751f39cac336fef3d6a0099/
+    http://autobuild.buildroot.net/results/38c/38c81407bb8d0677e87b3a01f9a1fc1372ab4738/
+    ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ncurses/ncurses.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/ncurses/ncurses.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index b870aa4..9b660fd 100644
+index 9b660fd..7febed6 100644
 --- a/package/ncurses/ncurses.mk
 +++ b/package/ncurses/ncurses.mk
-@@ -43,17 +43,17 @@ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- NCURSES_CONF_OPTS += --with-shared --with-normal
- endif
- 
--NCURSES_LIBS-y = libncurses
--NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
--NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
--NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += libform
-+NCURSES_LIBS-y = ncurses
-+NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
-+NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
-+NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
- 
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
- NCURSES_LIB_SUFFIX = w
- 
- define NCURSES_LINK_LIBS_STATIC
--	for lib in $(NCURSES_LIBS-y); do \
-+	for lib in $(NCURSES_LIBS-y:%=lib%); do \
- 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
- 			$(1)/usr/lib/$${lib}.a; \
- 	done
-@@ -62,7 +62,7 @@ define NCURSES_LINK_LIBS_STATIC
+@@ -70,6 +70,13 @@ define NCURSES_LINK_LIBS_SHARED
+ 		$(1)/usr/lib/libcurses.so
  endef
  
- define NCURSES_LINK_LIBS_SHARED
--	for lib in $(NCURSES_LIBS-y); do \
-+	for lib in $(NCURSES_LIBS-y:%=lib%); do \
- 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
- 			$(1)/usr/lib/$${lib}.so; \
- 	done
-@@ -95,7 +95,7 @@ endef
++define NCURSES_LINK_PC
++	for pc in $(NCURSES_LIBS-y); do \
++		ln -sf $${pc}$(NCURSES_LIB_SUFFIX).pc \
++			$(1)/usr/lib/pkgconfig/$${pc}.pc; \
++	done
++endef
++
+ NCURSES_LINK_TARGET_LIBS = \
+ 	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR))) \
+ 	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(TARGET_DIR)))
+@@ -77,7 +84,10 @@ NCURSES_LINK_STAGING_LIBS = \
+ 	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR))) \
+ 	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(STAGING_DIR)))
  
- ifneq ($(BR2_STATIC_LIBS),y)
- define NCURSES_INSTALL_TARGET_LIBS
--	for lib in $(NCURSES_LIBS-y); do \
-+	for lib in $(NCURSES_LIBS-y:%=lib%); do \
- 		cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
- 			$(TARGET_DIR)/usr/lib/; \
- 	done
++NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
++
+ NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
+ 
+ endif
+ 
 -- 
 1.9.1
