@@ -1,32 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 21:40:30 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: Bump version
-Message-ID: <20141214205926.A543D7FDC7@busybox.osuosl.org>
+Date: Sun, 14 Dec 2014 21:37:56 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: Bump version to 10.4.0
+Message-ID: <20141214205926.923BE80156@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98c0764f09d25918e86339983dd124c1a7b13790
+commit: http://git.buildroot.net/buildroot/commit/?id=dd02aceb565fb2e7452f9f30ad4ff7c747a680c3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- removed mesa3d-0002-execinfo_h.patch, applied upstream
+- renamed remaining patch according to new convention
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tvheadend/tvheadend.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...tform.h-not-installed-if-EGL-is-disabled.patch} |    0
+ package/mesa3d/mesa3d-0002-execinfo_h.patch        |   47 --------------------
+ package/mesa3d/mesa3d.hash                         |    4 +-
+ package/mesa3d/mesa3d.mk                           |    2 +-
+ 4 files changed, 3 insertions(+), 50 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 9c93807..f1c3921 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+diff --git a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch b/package/mesa3d/0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+similarity index 100%
+rename from package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+rename to package/mesa3d/0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+diff --git a/package/mesa3d/mesa3d-0002-execinfo_h.patch b/package/mesa3d/mesa3d-0002-execinfo_h.patch
+deleted file mode 100644
+index dbedfd1..0000000
+--- a/package/mesa3d/mesa3d-0002-execinfo_h.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-Fixes uclibc build as uclibc does not include backtrace functionality
+-
+-Patch sent upstream:
+-http://lists.freedesktop.org/archives/mesa-dev/2014-October/069506.html
+-
+-Bugtracker: https://bugs.freedesktop.org/show_bug.cgi?id=85197
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr Mesa-10.3.1.org/configure.ac Mesa-10.3.1/configure.ac
+---- Mesa-10.3.1.org/configure.ac	2014-10-12 22:42:38.000000000 +0200
+-+++ Mesa-10.3.1/configure.ac	2014-10-19 19:15:11.000000000 +0200
+-@@ -539,6 +539,9 @@
+- dnl See if posix_memalign is available
+- AC_CHECK_FUNC([posix_memalign], [DEFINES="$DEFINES -DHAVE_POSIX_MEMALIGN"])
+- 
+-+dnl Check for backtrace support
+-+AC_CHECK_HEADER([execinfo.h], [DEFINES="$DEFINES -DHAVE_EXECINFO_H"])
+-+
+- dnl Check for pthreads
+- case "$host_os" in
+- mingw*)
+-diff -uNr Mesa-10.3.1.org/src/mapi/glapi/gen/gl_gentable.py Mesa-10.3.1/src/mapi/glapi/gen/gl_gentable.py
+---- Mesa-10.3.1.org/src/mapi/glapi/gen/gl_gentable.py	2014-10-12 22:42:39.000000000 +0200
+-+++ Mesa-10.3.1/src/mapi/glapi/gen/gl_gentable.py	2014-10-19 19:21:32.913846414 +0200
+-@@ -42,7 +42,7 @@
+- #endif
+- 
+- #if (defined(GLXEXT) && defined(HAVE_BACKTRACE)) \\
+--	|| (!defined(GLXEXT) && defined(DEBUG) && !defined(_WIN32_WCE) && !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(__OpenBSD__) && !defined(__NetBSD__) && !defined(__DragonFly__))
+-+	|| (!defined(GLXEXT) && defined(DEBUG) && defined(HAVE_EXECINFO_H) && !defined(_WIN32_WCE) && !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(__OpenBSD__) && !defined(__NetBSD__) && !defined(__DragonFly__))
+- #define USE_BACKTRACE
+- #endif
+- 
+-diff -uNr Mesa-10.3.1.org/src/mesa/drivers/dri/i915/intel_regions.c Mesa-10.3.1/src/mesa/drivers/dri/i915/intel_regions.c
+---- Mesa-10.3.1.org/src/mesa/drivers/dri/i915/intel_regions.c	2014-05-06 00:45:23.000000000 +0200
+-+++ Mesa-10.3.1/src/mesa/drivers/dri/i915/intel_regions.c	2014-10-19 19:23:13.833850693 +0200
+-@@ -65,7 +65,9 @@
+- #define _DBG(...) {debug_backtrace(); DBG(__VA_ARGS__);}
+- 
+- /* Backtracing debug support */
+-+#ifdef HAVE_EXECINFO_H
+- #include <execinfo.h>
+-+#endif
+- 
+- static void
+- debug_backtrace(void)
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index bdcccaa..4c67205 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2014-November/000122.html
+-sha256	0e4eee4a2ddf86456eed2fc44da367f95471f74249636710491e85cc256c4753	MesaLib-10.3.3.tar.bz2
++# From http://lists.freedesktop.org/archives/mesa-announce/2014-December/000130.html
++sha256	98a7dff3a1a6708c79789de8b9a05d8042e867067f70e8f30387c15026233219	MesaLib-10.4.0.tar.bz2
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b3194d0..1e39b82 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = fcd16fa0d835d7fd4f57c350ed8b76350440c68c
-+TVHEADEND_VERSION = 388f57ecc32a3b631de2ff9c200cd398322a27bf
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-MESA3D_VERSION = 10.3.5
++MESA3D_VERSION = 10.4.0
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
