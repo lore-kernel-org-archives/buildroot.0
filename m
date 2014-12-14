@@ -1,76 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 14:08:25 +0100
-Subject: [Buildroot] [RFC/PATCH v8 16/17] package/kodi-audioencoder-vorbis:
-	New package
+Date: Sun, 14 Dec 2014 14:08:15 +0100
+Subject: [Buildroot] [RFC/PATCH v8 06/17] Rename xbmc-pvr-addons to
+	kodi-pvr-addons - part I - move files
 In-Reply-To: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1418562506-16669-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1418562506-16669-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In a first step to bump version to Helix move the package
+to its new directory. Because git will not recognize the moved
+files due to many upcoming changes to variable names the move
+is done in this seperate commit.
+
+The "Rename xbmc-pvr-addons to kodi-pvr-addons"-patch is split into
+two parts for easier review, please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-vorbis/Config.in           |    9 +++++++++
- .../kodi-audioencoder-vorbis.mk                      |   18 ++++++++++++++++++
- package/kodi/Config.in                               |    1 +
- 3 files changed, 28 insertions(+)
- create mode 100644 package/kodi-audioencoder-vorbis/Config.in
- create mode 100644 package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+ package/{xbmc-pvr-addons => kodi-pvr-addons}/Config.in               |    0
+ .../xbmc-pvr-addons.mk => kodi-pvr-addons/kodi-pvr-addons.mk}        |    0
+ package/kodi/Config.in                                               |    2 +-
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/{xbmc-pvr-addons => kodi-pvr-addons}/Config.in (100%)
+ rename package/{xbmc-pvr-addons/xbmc-pvr-addons.mk => kodi-pvr-addons/kodi-pvr-addons.mk} (100%)
 
-diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi-audioencoder-vorbis/Config.in
-new file mode 100644
-index 0000000..03300f1
---- /dev/null
-+++ b/package/kodi-audioencoder-vorbis/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS
-+	bool "kodi-audioencoder-vorbis"
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBVORBIS
-+	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
-+	help
-+	  An audioencoder addon for Kodi
-+
-+	  https://github.com/xbmc/audioencoder.vorbis
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-new file mode 100644
-index 0000000..901a7a1
---- /dev/null
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# kodi-audioencoder-vorbis
-+#
-+################################################################################
-+
-+KODI_AUDIOENCODER_VORBIS_VERSION = fa0de1562504253acf64ad39fbcb1e5d85676ae4
-+KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
-+KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
-+KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis
-+KODI_AUDIOENCODER_VORBIS_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
-+	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DVORBIS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DVORBISENC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
+diff --git a/package/xbmc-pvr-addons/Config.in b/package/kodi-pvr-addons/Config.in
+similarity index 100%
+rename from package/xbmc-pvr-addons/Config.in
+rename to package/kodi-pvr-addons/Config.in
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+similarity index 100%
+rename from package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+rename to package/kodi-pvr-addons/kodi-pvr-addons.mk
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7f33642..486dfda 100644
+index 2bd43b6..d1286b7 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -246,6 +246,7 @@ comment "Kodi audioencoder addons"
+@@ -238,6 +238,6 @@ config BR2_PACKAGE_KODI_WAVPACK
+ comment "Kodi addons"
  
- source "package/kodi-audioencoder-flac/Config.in"
- source "package/kodi-audioencoder-lame/Config.in"
-+source "package/kodi-audioencoder-vorbis/Config.in"
+ source "package/xbmc-addon-xvdr/Config.in"
+-source "package/xbmc-pvr-addons/Config.in"
++source "package/kodi-pvr-addons/Config.in"
  
- endif # BR2_PACKAGE_KODI_OPTICALDRIVE
- 
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
