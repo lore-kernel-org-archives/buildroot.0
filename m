@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 14:08:20 +0100
-Subject: [Buildroot] [RFC/PATCH v8 11/17] package/kodi-addon-xvdr: Bump
-	version for Helix-compatibility
+Date: Sun, 14 Dec 2014 14:08:24 +0100
+Subject: [Buildroot] [RFC/PATCH v8 15/17] package/kodi-audioencoder-lame:
+	New package
 In-Reply-To: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1418562506-16669-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1418562506-16669-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +14,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
- package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
- 2 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+ package/kodi-audioencoder-lame/Config.in               |    8 ++++++++
+ .../kodi-audioencoder-lame/kodi-audioencoder-lame.mk   |   16 ++++++++++++++++
+ package/kodi/Config.in                                 |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audioencoder-lame/Config.in
+ create mode 100644 package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
 
-diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
 new file mode 100644
-index 0000000..6e87b79
+index 0000000..78ec136
 --- /dev/null
-+++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
-@@ -0,0 +1,19 @@
-+Update for Kodi
++++ b/package/kodi-audioencoder-lame/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
++	bool "kodi-audioencoder-lame"
++	select BR2_PACKAGE_LAME
++	depends on BR2_PACKAGE_KODI_OPTICALDRIVE
++	help
++	  An audioencoder addon for Kodi
 +
-+Ported from OpenELEC:
-+https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
++	  https://github.com/xbmc/audioencoder.lame
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+new file mode 100644
+index 0000000..a890f64
+--- /dev/null
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# kodi-audioencoder-lame
++#
++################################################################################
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++KODI_AUDIOENCODER_LAME_VERSION = 6f8384f0d003faf7b91dcd38357ea0ecf9030cce
++KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
++KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
++KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
++KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
++KODI_AUDIOENCODER_LAME_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
++	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
 +
-+diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
-+--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
-++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
-+@@ -6,7 +6,7 @@
-+ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
-+ 
-+ AC_CONFIG_AUX_DIR(autotools)
-+-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
-++AC_PREFIX_DEFAULT(/usr/lib/kodi)
-+ 
-+ AC_CANONICAL_HOST
-+ AC_CANONICAL_TARGET
-diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-index 14b08fe..e05510c 100644
---- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-+++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index fa26f54..7f33642 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -245,6 +245,7 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
+ comment "Kodi audioencoder addons"
  
--# This cset is on master. When a Gotham branch is made, we should
-+# This cset is on master. When a Helix branch is made, we should
- # follow it, as incompatible changes in the plugins API can happen
- # on the master branch.
--KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
-+KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
- KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
- KODI_ADDON_XVDR_LICENSE = GPLv2+
- KODI_ADDON_XVDR_LICENSE_FILES = COPYING
+ source "package/kodi-audioencoder-flac/Config.in"
++source "package/kodi-audioencoder-lame/Config.in"
+ 
+ endif # BR2_PACKAGE_KODI_OPTICALDRIVE
+ 
 -- 
 1.7.10.4
