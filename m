@@ -1,133 +1,245 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Dec 2014 23:35:59 +0100
-Subject: [Buildroot] [PATCH 2/2] package/pinentry: allow building without Qt
-	accessibility
-In-Reply-To: <cover.1418596437.git.yann.morin.1998@free.fr>
-References: <cover.1418596437.git.yann.morin.1998@free.fr>
-Message-ID: <b1b44568a4bb46632d5c05cd28b84f3026575957.1418596437.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 14 Dec 2014 23:47:24 +0100
+Subject: [Buildroot] [PATCH 1/1]  package/gdb: fix shared-only build
+Message-ID: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport a patch applied upstream to allow building without Qt
-accessibility.
+ When --disable-static is given to the gdb's main configure script,
+ it also disable the static build of bundled libraries like bfd, readline
+ and opcodes, which must be build statically.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Fixes:
+ http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
+ http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
+ http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
+ http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
+ http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pinentry/0002-qt-no-accessibility.patch | 102 ++++++++++++++++++++++++
- 1 file changed, 102 insertions(+)
- create mode 100644 package/pinentry/0002-qt-no-accessibility.patch
+ package/gdb/0001-bfd-force-static-build.patch      | 79 +++++++++++++++++++++
+ package/gdb/0002-readline-force-static-build.patch | 34 +++++++++
+ .../gdb/0003-libopcodes-force-static-build.patch   | 80 ++++++++++++++++++++++
+ 3 files changed, 193 insertions(+)
+ create mode 100644 package/gdb/0001-bfd-force-static-build.patch
+ create mode 100644 package/gdb/0002-readline-force-static-build.patch
+ create mode 100644 package/gdb/0003-libopcodes-force-static-build.patch
 
-diff --git a/package/pinentry/0002-qt-no-accessibility.patch b/package/pinentry/0002-qt-no-accessibility.patch
+diff --git a/package/gdb/0001-bfd-force-static-build.patch b/package/gdb/0001-bfd-force-static-build.patch
 new file mode 100644
-index 0000000..2f9e508
+index 0000000..eb20aa6
 --- /dev/null
-+++ b/package/pinentry/0002-qt-no-accessibility.patch
-@@ -0,0 +1,102 @@
-+commit 484465338ea6f5f12eb1341ca0ef84aa79224ed4
-+Author: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date:   Mon Dec 8 16:42:42 2014 +0000
++++ b/package/gdb/0001-bfd-force-static-build.patch
+@@ -0,0 +1,79 @@
++From 458f8381d47deea7312963b098efca13bfcf1ae0 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 14 Dec 2014 17:03:49 +0100
++Subject: [PATCH 1/3] bfd: force static build
 +
-+    pinentry-qt4: make the accessibility part optional
-+    
-+    Check if the Qt libraries have support for QT Accessibility before using
-+    it. Otherwise it will raise error like these one:
-+    
-+    main.cpp: In function 'int qt_cmd_handler(pinentry_t)':
-+    main.cpp:220:51: error: 'class QAbstractButton' has no member named
-+    'setAccessibleDescription'
-+    
-+    Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++When --disable-static is given to the main configure script,
++it also disable the static build of bundled libraries like bfd.
 +
-+Backported from upstream.
++Fixes:
++http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/build-end.log
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.in | 7 +++++++
++ 1 file changed, 7 insertions(+)
 +
-+diff --git a/qt4/main.cpp b/qt4/main.cpp
-+index 106999e..b2a69f2 100644
-+--- a/qt4/main.cpp
-++++ b/qt4/main.cpp
-+@@ -217,8 +217,9 @@ qt_cmd_handler (pinentry_t pe)
-+       for ( size_t i = 0 ; i < sizeof buttonLabels / sizeof *buttonLabels ; ++i )
-+         if ( (buttons & buttonLabels[i].button) && !buttonLabels[i].label.isEmpty() ) {
-+             box.button( buttonLabels[i].button )->setText( buttonLabels[i].label );
-++#ifndef QT_NO_ACCESSIBILITY
-+             box.button( buttonLabels[i].button )->setAccessibleDescription ( buttonLabels[i].label );
-+-
-++#endif
-+         }
++diff --git a/Makefile.in b/Makefile.in
++index bf06dce..492bdbf 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -3004,6 +3004,7 @@ configure-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption}  \
+++	  --enable-static --disable-shared \
++ 	  || exit 1
++ @endif bfd
 + 
-+       box.setIconPixmap( icon() );
-+diff --git a/qt4/pinentryconfirm.cpp b/qt4/pinentryconfirm.cpp
-+index dfbd19f..6b3d545 100644
-+--- a/qt4/pinentryconfirm.cpp
-++++ b/qt4/pinentryconfirm.cpp
-+@@ -30,8 +30,10 @@ PinentryConfirm::PinentryConfirm(Icon icon, int timeout, const QString &title,
-+ 	connect(_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
-+ 	_timer->start(timeout*1000);
-+     }
-++#ifndef QT_NO_ACCESSIBILITY
-+     setAccessibleDescription (desc);
-+     setAccessibleName (title);
-++#endif
-+     raiseWindow (this);
-+ }
++@@ -3037,6 +3038,7 @@ configure-stage1-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  $(STAGE1_CONFIGURE_FLAGS)
++ @endif bfd-bootstrap
 + 
-+diff --git a/qt4/pinentrydialog.cpp b/qt4/pinentrydialog.cpp
-+index 3a6dacc..456f022 100644
-+--- a/qt4/pinentrydialog.cpp
-++++ b/qt4/pinentrydialog.cpp
-+@@ -217,7 +217,9 @@ void PinEntryDialog::setDescription( const QString& txt )
-+ {
-+   _desc->setVisible( !txt.isEmpty() );
-+   _desc->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _desc->setAccessibleDescription ( txt );
-++#endif
-+   _icon->setPixmap( icon() );
-+   setError( QString::null );
-+ }
-+@@ -231,7 +233,9 @@ void PinEntryDialog::setError( const QString& txt )
-+ {
-+   if( !txt.isNull() )_icon->setPixmap( icon( QStyle::SP_MessageBoxCritical ) );
-+   _error->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _error->setAccessibleDescription ( txt );
-++#endif
-+   _error->setVisible( !txt.isEmpty() );
-+ }
++@@ -3069,6 +3071,7 @@ configure-stage2-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGE2_CONFIGURE_FLAGS)
++ @endif bfd-bootstrap
++@@ -3102,6 +3105,7 @@ configure-stage3-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGE3_CONFIGURE_FLAGS)
++ @endif bfd-bootstrap
++@@ -3135,6 +3139,7 @@ configure-stage4-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGE4_CONFIGURE_FLAGS)
++ @endif bfd-bootstrap
++@@ -3168,6 +3173,7 @@ configure-stageprofile-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGEprofile_CONFIGURE_FLAGS)
++ @endif bfd-bootstrap
++@@ -3201,6 +3207,7 @@ configure-stagefeedback-bfd:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGEfeedback_CONFIGURE_FLAGS)
++ @endif bfd-bootstrap
++-- 
++1.9.3
++
+diff --git a/package/gdb/0002-readline-force-static-build.patch b/package/gdb/0002-readline-force-static-build.patch
+new file mode 100644
+index 0000000..381006f
+--- /dev/null
++++ b/package/gdb/0002-readline-force-static-build.patch
+@@ -0,0 +1,34 @@
++From ec9db3cc518fb0dbaa5982573c2203a8618bf994 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 14 Dec 2014 17:25:09 +0100
++Subject: [PATCH 2/3] readline: force static build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++When --disable-static is given to the main configure script,
++it also disable the static build of bundled libraries like readline
++
++Fixes:
++No rule to make target ?? ../readline/libreadline.a ??, needed by ?? gdb ??.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile.in b/Makefile.in
++index 492bdbf..5378995 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -24746,6 +24746,7 @@ configure-readline:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption}  \
+++	  --enable-static --disable-shared \
++ 	  || exit 1
++ @endif readline
 + 
-+@@ -264,14 +268,18 @@ QString PinEntryDialog::prompt() const
-+ void PinEntryDialog::setOkText( const QString& txt )
-+ {
-+   _ok->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _ok->setAccessibleDescription ( txt );
-++#endif
-+   _ok->setVisible( !txt.isEmpty() );
-+ }
++-- 
++1.9.3
++
+diff --git a/package/gdb/0003-libopcodes-force-static-build.patch b/package/gdb/0003-libopcodes-force-static-build.patch
+new file mode 100644
+index 0000000..1f1bd09
+--- /dev/null
++++ b/package/gdb/0003-libopcodes-force-static-build.patch
+@@ -0,0 +1,80 @@
++From b82d3918cc7dd4c758848ba596f6577c5486ba48 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 14 Dec 2014 17:42:15 +0100
++Subject: [PATCH 3/3] libopcodes: force static build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++When --disable-static is given to the main configure script,
++it also disable the static build of bundled libraries like opcodes.
++
++Fixes:
++No rule to make target ?? ../opcodes/libopcodes.a ??, needed by ?? gdb ??.
++---
++ Makefile.in | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/Makefile.in b/Makefile.in
++index 5378995..ecea16c 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -3883,6 +3883,7 @@ configure-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption}  \
+++	  --enable-static --disable-shared \
++ 	  || exit 1
++ @endif opcodes
 + 
-+ void PinEntryDialog::setCancelText( const QString& txt )
-+ {
-+   _cancel->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _cancel->setAccessibleDescription ( txt );
-++#endif
-+   _cancel->setVisible( !txt.isEmpty() );
-+ }
++@@ -3916,6 +3917,7 @@ configure-stage1-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  $(STAGE1_CONFIGURE_FLAGS)
++ @endif opcodes-bootstrap
 + 
-+@@ -279,7 +287,9 @@ void PinEntryDialog::setQualityBar( const QString& txt )
-+ {
-+   if (_have_quality_bar) {
-+     _quality_bar_label->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+     _quality_bar_label->setAccessibleDescription ( txt );
-++#endif
-+   }
-+ }
-+ 
++@@ -3948,6 +3950,7 @@ configure-stage2-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGE2_CONFIGURE_FLAGS)
++ @endif opcodes-bootstrap
++@@ -3981,6 +3984,7 @@ configure-stage3-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGE3_CONFIGURE_FLAGS)
++ @endif opcodes-bootstrap
++@@ -4014,6 +4018,7 @@ configure-stage4-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGE4_CONFIGURE_FLAGS)
++ @endif opcodes-bootstrap
++@@ -4047,6 +4052,7 @@ configure-stageprofile-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGEprofile_CONFIGURE_FLAGS)
++ @endif opcodes-bootstrap
++@@ -4080,6 +4086,7 @@ configure-stagefeedback-opcodes:
++ 	$(SHELL) $${libsrcdir}/configure \
++ 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
++ 	  --target=${target_alias} $${srcdiroption} \
+++	  --enable-static --disable-shared \
++ 	  --with-build-libsubdir=$(HOST_SUBDIR) \
++ 	  $(STAGEfeedback_CONFIGURE_FLAGS)
++ @endif opcodes-bootstrap
++-- 
++1.9.3
++
 -- 
-1.9.1
+1.9.3
