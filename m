@@ -1,35 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 13:18:13 +0100
-Subject: [Buildroot] dbus build fails since the bump of systemd to
-	version 218
-In-Reply-To: <548D6323.3010102@free.fr> (Thierry Bultel's message of "Sun, 14
- Dec 2014 11:14:59 +0100")
-References: <548B6E4E.104@free.fr> <87wq5vp6fa.fsf@dell.be.48ers.dk>
- <548D6323.3010102@free.fr>
-Message-ID: <87k31upgqi.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Dec 2014 13:52:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump version to 10.3.5
+Message-ID: <1418561578-8323-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thierry" == Thierry Bultel <tbultel@free.fr> writes:
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >> What toolchain is this? According to upstream it is could be because of
- >> a binutils bug:
- >> 
- >> https://www.marshut.net/kttspt/build-error-with-218-undefined-reference-to-start-bus-error-map.html
-
- > This happens with buildroot toolchain, eglibc 2.18, gcc-4.8.x,
- > binutils 2.22 It does not happen with binutils-2.23.2 and
- > binutils-2.24
-
-Ok, thanks for investigating it. It won't fix it for external
-toolchains, but perhaps it is time to bump our default binutils version
-to 2.24?
-
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f57012b..b3194d0 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.3.4
++MESA3D_VERSION = 10.3.5
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.7.10.4
