@@ -1,46 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 00:14:40 +0100
-Subject: [Buildroot] [git commit] prboom: fix static linking
-Message-ID: <20141213231637.CF790803D5@busybox.osuosl.org>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sat, 13 Dec 2014 18:07:51 -0600
+Subject: [Buildroot] [PATCH] freetype: add some dependencies
+Message-ID: <548CD4D7.1090808@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f80033bbe7106c9e7447a52bbf83638ac12b8d69
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+freetype needs fenv.h which is not available on uClibc except for x86, add dependencies
 
-Fixes:
-http://autobuild.buildroot.net/results/97b/97bb50add010e44aca8fcb079d8df9270d3cae45/
-http://autobuild.buildroot.net/results/a96/a969fd15a652df96c2414cf0c5f2e345d38e6e6c/
-http://autobuild.buildroot.net/results/9ba/9ba92c01b2c6b6eae2dcda60c2b80d66d2002d4b/
-http://autobuild.buildroot.net/results/776/776394ba89070ee2fa6e81585078df0a0e2ae3f2/
-
-And many more.
-
-SDL_mixer uses symbols from SDL, but ends up after it on the link cmdline,
-breaking static linking. Fix it by forcing the SDL libs at the very end.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 ---
- package/prboom/prboom.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
-
-diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index c39b5a3..7f9d6a0 100644
---- a/package/prboom/prboom.mk
-+++ b/package/prboom/prboom.mk
-@@ -15,6 +15,12 @@ ifeq ($(BR2_PACKAGE_LIBPNG),y)
- PRBOOM_DEPENDENCIES += libpng
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+# SDL_mixer uses symbols from SDL, but ends up after it on the link
-+# cmdline. Fix it by forcing the SDL libs at the very end
-+PRBOOM_CONF_ENV += LIBS="$(shell $(STAGING_DIR)/usr/bin/sdl-config --static-libs)"
-+endif
-+
- PRBOOM_CONF_OPTS = \
- 		--oldincludedir=$(STAGING_DIR)/usr/include \
- 		--with-sdl-prefix=$(STAGING_DIR)/usr \
+Modeled on the python-numpy solution to the same fenv.h problem
+diff -ru buildroot/package/freetype/Config.in buildroot.modified/package/freetype/Config.in
+--- buildroot/package/freetype/Config.in	2014-12-13 17:45:34.547751176 -0600
++++ buildroot.modified/package/freetype/Config.in	2014-12-13 17:43:32.723748839 -0600
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_FREETYPE
+ 	bool "freetype"
++	# freetype needs fenv.h. Available for all architectures in
++	# glibc, but only for x86 and x86-64 in uClibc.
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
+ 	help
+ 	  a free, high-quality and portable font engine.
