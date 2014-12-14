@@ -1,35 +1,48 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 14 Dec 2014 09:33:32 +0100
-Subject: [Buildroot] [PATCH] package/mono: fixing shared/static handling
-In-Reply-To: <87sigjp2if.fsf@dell.be.48ers.dk>
-References: <1418508052-25062-1-git-send-email-angelo.compagnucci@gmail.com>
- <87sigjp2if.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9VnvmaZRiLX2Rke6_bezKUdxYCWiQoOsOvkRKg94m8L0cQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Dec 2014 10:53:29 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/tvheadend: Fix inclusion of DVB
+	frequency tables in bundled build
+Message-ID: <1418550811-15547-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter
 
-2014-12-14 0:13 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
->  > Mono should always be compiled with --enable-static, this patch forces
->  > --enable-static also in case of shared only libraries.
->
-> Why? If it is really required, then mono should depend on
-> !BR2_SHARED_LIBS and show a comment to inform the user that it needs
-> static library support.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: add comment (Thomas)
+    change to --enable-dvbscan, otherwise data files are not included
 
-Mono doesn't really uses shared libraries at all, it ships its own
-glibc (eglib) and its own libmono library, It should be compiled
-statically for this reason, you can find further details here:
-http://www.mono-project.com/docs/compiling-mono/unsupported-advanced-compile-options/#static-vs-dynamic-mono
-.
+ package/tvheadend/tvheadend.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Before the new shared/static handling, --enable-static was always
-passed as a configure option.
-
-Sincerely, Angelo
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index e0ce160..9c93807 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -50,14 +50,20 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--arch="$(ARCH)"			\
+ 			--cpu="$(BR2_GCC_TARGET_CPU)"		\
+ 			--python="$(HOST_DIR)/usr/bin/python"	\
+-			--disable-dvbscan			\
++			--enable-dvbscan			\
+ 			--enable-bundle				\
+ 			--disable-libffmpeg_static		\
+ 			$(TVHEADEND_CONF_OPTS)			\
+ 	)
+ endef
+ 
++# The tvheadend build system expects the transponder data to be present inside
++# its source tree. To prevent a downloaded initiated by the build system just
++# copy the data files in the right place and add the corresponding stamp file.
+ define TVHEADEND_BUILD_CMDS
++	$(INSTALL) -d $(@D)/data/dvb-scan
++	cp -r $(TARGET_DIR)/usr/share/dvb/* $(@D)/data/dvb-scan/
++	touch $(@D)/data/dvb-scan/.stamp
+ 	$(MAKE) -C $(@D)
+ endef
+ 
+-- 
+1.7.10.4
