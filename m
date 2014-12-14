@@ -1,53 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 14:08:18 +0100
-Subject: [Buildroot] [RFC/PATCH v8 09/17] Rename xbmc-addon-xvdr to
-	kodi-addon-xvdr - part I - move files
+Date: Sun, 14 Dec 2014 14:08:20 +0100
+Subject: [Buildroot] [RFC/PATCH v8 11/17] package/kodi-addon-xvdr: Bump
+	version for Helix-compatibility
 In-Reply-To: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1418562506-16669-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1418562506-16669-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1418562506-16669-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In a first step to bump version to Helix move the package
-to its new directory. Because git will not recognize the moved
-files due to many upcoming changes to variable names the move
-is done in this seperate commit.
-
-The "Rename xbmc-addon-xvdr to kodi-addon-xvdr"-patch is split into
-two parts for easier review, please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/{xbmc-addon-xvdr => kodi-addon-xvdr}/Config.in               |    0
- .../xbmc-addon-xvdr.mk => kodi-addon-xvdr/kodi-addon-xvdr.mk}        |    0
- package/kodi/Config.in                                               |    2 +-
- 3 files changed, 1 insertion(+), 1 deletion(-)
- rename package/{xbmc-addon-xvdr => kodi-addon-xvdr}/Config.in (100%)
- rename package/{xbmc-addon-xvdr/xbmc-addon-xvdr.mk => kodi-addon-xvdr/kodi-addon-xvdr.mk} (100%)
+ package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
+ package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+ create mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
 
-diff --git a/package/xbmc-addon-xvdr/Config.in b/package/kodi-addon-xvdr/Config.in
-similarity index 100%
-rename from package/xbmc-addon-xvdr/Config.in
-rename to package/kodi-addon-xvdr/Config.in
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-similarity index 100%
-rename from package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-rename to package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d1286b7..4bc0178 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -237,7 +237,7 @@ config BR2_PACKAGE_KODI_WAVPACK
+diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+new file mode 100644
+index 0000000..6e87b79
+--- /dev/null
++++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+@@ -0,0 +1,19 @@
++Update for Kodi
++
++Ported from OpenELEC:
++https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
++--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
+++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
++@@ -6,7 +6,7 @@
++ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
++ 
++ AC_CONFIG_AUX_DIR(autotools)
++-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
+++AC_PREFIX_DEFAULT(/usr/lib/kodi)
++ 
++ AC_CANONICAL_HOST
++ AC_CANONICAL_TARGET
+diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+index 14b08fe..e05510c 100644
+--- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
++++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- comment "Kodi addons"
- 
--source "package/xbmc-addon-xvdr/Config.in"
-+source "package/kodi-addon-xvdr/Config.in"
- source "package/kodi-pvr-addons/Config.in"
- 
- endif # BR2_PACKAGE_KODI
+-# This cset is on master. When a Gotham branch is made, we should
++# This cset is on master. When a Helix branch is made, we should
+ # follow it, as incompatible changes in the plugins API can happen
+ # on the master branch.
+-KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
++KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
+ KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
+ KODI_ADDON_XVDR_LICENSE = GPLv2+
+ KODI_ADDON_XVDR_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
