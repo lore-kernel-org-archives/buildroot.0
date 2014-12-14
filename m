@@ -1,21 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 17:51:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: bump version to 10.3.5
-In-Reply-To: <1418561578-8323-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sun, 14 Dec 2014 13:52:58 +0100")
-References: <1418561578-8323-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <877fxup439.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Dec 2014 17:55:35 +0100
+Subject: [Buildroot] [PATCH] package/nmap: fix shared-only build
+In-Reply-To: <1418557891-24865-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 14 Dec 2014 12:51:31 +0100")
+References: <1418557891-24865-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87388ip3w8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Changeset f1d3e09 (Build shared libraries only as the default) broke the
+ > nmap package.
 
-Committed, thanks.
+ > nmap builds an internal version of libdnet, and tries to statically link
+ > against it. Of course, this breaks for shared-only builds, since in that
+ > case there is no static lib ever built.
 
+ > Using an external libdnet is not really an option:
+
+ >   - libdnet comes from dnprogs, from the linux-decnet project;
+ >     unfortunately, their build-system is not ammenable to
+ >     cross-compilation, and is a real pain to deal with;
+
+ >   - nmap's bundled libdnet is anyway heavily modified, which precludes
+ >     using an external libdnet.
+
+ > Fix that by considering libdnet to be a purely internal library, and by
+ > configuring it with --enable-static, always.
+
+ > nmap's ./configure uses AC_CONFIG_SUBDIRS() to configure the libdnet
+ > sub-directory; AC_CONFIG_SUBDIRS() calls ./configure in all the
+ > sub-directories it is passed as arguments. Unfortunately, it is not
+ > possible to specify extra ./configure arguments whith AC_CONFIG_SUBDIRS.
+
+ > We are using an autoconf trick, which is, when configuring
+ > sub-directories with AC_CONFIG_SUBDIRS(), it will first try to execute
+ > configure.gnu if it exists, before it fallbacks to running plain
+ > configure. See:
+ >     https://www.gnu.org/software/autoconf/manual/autoconf.html#Subdirectories
+
+ > So, we provide a configure.gnu that is just a wrapper around the real
+ > configure, which sole purpose is to append --enable-static when calling
+ > the real configure.
+
+ > Note1: since this libdnet is considered a purely internal library, we
+ > also always pass --disable-shared, since it is not needed at all.
+
+ > Note2: since this libdnet is considered a purely internal library, it
+ > should not be exposed to other packages, and thus nmap does not install
+ > it, neither in target nor in staging, neither static nor shared, which
+ > is what we want.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Romain Naour <romain.naour@openwide.fr>
+ > ---
+ >  package/nmap/0001-libdnet-wrapper-configure.patch | 11 +++++++++++
+ >  package/nmap/nmap.mk                              |  5 +++++
+ >  2 files changed, 16 insertions(+)
+ >  create mode 100644 package/nmap/0001-libdnet-wrapper-configure.patch
+
+ > +++ b/package/nmap/nmap.mk
+ > @@ -14,6 +14,11 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ >  NMAP_LICENSE = GPLv2
+ >  NMAP_LICENSE_FILES = COPYING
+ 
+I added a comment explaining why we're doing this. It would be nice if
+patch / apply-patches.sh would learn the git permissions / rename
+handling extensions.
+
+Committed with this and the typo pointed out by Romain fixed, thanks.
 -- 
 Bye, Peter Korsgaard
