@@ -1,50 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 10:57:24 +0100
-Subject: [Buildroot] [git commit] package/mono: fixing shared/static handling
-Message-ID: <20141214165629.456627FB7F@busybox.osuosl.org>
+Date: Sun, 14 Dec 2014 17:50:25 +0100
+Subject: [Buildroot] [git commit] legacy: update the BR2_PREFER_STATIC_LIB
+	option
+Message-ID: <20141214165629.50BF180414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00129608c3f61705c723afa1d20a205b9aea73d4
+commit: http://git.buildroot.net/buildroot/commit/?id=a44b1c14055d27d3bec96899c0f8e39d383cdee2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mono should always be compiled with --enable-static, this patch forces
---enable-static also in case of shared only libraries.
+Since the refactoring of the type of libraries in the target filesystem,
+these options belong to a choice, and the default is "shared only".
 
-Fixes:
-http://autobuild.buildroot.net/results/e739d64011fb6a24ccbef136d75944f3bd2eba03/
-http://autobuild.buildroot.net/results/7ebe6909da859507639f57da2d4fee46efc062d4/
-http://autobuild.buildroot.net/results/03c2243080b026b0c6f4bb64e7dc8dc359f0c8c2/
-http://autobuild.buildroot.net/results/406bf830ae84cf9ce4afd5a4ddc265197df42b44/
-http://autobuild.buildroot.net/results/894a3e0627244b5e1980c3840629b4627999d252/
-http://autobuild.buildroot.net/results/2dad2609834564060dc090919c128b45e289102e/
-http://autobuild.buildroot.net/results/46de32cbe68b614763a72303490515f80cfe5bfd/
-http://autobuild.buildroot.net/results/b167d2660ca37b896ceb8f1372d88eda6d6397d7/
-http://autobuild.buildroot.net/results/17b6aee3d0aaf425412f9f5d89de665de9efedb8/
-http://autobuild.buildroot.net/results/af9e5203299819085441fb6ee27e027d58f220b3/
-http://autobuild.buildroot.net/results/138e5bd9bd0e2ad6de13278b446d1a48a9b64b17/
-http://autobuild.buildroot.net/results/b77d52aaa5face5d5b8afe39f9a32a51b1df500f/
+The former option BR2_PREFER_STATIC_LIB has been moved in the legacy
+menu, and only selects the BR2_STATIC_LIBS ("static only") option.
+However, because BR2_STATIC_LIBS belongs to a choice, when
+BR2_PREFER_STATIC_LIB is selected, it does not affect the choice.
+So, existing Buildroot configurations, which have BR2_PREFER_STATIC_LIB
+set, will silently end with BR2_SHARED_LIBS ("shared only") enabled.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+So, the backward compatibility is not kept.
+
+Besides, the legacy BR2_PREFER_STATIC_LIB option does not select
+BR2_LEGACY, so the user is not notified of this legacy option, and the
+build silently continues with some undesired changes.
+
+This patch removes the inefficient BR2_STATIC_LIBS selection, correctly
+selects the BR2_LEGACY option and extend the help message so the user
+can easily know how to update his/her Buildroot configuration.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mono/mono.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ Config.in.legacy |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index baf205a..3d50ac1 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -24,7 +24,8 @@ MONO_CONF_OPTS = --disable-gtk-doc \
- 	--disable-libraries \
- 	--with-ikvm-native=no \
- 	--enable-minimal=aot,profiler,debug \
--	--disable-mcs-build
-+	--disable-mcs-build \
-+	--enable-static
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 09c025c..a969662 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -104,13 +104,16 @@ comment "Legacy options removed in 2015.02"
  
- # The libraries have been built by the host-mono build. Since they are
- # architecture-independent, we simply copy them to the target.
+ config BR2_PREFER_STATIC_LIB
+ 	bool "static library option renamed"
+-	select BR2_STATIC_LIBS
++	select BR2_LEGACY
+ 	help
+ 	  The BR2_PREFER_STATIC_LIB was renamed to BR2_STATIC_LIBS. It
+ 	  highlights the fact that the option no longer "prefers"
+ 	  static libraries, but "enforces" static libraries (i.e
+ 	  shared libraries are completely unused).
+ 
++	  Take care of updating the type of libraries you want under the
++	  "Build options" menu.
++
+ comment "Legacy options removed in 2014.11"
+ 
+ config BR2_x86_generic
