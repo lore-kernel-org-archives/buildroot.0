@@ -1,90 +1,73 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 14 Dec 2014 15:45:31 +0100
-Subject: [Buildroot] [PATCH] package/nmap: fix shared-only build
-In-Reply-To: <1418557891-24865-1-git-send-email-yann.morin.1998@free.fr>
-References: <1418557891-24865-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <548DA28B.8040207@openwide.fr>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Sun, 14 Dec 2014 16:28:16 +0100
+Subject: [Buildroot] [PATCH] samba: Swap libnss_win*.so* files and symlinks
+Message-ID: <1418570896-3302-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+The libnss_wins and libnss_winbind libraries were installed in this way:
+/lib/libnss_<service>.so
+/lib/libnss_<service>.so.<major> -> /lib/libnss_<service>.so
 
-Le 14/12/2014 12:51, Yann E. MORIN a ?crit :
-> Changeset f1d3e09 (Build shared libraries only as the default) broke the
-> nmap package.
-> 
-> nmap builds an internal version of libdnet, and tries to statically link
-> against it. Of course, this breaks for shared-only builds, since in that
-> case there is no static lib ever built.
-> 
-> Using an external libdnet is not really an option:
-> 
->   - libdnet comes from dnprogs, from the linux-decnet project;
->     unfortunately, their build-system is not ammenable to
+This had been done like this in order to get something similar to the
+other NSS libraries, which are usually installed in this way:
+/lib/libnss_<service>-<version>.so
+/lib/libnss_<service>.so.<major> -> /lib/libnss_<service>-<version>.so
 
-s/ammenable/amenable
+However, besides these files, these other NSS libraries usually come
+installed with:
+/usr/lib/libnss_<service>.so -> /lib/libnss_<service>.so.<major>
 
->     cross-compilation, and is a real pain to deal with;
-> 
->   - nmap's bundled libdnet is anyway heavily modified, which precludes
->     using an external libdnet.
-> 
-> Fix that by considering libdnet to be a purely internal library, and by
-> configuring it with --enable-static, always.
-> 
-> nmap's ./configure uses AC_CONFIG_SUBDIRS() to configure the libdnet
-> sub-directory; AC_CONFIG_SUBDIRS() calls ./configure in all the
-> sub-directories it is passed as arguments. Unfortunately, it is not
-> possible to specify extra ./configure arguments whith AC_CONFIG_SUBDIRS.
-> 
-> We are using an autoconf trick, which is, when configuring
-> sub-directories with AC_CONFIG_SUBDIRS(), it will first try to execute
-> configure.gnu if it exists, before it fallbacks to running plain
-> configure. See:
->     https://www.gnu.org/software/autoconf/manual/autoconf.html#Subdirectories
-> 
-> So, we provide a configure.gnu that is just a wrapper around the real
-> configure, which sole purpose is to append --enable-static when calling
-> the real configure.
-> 
-> Note1: since this libdnet is considered a purely internal library, we
-> also always pass --disable-shared, since it is not needed at all.
-> 
-> Note2: since this libdnet is considered a purely internal library, it
-> should not be exposed to other packages, and thus nmap does not install
-> it, neither in target nor in staging, neither static nor shared, which
-> is what we want.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> ---
+This means that the NSS libraries follow the usual library installation
+practice, i.e. that the non-versioned .so is a symlink to the versioned
+.so, so that switching versions is easy. In the case of the NSS
+libraries, the versioned .so is just also a symlink to a .so with a more
+accurate version.
 
-Thanks for your help during investigation about this issue.
+Hence, follow the same rules for libnss_win*.so*, and install these
+libraries the other way around:
+/lib/libnss_<service>.so -> /lib/libnss_<service>.so.<major>
+/lib/libnss_<service>.so.<major>
 
-Indeed, the static build for libdnet must forced for shared-only case.
+This is also how these libraries are installed by a major OS like Ubuntu
+14.10:
+/lib/x86_64-linux-gnu/libnss_winbind.so -> libnss_winbind.so.2
+/lib/x86_64-linux-gnu/libnss_winbind.so.2
+/lib/x86_64-linux-gnu/libnss_wins.so -> libnss_wins.so.2
+/lib/x86_64-linux-gnu/libnss_wins.so.2
 
-Acked-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
+---
+ package/samba/samba.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On my side, I tried to use an external liblinear library instead of the bundled
-one. It appears that the nmap's external liblinear library support is broken and
-never tested. Also bundled liblinear contains some modifications to be able to
-build a static library.
-
-But, as you said, since nmap properly builds liblinear, there's no reason to
-package it in Buildroot for now.
-
-So, liblinear like libdnet, must be considered as a purely internal library.
-
-Best regards,
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 0e4db95..d25e94e 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -137,16 +137,16 @@ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
+ 
+ ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINS),y)
+ define SAMBA_INSTALL_LIBNSS_WINS
+-	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so
+-	ln -snf libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
++	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
++	ln -snf libnss_wins.so.2 $(TARGET_DIR)/lib/libnss_wins.so
+ endef
+ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINS
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINBIND),y)
+ define SAMBA_INSTALL_LIBNSS_WINBIND
+-	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so
+-	ln -snf libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so.2
++	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so.2
++	ln -snf libnss_winbind.so.2 $(TARGET_DIR)/lib/libnss_winbind.so
+ endef
+ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINBIND
+ endif
 -- 
-Romain Naour
-
-OPEN WIDE Ing?nierie - Paris
-23/25, rue Daviel| 75013 PARIS
-http://ingenierie.openwide.fr
-
-Le blog des technologies libres et embarqu?es :
-http://www.linuxembedded.fr
+2.1.0
