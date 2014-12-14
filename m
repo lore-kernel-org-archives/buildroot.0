@@ -1,50 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Dec 2014 19:16:31 +0100
+Date: Sun, 14 Dec 2014 19:21:34 +0100
 Subject: [Buildroot] [PATCH] package/faad2: add hash
-In-Reply-To: <XnsA403BE33C127EberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+In-Reply-To: <87tx0ynlx1.fsf@dell.be.48ers.dk>
 References: <1418578396-11893-1-git-send-email-yann.morin.1998@free.fr>
  <XnsA403BE33C127EberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20141214181631.GC4121@free.fr>
+ <87tx0ynlx1.fsf@dell.be.48ers.dk>
+Message-ID: <20141214182134.GD4121@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Peter, All,
 
-On 2014-12-14 18:41 +0100, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:1418578396-11893-1-git-send-email-yann.morin.1998 at free.fr:
+On 2014-12-14 19:09 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 > 
-> > +++ b/package/faad2/faad2.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally computed
-> > +sha256  ee26ed1e177c0cd8fa8458a481b14a0b24ca0b51468c8b4c8b676fd3ceccd330  faad2-2.7.tar.gz
-> just a small note because the buildroot doc says hash values provided by 
-> upstream are prefered:
+>  > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+>  > news:1418578396-11893-1-git-send-email-yann.morin.1998 at free.fr:
+> 
+>  >> +++ b/package/faad2/faad2.hash
+>  >> @@ -0,0 +1,2 @@
+>  >> +# Locally computed
+>  >> +sha256  ee26ed1e177c0cd8fa8458a481b14a0b24ca0b51468c8b4c8b676fd3ceccd330  
+>  > faad2-2.7.tar.gz
+> 
+>  > Hi,
+> 
+>  > just a small note because the buildroot doc says hash values provided by 
+>  > upstream are prefered:
+> 
+>  > Looking at http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.7/ 
+>  > you can click on the "i" button of faad2-2.7.tar.bz2 to display its md5/sha1 
+>  > values, they could be added to our hash file instead of a locally computed 
+>  > hash.
+> 
+> Indeed, similar to how I did it for liblo in b08c503b244d37. Yann, will
+> you respin the patch?
 
-Indeed.
-
-> Looking at http://sourceforge.net/projects/faac/files/faad2-src/faad2-2.7/ 
-> you can click on the "i" button of faad2-2.7.tar.bz2 to display its md5/sha1 
-> values, they could be added to our hash file instead of a locally computed 
-> hash.
-
-OK, but it is not straight-forward. Upstream as we document it is:
-    http://www.audiocoding.com/faad2.html
-
-and they have no hash that I could find on that website.
-
-But they point the downloads to the sourceforge page.
-
-However, I'm a bit reluctant at using hashes published by a third-party.
-I guess we cn add them, plus our locally computed sha256.
-
-Thanks for pointing this.
+Yes, almost done. ;-)
 
 Regards,
 Yann E. MORIN.
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
