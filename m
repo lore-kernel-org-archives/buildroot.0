@@ -1,60 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Dec 2014 17:04:40 +0100
-Subject: [Buildroot] [PATCH 5/5] pckage/ncurses: fix pkg-config files for
-	ncursesw
-In-Reply-To: <cover.1418572993.git.yann.morin.1998@free.fr>
-References: <cover.1418572993.git.yann.morin.1998@free.fr>
-Message-ID: <50b4b144f7de56b1d0a60ec133c6fbf89c265dc3.1418572993.git.yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 14 Dec 2014 17:08:30 +0100
+Subject: [Buildroot] [PATCH] legacy: update the BR2_PREFER_STATIC_LIB option
+Message-ID: <1418573310-24250-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, ncurses creates symlinks from the non-'w' variants to the
-equivalent 'w' variant, but forgets to do so for pkg-config files.
+Since the refactoring of the type of libraries in the target filesystem,
+these options belong to a choice, and the default is "shared only".
 
-Do that for the pkg-config files too.
+The former option BR2_PREFER_STATIC_LIB has been moved in the legacy
+menu, and only selects the BR2_STATIC_LIBS ("static only") option.
+However, because BR2_STATIC_LIBS belongs to a choice, when
+BR2_PREFER_STATIC_LIB is selected, it does not affect the choice.
+So, existing Buildroot configurations, which have BR2_PREFER_STATIC_LIB
+set, will silently end with BR2_SHARED_LIBS ("shared only") enabled.
 
-Should fix numerous autobuild failures:
-    http://autobuild.buildroot.net/results/3c4/3c44dfc6e3f151bef751f39cac336fef3d6a0099/
-    http://autobuild.buildroot.net/results/38c/38c81407bb8d0677e87b3a01f9a1fc1372ab4738/
-    ...
+So, the backward compatibility is not kept.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Besides, the legacy BR2_PREFER_STATIC_LIB option doesn not select
+BR2_LEGACY, so the user is not notify of this legacy option, and the
+build silently continues with some undesired changes.
+
+This patch removes the inefficient BR2_STATIC_LIBS selection, correctly
+selects the BR2_LEGACY option and extend the hepl message so the user
+can easily know how to update his/her Buildroot configuration.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ncurses/ncurses.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Config.in.legacy | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 9b660fd..7febed6 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -70,6 +70,13 @@ define NCURSES_LINK_LIBS_SHARED
- 		$(1)/usr/lib/libcurses.so
- endef
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 09c025c..a969662 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -104,13 +104,16 @@ comment "Legacy options removed in 2015.02"
  
-+define NCURSES_LINK_PC
-+	for pc in $(NCURSES_LIBS-y); do \
-+		ln -sf $${pc}$(NCURSES_LIB_SUFFIX).pc \
-+			$(1)/usr/lib/pkgconfig/$${pc}.pc; \
-+	done
-+endef
+ config BR2_PREFER_STATIC_LIB
+ 	bool "static library option renamed"
+-	select BR2_STATIC_LIBS
++	select BR2_LEGACY
+ 	help
+ 	  The BR2_PREFER_STATIC_LIB was renamed to BR2_STATIC_LIBS. It
+ 	  highlights the fact that the option no longer "prefers"
+ 	  static libraries, but "enforces" static libraries (i.e
+ 	  shared libraries are completely unused).
+ 
++	  Take care of updating the type of libraries you want under the
++	  "Build options" menu.
 +
- NCURSES_LINK_TARGET_LIBS = \
- 	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR))) \
- 	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(TARGET_DIR)))
-@@ -77,7 +84,10 @@ NCURSES_LINK_STAGING_LIBS = \
- 	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR))) \
- 	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(STAGING_DIR)))
+ comment "Legacy options removed in 2014.11"
  
-+NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
-+
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
-+NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
- 
- endif
- 
+ config BR2_x86_generic
 -- 
-1.9.1
+2.1.3
