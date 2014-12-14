@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Dec 2014 10:53:30 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/tvheadend: Bump version
+Date: Sun, 14 Dec 2014 10:53:31 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/tvheadend: rename patches to new
+	convention
 In-Reply-To: <1418550811-15547-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1418550811-15547-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1418550811-15547-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1418550811-15547-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: bump to current git
+v2: initial version
 
- package/tvheadend/tvheadend.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...{tvheadend-002-no-check_config.patch => 0001-no-check_config.patch} |    0
+ .../{tvheadend-003-remove-werror.patch => 0002-remove-werror.patch}    |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/tvheadend/{tvheadend-002-no-check_config.patch => 0001-no-check_config.patch} (100%)
+ rename package/tvheadend/{tvheadend-003-remove-werror.patch => 0002-remove-werror.patch} (100%)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 9c93807..f1c3921 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = fcd16fa0d835d7fd4f57c350ed8b76350440c68c
-+TVHEADEND_VERSION = 388f57ecc32a3b631de2ff9c200cd398322a27bf
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+diff --git a/package/tvheadend/tvheadend-002-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
+similarity index 100%
+rename from package/tvheadend/tvheadend-002-no-check_config.patch
+rename to package/tvheadend/0001-no-check_config.patch
+diff --git a/package/tvheadend/tvheadend-003-remove-werror.patch b/package/tvheadend/0002-remove-werror.patch
+similarity index 100%
+rename from package/tvheadend/tvheadend-003-remove-werror.patch
+rename to package/tvheadend/0002-remove-werror.patch
 -- 
 1.7.10.4
