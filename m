@@ -1,46 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Dec 2014 19:48:22 +0100
-Subject: [Buildroot] [git commit] package/w_scan: needs headers >= 3.7
-Message-ID: <20141214194750.5AF79803EC@busybox.osuosl.org>
+Date: Sun, 14 Dec 2014 20:47:20 +0100
+Subject: [Buildroot] [git commit] iprutils: use correct include path for
+	ncurses
+Message-ID: <20141214194750.740948040E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ca3ad0edbadf95e67910deffaf039a2cc155d87
+commit: http://git.buildroot.net/buildroot/commit/?id=02f7dd34938f5f165c73f9f1e54bf55b2015be31
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-w_scan uses FEC_2_5, introduced in Linux 3.7.
+The Makefile is hardcoded for /usr/include/ncurses, so override it.
 
-Also fix the comment, that was stuck to headers 3.0 when we were
-requesting headers >= 3.3.
-
-Fixes:
-    http://autobuild.buildroot.org/results/bb9/bb97bff1bf7774ebd43ba2107d84520538e530cf/
-    http://autobuild.buildroot.org/results/9c2/9c28dcaf3d3bb65977d565e4fbbc25d51d45ac41/
-    ...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/w_scan/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/iprutils/iprutils.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
-index 23d178a..2d4f634 100644
---- a/package/w_scan/Config.in
-+++ b/package/w_scan/Config.in
-@@ -1,9 +1,9 @@
--comment "w_scan needs a toolchain w/ headers >= 3.0"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+comment "w_scan needs a toolchain w/ headers >= 3.7"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+index 53516b6..35bffa3 100644
+--- a/package/iprutils/iprutils.mk
++++ b/package/iprutils/iprutils.mk
+@@ -12,7 +12,8 @@ IPRUTILS_LICENSE = Common Public License Version 1.0
+ IPRUTILS_LICENSE_FILES = LICENSE
  
- config BR2_PACKAGE_W_SCAN
- 	bool "w_scan"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  w_scan is a small command line utility used to perform frequency
+ define IPRUTILS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
++		INCLUDEDIR="-I. $(shell $(STAGING_DIR)/usr/bin/ncurses5-config --cflags)" all
+ endef
+ 
+ define IPRUTILS_INSTALL_TARGET_CMDS
