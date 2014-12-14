@@ -1,73 +1,53 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Sun, 14 Dec 2014 16:28:16 +0100
-Subject: [Buildroot] [PATCH] samba: Swap libnss_win*.so* files and symlinks
-Message-ID: <1418570896-3302-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Dec 2014 17:04:36 +0100
+Subject: [Buildroot] [PATCH 0/5] gpsd: fix shared-only build (branch
+	yem/autobuild)
+Message-ID: <cover.1418572993.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libnss_wins and libnss_winbind libraries were installed in this way:
-/lib/libnss_<service>.so
-/lib/libnss_<service>.so.<major> -> /lib/libnss_<service>.so
+Hello All!
 
-This had been done like this in order to get something similar to the
-other NSS libraries, which are usually installed in this way:
-/lib/libnss_<service>-<version>.so
-/lib/libnss_<service>.so.<major> -> /lib/libnss_<service>-<version>.so
+This series fixes gpsd for the shared-only case.
 
-However, besides these files, these other NSS libraries usually come
-installed with:
-/usr/lib/libnss_<service>.so -> /lib/libnss_<service>.so.<major>
+The real culprit is in fact ncurses, that does not install the appropriate
+symlinks for pkg-config files when it is configured for wide-chars
 
-This means that the NSS libraries follow the usual library installation
-practice, i.e. that the non-versioned .so is a symlink to the versioned
-.so, so that switching versions is easy. In the case of the NSS
-libraries, the versioned .so is just also a symlink to a .so with a more
-accurate version.
+Regards,
+Yann E. MORIN.
 
-Hence, follow the same rules for libnss_win*.so*, and install these
-libraries the other way around:
-/lib/libnss_<service>.so -> /lib/libnss_<service>.so.<major>
-/lib/libnss_<service>.so.<major>
 
-This is also how these libraries are installed by a major OS like Ubuntu
-14.10:
-/lib/x86_64-linux-gnu/libnss_winbind.so -> libnss_winbind.so.2
-/lib/x86_64-linux-gnu/libnss_winbind.so.2
-/lib/x86_64-linux-gnu/libnss_wins.so -> libnss_wins.so.2
-/lib/x86_64-linux-gnu/libnss_wins.so.2
+The following changes since commit 2fbf0a98ad3f4ae10f0c0d76d4181d2271d9789d:
 
-Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
----
- package/samba/samba.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+  package/nmap: fix shared-only build (2014-12-14 12:51:26 +0100)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 0e4db95..d25e94e 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -137,16 +137,16 @@ SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
- 
- ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINS),y)
- define SAMBA_INSTALL_LIBNSS_WINS
--	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so
--	ln -snf libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
-+	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
-+	ln -snf libnss_wins.so.2 $(TARGET_DIR)/lib/libnss_wins.so
- endef
- SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINS
- endif
- 
- ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINBIND),y)
- define SAMBA_INSTALL_LIBNSS_WINBIND
--	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so
--	ln -snf libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so.2
-+	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so.2
-+	ln -snf libnss_winbind.so.2 $(TARGET_DIR)/lib/libnss_winbind.so
- endef
- SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINBIND
- endif
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/autobuild
+
+for you to fetch changes up to 50b4b144f7de56b1d0a60ec133c6fbf89c265dc3:
+
+  pckage/ncurses: fix pkg-config files for ncursesw (2014-12-14 17:02:35 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/gpsd: remove duplicate dependency
+      package/ncurses: fix shared-only libs
+      package/ncurses: slight code re-arrangement
+      package/ncurses: trim leading 'lib' from definition of libs to install
+      pckage/ncurses: fix pkg-config files for ncursesw
+
+ package/gpsd/gpsd.mk       |  2 +-
+ package/ncurses/ncurses.mk | 46 +++++++++++++++++++++++++++-------------------
+ 2 files changed, 28 insertions(+), 20 deletions(-)
+
 -- 
-2.1.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
