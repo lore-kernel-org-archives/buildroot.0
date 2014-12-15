@@ -1,62 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Dec 2014 22:03:06 +0100
-Subject: [Buildroot] [git commit] libyaml: add security patch for
-	CVE-2014-9130
-Message-ID: <20141215211812.E0A3580407@busybox.osuosl.org>
+Date: Mon, 15 Dec 2014 22:14:50 +0100
+Subject: [Buildroot] [git commit] package/ncurses: trim leading 'lib' from
+	definition of libs to install
+Message-ID: <20141215211813.1858F80425@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e91d3ca42c008ff860468a249177c6efdd397be9
+commit: http://git.buildroot.net/buildroot/commit/?id=19569281dd7e1482908b5bfb6e0d928bdf246008
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes: assert failure when processing wrapped strings (CVE-2014-9130).
-See https://bugzilla.redhat.com/show_bug.cgi?id=1169369
+Currently, ncurses creates symlinks from the non-'w' variants to the
+equivalent 'w' variant, but forgets to do so for pkg-config files.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+To be able to share the same list between the libraries and the
+pkg-config files to symlink, just trim the 'lib' prefix of libraries in
+the definition, and just add it back at the time we need it.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libyaml/0001-fix-CVE-2014-9130.patch |   33 ++++++++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
+ package/ncurses/ncurses.mk |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libyaml/0001-fix-CVE-2014-9130.patch b/package/libyaml/0001-fix-CVE-2014-9130.patch
-new file mode 100644
-index 0000000..a267e40
---- /dev/null
-+++ b/package/libyaml/0001-fix-CVE-2014-9130.patch
-@@ -0,0 +1,33 @@
-+From e6aa721cc0e5a48f408c52355559fd36780ba32a Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Ingy=20d=C3=B6t=20Net?= <ingy@ingy.net>
-+Date: Fri, 28 Nov 2014 09:21:49 -0800
-+Subject: [PATCH] Fix for https://bitbucket.org/xi/libyaml/issue/10/
-+
-+https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
-+
-+Commenting out the assert makes the scanner do the right thing and
-+results in just a simple parse failure.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/scanner.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/scanner.c b/src/scanner.c
-+index 88d4fa5..c5f3d2f 100644
-+--- a/src/scanner.c
-++++ b/src/scanner.c
-+@@ -1110,7 +1110,9 @@ yaml_parser_save_simple_key(yaml_parser_t *parser)
-+      * line.  Therefore it is always allowed.  But we add a check anyway.
-+      */
-+ 
-+-    assert(parser->simple_key_allowed || !required);    /* Impossible. */
-++    /* XXX This caused:
-++     * https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
-++    assert(parser->simple_key_allowed || !required); */    /* Impossible. */
-+ 
-+     /*
-+      * If the current position may start a simple key, save it.
-+-- 
-+2.0.4
-+
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index b870aa4..9b660fd 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -43,17 +43,17 @@ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ NCURSES_CONF_OPTS += --with-shared --with-normal
+ endif
+ 
+-NCURSES_LIBS-y = libncurses
+-NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
+-NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
+-NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += libform
++NCURSES_LIBS-y = ncurses
++NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
++NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
++NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ NCURSES_CONF_OPTS += --enable-widec
+ NCURSES_LIB_SUFFIX = w
+ 
+ define NCURSES_LINK_LIBS_STATIC
+-	for lib in $(NCURSES_LIBS-y); do \
++	for lib in $(NCURSES_LIBS-y:%=lib%); do \
+ 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
+ 			$(1)/usr/lib/$${lib}.a; \
+ 	done
+@@ -62,7 +62,7 @@ define NCURSES_LINK_LIBS_STATIC
+ endef
+ 
+ define NCURSES_LINK_LIBS_SHARED
+-	for lib in $(NCURSES_LIBS-y); do \
++	for lib in $(NCURSES_LIBS-y:%=lib%); do \
+ 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
+ 			$(1)/usr/lib/$${lib}.so; \
+ 	done
+@@ -95,7 +95,7 @@ endef
+ 
+ ifneq ($(BR2_STATIC_LIBS),y)
+ define NCURSES_INSTALL_TARGET_LIBS
+-	for lib in $(NCURSES_LIBS-y); do \
++	for lib in $(NCURSES_LIBS-y:%=lib%); do \
+ 		cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
+ 			$(TARGET_DIR)/usr/lib/; \
+ 	done
