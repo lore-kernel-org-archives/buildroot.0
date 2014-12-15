@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Dec 2014 22:04:09 +0100
-Subject: [Buildroot] [PATCH] libyaml: add security patch for
-	CVE-2014-9130
-In-Reply-To: <1418676910-2361-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 15 Dec 2014 17:55:10 -0300")
-References: <1418676910-2361-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ppbklj5i.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Dec 2014 22:11:17 +0100
+Subject: [Buildroot] [PATCH 1/5] package/gpsd: remove duplicate
+	dependency
+In-Reply-To: <07a14a0db8c7fb6e87dea83670fd7b9d53bb1267.1418572993.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 14 Dec 2014 17:04:36 +0100")
+References: <cover.1418572993.git.yann.morin.1998@free.fr>
+ <07a14a0db8c7fb6e87dea83670fd7b9d53bb1267.1418572993.git.yann.morin.1998@free.fr>
+Message-ID: <87lhm8litm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes: assert failure when processing wrapped strings (CVE-2014-9130).
- > See https://bugzilla.redhat.com/show_bug.cgi?id=1169369
+ > No need to duplicate the host-pkgconf dependency on the Qt case, we
+ > already depend on it in the general case.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
