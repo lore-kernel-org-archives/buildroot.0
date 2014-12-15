@@ -1,50 +1,42 @@
-From: Steve James <ste@junkomatic.net>
-Date: Mon, 15 Dec 2014 13:44:14 +0000
-Subject: [Buildroot] [PATCH] snappy: add dependency on host-pkgconf
-Message-ID: <201412151344.14441.ste@junkomatic.net>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 15 Dec 2014 09:27:37 -0500
+Subject: [Buildroot] [PATCH] erlang: bump to version 17.4
+In-Reply-To: <87mw6pmmk2.fsf@dell.be.48ers.dk>
+References: <1418411483-29636-1-git-send-email-fhunleth@troodon-software.com>
+ <87vblfrkao.fsf@dell.be.48ers.dk> <87mw6pmmk2.fsf@dell.be.48ers.dk>
+Message-ID: <CA+-urNSCA9fjcOoT46FSV81168k1wHvwB=8tcKshuJwUgpx=xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Steve James <ste@junkomatic.net>
+On Mon, Dec 15, 2014 at 1:53 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>
+>>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+>  >> Erlang/OTP 17.4 is a service release on the 17 track with mostly bug
+>  >> fixes, but it does contain a number of new features and characteristics
+>  >> improvements as well.
+>
+>  >> Some highlights of the release are:
+>
+>  >> - eldap: Nearly all TCP options are possible to give in the
+>  >> eldap:open/2 call.
+>  >> - ssh: Added API functions ptty_alloc/3 and ptty_alloc/4, to allocate a
+>  >> pseudo tty.
+>  >> - ssl: Handle servers that may send an empty SNI extension to the client.
+>
+>  >> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>
+>  > Committed, thanks.
+>
+> It seems to cause some build issues on ARM. Care to take a look?
+>
+> http://autobuild.buildroot.net/?reason=erlang-17.4
 
----
-Hello all. First Buildroot patch :-)
+Ugh, it worked on my ARM. :( I'll see if I can figure out the issue
+when I get a chance later today.
 
-(This was discovered when adding leveldb which requires snappy. This missing
-dependency is exposed when selection of this package is the only non-default
-configuration choice ie you're not getting host-pkgconf via some other non-
-default choice.)
-
-Snappy doesn't configure without host pkg-config. The diagnostic from autoconf
-is totally unhelpful, so for the benefit of others who might need this
-prerequisite, when autoconf says this...
-
-  configure.ac:42: error: possibly undefined macro: AC_DEFINE
-        If this token and others are legitimate, please use m4_pattern_allow.
-        See the Autoconf documentation.
-  configure.ac:44: error: possibly undefined macro: AC_MSG_FAILURE
-
-The solution is (probably) to add host-pkgconf to the packages's DEPENDENCIES
-list.
-
-
- package/snappy/snappy.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index fd89325..6bda7ce 100644
---- a/package/snappy/snappy.mk
-+++ b/package/snappy/snappy.mk
-@@ -10,6 +10,7 @@ SNAPPY_LICENSE = BSD-3c
- SNAPPY_LICENSE_FILES = COPYING
- # from git
- SNAPPY_AUTORECONF = YES
-+SNAPPY_DEPENDENCIES = host-pkgconf
- SNAPPY_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+Thanks,
+Frank
