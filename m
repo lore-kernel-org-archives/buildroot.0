@@ -1,84 +1,121 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Dec 2014 15:32:12 +0100
-Subject: [Buildroot] [PATCH] python-enum: new package
-Message-ID: <1418653932-6341-1-git-send-email-peter@korsgaard.com>
+From: Steve James <ste@junkomatic.net>
+Date: Mon, 15 Dec 2014 15:41:19 +0000
+Subject: [Buildroot] [PATCH] leveldb: new package
+Message-ID: <201412151541.19296.ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is an alternative to python-enum34 with a somewhat different API.
+Adds new package: leveldb
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  LevelDB is a fast key-value storage library written at Google that
+  provides an ordered mapping from string keys to string values.
+
+Signed-off-by: Steve James <ste@junkomatic.net>
 ---
- package/Config.in                    |  1 +
- package/python-enum/Config.in        | 12 ++++++++++++
- package/python-enum/python-enum.hash |  3 +++
- package/python-enum/python-enum.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-enum/Config.in
- create mode 100644 package/python-enum/python-enum.hash
- create mode 100644 package/python-enum/python-enum.mk
+ package/Config.in                           |    1 +
+ package/leveldb/001-ssize_t-undefined.patch |   17 ++++++++++++++
+ package/leveldb/Config.in                   |   12 ++++++++++
+ package/leveldb/leveldb.mk                  |   34 +++++++++++++++++++++++++++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 package/leveldb/001-ssize_t-undefined.patch
+ create mode 100644 package/leveldb/Config.in
+ create mode 100644 package/leveldb/leveldb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 48be2df..f3bf25b 100644
+index 48be2df..cd1f76b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -496,6 +496,7 @@ menu "external python modules"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-docopt/Config.in"
- 	source "package/python-dpkt/Config.in"
-+	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flup/Config.in"
-diff --git a/package/python-enum/Config.in b/package/python-enum/Config.in
+@@ -624,6 +624,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/leveldb/Config.in"
+ 	source "package/mysql/Config.in"
+ 	source "package/postgresql/Config.in"
+ 	source "package/redis/Config.in"
+diff --git a/package/leveldb/001-ssize_t-undefined.patch b/package/leveldb/001-ssize_t-undefined.patch
 new file mode 100644
-index 0000000..e26ae8b
+index 0000000..9a958d8
 --- /dev/null
-+++ b/package/python-enum/Config.in
++++ b/package/leveldb/001-ssize_t-undefined.patch
+@@ -0,0 +1,17 @@
++Fix leveldb issue 233 leveldb does not compile with g++ 4.8.2
++
++Where db_iter.cc fails to get a typedef for ssize_t when compiled by GCC.
++
++Upstream-Status: Submitted [https://github.com/google/leveldb/issues/233]
++Signed-off-by: Steve James <ste@junkomatic.net>
++
++--- a/db/db_iter.cc.orig	2014-12-08 16:54:31.384615752 +0000
+++++ b/db/db_iter.cc	2014-12-08 16:54:35.464656890 +0000
++@@ -13,6 +13,7 @@
++ #include "util/logging.h"
++ #include "util/mutexlock.h"
++ #include "util/random.h"
+++#include <sys/types.h> // for ssize_t
++ 
++ namespace leveldb {
++ 
+diff --git a/package/leveldb/Config.in b/package/leveldb/Config.in
+new file mode 100644
+index 0000000..fffd44b
+--- /dev/null
++++ b/package/leveldb/Config.in
 @@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_ENUM
-+	bool "python-enum"
-+	depends on BR2_PACKAGE_PYTHON
++config BR2_PACKAGE_LEVELDB
++	bool "leveldb"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_SNAPPY
 +	help
-+	  Robust enumerated type support in Python
++	  LevelDB is a fast key-value storage library written at Google that
++	  provides an ordered mapping from string keys to string values.
 +
-+	  An enumeration object is an immutable sequence object built
-+	  from a sequence of strings. Each value is also available as
-+	  an attribute. Such values are constant. Comparisons and
-+	  enumeration are supported.
++	  https://github.com/google/leveldb
 +
-+	  https://pypi.python.org/pypi/enum
-diff --git a/package/python-enum/python-enum.hash b/package/python-enum/python-enum.hash
++comment "leveldb needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
 new file mode 100644
-index 0000000..c7c1924
+index 0000000..d11ef59
 --- /dev/null
-+++ b/package/python-enum/python-enum.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ce75c7c3c86741175a84456cc5bd531e, sha256 locally computed
-+md5	ce75c7c3c86741175a84456cc5bd531e  enum-0.4.4.tar.gz
-+sha256	9bdfacf543baf2350df7613eb37f598a802f346985ca0dc1548be6494140fdff  enum-0.4.4.tar.gz
-diff --git a/package/python-enum/python-enum.mk b/package/python-enum/python-enum.mk
-new file mode 100644
-index 0000000..0131be3
---- /dev/null
-+++ b/package/python-enum/python-enum.mk
-@@ -0,0 +1,14 @@
++++ b/package/leveldb/leveldb.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+# python-enum
++# leveldb
 +#
 +################################################################################
 +
-+PYTHON_ENUM_VERSION = 0.4.4
-+PYTHON_ENUM_SOURCE = enum-$(PYTHON_ENUM_VERSION).tar.gz
-+PYTHON_ENUM_SITE = http://pypi.python.org/packages/source/e/enum
-+PYTHON_ENUM_SETUP_TYPE = setuptools
-+PYTHON_ENUM_LICENSE = GPLv2+ or Python software foundation license v2
-+PYTHON_ENUM_LICENSE_FILES = LICENSE.GPL LICENSE.PSF
++LEVELDB_VERSION = 1.18
++LEVELDB_SITE = https://github.com/google/leveldb/archive/
++LEVELDB_SOURCE = v$(LEVELDB_VERSION).tar.gz
++LEVELDB_LICENSE = BSD-3c
++LEVELDB_LICENSE_FILES = LICENSE
++LEVELDB_INSTALL_STAGING = YES
++LEVELDB_DEPENDENCIES = snappy
 +
-+$(eval $(python-package))
++define LEVELDB_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" -C $(@D) all
++endef
++
++define LEVELDB_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/libleveldb.a       $(STAGING_DIR)/usr/lib
++	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
++	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
++	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
++	$(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h $(STAGING_DIR)/usr/include/leveldb
++endef
++
++define LEVELDB_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
++	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
++	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
++endef
++
++$(eval $(generic-package))
 -- 
-2.1.3
+1.7.10.4
