@@ -1,257 +1,119 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 15 Dec 2014 18:06:44 +0100
-Subject: [Buildroot] [PATCH v4] libiio: new package
-In-Reply-To: <1418661995-29711-1-git-send-email-paul.cercueil@analog.com>
-References: <1418661995-29711-1-git-send-email-paul.cercueil@analog.com>
-Message-ID: <CAHXCMM+vhzu1fXsT9QHqH5OZGdzr4fhj6-mo74DvLwXHNffXBQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 15 Dec 2014 18:37:26 +0100
+Subject: [Buildroot] [PATCH] snappy: add dependency on host-pkgconf
+In-Reply-To: <201412151344.14441.ste@junkomatic.net>
+References: <201412151344.14441.ste@junkomatic.net>
+Message-ID: <20141215173726.GA4075@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+Steve, All,
 
-On Mon, Dec 15, 2014 at 5:46 PM, Paul Cercueil <paul.cercueil@analog.com> wrote:
-> Libiio is a library to ease the development of software interfacing
-> Linux Industrial I/O (IIO) devices.
->
-> http://wiki.analog.com/resources/tools-software/linux-software/libiio
->
-> v2: Simplify greatly the patch (upstream now uses CMake)
-> v3: Add support for IPv6 and allow installation of systemd service file
-> v4: Added .hash file
->
-> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+On 2014-12-15 13:44 +0000, Steve James spake thusly:
+> Signed-off-by: Steve James <ste@junkomatic.net>
+> 
 > ---
->  package/Config.in          |  1 +
->  package/libiio/Config.in   | 43 +++++++++++++++++++++++++++++++++++++
->  package/libiio/S99iiod.sh  | 42 ++++++++++++++++++++++++++++++++++++
->  package/libiio/libiio.hash |  2 ++
->  package/libiio/libiio.mk   | 53 ++++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 141 insertions(+)
->  create mode 100644 package/libiio/Config.in
->  create mode 100644 package/libiio/S99iiod.sh
->  create mode 100644 package/libiio/libiio.hash
->  create mode 100644 package/libiio/libiio.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 48be2df..3ce5260 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -707,6 +707,7 @@ menu "Hardware handling"
->         source "package/libfreefare/Config.in"
->         source "package/libftdi/Config.in"
->         source "package/libhid/Config.in"
-> +       source "package/libiio/Config.in"
->         source "package/libinput/Config.in"
->         source "package/libiqrf/Config.in"
->         source "package/libllcp/Config.in"
-> diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-> new file mode 100644
-> index 0000000..4bded41
-> --- /dev/null
-> +++ b/package/libiio/Config.in
-> @@ -0,0 +1,43 @@
-> +config BR2_PACKAGE_LIBIIO
-> +       bool "libiio"
-> +       select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND if !BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-> +       help
-> +         Libiio is a library to ease the development of software interfacing
-> +         Linux Industrial I/O (IIO) devices.
-> +
-> +         http://wiki.analog.com/resources/tools-software/linux-software/libiio
-> +
-> +if BR2_PACKAGE_LIBIIO
-> +
-> +config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-> +       bool "Local backend"
-> +       default y
-> +       help
-> +         Enable the local backend of the library.
-> +
-> +config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-> +       bool "Network backend"
-> +       select BR2_PACKAGE_LIBXML2
-> +       default y
-> +       help
-> +         Enable the network backend of the library.
-> +
-> +config BR2_PACKAGE_LIBIIO_IIOD
-> +       bool "IIO Daemon"
-> +       select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       default y
-> +       help
-> +         Install the IIO Daemon.
-> +
-> +comment "IIO Daemon needs a toolchain w/ threads"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +config BR2_PACKAGE_LIBIIO_TESTS
-> +       bool "Install test programs"
-> +       select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-> +       select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-> +       help
-> +         Install the test programs (iio_info, iio_genxml, iio_readdev).
-> +
-> +endif
-> diff --git a/package/libiio/S99iiod.sh b/package/libiio/S99iiod.sh
-> new file mode 100644
-> index 0000000..f900999
-> --- /dev/null
-> +++ b/package/libiio/S99iiod.sh
-> @@ -0,0 +1,42 @@
-> +#!/bin/sh
-> +
-> +# Server-side demuxing by default
-> +IIOD_OPTS=-D
-> +
-> +[ -r /etc/default/iiod ] && . /etc/default/iiod
-> +
-> +case "$1" in
-> +       start)
-> +               echo "Starting IIO Server Daemon"
-> +               start-stop-daemon -S -b -q -m -p /var/run/iiod.pid -x /usr/sbin/iiod -- $IIOD_OPTS
-> +               exit $?
-> +               ;;
-> +
-> +       stop)
-> +               echo "Stopping IIO Server Daemon"
-> +               start-stop-daemon -K -q -p /var/run/iiod.pid 2>/dev/null
-> +               exit $?
-> +               ;;
-> +
-> +       status)
-> +               RET=1
-> +               if [ -f /var/run/iiod.pid ] ; then
-> +                       kill -0 `cat /var/run/iiod.pid` >/dev/null 2>&1
-> +                       RET=$?
-> +               fi
-> +
-> +               if [ $RET -eq 0 ] ; then
-> +                       echo "iiod is running"
-> +               else
-> +                       echo "iiod is NOT running"
-> +               fi
-> +
-> +               return $RET
+> Hello all. First Buildroot patch :-)
 
-IIRC, in shell, only function can call return.
+Great, glad to see your contribution! :-)
 
-> +               ;;
-> +
-> +       *)
-> +               echo "Usage: $0 {start|stop|status}"
-> +               exit 1
-> +esac
-> +
-> +exit 0
+> (This was discovered when adding leveldb which requires snappy. This missing
+> dependency is exposed when selection of this package is the only non-default
+> configuration choice ie you're not getting host-pkgconf via some other non-
+> default choice.)
 
-Not needed (default behavior).
+This:
 
-> diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-> new file mode 100644
-> index 0000000..bbca4c8
-> --- /dev/null
-> +++ b/package/libiio/libiio.hash
-> @@ -0,0 +1,2 @@
-> +# From https://github.com/analogdevicesinc/libiio/archive/v0.3/
-> +sha256 a3571bbf7e80b9e0a8d6bd4b39a5bcd18f80a3d36c4a6f2092dfeefc98e20e07        libiio-v0.3.tar.gz
-> diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-> new file mode 100644
-> index 0000000..5553cc7
-> --- /dev/null
-> +++ b/package/libiio/libiio.mk
-> @@ -0,0 +1,53 @@
-> +################################################################################
-> +#
-> +# libiio
-> +#
-> +################################################################################
-> +
-> +LIBIIO_VERSION = v0.3
-> +LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
-> +LIBIIO_INSTALL_STAGING = YES
-> +LIBIIO_LICENSE = LGPLv2.1+
-> +LIBIIO_LICENSE_FILES = COPYING
-> +
-> +# Avahi support in libiio requires avahi-client, which needs avahi-daemon
-> +ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
-> +LIBIIO_DEPENDENCIES += avahi
-> +endif
-> +
-> +ifneq ($(BR2_INET_IPV6),y)
+> Snappy doesn't configure without host pkg-config. The diagnostic from autoconf
+> is totally unhelpful, so for the benefit of others who might need this
+> prerequisite, when autoconf says this...
+> 
+>   configure.ac:42: error: possibly undefined macro: AC_DEFINE
+>         If this token and others are legitimate, please use m4_pattern_allow.
+>         See the Autoconf documentation.
+>   configure.ac:44: error: possibly undefined macro: AC_MSG_FAILURE
 
-Avoid the negative logic please.
+... up until here should have been part of the ommit log itself, that
+is, above the --- line. All that is below the --- line is "forgotten"
+by git when it applies a patch.
 
-> +LIBIIO_CONF_OPTS += -DENABLE_IPV6=OFF
+Basically, a commit log should contain:
 
-We usually prefer having symetrical options, so either add:
----
-else
-LIBIIO_CONF_OPTS += -DENABLE_IPV6=ON
----
+    topic: a short description
 
-or use the one-liner form (only if there is no other vars. to set):
-LIBIIO_CONF_OPTS += -DENABLE_IPV6=$(if $(BR2_INET_IPV6),ON,OFF)
+    A paragraphe with one (or more as needed) sentences explaining
+    the problem, possibly with excerpts of the failure.
 
-> +endif
-> +
-> +ifneq ($(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),y)
-> +LIBIIO_CONF_OPTS += -DWITH_LOCAL_BACKEND=OFF
-> +endif
+    A paragraph explaining the reason for the failure.
 
-ditto
+    A paragraph explaining the solution.
 
-> +
-> +ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
-> +LIBIIO_DEPENDENCIES += libxml2
-> +else
-> +LIBIIO_CONF_OPTS += -DWITH_NETWORK_BACKEND=OFF
-> +endif
+    Signed-off-by: Real NAME <email-address>
 
-ditto
+Of course, for very trivial patches, it is possible to shorten the
+commit log. So for this patch, the commit log could have been something
+like:
 
-> +
-> +ifneq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
-> +LIBIIO_CONF_OPTS += -DWITH_IIOD=OFF
-> +else
-> +LIBIIO_DEPENDENCIES += host-flex host-bison
+    package/snappy: needs host-pkconf
 
-ditto
+    Snappy doesn't configure without host pkg-config. The diagnostic
+    from autoconf is totally unhelpful:
 
-> +define LIBIIO_INSTALL_INIT_SYSV
-> +       $(INSTALL) -D -m 0755 package/libiio/S99iiod.sh \
-> +               $(TARGET_DIR)/etc/init.d/S99iiod.sh
-> +endef
-> +define LIBIIO_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       $(INSTALL) -D -m 0644 $(@D)/debian/iiod.service \
-> +               $(TARGET_DIR)/lib/systemd/system/iiod.service
-> +       ln -fs /lib/systemd/system/iiod.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iiod.service
-> +endef
-> +endif
-> +
-> +ifneq ($(BR2_PACKAGE_LIBIIO_TESTS),y)
-> +LIBIIO_CONF_OPTS += -DWITH_TESTS=OFF
-> +endif
+        configure.ac:42: error: possibly undefined macro: AC_DEFINE
+            If this token and others are legitimate, please use m4_pattern_allow.
+            See the Autoconf documentation.
+        configure.ac:44: error: possibly undefined macro: AC_MSG_FAILURE
 
-ditto
+    So, add host-pkgconf to the dependencies.
 
-> +
-> +$(eval $(cmake-package))
-> --
-> 2.1.3
->
+    Signed-off-by: Steve James <ste@junkomatic.net>
+
+> The solution is (probably) to add host-pkgconf to the packages's DEPENDENCIES
+> list.
+> 
+> 
+>  package/snappy/snappy.mk |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+> index fd89325..6bda7ce 100644
+> --- a/package/snappy/snappy.mk
+> +++ b/package/snappy/snappy.mk
+> @@ -10,6 +10,7 @@ SNAPPY_LICENSE = BSD-3c
+>  SNAPPY_LICENSE_FILES = COPYING
+>  # from git
+>  SNAPPY_AUTORECONF = YES
+> +SNAPPY_DEPENDENCIES = host-pkgconf
+
+Indeed, snappy makes use of PKG_CHECK_MODULES().
+
+With the commit log rewritten, you can add my:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thank you for this patch! :-)
+
+Regards,
+Yann E. MORIN.
+
+>  SNAPPY_INSTALL_STAGING = YES
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 1.7.10.4
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
-
-Regards,
-
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
