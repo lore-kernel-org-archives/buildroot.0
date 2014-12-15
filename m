@@ -1,69 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Dec 2014 00:17:08 +0100
-Subject: [Buildroot] [PATCH 1/1]  package/gdb: fix shared-only build
-In-Reply-To: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
-References: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141214231708.GI4121@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Dec 2014 07:53:01 +0100
+Subject: [Buildroot] [PATCH] erlang: bump to version 17.4
+In-Reply-To: <87vblfrkao.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sat, 13 Dec 2014 10:06:07 +0100")
+References: <1418411483-29636-1-git-send-email-fhunleth@troodon-software.com>
+ <87vblfrkao.fsf@dell.be.48ers.dk>
+Message-ID: <87mw6pmmk2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 2014-12-14 23:47 +0100, Romain Naour spake thusly:
->  When --disable-static is given to the gdb's main configure script,
->  it also disable the static build of bundled libraries like bfd, readline
->  and opcodes, which must be build statically.
-> 
->  Fixes:
->  http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
->  http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
->  http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
->  http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
->  http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+ >> Erlang/OTP 17.4 is a service release on the 17 track with mostly bug
+ >> fixes, but it does contain a number of new features and characteristics
+ >> improvements as well.
 
-[--SNIP--]
-> diff --git a/package/gdb/0003-libopcodes-force-static-build.patch b/package/gdb/0003-libopcodes-force-static-build.patch
-> new file mode 100644
-> index 0000000..1f1bd09
-> --- /dev/null
-> +++ b/package/gdb/0003-libopcodes-force-static-build.patch
-> @@ -0,0 +1,80 @@
-> +From b82d3918cc7dd4c758848ba596f6577c5486ba48 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Sun, 14 Dec 2014 17:42:15 +0100
-> +Subject: [PATCH 3/3] libopcodes: force static build
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +When --disable-static is given to the main configure script,
-> +it also disable the static build of bundled libraries like opcodes.
-> +
-> +Fixes:
-> +No rule to make target ? ../opcodes/libopcodes.a ?, needed by ? gdb ?.
+ >> Some highlights of the release are:
 
-You forgot to SoB that patch.
+ >> - eldap: Nearly all TCP options are possible to give in the
+ >> eldap:open/2 call.
+ >> - ssh: Added API functions ptty_alloc/3 and ptty_alloc/4, to allocate a
+ >> pseudo tty.
+ >> - ssl: Handle servers that may send an empty SNI extension to the client.
 
-Otherwise, I do not have much to say about that. That will be need
-build-testing, but I see no reason that would be bad. But it's too late
-for me to do the tests now. ;-) I'll do that tomorrow, unless someone
-beats me to it and this gets applied, so (with your SoB added):
+ >> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Committed, thanks.
 
-Regards,
-Yann E. MORIN.
+It seems to cause some build issues on ARM. Care to take a look?
+
+http://autobuild.buildroot.net/?reason=erlang-17.4
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
