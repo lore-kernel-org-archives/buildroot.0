@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Dec 2014 21:40:30 +0100
-Subject: [Buildroot] [PATCH] ethtool: bump to version 3.18
-In-Reply-To: <1418647922-13154-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 15 Dec 2014 09:52:02 -0300")
-References: <1418647922-13154-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a92omytd.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Dec 2014 21:41:00 +0100
+Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.5.3
+In-Reply-To: <1418648240-8342-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 15 Dec 2014 09:57:20 -0300")
+References: <1418648240-8342-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8761dcmysj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
