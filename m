@@ -1,34 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Dec 2014 22:17:55 +0100
-Subject: [Buildroot] [PATCH 5/5] pckage/ncurses: fix pkg-config files
-	for ncursesw
-In-Reply-To: <50b4b144f7de56b1d0a60ec133c6fbf89c265dc3.1418572993.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 14 Dec 2014 17:04:40 +0100")
-References: <cover.1418572993.git.yann.morin.1998@free.fr>
- <50b4b144f7de56b1d0a60ec133c6fbf89c265dc3.1418572993.git.yann.morin.1998@free.fr>
-Message-ID: <874mswliik.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Dec 2014 22:03:06 +0100
+Subject: [Buildroot] [git commit] libyaml: add security patch for
+	CVE-2014-9130
+Message-ID: <20141215211812.E0A3580407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e91d3ca42c008ff860468a249177c6efdd397be9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Currently, ncurses creates symlinks from the non-'w' variants to the
- > equivalent 'w' variant, but forgets to do so for pkg-config files.
+Fixes: assert failure when processing wrapped strings (CVE-2014-9130).
+See https://bugzilla.redhat.com/show_bug.cgi?id=1169369
 
- > Do that for the pkg-config files too.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libyaml/0001-fix-CVE-2014-9130.patch |   33 ++++++++++++++++++++++++++
+ 1 files changed, 33 insertions(+), 0 deletions(-)
 
- > Should fix numerous autobuild failures:
- >     http://autobuild.buildroot.net/results/3c4/3c44dfc6e3f151bef751f39cac336fef3d6a0099/
- >     http://autobuild.buildroot.net/results/38c/38c81407bb8d0677e87b3a01f9a1fc1372ab4738/
- >     ...
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libyaml/0001-fix-CVE-2014-9130.patch b/package/libyaml/0001-fix-CVE-2014-9130.patch
+new file mode 100644
+index 0000000..a267e40
+--- /dev/null
++++ b/package/libyaml/0001-fix-CVE-2014-9130.patch
+@@ -0,0 +1,33 @@
++From e6aa721cc0e5a48f408c52355559fd36780ba32a Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Ingy=20d=C3=B6t=20Net?= <ingy@ingy.net>
++Date: Fri, 28 Nov 2014 09:21:49 -0800
++Subject: [PATCH] Fix for https://bitbucket.org/xi/libyaml/issue/10/
++
++https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
++
++Commenting out the assert makes the scanner do the right thing and
++results in just a simple parse failure.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/scanner.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/scanner.c b/src/scanner.c
++index 88d4fa5..c5f3d2f 100644
++--- a/src/scanner.c
+++++ b/src/scanner.c
++@@ -1110,7 +1110,9 @@ yaml_parser_save_simple_key(yaml_parser_t *parser)
++      * line.  Therefore it is always allowed.  But we add a check anyway.
++      */
++ 
++-    assert(parser->simple_key_allowed || !required);    /* Impossible. */
+++    /* XXX This caused:
+++     * https://bitbucket.org/xi/libyaml/issue/10/wrapped-strings-cause-assert-failure
+++    assert(parser->simple_key_allowed || !required); */    /* Impossible. */
++ 
++     /*
++      * If the current position may start a simple key, save it.
++-- 
++2.0.4
++
