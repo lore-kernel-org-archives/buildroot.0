@@ -1,40 +1,81 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Dec 2014 19:56:26 -0300
-Subject: [Buildroot] [PATCH 1/2] stunnel: bump to version 5.08
-Message-ID: <1418684187-12402-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 15 Dec 2014 19:56:27 -0300
+Subject: [Buildroot] [PATCH 2/2] stunnel: adjust initscript
+In-Reply-To: <1418684187-12402-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1418684187-12402-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1418684187-12402-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use proper status messages, make spacing standard instead of a mix of
+spacing/tabbing, drop boringly obvious comment from the header.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/stunnel/S50stunnel | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 2745a81..337d26b 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2014-November/000085.html
--sha256	505c6c63c4a20fc0cce8c35ef1ab7626c7b01071e3fca4ac6ea417afe8065309	stunnel-5.07.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-announce/2014-December/000088.html
-+sha256	830b21d24cd237e96f4d7993be43553d4eba4d3cfa2660faa78dec8d41d314fc	stunnel-5.08.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 3d0596d..eb24781 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/stunnel/S50stunnel b/package/stunnel/S50stunnel
+index 95bb301..5827fe0 100644
+--- a/package/stunnel/S50stunnel
++++ b/package/stunnel/S50stunnel
+@@ -1,36 +1,35 @@
+ #!/bin/sh
+-#
+-# Starts stunnel
+-#
  
--STUNNEL_VERSION = 5.07
-+STUNNEL_VERSION = 5.08
- STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ start() {
+-	echo -n "Starting stunnel: "
+-	start-stop-daemon -S -q -p /var/run/stunnel.pid --exec /usr/bin/stunnel
+-	echo "OK"
++  echo -n "Starting stunnel: "
++  start-stop-daemon -S -q -p /var/run/stunnel.pid --exec /usr/bin/stunnel
++  [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
++
+ stop() {
+-	echo -n "Stopping stunnel: "
+-	start-stop-daemon -K -q -p /var/run/stunnel.pid
+-	echo "OK"
++  echo -n "Stopping stunnel: "
++  start-stop-daemon -K -q -p /var/run/stunnel.pid
++  [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
++
+ restart() {
+-	stop
+-	start
++  stop
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++    ;;
+   stop)
+-	stop
+-	;;
++    stop
++    ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++    ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
+ esac
+ 
+ exit $?
 -- 
 2.0.4
