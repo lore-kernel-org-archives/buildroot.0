@@ -1,80 +1,40 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Mon, 15 Dec 2014 23:53:27 +0100
-Subject: [Buildroot] [1/1] Fix npm module cross compilation,
- use up-to-date npm and install modules globally
-Message-ID: <1418684007.5268.32.camel@posteo.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 15 Dec 2014 19:56:26 -0300
+Subject: [Buildroot] [PATCH 1/2] stunnel: bump to version 5.08
+Message-ID: <1418684187-12402-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Michael Wei,
-Dear Thomas Petazzoni,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I found this old thread in the mail archive. I added the message ID to
-the reply-to field, so I hope the mail makes it into the thread.
-
-I've using native modules for cross-compilation, too. I revied this
-patch, you'll find my comments below.
-
-> 
-> ______________________________________________________________________
-> Signed-off-by: Michael Wei <mwei@cs.ucsd.edu>
-> ---
->  package/nodejs/nodejs.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index 312aaa9..fbcb730 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -110,11 +110,13 @@ define NODEJS_INSTALL_MODULES
->  	# npm install call below and setting npm_config_rollback=false can both
->  	# help in diagnosing the problem.
->  	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
-> +		$(HOST_DIR)/usr/bin/npm install -g npm --prefix=$(HOST_DIR) && \
-
-This installs a newer npm in the modules directory $(HOST_DIR)/lib/node_modules/, but this version is not used for the modules installation, as you can see here:
-
-I've this by simply printing version info:
-	define NODEJS_INSTALL_MODULES
-		(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
-			$(HOST_DIR)/usr/bin/npm --version && \
-			$(HOST_DIR)/usr/bin/npm install -g npm --prefix=$(HOST_DIR) && \
-			$(HOST_DIR)/usr/bin/npm --version && \
-
-Prints:
-	1.4.28
-	/home/joerg/Work/buildroot/output/host/bin/npm -> /home/joerg/Work/buildroot/output/host/lib/node_modules/npm/bin/npm-cli.js
-npm at 2.1.12 /home/joerg/Work/buildroot/output/host/lib/node_modules/npm
-	1.4.28
-
-If we want to use a new version of npm we have to replace the bundled npm dependency in the nodejs source tree. In the Arch Linux PKGBUILD of nodejs is a way howto do it:
-https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/nodejs.
-
-
-
->  		$(TARGET_CONFIGURE_OPTS) \
->  		LD="$(TARGET_CXX)" \
->  		npm_config_arch=$(NODEJS_CPU) \
->  		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
-> -		$(HOST_DIR)/usr/bin/npm install \
-> +		$(HOST_DIR)/usr/bin/npm install -g --target_arch=$(NODEJS_CPU) \
-> +		--prefix=$(TARGET_DIR) \
-
-I'm not sure about the 'target-arch' and 'prefix' flags for npm install. Doing:
-
-# https://github.com/npm/npm.git
-# find npm -type f | xargs grep "target-arch"
-
-gives my no results. Also having a quick look at the git repo (especially https://github.com/npm/npm/blob/master/lib/install.js) I do not find any hints for those flags.
-
-Where did you get them from?
-
-Fo me cross-compilation for modules and native addons (compiled by gyp) work fine. What native modules are you building?
-
-Btw: Maybe soon version 0.11.15 of nodejs will be released. This is an unstable version, but very close to the next major release 0.12. Is it okay if nodejs is bumped to an unstable version or is the stable branch preferred?
-
-Best regards
-J?rg Krause
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 2745a81..337d26b 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,2 +1,2 @@
+-# From http://www.stunnel.org/pipermail/stunnel-announce/2014-November/000085.html
+-sha256	505c6c63c4a20fc0cce8c35ef1ab7626c7b01071e3fca4ac6ea417afe8065309	stunnel-5.07.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-announce/2014-December/000088.html
++sha256	830b21d24cd237e96f4d7993be43553d4eba4d3cfa2660faa78dec8d41d314fc	stunnel-5.08.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 3d0596d..eb24781 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STUNNEL_VERSION = 5.07
++STUNNEL_VERSION = 5.08
+ STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-- 
+2.0.4
