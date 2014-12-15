@@ -1,39 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Dec 2014 09:57:20 -0300
-Subject: [Buildroot] [PATCH] libgpgme: bump to version 1.5.3
-Message-ID: <1418648240-8342-1-git-send-email-gustavo@zacarias.com.ar>
+From: Steve James <ste@junkomatic.net>
+Date: Mon, 15 Dec 2014 13:44:14 +0000
+Subject: [Buildroot] [PATCH] snappy: add dependency on host-pkgconf
+Message-ID: <201412151344.14441.ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgpgme/libgpgme.hash | 2 +-
- package/libgpgme/libgpgme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Steve James <ste@junkomatic.net>
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index fda2e7d..7ed9b48 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
-@@ -1,2 +1,2 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  cb550ea09314a362aa895f1ca92da6ba73fb512a  gpgme-1.5.2.tar.bz2
-+sha1  8dd7711a4de117994fe2d45879ef8a9900d50f6a  gpgme-1.5.3.tar.bz2
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index fd25532..6377b76 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+---
+Hello all. First Buildroot patch :-)
+
+(This was discovered when adding leveldb which requires snappy. This missing
+dependency is exposed when selection of this package is the only non-default
+configuration choice ie you're not getting host-pkgconf via some other non-
+default choice.)
+
+Snappy doesn't configure without host pkg-config. The diagnostic from autoconf
+is totally unhelpful, so for the benefit of others who might need this
+prerequisite, when autoconf says this...
+
+  configure.ac:42: error: possibly undefined macro: AC_DEFINE
+        If this token and others are legitimate, please use m4_pattern_allow.
+        See the Autoconf documentation.
+  configure.ac:44: error: possibly undefined macro: AC_MSG_FAILURE
+
+The solution is (probably) to add host-pkgconf to the packages's DEPENDENCIES
+list.
+
+
+ package/snappy/snappy.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index fd89325..6bda7ce 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -10,6 +10,7 @@ SNAPPY_LICENSE = BSD-3c
+ SNAPPY_LICENSE_FILES = COPYING
+ # from git
+ SNAPPY_AUTORECONF = YES
++SNAPPY_DEPENDENCIES = host-pkgconf
+ SNAPPY_INSTALL_STAGING = YES
  
--LIBGPGME_VERSION = 1.5.2
-+LIBGPGME_VERSION = 1.5.3
- LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPLv2.1+
+ $(eval $(autotools-package))
 -- 
-2.0.4
+1.7.10.4
