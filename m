@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Dec 2014 21:40:16 +0100
-Subject: [Buildroot] [git commit] libgpgme: bump to version 1.5.3
-Message-ID: <20141215204604.E539980431@busybox.osuosl.org>
+Date: Mon, 15 Dec 2014 21:39:36 +0100
+Subject: [Buildroot] [git commit] ethtool: bump to version 3.18
+Message-ID: <20141215204604.DB41080431@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9efa1f583b90b8785ebdbbb64db737449ec9bc37
+commit: http://git.buildroot.net/buildroot/commit/?id=b3dca20570b8e78052a79a67cbb4a55bb7f3c062
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgpgme/libgpgme.hash |    2 +-
- package/libgpgme/libgpgme.mk   |    2 +-
+ package/ethtool/ethtool.hash |    2 +-
+ package/ethtool/ethtool.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index fda2e7d..7ed9b48 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index cd53325..f383037 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
 @@ -1,2 +1,2 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  cb550ea09314a362aa895f1ca92da6ba73fb512a  gpgme-1.5.2.tar.bz2
-+sha1  8dd7711a4de117994fe2d45879ef8a9900d50f6a  gpgme-1.5.3.tar.bz2
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index fd25532..6377b76 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	d6e0dd3fa904c3ad87487c66a4a8fde1ebc4194979ca5755df4b2efb247ca286	ethtool-3.16.tar.xz
++sha256	813ffe59fddd2db423c578448b10e33e2e2d4cc2ba780f1f0c603642b20342f6	ethtool-3.18.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 45c4735..24e0f59 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPGME_VERSION = 1.5.2
-+LIBGPGME_VERSION = 1.5.3
- LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPLv2.1+
+-ETHTOOL_VERSION = 3.16
++ETHTOOL_VERSION = 3.18
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
