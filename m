@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Dec 2014 08:14:50 +0100
-Subject: [Buildroot] [PATCH] system: add "askfirst shell" as an option
- for busybox init
-In-Reply-To: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
-References: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20141216081450.6438bdb6@free-electrons.com>
+Date: Tue, 16 Dec 2014 08:15:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package: indentation cleanup
+In-Reply-To: <1418633819-26569-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1418633819-26569-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20141216081538.66d262aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Jerzy Grzegorek,
 
-On Mon, 15 Dec 2014 11:56:24 +0300, Alexey Brodkin wrote:
-> Consider following cases:
->  * Buildroot only builds rootfs that could be used on systems with
->    different default serial ports (ttyS0, ttyS1, ttyAMA3 etc)
+On Mon, 15 Dec 2014 09:56:59 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/lxc/Config.in           |    2 +-
+>  package/python-ipaddr/Config.in |    4 ++--
+>  package/qemu/Config.in          |   10 +++++-----
+>  package/qt5/qt5base/Config.in   |    4 ++--
+>  package/squid/Config.in         |    2 +-
+>  5 files changed, 11 insertions(+), 11 deletions(-)
 
-To achieve this, there is no need for a new option, just specify
-"console" as the terminal on which to run getty. The only change needed
-is to add "console" to /etc/securetty.
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thomas
 -- 
