@@ -1,88 +1,85 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Dec 2014 21:56:07 -0300
-Subject: [Buildroot] [PATCH] strongswan: bump to version 5.2.1
-Message-ID: <1418691367-12528-1-git-send-email-gustavo@zacarias.com.ar>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 15 Dec 2014 21:53:56 -0600
+Subject: [Buildroot] [PATCH 04/30] checkpolicy: new package
+In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-5-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/strongswan/Config.in       | 17 +++++++++++++----
- package/strongswan/strongswan.hash |  2 ++
- package/strongswan/strongswan.mk   |  9 ++++++---
- 3 files changed, 21 insertions(+), 7 deletions(-)
- create mode 100644 package/strongswan/strongswan.hash
+ package/Config.in.host             |  1 +
+ package/checkpolicy/Config.in.host | 10 ++++++++++
+ package/checkpolicy/checkpolicy.mk | 26 ++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/checkpolicy/Config.in.host
+ create mode 100644 package/checkpolicy/checkpolicy.mk
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 3b0f47f..c1b7f41 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -110,13 +110,22 @@ config BR2_PACKAGE_STRONGSWAN_SQL
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 0b7bc36..af25e12 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
  
- endif
- 
--config BR2_PACKAGE_STRONGSWAN_TOOLS
--	bool "Enable additional utilities (openac, scepclient and pki)"
-+config BR2_PACKAGE_STRONGSWAN_PKI
-+	bool "Enable pki certificate utility"
-+	default y
-+
-+config BR2_PACKAGE_STRONGSWAN_SCEP
-+	bool "Enable SCEP client tool"
- 	default y
- 
- config BR2_PACKAGE_STRONGSWAN_SCRIPTS
--	bool "Enable additional utilities (found in directory scripts)"
--	depends on BR2_PACKAGE_STRONGSWAN_CHARON || BR2_PACKAGE_STRONGSWAN_TOOLS
-+	bool "Enable additional utilities (found in scripts directory)"
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON
-+	default y
-+
-+config BR2_PACKAGE_STRONGSWAN_VICI
-+	bool "Enable vici/swanctl"
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON
- 	default y
- 
- endif
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
++	source "package/checkpolicy/Config.in.host"
+ 	source "package/cramfs/Config.in.host"
+ 	source "package/dfu-util/Config.in.host"
+ 	source "package/dos2unix/Config.in.host"
+diff --git a/package/checkpolicy/Config.in.host b/package/checkpolicy/Config.in.host
 new file mode 100644
-index 0000000..f434530
+index 0000000..75794be
 --- /dev/null
-+++ b/package/strongswan/strongswan.hash
-@@ -0,0 +1,2 @@
-+# From http://download.strongswan.org/strongswan-5.2.1.tar.bz2.md5
-+md5	dd3717c0aa59ab4591ca1812941ebb82	strongswan-5.2.1.tar.bz2
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index bb1d268..f1fe3cc 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRONGSWAN_VERSION = 5.1.3
-+STRONGSWAN_VERSION = 5.2.1
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPLv2+
-@@ -28,8 +28,11 @@ STRONGSWAN_CONF_OPTS +=
- 	--enable-unity=$(if $(BR2_PACKAGE_STRONGSWAN_UNITY),yes,no)                  \
- 	--enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no)                \
- 	--enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no)                      \
--	--enable-tools=$(if $(BR2_PACKAGE_STRONGSWAN_TOOLS),yes,no)                  \
--	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)
-+	--enable-pki=$(if $(BR2_PACKAGE_STRONGSWAN_PKI),yes,no)                      \
-+	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no)              \
-+	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)              \
-+	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)                    \
-+	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
- 
- ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
- STRONGSWAN_CONF_OPTS +=               \
++++ b/package/checkpolicy/Config.in.host
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_HOST_CHECKPOLICY
++	bool "host checkpolicy"
++	help
++	  checkpolicy is the policy compiler. It uses libsepol to 
++	  generate the binary policy. checkpolicy uses the static 
++	  libsepol since it deals with low level details of the policy 
++	  that have not been encapsulated/abstracted by a proper 
++	  shared library interface. 
++	  
++	  http://selinuxproject.org/page/Main_Page
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+new file mode 100644
+index 0000000..0d91794
+--- /dev/null
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# checkpolicy
++#
++################################################################################
++
++CHECKPOLICY_VERSION = 2.1.12
++CHECKPOLICY_SITE = http://userspace.selinuxproject.org/releases/20130423/
++CHECKPOLICY_LICENSE = GPLv2
++CHECKPOLICY_LICENSE_FILES = COPYING
++
++HOST_CHECKPOLICY_DEPENDENCIES = host-libselinux host-flex host-bison
++
++HOST_CHECKPOLICY_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
++	LEX="$(HOST_DIR)/usr/bin/flex" \
++	YACC="$(HOST_DIR)/usr/bin/bison -y"
++
++define HOST_CHECKPOLICY_BUILD_CMDS
++	$(MAKE) -C $(@D) $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++define HOST_CHECKPOLICY_INSTALL_CMDS
++	$(MAKE) -C $(@D) install $(HOST_CHECKPOLICY_MAKE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++$(eval $(host-generic-package))
 -- 
-2.0.4
+1.9.1
