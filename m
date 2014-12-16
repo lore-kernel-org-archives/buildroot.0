@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:54:14 -0600
-Subject: [Buildroot] [PATCH 22/30] sysvinit: added libselinux dependency
+Date: Mon, 15 Dec 2014 21:54:17 -0600
+Subject: [Buildroot] [PATCH 25/30] openssh: selinux and pam support
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-23-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-26-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +12,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- .../sysvinit-0010-fix-WITH-SELINUX-define.patch    | 24 ++++++++++++++++++++++
- package/sysvinit/sysvinit.mk                       | 11 +++++++++-
- 2 files changed, 34 insertions(+), 1 deletion(-)
- create mode 100644 package/sysvinit/sysvinit-0010-fix-WITH-SELINUX-define.patch
+ package/openssh/openssh.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/sysvinit/sysvinit-0010-fix-WITH-SELINUX-define.patch b/package/sysvinit/sysvinit-0010-fix-WITH-SELINUX-define.patch
-new file mode 100644
-index 0000000..4d9c10a
---- /dev/null
-+++ b/package/sysvinit/sysvinit-0010-fix-WITH-SELINUX-define.patch
-@@ -0,0 +1,24 @@
-+--- a/src/Makefile	2010-04-11 04:30:27.000000000 -0500
-++++ b/src/Makefile	2014-09-16 14:07:31.404952266 -0500
-+@@ -104,7 +104,7 @@
-+ 
-+ runlevel:	runlevel.o
-+ 
-+-sulogin:	LDLIBS += $(SULOGINLIBS) $(STATIC)
-++sulogin:	LDLIBS += $(SULOGINLIBS) $(INITLIBS) $(STATIC)
-+ sulogin:	sulogin.o
-+ 
-+ wall:		dowall.o wall.o
-+@@ -114,10 +115,10 @@
-+ bootlogd:	LDLIBS += -lutil
-+ bootlogd:	bootlogd.o
-+ 
-+-sulogin.o:	CPPFLAGS += $(SELINUX_DEF)
-++sulogin.o:	CFLAGS += $(SELINUX_DEF)
-+ sulogin.o:	sulogin.c 
-+ 
-+-init.o:		CPPFLAGS += $(SELINUX_DEF)
-++init.o:		CFLAGS += $(SELINUX_DEF)
-+ init.o:		init.c init.h set.h reboot.h initreq.h
-+ 
-+ utmp.o:		utmp.c init.h
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index 53640a4..253ea9b 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -13,7 +13,16 @@ SYSVINIT_LICENSE_FILES = COPYING
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index d08b468..2488e59 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -23,9 +23,21 @@ endif
  
- # Override BusyBox implementations if BusyBox is enabled.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--SYSVINIT_DEPENDENCIES = busybox
-+SYSVINIT_DEPENDENCIES += busybox
+ OPENSSH_DEPENDENCIES = zlib openssl
+ 
++define OPENSSH_INSTALL_PAM_CONF
++	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
++	sed -i '/password   required     \/lib\/security\/pam_cracklib.so/d' $(TARGET_DIR)/etc/pam.d/sshd
++	sed -i -e 's/\#UsePAM no/UsePAM yes/' $(TARGET_DIR)/etc/ssh/sshd_config
++endef
++
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ OPENSSH_DEPENDENCIES += linux-pam
+ OPENSSH_CONF_OPTS += --with-pam
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_PAM_CONF
 +endif
 +
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SYSVINIT_DEPENDENCIES += libselinux
-+TARGET_CONFIGURE_OPTS += WITH_SELINUX="yes" ROOT="$(TARGET_DIR)"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+TARGET_CONFIGURE_OPTS += WITH_SELINUX="yes" ROOT="$(TARGET_DIR)"
++OPENSSH_DEPENDENCIES += libselinux
++OPENSSH_CONF_OPTS += --with-selinux
  endif
  
- define SYSVINIT_DEBIAN_PATCHES
+ define OPENSSH_INSTALL_INIT_SYSTEMD
 -- 
 1.9.1
