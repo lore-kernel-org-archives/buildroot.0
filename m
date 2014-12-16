@@ -1,44 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Dec 2014 08:42:58 -0300
-Subject: [Buildroot] [PATCH 2/2] nftables: bump to version 0.4
-In-Reply-To: <1418730178-16356-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1418730178-16356-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1418730178-16356-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Dec 2014 13:26:18 +0100
+Subject: [Buildroot] [git commit] erlang: use libatomic_ops if available
+In-Reply-To: <20141215215003.A758F80403@busybox.osuosl.org>
+References: <20141215215003.A758F80403@busybox.osuosl.org>
+Message-ID: <20141216132618.5c19cb84@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nftables/nftables.hash | 2 ++
- package/nftables/nftables.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/nftables/nftables.hash
+On Mon, 15 Dec 2014 22:36:24 +0100, Peter Korsgaard wrote:
 
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-new file mode 100644
-index 0000000..0b53fc9
---- /dev/null
-+++ b/package/nftables/nftables.hash
-@@ -0,0 +1,2 @@
-+# From http://www.netfilter.org/projects/nftables/downloads.html#nftables-0.4
-+sha1	c557c710510c59e4280d271e5b7232af7ba3fbb7	nftables-0.4.tar.bz2
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 6c26d4d..9f18df7 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NFTABLES_VERSION = 0.3
-+NFTABLES_VERSION = 0.4
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
+> Erlang can either provide its own atomic_ops implementation or use the
+> one in libatomic_ops. This patch ensures that it only uses the one from
+> libatomic_ops if it is available.
+
+Is this really what we want to do? In such cases, we normally always
+force to use the "system" version of the library rather than the
+built-in one. Why should Erlang be treated differently, especially if
+using the "system" version of the library works fine?
+
+Best regards,
+
+Thomas
 -- 
-2.0.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
