@@ -1,55 +1,47 @@
-From: Spielmann Werner <Werner.Spielmann@SWAROVSKI.COM>
-Date: Tue, 16 Dec 2014 15:19:34 +0000
-Subject: [Buildroot] Second try: Configuration for real hardware / How to
-	configure RTAI
-Message-ID: <d4a8b511599845a89f0c34664c0ed8b1@dsw332.wattens.swarovski.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 Dec 2014 18:31:49 +0100
+Subject: [Buildroot] Buildroot autobuilders - Cleanup faulty tarballs
+In-Reply-To: <20141216080256.09901ee4@free-electrons.com>
+References: <20141215230340.GB4075@free.fr>
+ <20141216080256.09901ee4@free-electrons.com>
+Message-ID: <20141216173149.GA4192@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-this is my second try...    :-(    Any help is appreciated!
+On 2014-12-16 08:02 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 16 Dec 2014 00:03:40 +0100, Yann E. MORIN wrote:
+> 
+> > Could you please remove the tarballs from SF-hosted packages on each
+> > autobuilder instance you are running, please? You'll find that list
+> > below.
+> 
+> Done.
 
+OK, thank you! :-)
 
-I was able to pass "make" (for a x86 configuration: kernel 2.6.32.11, rtai 3.8.1, gcc 4.5.4)  for the first time (with the help of Peter Koorsgard).
+[--SNIP--]
+>  * Probably a higher number of reports about failed downloads, since
+>    wiping out the download directory means that the next builds will
+>    re-download everything they need, which gives a higher probability
+>    of downloading tarballs that have disappeared, or trying to reach
+>    hosts that are down, etc.
 
-I found this document:  http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
+Are you running your instances without a backup mirror configured? I
+believe this is a good thing, because it will help find the missing
+upstreams.
 
-But I still have several questions:
+Regards,
+Yann E. MORIN.
 
-
-*         How can I adapt the configuration to my real hardware?
-
-I want to use a x86 architecture with is nearly a standard PC with flash cards.
-
-Have I to configure a board/ directory and a configs/ directory for this Board?
-
-The Ethernet devices will need the Intel e1000e-Driver, the serial devices a 8250/16550 driver...
-
-Can you give me any pointers?
-
-
-*         To configure RTAI on a standard PC I have to execute within the RTAI directory (before building the kernel):
-
-
-   "make menuconfig"
-
-
-
-and then:
-
-
-
-    "make"
-
-When and how can I configure RTAI in combination with buildroot?
-Thanks for reading. Any help is appreciated!
-
-Werner
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141216/3ca2a0bc/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
