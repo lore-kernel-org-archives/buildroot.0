@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Dec 2014 23:49:35 +0100
-Subject: [Buildroot] [PATCH 1/2] libnftnl: bump to version 1.0.3
-In-Reply-To: <1418730178-16356-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 16 Dec 2014 08:42:57 -0300")
+Date: Tue, 16 Dec 2014 23:49:54 +0100
+Subject: [Buildroot] [PATCH 2/2] nftables: bump to version 0.4
+In-Reply-To: <1418730178-16356-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 16 Dec 2014 08:42:58 -0300")
 References: <1418730178-16356-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bnn3i51c.fsf@dell.be.48ers.dk>
+ <1418730178-16356-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877fxri50t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
