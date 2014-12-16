@@ -1,28 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Dec 2014 09:41:13 -0300
-Subject: [Buildroot] [PATCH 2/2] apr-util: add hash file
-In-Reply-To: <1418733673-12637-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1418733673-12637-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1418733673-12637-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Dec 2014 13:41:33 +0100
+Subject: [Buildroot] [git commit] erlang: use libatomic_ops if available
+In-Reply-To: <20141216132618.5c19cb84@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 16 Dec 2014 13:26:18 +0100")
+References: <20141215215003.A758F80403@busybox.osuosl.org>
+ <20141216132618.5c19cb84@free-electrons.com>
+Message-ID: <8761dbkbr6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/apr-util/apr-util.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/apr-util/apr-util.hash
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/apr-util/apr-util.hash b/package/apr-util/apr-util.hash
-new file mode 100644
-index 0000000..3db4396
---- /dev/null
-+++ b/package/apr-util/apr-util.hash
-@@ -0,0 +1,2 @@
-+# From http://archive.apache.org/dist/apr/apr-util-1.5.4.tar.gz.sha1
-+sha1	72cc3ac693b52fb831063d5c0de18723bc8e0095	apr-util-1.5.4.tar.gz
+ > Hello,
+ > On Mon, 15 Dec 2014 22:36:24 +0100, Peter Korsgaard wrote:
+
+ >> Erlang can either provide its own atomic_ops implementation or use the
+ >> one in libatomic_ops. This patch ensures that it only uses the one from
+ >> libatomic_ops if it is available.
+
+ > Is this really what we want to do? In such cases, we normally always
+ > force to use the "system" version of the library rather than the
+ > built-in one. Why should Erlang be treated differently, especially if
+ > using the "system" version of the library works fine?
+
+So in other words, make erlang select libatomic_ops? That sounds fine to
+me.
+
 -- 
-2.0.4
+Bye, Peter Korsgaard 
