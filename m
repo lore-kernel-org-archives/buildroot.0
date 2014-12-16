@@ -1,9 +1,9 @@
 From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Tue, 16 Dec 2014 10:44:29 +0100
+Date: Tue, 16 Dec 2014 10:47:28 +0100
 Subject: [Buildroot] [PATCH 1/1] qt: add X11 support
 In-Reply-To: <1405441856-6263-1-git-send-email-hadrien.boutteville@gmail.com>
 References: <1405441856-6263-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20141216104429.5ea049c9@x230>
+Message-ID: <20141216104728.3d6b861a@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
