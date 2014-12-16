@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:54:16 -0600
-Subject: [Buildroot] [PATCH 24/30] logrotate: selinux support
+Date: Mon, 15 Dec 2014 21:54:22 -0600
+Subject: [Buildroot] [PATCH 30/30] readline: host support for host-sqlite
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-25-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-31-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/logrotate/logrotate.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/readline/readline.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index dc26d85..a7f8290 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -11,8 +11,17 @@ LOGROTATE_LICENSE_FILES = COPYING
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index d670a71..2dc04a1 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -19,4 +19,5 @@ endef
  
- LOGROTATE_DEPENDENCIES = popt
+ READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
  
-+LOGROTATE_CFLAGS = $(TARGET_CFLAGS)
-+LOGROTATE_LDFLAGS = $(TARGET_LDFLAGS)
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+LOGROTATE_DEPENDENCIES += libselinux
-+LOGROTATE_CFLAGS += -DWITH_SELINUX=yes
-+LOGROTATE_LDFLAGS += -lselinux
-+endif
-+
- define LOGROTATE_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" -C $(@D)
-+	$(MAKE) CC="$(TARGET_CC) $(LOGROTATE_CFLAGS)" LDFLAGS="$(LOGROTATE_LDFLAGS)" -C $(@D)
- endef
- 
- define LOGROTATE_INSTALL_TARGET_CMDS
++$(eval $(host-autotools-package))
+ $(eval $(autotools-package))
 -- 
 1.9.1
