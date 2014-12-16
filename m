@@ -1,41 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Dec 2014 15:52:18 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.18.1
-In-Reply-To: <1418755938-24942-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1418755938-24942-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1418755938-24942-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Dec 2014 21:02:51 +0100
+Subject: [Buildroot] Buildroot autobuilders - Cleanup faulty tarballs
+In-Reply-To: <20141216173149.GA4192@free.fr>
+References: <20141215230340.GB4075@free.fr>
+ <20141216080256.09901ee4@free-electrons.com>
+ <20141216173149.GA4192@free.fr>
+Message-ID: <20141216210251.0bb2fe67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear Yann E. MORIN,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3f82162..ba4b574 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.18"
-+	bool "3.18.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.18" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.18.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On Tue, 16 Dec 2014 18:31:49 +0100, Yann E. MORIN wrote:
+
+> >  * Probably a higher number of reports about failed downloads, since
+> >    wiping out the download directory means that the next builds will
+> >    re-download everything they need, which gives a higher probability
+> >    of downloading tarballs that have disappeared, or trying to reach
+> >    hosts that are down, etc.
+> 
+> Are you running your instances without a backup mirror configured? I
+> believe this is a good thing, because it will help find the missing
+> upstreams.
+
+Nope, I'm using the regular Buildroot configuration, so it does use
+sources.buildroot.net.
+
+Best regards,
+
+Thomas
 -- 
-2.0.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
