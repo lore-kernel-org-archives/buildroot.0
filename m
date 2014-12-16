@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Dec 2014 23:46:44 +0100
-Subject: [Buildroot] [PATCH 1/2] package/Config.in: fix menu
-	alphabetical order
-In-Reply-To: <1418458681-5342-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- (Jerzy Grzegorek's message of "Sat, 13 Dec 2014 09:18:00 +0100")
-References: <1418458681-5342-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <871tnzjjqj.fsf@dell.be.48ers.dk>
+Date: Tue, 16 Dec 2014 23:47:32 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{18, 17, 14,
+	10}.x series
+In-Reply-To: <1418755938-24942-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 16 Dec 2014 15:52:17 -0300")
+References: <1418755938-24942-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wq5ri54r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
