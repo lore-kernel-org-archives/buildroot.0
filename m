@@ -1,101 +1,179 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:54:09 -0600
-Subject: [Buildroot] [PATCH 17/30] busybox: selinux support
+Date: Mon, 15 Dec 2014 21:54:06 -0600
+Subject: [Buildroot] [PATCH 14/30] refpolicy: custom git repo
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-18-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-15-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a configure option to enable the SELinux support in the
-busybox configuration from the Buildroot menuconfig.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/busybox/Config.in                          |  3 +++
- ...ags-strip-non-l-arguments-returned-by-pkg.patch | 28 ++++++++++++++++++++++
- package/busybox/busybox.mk                         |  8 +++++++
- 3 files changed, 39 insertions(+)
- create mode 100644 package/busybox/busybox-0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+ package/refpolicy-contrib/Config.in            | 20 +++++++++++++++++
+ package/refpolicy-contrib/refpolicy-contrib.mk | 19 ++++++++++++++++
+ package/refpolicy/Config.in                    | 22 +++++++++++++++++++
+ package/refpolicy/refpolicy.mk                 | 30 ++++++++++++++++++++++----
+ 4 files changed, 87 insertions(+), 4 deletions(-)
+ create mode 100644 package/refpolicy-contrib/Config.in
+ create mode 100644 package/refpolicy-contrib/refpolicy-contrib.mk
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 2344c4e..6a0e5d1 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -33,6 +33,9 @@ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
- comment "Busybox individual binaries depends on dynamic libraries"
- 	depends on BR2_PREFER_STATIC_LIB
- 
-+config BR2_PACKAGE_BUSYBOX_SELINUX
-+	bool "Enable SELinux support"
-+
- config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	bool "Install the watchdog daemon startup script"
- 	help
-diff --git a/package/busybox/busybox-0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/busybox-0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+diff --git a/package/refpolicy-contrib/Config.in b/package/refpolicy-contrib/Config.in
 new file mode 100644
-index 0000000..105626c
+index 0000000..1fc0c31
 --- /dev/null
-+++ b/package/busybox/busybox-0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-@@ -0,0 +1,28 @@
-+From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 25 Nov 2013 22:51:53 +0100
-+Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
++++ b/package/refpolicy-contrib/Config.in
+@@ -0,0 +1,20 @@
++if BR2_REFPOLICY_CUSTOM_GIT
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile.flags | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++comment "A refpolicy contrib repository is required if using a refpolicy repo. (Contrib is a GIT submodule of refpolicy)"
 +
-+diff --git a/Makefile.flags b/Makefile.flags
-+index 307afa7..885e323 100644
-+--- a/Makefile.flags
-++++ b/Makefile.flags
-+@@ -141,7 +141,9 @@ ifeq ($(CONFIG_SELINUX),y)
-+ SELINUX_PC_MODULES = libselinux libsepol
-+ $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
-+ CPPFLAGS += $(SELINUX_CFLAGS)
-+-LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
-++LDLIBS += $(if $(SELINUX_LIBS),\
-++       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
-++       $(SELINUX_PC_MODULES:lib%=%))
-+ endif
-+ 
-+ ifeq ($(CONFIG_EFENCE),y)
-+-- 
-+1.8.1.2
++config BR2_PACKAGE_REFPOLICY_CONTRIB
++	bool "refpolicy-contrib"
++	help
++	  A GIT submodule of the refpolicy package.
 +
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e689d2d..cc7a711 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -193,6 +193,13 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
- endef
++
++config BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_URL
++	string "URL of custom contrib submodule repository"
++
++config BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION
++	string "Custom contrib submodule repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  e.g. a SHA id, a tag, branch, ..
++
++endif
+diff --git a/package/refpolicy-contrib/refpolicy-contrib.mk b/package/refpolicy-contrib/refpolicy-contrib.mk
+new file mode 100644
+index 0000000..e13a3ff
+--- /dev/null
++++ b/package/refpolicy-contrib/refpolicy-contrib.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# refpolicy-contrib
++#
++################################################################################
++
++ifeq ($(BR2_REFPOLICY_CUSTOM_GIT),y)
++REFPOLICY_CONTRIB_SITE = $(call qstrip,$(BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_URL))
++REFPOLICY_CONTRIB_VERSION = $(call qstrip,$(BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION))
++REFPOLICY_CONTRIB_SITE_METHOD = git
++
++# Inherits license from refpolicy as normally this is a submodule
++REFPOLICY_CONTRIB_LICENSE = GPLv2
++REFPOLICY_CONTRIB_LICENSE_FILES = COPYING
++endif
++
++# If refpolicy is from release archive, this contrib content is part of it.
++
++$(eval $(generic-package))
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index 5f4046e..79b958e 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -62,6 +62,8 @@ config BR2_PACKAGE_REFPOLICY_MODULES_FILE
+ 	  SELinux policy modules to be included in the compiled
+ 	  policy. See policy/modules.conf in the refpolicy sources for
+ 	  the complete list of available modules.
++	  NOTE: This file is only used if a Custom GIT repo is
++	  not specified.
+ 
+ config BR2_PACKAGE_REFPOLICY_MODULAR
+ 	bool "Build a modular SELinux policy"
+@@ -71,4 +73,24 @@ config BR2_PACKAGE_REFPOLICY_MODULAR
+ 	  target. A modular policy can also be built if policies
+ 	  need to be modified without reloading the target.
+ 
++config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++	bool "Custom Git repository"
++	select BR2_PACKAGE_REFPOLICY_CONTRIB
++	help
++	 This option allows Buildroot to get the refpolicy source
++	 code from a Git repository.
++
++if BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  e.g. a SHA id, a tag, branch, ..
++
++endif
++
+ endif
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 81e104c..382f141 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -4,16 +4,23 @@
+ #
+ ################################################################################
+ 
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
++REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
++REFPOLICY_SITE_METHOD = git
++REFPOLICY_DEPENDENCIES += refpolicy-contrib
++else
+ REFPOLICY_VERSION = 2.20130424
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+ REFPOLICY_SITE = http://oss.tresys.com/files/refpolicy/
++endif
+ REFPOLICY_LICENSE = GPLv2
+ REFPOLICY_LICENSE_FILES = COPYING
+ 
+ # Cannot use multiple threads to build the reference policy
+ REFPOLICY_MAKE = $(TARGET_MAKE_ENV) $(MAKE1)
+ 
+-REFPOLICY_DEPENDENCIES = host-m4 host-checkpolicy host-policycoreutils \
++REFPOLICY_DEPENDENCIES += host-m4 host-checkpolicy host-policycoreutils \
+ 	host-setools host-python-pyxml host-gawk policycoreutils
+ 
+ REFPOLICY_INSTALL_STAGING = YES
+@@ -37,18 +44,33 @@ else
+ 	REFPOLICY_MONOLITHIC = y
  endif
  
-+ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
-+BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
-+define BUSYBOX_SET_SELINUX
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++define REFPOLICY_GIT_SUBMODULE_SETUP
++	rsync -ar $(REFPOLICY_CONTRIB_DIR)/* $(@D)/policy/modules/contrib/
++endef
++else
++define REFPOLICY_CUSTOM_MODULES_CONF
++	cp -f $(REFPOLICY_MODULES_FILE) $(@D)/policy/modules.conf
 +endef
 +endif
 +
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-@@ -231,6 +238,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
-+	$(BUSYBOX_SET_SELINUX)
+ define REFPOLICY_CONFIGURE_CMDS
+ 	$(REFPOLICY_GIT_SUBMODULE_SETUP)
+ 	# If an external repo is used to build refpolicy, this preserves the
+ 	# custom modules.conf which defines the enabled components.
+-	[ -f $(@D)/policy/modules.conf ] && mv $(@D)/policy/modules.conf $(@D)/modules.conf.bk
++	if [ -f $(@D)/policy/modules.conf ]; then \
++		mv $(@D)/policy/modules.conf $(@D)/modules.conf.bk ; \
++	fi
+ 	$(REFPOLICY_MAKE) -C $(@D) bare $(REFPOLICY_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+ 	$(SED) "/TYPE/c\TYPE = $(BR2_PACKAGE_REFPOLICY_TYPE)" $(@D)/build.conf
+ 	$(SED) "/MONOLITHIC/c\MONOLITHIC = $(REFPOLICY_MONOLITHIC)" $(@D)/build.conf
+ 	$(SED) "/NAME/c\NAME = $(REFPOLICY_POLICY_NAME)" $(@D)/build.conf
+ 	$(REFPOLICY_MAKE) -C $(@D) conf $(REFPOLICY_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+-	[ -f $(@D)/modules.conf.bk ] &&  echo "[Preserved modules.conf]" && \
+-		mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf
++	if [ -f $(@D)/modules.conf.bk ]; then \
++		echo "[Preserved modules.conf]" ; \
++		mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf ; \
++	fi
++	$(REFPOLICY_CUSTOM_MODULES_CONF)
  endef
  
- define BUSYBOX_CONFIGURE_CMDS
+ define REFPOLICY_INSTALL_STAGING_CMDS
 -- 
 1.9.1
