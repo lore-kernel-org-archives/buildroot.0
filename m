@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:54:07 -0600
-Subject: [Buildroot] [PATCH 15/30] shadow: new package
+Date: Mon, 15 Dec 2014 21:53:55 -0600
+Subject: [Buildroot] [PATCH 03/30] libsemanage: new package
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-16-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-4-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,101 +15,160 @@ From: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in        |  3 +++
- package/shadow/Config.in | 13 +++++++++++++
- package/shadow/shadow.mk | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 66 insertions(+)
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.mk
+ package/Config.in                                  |  1 +
+ .../libsemanage/0001-execption-lib-path-fix.patch  | 14 +++++
+ package/libsemanage/Config.in                      | 30 +++++++++
+ package/libsemanage/libsemanage.mk                 | 72 ++++++++++++++++++++++
+ 4 files changed, 117 insertions(+)
+ create mode 100644 package/libsemanage/0001-execption-lib-path-fix.patch
+ create mode 100644 package/libsemanage/Config.in
+ create mode 100644 package/libsemanage/libsemanage.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c02e665..a4fdb62 100644
+index 10a3409..a325cba 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1215,6 +1215,9 @@ comment "Utilities"
- 	source "package/logsurfer/Config.in"
- 	source "package/pinentry/Config.in"
- 	source "package/screen/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	source "package/shadow/Config.in"
-+endif
- 	source "package/sudo/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/time/Config.in"
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
+@@ -937,6 +937,7 @@ endmenu
+ 
+ menu "Security"
+ 	source "package/libselinux/Config.in"
++	source "package/libsemanage/Config.in"
+ 	source "package/libsepol/Config.in"
+ endmenu
+ 
+diff --git a/package/libsemanage/0001-execption-lib-path-fix.patch b/package/libsemanage/0001-execption-lib-path-fix.patch
 new file mode 100644
-index 0000000..5692ac6
+index 0000000..cbcbea5
 --- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_SHADOW
-+	bool "shadow"
++++ b/package/libsemanage/0001-execption-lib-path-fix.patch
+@@ -0,0 +1,14 @@
++Patch to correct a missing header file issue.
++
++Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
++
++--- a/src/exception.sh	2011-12-21 11:46:04.000000000 -0600
+++++ b/src/exception.sh	2012-08-27 11:29:58.000000000 -0500
++@@ -9,6 +9,6 @@
++ }
++ "
++ }
++-gcc -x c -c - -aux-info temp.aux < ../include/semanage/semanage.h
+++gcc -x c -c - -aux-info temp.aux -I../include < ../include/semanage/semanage.h
++ for i in `awk '/extern int/ { print $6 }' temp.aux`; do except $i ; done
++ rm -f -- temp.aux -.o
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
+new file mode 100644
+index 0000000..e4013cd
+--- /dev/null
++++ b/package/libsemanage/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_LIBSEMANAGE
++	bool "libsemanage"
++	select BR2_PACKAGE_LIBSELINUX
++	select BR2_PACKAGE_USTR
++	select BR2_PACKAGE_BZIP2
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
 +	help
-+	  The shadow-utils package includes the necessary programs for
-+	  converting UNIX password files to the shadow password format, plus
-+	  programs for managing user and group accounts. The pwconv command
-+	  converts passwords to the shadow password format. The pwunconv command
-+	  unconverts shadow passwords and generates an npasswd file (a standard
-+	  UNIX password file). The pwck command checks the integrity of password
-+	  and shadow files. The lastlog command prints out the last login times
-+	  for all users. The useradd, userdel, and usermod commands are used for
-+	  managing user accounts. The groupadd, groupdel, and groupmod commands
-+	  are used for managing group accounts.
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-new file mode 100644
-index 0000000..ced78b2
---- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# shadow
-+#
-+################################################################################
++	  libsemanage is the policy management library. It uses
++	  libsepol for binary policy manipulation and libselinux for
++	  interacting with the SELinux system. It also exec's helper
++	  programs for loading policy and for checking whether the
++	  file_contexts configuration is valid (load_policy and
++	  setfiles from policycoreutils) presently, although this may
++	  change@least for the bootstrapping case (for rpm).
 +
-+SHADOW_VERSION = 4.1.5.1
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.bz2
-+SHADOW_SITE = http://pkg-shadow.alioth.debian.org/releases/
-+SHADOW_LICENSE = BSD
-+SHADOW_LICENSE_FILES = COPYING
-+SHADOW_DEPENDENCIES = acl attr busybox
++	  http://selinuxproject.org/page/Main_Page
 +
-+SHADOW_INSTALL_STAGING = NO
++comment "libsemanage needs a toolchain w/ largefile, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
 +
-+SHADOW_CONF_OPTS = --disable-nls
++if BR2_PACKAGE_LIBSEMANAGE
 +
-+# Shadow configuration to support audit
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_DEPENDENCIES += audit
-+SHADOW_CONF_OPTS += --with-audit=yes
++config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
++	select BR2_PACKAGE_PYTHON
++	bool "python bindings"
++	help
++	  enable building python bindings
++
 +endif
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+new file mode 100644
+index 0000000..55e5705
+--- /dev/null
++++ b/package/libsemanage/libsemanage.mk
+@@ -0,0 +1,72 @@
++################################################################################
++#
++# libsemanage
++#
++################################################################################
 +
-+# Shadow with linux-pam support
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SHADOW_DEPENDENCIES += linux-pam
-+SHADOW_CONF_OPTS += --with-libpam=yes
++LIBSEMANAGE_VERSION = 2.1.10
++LIBSEMANAGE_SITE = http://userspace.selinuxproject.org/releases/20130423/
++LIBSEPOL_LICENSE = LGPLv2.1+
++LIBSEPOL_LICENSE_FILES = COPYING
 +
-+# Comment out all config entries that conflict with using PAM
-+define SHADOW_LOGIN_CONFIGURATION
-+        for FUNCTION in FAIL_DELAY FAILLOG_ENAB LASTLOG_ENAB MAIL_CHECK_ENAB \
-+                OBSCURE_CHECKS_ENAB PORTTIME_CHECKS_ENAB QUOTAS_ENAB CONSOLE MOTD_FILE \
-+                FTMP_FILE NOLOGINS_FILE ENV_HZ PASS_MIN_LEN SU_WHEEL_ONLY CRACKLIB_DICTPATH \
-+                PASS_CHANGE_TRIES PASS_ALWAYS_WARN CHFN_AUTH ENCRYPT_METHOD ENVIRON_FILE ; \
-+        do \
-+                sed -i "s/^$${FUNCTION}/# &/" $(TARGET_DIR)/etc/login.defs ; \
-+        done
++LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
++
++LIBSEMANAGE_INSTALL_STAGING = YES
++
++LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
++
++ifeq ($(BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS),y)
++
++LIBSEMANAGE_DEPENDENCIES += python host-swig host-python
++LIBSEMANAGE_MAKE_OPTS += \
++	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++define LIBSEMANAGE_PYTHON_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
 +endef
 +
-+SHADOW_POST_INSTALL_TARGET_HOOKS += SHADOW_LOGIN_CONFIGURATION
++define LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install-pywrap $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
++endef
 +
-+endif
++define LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install-pywrap $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
++endef
 +
-+# Shadow with selinux support
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+SHADOW_CONF_OPTS += --with-selinux=yes
-+endif
++endif # End of BR2_PACKAGE_PYTHON
 +
-+$(eval $(autotools-package))
++define LIBSEMANAGE_BUILD_CMDS
++	# DESTDIR is needed during the compile to compute library and 
++	# header paths.
++	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
++	$(LIBSEMANAGE_PYTHON_BUILD_CMDS)
++endef
++
++define LIBSEMANAGE_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
++	$(LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS)
++endef
++
++define LIBSEMANAGE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
++	$(LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS)
++endef
++
++HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol \
++	host-libselinux host-ustr host-bzip2
++
++define HOST_LIBSEMANAGE_BUILD_CMDS
++	# DESTDIR is needed during the compile to compute library and 
++	# header paths.
++	$(MAKE) -C $(@D) all $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++define HOST_LIBSEMANAGE_INSTALL_CMDS
++	$(MAKE) -C $(@D) install $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR)
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 1.9.1
