@@ -1,33 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Dec 2014 13:41:33 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Dec 2014 13:45:51 +0100
 Subject: [Buildroot] [git commit] erlang: use libatomic_ops if available
-In-Reply-To: <20141216132618.5c19cb84@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 16 Dec 2014 13:26:18 +0100")
+In-Reply-To: <8761dbkbr6.fsf@dell.be.48ers.dk>
 References: <20141215215003.A758F80403@busybox.osuosl.org>
  <20141216132618.5c19cb84@free-electrons.com>
-Message-ID: <8761dbkbr6.fsf@dell.be.48ers.dk>
+ <8761dbkbr6.fsf@dell.be.48ers.dk>
+Message-ID: <20141216134551.75ca7975@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Peter Korsgaard,
 
- > Hello,
- > On Mon, 15 Dec 2014 22:36:24 +0100, Peter Korsgaard wrote:
+On Tue, 16 Dec 2014 13:41:33 +0100, Peter Korsgaard wrote:
 
- >> Erlang can either provide its own atomic_ops implementation or use the
- >> one in libatomic_ops. This patch ensures that it only uses the one from
- >> libatomic_ops if it is available.
+>  > Is this really what we want to do? In such cases, we normally always
+>  > force to use the "system" version of the library rather than the
+>  > built-in one. Why should Erlang be treated differently, especially if
+>  > using the "system" version of the library works fine?
+> 
+> So in other words, make erlang select libatomic_ops? That sounds fine to
+> me.
 
- > Is this really what we want to do? In such cases, we normally always
- > force to use the "system" version of the library rather than the
- > built-in one. Why should Erlang be treated differently, especially if
- > using the "system" version of the library works fine?
+Yes, that's what I meant: make erlang select libatomic_ops.
 
-So in other words, make erlang select libatomic_ops? That sounds fine to
-me.
-
+Thomas
 -- 
-Bye, Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
