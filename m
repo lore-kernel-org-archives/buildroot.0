@@ -1,74 +1,44 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 16 Dec 2014 21:16:16 +0100
-Subject: [Buildroot] [PATCH 1/1]  package/gdb: fix shared-only build
-In-Reply-To: <20141216081322.229c0a52@free-electrons.com>
-References: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
- <20141216081322.229c0a52@free-electrons.com>
-Message-ID: <54909310.4070306@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Dec 2014 21:28:30 +0100
+Subject: [Buildroot] [git commit] dbus: bump version
+Message-ID: <20141216203035.5B478803FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=f66ea18d98f141baae7de2970ca29286b1761749
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 16/12/2014 08:13, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Sun, 14 Dec 2014 23:47:24 +0100, Romain Naour wrote:
->>  When --disable-static is given to the gdb's main configure script,
->>  it also disable the static build of bundled libraries like bfd, readline
->>  and opcodes, which must be build statically.
->>
->>  Fixes:
->>  http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
->>  http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
->>  http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
->>  http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
->>  http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> ---
->>  package/gdb/0001-bfd-force-static-build.patch      | 79 +++++++++++++++++++++
->>  package/gdb/0002-readline-force-static-build.patch | 34 +++++++++
->>  .../gdb/0003-libopcodes-force-static-build.patch   | 80 ++++++++++++++++++++++
->>  3 files changed, 193 insertions(+)
->>  create mode 100644 package/gdb/0001-bfd-force-static-build.patch
->>  create mode 100644 package/gdb/0002-readline-force-static-build.patch
->>  create mode 100644 package/gdb/0003-libopcodes-force-static-build.patch
-> 
-> Are you sure patching gdb is the right direction here? I believe those
-> patches have no chance to be merged upstream, so patching is not the
-> right solution.
+Regression fix for CVE-2014-3636, see release announcement:
+http://lists.freedesktop.org/archives/dbus/2014-November/016430.html
 
-Sorry, this patch should have been marked as RFC.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.hash |    4 ++--
+ package/dbus/dbus.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> 
-> A better solution is probably to re-add --enable-static to
-> GDB_CONF_OPTS, even if we're doing a shared only build. This doesn't
-> require patching gdb, and is more compliant with what upstream wants:
-> doing a pure shared build of gdb isn't supported.
-> 
-
-Ok, I'm fine with this solution.
-
-I wanted to show what I had done in order to compile gdb in shared only case
-without re-add --enable-static in GDB_CONF_OPTS.
-I agree patching gdb is not an elegant solution.
-
-What I have observed since shared only build are available, is that some
-packages pass --disable-static or disable static build for their build-in
-libraries even when they should be build statically :-/
-
-Best regards,
--- 
-Romain Naour
-
-OPEN WIDE Ing?nierie - Paris
-23/25, rue Daviel| 75013 PARIS
-http://ingenierie.openwide.fr
-
-Le blog des technologies libres et embarqu?es :
-http://www.linuxembedded.fr
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 516b87c..4ae6d03 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	10bf87fdb68815edd01d53885101dbcdd80dacad7198912cca61a4fa22dfaf8e	dbus-1.8.10.tar.gz
++# Locally calculated
++sha256	c91428f28d2925ba32d34ffc824bfcf4d40d5e1e67befc4bcf2202f0a862501e  dbus-1.8.12.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index ed400e8..8d02b42 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.8.10
++DBUS_VERSION = 1.8.12
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
