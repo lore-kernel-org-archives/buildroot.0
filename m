@@ -1,206 +1,185 @@
-From: Paul Cercueil <paul.cercueil@analog.com>
-Date: Tue, 16 Dec 2014 10:34:06 +0100
-Subject: [Buildroot] [PATCH v5] libiio: new package
-Message-ID: <1418722446-3831-1-git-send-email-paul.cercueil@analog.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Tue, 16 Dec 2014 10:44:29 +0100
+Subject: [Buildroot] [PATCH 1/1] qt: add X11 support
+In-Reply-To: <1405441856-6263-1-git-send-email-hadrien.boutteville@gmail.com>
+References: <1405441856-6263-1-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <20141216104429.5ea049c9@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libiio is a library to ease the development of software interfacing
-Linux Industrial I/O (IIO) devices.
+On Tue, 15 Jul 2014 18:30:56 +0200
+Hadrien Boutteville <hadrien.boutteville@gmail.com> wrote:
 
-http://wiki.analog.com/resources/tools-software/linux-software/libiio
+> There are two possible configurations for Qt4 installation: standard
+> (with X11) and embedded (for framebuffer). Both configurations cannot be
+> used together for one installation and some options are specific to one
+> configuration or the other.
+> 
+> Add a choice to select the standard or the embedded installation to add
+> X11 support.
+> 
+> The integration is done in order to make maximum use of the current
+> configuration logic, for example by using the same mkspecs files.
+> 
+> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-v2: Simplify greatly the patch (upstream now uses CMake)
-v3: Add support for IPv6 and allow installation of systemd service file
-v4: Added .hash file
-v5: Rework libiio.mk and init.d scripts after feedback from upstream
-
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
----
- package/Config.in          |  1 +
- package/libiio/Config.in   | 43 +++++++++++++++++++++++++++++++++++++++
- package/libiio/S99iiod.sh  | 40 +++++++++++++++++++++++++++++++++++++
- package/libiio/libiio.hash |  2 ++
- package/libiio/libiio.mk   | 50 ++++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 136 insertions(+)
- create mode 100644 package/libiio/Config.in
- create mode 100644 package/libiio/S99iiod.sh
- create mode 100644 package/libiio/libiio.hash
- create mode 100644 package/libiio/libiio.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 48be2df..3ce5260 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -707,6 +707,7 @@ menu "Hardware handling"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
- 	source "package/libhid/Config.in"
-+	source "package/libiio/Config.in"
- 	source "package/libinput/Config.in"
- 	source "package/libiqrf/Config.in"
- 	source "package/libllcp/Config.in"
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-new file mode 100644
-index 0000000..4bded41
---- /dev/null
-+++ b/package/libiio/Config.in
-@@ -0,0 +1,43 @@
-+config BR2_PACKAGE_LIBIIO
-+	bool "libiio"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND if !BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	help
-+	  Libiio is a library to ease the development of software interfacing
-+	  Linux Industrial I/O (IIO) devices.
-+
-+	  http://wiki.analog.com/resources/tools-software/linux-software/libiio
-+
-+if BR2_PACKAGE_LIBIIO
-+
-+config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	bool "Local backend"
-+	default y
-+	help
-+	  Enable the local backend of the library.
-+
-+config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	bool "Network backend"
-+	select BR2_PACKAGE_LIBXML2
-+	default y
-+	help
-+	  Enable the network backend of the library.
-+
-+config BR2_PACKAGE_LIBIIO_IIOD
-+	bool "IIO Daemon"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	default y
-+	help
-+	  Install the IIO Daemon.
-+
-+comment "IIO Daemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_LIBIIO_TESTS
-+	bool "Install test programs"
-+	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
-+	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	help
-+	  Install the test programs (iio_info, iio_genxml, iio_readdev).
-+
-+endif
-diff --git a/package/libiio/S99iiod.sh b/package/libiio/S99iiod.sh
-new file mode 100644
-index 0000000..bf6294b
---- /dev/null
-+++ b/package/libiio/S99iiod.sh
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+
-+# Server-side demuxing by default
-+IIOD_OPTS=-D
-+
-+[ -r /etc/default/iiod ] && . /etc/default/iiod
-+
-+case "$1" in
-+	start)
-+		echo "Starting IIO Server Daemon"
-+		start-stop-daemon -S -b -q -m -p /var/run/iiod.pid -x /usr/sbin/iiod -- $IIOD_OPTS
-+		exit $?
-+		;;
-+
-+	stop)
-+		echo "Stopping IIO Server Daemon"
-+		start-stop-daemon -K -q -p /var/run/iiod.pid 2>/dev/null
-+		exit $?
-+		;;
-+
-+	status)
-+		RET=1
-+		if [ -f /var/run/iiod.pid ] ; then
-+			kill -0 `cat /var/run/iiod.pid` >/dev/null 2>&1
-+			RET=$?
-+		fi
-+
-+		if [ $RET -eq 0 ] ; then
-+			echo "iiod is running"
-+		else
-+			echo "iiod is NOT running"
-+		fi
-+
-+		exit $RET
-+		;;
-+
-+	*)
-+		echo "Usage: $0 {start|stop|status}"
-+		exit 1
-+esac
-diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-new file mode 100644
-index 0000000..bbca4c8
---- /dev/null
-+++ b/package/libiio/libiio.hash
-@@ -0,0 +1,2 @@
-+# From https://github.com/analogdevicesinc/libiio/archive/v0.3/
-+sha256	a3571bbf7e80b9e0a8d6bd4b39a5bcd18f80a3d36c4a6f2092dfeefc98e20e07	libiio-v0.3.tar.gz
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-new file mode 100644
-index 0000000..9077896
---- /dev/null
-+++ b/package/libiio/libiio.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# libiio
-+#
-+################################################################################
-+
-+LIBIIO_VERSION = v0.3
-+LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
-+LIBIIO_INSTALL_STAGING = YES
-+LIBIIO_LICENSE = LGPLv2.1+
-+LIBIIO_LICENSE_FILES = COPYING
-+
-+LIBIIO_CONF_OPTS = -DENABLE_IPV6=$(if $(BR2_INET_IPV6),ON,OFF) \
-+				   -DWITH_LOCAL_BACKEND=$(if $(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),ON,OFF) \
-+				   -DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF)
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
-+LIBIIO_DEPENDENCIES += libxml2
-+LIBIIO_CONF_OPTS += -DWITH_NETWORK_BACKEND=ON
-+else
-+LIBIIO_CONF_OPTS += -DWITH_NETWORK_BACKEND=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
-+LIBIIO_DEPENDENCIES += host-flex host-bison
-+LIBIIO_CONF_OPTS += -DWITH_IIOD=ON
-+else
-+LIBIIO_CONF_OPTS += -DWITH_IIOD=OFF
-+endif
-+
-+# Avahi support in libiio requires avahi-client, which needs avahi-daemon
-+ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
-+LIBIIO_DEPENDENCIES += avahi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
-+define LIBIIO_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/libiio/S99iiod.sh \
-+		$(TARGET_DIR)/etc/init.d/S99iiod.sh
-+endef
-+define LIBIIO_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	$(INSTALL) -D -m 0644 $(@D)/debian/iiod.service \
-+		$(TARGET_DIR)/lib/systemd/system/iiod.service
-+	ln -fs /lib/systemd/system/iiod.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/iiod.service
-+endef
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.1.3
+Hi,
+Works on ARM (Armadeus APF51).
+Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+> 
+> For now I only tested under Qemu without all modules (successfully).
+> I will do more tests on an ARM target, but feel free to test on your
+> side ;-).
+> 
+> ---
+>  package/qt/Config.in | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+>  package/qt/qt.mk     | 15 +++++++++++++++
+>  2 files changed, 61 insertions(+)
+> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 0a21e93..abab229 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -17,6 +17,40 @@ menuconfig BR2_PACKAGE_QT
+>  
+>  if BR2_PACKAGE_QT
+>  
+> +choice
+> +	prompt "Qt installation"
+> +	help
+> +	  Selects the type of installation: standard or embedded
+> +
+> +config BR2_PACKAGE_QT_EMBEDDED
+> +	bool "Qt embedded"
+> +	help
+> +	  The embedded Qt installation targets embedded systems without X.org.
+> +	  Provides backends for framebuffer.
+> +	  If unsure, say Y.
+> +
+> +comment "Qt standard (X11) not available (need X.org)"
+> +	depends on !BR2_PACKAGE_XORG7
+> +
+> +config BR2_PACKAGE_QT_X11
+> +	bool "Qt standard (X11)"
+> +	depends on BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_FONTCONFIG
+> +	select BR2_PACKAGE_XLIB_LIBXI
+> +	select BR2_PACKAGE_XLIB_LIBX11
+> +	select BR2_PACKAGE_XLIB_LIBXRENDER
+> +	select BR2_PACKAGE_XLIB_LIBXCURSOR
+> +	select BR2_PACKAGE_XLIB_LIBXRANDR
+> +	select BR2_PACKAGE_XLIB_LIBXEXT
+> +	select BR2_PACKAGE_XLIB_LIBXV
+> +	select BR2_PACKAGE_QT_SYSTEMFREETYPE
+> +	select BR2_PACKAGE_QT_GUI_MODULE
+> +	help
+> +	  The standard Qt installation provides X.org backend. If you don't want to
+> +	  use X.org, say N.
+> +
+> +endchoice
+> +
+>  config BR2_PACKAGE_QT_DEBUG
+>  	bool "Compile with debug support"
+>  	help
+> @@ -98,6 +132,9 @@ config BR2_PACKAGE_QT_GUI_MODULE
+>  	  video output, or you don't require Qt GUI, say n.
+>  
+>  if BR2_PACKAGE_QT_GUI_MODULE
+> +
+> +if BR2_PACKAGE_QT_EMBEDDED
+> +
+>  menu "Pixel depths"
+>  comment "Deselecting each option leads to Qt's default (8,16,32)"
+>  
+> @@ -155,6 +192,8 @@ config BR2_PACKAGE_QT_FONT_UNIFONT
+>  
+>  endmenu
+>  
+> +endif # BR2_PACKAGE_QT_EMBEDDED
+> +
+>  choice
+>  	prompt "freetype2 support"
+>  	default BR2_PACKAGE_QT_NOFREETYPE
+> @@ -163,11 +202,16 @@ choice
+>  
+>  config BR2_PACKAGE_QT_NOFREETYPE
+>  	bool "no freetype2 support"
+> +	depends on BR2_PACKAGE_QT_EMBEDDED
+>  	help
+>  	  Do not compile in Freetype2 support.
+>  
+> +comment "Qt freetype2 needs Qt embedded"
+> +	depends on BR2_PACKAGE_QT_X11
+> +
+>  config BR2_PACKAGE_QT_QTFREETYPE
+>  	bool "Qt freetype2"
+> +	depends on BR2_PACKAGE_QT_EMBEDDED
+>  	help
+>  	  Use the libfreetype bundled with Qt.
+>  
+> @@ -268,9 +312,11 @@ endchoice
+>  
+>  source "package/qt/Config.sql.in"
+>  if BR2_PACKAGE_QT_GUI_MODULE
+> +if BR2_PACKAGE_QT_EMBEDDED
+>  source "package/qt/Config.gfx.in"
+>  source "package/qt/Config.mouse.in"
+>  source "package/qt/Config.keyboard.in"
+> +endif
+>  
+>  config BR2_PACKAGE_QT_PHONON
+>  	bool "Phonon Module"
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index 6d01023..0513416 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -236,7 +236,20 @@ else
+>  QT_EMB_PLATFORM = generic
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_QT_X11),y)
+> +QT_DEPENDENCIES += fontconfig xlib_libXi xlib_libX11 xlib_libXrender \
+> +                xlib_libXcursor xlib_libXrandr xlib_libXext xlib_libXv
+> +# Using pkg-config avoids us some logic to redefine and sed again mkspecs files
+> +# to add X11 include path and link options
+> +QT_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags x11)
+> +QT_CXXFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags x11)
+> +QT_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs x11 xext)
+> +QT_CONFIGURE_OPTS += -arch $(QT_EMB_PLATFORM) \
+> +		-xplatform qws/linux-$(QT_EMB_PLATFORM)-g++ -x11 -no-gtkstyle -no-sm \
+> +		-no-openvg
+> +else # if BR2_PACKAGE_QT_EMBEDDED
+>  QT_CONFIGURE_OPTS += -embedded $(QT_EMB_PLATFORM)
+> +endif
+>  
+>  ifneq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+>  QT_CONFIGURE_OPTS += -no-gui
+> @@ -652,6 +665,7 @@ define QT_INSTALL_TARGET_IMPORTS
+>  endef
+>  
+>  # Fonts installation
+> +ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
+>  ifneq ($(QT_FONTS),)
+>  define QT_INSTALL_TARGET_FONTS
+>  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+> @@ -665,6 +679,7 @@ define QT_INSTALL_TARGET_FONTS_TTF
+>  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+>  endef
+>  endif
+> +endif # BR2_PACKAGE_QT_EMBEDDED
+>  
+>  ifeq ($(BR2_PACKAGE_QT_GFX_POWERVR),y)
+>  define QT_INSTALL_TARGET_POWERVR
+> -- 
+> 2.0.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
