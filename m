@@ -1,144 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Dec 2014 00:02:43 +0100
-Subject: [Buildroot] [PATCH] leveldb: new package
-In-Reply-To: <201412151541.19296.ste@junkomatic.net>
-References: <201412151541.19296.ste@junkomatic.net>
-Message-ID: <20141216230243.GE4192@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 17 Dec 2014 00:07:27 +0100
+Subject: [Buildroot] [PATCH] package/wpa_supplicant: use correct include
+	path for libnl-3.0
+Message-ID: <1418771247-12079-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steve, All,
+Fixes:
+ERROR: unsafe header/library path used in cross-compilation: '/usr/include/libnl3'
 
-On 2014-12-15 15:41 +0000, Steve James spake thusly:
-> Adds new package: leveldb
-> 
->   LevelDB is a fast key-value storage library written at Google that
->   provides an ordered mapping from string keys to string values.
-> 
-> Signed-off-by: Steve James <ste@junkomatic.net>
-[--SNIP--]
-> diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-> new file mode 100644
-> index 0000000..d11ef59
-> --- /dev/null
-> +++ b/package/leveldb/leveldb.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# leveldb
-> +#
-> +################################################################################
-> +
-> +LEVELDB_VERSION = 1.18
-> +LEVELDB_SITE = https://github.com/google/leveldb/archive/
-> +LEVELDB_SOURCE = v$(LEVELDB_VERSION).tar.gz
+Add a dependancy on host-pkgconf when BR2_PACKAGE_LIBNL is enabled.
 
-There is a simple way to add packages from GitHub, see:
-    http://nightly.buildroot.org/#_tips_and_tricks
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reported-by: J?rg Krause <jkrause@posteo.de>
+Cc: J?rg Krause <jkrause@posteo.de>
+---
+ ...02-use-correct-include-path-for-libnl-3.0.patch | 26 ++++++++++++++++++++++
+ package/wpa_supplicant/wpa_supplicant.mk           |  2 +-
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+ create mode 100644 package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
 
-Basically, that means wirting:
-
-    LEVELDB_SOURCE = $(call github,google,leveldb,$(LEVELDB_VERSION))
-
-I know the manual says to prefer the "green button" but in this case, it
-means we would end up with a tarball locally named v1.18.tar.gz.
-
-This is not nice, because there is thus no way to know what package it
-applies to, and we usually have tarballs named foo-version.tar.gz
-
-So, in this case, I would prefer we use the github helper, even though
-upstream has uploaded release tarballs.
-
-> +LEVELDB_LICENSE = BSD-3c
-> +LEVELDB_LICENSE_FILES = LICENSE
-> +LEVELDB_INSTALL_STAGING = YES
-> +LEVELDB_DEPENDENCIES = snappy
-> +
-> +define LEVELDB_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" -C $(@D) all
-
-Passing CC and CXX is not enough, because you are missing the CFLAGS and
-CXXFLAGS, as well as others, like LDFLAGS.
-
-We usually write:
-
-    $(MAKE) $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-
-> +endef
-> +
-> +define LEVELDB_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/libleveldb.a       $(STAGING_DIR)/usr/lib
-> +	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
-> +	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
-> +	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
-> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
-> +	$(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h $(STAGING_DIR)/usr/include/leveldb
-> +endef
-> +
-> +define LEVELDB_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
-> +	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
-> +	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
-
-I think you are the first one to actually use HOSTLN! :-)
-Hmm, in fact I already used it in keyutils. Hehe! :-)
-
-> +endef
-
-Ah, we have had a very recent (like, *very* recent) change that allows
-the user to select what libraries they want:
-  - shared only
-  - static only
-  - both
-
-So, you'd want to write something like:
-
-    ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-    define LEVELDB_INSTALL_STAGING_STATIC
-        $(INSTALL) -D -m 0644 $(@D)/libleveldb.a       $(STAGING_DIR)/usr/lib
-    endef
-    endif
-
-    ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-    define LEVELDB_INSTALL_STAGING_SHARED
-        $(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
-        $(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
-        $(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
-    endef
-    endif
-
-    define LEVELDB_INSTALL_STAGING_CMDS
-        $(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
-        $(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h $(STAGING_DIR)/usr/include/leveldb
-        $(LEVELDB_INSTALL_STAGING_STATIC)
-        $(LEVELDB_INSTALL_STAGING_SHARED)
-    endef
-
-    ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-    define LEVELDB_INSTALL_TARGET_CMDS
-        $(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
-        $(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
-        $(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
-    endef
-    endif
-
-Otherwise, this looks real good!
-
-Regards,
-Yann E. MORIN.
-
-> +$(eval $(generic-package))
-> -- 
-> 1.7.10.4
-> 
-
+diff --git a/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch b/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
+new file mode 100644
+index 0000000..6ed0eed
+--- /dev/null
++++ b/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
+@@ -0,0 +1,26 @@
++From 4426de35f0e5dd5b0152474ce6a885b73de60656 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Tue, 16 Dec 2014 23:50:33 +0100
++Subject: [PATCH 2/2] use correct include path for libnl-3.0
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/drivers/drivers.mak | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/drivers/drivers.mak b/src/drivers/drivers.mak
++index cdb913e..e9fc83c 100644
++--- a/src/drivers/drivers.mak
+++++ b/src/drivers/drivers.mak
++@@ -35,7 +35,7 @@ NEED_RFKILL=y
++ ifdef CONFIG_LIBNL32
++   DRV_LIBS += -lnl-3
++   DRV_LIBS += -lnl-genl-3
++-  DRV_CFLAGS += -DCONFIG_LIBNL20 -I/usr/include/libnl3
+++  DRV_CFLAGS += -DCONFIG_LIBNL20 `pkg-config --cflags libnl-3.0`
++ ifdef CONFIG_LIBNL3_ROUTE
++   DRV_LIBS += -lnl-route-3
++   DRV_CFLAGS += -DCONFIG_LIBNL3_ROUTE
++-- 
++1.9.3
++
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 0c4abb5..10b2c0a 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -35,7 +35,7 @@ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+ 	WPA_SUPPLICANT_LIBS += -lnl-3 -lm -lpthread
+ endif
+-	WPA_SUPPLICANT_DEPENDENCIES += libnl
++	WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libnl
+ 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_LIBNL32
+ else
+ 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
