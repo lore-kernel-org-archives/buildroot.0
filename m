@@ -1,44 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Dec 2014 21:28:30 +0100
-Subject: [Buildroot] [git commit] dbus: bump version
-Message-ID: <20141216203035.5B478803FC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Dec 2014 21:34:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 7724] New: Startx is not installed in the target
+Message-ID: <bug-7724-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f66ea18d98f141baae7de2970ca29286b1761749
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7724
 
-Regression fix for CVE-2014-3636, see release announcement:
-http://lists.freedesktop.org/archives/dbus/2014-November/016430.html
+           Summary: Startx is not installed in the target
+           Product: buildroot
+           Version: 2014.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mostafa.barmshory at dpq.co.ir
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dbus/dbus.hash |    4 ++--
- package/dbus/dbus.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 516b87c..4ae6d03 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	10bf87fdb68815edd01d53885101dbcdd80dacad7198912cca61a4fa22dfaf8e	dbus-1.8.10.tar.gz
-+# Locally calculated
-+sha256	c91428f28d2925ba32d34ffc824bfcf4d40d5e1e67befc4bcf2202f0a862501e  dbus-1.8.12.tar.gz
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index ed400e8..8d02b42 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.8.10
-+DBUS_VERSION = 1.8.12
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
+Dear all,
+
+I select X.org>XServer in the configuration of my board. But the startx is not
+installed in the target. By the way, the service is not build in the build
+folder. Would you help me, please?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
