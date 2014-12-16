@@ -1,32 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Dec 2014 13:26:18 +0100
-Subject: [Buildroot] [git commit] erlang: use libatomic_ops if available
-In-Reply-To: <20141215215003.A758F80403@busybox.osuosl.org>
-References: <20141215215003.A758F80403@busybox.osuosl.org>
-Message-ID: <20141216132618.5c19cb84@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Dec 2014 09:41:12 -0300
+Subject: [Buildroot] [PATCH 1/2] apr: add hash file
+Message-ID: <1418733673-12637-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/apr/apr.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/apr/apr.hash
 
-On Mon, 15 Dec 2014 22:36:24 +0100, Peter Korsgaard wrote:
-
-> Erlang can either provide its own atomic_ops implementation or use the
-> one in libatomic_ops. This patch ensures that it only uses the one from
-> libatomic_ops if it is available.
-
-Is this really what we want to do? In such cases, we normally always
-force to use the "system" version of the library rather than the
-built-in one. Why should Erlang be treated differently, especially if
-using the "system" version of the library works fine?
-
-Best regards,
-
-Thomas
+diff --git a/package/apr/apr.hash b/package/apr/apr.hash
+new file mode 100644
+index 0000000..50d657a
+--- /dev/null
++++ b/package/apr/apr.hash
+@@ -0,0 +1,2 @@
++# From http://archive.apache.org/dist/apr/apr-1.5.1.tar.gz.sha1
++sha1	9caa83e3f50f3abc9fab7c4a3f2739a12b14c3a3	apr-1.5.1.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
