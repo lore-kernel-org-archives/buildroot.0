@@ -1,42 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Dec 2014 23:47:22 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{18, 17, 14,
-	10}.x series
-Message-ID: <20141216225030.5726580458@busybox.osuosl.org>
+Date: Tue, 16 Dec 2014 23:45:52 +0100
+Subject: [Buildroot] [git commit] package/Config.in: fix menu alphabetical
+	order
+Message-ID: <20141216225030.2157880455@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa3ef502c929c32fa1e4a322df7d9b11da48788a
+commit: http://git.buildroot.net/buildroot/commit/?id=b90f1934c09272bfa019c398e3d928a055ceaa16
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in |   22 +++++++++++-----------
+ 1 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 135b578..35c88e4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -174,13 +174,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.65"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.105"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.62"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.63"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.35"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.26"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.27"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
--	default "3.17.6"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18"		if BR2_KERNEL_HEADERS_3_18
-+	default "3.17.7"	if BR2_KERNEL_HEADERS_3_17
-+	default "3.18.1"	if BR2_KERNEL_HEADERS_3_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/Config.in b/package/Config.in
+index 48be2df..7300443 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -961,6 +961,17 @@ endmenu
+ 
+ endmenu
+ 
++menu "Mail"
++	source "package/dovecot/Config.in"
++	source "package/exim/Config.in"
++	source "package/fetchmail/Config.in"
++	source "package/heirloom-mailx/Config.in"
++	source "package/libesmtp/Config.in"
++	source "package/msmtp/Config.in"
++	source "package/mutt/Config.in"
++	source "package/sylpheed/Config.in"
++endmenu
++
+ menu "Miscellaneous"
+ 	source "package/aespipe/Config.in"
+ 	source "package/bc/Config.in"
+@@ -978,17 +989,6 @@ menu "Miscellaneous"
+ 	source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+-menu "Mail"
+-	source "package/dovecot/Config.in"
+-	source "package/exim/Config.in"
+-	source "package/fetchmail/Config.in"
+-	source "package/heirloom-mailx/Config.in"
+-	source "package/libesmtp/Config.in"
+-	source "package/msmtp/Config.in"
+-	source "package/mutt/Config.in"
+-	source "package/sylpheed/Config.in"
+-endmenu
+-
+ menu "Networking applications"
+ 	source "package/aiccu/Config.in"
+ 	source "package/aircrack-ng/Config.in"
