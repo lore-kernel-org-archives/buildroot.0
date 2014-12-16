@@ -1,61 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Dec 2014 23:45:52 +0100
-Subject: [Buildroot] [git commit] package/Config.in: fix menu alphabetical
-	order
-Message-ID: <20141216225030.2157880455@busybox.osuosl.org>
+Date: Tue, 16 Dec 2014 23:48:32 +0100
+Subject: [Buildroot] [git commit] libnss: security bump to version 3.17.3
+Message-ID: <20141216225030.76D3D7FD46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b90f1934c09272bfa019c398e3d928a055ceaa16
+commit: http://git.buildroot.net/buildroot/commit/?id=6efc256a7762ed388ca57d809ceb3fc9f6776b7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes CVE-2014-1569 - The definite_length_decoder function in
+lib/util/quickder.c in Mozilla Network Security Services (NSS) before
+3.16.2.4 and 3.17.x before 3.17.3 does not ensure that the DER encoding
+of an ASN.1 length is properly formed, which allows remote attackers to
+conduct data-smuggling attacks by using a long byte sequence for an
+encoding.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in |   22 +++++++++++-----------
- 1 files changed, 11 insertions(+), 11 deletions(-)
+ package/libnss/libnss.hash |    4 ++--
+ package/libnss/libnss.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 48be2df..7300443 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -961,6 +961,17 @@ endmenu
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 916aade..5664e93 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_2_RTM/src/
+-sha256	134929e44e44b968a4883f4ee513a71ae45d55b486cee41ee8e26c3cc84dab8b	nss-3.17.2.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_3_RTM/src/
++sha256	f4d5e9035a2f84f25f35c283de3b0ff60d72e918748de25eaf017ed201fa21d5	nss-3.17.3.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 4e174f6..1737cd4 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endmenu
- 
-+menu "Mail"
-+	source "package/dovecot/Config.in"
-+	source "package/exim/Config.in"
-+	source "package/fetchmail/Config.in"
-+	source "package/heirloom-mailx/Config.in"
-+	source "package/libesmtp/Config.in"
-+	source "package/msmtp/Config.in"
-+	source "package/mutt/Config.in"
-+	source "package/sylpheed/Config.in"
-+endmenu
-+
- menu "Miscellaneous"
- 	source "package/aespipe/Config.in"
- 	source "package/bc/Config.in"
-@@ -978,17 +989,6 @@ menu "Miscellaneous"
- 	source "package/sound-theme-freedesktop/Config.in"
- endmenu
- 
--menu "Mail"
--	source "package/dovecot/Config.in"
--	source "package/exim/Config.in"
--	source "package/fetchmail/Config.in"
--	source "package/heirloom-mailx/Config.in"
--	source "package/libesmtp/Config.in"
--	source "package/msmtp/Config.in"
--	source "package/mutt/Config.in"
--	source "package/sylpheed/Config.in"
--endmenu
--
- menu "Networking applications"
- 	source "package/aiccu/Config.in"
- 	source "package/aircrack-ng/Config.in"
+-LIBNSS_VERSION = 3.17.2
++LIBNSS_VERSION = 3.17.3
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
