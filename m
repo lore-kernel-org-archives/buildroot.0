@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:53:53 -0600
-Subject: [Buildroot] [PATCH 01/30] libselinux: new package
+Date: Mon, 15 Dec 2014 21:54:07 -0600
+Subject: [Buildroot] [PATCH 15/30] shadow: new package
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-16-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,133 +12,104 @@ To: buildroot@busybox.net
 
 From: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in                |  1 +
- package/libselinux/Config.in     | 25 ++++++++++++++
- package/libselinux/libselinux.mk | 70 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 96 insertions(+)
- create mode 100644 package/libselinux/Config.in
- create mode 100644 package/libselinux/libselinux.mk
+ package/Config.in        |  3 +++
+ package/shadow/Config.in | 13 +++++++++++++
+ package/shadow/shadow.mk | 50 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 66 insertions(+)
+ create mode 100644 package/shadow/Config.in
+ create mode 100644 package/shadow/shadow.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f41e332..0944542 100644
+index c02e665..a4fdb62 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -936,6 +936,7 @@ menu "Other"
- endmenu
- 
- menu "Security"
-+	source "package/libselinux/Config.in"
- 	source "package/libsepol/Config.in"
- endmenu
- 
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+@@ -1215,6 +1215,9 @@ comment "Utilities"
+ 	source "package/logsurfer/Config.in"
+ 	source "package/pinentry/Config.in"
+ 	source "package/screen/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	source "package/shadow/Config.in"
++endif
+ 	source "package/sudo/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/time/Config.in"
+diff --git a/package/shadow/Config.in b/package/shadow/Config.in
 new file mode 100644
-index 0000000..239f31e
+index 0000000..5692ac6
 --- /dev/null
-+++ b/package/libselinux/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_LIBSELINUX
-+	bool "libselinux"
-+	select BR2_PACKAGE_LIBSEPOL
-+	select BR2_PACKAGE_PCRE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LARGEFILE
-+	# No direct limitation to build other arch or libc(s).
-+	# Limiting based on qemu tested arch(s).
-+	depends on BR2_powerpc || BR2_powerpc64 || \
-+		BR2_i386 || BR2_x86_64 || BR2_arm
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # UCLIBC needs testing
-+
++++ b/package/shadow/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_SHADOW
++	bool "shadow"
 +	help
-+	  libselinux is the runtime SELinux library that provides
-+	  interfaces (e.g. library functions for the SELinux kernel
-+	  APIs like getcon(), other support functions like
-+	  getseuserbyname()) to SELinux-aware applications. libselinux
-+	  may use the shared libsepol to manipulate the binary policy
-+	  if necessary (e.g. to downgrade the policy format to an
-+	  older version supported by the kernel) when loading policy.
-+
-+	  http://selinuxproject.org/page/Main_Page
-+
-+comment "libselinux needs a toolchain w/ largefile, threads"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
++	  The shadow-utils package includes the necessary programs for
++	  converting UNIX password files to the shadow password format, plus
++	  programs for managing user and group accounts. The pwconv command
++	  converts passwords to the shadow password format. The pwunconv command
++	  unconverts shadow passwords and generates an npasswd file (a standard
++	  UNIX password file). The pwck command checks the integrity of password
++	  and shadow files. The lastlog command prints out the last login times
++	  for all users. The useradd, userdel, and usermod commands are used for
++	  managing user accounts. The groupadd, groupdel, and groupmod commands
++	  are used for managing group accounts.
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
 new file mode 100644
-index 0000000..9e2b438
+index 0000000..ced78b2
 --- /dev/null
-+++ b/package/libselinux/libselinux.mk
-@@ -0,0 +1,70 @@
++++ b/package/shadow/shadow.mk
+@@ -0,0 +1,50 @@
 +################################################################################
 +#
-+# libselinux
++# shadow
 +#
 +################################################################################
 +
-+LIBSELINUX_VERSION = 2.1.13
-+LIBSELINUX_SITE = http://userspace.selinuxproject.org/releases/20130423/
-+LIBSELINUX_LICENSE = PublicDomain
-+LIBSELINUX_LICENSE_FILES = LICENSE
++SHADOW_VERSION = 4.1.5.1
++SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.bz2
++SHADOW_SITE = http://pkg-shadow.alioth.debian.org/releases/
++SHADOW_LICENSE = BSD
++SHADOW_LICENSE_FILES = COPYING
++SHADOW_DEPENDENCIES = acl attr busybox
 +
-+LIBSELINUX_DEPENDENCIES = libsepol pcre
++SHADOW_INSTALL_STAGING = NO
 +
-+LIBSELINUX_INSTALL_STAGING = YES
++SHADOW_CONF_OPTS = --disable-nls
 +
-+LIBSELINUX_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
++# Shadow configuration to support audit
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++SHADOW_DEPENDENCIES += audit
++SHADOW_CONF_OPTS += --with-audit=yes
++endif
 +
-+define LIBSELINUX_BUILD_CMDS
-+	# DESTDIR is needed during the compile to compute library and
-+	# header paths.
-+	$(MAKE) -C $(@D) $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
++# Shadow with linux-pam support
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++SHADOW_DEPENDENCIES += linux-pam
++SHADOW_CONF_OPTS += --with-libpam=yes
++
++# Comment out all config entries that conflict with using PAM
++define SHADOW_LOGIN_CONFIGURATION
++        for FUNCTION in FAIL_DELAY FAILLOG_ENAB LASTLOG_ENAB MAIL_CHECK_ENAB \
++                OBSCURE_CHECKS_ENAB PORTTIME_CHECKS_ENAB QUOTAS_ENAB CONSOLE MOTD_FILE \
++                FTMP_FILE NOLOGINS_FILE ENV_HZ PASS_MIN_LEN SU_WHEEL_ONLY CRACKLIB_DICTPATH \
++                PASS_CHANGE_TRIES PASS_ALWAYS_WARN CHFN_AUTH ENCRYPT_METHOD ENVIRON_FILE ; \
++        do \
++                sed -i "s/^$${FUNCTION}/# &/" $(TARGET_DIR)/etc/login.defs ; \
++        done
 +endef
 +
-+define LIBSELINUX_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(STAGING_DIR)
-+endef
++SHADOW_POST_INSTALL_TARGET_HOOKS += SHADOW_LOGIN_CONFIGURATION
 +
-+define LIBSELINUX_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install $(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR)
-+	# Create the selinuxfs mount point
-+	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
-+	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
-+		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
-+endef
++endif
 +
-+HOST_LIBSELINUX_DEPENDENCIES = host-libsepol host-pcre host-python host-swig
++# Shadow with selinux support
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SHADOW_DEPENDENCIES += libselinux libsemanage
++SHADOW_CONF_OPTS += --with-selinux=yes
++endif
 +
-+HOST_LIBSELINUX_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) \
-+	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
-+	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
-+	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
-+
-+define HOST_LIBSELINUX_BUILD_CMDS
-+	# DESTDIR is needed during the compile to compute library and
-+	# header paths.
-+	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) all
-+	# Generate python interface wrapper
-+	$(MAKE) -C $(@D) $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
-+endef
-+
-+define HOST_LIBSELINUX_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+	mv $(HOST_DIR)/lib/libselinux.so.1 $(HOST_DIR)/usr/lib
-+	(cd $(HOST_DIR)/usr/lib; rm -f libselinux.so; \
-+		ln -s libselinux.so.1 libselinux.so)
-+	-rmdir $(HOST_DIR)/lib
-+	(if [ -f $(HOST_DIR)/sbin/matchpathcon ]; then \
-+		mv $(HOST_DIR)/sbin/matchpathcon $(HOST_DIR)/usr/sbin/; \
-+		-rmdir $(HOST_DIR)/sbin; \
-+	fi)
-+	# Install python interface wrapper
-+	$(MAKE) -C $(@D) install-pywrap $(HOST_LIBSELINUX_MAKE_OPTS) DESTDIR=$(HOST_DIR)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
++$(eval $(autotools-package))
 -- 
 1.9.1
