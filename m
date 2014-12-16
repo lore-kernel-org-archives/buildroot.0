@@ -1,156 +1,233 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:54:13 -0600
-Subject: [Buildroot] [PATCH 21/30] linux-pam: selinux support
+Date: Mon, 15 Dec 2014 21:54:08 -0600
+Subject: [Buildroot] [PATCH 16/30] busybox: applets as individual binaries
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-22-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-17-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The individual binaries option of busybox allows for the applets
+that would usually be symlinks to be built as individual applications
+that link against a shared library.
+
+This feature is needed for SELinux to allow the applications to run
+under the correct SELinux context.
+
+The patch being added allows the individual applications to be
+installed and will be upstreamed to the busybox developers.
+
+The initial work for this change was done by Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>.
+
+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- .../linux-pam-08-audit-log-acct_message_ret.patch  | 16 ++++++
- package/linux-pam/linux-pam.mk                     | 58 +++++++++++++++++++++-
- package/linux-pam/system-auth.pamd                 | 15 ++++++
- 3 files changed, 88 insertions(+), 1 deletion(-)
- create mode 100644 package/linux-pam/linux-pam-08-audit-log-acct_message_ret.patch
- create mode 100644 package/linux-pam/system-auth.pamd
+ package/busybox/Config.in                          |   7 ++
+ ...s-Add-installation-of-individual-binaries.patch | 103 +++++++++++++++++++++
+ package/busybox/busybox.mk                         |  34 +++++++
+ 3 files changed, 144 insertions(+)
+ create mode 100644 package/busybox/busybox-0007-applets-Add-installation-of-individual-binaries.patch
 
-diff --git a/package/linux-pam/linux-pam-08-audit-log-acct_message_ret.patch b/package/linux-pam/linux-pam-08-audit-log-acct_message_ret.patch
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index f2f2990..2344c4e 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -26,6 +26,13 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
+ 
++config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
++	bool "Individual binaries"
++	depends on !BR2_PREFER_STATIC_LIB
++
++comment "Busybox individual binaries depends on dynamic libraries"
++	depends on BR2_PREFER_STATIC_LIB
++
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox-0007-applets-Add-installation-of-individual-binaries.patch b/package/busybox/busybox-0007-applets-Add-installation-of-individual-binaries.patch
 new file mode 100644
-index 0000000..d819f08
+index 0000000..e7b9178
 --- /dev/null
-+++ b/package/linux-pam/linux-pam-08-audit-log-acct_message_ret.patch
-@@ -0,0 +1,16 @@
-+--- a/libpam/pam_audit.c	2011-06-21 04:04:56.000000000 -0500
-++++ b/libpam/pam_audit.c	2012-09-12 08:55:26.000000000 -0500
-+@@ -41,11 +41,11 @@
-+      an official errno number, but must not. It can also be a audit
-+      internal error code. Which makes errno useless :-((. Try the
-+      best to fix it. */
-+-  errno = -rc;
-++  errno = rc;
-+ 
-+   pamh->audit_state |= PAMAUDIT_LOGGED;
-+ 
-+-  if (rc < 0) {
-++  if (rc <= 0) {
-+       if (rc == -EPERM && getuid() != 0)
-+           return 0;
-+       if (errno != old_errno) {
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 3dce25c..db6161d 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -8,6 +8,9 @@ LINUX_PAM_VERSION = 1.1.8
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
- LINUX_PAM_SITE = http://linux-pam.org/library
- LINUX_PAM_INSTALL_STAGING = YES
++++ b/package/busybox/busybox-0007-applets-Add-installation-of-individual-binaries.patch
+@@ -0,0 +1,103 @@
++From 3451b55054a6fe2073a21301938802a27dec835d Mon Sep 17 00:00:00 2001
++From: Clayton Shotwell <clshotwe@rockwellcollins.com>
++Date: Mon, 16 Dec 2013 14:45:33 -0600
++Subject: [PATCH 5/5] applets: Add installation of individual binaries
 +
-+# lckpwdf is included with shadow
-+# cracklib and libdb are not currently present in buildroot
- LINUX_PAM_CONF_OPTS = \
- 	--disable-prelude \
- 	--disable-isadir \
-@@ -15,8 +18,10 @@ LINUX_PAM_CONF_OPTS = \
- 	--disable-db \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
-+	--disable-cracklib \
- 	--libdir=/lib
--LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf
++Adding support to install individual binaries if the option is
++enabled. This also installs the shared libbusybox.so.* library.
 +
-+LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf host-linux-pam
- LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_LICENSE = BSD-3c
- LINUX_PAM_LICENSE_FILES = Copyright
-@@ -26,12 +31,63 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- 	LINUX_PAM_MAKE_OPTS += LIBS=-lintl
++Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
++---
++ Makefile.custom    |    4 ++++
++ applets/install.sh |   26 ++++++++++++++++++++++++--
++ 2 files changed, 28 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.custom b/Makefile.custom
++index 6da79e6..e4dc4dc 100644
++--- a/Makefile.custom
+++++ b/Makefile.custom
++@@ -23,6 +23,10 @@ ifeq ($(CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER),y)
++ INSTALL_OPTS:= --scriptwrapper
++ endif
++ endif
+++ifeq ($(CONFIG_FEATURE_INDIVIDUAL),y)
+++INSTALL_OPTS:= --binaries
+++LIBBUSYBOX_SONAME:= 0_lib/libbusybox.so.$(BB_VER)
+++endif
++ install: $(srctree)/applets/install.sh busybox busybox.links
++ 	$(Q)DO_INSTALL_LIBS="$(strip $(LIBBUSYBOX_SONAME) $(DO_INSTALL_LIBS))" \
++ 		$(SHELL) $< $(CONFIG_PREFIX) $(INSTALL_OPTS)
++diff --git a/applets/install.sh b/applets/install.sh
++index 95b4719..d01c98d 100755
++--- a/applets/install.sh
+++++ b/applets/install.sh
++@@ -5,19 +5,26 @@ export LC_CTYPE=POSIX
++ 
++ prefix=$1
++ if [ -z "$prefix" ]; then
++-	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--scriptwrapper]"
+++	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--binaries/--scriptwrapper]"
++ 	exit 1
++ fi
++ 
+++# Source the configuration
+++. ./.config
+++
++ h=`sort busybox.links | uniq`
++ 
+++sharedlib_dir="0_lib"
+++
++ linkopts=""
++ scriptwrapper="n"
+++binaries="n"
++ cleanup="0"
++ noclobber="0"
++ case "$2" in
++ 	--hardlinks)     linkopts="-f";;
++ 	--symlinks)      linkopts="-fs";;
+++	--binaries)      binaries="y";;
++ 	--scriptwrapper) scriptwrapper="y";swrapall="y";;
++ 	--sw-sh-hard)    scriptwrapper="y";linkopts="-f";;
++ 	--sw-sh-sym)     scriptwrapper="y";linkopts="-fs";;
++@@ -40,8 +47,9 @@ if [ -n "$DO_INSTALL_LIBS" ] && [ "$DO_INSTALL_LIBS" != "n" ]; then
++ 	for i in $DO_INSTALL_LIBS; do
++ 		rm -f "$prefix/$libdir/$i" || exit 1
++ 		if [ -f "$i" ]; then
+++			echo "   Installing $i to the target@$prefix/$libdir/"
++ 			cp -pPR "$i" "$prefix/$libdir/" || exit 1
++-			chmod 0644 "$prefix/$libdir/$i" || exit 1
+++			chmod 0644 "$prefix/$libdir/`basename $i`" || exit 1
++ 		fi
++ 	done
++ fi
++@@ -68,6 +76,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
++ 
++ for i in $h; do
++ 	appdir=`dirname "$i"`
+++	app=`basename "$i"`
++ 	mkdir -p "$prefix/$appdir" || exit 1
++ 	if [ "$scriptwrapper" = "y" ]; then
++ 		if [ "$swrapall" != "y" ] && [ "$i" = "/bin/sh" ]; then
++@@ -78,6 +87,19 @@ for i in $h; do
++ 			chmod +x "$prefix/$i"
++ 		fi
++ 		echo "	$prefix/$i"
+++	elif [ "$binaries" = "y" ]; then
+++		# Copy the binary over rather
+++		if [ -e $sharedlib_dir/$app ]; then
+++			if [ "$noclobber" = "0" ] || [ ! -e "$prefix/$i" ]; then
+++				echo "   Copying $sharedlib_dir/$app to $prefix/$i"
+++				cp -a $sharedlib_dir/$app $prefix/$i || exit 1
+++			else
+++				echo "  $prefix/$i already exists"
+++			fi
+++		else
+++			echo "Error: Could not find $sharedlib_dir/$app"
+++			exit 1
+++		fi
++ 	else
++ 		if [ "$2" = "--hardlinks" ]; then
++ 			bb_path="$prefix/bin/busybox"
++-- 
++1.7.1
++
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 9fb389d..e689d2d 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -49,10 +49,31 @@ BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++define BUSYBOX_PERMISSIONS
++# Applets with BB_SUID_REQUIRE
++/usr/bin/crontab		 f 4755	0 0 - - - - -
++/bin/login			 f 4755	0 0 - - - - -
++/usr/bin/passwd		 f 4755	0 0 - - - - -
++/bin/su			 f 4755	0 0 - - - - -
++/usr/bin/vlock			 f 4755	0 0 - - - - -
++/usr/bin/wall			 f 4755	0 0 - - - - -
++# Applets with BB_SUID_MAYBE
++/bin/ping			 f 4755	0 0 - - - - -
++/bin/ping6			 f 4755	0 0 - - - - -
++/sbin/findfs			 f 4755	0 0 - - - - -
++/bin/mount			 f 4755	0 0 - - - - -
++/usr/bin/traceroute		 f 4755	0 0 - - - - -
++/usr/bin/traceroute6		 f 4755	0 0 - - - - -
++# Other files
++/usr/share/udhcpc/default.script f 755  0 0 - - - - -
++endef
++else
+ define BUSYBOX_PERMISSIONS
+ 	/bin/busybox                     f 4755 0  0 - - - - -
+ 	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+ endef
++endif
+ 
+ # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+@@ -161,6 +182,17 @@ define BUSYBOX_SET_INIT
+ endef
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+	LINUX_PAM_CONF_OPTS += --enable-selinux
-+	LINUX_PAM_DEPENDENCIES += libselinux
-+else
-+	LINUX_PAM_CONF_OPTS += --disable-selinux
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
++endef
++
++define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
++	rm -f $(TARGET_DIR)/bin/busybox
++endef
 +endif
 +
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+	LINUX_PAM_CONF_OPTS += --enable-audit
-+	LINUX_PAM_DEPENDENCIES += audit
-+else
-+	LINUX_PAM_CONF_OPTS += --disable-audit
-+endif
-+
- # Install default pam config (deny everything)
- define LINUX_PAM_INSTALL_CONFIG
- 	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
- 		$(TARGET_DIR)/etc/pam.d/other
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+@@ -198,6 +230,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
++	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
  endef
  
-+# Use the host-pam pam_conv1 app to create the pam.d files
-+define LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
-+	( \
-+		if [ -d $(TARGET_DIR)/etc/pam.d/ ]; then \
-+			mv $(TARGET_DIR)/etc/pam.d/ $(TARGET_DIR)/etc/pam.d.orig/; \
-+		fi; \
-+		cd $(TARGET_DIR)/etc/ && \
-+		cat $(@D)/conf/pam.conf | $(HOST_DIR)/usr/bin/pam_conv1; \
-+		if [ -d pam.d.orig ]; then \
-+			cp -a pam.d/* pam.d.orig/; \
-+			rm -rf pam.d/; \
-+			mv pam.d.orig/ pam.d/; \
-+		fi; \
-+	)
-+	$(INSTALL) -D -m 0644 package/linux-pam/system-auth.pamd $(TARGET_DIR)/etc/pam.d/system-auth
-+endef
-+
-+LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
- LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
+ define BUSYBOX_CONFIGURE_CMDS
+@@ -219,6 +252,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
+ endef
  
-+HOST_LINUX_PAM_DEPENDENCIES = host-autoconf host-flex
-+
-+HOST_LINUX_PAM_CONF_OPTS = --disable-rpath \
-+               --enable-read-both-confs \
-+               --disable-regenerate-docu \
-+               --disable-isadir \
-+               --disable-nis \
-+               --enable-securedir=/lib/security \
-+               --disable-prelude \
-+               --disable-cracklib \
-+               --disable-lckpwdf \
-+               --enable-db=no \
-+               --disable-selinux \
-+               --disable-audit \
-+
-+define HOST_LINUX_PAM_INSTALL_CMDS
-+	$(INSTALL) -m 755 $(@D)/conf/pam_conv1/pam_conv1 $(HOST_DIR)/usr/bin/
-+endef
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/linux-pam/system-auth.pamd b/package/linux-pam/system-auth.pamd
-new file mode 100644
-index 0000000..2fa116a
---- /dev/null
-+++ b/package/linux-pam/system-auth.pamd
-@@ -0,0 +1,15 @@
-+#%PAM-1.0
-+auth        required      pam_env.so
-+auth        sufficient    pam_unix.so
-+auth        required      pam_deny.so
-+
-+account     required      pam_unix.so
-+
-+#password    required      pam_cracklib.so try_first_pass retry=3
-+password    sufficient    pam_unix.so md5 shadow try_first_pass
-+password    required      pam_deny.so
-+
-+session     optional      pam_keyinit.so revoke
-+session     required      pam_limits.so
-+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
-+session     required      pam_unix.so
+ $(eval $(kconfig-package))
 -- 
 1.9.1
