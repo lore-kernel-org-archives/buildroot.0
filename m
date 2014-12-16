@@ -1,117 +1,144 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Dec 2014 23:55:32 +0100
-Subject: [Buildroot] Second try: Configuration for real hardware / How
- to configure RTAI
-In-Reply-To: <d4a8b511599845a89f0c34664c0ed8b1@dsw332.wattens.swarovski.com>
-References: <d4a8b511599845a89f0c34664c0ed8b1@dsw332.wattens.swarovski.com>
-Message-ID: <5490B864.30406@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 Dec 2014 00:02:43 +0100
+Subject: [Buildroot] [PATCH] leveldb: new package
+In-Reply-To: <201412151541.19296.ste@junkomatic.net>
+References: <201412151541.19296.ste@junkomatic.net>
+Message-ID: <20141216230243.GE4192@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/12/14 16:19, Spielmann Werner wrote:
-> Hello,
->
->  
->
-> this is my second try?    :-(    Any help is appreciated!
->
->  
->
->  
->
-> I was able to pass ?make? (for a x86 configuration: kernel 2.6.32.11, rtai
-> 3.8.1, gcc 4.5.4)  for the first time (with the help of Peter Koorsgard).
->
->  
->
-> I found this document:
-> http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
->
->  
->
-> But I still have several questions:
->
->  
->
-> ?         How can I adapt the configuration to my real hardware?
->
-> I want to use a x86 architecture with is nearly a standard PC with flash cards.
->
-> Have I to configure a board/ directory and a configs/ directory for this Board?
->
-> The Ethernet devices will need the Intel e1000e-Driver, the serial devices a
-> 8250/16550 driver?
+Steve, All,
 
- If you passed the build, then the next step is to create a bootable image (SD
-or CF card). On a PC that is unfortunately a little complicated. You can look at
-e.g. board/ts/ts5x00/ for an example.
+On 2014-12-15 15:41 +0000, Steve James spake thusly:
+> Adds new package: leveldb
+> 
+>   LevelDB is a fast key-value storage library written at Google that
+>   provides an ordered mapping from string keys to string values.
+> 
+> Signed-off-by: Steve James <ste@junkomatic.net>
+[--SNIP--]
+> diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+> new file mode 100644
+> index 0000000..d11ef59
+> --- /dev/null
+> +++ b/package/leveldb/leveldb.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# leveldb
+> +#
+> +################################################################################
+> +
+> +LEVELDB_VERSION = 1.18
+> +LEVELDB_SITE = https://github.com/google/leveldb/archive/
+> +LEVELDB_SOURCE = v$(LEVELDB_VERSION).tar.gz
 
- Next, you'll probably want to make a custom kernel configuration because the
-i386_defconfig is pretty bloated. So do a 'make linux-menuconfig' and remove all
-the drivers you don't need.
+There is a simple way to add packages from GitHub, see:
+    http://nightly.buildroot.org/#_tips_and_tricks
 
- Finally, to save all that configuration, you can create a board/ directory and
-a defconfig. Look at the BR2_EXTERNAL explanation in the manual for suggestions
-on how to approach that.
+Basically, that means wirting:
 
->
-> Can you give me any pointers?
->
->  
->
-> ?         To configure RTAI on a standard PC I have to execute within the RTAI
-> directory (before building the kernel):
->
->  
->
->    ?make menuconfig?
->
->  
->
-> and then:
->
->  
->
->     ?make?
->
-> When and how can I configure RTAI in combination with buildroot?
+    LEVELDB_SOURCE = $(call github,google,leveldb,$(LEVELDB_VERSION))
 
- I haven't used RTAI myself, but I thought it's Kconfig was merged with the
-kernel's. Hm, looking at RTAI's README, it turns out that I was wrong... Well,
-currently we only support the automatic configuration of RTAI, not the
-interactive configuration. Patches to improve that are welcome.
+I know the manual says to prefer the "green button" but in this case, it
+means we would end up with a tarball locally named v1.18.tar.gz.
 
+This is not nice, because there is thus no way to know what package it
+applies to, and we usually have tarballs named foo-version.tar.gz
 
+So, in this case, I would prefer we use the github helper, even though
+upstream has uploaded release tarballs.
 
- Regards,
- Arnout
+> +LEVELDB_LICENSE = BSD-3c
+> +LEVELDB_LICENSE_FILES = LICENSE
+> +LEVELDB_INSTALL_STAGING = YES
+> +LEVELDB_DEPENDENCIES = snappy
+> +
+> +define LEVELDB_BUILD_CMDS
+> +	$(MAKE) CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" -C $(@D) all
 
+Passing CC and CXX is not enough, because you are missing the CFLAGS and
+CXXFLAGS, as well as others, like LDFLAGS.
 
->
-> Thanks for reading. Any help is appreciated!
->
->  
->
-> Werner
->
->  
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+We usually write:
 
+    $(MAKE) $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+
+> +endef
+> +
+> +define LEVELDB_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/libleveldb.a       $(STAGING_DIR)/usr/lib
+> +	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
+> +	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
+> +	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
+> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
+> +	$(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h $(STAGING_DIR)/usr/include/leveldb
+> +endef
+> +
+> +define LEVELDB_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
+> +	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
+> +	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
+
+I think you are the first one to actually use HOSTLN! :-)
+Hmm, in fact I already used it in keyutils. Hehe! :-)
+
+> +endef
+
+Ah, we have had a very recent (like, *very* recent) change that allows
+the user to select what libraries they want:
+  - shared only
+  - static only
+  - both
+
+So, you'd want to write something like:
+
+    ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+    define LEVELDB_INSTALL_STAGING_STATIC
+        $(INSTALL) -D -m 0644 $(@D)/libleveldb.a       $(STAGING_DIR)/usr/lib
+    endef
+    endif
+
+    ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+    define LEVELDB_INSTALL_STAGING_SHARED
+        $(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
+        $(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
+        $(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
+    endef
+    endif
+
+    define LEVELDB_INSTALL_STAGING_CMDS
+        $(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
+        $(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h $(STAGING_DIR)/usr/include/leveldb
+        $(LEVELDB_INSTALL_STAGING_STATIC)
+        $(LEVELDB_INSTALL_STAGING_SHARED)
+    endef
+
+    ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+    define LEVELDB_INSTALL_TARGET_CMDS
+        $(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
+        $(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
+        $(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
+    endef
+    endif
+
+Otherwise, this looks real good!
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(generic-package))
+> -- 
+> 1.7.10.4
+> 
 
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
