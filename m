@@ -1,39 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Dec 2014 08:02:56 +0100
-Subject: [Buildroot] Buildroot autobuilders - Cleanup faulty tarballs
-In-Reply-To: <20141215230340.GB4075@free.fr>
-References: <20141215230340.GB4075@free.fr>
-Message-ID: <20141216080256.09901ee4@free-electrons.com>
+Date: Tue, 16 Dec 2014 08:13:22 +0100
+Subject: [Buildroot] [PATCH 1/1]  package/gdb: fix shared-only build
+In-Reply-To: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
+References: <1418597244-31844-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141216081322.229c0a52@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Romain Naour,
 
-On Tue, 16 Dec 2014 00:03:40 +0100, Yann E. MORIN wrote:
+On Sun, 14 Dec 2014 23:47:24 +0100, Romain Naour wrote:
+>  When --disable-static is given to the gdb's main configure script,
+>  it also disable the static build of bundled libraries like bfd, readline
+>  and opcodes, which must be build statically.
+> 
+>  Fixes:
+>  http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
+>  http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
+>  http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
+>  http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
+>  http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/gdb/0001-bfd-force-static-build.patch      | 79 +++++++++++++++++++++
+>  package/gdb/0002-readline-force-static-build.patch | 34 +++++++++
+>  .../gdb/0003-libopcodes-force-static-build.patch   | 80 ++++++++++++++++++++++
+>  3 files changed, 193 insertions(+)
+>  create mode 100644 package/gdb/0001-bfd-force-static-build.patch
+>  create mode 100644 package/gdb/0002-readline-force-static-build.patch
+>  create mode 100644 package/gdb/0003-libopcodes-force-static-build.patch
 
-> Could you please remove the tarballs from SF-hosted packages on each
-> autobuilder instance you are running, please? You'll find that list
-> below.
+Are you sure patching gdb is the right direction here? I believe those
+patches have no chance to be merged upstream, so patching is not the
+right solution.
 
-Done. Note that I did not simply remove the Sourceforge tarballs, but
-simply completely removed the download directories of each autobuild
-instance I was managing. This has two consequences:
- 
- * A few invalid failures being reported, such as
-   http://autobuild.buildroot.org/results/8da/8daafed00348b4498c7dfe2b34e060338b2f10eb/build-end.log.
-   There should be no more than the number of instances I was taking of
-   (4 on the Free Electrons build server, 4 on the gcc75 machine).
+A better solution is probably to re-add --enable-static to
+GDB_CONF_OPTS, even if we're doing a shared only build. This doesn't
+require patching gdb, and is more compliant with what upstream wants:
+doing a pure shared build of gdb isn't supported.
 
- * Probably a higher number of reports about failed downloads, since
-   wiping out the download directory means that the next builds will
-   re-download everything they need, which gives a higher probability
-   of downloading tarballs that have disappeared, or trying to reach
-   hosts that are down, etc.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
