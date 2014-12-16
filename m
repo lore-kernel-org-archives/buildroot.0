@@ -1,33 +1,30 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 17 Dec 2014 00:07:27 +0100
-Subject: [Buildroot] [PATCH] package/wpa_supplicant: use correct include
-	path for libnl-3.0
-Message-ID: <1418771247-12079-1-git-send-email-romain.naour@openwide.fr>
+Date: Wed, 17 Dec 2014 00:17:12 +0100
+Subject: [Buildroot] [PATCH] package/hostapd: use correct include path for
+	libnl-3.0
+Message-ID: <1418771832-14258-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-ERROR: unsafe header/library path used in cross-compilation: '/usr/include/libnl3'
-
-Add a dependancy on host-pkgconf when BR2_PACKAGE_LIBNL is enabled.
+Add a dependancy on host-pkgconf.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Reported-by: J?rg Krause <jkrause@posteo.de>
 Cc: J?rg Krause <jkrause@posteo.de>
 ---
- ...02-use-correct-include-path-for-libnl-3.0.patch | 26 ++++++++++++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk           |  2 +-
+ ...01-use-correct-include-path-for-libnl-3.0.patch | 26 ++++++++++++++++++++++
+ package/hostapd/hostapd.mk                         |  2 +-
  2 files changed, 27 insertions(+), 1 deletion(-)
- create mode 100644 package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
+ create mode 100644 package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
 
-diff --git a/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch b/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
+diff --git a/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch b/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
 new file mode 100644
 index 0000000..6ed0eed
 --- /dev/null
-+++ b/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
++++ b/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
 @@ -0,0 +1,26 @@
 +From 4426de35f0e5dd5b0152474ce6a885b73de60656 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@openwide.fr>
@@ -55,18 +52,18 @@ index 0000000..6ed0eed
 +-- 
 +1.9.3
 +
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 0c4abb5..10b2c0a 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -35,7 +35,7 @@ ifeq ($(BR2_PACKAGE_LIBNL),y)
- ifeq ($(BR2_STATIC_LIBS),y)
- 	WPA_SUPPLICANT_LIBS += -lnl-3 -lm -lpthread
- endif
--	WPA_SUPPLICANT_DEPENDENCIES += libnl
-+	WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libnl
- 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_LIBNL32
- else
- 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index d4a5304..72305fa 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -8,7 +8,7 @@ HOSTAPD_VERSION = 2.3
+ HOSTAPD_SITE = http://hostap.epitest.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+-HOSTAPD_DEPENDENCIES = libnl
++HOSTAPD_DEPENDENCIES = host-pkgconf libnl
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ HOSTAPD_LICENSE = GPLv2/BSD-3c
+ HOSTAPD_LICENSE_FILES = README
 -- 
 1.9.3
