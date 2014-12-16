@@ -1,53 +1,52 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 15 Dec 2014 21:54:10 -0600
-Subject: [Buildroot] [PATCH 18/30] busybox: added linux-pam support
+Date: Mon, 15 Dec 2014 21:54:18 -0600
+Subject: [Buildroot] [PATCH 26/30] util-linux: selinux, audit,
+	and pam support
 In-Reply-To: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1418702062-61039-19-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1418702062-61039-27-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <Matthew.Weber@rockwellcollins.com>
-
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/busybox/busybox.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/util-linux/util-linux.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index cc7a711..8c8011e 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -193,10 +193,19 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
- endef
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index e06fa9a..b31afdc 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -51,6 +51,27 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define BUSYBOX_LINUX_PAM
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+BUSYBOX_DEPENDENCIES += linux-pam
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
++else
++UTIL_LINUX_CONF_OPTS += --without-selinux
 +endif
 +
- ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
- BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
- define BUSYBOX_SET_SELINUX
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUXENABLED,$(BUSYBOX_BUILD_CONFIG))
++ifeq ($(BR2_PACKAGE_PAM),y)
++UTIL_LINUX_DEPENDENCIES += pam
++UTIL_LINUX_CONF_OPTS += --with-pam
++else
++UTIL_LINUX_CONF_OPTS += --without-pam
++endif
 +
- endef
- endif
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++UTIL_LINUX_DEPENDENCIES += audit
++UTIL_LINUX_CONF_OPTS += --with-audit
++else
++UTIL_LINUX_CONF_OPTS += --without-audit
++endif
++
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
  
-@@ -234,6 +243,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_CRYPT_SHA)
- 	$(BUSYBOX_NETKITBASE)
- 	$(BUSYBOX_NETKITTELNET)
-+	$(BUSYBOX_LINUX_PAM)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
 -- 
 1.9.1
