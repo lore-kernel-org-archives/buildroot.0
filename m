@@ -1,69 +1,32 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 17 Dec 2014 00:17:12 +0100
-Subject: [Buildroot] [PATCH] package/hostapd: use correct include path for
-	libnl-3.0
-Message-ID: <1418771832-14258-1-git-send-email-romain.naour@openwide.fr>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 16 Dec 2014 23:22:15 -0500
+Subject: [Buildroot] [PATCH] erlang: fix typo in dependencies
+Message-ID: <1418790135-31149-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a dependancy on host-pkgconf.
+If libatomic_ops was enabled, then the host-erlang dependency was lost.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reported-by: J?rg Krause <jkrause@posteo.de>
-Cc: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- ...01-use-correct-include-path-for-libnl-3.0.patch | 26 ++++++++++++++++++++++
- package/hostapd/hostapd.mk                         |  2 +-
- 2 files changed, 27 insertions(+), 1 deletion(-)
- create mode 100644 package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
+ package/erlang/erlang.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch b/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
-new file mode 100644
-index 0000000..6ed0eed
---- /dev/null
-+++ b/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
-@@ -0,0 +1,26 @@
-+From 4426de35f0e5dd5b0152474ce6a885b73de60656 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Tue, 16 Dec 2014 23:50:33 +0100
-+Subject: [PATCH 2/2] use correct include path for libnl-3.0
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/drivers/drivers.mak | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/drivers/drivers.mak b/src/drivers/drivers.mak
-+index cdb913e..e9fc83c 100644
-+--- a/src/drivers/drivers.mak
-++++ b/src/drivers/drivers.mak
-+@@ -35,7 +35,7 @@ NEED_RFKILL=y
-+ ifdef CONFIG_LIBNL32
-+   DRV_LIBS += -lnl-3
-+   DRV_LIBS += -lnl-genl-3
-+-  DRV_CFLAGS += -DCONFIG_LIBNL20 -I/usr/include/libnl3
-++  DRV_CFLAGS += -DCONFIG_LIBNL20 `pkg-config --cflags libnl-3.0`
-+ ifdef CONFIG_LIBNL3_ROUTE
-+   DRV_LIBS += -lnl-route-3
-+   DRV_CFLAGS += -DCONFIG_LIBNL3_ROUTE
-+-- 
-+1.9.3
-+
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index d4a5304..72305fa 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -8,7 +8,7 @@ HOSTAPD_VERSION = 2.3
- HOSTAPD_SITE = http://hostap.epitest.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
--HOSTAPD_DEPENDENCIES = libnl
-+HOSTAPD_DEPENDENCIES = host-pkgconf libnl
- HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- HOSTAPD_LICENSE = GPLv2/BSD-3c
- HOSTAPD_LICENSE_FILES = README
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index dd15539..0b8619e 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -23,7 +23,7 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
+ ERLANG_CONF_OPTS = --without-javac
+ 
+ ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+-ERLANG_DEPENDENCIES = libatomic_ops
++ERLANG_DEPENDENCIES += libatomic_ops
+ ERLANG_CONF_OPTS += --with-libatomic_ops=$(STAGING_DIR)/usr
+ endif
+ 
 -- 
-1.9.3
+1.9.1
