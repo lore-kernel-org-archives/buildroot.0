@@ -1,41 +1,45 @@
 From: Steve James <ste@junkomatic.net>
-Date: Wed, 17 Dec 2014 12:18:02 +0000
-Subject: [Buildroot] [PATCH] snappy: add dependency on host-pkgconf
-In-Reply-To: <20141215173726.GA4075@free.fr>
-References: <201412151344.14441.ste@junkomatic.net>
- <20141215173726.GA4075@free.fr>
-Message-ID: <201412171218.02701.ste@junkomatic.net>
+Date: Wed, 17 Dec 2014 12:25:59 +0000
+Subject: [Buildroot] [PATCH v2] package/snappy: add dependency on
+	host-pkgconf
+Message-ID: <201412171225.59482.ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 15 Dec 2014 17:37:26 Yann E. MORIN wrote:
-> Steve, All,
-> 
-> On 2014-12-15 13:44 +0000, Steve James spake thusly:
-> > Signed-off-by: Steve James <ste@junkomatic.net>
-> > 
-> > ---
-> > Hello all. First Buildroot patch :-)
-> 
-> Great, glad to see your contribution! :-)
-> 
---snip--
-> 
-> With the commit log rewritten, you can add my:
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Thank you for this patch! :-)
+Snappy doesn't configure without host pkg-config, causing this totally 
+unhelpful diagnostic from autoconf:
 
-Many thanks for the feedback Yann. Patch v2 follows.
+  configure.ac:42: error: possibly undefined macro: AC_DEFINE
+        If this token and others are legitimate, please use m4_pattern_allow.
+        See the Autoconf documentation.
+  configure.ac:44: error: possibly undefined macro: AC_MSG_FAILURE
 
-Looking at Patchwork, I presume I should mark this v1 patch as superseded.
-I don't think Patchwork would be able to do that automatically?
+So add host-pkgconf to the package's DEPENDENCIES list.
 
---snip--
+Signed-off-by: Steve James <ste@junkomatic.net>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks,
-Steve.
+---
+Changes v1 -> v2:
+  - Reorganised this commit comment only; no change to the patch itself
+
+ package/snappy/snappy.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index fd89325..6bda7ce 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -10,6 +10,7 @@ SNAPPY_LICENSE = BSD-3c
+ SNAPPY_LICENSE_FILES = COPYING
+ # from git
+ SNAPPY_AUTORECONF = YES
++SNAPPY_DEPENDENCIES = host-pkgconf
+ SNAPPY_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.10.4
