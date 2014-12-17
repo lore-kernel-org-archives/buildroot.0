@@ -1,44 +1,61 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 17 Dec 2014 22:09:03 +0100
-Subject: [Buildroot] [PATCH 1/1] json-c : moved to github
-Message-ID: <1418850543-20668-1-git-send-email-sagaert.johan@skynet.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 17 Dec 2014 22:30:10 +0100
+Subject: [Buildroot] [PATCH v3] package/gdb: fix shared-only build
+Message-ID: <1418851810-6586-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-json-c website and download locations have changed.
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/json-c/Config.in | 2 +-
- package/json-c/json-c.mk | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The shared build only of gdb is actually not supported.
 
-diff --git a/package/json-c/Config.in b/package/json-c/Config.in
-index dbdd75b..67348fb 100644
---- a/package/json-c/Config.in
-+++ b/package/json-c/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_JSON_C
- 	  them as JSON formatted strings and parse JSON formatted
- 	  strings back into the C representation of JSON objects.
+When --disable-static is given to the gdb's main configure script,
+it also disable the static build of bundled libraries like bfd, readline
+and opcodes, which must be build statically.
+
+Force the static build of bundled libraries by adding --enable-static in
+GDB_CONF_OPTS.
+
+Fixes:
+http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
+http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
+http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
+http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
+http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
+
+And many more.
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+v3: Add a comment in gdb.mk (ThomasP)
+v2: D'ont patch gdb, just enable static build.
+---
+ package/gdb/gdb.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index dbec760..e1e760b 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -74,6 +74,8 @@ GDB_CONF_ENV = \
+ 	bash_cv_have_mbstate_t=yes \
+ 	gdb_cv_func_sigsetjmp=yes
  
--	  http://oss.metaparadigm.com/json-c/
-+	  https://github.com/json-c/json-c/
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index dfce96f..b8212ca 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
++# The shared only build is not supported by gdb, so enable static build for
++# buildin libraries whith --enable-static.
+ GDB_CONF_OPTS = \
+ 	--without-uiout \
+ 	--disable-gdbtk \
+@@ -83,7 +85,8 @@ GDB_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
+ 	--with-curses \
+ 	--without-included-gettext \
+-	--disable-werror
++	--disable-werror \
++	--enable-static
  
--JSON_C_VERSION = 0.11
--JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
-+JSON_C_VERSION = json-c-0.11-20130402
-+JSON_C_SITE = $(call github,json-c,json-c,$(JSON_C_VERSION))
- JSON_C_INSTALL_STAGING = YES
- JSON_C_MAKE = $(MAKE1)
- JSON_C_CONF_OPTS = --disable-oldname-compat
+ ifeq ($(BR2_PACKAGE_GDB_TUI),y)
+ 	GDB_CONF_OPTS += --enable-tui
 -- 
-2.1.3
+1.9.3
