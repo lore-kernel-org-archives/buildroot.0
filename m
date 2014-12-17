@@ -1,45 +1,101 @@
-From: Steve James <ste@junkomatic.net>
-Date: Wed, 17 Dec 2014 12:25:59 +0000
-Subject: [Buildroot] [PATCH v2] package/snappy: add dependency on
-	host-pkgconf
-Message-ID: <201412171225.59482.ste@junkomatic.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 17 Dec 2014 09:59:05 -0300
+Subject: [Buildroot] [PATCH] iperf3: new package
+Message-ID: <1418821145-20888-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Snappy doesn't configure without host pkg-config, causing this totally 
-unhelpful diagnostic from autoconf:
-
-  configure.ac:42: error: possibly undefined macro: AC_DEFINE
-        If this token and others are legitimate, please use m4_pattern_allow.
-        See the Autoconf documentation.
-  configure.ac:44: error: possibly undefined macro: AC_MSG_FAILURE
-
-So add host-pkgconf to the package's DEPENDENCIES list.
-
-Signed-off-by: Steve James <ste@junkomatic.net>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v1 -> v2:
-  - Reorganised this commit comment only; no change to the patch itself
+ package/Config.in                           |  1 +
+ package/iperf3/0001-disable-profiling.patch | 20 ++++++++++++++++++++
+ package/iperf3/Config.in                    | 16 ++++++++++++++++
+ package/iperf3/iperf3.mk                    | 12 ++++++++++++
+ 4 files changed, 49 insertions(+)
+ create mode 100644 package/iperf3/0001-disable-profiling.patch
+ create mode 100644 package/iperf3/Config.in
+ create mode 100644 package/iperf3/iperf3.mk
 
- package/snappy/snappy.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index fd89325..6bda7ce 100644
---- a/package/snappy/snappy.mk
-+++ b/package/snappy/snappy.mk
-@@ -10,6 +10,7 @@ SNAPPY_LICENSE = BSD-3c
- SNAPPY_LICENSE_FILES = COPYING
- # from git
- SNAPPY_AUTORECONF = YES
-+SNAPPY_DEPENDENCIES = host-pkgconf
- SNAPPY_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+diff --git a/package/Config.in b/package/Config.in
+index 321983d..917a648 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1045,6 +1045,7 @@ endif
+ 	source "package/igmpproxy/Config.in"
+ 	source "package/inadyn/Config.in"
+ 	source "package/iperf/Config.in"
++	source "package/iperf3/Config.in"
+ 	source "package/iproute2/Config.in"
+ 	source "package/ipsec-tools/Config.in"
+ 	source "package/ipset/Config.in"
+diff --git a/package/iperf3/0001-disable-profiling.patch b/package/iperf3/0001-disable-profiling.patch
+new file mode 100644
+index 0000000..09da98e
+--- /dev/null
++++ b/package/iperf3/0001-disable-profiling.patch
+@@ -0,0 +1,20 @@
++This should be an option, but it's not.
++Don't force profiled builds, it breaks on many toolchains.
++Patch Makefile.in to avoid AUTORECONFing since it needs dummy files
++that are missing to succeed (ChangeLog, COPYING, NEWS, README) and it's
++simple enough so avoid pulling in dependencies and delays.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura iperf-3.0.10.orig/src/Makefile.in iperf-3.0.10/src/Makefile.in
++--- iperf-3.0.10.orig/src/Makefile.in	2014-12-17 07:30:46.878310789 -0300
+++++ iperf-3.0.10/src/Makefile.in	2014-12-17 07:33:41.879356643 -0300
++@@ -82,7 +82,7 @@
++ host_triplet = @host@
++ bin_PROGRAMS = iperf3$(EXEEXT)
++ noinst_PROGRAMS = t_timer$(EXEEXT) t_units$(EXEEXT) t_uuid$(EXEEXT) \
++-	iperf3_profile$(EXEEXT)
+++	iperf3$(EXEEXT)
++ TESTS = t_timer$(EXEEXT) t_units$(EXEEXT) t_uuid$(EXEEXT)
++ subdir = src
++ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
+new file mode 100644
+index 0000000..1f263ab
+--- /dev/null
++++ b/package/iperf3/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_IPERF3
++	bool "iperf3"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  iperf is a tool for active measurements of the maximum
++	  achievable bandwidth on IP networks.
++	  It supports tuning of various parameters related to timing,
++	  protocols, and buffers. For each test it reports the bandwidth,
++	  loss, and other parameters.
++	  It's a redesign of the NLANR/DAST iperf(2) and is not
++	  backward compatible.
++
++	  https://github.com/esnet/iperf
++
++comment "iperf3 needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+new file mode 100644
+index 0000000..b8e594f
+--- /dev/null
++++ b/package/iperf3/iperf3.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# iperf3
++#
++################################################################################
++
++IPERF3_VERSION = 3.0.10
++IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
++IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
++IPERF3_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
 -- 
-1.7.10.4
+2.0.4
