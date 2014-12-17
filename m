@@ -1,43 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Dec 2014 16:14:06 +0100
-Subject: [Buildroot] [PATCH] system: add "askfirst shell" as an option
- for busybox init
-In-Reply-To: <1418828592.4132.7.camel@synopsys.com>
-References: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
- <20141216081450.6438bdb6@free-electrons.com>
- <1418828592.4132.7.camel@synopsys.com>
-Message-ID: <20141217161406.1f418842@free-electrons.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 17 Dec 2014 09:15:36 -0600
+Subject: [Buildroot] [PATCH] freetype: add some dependencies
+In-Reply-To: <54917FFF.1060101@zacarias.com.ar>
+References: <548CD4D7.1090808@ou.edu> <54917FFF.1060101@zacarias.com.ar>
+Message-ID: <54919E18.2020206@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
-
-On Wed, 17 Dec 2014 15:03:12 +0000, Alexey Brodkin wrote:
-
-> Well, actually putting "console" in BR2_TARGET_GENERIC_GETTY_PORT
-> resolves only part of issues - need to specify particular tty.
-> 
-> But still we have serial port settings like baudrate.
-> BR2_TARGET_GENERIC_GETTY_BAUDRATE_x must match your serial port
-> settings.
-> 
-> So we're loosing flexibility of my approach here, but what is even more
-> important imagine if there're 2 serial ports in the system and they have
-> different baudrates but both properly described in kernel bootargs. With
-> BR2_TARGET_GENERIC_GETTY only 1 console could be used then but not
-> either of them.
-
-Ah, yes I haven't looked at the baudrate issue. Isn't there a way to
-not pass any baudrate to getty, and let it use whatever baudrate is
-already configured on the device?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On 12/17/2014 7:07 AM, Gustavo Zacarias wrote:
+> On 12/13/2014 09:07 PM, Steve Kenton wrote:
+>
+>> freetype needs fenv.h which is not available on uClibc except for x86, add dependencies
+>>
+>> Signed-off-by Stephen M. Kenton<skenton@ou.edu>
+> Hi.
+> This is wrong.
+> I'm using freetype with rrdtool for ARM and PowerPC targets with uClibc
+> just fine.
+My apologies, you are right
+> In fact any search for fenv.h in the freetype source gives nothing.
+> And the autobuilders would have caught this by now.
+> Is it possible that some other application that links to freetype is
+> breaking, and uses fenv itself?
+Yes, the problem is in the app using freetype, I misinterpreted things.
+I will try again with a hopefully better patch.
+> Regards.
+>
