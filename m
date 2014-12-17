@@ -1,38 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Dec 2014 12:44:47 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/gdb: fix shared-only build
-In-Reply-To: <1418766762-31851-1-git-send-email-romain.naour@openwide.fr>
-References: <1418766762-31851-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141217124447.04cbb0e6@free-electrons.com>
+From: Steve James <ste@junkomatic.net>
+Date: Wed, 17 Dec 2014 12:18:02 +0000
+Subject: [Buildroot] [PATCH] snappy: add dependency on host-pkgconf
+In-Reply-To: <20141215173726.GA4075@free.fr>
+References: <201412151344.14441.ste@junkomatic.net>
+ <20141215173726.GA4075@free.fr>
+Message-ID: <201412171218.02701.ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+On Monday 15 Dec 2014 17:37:26 Yann E. MORIN wrote:
+> Steve, All,
+> 
+> On 2014-12-15 13:44 +0000, Steve James spake thusly:
+> > Signed-off-by: Steve James <ste@junkomatic.net>
+> > 
+> > ---
+> > Hello all. First Buildroot patch :-)
+> 
+> Great, glad to see your contribution! :-)
+> 
+--snip--
+> 
+> With the commit log rewritten, you can add my:
+> 
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Thank you for this patch! :-)
 
-On Tue, 16 Dec 2014 22:52:42 +0100, Romain Naour wrote:
+Many thanks for the feedback Yann. Patch v2 follows.
 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index dbec760..7fbf2f8 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -83,7 +83,8 @@ GDB_CONF_OPTS = \
->  	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
->  	--with-curses \
->  	--without-included-gettext \
-> -	--disable-werror
-> +	--disable-werror \
-> +	--enable-static
+Looking at Patchwork, I presume I should mark this v1 patch as superseded.
+I don't think Patchwork would be able to do that automatically?
 
-We probably want a comment above GDB_CONF_OPTS to explain why we're
-adding --enable-static.
+--snip--
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Steve.
