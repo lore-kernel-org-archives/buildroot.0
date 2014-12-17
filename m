@@ -1,32 +1,122 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 16 Dec 2014 23:22:15 -0500
-Subject: [Buildroot] [PATCH] erlang: fix typo in dependencies
-Message-ID: <1418790135-31149-1-git-send-email-fhunleth@troodon-software.com>
+From: Spielmann Werner <Werner.Spielmann@SWAROVSKI.COM>
+Date: Wed, 17 Dec 2014 06:32:55 +0000
+Subject: [Buildroot] Second try: Configuration for real hardware / How
+ to configure RTAI
+In-Reply-To: <5490B864.30406@mind.be>
+References: <d4a8b511599845a89f0c34664c0ed8b1@dsw332.wattens.swarovski.com>
+ <5490B864.30406@mind.be>
+Message-ID: <4e2802c72e444790b7151be748d25add@dsw332.wattens.swarovski.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If libatomic_ops was enabled, then the host-erlang dependency was lost.
+Hello Arnout,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/erlang/erlang.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+many thanks for your help.
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index dd15539..0b8619e 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -23,7 +23,7 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
- ERLANG_CONF_OPTS = --without-javac
- 
- ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
--ERLANG_DEPENDENCIES = libatomic_ops
-+ERLANG_DEPENDENCIES += libatomic_ops
- ERLANG_CONF_OPTS += --with-libatomic_ops=$(STAGING_DIR)/usr
- endif
- 
--- 
-1.9.1
+Best regards,
+
+Werner
+
+
+-----Urspr?ngliche Nachricht-----
+Von: Arnout Vandecappelle [mailto:arnout at mind.be] 
+Gesendet: Dienstag, 16. Dezember 2014 23:56
+An: Spielmann Werner; buildroot at busybox.net
+Betreff: Re: [Buildroot] Second try: Configuration for real hardware / How to configure RTAI
+
+On 16/12/14 16:19, Spielmann Werner wrote:
+> Hello,
+>
+>  
+>
+> this is my second try.    :-(    Any help is appreciated!
+>
+>  
+>
+>  
+>
+> I was able to pass "make" (for a x86 configuration: kernel 2.6.32.11, 
+> rtai 3.8.1, gcc 4.5.4)  for the first time (with the help of Peter Koorsgard).
+>
+>  
+>
+> I found this document:
+> http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
+>
+>  
+>
+> But I still have several questions:
+>
+>  
+>
+> ?         How can I adapt the configuration to my real hardware?
+>
+> I want to use a x86 architecture with is nearly a standard PC with flash cards.
+>
+> Have I to configure a board/ directory and a configs/ directory for this Board?
+>
+> The Ethernet devices will need the Intel e1000e-Driver, the serial 
+> devices a
+> 8250/16550 driver.
+
+ If you passed the build, then the next step is to create a bootable image (SD or CF card). On a PC that is unfortunately a little complicated. You can look at e.g. board/ts/ts5x00/ for an example.
+
+ Next, you'll probably want to make a custom kernel configuration because the i386_defconfig is pretty bloated. So do a 'make linux-menuconfig' and remove all the drivers you don't need.
+
+ Finally, to save all that configuration, you can create a board/ directory and a defconfig. Look at the BR2_EXTERNAL explanation in the manual for suggestions on how to approach that.
+
+>
+> Can you give me any pointers?
+>
+>  
+>
+> ?         To configure RTAI on a standard PC I have to execute within the RTAI
+> directory (before building the kernel):
+>
+>  
+>
+>    "make menuconfig"
+>
+>  
+>
+> and then:
+>
+>  
+>
+>     "make"
+>
+> When and how can I configure RTAI in combination with buildroot?
+
+ I haven't used RTAI myself, but I thought it's Kconfig was merged with the kernel's. Hm, looking at RTAI's README, it turns out that I was wrong... Well, currently we only support the automatic configuration of RTAI, not the interactive configuration. Patches to improve that are welcome.
+
+
+
+ Regards,
+ Arnout
+
+
+>
+> Thanks for reading. Any help is appreciated!
+>
+>  
+>
+> Werner
+>
+>  
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+--
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500 Essensium/Mind http://www.mind.be G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
