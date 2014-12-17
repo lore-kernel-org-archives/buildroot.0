@@ -1,117 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Dec 2014 22:36:02 +0100
-Subject: [Buildroot] [PATCH 1/3] bdwgc: add patch automatically
- detecting for NO_GETCONTEXT need
-In-Reply-To: <1418492588-22122-1-git-send-email-s.martin49@gmail.com>
-References: <1418492588-22122-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20141217213602.GC4293@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 17 Dec 2014 22:37:05 +0100
+Subject: [Buildroot] [PATCH v4] package/gdb: fix shared-only build
+Message-ID: <1418852225-7144-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+The shared build only of gdb is actually not supported.
 
-On 2014-12-13 18:43 +0100, Samuel Martin spake thusly:
-> This patch is necessary to successfully build guile with toolchain
-> missing its support.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  ...ac-add-check-for-NO_GETCONTEXT-definition.patch | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
-> 
-> diff --git a/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch b/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
-> new file mode 100644
-> index 0000000..912a659
-> --- /dev/null
-> +++ b/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
-> @@ -0,0 +1,38 @@
-> +From e4448da044338f81548c13cb7eda2a49074156b3 Mon Sep 17 00:00:00 2001
-> +From: Samuel Martin <s.martin49@gmail.com>
-> +Date: Mon, 8 Dec 2014 21:17:10 +0100
-> +Subject: [PATCH] configure.ac: add check for NO_GETCONTEXT definition
-> +
-> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> +---
-> + configure.ac | 14 ++++++++++++++
-> + 1 file changed, 14 insertions(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 6551cbd..c3a0454 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -365,6 +365,20 @@ if test "$GCC" = yes; then
-> +   AC_MSG_RESULT($ac_cv_fno_strict_aliasing)
-> + fi
-> + 
-> ++AC_MSG_CHECKING(for NO_GETCONTEXT need)
-> ++AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-> ++    #include <ucontext.h>
-> ++  ]],[[
-> ++    getcontext(0);
-> ++  ]])],[need_no_getcontext=no],[need_no_getcontext=yes])
+When --disable-static is given to the gdb's main configure script,
+it also disable the static build of bundled libraries like bfd, readline
+and opcodes, which must be build statically.
 
-The naming of the need_no_getcontext is relatively non obvious. Usually,
-tests are used to check if the toolchain/system has a feature, so it
-would be more appropriate to name that variable has_getcontext,
-regardless of what action it will entail.
+Force the static build of bundled libraries by adding --enable-static in
+GDB_CONF_OPTS.
 
-In proper English, you'd write:
+Fixes:
+http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
+http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
+http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
+http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
+http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
 
-  If the toolchain does not have getcontext, then I disable use of it.
+And many more.
 
-==> has_getcontext    ;-)
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+v4: Fix typos (ThomasP)
+v3: Add a comment in gdb.mk (ThomasP)
+v2: D'ont patch gdb, just enable static build.
+---
+ package/gdb/gdb.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Otherwise, I tried to find how others were checking for getcontext, and
-it is very difficult o find a package that does.
-
-The first I could find was GNU Pth (dead since 2006), and then ruby. And
-they both use that:
-
-    AC_CHECK_FUNCS([getcontext setcontext])
-
-which would automatically define HAVE_getcontext and HAVE_setcontext if
-they are available, but that's macro definitions, not available in
-configure, so we could not do the following:
-
-> ++AC_MSG_RESULT($need_no_getcontext)
-> ++if test x$need_no_getcontext = xyes ; then
-> ++  CFLAGS="$CFLAGS -DNO_GETCONTEXT"
-> ++  CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
-> ++fi
-> ++AC_MSG_NOTICE([[CFLAGS=$CFLAGS]])
-> ++AC_MSG_NOTICE([[CPPFLAGS=$CPPFLAGS]])
-
-No need for those two notices.
-
-I'm unsure what to do with that... Sure, it's not too complex, but what
-would upstream say about that? Surely, we'd like to push it to them so
-we do not have to maintain it...
-
-Regards,
-Yann E. MORIN.
-
-> + case "$host" in
-> + # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
-> + # and unnecessary everywhere.
-> +-- 
-> +2.1.3
-> +
-> -- 
-> 2.1.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index dbec760..aa22193 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -74,6 +74,8 @@ GDB_CONF_ENV = \
+ 	bash_cv_have_mbstate_t=yes \
+ 	gdb_cv_func_sigsetjmp=yes
+ 
++# The shared only build is not supported by gdb, so enable static build for
++# build-in libraries with --enable-static.
+ GDB_CONF_OPTS = \
+ 	--without-uiout \
+ 	--disable-gdbtk \
+@@ -83,7 +85,8 @@ GDB_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
+ 	--with-curses \
+ 	--without-included-gettext \
+-	--disable-werror
++	--disable-werror \
++	--enable-static
+ 
+ ifeq ($(BR2_PACKAGE_GDB_TUI),y)
+ 	GDB_CONF_OPTS += --enable-tui
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
