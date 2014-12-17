@@ -1,31 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Dec 2014 17:07:45 +0100
+Date: Wed, 17 Dec 2014 17:08:26 +0100
 Subject: [Buildroot] [PATCH] system: add "askfirst shell" as an option
  for busybox init
-In-Reply-To: <412765297.29393617.1418831613614.JavaMail.root@openwide.fr>
-References: <1418831416.4132.19.camel@synopsys.com>
- <412765297.29393617.1418831613614.JavaMail.root@openwide.fr>
-Message-ID: <20141217170745.52d306d1@free-electrons.com>
+In-Reply-To: <1418831416.4132.19.camel@synopsys.com>
+References: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
+ <20141216081450.6438bdb6@free-electrons.com>
+ <1418828592.4132.7.camel@synopsys.com>
+ <20141217161406.1f418842@free-electrons.com>
+ <1418829884.4132.13.camel@synopsys.com>
+ <20141217163652.3812739e@free-electrons.com>
+ <1418831416.4132.19.camel@synopsys.com>
+Message-ID: <20141217170826.075c6d48@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+Dear Alexey Brodkin,
 
-On Wed, 17 Dec 2014 16:53:33 +0100 (CET), Jeremy Rosen wrote:
+On Wed, 17 Dec 2014 15:50:16 +0000, Alexey Brodkin wrote:
 
-> Doesn't your patch allow multiple getty ? I don't think console
->  does that...
+> Right it was too obvious.
 > 
-> that was a feature I was interested in.
+> So looks like this is a replacement for my patch:
+> --->---
+> BR2_TARGET_GENERIC_GETTY_PORT=console
+> BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP=y
+> --->---
 
-multiple getty is really something we want to leave to project-specific
-customization of the inittab. Use a rootfs overlay or a post-build
-script to do that. There are too many potential customizations that can
-be done in inittab to allow all of them to be done through Buildroot
-config options.
+Yes. Does it work? :-)
+
+> Then the question is why this is not a default in Buildroot?
+> IMHO most of the time kernel's bootcmd has console set so explicit setup
+> of tty in Buildroot might be required in some corner cases only.
+
+I agree, maybe we should make this the default. What happens on
+PC-style platforms? Is console= typically set to tty1 ?
 
 Best regards,
 
