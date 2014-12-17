@@ -1,42 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Dec 2014 16:36:52 +0100
-Subject: [Buildroot] [PATCH] system: add "askfirst shell" as an option
- for busybox init
-In-Reply-To: <1418829884.4132.13.camel@synopsys.com>
-References: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
- <20141216081450.6438bdb6@free-electrons.com>
- <1418828592.4132.7.camel@synopsys.com>
- <20141217161406.1f418842@free-electrons.com>
- <1418829884.4132.13.camel@synopsys.com>
-Message-ID: <20141217163652.3812739e@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Dec 2014 15:38:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 7730] New: Error while connecting Qt Cretaor to
+	device.
+Message-ID: <bug-7730-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+https://bugs.busybox.net/show_bug.cgi?id=7730
 
-On Wed, 17 Dec 2014 15:24:44 +0000, Alexey Brodkin wrote:
+           Summary: Error while connecting Qt Cretaor to device.
+           Product: buildroot
+           Version: 2014.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: sam86eer at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> Probably not. At least in case of Busybox I saw this on attempt to
-> execute getty without baudrate at all.
 
-Well, you didn't read it all...
+I have generated a image for the raspberry pi board using buildroot 2014.11,
+but while connecting Qt Creator via ssh to raspberry pi board it shows the
+following error.
 
-> 
-> --->---
-> BAUD_RATE of 0 leaves it unchanged
+Connecting to host...
+SSH connection failure: SSH Protocol error: Server and client capabilities
+don't match. Client list was: aes128-cbc,3des-cbc.
+Server list was
+aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm at openssh.com,aes256-gcm at openssh.com,chacha20-poly1305 at openssh.com.
 
-... see this :-)
+Device test failed.
 
-So if you set the baud rate to 0, it will keep the one configured by
-console= in the kernel command line.
+Whereas it is possible to connect the raspberry pi via terminal using ssh.
+Please help me with this issue.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
