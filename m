@@ -1,47 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Dec 2014 09:57:37 +0100
-Subject: [Buildroot] [PATCH v2] gnupg2: fix linking with intl
-In-Reply-To: <548B0998.5000001@imgtec.com>
-References: <1418299611-50833-1-git-send-email-Vincent.Riera@imgtec.com>
- <20141211195331.48f6f7c4@free-electrons.com>
- <548B0998.5000001@imgtec.com>
-Message-ID: <20141217095737.564714af@free-electrons.com>
+From: Pierre Le Magourou <pierre.lemagourou@openwide.fr>
+Date: Wed, 17 Dec 2014 10:37:40 +0100
+Subject: [Buildroot] [PATCH 1/1] qt5cinex: Add new
+ Qt5CinematicExperience package.
+In-Reply-To: <20141214230211.GH4121@free.fr>
+References: <1415095550-26839-1-git-send-email-pierre.lemagourou@openwide.fr>
+ <20141214230211.GH4121@free.fr>
+Message-ID: <54914EE4.60103@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Yann,
 
-On Fri, 12 Dec 2014 15:28:24 +0000, Vicente Olivert Riera wrote:
-> On 12/11/2014 06:53 PM, Thomas Petazzoni wrote:
-> > Dear Vicente Olivert Riera,
-> > 
-> > On Thu, 11 Dec 2014 12:06:51 +0000, Vicente Olivert Riera wrote:
-> > 
-> >> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> >> +GNUPG2_DEPENDENCIES += gettext
-> >> +GNUPG2_CONF_ENV += LIBS=-lintl
-> > 
-> > Are you sure we need this LIBS part when glibc is used?
+> Thank you for your contribution. Sorry for the delay in reviewing this
+> patch; here is my review...
 > 
-> Uhm..., something must have changed in the tree and right now I'm not
-> able to reproduce this failure even using the same config file :/
+
+I have modified my patch taking into account what you said in your
+review. I will send a new patch once I received feedback concerning
+where to put the Qt binary file, but I have to clarify something
+concerning arm dependency before.
+
+[--SNIP--]
+
+>> +if BR2_PACKAGE_QT5CINEX
+>> +
+>> +config BR2_PACKAGE_QT5CINEX_RPI
+>> +	bool "RaspberryPI Edition"
 > 
-> http://autobuild.buildroot.net/results/9aa/9aaca74dd3a1f82e12358530db4d5d17eb833f7f/config
+> This should at least "depends on BR2_arm".
 
-This problem was related to static linking, but the
-BR2_PREFER_STATIC_LIB option has been renamed to BR2_STATIC_LIBS (with
-a bogus Config.in.legacy handling done by me). So if you took the old
-config file, BR2_PREFER_STATIC_LIB was discarded, and you were doing a
-shared library build instead of a static library build, which explains
-why the problem was not appearing anymore.
+The name of the upstream software is confusing here, it is called
+"RaspberryPI edition" but it can also be run on any other platform
+that have Qt5 installed. I run it on my laptop without any problem.
+So I would say that this package does not need to depend on BR2_arm.
 
-Best regards,
+I decided to modify the name of this option to "High Definition
+Edition" instead because the difference with the first option is
+mainly the 1920x1080 resolution.
 
-Thomas
+> 
+> Also, does it use either or both of rpi-userland or rpi-firmware at
+> build time or at runtime?
+
+In my understanding, this application is platform independent. It
+only needs a functional Qt5 framework installed with
+QT5GRAPHICALEFFECTS and does not use rpi-firmware nor rpi-userland.
+
+The dependency to rpi-userland comes from the Qt5GraphicalEffect
+package that needs BR2_PACKAGE_QT5_GL_AVAILABLE that will ask for
+rpi-userland package to provide GLESv2 on RaspberryPi platform.
+
+> 
+> If so, you should add proper dependencies, for example:
+> 
+> - if build or runtime dependency, add in Config.in:
+>     config BR2_PACKAGE_QT5CINEX_RPI
+>         bool "RaspberryPI Edition"
+>         depends on BR2_PACKAGE_RPI_USERLAND
+> 
+> - if runtime dependency, add in qt5cinex.mk:
+>     QT5CINEX_RPI_DEPENDENCIES += rpi-userland
+> 
+> (but that's just an example.)
+> 
+
+Regards.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Pierre Le Magourou
