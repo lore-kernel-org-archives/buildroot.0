@@ -1,27 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Dec 2014 10:07:11 -0300
-Subject: [Buildroot] [PATCH] freetype: add some dependencies
-In-Reply-To: <548CD4D7.1090808@ou.edu>
-References: <548CD4D7.1090808@ou.edu>
-Message-ID: <54917FFF.1060101@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 17 Dec 2014 15:03:12 +0000
+Subject: [Buildroot] [PATCH] system: add "askfirst shell" as an option
+ for busybox init
+In-Reply-To: <20141216081450.6438bdb6@free-electrons.com>
+References: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
+ <20141216081450.6438bdb6@free-electrons.com>
+Message-ID: <1418828592.4132.7.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/13/2014 09:07 PM, Steve Kenton wrote:
+Hi Thomas,
 
-> freetype needs fenv.h which is not available on uClibc except for x86, add dependencies
+On Tue, 2014-12-16 at 08:14 +0100, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
 > 
-> Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+> On Mon, 15 Dec 2014 11:56:24 +0300, Alexey Brodkin wrote:
+> > Consider following cases:
+> >  * Buildroot only builds rootfs that could be used on systems with
+> >    different default serial ports (ttyS0, ttyS1, ttyAMA3 etc)
+> 
+> To achieve this, there is no need for a new option, just specify
+> "console" as the terminal on which to run getty. The only change needed
+> is to add "console" to /etc/securetty.
 
-Hi.
-This is wrong.
-I'm using freetype with rrdtool for ARM and PowerPC targets with uClibc
-just fine.
-In fact any search for fenv.h in the freetype source gives nothing.
-And the autobuilders would have caught this by now.
-Is it possible that some other application that links to freetype is
-breaking, and uses fenv itself?
-Regards.
+Well, actually putting "console" in BR2_TARGET_GENERIC_GETTY_PORT
+resolves only part of issues - need to specify particular tty.
+
+But still we have serial port settings like baudrate.
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_x must match your serial port
+settings.
+
+So we're loosing flexibility of my approach here, but what is even more
+important imagine if there're 2 serial ports in the system and they have
+different baudrates but both properly described in kernel bootargs. With
+BR2_TARGET_GENERIC_GETTY only 1 console could be used then but not
+either of them.
+
+-Alexey
