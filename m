@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Dec 2014 22:54:04 +0100
-Subject: [Buildroot] [git commit] php: security bump to version 5.5.20
-Message-ID: <20141218220056.4A48B7FED9@busybox.osuosl.org>
+Date: Thu, 18 Dec 2014 22:56:41 +0100
+Subject: [Buildroot] [git commit] boost: bump to version 1.57.0
+Message-ID: <20141218220056.7229F7FED9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d64599ccb71a8ad33e5cebf69adb4065e23ce6b4
+commit: http://git.buildroot.net/buildroot/commit/?id=6483d26b49f4435cb40f1ad208c5b594d36a50b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2014-8142 - Use after free vulnerability in unserialize()
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash |    2 +-
- package/php/php.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/boost/boost.hash |    3 +++
+ package/boost/boost.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 7a2dd70..0117289 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--md5	c63dcfd8b318d12127ba6d39ecc8a444	php-5.5.19.tar.xz
-+md5	51377838dfee2d7bb4715674ac715394	php-5.5.20.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 86864f0..8c322ec 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+new file mode 100644
+index 0000000..2019743
+--- /dev/null
++++ b/package/boost/boost.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/boost/files/boost/1.57.0/
++md5	1be49befbdd9a5ce9def2983ba3e7b76	boost_1_57_0.tar.bz2
++sha1	e151557ae47afd1b43dc3fac46f8b04a8fe51c12	boost_1_57_0.tar.bz2
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 725463c..7b56827 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 5.5.19
-+PHP_VERSION = 5.5.20
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-BOOST_VERSION = 1.56.0
++BOOST_VERSION = 1.57.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
