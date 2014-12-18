@@ -1,88 +1,42 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Thu, 18 Dec 2014 09:04:17 +0100 (CET)
-Subject: [Buildroot] [PATCH] Allow a single DHCP configuration via the
- system configuration submenu
-In-Reply-To: <20141217212900.0df35c02@free-electrons.com>
-Message-ID: <940385025.29419441.1418889857770.JavaMail.root@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Dec 2014 15:04:12 -0300
+Subject: [Buildroot] [PATCH] jquery: bump to version 1.11.2
+Message-ID: <1418925852-19931-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash file.
 
------ Mail original -----
-> Dear J?r?my Rosen,
-> 
-> On Wed, 17 Dec 2014 17:15:46 +0100, J?r?my Rosen wrote:
-> 
-> >  support/scripts/generate-network-config.sh | 24
-> >  ++++++++++++++++++++++++
-> 
-> Do we really need a helper script to do this?
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/jquery/jquery.hash | 2 ++
+ package/jquery/jquery.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/jquery/jquery.hash
 
-That's... debatable. I think it's a bit long for inline, but it's 
-a matter of taste. I'll inline in simplify it (do everythin without
-functions to shorten a bit)
-
+diff --git a/package/jquery/jquery.hash b/package/jquery/jquery.hash
+new file mode 100644
+index 0000000..ec43e7c
+--- /dev/null
++++ b/package/jquery/jquery.hash
+@@ -0,0 +1,2 @@
++# Locally computed hashes, not provided by upstream
++sha256	2ecd295d295bec062cedebe177e54b9d6b19fc0a841dc5c178c654c9ccff09c0	jquery-1.11.2.min.js
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 17d3e8b..363ee09 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-> NETWORK_IFACES = $(TARGET_DIR)/etc/network/interfaces
-> NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SIMPLE_DHCP_INTERFACE))
-> 
-> define NETWORK_ADD_DHCP_INTERFACE
-> 	echo "auto $(NETWORK_DHCP_IFACE)" >> $(NETWORK_IFACES)
-> 	echo "iface $(NETWORK_DHCP_IFACE) inet dhcp" >> $(NETWORK_IFACES)
-> endef
-> 
-> define NETWORK_CREATE_IFACES_FILE
-> 	rm -f $(NETWORK_IFACES)
-> 	echo "auto lo" >> $(NETWORK_IFACES)
-> 	echo "iface lo inet loopback" >> $(NETWORK_IFACES)
-> 	$(NETWORK_ADD_DHCP_INTERFACE)
-> endef
-> 
-> TARGET_FINALIZE_HOOKS += NETWORK_CREATE_IFACES_FILE
-> 
-> > +config BR2_SIMPLE_DHCP
-> > +	bool "automatic network configuration via DHCP"
-> > +	default n
-> > +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
-> > +	help
-> > +	  Automatically do a DHCP request on startup on selected
-> > interface at
-> > +	  startup. For more complicated setups use an overlay.
-> > +
-> > +comment "automatic network configuration via DHCP is not
-> > compatible with networkd"
-> > +	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
-> > +
-> > +config BR2_SIMPLE_DHCP_INTERFACE
-> > +	string "name of the physical network interface to run DHCP on"
-> > +	depends on BR2_SIMPLE_DHCP
-> > +	default eth0
-> > +	help
-> > +	  The name of the network interface to configure automatically
-> 
-> Why two options? Just make the BR2_SIMPLE_DHCP_INTERFACE empty by
-> default (does nothing), and when non-empty, used as the DHCP network
-> interface.
-> 
-
-I did it for better presentation in the menuconfig menu, I thought
-one option to activate and then another one to set, rather than
-an empty-by-default one was cleaner... but if you think a single
-one is better it's easy to change...
-
-
-I'll wait for more comments and submit a v2 when I have more feedback
-
-
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+-JQUERY_VERSION = 1.11.1
++JQUERY_VERSION = 1.11.2
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
+ JQUERY_LICENSE = MIT
+-- 
+2.0.4
