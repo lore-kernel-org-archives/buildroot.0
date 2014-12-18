@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 18 Dec 2014 15:26:51 -0300
-Subject: [Buildroot] [PATCH] tcpreplay: bump to version 4.1.0
-Message-ID: <1418927211-23461-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 18 Dec 2014 15:42:29 -0300
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.7
+Message-ID: <1418928149-24581-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/tcpreplay/tcpreplay.hash | 6 +++---
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index d7e8f1d..7d153e5 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.0.5/
--md5	1a6f108a62bf526eeffa2998a6f311af	tcpreplay-4.0.5.tar.gz
--sha1	878970d77e1482c9b26ac19eb2d125915a900f9b	tcpreplay-4.0.5.tar.gz
-+# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.1.0/
-+md5	fd48d73d84ade30ece0a9abb538c82d5	tcpreplay-4.1.0.tar.gz
-+sha1	9723d82a0136d963bcc2665d562cb562d216a1c1	tcpreplay-4.1.0.tar.gz
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index e937af9..1dbe453 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 02590fa..51d5fbb 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	fac25376ee46b89249ee28a1ae13b2d5d1df7ff62464340c33c077015364d1e0	mpd-0.19.6.tar.xz
++sha256	16d96332ec09d58ae2b914cfa509862e5f5b854dd52fdd6bda7336d66e888278	mpd-0.19.7.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 132ad44..2e664a3 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--TCPREPLAY_VERSION = 4.0.5
-+TCPREPLAY_VERSION = 4.1.0
- TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
- TCPREPLAY_LICENSE = GPLv3
- TCPREPLAY_LICENSE_FILES = docs/LICENSE
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).6
++MPD_VERSION = $(MPD_VERSION_MAJOR).7
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
 -- 
 2.0.4
