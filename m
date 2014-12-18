@@ -1,39 +1,43 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 18 Dec 2014 15:42:29 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.7
-Message-ID: <1418928149-24581-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 18 Dec 2014 18:36:05 -0300
+Subject: [Buildroot] [PATCH 1/2] boost: bump to version 1.57.0
+Message-ID: <1418938566-19279-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add hash file.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/boost/boost.hash | 3 +++
+ package/boost/boost.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/boost/boost.hash
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 02590fa..51d5fbb 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fac25376ee46b89249ee28a1ae13b2d5d1df7ff62464340c33c077015364d1e0	mpd-0.19.6.tar.xz
-+sha256	16d96332ec09d58ae2b914cfa509862e5f5b854dd52fdd6bda7336d66e888278	mpd-0.19.7.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 132ad44..2e664a3 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+new file mode 100644
+index 0000000..2019743
+--- /dev/null
++++ b/package/boost/boost.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/boost/files/boost/1.57.0/
++md5	1be49befbdd9a5ce9def2983ba3e7b76	boost_1_57_0.tar.bz2
++sha1	e151557ae47afd1b43dc3fac46f8b04a8fe51c12	boost_1_57_0.tar.bz2
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 725463c..7b56827 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).6
-+MPD_VERSION = $(MPD_VERSION_MAJOR).7
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+-BOOST_VERSION = 1.56.0
++BOOST_VERSION = 1.57.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
 -- 
 2.0.4
