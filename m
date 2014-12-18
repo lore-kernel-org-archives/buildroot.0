@@ -1,51 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Dec 2014 19:12:19 +0100
-Subject: [Buildroot] [buildroot-test 2/2] Enable paranoid path checking
-In-Reply-To: <1418852858-818-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1418852858-818-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1418852858-818-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141218181219.GA4589@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Dec 2014 15:26:51 -0300
+Subject: [Buildroot] [PATCH] tcpreplay: bump to version 4.1.0
+Message-ID: <1418927211-23461-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/tcpreplay/tcpreplay.hash | 6 +++---
+ package/tcpreplay/tcpreplay.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2014-12-17 22:47 +0100, Thomas Petazzoni spake thusly:
-> Now that Buildroot has support for paranoid path checking (check for
-> clearly invalid header and library directories used when
-> cross-compiling), let's enable this in the autobuilders.
-> 
-> Without this, the paranoid path checking only emits warnings. With
-> this patch enabled, whenever an invalid header or library path is
-> used, the build will stop and fail, which will allow us to clearly
-> notice such cases.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Do we want to apply this right now? We already have a lot of failures
-> caused by the static/shared change. Do we want to have more?
-
-Well, either we set it right now, so we have time to investigate before
-the 2015.02 release, or we post-pone that for after.
-
-We're almost one mont in the release cycle, with a bit more than another
-month before rc1, so it might be already too late for the switch, but it
-is still doable.
-
-So:
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index d7e8f1d..7d153e5 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.0.5/
+-md5	1a6f108a62bf526eeffa2998a6f311af	tcpreplay-4.0.5.tar.gz
+-sha1	878970d77e1482c9b26ac19eb2d125915a900f9b	tcpreplay-4.0.5.tar.gz
++# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.1.0/
++md5	fd48d73d84ade30ece0a9abb538c82d5	tcpreplay-4.1.0.tar.gz
++sha1	9723d82a0136d963bcc2665d562cb562d216a1c1	tcpreplay-4.1.0.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index e937af9..1dbe453 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TCPREPLAY_VERSION = 4.0.5
++TCPREPLAY_VERSION = 4.1.0
+ TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPLv3
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.4
