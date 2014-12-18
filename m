@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Dec 2014 22:56:41 +0100
-Subject: [Buildroot] [git commit] boost: bump to version 1.57.0
-Message-ID: <20141218220056.7229F7FED9@busybox.osuosl.org>
+Date: Thu, 18 Dec 2014 22:55:50 +0100
+Subject: [Buildroot] [git commit] tcpreplay: bump to version 4.1.0
+Message-ID: <20141218220056.5F4397FED9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6483d26b49f4435cb40f1ad208c5b594d36a50b5
+commit: http://git.buildroot.net/buildroot/commit/?id=27dde92fa8dd437cdd55b675adcfe85ae274c034
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/boost.hash |    3 +++
- package/boost/boost.mk   |    2 +-
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ package/tcpreplay/tcpreplay.hash |    6 +++---
+ package/tcpreplay/tcpreplay.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-new file mode 100644
-index 0000000..2019743
---- /dev/null
-+++ b/package/boost/boost.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/boost/files/boost/1.57.0/
-+md5	1be49befbdd9a5ce9def2983ba3e7b76	boost_1_57_0.tar.bz2
-+sha1	e151557ae47afd1b43dc3fac46f8b04a8fe51c12	boost_1_57_0.tar.bz2
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 725463c..7b56827 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
+diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
+index d7e8f1d..7d153e5 100644
+--- a/package/tcpreplay/tcpreplay.hash
++++ b/package/tcpreplay/tcpreplay.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.0.5/
+-md5	1a6f108a62bf526eeffa2998a6f311af	tcpreplay-4.0.5.tar.gz
+-sha1	878970d77e1482c9b26ac19eb2d125915a900f9b	tcpreplay-4.0.5.tar.gz
++# From http://sourceforge.net/projects/tcpreplay/files/tcpreplay/4.1.0/
++md5	fd48d73d84ade30ece0a9abb538c82d5	tcpreplay-4.1.0.tar.gz
++sha1	9723d82a0136d963bcc2665d562cb562d216a1c1	tcpreplay-4.1.0.tar.gz
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index e937af9..1dbe453 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOOST_VERSION = 1.56.0
-+BOOST_VERSION = 1.57.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
+-TCPREPLAY_VERSION = 4.0.5
++TCPREPLAY_VERSION = 4.1.0
+ TCPREPLAY_SITE = http://downloads.sourceforge.net/project/tcpreplay/tcpreplay/$(TCPREPLAY_VERSION)
+ TCPREPLAY_LICENSE = GPLv3
+ TCPREPLAY_LICENSE_FILES = docs/LICENSE
