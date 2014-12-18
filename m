@@ -1,21 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Dec 2014 22:58:09 +0100
-Subject: [Buildroot] [PATCH 2/2] icu: bump to version 54.1
-In-Reply-To: <1418938566-19279-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 18 Dec 2014 18:36:06 -0300")
-References: <1418938566-19279-1-git-send-email-gustavo@zacarias.com.ar>
- <1418938566-19279-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8761d8hb7y.fsf@dell.be.48ers.dk>
+Date: Thu, 18 Dec 2014 22:59:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package: cleanup whitespace of
+	assignments
+In-Reply-To: <1418889085-14207-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Thu, 18 Dec 2014 08:51:25 +0100")
+References: <1418889085-14207-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <871tnwhb6g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
- > Also add hash file.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
 Committed, thanks.
 
