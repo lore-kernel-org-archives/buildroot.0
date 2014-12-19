@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Dec 2014 15:59:54 +0000 (UTC)
+Date: Fri, 19 Dec 2014 16:48:34 +0000 (UTC)
 Subject: [Buildroot] [Bug 7730] Error while connecting Qt Cretaor to device.
 In-Reply-To: <bug-7730-163@https.bugs.busybox.net/>
 References: <bug-7730-163@https.bugs.busybox.net/>
-Message-ID: <20141219155954.042C680449@busybox.osuosl.org>
+Message-ID: <20141219164834.0EFD580559@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,25 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=7730
 
-Sameer R <sam86eer@gmail.com> changed:
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |sam86eer at gmail.com
-           Severity|major                       |critical
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
 
---- Comment #1 from Sameer R <sam86eer@gmail.com> 2014-12-19 15:59:53 UTC ---
-Can any one help me with this issue please.
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2014-12-19 16:48:33 UTC ---
+Relax a bit, this is all volunteer effort and you won't get anyone on their
+good side by pushing.
+That being said, gives the server list ciphers it seems you're using openssh on
+the board (chacha20-poly1305 is very openssh-specific for now) and your client
+only supports pretty old/basic ciphers which have been deprecated in openssh
+because they're considered not safe any longer.
 
-(In reply to comment #0)
-> I have generated a image for the raspberry pi board using buildroot 2014.11,
-> but while connecting Qt Creator via ssh to raspberry pi board it shows the
-> following error.
-> 
-> Connecting to host...
-> SSH connection failure: SSH Protocol error: Server and client capabilities
-> don't match. Client list was: aes128-cbc,3des-cbc.
-> Server list was
-> aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm at openssh.com,aes256-gcm at openssh.com,chacha20-poly1305 at openssh.com.
-> 
-> Device test failed.
-> 
-> Whereas it is possible to connect the raspberry pi via terminal using ssh.
-> Please help me with this issue.
+So either you upgrade your client or switch to dropbear instead of openssh on
+the rpi which allows for the not-so-secure ciphers.
+
+In any case this is not a buildroot problem, so closing the bug as INVALID.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
