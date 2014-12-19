@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Dec 2014 22:01:36 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libdvbcsa: Update SITE url
-In-Reply-To: <1419013813-2050-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Fri, 19 Dec 2014 19:30:12 +0100")
-References: <1419013813-2050-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87zjaje4lr.fsf@dell.be.48ers.dk>
+Date: Fri, 19 Dec 2014 21:41:03 +0100
+Subject: [Buildroot] [git commit] git: security bump to version 2.2.1
+Message-ID: <20141219210206.5952280589@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=59b3b3edd6d67ed7c4e22da045f43ca98c31b940
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/libdvbcsa/libdvbcsa.mk |    2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
+CVE-2014-9390 - arbitrary command execution vulnerability on
+case-insensitive file systems.
 
- > diff --git a/package/libdvbcsa/libdvbcsa.mk b/package/libdvbcsa/libdvbcsa.mk
- > index ef1d957..1472537 100644
- > --- a/package/libdvbcsa/libdvbcsa.mk
- > +++ b/package/libdvbcsa/libdvbcsa.mk
- > @@ -5,7 +5,7 @@
- >  ################################################################################
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 33fed89..757546d 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  3b87774672bbf35b4d33991dc5119d4eff47c3679e27185312a2b8b36fdad314  git-2.2.0.tar.xz
++sha256  09422dc9a0bdddf6bdd5b8634c71e1ed3125256c47424e6a2687701e764ef450  git-2.2.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 9e931a1..57737f2 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  LIBDVBCSA_VERSION = 1.1.0
- > -LIBDVBCSA_SITE = http://download.videolan.org/pub/videolan/libdvbcsa/$(LIBDVBCSA_VERSION)
- > +LIBDVBCSA_SITE = http://get.videolan.org/libdvbcsa/$(LIBDVBCSA_VERSION)
-
-Why?
-
-Please document why you are doing changes in the commit messages.
-
--- 
-Bye, Peter Korsgaard
+-GIT_VERSION = 2.2.0
++GIT_VERSION = 2.2.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
