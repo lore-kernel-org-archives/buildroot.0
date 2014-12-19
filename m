@@ -1,31 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Dec 2014 21:42:51 +0100
-Subject: [Buildroot] [git commit] gcc: bump 4.8.x series to version 4.8.4
-Message-ID: <20141219210206.6FC9B7FD99@busybox.osuosl.org>
+Date: Fri, 19 Dec 2014 21:50:04 +0100
+Subject: [Buildroot] [git commit] package/libbluray: bump version to 0.6.2
+Message-ID: <20141219210206.79E537FD99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e8fc282f832d16e8edacfc25dfb5ae9a426d667
+commit: http://git.buildroot.net/buildroot/commit/?id=6878126afaadb3c84fc21c3283511be1fff3bcc6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+- old SITE is now password-protected
+- add hash
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/{4.8.3 => 4.8.4}/100-uclibc-conf.patch |    0
- .../{4.8.3 => 4.8.4}/301-missing-execinfo_h.patch  |    0
- .../305-libmudflap-susv3-legacy.patch              |    0
- .../810-arm-softfloat-libgcc.patch                 |    0
- .../{4.8.3 => 4.8.4}/830-arm_unbreak_armv4t.patch  |    0
- .../gcc/{4.8.3 => 4.8.4}/841-PR57717-E500v2.patch  |    0
- package/gcc/{4.8.3 => 4.8.4}/842-PR60155.patch     |    0
- .../850-libstdcxx-uclibc-c99.patch                 |    0
- .../gcc/{4.8.3 => 4.8.4}/900-musl-support.patch    |    0
- .../910-gcc-poison-system-directories.patch        |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- package/gcc/Config.in.host                         |    6 +++---
- 12 files changed, 3 insertions(+), 3 deletions(-)
+ package/libbluray/libbluray.hash |    2 ++
+ package/libbluray/libbluray.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+new file mode 100644
+index 0000000..b7bc201
+--- /dev/null
++++ b/package/libbluray/libbluray.hash
+@@ -0,0 +1,2 @@
++# Hashes from: http://get.videolan.org/libbluray/0.6.2/libbluray-0.6.2.tar.bz2.sha512
++sha512 20fbc5f34d7d025efaac1b6398c18b94b603a52bfb6dd0f021059d3bd4c3cf785e715698cd09e5d1c97a7ed11bbd146b29aa363650620eef1efca08053fc033a  libbluray-0.6.2.tar.bz2
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index ead57a3..b53f21c 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBBLURAY_VERSION = 0.5.0
+-LIBBLURAY_SITE = ftp://ftp.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
++LIBBLURAY_VERSION = 0.6.2
++LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
+ LIBBLURAY_LICENSE = LGPLv2.1+
