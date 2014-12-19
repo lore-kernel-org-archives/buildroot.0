@@ -1,37 +1,90 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 19 Dec 2014 11:33:10 -0800
-Subject: [Buildroot] Using external toolchain
-Message-ID: <CALo-6+iOGt+y1JjC8AaJ3vpck_tb1h7ZTSAd3LBcypfwGCZRfg@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 19 Dec 2014 21:08:20 +0100
+Subject: [Buildroot] [PATCH] python-markdown: add new package
+In-Reply-To: <1418328271-30112-1-git-send-email-gwenj@trabucayre.com>
+References: <1418328271-30112-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <CAHXCMM+bn6aftn4FFSz9FR-=0+BG3sPSChqP=FA5fN424h6aDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm working with buildroot 2011.02 on a project which is in production and
-the company wishes to change to a newer toolchain, crosstools-ng version
-1.20.0 (gcc-4.9.1).
+Hi Gwenhael,
 
-I set in the toolchain with the location and prefix, but the build fails
-with an incorrect sysroot.
+On Thu, Dec 11, 2014 at 9:04 PM, Gwenhael Goavec-Merou
+<gwenj@trabucayre.com> wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/Config.in                          |  1 +
+>  package/python-markdown/Config.in          |  6 ++++++
+>  package/python-markdown/python-markdown.mk | 15 +++++++++++++++
+>  3 files changed, 22 insertions(+)
+>  create mode 100644 package/python-markdown/Config.in
+>  create mode 100644 package/python-markdown/python-markdown.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index f41e332..f62c787 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -510,6 +510,7 @@ menu "external python modules"
+>         source "package/python-keyring/Config.in"
+>         source "package/python-libconfig/Config.in"
+>         source "package/python-mad/Config.in"
+> +       source "package/python-markdown/Config.in"
+>         source "package/python-markupsafe/Config.in"
+>         source "package/python-meld3/Config.in"
+>         source "package/python-msgpack/Config.in"
+> diff --git a/package/python-markdown/Config.in b/package/python-markdown/Config.in
+> new file mode 100644
+> index 0000000..e5e164e
+> --- /dev/null
+> +++ b/package/python-markdown/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_MARKDOWN
+> +       bool "python-markdown"
+> +       help
+> +         This is a Python implementation of John Gruber's Markdown
+> +
+> +         https://pypi.python.org/pypi/Markdown
+> diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+> new file mode 100644
+> index 0000000..28d9a07
+> --- /dev/null
+> +++ b/package/python-markdown/python-markdown.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-markdown
+> +#
+> +################################################################################
+> +
+> +PYTHON_MARKDOWN_VERSION = 2.5.2
+> +PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+> +PYTHON_MARKDOWN_SITE = http://pypi.python.org/packages/source/M/Markdown
+> +PYTHON_MARKDOWN_LICENSE = BSD License
 
-For instance, the toolchain is at:
+Should be BSD-3c
 
-/opt/toolchains/powerpc-econolite_e300c2-linux-gnu/bin/powerpc-econolite_e300c2-linux-gnu-gcc
+> +PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+> +PYTHON_MARKDOWN_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> +$(eval $(host-python-package))
 
-But the sysroot comes out:
+Why is the host variant needed?
 
---sysroot=
-*/home/ckrinke/asc4_bsp/buildroot-glibc/output/host/usr/powerpc-unknown-linux-gnu/sysroot*
+> --
+> 2.0.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Note the "econolite" vs the "unknown" in the tuple. This is complicated by
-the fact that output/host/usr/power* is non-existent
-
-I *think* that one can specify sysroot when compiling and would appreciate
-a suggestion or two to get me out of this despicable place.
+Regards,
 
 -- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141219/c1720243/attachment.html>
+Samuel
