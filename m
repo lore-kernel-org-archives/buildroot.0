@@ -1,45 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Dec 2014 21:41:03 +0100
-Subject: [Buildroot] [git commit] git: security bump to version 2.2.1
-Message-ID: <20141219210206.5952280589@busybox.osuosl.org>
+Date: Fri, 19 Dec 2014 21:56:54 +0100
+Subject: [Buildroot] [git commit] ympd: fix license typo
+Message-ID: <20141219210206.860547FD99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59b3b3edd6d67ed7c4e22da045f43ca98c31b940
+commit: http://git.buildroot.net/buildroot/commit/?id=6af6eecd9db3772b300724b5cb5650012c129313
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2014-9390 - arbitrary command execution vulnerability on
-case-insensitive file systems.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ympd/ympd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 33fed89..757546d 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  3b87774672bbf35b4d33991dc5119d4eff47c3679e27185312a2b8b36fdad314  git-2.2.0.tar.xz
-+sha256  09422dc9a0bdddf6bdd5b8634c71e1ed3125256c47424e6a2687701e764ef450  git-2.2.1.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 9e931a1..57737f2 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ympd/ympd.mk b/package/ympd/ympd.mk
+index 2898c9d..346c510 100644
+--- a/package/ympd/ympd.mk
++++ b/package/ympd/ympd.mk
+@@ -7,7 +7,7 @@
+ YMPD_VERSION = a98d760dddff4b0dd595d977c9077f34beff05c5
+ YMPD_SITE = $(call github,notandy,ympd,$(YMPD_VERSION))
+ YMPD_LICENSE = GPLv2
+-YMPD_LICENSE_FILE = LICENSE
++YMPD_LICENSE_FILES = LICENSE
+ YMPD_DEPENDENCIES = libmpdclient
  
--GIT_VERSION = 2.2.0
-+GIT_VERSION = 2.2.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+ define YMPD_MAKE_HOST_TOOL
