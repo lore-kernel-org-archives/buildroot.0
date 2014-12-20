@@ -1,59 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Dec 2014 19:22:41 +0100
-Subject: [Buildroot] [PATCH] package/weston: do not select rpi-userland
-Message-ID: <1419099761-32669-1-git-send-email-yann.morin.1998@free.fr>
+From: Tal Lubko <tallubko@yahoo.com>
+Date: Sat, 20 Dec 2014 21:58:32 +0200
+Subject: [Buildroot] [PATCH 1/1] intel-gpu-tools: new package
+Message-ID: <1419105512-4136-1-git-send-email-tallubko@yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rpi-userland is a provider for some virtual packages, so we can not
-select it, as instructed in the manual:
-
-    http://nightly.buildroot.org/#_infrastructure_for_virtual_packages
-
-    ---8<---
-    If your package really requires a specific provider, then you?ll
-    have to make your package depends on this provider; you can not select a
-    provider.
-    ---8<---
-
-Instead, just depend on it. Remove the comment as well.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Tal Lubko <tallubko@yahoo.com>
 ---
-Notes: I choose to remove the comment altogether, because we have no
-official solution to tell the user about dependencies to other packages.
----
- package/weston/Config.in | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ package/Config.in                          |  1 +
+ package/intel-gpu-tools/Config.in          | 13 +++++++++++++
+ package/intel-gpu-tools/intel-gpu-tools.mk | 17 +++++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 package/intel-gpu-tools/Config.in
+ create mode 100644 package/intel-gpu-tools/intel-gpu-tools.mk
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 5fff5bd..49130b4 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -40,17 +40,10 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 
--comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
--	depends on BR2_arm
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
--
-+# rpi-userland is an EGL/GLES provider, so we can't select it
- config BR2_PACKAGE_WESTON_RPI
- 	bool "RPi compositor"
--	depends on BR2_arm                      # rpi-userland
--	depends on BR2_INSTALL_LIBSTDCPP        # rpi-userland
--	depends on BR2_LARGEFILE                # rpi-userland
--	depends on BR2_TOOLCHAIN_HAS_THREADS    # rpi-userland
--	select BR2_PACKAGE_RPI_USERLAND
-+	depends on BR2_PACKAGE_RPI_USERLAND
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 
- endif
+diff --git a/package/Config.in b/package/Config.in
+index 81bb9e3..000f7cb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -63,6 +63,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/fio/Config.in"
+ 	source "package/gdb/Config.in"
+ 	source "package/google-breakpad/Config.in"
++	source "package/intel-gpu-tools/Config.in"
+ 	source "package/iozone/Config.in"
+ 	source "package/kexec/Config.in"
+ 	source "package/kexec-lite/Config.in"
+diff --git a/package/intel-gpu-tools/Config.in b/package/intel-gpu-tools/Config.in
+new file mode 100644
+index 0000000..2336d2a
+--- /dev/null
++++ b/package/intel-gpu-tools/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_INTEL_GPU_TOOLS
++	bool "intel-gpu-tools"
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBPCIACCESS
++
++	help
++	  This is a collection of tools for development and testing of the Intel DRM driver.
++
++	  https://01.org/linuxgraphics/
+diff --git a/package/intel-gpu-tools/intel-gpu-tools.mk b/package/intel-gpu-tools/intel-gpu-tools.mk
+new file mode 100644
+index 0000000..a001ea8
+--- /dev/null
++++ b/package/intel-gpu-tools/intel-gpu-tools.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# intel-gpu-tools
++#
++################################################################################
++
++INTEL_GPU_TOOLS_VERSION = 1.8
++INTEL_GPU_TOOLS_SOURCE = intel-gpu-tools-$(INTEL_GPU_TOOLS_VERSION).tar.bz2
++INTEL_GPU_TOOLS_SITE = http://xorg.freedesktop.org/archive/individual/app
++INTEL_GPU_TOOLS_LICENSE = MIT
++INTEL_GPU_TOOLS_INSTALL_STAGING = YES
++INTEL_GPU_TOOLS_INSTALL_TARGET = YES
++INTEL_GPU_TOOLS_DEPENDENCIES = host-pkgconf libdrm cairo libglib2 libpciaccess
++
++INTEL_GPU_TOOLS_CONF_OPTS = \
++
++$(eval $(autotools-package))
 -- 
 1.9.1
