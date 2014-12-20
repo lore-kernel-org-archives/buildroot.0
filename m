@@ -1,52 +1,49 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Fri, 19 Dec 2014 17:41:26 -0800
-Subject: [Buildroot] [PATCH v5 00/15] Add Xorg support for iMX6
-In-Reply-To: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
-Message-ID: <5494D3C6.6060006@gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 19 Dec 2014 21:42:03 -0600
+Subject: [Buildroot] [PATCH] ffmpeg: enable freetype support
+Message-ID: <5494F00B.4080107@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerome, All,
+If libfreetype has been select configure ffmpeg to use it if possible
+Since this requires fenv.h it won't happen when using uClibc except for x86 targets
 
-On 12/09/2014 05:46 AM, J?r?me Pouiller wrote:
-> Hello,
->
-> Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
-> Xorg. This work is mainly adapted from Yocto.
->
-> v5:
->    - Add references in commit log of xdriver_xf86-video-imx-viv
->    - Split qmx6_defconfig in two defconfig: a minimal one and a demo one
->
-> v4:
->    - Fix example config in commit log of xdriver_xf86-video-imx-viv
->    - Add a note about OpenGL API in xdriver_xf86-video-imx-viv help
->
-> v3:
->    - Respin on next
->    - Add patch to use self-extractible helper function
->    - Remove 'See freescale-imx.mk' comment
->    - Reword patch "gpu-viv-bin-mx6q: change output selection mecanisms"
->    - libdrm: Apply new patch naming policy
->    - xdriver_xf86-video-imx-viv: Apply new patch naming policy
->    - xdriver_xf86-video-imx-viv: Does not depends directly on glibc
->    - qt5base: Apply new patch naming policy
->    - qmx6_defconfig: Use internal toochain
->
-> v2:
->    - Rebase on new version of mesa3d
->    - Reorder some patches (in order to make examples I provide in commit message
->      functional)
->    - Do not bump version of all freescale packages
->    - Bump kernel version of imx6 boards
-> [snip]
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+diff -pruN buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk buildroot-2014.11.modified/package/ffmpeg/ffmpeg.mk
+--- buildroot-2014.11.clean/package/ffmpeg/ffmpeg.mk	2014-12-01 03:19:00.000000000 -0600
++++ buildroot-2014.11.modified/package/ffmpeg/ffmpeg.mk	2014-12-19 21:27:00.321228195 -0600
+@@ -50,7 +49,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libopencv \
+ 	--disable-libdc1394 \
+ 	--disable-libfaac \
+-	--disable-libfreetype \
+ 	--disable-libgsm \
+ 	--disable-libmp3lame \
+ 	--disable-libnut \
+@@ -229,6 +233,22 @@ else
+ FFMPEG_CONF_OPTS += --disable-libvpx
+ endif
 
-I haven't tested this series of patch as Thomas had some remarks. Let me 
-know if I should test it anyway or if I should wait for a v6.
-
-Thanks,
-Gary
++# ffmpeg freetype support require fenv.h
++# which is not available in uClibc
++ifneq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++ffmpeg_environment_has_fenv ?= y
++endif
++# except for uClibc on x86
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++ffmpeg_environment_has_fenv ?= y
++endif
++ifeq ($(BR2_PACKAGE_FREETYPE)$(ffmpeg_environment_has_fenv),yy)
++FFMPEG_CONF_OPTS += --enable-libfreetype
++FFMPEG_DEPENDENCIES += freetype
++else
++FFMPEG_CONF_OPTS += --disable-libfreetype
++endif
++
+ ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
+ FFMPEG_CONF_OPTS += --enable-libx264
+ FFMPEG_DEPENDENCIES += x264
