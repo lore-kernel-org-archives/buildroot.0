@@ -1,55 +1,39 @@
-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-Date: Sat, 20 Dec 2014 15:22:12 +0100
-Subject: [Buildroot] [PATCH 1/1] busybox: make LOGIN_FAIL_DELAY configurable
-Message-ID: <1419085332-379-1-git-send-email-syntheticpp@gmx.net>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Sat, 20 Dec 2014 15:27:34 +0100
+Subject: [Buildroot] [PATCH v5 00/15] Add Xorg support for iMX6
+In-Reply-To: <5494D3C6.6060006@gmail.com>
+References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
+ <5494D3C6.6060006@gmail.com>
+Message-ID: <2664122.16Rl9eEuFN@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass LOGIN_FAIL_DELAY=<seconds> in busybox's CONFIG_EXTRA_CFLAGS
-to change default delay of 3 seconds.
+Hello Garry,
 
-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
----
- .../busybox/busybox-0007-login-fail-delay.patch    | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/busybox/busybox-0007-login-fail-delay.patch
+On Friday 19 December 2014 17:41:26 Gary Bisson wrote:
+> Jerome, All,
+> 
+> On 12/09/2014 05:46 AM, J?r?me Pouiller wrote:
+> > Hello,
+> >
+> > Main purpose of this serie is to add support of Vivante GPU (found on 
+imx6) to
+> > Xorg. This work is mainly adapted from Yocto.
+> >
+> > v5:
+> >    - Add references in commit log of xdriver_xf86-video-imx-viv
+> >    - Split qmx6_defconfig in two defconfig: a minimal one and a demo one
+[...] 
+> I haven't tested this series of patch as Thomas had some remarks. Let me 
+> know if I should test it anyway or if I should wait for a v6.
+Thomas remarks are only related to Qt5 modifications. I have not yet totally 
+answered these remarks, but apart from Qt5 patch, there is no opened issues on 
+this series. 
 
-diff --git a/package/busybox/busybox-0007-login-fail-delay.patch b/package/busybox/busybox-0007-login-fail-delay.patch
-new file mode 100644
-index 0000000..158088d
---- /dev/null
-+++ b/package/busybox/busybox-0007-login-fail-delay.patch
-@@ -0,0 +1,28 @@
-+From 782002e319d01aba1ddf77419ace633998320866 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-+Date: Sat, 20 Dec 2014 14:35:56 +0100
-+Subject: [PATCH] make LOGIN_FAIL_DELAY configurable
-+
-+Pass LOGIN_FAIL_DELAY=<seconds> in busybox's CONFIG_EXTRA_CFLAGS
-+to change default delay of 3 seconds.
-+---
-+ include/libbb.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/libbb.h b/include/libbb.h
-+index 64167bb..60c7013 100644
-+--- a/include/libbb.h
-++++ b/include/libbb.h
-+@@ -1252,7 +1252,9 @@ char *bb_simplify_path(const char *path) FAST_FUNC;
-+ /* Returns ptr to NUL */
-+ char *bb_simplify_abs_path_inplace(char *path) FAST_FUNC;
-+ 
-++#ifndef LOGIN_FAIL_DELAY
-+ #define LOGIN_FAIL_DELAY 3
-++#endif
-+ extern void bb_do_delay(int seconds) FAST_FUNC;
-+ extern void change_identity(const struct passwd *pw) FAST_FUNC;
-+ extern void run_shell(const char *shell, int loginshell, const char *command, const char **additional_args) NORETURN FAST_FUNC;
-+-- 
-+1.9.1
-+
 -- 
-1.9.1
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
