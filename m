@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Dec 2014 16:12:15 +0100
-Subject: [Buildroot] [PATCH] package/hostapd: use correct include path
- for libnl-3.0
-In-Reply-To: <1418771832-14258-1-git-send-email-romain.naour@openwide.fr>
-References: <1418771832-14258-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141220161215.264ab952@free-electrons.com>
+From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
+Date: Sat, 20 Dec 2014 16:14:53 +0100
+Subject: [Buildroot] [PATCH 1/1] busybox: make LOGIN_FAIL_DELAY
+	configurable
+In-Reply-To: <20141220155836.7ae8c639@free-electrons.com>
+References: <1419085332-379-1-git-send-email-syntheticpp@gmx.net>
+ <20141220155836.7ae8c639@free-electrons.com>
+Message-ID: <5495926D.1080008@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
 
-On Wed, 17 Dec 2014 00:17:12 +0100, Romain Naour wrote:
-> Add a dependancy on host-pkgconf.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Reported-by: J?rg Krause <jkrause@posteo.de>
-> Cc: J?rg Krause <jkrause@posteo.de>
-> ---
->  ...01-use-correct-include-path-for-libnl-3.0.patch | 26 ++++++++++++++++++++++
->  package/hostapd/hostapd.mk                         |  2 +-
->  2 files changed, 27 insertions(+), 1 deletion(-)
->  create mode 100644 package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
 
-Applied, thanks. Please submit the patch upstream.
+Am 20.12.2014 um 15:58 schrieb Thomas Petazzoni:
+> Dear Peter K?mmel,
+>
+> On Sat, 20 Dec 2014 15:22:12 +0100, Peter K?mmel wrote:
+>> Pass LOGIN_FAIL_DELAY=<seconds> in busybox's CONFIG_EXTRA_CFLAGS
+>> to change default delay of 3 seconds.
+>>
+>> Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+>> ---
+>>   .../busybox/busybox-0007-login-fail-delay.patch    | 28 ++++++++++++++++++++++
+>>   1 file changed, 28 insertions(+)
+>>   create mode 100644 package/busybox/busybox-0007-login-fail-delay.patch
+>
+> Even though the patch is small, it is in a way a "feature" patch: do
+> something that the upstream Busybox doesn't allow to do. Could you
+> instead submit this patch upstream, and once it gets accepted, backport
+> it into Buildroot?
+>
+> Thanks,
+>
+> Thomas
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+OK, pushed it to the busybox ml.
+
+pk
