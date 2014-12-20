@@ -1,9 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sat, 20 Dec 2014 12:17:58 +0100
-Subject: [Buildroot] [PATCH v2 2/2] python-cheetah: add new package
-In-Reply-To: <1419074278-17625-1-git-send-email-gwenj@trabucayre.com>
-References: <1419074278-17625-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1419074278-17625-2-git-send-email-gwenj@trabucayre.com>
+Date: Sat, 20 Dec 2014 12:17:57 +0100
+Subject: [Buildroot] [PATCH v2 1/2] python-markdown: add new package
+Message-ID: <1419074278-17625-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,64 +13,59 @@ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
 Changes v1 -> v2:
-	- Add python-cheetah patch
+	- Change license
 
- package/Config.in                        |  1 +
- package/python-cheetah/Config.in         | 12 ++++++++++++
- package/python-cheetah/python-cheetah.mk | 14 ++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/python-cheetah/Config.in
- create mode 100644 package/python-cheetah/python-cheetah.mk
+ package/Config.in                          |  1 +
+ package/python-markdown/Config.in          |  6 ++++++
+ package/python-markdown/python-markdown.mk | 15 +++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/python-markdown/Config.in
+ create mode 100644 package/python-markdown/python-markdown.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 51630ba..3324f17 100644
+index 81bb9e3..51630ba 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -489,6 +489,7 @@ menu "external python modules"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
-+	source "package/python-cheetah/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-diff --git a/package/python-cheetah/Config.in b/package/python-cheetah/Config.in
+@@ -511,6 +511,7 @@ menu "external python modules"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-mad/Config.in"
++	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-msgpack/Config.in"
+diff --git a/package/python-markdown/Config.in b/package/python-markdown/Config.in
 new file mode 100644
-index 0000000..732da6a
+index 0000000..e5e164e
 --- /dev/null
-+++ b/package/python-cheetah/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_CHEETAH
-+	bool "python-cheetah"
-+	depends on BR2_PACKAGE_PYTHON_MARKDOWN
++++ b/package/python-markdown/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_MARKDOWN
++	bool "python-markdown"
 +	help
-+	  Cheetah is an open source template engine and code generation tool.
++	  This is a Python implementation of John Gruber's Markdown 
 +
-+	  It can be used standalone or combined with other tools and frameworks.
-+	  Web development is its principle use, but Cheetah is very flexible
-+	  and is also being used to generate C++ game code, Java, sql, form
-+	  emails and even Python code.
-+
-+	  https://pypi.python.org/pypi/Cheetah/
-diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
++	  https://pypi.python.org/pypi/Markdown
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
 new file mode 100644
-index 0000000..523ad26
+index 0000000..05783a0
 --- /dev/null
-+++ b/package/python-cheetah/python-cheetah.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-markdown/python-markdown.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-cheetah
++# python-markdown
 +#
 +################################################################################
 +
-+PYTHON_CHEETAH_VERSION = 2.4.4
-+PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
-+PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
-+PYTHON_CHEETAH_LICENSE = MIT
-+PYTHON_CHEETAH_SETUP_TYPE = setuptools
-+PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
++PYTHON_MARKDOWN_VERSION = 2.5.2
++PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
++PYTHON_MARKDOWN_SITE = http://pypi.python.org/packages/source/M/Markdown
++PYTHON_MARKDOWN_LICENSE = BSD-3c 
++PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
++PYTHON_MARKDOWN_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.0.4
