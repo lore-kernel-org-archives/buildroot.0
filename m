@@ -1,47 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Dec 2014 23:40:06 +0100
-Subject: [Buildroot] [PATCH 00/14] Add support for U-Boots Kbuild &
- Kconfig build system
-In-Reply-To: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20141221234006.311fcde0@free-electrons.com>
+Date: Sun, 21 Dec 2014 23:24:09 +0100
+Subject: [Buildroot] [git commit] boot/uboot: bump to version 2014.10
+Message-ID: <20141221224101.A40D880543@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=143119c0ef58b04bd7109bcb7b095ef98cc5311c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 13 Dec 2014 00:15:57 +0100, J?rg Krause wrote:
-> This patch series adds to the bootloader Das U-Boot:
->   * Update to the latest stable version 2014.10
->   * Support for its Kbuild & Kconfig build system
->   * Documentation in the manual
->   * Fixes and adjustments to the packages infrastructure
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for working on this, definitely good to see someone tackling the
-bump to the first kconfig-enabled U-Boot version.
-
-There is however one big issue with your patch series: I believe it
-breaks backward compatibility with U-Boot versions older than 2014.10.
-And a *lot* of people are using old versions of U-Boot, to which they
-are stuck due to the old version being their only choice for a given
-piece of hardware.
-
-So we clearly need to continue to support older versions of U-Boot,
-that don't have the kconfig stuff. I just gave a try, and it seems like
-the old U-Boot way of configuring/building things apparently still
-works with U-Boot 2014.10. So your PATCH 01/14 is probably OK. However
-starting from 02/14, I believe you'll be breaking things for U-Boot
-versions older than 2014.10.
-
-Can you work on a solution that preserves compatibility?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index cf40fdc..f3e1778 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2014.07"
++	bool "2014.10"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -63,7 +63,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2014.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2014.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
