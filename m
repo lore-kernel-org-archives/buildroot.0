@@ -1,12 +1,15 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 21 Dec 2014 14:34:11 -0300
-Subject: [Buildroot] [PATCH] libtool: fix help2man related failure
-Message-ID: <1419183251-26734-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Dec 2014 20:01:51 +0100
+Subject: [Buildroot] [git commit] libtool: fix help2man related failure
+Message-ID: <20141221190157.70E50805F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=9d39d6601d346f7f521247548b84463a30434649
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Libtool sometimes requires help2man to build manpages, but since we
 don't use/need them and want to avoid pulling in and/or building
@@ -17,9 +20,10 @@ Also add host-m4 as dependency, it's not strictly required but silences
 many build warnings.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libtool/libtool.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libtool/libtool.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
 diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
 index c392e25..92c6dce 100644
@@ -34,5 +38,3 @@ index c392e25..92c6dce 100644
  LIBTOOL_LICENSE = GPLv2+
  LIBTOOL_LICENSE_FILES = COPYING
  
--- 
-2.0.4
