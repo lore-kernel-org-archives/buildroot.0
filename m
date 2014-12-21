@@ -1,40 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Dec 2014 11:02:41 +0100
-Subject: [Buildroot] [PATCH 1/1] intel-gpu-tools: new package
-References: <1419105512-4136-1-git-send-email-tallubko@yahoo.com>
-Message-ID: <XnsA40A705DB13B4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Sun, 21 Dec 2014 11:09:31 +0100
+Subject: [Buildroot] [PATCH 2/2] package/iucode-tool: bump version
+In-Reply-To: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1419156571-12002-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+- updated upstream location
+  http://metadata.ftp-master.debian.org/changelogs/contrib/i/iucode-tool/unstable_changelog
+  "iucode-tool (1.0.2-1) unstable; urgency=low
+   [...]
+   * debian/control: update for new upstream location at Gitorious"
 
-Tal Lubko <tallubko@yahoo.com> wrote in 
-news:1419105512-4136-1-git-send-email-tallubko at yahoo.com:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/iucode-tool/Config.in      |    2 +-
+ package/iucode-tool/iucode-tool.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> +     select BR2_PACKAGE_LIBDRM
-
-libdrm package depends on BR2_LARGEFILE & BR2_TOOLCHAIN_HAS_THREADS, please 
-propagate this dependency to your new package.
-
-> +     select BR2_PACKAGE_LIBDRM_INTEL
-> +     select BR2_PACKAGE_CAIRO
-
-Cairo depends on BR2_ARCH_HAS_ATOMICS
-
-> +     select BR2_PACKAGE_CAIRO_PNG
-> +     select BR2_PACKAGE_LIBGLIB2
-
-Libglib2 depends on BR2_USE_WCHAR, BR2_TOOLCHAIN_HAS_THREADS & BR2_USE_MMU
-
-> +     select BR2_PACKAGE_LIBPCIACCESS
-
-Libpciaccess depends on BR2_LARGEFILE.
-
-> +INTEL_GPU_TOOLS_VERSION = 1.8
-
-Version 1.9 was released on Dec, 12th ;)
-
-Regards, Bernd
+diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
+index 8f90350..b996b36 100644
+--- a/package/iucode-tool/Config.in
++++ b/package/iucode-tool/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_IUCODE_TOOL
+ 	help
+ 	  Intel processor microcode tool
+ 
+-	  http://packages.debian.org/source/iucode-tool
++	  https://gitorious.org/iucode-tool
+diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+index 081b086..44d49d9 100644
+--- a/package/iucode-tool/iucode-tool.mk
++++ b/package/iucode-tool/iucode-tool.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-IUCODE_TOOL_VERSION = v1.0.1
+-IUCODE_TOOL_SITE = git://git.debian.org/users/hmh/iucode-tool.git
++IUCODE_TOOL_VERSION = 1cbd73013cd4c6b2b287f07f6189eef35cb83ca0
++IUCODE_TOOL_SITE = git://gitorious.org/iucode-tool/iucode-tool.git
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ IUCODE_TOOL_CONF_ENV = LIBS="-largp"
+ IUCODE_TOOL_DEPENDENCIES = argp-standalone
+-- 
+1.7.10.4
