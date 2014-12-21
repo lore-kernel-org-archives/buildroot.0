@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Dec 2014 22:03:05 +0100
-Subject: [Buildroot] [buildroot-test 1/2] Taking into account
- BR2_PREFER_STATIC_LIB rename
-In-Reply-To: <1418852858-818-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1418852858-818-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141221220305.7923490b@free-electrons.com>
+Date: Sun, 21 Dec 2014 22:03:59 +0100
+Subject: [Buildroot] [PATCH v4 1/2] python-markdown: add new package
+In-Reply-To: <1419175615-13068-1-git-send-email-gwenj@trabucayre.com>
+References: <1419175615-13068-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20141221220359.5df9d09e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Gwenhael Goavec-Merou,
 
-On Wed, 17 Dec 2014 22:47:37 +0100, Thomas Petazzoni wrote:
+On Sun, 21 Dec 2014 16:26:54 +0100, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
->      if config["libc"] != "glibc" and randint(0, 20) == 0:
-> -        configlines.append("BR2_PREFER_STATIC_LIB=y\n")
-> +        configlines.append("BR2_STATIC_LIBS=y\n")
+Thanks, applied, after doing various changes:
 
-Instead, should I also sometimes test BR2_SHARED_STATIC_LIBS ? Like 5%
-of times static only, 5% of times static+shared, and 90% of the time
-shared only (the default) ?
-
-Best regards,
+    [Thomas:
+     - Remove host variant of python-markdown, as it is not needed.
+     - Add runtime dependency on Python XML module.]
 
 Thomas
 -- 
