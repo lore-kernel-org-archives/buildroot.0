@@ -1,39 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Dec 2014 22:05:56 +0100
-Subject: [Buildroot] [PATCH v4] package/gdb: fix shared-only build
-In-Reply-To: <1418852225-7144-1-git-send-email-romain.naour@openwide.fr>
-References: <1418852225-7144-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141221220556.5b343671@free-electrons.com>
+Date: Sun, 21 Dec 2014 22:09:13 +0100
+Subject: [Buildroot] [PATCH] system: add "askfirst shell" as an option
+ for busybox init
+In-Reply-To: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
+References: <1418633784-7709-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20141221220913.5cb62321@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Alexey Brodkin,
 
-On Wed, 17 Dec 2014 22:37:05 +0100, Romain Naour wrote:
-> The shared build only of gdb is actually not supported.
+On Mon, 15 Dec 2014 11:56:24 +0300, Alexey Brodkin wrote:
+> Consider following cases:
+>  * Buildroot only builds rootfs that could be used on systems with
+>    different default serial ports (ttyS0, ttyS1, ttyAMA3 etc)
+>  * Target system has multiple serial ports and in kernel command
+>    line users/developers may select different serial ports as
+>    debug consoles
 > 
-> When --disable-static is given to the gdb's main configure script,
-> it also disable the static build of bundled libraries like bfd, readline
-> and opcodes, which must be build statically.
+> In both cases hard-coded with BR2_TARGET_GENERIC_GETTY tty will
+> only work for 1 particular serial port.
 > 
-> Force the static build of bundled libraries by adding --enable-static in
-> GDB_CONF_OPTS.
+> This change introduces an option to use whatever existing console.
+> For example console selected in kernel's command line will be used.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
-> http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
-> http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
-> http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
-> http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
+> I'm not sure if the same thing works for SysVinit so marking it
+> dependent on Busybox init.
 > 
-> And many more.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Applied, thanks.
+In the light of the discussion that has taken place, we have found a
+solution that apparently matches your use case, by using the existing
+Buildroot options. Therefore, I've marked your patch as Rejected in
+patchwork. If you disagree, do not hesitate to re-send an updated
+version with an extended justification.
+
+Thanks a lot!
 
 Thomas
 -- 
