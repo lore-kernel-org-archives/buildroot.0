@@ -1,39 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Dec 2014 16:41:28 +0100
-Subject: [Buildroot] [PATCH 1/1] add new package tinc
-In-Reply-To: <1418741278-32077-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1418741278-32077-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20141221164128.43d07933@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 21 Dec 2014 14:34:11 -0300
+Subject: [Buildroot] [PATCH] libtool: fix help2man related failure
+Message-ID: <1419183251-26734-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoltan Gyarmati,
+Libtool sometimes requires help2man to build manpages, but since we
+don't use/need them and want to avoid pulling in and/or building
+dependencies for that we just disable it. Fixes:
+http://autobuild.buildroot.net/results/bfb/bfb9e298196d877b623580f882b6fe74b30bec9b/
 
-On Tue, 16 Dec 2014 15:47:58 +0100, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->  package/Config.in      |  1 +
->  package/tinc/Config.in | 11 +++++++++++
->  package/tinc/tinc.mk   | 13 +++++++++++++
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/tinc/Config.in
->  create mode 100644 package/tinc/tinc.mk
+Also add host-m4 as dependency, it's not strictly required but silences
+many build warnings.
 
-Patch applied, thanks. I've only done some minor changes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libtool/libtool.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-    [Thomas:
-     - fix license from GPLv2 to 'GPLv2+ with OpenSSL exception'
-     - add -std=c99 to CFLAGS, otherwise it doesn't build with a minimal
-       toolchain configuration
-     - add BR2_USE_MMU dependency since fork() is used.]
-
-Thanks for your contribution!
-
-Thomas
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index c392e25..92c6dce 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -8,6 +8,8 @@ LIBTOOL_VERSION = 2.4.4
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+ LIBTOOL_INSTALL_STAGING = YES
++LIBTOOL_CONF_ENV = HELP2MAN=true
++LIBTOOL_DEPENDENCIES = host-m4
+ LIBTOOL_LICENSE = GPLv2+
+ LIBTOOL_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.4
