@@ -1,63 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Dec 2014 21:28:43 +0100
-Subject: [Buildroot] [PATCH] package/ncurses: fix builds with both shared
-	and static libs
-Message-ID: <1419193723-7911-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 21 Dec 2014 21:41:26 +0100
+Subject: [Buildroot] [PATCH v4] package/gdb: fix shared-only build
+In-Reply-To: <1418852225-7144-1-git-send-email-romain.naour@openwide.fr>
+References: <1418852225-7144-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141221204125.GA4207@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When both shared and static libs are enabled, we have two shell
-constructs to run, but they are not properly separated, leading to build
-failures like:
+Romain, All,
 
-    ln -sf libncursesw.a /home/idnc_sk/IOLINUX/builds/micro-x86_64-corei7/
-    output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libcurse
-    s.a for lib in libncurses libmenu libpanel libform; do ln -sf ${lib}w.
-    so /home/idnc_sk/IOLINUX/builds/micro-x86_64-corei7/output/host/usr/x8
-    6_64-buildroot-linux-uclibc/sysroot/usr/lib/${lib}.so; done
-    /bin/bash: -c: line 0: syntax error near unexpected token `do'
-    /bin/bash: -c: line 0: `ln -sf libncursesw.a /home/idnc_sk/IOLINUX/bui
-    lds/micro-x86_64-corei7/output/host/usr/x86_64-buildroot-linux-uclibc/
-    sysroot/usr/lib/libcurses.a for lib in libncurses libmenu libpanel lib
-    form; do ln -sf ${lib}w.so /home/idnc_sk/IOLINUX/builds/micro-x86_64-c
-    orei7/output/host/usr/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/${
-    lib}.so; done'
+On 2014-12-17 22:37 +0100, Romain Naour spake thusly:
+> The shared build only of gdb is actually not supported.
+> 
+> When --disable-static is given to the gdb's main configure script,
+> it also disable the static build of bundled libraries like bfd, readline
+> and opcodes, which must be build statically.
+> 
+> Force the static build of bundled libraries by adding --enable-static in
+> GDB_CONF_OPTS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/219/21979e730dca1fce5bdda9a4c7fad4485e788866/
+> http://autobuild.buildroot.net/results/c10/c1096d0bd22de5c6feba848f743601ad0416a944/
+> http://autobuild.buildroot.net/results/d8a/d8a5bcc7fa374fb0c916a9d0f33ef283109cb404/
+> http://autobuild.buildroot.net/results/22a/22a86d0f1df0fc4698c0f734f3d659e6317404a4/
+> http://autobuild.buildroot.net/results/404/404e61e5c30040ee5756f4b5839149dca38660d4/
+> 
+> And many more.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-As can be seen, there is a missing semi-colon ';' between the symlink
-command and the for loop:
+This is starting to bug some real users, as recently reported on the IRC
+channel.
 
-    ln -sf libncursesw.a [...]/libcurses.a for lib in [...]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fix that by adding a semi-colon after each first shell constructs, to
-properly separate the two. If the second one is not enabled (i.e. for a
-static-only build), there is a trailing semi-colon, but that's perfectly
-valid shell syntax.
+Regards,
+Yann E. MORIN.
 
-Reported-by: idnc_sk on IRC
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/ncurses/ncurses.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> ---
+> v4: Fix typos (ThomasP)
+> v3: Add a comment in gdb.mk (ThomasP)
+> v2: D'ont patch gdb, just enable static build.
+> ---
+>  package/gdb/gdb.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index dbec760..aa22193 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -74,6 +74,8 @@ GDB_CONF_ENV = \
+>  	bash_cv_have_mbstate_t=yes \
+>  	gdb_cv_func_sigsetjmp=yes
+>  
+> +# The shared only build is not supported by gdb, so enable static build for
+> +# build-in libraries with --enable-static.
+>  GDB_CONF_OPTS = \
+>  	--without-uiout \
+>  	--disable-gdbtk \
+> @@ -83,7 +85,8 @@ GDB_CONF_OPTS = \
+>  	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
+>  	--with-curses \
+>  	--without-included-gettext \
+> -	--disable-werror
+> +	--disable-werror \
+> +	--enable-static
+>  
+>  ifeq ($(BR2_PACKAGE_GDB_TUI),y)
+>  	GDB_CONF_OPTS += --enable-tui
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 47378f7..5f9e4bd 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -86,10 +86,10 @@ define NCURSES_LINK_PC
- endef
- 
- NCURSES_LINK_TARGET_LIBS = \
--	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR))) \
-+	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(TARGET_DIR));) \
- 	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(TARGET_DIR)))
- NCURSES_LINK_STAGING_LIBS = \
--	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR))) \
-+	$(if $(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_STATIC,$(STAGING_DIR));) \
- 	$(if $(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),$(call NCURSES_LINK_LIBS_SHARED,$(STAGING_DIR)))
- 
- NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
