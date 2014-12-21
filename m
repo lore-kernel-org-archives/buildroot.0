@@ -1,132 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Dec 2014 22:41:03 +0100
-Subject: [Buildroot] [git commit] package/pinentry: allow building without
-	Qt accessibility
-Message-ID: <20141221215109.55CBE805ED@busybox.osuosl.org>
+Date: Sun, 21 Dec 2014 22:50:45 +0100
+Subject: [Buildroot] [git commit] package/pkg-cmake.mk: add ccache support
+	for host packages
+Message-ID: <20141221215109.60F87805ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ec5167d0cccd8628537ac98222cfc528b08022b
+commit: http://git.buildroot.net/buildroot/commit/?id=45ed9844bede86c4e452fe249a0f9a50a5c5710a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport a patch applied upstream to allow building without Qt
-accessibility.
+This ccache support for host-cmake-package uses the same logic as the
+one done for the target packages in the toolchainfile.cmake file.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas: fix lots of mistakes.]
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pinentry/0002-qt-no-accessibility.patch |  102 +++++++++++++++++++++++
- 1 files changed, 102 insertions(+), 0 deletions(-)
+ package/pkg-cmake.mk |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/pinentry/0002-qt-no-accessibility.patch b/package/pinentry/0002-qt-no-accessibility.patch
-new file mode 100644
-index 0000000..2f9e508
---- /dev/null
-+++ b/package/pinentry/0002-qt-no-accessibility.patch
-@@ -0,0 +1,102 @@
-+commit 484465338ea6f5f12eb1341ca0ef84aa79224ed4
-+Author: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date:   Mon Dec 8 16:42:42 2014 +0000
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 231d0ba..1037513 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -20,6 +20,17 @@
+ #
+ ################################################################################
+ 
++# Set compiler variables.
++ifeq ($(BR2_CCACHE),y)
++CMAKE_HOST_C_COMPILER="$(HOST_DIR)/usr/bin/ccache"
++CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
++CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
++CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
++else
++CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
++CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
++endif
 +
-+    pinentry-qt4: make the accessibility part optional
-+    
-+    Check if the Qt libraries have support for QT Accessibility before using
-+    it. Otherwise it will raise error like these one:
-+    
-+    main.cpp: In function 'int qt_cmd_handler(pinentry_t)':
-+    main.cpp:220:51: error: 'class QAbstractButton' has no member named
-+    'setAccessibleDescription'
-+    
-+    Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+Backported from upstream.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff --git a/qt4/main.cpp b/qt4/main.cpp
-+index 106999e..b2a69f2 100644
-+--- a/qt4/main.cpp
-++++ b/qt4/main.cpp
-+@@ -217,8 +217,9 @@ qt_cmd_handler (pinentry_t pe)
-+       for ( size_t i = 0 ; i < sizeof buttonLabels / sizeof *buttonLabels ; ++i )
-+         if ( (buttons & buttonLabels[i].button) && !buttonLabels[i].label.isEmpty() ) {
-+             box.button( buttonLabels[i].button )->setText( buttonLabels[i].label );
-++#ifndef QT_NO_ACCESSIBILITY
-+             box.button( buttonLabels[i].button )->setAccessibleDescription ( buttonLabels[i].label );
-+-
-++#endif
-+         }
-+ 
-+       box.setIconPixmap( icon() );
-+diff --git a/qt4/pinentryconfirm.cpp b/qt4/pinentryconfirm.cpp
-+index dfbd19f..6b3d545 100644
-+--- a/qt4/pinentryconfirm.cpp
-++++ b/qt4/pinentryconfirm.cpp
-+@@ -30,8 +30,10 @@ PinentryConfirm::PinentryConfirm(Icon icon, int timeout, const QString &title,
-+ 	connect(_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
-+ 	_timer->start(timeout*1000);
-+     }
-++#ifndef QT_NO_ACCESSIBILITY
-+     setAccessibleDescription (desc);
-+     setAccessibleName (title);
-++#endif
-+     raiseWindow (this);
-+ }
-+ 
-+diff --git a/qt4/pinentrydialog.cpp b/qt4/pinentrydialog.cpp
-+index 3a6dacc..456f022 100644
-+--- a/qt4/pinentrydialog.cpp
-++++ b/qt4/pinentrydialog.cpp
-+@@ -217,7 +217,9 @@ void PinEntryDialog::setDescription( const QString& txt )
-+ {
-+   _desc->setVisible( !txt.isEmpty() );
-+   _desc->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _desc->setAccessibleDescription ( txt );
-++#endif
-+   _icon->setPixmap( icon() );
-+   setError( QString::null );
-+ }
-+@@ -231,7 +233,9 @@ void PinEntryDialog::setError( const QString& txt )
-+ {
-+   if( !txt.isNull() )_icon->setPixmap( icon( QStyle::SP_MessageBoxCritical ) );
-+   _error->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _error->setAccessibleDescription ( txt );
-++#endif
-+   _error->setVisible( !txt.isEmpty() );
-+ }
-+ 
-+@@ -264,14 +268,18 @@ QString PinEntryDialog::prompt() const
-+ void PinEntryDialog::setOkText( const QString& txt )
-+ {
-+   _ok->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _ok->setAccessibleDescription ( txt );
-++#endif
-+   _ok->setVisible( !txt.isEmpty() );
-+ }
-+ 
-+ void PinEntryDialog::setCancelText( const QString& txt )
-+ {
-+   _cancel->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+   _cancel->setAccessibleDescription ( txt );
-++#endif
-+   _cancel->setVisible( !txt.isEmpty() );
-+ }
-+ 
-+@@ -279,7 +287,9 @@ void PinEntryDialog::setQualityBar( const QString& txt )
-+ {
-+   if (_have_quality_bar) {
-+     _quality_bar_label->setText( txt );
-++#ifndef QT_NO_ACCESSIBILITY
-+     _quality_bar_label->setAccessibleDescription ( txt );
-++#endif
-+   }
-+ }
-+ 
+ ################################################################################
+ # inner-cmake-package -- defines how the configuration, compilation and
+ # installation of a CMake package should be done, implements a few hooks to
+@@ -95,6 +106,13 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
+ 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
+ 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
++		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
++		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
++		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
++		$(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
++			-DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
++			-DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
++		) \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
+ 		-DBUILD_DOCS=OFF \
