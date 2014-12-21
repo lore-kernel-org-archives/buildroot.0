@@ -1,85 +1,77 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sun, 21 Dec 2014 16:26:55 +0100
-Subject: [Buildroot] [PATCH v4 2/2] python-cheetah: add new package
-In-Reply-To: <1419175615-13068-1-git-send-email-gwenj@trabucayre.com>
-References: <1419175615-13068-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1419175615-13068-2-git-send-email-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Dec 2014 16:39:25 +0100
+Subject: [Buildroot] [git commit] tinc: new package
+Message-ID: <20141221154058.2F0A0805F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=50440196aebc11d75184aa6855f38ff0b92cfbc2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[Thomas:
+ - fix license from GPLv2 to 'GPLv2+ with OpenSSL exception'
+ - add -std=c99 to CFLAGS, otherwise it doesn't build with a minimal
+   toolchain configuration
+ - add BR2_USE_MMU dependency since fork() is used.]
+
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v3 -> v4:
-	- fix dependencies again: suppress depency to markdown in mk file
-
-Changes v2 -> v3:
-	- fix dependencies
-
-Changes v1 -> v2:
-	- Add python-cheetah patch
-
- package/Config.in                        |  1 +
- package/python-cheetah/Config.in         | 13 +++++++++++++
- package/python-cheetah/python-cheetah.mk | 14 ++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/python-cheetah/Config.in
- create mode 100644 package/python-cheetah/python-cheetah.mk
+ package/Config.in      |    1 +
+ package/tinc/Config.in |   12 ++++++++++++
+ package/tinc/tinc.mk   |   14 ++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 51630ba..3324f17 100644
+index 0ce890d..9747c0e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -489,6 +489,7 @@ menu "external python modules"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
-+	source "package/python-cheetah/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-diff --git a/package/python-cheetah/Config.in b/package/python-cheetah/Config.in
+@@ -1140,6 +1140,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/tftpd/Config.in"
+ endif
+ 	source "package/thttpd/Config.in"
++	source "package/tinc/Config.in"
+ 	source "package/tinyhttpd/Config.in"
+ 	source "package/tn5250/Config.in"
+ 	source "package/transmission/Config.in"
+diff --git a/package/tinc/Config.in b/package/tinc/Config.in
 new file mode 100644
-index 0000000..24391a9
+index 0000000..5390ff3
 --- /dev/null
-+++ b/package/python-cheetah/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_CHEETAH
-+	bool "python-cheetah"
-+	# runtime dependency only
-+	select BR2_PACKAGE_PYTHON_MARKDOWN
++++ b/package/tinc/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_TINC
++	bool "tinc"
++	select BR2_PACKAGE_LZO
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
++	depends on BR2_USE_MMU # fork()
 +	help
-+	  Cheetah is an open source template engine and code generation tool.
++	  tinc is a Virtual Private Network (VPN) daemon that uses
++	  tunnelling and encryption to create a secure private network
++	  between hosts on the Internet.
 +
-+	  It can be used standalone or combined with other tools and frameworks.
-+	  Web development is its principle use, but Cheetah is very flexible
-+	  and is also being used to generate C++ game code, Java, sql, form
-+	  emails and even Python code.
-+
-+	  https://pypi.python.org/pypi/Cheetah/
-diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
++	  http://www.tinc-vpn.org/
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
 new file mode 100644
-index 0000000..523ad26
+index 0000000..b8d4ca7
 --- /dev/null
-+++ b/package/python-cheetah/python-cheetah.mk
++++ b/package/tinc/tinc.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-cheetah
++# tinc
 +#
 +################################################################################
 +
-+PYTHON_CHEETAH_VERSION = 2.4.4
-+PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
-+PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
-+PYTHON_CHEETAH_LICENSE = MIT
-+PYTHON_CHEETAH_SETUP_TYPE = setuptools
-+PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
++TINC_VERSION = 1.0.24
++TINC_SITE = http://www.tinc-vpn.org/packages
++TINC_DEPENDENCIES = lzo openssl zlib
++TINC_LICENSE = GPLv2+ with OpenSSL exception
++TINC_LICENSE_FILES = COPYING COPYING.README
++TINC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
 +
-+$(eval $(python-package))
--- 
-2.0.4
++$(eval $(autotools-package))
