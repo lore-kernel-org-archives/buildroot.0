@@ -1,66 +1,31 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 22 Dec 2014 04:04:31 -0500
-Subject: [Buildroot] [PATCH] erlang: selectively enable libatomic_ops
-Message-ID: <1419239071-4637-1-git-send-email-fhunleth@troodon-software.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 22 Dec 2014 08:35:01 -0300
+Subject: [Buildroot] [PATCH] strongswan: bump to version 5.2.1
+In-Reply-To: <20141220214814.2f2f0521@free-electrons.com>
+References: <1418691367-12528-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141220214814.2f2f0521@free-electrons.com>
+Message-ID: <549801E5.7020104@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erlang can use either the system libatomic_ops or its own version.
-However, if using the system version, it must find implementations for
-AO_compare_and_swap() and other calls.  Since these are not available on
-all platforms, selectively enable the use of the system libatomic_ops.
+On 12/20/2014 05:48 PM, Thomas Petazzoni wrote:
+>> -config BR2_PACKAGE_STRONGSWAN_TOOLS
+>> -	bool "Enable additional utilities (openac, scepclient and pki)"
+> 
+> You're removing this option. Shouldn't it be added to Config.in.legacy,
+> for proper legacy handling?
 
-Fixes:
-http://autobuild.buildroot.net/results/eba/eba5bf85e9ff98916cd3638b5f13ab5bd54564d8/
-http://autobuild.buildroot.net/results/c74/c743cfca629fb332bbb1327cf4ea360f0a4e4bfe/
-http://autobuild.buildroot.net/results/095/095348d4d309c2a408a3b297b4325348ed1dd7e8/
+Hi.
+Possibly, however it won't do any good since some tools (openac) are
+just gone upstream and i've defaulted to 'y' for the new split tool options.
+Frankly speaking i'd rather see the number of options reduced for this
+package, only a few of them introduce dependencies:
+Curl fetcher (libcurl)
+TNCCS 1.1 (libxml2)
+EAP-SIM (pcsc-lite)
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/erlang/Config.in | 10 ++++++++++
- package/erlang/erlang.mk |  4 +++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 56830da..9caf1ec 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -26,6 +26,16 @@ config BR2_PACKAGE_ERLANG_SMP
- 	  If you do not need SMP support, turning this option off reduces
- 	  compile time and the size of the Erlang installation.
- 
-+config BR2_PACKAGE_ERLANG_USE_LIBATOMIC_OPS
-+	bool
-+	select BR2_PACKAGE_LIBATOMIC_OPS
-+	default y if BR2_ARM_CPU_ARMV7A || BR2_x86_64
-+	help
-+	  Use the system libatomic_ops on platforms that provide
-+	  implementations for AO_store(), AO_load(), and AO_compare_and_swap().
-+	  Platforms without support for those functions must still use the
-+	  Erlang-provided implementation.
-+
- config BR2_PACKAGE_ERLANG_MEGACO
- 	bool "install megaco application"
- 	help
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 0b8619e..007053a 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -22,9 +22,11 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
- 
- ERLANG_CONF_OPTS = --without-javac
- 
--ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
-+ifeq ($(BR2_PACKAGE_ERLANG_USE_LIBATOMIC_OPS),y)
- ERLANG_DEPENDENCIES += libatomic_ops
- ERLANG_CONF_OPTS += --with-libatomic_ops=$(STAGING_DIR)/usr
-+else
-+ERLANG_CONF_OPTS += --without-libatomic_ops
- endif
- 
- # erlang uses openssl for all things crypto. Since the host tools (such as
--- 
-1.9.1
+And that's it, the other options won't make strongswan that big.
+Regards.
