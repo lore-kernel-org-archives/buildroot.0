@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Dec 2014 14:04:04 +0100
-Subject: [Buildroot] [PATCH] strongswan: bump to version 5.2.1
-In-Reply-To: <549801E5.7020104@zacarias.com.ar>
-References: <1418691367-12528-1-git-send-email-gustavo@zacarias.com.ar>
- <20141220214814.2f2f0521@free-electrons.com>
- <549801E5.7020104@zacarias.com.ar>
-Message-ID: <20141222140404.26d7dfcd@free-electrons.com>
+Date: Mon, 22 Dec 2014 14:56:38 +0100
+Subject: [Buildroot] [PATCH] liblinear: needs C++
+In-Reply-To: <6dade243be7400bc9321485065203557498387bb.1419237190.git.baruch@tkos.co.il>
+References: <6dade243be7400bc9321485065203557498387bb.1419237190.git.baruch@tkos.co.il>
+Message-ID: <20141222145638.547fb1e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Baruch Siach,
 
-On Mon, 22 Dec 2014 08:35:01 -0300, Gustavo Zacarias wrote:
-
-> Possibly, however it won't do any good since some tools (openac) are
-> just gone upstream and i've defaulted to 'y' for the new split tool options.
-
-Ok. But still, even if some tools are gone upstream, we should have
-some Config.in.legacy handling, no?
-
-> Frankly speaking i'd rather see the number of options reduced for this
-> package, only a few of them introduce dependencies:
-> Curl fetcher (libcurl)
-> TNCCS 1.1 (libxml2)
-> EAP-SIM (pcsc-lite)
+On Mon, 22 Dec 2014 10:33:10 +0200, Baruch Siach wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/1be/1be890ece519ebc0d0ff4f3f31abc06eb0b7356c/
+> http://autobuild.buildroot.net/results/f59/f59e0fade9dbf851cfee5f82751390df87706e6a/
 > 
-> And that's it, the other options won't make strongswan that big.
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/liblinear/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-No problem on my side, feel free to submit some patches :-)
+Sorry, too late I already committed
+http://git.buildroot.net/buildroot/commit/?id=a20c15f1812ef50aa63bf050a604012db370bc14
+earlier today.
 
 Thomas
 -- 
