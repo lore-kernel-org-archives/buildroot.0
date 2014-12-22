@@ -1,81 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 22 Dec 2014 13:45:06 +0100
-Subject: [Buildroot] [PATCH v5 00/11] autobuild-run improvements
-In-Reply-To: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LXhvvoAVaDOB6Tipnk1XnKfVr884vkmJzFS_z8awd7HXQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Dec 2014 14:04:04 +0100
+Subject: [Buildroot] [PATCH] strongswan: bump to version 5.2.1
+In-Reply-To: <549801E5.7020104@zacarias.com.ar>
+References: <1418691367-12528-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141220214814.2f2f0521@free-electrons.com>
+ <549801E5.7020104@zacarias.com.ar>
+Message-ID: <20141222140404.26d7dfcd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Gustavo Zacarias,
 
-On Fri, Dec 12, 2014 at 9:04 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> This series against the buildroot-test repo makes some improvements to the
-> autobuild-run script.
->
-> v5:
-> - add two patches to handle kill/interrupt properly
-> - make the kwargs dictionary passing to Process more readable
-> - rebase
->
-> v4:
-> - rename do_send_results into upload (Peter)
->
-> v3:
-> - introduce missing usage of do_send_results (and move patch backwards)
-> - update TODO list
->
-> v2:
-> - reorder patches
-> - take into account comments on boolean logic in first patch
-> - place docopt directly in scripts/ instead of in a subdirectory
-> - remove patch adding --git (Yann, Thomas)
-> - some bug fixes in the first version of the patches
->
-> As you can see, this iteration still has the docopt patches. Thomas Petazzoni
-> has expressed his reservations against the introduction of docopt, because the
-> benefits wouldn't weigh out against the addition of an external Python module.
-> Thomas told me on IRC he would have a deeper look onto this before making a
-> final decision.
->
-> In case the final decision is not to introduce docopt, following improvements
-> could be done to the current code:
->   - save the arguments from the command-line into a dictionary instead of plain
->     variables
->   - keep the added ini_config() method to also save the options in a dictionary,
->     and use the added merge() method to merge both arguments and config options
->     into one final configuration, without needing to handle it manually.
->
->
-> Thomas De Schampheleire (11):
->   scripts: add python module docopt
->   autobuild-run: use docopt for argument parsing
->   autobuild-run: add option --make-opts for custom Buildroot options
->   autobuild-run: use **kwargs to avoid explicit parameter passthroughs
->   autobuild-run: check-requirements does not need to know the login
->     details
->   autobuild-run: set LC_ALL=C to not use locale settings of host machine
->   autobuild-run: improve the logic to generate build-end.log
->   autobuild-run: save config.log files for failed package
->   autobuild-run: extend TODO list
->   autobuild-run: kill all children on SIGTERM
->   autobuild-run: catch KeyboardInterrupt in the same way as SIGTERM
->
->  scripts/autobuild-run      | 350 +++++++++++++++++++--------
->  scripts/docopt.LICENSE-MIT |  23 ++
->  scripts/docopt.py          | 581 +++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 851 insertions(+), 103 deletions(-)
->  create mode 100644 scripts/docopt.LICENSE-MIT
->  create mode 100644 scripts/docopt.py
->
+On Mon, 22 Dec 2014 08:35:01 -0300, Gustavo Zacarias wrote:
 
-How about this patchset?
+> Possibly, however it won't do any good since some tools (openac) are
+> just gone upstream and i've defaulted to 'y' for the new split tool options.
 
-Thanks,
+Ok. But still, even if some tools are gone upstream, we should have
+some Config.in.legacy handling, no?
+
+> Frankly speaking i'd rather see the number of options reduced for this
+> package, only a few of them introduce dependencies:
+> Curl fetcher (libcurl)
+> TNCCS 1.1 (libxml2)
+> EAP-SIM (pcsc-lite)
+> 
+> And that's it, the other options won't make strongswan that big.
+
+No problem on my side, feel free to submit some patches :-)
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
