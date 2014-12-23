@@ -1,45 +1,40 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 23 Dec 2014 09:55:00 +0100
-Subject: [Buildroot] [PATCH v5 3/4] support/download: silence svn if it is a
+Date: Tue, 23 Dec 2014 09:55:01 +0100
+Subject: [Buildroot] [PATCH v5 4/4] support/download: silence git if it is a
 	silent build
 In-Reply-To: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1419324901-14003-4-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1419324901-14003-5-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If it is a silent build (make -s -> BR_QUIET=-q) silence the svn
-download helper using "svn -q" just like others download helpers,
+If it is a silent build (make -s -> BR_QUIET=-q) silence the git
+download helper using "git clone -q" just like others download helpers,
 e.g. wget.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
 
 Notes:
     v5:
-    - use getopts
-    v4:
-    - instead of changing the "SVN" variable pass the "-q" option to the
-      download helper (Thomas P.)
+     - use getopts
     v3:
      - add this patch
 
  package/pkg-download.mk     |  1 +
- support/download/dl-wrapper | 11 ++++++++---
- support/download/svn        | 17 ++++++++++++++++-
- 3 files changed, 25 insertions(+), 4 deletions(-)
+ support/download/dl-wrapper |  2 +-
+ support/download/git        | 27 +++++++++++++++++++++++----
+ 3 files changed, 25 insertions(+), 5 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 884daff..a773597 100644
+index a773597..e7bac2d 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -147,6 +147,7 @@ define DOWNLOAD_SVN
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
+@@ -88,6 +88,7 @@ define DOWNLOAD_GIT
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
  		-o $(DL_DIR)/$($(PKG)_SOURCE) \
  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
 +		$(BR_QUIET) \
@@ -47,64 +42,34 @@ index 884daff..a773597 100644
  		$($(PKG)_SITE) \
  		$($(PKG)_DL_VERSION) \
 diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index cced8f6..7cd8606 100755
+index 7cd8606..e84a757 100755
 --- a/support/download/dl-wrapper
 +++ b/support/download/dl-wrapper
-@@ -21,15 +21,16 @@ set -e
- 
- main() {
-     local OPT OPTARG
--    local backend output hfile
-+    local backend output hfile quiet
- 
-     # Parse our options; anything after '--' is for the backend
--    while getopts :hb:o:H: OPT; do
-+    while getopts :hb:o:H:q OPT; do
-         case "${OPT}" in
-         h)  help; exit 0;;
-         b)  backend="${OPTARG}";;
-         o)  output="${OPTARG}";;
-         H)  hfile="${OPTARG}";;
-+        q)  quiet="-q";;
-         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-         \?) error "unknown option '%s'\n" "${OPTARG}";;
-         esac
-@@ -47,6 +48,10 @@ main() {
+@@ -48,7 +48,7 @@ main() {
          error "no hash-file specified, use -H\n"
      fi
  
-+    if [ "${backend}" != "svn" ]; then
-+	quiet=
-+    fi
-+
-     # If the output file already exists, do not download it again
-     if [ -e "${output}" ]; then
-         if support/download/check-hash "${hfile}" "${output}" "${output##*/}"; then
-@@ -75,7 +80,7 @@ main() {
-     # If the backend fails, we can just remove the temporary directory to
-     # remove all the cruft it may have left behind. Then we just exit in
-     # error too.
--    if ! "${OLDPWD}/support/download/${backend}" "${tmpf}" "${@}"; then
-+    if ! "${OLDPWD}/support/download/${backend}" ${quiet} "${tmpf}" "${@}"; then
-         rm -rf "${tmpd}"
-         exit 1
+-    if [ "${backend}" != "svn" ]; then
++    if [ ! \( "${backend}" == "git" -o "${backend}" == "svn" \) ]; then
+ 	quiet=
      fi
-diff --git a/support/download/svn b/support/download/svn
-index a960f7d..90470dd 100755
---- a/support/download/svn
-+++ b/support/download/svn
+ 
+diff --git a/support/download/git b/support/download/git
+index 5d36ca4..b6ebfdc 100755
+--- a/support/download/git
++++ b/support/download/git
 @@ -4,6 +4,8 @@
  set -e
  
- # Download helper for svn, to be called from the download wrapper script
+ # Download helper for git, to be called from the download wrapper script
 +# Optional arguments:
 +#   "-q": quiet flag
  # Expected arguments:
  #   $1: output file
- #   $2: svn repo
-@@ -12,11 +14,24 @@ set -e
+ #   $2: git repo
+@@ -12,6 +14,19 @@ set -e
  # And this environment:
- #   SVN      : the svn command to call
+ #   GIT      : the git command to call
  
 +quiet=
 +while getopts "q" opt; do
@@ -121,12 +86,31 @@ index a960f7d..90470dd 100755
 +
  output="${1}"
  repo="${2}"
- rev="${3}"
- basename="${4}"
+ cset="${3}"
+@@ -21,16 +36,20 @@ basename="${4}"
+ # than a full clone.
+ git_done=0
+ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+-    printf "Doing shallow clone\n"
+-    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
++    if [ -z "${quiet}" ]; then
++	printf "Doing shallow clone\n";
++    fi
++    if ${GIT} clone ${quiet} --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
+         git_done=1
+     else
+         printf "Shallow clone failed, falling back to doing a full clone\n"
+     fi
+ fi
+ if [ ${git_done} -eq 0 ]; then
+-    printf "Doing full clone\n"
+-    ${GIT} clone --bare "${repo}" "${basename}"
++    if [ -z "${quiet}" ]; then
++	printf "Doing full clone\n";
++    fi
++    ${GIT} clone ${quiet} --bare "${repo}" "${basename}"
+ fi
  
--${SVN} export "${repo}@${rev}" "${basename}"
-+${SVN} ${quiet} export "${repo}@${rev}" "${basename}"
- 
- tar czf "${output}" "${basename}"
+ GIT_DIR="${basename}" \
 -- 
 2.2.1
