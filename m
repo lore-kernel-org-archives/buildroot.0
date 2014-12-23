@@ -1,65 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Dec 2014 14:02:00 +0100
-Subject: [Buildroot] [PATCH 1/3] bdwgc: add patch automatically
- detecting for NO_GETCONTEXT need
-In-Reply-To: <20141221231731.7bdd1631@free-electrons.com>
-References: <1418492588-22122-1-git-send-email-s.martin49@gmail.com>
- <20141217213602.GC4293@free.fr>
- <20141221231731.7bdd1631@free-electrons.com>
-Message-ID: <20141223130200.GC4152@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 23 Dec 2014 14:57:22 +0100
+Subject: [Buildroot] [PATCH] system: run getty on boot console by default
+In-Reply-To: <1419337919.2781.6.camel@synopsys.com>
+References: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
+ <CAGm1_ktp7gkprBXNLTvd3gE7LMv_9cyUXyF3eb3r83OGPie0NQ@mail.gmail.com>
+ <1419337919.2781.6.camel@synopsys.com>
+Message-ID: <CAGm1_ktzvRWMrZHEVfrQnRdACs-N++Kwx5dq3Xp30YPxN-gQHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Tue, Dec 23, 2014 at 1:32 PM, Alexey Brodkin
+<Alexey.Brodkin@synopsys.com> wrote:
+> Hi Yegor,
+>
+>
+> On Tue, 2014-12-23 at 13:18 +0100, Yegor Yefremov wrote:
+>> On Tue, Dec 23, 2014 at 1:06 PM, Alexey Brodkin
+>> <Alexey.Brodkin@synopsys.com> wrote:
+>> > We used to specify explicitly serial port with all its settings
+>> > for init to instantiate getty.
+>> >
+>> > This limits usecases when the same one rootfs could be used.
+>> >
+>> > For example following cases won't work well with hardcoded
+>> > serial console settings:
+>> >  * On the same board other serial port is expected to be used
+>> >  * The same rootfs is intended to be used on different boards with
+>> >    different serial ports (like ttySx vs ttyAMAx or even ttyx)
+>> >
+>> > With this change by default we rely on "console" specified in
+>> > kernel's boot command line.
+>> >
+>> > What is important getty will be set on the last console
+>> > specified in bootargs.
+>> >
+>> > For example is a kernel comand line:
+>> > --->---
+>> > bootargs="... console=tty0 console=ttyS3,115200n8..."
+>> > --->---
+>> >
+>> > This now will instantiate serial console on ttyS3 but not on tty0.
+>> >
+>> > Tested with both Busybox and SysV init.
+>>
+>> But can you login as root via /dev/console? AFAIK it was the main
+>> problem by this approach. There is also another alternative: cttyhack
+>
+> Probably I don't quite understand your question.
+> What is a problem with "/dev/console"?
+>
+> I do login as root with these new settings:
+> --->---
+> # whooami
+> root
+> --->---
+>
+> Did I miss something?
 
-On 2014-12-21 23:17 +0100, Thomas Petazzoni spake thusly:
-> On Wed, 17 Dec 2014 22:36:02 +0100, Yann E. MORIN wrote:
-> 
-> > The first I could find was GNU Pth (dead since 2006), and then ruby. And
-> > they both use that:
-> > 
-> >     AC_CHECK_FUNCS([getcontext setcontext])
-> > 
-> > which would automatically define HAVE_getcontext and HAVE_setcontext if
-> > they are available, but that's macro definitions, not available in
-> > configure, so we could not do the following:
-> > 
-> > > ++AC_MSG_RESULT($need_no_getcontext)
-> > > ++if test x$need_no_getcontext = xyes ; then
-> > > ++  CFLAGS="$CFLAGS -DNO_GETCONTEXT"
-> > > ++  CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
-> > > ++fi
-> 
-> Well, you can do:
-> 
-> 	AC_CHECK_FUNCS([getcontext], [has_getcontext=yes])
-> 	AC_CHECK_FUNCS([setcontext], [has_setcontext=yes])
+It could be this issue: http://www.busybox.net/FAQ.html#job_control
 
-Using AC_CHECK_FUNCS is not enough, because uClibc declares prototypes
-for getcontext/setcontext, but there might be no implementation of them.
+Does it still make problems? When not, then there is no problem.
 
-So we have to attempt a link.
-
-> if test x${has_getcontext} != xyes -o x${has_setcontext} != xyes; then
-> 	CFLAGS="$CFLAGS -DNO_GETCONTEXT"
-> 	CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
-> fi
-> 
-> You need two tests because AC_CHECK_FUNCS() runs the action-if-found if
-> at least one of the functions are found.
-
-Yup.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Yegor
