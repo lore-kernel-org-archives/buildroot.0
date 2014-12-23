@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 20:51:24 +0100
-Subject: [Buildroot] [PATCH v2] leveldb: new package
-In-Reply-To: <201412231716.23849.ste@junkomatic.net>
-References: <201412231716.23849.ste@junkomatic.net>
-Message-ID: <20141223205124.0d05b9dc@free-electrons.com>
+Date: Tue, 23 Dec 2014 20:52:01 +0100
+Subject: [Buildroot] [PATCH] system: run getty on boot console by default
+In-Reply-To: <1419345339.2781.9.camel@synopsys.com>
+References: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
+ <CAGm1_ktp7gkprBXNLTvd3gE7LMv_9cyUXyF3eb3r83OGPie0NQ@mail.gmail.com>
+ <1419337919.2781.6.camel@synopsys.com>
+ <CAGm1_ktzvRWMrZHEVfrQnRdACs-N++Kwx5dq3Xp30YPxN-gQHw@mail.gmail.com>
+ <1419345339.2781.9.camel@synopsys.com>
+Message-ID: <20141223205201.021ee085@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve James,
+Dear Alexey Brodkin,
 
-On Tue, 23 Dec 2014 17:16:23 +0000, Steve James wrote:
-> Adds new package: leveldb
+On Tue, 23 Dec 2014 14:35:40 +0000, Alexey Brodkin wrote:
+
+> Even thought I haven't done any extensive testing I don't see any
+> suspicious behavior.
 > 
->   LevelDB is a fast key-value storage library written at Google that
->   provides an ordered mapping from string keys to string values.
-> 
-> Signed-off-by: Steve James <ste@junkomatic.net>
+> So I think "console" in BR2_TARGET_GENERIC_GETTY_PORT should be fine.
 
-Thanks for this new version. However, your patch has been line-wrapped
-by your e-mail client. Could you try to send it with 'git send-email'
-instead? See the Buildroot instructions for some details about this.
-
-Thanks!
+No, you can only login as root if you add "console" to /etc/securetty.
 
 Thomas
 -- 
