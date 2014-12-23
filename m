@@ -1,65 +1,98 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Dec 2014 18:46:35 +0100
-Subject: [Buildroot] [PATCH v9 12/18] package/kodi-addon-xvdr: Bump version
-	for Helix-compatibility
+Date: Tue, 23 Dec 2014 18:46:27 +0100
+Subject: [Buildroot] [PATCH v9 04/18] Rename XBMC to Kodi - part I - move
+	files
 In-Reply-To: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1419356801-31525-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1419356801-31525-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Background information: http://xbmc.org/introducing-kodi-14
+
+In a first step to bump version to 14.0-Helix move the package
+to its new directory. Because git will not recognize the moved
+files due to many upcoming changes to variable names the move
+is done in this seperate commit.
+
+The "Rename XBMC to Kodi" is split in two parts for easier review,
+please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
- package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
- 2 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+ package/Config.in                                                    |    2 +-
+ .../0001-Fixup-include-path.patch}                                   |    0
+ package/{xbmc => kodi}/Config.in                                     |    0
+ package/{xbmc/S50xbmc => kodi/S50kodi}                               |    0
+ package/{xbmc/br-xbmc => kodi/br-kodi}                               |    0
+ .../{xbmc/xbmc-0002-mathutil.patch => kodi/kodi-0002-mathutil.patch} |    0
+ package/{xbmc/xbmc-0003-dbus.patch => kodi/kodi-0003-dbus.patch}     |    0
+ package/{xbmc/xbmc.mk => kodi/kodi.mk}                               |    0
+ package/{xbmc/xbmc.service => kodi/kodi.service}                     |    0
+ 9 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/{xbmc/xbmc-0001-Fixup-include-path.patch => kodi/0001-Fixup-include-path.patch} (100%)
+ rename package/{xbmc => kodi}/Config.in (100%)
+ rename package/{xbmc/S50xbmc => kodi/S50kodi} (100%)
+ rename package/{xbmc/br-xbmc => kodi/br-kodi} (100%)
+ rename package/{xbmc/xbmc-0002-mathutil.patch => kodi/kodi-0002-mathutil.patch} (100%)
+ rename package/{xbmc/xbmc-0003-dbus.patch => kodi/kodi-0003-dbus.patch} (100%)
+ rename package/{xbmc/xbmc.mk => kodi/kodi.mk} (100%)
+ rename package/{xbmc/xbmc.service => kodi/kodi.service} (100%)
 
-diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
-new file mode 100644
-index 0000000..6e87b79
---- /dev/null
-+++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
-@@ -0,0 +1,19 @@
-+Update for Kodi
-+
-+Ported from OpenELEC:
-+https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
-+--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
-++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
-+@@ -6,7 +6,7 @@
-+ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
-+ 
-+ AC_CONFIG_AUX_DIR(autotools)
-+-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
-++AC_PREFIX_DEFAULT(/usr/lib/kodi)
-+ 
-+ AC_CANONICAL_HOST
-+ AC_CANONICAL_TARGET
-diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-index 14b08fe..e05510c 100644
---- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-+++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--# This cset is on master. When a Gotham branch is made, we should
-+# This cset is on master. When a Helix branch is made, we should
- # follow it, as incompatible changes in the plugins API can happen
- # on the master branch.
--KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
-+KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
- KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
- KODI_ADDON_XVDR_LICENSE = GPLv2+
- KODI_ADDON_XVDR_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index e2b73dd..3b37bb2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -14,6 +14,7 @@ menu "Audio and video applications"
+ 	source "package/gstreamer/Config.in"
+ 	source "package/gstreamer1/Config.in"
+ 	source "package/jack2/Config.in"
++	source "package/kodi/Config.in"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
+@@ -34,7 +35,6 @@ menu "Audio and video applications"
+ 	source "package/vlc/Config.in"
+ 	source "package/vorbis-tools/Config.in"
+ 	source "package/wavpack/Config.in"
+-	source "package/xbmc/Config.in"
+ 	source "package/yavta/Config.in"
+ 	source "package/ympd/Config.in"
+ endmenu
+diff --git a/package/xbmc/xbmc-0001-Fixup-include-path.patch b/package/kodi/0001-Fixup-include-path.patch
+similarity index 100%
+rename from package/xbmc/xbmc-0001-Fixup-include-path.patch
+rename to package/kodi/0001-Fixup-include-path.patch
+diff --git a/package/xbmc/Config.in b/package/kodi/Config.in
+similarity index 100%
+rename from package/xbmc/Config.in
+rename to package/kodi/Config.in
+diff --git a/package/xbmc/S50xbmc b/package/kodi/S50kodi
+similarity index 100%
+rename from package/xbmc/S50xbmc
+rename to package/kodi/S50kodi
+diff --git a/package/xbmc/br-xbmc b/package/kodi/br-kodi
+similarity index 100%
+rename from package/xbmc/br-xbmc
+rename to package/kodi/br-kodi
+diff --git a/package/xbmc/xbmc-0002-mathutil.patch b/package/kodi/kodi-0002-mathutil.patch
+similarity index 100%
+rename from package/xbmc/xbmc-0002-mathutil.patch
+rename to package/kodi/kodi-0002-mathutil.patch
+diff --git a/package/xbmc/xbmc-0003-dbus.patch b/package/kodi/kodi-0003-dbus.patch
+similarity index 100%
+rename from package/xbmc/xbmc-0003-dbus.patch
+rename to package/kodi/kodi-0003-dbus.patch
+diff --git a/package/xbmc/xbmc.mk b/package/kodi/kodi.mk
+similarity index 100%
+rename from package/xbmc/xbmc.mk
+rename to package/kodi/kodi.mk
+diff --git a/package/xbmc/xbmc.service b/package/kodi/kodi.service
+similarity index 100%
+rename from package/xbmc/xbmc.service
+rename to package/kodi/kodi.service
 -- 
 1.7.10.4
