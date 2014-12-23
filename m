@@ -1,37 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 11:33:28 +0100
-Subject: [Buildroot] [PATCH] liblinear: fix shared library build when
- -fPIC is required
-In-Reply-To: <5fd89bc9217a91d4387f32dce95e557b4044ca17.1419270638.git.baruch@tkos.co.il>
-References: <5fd89bc9217a91d4387f32dce95e557b4044ca17.1419270638.git.baruch@tkos.co.il>
-Message-ID: <20141223113328.117b3951@free-electrons.com>
+Date: Tue, 23 Dec 2014 11:33:44 +0100
+Subject: [Buildroot] [git commit] uemacs: fix "homepage" link
+Message-ID: <20141223103354.CAF0E805F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=7af98f27ab42acf180d6510f44b9cd31d981dd79
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 22 Dec 2014 19:50:38 +0200, Baruch Siach wrote:
-> Some architectures require building with -fPIC for shared libraries. -fPIC is
-> present in upstream Makefile but we override CFLAGS when running make. Add
-> -fPIC back when building shared libraries.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/5d6/5d63bf2f1af7977ff81116e767b399d4d0a30a99/
-> http://autobuild.buildroot.net/results/47d/47d62d66c65cc77da9d48981ca6612257e616a90/
-> http://autobuild.buildroot.net/results/c81/c816a0982733595438ed7ad90ae1231001c285cc/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/liblinear/liblinear.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+The latest version is only available from git.
 
-Applied, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uemacs/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uemacs/Config.in b/package/uemacs/Config.in
+index f093218..cfe9805 100644
+--- a/package/uemacs/Config.in
++++ b/package/uemacs/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_UEMACS
+ 	help
+ 	  A small emacs.
+ 
+-	  ftp://ftp.kernel.org/pub/software/editors/uemacs/
++	  https://git.kernel.org/cgit/editors/uemacs/uemacs.git/
