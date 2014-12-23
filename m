@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 20:52:28 +0100
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 2.5.2
-Message-ID: <20141223195431.95CBC8073B@busybox.osuosl.org>
+Date: Tue, 23 Dec 2014 20:53:15 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-intel: Bump version to
+	2.99.917
+Message-ID: <20141223195431.AB93C7FC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd3a2d625eb1f215665df9ae9d091fc59e30bda0
+commit: http://git.buildroot.net/buildroot/commit/?id=0244a9b2c7b0f9796e0f3b9299cf2c7573d87872
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-intel.mk                    |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 12f546d..b74a59a 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 801cdae..707cedd 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,12 +4,16 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 2.5.1
-+FFMPEG_VERSION = 2.5.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.914
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.917
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+ 
++# this fixes a getline-related compilation error in src/sna/kgem.c
++XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++
+ XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS = \
+ 	--disable-xvmc \
+ 	--enable-sna \
