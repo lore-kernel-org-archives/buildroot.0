@@ -1,378 +1,644 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Dec 2014 18:46:29 +0100
-Subject: [Buildroot] [PATCH v9 06/18] package/kodi: Bump version to
-	14.0-Helix
+Date: Tue, 23 Dec 2014 18:46:26 +0100
+Subject: [Buildroot] [PATCH v9 03/18] package/ffmpeg: Add Kodi patchset
 In-Reply-To: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1419356801-31525-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1419356801-31525-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- delete kodi-0002-mathutil.patch, committed upstream
-- delete kodi-0003-dbus.patch, committed upstream
-- add dependency to ffmpeg, xbmc does not deliver its own ffmpeg anymore
-- remove dependency to flac & lame, audio encoders have been seperated from kodi
+In the past xbmc delivered its own ffmpeg source code with specific patches to
+address bugs found during the use of xbmc. For Helix the ffmpeg source code was
+removed, Helix uses a vanilla ffmpeg source tarball and applies this patchset
+on top of it.
+
+Downloaded from
+https://github.com/xbmc/FFmpeg/compare/FFmpeg:release/2.5...release/2.5-xbmc.patch
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in                |    4 +-
- package/kodi/kodi-0002-mathutil.patch |  213 ---------------------------------
- package/kodi/kodi-0003-dbus.patch     |   46 -------
- package/kodi/kodi.mk                  |   26 +---
- 4 files changed, 8 insertions(+), 281 deletions(-)
- delete mode 100644 package/kodi/kodi-0002-mathutil.patch
- delete mode 100644 package/kodi/kodi-0003-dbus.patch
+ package/ffmpeg/0001-kodi.patch |  610 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 610 insertions(+)
+ create mode 100644 package/ffmpeg/0001-kodi.patch
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 1b06512..2bd43b6 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -35,7 +35,9 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG_GPL
-+	select BR2_PACKAGE_FFMPEG_POSTPROC # postproc depends on GPL
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JASPER
-diff --git a/package/kodi/kodi-0002-mathutil.patch b/package/kodi/kodi-0002-mathutil.patch
-deleted file mode 100644
-index 33f91eb..0000000
---- a/package/kodi/kodi-0002-mathutil.patch
-+++ /dev/null
-@@ -1,213 +0,0 @@
--Taken from upstream PR: https://github.com/xbmc/xbmc/pull/3760
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From 7388e8be7cd5e78100532ebf0dba15dccb7b03f8 Mon Sep 17 00:00:00 2001
--From: Ben Avison <bavison@riscosopen.org>
--Date: Tue, 3 Dec 2013 15:51:39 +0000
--Subject: [PATCH] Faster and simpler portable implementation of
-- MathUtils::round_int().
--
--Much as I like a bit of inline assembler, I have also removed the ARM versions
--of MathUtils::truncate_int() and MathUtils::round_int(). The former was just
--how any sane compiler should have assembled a cast from double to signed int
--anyway. The latter was a much too complicated way to achieve the desired
--effect, and was switched out in most ARM builds anyway in favour of the old
--portable implementation that used floor().
--
--Verified that MathUtils::test() still passes, and that GCC is now able to
--inline MathUtils::round_int(), where it didn't previously.
--
--I tested on a Raspberry Pi with the default theme, displaying the front page
--with the RSS ticker enabled. This saturates the CPU, so I'm measuring the
--improvement using the debug window's FPS figure. This patch improves this from
--~50.8 FPS to ~52.6 FPS.
-----
-- xbmc/utils/MathUtils.h | 129 +++++++++++++++++++++++--------------------------
-- 1 file changed, 61 insertions(+), 68 deletions(-)
--
--diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
--index 96af9f4..0dae77d 100644
----- a/xbmc/utils/MathUtils.h
--+++ b/xbmc/utils/MathUtils.h
--@@ -34,17 +34,13 @@
-- 
-- #if defined(__ppc__) || \
--     defined(__powerpc__) || \
---   (defined(TARGET_DARWIN_IOS) && defined(__llvm__)) || \
---   (defined(TARGET_ANDROID) && defined(__arm__)) || \
---    defined(TARGET_RASPBERRY_PI)
--+    defined(__arm__)
--   #define DISABLE_MATHUTILS_ASM_ROUND_INT
-- #endif
-- 
-- #if defined(__ppc__) || \
--     defined(__powerpc__) || \
---   (defined(TARGET_DARWIN) && defined(__llvm__)) || \
---   (defined(TARGET_ANDROID) && defined(__arm__)) || \
---    defined(TARGET_RASPBERRY_PI)
--+    defined(__arm__)
--   #define DISABLE_MATHUTILS_ASM_TRUNCATE_INT
-- #endif
-- 
--@@ -73,60 +69,63 @@
--   {
--     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
--     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
---    const float round_to_nearest = 0.5f;
---    int i;
-- 
-- #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
---    i = floor(x + round_to_nearest);
---
---#elif defined(__arm__)
---    // From 'ARM-v7-M Architecture Reference Manual' page A7-569:
---    //  "The floating-point to integer operation (vcvt) [normally] uses the Round towards Zero rounding mode"
---    // Because of this...we must use some less-than-straightforward logic to perform this operation without
---    //  changing the rounding mode flags
---
---    /* The assembly below implements the following logic:
---     if (x < 0)
---       inc = -0.5f
---     else
---       inc = 0.5f
---     int_val = trunc(x+inc);
---     err = x - int_val;
---     if (err == 0.5f)
---       int_val++;
---     return int_val;
---    */
--+    /* This implementation warrants some further explanation.
--+     *
--+     * First, a couple of notes on rounding:
--+     * 1) C casts from float/double to integer round towards zero.
--+     * 2) Float/double additions are rounded according to the normal rules,
--+     *    in other words: on some architectures, it's fixed at compile-time,
--+     *    and on others it can be set using fesetround()). The following
--+     *    analysis assumes round-to-nearest with ties rounding to even. This
--+     *    is a fairly sensible choice, and is the default with ARM VFP.
--+     *
--+     * What this function wants is round-to-nearest with ties rounding to
--+     * +infinity. This isn't an IEEE rounding mode, even if we could guarantee
--+     * that all architectures supported fesetround(), which they don't. Instead,
--+     * this adds an offset of 2147483648.5 (= 0x80000000.8p0), then casts to
--+     * an unsigned int (crucially, all possible inputs are now in a range where
--+     * round to zero acts the same as round to -infinity) and then subtracts
--+     * 0x80000000 in the integer domain. The 0.5 component of the offset
--+     * converts what is effectively a round down into a round to nearest, with
--+     * ties rounding up, as desired.
--+     *
--+     * There is a catch, that because there is a double rounding, there is a
--+     * small region where the input falls just *below* a tie, where the addition
--+     * of the offset causes a round *up* to an exact integer, due to the finite
--+     * level of precision available in floating point. You need to be aware of
--+     * this when calling this function, although@present it is not believed
--+     * that XBMC ever attempts to round numbers in this window.
--+     *
--+     * It is worth proving the size of the affected window. Recall that double
--+     * precision employs a mantissa of 52 bits.
--+     * 1) For all inputs -0.5 <= x <= INT_MAX
--+     *    Once the offset is applied, the most significant binary digit in the
--+     *    floating-point representation is +2^31.
--+     *    At this magnitude, the smallest step representable in double precision
--+     *    is 2^31 / 2^52 = 0.000000476837158203125
--+     *    So the size of the range which is rounded up due to the addition is
--+     *    half the size of this step, or 0.0000002384185791015625
--+     *
--+     * 2) For all inputs INT_MIN/2 < x < -0.5
--+     *    Once the offset is applied, the most significant binary digit in the
--+     *    floating-point representation is +2^30.
--+     *    At this magnitude, the smallest step representable in double precision
--+     *    is 2^30 / 2^52 = 0.0000002384185791015625
--+     *    So the size of the range which is rounded up due to the addition is
--+     *    half the size of this step, or 0.00000011920928955078125
--+     *
--+     * 3) For all inputs INT_MIN <= x <= INT_MIN/2
--+     *    The representation once the offset is applied has equal or greater
--+     *    precision than the input, so the addition does not cause rounding.
--+     */
--+    return ((unsigned int) (x + 0x80000000.8p0)) - 0x80000000;
-- 
---    __asm__ __volatile__ (
---#if defined(__ARM_PCS_VFP)
---      "fconstd d1,#%G[rnd_val]     \n\t" // Copy round_to_nearest into a working register (d1 = 0.5)
-- #else
---      "vmov.F64 d1,%[rnd_val]      \n\t"
---#endif
---      "fcmpezd %P[value]           \n\t" // Check value against zero (value == 0?)
---      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
---      "it mi                       \n\t"
---      "vnegmi.F64 d1, d1           \n\t" // if N-flag is set, negate round_to_nearest (if (value < 0) d1 = -1 * d1)
---      "vadd.F64 d1,%P[value],d1    \n\t" // Add round_to_nearest to value, store result in working register (d1 += value)
---      "vcvt.S32.F64 s3,d1          \n\t" // Truncate(round towards zero) (s3 = (int)d1)
---      "vmov %[result],s3           \n\t" // Store the integer result in a general-purpose register (result = s3)
---      "vcvt.F64.S32 d1,s3          \n\t" // Convert back to floating-point (d1 = (double)s3)
---      "vsub.F64 d1,%P[value],d1    \n\t" // Calculate the error (d1 = value - d1)
---#if defined(__ARM_PCS_VFP)
---      "fconstd d2,#%G[rnd_val]     \n\t" // d2 = 0.5;
---#else
---      "vmov.F64 d2,%[rnd_val]      \n\t"
---#endif
---      "fcmped d1, d2               \n\t" // (d1 == 0.5?)
---      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
---      "it eq                       \n\t"
---      "addeq %[result],#1          \n\t" // (if (d1 == d2) result++;)
---      : [result] "=r"(i)                                  // Outputs
---      : [rnd_val] "Dv" (round_to_nearest), [value] "w"(x) // Inputs
---      : "d1", "d2", "s3"                                  // Clobbers
---    );
---
---#elif defined(__SSE2__)
--+    const float round_to_nearest = 0.5f;
--+    int i;
--+#if defined(__SSE2__)
--     const float round_dn_to_nearest = 0.4999999f;
--     i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
-- 
--@@ -150,8 +149,8 @@
--     );
-- 
-- #endif
---
--     return i;
--+#endif
--   }
-- 
--   /*! \brief Truncate to nearest integer.
--@@ -165,20 +164,13 @@
--   {
--     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
--     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
---    int i;
-- 
-- #if defined(DISABLE_MATHUTILS_ASM_TRUNCATE_INT)
---    return i = (int)x;
---
---#elif defined(__arm__)
---    __asm__ __volatile__ (
---      "vcvt.S32.F64 %[result],%P[value]   \n\t" // Truncate(round towards zero) and store the result
---      : [result] "=w"(i)                        // Outputs
---      : [value] "w"(x)                          // Inputs
---    );
---    return i;
--+    return x;
-- 
---#elif defined(TARGET_WINDOWS)
--+#else
--+    int i;
--+#if defined(TARGET_WINDOWS)
--     const float round_towards_m_i = -0.5f;
--     __asm
--     {
--@@ -204,6 +196,7 @@
--     if (x < 0)
--       i = -i;
--     return (i);
--+#endif
--   }
-- 
--   inline int64_t abs(int64_t a)
---- 
--1.9.1
--
-diff --git a/package/kodi/kodi-0003-dbus.patch b/package/kodi/kodi-0003-dbus.patch
-deleted file mode 100644
-index 3b63b23..0000000
---- a/package/kodi/kodi-0003-dbus.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--build: make D-Bus configurable
--
--Patch accepted upstream:
--https://github.com/xbmc/xbmc/commit/630f930d4c9c33230e9ff7df24f93afb3f05881f
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr xbmc-13.2-Gotham.org/configure.in xbmc-13.2-Gotham/configure.in
----- xbmc-13.2-Gotham.org/configure.in	2014-08-17 15:19:05.000000000 +0200
--+++ xbmc-13.2-Gotham/configure.in	2014-09-02 20:55:06.932442467 +0200
--@@ -129,6 +129,7 @@
-- goom_enabled="== GOOM enabled. =="
-- goom_disabled="== GOOM disabled. =="
-- alsa_disabled="== ALSA support disabled. =="
--+dbus_disabled="== DBUS support disabled. =="
-- rsxs_enabled="== RSXS enabled. =="
-- rsxs_disabled="== RSXS disabled. =="
-- fishbmc_enabled="== FishBMC enabled. =="
--@@ -369,6 +370,12 @@
--   [use_alsa=$enableval],
--   [use_alsa=yes])
-- 
--+AC_ARG_ENABLE([dbus],
--+  [AS_HELP_STRING([--disable-dbus],
--+  [disable DBUS support])],
--+  [use_dbus=$enableval],
--+  [use_dbus=yes])
--+
-- AC_ARG_ENABLE([pulse],
--   [AS_HELP_STRING([--enable-pulse],
--   [enable PulseAudio support (default is auto)])],
--@@ -1253,10 +1260,14 @@
--     [INCLUDES="$INCLUDES $ALSA_CFLAGS"; LIBS="$LIBS $ALSA_LIBS"; use_alsa=yes],
--     AC_MSG_NOTICE($alsa_not_found); use_alsa=no)
-- fi
--+if test "x$use_dbus" != "xno"; then
--   PKG_CHECK_MODULES([DBUS],    [dbus-1],
--     [INCLUDES="$INCLUDES $DBUS_CFLAGS"; LIBS="$LIBS $DBUS_LIBS"; use_dbus=yes]; \
--     AC_DEFINE([HAVE_DBUS],[1],["Define to 1 if dbus is installed"]),
--     AC_MSG_NOTICE($missing_library); use_dbus=no)
--+else
--+  AC_MSG_NOTICE($dbus_disabled)
--+fi
--   if test "x$use_sdl" != "xno"; then
--     PKG_CHECK_MODULES([SDL],   [sdl],
--       [INCLUDES="$INCLUDES $SDL_CFLAGS"; LIBS="$LIBS $SDL_LIBS"],
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index c462ab3..14fa244 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VERSION = 13.2-Gotham
-+KODI_VERSION = 14.0-Helix
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPLv2
- KODI_LICENSE_FILES = LICENSE.GPL
-@@ -12,22 +12,13 @@ KODI_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
--KODI_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
-+KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo \
-+	host-nasm host-sdl_image host-swig
-+KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
- 
--# kodi at i386 depends on nasm
--KODI_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
--
--# ffmpeg depends on yasm on MMX archs
--# kodi configure passes $(BR2_ARCH) to ffmpeg configure which adds
--# yasm as dependency for x86_64, even if BR2_x86_generic=y
--ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
--KODI_DEPENDENCIES += host-yasm
--endif
--
- KODI_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
-@@ -39,7 +30,7 @@ KODI_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- KODI_CONF_OPTS +=  \
--	--with-arch=$(BR2_ARCH) \
-+	--with-ffmpeg=shared \
- 	--disable-crystalhd \
- 	--disable-dvdcss \
- 	--disable-hal \
-@@ -83,13 +74,6 @@ else
- KODI_CONF_OPTS += --disable-alsa
- endif
- 
--ifeq ($(BR2_PACKAGE_LAME),y)
--KODI_DEPENDENCIES += lame
--KODI_CONF_OPTS += --enable-libmp3lame
--else
--KODI_CONF_OPTS += --disable-libmp3lame
--endif
--
- # quote from kodi/configure.in: "GLES overwrites GL if both set to yes."
- # we choose the opposite because opengl offers more features, like libva support
- ifeq ($(BR2_PACKAGE_KODI_GL),y)
+diff --git a/package/ffmpeg/0001-kodi.patch b/package/ffmpeg/0001-kodi.patch
+new file mode 100644
+index 0000000..dba5dc4
+--- /dev/null
++++ b/package/ffmpeg/0001-kodi.patch
+@@ -0,0 +1,610 @@
++In the past xbmc delivered its own ffmpeg source code with specific patches to
++address bugs found during the use of xbmc. For Kodi Helix the ffmpeg source code
++was removed, Helix uses a vanilla ffmpeg source tarball and applies this patchset
++on top of it.
++
++Downloaded from
++https://github.com/xbmc/FFmpeg/compare/FFmpeg:release/2.5...release/2.5-xbmc.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++From 74f1c9b43b191a9d6b494e90a4a11677fca33c13 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sun, 11 Sep 2011 19:04:51 +0200
++Subject: [PATCH 01/13] Support raw dvdsub palette as stored on normal dvd's
++
++This is how the palette is stored on dvd's. Currently
++only xbmc passes the palette information to libavcodec
++this way.
++---
++ libavcodec/dvdsubdec.c | 24 ++++++++++++++++++++++++
++ 1 file changed, 24 insertions(+)
++
++diff --git a/libavcodec/dvdsubdec.c b/libavcodec/dvdsubdec.c
++index 39604f3..a711e16 100644
++--- a/libavcodec/dvdsubdec.c
+++++ b/libavcodec/dvdsubdec.c
++@@ -64,6 +64,24 @@ static void yuv_a_to_rgba(const uint8_t *ycbcr, const uint8_t *alpha, uint32_t *
++     }
++ }
++ 
+++static void ayvu_to_argb(const uint8_t *ayvu, uint32_t *argb, int num_values)
+++{
+++    uint8_t *cm = ff_crop_tab + MAX_NEG_CROP;
+++    uint8_t r, g, b;
+++    int i, y, cb, cr, a;
+++    int r_add, g_add, b_add;
+++
+++    for (i = num_values; i > 0; i--) {
+++        a = *ayvu++;
+++        y = *ayvu++;
+++        cr = *ayvu++;
+++        cb = *ayvu++;
+++        YUV_TO_RGB1_CCIR(cb, cr);
+++        YUV_TO_RGB2_CCIR(r, g, b, y);
+++        *argb++ = (a << 24) | (r << 16) | (g << 8) | b;
+++    }
+++}
+++
++ static int decode_run_2bit(GetBitContext *gb, int *color)
++ {
++     unsigned int v, t;
++@@ -697,6 +715,12 @@ static av_cold int dvdsub_init(AVCodecContext *avctx)
++         parse_ifo_palette(ctx, ctx->ifo_str);
++     if (ctx->palette_str)
++         parse_palette(ctx, ctx->palette_str);
+++
+++    if (!ctx->has_palette && avctx->extradata_size == 64) {
+++        ayvu_to_argb((uint8_t*)avctx->extradata, ctx->palette, 16);
+++        ctx->has_palette = 1;
+++    }
+++
++     if (ctx->has_palette) {
++         int i;
++         av_log(avctx, AV_LOG_DEBUG, "palette:");
++
++From fbd0b8b0239d3786b941adc89322b8e49e4c768e Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Mon, 12 Sep 2011 21:37:17 +0200
++Subject: [PATCH 02/13] asf hacks
++
++---
++ libavformat/asfdec.c | 11 +++++++++++
++ 1 file changed, 11 insertions(+)
++
++diff --git a/libavformat/asfdec.c b/libavformat/asfdec.c
++index 7f7bb4d..8911987 100644
++--- a/libavformat/asfdec.c
+++++ b/libavformat/asfdec.c
++@@ -1549,9 +1549,20 @@ static int asf_read_seek(AVFormatContext *s, int stream_index,
++     AVStream *st    = s->streams[stream_index];
++     int ret = 0;
++ 
+++    if (pts == 0) {
+++      // this is a hack since av_gen_search searches the entire file in this case
+++      av_log(s, AV_LOG_DEBUG, "SEEKTO: %"PRId64"\n", s->data_offset);
+++      if (avio_seek(s->pb, s->data_offset, SEEK_SET) < 0)
+++          return -1;
+++      return 0;
+++    }
+++
++     if (s->packet_size <= 0)
++         return -1;
++ 
+++    if (st->codec->codec_type != AVMEDIA_TYPE_VIDEO)
+++        return -1;
+++
++     /* Try using the protocol's read_seek if available */
++     if (s->pb) {
++         int ret = avio_seek_time(s->pb, stream_index, pts, flags);
++
++From 54200b3e6009c6870e33c02c8bbcf023fcd92cac Mon Sep 17 00:00:00 2001
++From: Cory Fields <theuni-nospam-@xbmc.org>
++Date: Mon, 28 Jun 2010 01:55:31 -0400
++Subject: [PATCH 03/13] if av_read_packet returns AVERROR_IO, we are done.
++ ffmpeg's codecs might or might not handle returning any completed demuxed
++ packets correctly
++
++---
++ libavformat/utils.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libavformat/utils.c b/libavformat/utils.c
++index ae6347a..3e8af50 100644
++--- a/libavformat/utils.c
+++++ b/libavformat/utils.c
++@@ -1304,6 +1304,8 @@ static int read_frame_internal(AVFormatContext *s, AVPacket *pkt)
++         if (ret < 0) {
++             if (ret == AVERROR(EAGAIN))
++                 return ret;
+++            if (ret == AVERROR(EIO))
+++                return ret;
++             /* flush the parsers */
++             for (i = 0; i < s->nb_streams; i++) {
++                 st = s->streams[i];
++
++From e9236f6fe3fae1ad4a3a2b6b63db493b083f0b21 Mon Sep 17 00:00:00 2001
++From: Cory Fields <theuni-nospam-@xbmc.org>
++Date: Mon, 28 Jun 2010 02:10:50 -0400
++Subject: [PATCH 04/13] added: Ticket #7187, TV Teletext support for DVB EBU
++ Teletext streams
++
++---
++ libavcodec/avcodec.h | 4 ++++
++ libavformat/mpegts.c | 2 ++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/libavcodec/avcodec.h b/libavcodec/avcodec.h
++index dabae1b..dd6ef3f 100644
++--- a/libavcodec/avcodec.h
+++++ b/libavcodec/avcodec.h
++@@ -520,6 +520,10 @@ enum AVCodecID {
++     AV_CODEC_ID_PJS        = MKBETAG('P','h','J','S'),
++     AV_CODEC_ID_ASS        = MKBETAG('A','S','S',' '),  ///< ASS as defined in Matroska
++ 
+++    /* data codecs */
+++    AV_CODEC_ID_VBI_DATA= 0x17500,
+++    AV_CODEC_ID_VBI_TELETEXT,
+++
++     /* other specific kind of codecs (generally used for attachments) */
++     AV_CODEC_ID_FIRST_UNKNOWN = 0x18000,           ///< A dummy ID pointing at the start of various fake codecs.
++     AV_CODEC_ID_TTF = 0x18000,
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 97da0a3..5dd28f1 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -729,6 +729,8 @@ static const StreamType DESC_types[] = {
++     { 0x7b, AVMEDIA_TYPE_AUDIO,    AV_CODEC_ID_DTS          },
++     { 0x56, AVMEDIA_TYPE_SUBTITLE, AV_CODEC_ID_DVB_TELETEXT },
++     { 0x59, AVMEDIA_TYPE_SUBTITLE, AV_CODEC_ID_DVB_SUBTITLE }, /* subtitling descriptor */
+++    { 0x45, AVMEDIA_TYPE_DATA,         AV_CODEC_ID_VBI_DATA }, /* VBI Data descriptor */
+++    { 0x46, AVMEDIA_TYPE_DATA,     AV_CODEC_ID_VBI_TELETEXT }, /* VBI Teletext descriptor */
++     { 0 },
++ };
++ 
++
++From 1f48ee2290e9041b0371eb9a9cb742e9568930a1 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sun, 18 Sep 2011 19:16:34 +0200
++Subject: [PATCH 05/13] Don't accept mpegts PMT that isn't current
++
++---
++ libavformat/mpegts.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 5dd28f1..9f85aed 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -572,6 +572,7 @@ typedef struct SectionHeader {
++     uint8_t tid;
++     uint16_t id;
++     uint8_t version;
+++    uint8_t current;
++     uint8_t sec_num;
++     uint8_t last_sec_num;
++ } SectionHeader;
++@@ -643,6 +644,7 @@ static int parse_section_header(SectionHeader *h,
++     val = get8(pp, p_end);
++     if (val < 0)
++         return val;
+++    h->current = val & 0x1;
++     h->version = (val >> 1) & 0x1f;
++     val = get8(pp, p_end);
++     if (val < 0)
++@@ -1968,6 +1970,8 @@ static void pat_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
++         return;
++     if (ts->skip_changes)
++         return;
+++    if (!h->current)
+++        return;
++ 
++     ts->stream->ts_id = h->id;
++ 
++
++From db98fbe37f2f7175ff03b8d582e940518ddf3642 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sun, 18 Sep 2011 19:17:23 +0200
++Subject: [PATCH 06/13] Don't reparse PMT unless it's version has changed
++
++---
++ libavformat/mpegts.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 9f85aed..25007a6 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -88,6 +88,7 @@ struct MpegTSFilter {
++     int es_id;
++     int last_cc; /* last cc code (-1 if first packet) */
++     int64_t last_pcr;
+++    int last_version; /* last version of data on this pid */
++     enum MpegTSFilterType type;
++     union {
++         MpegTSPESFilter pes_filter;
++@@ -450,6 +451,7 @@ static MpegTSFilter *mpegts_open_filter(MpegTSContext *ts, unsigned int pid,
++     filter->es_id   = -1;
++     filter->last_cc = -1;
++     filter->last_pcr= -1;
+++    filter->last_version = -1;
++ 
++     return filter;
++ }
++@@ -1972,6 +1974,10 @@ static void pat_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
++         return;
++     if (!h->current)
++         return;
+++    if (h->version == filter->last_version)
+++        return;
+++    filter->last_version = h->version;
+++    av_dlog(ts->stream, "version=%d\n", filter->last_version);
++ 
++     ts->stream->ts_id = h->id;
++ 
++
++From fdd8caea6535434a877587f5325e914ba50ed17f Mon Sep 17 00:00:00 2001
++From: Cory Fields <theuni-nospam-@xbmc.org>
++Date: Fri, 9 Jul 2010 16:43:31 -0400
++Subject: [PATCH 07/13] Read PID timestamps as well as PCR timestamps to find
++ location in mpegts stream
++
++---
++ libavformat/mpegts.c | 48 ++++++++++++++++++++++++++++++++++++++++++++++--
++ 1 file changed, 46 insertions(+), 2 deletions(-)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index 25007a6..d5a8a45 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -2459,6 +2459,44 @@ static void seek_back(AVFormatContext *s, AVIOContext *pb, int64_t pos) {
++         av_log(s, pb->seekable ? AV_LOG_ERROR : AV_LOG_INFO, "Unable to seek back to the start\n");
++ }
++ 
+++static int parse_timestamp(int64_t *ts, const uint8_t *buf)
+++{
+++    int afc, flags;
+++    const uint8_t *p;
+++
+++    if(!(buf[1] & 0x40)) /* must be a start packet */
+++        return -1;
+++
+++    afc = (buf[3] >> 4) & 3;
+++    p = buf + 4;
+++    if (afc == 0 || afc == 2) /* invalid or only adaption field */
+++        return -1;
+++    if (afc == 3)
+++        p += p[0] + 1;
+++    if (p >= buf + TS_PACKET_SIZE)
+++        return -1;
+++
+++    if (p[0] != 0x00 || p[1] != 0x00 || p[2] != 0x01)  /* packet_start_code_prefix */
+++        return -1;
+++
+++    flags = p[3] | 0x100; /* stream type */
+++    if (!((flags >= 0x1c0 && flags <= 0x1df) ||
+++          (flags >= 0x1e0 && flags <= 0x1ef) ||
+++          (flags == 0x1bd) || (flags == 0x1fd)))
+++        return -1;
+++
+++    flags = p[7];
+++    if ((flags & 0xc0) == 0x80) {
+++        *ts = ff_parse_pes_pts(p+9);
+++        return 0;
+++    } else if ((flags & 0xc0) == 0xc0) {
+++        *ts = ff_parse_pes_pts(p+9+5);
+++        return 0;
+++    }
+++    return -1;
+++}
+++
+++
++ static int mpegts_read_header(AVFormatContext *s)
++ {
++     MpegTSContext *ts = s->priv_data;
++@@ -2658,6 +2696,7 @@ static av_unused int64_t mpegts_get_pcr(AVFormatContext *s, int stream_index,
++     uint8_t buf[TS_PACKET_SIZE];
++     int pcr_l, pcr_pid =
++         ((PESContext *)s->streams[stream_index]->priv_data)->pcr_pid;
+++    int pid = ((PESContext*)s->streams[stream_index]->priv_data)->pid;
++     int pos47 = ts->pos47_full % ts->raw_packet_size;
++     pos =
++         ((*ppos + ts->raw_packet_size - 1 - pos47) / ts->raw_packet_size) *
++@@ -2679,6 +2718,11 @@ static av_unused int64_t mpegts_get_pcr(AVFormatContext *s, int stream_index,
++             *ppos = pos;
++             return timestamp;
++         }
+++        if ((pid < 0 || (AV_RB16(buf + 1) & 0x1fff) == pid) &&
+++            parse_timestamp(&timestamp, buf) == 0) {
+++            *ppos = pos;
+++            return timestamp;
+++        }
++         pos += ts->raw_packet_size;
++     }
++ 
++@@ -2778,7 +2822,7 @@ AVInputFormat ff_mpegts_demuxer = {
++     .read_header    = mpegts_read_header,
++     .read_packet    = mpegts_read_packet,
++     .read_close     = mpegts_read_close,
++-    .read_timestamp = mpegts_get_dts,
+++    .read_timestamp = mpegts_get_pcr,
++     .flags          = AVFMT_SHOW_IDS | AVFMT_TS_DISCONT,
++     .priv_class     = &mpegts_class,
++ };
++@@ -2790,7 +2834,7 @@ AVInputFormat ff_mpegtsraw_demuxer = {
++     .read_header    = mpegts_read_header,
++     .read_packet    = mpegts_raw_read_packet,
++     .read_close     = mpegts_read_close,
++-    .read_timestamp = mpegts_get_dts,
+++    .read_timestamp = mpegts_get_pcr,
++     .flags          = AVFMT_SHOW_IDS | AVFMT_TS_DISCONT,
++     .priv_class     = &mpegtsraw_class,
++ };
++
++From c57e5b8154f5fe1457f4c64e04885a2cdfb37f51 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Sat, 22 Oct 2011 19:01:38 +0200
++Subject: [PATCH 08/13] Get stream durations using read_timestamp
++
++---
++ libavformat/utils.c | 39 +++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 39 insertions(+)
++
++diff --git a/libavformat/utils.c b/libavformat/utils.c
++index 3e8af50..f4fb172 100644
++--- a/libavformat/utils.c
+++++ b/libavformat/utils.c
++@@ -2356,6 +2356,41 @@ static void estimate_timings_from_bit_rate(AVFormatContext *ic)
++ #define DURATION_MAX_READ_SIZE 250000LL
++ #define DURATION_MAX_RETRY 4
++ 
+++static void av_estimate_timings_from_pts2(AVFormatContext *ic, int64_t old_offset)
+++{
+++    AVStream *st;
+++    int i, step= 1024;
+++    int64_t ts, pos;
+++
+++    for(i=0;i<ic->nb_streams;i++) {
+++        st = ic->streams[i];
+++
+++        pos = 0;
+++        ts = ic->iformat->read_timestamp(ic, i, &pos, DURATION_MAX_READ_SIZE);
+++        if (ts == AV_NOPTS_VALUE)
+++            continue;
+++        if (st->start_time > ts || st->start_time == AV_NOPTS_VALUE)
+++            st->start_time = ts;
+++
+++        pos = avio_size(ic->pb) - 1;
+++        do {
+++            pos -= step;
+++            ts = ic->iformat->read_timestamp(ic, i, &pos, pos + step);
+++            step += step;
+++        } while (ts == AV_NOPTS_VALUE && pos >= step && step < DURATION_MAX_READ_SIZE);
+++
+++        if (ts == AV_NOPTS_VALUE)
+++            continue;
+++
+++        if (st->duration < ts - st->start_time || st->duration == AV_NOPTS_VALUE)
+++            st->duration = ts - st->start_time;
+++    }
+++
+++    fill_all_stream_timings(ic);
+++
+++    avio_seek(ic->pb, old_offset, SEEK_SET);
+++}
+++
++ /* only usable for MPEG-PS streams */
++ static void estimate_timings_from_pts(AVFormatContext *ic, int64_t old_offset)
++ {
++@@ -2506,6 +2541,10 @@ static void estimate_timings(AVFormatContext *ic, int64_t old_offset)
++          * the components */
++         fill_all_stream_timings(ic);
++         ic->duration_estimation_method = AVFMT_DURATION_FROM_STREAM;
+++    } else if (ic->iformat->read_timestamp && 
+++        file_size && ic->pb->seekable) {
+++        /* get accurate estimate from the PTSes */
+++        av_estimate_timings_from_pts2(ic, old_offset);
++     } else {
++         /* less precise: use bitrate info */
++         estimate_timings_from_bit_rate(ic);
++
++From 4bcec3ef0042244b0ade00d132368d0872f73c72 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Wed, 8 Dec 2010 14:03:43 +0000
++Subject: [PATCH 09/13] changed: allow 4 second skew between streams in mov
++ before attempting to seek
++
++---
++ libavformat/mov.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libavformat/mov.c b/libavformat/mov.c
++index 8d66c0a..127ffd9 100644
++--- a/libavformat/mov.c
+++++ b/libavformat/mov.c
++@@ -4028,8 +4028,8 @@ static AVIndexEntry *mov_find_next_sample(AVFormatContext *s, AVStream **st)
++             if (!sample || (!s->pb->seekable && current_sample->pos < sample->pos) ||
++                 (s->pb->seekable &&
++                  ((msc->pb != s->pb && dts < best_dts) || (msc->pb == s->pb &&
++-                 ((FFABS(best_dts - dts) <= AV_TIME_BASE && current_sample->pos < sample->pos) ||
++-                  (FFABS(best_dts - dts) > AV_TIME_BASE && dts < best_dts)))))) {
+++                 ((FFABS(best_dts - dts) <= 4*AV_TIME_BASE && current_sample->pos < sample->pos) ||
+++                  (FFABS(best_dts - dts) > 4*AV_TIME_BASE && dts < best_dts)))))) {
++                 sample = current_sample;
++                 best_dts = dts;
++                 *st = avst;
++
++From cb7c19124165508ae5f38a385a14f9c13b096a27 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Fri, 26 Nov 2010 20:56:48 +0000
++Subject: [PATCH 10/13] fixed: memleak in mpegts demuxer on some malformed (??)
++ mpegts files with too large pes packets
++
++at-visions sample file brokenStream.mpg
++---
++ libavformat/mpegts.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index d5a8a45..e070f1f 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -832,6 +832,10 @@ static void reset_pes_packet_state(PESContext *pes)
++ 
++ static void new_pes_packet(PESContext *pes, AVPacket *pkt)
++ {
+++    if(pkt->data) {
+++      av_log(pes->stream, AV_LOG_ERROR, "ignoring previously allocated packet on stream %d\n", pkt->stream_index);
+++      av_free_packet(pkt);
+++    }
++     av_init_packet(pkt);
++ 
++     pkt->buf  = pes->buffer;
++@@ -2649,6 +2653,8 @@ static int mpegts_read_packet(AVFormatContext *s, AVPacket *pkt)
++ 
++     pkt->size = -1;
++     ts->pkt = pkt;
+++    ts->pkt->data = NULL;
+++
++     ret = handle_packets(ts, 0);
++     if (ret < 0) {
++         av_free_packet(ts->pkt);
++
++From c315a758a292200c22925603682e259849d6d558 Mon Sep 17 00:00:00 2001
++From: Joakim Plate <elupus@ecce.se>
++Date: Mon, 28 Jun 2010 21:26:54 +0000
++Subject: [PATCH 11/13] Speed up mpegts av_find_stream_info
++
++---
++ libavformat/mpegts.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index e070f1f..dd9e129 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -994,7 +994,7 @@ static int mpegts_push_data(MpegTSFilter *filter,
++                         goto skip;
++ 
++                     /* stream not present in PMT */
++-                    if (!pes->st) {
+++                    if (ts->auto_guess && !pes->st) {
++                         if (ts->skip_changes)
++                             goto skip;
++ 
++
++From 939ebbbc46ca9995637415594f1815633587104f Mon Sep 17 00:00:00 2001
++From: marc <mhocking@ubuntu-desktop.(none)>
++Date: Mon, 18 Feb 2013 17:18:18 +0000
++Subject: [PATCH 12/13] dxva-h264 Fix dxva playback of streams that don't start
++ with an I-Frame.
++
++---
++ libavcodec/dxva2_h264.c | 8 ++++++++
++ libavcodec/h264.c       | 1 +
++ libavcodec/h264.h       | 2 ++
++ libavcodec/h264_slice.c | 1 +
++ 4 files changed, 12 insertions(+)
++
++diff --git a/libavcodec/dxva2_h264.c b/libavcodec/dxva2_h264.c
++index 6deccc3..85b25fd 100644
++--- a/libavcodec/dxva2_h264.c
+++++ b/libavcodec/dxva2_h264.c
++@@ -451,6 +451,14 @@ static int dxva2_h264_end_frame(AVCodecContext *avctx)
++ 
++     if (ctx_pic->slice_count <= 0 || ctx_pic->bitstream_size <= 0)
++         return -1;
+++
+++    // Wait for an I-frame before start decoding. Workaround for ATI UVD and UVD+ GPUs
+++    if (!h->got_first_iframe) {
+++        if (!(ctx_pic->pp.wBitFields & (1 << 15)))
+++            return -1;
+++        h->got_first_iframe = 1;
+++    }
+++
++     ret = ff_dxva2_common_end_frame(avctx, &h->cur_pic_ptr->f,
++                                     &ctx_pic->pp, sizeof(ctx_pic->pp),
++                                     &ctx_pic->qm, sizeof(ctx_pic->qm),
++diff --git a/libavcodec/h264.c b/libavcodec/h264.c
++index 222bf58..ea2ec17 100644
++--- a/libavcodec/h264.c
+++++ b/libavcodec/h264.c
++@@ -1085,6 +1085,7 @@ void ff_h264_flush_change(H264Context *h)
++     h->list_count = 0;
++     h->current_slice = 0;
++     h->mmco_reset = 1;
+++    h->got_first_iframe = 0;
++ }
++ 
++ /* forget old pics after a seek */
++diff --git a/libavcodec/h264.h b/libavcodec/h264.h
++index b94f06b..bc9458b 100644
++--- a/libavcodec/h264.h
+++++ b/libavcodec/h264.h
++@@ -741,6 +741,8 @@ typedef struct H264Context {
++     int luma_weight_flag[2];    ///< 7.4.3.2 luma_weight_lX_flag
++     int chroma_weight_flag[2];  ///< 7.4.3.2 chroma_weight_lX_flag
++ 
+++    int got_first_iframe;
+++
++     // Timestamp stuff
++     int sei_buffering_period_present;   ///< Buffering period SEI flag
++     int initial_cpb_removal_delay[32];  ///< Initial timestamps for CPBs
++diff --git a/libavcodec/h264_slice.c b/libavcodec/h264_slice.c
++index 53f61ca..b171d78 100644
++--- a/libavcodec/h264_slice.c
+++++ b/libavcodec/h264_slice.c
++@@ -1189,6 +1189,7 @@ static int h264_slice_header_init(H264Context *h, int reinit)
++         ff_h264_free_tables(h, 0);
++     h->first_field           = 0;
++     h->prev_interlaced_frame = 1;
+++    h->got_first_iframe = 0;
++ 
++     init_scan_tables(h);
++     ret = ff_h264_alloc_tables(h);
++
++From 7d7ce18ff0d24b586634fa6e631fa0eec7865aae Mon Sep 17 00:00:00 2001
++From: elupus <elupus@xbmc.org>
++Date: Tue, 1 Nov 2011 20:18:35 +0100
++Subject: [PATCH 13/13] add public version of ff_read_frame_flush
++
++We need this since we sometimes seek on the
++input stream behind ffmpeg's back. After this
++all data need to be flushed completely.
++---
++ libavformat/avformat.h | 5 +++++
++ libavformat/utils.c    | 5 +++++
++ 2 files changed, 10 insertions(+)
++
++diff --git a/libavformat/avformat.h b/libavformat/avformat.h
++index 2e54ed1..3a9f292 100644
++--- a/libavformat/avformat.h
+++++ b/libavformat/avformat.h
++@@ -2121,6 +2121,11 @@ int av_find_best_stream(AVFormatContext *ic,
++ int av_read_frame(AVFormatContext *s, AVPacket *pkt);
++ 
++ /**
+++ * Clear out any buffered data in context
+++ */
+++void av_read_frame_flush(AVFormatContext *s);
+++
+++/**
++  * Seek to the keyframe at timestamp.
++  * 'timestamp' in 'stream_index'.
++  *
++diff --git a/libavformat/utils.c b/libavformat/utils.c
++index f4fb172..10dda18 100644
++--- a/libavformat/utils.c
+++++ b/libavformat/utils.c
++@@ -1624,6 +1624,11 @@ void ff_read_frame_flush(AVFormatContext *s)
++     }
++ }
++ 
+++void av_read_frame_flush(AVFormatContext *s)
+++{
+++  ff_read_frame_flush(s);
+++}
+++
++ void ff_update_cur_dts(AVFormatContext *s, AVStream *ref_st, int64_t timestamp)
++ {
++     int i;
 -- 
 1.7.10.4
