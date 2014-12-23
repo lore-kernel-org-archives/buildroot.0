@@ -1,43 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 12:39:27 +0100
-Subject: [Buildroot] [PATCH] package/pcre: install headers in legacy
- location
-In-Reply-To: <20141223112136.GA4152@free.fr>
-References: <1418490513-10957-1-git-send-email-yann.morin.1998@free.fr>
- <20141221231948.77de4e62@free-electrons.com>
- <20141223112136.GA4152@free.fr>
-Message-ID: <20141223123927.4378caf5@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 23 Dec 2014 15:06:13 +0300
+Subject: [Buildroot] [PATCH] system: run getty on boot console by default
+Message-ID: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+We used to specify explicitly serial port with all its settings
+for init to instantiate getty.
 
-On Tue, 23 Dec 2014 12:21:36 +0100, Yann E. MORIN wrote:
+This limits usecases when the same one rootfs could be used.
 
-> One the one hand, we woudl certainly prefer to fix packages to use the
-> new location, so we can eventually get rid of our hacks to make them
-> build when we eventually update them.
-> 
-> On the other hand, I'm afraid this could be an endless hide-and-seek
-> game, which would take us quite some efforts to upstream our patches,
-> especially for packages that may still want to build on older systems
-> with the old layout...
-> 
-> However, for now, the only offender in this respect is nmap, so I can
-> try to fix it and upstream the fix.
+For example following cases won't work well with hardcoded
+serial console settings:
+ * On the same board other serial port is expected to be used
+ * The same rootfs is intended to be used on different boards with
+   different serial ports (like ttySx vs ttyAMAx or even ttyx)
 
-Hard to take a decision without having an idea on the number of
-affected packages. So far, if only nmap has been detected by the
-autobuilders, it seems like not that many packages are broken by this
-issue, and therefore fixing nmap seems to be the right solution.
+With this change by default we rely on "console" specified in
+kernel's boot command line.
 
-Best regards,
+What is important getty will be set on the last console
+specified in bootargs.
 
-Thomas
+For example is a kernel comand line:
+--->---
+bootargs="... console=tty0 console=ttyS3,115200n8..."
+--->---
+
+This now will instantiate serial console on ttyS3 but not on tty0.
+
+Tested with both Busybox and SysV init.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/system/Config.in b/system/Config.in
+index 0fa0dc6..6447be8 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -263,13 +263,13 @@ if BR2_TARGET_GENERIC_GETTY
+ menu "getty options"
+ config BR2_TARGET_GENERIC_GETTY_PORT
+ 	string "TTY port"
+-	default "ttyS0"
++	default "console"
+ 	help
+ 	  Specify a port to run a getty on.
+ 
+ choice
+ 	prompt "Baudrate"
+-	default BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
++	default BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP
+ 	help
+ 	  Select a baudrate to use.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
