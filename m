@@ -1,39 +1,301 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 11:36:19 +0100
-Subject: [Buildroot] [git commit] ntp: update sample config
-Message-ID: <20141223104122.DE5EF800E4@busybox.osuosl.org>
+Date: Tue, 23 Dec 2014 11:36:07 +0100
+Subject: [Buildroot] [git commit] ntp: security bump to version 4.2.8
+Message-ID: <20141223104122.D5F72800E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3c2e7c7ed90e7930c934bcd9b43669a330a305a
+commit: http://git.buildroot.net/buildroot/commit/?id=5d5c9a8dcb1f3385e70a2e089f6577c67eca59c3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop redundant IP version and double default restrict.
-Tweak KoD and other defaults for properness.
+Fixes:
+
+CVE-2014-9293 - ntpd generated a weak key for its internal use, with
+full administrative privileges.  Attackers could use this key to
+reconfigure ntpd (or to exploit other vulnerabilities).
+
+CVE-2014-9294 - The ntp-keygen utility generated weak MD5 keys with
+insufficient entropy.
+
+CVE-2014-9295 - ntpd had several buffer overflows (both on the stack and
+in the data section), allowing remote authenticated attackers to crash
+ntpd or potentially execute arbitrary code.
+
+CVE-2014-9296 - The general packet processing function in ntpd did not
+handle an error case correctly.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ntp/ntpd.etc.conf |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ .../ntp/0001-fix-ntp-keygen-without-openssl.patch  |  153 ++++++++++++++++++++
+ .../ntp/{ntp-002-nano.patch => 0002-nano.patch}    |    0
+ package/ntp/Config.in                              |    1 +
+ package/ntp/ntp-001-adjtimex.patch                 |   33 -----
+ package/ntp/ntp.hash                               |    2 +
+ package/ntp/ntp.mk                                 |   16 ++-
+ 6 files changed, 166 insertions(+), 39 deletions(-)
 
-diff --git a/package/ntp/ntpd.etc.conf b/package/ntp/ntpd.etc.conf
-index 6a2b88c..543c8ff 100644
---- a/package/ntp/ntpd.etc.conf
-+++ b/package/ntp/ntpd.etc.conf
-@@ -1,8 +1,8 @@
- server 0.pool.ntp.org iburst
- server 1.pool.ntp.org iburst
- 
--restrict default kod nomodify notrap nopeer noquery
--restrict -6 default kod nomodify notrap nopeer noquery
+diff --git a/package/ntp/0001-fix-ntp-keygen-without-openssl.patch b/package/ntp/0001-fix-ntp-keygen-without-openssl.patch
+new file mode 100644
+index 0000000..b9883be
+--- /dev/null
++++ b/package/ntp/0001-fix-ntp-keygen-without-openssl.patch
+@@ -0,0 +1,153 @@
++Fix build breakage without openssl.
++From upstream: http://bk1.ntp.org/ntp-stable/?PAGE=patch&REV=5497b345z5MNTuNvJWuqPSje25NQTg
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura ntp-4.2.8.orig/configure.ac ntp-4.2.8/configure.ac
++--- ntp-4.2.8.orig/configure.ac	2014-12-22 10:16:10.449311393 -0300
+++++ ntp-4.2.8/configure.ac	2014-12-22 10:17:30.757215905 -0300
++@@ -102,7 +102,7 @@
++ enable_nls=no
++ LIBOPTS_CHECK_NOBUILD([sntp/libopts])
++ 
++-NTP_ENABLE_LOCAL_LIBEVENT
+++NTP_LIBEVENT_CHECK_NOBUILD([2], [sntp/libevent])
++ 
++ NTP_LIBNTP
++ 
++@@ -771,6 +771,10 @@
++ 
++ #### 
++ 
+++AC_CHECK_FUNCS([arc4random_buf])
+++
+++####
+++
++ saved_LIBS="$LIBS"
++ LIBS="$LIBS $LDADD_LIBNTP"
++ AC_CHECK_FUNCS([daemon])
++diff -Nura ntp-4.2.8.orig/libntp/ntp_crypto_rnd.c ntp-4.2.8/libntp/ntp_crypto_rnd.c
++--- ntp-4.2.8.orig/libntp/ntp_crypto_rnd.c	2014-12-22 10:16:10.430301237 -0300
+++++ ntp-4.2.8/libntp/ntp_crypto_rnd.c	2014-12-22 10:18:04.921468163 -0300
++@@ -24,6 +24,21 @@
++ int crypto_rand_init = 0;
++ #endif
++ 
+++#ifndef HAVE_ARC4RANDOM_BUF
+++static void
+++arc4random_buf(void *buf, size_t nbytes);
+++
+++void
+++evutil_secure_rng_get_bytes(void *buf, size_t nbytes);
+++
+++static void
+++arc4random_buf(void *buf, size_t nbytes)
+++{
+++	evutil_secure_rng_get_bytes(buf, nbytes);
+++	return;
+++}
+++#endif
+++
++ /*
++  * As of late 2014, here's how we plan to provide cryptographic-quality
++  * random numbers:
++diff -Nura ntp-4.2.8.orig/Makefile.am ntp-4.2.8/Makefile.am
++--- ntp-4.2.8.orig/Makefile.am	2014-12-22 10:16:10.441307117 -0300
+++++ ntp-4.2.8/Makefile.am	2014-12-22 10:16:49.403122474 -0300
++@@ -3,6 +3,7 @@
++ NULL =
++ 
++ SUBDIRS =		\
+++	sntp		\
++ 	scripts		\
++ 	include		\
++ 	libntp		\
++@@ -17,7 +18,6 @@
++ 	clockstuff	\
++ 	kernel		\
++ 	util		\
++-	sntp		\
++ 	tests		\
++ 	$(NULL)
++ 
++@@ -64,7 +64,6 @@
++ 	.gcc-warning			\
++ 	libtool				\
++ 	html/.datecheck			\
++-	sntp/built-sources-only		\
++ 	$(srcdir)/COPYRIGHT		\
++ 	$(srcdir)/.checkChangeLog	\
++ 	$(NULL)
++diff -Nura ntp-4.2.8.orig/sntp/configure.ac ntp-4.2.8/sntp/configure.ac
++--- ntp-4.2.8.orig/sntp/configure.ac	2014-12-22 10:16:10.428300168 -0300
+++++ ntp-4.2.8/sntp/configure.ac	2014-12-22 10:24:11.238172928 -0300
++@@ -97,11 +97,14 @@
++ enable_nls=no
++ LIBOPTS_CHECK
++ 
++-AM_COND_IF(
++-    [BUILD_SNTP],
++-    [NTP_LIBEVENT_CHECK],
++-    [NTP_LIBEVENT_CHECK_NOBUILD]
++-)
+++# From when we only used libevent for sntp:
+++#AM_COND_IF(
+++#    [BUILD_SNTP],
+++#    [NTP_LIBEVENT_CHECK],
+++#    [NTP_LIBEVENT_CHECK_NOBUILD]
+++#)
+++
+++NTP_LIBEVENT_CHECK([2])
++ 
++ # Checks for libraries.
++ 
++diff -Nura ntp-4.2.8.orig/sntp/m4/ntp_libevent.m4 ntp-4.2.8/sntp/m4/ntp_libevent.m4
++--- ntp-4.2.8.orig/sntp/m4/ntp_libevent.m4	2014-12-22 10:16:10.417294288 -0300
+++++ ntp-4.2.8/sntp/m4/ntp_libevent.m4	2014-12-22 10:20:31.757915561 -0300
++@@ -1,4 +1,25 @@
++-dnl NTP_ENABLE_LOCAL_LIBEVENT				     -*- Autoconf -*-
+++# SYNOPSIS						-*- Autoconf -*-
+++#
+++#  NTP_ENABLE_LOCAL_LIBEVENT
+++#  NTP_LIBEVENT_CHECK([MINVERSION [, DIR]])
+++#  NTP_LIBEVENT_CHECK_NOBUILD([MINVERSION [, DIR]])
+++#
+++# DESCRIPTION
+++#
+++# AUTHOR
+++#
+++#  Harlan Stenn
+++#
+++# LICENSE
+++#
+++#  This file is Copyright (c) 2014 Network Time Foundation
+++# 
+++#  Copying and distribution of this file, with or without modification, are
+++#  permitted in any medium without royalty provided the copyright notice,
+++#  author attribution and this notice are preserved.  This file is offered
+++#  as-is, without any warranty.
+++
+++dnl NTP_ENABLE_LOCAL_LIBEVENT
++ dnl
++ dnl Provide only the --enable-local-libevent command-line option.
++ dnl
++@@ -29,7 +50,7 @@
++ dnl but DO NOT invoke DIR/configure if we are going to use our bundled
++ dnl version.  This may be the case for nested packages.
++ dnl
++-dnl provide --enable-local-libevent .
+++dnl provides --enable-local-libevent .
++ dnl
++ dnl Examples:
++ dnl
++diff -Nura ntp-4.2.8.orig/util/Makefile.am ntp-4.2.8/util/Makefile.am
++--- ntp-4.2.8.orig/util/Makefile.am	2014-12-22 10:16:10.435303910 -0300
+++++ ntp-4.2.8/util/Makefile.am	2014-12-22 10:21:02.500339706 -0300
++@@ -19,6 +19,7 @@
++ LDADD=		../libntp/libntp.a $(LDADD_LIBNTP) $(LIBM) $(PTHREAD_LIBS)
++ tg2_LDADD=	../libntp/libntp.a $(LDADD_LIBNTP) $(LIBM)
++ ntp_keygen_LDADD  = version.o $(LIBOPTS_LDADD) ../libntp/libntp.a
+++ntp_keygen_LDADD += $(LDADD_LIBEVENT)
++ ntp_keygen_LDADD += $(LDADD_LIBNTP) $(PTHREAD_LIBS) $(LDADD_NTP) $(LIBM)
++ ntp_keygen_SOURCES = ntp-keygen.c ntp-keygen-opts.c ntp-keygen-opts.h
++ 
+diff --git a/package/ntp/ntp-002-nano.patch b/package/ntp/0002-nano.patch
+similarity index 100%
+rename from package/ntp/ntp-002-nano.patch
+rename to package/ntp/0002-nano.patch
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index c92ae93..d4caddf 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NTP
+ 	bool "ntp"
++	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Network Time Protocol suite/programs.
+ 	  Provides things like ntpd, ntpdate, ntpq, etc...
+diff --git a/package/ntp/ntp-001-adjtimex.patch b/package/ntp/ntp-001-adjtimex.patch
+deleted file mode 100644
+index 40625fa..0000000
+--- a/package/ntp/ntp-001-adjtimex.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-https://support.ntp.org/bugs/show_bug.cgi?id=769
+-http://bugs.gentoo.org/254030
 -
-+# Allow only time queries, at a limited rate, sending KoD when in excess.
-+# Allow all local queries (IPv4, IPv6)
-+restrict default nomodify nopeer noquery limited kod
- restrict 127.0.0.1
--restrict -6 ::1
-+restrict [::1]
+---- ntp/util/tickadj.c
+-+++ ntp/util/tickadj.c
+-@@ -21,7 +21,8 @@
+- # include <unistd.h>
+- #endif /* HAVE_UNISTD_H */
+- 
+--#ifdef HAVE___ADJTIMEX		/* Linux */
+-+/* proper handling here has been moved to upstream ntp bugzilla */
+-+#ifdef linux
+- 
+- #include <sys/timex.h>
+- struct timex txc;
+-@@ -91,7 +92,7 @@
+- 	}
+- 
+- 	if (!errflg) {
+--		if (__adjtimex(&txc) < 0)
+-+		if (adjtimex(&txc) < 0)
+- 			perror("adjtimex");
+- 		else if (!quiet)
+- 			printf("tick     = %ld\ntick_adj = %d\n",
+-@@ -146,7 +147,7 @@
+- #endif
+- 	}
+-     
+--	if (__adjtimex(&txc) < 0)
+-+	if (adjtimex(&txc) < 0)
+- 	{
+- 		perror("adjtimex");
+- 	}
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+new file mode 100644
+index 0000000..2ff6449
+--- /dev/null
++++ b/package/ntp/ntp.hash
+@@ -0,0 +1,2 @@
++# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8.tar.gz.md5
++md5	6972a626be6150db8cfbd0b63d8719e7ntp-4.2.8.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index bb950a1..1708978 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,25 +5,29 @@
+ ################################################################################
+ 
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).6p5
++NTP_VERSION = $(NTP_VERSION_MAJOR).8
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
++NTP_DEPENDENCIES = host-pkgconf libevent
++# For 0001-fix-ntp-keygen-without-openssl.patch
++NTP_AUTORECONF = YES
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
++NTP_CONF_OPTS = --with-shared \
++		--program-transform-name=s,,, \
++		--disable-tickadj \
++		--with-yielding-select=yes \
++		--disable-local-libevent
+ 
+ ifneq ($(BR2_INET_IPV6),y)
+ 	NTP_CONF_ENV += isc_cv_have_in6addr_any=no
+ endif
+ 
+-NTP_CONF_OPTS = --with-shared \
+-		--program-transform-name=s,,, \
+-		--disable-tickadj
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	NTP_CONF_OPTS += --with-crypto
+ 	NTP_DEPENDENCIES += openssl
+ else
+-	NTP_CONF_OPTS += --without-crypto
++	NTP_CONF_OPTS += --without-crypto --disable-openssl-random
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NTP_NTPSNMPD),y)
