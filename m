@@ -1,100 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Dec 2014 18:46:23 +0100
-Subject: [Buildroot] [PATCH v9 00/18] package/kodi: Bump version to
-	14.0-Helix
-Message-ID: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 23 Dec 2014 18:46:35 +0100
+Subject: [Buildroot] [PATCH v9 12/18] package/kodi-addon-xvdr: Bump version
+	for Helix-compatibility
+In-Reply-To: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1419356801-31525-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-the follow-up version of XBMC 13.x-Gotham is called Kodi and was released today.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
+ package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+ create mode 100644 package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
 
-This patchset consists of two preparatory patches each to rename the packages,
-splitted for easier review, and one patch each for the real version bumps
-along with some version bumps and new packages to be used with optical drives.
-
-Regards, Bernd
-
-v9: - rebased
-    - bumped Kodi to 14.0-Helix
-    - bumped kodi-pvr-addons
-    - rebased kodi specific ffmpeg-patches against Kodi upstream
-    - added ffmpeg version bump
-
-v8: - rebased
-    - bumped Kodi to 14.0rc3-Helix
-    - bumped kodi-pvr-addons
-    - bumped kodi-audioencoder-flac
-    - rebased kodi specific ffmpeg-patches against ffmpeg-2.5
-
-v7: - rebased
-    - bumped Kodi to 14.0b5-Helix
-    - bumped kodi-pvr-addons
-
-v6: - rebased
-    - bumped Kodi to 14.0b3-Helix
-    - bumped audioencoder addons
-    - renamed xbmc-pvr-addons to kodi-pvr-addons
-    - renamed xbmc-addon-xvdr to kodi-addon-xvdr
-    - bumped kodi-pvr-addons, removed dependencies to boost & mysql
-
-v5: - rebased
-    - bumped Kodi to 14.0b2-Helix
-    - bumped libcec to 2.2.0, Helix depends on this version
-    - bumped audioencoder addons
-
-v4: - rebased
-    - renamed package/kodi-audioencoder-wav/kodi-audioencoder-flac.mk to
-      package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-    - added option BR2_PACKAGE_KODI_OPTICALDRIVE to enable support for optical
-      drives
-    - audioencoder addons depend in BR2_PACKAGE_KODI_OPTICALDRIVE, see
-      https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/virtual/mediacenter/package.mk#L46
-
-v3: - rebased
-    - added audioenconder addons, Kodi now needs to be installed to STAGING_DIR
-    - kodi: removed dependency to flac, backported from upstream master
-    - bumped xbmc-pvr-addons
-    - bumped xbmc-addon-xvdr
-    - note: kodi specific ffmpeg-patches no longer depend on
-            http://patchwork.ozlabs.org/patch/396911/
-            patch was committed to buildroot
-
-v2: - rebased: - _CONF_OPT -> _CONF_OPTS
-    - added notes to "Rename XBMC to Kodi"-patches, they are meant to be committed
-      together (Yann)
-    - kodi specific ffmpeg-patches are now a seperate commit (Yann),
-      depends on http://patchwork.ozlabs.org/patch/396911/
-    - ffmpeg is now compiled dynamically, ported from
-      https://github.com/OpenELEC/OpenELEC.tv/commit/ba586280
-
-
-Bernd Kuhls (18):
-  package/ffmpeg: bump version to 2.5.2
-  package/libcec: Bump to version 2.2.0
-  package/ffmpeg: Add Kodi patchset
-  Rename XBMC to Kodi - part I - move files
-  Rename XBMC to Kodi - part II - rename variables
-  package/kodi: Bump version to 14.0-Helix
-  Rename xbmc-pvr-addons to kodi-pvr-addons - part I - move files
-  Rename xbmc-pvr-addons to kodi-pvr-addons - part II - rename
-    variables
-  package/kodi-pvr-addons: Bump version for Helix-compatibility
-  Rename xbmc-addon-xvdr to kodi-addon-xvdr - part I - move files
-  Rename xbmc-addon-xvdr to kodi-addon-xvdr - part II - rename
-    variables
-  package/kodi-addon-xvdr: Bump version for Helix-compatibility
-  package/kodi: New option to enable support for optical drives
-  package/kodi: Enable install to STAGING_DIR, needed for audioencoder
-    addons
-  package/kodi-audioencoder-flac: New package
-  package/kodi-audioencoder-lame: New package
-  package/kodi-audioencoder-vorbis: New package
-  package/kodi-audioencoder-wav: New package
-
+diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+new file mode 100644
+index 0000000..6e87b79
+--- /dev/null
++++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+@@ -0,0 +1,19 @@
++Update for Kodi
++
++Ported from OpenELEC:
++https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
++--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
+++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
++@@ -6,7 +6,7 @@
++ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
++ 
++ AC_CONFIG_AUX_DIR(autotools)
++-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
+++AC_PREFIX_DEFAULT(/usr/lib/kodi)
++ 
++ AC_CANONICAL_HOST
++ AC_CANONICAL_TARGET
+diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+index 14b08fe..e05510c 100644
+--- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
++++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-# This cset is on master. When a Gotham branch is made, we should
++# This cset is on master. When a Helix branch is made, we should
+ # follow it, as incompatible changes in the plugins API can happen
+ # on the master branch.
+-KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
++KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
+ KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
+ KODI_ADDON_XVDR_LICENSE = GPLv2+
+ KODI_ADDON_XVDR_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
