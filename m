@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 20:52:01 +0100
-Subject: [Buildroot] [PATCH] system: run getty on boot console by default
-In-Reply-To: <1419345339.2781.9.camel@synopsys.com>
-References: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
- <CAGm1_ktp7gkprBXNLTvd3gE7LMv_9cyUXyF3eb3r83OGPie0NQ@mail.gmail.com>
- <1419337919.2781.6.camel@synopsys.com>
- <CAGm1_ktzvRWMrZHEVfrQnRdACs-N++Kwx5dq3Xp30YPxN-gQHw@mail.gmail.com>
- <1419345339.2781.9.camel@synopsys.com>
-Message-ID: <20141223205201.021ee085@free-electrons.com>
+Date: Tue, 23 Dec 2014 20:53:03 +0100
+Subject: [Buildroot] [PATCH v9 00/18] package/kodi: Bump version to
+ 14.0-Helix
+In-Reply-To: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141223205303.01acad35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Bernd Kuhls,
 
-On Tue, 23 Dec 2014 14:35:40 +0000, Alexey Brodkin wrote:
+On Tue, 23 Dec 2014 18:46:23 +0100, Bernd Kuhls wrote:
 
-> Even thought I haven't done any extensive testing I don't see any
-> suspicious behavior.
-> 
-> So I think "console" in BR2_TARGET_GENERIC_GETTY_PORT should be fine.
+> Bernd Kuhls (18):
+>   package/ffmpeg: bump version to 2.5.2
+>   package/libcec: Bump to version 2.2.0
 
-No, you can only login as root if you add "console" to /etc/securetty.
+Both applied, thanks.
 
 Thomas
 -- 
