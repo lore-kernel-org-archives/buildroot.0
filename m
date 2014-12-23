@@ -1,157 +1,89 @@
-From: Steve James <ste@junkomatic.net>
-Date: Tue, 23 Dec 2014 17:16:23 +0000
-Subject: [Buildroot] [PATCH v2] leveldb: new package
-Message-ID: <201412231716.23849.ste@junkomatic.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 23 Dec 2014 18:46:25 +0100
+Subject: [Buildroot] [PATCH v9 02/18] package/libcec: Bump to version 2.2.0
+In-Reply-To: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1419356801-31525-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds new package: leveldb
+Kodi Helix depends on libcec >= 2.2.0
 
-  LevelDB is a fast key-value storage library written at Google that
-  provides an ordered mapping from string keys to string values.
+Removed libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
+applied upstream: https://github.com/Pulse-Eight/libcec/commit/485660f
 
-Signed-off-by: Steve James <ste@junkomatic.net>
+Renamed remaining patch according to new naming convention.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - Upstream release labels don't include package name, giving us an
-    anonymous download archive, so use $(call github) method instead
-  - Use $(TARGET_CONFIGURE_OPTS)
-  - Support new shared vs static vs shared+static possibilities
+ ...i-warning.patch => 0001-no-psabi-warning.patch} |    0
+ ...gistering-a-callback-that-wasn-t-register.patch |   36 --------------------
+ package/libcec/libcec.mk                           |    2 +-
+ 3 files changed, 1 insertion(+), 37 deletions(-)
+ rename package/libcec/{libcec-0002-no-psabi-warning.patch => 0001-no-psabi-warning.patch} (100%)
+ delete mode 100644 package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
 
- package/Config.in                           |    1 +
- package/leveldb/001-ssize_t-undefined.patch |   17 ++++++++
- package/leveldb/Config.in                   |   12 ++++++
- package/leveldb/leveldb.mk                  |   59 
-+++++++++++++++++++++++++++
- 4 files changed, 89 insertions(+)
- create mode 100644 package/leveldb/001-ssize_t-undefined.patch
- create mode 100644 package/leveldb/Config.in
- create mode 100644 package/leveldb/leveldb.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index e2b73dd..17e4345 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -627,6 +627,7 @@ menu "Database"
- 	source "package/berkeleydb/Config.in"
- 	source "package/cppdb/Config.in"
- 	source "package/gdbm/Config.in"
-+	source "package/leveldb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
- 	source "package/redis/Config.in"
-diff --git a/package/leveldb/001-ssize_t-undefined.patch 
-b/package/leveldb/001-ssize_t-undefined.patch
-new file mode 100644
-index 0000000..9a958d8
---- /dev/null
-+++ b/package/leveldb/001-ssize_t-undefined.patch
-@@ -0,0 +1,17 @@
-+Fix leveldb issue 233 leveldb does not compile with g++ 4.8.2
-+
-+Where db_iter.cc fails to get a typedef for ssize_t when compiled by GCC.
-+
-+Upstream-Status: Submitted [https://github.com/google/leveldb/issues/233]
-+Signed-off-by: Steve James <ste@junkomatic.net>
-+
-+--- a/db/db_iter.cc.orig	2014-12-08 16:54:31.384615752 +0000
-++++ b/db/db_iter.cc	2014-12-08 16:54:35.464656890 +0000
-+@@ -13,6 +13,7 @@
-+ #include "util/logging.h"
-+ #include "util/mutexlock.h"
-+ #include "util/random.h"
-++#include <sys/types.h> // for ssize_t
-+ 
-+ namespace leveldb {
-+ 
-diff --git a/package/leveldb/Config.in b/package/leveldb/Config.in
-new file mode 100644
-index 0000000..fffd44b
---- /dev/null
-+++ b/package/leveldb/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LEVELDB
-+	bool "leveldb"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_SNAPPY
-+	help
-+	  LevelDB is a fast key-value storage library written at Google that
-+	  provides an ordered mapping from string keys to string values.
-+
-+	  https://github.com/google/leveldb
-+
-+comment "leveldb needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-new file mode 100644
-index 0000000..0a4a079
---- /dev/null
-+++ b/package/leveldb/leveldb.mk
-@@ -0,0 +1,59 @@
-+################################################################################
-+#
-+# leveldb
-+#
-+################################################################################
-+
-+LEVELDB_VERSION = 803d69203a62faf50f1b77897310a3a1fcae712b
-+LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
-+LEVELDB_LICENSE = BSD-3c
-+LEVELDB_LICENSE_FILES = LICENSE
-+LEVELDB_INSTALL_STAGING = YES
-+LEVELDB_DEPENDENCIES = snappy
-+
-+# The leveldb build has some basic autoconf-like behaviour which assumes the
-+# target is the host. We hard-wire it to the right outcome for Buildroot
-+# irrespective of the host.
-+LEVELDB_MAKE_ARGS = TARGET_OS=Linux
-+
-+# Default leveldb compiler flags
-+LEVELDB_CFLAGS = -DNDEBUG -I. -I./include -std=c++0x -pthread -DOS_LINUX -
-DLEVELDB_PLATFORM_POSIX
-+
-+TARGET_CFLAGS += $(LEVELDB_CFLAGS)
-+TARGET_CXXFLAGS += $(LEVELDB_CFLAGS)
-+TARGET_MAKE_ARGS += $(LEVELDB_MAKE_ARGS)
-+
-+define LEVELDB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) 
-$(TARGET_MAKE_ARGS)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_STAGING_CMDS_STATIC
-+	$(INSTALL) -D -m 0644 $(@D)/libleveldb.a $(STAGING_DIR)/usr/lib
-+endef
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_STAGING_CMDS_SHARED
-+	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
-+endef
-+endif
-+
-+define LEVELDB_INSTALL_STAGING_CMDS
-+	$(LEVELDB_INSTALL_STAGING_CMDS_STATIC)
-+	$(LEVELDB_INSTALL_STAGING_CMDS_SHARED)
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
-+	$(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h 
-$(STAGING_DIR)/usr/include/leveldb
-+endef
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
-+endef
-+endif
-+
-+$(eval $(generic-package))
+diff --git a/package/libcec/libcec-0002-no-psabi-warning.patch b/package/libcec/0001-no-psabi-warning.patch
+similarity index 100%
+rename from package/libcec/libcec-0002-no-psabi-warning.patch
+rename to package/libcec/0001-no-psabi-warning.patch
+diff --git a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch b/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
+deleted file mode 100644
+index 41d93aa..0000000
+--- a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 78e52d55d6fc079b9a96d1a663d1991d9a0f2a2b Mon Sep 17 00:00:00 2001
+-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+-Date: Wed, 7 May 2014 08:41:27 +0200
+-Subject: [PATCH] Fix unregistering a callback that wasn't register
+-
+-This patchs fixes an asserts that get's thrown when you start XBMC and thus
+-prevents it from starting.
+-The asserts you'll endup getting is:
+-assertion failure:
+-[...]/interface/vmcs_host/vc_vchi_tvservice.c:430:vc_tv_unregister_callback():done
+-
+-Found: https://github.com/raspberrypi/userland/issues/159
+-
+-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+----
+- src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
+-index 76c61b3..1eb6417 100644
+---- a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
+-+++ b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
+-@@ -353,7 +353,9 @@ void CRPiCECAdapterCommunication::Close(void)
+-     else
+-       return;
+-   }
+--  vc_tv_unregister_callback(rpi_tv_callback);
+-+
+-+  if (m_bInitialised)
+-+    vc_tv_unregister_callback(rpi_tv_callback);
+-
+-   UnregisterLogicalAddress();
+-
+---
+-1.9.2
+-
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 5a889b9..8bdc9ea 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCEC_VERSION = libcec-2.1.4-repack
++LIBCEC_VERSION = libcec-2.2.0-repack
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
