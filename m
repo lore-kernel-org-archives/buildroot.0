@@ -1,53 +1,34 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Dec 2014 18:46:33 +0100
-Subject: [Buildroot] [PATCH v9 10/18] Rename xbmc-addon-xvdr to
-	kodi-addon-xvdr - part I - move files
+Date: Tue, 23 Dec 2014 18:46:37 +0100
+Subject: [Buildroot] [PATCH v9 14/18] package/kodi: Enable install to
+	STAGING_DIR, needed for audioencoder addons
 In-Reply-To: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1419356801-31525-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1419356801-31525-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In a first step to bump version to Helix move the package
-to its new directory. Because git will not recognize the moved
-files due to many upcoming changes to variable names the move
-is done in this seperate commit.
-
-The "Rename xbmc-addon-xvdr to kodi-addon-xvdr"-patch is split into
-two parts for easier review, please apply both patches in one commit.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/{xbmc-addon-xvdr => kodi-addon-xvdr}/Config.in               |    0
- .../xbmc-addon-xvdr.mk => kodi-addon-xvdr/kodi-addon-xvdr.mk}        |    0
- package/kodi/Config.in                                               |    2 +-
- 3 files changed, 1 insertion(+), 1 deletion(-)
- rename package/{xbmc-addon-xvdr => kodi-addon-xvdr}/Config.in (100%)
- rename package/{xbmc-addon-xvdr/xbmc-addon-xvdr.mk => kodi-addon-xvdr/kodi-addon-xvdr.mk} (100%)
+ package/kodi/kodi.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xbmc-addon-xvdr/Config.in b/package/kodi-addon-xvdr/Config.in
-similarity index 100%
-rename from package/xbmc-addon-xvdr/Config.in
-rename to package/kodi-addon-xvdr/Config.in
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-similarity index 100%
-rename from package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-rename to package/kodi-addon-xvdr/kodi-addon-xvdr.mk
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d1286b7..4bc0178 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -237,7 +237,7 @@ config BR2_PACKAGE_KODI_WAVPACK
- 
- comment "Kodi addons"
- 
--source "package/xbmc-addon-xvdr/Config.in"
-+source "package/kodi-addon-xvdr/Config.in"
- source "package/kodi-pvr-addons/Config.in"
- 
- endif # BR2_PACKAGE_KODI
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index cd1f2fb..8a52433 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -8,6 +8,8 @@ KODI_VERSION = 14.0-Helix
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPLv2
+ KODI_LICENSE_FILES = LICENSE.GPL
++# needed for audioencoder addons
++KODI_INSTALL_STAGING = YES
+ # Kodi needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
 -- 
 1.7.10.4
