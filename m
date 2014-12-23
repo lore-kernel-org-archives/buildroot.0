@@ -1,38 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 12:20:43 +0100
-Subject: [Buildroot] [PATCH 1/1] util-linux: Add an option to compile
- 'nsenter' binary.
-In-Reply-To: <1419331450-820-1-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <1419331450-820-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <20141223122043.5d559f5a@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 23 Dec 2014 12:21:36 +0100
+Subject: [Buildroot] [PATCH] package/pcre: install headers in legacy
+ location
+In-Reply-To: <20141221231948.77de4e62@free-electrons.com>
+References: <1418490513-10957-1-git-send-email-yann.morin.1998@free.fr>
+ <20141221231948.77de4e62@free-electrons.com>
+Message-ID: <20141223112136.GA4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Cavallari,
+Thomas, All,
 
-On Tue, 23 Dec 2014 11:44:10 +0100, Nicolas Cavallari wrote:
-> nsenter is a tool to enter the namespace of another process.
+On 2014-12-21 23:19 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 13 Dec 2014 18:08:33 +0100, Yann E. MORIN wrote:
+> > nmap is looking for pcre headers in pcre/pcre.h which our current
+> > version of pcre does not populates.
+> > 
+> > So, just create those as symlinks to the actual headers.
 > 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  package/util-linux/Config.in     | 5 +++++
->  package/util-linux/util-linux.mk | 1 +
->  2 files changed, 6 insertions(+)
+> Do we want this, or instead do we want to fix nmap and other pcre users
+> to use the new location?
 
-We had this option in the past, but it was causing some problems with a
-number of toolchains, so we had to revert it. See:
+I don;t know.
 
-  http://git.buildroot.net/buildroot/commit/package/util-linux?id=d293e64bfb75c4cbaab7e46472de674ee813d4aa
+One the one hand, we woudl certainly prefer to fix packages to use the
+new location, so we can eventually get rid of our hacks to make them
+build when we eventually update them.
 
-Has this issue been resolved?
+On the other hand, I'm afraid this could be an endless hide-and-seek
+game, which would take us quite some efforts to upstream our patches,
+especially for packages that may still want to build on older systems
+with the old layout...
 
-Best regards,
+However, for now, the only offender in this respect is nmap, so I can
+try to fix it and upstream the fix.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
