@@ -1,90 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Dec 2014 13:54:21 +0100
-Subject: [Buildroot] [PATCH] package/pcre: install headers in legacy
-	location
-In-Reply-To: <1418490513-10957-1-git-send-email-yann.morin.1998@free.fr>
-References: <1418490513-10957-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141223125421.GB4152@free.fr>
+Date: Tue, 23 Dec 2014 14:02:00 +0100
+Subject: [Buildroot] [PATCH 1/3] bdwgc: add patch automatically
+ detecting for NO_GETCONTEXT need
+In-Reply-To: <20141221231731.7bdd1631@free-electrons.com>
+References: <1418492588-22122-1-git-send-email-s.martin49@gmail.com>
+ <20141217213602.GC4293@free.fr>
+ <20141221231731.7bdd1631@free-electrons.com>
+Message-ID: <20141223130200.GC4152@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thomas, All,
 
-On 2014-12-13 18:08 +0100, Yann E. MORIN spake thusly:
-> nmap is looking for pcre headers in pcre/pcre.h which our current
-> version of pcre does not populates.
+On 2014-12-21 23:17 +0100, Thomas Petazzoni spake thusly:
+> On Wed, 17 Dec 2014 22:36:02 +0100, Yann E. MORIN wrote:
 > 
-> So, just create those as symlinks to the actual headers.
+> > The first I could find was GNU Pth (dead since 2006), and then ruby. And
+> > they both use that:
+> > 
+> >     AC_CHECK_FUNCS([getcontext setcontext])
+> > 
+> > which would automatically define HAVE_getcontext and HAVE_setcontext if
+> > they are available, but that's macro definitions, not available in
+> > configure, so we could not do the following:
+> > 
+> > > ++AC_MSG_RESULT($need_no_getcontext)
+> > > ++if test x$need_no_getcontext = xyes ; then
+> > > ++  CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+> > > ++  CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
+> > > ++fi
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@openwide.fr>
+> Well, you can do:
+> 
+> 	AC_CHECK_FUNCS([getcontext], [has_getcontext=yes])
+> 	AC_CHECK_FUNCS([setcontext], [has_setcontext=yes])
 
-I've marked this patch as "Rejected" in Patchwork, because it is in fact
-not needed.
+Using AC_CHECK_FUNCS is not enough, because uClibc declares prototypes
+for getcontext/setcontext, but there might be no implementation of them.
 
-nmap's configure.ac has:
+So we have to attempt a link.
 
-    AC_CHECK_HEADERS(pcre/pcre.h)
+> if test x${has_getcontext} != xyes -o x${has_setcontext} != xyes; then
+> 	CFLAGS="$CFLAGS -DNO_GETCONTEXT"
+> 	CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"
+> fi
+> 
+> You need two tests because AC_CHECK_FUNCS() runs the action-if-found if
+> at least one of the functions are found.
 
-which seems to imply it is only checking for pcre/pcre.h but that is not
-the case. A little bit above, we can see:
-
-    AC_CHECK_HEADER(pcre.h,
-        AC_CHECK_LIB(pcre, pcre_version, [have_pcre=yes ]),
-        [AC_CHECK_HEADER(pcre/pcre.h,
-          [AC_CHECK_LIB(pcre, pcre_version, [have_pcre=yes])]
-        )]
-    )
-
-which means it also checks for just pcre.h which we have. But that is
-misleading, as only pcre/pcre.h appears in the configure log, as Romain
-quoted in his reply.
-
-But then, the code that includes pcre/pcre.h (present in two files) has
-this construct:
-
-    #ifdef HAVE_PCRE_PCRE_H
-    # include <pcre/pcre.h>
-    #else
-    # include <pcre.h>
-    #endif
-
-HAVE_PCRE_PCRE_H is defined by AC_CHECK_HEADERS(pcre/pcre.h), so if it
-does not find pcre/pcre.h, it falls back to including pcre.h.
-
-So, this patch is in fact not needed.
+Yup.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/pcre/pcre.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-> index 4ff7abd..f2cf02d 100644
-> --- a/package/pcre/pcre.mk
-> +++ b/package/pcre/pcre.mk
-> @@ -22,5 +22,13 @@ PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_32),--enable-pcre32,--disable-pcre32)
->  PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UTF),--enable-utf,--disable-utf)
->  PCRE_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE_UCP),--enable-unicode-properties,--disable-unicode-properties)
->  
-> +define PCRE_LEGACY_PATHS
-> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/pcre
-> +	for h in $(STAGING_DIR)/usr/include/pcre*.h; do \
-> +		ln -sf ../$${h##*/} $(STAGING_DIR)/usr/include/pcre/ || exit 1; \
-> +	done
-> +endef
-> +PCRE_POST_INSTALL_STAGING_HOOKS += PCRE_LEGACY_PATHS
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 1.9.1
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
