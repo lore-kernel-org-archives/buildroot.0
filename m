@@ -1,40 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 11:41:44 +0100
-Subject: [Buildroot] [PATCH 1/3] ntp: security bump to version 4.2.8
-In-Reply-To: <1419258421-18318-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1419258421-18318-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141223114144.7ab5e4d3@free-electrons.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Tue, 23 Dec 2014 11:44:10 +0100
+Subject: [Buildroot] [PATCH 1/1] util-linux: Add an option to compile
+	'nsenter' binary.
+Message-ID: <1419331450-820-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+nsenter is a tool to enter the namespace of another process.
 
-On Mon, 22 Dec 2014 11:26:59 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> 
-> CVE-2014-9293 - ntpd generated a weak key for its internal use, with
-> full administrative privileges.  Attackers could use this key to
-> reconfigure ntpd (or to exploit other vulnerabilities).
-> 
-> CVE-2014-9294 - The ntp-keygen utility generated weak MD5 keys with
-> insufficient entropy.
-> 
-> CVE-2014-9295 - ntpd had several buffer overflows (both on the stack and
-> in the data section), allowing remote authenticated attackers to crash
-> ntpd or potentially execute arbitrary code.
-> 
-> CVE-2014-9296 - The general packet processing function in ntpd did not
-> handle an error case correctly.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/util-linux/Config.in     | 5 +++++
+ package/util-linux/util-linux.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-All three patches applied, thanks.
-
-Thomas
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 5dfd050..2f23419 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -118,6 +118,11 @@ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	help
+ 	  Control write access to your terminal
+ 
++config BR2_PACKAGE_UTIL_LINUX_NSENTER
++	bool "nsenter"
++	help
++	  Enter the namespaces of another process.
++
+ config BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	bool "mount/umount"
+ 	help
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index e06fa9a..a530596 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -74,6 +74,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.3
