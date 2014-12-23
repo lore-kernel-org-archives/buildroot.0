@@ -1,50 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 12:09:17 +0100
-Subject: [Buildroot] [git commit] qemu: add to host utilities menu
-Message-ID: <20141223110939.6DBFD80747@busybox.osuosl.org>
+Date: Tue, 23 Dec 2014 12:10:22 +0100
+Subject: [Buildroot] [PATCH 0/2] qemu: allow selection of host qemu-user
+ from menuconfig
+In-Reply-To: <1418249519-15794-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1418249519-15794-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141223121022.5cc46535@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b268df55c17e8323fe658412df681268b0f1b0df
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This allows qemu-user to be selected by the user. One use case
-for this is to call qemu-user from post build scripts to
-run regression tests against the build.
+On Wed, 10 Dec 2014 23:11:57 +0100, Thomas Petazzoni wrote:
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in.host      |    1 +
- package/qemu/Config.in.host |    8 ++++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+> Frank Hunleth (1):
+>   qemu: add to host utilities menu
+> 
+> Thomas Petazzoni (1):
+>   qemu: add host/target Linux version check
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 0b7bc36..9b127c8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -18,6 +18,7 @@ menu "Host utilities"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
- 	source "package/pwgen/Config.in.host"
-+	source "package/qemu/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-new file mode 100644
-index 0000000..a1f0531
---- /dev/null
-+++ b/package/qemu/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_QEMU
-+	bool "host qemu"
-+	help
-+	  QEMU is a generic and open source machine emulator and virtualizer.
-+
-+	  This option builds a user emulator for your selected architecture.
-+
-+	  http://www.qemu.org
+I've applied both patches.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
