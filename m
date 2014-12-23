@@ -1,42 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Dec 2014 23:10:52 +0100
-Subject: [Buildroot] [PATCH] system: run getty on boot console by default
-In-Reply-To: <1419369534.3284.4.camel@synopsys.com>
-References: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
- <CAGm1_ktp7gkprBXNLTvd3gE7LMv_9cyUXyF3eb3r83OGPie0NQ@mail.gmail.com>
- <1419337919.2781.6.camel@synopsys.com>
- <CAGm1_ktzvRWMrZHEVfrQnRdACs-N++Kwx5dq3Xp30YPxN-gQHw@mail.gmail.com>
- <1419345339.2781.9.camel@synopsys.com>
- <20141223205201.021ee085@free-electrons.com>
- <1419369534.3284.4.camel@synopsys.com>
-Message-ID: <20141223231052.6973e707@free-electrons.com>
+Date: Tue, 23 Dec 2014 23:18:56 +0100
+Subject: [Buildroot] [PATCH 1/3] bdwgc: add patch automatically
+ detecting for NO_GETCONTEXT need
+In-Reply-To: <20141223130200.GC4152@free.fr>
+References: <1418492588-22122-1-git-send-email-s.martin49@gmail.com>
+ <20141217213602.GC4293@free.fr>
+ <20141221231731.7bdd1631@free-electrons.com>
+ <20141223130200.GC4152@free.fr>
+Message-ID: <20141223231856.2732c445@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Yann E. MORIN,
 
-On Tue, 23 Dec 2014 21:18:56 +0000, Alexey Brodkin wrote:
+On Tue, 23 Dec 2014 14:02:00 +0100, Yann E. MORIN wrote:
 
-> Interesting, then how it worked for me?
+> > Well, you can do:
+> > 
+> > 	AC_CHECK_FUNCS([getcontext], [has_getcontext=yes])
+> > 	AC_CHECK_FUNCS([setcontext], [has_setcontext=yes])
 > 
-> I have the same login prompt as usual:
-> --->---
-> Welcome to Buildroot
-> buildroot login:
-> --->---
+> Using AC_CHECK_FUNCS is not enough, because uClibc declares prototypes
+> for getcontext/setcontext, but there might be no implementation of them.
 > 
-> Here I enter "root" as usual, press Enter and that's it.
-> "whoami" says "root" and I may modify any files etc.
-> 
-> What do I do wrong?
+> So we have to attempt a link.
 
-Weird, when I tested I had to add "console" to /etc/securetty,
-otherwise login would not let me log in as root. Are you using just
-Busybox, or some other login/getty implementation? Are you using an
-unmodified /etc/securetty?
+AC_CHECK_FUNCS is doing a link, at least that's what a quick test
+shows. Try the following minimal configure.ac:
+
+AC_INIT(foobar, 1.0, me at mail.com)
+AC_PROG_CXX
+AC_CHECK_FUNCS([setcontext])
+
+Try with your host system, which presumably uses glibc and therefore
+has setcontext():
+
+$ ./configure
+[...]
+checking for setcontext... yes
+[...]
+
+And the config.log contains:
+
+[...]
+configure:2934: checking for setcontext
+configure:2934: gcc -o conftest -g -O2   conftest.c  >&5
+configure:2934: $? = 0
+configure:2934: result: yes
+[...]
+
+See how the command line is a full link of the conftest program?
+
+Now, try again with a Buildroot uClibc toolchain:
+
+$ PATH=/home/thomas/projets/buildroot/output/host/usr/bin/:$PATH ./configure --host=arm-linux
+[...]
+checking for setcontext... no
+[...]
+
+And the config.log contains:
+
+[...]
+configure:2934: arm-linux-gcc -o conftest -g -O2   conftest.c  >&5
+/tmp/cceDeuVd.o: In function `main':
+/tmp/foo/conftest.c:43: undefined reference to `setcontext'
+collect2: error: ld returned 1 exit status
+configure:2934: $? = 1
+[...]
+
+So I believe an AC_CHECK_FUNCS() test is enough here.
+
+Thanks,
 
 Thomas
 -- 
