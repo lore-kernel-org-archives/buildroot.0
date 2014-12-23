@@ -1,30 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Dec 2014 11:24:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 7742] dhcp lacks important features when
-	BR2_ENABLE_DEBUG
-In-Reply-To: <bug-7742-163@https.bugs.busybox.net/>
-References: <bug-7742-163@https.bugs.busybox.net/>
-Message-ID: <20141223112403.15FA980736@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Dec 2014 12:39:27 +0100
+Subject: [Buildroot] [PATCH] package/pcre: install headers in legacy
+ location
+In-Reply-To: <20141223112136.GA4152@free.fr>
+References: <1418490513-10957-1-git-send-email-yann.morin.1998@free.fr>
+ <20141221231948.77de4e62@free-electrons.com>
+ <20141223112136.GA4152@free.fr>
+Message-ID: <20141223123927.4378caf5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7742
+Dear Yann E. MORIN,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-12-23 11:24:02 UTC ---
-Interesting, thanks for the report.
+On Tue, 23 Dec 2014 12:21:36 +0100, Yann E. MORIN wrote:
 
-We have seen several cases of --enable-debug causing problems, and indeed the
-help text of BR2_ENABLE_DEBUG only mentions that it's causing the packages to
-be built with debugging symbols.
+> One the one hand, we woudl certainly prefer to fix packages to use the
+> new location, so we can eventually get rid of our hacks to make them
+> build when we eventually update them.
+> 
+> On the other hand, I'm afraid this could be an endless hide-and-seek
+> game, which would take us quite some efforts to upstream our patches,
+> especially for packages that may still want to build on older systems
+> with the old layout...
+> 
+> However, for now, the only offender in this respect is nmap, so I can
+> try to fix it and upstream the fix.
 
-So, I would personally suggest that we simply do not pass --enable-debug when
-BR2_ENABLE_DEBUG is set, and make BR2_ENABLE_DEBUG only enable debugging
-symbols.
+Hard to take a decision without having an idea on the number of
+affected packages. So far, if only nmap has been detected by the
+autobuilders, it seems like not that many packages are broken by this
+issue, and therefore fixing nmap seems to be the right solution.
 
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
