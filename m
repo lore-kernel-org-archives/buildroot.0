@@ -1,58 +1,75 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 24 Dec 2014 09:54:53 +0100
-Subject: [Buildroot] [PATCH RFC 2/2] package/perl-gd: Add a new option
- to set the path to gdlib-config
-In-Reply-To: <20141221132027.0d69abf8@free-electrons.com>
-References: <1419119460-1437-1-git-send-email-romain.naour@openwide.fr>
- <1419119460-1437-2-git-send-email-romain.naour@openwide.fr>
- <20141221132027.0d69abf8@free-electrons.com>
-Message-ID: <CAB0FRsvwcNvzH=g-Y1DV-Z070euKBhkoBixfSo5tkbWxG7hSoA@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 24 Dec 2014 09:03:01 +0000
+Subject: [Buildroot] [PATCH] system: run getty on boot console by default
+In-Reply-To: <20141223231052.6973e707@free-electrons.com>
+References: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
+ <CAGm1_ktp7gkprBXNLTvd3gE7LMv_9cyUXyF3eb3r83OGPie0NQ@mail.gmail.com>
+ <1419337919.2781.6.camel@synopsys.com>
+ <CAGm1_ktzvRWMrZHEVfrQnRdACs-N++Kwx5dq3Xp30YPxN-gQHw@mail.gmail.com>
+ <1419345339.2781.9.camel@synopsys.com>
+ <20141223205201.021ee085@free-electrons.com>
+ <1419369534.3284.4.camel@synopsys.com>
+ <20141223231052.6973e707@free-electrons.com>
+Message-ID: <1419411780.3420.5.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-12-21 13:20 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Romain Naour,
->
-> On Sun, 21 Dec 2014 00:51:00 +0100, Romain Naour wrote:
->> The build of perl-gd use the gdlib-config from the host that in result
->> incorect features enabled, incorrect header and library paths.
->>
->> Should fixes:
->> http://autobuild.buildroot.net/results/15c/15ce69b916167305aba2820a157c880e487ee8c7/
->> http://autobuild.buildroot.net/results/504/504d64d992eb504e02c127feb4734a917ad95d0a/
->> http://autobuild.buildroot.net/results/551/5512213c8861e51b390c1c223d53add0ec1ed758/
->>
->> And many more.
->>
->> Note:
->> In the generated Makefile, LDFLAGS still contains "-L/usr/local/lib"
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Francois Perrad <francois.perrad@gadz.org>
+Hi Thomas,
 
->> ---
->>  .../0004-gdlib-config-is-now-configurable.patch    | 67 ++++++++++++++++++++++
->>  package/perl-gd/perl-gd.mk                         |  3 +-
->>  2 files changed, 69 insertions(+), 1 deletion(-)
->>  create mode 100644 package/perl-gd/0004-gdlib-config-is-now-configurable.patch
->
-> We have another patch from Fran?ois for the same issue, at
-> http://patchwork.ozlabs.org/patch/415924/. However, Peter raised some
-> concerns about Fran?ois approach, and your patch indeed seems better.
->
-> Fran?ois, can you comment/review Romain's patch? See
-> http://patchwork.ozlabs.org/patch/423143/.
->
-> Romain, any chance you can submit your patch upstream?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+On Tue, 2014-12-23 at 23:10 +0100, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> 
+> On Tue, 23 Dec 2014 21:18:56 +0000, Alexey Brodkin wrote:
+> 
+> > Interesting, then how it worked for me?
+> > 
+> > I have the same login prompt as usual:
+> > --->---
+> > Welcome to Buildroot
+> > buildroot login:
+> > --->---
+> > 
+> > Here I enter "root" as usual, press Enter and that's it.
+> > "whoami" says "root" and I may modify any files etc.
+> > 
+> > What do I do wrong?
+> 
+> Weird, when I tested I had to add "console" to /etc/securetty,
+> otherwise login would not let me log in as root. Are you using just
+> Busybox, or some other login/getty implementation? Are you using an
+> unmodified /etc/securetty?
+
+Indeed it's strange.
+I've just re-tested it and still see root login working perfectly.
+
+I'm on mainline/master branch with my patch applied (no other changes):
+--->---
+(my patch) 7af7de3 system: run getty on boot console by default
+f7add51 qemu: add host/target Linux version check
+--->---
+
+And this is output of "make savedefconfig":
+--->---
+BR2_x86_pentiumpro=y
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="3.18"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.18.config"
+BR2_TARGET_ROOTFS_EXT2=y
+# BR2_TARGET_ROOTFS_TAR is not set
+--->---
+
+Note that this is based on "qemu_x86_defconfig" and with my patch
+applied that's why you don't see mention of "console".
+
+You may try even without my patch and manually set
+BR2_TARGET_GENERIC_GETTY_PORT=console
+
+-Alexey
