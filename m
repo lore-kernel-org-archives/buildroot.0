@@ -1,39 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 24 Dec 2014 10:31:47 -0300
-Subject: [Buildroot] [PATCH] dhcpcd: bump to version 6.6.7
-Message-ID: <1419427907-4479-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 24 Dec 2014 10:54:55 -0300
+Subject: [Buildroot] [PATCH] linux: fix breakage from
+	d4b2b032a00c9922c9efa144b014dc086a7e48f1
+Message-ID: <1419429295-16322-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Unbreak qemu_xtensa_lx60_defconfig where LINUX_IMAGE_NAME !=
+LINUX_TARGET_NAME.
+It incorrectly overwrites LINUX_IMAGE_NAME even if it was set before,
+defeating the purpose of IMAGE being different than TARGET.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dhcpcd/dhcpcd.hash | 2 +-
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index 31ac05d..ac927ae 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated from download (no sig, hash)
--sha256	62efd1c7fa162f7277b8a09089065f726e5d4dd45f426bb5db06e879e068bbe0	dhcpcd-6.6.5.tar.bz2
-+sha256	43f93a0a536b93e26e4c7733582df7595d73aff9acfef298323e59dd8db8cdab	dhcpcd-6.6.7.tar.bz2
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 26226eb..9c65826 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DHCPCD_VERSION = 6.6.5
-+DHCPCD_VERSION = 6.6.7
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+diff --git a/linux/linux.mk b/linux/linux.mk
+index be66fb5..680521c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -82,7 +82,9 @@ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+ LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
+ LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
++ifeq ($(LINUX_IMAGE_NAME),)
+ LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
++endif
+ else
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+ LINUX_IMAGE_NAME = uImage
 -- 
 2.0.5
