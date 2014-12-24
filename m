@@ -1,143 +1,879 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Dec 2014 08:30:17 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-12-23
-Message-ID: <20141224073017.97018101278@stock.ovh.net>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 24 Dec 2014 08:54:24 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/1=5D_package=3A_indentation_clea?=
+	=?utf-8?q?nup?=
+Message-ID: <1419407664-14453-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-12-23
-===============================
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/binutils/binutils.mk                       |   34 ++++++----
+ package/blackbox/blackbox.mk                       |    5 +-
+ package/cups/cups.mk                               |   22 ++++---
+ package/dbus/dbus.mk                               |   23 +++----
+ package/ed/ed.mk                                   |    5 +-
+ package/fontconfig/fontconfig.mk                   |    7 +-
+ package/gnuplot/gnuplot.mk                         |   25 +++----
+ package/icu/icu.mk                                 |    6 +-
+ package/imagemagick/imagemagick.mk                 |   27 ++++----
+ package/libao/libao.mk                             |    9 ++-
+ package/libargtable2/libargtable2.mk               |    9 +--
+ package/libxslt/libxslt.mk                         |    7 +-
+ package/metacity/metacity.mk                       |   11 ++--
+ package/netsnmp/netsnmp.mk                         |   34 ++++++----
+ package/ntp/ntp.mk                                 |   11 ++--
+ package/openssh/openssh.mk                         |   10 ++-
+ package/php/php.mk                                 |   68 ++++++++++----------
+ package/proftpd/proftpd.mk                         |   24 +++----
+ package/rrdtool/rrdtool.mk                         |   16 +++--
+ package/sdl_image/sdl_image.mk                     |   50 +++++++-------
+ package/sdl_ttf/sdl_ttf.mk                         |    7 +-
+ package/sed/sed.mk                                 |   17 ++---
+ package/squid/squid.mk                             |   41 +++++++-----
+ package/tcpdump/tcpdump.mk                         |   12 ++--
+ package/vde2/vde2.mk                               |   15 +++--
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   23 ++++---
+ 26 files changed, 297 insertions(+), 221 deletions(-)
 
-        success : 285
-       failures : 75 
-       timeouts : 6  
-          TOTAL : 366
-
-Classification of failures by reason
-====================================
-
-                  guile-2.0.11 | 11
-             libxmlrpc-1.25.26 | 10
-f2fs-tools-baac4b4e6f41ceb0... | 8 
-                liblinear-1.96 | 6 
-                  libdnet-1.11 | 5 
-  toolchain-external-undefined | 3 
-                    vtun-3.0.3 | 3 
-                poppler-0.24.4 | 2 
-                  zeromq-4.0.5 | 2 
-                   erlang-17.4 | 2 
-freerdp-440916eae2e07463912... | 2 
-                    libcgi-1.0 | 2 
-                  thrift-0.9.2 | 2 
-            host-heimdal-1.5.3 | 2 
-             smartmontools-6.3 | 2 
-                  sispmctl-3.1 | 2 
-checking whether build envi... | 1 
-       opentyrian-2.1.20130907 | 1 
-                 libssh2-1.4.3 | 1 
-                   libiio-v0.3 | 1 
-                   lpeg-0.12-1 | 1 
-       directfb-examples-1.6.0 | 1 
-               ipmitool-1.8.14 | 1 
-            ecryptfs-utils-104 | 1 
-           python-pyzmq-14.3.1 | 1 
-               libsigsegv-2.10 | 1 
-                elfutils-0.160 | 1 
-               tinyxml-2.6.2_2 | 1 
-                    ruby-2.1.5 | 1 
-qhull-60d55819729d7b49391dd... | 1 
-                gptfdisk-0.8.6 | 1 
-                oprofile-1.0.0 | 1 
-                libupnpp-0.8.6 | 1 
-
-Detail of failures
-===================
-
-         sh4 | checking whether build envi... | TIM | http://autobuild.buildroot.net/results/41d186e20055d54d6b52d70cf34939779509d1ca/
-        bfin |        directfb-examples-1.6.0 | NOK | http://autobuild.buildroot.net/results/65ea601b6cbab7a1aec76bdeec620ee5ba468458/
-      x86_64 |             ecryptfs-utils-104 | NOK | http://autobuild.buildroot.net/results/2545188de561a444e8b780868bc6d83bd8128008/
-         arm |                 elfutils-0.160 | NOK | http://autobuild.buildroot.net/results/9a7b154c8b0625433f31c8b20af7ed4a83c1b3cf/
-         arm |                    erlang-17.4 | NOK | http://autobuild.buildroot.net/results/7964b0e9e9747a4ef2be463d6ff5b6819862af46/
-         arm |                    erlang-17.4 | NOK | http://autobuild.buildroot.net/results/79f590973260f5148bcb0b4c9c9ebaf4ce8b0dd5/
-      x86_64 | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/28d4916da3c2b67da03975a36a7cebd10459b710/
-         arm | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/4b4450293bbd28301ab9e2e183912586f408750f/
-     powerpc | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/8f97186489134619de7086028a59523d528b0d51/
-      xtensa | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/14a7e22f23595958dd1217348e069c9d23c6daad/
-      mipsel | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/6bb9cf90f3f639b9c1290b5746b099cde6d965e7/
-     powerpc | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/29245d5f4c234db121849a7327adfc7a8ae35075/
-     powerpc | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/6458f7017625e194b09607e5a90e7ecceb8ecdee/
-      mipsel | f2fs-tools-baac4b4e6f41ceb0... | NOK | http://autobuild.buildroot.net/results/77d93850d96fe2f077b24e5c6cb1738824370853/
-         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/4bd8140f3a84d158d722021592bd5ef849e1c848/
-         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/2349d40ef8d658ab1cd7332eb1b42a75afcd423f/
-         arm |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/11fba09345f802063a80d624e85f8c69f0f5253f/
-         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/27b58579635bf7b961f7863aec53f67ac171f2e3/
-        i686 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/37a9beb7245acb74970a137481580f18ce4f0171/
-      x86_64 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/34dd2ed61725d767ac3907cf761d4594454fcbcc/
-     powerpc |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/cdb248294713c7fdb72e4e15ec3301ed00953638/
-        i686 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/a2275222c5ca758284ddbb29d0ef2f620534a67f/
-        i686 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/137fd96fff412e5ef864e8dff3db80e89dc67d2b/
-         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/91adbe256249f541f152cc485b91ac9eeef8aff5/
-         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/36fec62923a391943690ee24e648b5ab05d9c865/
-         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/1e2a58824af3661c772d5829d35fb459502c0897/
-        i686 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/7410e82b3aa02f2a5ce568fdacf5c49c17a99882/
-     powerpc |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/be2dced75d2dde9e2b1fc1c4cfdf8960b9d5cb65/
-        i686 |             host-heimdal-1.5.3 | TIM | http://autobuild.buildroot.net/results/cbcd7207144d5335c67015ab44312f5d16280505/
-    mips64el |             host-heimdal-1.5.3 | TIM | http://autobuild.buildroot.net/results/e44172f1c17ead7097c963f2d112ce0d31a5b172/
-    mips64el |                ipmitool-1.8.14 | NOK | http://autobuild.buildroot.net/results/5ea6392745be6a9947560b1949520c21d1df8a65/
-        i486 |                     libcgi-1.0 | NOK | http://autobuild.buildroot.net/results/42bd639e5a12d0148a2bc515257adcc338d2c095/
-     powerpc |                     libcgi-1.0 | NOK | http://autobuild.buildroot.net/results/1cec4a457fd2234306d5d819adf00a6b9a22e59b/
-         arm |                   libdnet-1.11 | NOK | http://autobuild.buildroot.net/results/5c806e004d209537252273741a36caebb433778a/
-    mips64el |                   libdnet-1.11 | NOK | http://autobuild.buildroot.net/results/691f255fb24772a046163f3ee0ac1b161e1517b7/
-    mips64el |                   libdnet-1.11 | NOK | http://autobuild.buildroot.net/results/98025129a78df55d74bfe7fc37eeeeb04fb0e70b/
-        i686 |                   libdnet-1.11 | NOK | http://autobuild.buildroot.net/results/353a37ca80cc7ae748a1b266c55a2b16e2bbf89a/
-         arm |                   libdnet-1.11 | NOK | http://autobuild.buildroot.net/results/0c3a8d229066e588df1bf032bf6b5199ce2b92b6/
-        bfin |                    libiio-v0.3 | NOK | http://autobuild.buildroot.net/results/e01d3eb23bab4103c8bc3ccadf4006d6a96441cc/
-         arc |                 liblinear-1.96 | NOK | http://autobuild.buildroot.net/results/caebcd6c451f6ae945e59a533822c51e3a4e1c4f/
-        mips |                 liblinear-1.96 | NOK | http://autobuild.buildroot.net/results/eff59c86954016ea64f10c9c68a363e7af2bd9df/
-      mipsel |                 liblinear-1.96 | NOK | http://autobuild.buildroot.net/results/64ef7c1f61ba627b1f6e6e55532df4ed3c5197f0/
-      x86_64 |                 liblinear-1.96 | NOK | http://autobuild.buildroot.net/results/8ff542dd1d7dbb2cbd4463575ed696ce7f7e9b5e/
-      x86_64 |                 liblinear-1.96 | NOK | http://autobuild.buildroot.net/results/a1b2143b60904e4b83b1e3d9c2d6b87b2c9239f1/
-        mips |                 liblinear-1.96 | NOK | http://autobuild.buildroot.net/results/15fb7708ddad3e60a0c42a995089ef01c43d1587/
-       nios2 |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/7d3c56cdbe435dd9ee573cf70ba522803ab287f0/
-        bfin |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/5ff085495e11723b4372d892e7369ac7825347ea/
-       nios2 |                 libupnpp-0.8.6 | NOK | http://autobuild.buildroot.net/results/40026c0748b825917ac6ffcbe05613a7a54913a9/
-        mips |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/26cf505c7b09f1d16e8622bf982c5975ef910b76/
-         arc |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/6af7a2e2a9c4f5b41e14d12befd8c1a893c0e5b1/
-        i686 |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/da7aaf9842c93aca4be064bd098861931e515a9b/
-         arm |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/4af9f2c76b5b90f8d693084d86465f3c39b28e93/
-    mips64el |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/8a9e0f885726e1d1707e7272a1b2453e653a675c/
-         sh4 |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/f7ca6ec7ab4a0a7475134a0240dceee1a3e7b365/
-         arm |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/be731f37bef69f27e4e5e7f5a3cf3dcde1072017/
-     powerpc |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/46475eaf9039806673bf937fc5f8f6258a197d70/
-     powerpc |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/c5bebb1862654ecc6fddb954cc4da169a0d772a5/
-microblazeel |              libxmlrpc-1.25.26 | NOK | http://autobuild.buildroot.net/results/28636811035240ef4ee0013c2c196deb2bada105/
-    mips64el |                    lpeg-0.12-1 | TIM | http://autobuild.buildroot.net/results/ff4326ea72bd42627f0ba7d06a6a9c3e812806d2/
-        bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/bf21e175025f7ba750d35b93879a1ee5408ff8a4/
-         arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/7fb40932d4add6a9768dd869f03cb5c6e62ff660/
-        i686 |                 poppler-0.24.4 | NOK | http://autobuild.buildroot.net/results/687fe443025e6b3f31ec38bee3843f96c6714d0f/
-     powerpc |                 poppler-0.24.4 | NOK | http://autobuild.buildroot.net/results/50bdc17a345276c814a2dbd3ba6dc32020e12ca4/
-         sh4 |            python-pyzmq-14.3.1 | NOK | http://autobuild.buildroot.net/results/c2403131acb08c34f1833178222d87ff02db6ac6/
-         arc | qhull-60d55819729d7b49391dd... | TIM | http://autobuild.buildroot.net/results/2bce5ea995d55db0f2385f8486d7c8f7a3d99f5e/
-     powerpc |                     ruby-2.1.5 | NOK | http://autobuild.buildroot.net/results/92373be05058793f8116a26f14e2be8e34912ec2/
-         arm |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/dcd043231a5e0cf8de808990725ff94c71b22a8a/
-         arm |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/21fa2b9ae6320ffbd817bb26eb22ef7380dbdd78/
-         arm |              smartmontools-6.3 | NOK | http://autobuild.buildroot.net/results/85f903d2c01e214178ab62c8b4221e26df8f49f9/
-      x86_64 |              smartmontools-6.3 | NOK | http://autobuild.buildroot.net/results/17992b600312d9df8dcc339648a078a93ce21f89/
-        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/aa38f14ad6120beeb064ab3167ba667f8f7a50f2/
-        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/a256c0f49a18ab1809f9252a6fafa5d406b2fe54/
-    mips64el |                tinyxml-2.6.2_2 | TIM | http://autobuild.buildroot.net/results/09581360f21a38c670ef20d68e81ef9e8fd4e2b6/
-        bfin |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/c440bc84542ed7697ab83e118616a654b4590e79/
-        bfin |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/405c571a5ff4fa1b18b45f0a0697f3b2d877cec1/
-        bfin |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/4a997c29e14f488f06374944ffc99d94704847b8/
-     aarch64 |                     vtun-3.0.3 | NOK | http://autobuild.buildroot.net/results/5594f5ee9737cb079708debe97a07fb4eec45e47/
-         arm |                     vtun-3.0.3 | NOK | http://autobuild.buildroot.net/results/611fb32f1155231592304c040888aba291afeceb/
-     aarch64 |                     vtun-3.0.3 | NOK | http://autobuild.buildroot.net/results/4d94760fc5fe7bf707635e1ab8a30ddf521b3756/
-        bfin |                   zeromq-4.0.5 | NOK | http://autobuild.buildroot.net/results/33570e67135e8597326a32e0ca3d4a0fdfa1e56b/
-        bfin |                   zeromq-4.0.5 | NOK | http://autobuild.buildroot.net/results/a8fd78c0de8c17b289688254742f72676059470b/
-
-
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 9a9bb94..1ff7fba 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -42,15 +42,18 @@ endif
+ # they also contain the gdb sources, but gdb shouldn't be built, so we
+ # disable it.
+ BINUTILS_DISABLE_GDB_CONF_OPTS = \
+-	--disable-sim --disable-gdb
++	--disable-sim \
++	--disable-gdb
+ 
+ # We need to specify host & target to avoid breaking ARM EABI
+-BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
+-		--host=$(GNU_TARGET_NAME) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--enable-install-libiberty \
+-		$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+-		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
++BINUTILS_CONF_OPTS = \
++	--disable-multilib \
++	--disable-werror \
++	--host=$(GNU_TARGET_NAME) \
++	--target=$(GNU_TARGET_NAME) \
++	--enable-install-libiberty \
++	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
++	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
+ # Don't build documentation. It takes up extra space / build time,
+ # and sometimes needs specific makeinfo versions to work
+@@ -64,13 +67,16 @@ endif
+ 
+ # "host" binutils should actually be "cross"
+ # We just keep the convention of "host utility" for now
+-HOST_BINUTILS_CONF_OPTS = --disable-multilib --disable-werror \
+-			--target=$(GNU_TARGET_NAME) \
+-			--disable-shared --enable-static \
+-			--with-sysroot=$(STAGING_DIR) \
+-			--enable-poison-system-directories \
+-			$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+-			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
++HOST_BINUTILS_CONF_OPTS = \
++	--disable-multilib \
++	--disable-werror \
++	--target=$(GNU_TARGET_NAME) \
++	--disable-shared \
++	--enable-static \
++	--with-sysroot=$(STAGING_DIR) \
++	--enable-poison-system-directories \
++	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
++	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
+ # We just want libbfd and libiberty, not the full-blown binutils in staging
+ define BINUTILS_INSTALL_STAGING_CMDS
+diff --git a/package/blackbox/blackbox.mk b/package/blackbox/blackbox.mk
+index 254d46f..a73bc5b 100644
+--- a/package/blackbox/blackbox.mk
++++ b/package/blackbox/blackbox.mk
+@@ -7,8 +7,9 @@
+ BLACKBOX_VERSION = 0.70.1
+ BLACKBOX_SOURCE = blackbox-$(BLACKBOX_VERSION).tar.bz2
+ BLACKBOX_SITE = http://downloads.sourceforge.net/project/blackboxwm/blackboxwm/Blackbox%20$(BLACKBOX_VERSION)
+-BLACKBOX_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+-		--x-libraries=$(STAGING_DIR)/usr/lib
++BLACKBOX_CONF_OPTS = \
++	--x-includes=$(STAGING_DIR)/usr/include/X11 \
++	--x-libraries=$(STAGING_DIR)/usr/lib
+ BLACKBOX_DEPENDENCIES = xlib_libX11
+ BLACKBOX_LICENSE = MIT
+ BLACKBOX_LICENSE_FILES = LICENSE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 318571d..cc87574 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -12,18 +12,20 @@ CUPS_LICENSE_FILES = LICENSE.txt
+ CUPS_INSTALL_STAGING = YES
+ CUPS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
+ CUPS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
+-CUPS_CONF_OPTS = --without-perl \
+-		--without-java \
+-		--without-php \
+-		--disable-gnutls \
+-		--disable-gssapi \
+-		--libdir=/usr/lib
++CUPS_CONF_OPTS = \
++	--without-perl \
++	--without-java \
++	--without-php \
++	--disable-gnutls \
++	--disable-gssapi \
++	--libdir=/usr/lib
+ CUPS_CONFIG_SCRIPTS = cups-config
+ 
+-CUPS_DEPENDENCIES = $(if $(BR2_PACKAGE_ZLIB),zlib) \
+-		    $(if $(BR2_PACKAGE_LIBPNG),libpng) \
+-		    $(if $(BR2_PACKAGE_JPEG),jpeg) \
+-		    $(if $(BR2_PACKAGE_TIFF),tiff)
++CUPS_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_ZLIB),zlib) \
++	$(if $(BR2_PACKAGE_LIBPNG),libpng) \
++	$(if $(BR2_PACKAGE_JPEG),jpeg) \
++	$(if $(BR2_PACKAGE_TIFF),tiff)
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 	CUPS_CONF_OPTS += --enable-dbus
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 77ea502..5e4fd19 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -22,17 +22,18 @@ endef
+ DBUS_DEPENDENCIES = host-pkgconf expat
+ 
+ DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+-DBUS_CONF_OPTS = --with-dbus-user=dbus \
+-		--disable-tests \
+-		--disable-asserts \
+-		--enable-abstract-sockets \
+-		--disable-selinux \
+-		--disable-xml-docs \
+-		--disable-doxygen-docs \
+-		--disable-dnotify \
+-		--with-xml=expat \
+-		--with-system-socket=/var/run/dbus/system_bus_socket \
+-		--with-system-pid-file=/var/run/messagebus.pid
++DBUS_CONF_OPTS = \
++	--with-dbus-user=dbus \
++	--disable-tests \
++	--disable-asserts \
++	--enable-abstract-sockets \
++	--disable-selinux \
++	--disable-xml-docs \
++	--disable-doxygen-docs \
++	--disable-dnotify \
++	--with-xml=expat \
++	--with-system-socket=/var/run/dbus/system_bus_socket \
++	--with-system-pid-file=/var/run/messagebus.pid
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DBUS_CONF_OPTS += LIBS='-pthread'
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 1fca2fd..f3bcb74 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -6,8 +6,9 @@
+ 
+ ED_VERSION = 1.9
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+-ED_CONF_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)"
++ED_CONF_OPTS = \
++	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)"
+ ED_LICENSE = GPLv3+
+ ED_LICENSE_FILES = COPYING
+ 
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 863fa26..caf997b 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -11,9 +11,10 @@ FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
+ 
+-FONTCONFIG_CONF_OPTS = --with-arch=$(GNU_TARGET_NAME) \
+-		--with-cache-dir=/var/cache/fontconfig \
+-		--disable-docs
++FONTCONFIG_CONF_OPTS = \
++	--with-arch=$(GNU_TARGET_NAME) \
++	--with-cache-dir=/var/cache/fontconfig \
++	--disable-docs
+ 
+ HOST_FONTCONFIG_CONF_OPTS = \
+ 	--disable-static
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index 238da68..4408ece 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -11,18 +11,19 @@ GNUPLOT_LICENSE_FILES = Copyright
+ 
+ GNUPLOT_AUTORECONF = YES
+ 
+-GNUPLOT_CONF_OPTS = --without-x \
+-		--disable-raise-console \
+-		--disable-mouse \
+-	        --without-tutorial \
+-		--disable-demo \
+-	        --without-row-help \
+-		--disable-history-file \
+-	        --without-lisp-files \
+-	        --disable-wxwidgets \
+-	        --without-lua \
+-		--without-latex \
+-	        --without-cairo
++GNUPLOT_CONF_OPTS = \
++	--without-x \
++	--disable-raise-console \
++	--disable-mouse \
++	--without-tutorial \
++	--disable-demo \
++	--without-row-help \
++	--disable-history-file \
++	--without-lisp-files \
++	--disable-wxwidgets \
++	--without-lua \
++	--without-latex \
++	--without-cairo
+ 
+ ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
+ GNUPLOT_CONF_OPTS += --with-gd
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 0c554ca..c5460b2 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -13,8 +13,10 @@ ICU_LICENSE_FILES = license.html
+ ICU_DEPENDENCIES = host-icu
+ ICU_INSTALL_STAGING = YES
+ ICU_CONFIG_SCRIPTS = icu-config
+-ICU_CONF_OPTS = --with-cross-build=$(HOST_ICU_DIR)/source --disable-samples \
+-		--disable-tests
++ICU_CONF_OPTS = \
++	--with-cross-build=$(HOST_ICU_DIR)/source \
++	--disable-samples \
++	--disable-tests
+ HOST_ICU_CONF_OPTS = \
+ 	--disable-samples \
+ 	--disable-tests \
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b8e5155..db3b563 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -27,19 +27,20 @@ else
+ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=32
+ endif
+ 
+-IMAGEMAGICK_CONF_OPTS = --program-transform-name='s,,,' \
+-		--disable-openmp \
+-		--without-perl \
+-		--without-wmf \
+-		--without-openexr \
+-		--without-jp2 \
+-		--without-jbig \
+-		--without-gvc \
+-		--without-djvu \
+-		--without-dps \
+-		--without-gslib \
+-		--without-fpx \
+-		--without-x
++IMAGEMAGICK_CONF_OPTS = \
++	--program-transform-name='s,,,' \
++	--disable-openmp \
++	--without-perl \
++	--without-wmf \
++	--without-openexr \
++	--without-jp2 \
++	--without-jbig \
++	--without-gvc \
++	--without-djvu \
++	--without-dps \
++	--without-gslib \
++	--without-fpx \
++	--without-x
+ 
+ IMAGEMAGICK_DEPENDENCIES = host-pkgconf
+ 
+diff --git a/package/libao/libao.mk b/package/libao/libao.mk
+index 9dfdb96..a314c08 100644
+--- a/package/libao/libao.mk
++++ b/package/libao/libao.mk
+@@ -10,8 +10,13 @@ LIBAO_DEPENDENCIES = host-pkgconf
+ LIBAO_INSTALL_STAGING = YES
+ LIBAO_LICENSE = GPLv2+
+ LIBAO_LICENSE_FILES = COPYING
+-LIBAO_CONF_OPTS = --disable-esd --disable-wmm --disable-arts \
+-			--disable-nas --disable-pulse --disable-broken-oss
++LIBAO_CONF_OPTS = \
++	--disable-esd \
++	--disable-wmm \
++	--disable-arts \
++	--disable-nas \
++	--disable-pulse \
++	--disable-broken-oss
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ LIBAO_DEPENDENCIES += alsa-lib
+diff --git a/package/libargtable2/libargtable2.mk b/package/libargtable2/libargtable2.mk
+index 583b0b4..6b42cc0 100644
+--- a/package/libargtable2/libargtable2.mk
++++ b/package/libargtable2/libargtable2.mk
+@@ -8,10 +8,11 @@ LIBARGTABLE2_VERSION = 13
+ LIBARGTABLE2_SOURCE = argtable2-$(LIBARGTABLE2_VERSION).tar.gz
+ LIBARGTABLE2_SITE = http://downloads.sourceforge.net/project/argtable/argtable/argtable-2.13
+ LIBARGTABLE2_INSTALL_STAGING = YES
+-LIBARGTABLE2_CONF_OPTS = --disable-example \
+-		--disable-kernel-module \
+-		--enable-lib \
+-		--enable-util
++LIBARGTABLE2_CONF_OPTS = \
++	--disable-example \
++	--disable-kernel-module \
++	--enable-lib \
++	--enable-util
+ LIBARGTABLE2_LICENSE = LGPLv2+
+ LIBARGTABLE2_LICENSE_FILES = COPYING
+ 
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 20aba08..2e5cc14 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -10,8 +10,11 @@ LIBXSLT_INSTALL_STAGING = YES
+ LIBXSLT_LICENSE = MIT
+ LIBXSLT_LICENSE_FILES = COPYING
+ 
+-LIBXSLT_CONF_OPTS = --with-gnu-ld --without-debug \
+-		--without-python --with-libxml-prefix=$(STAGING_DIR)/usr/
++LIBXSLT_CONF_OPTS = \
++	--with-gnu-ld \
++	--without-debug \
++	--without-python \
++	--with-libxml-prefix=$(STAGING_DIR)/usr/
+ LIBXSLT_CONFIG_SCRIPTS = xslt-config
+ LIBXSLT_DEPENDENCIES = libxml2
+ 
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 1d3e143..d889779 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -12,10 +12,13 @@ METACITY_SITE = http://ftp.gnome.org/pub/gnome/sources/metacity/$(METACITY_VERSI
+ METACITY_LICENSE = GPLv2+
+ METACITY_LICENSE_FILES = COPYING
+ 
+-METACITY_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+-		--x-libraries=$(STAGING_DIR)/usr/lib \
+-		--disable-glibtest --disable-gconf \
+-		--disable-sm --disable-startup-notification
++METACITY_CONF_OPTS = \
++	--x-includes=$(STAGING_DIR)/usr/include/X11 \
++	--x-libraries=$(STAGING_DIR)/usr/lib \
++	--disable-glibtest \
++	--disable-gconf \
++	--disable-sm \
++	--disable-startup-notification
+ 
+ METACITY_DEPENDENCIES = libgtk2 \
+ 	xlib_libX11 \
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 91afffe..bfc2a74 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -11,19 +11,27 @@ NETSNMP_LICENSE = Various BSD-like
+ NETSNMP_LICENSE_FILES = COPYING
+ NETSNMP_INSTALL_STAGING = YES
+ NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
+-NETSNMP_CONF_OPTS = --with-persistent-directory=/var/lib/snmp \
+-		--with-defaults --enable-mini-agent --without-rpm \
+-		--with-logfile=none --without-kmem-usage $(DISABLE_IPV6) \
+-		--enable-as-needed --without-perl-modules \
+-		--disable-embedded-perl --disable-perl-cc-checks \
+-		--disable-scripts --with-default-snmp-version="1" \
+-		--enable-silent-libtool --enable-mfd-rewrites \
+-		--with-sys-contact="root at localhost" \
+-		--with-sys-location="Unknown" \
+-		--with-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
+-		--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+-		--with-out-transports="Unix" \
+-		--disable-manuals
++NETSNMP_CONF_OPTS = \
++	--with-persistent-directory=/var/lib/snmp \
++	--with-defaults \
++	--enable-mini-agent \
++	--without-rpm \
++	--with-logfile=none \
++	--without-kmem-usage $(DISABLE_IPV6) \
++	--enable-as-needed \
++	--without-perl-modules \
++	--disable-embedded-perl \
++	--disable-perl-cc-checks \
++	--disable-scripts \
++	--with-default-snmp-version="1" \
++	--enable-silent-libtool \
++	--enable-mfd-rewrites \
++	--with-sys-contact="root at localhost" \
++	--with-sys-location="Unknown" \
++	--with-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
++	--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
++	--with-out-transports="Unix" \
++	--disable-manuals
+ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_MAKE = $(MAKE1)
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 1708978..a30adc2 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -13,11 +13,12 @@ NTP_AUTORECONF = YES
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+-NTP_CONF_OPTS = --with-shared \
+-		--program-transform-name=s,,, \
+-		--disable-tickadj \
+-		--with-yielding-select=yes \
+-		--disable-local-libevent
++NTP_CONF_OPTS = \
++	--with-shared \
++	--program-transform-name=s,,, \
++	--disable-tickadj \
++	--with-yielding-select=yes \
++	--disable-local-libevent
+ 
+ ifneq ($(BR2_INET_IPV6),y)
+ 	NTP_CONF_ENV += isc_cv_have_in6addr_any=no
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index d08b468..be471b6 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -9,8 +9,14 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+-OPENSSH_CONF_OPTS = --sysconfdir=/etc/ssh --disable-lastlog --disable-utmp \
+-		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
++OPENSSH_CONF_OPTS = \
++	--sysconfdir=/etc/ssh \
++	--disable-lastlog \
++	--disable-utmp \
++	--disable-utmpx \
++	--disable-wtmp \
++	--disable-wtmpx \
++	--disable-strip
+ 
+ define OPENSSH_USERS
+ 	sshd -1 sshd -1 * - - - SSH drop priv user
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 8c322ec..a5f4574 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -13,12 +13,13 @@ PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+ PHP_DEPENDENCIES = host-pkgconf
+ PHP_LICENSE = PHP
+ PHP_LICENSE_FILES = LICENSE
+-PHP_CONF_OPTS = --mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--disable-all \
+-		--without-pear \
+-		--with-config-file-path=/etc \
+-		--disable-rpath
++PHP_CONF_OPTS = \
++	--mandir=/usr/share/man \
++	--infodir=/usr/share/info \
++	--disable-all \
++	--without-pear \
++	--with-config-file-path=/etc \
++	--disable-rpath
+ PHP_CONF_ENV = EXTRA_LIBS="$(PHP_EXTRA_LIBS)"
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
+@@ -50,33 +51,34 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
+ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable-fpm)
+ 
+ ### Extensions
+-PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_POSIX),--enable-posix) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SESSION),--enable-session) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_HASH),--enable-hash) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_DOM),--enable-dom) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SIMPLEXML),--enable-simplexml) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SOAP),--enable-soap) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_XML),--enable-xml) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_XMLREADER),--enable-xmlreader) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_XMLWRITER),--enable-xmlwriter) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_EXIF),--enable-exif) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_FTP),--enable-ftp) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_JSON),--enable-json) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_TOKENIZER),--enable-tokenizer) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_PCNTL),--enable-pcntl) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SHMOP),--enable-shmop) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SYSVMSG),--enable-sysvmsg) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SYSVSEM),--enable-sysvsem) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_SYSVSHM),--enable-sysvshm) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_ZIP),--enable-zip) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
+-		$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
++PHP_CONF_OPTS += \
++	$(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
++	$(if $(BR2_PACKAGE_PHP_EXT_POSIX),--enable-posix) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SESSION),--enable-session) \
++	$(if $(BR2_PACKAGE_PHP_EXT_HASH),--enable-hash) \
++	$(if $(BR2_PACKAGE_PHP_EXT_DOM),--enable-dom) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SIMPLEXML),--enable-simplexml) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SOAP),--enable-soap) \
++	$(if $(BR2_PACKAGE_PHP_EXT_XML),--enable-xml) \
++	$(if $(BR2_PACKAGE_PHP_EXT_XMLREADER),--enable-xmlreader) \
++	$(if $(BR2_PACKAGE_PHP_EXT_XMLWRITER),--enable-xmlwriter) \
++	$(if $(BR2_PACKAGE_PHP_EXT_EXIF),--enable-exif) \
++	$(if $(BR2_PACKAGE_PHP_EXT_FTP),--enable-ftp) \
++	$(if $(BR2_PACKAGE_PHP_EXT_JSON),--enable-json) \
++	$(if $(BR2_PACKAGE_PHP_EXT_TOKENIZER),--enable-tokenizer) \
++	$(if $(BR2_PACKAGE_PHP_EXT_PCNTL),--enable-pcntl) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SHMOP),--enable-shmop) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SYSVMSG),--enable-sysvmsg) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SYSVSEM),--enable-sysvsem) \
++	$(if $(BR2_PACKAGE_PHP_EXT_SYSVSHM),--enable-sysvshm) \
++	$(if $(BR2_PACKAGE_PHP_EXT_ZIP),--enable-zip) \
++	$(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
++	$(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
++	$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
++	$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
++	$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath) \
++	$(if $(BR2_PACKAGE_PHP_EXT_MBSTRING),--enable-mbstring) \
++	$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MCRYPT),y)
+ 	PHP_CONF_OPTS += --with-mcrypt=$(STAGING_DIR)/usr
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index b79abe4..59ce844 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -10,17 +10,19 @@ PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source
+ PROFTPD_LICENSE = GPLv2+
+ PROFTPD_LICENSE_FILES = COPYING
+ 
+-PROFTPD_CONF_ENV = ac_cv_func_setpgrp_void=yes \
+-		ac_cv_func_setgrent_void=yes
+-
+-PROFTPD_CONF_OPTS = --localstatedir=/var/run \
+-		--disable-static \
+-		--disable-curses \
+-		--disable-ncurses \
+-		--disable-facl \
+-		--disable-dso \
+-		--enable-shadow \
+-		--with-gnu-ld
++PROFTPD_CONF_ENV = \
++	ac_cv_func_setpgrp_void=yes \
++	ac_cv_func_setgrent_void=yes
++
++PROFTPD_CONF_OPTS = \
++	--localstatedir=/var/run \
++	--disable-static \
++	--disable-curses \
++	--disable-ncurses \
++	--disable-facl \
++	--disable-dso \
++	--enable-shadow \
++	--with-gnu-ld
+ 
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 6d5c887..e422694 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -12,11 +12,17 @@ RRDTOOL_LICENSE_FILES = COPYING COPYRIGHT
+ RRDTOOL_DEPENDENCIES = host-pkgconf freetype libart libpng zlib
+ RRDTOOL_AUTORECONF = YES
+ RRDTOOL_INSTALL_STAGING = YES
+-RRDTOOL_CONF_ENV = rd_cv_ieee_works=yes rd_cv_null_realloc=nope \
+-			ac_cv_func_mmap_fixed_mapped=yes
+-RRDTOOL_CONF_OPTS = --disable-perl --disable-python --disable-ruby \
+-			--disable-tcl --program-transform-name='' \
+-			$(if $(BR2_TOOLCHAIN_HAS_THREADS),,--disable-pthread)
++RRDTOOL_CONF_ENV = \
++	rd_cv_ieee_works=yes \
++	rd_cv_null_realloc=nope \
++	ac_cv_func_mmap_fixed_mapped=yes
++RRDTOOL_CONF_OPTS = \
++	--disable-perl \
++	--disable-python \
++	--disable-ruby \
++	--disable-tcl \
++	--program-transform-name='' \
++	$(if $(BR2_TOOLCHAIN_HAS_THREADS),,--disable-pthread)
+ RRDTOOL_MAKE = $(MAKE1)
+ 
+ define RRDTOOL_REMOVE_EXAMPLES
+diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
+index 951ea45..b46fc64 100644
+--- a/package/sdl_image/sdl_image.mk
++++ b/package/sdl_image/sdl_image.mk
+@@ -11,23 +11,24 @@ SDL_IMAGE_INSTALL_STAGING = YES
+ SDL_IMAGE_LICENSE = zlib
+ SDL_IMAGE_LICENSE_FILES = COPYING
+ 
+-SDL_IMAGE_CONF_OPTS = --with-sdl-prefix=$(STAGING_DIR)/usr \
+-		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+-		--disable-sdltest \
+-		--disable-static \
+-		--enable-bmp=$(if $(BR2_PACKAGE_SDL_IMAGE_BMP),yes,no) \
+-		--enable-gif=$(if $(BR2_PACKAGE_SDL_IMAGE_GIF),yes,no) \
+-		--enable-jpg=$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),yes,no) \
+-		--enable-lbm=$(if $(BR2_PACKAGE_SDL_IMAGE_LBM),yes,no) \
+-		--enable-pcx=$(if $(BR2_PACKAGE_SDL_IMAGE_PCX),yes,no) \
+-		--enable-png=$(if $(BR2_PACKAGE_SDL_IMAGE_PNG),yes,no) \
+-		--enable-pnm=$(if $(BR2_PACKAGE_SDL_IMAGE_PNM),yes,no) \
+-		--enable-tga=$(if $(BR2_PACKAGE_SDL_IMAGE_TARGA),yes,no) \
+-		--enable-tif=$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),yes,no) \
+-		--enable-webp=$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),yes,no) \
+-		--enable-xcf=$(if $(BR2_PACKAGE_SDL_IMAGE_XCF),yes,no) \
+-		--enable-xpm=$(if $(BR2_PACKAGE_SDL_IMAGE_XPM),yes,no) \
+-		--enable-xv=$(if $(BR2_PACKAGE_SDL_IMAGE_XV),yes,no) \
++SDL_IMAGE_CONF_OPTS = \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
++	--disable-sdltest \
++	--disable-static \
++	--enable-bmp=$(if $(BR2_PACKAGE_SDL_IMAGE_BMP),yes,no) \
++	--enable-gif=$(if $(BR2_PACKAGE_SDL_IMAGE_GIF),yes,no) \
++	--enable-jpg=$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),yes,no) \
++	--enable-lbm=$(if $(BR2_PACKAGE_SDL_IMAGE_LBM),yes,no) \
++	--enable-pcx=$(if $(BR2_PACKAGE_SDL_IMAGE_PCX),yes,no) \
++	--enable-png=$(if $(BR2_PACKAGE_SDL_IMAGE_PNG),yes,no) \
++	--enable-pnm=$(if $(BR2_PACKAGE_SDL_IMAGE_PNM),yes,no) \
++	--enable-tga=$(if $(BR2_PACKAGE_SDL_IMAGE_TARGA),yes,no) \
++	--enable-tif=$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),yes,no) \
++	--enable-webp=$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),yes,no) \
++	--enable-xcf=$(if $(BR2_PACKAGE_SDL_IMAGE_XCF),yes,no) \
++	--enable-xpm=$(if $(BR2_PACKAGE_SDL_IMAGE_XPM),yes,no) \
++	--enable-xv=$(if $(BR2_PACKAGE_SDL_IMAGE_XV),yes,no) \
+ 
+ SDL_IMAGE_DEPENDENCIES = sdl \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),jpeg) \
+@@ -35,13 +36,14 @@ SDL_IMAGE_DEPENDENCIES = sdl \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_TIFF),tiff) \
+ 	$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),webp)
+ 
+-HOST_SDL_IMAGE_CONF_OPTS = --with-sdl-prefix=$(HOST_DIR)/usr \
+-		--with-sdl-exec-prefix=$(HOST_DIR)/usr \
+-		--disable-sdltest \
+-		--disable-static \
+-		--disable-jpg-shared \
+-		--disable-png-shared \
+-		--disable-tif-shared \
++HOST_SDL_IMAGE_CONF_OPTS = \
++	--with-sdl-prefix=$(HOST_DIR)/usr \
++	--with-sdl-exec-prefix=$(HOST_DIR)/usr \
++	--disable-sdltest \
++	--disable-static \
++	--disable-jpg-shared \
++	--disable-png-shared \
++	--disable-tif-shared \
+ 
+ HOST_SDL_IMAGE_DEPENDENCIES = host-libjpeg host-libpng host-sdl
+ 
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index f316a46..3e494b4 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -12,9 +12,10 @@ SDL_TTF_LICENSE_FILES = COPYING
+ 
+ SDL_TTF_INSTALL_STAGING = YES
+ SDL_TTF_DEPENDENCIES = sdl freetype
+-SDL_TTF_CONF_OPTS = --without-x \
+-		--with-freetype-prefix=$(STAGING_DIR)/usr \
+-		--with-sdl-prefix=$(STAGING_DIR)/usr
++SDL_TTF_CONF_OPTS = \
++	--without-x \
++	--with-freetype-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-prefix=$(STAGING_DIR)/usr
+ 
+ SDL_TTF_MAKE_OPTS = INCLUDES="-I$(STAGING_DIR)/usr/include/SDL"  LDFLAGS="-L$(STAGING_DIR)/usr/lib"
+ $(eval $(autotools-package))
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index f72b8b1..b819300 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -9,14 +9,15 @@ SED_SITE = $(BR2_GNU_MIRROR)/sed
+ SED_LICENSE = GPLv3
+ SED_LICENSE_FILES = COPYING
+ 
+-SED_CONF_OPTS = --bindir=/usr/bin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		--include=$(STAGING_DIR)/usr/include
++SED_CONF_OPTS = \
++	--bindir=/usr/bin \
++	--libdir=/lib \
++	--libexecdir=/usr/lib \
++	--sysconfdir=/etc \
++	--datadir=/usr/share \
++	--mandir=/usr/share/man \
++	--infodir=/usr/share/info \
++	--include=$(STAGING_DIR)/usr/include
+ 
+ define SED_MOVE_BINARY
+ 	mv $(TARGET_DIR)/usr/bin/sed $(TARGET_DIR)/bin/
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 1224369..e9e821d 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -14,23 +14,30 @@ SQUID_LICENSE_FILES = COPYING
+ SQUID_AUTORECONF = YES
+ SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+-SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
+-			ac_cv_func_va_copy=yes ac_cv_func___va_copy=yes \
+-			ac_cv_func_strnstr=no ac_cv_have_squid=yes
+-SQUID_CONF_OPTS =	--enable-async-io=8 --enable-linux-netfilter \
+-			--enable-removal-policies="lru,heap" \
+-			--with-filedescriptors=1024 --disable-ident-lookups \
+-			--with-krb5-config=no \
+-			--enable-auth-basic="fake getpwnam" \
+-			--enable-auth-digest="file" \
+-			--enable-auth-negotiate="wrapper" \
+-			--enable-auth-ntlm="fake" \
+-			--disable-strict-error-checking \
+-			--enable-external-acl-helpers="file_userip" \
+-			--with-logdir=/var/log/squid/ \
+-			--with-pidfile=/var/run/squid.pid \
+-			--with-swapdir=/var/cache/squid/ \
+-			--enable-icap-client
++SQUID_CONF_ENV = \
++	ac_cv_epoll_works=yes \
++	ac_cv_func_setresuid=yes \
++	ac_cv_func_va_copy=yes \
++	ac_cv_func___va_copy=yes \
++	ac_cv_func_strnstr=no \
++	ac_cv_have_squid=yes
++SQUID_CONF_OPTS = \
++	--enable-async-io=8 \
++	--enable-linux-netfilter \
++	--enable-removal-policies="lru,heap" \
++	--with-filedescriptors=1024 \
++	--disable-ident-lookups \
++	--with-krb5-config=no \
++	--enable-auth-basic="fake getpwnam" \
++	--enable-auth-digest="file" \
++	--enable-auth-negotiate="wrapper" \
++	--enable-auth-ntlm="fake" \
++	--disable-strict-error-checking \
++	--enable-external-acl-helpers="file_userip" \
++	--with-logdir=/var/log/squid/ \
++	--with-pidfile=/var/run/squid.pid \
++	--with-swapdir=/var/cache/squid/ \
++	--enable-icap-client
+ 
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index dedeb70..69eb717 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -8,10 +8,14 @@ TCPDUMP_VERSION = 4.6.2
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3c
+ TCPDUMP_LICENSE_FILES = LICENSE
+-TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no \
+-		PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+-TCPDUMP_CONF_OPTS = --without-crypto --with-system-libpcap \
+-		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
++TCPDUMP_CONF_ENV = \
++	ac_cv_linux_vers=2 \
++	td_cv_buggygetaddrinfo=no \
++	PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
++TCPDUMP_CONF_OPTS = \
++	--without-crypto \
++	--with-system-libpcap \
++	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ TCPDUMP_DEPENDENCIES = zlib libpcap
+ # Patching aclocal.m4
+ TCPDUMP_AUTORECONF = YES
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index c8bcfae..f4a8c84 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -25,13 +25,14 @@ VDE2_AUTORECONF = YES
+ #
+ # Note: disabled features can be added with corresponding dependencies
+ #       in future commits.
+-VDE2_CONF_OPTS = --disable-experimental  \
+-		--disable-cryptcab      \
+-		--disable-pcap          \
+-		--disable-python        \
+-		--disable-profile       \
+-		--disable-kernel-switch \
+-		--enable-tuntap         \
++VDE2_CONF_OPTS = \
++	--disable-experimental  \
++	--disable-cryptcab      \
++	--disable-pcap          \
++	--disable-python        \
++	--disable-profile       \
++	--disable-kernel-switch \
++	--enable-tuntap         \
+ 
+ #?Package does not build in parallel due to improper make rules
+ VDE2_MAKE = $(MAKE1)
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 3b69141..5baa515 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -54,12 +54,15 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	mcookie 			\
+ 	host-pkgconf
+ 
+-XSERVER_XORG_SERVER_CONF_OPTS = --disable-config-hal \
+-		--disable-xnest --disable-xephyr --disable-dmx \
+-		--with-builder-addr=buildroot at buildroot.org \
+-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
+-		--with-fontrootdir=/usr/share/fonts/X11/ \
+-		--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
++XSERVER_XORG_SERVER_CONF_OPTS = \
++	--disable-config-hal \
++	--disable-xnest \
++	--disable-xephyr \
++	--disable-dmx \
++	--with-builder-addr=buildroot at buildroot.org \
++	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
++	--with-fontrootdir=/usr/share/fonts/X11/ \
++	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
+@@ -69,8 +72,12 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xorg
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-kdrive --enable-xfbdev \
+-		--disable-glx --disable-dri --disable-xsdl
++XSERVER_XORG_SERVER_CONF_OPTS += \
++	--enable-kdrive \
++	--enable-xfbdev \
++	--disable-glx \
++	--disable-dri \
++	--disable-xsdl
+ define XSERVER_CREATE_X_SYMLINK
+ 	ln -f -s Xfbdev $(TARGET_DIR)/usr/bin/X
+ endef
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
