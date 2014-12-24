@@ -1,55 +1,56 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 24 Dec 2014 10:10:39 +0100
-Subject: [Buildroot] [PATCH 6/7] lua-coatpersistent: bump to version 0.2.1
+Date: Wed, 24 Dec 2014 10:10:40 +0100
+Subject: [Buildroot] [PATCH 7/7] luaposix: bump to version 33.0.0
 In-Reply-To: <1419412240-16068-1-git-send-email-francois.perrad@gadz.org>
 References: <1419412240-16068-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1419412240-16068-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1419412240-16068-7-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ncurses becomes a mandatory dependency
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-coatpersistent/Config.in             | 4 ++++
- package/lua-coatpersistent/lua-coatpersistent.mk | 8 ++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/luaposix/Config.in   | 1 +
+ package/luaposix/luaposix.mk | 8 ++------
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/lua-coatpersistent/Config.in b/package/lua-coatpersistent/Config.in
-index 86cddda..a0f5bdc 100644
---- a/package/lua-coatpersistent/Config.in
-+++ b/package/lua-coatpersistent/Config.in
-@@ -3,7 +3,11 @@ config BR2_PACKAGE_LUA_COATPERSISTENT
- 	# run-time dependencies
- 	select BR2_PACKAGE_DADO
- 	select BR2_PACKAGE_LUA_COAT
-+	depends on BR2_PACKAGE_LSQLITE3 || BR2_PACKAGE_LUASQL_SQLITE3
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index 04269fb..a40c3f9 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
+ 	# LuaBitOp is already included in LuaJIT
  	help
- 	  An ORM for lua-Coat.
- 
- 	  http://fperrad.github.io/lua-CoatPersistent/
-+
-+comment "lua-coatpersistent needs lsqlite3 or luasql-sqlite3"
-+	depends on !BR2_PACKAGE_LSQLITE3 && !BR2_PACKAGE_LUASQL_SQLITE3
-diff --git a/package/lua-coatpersistent/lua-coatpersistent.mk b/package/lua-coatpersistent/lua-coatpersistent.mk
-index 35035e9..be8a4da 100644
---- a/package/lua-coatpersistent/lua-coatpersistent.mk
-+++ b/package/lua-coatpersistent/lua-coatpersistent.mk
-@@ -4,8 +4,12 @@
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index a723a50..5d41472 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -4,15 +4,11 @@
  #
  ################################################################################
  
--LUA_COATPERSISTENT_VERSION_UPSTREAM = 0.2.0
--LUA_COATPERSISTENT_VERSION = $(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
-+LUA_COATPERSISTENT_VERSION_UPSTREAM = 0.2.1
-+ifeq ($(BR2_PACKAGE_LSQLITE3),y)
-+LUA_COATPERSISTENT_VERSION = lsqlite3-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
-+else
-+LUA_COATPERSISTENT_VERSION = luasql-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
-+endif
- LUA_COATPERSISTENT_SUBDIR = lua-CoatPersistent-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)
- LUA_COATPERSISTENT_LICENSE = MIT
- LUA_COATPERSISTENT_LICENSE_FILES = $(LUA_COATPERSISTENT_SUBDIR)/COPYRIGHT
+-LUAPOSIX_VERSION = 32
++LUAPOSIX_VERSION = 33.0.0
+ LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = COPYING
+-LUAPOSIX_DEPENDENCIES = luainterpreter host-lua
++LUAPOSIX_DEPENDENCIES = luainterpreter host-lua ncurses
+ LUAPOSIX_CONF_OPTS = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+ 
+-ifeq ($(BR2_PACKAGE_NCURSES),y)
+-LUAPOSIX_DEPENDENCIES += ncurses
+-endif
+-
+ $(eval $(autotools-package))
 -- 
 2.1.0
