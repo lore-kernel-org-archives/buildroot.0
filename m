@@ -1,39 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Dec 2014 15:00:48 +0100
-Subject: [Buildroot] [git commit] linux: fix breakage from
-	d4b2b032a00c9922c9efa144b014dc086a7e48f1
-Message-ID: <20141224140053.B66438078A@busybox.osuosl.org>
+From: Arthur Lambert <lambertarthur22@gmail.com>
+Date: Wed, 24 Dec 2014 15:24:00 +0100
+Subject: [Buildroot] Generate a sdcard for imx6sololiteevk
+Message-ID: <CAGpqJgrUgYciRtPe4JsiU2LPa7SR+=tyxZce8+PD95Gzh_7S0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49b147ccbb807238009fde815ad68e953077bc3a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Unbreak qemu_xtensa_lx60_defconfig where LINUX_IMAGE_NAME !=
-LINUX_TARGET_NAME.
-It incorrectly overwrites LINUX_IMAGE_NAME even if it was set before,
-defeating the purpose of IMAGE being different than TARGET.
+I would like to use Buildroot to generate a linux for imx6 sololitevk.
+I found an existing configuration done for this board in the master
+branch of Buildroot.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+To generate my image :
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 36f0230..8256641 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -82,7 +82,9 @@ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
- LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
- LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-+ifeq ($(LINUX_IMAGE_NAME),)
- LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
-+endif
- else
- ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
- LINUX_IMAGE_NAME = uImage
+make freescale_imx6sololiteevk_defconfig
+make all
+
+Then I used this script in
+board/freescale/imx6sabresd/create-boot-sd.sh to generate an sd card
+by typing :
+
+sudo ./create-boot-sd.sh /dev/mmcblk0
+
+When I tried to run my sdcard on the board current result is :
+
+_______________________________________________________
+reading uImage
+5258568 bytes read in 267 ms (18.8 MiB/s)
+Booting from mmc ...
+reading imx6sl-evk.dtb
+33925 bytes read in 18 ms (1.8 MiB/s)
+## Booting kernel from Legacy Image at 80800000 ...
+   Image Name:   Linux-3.10.17
+   Image Type:   ARM Linux Kernel Image (uncompressed)
+   Data Size:    5258504 Bytes = 5 MiB
+   Load Address: 10008000
+   Entry Point:  10008000
+   Verifying Checksum ... OK
+## Flattened Device Tree blob at 83000000
+   Booting using the fdt blob at 0x83000000
+   Loading Kernel Image ... data abort
+
+    MAYBE you should read doc/README.arm-unaligned-accesses
+
+pc : [<bff939d8>]          lr : [<bff70ee8>]
+sp : bfc6b9d0  ip : 00000000     fp : 00000000
+r10: 80d03d48  r9 : 00000000     r8 : bfc6bf38
+r7 : 80800000  r6 : 00000000     r5 : bfc6ba14  r4 : 10008000
+r3 : 00000000  r2 : 00503d08     r1 : 80800040  r0 : 10008000
+Flags: Nzcv  IRQs off  FIQs off  Mode SVC_32
+Resetting CPU ...
+
+resetting ...
+_______________________________________________________
+
+Is it normal ? Do I wrong somewhere in my process ?
+Do I must add a patch on uboot to fix that ?
+I see some stuff like this for example :
+https://gitorious.org/rowboat/u-boot/commit/7894b625259b89cd117685a0855a2c84b11a38f5
+
+Thanks & Regards,
+Arthur.
