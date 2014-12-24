@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Dec 2014 14:58:51 +0100
-Subject: [Buildroot] [git commit] gettext: bump to version 0.19.4
-Message-ID: <20141224135935.D5BC880788@busybox.osuosl.org>
+Date: Wed, 24 Dec 2014 14:59:02 +0100
+Subject: [Buildroot] [git commit] libpng: security bump to version 1.6.16
+Message-ID: <20141224135935.DF0C37FCE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c90515124ee1eff9896cdbd5bcb3c1bd7c4dbcb
+commit: http://git.buildroot.net/buildroot/commit/?id=5fd9ab402f4f64fa1521d07c311ff2a7aa857764
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes a buffer overflow which may allow an attacker to gain write
+access to memory.
+CVE requested but not yet assigned.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gettext/gettext.hash |    6 +++---
- package/gettext/gettext.mk   |    2 +-
+ package/libpng/libpng.hash |    6 +++---
+ package/libpng/libpng.mk   |    2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
-index d93eba1..db5a0ed 100644
---- a/package/gettext/gettext.hash
-+++ b/package/gettext/gettext.hash
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 37f6067..d0027c7 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
 @@ -1,3 +1,3 @@
--# From http://lists.gnu.org/archive/html/bug-gettext/2014-10/msg00025.html
--md5	092c3f460553ceb4a638ff81d36434c4	gettext-0.19.3.tar.xz
--sha1	5c8e37c5275742b6acc1257e2df9b5d1874c12e3	gettext-0.19.3.tar.xz
-+# From http://lists.gnu.org/archive/html/bug-gettext/2014-12/msg00038.html
-+md5	997c9070354eff5517115feaea6038f0	gettext-0.19.4.tar.xz
-+sha1	16c90342f3a59c7df364ebb3209a48be42b7ffd9	gettext-0.19.4.tar.xz
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 2b7b4f2..c2419c1 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.15/
+-md5	a95cb387c53215b034203b41ec57c7e5	libpng-1.6.15.tar.xz
+-sha1	bddeac8ca97fbcf54d6d32c6eefed5d94b49df88	libpng-1.6.15.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/
++md5	23b7286b5d4a86de950fd2ffc5cac742	libpng-1.6.16.tar.xz
++sha1	31855a8438ae795d249574b0da15b34eb0922e13	libpng-1.6.16.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 67bf141..2f53a95 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GETTEXT_VERSION = 0.19.3
-+GETTEXT_VERSION = 0.19.4
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
- GETTEXT_INSTALL_STAGING = YES
+-LIBPNG_VERSION = 1.6.15
++LIBPNG_VERSION = 1.6.16
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
