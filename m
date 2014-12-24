@@ -1,25 +1,55 @@
-From: Steve James <ste@junkomatic.net>
-Date: Wed, 24 Dec 2014 10:54:15 +0000
-Subject: [Buildroot] [PATCH v2] leveldb: new package
-In-Reply-To: <20141223205124.0d05b9dc@free-electrons.com>
-References: <201412231716.23849.ste@junkomatic.net>
- <20141223205124.0d05b9dc@free-electrons.com>
-Message-ID: <201412241054.16028.ste@junkomatic.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Dec 2014 12:00:51 +0100
+Subject: [Buildroot] [git commit] lua-coatpersistent: bump to version 0.2.1
+Message-ID: <20141224111107.656F07FA48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 23 Dec 2014 19:51:24 Thomas Petazzoni wrote:
-> Dear Steve James,
-> 
---snip--
-> 
-> Thanks for this new version. However, your patch has been line-wrapped
-> by your e-mail client. Could you try to send it with 'git send-email'
-> instead? See the Buildroot instructions for some details about this.
+commit: http://git.buildroot.net/buildroot/commit/?id=aeb3f480c69e93b4ad2af6a172a0c554e4c67092
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Oh dear, that's embarassing. This has happened because I am at home using a
-different client. Yes, I should have used send-email. Sorry to waste your
-time Thomas. Fresh patch follows...
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lua-coatpersistent/Config.in             |    4 ++++
+ package/lua-coatpersistent/lua-coatpersistent.mk |    8 ++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/package/lua-coatpersistent/Config.in b/package/lua-coatpersistent/Config.in
+index 86cddda..a0f5bdc 100644
+--- a/package/lua-coatpersistent/Config.in
++++ b/package/lua-coatpersistent/Config.in
+@@ -3,7 +3,11 @@ config BR2_PACKAGE_LUA_COATPERSISTENT
+ 	# run-time dependencies
+ 	select BR2_PACKAGE_DADO
+ 	select BR2_PACKAGE_LUA_COAT
++	depends on BR2_PACKAGE_LSQLITE3 || BR2_PACKAGE_LUASQL_SQLITE3
+ 	help
+ 	  An ORM for lua-Coat.
+ 
+ 	  http://fperrad.github.io/lua-CoatPersistent/
++
++comment "lua-coatpersistent needs lsqlite3 or luasql-sqlite3"
++	depends on !BR2_PACKAGE_LSQLITE3 && !BR2_PACKAGE_LUASQL_SQLITE3
+diff --git a/package/lua-coatpersistent/lua-coatpersistent.mk b/package/lua-coatpersistent/lua-coatpersistent.mk
+index 35035e9..be8a4da 100644
+--- a/package/lua-coatpersistent/lua-coatpersistent.mk
++++ b/package/lua-coatpersistent/lua-coatpersistent.mk
+@@ -4,8 +4,12 @@
+ #
+ ################################################################################
+ 
+-LUA_COATPERSISTENT_VERSION_UPSTREAM = 0.2.0
+-LUA_COATPERSISTENT_VERSION = $(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
++LUA_COATPERSISTENT_VERSION_UPSTREAM = 0.2.1
++ifeq ($(BR2_PACKAGE_LSQLITE3),y)
++LUA_COATPERSISTENT_VERSION = lsqlite3-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
++else
++LUA_COATPERSISTENT_VERSION = luasql-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)-1
++endif
+ LUA_COATPERSISTENT_SUBDIR = lua-CoatPersistent-$(LUA_COATPERSISTENT_VERSION_UPSTREAM)
+ LUA_COATPERSISTENT_LICENSE = MIT
+ LUA_COATPERSISTENT_LICENSE_FILES = $(LUA_COATPERSISTENT_SUBDIR)/COPYRIGHT
