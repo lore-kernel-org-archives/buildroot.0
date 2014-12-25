@@ -1,44 +1,39 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 25 Dec 2014 06:47:59 +0200
-Subject: [Buildroot] AC_CHECK_LIB doesn't work for cross-compiling
-In-Reply-To: <549B93F3.7020602@infipwr.com>
-References: <549B93F3.7020602@infipwr.com>
-Message-ID: <20141225044759.GE6400@tarshish>
+Date: Thu, 25 Dec 2014 07:36:28 +0200
+Subject: [Buildroot] [PATCH] Makefile: clarify comment on .br-external
+	handling
+Message-ID: <b036dd78f478b15f5e0c74ebe01915ec43cca382.1419485788.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+The comment language may lead the reader to think that .br-external is removed
+whenever BR2_EXTERNAL is not set in the command line. Make it clear that
+BR2_EXTERNAL must be explicitly set to an empty value for .br-external to get
+removed.
 
-On Thu, Dec 25, 2014 at 01:34:59PM +0900, Adam Jiang wrote:
-> I am trying to add a new package to buildroot. the package is built upon
-> autotools. thus, it is supposed to be very easy to make it
-> cross-compilable. ever, i got suck at AC_CHECK_LIB macro. it doesn't
-> work well at cross-compiling while it does work on normal compiling.
-> 
-> AC_CHECK_LIB([fcgi], [FCGX_InitRequest], [AC_MSG_WARN("unable to find
-> the FCGX_InitRequest() function")])
-> 
-> always failed even though I do have libfcgi in my configuration. The
-> error message looks like
-> 
-> checking for FCGX_InitRequest in -lfcgi... no
-> configure: WARNING: unable to find the FCGX_InitRequest() function
-> 
-> I don't think AC_CHECK_LIB will not work on cross-compiling because it
-> seems there are lots of other target packages in buildroot using the
-> macro. Most probably, I am doing something wrong.
-> 
-> Does AC_CHECK_LIB work in buildroot? If the macro needs some changes,
-> how could I do it?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-What do you have in config.log for the FCGX_InitRequest check?
-
-baruch
-
+diff --git a/Makefile b/Makefile
+index ad018c88f12e..5e0b4f254a05 100644
+--- a/Makefile
++++ b/Makefile
+@@ -123,8 +123,9 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ # On subsequent invocations of make, it is read in. It can still be overridden
+ # on the command line, therefore the file is re-created every time make is run.
+ #
+-# When BR2_EXTERNAL is not set, the .br-external file is removed and we point
+-# to support/dummy-external. This makes sure we can unconditionally include the
++# When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
++# line), the .br-external file is removed and we point to
++# support/dummy-external. This makes sure we can unconditionally include the
+ # Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
+ # override is necessary so the user can clear BR2_EXTERNAL from the command
+ # line, but the dummy path is still used internally.
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.3
