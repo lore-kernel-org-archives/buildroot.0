@@ -1,31 +1,47 @@
-From: thebestofall007 . <loucrittenden63@gmail.com>
-Date: Thu, 25 Dec 2014 14:09:38 -0600
-Subject: [Buildroot] building fbtft framebuffer drivers into buildroot.
-Message-ID: <CAFGceHGR2k7ARYDZqK0pskkNbd6wiguLkMdZ07zpPENW+NAZxw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Dec 2014 22:24:52 +0100
+Subject: [Buildroot] [PATCH] package/ntp: fix installation
+Message-ID: <1419542692-21651-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, I am new to buildroot and have been feeling my way around it, but I
-currently have a very fast bootable buildroot system for my raspberry pi
-system set up following various rpi setup tutorials, and I was wondering
-where I can start on building a package for the fbtft drivers from their
-source code located in the git repository located here:
-https://github.com/notro/fbtft/ that are used for driving small lcd
-displays, or has this already been done before?
+Since 5d5c9a8 (ntp: security bump to version 4.2.8), scripts/ntp-wait
+and scripts/ntptrace are no longer scripts themselves, but directories
+containing those scripts.
 
-I want to be able to use a small 3.2" raspberry pi display shield as the
-default display with buildroot, and although I have had good luck setting
-up those drivers within raspbian os and raspbmc and having it work with my
-lcd model, I want a much faster, leaner setup that boots in seconds yet is
-customizable (as buildroot does with flying colors!)..
+Fixes:
+    http://autobuild.buildroot.org/results/518/5189e84004bf28b891da3ee07fecc8717b4e8e8c/ (ntp-wait)
+    http://autobuild.buildroot.org/results/005/0056192a06d44814a0279637c4bcbf602936e7ff/ (ntptrace)
+    http://autobuild.buildroot.org/results/8f3/8f372acf73743edf8027cda6865ba1aa7b6413a3/ (both)
+    ...
 
-I have went through the manual, and while it has a lot of info, this is an
-area that seems to be a little less self explanatory. I also gave info from
-this site a try, but I'm stuck at the making of the .mk file:
-http://free-electrons.com/~thomas/buildroot/manual/html/ch11.html
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141225/fe92b4db/attachment.html>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ntp/ntp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index a30adc2..3a1a917 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -52,12 +52,12 @@ define NTP_PATCH_FIXUPS
+ endef
+ 
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
+-NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait
++NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDC) += ntpdc/ntpdc
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPQ) += ntpq/ntpq
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPSNMPD) += ntpsnmpd/ntpsnmpd
+-NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTRACE) += scripts/ntptrace
++NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTRACE) += scripts/ntptrace/ntptrace
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_SNTP) += sntp/sntp
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
+ 
+-- 
+1.9.1
