@@ -1,69 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Dec 2014 20:09:13 +0100
-Subject: [Buildroot] [PATCH 2/2] bdwgc: add patch automatically detecting
-	for NO_GETCONTEXT need
-In-Reply-To: <cover.1419448003.git.yann.morin.1998@free.fr>
-References: <cover.1419448003.git.yann.morin.1998@free.fr>
-Message-ID: <efeb5ff2d78fb77cfd65a2e4e3bbb78ec9bef3f0.1419448003.git.yann.morin.1998@free.fr>
+From: Adam Jiang <chaoj@infipwr.com>
+Date: Thu, 25 Dec 2014 13:34:59 +0900
+Subject: [Buildroot] AC_CHECK_LIB doesn't work for cross-compiling
+Message-ID: <549B93F3.7020602@infipwr.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+Hi,
 
-This patch is necessary to successfully build guile with toolchain
-missing support for getcontext.
+I am trying to add a new package to buildroot. the package is built upon
+autotools. thus, it is supposed to be very easy to make it
+cross-compilable. ever, i got suck at AC_CHECK_LIB macro. it doesn't
+work well at cross-compiling while it does work on normal compiling.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: add a comment, change variable name, use
- AS_IF, remove debug traces, use AC_CHECK_FUNCS (Thomas)]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+AC_CHECK_LIB([fcgi], [FCGX_InitRequest], [AC_MSG_WARN("unable to find
+the FCGX_InitRequest() function")])
 
----
-Note: we're not testing setcontext, because it is not used. getcontext
-is used only to retrieve the context of the tread (like registers, heap
-adress, and so on...), not to actually use contexts.
----
- ...ac-add-check-for-NO_GETCONTEXT-definition.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
+always failed even though I do have libfcgi in my configuration. The
+error message looks like
 
-diff --git a/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch b/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
-new file mode 100644
-index 0000000..393ad90
---- /dev/null
-+++ b/package/bdwgc/0001-configure.ac-add-check-for-NO_GETCONTEXT-definition.patch
-@@ -0,0 +1,28 @@
-+configure.ac: add check for NO_GETCONTEXT definition
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+[yann.morin.1998 at free.fr: add a comment, change variable name, use
-+ AS_IF, remove debug traces, use AC_CHECK_FUNCS (as suggested by
-+ Thomas)]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+---
-+ configure.ac | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+--- bdwgc-7.2f.orig/configure.ac	2014-06-01 19:00:47.000000000 +0200
-++++ bdwgc-7.2f/configure.ac	2014-12-23 14:13:11.585716713 +0100
-+@@ -365,6 +365,12 @@
-+   AC_MSG_RESULT($ac_cv_fno_strict_aliasing)
-+ fi
-+ 
-++# Check for getcontext (uClibc can be configured without it, for example)
-++AC_CHECK_FUNCS([getcontext])
-++AS_IF([test "$ac_cv_func_getcontext" = "no"],
-++  [CFLAGS="$CFLAGS -DNO_GETCONTEXT"
-++   CPPFLAGS="$CPPFLAGS -DNO_GETCONTEXT"])
-++
-+ case "$host" in
-+ # While IRIX 6 has libdl for the O32 and N32 ABIs, it's missing for N64
-+ # and unnecessary everywhere.
--- 
-1.9.1
+checking for FCGX_InitRequest in -lfcgi... no
+configure: WARNING: unable to find the FCGX_InitRequest() function
+
+I don't think AC_CHECK_LIB will not work on cross-compiling because it
+seems there are lots of other target packages in buildroot using the
+macro. Most probably, I am doing something wrong.
+
+Does AC_CHECK_LIB work in buildroot? If the macro needs some changes,
+how could I do it?
+
+Thanks,
+/Adam
