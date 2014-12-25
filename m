@@ -1,17 +1,15 @@
 From: Adam Jiang <chaoj@infipwr.com>
-Date: Thu, 25 Dec 2014 22:03:02 +0900
+Date: Thu, 25 Dec 2014 22:25:14 +0900
 Subject: [Buildroot] AC_CHECK_LIB doesn't work for cross-compiling
 In-Reply-To: <20141225064950.GG6400@tarshish>
 References: <549B93F3.7020602@infipwr.com> <20141225044759.GE6400@tarshish>
  <549BAE5C.409@infipwr.com> <20141225064950.GG6400@tarshish>
-Message-ID: <549C0B06.60808@infipwr.com>
+Message-ID: <549C103A.5000908@infipwr.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-Hi, Baruch
 
 On 12/25/2014 03:49 PM, Baruch Siach wrote:
 > Hi adam,
@@ -39,10 +37,11 @@ On 12/25/2014 03:49 PM, Baruch Siach wrote:
 > 		[AC_MSG_WARN("unable to find the FCGX_InitRequest() function")],
 > 		[-lm])
 
-Em...I can understand the issue now. However, would it be possible for 
-libfcgi to resolve its dependency somehow?
+Probably, the dependency on '-lm' issue is caused by difference between 
+glibc and uclibc. Does uclibc split math library into another library 
+and don't implicitly include it?
 
-/Adam
+/adam
 
 > baruch
 >
