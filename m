@@ -1,53 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 15:31:07 +0100
-Subject: [Buildroot] AC_CHECK_LIB doesn't work for cross-compiling
-In-Reply-To: <549C0B06.60808@infipwr.com>
-References: <549B93F3.7020602@infipwr.com> <20141225044759.GE6400@tarshish>
- <549BAE5C.409@infipwr.com> <20141225064950.GG6400@tarshish>
- <549C0B06.60808@infipwr.com>
-Message-ID: <20141226153107.6402246e@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 26 Dec 2014 15:51:28 +0100
+Subject: [Buildroot] building fbtft framebuffer drivers into buildroot.
+In-Reply-To: <20141226150438.08e429c2@free-electrons.com>
+References: <CAFGceHGR2k7ARYDZqK0pskkNbd6wiguLkMdZ07zpPENW+NAZxw@mail.gmail.com>
+ <20141226102028.GA3982@free.fr>
+ <20141226150438.08e429c2@free-electrons.com>
+Message-ID: <20141226145128.GC3982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Adam Jiang,
-
-On Thu, 25 Dec 2014 22:03:02 +0900, Adam Jiang wrote:
-
-> > 	AC_CHECK_LIB([fcgi], [FCGX_InitRequest], [LIBS="$LIBS -lfcgi],
-> > 		[AC_MSG_WARN("unable to find the FCGX_InitRequest() function")],
-> > 		[-lm])
+On 2014-12-26 15:04 +0100, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
 > 
-> Em...I can understand the issue now. However, would it be possible for 
-> libfcgi to resolve its dependency somehow?
+> On Fri, 26 Dec 2014 11:20:29 +0100, Yann E. MORIN wrote:
+> 
+> > I've had a look at this package, and unfortunately, it will be hard to
+> > get it packaged in Buildroot.
+> > 
+> > The problem is that this kernel module does not compile as an
+> > out-of-tree module, and their buildsystem is made so that it requires
+> > the kernel be patched.
+> > 
+> > This is not posible with Buildroot.
+> 
+> Well, yes and no. Indeed it is much easier to package if the stuff can
+> be built as an out-of-tree module. However, we have two examples of
+> things packaged in Buildroot that require patching the kernel: Xenomai
+> and RTAI. They use a loosely defined model that we could name "Linux
+> extension", see linux/linux-ext-*.mk. They basically hook up into the
+> Linux build process by adding some stuff to LINUX_PRE_PATCH_HOOKS.
+> 
+> I recently had a look at the aufs stuff, and it has the same problem:
+> not only it is made of modules that can be built out-of-tree, but it
+> also needs to patch the kernel (some core VFS changes).
+> 
+> So, I haven't looked at all the fbtft stuff. If it's a set of
+> standalone drivers that don't require any modification to the core of
+> the kernel, then indeed, turning them into out-of-tree modules can be a
+> good idea. If not, then using the "linux-ext" model can be a solution.
 
-For dynamic linking, this should happen automatically, provided libfcgi
-is properly linked against libm. But indeed, after a quick look, it
-turns out that libfcgi uses frexp() but isn't linked against libm:
+Yes, I know about those linux "extensions".
 
-$ readelf -a libfcgi.so.0.0.0
-[...]
-  Tag        Type                         Name/Value
- 0x00000001 (NEEDED)                     Shared library: [libnsl.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
- 0x0000000e (SONAME)                     Library soname: [libfcgi.so.0]
-[...]
-   176: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND frexp
+But the fact is that fbtft is only an additional modules with no impact
+on the core of the kernel; it requires "patching" the kernel just
+because it wants to add a Kconfig option and a Kbuild sub-directory.
 
-To me, this looks like a bug in libfcgi build system.
+So, it would better be built as an out-of-tree module, rather than be
+handled as a kernel extension. Hence the reason I said it would not play
+well "as-is" with Buildroot.
 
-However, even if libfcgi is linked against libm, this will not solve
-the case of static linking. In this case, the only proper solution
-would be to extend libfcgi to install a .pc (pkg-config) file, and have
-your package use PKG_CHECK_MODULES() instead of AC_CHECK_LIB().
+Regards,
+Yann E. MORIN.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
