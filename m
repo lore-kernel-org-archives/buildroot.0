@@ -1,78 +1,74 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri, 26 Dec 2014 18:37:15 +0100
-Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
-	tightpng encoding support
-In-Reply-To: <20141226180839.53e2df6f@free-electrons.com>
-References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
- <1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>
- <20141226180839.53e2df6f@free-electrons.com>
-Message-ID: <b66fd2b4894b872b928f81fdf13998ec@to-the-max.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 26 Dec 2014 18:29:43 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tmux: remove unsafe headers path
+In-Reply-To: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
+References: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1419614983-8105-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26.12.2014 18:08, Thomas Petazzoni wrote:
-> On Fri, 26 Dec 2014 01:46:15 +0100, Floris Bos wrote:
-> 
->> +if BR2_PACKAGE_LIBVNCSERVER
->> +
->> +config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
->> +	bool "TightPNG encoding support"
->> +	select BR2_PACKAGE_JPEG
->> +	select BR2_PACKAGE_LIBPNG
->> +	help
->> +	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
->> +
->> +	  http://wiki.qemu.org/VNC_Tight_PNG
-> 
-> I've tried to read a bit, but I don't really understand whether JPEG is
-> absolutely necessary to get TightPNG support. The webpage you mention
-> says "If the client indicates JPEG support by sending a JPEG
-> quality pseudo-encoding, then the server can send JPEG, because PNG
-> will only replace the basic compression type used in normal tight.",
-> which seems to indicate that the JPEG support is only optional.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...001-Makefile.a-remove-unsafe-headers-path.patch | 35 ++++++++++++++++++++++
+ package/tmux/tmux.mk                               |  3 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/tmux/0001-Makefile.a-remove-unsafe-headers-path.patch
 
-JPEG and PNG are both necesarry.
-
-Libvncserver will only compile tight.c if HAVE_LIBJPEG
-
-https://github.com/LibVNC/libvncserver/blob/master/libvncserver/Makefile.am#L49
-
-And inside tight.c png is optional, jpeg is not.
-
-> 
->> +endif
->> diff --git a/package/libvncserver/libvncserver.mk 
->> b/package/libvncserver/libvncserver.mk
->> index b26d5b9..8479a62 100644
->> --- a/package/libvncserver/libvncserver.mk
->> +++ b/package/libvncserver/libvncserver.mk
->> @@ -56,4 +56,10 @@ else
->>  LIBVNCSERVER_CONF_OPTS += --without-zlib
->>  endif
->> 
->> +ifeq ($(BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG),y)
->> +LIBVNCSERVER_DEPENDENCIES += libpng
-> 
-> So we don't really need JPEG support after all, since you don't depend
-> on it?
-
-JPEG is added by the existing code:
-
-==
-ifeq ($(BR2_PACKAGE_JPEG),y)
-LIBVNCSERVER_DEPENDENCIES += jpeg
-else
-LIBVNCSERVER_CONF_OPTS += --without-jpeg
-endif
-==
-
-Wasn't sure whether to touch that, was afraid that would change behavior 
-for existing users.
-
-
-Your sincerely,
-
-Floris Bos
+diff --git a/package/tmux/0001-Makefile.a-remove-unsafe-headers-path.patch b/package/tmux/0001-Makefile.a-remove-unsafe-headers-path.patch
+new file mode 100644
+index 0000000..39b14f8
+--- /dev/null
++++ b/package/tmux/0001-Makefile.a-remove-unsafe-headers-path.patch
+@@ -0,0 +1,35 @@
++From 5089886901223b7318d3326704d47b734498993e Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Fri, 26 Dec 2014 17:44:15 +0100
++Subject: [PATCH] Makefile.a: remove unsafe headers path
++
++/usr/local/include is probably not needed and it's unsafe for
++cross-compilation.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index a9ad5b9..0109e5d 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -38,12 +38,12 @@ else
++ CFLAGS += -O2
++ endif
++ if IS_GCC4
++-CPPFLAGS += -iquote. -I/usr/local/include
+++CPPFLAGS += -iquote.
++ if IS_DEBUG
++ CFLAGS += -Wno-pointer-sign
++ endif
++ else
++-CPPFLAGS += -I. -I- -I/usr/local/include
+++CPPFLAGS += -I. -I-
++ endif
++ endif
++ 
++-- 
++1.9.3
++
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 055e97a..9c8921e 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -10,4 +10,7 @@ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
++# we patch Makefile.am
++TMUX_AUTORECONF = YES
++
+ $(eval $(autotools-package))
+-- 
+1.9.3
