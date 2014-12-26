@@ -1,40 +1,40 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 26 Dec 2014 18:38:11 +0100
-Subject: [Buildroot] [PATCH] package/leafnode2: fix news user check
-Message-ID: <1419615491-8238-1-git-send-email-romain.naour@openwide.fr>
+Date: Fri, 26 Dec 2014 18:51:12 +0100
+Subject: [Buildroot] [buildroot-test 2/2] Enable paranoid path checking
+In-Reply-To: <1418852858-818-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1418852858-818-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1418852858-818-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <549DA010.6040205@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---enable-runas-user use 'news' as default but the configure stop
-if news doesn't exist on the build host.
-Use 'root' while cross-compiling
+Hi Thomas,
+Le 17/12/2014 22:47, Thomas Petazzoni a ?crit :
+> Now that Buildroot has support for paranoid path checking (check for
+> clearly invalid header and library directories used when
+> cross-compiling), let's enable this in the autobuilders.
+>
+> Without this, the paranoid path checking only emits warnings. With
+> this patch enabled, whenever an invalid header or library path is
+> used, the build will stop and fail, which will allow us to clearly
+> notice such cases.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Do we want to apply this right now? We already have a lot of failures
+> caused by the static/shared change. Do we want to have more?
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>
+Several packages have already been fixed since this feature has been
+added. Enabling this check now will help to discover the remaining
+packages left to fix.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/leafnode2/leafnode2.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Acked-by: Romain Naour <romain.naour@openwide.fr>
 
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 3bc1c68..0fc2a8d 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -14,9 +14,13 @@ LEAFNODE2_DEPENDENCIES = host-pcre pcre
- LEAFNODE2_CONF_ENV = \
- 	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
- 
-+# --enable-runas-user use 'news' as default but the configure stop
-+# if news doesn't exist on the build host.
-+# Use 'root' while cross-compiling 
- LEAFNODE2_CONF_OPTS = \
- 	--sysconfdir=/etc/leafnode2 \
--	--enable-spooldir=/var/spool/news
-+	--enable-spooldir=/var/spool/news \
-+	--enable-runas-user=root
- 
- # Leafnode2 needs the host version of b_sortnl during
- # compilation. Instead of creating a seperate host package and
--- 
-1.9.3
+Best regards,
+Romain
