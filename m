@@ -1,22 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 26 Dec 2014 09:52:49 -0300
-Subject: [Buildroot] [PATCH] binutils: add version 2.25
-In-Reply-To: <20141226134342.2a270c35@free-electrons.com>
-References: <1419423743-11400-1-git-send-email-gustavo@zacarias.com.ar>
- <20141226134342.2a270c35@free-electrons.com>
-Message-ID: <549D5A21.4080706@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Dec 2014 13:56:20 +0100
+Subject: [Buildroot] [PATCH] Makefile: clarify comment on .br-external
+ handling
+In-Reply-To: <b036dd78f478b15f5e0c74ebe01915ec43cca382.1419485788.git.baruch@tkos.co.il>
+References: <b036dd78f478b15f5e0c74ebe01915ec43cca382.1419485788.git.baruch@tkos.co.il>
+Message-ID: <20141226135620.55674108@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/26/2014 09:43 AM, Thomas Petazzoni wrote:
-> Our default binutils version is still 2.22. I would propose to move to
-> 2.24 as the default version. Thoughts?
+Dear Baruch Siach,
 
-2.24 has been in the tree for some time and covers all of the
-architectures nicely (except bfin and avr32 that's going away) so it
-sounds reasonable.
-+1 from me.
-Regards.
+On Thu, 25 Dec 2014 07:36:28 +0200, Baruch Siach wrote:
+> The comment language may lead the reader to think that .br-external is removed
+> whenever BR2_EXTERNAL is not set in the command line. Make it clear that
+> BR2_EXTERNAL must be explicitly set to an empty value for .br-external to get
+> removed.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  Makefile | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+
+Applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
