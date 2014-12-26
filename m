@@ -1,121 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 16:02:41 +0100
-Subject: [Buildroot] [PATCH 3/4] qt5: bump to version 5.4.0
-In-Reply-To: <1419595603-15591-3-git-send-email-fatih.asici@gmail.com>
-References: <1419595603-15591-1-git-send-email-fatih.asici@gmail.com>
- <1419595603-15591-3-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20141226160241.574a1ae0@free-electrons.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Fri, 26 Dec 2014 16:03:48 +0100
+Subject: [Buildroot] [PATCH 1/2] libvncserver: bump version to 0.9.10
+In-Reply-To: <20141226044006.GT6400@tarshish>
+References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
+ <20141226044006.GT6400@tarshish>
+Message-ID: <19e3ab6547ff31fb2f50e976e6ac5394@to-the-max.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+On 26.12.2014 05:40, Baruch Siach wrote:
+>> diff --git a/package/libvncserver/libvncserver.mk
+>> b/package/libvncserver/libvncserver.mk
+>> index 99d757b..b26d5b9 100644
+>> --- a/package/libvncserver/libvncserver.mk
+>> +++ b/package/libvncserver/libvncserver.mk
+>> @@ -4,13 +4,14 @@
+>>  #
+>>  
+>> ################################################################################
+>> 
+>> -LIBVNCSERVER_VERSION = 0.9.9
+>> +LIBVNCSERVER_VERSION = 0.9.10
+>>  LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
+>> -LIBVNCSERVER_SITE = 
+>> http://downloads.sourceforge.net/project/libvncserver/libvncserver/$(LIBVNCSERVER_VERSION)
+>> +LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
+>>  LIBVNCSERVER_LICENSE = GPLv2+
+>>  LIBVNCSERVER_LICENSE_FILES = COPYING
+>>  LIBVNCSERVER_INSTALL_STAGING = YES
+>>  LIBVNCSERVER_CONFIG_SCRIPTS = libvncserver-config
+>> +LIBVNCSERVER_AUTORECONF = YES
+> 
+> Why is this needed? Please explain in a comment.
 
-On Fri, 26 Dec 2014 14:06:42 +0200, Fatih A??c? wrote:
-> qt5base:
->   - Add patches to fix uClibc build.
->   - Remove -no-c++11 option since qt5connectivity needs some C++11
->     features.
+The autoreconf you mean?
 
-Hum, we don't really have a good "handling" of C++11 in Buildroot. I
-believe C++11 is only available starting from certain gcc versions, no?
-So maybe not all toolchains will support C++11 ?
-
-> qt5webkit:
->   - Remove egl patch. This should be fixed with CONFIG += egl option.
-
-Hum, looking at the patch, I don't really understand this. The patch
-does add some include paths when EGL is enabled. How does CONFIG += egl
-solves the problem?
-
->  ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
->  QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
-> -QT5BASE_LICENSE = LGPLv2.1 or GPLv3.0
-> -QT5BASE_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
-> +QT5BASE_LICENSE = LGPLv2.1 with exception or LGPLv3
-> +QT5BASE_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
-
-So the license of qt5base is not the same as the license of the other
-Qt modules?
-
-For the other Qt modules, I see:
-
-> +QT5CONNECTIVITY_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5CONNECTIVITY_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5DECLARATIVE_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5DECLARATIVE_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-Qt5enginio is also different?
-
-> +QT5ENGINIO_LICENSE = LGPLv2.1 with exception or LGPLv3
-> +QT5ENGINIO_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
-
-> +QT5GRAPHICALEFFECTS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5IMAGEFORMATS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5MULTIMEDIA_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5MULTIMEDIA_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5QUICK1_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5QUICK1_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5QUICKCONTROLS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5SCRIPT_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5SENSORS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5SENSORS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5SERIALPORT_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5SERIALPORT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5SVG_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5SVG_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5WEBKIT_EXAMPLES_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +# Source files contain references to LGPL_EXCEPTION.txt but it is not included
-> +# in the archive.
-> +QT5WEBKIT_EXAMPLES_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
-
-For qt5webkit, I can understand why the license is different.
-
-> +QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +# Source files contain references to LGPL_EXCEPTION.txt but it is not included
-> +# in the archive.
-> +QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
->  else
-> -QT5WEBKIT_LICENSE = LGPLv2+, MIT, Commercial license
-> +QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), Commercial license
+No idea why exactly, but upstream no longer includes a ready-made 
+configure script with the new release.
+Since it is mentioned in their changelog ("Cleaned out the autotools 
+build system which now uses autoreconf") I assume it is intentional, 
+instead of overlooked.
 
 
-> +QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +# Source files contain references to LGPL_EXCEPTION.txt but it is not included
-> +# in the archive.
-> +QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
+Yours sincerely,
 
-
-> +QT5X11EXTRAS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5X11EXTRAS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-> +QT5XMLPATTERNS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> +QT5XMLPATTERNS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-
-Maybe we should define some variables in package/qt5/qt5.mk for the
-license stuff, and re-use $(QT5_LICENSE) and $(QT5_LICENSE_FILES) in
-the various packages in order to avoid this duplication?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Floris Bos
