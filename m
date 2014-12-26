@@ -1,40 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Dec 2014 19:33:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 7760] New: botan: wrong prefix in botan-1.10.pc
-Message-ID: <bug-7760-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Dec 2014 21:01:12 +0100
+Subject: [Buildroot] [PATCH 1/2] package/kismet: fix ncurses static build
+In-Reply-To: <bc13bcfd2fff0fa2c313edad80d220ef5e34e567.1419615048.git.yann.morin.1998@free.fr>
+References: <cover.1419615048.git.yann.morin.1998@free.fr>
+ <bc13bcfd2fff0fa2c313edad80d220ef5e34e567.1419615048.git.yann.morin.1998@free.fr>
+Message-ID: <20141226210112.224245f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7760
+Dear Yann E. MORIN,
 
-           Summary: botan: wrong prefix in botan-1.10.pc
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ruben at rubenkerkhof.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Fri, 26 Dec 2014 18:33:08 +0100, Yann E. MORIN wrote:
 
+> diff --git a/package/kismet/0003-fix-curses-libs-ordering.patch b/package/kismet/0003-fix-curses-libs-ordering.patch
+> new file mode 100644
+> index 0000000..c5e7eff
+> --- /dev/null
+> +++ b/package/kismet/0003-fix-curses-libs-ordering.patch
+> @@ -0,0 +1,52 @@
+> +configure: fix ordering of ncurses libraries
+> +
+> +Says Vicente:
+> +    [T]he order is very important when doing static builds.
+> +    Otherwise we will see errors like this one:
+> +
+> +    [...]/sysroot/usr/lib/libpanel.a(p_delete.o):
+> +    In function `del_panel':
+> +    p_delete.c:(.text+0x68): undefined reference to `_nc_panelhook'
+> +
+> +Fix the order configure adds libraries: new libraries should be added
+> +at the *front* of the list, not at the end.
 
-botan-1.10.pc contains:
+So this is only talking about library ordering.
 
-prefix=/usr/local
-exec_prefix=${prefix}
-libdir=${prefix}/lib
-includedir=${prefix}/include/botan-1.10
+> +-# Add additional cflags since some distros bury panel.h
+> +-CPPFLAGS="$CPPFLAGS -I/usr/include/ncurses"
 
-but the headers are installed in /usr/include, not /usr/local/include.
+But the patch also removes some invalid -I path.
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
