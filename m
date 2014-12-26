@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 13:56:20 +0100
-Subject: [Buildroot] [PATCH] Makefile: clarify comment on .br-external
- handling
-In-Reply-To: <b036dd78f478b15f5e0c74ebe01915ec43cca382.1419485788.git.baruch@tkos.co.il>
-References: <b036dd78f478b15f5e0c74ebe01915ec43cca382.1419485788.git.baruch@tkos.co.il>
-Message-ID: <20141226135620.55674108@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Dec 2014 12:57:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 7754] make: ***
+ [/..../buildroot-2014.11/output/build/host-gcc-initial-4.8.3/.stamp_built]
+ Error 2
+In-Reply-To: <bug-7754-163@https.bugs.busybox.net/>
+References: <bug-7754-163@https.bugs.busybox.net/>
+Message-ID: <20141226125742.4BF27807B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+https://bugs.busybox.net/show_bug.cgi?id=7754
 
-On Thu, 25 Dec 2014 07:36:28 +0200, Baruch Siach wrote:
-> The comment language may lead the reader to think that .br-external is removed
-> whenever BR2_EXTERNAL is not set in the command line. Make it clear that
-> BR2_EXTERNAL must be explicitly set to an empty value for .br-external to get
-> removed.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  Makefile | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-12-26 12:57:41 UTC ---
+Could you specify which Buildroot version you're using, and include the last
+100-200 lines of build output?
 
-Applied, thanks!
+With the message you gave, there's nothing we can do: all we can conclude is
+that the build of host-gcc-initial has failed, which is not enough to solve
+this bug.
 
-Thomas
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
