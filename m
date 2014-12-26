@@ -1,49 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 15:04:38 +0100
-Subject: [Buildroot] building fbtft framebuffer drivers into buildroot.
-In-Reply-To: <20141226102028.GA3982@free.fr>
-References: <CAFGceHGR2k7ARYDZqK0pskkNbd6wiguLkMdZ07zpPENW+NAZxw@mail.gmail.com>
- <20141226102028.GA3982@free.fr>
-Message-ID: <20141226150438.08e429c2@free-electrons.com>
+Date: Fri, 26 Dec 2014 13:55:50 +0100
+Subject: [Buildroot] [git commit] Makefile: clarify comment on .br-external
+	handling
+Message-ID: <20141226141335.6046C8004B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=f6e771032336f6af18997b3f9145d75301bb4da0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 26 Dec 2014 11:20:29 +0100, Yann E. MORIN wrote:
+The comment language may lead the reader to think that .br-external is removed
+whenever BR2_EXTERNAL is not set in the command line. Make it clear that
+BR2_EXTERNAL must be explicitly set to an empty value for .br-external to get
+removed.
 
-> I've had a look at this package, and unfortunately, it will be hard to
-> get it packaged in Buildroot.
-> 
-> The problem is that this kernel module does not compile as an
-> out-of-tree module, and their buildsystem is made so that it requires
-> the kernel be patched.
-> 
-> This is not posible with Buildroot.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Well, yes and no. Indeed it is much easier to package if the stuff can
-be built as an out-of-tree module. However, we have two examples of
-things packaged in Buildroot that require patching the kernel: Xenomai
-and RTAI. They use a loosely defined model that we could name "Linux
-extension", see linux/linux-ext-*.mk. They basically hook up into the
-Linux build process by adding some stuff to LINUX_PRE_PATCH_HOOKS.
-
-I recently had a look at the aufs stuff, and it has the same problem:
-not only it is made of modules that can be built out-of-tree, but it
-also needs to patch the kernel (some core VFS changes).
-
-So, I haven't looked at all the fbtft stuff. If it's a set of
-standalone drivers that don't require any modification to the core of
-the kernel, then indeed, turning them into out-of-tree modules can be a
-good idea. If not, then using the "linux-ext" model can be a solution.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index ad018c8..5e0b4f2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -123,8 +123,9 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ # On subsequent invocations of make, it is read in. It can still be overridden
+ # on the command line, therefore the file is re-created every time make is run.
+ #
+-# When BR2_EXTERNAL is not set, the .br-external file is removed and we point
+-# to support/dummy-external. This makes sure we can unconditionally include the
++# When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
++# line), the .br-external file is removed and we point to
++# support/dummy-external. This makes sure we can unconditionally include the
+ # Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
+ # override is necessary so the user can clear BR2_EXTERNAL from the command
+ # line, but the dummy path is still used internally.
