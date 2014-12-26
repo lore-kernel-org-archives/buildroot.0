@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 15:14:56 +0100
-Subject: [Buildroot] [PATCH] package/f2fs-tools: furthe endianness fixes
-In-Reply-To: <1419532540-4688-1-git-send-email-yann.morin.1998@free.fr>
-References: <1419532540-4688-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141226151456.07f5fdfd@free-electrons.com>
+Date: Fri, 26 Dec 2014 15:15:15 +0100
+Subject: [Buildroot] [git commit] libxkbcommon: bump to version 0.5.0
+Message-ID: <20141226141557.1814980074@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=afab8dc6038b54a3b0dea08858978f3a68885300
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 25 Dec 2014 19:35:40 +0100, Yann E. MORIN wrote:
-> Add appropriate checks in configure.ac.
-> 
-> Fixes a slew of autobuilder failures:
->     http://autobuild.buildroot.org/results/cf6/cf6f5b6981694f74bfca45b3d04ff35e4226b162/
->     http://autobuild.buildroot.org/results/b34/b346472e686af5b517b689217349eab21878bb7b/
->     http://autobuild.buildroot.org/results/49a/49a6a2a88cac6e0899f271a5e65c78dd9eb2eab4/
->     ...
-> 
-> Note: patches sent upstream, awaiting for reply...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libxkbcommon/libxkbcommon.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 3bfe764..2d30506 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 0.3.0
++LIBXKBCOMMON_VERSION = 0.5.0
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
