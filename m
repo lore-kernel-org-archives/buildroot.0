@@ -1,59 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Dec 2014 21:53:32 +0100
-Subject: [Buildroot] [PATCH 1/2] package/kismet: fix ncurses static build
-In-Reply-To: <20141226210112.224245f6@free-electrons.com>
-References: <cover.1419615048.git.yann.morin.1998@free.fr>
- <bc13bcfd2fff0fa2c313edad80d220ef5e34e567.1419615048.git.yann.morin.1998@free.fr>
- <20141226210112.224245f6@free-electrons.com>
-Message-ID: <20141226205332.GG3982@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Dec 2014 21:57:30 +0100
+Subject: [Buildroot] [PATCH 1/1] util-linux: Add an option to compile
+ 'nsenter' binary.
+In-Reply-To: <549DC8F6.3080403@green-communications.fr>
+References: <1419331450-820-1-git-send-email-nicolas.cavallari@green-communications.fr>
+ <20141226210225.461140c6@free-electrons.com>
+ <549DC8F6.3080403@green-communications.fr>
+Message-ID: <20141226215730.57250eab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Nicolas Cavallari,
 
-On 2014-12-26 21:01 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 26 Dec 2014 18:33:08 +0100, Yann E. MORIN wrote:
-> 
-> > diff --git a/package/kismet/0003-fix-curses-libs-ordering.patch b/package/kismet/0003-fix-curses-libs-ordering.patch
-> > new file mode 100644
-> > index 0000000..c5e7eff
-> > --- /dev/null
-> > +++ b/package/kismet/0003-fix-curses-libs-ordering.patch
-> > @@ -0,0 +1,52 @@
-> > +configure: fix ordering of ncurses libraries
-> > +
-> > +Says Vicente:
-> > +    [T]he order is very important when doing static builds.
-> > +    Otherwise we will see errors like this one:
-> > +
-> > +    [...]/sysroot/usr/lib/libpanel.a(p_delete.o):
-> > +    In function `del_panel':
-> > +    p_delete.c:(.text+0x68): undefined reference to `_nc_panelhook'
-> > +
-> > +Fix the order configure adds libraries: new libraries should be added
-> > +at the *front* of the list, not at the end.
-> 
-> So this is only talking about library ordering.
-> 
-> > +-# Add additional cflags since some distros bury panel.h
-> > +-CPPFLAGS="$CPPFLAGS -I/usr/include/ncurses"
-> 
-> But the patch also removes some invalid -I path.
+On Fri, 26 Dec 2014 21:45:42 +0100, Nicolas Cavallari wrote:
 
-Damn, that was supposed to go in a separate patch.
+> I'm not so sure now ... The fallback uses SYS_netns, instead of the
+> kernel's __NR_setns, so i assume that there must be some C library
+> support ... uclibc does define SYS_netns to be __NR_setns, so i think
+> the problem is still valid if the toolchain does not define SYS_setns.
 
-I'll fix. Thanks for spotting.
+I was also confused by this, but it's actually util-linux itself that
+defines SYS_setns from __NR_setns.
 
-Regards,
-Yann E. MORIN.
+From m4/ul.m4 in util-linux sources:
 
+AC_DEFUN([UL_CHECK_SYSCALL], [
+  dnl This macro uses host_cpu.
+  AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_CACHE_CHECK([for syscall $1],
+    [ul_cv_syscall_$1],
+    [_UL_SYSCALL_CHECK_DECL([SYS_$1],
+      [syscall=SYS_$1],
+      [dnl Our libc failed use, so see if we can get the kernel
+      dnl headers to play ball ...
+      _UL_SYSCALL_CHECK_DECL([_NR_$1],
+        [syscall=_NR_$1],
+        [
+          syscall=no
+          if test "x$linux_os" = xyes; then
+            case $host_cpu in
+              _UL_CHECK_SYSCALL_FALLBACK(m4_shift($@))
+            esac
+          fi
+        ])
+      ])
+    ul_cv_syscall_$1=$syscall
+    ])
+  AM_CONDITIONAL([HAVE_]m4_toupper($1), [test "x$ul_cv_syscall_$1" != xno])
+  case $ul_cv_syscall_$1 in #(
+  no) AC_MSG_WARN([Unable to detect syscall $1.]) ;;
+  SYS_*) ;;
+  *) AC_DEFINE_UNQUOTED([SYS_$1], [$ul_cv_syscall_$1],
+        [Fallback syscall number for $1]) ;;
+  esac
+])
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
