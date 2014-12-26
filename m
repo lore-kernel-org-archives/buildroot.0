@@ -1,58 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 20:09:34 +0100
-Subject: [Buildroot] [git commit] util-linux: Add an option to compile
-	'nsenter' binary.
-Message-ID: <20141226191005.363B980425@busybox.osuosl.org>
+Date: Fri, 26 Dec 2014 20:11:43 +0100
+Subject: [Buildroot] [PATCH 1/2] package/lftp: don't use host's path
+In-Reply-To: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
+References: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141226201143.143896ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21d6e4ea459b0b3a436c7936a94a917f085919e6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-nsenter is a tool to enter the namespace of another process.
+On Fri, 26 Dec 2014 18:29:42 +0100, Romain Naour wrote:
+> lftp try to link with -L/usr/lib/lftp/$(LFTP_VERSION) if
+> DESTDIR is not set.
+> 
+> When DESTDIR is set to STAGING_DIR, it link with
+> -L$(STAGING_DIR)/usr/lib/lftp/$(LFTP_VERSION)
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/lftp/lftp.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+> index 1586579..73e3087 100644
+> --- a/package/lftp/lftp.mk
+> +++ b/package/lftp/lftp.mk
+> @@ -45,6 +45,10 @@ LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_FTP) += proto-ftp.so
+>  LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_HTTP) += proto-http.so
+>  LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_SFTP) += proto-sftp.so
+>  
+> +# Set DESTDIR to STAGING_DIR during the build to avoid linking
+> +# with -L/usr/lib/lftp/$(LFTP_VERSION)
+> +LFTP_MAKE_ENV += DESTDIR="$(STAGING_DIR)"
 
-[Thomas: add dependency to 3.0 kernel headers, since the setns()
-system call was added in Linux 3.0.]
+Can we patch lftp's build system instead, and submit the patch upstream?
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/util-linux/Config.in     |    9 +++++++++
- package/util-linux/util-linux.mk |    1 +
- 2 files changed, 10 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 5dfd050..a8dfa1c 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -118,6 +118,15 @@ config BR2_PACKAGE_UTIL_LINUX_MESG
- 	help
- 	  Control write access to your terminal
- 
-+config BR2_PACKAGE_UTIL_LINUX_NSENTER
-+	bool "nsenter"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	help
-+	  Enter the namespaces of another process.
-+
-+comment "nsenter needs a toolchain w/ headers >= 3.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+
- config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	bool "mount/umount"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index e06fa9a..a530596 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -74,6 +74,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-su --enable-sulogin,--disable-last --disable-login --disable-su --disable-sulogin) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),--enable-mount,--disable-mount) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_NEWGRP),--enable-newgrp,--disable-newgrp) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
