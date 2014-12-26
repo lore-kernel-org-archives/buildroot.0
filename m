@@ -1,67 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 21:57:30 +0100
-Subject: [Buildroot] [PATCH 1/1] util-linux: Add an option to compile
- 'nsenter' binary.
-In-Reply-To: <549DC8F6.3080403@green-communications.fr>
-References: <1419331450-820-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <20141226210225.461140c6@free-electrons.com>
- <549DC8F6.3080403@green-communications.fr>
-Message-ID: <20141226215730.57250eab@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 26 Dec 2014 22:07:58 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] kismet: fix static builds (branch
+	yem/fixes)
+Message-ID: <cover.1419627979.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Cavallari,
+Hello All!
 
-On Fri, 26 Dec 2014 21:45:42 +0100, Nicolas Cavallari wrote:
+This series contains fixes to kismet when doing a static-only build:
 
-> I'm not so sure now ... The fallback uses SYS_netns, instead of the
-> kernel's __NR_setns, so i assume that there must be some C library
-> support ... uclibc does define SYS_netns to be __NR_setns, so i think
-> the problem is still valid if the toolchain does not define SYS_setns.
+  - first patch is the same as what Vicente proposed, but done in
+    configure.in instead of configure, and thus needs an autoreconf;
+    it fixes static linking against ncurses libs;
 
-I was also confused by this, but it's actually util-linux itself that
-defines SYS_setns from __NR_setns.
+  - second patch removes unsafe host paths from the include search dirs;
 
-From m4/ul.m4 in util-linux sources:
+  - third patch is what Vicente provided, but with the ncurses bits
+    removed since it is now handled differently in its own patch.
 
-AC_DEFUN([UL_CHECK_SYSCALL], [
-  dnl This macro uses host_cpu.
-  AC_REQUIRE([AC_CANONICAL_HOST])
-  AC_CACHE_CHECK([for syscall $1],
-    [ul_cv_syscall_$1],
-    [_UL_SYSCALL_CHECK_DECL([SYS_$1],
-      [syscall=SYS_$1],
-      [dnl Our libc failed use, so see if we can get the kernel
-      dnl headers to play ball ...
-      _UL_SYSCALL_CHECK_DECL([_NR_$1],
-        [syscall=_NR_$1],
-        [
-          syscall=no
-          if test "x$linux_os" = xyes; then
-            case $host_cpu in
-              _UL_CHECK_SYSCALL_FALLBACK(m4_shift($@))
-            esac
-          fi
-        ])
-      ])
-    ul_cv_syscall_$1=$syscall
-    ])
-  AM_CONDITIONAL([HAVE_]m4_toupper($1), [test "x$ul_cv_syscall_$1" != xno])
-  case $ul_cv_syscall_$1 in #(
-  no) AC_MSG_WARN([Unable to detect syscall $1.]) ;;
-  SYS_*) ;;
-  *) AC_DEFINE_UNQUOTED([SYS_$1], [$ul_cv_syscall_$1],
-        [Fallback syscall number for $1]) ;;
-  esac
-])
+Changes v1 -> v2:
+  - split unsafe host paths removal to is own patch  (Thomas)
 
-Best regards,
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 21d6e4ea459b0b3a436c7936a94a917f085919e6:
+
+  util-linux: Add an option to compile 'nsenter' binary. (2014-12-26 20:09:34 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/fixes
+
+for you to fetch changes up to 0595c07a5d923887ee61e9a3a5084da616b92329:
+
+  kismet: Fix static build (2014-12-26 22:06:03 +0100)
+
+----------------------------------------------------------------
+Vicente Olivert Riera (1):
+      kismet: Fix static build
+
+Yann E. MORIN (2):
+      package/kismet: fix ncurses static build
+      package/kismet: do not use host headers
+
+ package/kismet/0003-fix-curses-libs-ordering.patch | 42 ++++++++++++++++++++++
+ package/kismet/0004-no-include-host-paths.patch    | 23 ++++++++++++
+ package/kismet/kismet.mk                           |  7 ++++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 package/kismet/0003-fix-curses-libs-ordering.patch
+ create mode 100644 package/kismet/0004-no-include-host-paths.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
