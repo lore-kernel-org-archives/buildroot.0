@@ -1,69 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Dec 2014 16:16:56 +0100
-Subject: [Buildroot] [PATCH 1/2] libvncserver: bump version to 0.9.10
-In-Reply-To: <19e3ab6547ff31fb2f50e976e6ac5394@to-the-max.net>
-References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
- <20141226044006.GT6400@tarshish>
- <19e3ab6547ff31fb2f50e976e6ac5394@to-the-max.net>
-Message-ID: <20141226151656.GD3982@free.fr>
+Date: Fri, 26 Dec 2014 17:04:59 +0100
+Subject: [Buildroot] [PATCH 2/2] kismet: Fix static build
+In-Reply-To: <1418395681-40434-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1418395681-40434-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1418395681-40434-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20141226160459.GE3982@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Floris, All,
+Vicente, All,
 
-On 2014-12-26 16:03 +0100, Floris Bos spake thusly:
-> On 26.12.2014 05:40, Baruch Siach wrote:
-> >>diff --git a/package/libvncserver/libvncserver.mk
-> >>b/package/libvncserver/libvncserver.mk
-> >>index 99d757b..b26d5b9 100644
-> >>--- a/package/libvncserver/libvncserver.mk
-> >>+++ b/package/libvncserver/libvncserver.mk
-> >>@@ -4,13 +4,14 @@
-> >> #
-> >>################################################################################
-> >>
-> >>-LIBVNCSERVER_VERSION = 0.9.9
-> >>+LIBVNCSERVER_VERSION = 0.9.10
-> >> LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
-> >>-LIBVNCSERVER_SITE = http://downloads.sourceforge.net/project/libvncserver/libvncserver/$(LIBVNCSERVER_VERSION)
-> >>+LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
-> >> LIBVNCSERVER_LICENSE = GPLv2+
-> >> LIBVNCSERVER_LICENSE_FILES = COPYING
-> >> LIBVNCSERVER_INSTALL_STAGING = YES
-> >> LIBVNCSERVER_CONFIG_SCRIPTS = libvncserver-config
-> >>+LIBVNCSERVER_AUTORECONF = YES
-> >
-> >Why is this needed? Please explain in a comment.
+On 2014-12-12 14:48 +0000, Vicente Olivert Riera spake thusly:
+> Use pcap-config to list optional libpcap dependencies needed for static
+> link. Otherwise we will see errors like this one:
 > 
-> The autoreconf you mean?
+> /br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libpcap.a(pcap-canusb-linux.o):
+> In function `canusb_close':
+> pcap-canusb-linux.c:(.text+0xec): undefined reference to `libusb_close'
+> 
+> Also reorder the ncurses libs because the order is very important when
+> doing static builds. Otherwise we will see errors like this one:
+> 
+> /br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libpanel.a(p_delete.o):
+> In function `del_panel':
+> p_delete.c:(.text+0x68): undefined reference to `_nc_panelhook'
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/kismet/kismet.mk |    8 ++++++++
+>  1 files changed, 8 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+> index f177fea..6aeafe2 100644
+> --- a/package/kismet/kismet.mk
+> +++ b/package/kismet/kismet.mk
+> @@ -12,6 +12,14 @@ KISMET_CONF_OPTS += --with-netlink-version=3
+>  KISMET_LICENSE = GPLv2+
+>  KISMET_LICENSE_FILES = debian/copyright
+>  
+> +define KISMET_REORDER_NCURSES_LIBS
+> +	$(SED) 's/-lncurses -lpanel/-lpanel -lncurses/' $(@D)/Makefile.inc
 
-Yes.
+I think it is better to patch configure.in instead of this post-patch
+hook. I have a patch to this effect that I'll submit soon.
 
-It is not often that a release tarball does not contain pre-generated
-autotools files, so adding a comment saying so is required, like:
+> +endef
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +KISMET_CONF_ENV = LIBS="-lpcap $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
 
-    # Upstream decided to remove generated autotools files from the
-    # tarball, so we need to generate it:
-    LIBVNCSERVER_AUTORECONF = YES
+I'll incorporate your libpcap in my series when I resubmit.
 
-> No idea why exactly, but upstream no longer includes a ready-made configure
-> script with the new release.
-> Since it is mentioned in their changelog ("Cleaned out the autotools build
-> system which now uses autoreconf") I assume it is intentional, instead of
-> overlooked.
-
-That's pretty much unusual not to bundle the generated configure. That
-they be removed from the repository is understandable, of course, but
-release tarballs usually have them, so users do not have to have the
-autotools development stuff just to build the package.
-
-But, he... If upstream does not want to bundle it... :-/
+In the meantime, I have marked this patch as "Changes Requested" in
+Patchwork.
 
 Regards,
 Yann E. MORIN.
+
+> +KISMET_POST_CONFIGURE_HOOKS += KISMET_REORDER_NCURSES_LIBS
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_PCRE),y)
+>  	KISMET_DEPENDENCIES += pcre
+>  endif
+> -- 
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
