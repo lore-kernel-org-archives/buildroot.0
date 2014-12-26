@@ -1,38 +1,40 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 26 Dec 2014 18:29:42 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lftp: don't use host's path
-Message-ID: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
+Date: Fri, 26 Dec 2014 18:38:11 +0100
+Subject: [Buildroot] [PATCH] package/leafnode2: fix news user check
+Message-ID: <1419615491-8238-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lftp try to link with -L/usr/lib/lftp/$(LFTP_VERSION) if
-DESTDIR is not set.
-
-When DESTDIR is set to STAGING_DIR, it link with
--L$(STAGING_DIR)/usr/lib/lftp/$(LFTP_VERSION)
+--enable-runas-user use 'news' as default but the configure stop
+if news doesn't exist on the build host.
+Use 'root' while cross-compiling
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/lftp/lftp.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/leafnode2/leafnode2.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 1586579..73e3087 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -45,6 +45,10 @@ LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_FTP) += proto-ftp.so
- LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_HTTP) += proto-http.so
- LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_SFTP) += proto-sftp.so
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 3bc1c68..0fc2a8d 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -14,9 +14,13 @@ LEAFNODE2_DEPENDENCIES = host-pcre pcre
+ LEAFNODE2_CONF_ENV = \
+ 	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
  
-+# Set DESTDIR to STAGING_DIR during the build to avoid linking
-+# with -L/usr/lib/lftp/$(LFTP_VERSION)
-+LFTP_MAKE_ENV += DESTDIR="$(STAGING_DIR)"
-+
- define LFTP_REMOVE_MODULES
- 	for f in $(LFTP_MODULES_TO_REMOVE-) ; do \
- 		$(RM) -f $(TARGET_DIR)/usr/lib/lftp/$(LFTP_VERSION)/$$f ; \
++# --enable-runas-user use 'news' as default but the configure stop
++# if news doesn't exist on the build host.
++# Use 'root' while cross-compiling 
+ LEAFNODE2_CONF_OPTS = \
+ 	--sysconfdir=/etc/leafnode2 \
+-	--enable-spooldir=/var/spool/news
++	--enable-spooldir=/var/spool/news \
++	--enable-runas-user=root
+ 
+ # Leafnode2 needs the host version of b_sortnl during
+ # compilation. Instead of creating a seperate host package and
 -- 
 1.9.3
