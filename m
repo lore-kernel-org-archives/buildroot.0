@@ -1,61 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 18:08:39 +0100
-Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
- tightpng encoding support
-In-Reply-To: <1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>
-References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
- <1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20141226180839.53e2df6f@free-electrons.com>
+Date: Fri, 26 Dec 2014 18:22:51 +0100
+Subject: [Buildroot] [PATCH v9 03/18] package/ffmpeg: Add Kodi patchset
+In-Reply-To: <1419356801-31525-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
+ <1419356801-31525-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20141226182251.79d06670@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Dear Bernd Kuhls,
 
-On Fri, 26 Dec 2014 01:46:15 +0100, Floris Bos wrote:
+On Tue, 23 Dec 2014 18:46:26 +0100, Bernd Kuhls wrote:
+> In the past xbmc delivered its own ffmpeg source code with specific patches to
+> address bugs found during the use of xbmc. For Helix the ffmpeg source code was
+> removed, Helix uses a vanilla ffmpeg source tarball and applies this patchset
+> on top of it.
+> 
+> Downloaded from
+> https://github.com/xbmc/FFmpeg/compare/FFmpeg:release/2.5...release/2.5-xbmc.patch
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> +if BR2_PACKAGE_LIBVNCSERVER
-> +
-> +config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
-> +	bool "TightPNG encoding support"
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_LIBPNG
-> +	help
-> +	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
-> +
-> +	  http://wiki.qemu.org/VNC_Tight_PNG
+I am wondering, wouldn't it be easier to have the individual patches,
+instead of one big patch that combines all the XBMC patches?
 
-I've tried to read a bit, but I don't really understand whether JPEG is
-absolutely necessary to get TightPNG support. The webpage you mention
-says "If the client indicates JPEG support by sending a JPEG
-quality pseudo-encoding, then the server can send JPEG, because PNG
-will only replace the basic compression type used in normal tight.",
-which seems to indicate that the JPEG support is only optional.
-
-> +endif
-> diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-> index b26d5b9..8479a62 100644
-> --- a/package/libvncserver/libvncserver.mk
-> +++ b/package/libvncserver/libvncserver.mk
-> @@ -56,4 +56,10 @@ else
->  LIBVNCSERVER_CONF_OPTS += --without-zlib
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG),y)
-> +LIBVNCSERVER_DEPENDENCIES += libpng
-
-So we don't really need JPEG support after all, since you don't depend
-on it?
-
-> +else
-> +LIBVNCSERVER_CONF_OPTS += --without-png
-> +endif
-> +
->  $(eval $(autotools-package))
-
-Thanks,
+Also, have those patches been submitted upstream? Why is there an XBMC
+patch set, instead of patches submitted to upstream ffmpeg? Can we
+expect this patch series to reduce in size over time?
 
 Thomas
 -- 
