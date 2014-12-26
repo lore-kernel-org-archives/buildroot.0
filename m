@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Dec 2014 20:11:43 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lftp: don't use host's path
-In-Reply-To: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
-References: <1419614983-8105-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20141226201143.143896ff@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Dec 2014 19:33:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 7760] New: botan: wrong prefix in botan-1.10.pc
+Message-ID: <bug-7760-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+https://bugs.busybox.net/show_bug.cgi?id=7760
 
-On Fri, 26 Dec 2014 18:29:42 +0100, Romain Naour wrote:
-> lftp try to link with -L/usr/lib/lftp/$(LFTP_VERSION) if
-> DESTDIR is not set.
-> 
-> When DESTDIR is set to STAGING_DIR, it link with
-> -L$(STAGING_DIR)/usr/lib/lftp/$(LFTP_VERSION)
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/lftp/lftp.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-> index 1586579..73e3087 100644
-> --- a/package/lftp/lftp.mk
-> +++ b/package/lftp/lftp.mk
-> @@ -45,6 +45,10 @@ LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_FTP) += proto-ftp.so
->  LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_HTTP) += proto-http.so
->  LFTP_MODULES_TO_REMOVE-$(BR2_PACKAGE_LFTP_PROTO_SFTP) += proto-sftp.so
->  
-> +# Set DESTDIR to STAGING_DIR during the build to avoid linking
-> +# with -L/usr/lib/lftp/$(LFTP_VERSION)
-> +LFTP_MAKE_ENV += DESTDIR="$(STAGING_DIR)"
+           Summary: botan: wrong prefix in botan-1.10.pc
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: ruben at rubenkerkhof.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Can we patch lftp's build system instead, and submit the patch upstream?
 
-Thanks,
+botan-1.10.pc contains:
 
-Thomas
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/botan-1.10
+
+but the headers are installed in /usr/include, not /usr/local/include.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
