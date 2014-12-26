@@ -1,7 +1,10 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri, 26 Dec 2014 01:46:14 +0100
-Subject: [Buildroot] [PATCH 1/2] libvncserver: bump version to 0.9.10
-Message-ID: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
+Date: Fri, 26 Dec 2014 01:46:15 +0100
+Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
+	tightpng encoding support
+In-Reply-To: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,404 +13,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 ---
- .../libvncserver-0001-CVE-2014-6051-6052.patch     |  85 ------------
- .../libvncserver-0002-CVE-2014-6053.patch          |  21 ---
- .../libvncserver-0003-CVE-2014-6054.patch          |  87 ------------
- .../libvncserver-0004-CVE-2014-6055.patch          | 150 ---------------------
- package/libvncserver/libvncserver.mk               |   5 +-
- 5 files changed, 3 insertions(+), 345 deletions(-)
- delete mode 100644 package/libvncserver/libvncserver-0001-CVE-2014-6051-6052.patch
- delete mode 100644 package/libvncserver/libvncserver-0002-CVE-2014-6053.patch
- delete mode 100644 package/libvncserver/libvncserver-0003-CVE-2014-6054.patch
- delete mode 100644 package/libvncserver/libvncserver-0004-CVE-2014-6055.patch
+ package/libvncserver/Config.in       | 13 +++++++++++++
+ package/libvncserver/libvncserver.mk |  6 ++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/libvncserver/libvncserver-0001-CVE-2014-6051-6052.patch b/package/libvncserver/libvncserver-0001-CVE-2014-6051-6052.patch
-deleted file mode 100644
-index 6c21b1d..0000000
---- a/package/libvncserver/libvncserver-0001-CVE-2014-6051-6052.patch
-+++ /dev/null
-@@ -1,85 +0,0 @@
--Description: fix denial of service and possible code execution via
-- integer overflow and lack of malloc error handling in MallocFrameBuffer()
--Origin: backport, https://github.com/newsoft/libvncserver/commit/045a044e8ae79db9244593fbce154cdf6e843273
--Origin: backport, https://github.com/newsoft/libvncserver/commit/85a778c0e45e87e35ee7199f1f25020648e8b812
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: libvncserver-0.9.9+dfsg/libvncclient/rfbproto.c
--===================================================================
----- libvncserver-0.9.9+dfsg.orig/libvncclient/rfbproto.c	2012-05-04 10:19:00.000000000 -0400
--+++ libvncserver-0.9.9+dfsg/libvncclient/rfbproto.c	2014-09-25 11:11:55.884057336 -0400
--@@ -1807,7 +1807,8 @@
-- 	client->updateRect.x = client->updateRect.y = 0;
-- 	client->updateRect.w = client->width;
-- 	client->updateRect.h = client->height;
---	client->MallocFrameBuffer(client);
--+	if (!client->MallocFrameBuffer(client))
--+	  return FALSE;
-- 	SendFramebufferUpdateRequest(client, 0, 0, rect.r.w, rect.r.h, FALSE);
-- 	rfbClientLog("Got new framebuffer size: %dx%d\n", rect.r.w, rect.r.h);
-- 	continue;
--@@ -2260,7 +2261,8 @@
--     client->updateRect.x = client->updateRect.y = 0;
--     client->updateRect.w = client->width;
--     client->updateRect.h = client->height;
---    client->MallocFrameBuffer(client);
--+    if (!client->MallocFrameBuffer(client))
--+      return FALSE;
--     SendFramebufferUpdateRequest(client, 0, 0, client->width, client->height, FALSE);
--     rfbClientLog("Got new framebuffer size: %dx%d\n", client->width, client->height);
--     break;
--@@ -2276,7 +2278,9 @@
--     client->updateRect.x = client->updateRect.y = 0;
--     client->updateRect.w = client->width;
--     client->updateRect.h = client->height;
---    client->MallocFrameBuffer(client);
--+    if (!client->MallocFrameBuffer(client))
--+      return FALSE;
--+
--     SendFramebufferUpdateRequest(client, 0, 0, client->width, client->height, FALSE);
--     rfbClientLog("Got new framebuffer size: %dx%d\n", client->width, client->height);
--     break;
--Index: libvncserver-0.9.9+dfsg/libvncclient/vncviewer.c
--===================================================================
----- libvncserver-0.9.9+dfsg.orig/libvncclient/vncviewer.c	2012-05-04 10:19:00.000000000 -0400
--+++ libvncserver-0.9.9+dfsg/libvncclient/vncviewer.c	2014-09-25 11:10:29.984055035 -0400
--@@ -82,9 +82,27 @@
-- #endif
-- }
-- static rfbBool MallocFrameBuffer(rfbClient* client) {
--+uint64_t allocSize;
--+
--   if(client->frameBuffer)
--     free(client->frameBuffer);
---  client->frameBuffer=malloc(client->width*client->height*client->format.bitsPerPixel/8);
--+
--+  /* SECURITY: promote 'width' into uint64_t so that the multiplication does not overflow
--+     'width' and 'height' are 16-bit integers per RFB protocol design
--+     SIZE_MAX is the maximum value that can fit into size_t
--+  */
--+  allocSize = (uint64_t)client->width * client->height * client->format.bitsPerPixel/8;
--+
--+  if (allocSize >= SIZE_MAX) {
--+    rfbClientErr("CRITICAL: cannot allocate frameBuffer, requested size is too large\n");
--+    return FALSE;
--+  }
--+
--+  client->frameBuffer=malloc( (size_t)allocSize );
--+
--+  if (client->frameBuffer == NULL)
--+    rfbClientErr("CRITICAL: frameBuffer allocation failed, requested size too large or not enough memory?\n");
--+
--   return client->frameBuffer?TRUE:FALSE;
-- }
-- 
--@@ -225,7 +243,8 @@
-- 
--   client->width=client->si.framebufferWidth;
--   client->height=client->si.framebufferHeight;
---  client->MallocFrameBuffer(client);
--+  if (!client->MallocFrameBuffer(client))
--+    return FALSE;
-- 
--   if (!SetFormatAndEncodings(client))
--     return FALSE;
-diff --git a/package/libvncserver/libvncserver-0002-CVE-2014-6053.patch b/package/libvncserver/libvncserver-0002-CVE-2014-6053.patch
-deleted file mode 100644
-index 23b8ada..0000000
---- a/package/libvncserver/libvncserver-0002-CVE-2014-6053.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Description: fix denial of service via large ClientCutText message
--Origin: backport, https://github.com/newsoft/libvncserver/commit/6037a9074d52b1963c97cb28ea1096c7c14cbf28
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: libvncserver-0.9.9+dfsg/libvncserver/rfbserver.c
--===================================================================
----- libvncserver-0.9.9+dfsg.orig/libvncserver/rfbserver.c	2012-05-04 10:19:00.000000000 -0400
--+++ libvncserver-0.9.9+dfsg/libvncserver/rfbserver.c	2014-09-25 11:12:36.124058413 -0400
--@@ -2457,6 +2457,11 @@
-- 	msg.cct.length = Swap32IfLE(msg.cct.length);
-- 
-- 	str = (char *)malloc(msg.cct.length);
--+	if (str == NULL) {
--+		rfbLogPerror("rfbProcessClientNormalMessage: not enough memory");
--+		rfbCloseClient(cl);
--+		return;
--+	}
-- 
-- 	if ((n = rfbReadExact(cl, str, msg.cct.length)) <= 0) {
-- 	    if (n != 0)
-diff --git a/package/libvncserver/libvncserver-0003-CVE-2014-6054.patch b/package/libvncserver/libvncserver-0003-CVE-2014-6054.patch
-deleted file mode 100644
-index b01aa50..0000000
---- a/package/libvncserver/libvncserver-0003-CVE-2014-6054.patch
-+++ /dev/null
-@@ -1,87 +0,0 @@
--Description: fix denial of service via zero scaling factor
--Origin: backport, https://github.com/newsoft/libvncserver/commit/05a9bd41a8ec0a9d580a8f420f41718bdd235446
--Origin: backport, https://github.com/newsoft/libvncserver/commit/f18f24ce65f5cac22ddcf3ed51417e477f9bad09
--Origin: backport, https://github.com/newsoft/libvncserver/commit/5dee1cbcd83920370a487c4fd2718aa4d3eba548
--Origin: backport, https://github.com/newsoft/libvncserver/commit/819481c5e2003cd36d002336c248de8c75de362e
--Origin: backport, https://github.com/newsoft/libvncserver/commit/e5d9b6a07257c12bf3b6242ddea79ea1c95353a8
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: libvncserver-0.9.9+dfsg/libvncserver/rfbserver.c
--===================================================================
----- libvncserver-0.9.9+dfsg.orig/libvncserver/rfbserver.c	2014-09-25 11:19:54.464070151 -0400
--+++ libvncserver-0.9.9+dfsg/libvncserver/rfbserver.c	2014-09-25 11:20:04.344070416 -0400
--@@ -2487,6 +2487,13 @@
--           rfbCloseClient(cl);
--           return;
--       }
--+
--+      if (msg.ssc.scale == 0) {
--+          rfbLogPerror("rfbProcessClientNormalMessage: will not accept a scale factor of zero");
--+          rfbCloseClient(cl);
--+          return;
--+      }
--+
--       rfbStatRecordMessageRcvd(cl, msg.type, sz_rfbSetScaleMsg, sz_rfbSetScaleMsg);
--       rfbLog("rfbSetScale(%d)\n", msg.ssc.scale);
--       rfbScalingSetup(cl,cl->screen->width/msg.ssc.scale, cl->screen->height/msg.ssc.scale);
--@@ -2503,6 +2510,13 @@
--           rfbCloseClient(cl);
--           return;
--       }
--+
--+      if (msg.ssc.scale == 0) {
--+          rfbLogPerror("rfbProcessClientNormalMessage: will not accept a scale factor of zero");
--+          rfbCloseClient(cl);
--+          return;
--+      }
--+
--       rfbStatRecordMessageRcvd(cl, msg.type, sz_rfbSetScaleMsg, sz_rfbSetScaleMsg);
--       rfbLog("rfbSetScale(%d)\n", msg.ssc.scale);
--       rfbScalingSetup(cl,cl->screen->width/msg.ssc.scale, cl->screen->height/msg.ssc.scale);
--Index: libvncserver-0.9.9+dfsg/libvncserver/scale.c
--===================================================================
----- libvncserver-0.9.9+dfsg.orig/libvncserver/scale.c	2012-05-04 10:19:00.000000000 -0400
--+++ libvncserver-0.9.9+dfsg/libvncserver/scale.c	2014-09-25 11:20:13.580070663 -0400
--@@ -66,6 +66,10 @@
--         (double) ((int) (x)) : (double) ((int) (x) + 1) )
-- #define FLOOR(x) ( (double) ((int) (x)) )
-- 
--+static inline int pad4(int value) {
--+    int remainder = value & 3;
--+    return value + (remainder == 0 ? 0 : 4 - remainder);
--+}
-- 
-- int ScaleX(rfbScreenInfoPtr from, rfbScreenInfoPtr to, int x)
-- {
--@@ -281,14 +285,29 @@
--     ptr = malloc(sizeof(rfbScreenInfo));
--     if (ptr!=NULL)
--     {
--+        int allocSize;
--+
--         /* copy *everything* (we don't use most of it, but just in case) */
--         memcpy(ptr, cl->screen, sizeof(rfbScreenInfo));
--+
--+        /* SECURITY: make sure that no integer overflow will occur afterwards.
--+         * Note: this is defensive coding, as the check should have already been
--+         * performed during initial, non-scaled screen setup.
--+         */
--+        allocSize = pad4(width * (ptr->bitsPerPixel/8)); /* per protocol, width<2**16 and bpp<256 */
--+        if ((height == 0) || (allocSize >= (SIZE_MAX / height)))
--+        {
--+          free(ptr);
--+          return NULL; /* malloc() will allocate an incorrect buffer size - early abort */
--+        }
--+
--+        /* Resume copy everything */
--         ptr->width = width;
--         ptr->height = height;
--         ptr->paddedWidthInBytes = (ptr->bitsPerPixel/8)*ptr->width;
-- 
--         /* Need to by multiples of 4 for Sparc systems */
---        ptr->paddedWidthInBytes += (ptr->paddedWidthInBytes % 4);
--+        ptr->paddedWidthInBytes = pad4(ptr->paddedWidthInBytes);
-- 
--         /* Reset the reference count to 0! */
--         ptr->scaledScreenRefCount = 0;
-diff --git a/package/libvncserver/libvncserver-0004-CVE-2014-6055.patch b/package/libvncserver/libvncserver-0004-CVE-2014-6055.patch
-deleted file mode 100644
-index 2a6ee76..0000000
---- a/package/libvncserver/libvncserver-0004-CVE-2014-6055.patch
-+++ /dev/null
-@@ -1,150 +0,0 @@
--Description: fix denial of service and possible code execution via
-- stack overflows in File Transfer feature
--Origin: backport, https://github.com/newsoft/libvncserver/commit/06ccdf016154fde8eccb5355613ba04c59127b2e
--Origin: backport, https://github.com/newsoft/libvncserver/commit/f528072216dec01cee7ca35d94e171a3b909e677
--Origin: backport, https://github.com/newsoft/libvncserver/commit/256964b884c980038cd8b2f0d180fbb295b1c748
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Index: libvncserver-0.9.9+dfsg/libvncserver/rfbserver.c
--===================================================================
----- libvncserver-0.9.9+dfsg.orig/libvncserver/rfbserver.c	2014-09-25 11:20:22.972070915 -0400
--+++ libvncserver-0.9.9+dfsg/libvncserver/rfbserver.c	2014-09-25 11:20:40.368071381 -0400
--@@ -1237,21 +1237,35 @@
-- #define RFB_FILE_ATTRIBUTE_TEMPORARY  0x100
-- #define RFB_FILE_ATTRIBUTE_COMPRESSED 0x800
-- 
---rfbBool rfbFilenameTranslate2UNIX(rfbClientPtr cl, char *path, char *unixPath)
--+rfbBool rfbFilenameTranslate2UNIX(rfbClientPtr cl, /* in */ char *path, /* out */ char *unixPath, size_t unixPathMaxLen )
-- {
--     int x;
--     char *home=NULL;
-- 
--     FILEXFER_ALLOWED_OR_CLOSE_AND_RETURN("", cl, FALSE);
-- 
--+    /*
--+     * Do not use strncpy() - truncating the file name would probably have undesirable side effects
--+     * Instead check if destination buffer is big enough
--+     */
--+
--+    if (strlen(path) >= unixPathMaxLen)
--+      return FALSE;
--+
--     /* C: */
--     if (path[0]=='C' && path[1]==':')
--+    {
--       strcpy(unixPath, &path[2]);
--+    }
--     else
--     {
--       home = getenv("HOME");
--       if (home!=NULL)
--       {
--+        /* Re-check buffer size */
--+        if ((strlen(path) + strlen(home) + 1) >= unixPathMaxLen)
--+          return FALSE;
--+
--         strcpy(unixPath, home);
--         strcat(unixPath,"/");
--         strcat(unixPath, path);
--@@ -1289,7 +1303,8 @@
--     FILEXFER_ALLOWED_OR_CLOSE_AND_RETURN("", cl, FALSE);
-- 
--     /* Client thinks we are Winblows */
---    rfbFilenameTranslate2UNIX(cl, buffer, path);
--+    if (!rfbFilenameTranslate2UNIX(cl, buffer, path, sizeof(path)))
--+      return FALSE;
-- 
--     if (DB) rfbLog("rfbProcessFileTransfer() rfbDirContentRequest: rfbRDirContent: \"%s\"->\"%s\"\n",buffer, path);
-- 
--@@ -1566,7 +1581,9 @@
--         /* add some space to the end of the buffer as we will be adding a timespec to it */
--         if ((buffer = rfbProcessFileTransferReadBuffer(cl, length))==NULL) return FALSE;
--         /* The client requests a File */
---        rfbFilenameTranslate2UNIX(cl, buffer, filename1);
--+        if (!rfbFilenameTranslate2UNIX(cl, buffer, filename1, sizeof(filename1)))
--+          goto fail;
--+
--         cl->fileTransfer.fd=open(filename1, O_RDONLY, 0744);
-- 
--         /*
--@@ -1660,16 +1677,17 @@
--         */
--         if ((buffer = rfbProcessFileTransferReadBuffer(cl, length))==NULL) return FALSE;
-- 
---        /* Parse the FileTime */
--+        /* Parse the FileTime
--+         * TODO: FileTime is actually never used afterwards
--+         */
--         p = strrchr(buffer, ',');
--         if (p!=NULL) {
--             *p = '\0';
---            strcpy(szFileTime, p+1);
--+            strncpy(szFileTime, p+1, sizeof(szFileTime));
--+            szFileTime[sizeof(szFileTime)-1] = '\x00'; /* ensure NULL terminating byte is present, even if copy overflowed */
--         } else
--             szFileTime[0]=0;
-- 
---
---
--         /* Need to read in sizeHtmp */
--         if ((n = rfbReadExact(cl, (char *)&sizeHtmp, 4)) <= 0) {
--             if (n != 0)
--@@ -1681,7 +1699,8 @@
--         }
--         sizeHtmp = Swap32IfLE(sizeHtmp);
--         
---        rfbFilenameTranslate2UNIX(cl, buffer, filename1);
--+        if (!rfbFilenameTranslate2UNIX(cl, buffer, filename1, sizeof(filename1)))
--+          goto fail;
-- 
--         /* If the file exists... We can send a rfbFileChecksums back to the client before we send an rfbFileAcceptHeader */
--         /* TODO: Delta Transfer */
--@@ -1810,7 +1829,9 @@
--         if ((buffer = rfbProcessFileTransferReadBuffer(cl, length))==NULL) return FALSE;
--         switch (contentParam) {
--         case rfbCDirCreate:  /* Client requests the creation of a directory */
---            rfbFilenameTranslate2UNIX(cl, buffer, filename1);
--+            if (!rfbFilenameTranslate2UNIX(cl, buffer, filename1, sizeof(filename1)))
--+              goto fail;
--+
--             retval = mkdir(filename1, 0755);
--             if (DB) rfbLog("rfbProcessFileTransfer() rfbCommand: rfbCDirCreate(\"%s\"->\"%s\") %s\n", buffer, filename1, (retval==-1?"Failed":"Success"));
--             /*
--@@ -1819,7 +1840,9 @@
--             if (buffer!=NULL) free(buffer);
--             return retval;
--         case rfbCFileDelete: /* Client requests the deletion of a file */
---            rfbFilenameTranslate2UNIX(cl, buffer, filename1);
--+            if (!rfbFilenameTranslate2UNIX(cl, buffer, filename1, sizeof(filename1)))
--+              goto fail;
--+
--             if (stat(filename1,&statbuf)==0)
--             {
--                 if (S_ISDIR(statbuf.st_mode))
--@@ -1837,8 +1860,12 @@
--             {
--                 /* Split into 2 filenames ('*' is a seperator) */
--                 *p = '\0';
---                rfbFilenameTranslate2UNIX(cl, buffer, filename1);
---                rfbFilenameTranslate2UNIX(cl, p+1,    filename2);
--+                if (!rfbFilenameTranslate2UNIX(cl, buffer, filename1, sizeof(filename1)))
--+                  goto fail;
--+
--+                if (!rfbFilenameTranslate2UNIX(cl, p+1,    filename2, sizeof(filename2)))
--+                  goto fail;
--+
--                 retval = rename(filename1,filename2);
--                 if (DB) rfbLog("rfbProcessFileTransfer() rfbCommand: rfbCFileRename(\"%s\"->\"%s\" -->> \"%s\"->\"%s\") %s\n", buffer, filename1, p+1, filename2, (retval==-1?"Failed":"Success"));
--                 /*
--@@ -1858,6 +1885,10 @@
--     /* NOTE: don't forget to free(buffer) if you return early! */
--     if (buffer!=NULL) free(buffer);
--     return TRUE;
--+
--+fail:
--+    if (buffer!=NULL) free(buffer);
--+    return FALSE;
-- }
-- 
-- /*
+diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
+index 07b77f5..7d8272f 100644
+--- a/package/libvncserver/Config.in
++++ b/package/libvncserver/Config.in
+@@ -5,3 +5,16 @@ config BR2_PACKAGE_LIBVNCSERVER
+ 	  libvncserver is a VNC server/client library.
+ 
+ 	  http://libvncserver.sourceforge.net/
++
++if BR2_PACKAGE_LIBVNCSERVER
++
++config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
++	bool "TightPNG encoding support"
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG
++	help
++	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
++
++	  http://wiki.qemu.org/VNC_Tight_PNG
++
++endif
 diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 99d757b..b26d5b9 100644
+index b26d5b9..8479a62 100644
 --- a/package/libvncserver/libvncserver.mk
 +++ b/package/libvncserver/libvncserver.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
+@@ -56,4 +56,10 @@ else
+ LIBVNCSERVER_CONF_OPTS += --without-zlib
+ endif
  
--LIBVNCSERVER_VERSION = 0.9.9
-+LIBVNCSERVER_VERSION = 0.9.10
- LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
--LIBVNCSERVER_SITE = http://downloads.sourceforge.net/project/libvncserver/libvncserver/$(LIBVNCSERVER_VERSION)
-+LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
- LIBVNCSERVER_LICENSE = GPLv2+
- LIBVNCSERVER_LICENSE_FILES = COPYING
- LIBVNCSERVER_INSTALL_STAGING = YES
- LIBVNCSERVER_CONFIG_SCRIPTS = libvncserver-config
-+LIBVNCSERVER_AUTORECONF = YES
- 
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += --with-sdl-config=/bin/false
++ifeq ($(BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG),y)
++LIBVNCSERVER_DEPENDENCIES += libpng
++else
++LIBVNCSERVER_CONF_OPTS += --without-png
++endif
++
+ $(eval $(autotools-package))
 -- 
 1.9.1
