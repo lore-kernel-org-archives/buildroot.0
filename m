@@ -1,32 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 21:31:24 +0100
-Subject: [Buildroot] [PATCH] binutils: add version 2.25
-In-Reply-To: <549D5A21.4080706@zacarias.com.ar>
-References: <1419423743-11400-1-git-send-email-gustavo@zacarias.com.ar>
- <20141226134342.2a270c35@free-electrons.com>
- <549D5A21.4080706@zacarias.com.ar>
-Message-ID: <20141227213124.50a2cc69@free-electrons.com>
+Date: Sat, 27 Dec 2014 21:33:18 +0100
+Subject: [Buildroot] [git commit] gpu-viv-bin-mx6q: fix GLESv2 support
+Message-ID: <20141227203322.9CFCF8045F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=8ec52d57ecdb09ef8330eaf4e84efd41fa5a2fcf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 26 Dec 2014 09:52:49 -0300, Gustavo Zacarias wrote:
+Tested with:
+    QMX6 board +
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_GIT=y
+    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
+    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+    BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
+    BR2_PACKAGE_QT5=y
+    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+    BR2_PACKAGE_QT5BASE_EXAMPLES=y
+    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+    BR2_PACKAGE_QT5BASE_EGLFS=y
+    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+    BR2_PACKAGE_QT5BASE_GIF=y
+    BR2_PACKAGE_QT5BASE_JPEG=y
+    BR2_PACKAGE_QT5BASE_PNG=y
+    BR2_PACKAGE_QT5QUICKCONTROLS=y
+    BR2_PACKAGE_FREESCALE_IMX=y
+    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
+    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
 
-> 2.24 has been in the tree for some time and covers all of the
-> architectures nicely (except bfin and avr32 that's going away) so it
-> sounds reasonable.
-> +1 from me.
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-Does this means you will submit a patch for this? :-)
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+index bc44e38..79c7a92 100644
+--- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
++++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
+@@ -37,12 +37,13 @@ endef
+ # Make sure these commands are idempotent.
+ define GPU_VIV_BIN_MX6Q_BUILD_CMDS
+ 	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/usr/include/*/*.h
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		ln -sf lib$${lib}-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so \
+ 			$(@D)/usr/lib/lib$${lib}.so; \
+ 	done
+-	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
+ 	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1
++	ln -sf libGL.so.1.2 $(@D)/usr/lib/libGL.so.1.2.0
+ endef
+ 
+ define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
+@@ -71,7 +72,7 @@ endif
+ define GPU_VIV_BIN_MX6Q_INSTALL_TARGET_CMDS
+ 	$(GPU_VIV_BIN_MX6Q_INSTALL_EXAMPLES)
+ 	cp -a $(@D)/usr/lib $(TARGET_DIR)/usr
+-	for lib in EGL GAL VIVANTE; do \
++	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
+ 				*-$(GPU_VIV_BIN_MX6Q_LIB_TARGET).so) : ;; \
