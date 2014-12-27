@@ -1,41 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 19:58:28 +0100
-Subject: [Buildroot] [git commit] package/xbmc: rename to 'kodi',
-	the new upstream project name
-Message-ID: <20141227185849.617C38042F@busybox.osuosl.org>
+Date: Sat, 27 Dec 2014 19:58:29 +0100
+Subject: [Buildroot] [git commit] package/kodi-audioencoder-vorbis: New
+	package
+Message-ID: <20141227185849.BCC167FD02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3578459748d80cd469729319543b199380a4370f
+commit: http://git.buildroot.net/buildroot/commit/?id=01d1c331489cbea59e39d9354908ffe228e62c08
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Background information: http://xbmc.org/introducing-kodi-14. In a
-first step to bump version to 14.0-Helix, we move the xbmc package to
-a new directory called kodi.
-
-Appropriate Config.in.legacy variables are added.
-
-[Thomas: rename patches to the new convention.]
+[Thomas: removed dependency on BR2_PACKAGE_KODI_OPTICALDRIVE from the
+package Config.in, since it is already only included if
+BR2_PACKAGE_KODI_OPTICALDRIVE is enabled.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |  120 +++++++++
- package/Config.in                                  |    2 +-
- .../0001-Fixup-include-path.patch}                 |    0
- .../0002-mathutil.patch}                           |    0
- .../xbmc-0003-dbus.patch => kodi/0003-dbus.patch}  |    0
- package/{xbmc => kodi}/Config.in                   |  100 ++++----
- package/{xbmc/S50xbmc => kodi/S50kodi}             |   16 +-
- package/{xbmc/br-xbmc => kodi/br-kodi}             |   16 +-
- package/kodi/kodi.mk                               |  260 ++++++++++++++++++++
- package/{xbmc/xbmc.service => kodi/kodi.service}   |    2 +-
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         |    2 +-
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk         |    2 +-
- package/xbmc/xbmc.mk                               |  260 --------------------
- 13 files changed, 450 insertions(+), 330 deletions(-)
+ package/kodi-audioencoder-vorbis/Config.in         |    8 ++++++++
+ .../kodi-audioencoder-vorbis.mk                    |   18 ++++++++++++++++++
+ package/kodi/Config.in                             |    1 +
+ 3 files changed, 27 insertions(+), 0 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/kodi-audioencoder-vorbis/Config.in b/package/kodi-audioencoder-vorbis/Config.in
+new file mode 100644
+index 0000000..ab8b4b3
+--- /dev/null
++++ b/package/kodi-audioencoder-vorbis/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS
++	bool "kodi-audioencoder-vorbis"
++	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_LIBVORBIS
++	help
++	  An audioencoder addon for Kodi
++
++	  https://github.com/xbmc/audioencoder.vorbis
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+new file mode 100644
+index 0000000..901a7a1
+--- /dev/null
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# kodi-audioencoder-vorbis
++#
++################################################################################
++
++KODI_AUDIOENCODER_VORBIS_VERSION = fa0de1562504253acf64ad39fbcb1e5d85676ae4
++KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
++KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
++KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
++KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis
++KODI_AUDIOENCODER_VORBIS_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
++	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
++	-DVORBIS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
++	-DVORBISENC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 7f33642..486dfda 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -246,6 +246,7 @@ comment "Kodi audioencoder addons"
+ 
+ source "package/kodi-audioencoder-flac/Config.in"
+ source "package/kodi-audioencoder-lame/Config.in"
++source "package/kodi-audioencoder-vorbis/Config.in"
+ 
+ endif # BR2_PACKAGE_KODI_OPTICALDRIVE
+ 
