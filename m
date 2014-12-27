@@ -1,64 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:28:10 +0100
-Subject: [Buildroot] [git commit] package/libiio: do not force shared object
-	build
-Message-ID: <20141227162826.11B2F80464@busybox.osuosl.org>
+Date: Sat, 27 Dec 2014 17:28:19 +0100
+Subject: [Buildroot] [git commit] package/libxkbcommon: fix builds
+	with/without X11
+Message-ID: <20141227162826.1CA3B80464@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e6cfbba2e834621f050452aaca32304319a8429
+commit: http://git.buildroot.net/buildroot/commit/?id=30fd52a727061a73eabea1b1665c24f5649017d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libiio correctly builds as a static library, there is no obvious reason
-to force the shared object build.
+We need to explicitly disable X11 support when X11 is not available.
+Conversely, when it is, we need to add the required dependencies.
 
-So, let the CMake BUILD_SHARED_LIBS variable handles the type of library
-built.
+Fixes a slew of autobuild failures:
+    http://autobuild.buildroot.org/results/587/58794f894a4950b77e38d5fc877852d6cc507d8c/
+    http://autobuild.buildroot.org/results/927/92741f6b9b7909b226c200e453ac6cee8af5abd6/
+    http://autobuild.buildroot.org/results/51c/51cb09f7f267319948c685f905e29afe99f59589/
+    ...
 
-This libiio patch has already been submitted upstream:
-  https://github.com/analogdevicesinc/libiio/pull/6
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fatih A????c?? <fatih.asici@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...UILD_SHARED_LIBS-drive-the-type-of-librar.patch |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
+ package/libxkbcommon/Config.in       |    1 +
+ package/libxkbcommon/libxkbcommon.mk |    7 +++++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch b/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
-new file mode 100644
-index 0000000..9ee0299
---- /dev/null
-+++ b/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
-@@ -0,0 +1,29 @@
-+From 4d036f3708f1f427bf91c5925394d39ef76ad96a Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sat, 27 Dec 2014 16:36:50 +0100
-+Subject: [PATCH] cmake: let BUILD_SHARED_LIBS drive the type of library built
+diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+index 0a52c6f..4da1289 100644
+--- a/package/libxkbcommon/Config.in
++++ b/package/libxkbcommon/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBXKBCOMMON
+ 	bool "libxkbcommon"
++	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	help
+ 	  xkbcommon is a keymap compiler and support library which
+ 	  processes a reduced subset of keymaps as defined by the XKB
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 2d30506..12d5f16 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -15,4 +15,11 @@ LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+ # uses C99 features
+ LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBXKBCOMMON_CONF_OPTS += --enable-x11
++LIBXKBCOMMON_DEPENDENCIES += libxcb
++else
++LIBXKBCOMMON_CONF_OPTS += --disable-x11
++endif
 +
-+Do not force the type of library because some architectures (such as
-+BlackFin from AnalogDevice) do not support shared object.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index cd82a96..393fee3 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -115,7 +115,7 @@ install(FILES ${LIBIIO_PC} DESTINATION "${INSTALL_PKGCONFIG_DIR}")
-+ #set(SETUP_PY ${CMAKE_CURRENT_SOURCE_DIR}/bindings/python/setup.py)
-+ #configure_file(python/setup.py.in ${SETUP_PY} @ONLY)
-+ 
-+-add_library(iio SHARED ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
-++add_library(iio ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
-+ set_target_properties(iio PROPERTIES VERSION ${VERSION} SOVERSION ${LIBIIO_VERSION_MAJOR})
-+ target_link_libraries(iio LINK_PRIVATE ${LIBS_TO_LINK})
-+ 
-+-- 
-+2.2.1
-+
+ $(eval $(autotools-package))
