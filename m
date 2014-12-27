@@ -1,31 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 14:48:31 +0100
-Subject: [Buildroot] [PATCH] package/nftables: do not build docs
-In-Reply-To: <1419687052-24398-1-git-send-email-yann.morin.1998@free.fr>
-References: <1419687052-24398-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141227144831.1e96cb3f@free-electrons.com>
+Date: Sat, 27 Dec 2014 14:51:32 +0100
+Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
+ tightpng encoding support
+In-Reply-To: <b66fd2b4894b872b928f81fdf13998ec@to-the-max.net>
+References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
+ <1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>
+ <20141226180839.53e2df6f@free-electrons.com>
+ <b66fd2b4894b872b928f81fdf13998ec@to-the-max.net>
+Message-ID: <20141227145132.1c48523a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Floris Bos,
 
-On Sat, 27 Dec 2014 14:30:52 +0100, Yann E. MORIN wrote:
+On Fri, 26 Dec 2014 18:37:15 +0100, Floris Bos wrote:
 
-> Note: patching the Makefile.am is the most straightforward way of doing
-> it, although we may also pre-set a bunch of variables when calling
-> ./configure;
->   - DBLATEX=no to disable PDF generation
->   - DOCBOOK2X_MAN=no, DOCBOOK2MAN=no and DB2X_DOCBOOK2MAN=no to disable
->     manpage generation
+> JPEG and PNG are both necesarry.
+> 
+> Libvncserver will only compile tight.c if HAVE_LIBJPEG
+> 
+> https://github.com/LibVNC/libvncserver/blob/master/libvncserver/Makefile.am#L49
+> 
+> And inside tight.c png is optional, jpeg is not.
 
-Well, I believe I would actually prefer to use those environment
-variables rather than patching Makefile.am and having to autoreconf the
-package.
+Ok, so I believe we should rather do:
 
-Best regards,
++config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
++	bool "TightPNG encoding support"
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG
++	help
++	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
++
++	  http://wiki.qemu.org/VNC_Tight_PNG
+
+in Config.in (i.e as you did)
+
+And then in libvncserver.mk, do:
+
+ifeq ($(BR2_PACKAGE_LIBPNG),y)
+LIBVNCSERVER_DEPENDENCIES += libpng
+else
+LIBVNCSERVER_CONF_OPTS += --without-png
+endif
+
+This way, people not using tightpng support but having libpng enabled
+will have PNG support in libvncserver.
+
+Can you rework your patch in this direction?
+
+Thanks,
 
 Thomas
 -- 
