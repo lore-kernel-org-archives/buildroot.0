@@ -1,70 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 27 Dec 2014 19:58:29 +0100
-Subject: [Buildroot] [git commit] package/kodi-audioencoder-wav: New package
-Message-ID: <20141227185849.C5E197FD02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-addons: Bump version for
+	Helix-compatibility
+Message-ID: <20141227185849.7B35D8046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7863cfe0d27d31e5d542ce05312464dc48bc28fe
+commit: http://git.buildroot.net/buildroot/commit/?id=f84f60c652b1aa29b7bb02dcf1fd76b4498fe1e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Thomas: removed dependency on BR2_PACKAGE_KODI_OPTICALDRIVE from the
-package Config.in, since it is already only included if
-BR2_PACKAGE_KODI_OPTICALDRIVE is enabled.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-audioencoder-wav/Config.in            |    6 ++++++
- .../kodi-audioencoder-wav/kodi-audioencoder-wav.mk |   15 +++++++++++++++
- package/kodi/Config.in                             |    1 +
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ package/kodi-pvr-addons/kodi-pvr-addons.mk |   15 ++++-----------
+ 1 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/kodi-audioencoder-wav/Config.in b/package/kodi-audioencoder-wav/Config.in
-new file mode 100644
-index 0000000..6813f02
---- /dev/null
-+++ b/package/kodi-audioencoder-wav/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_WAV
-+	bool "kodi-audioencoder-wav"
-+	help
-+	  An audioencoder addon for Kodi
-+
-+	  https://github.com/xbmc/audioencoder.wav
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-new file mode 100644
-index 0000000..06803f2
---- /dev/null
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# kodi-audioencoder-wav
-+#
-+################################################################################
-+
-+KODI_AUDIOENCODER_WAV_VERSION = 40aaedfa1cd9c75749c82f6e1bd7c42ef61fdb38
-+KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
-+KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
-+KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
-+KODI_AUDIOENCODER_WAV_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 486dfda..41f7798 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -247,6 +247,7 @@ comment "Kodi audioencoder addons"
- source "package/kodi-audioencoder-flac/Config.in"
- source "package/kodi-audioencoder-lame/Config.in"
- source "package/kodi-audioencoder-vorbis/Config.in"
-+source "package/kodi-audioencoder-wav/Config.in"
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+index 5e70bb3..acd431c 100644
+--- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
++++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- endif # BR2_PACKAGE_KODI_OPTICALDRIVE
+-# This cset is on the branch 'gotham'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PVR_ADDONS_VERSION = be12a8da2072e9c3ddad54892df2f85b759d4e9a
++# This cset is on the branch 'master'
++# When Kodi is released this should be updated to the corresponding branch
++KODI_PVR_ADDONS_VERSION = 89ba5bb6917a820b278688b9f43b23834002e9b5
+ KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
+ KODI_PVR_ADDONS_LICENSE = GPLv3+
+ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
+@@ -14,7 +14,7 @@ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
+ # There's no ./configure in the git tree, we need to generate it
+ KODI_PVR_ADDONS_AUTORECONF = YES
  
+-KODI_PVR_ADDONS_DEPENDENCIES = boost zlib
++KODI_PVR_ADDONS_DEPENDENCIES = zlib
+ # This really is a runtime dependency, but we need KODI to be installed
+ # first, since we'll install files in KODI's directories _after_ KODI has
+ # installed its own files
+@@ -24,11 +24,4 @@ KODI_PVR_ADDONS_CONF_OPTS = \
+ 	--enable-release \
+ 	--enable-addons-with-dependencies
+ 
+-ifeq ($(BR2_PACKAGE_MYSQL),y)
+-KODI_PVR_ADDONS_CONF_OPTS += --enable-mysql
+-KODI_PVR_ADDONS_DEPENDENCIES += mysql
+-else
+-KODI_PVR_ADDONS_CONF_OPTS += --disable-mysql
+-endif
+-
+ $(eval $(autotools-package))
