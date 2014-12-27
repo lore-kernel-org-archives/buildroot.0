@@ -1,26 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 21:30:35 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libvncserver: add config option for
- tightpng encoding support
-In-Reply-To: <1419707574-32280-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1419707574-32280-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20141227213035.18c65c44@free-electrons.com>
+Date: Sat, 27 Dec 2014 21:31:24 +0100
+Subject: [Buildroot] [PATCH] binutils: add version 2.25
+In-Reply-To: <549D5A21.4080706@zacarias.com.ar>
+References: <1419423743-11400-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141226134342.2a270c35@free-electrons.com>
+ <549D5A21.4080706@zacarias.com.ar>
+Message-ID: <20141227213124.50a2cc69@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Dear Gustavo Zacarias,
 
-On Sat, 27 Dec 2014 20:12:54 +0100, Floris Bos wrote:
-> TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
-> libvncserver enables this encoding if both libpng and jpeg libraries
-> are available.
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+On Fri, 26 Dec 2014 09:52:49 -0300, Gustavo Zacarias wrote:
 
-Applied, thanks!
+> 2.24 has been in the tree for some time and covers all of the
+> architectures nicely (except bfin and avr32 that's going away) so it
+> sounds reasonable.
+> +1 from me.
+
+Does this means you will submit a patch for this? :-)
+
+Thanks,
 
 Thomas
 -- 
