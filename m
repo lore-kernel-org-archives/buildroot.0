@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:25:56 +0100
-Subject: [Buildroot] [PATCHv2 3/3] xerces: make sure to use the
-	cross-compiled curl
-In-Reply-To: <1419697556-32541-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419697556-32541-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419697556-32541-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Dec 2014 17:26:24 +0100
+Subject: [Buildroot] [PATCH 1/5] libxmlrpc: bump to 1.25.30
+In-Reply-To: <20141227155648.GE4098@free.fr>
+References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1419688038-15640-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20141227155648.GE4098@free.fr>
+Message-ID: <20141227172624.58b77c6f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When curl support is enabled in xerces, and a host curl is available
-on the system, it might try to use it, so this patch adds --with-curl=
-to the configure options to explicitly indicate where is the curl
-library to use.
+Dear Yann E. MORIN,
 
-Should fix:
+On Sat, 27 Dec 2014 16:56:48 +0100, Yann E. MORIN wrote:
 
-  http://autobuild.buildroot.org/results/c3c/c3c6be45d0f764fb931a46dbf1509ccf2916ecbf/
+> > -LIBXMLRPC_VERSION = 1.25.26
+> > +LIBXMLRPC_VERSION = 1.25.30
+> >  LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+> >  LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
+> 
+> Since we do get a lot of dowenload issues with sourceforge, could you
+> take this opportunity to add a .hash file for libxmlrpc?
 
-  (We were not able to reproduce specifically this problem, but
-  another similar problem, where curl was detected, but considered as
-  non-working because of the compilation failure of a test program.)
+Good point. I've just sent a v2 which adds this.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xerces/xerces.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 36955e3..9b2bb81 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -20,7 +20,7 @@ XERCES_DEPENDENCIES += libiconv
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
--XERCES_CONF_OPTS += --enable-netaccessor-curl
-+XERCES_CONF_OPTS += --enable-netaccessor-curl --with-curl=$(STAGING_DIR)/usr/lib
- XERCES_DEPENDENCIES += libcurl
- else
- XERCES_CONF_OPTS += --disable-network
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
