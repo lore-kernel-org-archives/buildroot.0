@@ -1,66 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Dec 2014 16:57:03 +0100
-Subject: [Buildroot] [PATCH 2/5] libxmlrpc: rename patches to the new
- convention
-In-Reply-To: <1419688038-15640-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419688038-15640-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141227155703.GF4098@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Dec 2014 17:11:26 +0100
+Subject: [Buildroot] [git commit] package/leafnode2: fix news user check
+Message-ID: <20141227161137.3C3B480060@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=159cdbd5a3b3a14b004a6df2ce4bf202fb4cb592
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-12-27 14:47 +0100, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+--enable-runas-user use 'news' as default but the configure stop
+if news doesn't exist on the build host.
+Use 'root' while cross-compiling
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/leafnode2/leafnode2.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...xmlrpc-0001-fix-gennmtab-build.patch => 0001-fix-gennmtab-build.patch} | 0
->  ...2-fix-non-cplusplus-build.patch => 0002-fix-non-cplusplus-build.patch} | 0
->  .../{libxmlrpc-0003-non-wchar-build.patch => 0003-non-wchar-build.patch}  | 0
->  ...4-use-correct-curl-config.patch => 0004-use-correct-curl-config.patch} | 0
->  4 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/libxmlrpc/{libxmlrpc-0001-fix-gennmtab-build.patch => 0001-fix-gennmtab-build.patch} (100%)
->  rename package/libxmlrpc/{libxmlrpc-0002-fix-non-cplusplus-build.patch => 0002-fix-non-cplusplus-build.patch} (100%)
->  rename package/libxmlrpc/{libxmlrpc-0003-non-wchar-build.patch => 0003-non-wchar-build.patch} (100%)
->  rename package/libxmlrpc/{libxmlrpc-0004-use-correct-curl-config.patch => 0004-use-correct-curl-config.patch} (100%)
-> 
-> diff --git a/package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch b/package/libxmlrpc/0001-fix-gennmtab-build.patch
-> similarity index 100%
-> rename from package/libxmlrpc/libxmlrpc-0001-fix-gennmtab-build.patch
-> rename to package/libxmlrpc/0001-fix-gennmtab-build.patch
-> diff --git a/package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch b/package/libxmlrpc/0002-fix-non-cplusplus-build.patch
-> similarity index 100%
-> rename from package/libxmlrpc/libxmlrpc-0002-fix-non-cplusplus-build.patch
-> rename to package/libxmlrpc/0002-fix-non-cplusplus-build.patch
-> diff --git a/package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch b/package/libxmlrpc/0003-non-wchar-build.patch
-> similarity index 100%
-> rename from package/libxmlrpc/libxmlrpc-0003-non-wchar-build.patch
-> rename to package/libxmlrpc/0003-non-wchar-build.patch
-> diff --git a/package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch b/package/libxmlrpc/0004-use-correct-curl-config.patch
-> similarity index 100%
-> rename from package/libxmlrpc/libxmlrpc-0004-use-correct-curl-config.patch
-> rename to package/libxmlrpc/0004-use-correct-curl-config.patch
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 3bc1c68..0fc2a8d 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -14,9 +14,13 @@ LEAFNODE2_DEPENDENCIES = host-pcre pcre
+ LEAFNODE2_CONF_ENV = \
+ 	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
+ 
++# --enable-runas-user use 'news' as default but the configure stop
++# if news doesn't exist on the build host.
++# Use 'root' while cross-compiling 
+ LEAFNODE2_CONF_OPTS = \
+ 	--sysconfdir=/etc/leafnode2 \
+-	--enable-spooldir=/var/spool/news
++	--enable-spooldir=/var/spool/news \
++	--enable-runas-user=root
+ 
+ # Leafnode2 needs the host version of b_sortnl during
+ # compilation. Instead of creating a seperate host package and
