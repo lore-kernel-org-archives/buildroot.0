@@ -1,80 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 21:43:25 +0100
-Subject: [Buildroot] [PATCH v5 07/15] xdriver_xf86-video-imx-viv: new
- package
-In-Reply-To: <1418132813-32642-8-git-send-email-jezz@sysmic.org>
-References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
- <1418132813-32642-8-git-send-email-jezz@sysmic.org>
-Message-ID: <20141227214325.2135108d@free-electrons.com>
+Date: Sat, 27 Dec 2014 21:48:06 +0100
+Subject: [Buildroot] [git commit] libdrm: fix support for xserver with
+	Vivante drivers
+Message-ID: <20141227204831.4E9F58016A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+commit: http://git.buildroot.net/buildroot/commit/?id=94841d87fd2ff8ebf7af84d49e5095074958febf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Dec 2014 14:46:45 +0100, J?r?me Pouiller wrote:
+[Thomas: fix minor typo in patch description.]
 
-> diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-> new file mode 100644
-> index 0000000..d91ba79
-> --- /dev/null
-> +++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-> @@ -0,0 +1,31 @@
-> +
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdrm/0001-update-arm.patch |   37 ++++++++++++++++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-Unneeded empty line.
-
-> +config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
-> +	bool "xf86-video-imx-viv"
-> +	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-> +	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
-> +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-
-The world of OpenGL stuff will always surprise me. Why on earth does a
-X.org driver that uses a proprietary OpenGL implementation needs
-Mesa3D ?!?
-
-> +	  Notice EGL and GLes2 APIs are correctly supported. This driver should
-> +	  also be able to provide Desktop OpenGL implementation but, this 
-> +	  feature seems broken for a while.
-
-"for a while" -> "since quite some time".
-
-> +	  Don't forget to load galcore.ko and create /dev/galcore before to
-> +	  use this driver (else, Xorg will exit with an obscur message
-
-"to use" -> using.
-
-obscur -> obscure.
-
-> +	  like "Segmentation fault at address 0xc").
-> +
-> +comment "xf86-video-imx-viv depends on gpu-viv-bin-mx6q with X11 output"
-> +	depends on BR2_arm
-> +	depends on (!BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11)
-
-Unneeded parenthesis.
-
-> +XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
-> +XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
-> +
-> +define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
-> +	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
-> +		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
-> +		CFLAGS+="$(TARGET_CFLAGS) -I$(@D)/DRI_1.10.4/src"
-
-Why += here? I don't think it has any effect.
-
-Also, can you add _LICENSE and _LICENSE_FILES information?
-
-Care to fixup those minor issues and resend?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libdrm/0001-update-arm.patch b/package/libdrm/0001-update-arm.patch
+new file mode 100644
+index 0000000..1a95a14
+--- /dev/null
++++ b/package/libdrm/0001-update-arm.patch
+@@ -0,0 +1,37 @@
++[Adapted from yocto project]
++
++Add ARM support into xf86drm.h.  This provides support for Xorg interface.
++Without this the vivante samples will hang during close requiring a reboot
++
++Upstream-Status: Pending
++
++Signed-off-by: Lauren Post <lauren.post@freescale.com>
++Signed-off-by: Evan Kotara <evan.kotara@freescale.com>
++
++diff --git a/xf86drm.h b/xf86drm.h
++--- a/xf86drm.h
+++++ b/xf86drm.h
++@@ -461,6 +461,23 @@ do {	register unsigned int __old __asm("
++ 		: "cr0", "memory");			\
++ 	} while (0)
++ 
+++#elif defined(__arm__)
+++       #undef DRM_DEV_MODE
+++       #define DRM_DEV_MODE     (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
+++
+++       #define DRM_CAS(lock,old,new,__ret)             \
+++       do {                                            \
+++               __asm__ __volatile__ (                  \
+++                       "1: ldrex %0, [%1]\n"           \
+++                       "   teq %0, %2\n"               \
+++                       "   ite eq\n"                   \
+++                       "   strexeq %0, %3, [%1]\n"     \
+++                       "   movne   %0, #1\n"           \
+++               : "=&r" (__ret)                         \
+++               : "r" (lock), "r" (old), "r" (new)      \
+++               : "cc","memory");                       \
+++       } while (0)
+++
++ #endif /* architecture */
++ #endif /* __GNUC__ >= 2 */
++ 
