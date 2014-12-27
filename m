@@ -1,65 +1,45 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sat, 27 Dec 2014 18:43:40 +0100
-Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
- tightpng encoding support
-In-Reply-To: <20141227145132.1c48523a@free-electrons.com>
-References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>	<1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>	<20141226180839.53e2df6f@free-electrons.com>	<b66fd2b4894b872b928f81fdf13998ec@to-the-max.net>
- <20141227145132.1c48523a@free-electrons.com>
-Message-ID: <549EEFCC.9030202@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Dec 2014 18:46:51 +0100
+Subject: [Buildroot] [git commit] libxmlrpc: bump to 1.25.30 and add hash
+	file
+Message-ID: <20141227174706.7A6848045B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/27/2014 02:51 PM, Thomas Petazzoni wrote:
-> Dear Floris Bos,
->
-> On Fri, 26 Dec 2014 18:37:15 +0100, Floris Bos wrote:
->
->> JPEG and PNG are both necesarry.
->>
->> Libvncserver will only compile tight.c if HAVE_LIBJPEG
->>
->> https://github.com/LibVNC/libvncserver/blob/master/libvncserver/Makefile.am#L49
->>
->> And inside tight.c png is optional, jpeg is not.
-> Ok, so I believe we should rather do:
->
-> +config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
-> +	bool "TightPNG encoding support"
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_LIBPNG
-> +	help
-> +	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
-> +
-> +	  http://wiki.qemu.org/VNC_Tight_PNG
->
-> in Config.in (i.e as you did)
->
-> And then in libvncserver.mk, do:
->
-> ifeq ($(BR2_PACKAGE_LIBPNG),y)
-> LIBVNCSERVER_DEPENDENCIES += libpng
-> else
-> LIBVNCSERVER_CONF_OPTS += --without-png
-> endif
->
-> This way, people not using tightpng support but having libpng enabled
-> will have PNG support in libvncserver.
+commit: http://git.buildroot.net/buildroot/commit/?id=7b5de43a03d432c28536cbb58fc50e5c393494b6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do note that the only thing using PNG inside libvncserver is the 
-TightPNG encoding.
-Think it is a bit counter-inductive to give users TightPNG support, just 
-because another package selected libpng, even though they chose not to 
-select the TightPNG feature.
+This commit bumps libxmlrpc to the latest available stable version,
+and adds a hash file.
 
-(Just like I believe it is counter-inductive that users are expected to 
-know which dependencies are needed to get a specific feature they want, 
-as seems to be the current case with many buildroot packages, which do 
-not offer any feature options).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/libxmlrpc/libxmlrpc.hash |    2 ++
+ package/libxmlrpc/libxmlrpc.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
--- 
-Yours sincerely,
-
-Floris Bos
+diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
+new file mode 100644
+index 0000000..d37fcfc
+--- /dev/null
++++ b/package/libxmlrpc/libxmlrpc.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 8ae6ed4ec57d50ed132b1150fc5258346eef3e291501a564f14fa97586902f98 xmlrpc-c-1.25.30.tgz
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index a8e8aa3..1b771e2 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXMLRPC_VERSION = 1.25.26
++LIBXMLRPC_VERSION = 1.25.30
+ LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+ LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
+ LIBXMLRPC_LICENSE = BSD-3c (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
