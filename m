@@ -1,95 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 11:29:04 +0100
-Subject: [Buildroot] [git commit] package/kismet: fix ncurses static build
-Message-ID: <20141227102918.ADAD98041F@busybox.osuosl.org>
+Date: Sat, 27 Dec 2014 11:29:13 +0100
+Subject: [Buildroot] [git commit] kismet: Fix static build
+Message-ID: <20141227102918.BD53E7FAFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b966c934db6b482fbba4c65cdbc49d1b19b5212
+commit: http://git.buildroot.net/buildroot/commit/?id=a3365ebf72fc34c71e28191f107280b9d7c825a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Says Vicente:
-    [T]he order is very important when doing static builds.
-    Otherwise we will see errors like this one:
+Use pcap-config to list optional libpcap dependencies needed for static
+link. Otherwise we will see errors like this one:
 
-    [...]/sysroot/usr/lib/libpanel.a(p_delete.o):
-    In function `del_panel':
-    p_delete.c:(.text+0x68): undefined reference to `_nc_panelhook'
+/br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libpcap.a(pcap-canusb-linux.o):
+In function `canusb_close':
+pcap-canusb-linux.c:(.text+0xec): undefined reference to `libusb_close'
 
-Fix the order configure adds libraries: new libraries should be added
-at the *front* of the list, not at the end.
-
-Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[yann.morin.1998 at free.fr: remove the ncurses bits (done differently in
+ another patch), fix BR2_PREFER_STATIC_LIB -> BR2_STATIC_LIBS]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kismet/0003-fix-curses-libs-ordering.patch |   42 ++++++++++++++++++++
- package/kismet/kismet.mk                           |    3 +
- 2 files changed, 45 insertions(+), 0 deletions(-)
+ package/kismet/kismet.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/kismet/0003-fix-curses-libs-ordering.patch b/package/kismet/0003-fix-curses-libs-ordering.patch
-new file mode 100644
-index 0000000..b579c96
---- /dev/null
-+++ b/package/kismet/0003-fix-curses-libs-ordering.patch
-@@ -0,0 +1,42 @@
-+configure: fix ordering of ncurses libraries
-+
-+Says Vicente:
-+    [T]he order is very important when doing static builds.
-+    Otherwise we will see errors like this one:
-+
-+    [...]/sysroot/usr/lib/libpanel.a(p_delete.o):
-+    In function `del_panel':
-+    p_delete.c:(.text+0x68): undefined reference to `_nc_panelhook'
-+
-+Fix the order configure adds libraries: new libraries should be added
-+at the *front* of the list, not at the end.
-+
-+Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+diff -durN kismet-Kismet-2014-02-R1.orig/configure.in kismet-Kismet-2014-02-R1/configure.in
-+--- kismet-Kismet-2014-02-R1.orig/configure.in	2014-02-19 05:37:43.000000000 +0100
-++++ kismet-Kismet-2014-02-R1/configure.in	2014-12-26 16:46:55.770692349 +0100
-+@@ -437,10 +434,10 @@
-+ 		AC_MSG_ERROR(Failed to find curses.h or ncurses.h.  You probably need to install the curses-devel package from your distribution)
-+ 	fi
-+ 
-+-	LIBS="$LIBS $curseaux"
-++	LIBS="$curseaux $LIBS"
-+ 	AC_CHECK_LIB([panel], [new_panel],
-+ 				 AC_DEFINE(HAVE_LIBPANEL, 1, Panel terminal lib) 
-+-				 curseaux="$curseaux -lpanel",
-++				 curseaux="-lpanel $curseaux",
-+ 				 AC_MSG_ERROR(Failed to find libpanel extension to curses/ncurses.  Install it, or disable building the Kismet client with --disable-client.  Disabling the client is probably not something you want to do normally.))
-+ 
-+ 	AC_CHECK_HEADER([panel.h], [foundhpanel=yes])
-+@@ -450,7 +447,7 @@
-+ 
-+ 	LIBS="$OLIBS"
-+ 
-+-	CLIENTCLIBS="$CLIENTCLIBS $curseaux"
-++	CLIENTCLIBS="$curseaux $CLIENTCLIBS"
-+ fi
-+ 
-+ AC_SUBST(CLIBS)
 diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index f177fea..a71414e 100644
+index a71414e..117d182 100644
 --- a/package/kismet/kismet.mk
 +++ b/package/kismet/kismet.mk
-@@ -12,6 +12,9 @@ KISMET_CONF_OPTS += --with-netlink-version=3
- KISMET_LICENSE = GPLv2+
- KISMET_LICENSE_FILES = debian/copyright
+@@ -15,6 +15,10 @@ KISMET_LICENSE_FILES = debian/copyright
+ # We touch configure.in:
+ KISMET_AUTORECONF = YES
  
-+# We touch configure.in:
-+KISMET_AUTORECONF = YES
++ifeq ($(BR2_STATIC_LIBS),y)
++KISMET_CONF_ENV = LIBS="-lpcap $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
++endif
 +
  ifeq ($(BR2_PACKAGE_PCRE),y)
  	KISMET_DEPENDENCIES += pcre
