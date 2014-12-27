@@ -1,38 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 21:51:10 +0100
-Subject: [Buildroot] [PATCH] qt5multimedia: enable gstreamer-1.x support
-In-Reply-To: <1419163196-28128-1-git-send-email-ps.report@gmx.net>
-References: <1419163196-28128-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20141227215110.10276b5a@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 27 Dec 2014 21:52:14 +0100
+Subject: [Buildroot] [PATCH] package/leafnode2: fix news user check
+In-Reply-To: <20141227171318.42ba61a4@free-electrons.com>
+References: <1419615491-8238-1-git-send-email-romain.naour@openwide.fr>
+ <20141227171318.42ba61a4@free-electrons.com>
+Message-ID: <549F1BFE.3050106@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Le 27/12/2014 17:13, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+>
+> On Fri, 26 Dec 2014 18:38:11 +0100, Romain Naour wrote:
+>> --enable-runas-user use 'news' as default but the configure stop
+>> if news doesn't exist on the build host.
+>> Use 'root' while cross-compiling
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/leafnode2/leafnode2.mk | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+> Applied, thanks. Here, leafnode2 does not start properly at boot time,
+> it asks for a fully qualified host name in /etc/hosts. It would be good
+> to add a default config file + init script to make leafnode2 work at
+> least somewhat out of the box.
+>
+> Thanks!
+>
+> Thomas
+Honestly, I haven't runtime tested leadnode2.
+I just checked why the build has stopped during a random build.
 
-On Sun, 21 Dec 2014 12:59:56 +0100, Peter Seiderer wrote:
-> Add 0001-Initial-porting-effort-to-GStreamer-1.0.patch from [1] (with minor
-> conflict fixed).
-> Add 0002-Fix-compilation-when-building-against-GStreamer-0.10.patch from [2].
-> 
-> Fix qt5multimedia.mk for the gstreamer-1.x case.
-> 
-> [1] https://qt.gitorious.org/qt/tolszaks-qtmultimedia/commit/c847d2f36bd45befcd44d52f92140758563350bf.patch
-> [2] https://qt.gitorious.org/qt/tolszaks-qtmultimedia/commit/609048bd6fcd37162b2b5b139392a8ec8b2260e9.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+The configure script run the command: id -u news:
+a=`$ID -u $RUNAS_USER`
+if test -z "$a" ; then
+    as_fn_error $? "user $RUNAS_USER does not exist. Please add this user before building leafnode.
+                  Most systems have man adduser or man useradd to tell you how to do this." "$LINENO" 5
+else
+...
 
-We have another patch at http://patchwork.ozlabs.org/patch/424107/ that
-bumps the entire Qt5 stuff to Qt 5.4.0. How would this interact with
-your patch enabling gstreamer 1.x support? Is gstreamer 1.x support
-part of Qt 5.4.0 ?
+This test is used to print a warning because it expect a native
+build:
+WARNING: user $RUNAS_USER cannot be used to run leafnode for security reasons.
+Be sure to configure run_as_user to an unprivileged user, else leafnode will not run."
+
+I'm adding Bernd to cc since it use leadnode2.
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Romain
