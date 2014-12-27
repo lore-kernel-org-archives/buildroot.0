@@ -1,82 +1,56 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 27 Dec 2014 16:10:33 +0100
-Subject: [Buildroot] [PATCH 5/5] guile: fix libltdl and libgmp detection
-In-Reply-To: <1419688038-15640-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419688038-15640-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMKxFtNsz-SWkH-sy_vRL1=MkqA06r5d4YbCTj62h9kgQA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 16:49:56 +0100
+Subject: [Buildroot] [PATCH 1/4] libxkbcommon: bump to version 0.5.0
+In-Reply-To: <20141227101335.GA4098@free.fr>
+References: <1419595603-15591-1-git-send-email-fatih.asici@gmail.com>
+ <20141227101335.GA4098@free.fr>
+Message-ID: <20141227154956.GD4098@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 27, 2014 at 2:47 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Explicitly pass the path to libtldl and libgmp, so that guile does not
-> try to use host versions when available.
->
-> Fixes:
->
->   http://autobuild.buildroot.org/results/056/056b7fcbf3b73a8d15ca635b000771cdc2d7fbf9/
->
-> And another similar problem with libgmp.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fatih, All,
 
-[for those 2 mis-detections, however I'm still hitting libunistring
-error at configuration]
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Samuel Martin <s.martin49@gmail.com>
+On 2014-12-27 11:13 +0100, Yann E. MORIN spake thusly:
+> On 2014-12-26 14:06 +0200, Fatih A??c? spake thusly:
+> > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+> > ---
+> >  package/libxkbcommon/libxkbcommon.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+> > index 3bfe764..2d30506 100644
+> > --- a/package/libxkbcommon/libxkbcommon.mk
+> > +++ b/package/libxkbcommon/libxkbcommon.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -LIBXKBCOMMON_VERSION = 0.3.0
+> > +LIBXKBCOMMON_VERSION = 0.5.0
+> 
+> This is causing a lot of autobuild failures:
+>     http://autobuild.buildroot.org/?reason=libxkbcommon-0.5.0
+> 
+>     checking for XCB_XKB... no
+>     configure: error: xkbcommon-x11 requires xcb-xkb >= 1.10 which was not
+>     found. You can disable X11 support with --disable-x11.
+> 
+> I guess what we want is to use --disable-x11 when we do not have x11
+> enabled, and if it is enabled, select the required package(s).
 
-Libunistring mis-detection:
-config.log:
----
-[...]
-configure:15821:
-/home/system/src/tmp/br/abo/guile-d07/host/usr/bin/arm-none-linux-gnueabi-gcc
--o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64   -Os  -DHAVE_GC_SET_FINALIZER_NOTIFIER
--DHAVE_GC_GET_HEAP_USAGE_SAFE -DHAVE_GC_GET_FREE_SPACE_DIVISOR
--DHAVE_GC_SET_FINALIZE_ON_DEMAND -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c
-/usr/lib/libunistring.so  >&5
-/usr/lib/libunistring.so: file not recognized: File format not recognized
-collect2: error: ld returned 1 exit status
-configure:15821: $? = 1
-[...]
----
-and the --with-libunistring-prefix=$(STAGING_DIR)/usr/lib trick fixes the error.
-
-
-> ---
->  package/guile/guile.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-> index 30af11d..194eca2 100644
-> --- a/package/guile/guile.mk
-> +++ b/package/guile/guile.mk
-> @@ -29,5 +29,9 @@ GUILE_CFLAGS = \
->  GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/usr/bin/guile \
->         CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
->
-> +GUILE_CONF_OPTS += \
-> +       --with-libltdl-prefix=$(STAGING_DIR)/usr/lib \
-> +       --with-libgmp-prefix=$(STAGING_DIR)/usr/lib
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> --
-> 2.1.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+I've had a bit of bandwidth today, and I've had a look at it, and the
+fix is almost ready. I'll submit soon.
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
