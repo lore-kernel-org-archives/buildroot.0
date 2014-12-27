@@ -1,61 +1,47 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sat, 27 Dec 2014 20:12:54 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libvncserver: add config option for
-	tightpng encoding support
-Message-ID: <1419707574-32280-1-git-send-email-bos@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Dec 2014 20:13:58 +0100
+Subject: [Buildroot] [PATCH v3 03/14] gpu-viv-bin-mx6q: fix compiling
+ issues with EGL_API_FB
+In-Reply-To: <1417253726-14395-4-git-send-email-jezz@sysmic.org>
+References: <1417253726-14395-1-git-send-email-jezz@sysmic.org>
+ <1417253726-14395-4-git-send-email-jezz@sysmic.org>
+Message-ID: <20141227201358.01abe132@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
-libvncserver enables this encoding if both libpng and jpeg libraries
-are available.
+Dear J?r?me Pouiller,
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
----
- package/libvncserver/Config.in       | 13 +++++++++++++
- package/libvncserver/libvncserver.mk |  6 ++++++
- 2 files changed, 19 insertions(+)
+On Sat, 29 Nov 2014 10:35:15 +0100, J?r?me Pouiller wrote:
+> To compile with Vivante header and use framebuffer, it is necessary to
+> pass option -DEGL_API_FB. This option is declared in pkg-config file of
+> Vivante library. But many packages (especialy qt5 components) does not
+> consider these flags.
+> 
+> So instead of patching every packages that use EGL, it is more
+> convenient to patch Vivante headers.
+> 
+> This commit add #define EGL_API_FB on top of eglvivante.h when
+> necessary.
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
+>  package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
+>  package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
+>  4 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
-index 07b77f5..7d8272f 100644
---- a/package/libvncserver/Config.in
-+++ b/package/libvncserver/Config.in
-@@ -5,3 +5,16 @@ config BR2_PACKAGE_LIBVNCSERVER
- 	  libvncserver is a VNC server/client library.
- 
- 	  http://libvncserver.sourceforge.net/
-+
-+if BR2_PACKAGE_LIBVNCSERVER
-+
-+config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
-+	bool "TightPNG encoding support"
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
-+
-+	  http://wiki.qemu.org/VNC_Tight_PNG
-+
-+endif
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index a8389b4..ed6b64d 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -58,6 +58,12 @@ else
- LIBVNCSERVER_CONF_OPTS += --without-jpeg
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LIBVNCSERVER_DEPENDENCIES += libpng
-+else
-+LIBVNCSERVER_CONF_OPTS += --without-png
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBVNCSERVER_DEPENDENCIES += zlib
- else
+I am still uncertain about this one. Hardcoding the backend choice in
+the header file seems really ugly, and using proper pkg-config files a
+much better solution. Shouldn't we instead patch qt5 ?
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
