@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 21:49:08 +0100
-Subject: [Buildroot] [PATCH v5 08/15] libdrm: fix support for xserver
- with Vivante drivers
-In-Reply-To: <1418132813-32642-9-git-send-email-jezz@sysmic.org>
-References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
- <1418132813-32642-9-git-send-email-jezz@sysmic.org>
-Message-ID: <20141227214908.73a2097d@free-electrons.com>
+Date: Sat, 27 Dec 2014 21:51:10 +0100
+Subject: [Buildroot] [PATCH] qt5multimedia: enable gstreamer-1.x support
+In-Reply-To: <1419163196-28128-1-git-send-email-ps.report@gmx.net>
+References: <1419163196-28128-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20141227215110.10276b5a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Dear Peter Seiderer,
 
-On Tue,  9 Dec 2014 14:46:46 +0100, J?r?me Pouiller wrote:
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/libdrm/0001-update-arm.patch | 37 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/libdrm/0001-update-arm.patch
+On Sun, 21 Dec 2014 12:59:56 +0100, Peter Seiderer wrote:
+> Add 0001-Initial-porting-effort-to-GStreamer-1.0.patch from [1] (with minor
+> conflict fixed).
+> Add 0002-Fix-compilation-when-building-against-GStreamer-0.10.patch from [2].
 > 
-> diff --git a/package/libdrm/0001-update-arm.patch b/package/libdrm/0001-update-arm.patch
-> new file mode 100644
-> index 0000000..8c874bb
-> --- /dev/null
-> +++ b/package/libdrm/0001-update-arm.patch
-> @@ -0,0 +1,37 @@
-> +[Adapted from yocto project]
-> +
-> +Add ARM support into xf86arm.h.  This provides support for Xorg interface.
+> Fix qt5multimedia.mk for the gstreamer-1.x case.
+> 
+> [1] https://qt.gitorious.org/qt/tolszaks-qtmultimedia/commit/c847d2f36bd45befcd44d52f92140758563350bf.patch
+> [2] https://qt.gitorious.org/qt/tolszaks-qtmultimedia/commit/609048bd6fcd37162b2b5b139392a8ec8b2260e9.patch
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-xf86arm -> xf86drm.
+We have another patch at http://patchwork.ozlabs.org/patch/424107/ that
+bumps the entire Qt5 stuff to Qt 5.4.0. How would this interact with
+your patch enabling gstreamer 1.x support? Is gstreamer 1.x support
+part of Qt 5.4.0 ?
 
-Committed with this fixed.
-
-If you've successfully tested this, can you send a Tested-by to
-upstream libdrm to ensure the patch gets merged at some point?
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
