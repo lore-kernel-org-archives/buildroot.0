@@ -1,26 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:21:29 +0100
-Subject: [Buildroot] [PATCH 2/5] libxmlrpc: rename patches to the new
- convention
-In-Reply-To: <1419688038-15640-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419688038-15640-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141227172129.081d055d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 17:22:29 +0100
+Subject: [Buildroot] [PATCH] package/libxkbcommon: fix builds with/without
+	X11
+Message-ID: <1419697349-24929-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+We need to explicitly disable X11 support when X11 is not available.
+Conversely, when it is, we need to add the required dependencies.
 
-On Sat, 27 Dec 2014 14:47:15 +0100, Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes a slew of autobuild failures:
+    http://autobuild.buildroot.org/results/587/58794f894a4950b77e38d5fc877852d6cc507d8c/
+    http://autobuild.buildroot.org/results/927/92741f6b9b7909b226c200e453ac6cee8af5abd6/
+    http://autobuild.buildroot.org/results/51c/51cb09f7f267319948c685f905e29afe99f59589/
+    ...
 
-Applied.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fatih A??c? <fatih.asici@gmail.com>
+---
+ package/libxkbcommon/Config.in       | 1 +
+ package/libxkbcommon/libxkbcommon.mk | 7 +++++++
+ 2 files changed, 8 insertions(+)
 
-Thomas
+diff --git a/package/libxkbcommon/Config.in b/package/libxkbcommon/Config.in
+index 0a52c6f..4da1289 100644
+--- a/package/libxkbcommon/Config.in
++++ b/package/libxkbcommon/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBXKBCOMMON
+ 	bool "libxkbcommon"
++	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	help
+ 	  xkbcommon is a keymap compiler and support library which
+ 	  processes a reduced subset of keymaps as defined by the XKB
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 2d30506..12d5f16 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -15,4 +15,11 @@ LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+ # uses C99 features
+ LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBXKBCOMMON_CONF_OPTS += --enable-x11
++LIBXKBCOMMON_DEPENDENCIES += libxcb
++else
++LIBXKBCOMMON_CONF_OPTS += --disable-x11
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
