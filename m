@@ -1,35 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:26:24 +0100
-Subject: [Buildroot] [PATCH 1/5] libxmlrpc: bump to 1.25.30
-In-Reply-To: <20141227155648.GE4098@free.fr>
-References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419688038-15640-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20141227155648.GE4098@free.fr>
-Message-ID: <20141227172624.58b77c6f@free-electrons.com>
+Date: Sat, 27 Dec 2014 17:28:10 +0100
+Subject: [Buildroot] [git commit] package/libiio: do not force shared object
+	build
+Message-ID: <20141227162826.11B2F80464@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=0e6cfbba2e834621f050452aaca32304319a8429
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 27 Dec 2014 16:56:48 +0100, Yann E. MORIN wrote:
+libiio correctly builds as a static library, there is no obvious reason
+to force the shared object build.
 
-> > -LIBXMLRPC_VERSION = 1.25.26
-> > +LIBXMLRPC_VERSION = 1.25.30
-> >  LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
-> >  LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
-> 
-> Since we do get a lot of dowenload issues with sourceforge, could you
-> take this opportunity to add a .hash file for libxmlrpc?
+So, let the CMake BUILD_SHARED_LIBS variable handles the type of library
+built.
 
-Good point. I've just sent a v2 which adds this.
+This libiio patch has already been submitted upstream:
+  https://github.com/analogdevicesinc/libiio/pull/6
 
-Thanks,
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...UILD_SHARED_LIBS-drive-the-type-of-librar.patch |   29 ++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch b/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
+new file mode 100644
+index 0000000..9ee0299
+--- /dev/null
++++ b/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
+@@ -0,0 +1,29 @@
++From 4d036f3708f1f427bf91c5925394d39ef76ad96a Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sat, 27 Dec 2014 16:36:50 +0100
++Subject: [PATCH] cmake: let BUILD_SHARED_LIBS drive the type of library built
++
++Do not force the type of library because some architectures (such as
++BlackFin from AnalogDevice) do not support shared object.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index cd82a96..393fee3 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -115,7 +115,7 @@ install(FILES ${LIBIIO_PC} DESTINATION "${INSTALL_PKGCONFIG_DIR}")
++ #set(SETUP_PY ${CMAKE_CURRENT_SOURCE_DIR}/bindings/python/setup.py)
++ #configure_file(python/setup.py.in ${SETUP_PY} @ONLY)
++ 
++-add_library(iio SHARED ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
+++add_library(iio ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
++ set_target_properties(iio PROPERTIES VERSION ${VERSION} SOVERSION ${LIBIIO_VERSION_MAJOR})
++ target_link_libraries(iio LINK_PRIVATE ${LIBS_TO_LINK})
++ 
++-- 
++2.2.1
++
