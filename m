@@ -1,69 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Dec 2014 17:45:40 +0100
-Subject: [Buildroot] [PATCHv2 3/3] xerces: make sure to use the
- cross-compiled curl
-In-Reply-To: <1419697556-32541-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419697556-32541-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419697556-32541-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141227164540.GK4098@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 27 Dec 2014 18:01:14 +0100
+Subject: [Buildroot] [PATCH 1/2] libvncserver: bump version to 0.9.10
+In-Reply-To: <20141227145230.76abeade@free-electrons.com>
+References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
+ <20141227145230.76abeade@free-electrons.com>
+Message-ID: <549EE5DA.30003@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 12/27/2014 02:52 PM, Thomas Petazzoni wrote:
+> Dear Floris Bos,
+>
+> On Fri, 26 Dec 2014 01:46:14 +0100, Floris Bos wrote:
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>> ---
+>>   .../libvncserver-0001-CVE-2014-6051-6052.patch     |  85 ------------
+>>   .../libvncserver-0002-CVE-2014-6053.patch          |  21 ---
+>>   .../libvncserver-0003-CVE-2014-6054.patch          |  87 ------------
+>>   .../libvncserver-0004-CVE-2014-6055.patch          | 150 ---------------------
+>>   package/libvncserver/libvncserver.mk               |   5 +-
+>>   5 files changed, 3 insertions(+), 345 deletions(-)
+>>   delete mode 100644 package/libvncserver/libvncserver-0001-CVE-2014-6051-6052.patch
+>>   delete mode 100644 package/libvncserver/libvncserver-0002-CVE-2014-6053.patch
+>>   delete mode 100644 package/libvncserver/libvncserver-0003-CVE-2014-6054.patch
+>>   delete mode 100644 package/libvncserver/libvncserver-0004-CVE-2014-6055.patch
+> This patch is causing a bunch of new build failures, like:
+>
+> http://autobuild.buildroot.org/results/75a/75afaad317264fb3cca80fe82cfc5a786f7e42a3/build-end.log
+>
+> Can you look into this and fix it?
 
-On 2014-12-27 17:25 +0100, Thomas Petazzoni spake thusly:
-> When curl support is enabled in xerces, and a host curl is available
-> on the system, it might try to use it, so this patch adds --with-curl=
-> to the configure options to explicitly indicate where is the curl
-> library to use.
-> 
-> Should fix:
-> 
->   http://autobuild.buildroot.org/results/c3c/c3c6be45d0f764fb931a46dbf1509ccf2916ecbf/
-> 
->   (We were not able to reproduce specifically this problem, but
->   another similar problem, where curl was detected, but considered as
->   non-working because of the compilation failure of a test program.)
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Doesn't get along with the version of libva shipped with buildroot.
+Will send in a patch that disables that.
+(not using libva myself, so did not notice)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Regards,
-Yann E. MORIN.
+Yours sincerely,
 
-> ---
->  package/xerces/xerces.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-> index 36955e3..9b2bb81 100644
-> --- a/package/xerces/xerces.mk
-> +++ b/package/xerces/xerces.mk
-> @@ -20,7 +20,7 @@ XERCES_DEPENDENCIES += libiconv
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> -XERCES_CONF_OPTS += --enable-netaccessor-curl
-> +XERCES_CONF_OPTS += --enable-netaccessor-curl --with-curl=$(STAGING_DIR)/usr/lib
->  XERCES_DEPENDENCIES += libcurl
->  else
->  XERCES_CONF_OPTS += --disable-network
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Floris Bos
