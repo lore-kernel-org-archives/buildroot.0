@@ -1,44 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 19:58:05 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: add hashes for Blackfin
-	toolchains
-Message-ID: <1419706685-13020-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Dec 2014 19:58:29 +0100
+Subject: [Buildroot] [git commit] package/kodi-audioencoder-lame: New package
+Message-ID: <20141227185849.B3FDF7FD02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those toolchains are downloaded from Sourceforge, and are therefore
-affected by the Sourcefoge download issues. Therefore, this commit
-adds the hashes for those toolchain tarballs.
+commit: http://git.buildroot.net/buildroot/commit/?id=c9338f16a4a9741775c4c5a492aa8961bbdf1e3e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+[Thomas: removed dependency on BR2_PACKAGE_KODI_OPTICALDRIVE from the
+package Config.in, since it is already only included if
+BR2_PACKAGE_KODI_OPTICALDRIVE is enabled.]
 
-  http://autobuild.buildroot.org/results/fa5/fa5e38246dddd661f1d674f3521d21297796bce3/
-  (and other similar issues)
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.hash | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/kodi-audioencoder-lame/Config.in           |    7 +++++++
+ .../kodi-audioencoder-lame.mk                      |   16 ++++++++++++++++
+ package/kodi/Config.in                             |    1 +
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 7e64d4f..b4fb5e0 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -5,3 +5,12 @@ md5  ad4a66e4791606c5df70f48c4a97b0ec  mips-2014.11-22-mips-linux-gnu-i686-pc-li
- md5  14facaac538a43533b89d969d7904d46  mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2640
- md5  0ba8bc4923c04728ee3787bed4cd5148  mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/package/kodi-audioencoder-lame/Config.in b/package/kodi-audioencoder-lame/Config.in
+new file mode 100644
+index 0000000..be00296
+--- /dev/null
++++ b/package/kodi-audioencoder-lame/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIOENCODER_LAME
++	bool "kodi-audioencoder-lame"
++	select BR2_PACKAGE_LAME
++	help
++	  An audioencoder addon for Kodi
 +
-+# Blackfin toolchains from Analog Devices
-+# Locally computed
-+sha256 fba010929c7355a0286fc4b1817d6065ee21380d3c2993383d3778f0b998ca9d  blackfin-toolchain-2012R2-RC2.i386.tar.bz2
-+sha256 90284fe72125f381817da505b6f91f2b0c86a763ffe2c722c7d6b3ae60b25010  blackfin-toolchain-2013R1-RC1.i386.tar.bz2
-+sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfin-toolchain-2014R1-RC2.i386.tar.bz2
-+sha256 436ca3d901b152094cd6be2b6e274c59643387f46bb0563db1adcab1202f1455  blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
-+sha256 4d66a3390ae9e1c4b9aad214757791a5e0c45ef2bb31977fa6d3a80d96290237  blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
-+sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
--- 
-2.1.0
++	  https://github.com/xbmc/audioencoder.lame
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+new file mode 100644
+index 0000000..a890f64
+--- /dev/null
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# kodi-audioencoder-lame
++#
++################################################################################
++
++KODI_AUDIOENCODER_LAME_VERSION = 6f8384f0d003faf7b91dcd38357ea0ecf9030cce
++KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
++KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
++KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
++KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
++KODI_AUDIOENCODER_LAME_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
++	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index fa26f54..7f33642 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -245,6 +245,7 @@ if BR2_PACKAGE_KODI_OPTICALDRIVE
+ comment "Kodi audioencoder addons"
+ 
+ source "package/kodi-audioencoder-flac/Config.in"
++source "package/kodi-audioencoder-lame/Config.in"
+ 
+ endif # BR2_PACKAGE_KODI_OPTICALDRIVE
+ 
