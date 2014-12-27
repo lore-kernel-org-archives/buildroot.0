@@ -1,63 +1,81 @@
-From: Tal Lubko <tallubko@yahoo.com>
-Date: Sat, 27 Dec 2014 12:31:49 +0200
-Subject: [Buildroot] [PATCH v1 2/2] intel-gpu-tools: - fixing dependencies -
-	version bump from 1.8 to 1.9
-In-Reply-To: <1419676309-850-1-git-send-email-tallubko@yahoo.com>
-References: <1419676309-850-1-git-send-email-tallubko@yahoo.com>
-Message-ID: <1419676309-850-2-git-send-email-tallubko@yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 14:30:52 +0100
+Subject: [Buildroot] [PATCH] package/nftables: do not build docs
+Message-ID: <1419687052-24398-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Tal Lubko <tallubko@yahoo.com>
----
- package/intel-gpu-tools/Config.in          | 11 +++++++++++
- package/intel-gpu-tools/intel-gpu-tools.mk |  2 +-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+Building docs requires dblatex with a working Jade Wrapper (jw) which
+may well be missing on the build machine, and we do not build our own.
 
-diff --git a/package/intel-gpu-tools/Config.in b/package/intel-gpu-tools/Config.in
-index 2336d2a..6eab8c7 100644
---- a/package/intel-gpu-tools/Config.in
-+++ b/package/intel-gpu-tools/Config.in
-@@ -1,13 +1,24 @@
- config BR2_PACKAGE_INTEL_GPU_TOOLS
- 	bool "intel-gpu-tools"
- 	select BR2_PACKAGE_LIBDRM
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-+	depends on BR2_LARGEFILE # libdrm & libpciaccess
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	depends on BR2_i386 || BR2_x86_64 # libdrm-intel
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
-+	depends on BR2_ARCH_HAS_ATOMICS # cairo
- 	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
- 	select BR2_PACKAGE_LIBPCIACCESS
- 
- 	help
- 	  This is a collection of tools for development and testing of the Intel DRM driver.
- 
- 	  https://01.org/linuxgraphics/
+Since docs are anyway removed from the target, just do not build them to
+start with.
+
+Note: patching the Makefile.am is the most straightforward way of doing
+it, although we may also pre-set a bunch of variables when calling
+./configure;
+  - DBLATEX=no to disable PDF generation
+  - DOCBOOK2X_MAN=no, DOCBOOK2MAN=no and DB2X_DOCBOOK2MAN=no to disable
+    manpage generation
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/nftables/0001-dont-build-docs.patch | 24 ++++++++++++++++++++++++
+ package/nftables/nftables.mk                |  8 ++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 package/nftables/0001-dont-build-docs.patch
+
+diff --git a/package/nftables/0001-dont-build-docs.patch b/package/nftables/0001-dont-build-docs.patch
+new file mode 100644
+index 0000000..945010f
+--- /dev/null
++++ b/package/nftables/0001-dont-build-docs.patch
+@@ -0,0 +1,24 @@
++Makefile: do not build docs
 +
-+comment "intel-gpu-tools needs a toolchain w/ largefile, threads, wchar"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
-diff --git a/package/intel-gpu-tools/intel-gpu-tools.mk b/package/intel-gpu-tools/intel-gpu-tools.mk
-index a001ea8..76d0abe 100644
---- a/package/intel-gpu-tools/intel-gpu-tools.mk
-+++ b/package/intel-gpu-tools/intel-gpu-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++Building docs fail with:
++
++    [...]
++      GEN    nft.8
++      GEN    nft.pdf
++    Usage: jw [<options>] <sgml_file>
++    where <options> are:
++    [...]
++
++Since we are not interested in docs on the target, just do not build
++them to start with.
++ 
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++diff -durN nftables-0.4.orig/Makefile.am nftables-0.4/Makefile.am
++--- nftables-0.4.orig/Makefile.am	2014-11-14 18:37:53.491326930 +0100
+++++ nftables-0.4/Makefile.am	2014-12-27 14:06:35.929187185 +0100
++@@ -2,5 +2,4 @@
++ 
++ SUBDIRS = 	src	\
++ 		include	\
++-		doc	\
++ 		files
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 9f18df7..9d71240 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -12,6 +12,14 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
+ NFTABLES_LICENSE = GPLv2
+ NFTABLES_LICENSE_FILES = COPYING
  
--INTEL_GPU_TOOLS_VERSION = 1.8
-+INTEL_GPU_TOOLS_VERSION = 1.9
- INTEL_GPU_TOOLS_SOURCE = intel-gpu-tools-$(INTEL_GPU_TOOLS_VERSION).tar.bz2
- INTEL_GPU_TOOLS_SITE = http://xorg.freedesktop.org/archive/individual/app
- INTEL_GPU_TOOLS_LICENSE = MIT
++# Touching Makefile.am:
++NFTABLES_AUTORECONF = YES
++
++define NFTABLES_M4_DIR
++	mkdir -p $(@D)/m4
++endef
++NFTABLES_POST_PATCH_HOOKS += NFTABLES_M4_DIR
++
+ NFTABLES_LIBS = -lncurses
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
+ NFTABLES_LIBS += -ljansson -lm
 -- 
 1.9.1
