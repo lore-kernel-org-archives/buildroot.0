@@ -1,71 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Dec 2014 18:07:56 +0100
-Subject: [Buildroot] [PATCH 1/1] libvncserver: disable libva support
-In-Reply-To: <1419699691-7765-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1419699691-7765-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20141227170756.GL4098@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 27 Dec 2014 18:43:40 +0100
+Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
+ tightpng encoding support
+In-Reply-To: <20141227145132.1c48523a@free-electrons.com>
+References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>	<1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>	<20141226180839.53e2df6f@free-electrons.com>	<b66fd2b4894b872b928f81fdf13998ec@to-the-max.net>
+ <20141227145132.1c48523a@free-electrons.com>
+Message-ID: <549EEFCC.9030202@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Floris, All,
-
-On 2014-12-27 18:01 +0100, Floris Bos spake thusly:
-> The libvncclient library (part of libvncserver) has optional support
-> for HW accelerated H264 video playback using libva
-> 
-> However there are currently two problems with it:
-> 
-> 1) it only supports libva compiled with X11 support enabled, but it
->    does not verify that is the case, resulting in compile errors.
-> 
-> 2) it only supports the libva 1.0.x API, and not newer
->    libva versions, like 1.4.x we include with buildroot.
-> 
->    https://github.com/LibVNC/libvncserver/issues/11
-> 
-> Disabling libva support for now.
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libvncserver/libvncserver.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-> index ced6689..a8389b4 100644
-> --- a/package/libvncserver/libvncserver.mk
-> +++ b/package/libvncserver/libvncserver.mk
-> @@ -17,6 +17,10 @@ LIBVNCSERVER_DEPENDENCIES = host-pkgconf
->  # tarball, so we need to generate them.
->  LIBVNCSERVER_AUTORECONF = YES
->  
-> +# libvncserver does not get along with newer libva versions
-> +# https://github.com/LibVNC/libvncserver/issues/11
-> +LIBVNCSERVER_CONF_OPTS += --without-libva
+On 12/27/2014 02:51 PM, Thomas Petazzoni wrote:
+> Dear Floris Bos,
+>
+> On Fri, 26 Dec 2014 18:37:15 +0100, Floris Bos wrote:
+>
+>> JPEG and PNG are both necesarry.
+>>
+>> Libvncserver will only compile tight.c if HAVE_LIBJPEG
+>>
+>> https://github.com/LibVNC/libvncserver/blob/master/libvncserver/Makefile.am#L49
+>>
+>> And inside tight.c png is optional, jpeg is not.
+> Ok, so I believe we should rather do:
+>
+> +config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
+> +	bool "TightPNG encoding support"
+> +	select BR2_PACKAGE_JPEG
+> +	select BR2_PACKAGE_LIBPNG
+> +	help
+> +	  TightPNG encoding speeds up HTML5 based VNC clients like noVNC.
 > +
->  # only used for examples
->  LIBVNCSERVER_CONF_OPTS += --with-sdl-config=/bin/false
->  
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +	  http://wiki.qemu.org/VNC_Tight_PNG
+>
+> in Config.in (i.e as you did)
+>
+> And then in libvncserver.mk, do:
+>
+> ifeq ($(BR2_PACKAGE_LIBPNG),y)
+> LIBVNCSERVER_DEPENDENCIES += libpng
+> else
+> LIBVNCSERVER_CONF_OPTS += --without-png
+> endif
+>
+> This way, people not using tightpng support but having libpng enabled
+> will have PNG support in libvncserver.
+
+Do note that the only thing using PNG inside libvncserver is the 
+TightPNG encoding.
+Think it is a bit counter-inductive to give users TightPNG support, just 
+because another package selected libpng, even though they chose not to 
+select the TightPNG feature.
+
+(Just like I believe it is counter-inductive that users are expected to 
+know which dependencies are needed to get a specific feature they want, 
+as seems to be the current case with many buildroot packages, which do 
+not offer any feature options).
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Yours sincerely,
+
+Floris Bos
