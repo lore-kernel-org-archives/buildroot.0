@@ -1,47 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Dec 2014 19:16:03 +0100
-Subject: [Buildroot] [PATCH 0/2] FreeRDP: misc arch-related fixes (branch
-	yem/fixes)
-Message-ID: <cover.1419704115.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 19:16:07 +0100
+Subject: [Buildroot] [PATCH 2/2] package/freerdp: do not use SSE2 extensions
+	when not available
+In-Reply-To: <cover.1419704115.git.yann.morin.1998@free.fr>
+References: <cover.1419704115.git.yann.morin.1998@free.fr>
+Message-ID: <d37d664e994af72e48de29bfbb2112249981b672.1419704115.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Do not let FreeRDP decide whether it can use SE2 opcodes, it may well
+fail to do so, because the heuristic is not working for
+cross-compilation.
 
-Two patches to fix FreeRDP because it may mis-detects the CPU, and may
-enable features (Neon, SSE2) even if the CPU is missing them.
+Also, we do have a Kconfig option stating whether we have SSE2 or not,
+so reuse that.
 
-Regards,
-Yann E. MORIN.
+Similar to the recent ARM+Neon fix.
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freerdp/freerdp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-The following changes since commit 4ab89081f4d9187b9ad853eac2058fd98c6892d1:
-
-  package/ffmpeg: update hash (2014-12-27 19:09:39 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/fixes
-
-for you to fetch changes up to d37d664e994af72e48de29bfbb2112249981b672:
-
-  package/freerdp: do not use SSE2 extensions when not available (2014-12-27 19:13:43 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/freerdp: do not use Neon extensions when not available
-      package/freerdp: do not use SSE2 extensions when not available
-
- package/freerdp/freerdp.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index c9396b5..a703500 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -69,4 +69,10 @@ else
+ FREERDP_CONF_OPTS += -DWITH_NEON=OFF
+ endif
+ 
++ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
++FREERDP_CONF_OPTS += -DWITH_SSE2=ON
++else
++FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
