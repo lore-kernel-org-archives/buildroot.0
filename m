@@ -1,83 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 27 Dec 2014 19:58:29 +0100
-Subject: [Buildroot] [git commit] package/kodi-audioencoder-flac: New package
-Message-ID: <20141227185849.A9A087FD02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-addon-xvdr: Bump version for
+	Helix-compatibility
+Message-ID: <20141227185849.9086F7FD02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9f3feb5c6a0b19c662f0a993ef8e61282ead5a5
+commit: http://git.buildroot.net/buildroot/commit/?id=7881cbc295a96568b224b5cdb85ea0211972358e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Thomas: removed dependency on BR2_PACKAGE_KODI_OPTICALDRIVE from the
-package Config.in, since it is already only included if
-BR2_PACKAGE_KODI_OPTICALDRIVE is enabled.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-audioencoder-flac/Config.in           |    8 ++++++++
- .../kodi-audioencoder-flac.mk                      |   17 +++++++++++++++++
- package/kodi/Config.in                             |   10 +++++++++-
- 3 files changed, 34 insertions(+), 1 deletions(-)
+ package/kodi-addon-xvdr/0001-xbmc-rebrand.patch |   19 +++++++++++++++++++
+ package/kodi-addon-xvdr/kodi-addon-xvdr.mk      |    4 ++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-audioencoder-flac/Config.in b/package/kodi-audioencoder-flac/Config.in
+diff --git a/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
 new file mode 100644
-index 0000000..799f9c5
+index 0000000..6e87b79
 --- /dev/null
-+++ b/package/kodi-audioencoder-flac/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIOENCODER_FLAC
-+	bool "kodi-audioencoder-flac"
-+	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_LIBOGG
-+	help
-+	  An audioencoder addon for Kodi
++++ b/package/kodi-addon-xvdr/0001-xbmc-rebrand.patch
+@@ -0,0 +1,19 @@
++Update for Kodi
 +
-+	  https://github.com/xbmc/audioencoder.flac
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-new file mode 100644
-index 0000000..a200150
---- /dev/null
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-audioencoder-flac
-+#
-+################################################################################
++Ported from OpenELEC:
++https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/kodi-addon-xvdr/patches/kodi-addon-xvdr-xbmc-rebrand.patch
 +
-+KODI_AUDIOENCODER_FLAC_VERSION = a960ebae64f4b66f580e70318fe6da97771cacba
-+KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
-+KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
-+KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
-+KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg
-+KODI_AUDIOENCODER_FLAC_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
-+	-DFLAC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
-+	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 22060b1..fa26f54 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -240,7 +240,15 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
- 	help
- 	  Enable support for optical drives
++diff -Naur xbmc-addon-xvdr-2bf2563/configure.ac xbmc-addon-xvdr-2bf2563.patch/configure.ac
++--- xbmc-addon-xvdr-2bf2563/configure.ac	2014-10-18 22:02:18.000000000 +0200
+++++ xbmc-addon-xvdr-2bf2563.patch/configure.ac	2014-10-20 03:03:20.525526996 +0200
++@@ -6,7 +6,7 @@
++ AC_INIT([xbmc-addon-xvdr], [MAJOR.MINOR.MICRO], [alexander.pipelka at gmail.com])
++ 
++ AC_CONFIG_AUX_DIR(autotools)
++-AC_PREFIX_DEFAULT(/usr/lib/xbmc)
+++AC_PREFIX_DEFAULT(/usr/lib/kodi)
++ 
++ AC_CANONICAL_HOST
++ AC_CANONICAL_TARGET
+diff --git a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+index 14b08fe..e05510c 100644
+--- a/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
++++ b/package/kodi-addon-xvdr/kodi-addon-xvdr.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
--comment "Kodi addons"
-+if BR2_PACKAGE_KODI_OPTICALDRIVE
-+
-+comment "Kodi audioencoder addons"
-+
-+source "package/kodi-audioencoder-flac/Config.in"
-+
-+endif # BR2_PACKAGE_KODI_OPTICALDRIVE
-+
-+comment "Kodi PVR addons"
- 
- source "package/kodi-addon-xvdr/Config.in"
- source "package/kodi-pvr-addons/Config.in"
+-# This cset is on master. When a Gotham branch is made, we should
++# This cset is on master. When a Helix branch is made, we should
+ # follow it, as incompatible changes in the plugins API can happen
+ # on the master branch.
+-KODI_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
++KODI_ADDON_XVDR_VERSION = 328fa653b821a4edc1256a13833f30a4483e2819
+ KODI_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(KODI_ADDON_XVDR_VERSION))
+ KODI_ADDON_XVDR_LICENSE = GPLv2+
+ KODI_ADDON_XVDR_LICENSE_FILES = COPYING
