@@ -1,42 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:11:26 +0100
-Subject: [Buildroot] [git commit] package/leafnode2: fix news user check
-Message-ID: <20141227161137.3C3B480060@busybox.osuosl.org>
+Date: Sat, 27 Dec 2014 17:12:30 +0100
+Subject: [Buildroot] [PATCH 1/4] libxkbcommon: bump to version 0.5.0
+In-Reply-To: <20141227154956.GD4098@free.fr>
+References: <1419595603-15591-1-git-send-email-fatih.asici@gmail.com>
+ <20141227101335.GA4098@free.fr> <20141227154956.GD4098@free.fr>
+Message-ID: <20141227171230.6f1e679a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=159cdbd5a3b3a14b004a6df2ce4bf202fb4cb592
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
---enable-runas-user use 'news' as default but the configure stop
-if news doesn't exist on the build host.
-Use 'root' while cross-compiling
+On Sat, 27 Dec 2014 16:49:56 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/leafnode2/leafnode2.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+> > I guess what we want is to use --disable-x11 when we do not have x11
+> > enabled, and if it is enabled, select the required package(s).
+> 
+> I've had a bit of bandwidth today, and I've had a look at it, and the
+> fix is almost ready. I'll submit soon.
 
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 3bc1c68..0fc2a8d 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -14,9 +14,13 @@ LEAFNODE2_DEPENDENCIES = host-pcre pcre
- LEAFNODE2_CONF_ENV = \
- 	PCRECONFIG="$(STAGING_DIR)/usr/bin/pcre-config"
- 
-+# --enable-runas-user use 'news' as default but the configure stop
-+# if news doesn't exist on the build host.
-+# Use 'root' while cross-compiling 
- LEAFNODE2_CONF_OPTS = \
- 	--sysconfdir=/etc/leafnode2 \
--	--enable-spooldir=/var/spool/news
-+	--enable-spooldir=/var/spool/news \
-+	--enable-runas-user=root
- 
- # Leafnode2 needs the host version of b_sortnl during
- # compilation. Instead of creating a seperate host package and
+Great thanks. Since the issue is causing a good number of failures,
+it's nice to have a fix quickly. I was even considering reverting the
+change, actually. But I'll wait for your fix instead.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
