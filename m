@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 14:47:14 +0100
-Subject: [Buildroot] [PATCH 1/5] libxmlrpc: bump to 1.25.30
+Date: Sat, 27 Dec 2014 14:47:18 +0100
+Subject: [Buildroot] [PATCH 5/5] guile: fix libltdl and libgmp detection
 In-Reply-To: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419688038-15640-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1419688038-15640-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Explicitly pass the path to libtldl and libgmp, so that guile does not
+try to use host versions when available.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/056/056b7fcbf3b73a8d15ca635b000771cdc2d7fbf9/
+
+And another similar problem with libgmp.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxmlrpc/libxmlrpc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/guile/guile.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-index a8e8aa3..1b771e2 100644
---- a/package/libxmlrpc/libxmlrpc.mk
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 30af11d..194eca2 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -29,5 +29,9 @@ GUILE_CFLAGS = \
+ GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/usr/bin/guile \
+ 	CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
  
--LIBXMLRPC_VERSION = 1.25.26
-+LIBXMLRPC_VERSION = 1.25.30
- LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
- LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
- LIBXMLRPC_LICENSE = BSD-3c (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
++GUILE_CONF_OPTS += \
++	--with-libltdl-prefix=$(STAGING_DIR)/usr/lib \
++	--with-libgmp-prefix=$(STAGING_DIR)/usr/lib
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.1.0
