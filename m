@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 14:47:18 +0100
-Subject: [Buildroot] [PATCH 5/5] guile: fix libltdl and libgmp detection
+Date: Sat, 27 Dec 2014 14:47:17 +0100
+Subject: [Buildroot] [PATCH 4/5] xerces: make sure to use the cross-compiled
+	curl
 In-Reply-To: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1419688038-15640-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419688038-15640-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1419688038-15640-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Explicitly pass the path to libtldl and libgmp, so that guile does not
-try to use host versions when available.
+When curl support is enabled in xerces, and a host curl is available
+on the system, it might try to use it, so this patch adds --with-curl=
+to the configure options to explicitly indicate where is the curl
+library to use.
 
-Fixes:
+Should fix:
 
-  http://autobuild.buildroot.org/results/056/056b7fcbf3b73a8d15ca635b000771cdc2d7fbf9/
+  http://autobuild.buildroot.org/results/c3c/c3c6be45d0f764fb931a46dbf1509ccf2916ecbf/
 
-And another similar problem with libgmp.
+  (We were not able to reproduce specifically this problem, but
+  another similar problem, where curl was detected, but considered as
+  non-working because of the compilation failure of a test program.)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/guile/guile.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/xerces/xerces.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index 30af11d..194eca2 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -29,5 +29,9 @@ GUILE_CFLAGS = \
- GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/usr/bin/guile \
- 	CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 36955e3..9b2bb81 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -20,7 +20,7 @@ XERCES_DEPENDENCIES += libiconv
+ endif
  
-+GUILE_CONF_OPTS += \
-+	--with-libltdl-prefix=$(STAGING_DIR)/usr/lib \
-+	--with-libgmp-prefix=$(STAGING_DIR)/usr/lib
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-XERCES_CONF_OPTS += --enable-netaccessor-curl
++XERCES_CONF_OPTS += --enable-netaccessor-curl --with-curl=$(STAGING_DIR)/usr/lib
+ XERCES_DEPENDENCIES += libcurl
+ else
+ XERCES_CONF_OPTS += --disable-network
 -- 
 2.1.0
