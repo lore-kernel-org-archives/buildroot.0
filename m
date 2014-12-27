@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:12:30 +0100
-Subject: [Buildroot] [PATCH 1/4] libxkbcommon: bump to version 0.5.0
-In-Reply-To: <20141227154956.GD4098@free.fr>
-References: <1419595603-15591-1-git-send-email-fatih.asici@gmail.com>
- <20141227101335.GA4098@free.fr> <20141227154956.GD4098@free.fr>
-Message-ID: <20141227171230.6f1e679a@free-electrons.com>
+Date: Sat, 27 Dec 2014 17:13:18 +0100
+Subject: [Buildroot] [PATCH] package/leafnode2: fix news user check
+In-Reply-To: <1419615491-8238-1-git-send-email-romain.naour@openwide.fr>
+References: <1419615491-8238-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20141227171318.42ba61a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Romain Naour,
 
-On Sat, 27 Dec 2014 16:49:56 +0100, Yann E. MORIN wrote:
-
-> > I guess what we want is to use --disable-x11 when we do not have x11
-> > enabled, and if it is enabled, select the required package(s).
+On Fri, 26 Dec 2014 18:38:11 +0100, Romain Naour wrote:
+> --enable-runas-user use 'news' as default but the configure stop
+> if news doesn't exist on the build host.
+> Use 'root' while cross-compiling
 > 
-> I've had a bit of bandwidth today, and I've had a look at it, and the
-> fix is almost ready. I'll submit soon.
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/leafnode2/leafnode2.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-Great thanks. Since the issue is causing a good number of failures,
-it's nice to have a fix quickly. I was even considering reverting the
-change, actually. But I'll wait for your fix instead.
+Applied, thanks. Here, leafnode2 does not start properly at boot time,
+it asks for a fully qualified host name in /etc/hosts. It would be good
+to add a default config file + init script to make leafnode2 work at
+least somewhat out of the box.
 
 Thanks!
 
