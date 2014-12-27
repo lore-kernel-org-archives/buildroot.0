@@ -1,39 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 18:48:37 +0100
-Subject: [Buildroot] [PATCH 1/1] libvncserver: disable libva support
-In-Reply-To: <1419699691-7765-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1419699691-7765-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20141227184837.5de867ca@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 18:54:58 +0100
+Subject: [Buildroot] [PATCH] package/ffmpeg: update hash
+Message-ID: <1419702898-25665-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Last bump (dd3a2d6) forgot to update the hash for the new version.
 
-On Sat, 27 Dec 2014 18:01:31 +0100, Floris Bos wrote:
-> The libvncclient library (part of libvncserver) has optional support
-> for HW accelerated H264 video playback using libva
-> 
-> However there are currently two problems with it:
-> 
-> 1) it only supports libva compiled with X11 support enabled, but it
->    does not verify that is the case, resulting in compile errors.
-> 
-> 2) it only supports the libva 1.0.x API, and not newer
->    libva versions, like 1.4.x we include with buildroot.
-> 
->    https://github.com/LibVNC/libvncserver/issues/11
-> 
-> Disabling libva support for now.
-> 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index d0949e8..ea37531 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	03cf50b2f9109548e466f144c960b37031ffc1b9fab96382b4b26b7607c7ef52	ffmpeg-2.5.1.tar.bz2
++sha256	9edf17e7c280cbcfca4bc4219b1c22f760a61ec6a3f39ef26e3e2ad4cd24465e	ffmpeg-2.5.2.tar.bz2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
