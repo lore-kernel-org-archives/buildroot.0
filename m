@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 21:34:18 +0100
-Subject: [Buildroot] [PATCH v5 04/15] gpu-viv-bin-mx6q: fix GLESv2
- support
-In-Reply-To: <1418132813-32642-5-git-send-email-jezz@sysmic.org>
+Date: Sat, 27 Dec 2014 21:36:17 +0100
+Subject: [Buildroot] [PATCH v5 05/15] gpu-viv-bin-mx6q: make fb/x11
+ choice explicit
+In-Reply-To: <1418132813-32642-6-git-send-email-jezz@sysmic.org>
 References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
- <1418132813-32642-5-git-send-email-jezz@sysmic.org>
-Message-ID: <20141227213418.4926f577@free-electrons.com>
+ <1418132813-32642-6-git-send-email-jezz@sysmic.org>
+Message-ID: <20141227213617.60fc152d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +14,57 @@ To: buildroot@busybox.net
 
 Dear J?r?me Pouiller,
 
-On Tue,  9 Dec 2014 14:46:42 +0100, J?r?me Pouiller wrote:
-> Tested with:
->     QMX6 board +
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
->     BR2_LINUX_KERNEL=y
->     BR2_LINUX_KERNEL_CUSTOM_GIT=y
->     BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
->     BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
->     BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
->     BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
->     BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
->     BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
->     BR2_PACKAGE_QT5=y
->     BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
->     BR2_PACKAGE_QT5BASE_EXAMPLES=y
->     BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
->     BR2_PACKAGE_QT5BASE_EGLFS=y
->     BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
->     BR2_PACKAGE_QT5BASE_GIF=y
->     BR2_PACKAGE_QT5BASE_JPEG=y
->     BR2_PACKAGE_QT5BASE_PNG=y
->     BR2_PACKAGE_QT5QUICKCONTROLS=y
->     BR2_PACKAGE_FREESCALE_IMX=y
->     BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
->     BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
->     BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
-> 
+On Tue,  9 Dec 2014 14:46:43 +0100, J?r?me Pouiller wrote:
 > Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+>  package/freescale-imx/gpu-viv-bin-mx6q/Config.in   | 24 ++++++++++++++++++++--
+>  .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  2 +-
+>  2 files changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+> index 4e83dd3..904b011 100644
+> --- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+> +++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
+> @@ -7,8 +7,6 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+>  	select BR2_PACKAGE_HAS_LIBEGL
+>  	select BR2_PACKAGE_HAS_LIBGLES
+>  	select BR2_PACKAGE_HAS_LIBOPENVG
+> -	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+> -	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
 
-I've applied your patch. However next time, please add a real commit
-log that explains what is going on. Saying how it was tested is
-definitely good, but giving some explanation about what is going on
-helps to understand the patch, and therefore increases the chance of
-getting your patch applied quickly.
+So we used to select libxdamage and libxext...
 
-Thanks!
+>  	depends on BR2_arm # Only relevant for i.MX6
+>  	# Library binaries are linked against libc.so.6
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+> @@ -25,6 +23,28 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+>  
+>  if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+>  
+> +choice
+> +	prompt "Output option"
+> +	help
+> +	  There are two versions of this library: one for
+> +	  direct framebuffer access, one for X11 rendering.
+> +	  Choose here which version to install.
+> +
+> +config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
+> +	depends on BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+> +	select BR2_PACKAGE_XLIB_LIBXEXT
+> +	select BR2_PACKAGE_LIBDRM
+
+... and now we're also selecting libdrm. Is this intended? Why isn't
+this explained in the commit log?
+
+>  # DirectFB is not supported (wrong version)
+> -ifeq ($(BR2_PACKAGE_XORG7),y)
+> +ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
+>  GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
+
+And libdrm is not part of the dependencies?
+
+Best regards,
 
 Thomas
 -- 
