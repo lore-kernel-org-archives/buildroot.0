@@ -1,61 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 19:07:55 +0100
-Subject: [Buildroot] [PATCH 2/2] libvncserver: add config option for
- tightpng encoding support
-In-Reply-To: <549EEFCC.9030202@je-eigen-domein.nl>
-References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
- <1419554775-11560-2-git-send-email-bos@je-eigen-domein.nl>
- <20141226180839.53e2df6f@free-electrons.com>
- <b66fd2b4894b872b928f81fdf13998ec@to-the-max.net>
- <20141227145132.1c48523a@free-electrons.com>
- <549EEFCC.9030202@je-eigen-domein.nl>
-Message-ID: <20141227190755.10b11f1c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 19:16:03 +0100
+Subject: [Buildroot] [PATCH 0/2] FreeRDP: misc arch-related fixes (branch
+	yem/fixes)
+Message-ID: <cover.1419704115.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Hello All!
 
-On Sat, 27 Dec 2014 18:43:40 +0100, Floris Bos wrote:
+Two patches to fix FreeRDP because it may mis-detects the CPU, and may
+enable features (Neon, SSE2) even if the CPU is missing them.
 
-> Do note that the only thing using PNG inside libvncserver is the 
-> TightPNG encoding.
-> Think it is a bit counter-inductive to give users TightPNG support, just 
-> because another package selected libpng, even though they chose not to 
-> select the TightPNG feature.
-> 
-> (Just like I believe it is counter-inductive that users are expected to 
-> know which dependencies are needed to get a specific feature they want, 
-> as seems to be the current case with many buildroot packages, which do 
-> not offer any feature options).
+Regards,
+Yann E. MORIN.
 
-This topic has been the source of many discussions in the Buildroot
-community, and we're trying to find a balance between two options:
 
- * Have sub-options in each package for all the various possible
-   optional features they have. This makes it more explicit for users,
-   but on the flip side generates a huge maintenance burden, as we
-   would have a much much larger number of Config.in options to
-   maintain.
+The following changes since commit 4ab89081f4d9187b9ad853eac2058fd98c6892d1:
 
- * Make optional features automatically enabled. This is less explicit
-   for users, but it is sometimes good (like if you have OpenSSL
-   enabled, enable SSL support everywhere it is possible), and avoids
-   creating zillions of Config.in options.
+  package/ffmpeg: update hash (2014-12-27 19:09:39 +0100)
 
-So generally, on a case by case basis, we decide which of the solution
-is the most appropriate. Sometimes the latter is good enough and avoids
-creating more Config.in options, sometimes the former is really
-necessary to make it explicit to the user what is happening. I don't
-think it is possible to settle on one or the other solution and apply
-this decision unconditionally to all packages.
+are available in the git repository at:
 
-Best regards,
+  git://git.busybox.net/~ymorin/git/buildroot yem/fixes
 
-Thomas
+for you to fetch changes up to d37d664e994af72e48de29bfbb2112249981b672:
+
+  package/freerdp: do not use SSE2 extensions when not available (2014-12-27 19:13:43 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/freerdp: do not use Neon extensions when not available
+      package/freerdp: do not use SSE2 extensions when not available
+
+ package/freerdp/freerdp.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
