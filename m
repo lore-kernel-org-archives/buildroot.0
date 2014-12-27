@@ -1,35 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 17:28:58 +0100
-Subject: [Buildroot] [PATCH] package/libxkbcommon: fix builds
- with/without X11
-In-Reply-To: <1419697349-24929-1-git-send-email-yann.morin.1998@free.fr>
-References: <1419697349-24929-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20141227172858.57c3848f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 17:44:11 +0100
+Subject: [Buildroot] [PATCHv2 1/3] libxmlrpc: bump to 1.25.30 and add
+ hash file
+In-Reply-To: <1419697556-32541-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1419697556-32541-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1419697556-32541-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141227164411.GI4098@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Sat, 27 Dec 2014 17:22:29 +0100, Yann E. MORIN wrote:
-> We need to explicitly disable X11 support when X11 is not available.
-> Conversely, when it is, we need to add the required dependencies.
+On 2014-12-27 17:25 +0100, Thomas Petazzoni spake thusly:
+> This commit bumps libxmlrpc to the latest available stable version,
+> and adds a hash file.
 > 
-> Fixes a slew of autobuild failures:
->     http://autobuild.buildroot.org/results/587/58794f894a4950b77e38d5fc877852d6cc507d8c/
->     http://autobuild.buildroot.org/results/927/92741f6b9b7909b226c200e453ac6cee8af5abd6/
->     http://autobuild.buildroot.org/results/51c/51cb09f7f267319948c685f905e29afe99f59589/
->     ...
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Hash manually verified to be OK.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libxmlrpc/libxmlrpc.hash | 2 ++
+>  package/libxmlrpc/libxmlrpc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/libxmlrpc/libxmlrpc.hash
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Fatih A??c? <fatih.asici@gmail.com>
+> diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
+> new file mode 100644
+> index 0000000..d37fcfc
+> --- /dev/null
+> +++ b/package/libxmlrpc/libxmlrpc.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 8ae6ed4ec57d50ed132b1150fc5258346eef3e291501a564f14fa97586902f98 xmlrpc-c-1.25.30.tgz
+> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+> index a8e8aa3..1b771e2 100644
+> --- a/package/libxmlrpc/libxmlrpc.mk
+> +++ b/package/libxmlrpc/libxmlrpc.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBXMLRPC_VERSION = 1.25.26
+> +LIBXMLRPC_VERSION = 1.25.30
+>  LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
+>  LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
+>  LIBXMLRPC_LICENSE = BSD-3c (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141227/2c30368e/attachment.asc>
