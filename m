@@ -1,41 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 27 Dec 2014 14:52:30 +0100
-Subject: [Buildroot] [PATCH 1/2] libvncserver: bump version to 0.9.10
-In-Reply-To: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1419554775-11560-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20141227145230.76abeade@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Dec 2014 15:39:48 +0100
+Subject: [Buildroot] [PATCH] package/nftables: do not build docs
+In-Reply-To: <20141227144831.1e96cb3f@free-electrons.com>
+References: <1419687052-24398-1-git-send-email-yann.morin.1998@free.fr>
+ <20141227144831.1e96cb3f@free-electrons.com>
+Message-ID: <20141227143948.GB4098@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+Thomas, All,
 
-On Fri, 26 Dec 2014 01:46:14 +0100, Floris Bos wrote:
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  .../libvncserver-0001-CVE-2014-6051-6052.patch     |  85 ------------
->  .../libvncserver-0002-CVE-2014-6053.patch          |  21 ---
->  .../libvncserver-0003-CVE-2014-6054.patch          |  87 ------------
->  .../libvncserver-0004-CVE-2014-6055.patch          | 150 ---------------------
->  package/libvncserver/libvncserver.mk               |   5 +-
->  5 files changed, 3 insertions(+), 345 deletions(-)
->  delete mode 100644 package/libvncserver/libvncserver-0001-CVE-2014-6051-6052.patch
->  delete mode 100644 package/libvncserver/libvncserver-0002-CVE-2014-6053.patch
->  delete mode 100644 package/libvncserver/libvncserver-0003-CVE-2014-6054.patch
->  delete mode 100644 package/libvncserver/libvncserver-0004-CVE-2014-6055.patch
+On 2014-12-27 14:48 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 27 Dec 2014 14:30:52 +0100, Yann E. MORIN wrote:
+> 
+> > Note: patching the Makefile.am is the most straightforward way of doing
+> > it, although we may also pre-set a bunch of variables when calling
+> > ./configure;
+> >   - DBLATEX=no to disable PDF generation
+> >   - DOCBOOK2X_MAN=no, DOCBOOK2MAN=no and DB2X_DOCBOOK2MAN=no to disable
+> >     manpage generation
+> 
+> Well, I believe I would actually prefer to use those environment
+> variables rather than patching Makefile.am and having to autoreconf the
+> package.
 
-This patch is causing a bunch of new build failures, like:
+OK, I'll switch to that. Thanks.
 
-http://autobuild.buildroot.org/results/75a/75afaad317264fb3cca80fe82cfc5a786f7e42a3/build-end.log
+Regards,
+Yann E. MORIN.
 
-Can you look into this and fix it?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
