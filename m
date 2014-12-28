@@ -1,55 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Dec 2014 09:36:11 -0300
-Subject: [Buildroot] [PATCH] dillo: bump to version 3.0.4.1
-Message-ID: <1419770171-1037-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 28 Dec 2014 09:49:07 -0300
+Subject: [Buildroot] [PATCH] whois: bump to version 5.2.3
+Message-ID: <1419770947-27017-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+With support for new gTLDs and updated TLDs.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ... 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch} | 0
- package/dillo/dillo.hash                                             | 2 ++
- package/dillo/dillo.mk                                               | 5 ++---
- 3 files changed, 4 insertions(+), 3 deletions(-)
- rename package/dillo/{dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch => 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch} (100%)
- create mode 100644 package/dillo/dillo.hash
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dillo/dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch b/package/dillo/0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
-similarity index 100%
-rename from package/dillo/dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
-rename to package/dillo/0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
-diff --git a/package/dillo/dillo.hash b/package/dillo/dillo.hash
-new file mode 100644
-index 0000000..927db62
---- /dev/null
-+++ b/package/dillo/dillo.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ed97c48029ad1fe62c8a505f81c6ea127532697374153e652065fc6ced098647	dillo-3.0.4.1.tar.bz2
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index d6fc746..c216322 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -4,13 +4,12 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 858eb94..ec5dbcd 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.2.dsc
+-sha256	cba874b457a6b7c4659245780d3d7321d129ab47da86103e07578ec7430fec09	whois_5.2.2.tar.xz
++# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.3.dsc
++sha256	b1c9a4005bd41036a9e82dd4830005f33ffa5255ab764f4dbe3300715c15e803	whois_5.2.3.tar.xz
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 63268c6..8b8a796 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DILLO_VERSION = 3.0.4
-+DILLO_VERSION = 3.0.4.1
- DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
- DILLO_SITE = http://www.dillo.org/download
- DILLO_LICENSE = GPLv3+
- DILLO_LICENSE_FILES = COPYING
--# dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
--# touches configure.ac
-+# For 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
- DILLO_AUTORECONF = YES
- 
- DILLO_DEPENDENCIES = fltk
+-WHOIS_VERSION = 5.2.2
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141112T101048Z/pool/main/w/whois
++WHOIS_VERSION = 5.2.3
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141227T042107Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
 -- 
 2.0.5
