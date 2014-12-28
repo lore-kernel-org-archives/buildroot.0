@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Dec 2014 17:31:48 +0100
-Subject: [Buildroot] [PATCH] openocd: bump to version 0.8.0
-In-Reply-To: <1419777098-6809-1-git-send-email-vincent.stehle@laposte.net>
-References: <1419777098-6809-1-git-send-email-vincent.stehle@laposte.net>
-Message-ID: <20141228173148.5b1332bb@free-electrons.com>
+Date: Sun, 28 Dec 2014 17:34:54 +0100
+Subject: [Buildroot] [PATCH] libvncserver: OpenSSL support needs NPTL thread
+	support
+Message-ID: <1419784494-23416-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent Stehl?,
+The OpenSSL support of libvncserver already has a dependency on thread
+support, but it in fact requires NPTL threading.
 
-On Sun, 28 Dec 2014 15:31:38 +0100, Vincent Stehl? wrote:
-> Refresh a few patches. Drop the ones, which are upstream already. (Keep patches
-> numbers steady for easier review.) Adapt configure options. Add hash file.
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-> Cc: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-> Cc: Peter Korsgaard <jacmet@sunsite.dk>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
 
-Thanks for this contribution. There is already a patch in patchwork to
-bump OpenOCD to version 0.8.0, see
-http://patchwork.ozlabs.org/patch/420900/. Would it be possible to sync
-with this proposal to propose a single patch set for OpenOCD ?
+  http://autobuild.buildroot.org/results/be2/be20dec9ffe7de3adc46a834852b20353d39baff/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libvncserver/libvncserver.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index ed6b64d..87bcf45 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -32,8 +32,8 @@ ifneq ($(BR2_INET_IPV6),y)
+ LIBVNCSERVER_CONF_OPTS += --without-ipv6
+ endif
+ 
+-# openssl supports needs pthread
+-ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# openssl supports needs NPTL thread support
++ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),yy)
+ LIBVNCSERVER_DEPENDENCIES += openssl
+ else
+ LIBVNCSERVER_CONF_OPTS += --without-crypto --without-ssl
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
