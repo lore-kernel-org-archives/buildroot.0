@@ -1,32 +1,37 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Sun, 28 Dec 2014 22:17:25 +0100
-Subject: [Buildroot] [PATCH] openocd: add hash file
-In-Reply-To: <20141228173148.5b1332bb@free-electrons.com>
-References: <20141228173148.5b1332bb@free-electrons.com>
-Message-ID: <1419801445-1405-1-git-send-email-vincent.stehle@laposte.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Dec 2014 22:20:09 +0100
+Subject: [Buildroot] [git commit] package/lm-sensors: disable static library
+	for shared-only build
+Message-ID: <20141228212039.B7BD18046A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Claudio Laurita <claudio.laurita@integrazionetotale.it>
----
- package/openocd/openocd.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/openocd/openocd.hash
+commit: http://git.buildroot.net/buildroot/commit/?id=3e05efd76636d29821a625fb608a49d846485572
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
-new file mode 100644
-index 0000000..bc5c8c0
---- /dev/null
-+++ b/package/openocd/openocd.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/openocd/files/openocd/0.8.0/
-+sha1 10bf9eeb54e03083cb1a101785b2d69fbdf18f31 openocd-0.8.0.tar.bz2
-+md5 6d83c34763a5f1d1ac7ad83c5a11f4fb openocd-0.8.0.tar.bz2
--- 
-2.1.4
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lm-sensors/lm-sensors.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index a79977f..c26f919 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -31,6 +31,12 @@ else
+ LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=1
+ endif
+ 
++ifeq ($(BR2_SHARED_LIBS),y)
++LM_SENSORS_MAKE_OPTS += BUILD_STATIC_LIB=0
++else
++LM_SENSORS_MAKE_OPTS += BUILD_STATIC_LIB=1
++endif
++
+ define LM_SENSORS_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LM_SENSORS_MAKE_OPTS) -C $(@D)
+ endef
