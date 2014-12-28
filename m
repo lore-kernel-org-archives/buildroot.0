@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Dec 2014 09:31:17 -0300
-Subject: [Buildroot] [PATCH 1/2] links: bump to version 2.8
-Message-ID: <1419769878-25114-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 28 Dec 2014 09:36:11 -0300
+Subject: [Buildroot] [PATCH] dillo: bump to version 3.0.4.1
+Message-ID: <1419770171-1037-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,120 +12,44 @@ Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/links/0001-no-largefile.patch        | 26 ++++++++++++++++++++++++++
- package/links/links-0001-no-largefile.patch  | 22 ----------------------
- package/links/links-0002-CVE-2013-6050.patch | 17 -----------------
- package/links/links.hash                     |  2 ++
- package/links/links.mk                       |  2 +-
- 5 files changed, 29 insertions(+), 40 deletions(-)
- create mode 100644 package/links/0001-no-largefile.patch
- delete mode 100644 package/links/links-0001-no-largefile.patch
- delete mode 100644 package/links/links-0002-CVE-2013-6050.patch
- create mode 100644 package/links/links.hash
+ ... 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch} | 0
+ package/dillo/dillo.hash                                             | 2 ++
+ package/dillo/dillo.mk                                               | 5 ++---
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+ rename package/dillo/{dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch => 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch} (100%)
+ create mode 100644 package/dillo/dillo.hash
 
-diff --git a/package/links/0001-no-largefile.patch b/package/links/0001-no-largefile.patch
+diff --git a/package/dillo/dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch b/package/dillo/0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
+similarity index 100%
+rename from package/dillo/dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
+rename to package/dillo/0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
+diff --git a/package/dillo/dillo.hash b/package/dillo/dillo.hash
 new file mode 100644
-index 0000000..782a25a
+index 0000000..927db62
 --- /dev/null
-+++ b/package/links/0001-no-largefile.patch
-@@ -0,0 +1,26 @@
-+Make links buildable without LFS support.
-+Author/status: unknown.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura links-2.8/com-defs.h links-2.8.nonlfs/com-defs.h
-+--- links-2.8/com-defs.h	2013-07-31 20:45:30.000000000 -0300
-++++ links-2.8.nonlfs/com-defs.h	2014-12-28 08:42:47.352237462 -0300
-+@@ -5,6 +5,9 @@
-+ #define __EXTENSIONS__
-+ #endif
-+ 
-++#include <features.h>
-++/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
-++#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
-+ #ifndef _LARGEFILE_SOURCE
-+ #define _LARGEFILE_SOURCE	1
-+ #endif
-+@@ -20,6 +23,7 @@
-+ #ifndef _FILE_OFFSET_BITS
-+ #define _FILE_OFFSET_BITS	64
-+ #endif
-++#endif /* UCLIBC !LFS */
-+ 
-+ #if defined(vax) && !defined(__vax)
-+ #define __vax	vax
-diff --git a/package/links/links-0001-no-largefile.patch b/package/links/links-0001-no-largefile.patch
-deleted file mode 100644
-index f3143cb..0000000
---- a/package/links/links-0001-no-largefile.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Index: links-1.01pre1-no-ssl/links.h
--===================================================================
----- links-1.01pre1-no-ssl.orig/links.h	2010-06-21 00:39:10.000000000 +0200
--+++ links-1.01pre1-no-ssl/links.h	2010-06-21 00:39:52.000000000 +0200
--@@ -2,6 +2,9 @@
-- #define __EXTENSIONS__
-- #endif
-- 
--+#include <features.h>
--+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
--+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
-- #ifndef _LARGEFILE_SOURCE
-- #define _LARGEFILE_SOURCE	1
-- #endif
--@@ -9,6 +12,7 @@
-- #ifndef _FILE_OFFSET_BITS
-- #define _FILE_OFFSET_BITS	64
-- #endif
--+#endif
-- 
-- #ifdef HAVE_CONFIG_H
-- #include "config.h"
-diff --git a/package/links/links-0002-CVE-2013-6050.patch b/package/links/links-0002-CVE-2013-6050.patch
-deleted file mode 100644
-index d85c250..0000000
---- a/package/links/links-0002-CVE-2013-6050.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Description: Fix integer overflow in graphics mode (CVE-2013-6050)
--Author: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
--Bug-CVE: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-6050
--
--Index: links-2.7/html_tbl.c
--===================================================================
----- links-2.7.orig/html_tbl.c   2013-11-22 01:57:29.000000000 +0100
--+++ links-2.7/html_tbl.c        2013-11-22 01:58:30.000000000 +0100
--@@ -1550,6 +1550,8 @@ static void add_to_rect_sets(struct rect
-- static void add_to_cell_sets(struct table_cell ****s, int **nn, int *n, struct rect *r, struct table_cell *c)
-- {
-- 	int i, j;
--+	if (r->y1 < 0 || r->y2 < 0)
--+		fatal_exit("add_to_cell_sets: integer overflow: %d, %d", r->y1, r->y2);
-- 	for (i = r->y1 >> RECT_BOUND_BITS; i <= (r->y2 - 1) >> RECT_BOUND_BITS; i++) {
-- 		if (i >= *n) {
-- 			struct table_cell ***ns;
-diff --git a/package/links/links.hash b/package/links/links.hash
-new file mode 100644
-index 0000000..a6e79b3
---- /dev/null
-+++ b/package/links/links.hash
++++ b/package/dillo/dillo.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	5070a759af7f107ca4f9572833b8f086cd9f7c21ef5e1fce8482a2883a743c7a	links-2.8.tar.gz
-diff --git a/package/links/links.mk b/package/links/links.mk
-index c7f3671..2ad56f9 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,7 +4,7 @@
++sha256	ed97c48029ad1fe62c8a505f81c6ea127532697374153e652065fc6ced098647	dillo-3.0.4.1.tar.bz2
+diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
+index d6fc746..c216322 100644
+--- a/package/dillo/dillo.mk
++++ b/package/dillo/dillo.mk
+@@ -4,13 +4,12 @@
  #
  ################################################################################
  
--LINKS_VERSION = 2.7
-+LINKS_VERSION = 2.8
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
- LINKS_LICENSE = GPLv2+
+-DILLO_VERSION = 3.0.4
++DILLO_VERSION = 3.0.4.1
+ DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
+ DILLO_SITE = http://www.dillo.org/download
+ DILLO_LICENSE = GPLv3+
+ DILLO_LICENSE_FILES = COPYING
+-# dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
+-# touches configure.ac
++# For 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
+ DILLO_AUTORECONF = YES
+ 
+ DILLO_DEPENDENCIES = fltk
 -- 
 2.0.5
