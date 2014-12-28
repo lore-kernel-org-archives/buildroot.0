@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Dec 2014 22:11:45 +0100
-Subject: [Buildroot] [PATCH] dillo: bump to version 3.0.4.1
-In-Reply-To: <1419770171-1037-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1419770171-1037-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20141228221145.750908a0@free-electrons.com>
+Date: Sun, 28 Dec 2014 22:12:30 +0100
+Subject: [Buildroot] [PATCH] whois: bump to version 5.2.3
+In-Reply-To: <1419770947-27017-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1419770947-27017-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141228221230.1c9f0594@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,16 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Sun, 28 Dec 2014 09:36:11 -0300, Gustavo Zacarias wrote:
-> Also add hash file.
+On Sun, 28 Dec 2014 09:49:07 -0300, Gustavo Zacarias wrote:
+> With support for new gTLDs and updated TLDs.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ... 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch} | 0
->  package/dillo/dillo.hash                                             | 2 ++
->  package/dillo/dillo.mk                                               | 5 ++---
->  3 files changed, 4 insertions(+), 3 deletions(-)
->  rename package/dillo/{dillo-0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch => 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch} (100%)
->  create mode 100644 package/dillo/dillo.hash
+>  package/whois/whois.hash | 4 ++--
+>  package/whois/whois.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks, applied after checking the hash locally.
+Applied, after checking the hash locally.
 
 Thomas
 -- 
