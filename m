@@ -1,83 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Dec 2014 16:05:42 +0100
-Subject: [Buildroot] [PATCH] package/kodi: fix leftover instance of 'xbmc'
-Message-ID: <1419779142-22229-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 28 Dec 2014 12:24:38 -0300
+Subject: [Buildroot] [PATCH] sdparm: bump to version 1.09
+Message-ID: <1419780278-2727-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the XBMC -> Kodi rename, some instance of 'xbmc' were left out,
-which meant our startup script would not run Kodi, and that Kodi would
-create its /.kodi directory.
+Also add hash file.
+And make the libsgutils2 support (from sg3_utils) deterministic.
 
-This patch renames the missing bits.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/kodi/S50kodi |  2 +-
- package/kodi/kodi.mk | 20 +++++++++++---------
- 2 files changed, 12 insertions(+), 10 deletions(-)
+ package/sdparm/sdparm.hash |  2 ++
+ package/sdparm/sdparm.mk   | 10 ++++++++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+ create mode 100644 package/sdparm/sdparm.hash
 
-diff --git a/package/kodi/S50kodi b/package/kodi/S50kodi
-index 3b0049f..8468c24 100755
---- a/package/kodi/S50kodi
-+++ b/package/kodi/S50kodi
-@@ -4,7 +4,7 @@
+diff --git a/package/sdparm/sdparm.hash b/package/sdparm/sdparm.hash
+new file mode 100644
+index 0000000..ff5e7b6
+--- /dev/null
++++ b/package/sdparm/sdparm.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	0f5e07438ef56e045443bd827008a38076e029558b00adbfc45f9cc8a5c75349	sdparm-1.09.tar.xz
+diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
+index 1b3ec4b..4aff25d 100644
+--- a/package/sdparm/sdparm.mk
++++ b/package/sdparm/sdparm.mk
+@@ -4,10 +4,16 @@
  #
+ ################################################################################
  
- BIN=/usr/bin/br-kodi
--KODI=/usr/lib/xbmc/xbmc.bin
-+KODI=/usr/lib/xbmc/kodi.bin
- KODI_ARGS="--standalone -fs -n"
- PIDFILE=/var/run/kodi.pid
+-SDPARM_VERSION = 1.08
+-SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
++SDPARM_VERSION = 1.09
++SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tar.xz
+ SDPARM_SITE = http://sg.danny.cz/sg/p
+ SDPARM_LICENSE = BSD-3c
+ SDPARM_LICENSE_FILES = COPYING
  
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 8a52433..1fb7256 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -203,16 +203,16 @@ endef
- KODI_PRE_CONFIGURE_HOOKS += KODI_BOOTSTRAP
- 
- define KODI_CLEAN_UNUSED_ADDONS
--	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/screensaver.rsxs.plasma
--	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.milkdrop
--	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.projectm
--	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/visualization.itunes
-+	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/screensaver.rsxs.plasma
-+	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.milkdrop
-+	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.projectm
-+	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.itunes
- endef
- KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_UNUSED_ADDONS
- 
- define KODI_CLEAN_CONFLUENCE_SKIN
--	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.png -delete
--	find $(TARGET_DIR)/usr/share/xbmc/addons/skin.confluence/media -name *.jpg -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.png -delete
-+	find $(TARGET_DIR)/usr/share/kodi/addons/skin.confluence/media -name *.jpg -delete
- endef
- KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_CONFLUENCE_SKIN
- 
-@@ -223,12 +223,14 @@ endef
- KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_BR_WRAPPER
- 
- # When run from a startup script, Kodi has no $HOME where to store its
--# configuration, so ends up storing it in /.xbmc  (yes, at the root of
-+# configuration, so ends up storing it in /.kodi  (yes, at the root of
- # the rootfs). This is a problem for read-only filesystems. But we can't
--# easily change that, so create /.xbmc as a symlink where we want the
--# config to eventually be.
-+# easily change that, so create /.kodi as a symlink where we want the
-+# config to eventually be. Add synlinks for the legacy XBMC name as well
- define KODI_INSTALL_CONFIG_DIR
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/kodi
-+	ln -sf /var/kodi $(TARGET_DIR)/.kodi
-+	ln -sf /var/kodi $(TARGET_DIR)/var/xbmc
- 	ln -sf /var/kodi $(TARGET_DIR)/.xbmc
- endef
- KODI_POST_INSTALL_TARGET_HOOKS += KODI_INSTALL_CONFIG_DIR
++ifeq ($(BR2_PACKAGE_SG3_UTILS),y)
++SDPARM_DEPENDENCIES += sg3_utils
++else
++SDPARM_CONF_OPTS += --disable-libsgutils
++endif
++
+ $(eval $(autotools-package))
 -- 
-1.9.1
+2.0.5
