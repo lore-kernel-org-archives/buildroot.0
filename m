@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Dec 2014 12:24:46 +0100
-Subject: [Buildroot] [git commit] binutils: default to 2.24
-Message-ID: <20141228112515.44DC8800E1@busybox.osuosl.org>
+Date: Sun, 28 Dec 2014 12:26:49 +0100
+Subject: [Buildroot] [PATCH] binutils: add version 2.25
+In-Reply-To: <549FE548.9070300@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Sun, 28 Dec 2014 08:11:04 -0300")
+References: <1419423743-11400-1-git-send-email-gustavo@zacarias.com.ar>
+ <20141226134342.2a270c35@free-electrons.com>
+ <549D5A21.4080706@zacarias.com.ar>
+ <20141227213124.50a2cc69@free-electrons.com>
+ <549FE548.9070300@zacarias.com.ar>
+Message-ID: <87a928dngm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8973107464a8e17a21487a64fdf42a2d941e79c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-2.22 is getting quite old (Nov 2011) and we've recently added 2.25. 2.24 has
-been used for the "new" architectures for a while and there's no known
-issues going to 2.24 for the rest, so bump the default version.
+ > On 12/27/2014 05:31 PM, Thomas Petazzoni wrote:
+ >> Does this means you will submit a patch for this? :-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/Config.in.host |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ > I'll send it as soon as the qemu tests pass (they don't take long to
+ > run, just to build).
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index af046ae..6dac3c0 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -3,8 +3,7 @@ comment "Binutils Options"
- choice
- 	prompt "Binutils Version"
- 	depends on !BR2_arc
--	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
--	default BR2_BINUTILS_VERSION_2_22
-+	default BR2_BINUTILS_VERSION_2_24
- 	help
- 	  Select the version of binutils you wish to use.
- 
+Sorry, I already did so.
+
+-- 
+Bye, Peter Korsgaard
