@@ -1,47 +1,36 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 28 Dec 2014 17:24:27 +0100
-Subject: [Buildroot] [PATCH v5 1/4] Rename the variable "QUIET" to
-	"BR_QUIET" for conformance
-In-Reply-To: <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
-References: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
- <1419324901-14003-2-git-send-email-fabio.porcedda@gmail.com>
- <20141223111726.617588fd@free-electrons.com>
- <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
-Message-ID: <CAHkwnC9=VJYF+1+Soz3AETg-B7ZPw-6_08mjG99XOsyQs=WP8A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Dec 2014 17:31:48 +0100
+Subject: [Buildroot] [PATCH] openocd: bump to version 0.8.0
+In-Reply-To: <1419777098-6809-1-git-send-email-vincent.stehle@laposte.net>
+References: <1419777098-6809-1-git-send-email-vincent.stehle@laposte.net>
+Message-ID: <20141228173148.5b1332bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 23, 2014 at 11:51 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Tue, Dec 23, 2014 at 11:17 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Tue, 23 Dec 2014 09:54:58 +0100, Fabio Porcedda wrote:
->>> Rename the variable "QUIET" to "BR_QUIET" accordingly to the convention
->>> that internal variables should be named BR_XXX.
->>>
->>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->>
->> Do we really want all internal variables to be named BR_* ? Like
->> HOST_CONFIGURE_OPTS, TARGET_CONFIGURE_OPTS, TARGET_MAKE_ENV and al. ?
->> I'm not sure we want to do this, do we?
->
-> On Wed, Nov 26, 2014 at 10:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> <snip>
->> Also, in retrospect, QUIET was not a really good name for this variable
->> in the Makefile. It would have been better if it were named BR_QUIET.
->> But that was introduced way before we decided on a variable naming
->> convention... :-/
->
-> So which naming conventions Yann was referring?
+Dear Vincent Stehl?,
 
-Hi Yann,
-Can you please explain further your opinion?
+On Sun, 28 Dec 2014 15:31:38 +0100, Vincent Stehl? wrote:
+> Refresh a few patches. Drop the ones, which are upstream already. (Keep patches
+> numbers steady for easier review.) Adapt configure options. Add hash file.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Cc: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+> Cc: Peter Korsgaard <jacmet@sunsite.dk>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-BR
+Thanks for this contribution. There is already a patch in patchwork to
+bump OpenOCD to version 0.8.0, see
+http://patchwork.ozlabs.org/patch/420900/. Would it be possible to sync
+with this proposal to propose a single patch set for OpenOCD ?
+
+Thanks!
+
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
