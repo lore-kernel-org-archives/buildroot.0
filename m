@@ -1,33 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Dec 2014 13:58:10 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] toolchain: add hashes for all
- remaining external toolchains
-In-Reply-To: <f924e745902fb357ec83221b28fb8a0f9a38a311.1419768498.git.yann.morin.1998@free.fr>
-References: <cover.1419768498.git.yann.morin.1998@free.fr>
- <f924e745902fb357ec83221b28fb8a0f9a38a311.1419768498.git.yann.morin.1998@free.fr>
-Message-ID: <20141228135810.763ae357@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 28 Dec 2014 14:18:25 +0100
+Subject: [Buildroot] [PATCH] qt5multimedia: enable gstreamer-1.x support
+Message-ID: <trinity-c614b5c0-eb9d-4c40-9751-efea2f308716-1419772704957@3capp-gmx-bs66>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hello Thomas,
 
-On Sun, 28 Dec 2014 13:19:31 +0100, Yann E. MORIN wrote:
+On Sat, Dec 27, 2014 at 09:51:10PM +0100, Thomas Petazzoni wrote:
+> Dear Peter Seiderer,
+> 
+> On Sun, 21 Dec 2014 12:59:56 +0100, Peter Seiderer wrote:
+> > Add 0001-Initial-porting-effort-to-GStreamer-1.0.patch from [1] (with minor
+> > conflict fixed).
+> > Add 0002-Fix-compilation-when-building-against-GStreamer-0.10.patch from [2].
+> > 
+> > Fix qt5multimedia.mk for the gstreamer-1.x case.
+> > 
+> > [1] https://qt.gitorious.org/qt/tolszaks-qtmultimedia/commit/c847d2f36bd45befcd44d52f92140758563350bf.patch
+> > [2] https://qt.gitorious.org/qt/tolszaks-qtmultimedia/commit/609048bd6fcd37162b2b5b139392a8ec8b2260e9.patch
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> We have another patch at http://patchwork.ozlabs.org/patch/424107/ that
+> bumps the entire Qt5 stuff to Qt 5.4.0. How would this interact with
+> your patch enabling gstreamer 1.x support? Is gstreamer 1.x support
+> part of Qt 5.4.0 ?
 
-> +# Buildroot (?)
-> +sha256 3e1c7c53fadfd3346ab60386c573f07f0617ab119546ec8cb93bc20c23cff2b3  lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-> +sha256 b72f7be654a75bb643372f3909de7b8739f0f56bdf8bea98fea41dcecefe6b6b  microblazeel-unknown-linux-gnu.tgz
-> +sha256 ed2fea022f2def257ca6db09911b73c7102aaa1792d2da2d81371a763e5c2eff  lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
-> +sha256 53ee0b1ad50e651eb14d0b53044b90e7bf7e3cb341ee57fe575bc4c4e142ea37  microblaze-unknown-linux-gnu.tgz
+No sorry, gstreamer 1.x support is not part of Qt-5.4.0 (checked already beforehand,
+would have saved me a little work), but I can rebase/resend my patch after
+the Qt bump is committed...
 
-These are not Buildroot toolchains. They are provided by Xilinx, but
-hosted on sources.buildroot.net since the official site was not working
-anymore, or something like that.
+Regards,
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
