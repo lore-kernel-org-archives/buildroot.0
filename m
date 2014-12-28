@@ -1,429 +1,340 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Dec 2014 11:49:21 -0300
-Subject: [Buildroot] [PATCH] configs/qemu: update to the latest
-	kernel/headers versions
-Message-ID: <1419778161-2467-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sun, 28 Dec 2014 15:31:38 +0100
+Subject: [Buildroot] [PATCH] openocd: bump to version 0.8.0
+Message-ID: <1419777098-6809-1-git-send-email-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Used to test the new default binutils 2.24 (all passed).
-Also update the virtex readme since the dtb is in output/images as well.
+Refresh a few patches. Drop the ones, which are upstream already. (Keep patches
+numbers steady for easier review.) Adapt configure options. Add hash file.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Cc: Peter Korsgaard <jacmet@sunsite.dk>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- board/qemu/ppc-virtex-ml507/readme.txt  | 2 +-
- configs/qemu_aarch64_virt_defconfig     | 4 ++--
- configs/qemu_arm_nuri_defconfig         | 4 ++--
- configs/qemu_arm_versatile_defconfig    | 4 ++--
- configs/qemu_arm_vexpress_defconfig     | 4 ++--
- configs/qemu_microblazebe_mmu_defconfig | 4 ++--
- configs/qemu_microblazeel_mmu_defconfig | 4 ++--
- configs/qemu_mips64_malta_defconfig     | 4 ++--
- configs/qemu_mips64el_malta_defconfig   | 4 ++--
- configs/qemu_mips_malta_defconfig       | 4 ++--
- configs/qemu_mipsel_malta_defconfig     | 4 ++--
- configs/qemu_ppc64_pseries_defconfig    | 4 ++--
- configs/qemu_ppc_g3beige_defconfig      | 4 ++--
- configs/qemu_ppc_mpc8544ds_defconfig    | 4 ++--
- configs/qemu_ppc_virtex_ml507_defconfig | 4 ++--
- configs/qemu_sh4_r2d_defconfig          | 4 ++--
- configs/qemu_sparc_ss10_defconfig       | 4 ++--
- configs/qemu_x86_64_defconfig           | 4 ++--
- configs/qemu_x86_defconfig              | 4 ++--
- configs/qemu_xtensa_lx60_defconfig      | 4 ++--
- 20 files changed, 39 insertions(+), 39 deletions(-)
 
-diff --git a/board/qemu/ppc-virtex-ml507/readme.txt b/board/qemu/ppc-virtex-ml507/readme.txt
-index 5713970..f8bf150 100644
---- a/board/qemu/ppc-virtex-ml507/readme.txt
-+++ b/board/qemu/ppc-virtex-ml507/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
+
+Hi,
+
+Here is a proposal to "bump" OpenOCD. Buildroot is at v0.5.0 but this is v0.8.0
+upstream already.
+
+This "works for me" for one board and a few compilation tries, but this is only
+lightly tested in view of all possible configurations. Feedbacks and tests are
+very welcome!
+
+Also, I can change the patches numbering if this is preferred.
+
+Best regards,
+
+V.
+
+
+ ...s-compilation-host-libsub-was-used-before.patch | 33 ------------------
+ ...002-fix-xscale-uninitialise-breakpoint_pc.patch | 27 ++++++++-------
+ package/openocd/openocd-0003-force-gnu99.patch     | 22 +++++++-----
+ .../openocd/openocd-0004-force_jimtcl_static.patch | 22 ++++++------
+ .../openocd/openocd-0005-dont-force-ldflags.patch  | 37 --------------------
+ package/openocd/openocd-0006-automake-compat.patch | 40 ----------------------
+ package/openocd/openocd.hash                       |  3 ++
+ package/openocd/openocd.mk                         |  6 ++--
+ 8 files changed, 46 insertions(+), 144 deletions(-)
+ delete mode 100644 package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+ delete mode 100644 package/openocd/openocd-0005-dont-force-ldflags.patch
+ delete mode 100644 package/openocd/openocd-0006-automake-compat.patch
+ create mode 100644 package/openocd/openocd.hash
+
+diff --git a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch b/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+deleted file mode 100644
+index caf1a8b..0000000
+--- a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 3728c4af7f6303ccedab56ec220797f8f290580e Mon Sep 17 00:00:00 2001
+-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+-Date: Wed, 10 Aug 2011 00:17:29 +0800
+-Subject: [PATCH] fix cross compilation: host libsub was used before
+-
+-tested in buildroot
+-
+-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+----
+- configure.in |    7 +++++--
+- 1 files changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.in b/configure.in
+-index dfa1e8f..cfe2218 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -1046,8 +1046,11 @@ build_usb=no
+- if test $build_jlink = yes -o $build_vsllink = yes -o $build_usbprog = yes -o \
+-   $build_rlink = yes -o $build_ulink = yes -o $build_armjtagew = yes
+- then
+--  AC_CHECK_HEADERS([usb.h],[],
+--  [AC_MSG_ERROR([usb.h is required to build some OpenOCD driver(s)])])
+-+  dnl check for libusb
+-+  PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
+-+  CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+-+  LDFLAGS="$LDFLAGS $LIBUSB_LDFLAGS"
+-+  LIBS="$LIBS $LIBUSB_LIBS"
+-   build_usb=yes
+- fi
+- 
+--- 
+-1.7.5.4
+-
+diff --git a/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch b/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
+index 328241e..af1e09f 100644
+--- a/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
++++ b/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
+@@ -1,20 +1,23 @@
+ xscale: fix uninitialise breakpoint_pc
  
-- qemu-system-ppc -M virtex-ml507 -kernel output/images/vmlinux -m 256 -nographic -append "console=ttyS0" -dtb virtex440-ml507.dtb
-+ qemu-system-ppc -M virtex-ml507 -kernel output/images/vmlinux -m 256 -nographic -append "console=ttyS0" -dtb output/images/virtex440-ml507.dtb
+ Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
++
++[Refresh for v0.8.0]
++Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+ ---
+- src/target/xscale.c |    2 +-
++ src/target/xscale.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
- The login prompt will appear in the terminal that started Qemu.
+-Index: b/src/target/xscale.c
+-===================================================================
++diff --git a/src/target/xscale.c b/src/target/xscale.c
++index e88a231..8d773b1 100644
+ --- a/src/target/xscale.c
+ +++ b/src/target/xscale.c
+-@@ -2811,7 +2811,7 @@ static int xscale_analyze_trace(struct t
+-    struct xscale_common *xscale = target_to_xscale(target);
+-    struct xscale_trace_data *trace_data = xscale->trace.data;
+-    int i, retval;
+--   uint32_t breakpoint_pc;
+-+   uint32_t breakpoint_pc = 0;
+-    struct arm_instruction instruction;
+-    uint32_t current_pc = 0;  /* initialized when address determined */
+- 	
++@@ -2667,7 +2667,7 @@ static int xscale_analyze_trace(struct target *target, struct command_context *c
++ 	struct xscale_common *xscale = target_to_xscale(target);
++ 	struct xscale_trace_data *trace_data = xscale->trace.data;
++ 	int i, retval;
++-	uint32_t breakpoint_pc;
+++	uint32_t breakpoint_pc = 0;
++ 	struct arm_instruction instruction;
++ 	uint32_t current_pc = 0;/* initialized when address determined */
++ 
+diff --git a/package/openocd/openocd-0003-force-gnu99.patch b/package/openocd/openocd-0003-force-gnu99.patch
+index 106d112..03a271f 100644
+--- a/package/openocd/openocd-0003-force-gnu99.patch
++++ b/package/openocd/openocd-0003-force-gnu99.patch
+@@ -1,19 +1,23 @@
+ force gnu99
  
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 4f414d4..b8aa036 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
++
++[Refresh for v0.8.0]
++Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+ ---
+- configure.in |    1 +
+- 1 file changed, 1 insertion(+)
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
  
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+-Index: b/configure.in
+-===================================================================
+---- a/configure.in
+-+++ b/configure.in
+-@@ -28,6 +28,7 @@ AC_DISABLE_SHARED
++diff --git a/configure.ac b/configure.ac
++index 27fdb2c..9b2d4f3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -29,6 +29,8 @@ AC_DISABLE_SHARED
+  AC_PROG_LIBTOOL
+- AC_SUBST(LIBTOOL_DEPS)
++ AC_SUBST([LIBTOOL_DEPS])
+  
+ +CFLAGS="$CFLAGS -std=gnu99"
+- 
+++
+  dnl configure checks required for Jim files (these are obsolete w/ C99)
+  AC_C_CONST
++ AC_TYPE_LONG_LONG_INT
+diff --git a/package/openocd/openocd-0004-force_jimtcl_static.patch b/package/openocd/openocd-0004-force_jimtcl_static.patch
+index 7118b57..988eae5 100644
+--- a/package/openocd/openocd-0004-force_jimtcl_static.patch
++++ b/package/openocd/openocd-0004-force_jimtcl_static.patch
+@@ -1,25 +1,27 @@
+ force jimtcl to build static
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.18.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
-index 06884ff..45ca553 100644
---- a/configs/qemu_arm_nuri_defconfig
-+++ b/configs/qemu_arm_nuri_defconfig
-@@ -16,12 +16,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Lock to 3.10 headers to avoid breaking with newer kernels
- # Stuck at 3.10.x because there's no Nuri DTS
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.62"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.63"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
++
++[Refresh for v0.8.0]
++Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+ ---
+- jimtcl/auto.def |    5 -----
+- 1 file changed, 5 deletions(-)
++ jimtcl/auto.def | 4 ----
++ 1 file changed, 4 deletions(-)
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.62"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.63"
- BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index bc28c8e..513f068 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -12,13 +12,13 @@ BR2_TARGET_ROOTFS_EXT2=y
+-Index: b/jimtcl/auto.def
+-===================================================================
++diff --git a/jimtcl/auto.def b/jimtcl/auto.def
++index ddb0c1e..13d3ab3 100644
+ --- a/jimtcl/auto.def
+ +++ b/jimtcl/auto.def
+-@@ -148,13 +148,8 @@ if {[opt-bool references]} {
++@@ -181,12 +181,8 @@ if {[opt-bool references]} {
+      msg-result "Enabling references"
+      define JIM_REFERENCES
+  }
+ -if {[opt-bool shared with-jim-shared]} {
+ -    msg-result "Building shared library"
+--    define JIM_LIBTYPE shared
+ -} else {
+      msg-result "Building static library"
+-     define JIM_LIBTYPE static
++     define JIM_STATICLIB
+ -}
+- if {[opt-bool install-jim]} {
+-     define install_jim 1
+- } else {
++ define JIM_INSTALL [opt-bool install-jim]
++ 
++ # Attributes of the extensions
+diff --git a/package/openocd/openocd-0005-dont-force-ldflags.patch b/package/openocd/openocd-0005-dont-force-ldflags.patch
+deleted file mode 100644
+index 1880e00..0000000
+--- a/package/openocd/openocd-0005-dont-force-ldflags.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-[PATCH] don't force library search path / rpath settings
+-
+-openocd adds -L$exec_prefix/lib -Wl,rpath,$exec_prefix/lib to the compile
+-LDFLAGS if it isn't installed into /usr/local, which breaks cross compilation
+-as the compiler ends up using host libraries.
+----
+- configure.in |   17 -----------------
+- 1 file changed, 17 deletions(-)
+-
+-Index: openocd-0.5.0/configure.in
+-===================================================================
+---- openocd-0.5.0.orig/configure.in
+-+++ openocd-0.5.0/configure.in
+-@@ -174,23 +174,6 @@
+- # Let make expand exec_prefix.
+- test x"$OCDxprefix" = xNONE && OCDxprefix="$OCDprefix"
+- 
+--# what matters is the "exec-prefix"
+--if test "$OCDxprefix" != "$ac_default_prefix"
+--then
+--    # We are installing in a non-standard place
+--    # Nonstandard --prefix and/or --exec-prefix
+--    # We have an override of some sort.
+--    # use build specific install library dir
+--
+--    LDFLAGS="$LDFLAGS -L$OCDxprefix/lib"
+--    # RPATH becomes an issue on Linux only
+--    if test $host_os = linux-gnu || test $host_os = linux ; then
+--      LDFLAGS="$LDFLAGS -Wl,-rpath,$OCDxprefix/lib"
+--    fi
+--    # The "INCDIR" is also usable
+--    CFLAGS="$CFLAGS -I$includedir"
+--fi
+--
+- AC_ARG_WITH(ftd2xx,
+-    AS_HELP_STRING([--with-ftd2xx=<PATH>],[This option has been removed.]),
+-   [
+diff --git a/package/openocd/openocd-0006-automake-compat.patch b/package/openocd/openocd-0006-automake-compat.patch
+deleted file mode 100644
+index cdc6c92..0000000
+--- a/package/openocd/openocd-0006-automake-compat.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-Backport from openocd commit 737a52d7b22b1774acc5d20f9bd25000a70ac116
+-Fix for automake 1.11.2+
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura openocd-0.5.0/src/jtag/drivers/Makefile.am openocd-0.5.0.automake/src/jtag/drivers/Makefile.am
+---- openocd-0.5.0/src/jtag/drivers/Makefile.am	2011-08-09 02:34:19.000000000 -0300
+-+++ openocd-0.5.0.automake/src/jtag/drivers/Makefile.am	2012-05-01 13:57:01.007561480 -0300
+-@@ -5,7 +5,8 @@
+- libocdjtagdrivers_la_SOURCES = \
+- 	$(DRIVERFILES)
+- 
+--nobase_dist_pkglib_DATA =
+-+ocddatadir = $(pkglibdir)
+-+nobase_dist_ocddata_DATA =
+- 
+- ULINK_FIRMWARE = $(srcdir)/OpenULINK
+- 
+-@@ -64,7 +65,7 @@
+- endif
+- if ULINK
+- DRIVERFILES += ulink.c
+--nobase_dist_pkglib_DATA += $(ULINK_FIRMWARE)/ulink_firmware.hex
+-+nobase_dist_ocddata_DATA += $(ULINK_FIRMWARE)/ulink_firmware.hex
+- endif
+- if VSLLINK
+- DRIVERFILES += vsllink.c
+-diff -Nura openocd-0.5.0/src/target/Makefile.am openocd-0.5.0.automake/src/target/Makefile.am
+---- openocd-0.5.0/src/target/Makefile.am	2011-08-09 02:34:19.000000000 -0300
+-+++ openocd-0.5.0.automake/src/target/Makefile.am	2012-05-01 13:57:01.934567076 -0300
+-@@ -165,7 +165,7 @@
+- 	avr32_mem.h \
+- 	avr32_regs.h
+- 
+--nobase_dist_pkglib_DATA =
+--nobase_dist_pkglib_DATA += ecos/at91eb40a.elf
+-+ocddatadir = $(pkglibdir)
+-+nobase_dist_ocddata_DATA = ecos/at91eb40a.elf
+- 
+- MAINTAINERCLEANFILES = $(srcdir)/Makefile.in
+diff --git a/package/openocd/openocd.hash b/package/openocd/openocd.hash
+new file mode 100644
+index 0000000..bc5c8c0
+--- /dev/null
++++ b/package/openocd/openocd.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/openocd/files/openocd/0.8.0/
++sha1 10bf9eeb54e03083cb1a101785b2d69fbdf18f31 openocd-0.8.0.tar.bz2
++md5 6d83c34763a5f1d1ac7ad83c5a11f4fb openocd-0.8.0.tar.bz2
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index 07366af..868e07f 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+-OPENOCD_VERSION = 0.5.0
++OPENOCD_VERSION = 0.8.0
+ OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+ OPENOCD_SITE = http://downloads.sourceforge.net/project/openocd/openocd/$(OPENOCD_VERSION)
+ OPENOCD_LICENSE = GPLv2+
+@@ -21,7 +21,7 @@ OPENOCD_DEPENDENCIES = libusb-compat
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.18.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 188b614..4910540 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -15,12 +15,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Adapters
+ ifeq ($(BR2_PACKAGE_OPENOCD_FT2XXX),y)
+-OPENOCD_CONF_OPTS += --enable-ft2232_libftdi
++OPENOCD_CONF_OPTS += --enable-ftdi
+ OPENOCD_DEPENDENCIES += libftdi
+ endif
  
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+@@ -38,7 +38,7 @@ HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
+ HOST_OPENOCD_CONF_OPTS = 	\
+ 	--disable-doxygen-html 	\
+ 	--enable-dummy 		\
+-	--enable-ft2232_libftdi \
++	--enable-ftdi \
+ 	--enable-jlink 		\
+ 	--enable-vsllink
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index dd3a009..28c9469 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -11,13 +11,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.18.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index b5305d1..a1a6cb0 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -11,13 +11,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.18.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
-index 42b1e16..be85860 100644
---- a/configs/qemu_mips64_malta_defconfig
-+++ b/configs/qemu_mips64_malta_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.18.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index 6ce9302..348b892 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -11,13 +11,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.18.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index a61b2b3..4210f9b 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.18.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 7de0b70..0318023 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.18.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index 6225f65..9c6d116 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -12,12 +12,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 4cbf7bf..207e347 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux-3.18.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index acd1d5a..3d34dfc 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index b5f18b7..d96a582 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -8,7 +8,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Use soft float
-@@ -17,7 +17,7 @@ BR2_SOFT_FLOAT=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index ed33cb9..23da9f4 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -16,13 +16,13 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.18.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 0468f44..cc5f1be 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-3.18.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 17aad2f..9bbcbdf 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -11,12 +11,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.18.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 996be70..9cb5ce2 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -12,12 +12,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.18.config"
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index f260095..6ebda98 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -16,13 +16,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- 
- # Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-3.18.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 -- 
-2.0.5
+2.1.4
