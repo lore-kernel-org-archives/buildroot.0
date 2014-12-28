@@ -1,37 +1,28 @@
-From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@laposte.net>
-Date: Sun, 28 Dec 2014 22:13:16 +0100
-Subject: [Buildroot] [PATCH] openocd: bump to version 0.8.0
-In-Reply-To: <20141228173148.5b1332bb@free-electrons.com>
-References: <1419777098-6809-1-git-send-email-vincent.stehle@laposte.net>
- <20141228173148.5b1332bb@free-electrons.com>
-Message-ID: <54A0726C.7020602@laposte.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Dec 2014 22:13:25 +0100
+Subject: [Buildroot] [PATCH] configs/qemu: update to the latest
+ kernel/headers versions
+In-Reply-To: <1419778161-2467-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1419778161-2467-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20141228221325.47f3e066@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+Claudio
+Dear Gustavo Zacarias,
 
-On 12/28/2014 05:31 PM, Thomas Petazzoni wrote:
-> Thanks for this contribution. There is already a patch in patchwork to
-> bump OpenOCD to version 0.8.0, see
-> http://patchwork.ozlabs.org/patch/420900/. Would it be possible to sync
-> with this proposal to propose a single patch set for OpenOCD ?
+On Sun, 28 Dec 2014 11:49:21 -0300, Gustavo Zacarias wrote:
+> Used to test the new default binutils 2.24 (all passed).
+> Also update the virtex readme since the dtb is in output/images as well.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Thanks Thomas; you are right, I forgot to check the patch tracker. Now I
-picked patch 420900 in my branch and it works fine for me (on one
-configuration).
+Applied, thanks!
 
-Dear Claudio, thank you for your patch. You may add a
-
-    Tested-by: Vincent Stehl? <vincent.stehle@laposte.net>
-
-...if you want (for what it's worth :). All what is left of my
-submission is the hash file addition. I'll re-send that right away.
-Please feel free to "squash it" into patch 420900, or keep it separate
-as you prefer.
-
-Best regards,
-
-V.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
