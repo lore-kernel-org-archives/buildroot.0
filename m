@@ -1,40 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Dec 2014 17:34:54 +0100
-Subject: [Buildroot] [PATCH] libvncserver: OpenSSL support needs NPTL thread
-	support
-Message-ID: <1419784494-23416-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Dec 2014 21:11:22 +0100
+Subject: [Buildroot] [PATCH] package/mke2img: do not overshoot
+	user-specified size
+Message-ID: <1419797482-28041-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenSSL support of libvncserver already has a dependency on thread
-support, but it in fact requires NPTL threading.
+Currently, we forcibly expand the generated filesystem by 1300 blocks
+(i.e. a bit more than 1MiB) when we need to generate an ext3 or ext4
+filesystem, even if the user already supplied us with the size it wants
+the filesystem to be.
 
-Fixes:
+In that case, we overshoot what the user requested, which is bad because
+the filesystem may no longer fit in the partition it is supposed to be
+written into.
 
-  http://autobuild.buildroot.org/results/be2/be20dec9ffe7de3adc46a834852b20353d39baff/
+Only add extra blocks when we do compute the required size, not when the
+user specifies the size.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libvncserver/libvncserver.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mke2img/mke2img | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index ed6b64d..87bcf45 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -32,8 +32,8 @@ ifneq ($(BR2_INET_IPV6),y)
- LIBVNCSERVER_CONF_OPTS += --without-ipv6
- endif
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+index 9c56bc2..e93d869 100755
+--- a/package/mke2img/mke2img
++++ b/package/mke2img/mke2img
+@@ -66,6 +66,12 @@ main() {
+         # bitmaps size + slack
+         nb_blocks=$(du -s -k "${root_dir}" |sed -r -e 's/[[:space:]]+.*$//')
+         nb_blocks=$((500+(nb_blocks+nb_inodes/8)*11/10))
++        if [ ${gen} -ge 3 ]; then
++            # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks)
++            # for the journal
++            # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
++            nb_blocks=$((nb_blocks+1300))
++        fi
+     fi
  
--# openssl supports needs pthread
--ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+# openssl supports needs NPTL thread support
-+ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),yy)
- LIBVNCSERVER_DEPENDENCIES += openssl
- else
- LIBVNCSERVER_CONF_OPTS += --without-crypto --without-ssl
+     # Upgrade to rev1 if needed
+@@ -76,10 +82,6 @@ main() {
+     # Add a journal for ext3 and above
+     if [ ${gen} -ge 3 ]; then
+         tune2fs_opts+=( -j -J size=1 )
+-        # we add 1300 blocks (a bit more than 1 MiB, assuming 1KiB blocks)
+-        # for the journal
+-        # Note: I came to 1300 blocks after trial-and-error checks. YMMV.
+-        nb_blocks=$((nb_blocks+1300))
+     fi
+ 
+     # Add ext4 specific features
 -- 
-2.1.0
+1.9.1
