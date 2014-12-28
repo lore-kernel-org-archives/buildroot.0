@@ -1,89 +1,131 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Dec 2014 13:19:31 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] toolchain: add hashes for all remaining
-	external toolchains
-In-Reply-To: <cover.1419768498.git.yann.morin.1998@free.fr>
-References: <cover.1419768498.git.yann.morin.1998@free.fr>
-Message-ID: <f924e745902fb357ec83221b28fb8a0f9a38a311.1419768498.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 28 Dec 2014 09:31:17 -0300
+Subject: [Buildroot] [PATCH 1/2] links: bump to version 2.8
+Message-ID: <1419769878-25114-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Getting the hashes from upstream is not always possible:
-  - Mentor's Sourcery: seems to require an account
-  - TI's Arago: not able to locate the upstream.
-  - Linaro: only signatures
-  - Buildroot: Eh! ;-)
+Also add hash file.
 
-So, all hashes were locally computed.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../toolchain-external/toolchain-external.hash     | 44 +++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ package/links/0001-no-largefile.patch        | 26 ++++++++++++++++++++++++++
+ package/links/links-0001-no-largefile.patch  | 22 ----------------------
+ package/links/links-0002-CVE-2013-6050.patch | 17 -----------------
+ package/links/links.hash                     |  2 ++
+ package/links/links.mk                       |  2 +-
+ 5 files changed, 29 insertions(+), 40 deletions(-)
+ create mode 100644 package/links/0001-no-largefile.patch
+ delete mode 100644 package/links/links-0001-no-largefile.patch
+ delete mode 100644 package/links/links-0002-CVE-2013-6050.patch
+ create mode 100644 package/links/links.hash
 
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index b4fb5e0..ca16294 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -6,11 +6,53 @@ md5  14facaac538a43533b89d969d7904d46  mips-2014.05-27-mips-linux-gnu-i686-pc-li
- # From: https://sourcery.mentor.com/GNUToolchain/release2640
- md5  0ba8bc4923c04728ee3787bed4cd5148  mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/package/links/0001-no-largefile.patch b/package/links/0001-no-largefile.patch
+new file mode 100644
+index 0000000..782a25a
+--- /dev/null
++++ b/package/links/0001-no-largefile.patch
+@@ -0,0 +1,26 @@
++Make links buildable without LFS support.
++Author/status: unknown.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura links-2.8/com-defs.h links-2.8.nonlfs/com-defs.h
++--- links-2.8/com-defs.h	2013-07-31 20:45:30.000000000 -0300
+++++ links-2.8.nonlfs/com-defs.h	2014-12-28 08:42:47.352237462 -0300
++@@ -5,6 +5,9 @@
++ #define __EXTENSIONS__
++ #endif
++ 
+++#include <features.h>
+++/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+++#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
++ #ifndef _LARGEFILE_SOURCE
++ #define _LARGEFILE_SOURCE	1
++ #endif
++@@ -20,6 +23,7 @@
++ #ifndef _FILE_OFFSET_BITS
++ #define _FILE_OFFSET_BITS	64
++ #endif
+++#endif /* UCLIBC !LFS */
++ 
++ #if defined(vax) && !defined(__vax)
++ #define __vax	vax
+diff --git a/package/links/links-0001-no-largefile.patch b/package/links/links-0001-no-largefile.patch
+deleted file mode 100644
+index f3143cb..0000000
+--- a/package/links/links-0001-no-largefile.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Index: links-1.01pre1-no-ssl/links.h
+-===================================================================
+---- links-1.01pre1-no-ssl.orig/links.h	2010-06-21 00:39:10.000000000 +0200
+-+++ links-1.01pre1-no-ssl/links.h	2010-06-21 00:39:52.000000000 +0200
+-@@ -2,6 +2,9 @@
+- #define __EXTENSIONS__
+- #endif
+- 
+-+#include <features.h>
+-+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
+- #ifndef _LARGEFILE_SOURCE
+- #define _LARGEFILE_SOURCE	1
+- #endif
+-@@ -9,6 +12,7 @@
+- #ifndef _FILE_OFFSET_BITS
+- #define _FILE_OFFSET_BITS	64
+- #endif
+-+#endif
+- 
+- #ifdef HAVE_CONFIG_H
+- #include "config.h"
+diff --git a/package/links/links-0002-CVE-2013-6050.patch b/package/links/links-0002-CVE-2013-6050.patch
+deleted file mode 100644
+index d85c250..0000000
+--- a/package/links/links-0002-CVE-2013-6050.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Description: Fix integer overflow in graphics mode (CVE-2013-6050)
+-Author: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
+-Bug-CVE: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-6050
+-
+-Index: links-2.7/html_tbl.c
+-===================================================================
+---- links-2.7.orig/html_tbl.c   2013-11-22 01:57:29.000000000 +0100
+-+++ links-2.7/html_tbl.c        2013-11-22 01:58:30.000000000 +0100
+-@@ -1550,6 +1550,8 @@ static void add_to_rect_sets(struct rect
+- static void add_to_cell_sets(struct table_cell ****s, int **nn, int *n, struct rect *r, struct table_cell *c)
+- {
+- 	int i, j;
+-+	if (r->y1 < 0 || r->y2 < 0)
+-+		fatal_exit("add_to_cell_sets: integer overflow: %d, %d", r->y1, r->y2);
+- 	for (i = r->y1 >> RECT_BOUND_BITS; i <= (r->y2 - 1) >> RECT_BOUND_BITS; i++) {
+- 		if (i >= *n) {
+- 			struct table_cell ***ns;
+diff --git a/package/links/links.hash b/package/links/links.hash
+new file mode 100644
+index 0000000..a6e79b3
+--- /dev/null
++++ b/package/links/links.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	5070a759af7f107ca4f9572833b8f086cd9f7c21ef5e1fce8482a2883a743c7a	links-2.8.tar.gz
+diff --git a/package/links/links.mk b/package/links/links.mk
+index c7f3671..2ad56f9 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+######################################
-+# Next hashes are all locally computed
-+
- # Blackfin toolchains from Analog Devices
--# Locally computed
- sha256 fba010929c7355a0286fc4b1817d6065ee21380d3c2993383d3778f0b998ca9d  blackfin-toolchain-2012R2-RC2.i386.tar.bz2
- sha256 90284fe72125f381817da505b6f91f2b0c86a763ffe2c722c7d6b3ae60b25010  blackfin-toolchain-2013R1-RC1.i386.tar.bz2
- sha256 e424e90d8481d942a40266d78d1488726561fed3ec38403094f98055e61889d0  blackfin-toolchain-2014R1-RC2.i386.tar.bz2
- sha256 436ca3d901b152094cd6be2b6e274c59643387f46bb0563db1adcab1202f1455  blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
- sha256 4d66a3390ae9e1c4b9aad214757791a5e0c45ef2bb31977fa6d3a80d96290237  blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
- sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
-+
-+# Mentor's Sourcery CodeBench Lite toolchains
-+# ARM
-+sha256 395f1c504a8fb6b7a10663143627b7eee2edc8fd884aa13c4b8505a3623960f5  arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+sha256 8455854d3b3abbc2328e6c061c6b9625ef8f9c1f236db9f1771877715bd70b9b  arm-2013.11-33-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+# NiosII
-+sha256 29567361910b020751ea8041ecb45b3cc74714e71c6deb4981b678772b746b33  sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 fb02fe3d595bd80a6e0ebc9d59a64010d84ae8d13f47e241b3a335f42b0414dc  sourceryg++-2014.05-47-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+# PowerPC
-+sha256 d68d1a2a055ece3824a1a11fcc0a8e813ee1d215025247cce0d877caa12c4b54  freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 525e1f53abbf65c2974ae9af762c45bb38520fe5fc50e968a23fe6a18e9eec04  freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 d6c94587d546197836e7e1a6909f6aabfa5879e91f501ab03088a6887cc242fc  mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+# SuperH
-+sha256 ce8115844619a8b02f85e801999fe4cc2e603788be784ae860a070f92ab8053d  renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 a545a9d412c47d85edcad09a86fe1d12a48e2b6e19d0ccf86b63d2cf0bffa687  renesas-2012.03-35-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 deaae7338c51f526ef809857e0335080e22ddbc2355cad14ade0813b40cd2e22  renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
-+sha256 e7d87fc62daecfb3989168bc5b84e099013fe9b796df3da5daebd2e0c0b1af6c  renesas-2011.03-36-sh-uclinux-i686-pc-linux-gnu.tar.bz2
-+# x86
-+sha256 5f308a3fe0752f181fd0d33a70a17efb8300d0e34a94ed18a1a0304dc18e150e  ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
-+sha256 6ac2f0d9ec56242ecbe4315533f3e00a675909850a41bdafc052fbfe27ece300  ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
-+sha256 ea804cf02014369da52abc4f64e91e96bde2dd2230aca96109459013d4545458  ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
-+# Aarch64
-+sha256 8ea78c5988b2bb507534f1ad46aa46659f66b39d55f2fc40e163a90b4195e70f  aarch64-2014.05-30-aarch64-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+
-+# ARM toolchains from Texas Instrument's Arago project
-+sha256 f2febf3b3c565536461ad4405f1bcb835d75a6afb2a8bec958a1248cb4b81fc7  arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
-+sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
-+
-+# ARM and Aarch64 toolchains from Linaro
-+sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-+sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-+sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
-+
-+# Buildroot (?)
-+sha256 3e1c7c53fadfd3346ab60386c573f07f0617ab119546ec8cb93bc20c23cff2b3  lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
-+sha256 b72f7be654a75bb643372f3909de7b8739f0f56bdf8bea98fea41dcecefe6b6b  microblazeel-unknown-linux-gnu.tgz
-+sha256 ed2fea022f2def257ca6db09911b73c7102aaa1792d2da2d81371a763e5c2eff  lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
-+sha256 53ee0b1ad50e651eb14d0b53044b90e7bf7e3cb341ee57fe575bc4c4e142ea37  microblaze-unknown-linux-gnu.tgz
+-LINKS_VERSION = 2.7
++LINKS_VERSION = 2.8
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
+ LINKS_LICENSE = GPLv2+
 -- 
-1.9.1
+2.0.5
