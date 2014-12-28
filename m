@@ -1,53 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 28 Dec 2014 12:24:38 -0300
-Subject: [Buildroot] [PATCH] sdparm: bump to version 1.09
-Message-ID: <1419780278-2727-1-git-send-email-gustavo@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 28 Dec 2014 17:24:27 +0100
+Subject: [Buildroot] [PATCH v5 1/4] Rename the variable "QUIET" to
+	"BR_QUIET" for conformance
+In-Reply-To: <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
+References: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
+ <1419324901-14003-2-git-send-email-fabio.porcedda@gmail.com>
+ <20141223111726.617588fd@free-electrons.com>
+ <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
+Message-ID: <CAHkwnC9=VJYF+1+Soz3AETg-B7ZPw-6_08mjG99XOsyQs=WP8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
-And make the libsgutils2 support (from sg3_utils) deterministic.
+On Tue, Dec 23, 2014 at 11:51 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Tue, Dec 23, 2014 at 11:17 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Tue, 23 Dec 2014 09:54:58 +0100, Fabio Porcedda wrote:
+>>> Rename the variable "QUIET" to "BR_QUIET" accordingly to the convention
+>>> that internal variables should be named BR_XXX.
+>>>
+>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>
+>> Do we really want all internal variables to be named BR_* ? Like
+>> HOST_CONFIGURE_OPTS, TARGET_CONFIGURE_OPTS, TARGET_MAKE_ENV and al. ?
+>> I'm not sure we want to do this, do we?
+>
+> On Wed, Nov 26, 2014 at 10:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> <snip>
+>> Also, in retrospect, QUIET was not a really good name for this variable
+>> in the Makefile. It would have been better if it were named BR_QUIET.
+>> But that was introduced way before we decided on a variable naming
+>> convention... :-/
+>
+> So which naming conventions Yann was referring?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sdparm/sdparm.hash |  2 ++
- package/sdparm/sdparm.mk   | 10 ++++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
- create mode 100644 package/sdparm/sdparm.hash
+Hi Yann,
+Can you please explain further your opinion?
 
-diff --git a/package/sdparm/sdparm.hash b/package/sdparm/sdparm.hash
-new file mode 100644
-index 0000000..ff5e7b6
---- /dev/null
-+++ b/package/sdparm/sdparm.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	0f5e07438ef56e045443bd827008a38076e029558b00adbfc45f9cc8a5c75349	sdparm-1.09.tar.xz
-diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
-index 1b3ec4b..4aff25d 100644
---- a/package/sdparm/sdparm.mk
-+++ b/package/sdparm/sdparm.mk
-@@ -4,10 +4,16 @@
- #
- ################################################################################
- 
--SDPARM_VERSION = 1.08
--SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
-+SDPARM_VERSION = 1.09
-+SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tar.xz
- SDPARM_SITE = http://sg.danny.cz/sg/p
- SDPARM_LICENSE = BSD-3c
- SDPARM_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_SG3_UTILS),y)
-+SDPARM_DEPENDENCIES += sg3_utils
-+else
-+SDPARM_CONF_OPTS += --disable-libsgutils
-+endif
-+
- $(eval $(autotools-package))
+BR
 -- 
-2.0.5
+Fabio Porcedda
