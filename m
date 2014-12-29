@@ -1,44 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Dec 2014 16:00:37 +0100
-Subject: [Buildroot] [git commit] freerdp: pass appropriate ARM ABI flags
-Message-ID: <20141229150127.5920D807AA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Dec 2014 19:04:06 +0100
+Subject: [Buildroot] [git commit] package/mke2img: always create sparse files
+Message-ID: <20141229180416.1741B807A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64f94d1109ea950e64cf6bbf14df9ed776ad308e
+commit: http://git.buildroot.net/buildroot/commit/?id=fbd244c277bfeca4f0dc58286be4f55780cdbbc2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In the line of commit 530693787b3 ("package/freerdp: do not use Neon
-extensions when not available") done by Yann E. Morin, freerdp also
-passes an explicit -mfloat-abi= flag, and defaults to softfp. This
-obviously breaks badly when building an EABIhf system.
+When the user specifies a number of blocks (and we do not auto-compute
+them), the generated filesystem can be quite large with large zones with
+only zeroes in them.
 
-This commit therefore fixes freerdp.mk to pass the appropriate
-ARM_FP_ABI value to freerdp's build system.
+Thus, always create the filesystem as a sparse file.
 
-Fixes:
+Sparse files behave the same as normal files, except those long runs of
+zeroes do not actually use space on the (host) filesystem. Also, this
+should not break current behaviour, as neither cp nor dd nor cat preserve
+sparseness by default. So users relying on the zeroed parts to actually
+be written won;t see a change. Users that were expressly using cp or dd
+to copy files to a sparse destination will however see a little bit of
+improvements, as the zeroed out parts won't even be read from disk.
 
-  http://autobuild.buildroot.org/results/6ca/6ca9de1a11c675533baa68f7a6bf7b6af7cb4345/
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Karoly Kasza <kaszak@gmail.com>
+Reviewed-by: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freerdp/freerdp.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/mke2img/mke2img |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index a703500..57cd7a8 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -75,4 +75,8 @@ else
- FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
- endif
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+index e93d869..68da6ed 100755
+--- a/package/mke2img/mke2img
++++ b/package/mke2img/mke2img
+@@ -100,7 +100,7 @@ main() {
+     fi
  
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+endif
-+
- $(eval $(cmake-package))
+     # Generate the filesystem
+-    genext2fs_opts=( -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
++    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
+     if [ -n "${nb_res_blocks}" ]; then
+         genext2fs_opts+=( -m ${nb_res_blocks} )
+     fi
