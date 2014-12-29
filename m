@@ -1,65 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Dec 2014 14:08:55 +0100
-Subject: [Buildroot] [PATCH 2/2] libsigsegv: add support for Nios II
-In-Reply-To: <1419858535-26614-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419858535-26614-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419858535-26614-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Dec 2014 14:22:52 +0100
+Subject: [Buildroot] [PATCH 1/2] libupnp: mark as broken on Nios II,
+	infamous _gp issue
+Message-ID: <1419859373-13766-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to libsigsegv that indicates the stack
-direction on Nios II, which is needed for libsigsegv to build properly
-on this architecture.
-
 Fixes:
 
-  http://autobuild.buildroot.org/results/943/9436c3208cfeee9bd3bc211df007e745fe13c2c2/
+  http://autobuild.buildroot.org/results/bc3/bc32c15ba569e700e401ddf97faba584fc16c4cc/
+
+The real error is in the config.log:
+
+configure:15081: checking for UpnpInit in -lupnp
+configure:15106: /home/thomas/projets/buildroot/output/host/usr/bin/nios2-linux-gnu-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  c
+onftest.c -lupnp  -lpthread -lrt  >&5
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.8.3/../../../../nios2-linux-gnu/bin/ld: /home/thomas/projets/buildroot/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/crt1.o: undefined reference to symbol '_gp'
+/home/thomas/projets/buildroot/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/libthreadutil.so.6: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
+configure:15106: $? = 1
+[...]
+configure:15125: error: libupnp not found
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
 ---
- ...ck-direction-for-the-Nios-II-architecture.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
+ package/libupnpp/Config.in | 5 +++++
+ package/upmpdcli/Config.in | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch b/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
-new file mode 100644
-index 0000000..ee4778e
---- /dev/null
-+++ b/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
-@@ -0,0 +1,31 @@
-+From 24bac122bf4ffe437bb4f6ca633ad08f31a23d73 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 29 Dec 2014 13:56:54 +0100
-+Subject: [PATCH 5/5] Add stack direction for the Nios II architecture
-+
-+According to Altera Application Binary Interface document for the Nios
-+II architecture
-+(http://www.altera.com/literature/hb/nios2/n2cpu_nii51016.pdf):
-+
-+ "The stack grows downward (i.e. towards lower addresses). ".
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ m4/stack-direction.m4 | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
-+index 1a97d5a..d9c5157 100644
-+--- a/m4/stack-direction.m4
-++++ b/m4/stack-direction.m4
-+@@ -38,6 +38,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
-+       mmix | \
-+       mn10200 | \
-+       mn10300 | \
-++      nios2 | \
-+       ns32k | \
-+       pdp11 | \
-+       pj* | \
-+-- 
-+2.1.0
-+
+diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
+index 5a48f97..90b6067 100644
+--- a/package/libupnpp/Config.in
++++ b/package/libupnpp/Config.in
+@@ -9,6 +9,9 @@ config BR2_PACKAGE_LIBUPNPP
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	# Triggers the _gp link issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	help
+ 	  The libupnpp C++ library wraps libupnp for easier use by upmpdcli and
+ 	  upplay.
+@@ -19,5 +22,7 @@ comment "libupnpp needs a toolchain w/ C++, largefile, threads"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index 84649d2..b2925ec 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -8,6 +8,9 @@ config BR2_PACKAGE_UPMPDCLI
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	# libupnpp triggers the _gp link issue
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	help
+ 	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
+ 	  Player Daemon. It supports UPnP gapless track transitions and
+@@ -16,5 +19,7 @@ config BR2_PACKAGE_UPMPDCLI
+ 	  http://www.lesbonscomptes.com/upmpdcli/
+ 
+ comment "upmpdcli needs a toolchain w/ C++, largefile, threads"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.1.0
