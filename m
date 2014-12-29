@@ -1,57 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Dec 2014 12:05:12 +0100
-Subject: [Buildroot] [PATCH 2/3] oprofile: autoreconf is no longer needed
-In-Reply-To: <1419851113-11865-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Dec 2014 13:26:28 +0100
+Subject: [Buildroot] [PATCH 1/3] oprofile: fix nanosleep() issue on
+ non-threaded toolchains
+In-Reply-To: <1419851113-11865-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1419851113-11865-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419851113-11865-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1419851113-11865-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20141229132628.43f1ce96@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OPROFILE_AUTORECONF = YES was added in commit
-99fc6299dbceaf6d58be2fb516a346451968a704 ("oprofile 0.9.8: fix
-compilation on powerpc") together with a patch touching
-configure.ac. However, since then, OProfile was bumped to 0.9.9 and
-then 1.0.0, and through those bumps, all patches touching configure.ac
-and .m4 files have been removed since they have been merged
-upstream. AUTORECONF = YES is therefore no longer necessary, and an
-OProfile build was successfully tested with autoreconfiguring the
-package.
+Hello,
 
-We can also remove the OPROFILE_CREATE_FILES post-patch hook, which
-was only needed to create files required by the autoreconf process.
+On Mon, 29 Dec 2014 12:05:11 +0100, Thomas Petazzoni wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/oprofile/oprofile.mk | 7 -------
- 1 file changed, 7 deletions(-)
+> diff --git a/package/oprofile/0001-Include-time.h-for-nanosleep.patch b/package/oprofile/0001-Include-time.h-for-nanosleep.patch
+> new file mode 100644
+> index 0000000..d4a9ca2
+> --- /dev/null
+> +++ b/package/oprofile/0001-Include-time.h-for-nanosleep.patch
+> @@ -0,0 +1,44 @@
+> +From c5b93c33a81d7c52dc6089387e415f2d653f758f Mon Sep 17 00:00:00 2001
+> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Date: Mon, 29 Dec 2014 11:43:51 +0100
+> +Subject: [PATCH] Include <time.h> for nanosleep()
+> +
+> +The nanosleep() function prototype is in <time.h>, so this header file
+> +should be included whenever nanosleep() is used. Not including it
+> +causes some issues when building OProfile against a non-thread capable
+> +version of the uClibc C library, probably because in such situation,
+> +<time.h> does not get included by another header.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index d40c8be..0c884b9 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -12,7 +12,6 @@ OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
- 	--enable-gui=no \
- 	--with-kernel=$(STAGING_DIR)/usr
--OPROFILE_AUTORECONF = YES
- OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
- OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv
- OPROFILE_BINARIES += utils/op-check-perfevents libabi/opimport
-@@ -45,12 +44,6 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
- OPROFILE_DEPENDENCIES += libpfm4
- endif
- 
--define OPROFILE_CREATE_FILES
--	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog
--endef
--
--OPROFILE_POST_PATCH_HOOKS += OPROFILE_CREATE_FILES
--
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
+Patch sent upstream at https://sourceforge.net/p/oprofile/bugs/277/.
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
