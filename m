@@ -1,85 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Dec 2014 13:31:39 +0100
-Subject: [Buildroot] [PATCH 2/2] bluez5_utils: fix missing link against librt
-In-Reply-To: <1419856299-30204-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419856299-30204-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419856299-30204-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Dec 2014 14:08:53 +0100
+Subject: [Buildroot] [PATCH 0/2] libsigsegv: update and fixes
+Message-ID: <1419858535-26614-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to bluez5_utils to make sure that the mcaptest tool gets
-linked against librt, since it uses clock_getres().
+Hello,
 
-Fixes:
+Two patches for libsigsegv: first to cleanup the existing patches,
+second to add a new patch with the Nios II support to avoid libsigsegv
+autobuilder failures on this architecture.
 
-  http://autobuild.buildroot.org/results/2b1/2b1e521422d9af2b13133323c6534c49fbb0e177/
+I've taken this opportunity to submit to upstream libsigsegv the 5
+patches that we have. However, the AArch64 patch was already submitted
+upstream in May 2013 by Will Newton, and there has never been any
+reaction to it, and the last commit of the project dates back from
+2012, so the chances of getting those patches merged are apparently
+pretty slim.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../bluez5_utils/0001-Link-mcaptest-with-lrt.patch | 37 ++++++++++++++++++++++
- package/bluez5_utils/bluez5_utils.mk               |  3 ++
- 2 files changed, 40 insertions(+)
- create mode 100644 package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch
+Best regards,
 
-diff --git a/package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch b/package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch
-new file mode 100644
-index 0000000..9933a08
---- /dev/null
-+++ b/package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch
-@@ -0,0 +1,37 @@
-+From 2d965dce71df18221e625efbfe380b54e6441d64 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 29 Dec 2014 12:23:41 +0100
-+Subject: [PATCH] Link mcaptest with -lrt
-+
-+The mcaptest tool uses the profiles/health/mcap.c source file, which
-+calls clock_getres(). This function is defined in librt, so mcaptest
-+should be linked against librt, otherwise one gets link failures such
-+as:
-+
-+ld: profiles/health/mcap.o: undefined reference to symbol 'clock_getres@@GLIBC_2.2.5'
-+ld: note: 'clock_getres@@GLIBC_2.2.5' is defined in DSO [...]/sysroot/lib64/librt.so.1 so try adding it to the linker command line
-+[...]/sysroot/lib64/librt.so.1: could not read symbols: Invalid operation
-+collect2: error: ld returned 1 exit status
-+Makefile:4184: recipe for target 'tools/mcaptest' failed
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile.tools | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.tools b/Makefile.tools
-+index bc827fe..178b773 100644
-+--- a/Makefile.tools
-++++ b/Makefile.tools
-+@@ -195,7 +195,7 @@ tools_mcaptest_SOURCES = tools/mcaptest.c \
-+ 				btio/btio.h btio/btio.c \
-+ 				src/log.c src/log.h \
-+ 				profiles/health/mcap.h profiles/health/mcap.c
-+-tools_mcaptest_LDADD = lib/libbluetooth-internal.la @GLIB_LIBS@
-++tools_mcaptest_LDADD = lib/libbluetooth-internal.la @GLIB_LIBS@ -lrt
-+ 
-+ dist_man_MANS += tools/hciattach.1 tools/hciconfig.1 \
-+ 			tools/hcitool.1 tools/hcidump.1 \
-+-- 
-+2.1.0
-+
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index b1a1724..a1adbe1 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -12,6 +12,9 @@ BLUEZ5_UTILS_DEPENDENCIES = dbus libglib2
- BLUEZ5_UTILS_LICENSE = GPLv2+ LGPLv2.1+
- BLUEZ5_UTILS_LICENSE_FILES = COPYING COPYING.LIB
- 
-+# 0001-Link-mcaptest-with-lrt.patch
-+BLUEZ5_UTILS_AUTORECONF = YES
-+
- BLUEZ5_UTILS_CONF_OPTS = 	\
- 	--enable-tools 		\
- 	--enable-library 	\
+Thomas
+
+Thomas Petazzoni (2):
+  libsigsegv: rename patches to the new convention and convert to Git
+    format
+  libsigsegv: add support for Nios II
+
+ ...ack-direction-for-the-AVR32-architecture.patch} | 19 ++++++++++---
+ ...k-direction-for-the-AArch64-architecture.patch} | 17 +++++-------
+ ...direction-for-the-Microblaze-architecture.patch | 26 ++++++++++++++++++
+ ...k-direction-for-the-Blackfin-architecture.patch | 29 ++++++++++++++++++++
+ ...ck-direction-for-the-Nios-II-architecture.patch | 31 ++++++++++++++++++++++
+ .../libsigsegv-0003-fix-microblaze-build.patch     | 16 -----------
+ .../libsigsegv-0004-fix-bfin-build.patch           | 19 -------------
+ 7 files changed, 109 insertions(+), 48 deletions(-)
+ rename package/libsigsegv/{libsigsegv-0001-fix-avr32-build.patch => 0001-Add-stack-direction-for-the-AVR32-architecture.patch} (51%)
+ rename package/libsigsegv/{libsigsegv-0002-fix-aarch64-build.patch => 0002-Add-stack-direction-for-the-AArch64-architecture.patch} (58%)
+ create mode 100644 package/libsigsegv/0003-Add-stack-direction-for-the-Microblaze-architecture.patch
+ create mode 100644 package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch
+ create mode 100644 package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
+ delete mode 100644 package/libsigsegv/libsigsegv-0003-fix-microblaze-build.patch
+ delete mode 100644 package/libsigsegv/libsigsegv-0004-fix-bfin-build.patch
+
 -- 
 2.1.0
