@@ -1,168 +1,513 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Dec 2014 09:30:05 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20141229073016.9A54E101206@stock.ovh.net>
-References: <20141229073016.9A54E101206@stock.ovh.net>
-Message-ID: <20141229093005.3a3c0142@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 29 Dec 2014 06:33:03 -0300
+Subject: [Buildroot] [PATCH] busybox: bump to version 1.23.0
+Message-ID: <1419845583-21874-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ibiproute-use-linux-if_packet.h-instead-.patch} |  0
+ package/busybox/0002-ash.patch                     | 39 +++++++++++++
+ .../busybox/busybox-0002-busybox-1.22.1-ash.patch  | 11 ----
+ .../busybox/busybox-0003-busybox-1.22.1-date.patch | 30 ----------
+ .../busybox-0004-busybox-1.22.1-iplink.patch       | 19 -------
+ .../busybox/busybox-0005-busybox-1.22.1-nc.patch   | 15 -----
+ .../busybox-0006-lzop-add-overflow-check.patch     | 66 ----------------------
+ .../busybox/busybox-0007-login-fail-delay.patch    | 32 -----------
+ package/busybox/busybox.config                     | 40 +++++++++----
+ package/busybox/busybox.hash                       |  6 +-
+ package/busybox/busybox.mk                         |  2 +-
+ 11 files changed, 73 insertions(+), 187 deletions(-)
+ rename package/busybox/{busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch => 0001-networking-libiproute-use-linux-if_packet.h-instead-.patch} (100%)
+ create mode 100644 package/busybox/0002-ash.patch
+ delete mode 100644 package/busybox/busybox-0002-busybox-1.22.1-ash.patch
+ delete mode 100644 package/busybox/busybox-0003-busybox-1.22.1-date.patch
+ delete mode 100644 package/busybox/busybox-0004-busybox-1.22.1-iplink.patch
+ delete mode 100644 package/busybox/busybox-0005-busybox-1.22.1-nc.patch
+ delete mode 100644 package/busybox/busybox-0006-lzop-add-overflow-check.patch
+ delete mode 100644 package/busybox/busybox-0007-login-fail-delay.patch
 
-On Mon, 29 Dec 2014 08:30:15 +0100 (CET), Thomas Petazzoni wrote:
-
->          arm |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/23398bc625ad2719f001c1ab0c76713bc2adbf07/
-
-The infamous cppcms issue, which has been happening since months.
-
->      powerpc |                   dhcpcd-6.6.7 | NOK | http://autobuild.buildroot.net/results/ca32c4de8b645c96cedb80b6270a792e9601ad84/
->      powerpc |                   dhcpcd-6.6.7 | NOK | http://autobuild.buildroot.net/results/e97e980a2f1e0ff4138a6dc03d86ad3ff0973e4a/
-
-Kernel headers issue with this old toolchain?
-
->     mips64el |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/6afd10f435692c72363f065d654d07eb4d74cd37/
-
-mv dmalloc.h.t dmalloc.h
-./dmallocc.cc:41:21: fatal error: dmalloc.h: No such file or directory
- #include "dmalloc.h"
-
-Parallel build issue, maybe?
-
->          arm |                    erlang-17.4 | NOK | http://autobuild.buildroot.net/results/89101289474d51e48f80e353aa4e4449113c083b/
-
-checking for a usable libatomic_ops implementation... no
-configure: error: No usable libatomic_ops implementation found
-configure: error: /bin/bash '/home/peko/autobuild/instance-2/output/build/erlang-17.4/erts/configure' failed for erts
-
-There are some patches from Frank pending about this, but I am not
-entirely convinced yet. We had some discussion about it last night with
-Yann. To be investigated.
-
->          arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/c1fdc7df0821641a0876da4f3138f6854d9d989a/
-
-../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `powl'
-../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `fmodl'
-../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `ceill'
-../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `log10l'
-../../libwinpr/utils/libwinpr-utils.so.0.1.0: undefined reference to `floorl'
-collect2: error: ld returned 1 exit status
-
-Forgets to link with libm? Weird because it's not a static link configuration.
-
->         bfin |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/0a74f37517f9944018d343361575479496a9bc6e/
-
-/ssd1/thomas/autobuild/instance-2/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libpopt.a(poptint.o): In function `strdup_locale_from_utf8':
-/ssd1/thomas/autobuild/instance-2/output/build/popt-1.16/poptint.c:93: undefined reference to `_libiconv_open'
-/ssd1/thomas/autobuild/instance-2/output/build/popt-1.16/poptint.c:108: undefined reference to `_libiconv'
-/ssd1/thomas/autobuild/instance-2/output/build/popt-1.16/poptint.c:111: undefined reference to `_libiconv'
-/ssd1/thomas/autobuild/instance-2/output/build/popt-1.16/poptint.c:138: undefined reference to `_libiconv_close'
-collect2: ld returned 1 exit status
-
-Forgets to link against libiconv in static linking situation.
-
->     mips64el |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/f1c1b05223fd62b96b9f2f4d780650c4d2d634b4/
-
-Corrupted tarball, should be resolved thanks to the addition of hash
-files for all Sourceforge packages.
-
->          arm |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/1d3839229c11979210d6a8ad440a66d0587ea546/
-
-Same.
-
->         bfin |                    libiio-v0.3 | NOK | http://autobuild.buildroot.net/results/964f98fafdcd7e994ea25cf0993915d81537c31c/
-
-Static linking issue: it doesn't take into account the fact that
-libxml2 is linked against libz and libm.
-
->         bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/7a6ca3c1f6b7bae6365fac0ffba9c16542cb9255/
-
-Not sure, but it seems it is trying to build a shared library on a FLAT
-system.
-
->       xtensa |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/e648ed8e7d96d2727c4446d12f5864e5691a4210/
-
-Would be fixed by http://patchwork.ozlabs.org/patch/424327/.
-
->       xtensa |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/e92cf4025b0f573d4a9ade30025954168d8469f6/
-
-Ditto.
-
->          arc |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/be20dec9ffe7de3adc46a834852b20353d39baff/
-
-Ditto.
-
->     mips64el |                mpdecimal-2.4.0 | TIM | http://autobuild.buildroot.net/results/d5d13915a57503d0df5fec6d10ae23b04946c120/
-
-Ignore.
-
->         bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/3815ba4ff4d43b53bd5b6195b9d3174e424672b5/
->         bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/b4c2a802946e75c6e50da68cef71e5d3cc2b2552/
-
-/ssd1/thomas/autobuild/instance-0/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libc.a(strchrnul.o): In function `*___GI_strchrnul':
-/usr/src/packages/BUILD/blackfin-toolchain-uclibc-full-2014R1/uClibc/libc/string/generic/strchrnul.c:33: multiple definition of `_strchrnul'
-obj/mingw_fixes.o:src/mingw_fixes.c:(.text+0x0): first defined here
-
->          arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/e822d62bbf21f8a9ef6cffbf888947fb0d09a861/
->          arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/e5e9ed8277dda1dcefbae4b75c673693a85ea422/
-
-operf.cpp: In function ???end_code_t _run()???:
-operf.cpp:668:33: error: ???nanosleep??? was not declared in this scope
-    (void)nanosleep(&ts_req, NULL);
-
->       mipsel |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/dd78faeaffe79bb4ed14e8d06ac7033fcb0341c1/
-
-Project ERROR: Package gstreamer-app-0.10 not found
-make[2]: *** [WebCore/Makefile.WebKit] Error 2
-make[2]: *** Waiting for unfinished jobs....
-
-Not sure what's going on here.
-
->       x86_64 |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/b9770aabb317d2e123a26b9c642a72759de836f1/
-
-mpglib.c:147:9: error: overflow in implicit constant conversion [-Werror=overflow]
-         SDL_RWseek(internal->rw, -sizeof (mp3_magic), SEEK_CUR);
-         ^
-cc1: all warnings being treated as errors
-
->     mips64el |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/1efca09d28f3724abe6973016d654af6c594752e/
->          arm |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/21e30bcb6df9b2b6170ecf0dc9d0ed157fd5e018/
->         i686 |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/0e993cab4b2923631909ad47eb11ca50e23f6bcd/
-> microblazeel |                   sispmctl-3.1 | NOK | http://autobuild.buildroot.net/results/fcb0cf4bf8e8e739162877a9ba74ce8df8ea4ba6/
-
-Download issues, also fixed by the addition of Sourceforge hashes.
-
->         bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/d58de379451a175b9eeda63535c17d6f2034639a/
->         bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/ad7bff258854f11a0921a583e2f756f75f512f48/
-
-Weird issue, I know Yann was looking into it.
-
->          arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/5955a3415ecf1c420249ac02b86321221463a43c/
-
-Temporary download issue. Maybe we should mirror the toolchains on sources.buildroot.net ?
-
->         bfin |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/0c0ff63aef4d92c57d203e32740b48f971870785/
-
-Download issue, fixed by the addition of hashes for Blackfin toolchains.
-
->     mips64el |                        unknown | TIM | http://autobuild.buildroot.net/results/4b3a5246a02fcfe0971698cc33248e4f62c25556/
->      powerpc |                    wvdial-1.61 | TIM | http://autobuild.buildroot.net/results/27189e551008f4fe10bd029b1058e1fd2d70865f/
->         sh4a |                 yaml-cpp-0.5.1 | TIM | http://autobuild.buildroot.net/results/94555403981dad96ceab660f681a0ae069becc7b/
-
-Ignore.
-
->         bfin |                   zeromq-4.0.5 | NOK | http://autobuild.buildroot.net/results/1a85103724ccb7d2b5a4a39dd054b8491d6bc077/
-
-Missing atomic operations.
-
->         bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/fefe865edebf4627e92a8bca3ac0b3c8dbac6cd6/
-
-Weird C++ issues.
-
-Thomas
+diff --git a/package/busybox/busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
+similarity index 100%
+rename from package/busybox/busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
+rename to package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
+diff --git a/package/busybox/0002-ash.patch b/package/busybox/0002-ash.patch
+new file mode 100644
+index 0000000..fbd1fad
+--- /dev/null
++++ b/package/busybox/0002-ash.patch
+@@ -0,0 +1,39 @@
++Upstream http://busybox.net/downloads/fixes-1.23.0/busybox-1.23.0-ash.patch
++post-release hotfix patch for ash segfault.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- busybox-1.23.0/shell/ash.c
+++++ busybox-1.23.0-ash/shell/ash.c
++@@ -6746,6 +6746,14 @@ varvalue(char *name, int varflags, int f
++ 		len = strlen(p);
++ 		if (!(subtype == VSPLUS || subtype == VSLENGTH))
++ 			memtodest(p, len, syntax, quotes);
+++#if ENABLE_UNICODE_SUPPORT
+++		if (subtype == VSLENGTH && len > 0) {
+++			reinit_unicode_for_ash();
+++			if (unicode_status == UNICODE_ON) {
+++				len = unicode_strlen(p);
+++			}
+++		}
+++#endif
++ 		return len;
++ 	}
++ 
++@@ -6829,15 +6837,7 @@ evalvar(char *p, int flags, struct strli
++ 		varunset(p, var, 0, 0);
++ 
++ 	if (subtype == VSLENGTH) {
++-		ssize_t n = varlen;
++-		if (n > 0) {
++-			reinit_unicode_for_ash();
++-			if (unicode_status == UNICODE_ON) {
++-				const char *val = lookupvar(var);
++-				n = unicode_strlen(val);
++-			}
++-		}
++-		cvtnum(n > 0 ? n : 0);
+++		cvtnum(varlen > 0 ? varlen : 0);
++ 		goto record;
++ 	}
++ 
+diff --git a/package/busybox/busybox-0002-busybox-1.22.1-ash.patch b/package/busybox/busybox-0002-busybox-1.22.1-ash.patch
+deleted file mode 100644
+index 301e942..0000000
+--- a/package/busybox/busybox-0002-busybox-1.22.1-ash.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- busybox-1.22.1/shell/ash.c
+-+++ busybox-1.22.1-ash/shell/ash.c
+-@@ -13014,7 +13014,7 @@ init(void)
+- 		setvar2("PPID", utoa(getppid()));
+- #if ENABLE_ASH_BASH_COMPAT
+- 		p = lookupvar("SHLVL");
+--		setvar2("SHLVL", utoa(p ? atoi(p) + 1 : 1));
+-+		setvar("SHLVL", utoa((p ? atoi(p) : 0) + 1), VEXPORT);
+- #endif
+- 		p = lookupvar("PWD");
+- 		if (p) {
+diff --git a/package/busybox/busybox-0003-busybox-1.22.1-date.patch b/package/busybox/busybox-0003-busybox-1.22.1-date.patch
+deleted file mode 100644
+index 6380d87..0000000
+--- a/package/busybox/busybox-0003-busybox-1.22.1-date.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+---- busybox-1.22.1/libbb/time.c
+-+++ busybox-1.22.1-date/libbb/time.c
+-@@ -68,15 +68,23 @@ void FAST_FUNC parse_datestr(const char
+- 			/* else end != NUL and we error out */
+- 		}
+- 	} else
+--	/* yyyy-mm-dd HH */
+--	if (sscanf(date_str, "%u-%u-%u %u%c", &ptm->tm_year,
+-+	if (strchr(date_str, '-')
+-+	    /* Why strchr('-') check?
+-+	     * sscanf below will trash ptm->tm_year, this breaks
+-+	     * if parse_str is "10101010" (iow, "MMddhhmm" form)
+-+	     * because we destroy year. Do these sscanf
+-+	     * only if we saw a dash in parse_str.
+-+	     */
+-+		/* yyyy-mm-dd HH */
+-+	 && (sscanf(date_str, "%u-%u-%u %u%c", &ptm->tm_year,
+- 				&ptm->tm_mon, &ptm->tm_mday,
+- 				&ptm->tm_hour,
+- 				&end) >= 4
+--	/* yyyy-mm-dd */
+--	 || sscanf(date_str, "%u-%u-%u%c", &ptm->tm_year,
+-+		/* yyyy-mm-dd */
+-+	     || sscanf(date_str, "%u-%u-%u%c", &ptm->tm_year,
+- 				&ptm->tm_mon, &ptm->tm_mday,
+- 				&end) >= 3
+-+	    )
+- 	) {
+- 		ptm->tm_year -= 1900; /* Adjust years */
+- 		ptm->tm_mon -= 1; /* Adjust month from 1-12 to 0-11 */
+diff --git a/package/busybox/busybox-0004-busybox-1.22.1-iplink.patch b/package/busybox/busybox-0004-busybox-1.22.1-iplink.patch
+deleted file mode 100644
+index dbd76c5..0000000
+--- a/package/busybox/busybox-0004-busybox-1.22.1-iplink.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+---- busybox-1.22.1/networking/libiproute/iplink.c
+-+++ busybox-1.22.1-iplink/networking/libiproute/iplink.c
+-@@ -31,6 +31,16 @@
+- #ifndef IFLA_LINKINFO
+- # define IFLA_LINKINFO 18
+- # define IFLA_INFO_KIND 1
+-+# define IFLA_INFO_DATA 2
+-+#endif
+-+
+-+#ifndef IFLA_VLAN_MAX
+-+# define IFLA_VLAN_ID 1
+-+# define IFLA_VLAN_FLAGS 2
+-+struct ifla_vlan_flags {
+-+	uint32_t	flags;
+-+	uint32_t	mask;
+-+};
+- #endif
+- 
+- /* taken from linux/sockios.h */
+diff --git a/package/busybox/busybox-0005-busybox-1.22.1-nc.patch b/package/busybox/busybox-0005-busybox-1.22.1-nc.patch
+deleted file mode 100644
+index 1ddb483..0000000
+--- a/package/busybox/busybox-0005-busybox-1.22.1-nc.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+---- busybox-1.22.1/networking/nc_bloaty.c
+-+++ busybox-1.22.1-nc/networking/nc_bloaty.c
+-@@ -175,9 +175,9 @@ enum {
+- 	OPT_w = (1 << 5),
+- 	OPT_l = (1 << 6) * ENABLE_NC_SERVER,
+- 	OPT_k = (1 << 7) * ENABLE_NC_SERVER,
+--	OPT_i = (1 << (7+2*ENABLE_NC_SERVER)) * ENABLE_NC_EXTRA,
+--	OPT_o = (1 << (8+2*ENABLE_NC_SERVER)) * ENABLE_NC_EXTRA,
+--	OPT_z = (1 << (9+2*ENABLE_NC_SERVER)) * ENABLE_NC_EXTRA,
+-+	OPT_i = (1 << (6+2*ENABLE_NC_SERVER)) * ENABLE_NC_EXTRA,
+-+	OPT_o = (1 << (7+2*ENABLE_NC_SERVER)) * ENABLE_NC_EXTRA,
+-+	OPT_z = (1 << (8+2*ENABLE_NC_SERVER)) * ENABLE_NC_EXTRA,
+- };
+- 
+- #define o_nflag   (option_mask32 & OPT_n)
+diff --git a/package/busybox/busybox-0006-lzop-add-overflow-check.patch b/package/busybox/busybox-0006-lzop-add-overflow-check.patch
+deleted file mode 100644
+index d3f6c67..0000000
+--- a/package/busybox/busybox-0006-lzop-add-overflow-check.patch
++++ /dev/null
+@@ -1,66 +0,0 @@
+-From a9dc7c2f59dc5e92870d2d46316ea5c1f14740e3 Mon Sep 17 00:00:00 2001
+-From: Denys Vlasenko <vda.linux@googlemail.com>
+-Date: Mon, 30 Jun 2014 10:14:34 +0200
+-Subject: [PATCH] lzop: add overflow check
+-
+-See CVE-2014-4607
+-http://www.openwall.com/lists/oss-security/2014/06/26/20
+-
+-function                                             old     new   delta
+-lzo1x_decompress_safe                               1010    1031     +21
+-
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+----
+- archival/libarchive/liblzo.h  | 2 ++
+- archival/libarchive/lzo1x_d.c | 3 +++
+- 2 files changed, 5 insertions(+)
+-
+-diff --git a/archival/libarchive/liblzo.h b/archival/libarchive/liblzo.h
+-index 843997c..4596620 100644
+---- a/archival/libarchive/liblzo.h
+-+++ b/archival/libarchive/liblzo.h
+-@@ -76,11 +76,13 @@
+- #    define TEST_IP             (ip < ip_end)
+- #    define NEED_IP(x) \
+-             if ((unsigned)(ip_end - ip) < (unsigned)(x))  goto input_overrun
+-+#    define TEST_IV(x)          if ((x) > (unsigned)0 - (511)) goto input_overrun
+- 
+- #    undef TEST_OP              /* don't need both of the tests here */
+- #    define TEST_OP             1
+- #    define NEED_OP(x) \
+-             if ((unsigned)(op_end - op) < (unsigned)(x))  goto output_overrun
+-+#    define TEST_OV(x)          if ((x) > (unsigned)0 - (511)) goto output_overrun
+- 
+- #define HAVE_ANY_OP 1
+- 
+-diff --git a/archival/libarchive/lzo1x_d.c b/archival/libarchive/lzo1x_d.c
+-index 9bc1270..40b167e 100644
+---- a/archival/libarchive/lzo1x_d.c
+-+++ b/archival/libarchive/lzo1x_d.c
+-@@ -92,6 +92,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
+- 				ip++;
+- 				NEED_IP(1);
+- 			}
+-+			TEST_IV(t);
+- 			t += 15 + *ip++;
+- 		}
+- 		/* copy literals */
+-@@ -224,6 +225,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
+- 						ip++;
+- 						NEED_IP(1);
+- 					}
+-+					TEST_IV(t);
+- 					t += 31 + *ip++;
+- 				}
+- #if defined(COPY_DICT)
+-@@ -265,6 +267,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
+- 						ip++;
+- 						NEED_IP(1);
+- 					}
+-+					TEST_IV(t);
+- 					t += 7 + *ip++;
+- 				}
+- #if defined(COPY_DICT)
+--- 
+-1.8.5.5
+-
+diff --git a/package/busybox/busybox-0007-login-fail-delay.patch b/package/busybox/busybox-0007-login-fail-delay.patch
+deleted file mode 100644
+index 0e2bb2e..0000000
+--- a/package/busybox/busybox-0007-login-fail-delay.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From a6588fa10230e7b87990482773a445701abbaae8 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
+-Date: Mon, 22 Dec 2014 01:55:54 +0100
+-Subject: [PATCH 1/1] Make it possible to override LOGIN_FAIL_DELAY in
+- CONFIG_EXTRA_CFLAGS
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+-Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+----
+- include/libbb.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/include/libbb.h b/include/libbb.h
+-index 8e8b9ca..68a7cf0 100644
+---- a/include/libbb.h
+-+++ b/include/libbb.h
+-@@ -1271,7 +1271,9 @@ char *bb_simplify_path(const char *path) FAST_FUNC;
+- /* Returns ptr to NUL */
+- char *bb_simplify_abs_path_inplace(char *path) FAST_FUNC;
+- 
+-+#ifndef LOGIN_FAIL_DELAY
+- #define LOGIN_FAIL_DELAY 3
+-+#endif
+- extern void bb_do_delay(int seconds) FAST_FUNC;
+- extern void change_identity(const struct passwd *pw) FAST_FUNC;
+- extern void run_shell(const char *shell, int loginshell, const char *command, const char **additional_args) NORETURN FAST_FUNC;
+--- 
+-1.9.1
+-
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 05ef676..7af7eca 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -1,7 +1,7 @@
+ #
+ # Automatically generated make config: don't edit
+-# Busybox version: 1.22.0
+-# Wed Jan  1 09:40:21 2014
++# Busybox version: 1.23.0
++# Sun Dec 28 21:14:57 2014
+ #
+ CONFIG_HAVE_DOT_CONFIG=y
+ 
+@@ -36,6 +36,8 @@ CONFIG_LAST_SUPPORTED_WCHAR=0
+ # CONFIG_UNICODE_BIDI_SUPPORT is not set
+ # CONFIG_UNICODE_NEUTRAL_TABLE is not set
+ # CONFIG_UNICODE_PRESERVE_BROKEN is not set
++# CONFIG_PAM is not set
++CONFIG_FEATURE_USE_SENDFILE=y
+ CONFIG_LONG_OPTS=y
+ CONFIG_FEATURE_DEVPTS=y
+ CONFIG_FEATURE_CLEAN_UP=y
+@@ -73,6 +75,7 @@ CONFIG_EXTRA_LDLIBS=""
+ #
+ # CONFIG_DEBUG is not set
+ # CONFIG_DEBUG_PESSIMIZE is not set
++# CONFIG_UNIT_TEST is not set
+ # CONFIG_WERROR is not set
+ CONFIG_NO_DEBUG_LIB=y
+ # CONFIG_DMALLOC is not set
+@@ -183,6 +186,7 @@ CONFIG_FEATURE_DATE_COMPAT=y
+ CONFIG_HOSTID=y
+ CONFIG_ID=y
+ # CONFIG_GROUPS is not set
++# CONFIG_SHUF is not set
+ CONFIG_TEST=y
+ CONFIG_FEATURE_TEST_64=y
+ CONFIG_TOUCH=y
+@@ -191,6 +195,7 @@ CONFIG_FEATURE_TOUCH_SUSV3=y
+ CONFIG_TR=y
+ CONFIG_FEATURE_TR_CLASSES=y
+ CONFIG_FEATURE_TR_EQUIV=y
++CONFIG_UNLINK=y
+ # CONFIG_BASE64 is not set
+ CONFIG_WHO=y
+ # CONFIG_USERS is not set
+@@ -299,6 +304,11 @@ CONFIG_WHOAMI=y
+ CONFIG_YES=y
+ 
+ #
++# Common options
++#
++CONFIG_FEATURE_VERBOSE=y
++
++#
+ # Common options for cp and mv
+ #
+ CONFIG_FEATURE_PRESERVE_HARDLINKS=y
+@@ -388,6 +398,9 @@ CONFIG_FEATURE_VI_SETOPTS=y
+ CONFIG_FEATURE_VI_SET=y
+ CONFIG_FEATURE_VI_WIN_RESIZE=y
+ CONFIG_FEATURE_VI_ASK_TERMINAL=y
++CONFIG_FEATURE_VI_UNDO=y
++CONFIG_FEATURE_VI_UNDO_QUEUE=y
++CONFIG_FEATURE_VI_UNDO_QUEUE_MAX=256
+ CONFIG_FEATURE_ALLOW_EXEC=y
+ 
+ #
+@@ -404,6 +417,7 @@ CONFIG_FEATURE_FIND_MAXDEPTH=y
+ CONFIG_FEATURE_FIND_NEWER=y
+ # CONFIG_FEATURE_FIND_INUM is not set
+ CONFIG_FEATURE_FIND_EXEC=y
++CONFIG_FEATURE_FIND_EXEC_PLUS=y
+ CONFIG_FEATURE_FIND_USER=y
+ CONFIG_FEATURE_FIND_GROUP=y
+ CONFIG_FEATURE_FIND_NOT=y
+@@ -425,6 +439,7 @@ CONFIG_XARGS=y
+ CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
+ CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
+ CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
++CONFIG_FEATURE_XARGS_SUPPORT_REPL_STR=y
+ 
+ #
+ # Init Utilities
+@@ -461,6 +476,7 @@ CONFIG_USE_BB_CRYPT=y
+ CONFIG_ADDUSER=y
+ # CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
+ # CONFIG_FEATURE_CHECK_NAMES is not set
++CONFIG_LAST_ID=60000
+ CONFIG_FIRST_SYSTEM_ID=100
+ CONFIG_LAST_SYSTEM_ID=999
+ CONFIG_ADDGROUP=y
+@@ -472,7 +488,6 @@ CONFIG_DELGROUP=y
+ CONFIG_GETTY=y
+ CONFIG_LOGIN=y
+ # CONFIG_LOGIN_SESSION_AS_CHILD is not set
+-# CONFIG_PAM is not set
+ # CONFIG_LOGIN_SCRIPTS is not set
+ CONFIG_FEATURE_NOLOGIN=y
+ CONFIG_FEATURE_SECURETTY=y
+@@ -530,6 +545,7 @@ CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
+ # Linux System Utilities
+ #
+ # CONFIG_BLOCKDEV is not set
++# CONFIG_FATATTR is not set
+ CONFIG_FSTRIM=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+@@ -601,6 +617,7 @@ CONFIG_READPROFILE=y
+ # CONFIG_SCRIPTREPLAY is not set
+ CONFIG_SETARCH=y
+ CONFIG_SWAPONOFF=y
++# CONFIG_FEATURE_SWAPON_DISCARD is not set
+ # CONFIG_FEATURE_SWAPON_PRI is not set
+ CONFIG_SWITCH_ROOT=y
+ CONFIG_UMOUNT=y
+@@ -643,6 +660,10 @@ CONFIG_FEATURE_VOLUMEID_FAT=y
+ # Miscellaneous Utilities
+ #
+ # CONFIG_CONSPY is not set
++CONFIG_CROND=y
++# CONFIG_FEATURE_CROND_D is not set
++# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
++CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
+ CONFIG_LESS=y
+ CONFIG_FEATURE_LESS_MAXLINES=9999999
+ CONFIG_FEATURE_LESS_BRACKETS=y
+@@ -657,6 +678,8 @@ CONFIG_FEATURE_LESS_REGEXP=y
+ # CONFIG_NANDDUMP is not set
+ # CONFIG_RFKILL is not set
+ CONFIG_SETSERIAL=y
++# CONFIG_TASKSET is not set
++# CONFIG_FEATURE_TASKSET_FANCY is not set
+ # CONFIG_UBIATTACH is not set
+ # CONFIG_UBIDETACH is not set
+ # CONFIG_UBIMKVOL is not set
+@@ -679,10 +702,6 @@ CONFIG_FEATURE_BEEP_LENGTH_MS=0
+ # CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
+ # CONFIG_FEATURE_CHAT_CLR_ABORT is not set
+ CONFIG_CHRT=y
+-CONFIG_CROND=y
+-# CONFIG_FEATURE_CROND_D is not set
+-# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
+-CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
+ CONFIG_CRONTAB=y
+ CONFIG_DC=y
+ # CONFIG_FEATURE_DC_LIBM is not set
+@@ -724,8 +743,6 @@ CONFIG_RUNLEVEL=y
+ # CONFIG_RX is not set
+ CONFIG_SETSID=y
+ CONFIG_STRINGS=y
+-# CONFIG_TASKSET is not set
+-# CONFIG_FEATURE_TASKSET_FANCY is not set
+ CONFIG_TIME=y
+ # CONFIG_TIMEOUT is not set
+ # CONFIG_TTYSIZE is not set
+@@ -761,13 +778,13 @@ CONFIG_ETHER_WAKE=y
+ # CONFIG_FTPD is not set
+ # CONFIG_FEATURE_FTP_WRITE is not set
+ # CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
++# CONFIG_FEATURE_FTP_AUTHENTICATION is not set
+ # CONFIG_FTPGET is not set
+ # CONFIG_FTPPUT is not set
+ # CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
+ CONFIG_HOSTNAME=y
+ # CONFIG_HTTPD is not set
+ # CONFIG_FEATURE_HTTPD_RANGES is not set
+-# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
+ # CONFIG_FEATURE_HTTPD_SETUID is not set
+ # CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
+ # CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
+@@ -824,6 +841,7 @@ CONFIG_NETSTAT=y
+ CONFIG_NSLOOKUP=y
+ # CONFIG_NTPD is not set
+ # CONFIG_FEATURE_NTPD_SERVER is not set
++# CONFIG_FEATURE_NTPD_CONF is not set
+ # CONFIG_PSCAN is not set
+ CONFIG_ROUTE=y
+ # CONFIG_SLATTACH is not set
+@@ -861,6 +879,7 @@ CONFIG_TRACEROUTE=y
+ CONFIG_DHCPD_LEASES_FILE=""
+ CONFIG_UDHCPC=y
+ CONFIG_FEATURE_UDHCPC_ARPING=y
++CONFIG_FEATURE_UDHCPC_SANITIZEOPT=y
+ # CONFIG_FEATURE_UDHCP_PORT is not set
+ CONFIG_UDHCP_DEBUG=0
+ # CONFIG_FEATURE_UDHCP_RFC3397 is not set
+@@ -979,6 +998,7 @@ CONFIG_ASH_GETOPTS=y
+ CONFIG_ASH_BUILTIN_ECHO=y
+ CONFIG_ASH_BUILTIN_PRINTF=y
+ CONFIG_ASH_BUILTIN_TEST=y
++CONFIG_ASH_HELP=y
+ CONFIG_ASH_CMDCMD=y
+ # CONFIG_ASH_MAIL is not set
+ CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 428ce0a..5ec4b78 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,3 +1,3 @@
+-# From http://busybox.net/downloads/busybox-1.22.1.tar.bz2.sign
+-md5	337d1a15ab1cb1d4ed423168b1eb7d7e	busybox-1.22.1.tar.bz2
+-sha1	d6e96fefb6f0fb8079f27468b9bf22d8dd96108e	busybox-1.22.1.tar.bz2
++# From http://busybox.net/downloads/busybox-1.23.0.tar.bz2.sign
++md5	6dffeb16044c6022476c64744492106a	busybox-1.23.0.tar.bz2
++sha1	c38285fc1458c19d0f7ca01515fc95c404bc596d	busybox-1.23.0.tar.bz2
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 2e55aec..8e75e1f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.22.1
++BUSYBOX_VERSION = 1.23.0
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPLv2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
