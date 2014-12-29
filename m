@@ -1,39 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Dec 2014 14:22:53 +0100
-Subject: [Buildroot] [PATCH 2/2] upmpdcli: add missing comment dependency
-	propagation
-In-Reply-To: <1419859373-13766-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419859373-13766-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1419859373-13766-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Boris Lenin <boris.lenin123@gmail.com>
+Date: Mon, 29 Dec 2014 15:27:40 +0200
+Subject: [Buildroot] building native gcc for target
+Message-ID: <CAHBHQYO9BLD1tJKxaR3z5StYXEtUvwBwQZfFNSzpZEcqHyR4gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-upmpdcli cannot be built with the Blackfin toolchains, but the comment
-could be shown with such toolchains, which doesn't make sense. This
-commit properly propagates the toolchain exceptions of the package
-config symbol to the Config.in comment.
+Hi,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/upmpdcli/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+I want to have a gcc binary in my target, so I can compile ELFs inside it.
+This is for compiling using uClibc as suggested here:
+http://www.uclibc.org/toolchains.html
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index b2925ec..8ccf861 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -19,6 +19,9 @@ config BR2_PACKAGE_UPMPDCLI
- 	  http://www.lesbonscomptes.com/upmpdcli/
- 
- comment "upmpdcli needs a toolchain w/ C++, largefile, threads"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
--- 
-2.1.0
+But after I make, I have no gcc in output/target/usr/bin/gcc
+I also don't have an option to include gcc in menuconfig->Target
+packages->Development Tools
+
+How can I have a working gcc that's using uClibc inside my new rootfs?
+
+Thank you.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141229/a86a08cf/attachment.html>
