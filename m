@@ -1,50 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Dec 2014 19:04:06 +0100
-Subject: [Buildroot] [git commit] package/mke2img: always create sparse files
-Message-ID: <20141229180416.1741B807A4@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 29 Dec 2014 23:35:48 +0100
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.0-2
+Message-ID: <1419892549-21674-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbd244c277bfeca4f0dc58286be4f55780cdbbc2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When the user specifies a number of blocks (and we do not auto-compute
-them), the generated filesystem can be quite large with large zones with
-only zeroes in them.
-
-Thus, always create the filesystem as a sparse file.
-
-Sparse files behave the same as normal files, except those long runs of
-zeroes do not actually use space on the (host) filesystem. Also, this
-should not break current behaviour, as neither cp nor dd nor cat preserve
-sparseness by default. So users relying on the zeroed parts to actually
-be written won;t see a change. Users that were expressly using cp or dd
-to copy files to a sparse destination will however see a little bit of
-improvements, as the zeroed out parts won't even be read from disk.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Karoly Kasza <kaszak@gmail.com>
-Reviewed-by: Karoly Kasza <kaszak@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/mke2img/mke2img |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/imagemagick/imagemagick.hash |    2 +-
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-index e93d869..68da6ed 100755
---- a/package/mke2img/mke2img
-+++ b/package/mke2img/mke2img
-@@ -100,7 +100,7 @@ main() {
-     fi
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 20bc982..463d88b 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256  12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6  ImageMagick-6.9.0-0.tar.xz
++sha256  8362d6b07ea08d2ccf0eb0c255f8369d1b1dea837daf1064e94ecc380b5ee51d  ImageMagick-6.9.0-2.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index db3b563..18d8729 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     # Generate the filesystem
--    genext2fs_opts=( -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
-+    genext2fs_opts=( -z -b ${nb_blocks} -N ${nb_inodes} -d "${root_dir}" )
-     if [ -n "${nb_res_blocks}" ]; then
-         genext2fs_opts+=( -m ${nb_res_blocks} )
-     fi
+-IMAGEMAGICK_VERSION = 6.9.0-0
++IMAGEMAGICK_VERSION = 6.9.0-2
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
+-- 
+1.7.9.5
