@@ -1,112 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 30 Dec 2014 20:30:25 +0100
-Subject: [Buildroot] [RFC] linux: add fbtft kernel extension
-In-Reply-To: <1419967825-8411-1-git-send-email-ps.report@gmx.net>
-References: <1419967825-8411-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1419967825-8411-2-git-send-email-ps.report@gmx.net>
+From: =?windows-1252?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
+Date: Tue, 30 Dec 2014 20:39:32 +0100
+Subject: [Buildroot] [PATCH 1/2] lcms2: Install into staging
+In-Reply-To: <20141230051606.GD16594@tarshish>
+References: <1419905244-7418-1-git-send-email-nerv@dawncrow.de>
+ <20141230051606.GD16594@tarshish>
+Message-ID: <54A2FF74.1040501@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- linux/Config.ext.in     | 10 ++++++++++
- linux/linux.mk          |  9 +++++++++
- package/Config.in       |  1 +
- package/fbtft/Config.in | 13 +++++++++++++
- package/fbtft/fbtft.mk  | 11 +++++++++++
- 5 files changed, 44 insertions(+)
- create mode 100644 package/fbtft/Config.in
- create mode 100644 package/fbtft/fbtft.mk
+Am 30.12.2014 um 06:16 schrieb Baruch Siach:
+> Hi Andr?,
+> 
+> On Tue, Dec 30, 2014 at 03:07:23AM +0100, Andr? Hentschel wrote:
+>> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+>> ---
+>>  package/lcms2/lcms2.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+>> index 5d22041..c2eda98 100644
+>> --- a/package/lcms2/lcms2.mk
+>> +++ b/package/lcms2/lcms2.mk
+>> @@ -6,6 +6,7 @@
+>>  
+>>  LCMS2_VERSION = 2.5
+>>  LCMS2_SITE = http://downloads.sourceforge.net/lcms/lcms
+>> +LCMS2_INSTALL_STAGING = YES
+> 
+> Please explain in the commit log why you need this. The same goes for the next 
+> patch in this series (sane-backends).
+> 
+> baruch
+> 
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 40c4684..583c250 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -42,4 +42,14 @@ config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
- 	help
- 	  Optionally, explicitly specify the RTAI patch to use.
- 
-+# fbtft
-+config BR2_LINUX_KERNEL_EXT_FBTFT
-+	bool "fbtft patch"
-+	select BR2_PACKAGE_FBTFT
-+	help
-+	  Linux Framebuffer drivers for small TFT LCD display modules,
-+	  e.g. Adafruit PiTFT displays for Raspberry Pi.
-+
-+	  https://github.com/notro/fbtft
-+
- endmenu
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 8256641..1fc0159 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -196,6 +196,15 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-+	$(if $(BR2_LINUX_KERNEL_EXT_FBTFT),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_FB,$(@D)/.config)
-+		$(call KCONFIG_SET_OPT,CONFIG_FB_TFT,m,$(@D)/.config)
-+		$(call KCONFIG_SET_OPT,CONFIG_FB_TFT_ILI9340,m,$(@D)/.config)
-+		$(call KCONFIG_SET_OPT,CONFIG_FB_TFT_ILI9341,m,$(@D)/.config)
-+		$(call KCONFIG_SET_OPT,CONFIG_FB_TFT_FBTFT_DEVICE,m,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SPI,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SPI_BCM2708,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_GPIOLIB,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KTAP),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-diff --git a/package/Config.in b/package/Config.in
-index 3b37bb2..c658a28 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -311,6 +311,7 @@ endif
- 	source "package/evemu/Config.in"
- 	source "package/evtest/Config.in"
- 	source "package/fan-ctrl/Config.in"
-+	source "package/fbtft/Config.in"
- 	source "package/fconfig/Config.in"
- 	source "package/fis/Config.in"
- 	source "package/flashrom/Config.in"
-diff --git a/package/fbtft/Config.in b/package/fbtft/Config.in
-new file mode 100644
-index 0000000..eceea85
---- /dev/null
-+++ b/package/fbtft/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_FBTFT
-+	bool "fbtft"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Linux Framebuffer drivers for small TFT LCD display modules,
-+	  e.g. Adafruit PiTFT displays for Raspberry Pi.
-+
-+	  This is only the download helper for the kernel patch.
-+
-+	  https://github.com/notro/fbtft
-+
-+comment "fbtft needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/fbtft/fbtft.mk b/package/fbtft/fbtft.mk
-new file mode 100644
-index 0000000..9f46bdb
---- /dev/null
-+++ b/package/fbtft/fbtft.mk
-@@ -0,0 +1,11 @@
-+################################################################################
-+#
-+# fbtft
-+#
-+################################################################################
-+
-+FBTFT_VERSION = 274035404701245e7491c0c6471c5b72ade4d491
-+FBTFT_SITE = $(call github,notro,fbtft,$(FBTFT_VERSION))
-+FBTFT_LICENSE = GPLv2+
-+
-+$(eval $(generic-package))
--- 
-2.1.2
+Hi Baruch,
+
+I'm about to resend the patches and i hope to do it right.
+
+But first i'd like to introduce myself quickly:
+I'm a OSS developer from Germany, please find my openhub page here: https://www.openhub.net/accounts/Andre_H
+Buildroot is great for testing software on different archictectures without finding a distro or something.
+I'll try to get a Wine package upstream, i hope this work is welcome.
