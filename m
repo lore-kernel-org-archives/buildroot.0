@@ -1,64 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Dec 2014 00:40:01 +0100
-Subject: [Buildroot] [git commit] libsigsegv: add support for Nios II
-Message-ID: <20141230235848.C8819807DE@busybox.osuosl.org>
+Date: Wed, 31 Dec 2014 00:24:49 +0100
+Subject: [Buildroot] [git commit] oprofile: autoreconf is no longer needed
+Message-ID: <20141230235848.998A3807DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c7392dc2ca6006a2d415bcd1b0c91bb69a4f8bf
+commit: http://git.buildroot.net/buildroot/commit/?id=2fbcee2fd1651b9d8ed85a5598b24787db344110
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to libsigsegv that indicates the stack
-direction on Nios II, which is needed for libsigsegv to build properly
-on this architecture.
+OPROFILE_AUTORECONF = YES was added in commit
+99fc6299dbceaf6d58be2fb516a346451968a704 ("oprofile 0.9.8: fix
+compilation on powerpc") together with a patch touching
+configure.ac. However, since then, OProfile was bumped to 0.9.9 and
+then 1.0.0, and through those bumps, all patches touching configure.ac
+and .m4 files have been removed since they have been merged
+upstream. AUTORECONF = YES is therefore no longer necessary, and an
+OProfile build was successfully tested with autoreconfiguring the
+package.
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/943/9436c3208cfeee9bd3bc211df007e745fe13c2c2/
+We can also remove the OPROFILE_CREATE_FILES post-patch hook, which
+was only needed to create files required by the autoreconf process.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-direction-for-the-Nios-II-architecture.patch |   31 ++++++++++++++++++++
- 1 files changed, 31 insertions(+), 0 deletions(-)
+ package/oprofile/oprofile.mk |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-diff --git a/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch b/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
-new file mode 100644
-index 0000000..ee4778e
---- /dev/null
-+++ b/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
-@@ -0,0 +1,31 @@
-+From 24bac122bf4ffe437bb4f6ca633ad08f31a23d73 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 29 Dec 2014 13:56:54 +0100
-+Subject: [PATCH 5/5] Add stack direction for the Nios II architecture
-+
-+According to Altera Application Binary Interface document for the Nios
-+II architecture
-+(http://www.altera.com/literature/hb/nios2/n2cpu_nii51016.pdf):
-+
-+ "The stack grows downward (i.e. towards lower addresses). ".
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ m4/stack-direction.m4 | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/m4/stack-direction.m4 b/m4/stack-direction.m4
-+index 1a97d5a..d9c5157 100644
-+--- a/m4/stack-direction.m4
-++++ b/m4/stack-direction.m4
-+@@ -38,6 +38,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
-+       mmix | \
-+       mn10200 | \
-+       mn10300 | \
-++      nios2 | \
-+       ns32k | \
-+       pdp11 | \
-+       pj* | \
-+-- 
-+2.1.0
-+
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index d40c8be..0c884b9 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -12,7 +12,6 @@ OPROFILE_CONF_OPTS = \
+ 	--disable-account-check \
+ 	--enable-gui=no \
+ 	--with-kernel=$(STAGING_DIR)/usr
+-OPROFILE_AUTORECONF = YES
+ OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
+ OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv
+ OPROFILE_BINARIES += utils/op-check-perfevents libabi/opimport
+@@ -45,12 +44,6 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
+ OPROFILE_DEPENDENCIES += libpfm4
+ endif
+ 
+-define OPROFILE_CREATE_FILES
+-	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog
+-endef
+-
+-OPROFILE_POST_PATCH_HOOKS += OPROFILE_CREATE_FILES
+-
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
