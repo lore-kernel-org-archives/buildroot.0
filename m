@@ -1,40 +1,28 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 30 Dec 2014 16:34:27 +0100
-Subject: [Buildroot] [PATCH] dnsmasq: install DBus configuration file
-Message-ID: <1419953667-3169-1-git-send-email-yegorslists@googlemail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 30 Dec 2014 17:19:39 +0100
+Subject: [Buildroot] [PATCH] ntp: fix hash file
+Message-ID: <1419956379-30058-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/dnsmasq/dnsmasq.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Add a space between the hash and filename so the hash can be used.
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 9b1092e..fc84fa3 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -101,9 +101,18 @@ define DNSMASQ_BUILD_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
- endef
- 
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+define DNSMASQ_INSTALL_DBUS
-+	$(INSTALL) -D \
-+	  $(@D)/dbus/dnsmasq.conf \
-+	  $(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
-+endef
-+endif
-+
- define DNSMASQ_INSTALL_TARGET_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
- 	mkdir -p $(TARGET_DIR)/var/lib/misc/
-+	$(DNSMASQ_INSTALL_DBUS)
- endef
- 
- define DNSMASQ_INSTALL_INIT_SYSV
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ntp/ntp.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index 2ff6449..1d1b907 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,2 +1,2 @@
+ # From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8.tar.gz.md5
+-md5	6972a626be6150db8cfbd0b63d8719e7ntp-4.2.8.tar.gz
++md5	6972a626be6150db8cfbd0b63d8719e7 ntp-4.2.8.tar.gz
 -- 
-1.8.3.2
+2.1.0
