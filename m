@@ -1,46 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Dec 2014 09:22:32 +0100
-Subject: [Buildroot] Need HDF5 Package for buildroot
-In-Reply-To: <938dd60bbeb74a7ba18f7a54eb215760@exch13-mail06.win.slac.stanford.edu>
-References: <938dd60bbeb74a7ba18f7a54eb215760@exch13-mail06.win.slac.stanford.edu>
-Message-ID: <20141230092232.4974fa12@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 30 Dec 2014 10:36:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libxml2: fix libxml2-config.cmake
+Message-ID: <1419932187-2319-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ernesto,
+This patch aligns the libxml2-config.cmake module to what the libxml-2.0.pc set.
 
-On Tue, 30 Dec 2014 04:06:12 +0000, Williams Jr., Ernest L. wrote:
+This patch has already been sent upstream:
+  https://mail.gnome.org/archives/xml/2014-December/msg00015.html
 
-> I am using "buildroot-2014.11" with the uclibc toolchain for  "x86" and "x86_64" targets.
-> 
-> I do notice the packages along with the configuration files :)
-> 
-> I have also looked at the documentation on how to add a new package.
-> 
-> So, I am not re-inventing the wheel; does anyone already have package configs for the following:
-> I need to have hdf5 support on my target.  hdf5 depends on both szip and zlib.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ ...onfig.cmake.in-update-include-directories.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/libxml2/0001-libxml2-config.cmake.in-update-include-directories.patch
 
-I am not aware of any effort to package hdf5 at this point. I had a
-quick look, and it uses the autotools, so you could use the
-autotools-package infrastructure in Buildroot to create a package for
-hdf5, it should be fairly straightforward.
-
-Note that the dependencies on zlib and szip are optional, according to
-http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/release_docs/INSTALL.
-
-If you create a package for hdf5 and/or szip, please remember to submit
-them upstream. This has several benefits: people with a strong
-Buildroot expertise will review your changes and point to potential
-issues/mistakes, and others will be able to benefit from the work
-you've done.
-
-Thanks!
-
-Thomas
+diff --git a/package/libxml2/0001-libxml2-config.cmake.in-update-include-directories.patch b/package/libxml2/0001-libxml2-config.cmake.in-update-include-directories.patch
+new file mode 100644
+index 0000000..589c8d6
+--- /dev/null
++++ b/package/libxml2/0001-libxml2-config.cmake.in-update-include-directories.patch
+@@ -0,0 +1,28 @@
++From dd6125f4b58fe7bc270e51bc3fcf41cd228d22fc Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Mon, 29 Dec 2014 20:40:18 +0100
++Subject: [PATCH] libxml2-config.cmake.in: update include directories
++
++Align the include directories on those from the pkg-config module.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ libxml2-config.cmake.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libxml2-config.cmake.in b/libxml2-config.cmake.in
++index ac29329..6b16fc2 100644
++--- a/libxml2-config.cmake.in
+++++ b/libxml2-config.cmake.in
++@@ -21,7 +21,7 @@ set(LIBXML2_VERSION_MINOR  @LIBXML_MINOR_VERSION@)
++ set(LIBXML2_VERSION_MICRO  @LIBXML_MICRO_VERSION@)
++ set(LIBXML2_VERSION_STRING "@VERSION@")
++ set(LIBXML2_INSTALL_PREFIX ${_libxml2_rootdir})
++-set(LIBXML2_INCLUDE_DIRS   ${_libxml2_rootdir}/include)
+++set(LIBXML2_INCLUDE_DIRS   ${_libxml2_rootdir}/include ${_libxml2_rootdir}/include/libxml2)
++ set(LIBXML2_LIBRARY_DIR    ${_libxml2_rootdir}/lib)
++ set(LIBXML2_LIBRARIES      -L${LIBXML2_LIBRARY_DIR} -lxml2)
++ 
++-- 
++2.2.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.2.1
