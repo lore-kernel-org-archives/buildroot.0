@@ -1,43 +1,30 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 31 Dec 2014 00:51:14 +0100
-Subject: [Buildroot] [PATCH v3] dnsmasq: install DBus configuration file
-Message-ID: <1419983474-3153-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 Dec 2014 00:19:14 +0100
+Subject: [Buildroot] [git commit] ntp: fix hash file
+Message-ID: <20141230235848.85032807DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=a49bd36409f1d4b87dafc47a2432b718baeb0846
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add a space between the hash and filename so the hash can be used.
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes:
-	v3: change file permissions
-	v2: fix indentation
+ package/ntp/ntp.hash |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- package/dnsmasq/dnsmasq.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 9b1092e..f848a94 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -101,9 +101,17 @@ define DNSMASQ_BUILD_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
- endef
- 
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+define DNSMASQ_INSTALL_DBUS
-+	$(INSTALL) -m 0644 -D $(@D)/dbus/dnsmasq.conf \
-+		$(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
-+endef
-+endif
-+
- define DNSMASQ_INSTALL_TARGET_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) install$(DNSMASQ_I18N)
- 	mkdir -p $(TARGET_DIR)/var/lib/misc/
-+	$(DNSMASQ_INSTALL_DBUS)
- endef
- 
- define DNSMASQ_INSTALL_INIT_SYSV
--- 
-1.8.3.2
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index 2ff6449..1d1b907 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,2 +1,2 @@
+ # From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8.tar.gz.md5
+-md5	6972a626be6150db8cfbd0b63d8719e7ntp-4.2.8.tar.gz
++md5	6972a626be6150db8cfbd0b63d8719e7 ntp-4.2.8.tar.gz
