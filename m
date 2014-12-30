@@ -1,109 +1,72 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 30 Dec 2014 12:41:07 +0100
-Subject: [Buildroot] [PATCH v6 3/3] support/download: silence git if it is a
-	silent build
-In-Reply-To: <1419939667-27095-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1419939667-27095-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1419939667-27095-4-git-send-email-fabio.porcedda@gmail.com>
+Date: Tue, 30 Dec 2014 12:43:04 +0100
+Subject: [Buildroot] [PATCH v5 1/4] Rename the variable "QUIET" to
+	"BR_QUIET" for conformance
+In-Reply-To: <CAHkwnC-qDjQ0trEQmBHgxuU9b_CtpbMT-8x07y3pgv4ooW5M=Q@mail.gmail.com>
+References: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
+ <1419324901-14003-2-git-send-email-fabio.porcedda@gmail.com>
+ <20141223111726.617588fd@free-electrons.com>
+ <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
+ <CAHkwnC9=VJYF+1+Soz3AETg-B7ZPw-6_08mjG99XOsyQs=WP8A@mail.gmail.com>
+ <20141228215747.GA5434@free.fr>
+ <CAHkwnC-qDjQ0trEQmBHgxuU9b_CtpbMT-8x07y3pgv4ooW5M=Q@mail.gmail.com>
+Message-ID: <CAHkwnC-ZO4ECY6jXwhFRiY9kUcDn3Vh4dPkOq31BqdFR2fq5cA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If it is a silent build (make -s -> QUIET=-q) silence the git download
-helper using "git clone -q" just like others download helpers,
-e.g. wget.
+On Tue, Dec 30, 2014 at 11:59 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Sun, Dec 28, 2014 at 10:57 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Fabio, All,
+>>
+>> On 2014-12-28 17:24 +0100, Fabio Porcedda spake thusly:
+>>> On Tue, Dec 23, 2014 at 11:51 AM, Fabio Porcedda
+>>> <fabio.porcedda@gmail.com> wrote:
+>>> > On Tue, Dec 23, 2014 at 11:17 AM, Thomas Petazzoni
+>>> > <thomas.petazzoni@free-electrons.com> wrote:
+>>> >> Hello,
+>>> >>
+>>> >> On Tue, 23 Dec 2014 09:54:58 +0100, Fabio Porcedda wrote:
+>>> >>> Rename the variable "QUIET" to "BR_QUIET" accordingly to the convention
+>>> >>> that internal variables should be named BR_XXX.
+>>> >>>
+>>> >>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>> >>
+>>> >> Do we really want all internal variables to be named BR_* ? Like
+>>> >> HOST_CONFIGURE_OPTS, TARGET_CONFIGURE_OPTS, TARGET_MAKE_ENV and al. ?
+>>> >> I'm not sure we want to do this, do we?
+>>> >
+>>> > On Wed, Nov 26, 2014 at 10:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>> > <snip>
+>>> >> Also, in retrospect, QUIET was not a really good name for this variable
+>>> >> in the Makefile. It would have been better if it were named BR_QUIET.
+>>> >> But that was introduced way before we decided on a variable naming
+>>> >> convention... :-/
+>>> >
+>>> > So which naming conventions Yann was referring?
+>>>
+>>> Hi Yann,
+>>> Can you please explain further your opinion?
+>>
+>> Oh, sorry, it seems I was not explicit enough in my mail...
+>>
+>> What I said was "QUIET was not a really good name [...] that was
+>> introduced way before we decided on a variable naming convention..."
+>>
+>> I did not want to make it sound like we should rename it, sorry.
+>>
+>> I agree with Thomas here: we should keep QUIET as-is.
+>>
+>> Sorry, sorry for the confusion... :-(
+>
+> Ok, I will sent an updated patch set without the renaming patch.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-download.mk     |  1 +
- support/download/dl-wrapper |  2 +-
- support/download/git        | 27 +++++++++++++++++++++++----
- 3 files changed, 25 insertions(+), 5 deletions(-)
+I've sent an updated patch set:
+http://lists.busybox.net/pipermail/buildroot/2014-December/116079.html
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 88d1437..37cf4b6 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -88,6 +88,7 @@ define DOWNLOAD_GIT
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
-+		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 7cd8606..e84a757 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -48,7 +48,7 @@ main() {
-         error "no hash-file specified, use -H\n"
-     fi
- 
--    if [ "${backend}" != "svn" ]; then
-+    if [ ! \( "${backend}" == "git" -o "${backend}" == "svn" \) ]; then
- 	quiet=
-     fi
- 
-diff --git a/support/download/git b/support/download/git
-index 5d36ca4..b6ebfdc 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -4,6 +4,8 @@
- set -e
- 
- # Download helper for git, to be called from the download wrapper script
-+# Optional arguments:
-+#   "-q": quiet flag
- # Expected arguments:
- #   $1: output file
- #   $2: git repo
-@@ -12,6 +14,19 @@ set -e
- # And this environment:
- #   GIT      : the git command to call
- 
-+quiet=
-+while getopts "q" opt; do
-+    case $opt in
-+	q)
-+	    quiet=-q
-+	    ;;
-+	\?)
-+	    exit 1
-+	    ;;
-+    esac
-+done
-+shift $((OPTIND-1))
-+
- output="${1}"
- repo="${2}"
- cset="${3}"
-@@ -21,16 +36,20 @@ basename="${4}"
- # than a full clone.
- git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
--    printf "Doing shallow clone\n"
--    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-+    if [ -z "${quiet}" ]; then
-+	printf "Doing shallow clone\n";
-+    fi
-+    if ${GIT} clone ${quiet} --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-         git_done=1
-     else
-         printf "Shallow clone failed, falling back to doing a full clone\n"
-     fi
- fi
- if [ ${git_done} -eq 0 ]; then
--    printf "Doing full clone\n"
--    ${GIT} clone --bare "${repo}" "${basename}"
-+    if [ -z "${quiet}" ]; then
-+	printf "Doing full clone\n";
-+    fi
-+    ${GIT} clone ${quiet} --bare "${repo}" "${basename}"
- fi
- 
- GIT_DIR="${basename}" \
+BR
 -- 
-2.1.0
+Fabio Porcedda
