@@ -1,72 +1,43 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 30 Dec 2014 12:43:04 +0100
-Subject: [Buildroot] [PATCH v5 1/4] Rename the variable "QUIET" to
-	"BR_QUIET" for conformance
-In-Reply-To: <CAHkwnC-qDjQ0trEQmBHgxuU9b_CtpbMT-8x07y3pgv4ooW5M=Q@mail.gmail.com>
-References: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
- <1419324901-14003-2-git-send-email-fabio.porcedda@gmail.com>
- <20141223111726.617588fd@free-electrons.com>
- <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
- <CAHkwnC9=VJYF+1+Soz3AETg-B7ZPw-6_08mjG99XOsyQs=WP8A@mail.gmail.com>
- <20141228215747.GA5434@free.fr>
- <CAHkwnC-qDjQ0trEQmBHgxuU9b_CtpbMT-8x07y3pgv4ooW5M=Q@mail.gmail.com>
-Message-ID: <CAHkwnC-ZO4ECY6jXwhFRiY9kUcDn3Vh4dPkOq31BqdFR2fq5cA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 30 Dec 2014 13:52:37 +0200
+Subject: [Buildroot] [PATCH] links: bump to version 2.9
+Message-ID: <98b448887da6d85900f5d1700a3ecc26e9b30b68.1419940357.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 30, 2014 at 11:59 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Sun, Dec 28, 2014 at 10:57 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Fabio, All,
->>
->> On 2014-12-28 17:24 +0100, Fabio Porcedda spake thusly:
->>> On Tue, Dec 23, 2014 at 11:51 AM, Fabio Porcedda
->>> <fabio.porcedda@gmail.com> wrote:
->>> > On Tue, Dec 23, 2014 at 11:17 AM, Thomas Petazzoni
->>> > <thomas.petazzoni@free-electrons.com> wrote:
->>> >> Hello,
->>> >>
->>> >> On Tue, 23 Dec 2014 09:54:58 +0100, Fabio Porcedda wrote:
->>> >>> Rename the variable "QUIET" to "BR_QUIET" accordingly to the convention
->>> >>> that internal variables should be named BR_XXX.
->>> >>>
->>> >>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->>> >>
->>> >> Do we really want all internal variables to be named BR_* ? Like
->>> >> HOST_CONFIGURE_OPTS, TARGET_CONFIGURE_OPTS, TARGET_MAKE_ENV and al. ?
->>> >> I'm not sure we want to do this, do we?
->>> >
->>> > On Wed, Nov 26, 2014 at 10:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->>> > <snip>
->>> >> Also, in retrospect, QUIET was not a really good name for this variable
->>> >> in the Makefile. It would have been better if it were named BR_QUIET.
->>> >> But that was introduced way before we decided on a variable naming
->>> >> convention... :-/
->>> >
->>> > So which naming conventions Yann was referring?
->>>
->>> Hi Yann,
->>> Can you please explain further your opinion?
->>
->> Oh, sorry, it seems I was not explicit enough in my mail...
->>
->> What I said was "QUIET was not a really good name [...] that was
->> introduced way before we decided on a variable naming convention..."
->>
->> I did not want to make it sound like we should rename it, sorry.
->>
->> I agree with Thomas here: we should keep QUIET as-is.
->>
->> Sorry, sorry for the confusion... :-(
->
-> Ok, I will sent an updated patch set without the renaming patch.
+Fixes:
+http://autobuild.buildroot.net/results/d95/d95daf56e23944d0b24d38dab949a196a89efcf3/
+http://autobuild.buildroot.net/results/f40/f407067f6504b7e4eaf6001828c5d073a21ccd96/
 
-I've sent an updated patch set:
-http://lists.busybox.net/pipermail/buildroot/2014-December/116079.html
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/links/links.hash | 2 +-
+ package/links/links.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-BR
+diff --git a/package/links/links.hash b/package/links/links.hash
+index a6e79b351100..910bb69d2fc2 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	5070a759af7f107ca4f9572833b8f086cd9f7c21ef5e1fce8482a2883a743c7a	links-2.8.tar.gz
++sha256	e2d4e193eb3147f0d745e28d37d510edb22697707e329cbe361bb79037bae332	links-2.9.tar.gz
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 2ad56f95745e..3b9f011a4ac1 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINKS_VERSION = 2.8
++LINKS_VERSION = 2.9
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
+ LINKS_LICENSE = GPLv2+
 -- 
-Fabio Porcedda
+2.1.4
