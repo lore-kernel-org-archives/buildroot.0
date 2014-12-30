@@ -1,66 +1,38 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 30 Dec 2014 11:59:32 +0100
-Subject: [Buildroot] [PATCH v5 1/4] Rename the variable "QUIET" to
-	"BR_QUIET" for conformance
-In-Reply-To: <20141228215747.GA5434@free.fr>
-References: <1419324901-14003-1-git-send-email-fabio.porcedda@gmail.com>
- <1419324901-14003-2-git-send-email-fabio.porcedda@gmail.com>
- <20141223111726.617588fd@free-electrons.com>
- <CAHkwnC8_FvgQuk3ngdcdy-dgG9iEo6A5xthyoQcM16CMMMonXw@mail.gmail.com>
- <CAHkwnC9=VJYF+1+Soz3AETg-B7ZPw-6_08mjG99XOsyQs=WP8A@mail.gmail.com>
- <20141228215747.GA5434@free.fr>
-Message-ID: <CAHkwnC-qDjQ0trEQmBHgxuU9b_CtpbMT-8x07y3pgv4ooW5M=Q@mail.gmail.com>
+Date: Tue, 30 Dec 2014 12:41:04 +0100
+Subject: [Buildroot] [PATCH v6 0/3] Improve silent builds
+Message-ID: <1419939667-27095-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 28, 2014 at 10:57 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Fabio, All,
->
-> On 2014-12-28 17:24 +0100, Fabio Porcedda spake thusly:
->> On Tue, Dec 23, 2014 at 11:51 AM, Fabio Porcedda
->> <fabio.porcedda@gmail.com> wrote:
->> > On Tue, Dec 23, 2014 at 11:17 AM, Thomas Petazzoni
->> > <thomas.petazzoni@free-electrons.com> wrote:
->> >> Hello,
->> >>
->> >> On Tue, 23 Dec 2014 09:54:58 +0100, Fabio Porcedda wrote:
->> >>> Rename the variable "QUIET" to "BR_QUIET" accordingly to the convention
->> >>> that internal variables should be named BR_XXX.
->> >>>
->> >>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> >>
->> >> Do we really want all internal variables to be named BR_* ? Like
->> >> HOST_CONFIGURE_OPTS, TARGET_CONFIGURE_OPTS, TARGET_MAKE_ENV and al. ?
->> >> I'm not sure we want to do this, do we?
->> >
->> > On Wed, Nov 26, 2014 at 10:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > <snip>
->> >> Also, in retrospect, QUIET was not a really good name for this variable
->> >> in the Makefile. It would have been better if it were named BR_QUIET.
->> >> But that was introduced way before we decided on a variable naming
->> >> convention... :-/
->> >
->> > So which naming conventions Yann was referring?
->>
->> Hi Yann,
->> Can you please explain further your opinion?
->
-> Oh, sorry, it seems I was not explicit enough in my mail...
->
-> What I said was "QUIET was not a really good name [...] that was
-> introduced way before we decided on a variable naming convention..."
->
-> I did not want to make it sound like we should rename it, sorry.
->
-> I agree with Thomas here: we should keep QUIET as-is.
->
-> Sorry, sorry for the confusion... :-(
+This patch set improves silent builds.
 
-Ok, I will sent an updated patch set without the renaming patch.
+Silent builds are also nice when top-level parallel make is being used
+to reduce the output clutter.
 
-BR
+After this patch set is accepted I will prepare a patch set to convert
+the other helpers (scp wget hg) to use the quiet flag instead of the
+environment variable.
+
+The change logs are also in each patch.
+
+v6:
+  - Remove the patch that renames QUIET to BR_QUIET
+
+Fabio Porcedda (3):
+  Makefile: improve detection of make "-s" flag
+  support/download: silence svn if it is a silent build
+  support/download: silence git if it is a silent build
+
+ Makefile                    |  2 +-
+ package/pkg-download.mk     |  2 ++
+ support/download/dl-wrapper | 11 ++++++++---
+ support/download/git        | 27 +++++++++++++++++++++++----
+ support/download/svn        | 17 ++++++++++++++++-
+ 5 files changed, 50 insertions(+), 9 deletions(-)
+
 -- 
-Fabio Porcedda
+2.1.0
