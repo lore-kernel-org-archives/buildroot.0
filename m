@@ -1,41 +1,39 @@
-From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
-Date: Tue, 30 Dec 2014 04:06:12 +0000
-Subject: [Buildroot] Need HDF5 Package for buildroot
-Message-ID: <938dd60bbeb74a7ba18f7a54eb215760@exch13-mail06.win.slac.stanford.edu>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 30 Dec 2014 07:16:06 +0200
+Subject: [Buildroot] [PATCH 1/2] lcms2: Install into staging
+In-Reply-To: <1419905244-7418-1-git-send-email-nerv@dawncrow.de>
+References: <1419905244-7418-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <20141230051606.GD16594@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Hi Andr?,
 
-I am using "buildroot-2014.11" with the uclibc toolchain for  "x86" and "x86_64" targets.
+On Tue, Dec 30, 2014 at 03:07:23AM +0100, Andr? Hentschel wrote:
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/lcms2/lcms2.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+> index 5d22041..c2eda98 100644
+> --- a/package/lcms2/lcms2.mk
+> +++ b/package/lcms2/lcms2.mk
+> @@ -6,6 +6,7 @@
+>  
+>  LCMS2_VERSION = 2.5
+>  LCMS2_SITE = http://downloads.sourceforge.net/lcms/lcms
+> +LCMS2_INSTALL_STAGING = YES
 
-I do notice the packages along with the configuration files :)
+Please explain in the commit log why you need this. The same goes for the next 
+patch in this series (sane-backends).
 
-I have also looked at the documentation on how to add a new package.
+baruch
 
-So, I am not re-inventing the wheel; does anyone already have package configs for the following:
-I need to have hdf5 support on my target.  hdf5 depends on both szip and zlib.
-
-=========================================================================
-(1) HDF5
-Version:     HDF5-1.8.14
-URL:          http://www.hdfgroup.org/HDF5/release/obtainsrc.html
-Download:  http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
-
-(2) SZIP
-Version:       szip-2.1
-Download:    http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
-
-(3) ZLIB   {Already provided by buildroot; yahoo :) }
-Version:       zlib-1.2.8
-URL:            http://www.zlib.net
-Download:    http://zlib.net/zlib-1.2.8.tar.gz
-=========================================================================
-
-Thanks in advance
-
-Cheers,
-Ernesto
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
