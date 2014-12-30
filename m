@@ -1,31 +1,41 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Tue, 30 Dec 2014 03:07:24 +0100
-Subject: [Buildroot] [PATCH 2/2] sane-backends: Install into staging
-In-Reply-To: <1419905244-7418-1-git-send-email-nerv@dawncrow.de>
-References: <1419905244-7418-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <1419905244-7418-2-git-send-email-nerv@dawncrow.de>
+From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
+Date: Tue, 30 Dec 2014 03:38:05 +0000
+Subject: [Buildroot] Newby Question: Adding a package to BuildRoot-2014.11
+Message-ID: <42dd819b82f141aeb3eb8230e5ef3676@exch13-mail06.win.slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/sane-backends/sane-backends.mk | 1 +
- 1 file changed, 1 insertion(+)
+Hi everyone,
 
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index ab40993..9e8d3d4 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -6,6 +6,7 @@
- 
- SANE_BACKENDS_VERSION = 1.0.22
- SANE_BACKENDS_SITE = http://sources.buildroot.net
-+SANE_BACKENDS_INSTALL_STAGING = YES
- SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
- SANE_BACKENDS_LICENSE = GPLv2+
- SANE_BACKENDS_LICENSE_FILES = COPYING
--- 
-1.9.1
+I am using "buildroot-2014.11" with the uclibc toolchain for  "x86" and "x86_64" targets.
+
+I do notice the packages along with the configuration files :)
+
+I have also looked at the documentation on how to add a new package.
+
+So, I am not re-inventing the wheel; does anyone already have package configs for the following:
+I need to have hdf5 support on my target.  hdf5 depends on both szip and zlib.
+
+=========================================================================
+(1) HDF5
+Version:     HDF5-1.8.14
+URL:          http://www.hdfgroup.org/HDF5/release/obtainsrc.html
+Download:  http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.14.tar.gz
+
+(2) SZIP
+Version:       szip-2.1
+Download:    http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src/szip-2.1.tar.gz
+
+(3) ZLIB   {Already provided by buildroot; yahoo :) }
+Version:       zlib-1.2.8
+URL:            http://www.zlib.net
+Download:    http://zlib.net/zlib-1.2.8.tar.gz
+=========================================================================
+
+Thanks in advance
+
+Cheers,
+Ernesto
