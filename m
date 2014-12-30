@@ -1,7 +1,7 @@
 From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
-Date: Tue, 30 Dec 2014 03:38:05 +0000
-Subject: [Buildroot] Newby Question: Adding a package to BuildRoot-2014.11
-Message-ID: <42dd819b82f141aeb3eb8230e5ef3676@exch13-mail06.win.slac.stanford.edu>
+Date: Tue, 30 Dec 2014 04:06:12 +0000
+Subject: [Buildroot] Need HDF5 Package for buildroot
+Message-ID: <938dd60bbeb74a7ba18f7a54eb215760@exch13-mail06.win.slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
