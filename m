@@ -1,83 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Dec 2014 11:14:27 +0100
-Subject: [Buildroot] [git commit] libnftnl: add patch to fix libnftnl.pc for
-	static linking
-Message-ID: <20141230102545.0CCA2807CC@busybox.osuosl.org>
+Date: Tue, 30 Dec 2014 11:13:40 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.0-2
+Message-ID: <20141230102544.EC606807CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bf107fa6d1031698c3b2d95404909081e1c14ec
+commit: http://git.buildroot.net/buildroot/commit/?id=fbd8c5dab7b34bfe6009d6142b636d29c64f3d3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to libnftnl to add the Libs.private field in
-the pkg-config file, which is needed for proper static linking of
-applications using libnftnl.
-
-Fixes the build of programs such as nftables on Blackfin:
-
-  http://autobuild.buildroot.org/results/061/06166344cc8e162d3f901c70ee31ce07e481053e/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: use correct sha256sum]
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...002-Add-Libs.private-field-to-libnftnl.pc.patch |   49 ++++++++++++++++++++
- 1 files changed, 49 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.hash |    2 +-
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnftnl/0002-Add-Libs.private-field-to-libnftnl.pc.patch b/package/libnftnl/0002-Add-Libs.private-field-to-libnftnl.pc.patch
-new file mode 100644
-index 0000000..ce3e950
---- /dev/null
-+++ b/package/libnftnl/0002-Add-Libs.private-field-to-libnftnl.pc.patch
-@@ -0,0 +1,49 @@
-+From d89fca062ba966332b573673fdd5c4cf01c3e2f5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 29 Dec 2014 15:32:08 +0100
-+Subject: [PATCH 2/2] Add Libs.private field to libnftnl.pc
-+
-+Static linking userspace programs such as nftables against libnftnl
-+currently doesn't work out of the box, because libnftnl is linked
-+against libmnl, but this isn't expressed in libnftnl pkg-config
-+file:
-+
-+  CCLD   nft
-+[...]/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libnftnl.a(table.o): In function `_nft_table_nlmsg_parse':
-+table.c:(.text+0x480): undefined reference to `_mnl_attr_parse'
-+table.c:(.text+0x492): undefined reference to `_mnl_attr_get_str'
-+table.c:(.text+0x4a8): undefined reference to `_mnl_attr_get_u32'
-+table.c:(.text+0x4ca): undefined reference to `_mnl_attr_get_u32'
-+[...]
-+
-+The Libs.private field is specifically designed for such usage:
-+
-+From pkg-config documentation:
-+
-+  Libs.private:
-+
-+     This line should list any private libraries in use.  Private
-+     libraries are libraries which are not exposed through your
-+     library, but are needed in the case of static linking.
-+
-+Therefore, this patch adds a reference to libmnl in the Libs.private
-+field of libnftnl pkg-config file.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libnftnl.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libnftnl.pc.in b/libnftnl.pc.in
-+index fd5cc6a..7fef921 100644
-+--- a/libnftnl.pc.in
-++++ b/libnftnl.pc.in
-+@@ -12,4 +12,5 @@ Version: @VERSION@
-+ Requires:
-+ Conflicts:
-+ Libs: -L${libdir} -lnftnl
-++Libs.private: @LIBMNL_LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.1.0
-+
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 20bc982..ec3e0a1 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256  12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6  ImageMagick-6.9.0-0.tar.xz
++sha256	ce7ced11cc1019cd37518ebc4ea03ffaff8e6891aaf41a05615689dafe854ff6  ImageMagick-6.9.0-2.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index db3b563..18d8729 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.0-0
++IMAGEMAGICK_VERSION = 6.9.0-2
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
