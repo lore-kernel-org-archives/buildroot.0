@@ -1,34 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Dec 2014 14:59:48 +0100
-Subject: [Buildroot] [PATCH 0/2] libsigsegv: update and fixes
-In-Reply-To: <1419858535-26614-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419858535-26614-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20141230145948.1c9a4549@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 30 Dec 2014 15:00:48 +0100
+Subject: [Buildroot] [PATCH v6 0/3] Improve silent builds
+In-Reply-To: <1419939667-27095-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1419939667-27095-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC8X50KAknRTBvQduQ3jK7+ereso3EzU3oDtg=Rzi6MGPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Dec 30, 2014 at 12:41 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> This patch set improves silent builds.
+>
+> Silent builds are also nice when top-level parallel make is being used
+> to reduce the output clutter.
+>
+> After this patch set is accepted I will prepare a patch set to convert
+> the other helpers (scp wget hg) to use the quiet flag instead of the
+> environment variable.
+>
+> The change logs are also in each patch.
+>
+> v6:
+>   - Remove the patch that renames QUIET to BR_QUIET
+>
 
-On Mon, 29 Dec 2014 14:08:53 +0100, Thomas Petazzoni wrote:
+I've sent an updated patch set:
+http://lists.busybox.net/pipermail/buildroot/2014-December/116085.html
 
-> I've taken this opportunity to submit to upstream libsigsegv the 5
-> patches that we have. However, the AArch64 patch was already submitted
-> upstream in May 2013 by Will Newton, and there has never been any
-> reaction to it, and the last commit of the project dates back from
-> 2012, so the chances of getting those patches merged are apparently
-> pretty slim.
-
-FYI, the patches have been merged upstream:
-http://git.savannah.gnu.org/cgit/libsigsegv.git/log/. Not sure when
-upstream will do a release, though.
-
-Best regards,
-
-Thomas
+BR
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
