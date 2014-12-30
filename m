@@ -1,77 +1,60 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 30 Dec 2014 10:36:27 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libiio: fix static build
-In-Reply-To: <1419932187-2319-1-git-send-email-s.martin49@gmail.com>
-References: <1419932187-2319-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1419932187-2319-2-git-send-email-s.martin49@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Dec 2014 11:13:34 +0100
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.0-2
+In-Reply-To: <1419892549-21674-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Mon, 29 Dec 2014 23:35:48 +0100")
+References: <1419892549-21674-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87k319cunl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the CMake module provided by libxml2 instead of the one from CMake to
-correctly set the cflags and ldflags.
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
-Fixes:
-  http://autobuild.buildroot.net/results/964f98fafdcd7e994ea25cf0993915d81537c31c/
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ > ---
+ >  package/imagemagick/imagemagick.hash |    2 +-
+ >  package/imagemagick/imagemagick.mk   |    2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Note that this patch needs the following one to be merged in libxml2:
-  https://mail.gnome.org/archives/xml/2014-December/msg00015.html
+ > diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+ > index 20bc982..463d88b 100644
+ > --- a/package/imagemagick/imagemagick.hash
+ > +++ b/package/imagemagick/imagemagick.hash
+ > @@ -1,2 +1,2 @@
+ >  # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+ > -sha256  12331c904c691cb128865fdc97e5f8a2654576f9b032e274b74dd7617aa1b9b6  ImageMagick-6.9.0-0.tar.xz
+ > +sha256  8362d6b07ea08d2ccf0eb0c255f8369d1b1dea837daf1064e94ecc380b5ee51d  ImageMagick-6.9.0-2.tar.xz
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- ...l2-detection-try-first-the-CMake-module-f.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+Are you sure? I get:
 
-diff --git a/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
-new file mode 100644
-index 0000000..9f44169
---- /dev/null
-+++ b/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
-@@ -0,0 +1,42 @@
-+From 4f849e1d2287206cfb7ff0fdeca96c22383b0d53 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Mon, 29 Dec 2014 19:05:13 +0100
-+Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
-+ libxml2
-+
-+Libxml2 >=2.9.2 provides its own CMake module, so check for it before
-+falling back on the CMake's module FindLibXml2.cmake.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ CMakeLists.txt | 14 +++++++++++++-
-+ 1 file changed, 13 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 393fee3..b4f1d26 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -38,7 +38,19 @@ endif()
-+ find_library(AVAHI_CLIENT_LIBRARIES avahi-client)
-+ find_library(AVAHI_COMMON_LIBRARIES avahi-common)
-+ find_library(PTHREAD_LIBRARIES pthread)
-+-include(FindLibXml2)
-++
-++# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
-++# variables correctly set.
-++# So, try first to find the CMake module provided by libxml2 package, then fallback
-++# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
-++# in static build case).
-++find_package(LibXml2 QUIET NO_MODULE)
-++if(DEFINED LIBXML2_VERSION_STRING)
-++  set(LIBXML2_FOUND ON)
-++  set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
-++else()
-++  include(FindLibXml2)
-++endif()
-+ 
-+ set(LIBIIO_CFILES channel.c device.c context.c buffer.c utilities.c)
-+ set(LIBIIO_HEADERS iio.h)
-+-- 
-+2.2.1
-+
+>>> imagemagick 6.9.0-2 Downloading
+--2014-12-30 11:10:09--  ftp://ftp.nluug.nl/pub/ImageMagick/ImageMagick-6.9.0-2.tar.xz
+           => ?/home/peko/source/buildroot/output/build/.ImageMagick-6.9.0-2.tar.xz.SbfnCI/output?
+Resolving ftp.nluug.nl (ftp.nluug.nl)... 2001:610:1:80aa:192:87:102:43, 2001:610:1:80aa:192:87:102:42, 192.87.102.43, ...
+Connecting to ftp.nluug.nl (ftp.nluug.nl)|2001:610:1:80aa:192:87:102:43|:21... connected.
+Logging in as anonymous ... Logged in!
+==> SYST ... done.    ==> PWD ... done.
+==> TYPE I ... done.  ==> CWD (1) /pub/ImageMagick ... done.
+==> SIZE ImageMagick-6.9.0-2.tar.xz ... 7896448
+==> EPSV ... done.    ==> RETR ImageMagick-6.9.0-2.tar.xz ... done.
+Length: 7896448 (7.5M) (unauthoritative)
+
+ImageMagick-6.9.0-2.tar.xz  100%[=============================================>]   7.53M  1.93MB/s   in 4.0s   
+
+2014-12-30 11:10:14 (1.88 MB/s) - ?/home/peko/source/buildroot/output/build/.ImageMagick-6.9.0-2.tar.xz.SbfnCI/output? saved [7896448]
+
+ERROR: ImageMagick-6.9.0-2.tar.xz has wrong sha256 hash:
+ERROR: expected: 8362d6b07ea08d2ccf0eb0c255f8369d1b1dea837daf1064e94ecc380b5ee51d
+ERROR: got     : ce7ced11cc1019cd37518ebc4ea03ffaff8e6891aaf41a05615689dafe854ff6
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+From the looks of it you used the hash value from the .tar.gz, not
+.tar.xz.
+
+Committed with that fixed, thanks.
+
 -- 
-2.2.1
+Bye, Peter Korsgaard
