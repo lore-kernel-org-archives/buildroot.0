@@ -1,118 +1,30 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 31 Dec 2014 00:00:58 +0100
-Subject: [Buildroot] [RFC v2] linux: add fbtft kernel extension
-In-Reply-To: <20141230223603.GC3928@free.fr>
-References: <1419969494-9615-1-git-send-email-ps.report@gmx.net>,
- <20141230223603.GC3928@free.fr>
-Message-ID: <trinity-edc46a73-cac1-488c-9c86-599abc47450e-1419980458398@3capp-gmx-bs39>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 31 Dec 2014 00:18:17 +0100
+Subject: [Buildroot] [PATCH v2] dnsmasq: install DBus configuration file
+In-Reply-To: <20141230224419.5288c872@free-electrons.com>
+References: <1419972927-25825-1-git-send-email-yegorslists@googlemail.com>
+ <20141230224419.5288c872@free-electrons.com>
+Message-ID: <CAGm1_kuhs2U1RsvYV9D6qD6XxZEHUON_qE-ERsoj3ge8GaEt9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
-
-> Gesendet: Dienstag, 30. Dezember 2014 um 23:36 Uhr
-> Von: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net, loucrittenden63 at gmail.com, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Betreff: Re: [RFC v2] linux: add fbtft kernel extension
+On Tue, Dec 30, 2014 at 10:44 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yegor Yefremov,
 >
-> Peter, All,
-> 
-> On 2014-12-30 20:58 +0100, Peter Seiderer spake thusly:
-> > ... sorry for the resend, file linux/linux-ext-fbtft.mk was missing.
-> 
-> No problem, I've marked the first iteration as "Syuperseded" in our
-> Patchwork.
-> 
-> > First draft of a patch adding fbtft framebuffer drivers to buildroot.
-> 
-> Thanks! :-)
-> 
-> > My first attempt was using the out of tree kernel modules compile
-> > (as suggested by Yann E. MORIN [1]) which is already (partly)
-> > supported by the fbtft source, but I failed to enable some
-> > needed kernel configurations e.g FB_DEFERRED_IO (did not survive
-> > the oldconfig/silentoldconfig step when not referenced in tree,
-> > workaround is to enable a built in feature with the same
-> > preferences [2]).
-> 
-> OK, I'll be looking at it, to see why it fails. Don't expect much before
-> next week-end (actually, that will be next year, too! :-) ) because,
-> well, New Year celebrations, boring stuff like that, which I'm socially
-> obliged to attend... ;-)
-> 
+> On Tue, 30 Dec 2014 21:55:27 +0100, Yegor Yefremov wrote:
+>
+>> +ifeq ($(BR2_PACKAGE_DBUS),y)
+>> +define DNSMASQ_INSTALL_DBUS
+>> +     $(INSTALL) -D $(@D)/dbus/dnsmasq.conf \
+>> +             $(TARGET_DIR)/etc/dbus-1/system.d/dnsmasq.conf
+>
+> Sorry, should have said that on the previous iteration: please add -m
+> 0644 to the $(INSTALL) invocation.
 
-...as a little help my patch file for the first attempt (after the duplication
-of the KCONFIG_ENABLE_OPT calls after the call to oldconfig I gave up and tried the
-second approach)...
+Should I apply these changes to wpa_supplicant too? I borrowed the code there.
 
-Regards,
-Peter
-
-> Regards,
-> Yann E. MORIN.
-> 
-> > The second attempt is the linux-ext approach (as presented here).
-> > 
-> > I am unsure if the enabling of CONFIG_SPI_BCM2708 belongs into
-> > linux.mk or should go into raspberrypi_defconfig or belongs into
-> > the appropriate Readme?
-> > 
-> > The second question is about the 25 submodules of fbtft
-> > (at the moment only FB_TFT_ILI9340 and FB_TFT_ILI9341 are
-> > enabled). Should every submodule be configurable or should all
-> > submodules be enabled by default?
-> > 
-> > There is an adafruit fork of the fbtft repository [4] with some
-> > adfruit specific enhancements...
-> > 
-> > Regards,
-> > Peter
-> > 
-> > Tested with RaspberryPi B+ and PiTFT Mini Kit - 320x240 2.8" TFT
-> > (see [5] and [6]) and the following configuration changes:
-> > 
-> > - cmdline.txt: add 'fbcon=map:10 fbcon=font:VGA8x8'
-> > - add /etc/modules-load.d/fbtft.conf with 'fbtft_device'
-> > - add /etc/modprobe.d/00-fbtft.conf with 'options fbtft_device name=adafruit28 rotate=90 gpios=dc:25'
-> > 
-> > [1] http://lists.busybox.net/pipermail/buildroot/2014-December/115770.html
-> > [2] https://github.com/notro/fbtft/issues/209#issuecomment-68191514
-> > [3] http://www.adafruit.com/products/1983
-> > [4] https://github.com/adafruit/adafruit-rpi-fbtft
-> > [5] http://h65951.serverkompetenz.net/PeterSeiderer/upload/PiTFT_2_8_ct/Image9893.jpg
-> > [6] http://h65951.serverkompetenz.net/PeterSeiderer/upload/PiTFT_2_8_ct/Image9897.jpg
-> > 
-> > Peter Seiderer (1):
-> >   linux: add fbtft kernel extension
-> > 
-> >  linux/Config.ext.in      | 10 ++++++++++
-> >  linux/linux-ext-fbtft.mk | 25 +++++++++++++++++++++++++
-> >  linux/linux.mk           |  9 +++++++++
-> >  package/Config.in        |  1 +
-> >  package/fbtft/Config.in  | 13 +++++++++++++
-> >  package/fbtft/fbtft.mk   | 11 +++++++++++
-> >  6 files changed, 69 insertions(+)
-> >  create mode 100644 linux/linux-ext-fbtft.mk
-> >  create mode 100644 package/fbtft/Config.in
-> >  create mode 100644 package/fbtft/fbtft.mk
-> > 
-> > -- 
-> > 2.1.2
-> > 
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: commit-a3501eb.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20141231/854c2fe5/attachment.ksh>
+Yegor
