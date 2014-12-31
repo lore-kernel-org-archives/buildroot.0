@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Dec 2014 15:15:42 +0100
-Subject: [Buildroot] [PATCH] svgtiny: update source url
-In-Reply-To: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20141231151542.556175ff@free-electrons.com>
+Date: Wed, 31 Dec 2014 15:17:34 +0100
+Subject: [Buildroot] [PATCH v3 1/2] randconfig,
+ allyesconfig: fix handling of legacy options
+In-Reply-To: <20141030230310.4b91e6ab@free-electrons.com>
+References: <1413278695-8979-1-git-send-email-arnout@mind.be>
+ <20141030230310.4b91e6ab@free-electrons.com>
+Message-ID: <20141231151734.0c95b119@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Hello,
 
-On Wed, 31 Dec 2014 10:31:20 +0100, Fabio Porcedda wrote:
-> As source url use the git repository instead of the unavaiable svn
-> repository.
-> 
-> This fix the following error:
-> 
-> svn: E670002: Unable to connect to a repository at URL 'svn://svn.netsurf-browser.org/trunk/libsvgtiny'
-> svn: E670002: Unknown hostname 'svn.netsurf-browser.org'
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/libsvgtiny/libsvgtiny.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, 30 Oct 2014 23:03:10 +0100, Thomas Petazzoni wrote:
 
-Thanks, applied, after taking into account the comment from Baruch.
+> I was going to apply this, and then I tested it, to discover that it
+> then causes the same problem as the one we have with randpackageconfig
+> today: none of the choice options get randomized anymore. So before
+> this patch, if you do "randconfig", you get proper randomization. After
+> this patch, if you do "randconfig", it only generates i386
+> configurations.
+> 
+> I admit it's not really an issue introduced by the patch as the issue
+> already exists for randpackageconfig. But it's very annoying :/
+
+Any comment about this?
 
 Thomas
 -- 
