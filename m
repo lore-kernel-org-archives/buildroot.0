@@ -1,56 +1,41 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 31 Dec 2014 10:23:46 +0100
-Subject: [Buildroot] [RFC v2] linux: add fbtft kernel extension
-In-Reply-To: <20141231101445.40e73507@free-electrons.com>
-References: <1419969494-9615-1-git-send-email-ps.report@gmx.net>
- <20141230223603.GC3928@free.fr> <20141230232807.GD3928@free.fr>
- <20141231092041.2b7cfa41@free-electrons.com>
- <20141231101445.40e73507@free-electrons.com>
-Message-ID: <CA+TH9V=x-JnekFqAj0=aNmm4q6c_5rSHhZDmcp8vhzhkrA-eXA@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 31 Dec 2014 10:31:20 +0100
+Subject: [Buildroot] [PATCH] svgtiny: update source url
+Message-ID: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas:
+As source url use the git repository instead of the unavaiable svn
+repository.
 
-FYI, Notro started a rewrite of fbtft aiming at kernel inclusion here:
+This fix the following error:
 
-https://github.com/notro/fbdbi/wiki
+svn: E670002: Unable to connect to a repository at URL 'svn://svn.netsurf-browser.org/trunk/libsvgtiny'
+svn: E670002: Unknown hostname 'svn.netsurf-browser.org'
 
-Sincerely, Angelo
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libsvgtiny/libsvgtiny.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-2014-12-31 10:14 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Wed, 31 Dec 2014 09:20:41 +0100, Thomas Petazzoni wrote:
->
->> No the proper solution would be for those fbtft people to submit their
->> drivers to the upstream kernel. But of course, since those drivers are
->> developed by RasberryPi folks, they cannot play with the normal
->> open-source rules of contributing things upstream: they *have* to do
->> some utter crap and do everything in their own fork.
->
-> So, I've just submitted a proposal to include those drivers to the
-> staging tree of the Linux kernel:
->
->   http://driverdev.linuxdriverproject.org/pipermail/driverdev-devel/2014-December/063195.html
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index a2d494e..ee2bb8a 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk/libsvgtiny
+-LIBSVGTINY_VERSION = 12121
++LIBSVGTINY_SITE = git://git.netsurf-browser.org/libsvgtiny.git
++LIBSVGTINY_VERSION = ea9d99fc8b231c22d06168135e181d61f4eb2f06
+ LIBSVGTINY_INSTALL_STAGING = YES
+ LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkgconf
+ LIBSVGTINY_LICENSE = MIT
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.1.0
