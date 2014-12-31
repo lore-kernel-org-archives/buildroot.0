@@ -1,48 +1,43 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 31 Dec 2014 09:15:51 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.18
-Message-ID: <1420028151-25584-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 31 Dec 2014 10:40:43 -0300
+Subject: [Buildroot] [PATCH] freetype: bump to version 2.5.5
+Message-ID: <1420033243-13190-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backtrace is disable by default now so remove the definition to avoid
-duplicate warnings.
+2.5.4 introduced a regression with uncompressed PCF files.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/freetype/freetype.hash | 5 +++--
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 4ef14a3..f3598a3 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	e7bd9ff8d95b515973d3a1255c17fd481bcd75e4420f00c6c9c99489d1ddac2c	btrfs-progs-v3.17.3.tar.xz
-+sha256	f9a4ab0b2d66461ca78ffefd03ddd017164d0c6ad2d9532ac2baf8d79f61044d	btrfs-progs-v3.18.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 6a1b7ea..033506e 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,12 +4,11 @@
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index 8184eb0..f890c7f 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,2 +1,3 @@
+-# Locally calculated
+-sha256  3b4e2c666b33b32ad29ff0fe5c6538e757d3c73368e5dfa88bd59b4bc95cbabb  freetype-2.5.4.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.5.5/
++md5	2a7a314927011d5030903179cf183be0	freetype-2.5.5.tar.bz2
++sha1	7b7460ef51a8fdb17baae53c6658fc1ad000a1c2	freetype-2.5.5.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index c2f7f13..0de5ce3 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 3.17.3
-+BTRFS_PROGS_VERSION = 3.18
- BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
--BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1 \
--	$(if $(BR2_TOOLCHAIN_USES_UCLIBC),DISABLE_BACKTRACE=1)
-+BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1
- BTRFS_PROGS_LICENSE = GPLv2
- BTRFS_PROGS_LICENSE_FILES = COPYING
- 
+-FREETYPE_VERSION = 2.5.4
++FREETYPE_VERSION = 2.5.5
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
 -- 
 2.0.5
