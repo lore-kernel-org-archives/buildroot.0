@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Dec 2014 15:13:25 +0100
-Subject: [Buildroot] [PATCH] dhcpcd: blacklist Sourcery PowerPC
- toolchains
-In-Reply-To: <4baeea60ab360e4c92976a3599c4b1cba5ff5bfb.1419953394.git.baruch@tkos.co.il>
-References: <4baeea60ab360e4c92976a3599c4b1cba5ff5bfb.1419953394.git.baruch@tkos.co.il>
-Message-ID: <20141231151325.08a7e7e4@free-electrons.com>
+Date: Wed, 31 Dec 2014 15:13:43 +0100
+Subject: [Buildroot] [git commit] libvncserver: OpenSSL support needs NPTL
+	thread support
+Message-ID: <20141231141348.B7515807DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=fa168c1aa45649094d90704267b8a8cac17a8e34
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 30 Dec 2014 17:29:55 +0200, Baruch Siach wrote:
-> The linux/socket.h header in these toolchains is broken as described in commit
-> f5866484ffe (libnftnl: exclude for CS PPC toolchains).
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d92/d92e7f2af0e64bc40f7b5c9ea081471de98bf8e8/
-> http://autobuild.buildroot.net/results/e97/e97e980a2f1e0ff4138a6dc03d86ad3ff0973e4a/
-> http://autobuild.buildroot.net/results/ca3/ca32c4de8b645c96cedb80b6270a792e9601ad84/
-> 
-> and some more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The OpenSSL support of libvncserver already has a dependency on thread
+support, but it in fact requires NPTL threading.
 
-Applied, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.org/results/be2/be20dec9ffe7de3adc46a834852b20353d39baff/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libvncserver/libvncserver.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index ed6b64d..87bcf45 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -32,8 +32,8 @@ ifneq ($(BR2_INET_IPV6),y)
+ LIBVNCSERVER_CONF_OPTS += --without-ipv6
+ endif
+ 
+-# openssl supports needs pthread
+-ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# openssl supports needs NPTL thread support
++ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),yy)
+ LIBVNCSERVER_DEPENDENCIES += openssl
+ else
+ LIBVNCSERVER_CONF_OPTS += --without-crypto --without-ssl
