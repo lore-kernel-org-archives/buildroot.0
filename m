@@ -1,31 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Dec 2014 18:01:44 +0100
-Subject: [Buildroot] [git commit] ding-libs: fix Config.in dependency logic
-Message-ID: <20141231170156.91966807F0@busybox.osuosl.org>
+Date: Wed, 31 Dec 2014 18:03:14 +0100
+Subject: [Buildroot] [PATCH v2 1/7] Adding ding-libs
+In-Reply-To: <1418398967-2183-2-git-send-email-gregd72002@gmail.com>
+References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
+ <1418398967-2183-2-git-send-email-gregd72002@gmail.com>
+Message-ID: <20141231180314.79697bfd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7e0f3a78192425891745aafe93b23362bc70527
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gregory Dymarek,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ding-libs/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Fri, 12 Dec 2014 15:42:41 +0000, Gregory Dymarek wrote:
+> Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
+> ---
+>  package/Config.in                |  1 +
+>  package/ding-libs/Config.in      |  9 +++++++++
+>  package/ding-libs/ding-libs.hash |  1 +
+>  package/ding-libs/ding-libs.mk   | 17 +++++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/ding-libs/Config.in
+>  create mode 100644 package/ding-libs/ding-libs.hash
+>  create mode 100644 package/ding-libs/ding-libs.mk
 
-diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
-index bb4fa24..6069ed9 100644
---- a/package/ding-libs/Config.in
-+++ b/package/ding-libs/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_DING_LIBS
- 	bool "ding-libs"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
--	depends on BR2_USE_WCHAR if BR2_NEEDS_GETTEXT
-+	depends on BR2_USE_WCHAR || !BR2_NEEDS_GETTEXT
- 	help
- 	  The ding-libs packages contain a set of libraries used by
- 	  the System Security Services Daemon (SSSD) and other
+Thanks, applied, after doing again a fairly significant amount of fixes:
+
+    [Thomas:
+     - Remove unneeded comment in Config.in
+     - Remove select if libiconv, not needed
+     - Add dependency on wchar, needed when we depend on gettext
+     - Improve Config.in help text
+     - Fix the format of the hash file to make it actually useful
+     - Fix the comment header in the .mk file
+     - Remove useless commented line in .mk file
+     - Fixup license information: it's not under GPLv3, but under LGPLv3+
+       (library) and GPLv3+ (test programs)
+     - Add host-pkgconf to the dependencies, remove libiconv from the
+       dependencies.
+     - Add a comment to explain why autoreconf is needed.
+     - Remove usage of $(MAKE1) that does look necessary.]
+
+See
+http://git.buildroot.net/buildroot/commit/?id=3af1d306bdc4144e243e453221a7ab5a49b14e56
+for the final commit.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
