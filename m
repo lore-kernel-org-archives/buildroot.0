@@ -1,55 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 31 Dec 2014 11:38:51 +0200
-Subject: [Buildroot] [PATCH] svgtiny: update source url
-In-Reply-To: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20141231093851.GR2481@sapphire.tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 31 Dec 2014 09:15:51 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.18
+Message-ID: <1420028151-25584-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+Backtrace is disable by default now so remove the definition to avoid
+duplicate warnings.
 
-On Wed, Dec 31, 2014 at 10:31:20AM +0100, Fabio Porcedda wrote:
-> As source url use the git repository instead of the unavaiable svn
-> repository.
-> 
-> This fix the following error:
-> 
-> svn: E670002: Unable to connect to a repository at URL 'svn://svn.netsurf-browser.org/trunk/libsvgtiny'
-> svn: E670002: Unknown hostname 'svn.netsurf-browser.org'
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/libsvgtiny/libsvgtiny.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-> index a2d494e..ee2bb8a 100644
-> --- a/package/libsvgtiny/libsvgtiny.mk
-> +++ b/package/libsvgtiny/libsvgtiny.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk/libsvgtiny
-> -LIBSVGTINY_VERSION = 12121
-> +LIBSVGTINY_SITE = git://git.netsurf-browser.org/libsvgtiny.git
-> +LIBSVGTINY_VERSION = ea9d99fc8b231c22d06168135e181d61f4eb2f06
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-git clone over HTTP is generally preferable, because corporate firewalls tend 
-to block the native git port. This repo seems to be accessible also from 
-http://git.netsurf-browser.org/libsvgtiny.git as well. Don't forget to set 
-SITE_METHODD = git.
-
-Thanks,
-baruch
-
-
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 4ef14a3..f3598a3 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	e7bd9ff8d95b515973d3a1255c17fd481bcd75e4420f00c6c9c99489d1ddac2c	btrfs-progs-v3.17.3.tar.xz
++sha256	f9a4ab0b2d66461ca78ffefd03ddd017164d0c6ad2d9532ac2baf8d79f61044d	btrfs-progs-v3.18.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 6a1b7ea..033506e 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 3.17.3
++BTRFS_PROGS_VERSION = 3.18
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
+-BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1 \
+-	$(if $(BR2_TOOLCHAIN_USES_UCLIBC),DISABLE_BACKTRACE=1)
++BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1
+ BTRFS_PROGS_LICENSE = GPLv2
+ BTRFS_PROGS_LICENSE_FILES = COPYING
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.0.5
