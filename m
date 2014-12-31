@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Dec 2014 18:05:15 +0100
-Subject: [Buildroot] [git commit] Revert "svgtiny: update source url"
-Message-ID: <20141231170547.7FC927FA62@busybox.osuosl.org>
+Date: Wed, 31 Dec 2014 18:06:33 +0100
+Subject: [Buildroot] [PATCH] svgtiny: update source url
+In-Reply-To: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1420018280-28316-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20141231180633.000dea5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31783dcf559a206bc84eac9a6529033056e5db8b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-This reverts commit 8f9b5f657b3dbb82a5725c3bf24ed261a77111d8.
+On Wed, 31 Dec 2014 10:31:20 +0100, Fabio Porcedda wrote:
+> As source url use the git repository instead of the unavaiable svn
+> repository.
+> 
+> This fix the following error:
+> 
+> svn: E670002: Unable to connect to a repository at URL 'svn://svn.netsurf-browser.org/trunk/libsvgtiny'
+> svn: E670002: Unknown hostname 'svn.netsurf-browser.org'
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/libsvgtiny/libsvgtiny.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-The new svgtiny version does not build at all, see:
+In the end, I reverted your change, it was causing build failures since
+some files are apparently missing from the Git repository. See
 
   http://autobuild.buildroot.org/results/242/24257e9739df8f589150336cb6213812516bf465/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsvgtiny/libsvgtiny.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+Can you have a look?
 
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index 46f4923..a2d494e 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--LIBSVGTINY_SITE = http://git.netsurf-browser.org/libsvgtiny.git
--LIBSVGTINY_SITE_METHOD = git
--LIBSVGTINY_VERSION = ea9d99fc8b231c22d06168135e181d61f4eb2f06
-+LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk/libsvgtiny
-+LIBSVGTINY_VERSION = 12121
- LIBSVGTINY_INSTALL_STAGING = YES
- LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkgconf
- LIBSVGTINY_LICENSE = MIT
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
