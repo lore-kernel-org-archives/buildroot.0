@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 16:51:33 +0100
-Subject: [Buildroot] [PATCH 2/2 try 2] sane-backends: Install into
- staging
-In-Reply-To: <54A2FFAE.30609@dawncrow.de>
-References: <1419905244-7418-1-git-send-email-nerv@dawncrow.de>
- <54A2FFAE.30609@dawncrow.de>
-Message-ID: <20150101165133.2d30b4b3@free-electrons.com>
+Date: Thu, 1 Jan 2015 16:56:10 +0100
+Subject: [Buildroot] [git commit] lcms2: install to staging
+Message-ID: <20150101155710.9C04D807F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+commit: http://git.buildroot.net/buildroot/commit/?id=b6a012a1b8fd841a855a0b89ba347db45bbff8c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 30 Dec 2014 20:40:30 +0100, Andr? Hentschel wrote:
-> Other packages might depend on sane, thus it should install it's development files.
-> I'm working on a clean Wine package and it wasn't able to find sane.
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/sane-backends/sane-backends.mk | 1 +
->  1 file changed, 1 insertion(+)
+Other packages might depend on lcms2, thus it should install its
+development files.
 
-Thanks, applied after slightly tweaking the commit log to remove
-"personal messages" such as "I'm working on ...".
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lcms2/lcms2.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 5d22041..42b2669 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -8,6 +8,7 @@ LCMS2_VERSION = 2.5
+ LCMS2_SITE = http://downloads.sourceforge.net/lcms/lcms
+ LCMS2_LICENSE = MIT
+ LCMS2_LICENSE_FILES = COPYING
++LCMS2_INSTALL_STAGING = YES
+ 
+ LCMS2_CONF_OPTS = \
+ 
