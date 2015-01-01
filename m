@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 11:31:44 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: fix indentation and change
- file permissions
-In-Reply-To: <1420066254-5483-1-git-send-email-yegorslists@googlemail.com>
-References: <1420066254-5483-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150101113144.6d329d65@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 1 Jan 2015 12:36:48 +0200
+Subject: [Buildroot] [PATCH] glibc: add debug symbols when
+ BR2_ENABLE_DEBUG
+In-Reply-To: <20150101112940.0d1859fa@free-electrons.com>
+References: <5517167ba77f268eeeaa8c5763078aeeb53741c6.1420107403.git.baruch@tkos.co.il>
+ <20150101112940.0d1859fa@free-electrons.com>
+Message-ID: <20150101103648.GU16594@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Hi Thomas,
 
-On Wed, 31 Dec 2014 23:50:54 +0100, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/wpa_supplicant/wpa_supplicant.mk | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
+On Thu, Jan 01, 2015 at 11:29:40AM +0100, Thomas Petazzoni wrote:
+> On Thu,  1 Jan 2015 12:16:43 +0200, Baruch Siach wrote:
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  package/glibc/glibc.mk | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> 
+> Thanks!
+> 
+> Do you know if there's an easy way of checking if ELF binaries have
+> debugging symbols? If so, we could add a check to verify that all ELF
+> binaries have debugging symbols when BR2_ENABLE_DEBUG=y, and add this
+> check in the autobuilders.
 
-Applied, thanks!
+I guess looking for '.debug_info' in the output of 'objdump -h' or 'readelf 
+-S' should be enough.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
