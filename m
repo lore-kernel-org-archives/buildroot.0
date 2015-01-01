@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 23:00:30 +0100
-Subject: [Buildroot] [git commit] sunxi-mali-prop: bump version
-Message-ID: <20150101220254.0703B807CA@busybox.osuosl.org>
+Date: Thu, 1 Jan 2015 23:03:07 +0100
+Subject: [Buildroot] [PATCH 32/51] sunxi-mali-prop: bump version
+In-Reply-To: <1414349157-22749-32-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1414349157-22749-32-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150101230307.76e2fb8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc91aaa6fe3ee94cd6306580532c997371bc8426
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sunxi-mali-prop/sunxi-mali-prop.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 26 Oct 2014 19:45:38 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/sunxi-mali-prop/sunxi-mali-prop.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sunxi-mali-prop/sunxi-mali-prop.mk b/package/sunxi-mali-prop/sunxi-mali-prop.mk
-index 0cb2d93..b828dc2 100644
---- a/package/sunxi-mali-prop/sunxi-mali-prop.mk
-+++ b/package/sunxi-mali-prop/sunxi-mali-prop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_MALI_PROP_VERSION = e4ced471d576708ac9aa093e41a0f91cf429862b
-+SUNXI_MALI_PROP_VERSION = 1c5063f43cdc9de341c0d63b2e3921cab86c7742
- SUNXI_MALI_PROP_SITE = $(call github,linux-sunxi,sunxi-mali-proprietary,$(SUNXI_MALI_PROP_VERSION))
- 
- $(eval $(generic-package))
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
