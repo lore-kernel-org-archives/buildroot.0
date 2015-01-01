@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 22:57:51 +0100
-Subject: [Buildroot] [PATCHv1.0] szip: new package
-In-Reply-To: <1420144680-28163-1-git-send-email-ernesto@slac.stanford.edu>
-References: <1420144680-28163-1-git-send-email-ernesto@slac.stanford.edu>
-Message-ID: <20150101225751.2d487bc0@free-electrons.com>
+Date: Thu, 1 Jan 2015 22:58:14 +0100
+Subject: [Buildroot] [git commit] package/rpi-firmware: only install images
+Message-ID: <20150101215822.A8AC1807F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ernesto L. Williams Jr,
+commit: http://git.buildroot.net/buildroot/commit/?id=72e9667e6f70c10c4ef1313bc3e94a803e420b55
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  1 Jan 2015 12:38:00 -0800, Ernesto L. Williams Jr wrote:
-> Signed-off-by: Ernesto L. Williams Jr <ernesto@slac.stanford.edu>
-> ---
->  package/Config.in      |  1 +
->  package/szip/Config.in | 15 +++++++++++++++
->  package/szip/szip.mk   | 14 ++++++++++++++
->  3 files changed, 30 insertions(+)
->  create mode 100644 package/szip/Config.in
->  create mode 100644 package/szip/szip.mk
+The rpi-firmware only installs images files, so it should use
+_INSTALL_IMAGES_CMDS and not _INSTALL_TARGET_CMDS.
 
-Thanks, applied, with only minor changes:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-firmware/rpi-firmware.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-[Thomas:
-  - Add hash file.
-  - Rewrap Config.in help text and remove trailing whitespace.
-  - Remove unneeded empty new line at the end of the .mk file.]
-
-See the final commit at
-http://git.buildroot.net/buildroot/commit/?id=1efb5ad43dec5539e2fa1c9bc0c4b2fecfdcfa32.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 7ebd38c..571a546 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -8,8 +8,10 @@ RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
++RPI_FIRMWARE_INSTALL_TARGET = NO
++RPI_FIRMWARE_INSTALL_IMAGES = YES
+ 
+-define RPI_FIRMWARE_INSTALL_TARGET_CMDS
++define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
