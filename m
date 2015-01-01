@@ -1,91 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 22:35:20 +0100
-Subject: [Buildroot] [git commit] bluez5_utils: improved version of the
-	mcaptest patch
-Message-ID: <20150101213726.8D72780797@busybox.osuosl.org>
+Date: Thu, 1 Jan 2015 22:36:33 +0100
+Subject: [Buildroot] [git commit] bluez5_utils: fix O_CLOEXEC build failure
+Message-ID: <20150101213726.980997FA7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9cfe8ffe2fd565110b193d870060c6a783f81854
+commit: http://git.buildroot.net/buildroot/commit/?id=6d28df573c9959fe0bb642908a5eeccfd532f7e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As suggested by bluez5_utils upstream developers, use an improved
-version of the mcaptest patch that only conditionally links on librt
-instead of unconditionally linking against it (glibc after 2.17 have
-clock_getres() in libc and not in librt).
+Add a patch for bluez5_utils to fix the O_CLOEXEC build failure, due
+to a missing <config.h> include.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/c61/c6117d261d0c7f938fabddb806d0b0095fe9dfb9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ... 0001-Link-mcaptest-with-lrt-when-needed.patch} |   33 +++++++++++++++-----
- 1 files changed, 25 insertions(+), 8 deletions(-)
+ .../0002-src-shared-ecc.c-include-config.h.patch   |   33 ++++++++++++++++++++
+ 1 files changed, 33 insertions(+), 0 deletions(-)
 
-diff --git a/package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch b/package/bluez5_utils/0001-Link-mcaptest-with-lrt-when-needed.patch
-similarity index 54%
-rename from package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch
-rename to package/bluez5_utils/0001-Link-mcaptest-with-lrt-when-needed.patch
-index 9933a08..a36e285 100644
---- a/package/bluez5_utils/0001-Link-mcaptest-with-lrt.patch
-+++ b/package/bluez5_utils/0001-Link-mcaptest-with-lrt-when-needed.patch
-@@ -1,12 +1,12 @@
--From 2d965dce71df18221e625efbfe380b54e6441d64 Mon Sep 17 00:00:00 2001
-+From 54b8977c2f854d04f9c6383e2cac76ea4cde3eaa Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Mon, 29 Dec 2014 12:23:41 +0100
--Subject: [PATCH] Link mcaptest with -lrt
-+Subject: [PATCH] Link mcaptest with -lrt when needed
- 
- The mcaptest tool uses the profiles/health/mcap.c source file, which
--calls clock_getres(). This function is defined in librt, so mcaptest
--should be linked against librt, otherwise one gets link failures such
--as:
-+calls clock_getres(). This function is defined in librt in some C
-+libraries, so mcaptest should be linked against librt when needed,
-+otherwise one gets link failures such as:
- 
- ld: profiles/health/mcap.o: undefined reference to symbol 'clock_getres@@GLIBC_2.2.5'
- ld: note: 'clock_getres@@GLIBC_2.2.5' is defined in DSO [...]/sysroot/lib64/librt.so.1 so try adding it to the linker command line
-@@ -17,10 +17,11 @@ Makefile:4184: recipe for target 'tools/mcaptest' failed
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  Makefile.tools | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ configure.ac   | 5 +++++
-+ 2 files changed, 6 insertions(+), 1 deletion(-)
- 
- diff --git a/Makefile.tools b/Makefile.tools
--index bc827fe..178b773 100644
-+index bc827fe..fef3db5 100644
- --- a/Makefile.tools
- +++ b/Makefile.tools
- @@ -195,7 +195,7 @@ tools_mcaptest_SOURCES = tools/mcaptest.c \
-@@ -28,10 +29,26 @@ index bc827fe..178b773 100644
-  				src/log.c src/log.h \
-  				profiles/health/mcap.h profiles/health/mcap.c
- -tools_mcaptest_LDADD = lib/libbluetooth-internal.la @GLIB_LIBS@
--+tools_mcaptest_LDADD = lib/libbluetooth-internal.la @GLIB_LIBS@ -lrt
-++tools_mcaptest_LDADD = lib/libbluetooth-internal.la @GLIB_LIBS@ @RT_LIBS@
-  
-  dist_man_MANS += tools/hciattach.1 tools/hciconfig.1 \
-  			tools/hcitool.1 tools/hcidump.1 \
-+diff --git a/configure.ac b/configure.ac
-+index 4739c10..b0afba6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -54,6 +54,11 @@ AC_CHECK_LIB(pthread, pthread_create, dummy=yes,
-+ AC_CHECK_LIB(dl, dlopen, dummy=yes,
-+ 			AC_MSG_ERROR(dynamic linking loader is required))
+diff --git a/package/bluez5_utils/0002-src-shared-ecc.c-include-config.h.patch b/package/bluez5_utils/0002-src-shared-ecc.c-include-config.h.patch
+new file mode 100644
+index 0000000..f339c88
+--- /dev/null
++++ b/package/bluez5_utils/0002-src-shared-ecc.c-include-config.h.patch
+@@ -0,0 +1,33 @@
++From 3c5a93d0be4457120d17da70918f9eb8799d6c52 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 1 Jan 2015 22:33:34 +0100
++Subject: [PATCH] src/shared/ecc.c: include <config.h>
++
++The ecc.c file forgets to include <config.h>. This causes build
++failures with certain C libraries, because ecc.c uses O_CLOEXEC, which
++is only available when _GNU_SOURCE is defined. And _GNU_SOURCE gets
++defined by <config.h>, so it should be included.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/shared/ecc.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/shared/ecc.c b/src/shared/ecc.c
++index 33c4187..41be02b 100644
++--- a/src/shared/ecc.c
+++++ b/src/shared/ecc.c
++@@ -24,6 +24,10 @@
++  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++  */
 + 
-++AC_SEARCH_LIBS([clock_getres], [rt],
-++			[test "$ac_cv_search_clock_getres" = "none required" ||
-++			RT_LIBS=$ac_cv_search_clock_getres])
-++AC_SUBST([RT_LIBS])
+++#ifdef HAVE_CONFIG_H
+++#include <config.h>
+++#endif
 ++
-+ PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.28, dummy=yes,
-+ 				AC_MSG_ERROR(GLib >= 2.28 is required))
-+ AC_SUBST(GLIB_CFLAGS)
- -- 
- 2.1.0
- 
++ #include <fcntl.h>
++ #include <unistd.h>
++ #include <sys/types.h>
++-- 
++2.1.0
++
