@@ -1,32 +1,103 @@
 From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu,  1 Jan 2015 21:54:36 +0100
-Subject: [Buildroot] [PATCH v2 0/2] Portability fixes for "make menuconfig"
-Message-ID: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
+Date: Thu,  1 Jan 2015 21:54:37 +0100
+Subject: [Buildroot] [PATCH v2 1/2] kconfig/lxdialog: get ncurses CFLAGS
+	with pkg-config
+In-Reply-To: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <1420145678-11134-2-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This makes "make menuconfig" also work on systems where ncurses is not
+installed in a standard location (such as on NixOS).
 
-Here are two portability fixes needed to be able to run "make menuconfig" on
-NixOS[1].
+This patch changes ccflags() so that it tries pkg-config first, and only
+if pkg-config fails does it go back to the fallback/manual checks. This
+is the same algorithm that ldflags() already uses.
 
-[1]: http://nixos.org/
+[This patch is already applied upstream (is part of linux v3.18):
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=be8af2d54a66911693eddc556e4f7a866670082b
 
-Bj?rn Forsman (2):
-  kconfig/lxdialog: get ncurses CFLAGS with pkg-config
-  Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time
+I'm adding this instead of doing a full upstream kconfig sync because
+there was a conflict in one of the Buildroot kconfig patches (against
+linux 3.18-rc1), which I was unable to resolve. Just drop this patch next time
+Buildroot kconfig is synced against upstream.
+]
 
- Makefile                                           |  6 ++-
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+---
  ...dialog-get-ncurses-CFLAGS-with-pkg-config.patch | 50 ++++++++++++++++++++++
  support/kconfig/patches/series                     |  1 +
- 3 files changed, 56 insertions(+), 1 deletion(-)
+ 2 files changed, 51 insertions(+)
  create mode 100644 support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
 
+diff --git a/support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch b/support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+new file mode 100644
+index 0000000..65973a3
+--- /dev/null
++++ b/support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+@@ -0,0 +1,50 @@
++From be8af2d54a66911693eddc556e4f7a866670082b Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
++Date: Sun, 14 Sep 2014 12:57:50 +0200
++Subject: [PATCH] kconfig/lxdialog: get ncurses CFLAGS with pkg-config
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This makes "make menuconfig" also work on systems where ncurses is not
++installed in a standard location (such as on NixOS).
++
++This patch changes ccflags() so that it tries pkg-config first, and only
++if pkg-config fails does it go back to the fallback/manual checks. This
++is the same algorithm that ldflags() already uses.
++
++Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
++Signed-off-by: Michal Marek <mmarek@suse.cz>
++---
++[This patch is already applied upstream (is part of linux v3.18):
++https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=be8af2d54a66911693eddc556e4f7a866670082b
++
++I'm adding this instead of doing a full upstream kconfig sync because
++there was a conflict in one of the Buildroot kconfig patches (against
++linux 3.18-rc1), which I was unable to resolve. Just drop this patch next time
++Buildroot kconfig is synced against upstream.
++]
++
++ scripts/kconfig/lxdialog/check-lxdialog.sh | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/scripts/kconfig/lxdialog/check-lxdialog.sh b/scripts/kconfig/lxdialog/check-lxdialog.sh
++index 9d2a4c5..5075ebf 100755
++--- a/scripts/kconfig/lxdialog/check-lxdialog.sh
+++++ b/scripts/kconfig/lxdialog/check-lxdialog.sh
++@@ -21,7 +21,11 @@ ldflags()
++ # Where is ncurses.h?
++ ccflags()
++ {
++-	if [ -f /usr/include/ncursesw/curses.h ]; then
+++	if pkg-config --cflags ncursesw 2>/dev/null; then
+++		echo '-DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1'
+++	elif pkg-config --cflags ncurses 2>/dev/null; then
+++		echo '-DCURSES_LOC="<ncurses.h>"'
+++	elif [ -f /usr/include/ncursesw/curses.h ]; then
++ 		echo '-I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"'
++ 		echo ' -DNCURSES_WIDECHAR=1'
++ 	elif [ -f /usr/include/ncurses/ncurses.h ]; then
++-- 
++2.1.3
++
+diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+index 9154d83..e25375e 100644
+--- a/support/kconfig/patches/series
++++ b/support/kconfig/patches/series
+@@ -6,3 +6,4 @@
+ 14-support-out-of-tree-config.patch
+ 15-fix-qconf-moc-rule.patch
+ 16-fix-space-to-de-select-options.patch
++17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
 -- 
-Changes v1 -> v2:
-  - make the kconfig/lxdialog patch a separate patch file, instead of modifying
-    the kconfig sources (which are synced with linux from time to time).
-    Suggested by Thomas P.
+2.1.3
