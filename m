@@ -1,67 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 16:46:38 +0100
-Subject: [Buildroot] [PATCH v2 7/7] Adding janus-gateway
-In-Reply-To: <1418398967-2183-8-git-send-email-gregd72002@gmail.com>
-References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
- <1418398967-2183-8-git-send-email-gregd72002@gmail.com>
-Message-ID: <20150101164638.66901cd9@free-electrons.com>
+Date: Thu, 1 Jan 2015 16:49:54 +0100
+Subject: [Buildroot] [git commit] sane-backends: install to staging
+Message-ID: <20150101155022.6FA0780806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gregory Dymarek,
+commit: http://git.buildroot.net/buildroot/commit/?id=d8acf0600953f273c00ecba00535afdadcf477da
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 12 Dec 2014 15:42:47 +0000, Gregory Dymarek wrote:
-> Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
-> ---
->  package/Config.in                                  |  1 +
->  package/janus-gateway/Config.in                    | 13 +++++++++++
->  .../janus-gateway-0001-disable-ssp.patch           | 12 ++++++++++
->  package/janus-gateway/janus-gateway.hash           |  1 +
->  package/janus-gateway/janus-gateway.mk             | 27 ++++++++++++++++++++++
->  5 files changed, 54 insertions(+)
->  create mode 100644 package/janus-gateway/Config.in
->  create mode 100644 package/janus-gateway/janus-gateway-0001-disable-ssp.patch
->  create mode 100644 package/janus-gateway/janus-gateway.hash
->  create mode 100644 package/janus-gateway/janus-gateway.mk
+Other packages might depend on sane, thus it should install its
+development files.
 
-Thanks, applied, with a number of changes:
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sane-backends/sane-backends.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-    [Thomas:
-      - Rename patch to the proper naming convention, and add a
-        description to it.
-      - Add mandatory dependency to OpenSSL.
-      - Make the dependency on libwebsock optional.
-      - Remove select of host-gengetopt, since this package no longer has
-        a menuconfig option.
-      - Add missing toolchain option dependencies inherited from selected
-        packages.
-      - Add proper Config.in help text.
-      - Fix the .mk comment header to the proper format.
-      - Use the github function and remove the unneeded SITE_METHOD
-        variable.
-      - Add support for optional Opus and Libogg support.
-      - Remove hash file, since the package is fetched from github.]
-
-See the final commit at
-http://git.buildroot.net/buildroot/commit/?id=f95c7e6fb9c0cf30eb769a8f0e272e76f36c5eae.
-
-Also, could you:
-
- * Submit the SSP patch to the upstream project, and ask them to create
-   the m4/ directory?
-
- * Create a followup patch for Buildroot that adds a working example of
-   janus.cfg configuration file and an init script to start the janus
-   daemon? This way users of the package at least have a working
-   starting point.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index ab40993..f8c59e8 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -9,6 +9,7 @@ SANE_BACKENDS_SITE = http://sources.buildroot.net
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
+ SANE_BACKENDS_LICENSE = GPLv2+
+ SANE_BACKENDS_LICENSE_FILES = COPYING
++SANE_BACKENDS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ SANE_BACKENDS_DEPENDENCIES += libusb
