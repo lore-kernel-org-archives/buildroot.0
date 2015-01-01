@@ -1,49 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 2 Jan 2015 00:02:23 +0100
-Subject: [Buildroot] [git commit] defconfigs: bump sheevaplug kernel to
+Subject: [Buildroot] [git commit] defconfigs: bump minnowboard-max kernel to
 	3.18.1
-Message-ID: <20150101230316.DCF2980812@busybox.osuosl.org>
+Message-ID: <20150101230316.CC8F380810@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=998a2aee773ccfef840c72299557f1a8ffe32b1f
+commit: http://git.buildroot.net/buildroot/commit/?id=4e10432a501a5d3b53fd170f2b72fc3865002e70
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig |   13 +++++++------
- 1 files changed, 7 insertions(+), 6 deletions(-)
+ .../{linux-3.17.config => linux-3.18.config}       |    0
+ configs/minnowboard_max_defconfig                  |   10 +++++-----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index d036622..5422f67 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -10,11 +10,10 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K=y
+diff --git a/board/minnowboard-max/linux-3.17.config b/board/minnowboard-max/linux-3.18.config
+similarity index 100%
+rename from board/minnowboard-max/linux-3.17.config
+rename to board/minnowboard-max/linux-3.18.config
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index 0cb5b97..e8bd0ab 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -6,10 +6,10 @@ BR2_x86_atom=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard-max/post-build.sh"
  
--
- # Lock down headers to avoid breaking with new defaults
+-# Lock to 3.17 headers to avoid breaking with newer kernels
++# Lock to 3.18 headers to avoid breaking with newer kernels
  BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.11.8"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_11=y
+-BR2_DEFAULT_KERNEL_VERSION="3.17.2"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
 +BR2_DEFAULT_KERNEL_VERSION="3.18.1"
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
  
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -27,6 +26,8 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
- # Kernel
+ # Needed for ethernet
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+@@ -18,9 +18,9 @@ BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
+ # Linux kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.11.8"
--BR2_LINUX_KERNEL_DEFCONFIG="kirkwood"
--BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17.2"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
-+BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="kirkwood-sheevaplug"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard-max/linux-3.17.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard-max/linux-3.18.config"
+ 
+ # Bootloader
+ BR2_TARGET_GRUB2=y
