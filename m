@@ -1,43 +1,370 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  1 Jan 2015 21:03:50 +0100
-Subject: [Buildroot] [PATCH 1/4 v9] Makefile: improve detection of make "-s"
-	flag
+Date: Thu,  1 Jan 2015 21:03:51 +0100
+Subject: [Buildroot] [PATCH 2/4 v9] support/download: support -q in all
+	download backends
 In-Reply-To: <cover.1420142462.git.yann.morin.1998@free.fr>
 References: <cover.1420142462.git.yann.morin.1998@free.fr>
-Message-ID: <3e5ffa778bc4dea304fd9897fc983c294a0c7dc9.1420142462.git.yann.morin.1998@free.fr>
+Message-ID: <a64a8b4e8ad98f4de42ac9e79265730aecc0a716.1420142462.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Add an option flag to all backends, as well as the check-hash script, so
+as to silence download helpers when the user wants a silent build.
 
-Because it's just checking the presence of the "s" character even a
-  make --warn-undefined-variables
-is detected as a silent build.
+Additionaly, make the default verbose.
 
-Fix that by filtering out long options.
+Inspired by Fabio's patch on git/svn.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note: cvs, cp and scp are not tested, because we do not have in-tree
+packages using those transport methods.
+---
+ support/download/bzr        | 23 ++++++++++++++++-------
+ support/download/check-hash |  8 ++++++++
+ support/download/cp         | 20 +++++++++++++++-----
+ support/download/cvs        | 23 +++++++++++++++--------
+ support/download/git        | 24 ++++++++++++++++--------
+ support/download/hg         | 24 ++++++++++++++++--------
+ support/download/scp        | 20 +++++++++++++++-----
+ support/download/svn        | 22 +++++++++++++++-------
+ support/download/wget       | 20 +++++++++++++++-----
+ 9 files changed, 131 insertions(+), 53 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 5e0b4f2..9995df7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -304,7 +304,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- TARGETS :=
+diff --git a/support/download/bzr b/support/download/bzr
+index c157ca8..96b0844 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -4,17 +4,26 @@
+ set -e
  
- # silent mode requested?
--QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-+QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+ # Download helper for bzr, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: bzr repo
+-#   $3: bzr revision
+-#   $4: basename
+-# And this environment:
++#
++# Call it as:
++#   .../bzr [-q] OUT_FILE REPO_URL REV BASENAME
++#
++# Environemnt:
+ #   BZR      : the bzr command to call
  
- # Strip off the annoying quoting
- ARCH := $(call qstrip,$(BR2_ARCH))
++
++verbose=-v
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ repo="${2}"
+ rev="${3}"
+ basename="${4}"
+ 
+-${BZR} export --root="${basename}/" --format=tgz "${output}" "${repo}" -r "${rev}"
++${BZR} export ${verbose} --root="${basename}/" --format=tgz "${output}" "${repo}" -r "${rev}"
+diff --git a/support/download/check-hash b/support/download/check-hash
+index b59fd2a..4c07274 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -10,6 +10,14 @@ set -e
+ #       saved as, to be able to match it to the corresponding hashes
+ #       in the .hash file
+ 
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  exec >/dev/null;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ h_file="${1}"
+ file="${2}"
+ base="${3}"
+diff --git a/support/download/cp b/support/download/cp
+index 463fc38..1c90f15 100755
+--- a/support/download/cp
++++ b/support/download/cp
+@@ -4,13 +4,23 @@
+ set -e
+ 
+ # Download helper for cp, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: source file
+-# And this environment:
++#
++# Call it as:
++#   .../cp [-q] OUT_FILE SRC_FILE
++#
++# Environment:
+ #   LOCALFILES: the cp command to call
+ 
++verbose=-v
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ source="${2}"
+ 
+-${LOCALFILES} "${source}" "${output}"
++${LOCALFILES} ${verbose} "${source}" "${output}"
+diff --git a/support/download/cvs b/support/download/cvs
+index 56a11c2..eca6fc4 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -4,22 +4,29 @@
+ set -e
+ 
+ # Download helper for cvs, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: cvs repo
+-#   $3: cvs revision
+-#   $4: package's name (eg. foobar)
+-#   $5: package's basename (eg. foobar-1.2.3)
+-# And this environment:
++#
++# Call it as:
++#   .../cvs [-q] OUT_FILE CVS_URL REV PKG_NAME BASENAME
++#
++# Environment:
+ #   CVS      : the cvs command to call
+ 
++verbose=
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-Q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ repo="${2}"
+ rev="${3}"
+ rawname="${4}"
+ basename="${5}"
+ 
+-${CVS} -z3 -d":pserver:anonymous@${repo}" \
++${CVS} ${verbose} -z3 -d":pserver:anonymous@${repo}" \
+        co -d "${basename}" -r ":${rev}" -P "${rawname}"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/git b/support/download/git
+index 5d36ca4..0a0e81c 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -4,14 +4,22 @@
+ set -e
+ 
+ # Download helper for git, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: git repo
+-#   $3: git cset
+-#   $4: package's basename (eg. foobar-1.2.3)
+-# And this environment:
++#
++# Call it as:
++#   .../git [-q] OUT_FILE REPO_URL CSET BASENAME
++#
++# Environment:
+ #   GIT      : the git command to call
+ 
++verbose=-v
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ repo="${2}"
+ cset="${3}"
+@@ -22,7 +30,7 @@ basename="${4}"
+ git_done=0
+ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+-    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
++    if ${GIT} clone ${verbose} --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
+         git_done=1
+     else
+         printf "Shallow clone failed, falling back to doing a full clone\n"
+@@ -30,7 +38,7 @@ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+-    ${GIT} clone --bare "${repo}" "${basename}"
++    ${GIT} clone ${verbose} --bare "${repo}" "${basename}"
+ fi
+ 
+ GIT_DIR="${basename}" \
+diff --git a/support/download/hg b/support/download/hg
+index 66bd2ed..0d212c0 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -4,21 +4,29 @@
+ set -e
+ 
+ # Download helper for hg, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: hg repo
+-#   $3: hg cset
+-#   $4: package's basename (eg. foobar-1.2.3)
+-# And this environment:
++#
++# Call it as:
++#   .../hg [-q] OUT_FILE REPO_URL CSET BASENAME
++#
++# Environment:
+ #   HG       : the hg command to call
+ 
++verbose=-v
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ repo="${2}"
+ cset="${3}"
+ basename="${4}"
+ 
+-${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
++${HG} clone ${verbose} --noupdate --rev "${cset}" "${repo}" "${basename}"
+ 
+-${HG} archive --repository "${basename}" --type tgz \
++${HG} archive ${verbose} --repository "${basename}" --type tgz \
+               --prefix "${basename}" --rev "${cset}" \
+               "${output}"
+diff --git a/support/download/scp b/support/download/scp
+index f3e92f3..189e5a4 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -4,13 +4,23 @@
+ set -e
+ 
+ # Download helper for scp, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: URL
+-# And this environment:
++#
++# Call it as:
++#   .../scp [-q] OUT_FILE SRC_URL
++#
++# Environment:
+ #   SCP       : the scp command to call
+ 
++verbose=-v
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ url="${2}"
+ 
+-${SCP} "${url}" "${output}"
++${SCP} ${verbose} "${url}" "${output}"
+diff --git a/support/download/svn b/support/download/svn
+index a960f7d..45fc4bf 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -4,19 +4,27 @@
+ set -e
+ 
+ # Download helper for svn, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: svn repo
+-#   $3: svn revision
+-#   $4: package's basename (eg. foobar-1.2.3)
+-# And this environment:
++#
++# Call it as:
++#   .../svn [-q] OUT_FILE REPO_URL REV BASNAME
++#
++# Environment:
+ #   SVN      : the svn command to call
+ 
++verbose=
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ repo="${2}"
+ rev="${3}"
+ basename="${4}"
+ 
+-${SVN} export "${repo}@${rev}" "${basename}"
++${SVN} export ${verbose} "${repo}@${rev}" "${basename}"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/wget b/support/download/wget
+index 6b73726..e7e1d38 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -4,13 +4,23 @@
+ set -e
+ 
+ # Download helper for wget, to be called from the download wrapper script
+-# Expected arguments:
+-#   $1: output file
+-#   $2: URL
+-# And this environment:
++#
++# Call it as:
++#   .../wget [-q] OUT_FILE URL
++#
++# Environment:
+ #   WGET     : the wget command to call
+ 
++verbose=-v
++while getopts :q OPT; do
++    case "${OPT}" in
++    q)  verbose=-q;;
++    \?) exit 1;;
++    esac
++done
++shift $((OPTIND-1))
++
+ output="${1}"
+ url="${2}"
+ 
+-${WGET} -O "${output}" "${url}"
++${WGET} ${verbose} -O "${output}" "${url}"
 -- 
 1.9.1
