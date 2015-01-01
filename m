@@ -1,66 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 15:04:32 +0100
-Subject: [Buildroot] [git commit] gengetopt: new package
-Message-ID: <20150101140644.862CF8080F@busybox.osuosl.org>
+Date: Thu, 1 Jan 2015 15:07:45 +0100
+Subject: [Buildroot] [PATCH v2 2/7] Adding gengetopt
+In-Reply-To: <1418398967-2183-3-git-send-email-gregd72002@gmail.com>
+References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
+ <1418398967-2183-3-git-send-email-gregd72002@gmail.com>
+Message-ID: <20150101150745.032ed18a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dadd8dd0b913f41faf4412dab8100965bb3fc621
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gregory Dymarek,
 
-Add a host only package, which will be needed for janus-gateway.
+On Fri, 12 Dec 2014 15:42:42 +0000, Gregory Dymarek wrote:
+> Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
+> ---
+>  package/Config.in                |  1 +
+>  package/Config.in.host           |  1 +
+>  package/gengetopt/Config.in      |  6 ++++++
+>  package/gengetopt/Config.in.host |  6 ++++++
+>  package/gengetopt/gengetopt.hash |  1 +
+>  package/gengetopt/gengetopt.mk   | 16 ++++++++++++++++
+>  6 files changed, 31 insertions(+)
+>  create mode 100644 package/gengetopt/Config.in
+>  create mode 100644 package/gengetopt/Config.in.host
+>  create mode 100644 package/gengetopt/gengetopt.hash
+>  create mode 100644 package/gengetopt/gengetopt.mk
 
-[Thomas:
-  - Improve commit log.
-  - Remove target variant of the package, not needed as we don't do
-    development on the target.
-  - Remove Config.in.host option for the package, there is not really
-    a need to select it from menuconfig, it's merely a build
-    dependency for another package.
-  - Fix format of hash file.
-  - Fix format of comment header in .mk file.
-  - Use BR2_GNU_MIRROR.
-  - License is GPLv3+, not GPLv3.
-  - Add 'LICENSE' to the license files, as it indicates that the
-    license is GPLv3+.
-  - Add an explanation about $(MAKE1) being used.]
+Thanks, applied, after doing a number of changes:
 
-Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gengetopt/gengetopt.hash |    2 ++
- package/gengetopt/gengetopt.mk   |   15 +++++++++++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+    [Thomas:
+      - Improve commit log.
+      - Remove target variant of the package, not needed as we don't do
+        development on the target.
+      - Remove Config.in.host option for the package, there is not really
+        a need to select it from menuconfig, it's merely a build
+        dependency for another package.
+      - Fix format of hash file.
+      - Fix format of comment header in .mk file.
+      - Use BR2_GNU_MIRROR.
+      - License is GPLv3+, not GPLv3.
+      - Add 'LICENSE' to the license files, as it indicates that the
+        license is GPLv3+.
+      - Add an explanation about $(MAKE1) being used.]
 
-diff --git a/package/gengetopt/gengetopt.hash b/package/gengetopt/gengetopt.hash
-new file mode 100644
-index 0000000..4f411ac
---- /dev/null
-+++ b/package/gengetopt/gengetopt.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 30b05a88604d71ef2a42a2ef26cd26df242b41f5b011ad03083143a31d9b01f7 gengetopt-2.22.6.tar.gz
-diff --git a/package/gengetopt/gengetopt.mk b/package/gengetopt/gengetopt.mk
-new file mode 100644
-index 0000000..7477d53
---- /dev/null
-+++ b/package/gengetopt/gengetopt.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# gengetopt
-+#
-+################################################################################
-+
-+GENGETOPT_VERSION = 2.22.6
-+GENGETOPT_SITE = $(BR2_GNU_MIRROR)/gengetopt/
-+GENGETOPT_LICENSE = GPLv3+
-+GENGETOPT_LICENSE_FILES = COPYING LICENSE
-+
-+# Parallel build broken
-+GENGETOPT_MAKE = $(MAKE1)
-+
-+$(eval $(host-autotools-package))
+See the final commit at
+http://git.buildroot.net/buildroot/commit/?id=dadd8dd0b913f41faf4412dab8100965bb3fc621.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
