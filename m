@@ -1,28 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 22:56:39 +0100
-Subject: [Buildroot] [PATCH 3/4 v9] pkg-download: silence downloads if
- make is silent
-In-Reply-To: <8537faa275be0b3bb0aec3da99d7aaf1c56db17c.1420142462.git.yann.morin.1998@free.fr>
-References: <cover.1420142462.git.yann.morin.1998@free.fr>
- <8537faa275be0b3bb0aec3da99d7aaf1c56db17c.1420142462.git.yann.morin.1998@free.fr>
-Message-ID: <20150101225639.2890512b@free-electrons.com>
+Date: Thu, 1 Jan 2015 22:57:51 +0100
+Subject: [Buildroot] [PATCHv1.0] szip: new package
+In-Reply-To: <1420144680-28163-1-git-send-email-ernesto@slac.stanford.edu>
+References: <1420144680-28163-1-git-send-email-ernesto@slac.stanford.edu>
+Message-ID: <20150101225751.2d487bc0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Ernesto L. Williams Jr,
 
-On Thu,  1 Jan 2015 21:03:52 +0100, Yann E. MORIN wrote:
-> From: Fabio Porcedda <fabio.porcedda@gmail.com>
-> 
-> If it is a silent build (make -s -> QUIET=-q) silence all downloads, as
-> well as the check-hash. This is done in two ways:
->   - redirect stdout to /dev/null
->   - pass the -q flag downward to backends
+On Thu,  1 Jan 2015 12:38:00 -0800, Ernesto L. Williams Jr wrote:
+> Signed-off-by: Ernesto L. Williams Jr <ernesto@slac.stanford.edu>
+> ---
+>  package/Config.in      |  1 +
+>  package/szip/Config.in | 15 +++++++++++++++
+>  package/szip/szip.mk   | 14 ++++++++++++++
+>  3 files changed, 30 insertions(+)
+>  create mode 100644 package/szip/Config.in
+>  create mode 100644 package/szip/szip.mk
 
-Why do we need to do both?
+Thanks, applied, with only minor changes:
+
+[Thomas:
+  - Add hash file.
+  - Rewrap Config.in help text and remove trailing whitespace.
+  - Remove unneeded empty new line at the end of the .mk file.]
+
+See the final commit at
+http://git.buildroot.net/buildroot/commit/?id=1efb5ad43dec5539e2fa1c9bc0c4b2fecfdcfa32.
+
+Thanks!
 
 Thomas
 -- 
