@@ -1,73 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Jan 2015 17:24:55 +0100
-Subject: [Buildroot] [PATCH v7 2/4] pkg-download: silence check-hash if
- it is a silent build
-In-Reply-To: <1419947920-22047-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1419947920-22047-1-git-send-email-fabio.porcedda@gmail.com>
- <1419947920-22047-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150101162455.GC4360@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Jan 2015 17:36:23 +0100
+Subject: [Buildroot] [git commit] imagemagick: needs thread support
+Message-ID: <20150101163739.14A8B8080C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=0319d627620dbdb26e08245c8a1a7a01aa9a010e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-12-30 14:58 +0100, Fabio Porcedda spake thusly:
-> If it is a silent build (make -s -> QUIET=-q) silence the "check-hash"
-> script.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+The no thread support in imagemagick is broken since the last
+bump. Since supporting non-threaded configurations is not that
+important, let's simply make imagemagick depend on thread support.
 
-Even though I acked it earlier, I missed something...
-Sorry... :-(
+Fixes:
 
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index b59fd2a..82f2e65 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -10,6 +13,19 @@ set -e
->  #       saved as, to be able to match it to the corresponding hashes
->  #       in the .hash file
->  
-> +quiet=
-> +while getopts "q" opt; do
-> +    case $opt in
-> +	q)
-> +	    quiet=-q
-> +	    ;;
-> +	\?)
-> +	    exit 1
-> +	    ;;
-> +    esac
+  http://autobuild.buildroot.org/results/4e6/4e6d0bbe120579ab4a54960ee794e8cf64b99e80/
 
-This script does not use TABs, so do not introduce any.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/Config.in |    5 +++++
+ package/php-imagick/Config.in |    6 ++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-> +done
-> +shift $((OPTIND-1))
-> +
->  h_file="${1}"
->  file="${2}"
->  base="${3}"
-> @@ -43,7 +59,9 @@ check_one_hash() {
->      # Do the hashes match?
->      _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
->      if [ "${_hash}" = "${_known}" ]; then
-> -        printf "%s: OK (%s: %s)\n" "${base}" "${_h}" "${_hash}"
-> +	if [ -z "${quiet}" ]; then
-> +            printf "%s: OK (%s: %s)\n" "${base}" "${_h}" "${_hash}"
-> +	fi
-
-Ditto, do not introduce TABs.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
+index 1bd04a9..0bd4df2 100644
+--- a/package/imagemagick/Config.in
++++ b/package/imagemagick/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IMAGEMAGICK
+ 	bool "imagemagick"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  ImageMagick(R) is a software suite to create, edit, and compose
+ 	  bitmap images. It can read, convert and write images in a variety of
+@@ -11,3 +12,7 @@ config BR2_PACKAGE_IMAGEMAGICK
+ 	  lines, polygons, ellipses and B??zier curves.
+ 
+ 	  http://www.imagemagick.org/
++
++comment "imagemagick needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-imagick/Config.in b/package/php-imagick/Config.in
+index a5e32a5..f759eea 100644
+--- a/package/php-imagick/Config.in
++++ b/package/php-imagick/Config.in
+@@ -2,8 +2,14 @@ config BR2_PACKAGE_PHP_IMAGICK
+ 	bool "php-imagick"
+ 	depends on BR2_PACKAGE_PHP
+ 	depends on BR2_USE_MMU # imagemagick
++	depends on BR2_TOOLCHAIN_HAS_THREADS # imagemagick
+ 	select BR2_PACKAGE_IMAGEMAGICK
+ 	help
+ 	  PHP wrapper to the ImageMagick library.
+ 
+ 	  http://pecl.php.net/package/imagick
++
++comment "php-imagemagick needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_PHP
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
