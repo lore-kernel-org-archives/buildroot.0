@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 16:56:10 +0100
-Subject: [Buildroot] [git commit] lcms2: install to staging
-Message-ID: <20150101155710.9C04D807F3@busybox.osuosl.org>
+Date: Thu, 1 Jan 2015 16:57:24 +0100
+Subject: [Buildroot] [PATCH 1/2 try 2] lcms2: Install into staging
+In-Reply-To: <54A2FFA2.8010208@dawncrow.de>
+References: <54A2FFA2.8010208@dawncrow.de>
+Message-ID: <20150101165724.168088bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6a012a1b8fd841a855a0b89ba347db45bbff8c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Andr? Hentschel,
 
-Other packages might depend on lcms2, thus it should install its
-development files.
+On Tue, 30 Dec 2014 20:40:18 +0100, Andr? Hentschel wrote:
+> Other packages might depend on lcms2, thus it should install it's development files.
+> I'm working on a clean Wine package and it wasn't able to find lcms2.
+> 
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/lcms2/lcms2.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lcms2/lcms2.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Applied, thanks!
 
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 5d22041..42b2669 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -8,6 +8,7 @@ LCMS2_VERSION = 2.5
- LCMS2_SITE = http://downloads.sourceforge.net/lcms/lcms
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
-+LCMS2_INSTALL_STAGING = YES
- 
- LCMS2_CONF_OPTS = \
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
