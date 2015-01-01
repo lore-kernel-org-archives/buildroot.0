@@ -1,26 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 22:38:58 +0100
-Subject: [Buildroot] [git commit] libsemanage: add hash file
-Message-ID: <20150101213911.4D8BB807E1@busybox.osuosl.org>
+Date: Thu, 1 Jan 2015 22:43:13 +0100
+Subject: [Buildroot] [PATCH 03/30] libsemanage: new package
+In-Reply-To: <1418702062-61039-4-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1418702062-61039-4-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20150101224313.792719f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27d6b6ad5fd028bb650ad10ea163f8adcbf1383e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Matt Weber,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsemanage/libsemanage.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Mon, 15 Dec 2014 21:53:55 -0600, Matt Weber wrote:
+> From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> 
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../libsemanage/0001-execption-lib-path-fix.patch  | 14 +++++
+>  package/libsemanage/Config.in                      | 30 +++++++++
+>  package/libsemanage/libsemanage.mk                 | 72 ++++++++++++++++++++++
+>  4 files changed, 117 insertions(+)
+>  create mode 100644 package/libsemanage/0001-execption-lib-path-fix.patch
+>  create mode 100644 package/libsemanage/Config.in
+>  create mode 100644 package/libsemanage/libsemanage.mk
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-new file mode 100644
-index 0000000..d4204d1
---- /dev/null
-+++ b/package/libsemanage/libsemanage.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 de2e8077245581e94576276f54e80a53c23c28d6961d2dfbe2f004eaba452e91 libsemanage-2.1.10.tar.gz
+Patch applied. On this one, I did a mistake, and forgot to squash my
+changes into your original commit, so you have three separate commits:
+
+  http://git.buildroot.net/buildroot/commit/?id=77872678accd4d98cd3aa3d95a34738861844e31
+  http://git.buildroot.net/buildroot/commit/?id=a963685245d4ad25b40520b251024720c3b18e11
+  http://git.buildroot.net/buildroot/commit/?id=27d6b6ad5fd028bb650ad10ea163f8adcbf1383e
+
+One thing to add would be Python 3 support, but I'll reply to your
+cover letter with a more generic question about those packages.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
