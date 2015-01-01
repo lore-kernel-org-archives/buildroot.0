@@ -1,48 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jan 2015 00:02:23 +0100
-Subject: [Buildroot] [git commit] defconfigs: bump openblocks a6 kernel to
-	3.18.1
-Message-ID: <20150101230316.D461280464@busybox.osuosl.org>
+Date: Fri, 02 Jan 2015 00:15:24 +0100
+Subject: [Buildroot] [PATCH 2/7] linux: add option to rely on a
+	bootloader-provided DTB
+In-Reply-To: <20150101231700.75d142fd@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 1 Jan 2015 23:17:00 +0100")
+References: <cover.1420142707.git.yann.morin.1998@free.fr>
+ <e330f5c885f762feb6f4d7487fe3f6aa29c7fca3.1420142707.git.yann.morin.1998@free.fr>
+ <20150101222449.18453adb@free-electrons.com>
+ <20150101214435.GJ4360@free.fr>
+ <20150101225102.64944ac5@free-electrons.com>
+ <20150101215845.GK4360@free.fr>
+ <20150101231700.75d142fd@free-electrons.com>
+Message-ID: <87k3169joz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c089bb25e2a2d7f44f2ce6e7a98e25dcd4594d0b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-And move to mvebu_v5_defconfig as kirkwood has been merged with mvebu since
-3.17.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/openblocks_a6_defconfig |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ > Dear Yann E. MORIN,
+ > On Thu, 1 Jan 2015 22:58:45 +0100, Yann E. MORIN wrote:
 
-diff --git a/configs/openblocks_a6_defconfig b/configs/openblocks_a6_defconfig
-index 582fa30..d9994f2 100644
---- a/configs/openblocks_a6_defconfig
-+++ b/configs/openblocks_a6_defconfig
-@@ -11,15 +11,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K=y
- 
--# Lock to 3.14 headers to avoid breaking with newer kernels
-+# Lock to 3.18 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.14.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18.1"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.14.3"
--BR2_LINUX_KERNEL_DEFCONFIG="kirkwood"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="kirkwood-openblocks_a6"
+ >> However, I beg to disagree on that last part: I think we should have
+ >> this as an option in Buildroot.
+ >> 
+ >> The reason is that some platforms can be built with or without support
+ >> for the device tree. The Raspberry Pi is but one such platform; there
+ >> are others. Their defconfig do not always enable USE_OF by default, it
+ >> must be a volunteer selection from the user.
+ >> 
+ >> In that case, your opinion is to delegate to the user the responsibility
+ >> to enable that on his own, right? So, it would no longer be possible to
+ >> use in-tree defconfigs for those boards, for example.
+
+ > Well, to me this is a slippery slope. There are gazillions of kernel
+ > options that do platform-specific stuff. So far, we really tried hard
+ > to limit how much Buildroot modifies the kernel options, and tried to
+ > limit that to cases related to userspace components enabled by the user
+ > that really need some feature in the kernel.
+
+ > Let's see what Peter thinks about this, he might very well have a
+ > different opinion on this.
+
+I must say I'm with Thomas on this one. Let's not fiddle with the kernel
+.config unless we really _HAVE_ to.
+
+-- 
+Bye, Peter Korsgaard
