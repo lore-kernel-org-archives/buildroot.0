@@ -1,47 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 22:43:13 +0100
-Subject: [Buildroot] [PATCH 03/30] libsemanage: new package
-In-Reply-To: <1418702062-61039-4-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1418702062-61039-4-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20150101224313.792719f5@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 1 Jan 2015 22:44:35 +0100
+Subject: [Buildroot] [PATCH 2/7] linux: add option to rely on a
+ bootloader-provided DTB
+In-Reply-To: <20150101222449.18453adb@free-electrons.com>
+References: <cover.1420142707.git.yann.morin.1998@free.fr>
+ <e330f5c885f762feb6f4d7487fe3f6aa29c7fca3.1420142707.git.yann.morin.1998@free.fr>
+ <20150101222449.18453adb@free-electrons.com>
+Message-ID: <20150101214435.GJ4360@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Thomas, All,
 
-On Mon, 15 Dec 2014 21:53:55 -0600, Matt Weber wrote:
-> From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+On 2015-01-01 22:24 +0100, Thomas Petazzoni spake thusly:
+> On Thu,  1 Jan 2015 21:23:48 +0100, Yann E. MORIN wrote:
+> > On some platforms (e.g. the Raspberry Pi), the DTB is already bundled
+> > with the bootloader, and installed with it. On some other platforms, the
+> > DTB might even be stored on the device itself (which is the ultimate
+> > goal of the DTB).
+> > 
+> > So far, when we build a kernel with DT support, we forcibly want a to
+> > also build the DTB blob, which goes against the situations described
+> > above.
+> > 
+> > Add a new option in the DT choice, to specify the DTB will be provided
+> > by the bootloader or the device itself.
+> > 
+> > This also means we must be a little bit more selective when we check the
+> > validity of the DTS name at build time.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/Config.in                                  |  1 +
->  .../libsemanage/0001-execption-lib-path-fix.patch  | 14 +++++
->  package/libsemanage/Config.in                      | 30 +++++++++
->  package/libsemanage/libsemanage.mk                 | 72 ++++++++++++++++++++++
->  4 files changed, 117 insertions(+)
->  create mode 100644 package/libsemanage/0001-execption-lib-path-fix.patch
->  create mode 100644 package/libsemanage/Config.in
->  create mode 100644 package/libsemanage/libsemanage.mk
+> I don't really see the point of this. If you don't want to build a DTB,
+> then don't tell Buildroot that you want to build a DTB, and that's it.
+> Why would we want such a patch?
+> 
+> Enabling CONFIG_OF should be done by the platform defconfig. It really
+> is tied to how the platform is supported in the Linux kernel, and is
+> not something that Buildroot should touch IMO.
 
-Patch applied. On this one, I did a mistake, and forgot to squash my
-changes into your original commit, so you have three separate commits:
+Fact is, the prompt reads:
 
-  http://git.buildroot.net/buildroot/commit/?id=77872678accd4d98cd3aa3d95a34738861844e31
-  http://git.buildroot.net/buildroot/commit/?id=a963685245d4ad25b40520b251024720c3b18e11
-  http://git.buildroot.net/buildroot/commit/?id=27d6b6ad5fd028bb650ad10ea163f8adcbf1383e
+    [*] Device tree support
 
-One thing to add would be Python 3 support, but I'll reply to your
-cover letter with a more generic question about those packages.
+So, I take that as "build a kernel with support for the device tree",
+not as "build a DTB".
 
-Thanks,
+But Now I think of it, this patch is doing two things:
 
-Thomas
+  - enable USE_OF when that option is enabled,
+
+  - add support for bootloader- or board-provided DTB.
+
+Maybe that should be split up in two, then?
+
+Or do you still want that option to mean "build a DTB" ?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
