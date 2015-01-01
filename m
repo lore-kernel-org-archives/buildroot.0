@@ -1,42 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  1 Jan 2015 23:08:19 +0100
-Subject: [Buildroot] [PATCH] linux: change DEvice Tree prompt
-Message-ID: <1420150099-13977-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Jan 2015 23:10:33 +0100
+Subject: [Buildroot] [git commit] sunxi-tools: bump version
+Message-ID: <20150101221111.72B8C807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current prompt seem to imp[ly that we want to add Device Tree
-support to the Linux kernel:
+commit: http://git.buildroot.net/buildroot/commit/?id=35bf5576b054668bc980bdf63ad024598d912a8a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-    [*] Device tree support
-
-But what it really means is that Buildroot will build a DTB.
-
-Change the prompt so that it is obvious that this is the intended
-behaviour, and users do not get mislead as to why Device Tree support is
-not automatically added to their Linux kernel.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sunxi-tools/sunxi-tools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ba4b574..541002e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -269,7 +269,7 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
- 	  If unsure, let this option empty.
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index f84b286..2dfd496 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_DTS_SUPPORT
--	bool "Device tree support"
-+	bool "Build a Device Tree Blob (DTB)"
- 	help
- 	  Compile a device tree source into a device tree blob.
- 	  Select the dts file to compile in the options below.
--- 
-1.9.1
+-SUNXI_TOOLS_VERSION = ed6f7969d80b91048b0ed95ccb61cc98f46fead7
++SUNXI_TOOLS_VERSION = v1.2
+ SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
+ SUNXI_TOOLS_LICENSE = GPLv2+
+ SUNXI_TOOLS_LICENSE_FILES = COPYING
