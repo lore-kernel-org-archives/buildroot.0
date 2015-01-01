@@ -1,32 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 11:29:40 +0100
-Subject: [Buildroot] [PATCH] glibc: add debug symbols when
- BR2_ENABLE_DEBUG
-In-Reply-To: <5517167ba77f268eeeaa8c5763078aeeb53741c6.1420107403.git.baruch@tkos.co.il>
-References: <5517167ba77f268eeeaa8c5763078aeeb53741c6.1420107403.git.baruch@tkos.co.il>
-Message-ID: <20150101112940.0d1859fa@free-electrons.com>
+Date: Thu, 1 Jan 2015 11:30:34 +0100
+Subject: [Buildroot] [PATCH v2 4/7] Adding libsrtp
+In-Reply-To: <1418398967-2183-5-git-send-email-gregd72002@gmail.com>
+References: <1418398967-2183-1-git-send-email-gregd72002@gmail.com>
+ <1418398967-2183-5-git-send-email-gregd72002@gmail.com>
+Message-ID: <20150101113034.78251c0d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Gregory Dymarek,
 
-On Thu,  1 Jan 2015 12:16:43 +0200, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Fri, 12 Dec 2014 15:42:44 +0000, Gregory Dymarek wrote:
+> Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
 > ---
->  package/glibc/glibc.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/Config.in            |  1 +
+>  package/libsrtp/Config.in    |  5 +++++
+>  package/libsrtp/libsrtp.hash |  1 +
+>  package/libsrtp/libsrtp.mk   | 13 +++++++++++++
+>  4 files changed, 20 insertions(+)
+>  create mode 100644 package/libsrtp/Config.in
+>  create mode 100644 package/libsrtp/libsrtp.hash
+>  create mode 100644 package/libsrtp/libsrtp.mk
 
-Thanks!
+Thanks, applied, after doing numerous changes:
 
-Do you know if there's an easy way of checking if ELF binaries have
-debugging symbols? If so, we could add a check to verify that all ELF
-binaries have debugging symbols when BR2_ENABLE_DEBUG=y, and add this
-check in the autobuilders.
+[Thomas:
+ - Add better Config.in help text and fix its indentation
+ - Fix comment header in .mk file
+ - Uncomment useful commented lines in .mk file (SITE and AUTORECONF)
+ - Add LICENSE_FILES variable.
+ - Add handling of static/shared libraries build/installation.
+ - Add dependency on host-pkgconf, so that libsrtp installs its own
+   .pc file.
+ - Add optional dependency on OpenSSL.
+ - Use github helper.
+ - Remove hash file, since we're downloading from Git.]
 
-Best regards,
+See
+http://git.buildroot.net/buildroot/commit/?id=10f42fa8ae8d05bf36fd5e65f0ab2a1315cab18d
+for the final commit.
+
+Thanks,
 
 Thomas
 -- 
