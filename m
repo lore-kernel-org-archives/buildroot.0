@@ -1,54 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  1 Jan 2015 17:50:47 +0100
-Subject: [Buildroot] [PATCH 0/2 v8] Improve silent builds (branch
-	yem/fabio/silent)
-Message-ID: <cover.1420130984.git.yann.morin.1998@free.fr>
+Date: Thu,  1 Jan 2015 17:50:51 +0100
+Subject: [Buildroot] [PATCH 1/2 v8] Makefile: improve detection of make "-s"
+	flag
+In-Reply-To: <cover.1420130984.git.yann.morin.1998@free.fr>
+References: <cover.1420130984.git.yann.morin.1998@free.fr>
+Message-ID: <0f90e48e3c0e40f86291208d0e4f4da050d575d2.1420130984.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-This patch set improves silent builds.
+Because it's just checked the presence of the "s" character even a
+  make --warn-undefined-variables
+is detected as a silent build so fix this by filtering out long options.
 
-Silent builds are also nice when top-level parallel make is being used
-to reduce the output clutter.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v7 -> v8:
-  - simply by just consigning stdout to oblivion  (Yann)
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit b7e7b417fa1210a7f9c4e76ee747238981dcd012:
-
-  wpa_supplicant: fix indentation and change file permissions (2015-01-01 11:31:14 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/fabio/silent
-
-for you to fetch changes up to 70490271dbf1774e87cc5dab1a5e907105afeb62:
-
-  pkg-download: silence downloads if make is silent (2015-01-01 17:47:49 +0100)
-
-----------------------------------------------------------------
-Fabio Porcedda (2):
-      Makefile: improve detection of make "-s" flag
-      pkg-download: silence downloads if make is silent
-
- Makefile                    | 2 +-
- package/pkg-download.mk     | 8 ++++++++
- support/download/dl-wrapper | 3 ++-
- 3 files changed, 11 insertions(+), 2 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 5e0b4f2..9995df7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -304,7 +304,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ TARGETS :=
+ 
+ # silent mode requested?
+-QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
++QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+ 
+ # Strip off the annoying quoting
+ ARCH := $(call qstrip,$(BR2_ARCH))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
