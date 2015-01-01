@@ -1,231 +1,116 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Sat, 01 Nov 2014 00:46:05 +0100
-Subject: [Buildroot] [git commit] avahi: fix avahi-ui build with libgtk3
-In-Reply-To: <20141031115353.56D52B23C4@busybox.osuosl.org>
-References: <20141031115353.56D52B23C4@busybox.osuosl.org>
-Message-ID: <1414799165.15213.1.camel@posteo.de>
+From: Ernest L Williams <ernesto@slac.stanford.edu>
+Date: Wed, 31 Dec 2014 16:53:46 -0800
+Subject: [Buildroot] Newbie: My first buildroot package:  szip
+In-Reply-To: <20141231091751.7c216ddf@free-electrons.com>
+References: <56b145c20d5d4a48b74921b5caced5e6@exch13-mail06.win.slac.stanford.edu>
+ <20141231091751.7c216ddf@free-electrons.com>
+Message-ID: <54A49A9A.8000906@slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fr, 2014-10-31 at 12:50 +0100, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=e6c04e6daae674f8983ec2fb106fb897c6803c32
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/daa/daad247db16818f25ab33402e26e27257defbe13/
-> http://autobuild.buildroot.net/results/720/720e2c8a5eab8b47d2510fe03b4a90ec8beafc17/
-> http://autobuild.buildroot.net/results/02b/02b4ab9ee07707ee4a4d4ea2b9c67bee91b1392d/
-> http://autobuild.buildroot.net/results/819/81914317ce82dc1321484d8c2b65647f92aa6929/
-> 
-> And many others.
-> 
-> avahi-ui uses deprecated gtk functionality, but explicitly requests to
-> disable the deprecated API support in gtk - Breaking the build when building
-> against libgtk3.
-> 
-> Patch is taken from Fedora:
-> https://bugzilla.redhat.com/show_bug.cgi?id=1001676
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/avahi/avahi-no-gtk-deprecations.patch |   31 +++++++++++++++++++++++++
->  package/avahi/avahi.mk                        |    1 +
->  2 files changed, 32 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/avahi/avahi-no-gtk-deprecations.patch b/package/avahi/avahi-no-gtk-deprecations.patch
-> new file mode 100644
-> index 0000000..3a284d0
-> --- /dev/null
-> +++ b/package/avahi/avahi-no-gtk-deprecations.patch
-> @@ -0,0 +1,31 @@
-> +Patch from http://pkgs.fedoraproject.org/cgit/avahi.git/plain/avahi-0.6.31-no-deprecations.patch?id=b3f4de05e331258c5123e3acc144e452595c2112
-> +
-> +Don't disable deprecated GTK support, as that breaks builds with modern GTK3
-> +versions.
-> +
-> +For more details, see the Fedora bugzilla:
-> +https://bugzilla.redhat.com/show_bug.cgi?id=1001676
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +--- avahi-0.6.31/avahi-ui/Makefile.am.orig	2013-09-21 16:47:28.677659361 +0200
-> ++++ avahi-0.6.31/avahi-ui/Makefile.am	2013-09-21 16:47:34.852520537 +0200
-> +@@ -15,7 +15,7 @@
-> + # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-> + # USA.
-> + 
-> +-AM_CFLAGS=-I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 -DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1
-> ++AM_CFLAGS=-I$(top_srcdir)
-> + 
-> + # This cool debug trap works on i386/gcc only
-> + AM_CFLAGS+='-DDEBUG_TRAP=__asm__("int $$3")'
-> +--- avahi-0.6.31/configure.ac.orig	2013-09-21 16:46:43.750669413 +0200
-> ++++ avahi-0.6.31/configure.ac	2013-09-21 16:47:02.566246400 +0200
-> +@@ -92,7 +92,7 @@
-> +     AC_MSG_CHECKING([whether stack-smashing protection is available])
-> +     ssp_old_cflags="$CFLAGS"
-> +     ssp_old_ldflags="$LDFLAGS"
-> +-    CFLAGS="$CFLAGS -Werror -fstack-protector-all -fPIC"
-> ++    CFLAGS="$CFLAGS -fstack-protector-all -fPIC"
-> +     LDFLAGS="$LDFLAGS -Wl,-z,defs"
-> +     cat confdefs.h > conftest.c
-> +     cat >>conftest.c <<_ACEOF
-> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-> index 4e5dbc6..e4c327d 100644
-> --- a/package/avahi/avahi.mk
-> +++ b/package/avahi/avahi.mk
-> @@ -16,6 +16,7 @@ AVAHI_SITE = http://www.avahi.org/download
->  AVAHI_LICENSE = LGPLv2.1+
->  AVAHI_LICENSE_FILES = LICENSE
->  AVAHI_INSTALL_STAGING = YES
-> +AVAHI_AUTORECONF = YES
->  
->  AVAHI_CONF_ENV = ac_cv_func_strtod=yes \
->  		ac_fsusage_space=yes \
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hi Thomas,
 
-This patch breaks building avahi for me. Is autoreconf really intended?
-Removing it fixed my build.
+On 12/31/2014 12:17 AM, Thomas Petazzoni wrote:
+> Dear Williams Jr., Ernest L.,
+>
+> On Wed, 31 Dec 2014 03:58:06 +0000, Williams Jr., Ernest L. wrote:
+>
+>> ======= Begin Config.in ==============================================
+>> config BR2_PACKAGE_SZIP
+>>          bool "szip"
+>>          help
+>>           Szip is an implementation of the extended-Rice lossless compression algorithm.
+>>           The Consultative Committee on Space Data Systems (CCSDS) has adopted the
+>>           extended-Rice algorithm for international standards for space applications[1,6,7].
+>>           Szip is reported to provide fast and effective compression, specifically for
+>>           the EOS data generated by the NASA Earth Observatory System (EOS)[1].
+>>           It was originally developed at University of New Mexico (UNM) and
+>>           integrated with HDF4 by UNM researchers and developers.
+>>
+>>            http://www.hdfgroup.org/doc_resource/SZIP
+>> ============ End Config.in ============================================
+> This looks good, with some minor issues:
+>
+>   * Indentation for 'bool' and 'help' should be one tab
+>   * Indentation for the help text should be one tab + two spaces
+>   * The help text should be wrapped to not go over 72 columns
+Thanks, I have corrected this.  :)
 
-        >>> avahi 0.6.31 Autoreconfiguring
-        configure.ac:419: warning: macro 'AM_GLIB_GNU_GETTEXT' not found
-        in library
-        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
-        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
-        from...
-        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
-        from...
-        configure.ac:143: the top level
-        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        configure.ac:300: the top level
-        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
-        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
-        from...
-        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
-        from...
-        configure.ac:143: the top level
-        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        configure.ac:300: the top level
-        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
-        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
-        from...
-        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
-        from...
-        configure.ac:143: the top level
-        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        configure.ac:300: the top level
-        libtoolize: putting auxiliary files in `.'.
-        libtoolize: copying file `./ltmain.sh'
-        libtoolize: putting macros in AC_CONFIG_MACRO_DIR, `common'.
-        libtoolize: copying file `common/libtool.m4'
-        libtoolize: copying file `common/ltoptions.m4'
-        libtoolize: copying file `common/ltsugar.m4'
-        libtoolize: copying file `common/ltversion.m4'
-        libtoolize: copying file `common/lt~obsolete.m4'
-        configure.ac:419: warning: macro 'AM_GLIB_GNU_GETTEXT' not found
-        in library
-        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
-        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
-        from...
-        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
-        from...
-        configure.ac:143: the top level
-        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        configure.ac:300: the top level
-        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
-        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
-        from...
-        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
-        from...
-        configure.ac:143: the top level
-        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        configure.ac:300: the top level
-        configure.ac:143: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        ../../lib/autoconf/general.m4:2590: _AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/autoconf/general.m4:2606: AC_COMPILE_IFELSE is
-        expanded from...
-        ../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
-        ../../lib/autoconf/general.m4:2031: AC_CACHE_VAL is expanded
-        from...
-        ../../lib/autoconf/general.m4:2052: AC_CACHE_CHECK is expanded
-        from...
-        configure.ac:143: the top level
-        configure.ac:300: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE
-        call detected in body
-        ../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded
-        from...
-        configure.ac:300: the top level
-        configure.ac:419: error: possibly undefined macro:
-        AM_GLIB_GNU_GETTEXT
-              If this token and others are legitimate, please use
-        m4_pattern_allow.
-              See the Autoconf documentation.
-        autoreconf: /home/joerg/git/buildroot/output/host/usr/bin/autoconf failed with exit status: 1
-        package/pkg-generic.mk:172: recipe for target
-        '/home/joerg/git/buildroot/output/build/avahi-0.6.31/.stamp_configured' failed
-        make: ***
-        [/home/joerg/git/buildroot/output/build/avahi-0.6.31/.stamp_configured] Error 1
+
+> Also, you may want to check if szip needs MMU support, or other
+> toolchain features (largefile, etc.)
+Thanks, szip does not need MMU or largefile support.
+
+However, hdf5 will indeed require "largefile" support. :)
+
+> .
+>
+>> ################################################################################
+>> #
+>> # szip
+>> #
+>> ################################################################################
+>>
+>> SZIP_VERSION = 2.1
+>> SZIP_SOURCE = szip-$(SZIP_VERSION).tar.gz
+> This line is not needed, as this is the default.
+Okay, I removed that line.
+
+
+>> SZIP_SITE = http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src
+>> SZIP_LICENSE = szip license
+>> SZIP_LICENSE_FILES = COPYING
+>> SZIP_INSTALL_STAGING = YES
+>>
+>> $(eval $(autotools-package))
+> Other than that, szip.mk looks good.
+>
+Awesome, I rebuilt the package with success after the recommended changes
+
+
+>> [ernesto at localhost package]$ diff -c Config.in Config.in.orig
+>> *** Config.in   2014-12-30 17:36:57.044105994 -0800
+>> --- Config.in.orig      2014-12-30 19:42:29.344642576 -0800
+>> ***************
+>> *** 575,581 ****
+>>          source "package/lzo/Config.in"
+>>          source "package/snappy/Config.in"
+>>          source "package/zlib/Config.in"
+>> -       source "package/szip/Config.in"
+> This patch is obviously reversed: the szip line should be added, not
+> removed.
+Oops, I will fix that as well. :)
+
+
+>> Please tell me how to submit this new package as a patch set.
+>> Also, please let me know if I did the above procedure properly.
+> You will have to learn a little bit of Git. This will not be a lost
+> investment done only for Buildroot: Git is now the version control
+> system used by the vast majority of open-source projects.
+>
+> You can read
+> http://buildroot.org/downloads/manual/manual.html#submitting-patches
+> for some details, but those details assume a little bit of familiarity
+> with Git.
+>
+> Maybe http://rypress.com/tutorials/git/patch-workflows is a good
+> starting point?
+Thanks for these great references.  They were excellent.
+I will now prepare tp contribute a patch for the szip package according 
+to the
+buildroot workflow referenced in your documentation.
+
+
+Thanks again.
+
+Cheers,
+Ernesto
+
+
+
+> Best regards,
+>
+> Thomas
