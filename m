@@ -1,59 +1,49 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu,  1 Jan 2015 21:54:38 +0100
-Subject: [Buildroot] [PATCH v2 2/2] Makefile: pass host PKG_CONFIG_PATH at
-	"make menuconfig" time
-In-Reply-To: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <1420145678-11134-3-git-send-email-bjorn.forsman@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Jan 2015 22:24:49 +0100
+Subject: [Buildroot] [PATCH 2/7] linux: add option to rely on a
+ bootloader-provided DTB
+In-Reply-To: <e330f5c885f762feb6f4d7487fe3f6aa29c7fca3.1420142707.git.yann.morin.1998@free.fr>
+References: <cover.1420142707.git.yann.morin.1998@free.fr>
+ <e330f5c885f762feb6f4d7487fe3f6aa29c7fca3.1420142707.git.yann.morin.1998@free.fr>
+Message-ID: <20150101222449.18453adb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot unexports PKG_CONFIG_PATH in the top-level Makefile for purity
-reasons. But it has an unfortunate side-effect in that "make menuconfig"
-will not (necessarily) be able to pick up ncurses via host pkg-config,
-breaking "make menuconfig" on systems where ncurses is installed in a
-non-standard location.
+Dear Yann E. MORIN,
 
-This patch saves the original PKG_CONFIG_PATH variable in
-HOST_PKG_CONFIG_PATH and restores the original PKG_CONFIG_PATH variable
-only in the sub-processes that builds the various menuconfig/nconfig/...
-targets.
+On Thu,  1 Jan 2015 21:23:48 +0100, Yann E. MORIN wrote:
+> On some platforms (e.g. the Raspberry Pi), the DTB is already bundled
+> with the bootloader, and installed with it. On some other platforms, the
+> DTB might even be stored on the device itself (which is the ultimate
+> goal of the DTB).
+> 
+> So far, when we build a kernel with DT support, we forcibly want a to
+> also build the DTB blob, which goes against the situations described
+> above.
+> 
+> Add a new option in the DT choice, to specify the DTB will be provided
+> by the bootloader or the device itself.
+> 
+> This also means we must be a little bit more selective when we check the
+> validity of the DTS name at build time.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-With this change, I am able to run "make menuconfig" on NixOS[1].
+I don't really see the point of this. If you don't want to build a DTB,
+then don't tell Buildroot that you want to build a DTB, and that's it.
+Why would we want such a patch?
 
-[1]: http://nixos.org/
+Enabling CONFIG_OF should be done by the platform defconfig. It really
+is tied to how the platform is supported in the Linux kernel, and is
+not something that Buildroot should touch IMO.
 
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- Makefile | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/Makefile b/Makefile
-index 5e0b4f2..2f1108f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -264,6 +264,7 @@ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
- 
- # Make sure pkg-config doesn't look outside the buildroot tree
-+export HOST_PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
- unexport PKG_CONFIG_PATH
- unexport PKG_CONFIG_SYSROOT_DIR
- unexport PKG_CONFIG_LIBDIR
-@@ -692,7 +693,10 @@ export HOSTCFLAGS
- 
- $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
--	$(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
-+	(export PKG_CONFIG_PATH=$(HOST_PKG_CONFIG_PATH); \
-+	 $(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" \
-+	         obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F) \
-+	)
- 
- DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
- 
+Thomas
 -- 
-2.1.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
