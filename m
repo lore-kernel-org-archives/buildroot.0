@@ -1,28 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jan 2015 23:03:07 +0100
-Subject: [Buildroot] [PATCH 32/51] sunxi-mali-prop: bump version
-In-Reply-To: <1414349157-22749-32-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-32-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150101230307.76e2fb8d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  1 Jan 2015 23:08:19 +0100
+Subject: [Buildroot] [PATCH] linux: change DEvice Tree prompt
+Message-ID: <1420150099-13977-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+The current prompt seem to imp[ly that we want to add Device Tree
+support to the Linux kernel:
 
-On Sun, 26 Oct 2014 19:45:38 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/sunxi-mali-prop/sunxi-mali-prop.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+    [*] Device tree support
 
-Applied, thanks.
+But what it really means is that Buildroot will build a DTB.
 
-Thomas
+Change the prompt so that it is obvious that this is the intended
+behaviour, and users do not get mislead as to why Device Tree support is
+not automatically added to their Linux kernel.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index ba4b574..541002e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -269,7 +269,7 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+ 	  If unsure, let this option empty.
+ 
+ config BR2_LINUX_KERNEL_DTS_SUPPORT
+-	bool "Device tree support"
++	bool "Build a Device Tree Blob (DTB)"
+ 	help
+ 	  Compile a device tree source into a device tree blob.
+ 	  Select the dts file to compile in the options below.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
