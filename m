@@ -1,68 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 21:09:40 +0100
-Subject: [Buildroot] [git commit] libselinux: needs shared library support
-Message-ID: <20150102201013.3A1B2801F4@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 2 Jan 2015 14:59:17 -0600
+Subject: [Buildroot] [PATCH 00/29] SELinux Buildroot Additions
+In-Reply-To: <20150101224717.2a063a90@free-electrons.com>
+References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20150101224717.2a063a90@free-electrons.com>
+Message-ID: <CANQCQpYzQyMBd8eKvJ8NtB59JpUvSfost6J+5k1gvKKqxNU+eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2dc5e21cfe1fecfe766b67df4f5a1450c053f41
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-Even though technically libselinux could make its <dlfcn.h> include
-optional, the build system isn't really suited to build and install
-only the static variant of libselinux, so let's make libselinux and
-its reverse dependency not available in pure-static environments.
+On Jan 1, 2015 3:47 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Dear Matt Weber,
+>
+> On Mon, 15 Dec 2014 21:53:52 -0600, Matt Weber wrote:
+>
+> > ### What's in this patchset?
+> >
+> > This patchset adds the required userspace tools, libraries, example
+> > QEMU target, existing package modifications, and initial policy
+> > to Buildroot.
+>
+> Thanks for this patch series. As you've seen, I've started integrating
+> the first patches. However, the tarballs are not located where
+> specified by your .mk file (the build worked in my
+> case because I had the tarballs locally). And the selinuxproject.org
+> site is down currently, so I can't fix anything. This is causing some
+> build failures such as:
+>
+>
+http://autobuild.buildroot.org/results/a95/a95412f8e78a64bbbf5a7981db35cdea0108e8b4/build-end.log
+>
+> If we can't find an upstream location with those tarballs quickly, then
+> I'll disable those packages for now.
+>
 
-Fixes:
+Oops, yeah i was working off a mirror.
 
-  http://autobuild.buildroot.org/results/90d/90dc73980a45b9b0441be3d493b22e3afea3cd6e/
+Looks like a patch moving to the new repo was submitted earlier today.
+I'll go through and retest with those locations. Plus see if any of the
+other patches have the same issue.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libselinux/Config.in  |    5 +++--
- package/libsemanage/Config.in |    5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+> Also, it seems that Debian has libselinux 2.3, while your package is
+> still using 2.1. Would it be possible to bump to 2.3 at some point?
 
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-index c8a23b3..e4d1309 100644
---- a/package/libselinux/Config.in
-+++ b/package/libselinux/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_PCRE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_LARGEFILE
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  libselinux is the runtime SELinux library that provides
- 	  interfaces (e.g. library functions for the SELinux kernel
-@@ -15,5 +16,5 @@ config BR2_PACKAGE_LIBSELINUX
- 
- 	  http://selinuxproject.org/page/Main_Page
- 
--comment "libselinux needs a toolchain w/ largefile, threads"
--        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-+comment "libselinux needs a toolchain w/ largefile, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || BR2_STATIC_LIBS
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 3f4bfb7..bef5c78 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	select BR2_PACKAGE_BZIP2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_LARGEFILE
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  libsemanage is the policy management library. It uses
- 	  libsepol for binary policy manipulation and libselinux for
-@@ -26,5 +27,5 @@ config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
- 
- endif
- 
--comment "libsemanage needs a toolchain w/ largefile, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-+comment "libsemanage needs a toolchain w/ largefile, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || BR2_STATIC_LIBS
+Comment below.
+
+>
+> Finally, I have found what appears to be the new Git repository for the
+> SELinux development at https://github.com/SELinuxProject/selinux. And
+> it seems that now all components are in a single Git repository. Are
+> they still doing separate tarballs for each component? I have the
+> feeling that packaging separately checkpolicy, libselinux, libsemanage,
+> libsepol, policycoreutils and sepolgen is maybe not the way to go.
+>
+> Can you clarify this before I spend more time merging more of your
+> patches?
+
+Definitely.  In general we errored on the side of using older stable libs
+when we pulled our selinux config together.  (Didn't realize the possible
+change in how the libs/tools were organized) I'll take a look at pulling
+things to the latest and see how that impacts how those packages are
+built.  I know that there were cross compile issues with a couple of the
+packages that we worked around so I'll see how things look porting wise.
+
+Thank you for the review and pulling this in.  I'll spend some time Monday
+figuring out if we should merge these patches or update to match the new
+repo layout.
+
+Matt
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150102/a4e82df2/attachment.html>
