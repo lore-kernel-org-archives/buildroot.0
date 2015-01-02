@@ -1,51 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  2 Jan 2015 13:26:27 +0100
-Subject: [Buildroot] [PATCH] linux: change Device Tree prompt
-Message-ID: <1420201587-27417-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  2 Jan 2015 09:39:40 -0300
+Subject: [Buildroot] [PATCH] mrouted: bump to version 3.9.7
+Message-ID: <1420202380-29765-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current prompt seems to imply that we want to add Device Tree
-support to the Linux kernel:
+bcopy patch removed since code is upstream.
 
-    [*] Device tree support
-
-But what it really means is that Buildroot will build a DTB.
-
-Change the prompt so that it is obvious that this is the intended
-behaviour, and users do not get mislead as to why Device Tree support is
-not automatically added to their Linux kernel.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v1 -> v2:
-  - tweak help entry to state this can be multiple DTBs  (Thomas)
----
- linux/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mrouted/mrouted-bcopy.patch | 39 -------------------------------------
+ package/mrouted/mrouted.mk          | 10 +++++++++-
+ 2 files changed, 9 insertions(+), 40 deletions(-)
+ delete mode 100644 package/mrouted/mrouted-bcopy.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ba4b574..bf30426 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -269,10 +269,10 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
- 	  If unsure, let this option empty.
+diff --git a/package/mrouted/mrouted-bcopy.patch b/package/mrouted/mrouted-bcopy.patch
+deleted file mode 100644
+index 74af02d..0000000
+--- a/package/mrouted/mrouted-bcopy.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 2d33110ee18fb59a1d6917d598fc1f4eb3c4cf83 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Mon, 7 May 2012 16:32:10 -0300
+-Subject: [PATCH] Switch from bcopy to memmove
+-
+-The bcopy() function is marked as legacy per POSIX.1-2001 and removed by
+-POSIX-1.2008 thus shouldn't be used.
+-So switch over to memmove()
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- mtrace.c |    4 ++--
+- 1 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/mtrace.c b/mtrace.c
+-index c982a67..64630bf 100644
+---- a/mtrace.c
+-+++ b/mtrace.c
+-@@ -556,7 +556,7 @@ int send_recv(u_int32_t dst, int type, int code, int tries, struct resp_buf *sav
+- 		save->rtime = ((tr.tv_sec + JAN_1970) << 16) +
+- 		    (tr.tv_usec << 10) / 15625;
+- 		save->len = len;
+--		bcopy((char *)igmp, (char *)&save->igmp, ipdatalen);
+-+		memmove((char *)&save->igmp, (char *)igmp, ipdatalen);
+- 	    }
+- 	    return recvlen;
+- 	}
+-@@ -646,7 +646,7 @@ void passive_mode(void)
+- 	base.rtime = ((tr.tv_sec + JAN_1970) << 16) +
+- 	    (tr.tv_usec << 10) / 15625;
+- 	base.len = len;
+--	bcopy((char *)igmp, (char *)&base.igmp, ipdatalen);
+-+	memmove((char *)&base.igmp, (char *)igmp, ipdatalen);
+- 	/*
+- 	 * If the user specified which traces to monitor,
+- 	 * only accept traces that correspond to the
+--- 
+-1.7.3.4
+-
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 78fe98a..01b4a9f 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -4,9 +4,17 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_DTS_SUPPORT
--	bool "Device tree support"
-+	bool "Build a Device Tree Blob (DTB)"
- 	help
--	  Compile a device tree source into a device tree blob.
--	  Select the dts file to compile in the options below.
-+	  Compile one or more device tree sources into device tree blobs.
-+	  Select the dts files to compile in the options below.
+-MROUTED_VERSION = 3.9.6
++MROUTED_VERSION = 3.9.7
+ MROUTED_SITE = $(call github,troglobit,mrouted,$(MROUTED_VERSION))
+ MROUTED_DEPENDENCIES = host-bison
++MROUTED_LICENSE = BSD-3c
++MROUTED_LICENSE_FILES = LICENSE
++
++define MROUTED_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(TARGET_MAKE_ENV) $(@D)/configure --enable-rsrr \
++	)
++endef
  
- if BR2_LINUX_KERNEL_DTS_SUPPORT
- 
+ define MROUTED_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 -- 
-1.9.1
+2.0.5
