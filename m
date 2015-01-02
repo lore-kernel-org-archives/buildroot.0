@@ -1,86 +1,127 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 17:05:31 +0100
-Subject: [Buildroot] [git commit] mpd-mpc: new package
-Message-ID: <20150102160717.8634B80D94@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Jan 2015 17:12:59 +0100
+Subject: [Buildroot] [PATCH v2 1/2] kconfig/lxdialog: get ncurses CFLAGS
+ with pkg-config
+In-Reply-To: <1420145678-11134-2-git-send-email-bjorn.forsman@gmail.com>
+References: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
+ <1420145678-11134-2-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20150102161259.GE4392@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f2367f416baa3e146f0ac8355bd7dacdcdec74d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bj?rn, All,
 
-[Thomas:
- - Changed hash file to use SHA256
- - Remove libiconv handling, since the iconv detection in mpc is
-   broken: if it's not available in the C library, it expects to find
-   iconv() in libintl (from gettext). But it's actually libiconv that
-   provides iconv() for non-locale capable uClibc toolchains. But
-   since anyway the package builds fine without iconv() support and
-   properly detects when it's available, don't bother with this.]
+On 2015-01-01 21:54 +0100, Bj?rn Forsman spake thusly:
+> This makes "make menuconfig" also work on systems where ncurses is not
+> installed in a standard location (such as on NixOS).
+> 
+> This patch changes ccflags() so that it tries pkg-config first, and only
+> if pkg-config fails does it go back to the fallback/manual checks. This
+> is the same algorithm that ldflags() already uses.
+> 
+> [This patch is already applied upstream (is part of linux v3.18):
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=be8af2d54a66911693eddc556e4f7a866670082b
+> 
+> I'm adding this instead of doing a full upstream kconfig sync because
+> there was a conflict in one of the Buildroot kconfig patches (against
+> linux 3.18-rc1), which I was unable to resolve. Just drop this patch next time
+> Buildroot kconfig is synced against upstream.
+> ]
+> 
+> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 
-Signed-off-by: Thierry Bultel <tbultel@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in            |    1 +
- package/mpd-mpc/Config.in    |    7 +++++++
- package/mpd-mpc/mpd-mpc.hash |    2 ++
- package/mpd-mpc/mpd-mpc.mk   |   16 ++++++++++++++++
- 4 files changed, 26 insertions(+), 0 deletions(-)
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/Config.in b/package/Config.in
-index 2def872..1abcaa8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -20,6 +20,7 @@ menu "Audio and video applications"
- 	source "package/madplay/Config.in"
- 	source "package/modplugtools/Config.in"
- 	source "package/mpd/Config.in"
-+	source "package/mpd-mpc/Config.in"
- 	source "package/mpg123/Config.in"
- 	source "package/mplayer/Config.in"
- 	source "package/musepack/Config.in"
-diff --git a/package/mpd-mpc/Config.in b/package/mpd-mpc/Config.in
-new file mode 100644
-index 0000000..1debc83
---- /dev/null
-+++ b/package/mpd-mpc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MPD_MPC
-+	bool "mpd-mpc"
-+	select BR2_PACKAGE_LIBMPDCLIENT
-+	help
-+	  A minimalist command line interface to MPD.
-+
-+	  http://www.musicpd.org/clients/mpc/
-diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
-new file mode 100644
-index 0000000..4f348d5
---- /dev/null
-+++ b/package/mpd-mpc/mpd-mpc.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 20735f7173cce56bec50c1d8b4633751052dc68365b29a6113206dc1cdc6e242 mpc-0.26.tar.xz
-diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
-new file mode 100644
-index 0000000..4e08c65
---- /dev/null
-+++ b/package/mpd-mpc/mpd-mpc.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# mpd-mpc
-+#
-+################################################################################
-+
-+MPD_MPC_VERSION_MAJOR = 0
-+MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).26
-+MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
-+MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
-+MPD_MPC_LICENSE = GPLv2+
-+MPD_MPC_LICENSE_FILES = COPYING
-+MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
-+MPD_MPC_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
-+
-+$(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...dialog-get-ncurses-CFLAGS-with-pkg-config.patch | 50 ++++++++++++++++++++++
+>  support/kconfig/patches/series                     |  1 +
+>  2 files changed, 51 insertions(+)
+>  create mode 100644 support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+> 
+> diff --git a/support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch b/support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+> new file mode 100644
+> index 0000000..65973a3
+> --- /dev/null
+> +++ b/support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+> @@ -0,0 +1,50 @@
+> +From be8af2d54a66911693eddc556e4f7a866670082b Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+> +Date: Sun, 14 Sep 2014 12:57:50 +0200
+> +Subject: [PATCH] kconfig/lxdialog: get ncurses CFLAGS with pkg-config
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +This makes "make menuconfig" also work on systems where ncurses is not
+> +installed in a standard location (such as on NixOS).
+> +
+> +This patch changes ccflags() so that it tries pkg-config first, and only
+> +if pkg-config fails does it go back to the fallback/manual checks. This
+> +is the same algorithm that ldflags() already uses.
+> +
+> +Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+> +Signed-off-by: Michal Marek <mmarek@suse.cz>
+> +---
+> +[This patch is already applied upstream (is part of linux v3.18):
+> +https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=be8af2d54a66911693eddc556e4f7a866670082b
+> +
+> +I'm adding this instead of doing a full upstream kconfig sync because
+> +there was a conflict in one of the Buildroot kconfig patches (against
+> +linux 3.18-rc1), which I was unable to resolve. Just drop this patch next time
+> +Buildroot kconfig is synced against upstream.
+> +]
+> +
+> + scripts/kconfig/lxdialog/check-lxdialog.sh | 6 +++++-
+> + 1 file changed, 5 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/scripts/kconfig/lxdialog/check-lxdialog.sh b/scripts/kconfig/lxdialog/check-lxdialog.sh
+> +index 9d2a4c5..5075ebf 100755
+> +--- a/scripts/kconfig/lxdialog/check-lxdialog.sh
+> ++++ b/scripts/kconfig/lxdialog/check-lxdialog.sh
+> +@@ -21,7 +21,11 @@ ldflags()
+> + # Where is ncurses.h?
+> + ccflags()
+> + {
+> +-	if [ -f /usr/include/ncursesw/curses.h ]; then
+> ++	if pkg-config --cflags ncursesw 2>/dev/null; then
+> ++		echo '-DCURSES_LOC="<ncurses.h>" -DNCURSES_WIDECHAR=1'
+> ++	elif pkg-config --cflags ncurses 2>/dev/null; then
+> ++		echo '-DCURSES_LOC="<ncurses.h>"'
+> ++	elif [ -f /usr/include/ncursesw/curses.h ]; then
+> + 		echo '-I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"'
+> + 		echo ' -DNCURSES_WIDECHAR=1'
+> + 	elif [ -f /usr/include/ncurses/ncurses.h ]; then
+> +-- 
+> +2.1.3
+> +
+> diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+> index 9154d83..e25375e 100644
+> --- a/support/kconfig/patches/series
+> +++ b/support/kconfig/patches/series
+> @@ -6,3 +6,4 @@
+>  14-support-out-of-tree-config.patch
+>  15-fix-qconf-moc-rule.patch
+>  16-fix-space-to-de-select-options.patch
+> +17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+> -- 
+> 2.1.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
