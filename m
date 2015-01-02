@@ -1,46 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 19:15:55 +0100
-Subject: [Buildroot] [PATCH 3/4] python: bump to 2.7.9
-In-Reply-To: <1419800095-7808-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1419800095-7808-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419800095-7808-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150102181555.GI4392@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Jan 2015 19:16:21 +0100
+Subject: [Buildroot] [PATCH 2/2] lightning: Added package
+In-Reply-To: <1407279610-15589-2-git-send-email-paul@crapouillou.net>
+References: <1407279610-15589-1-git-send-email-paul@crapouillou.net>
+ <1407279610-15589-2-git-send-email-paul@crapouillou.net>
+Message-ID: <20150102191621.49641fd6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Paul Cercueil,
 
-On 2014-12-28 21:54 +0100, Thomas Petazzoni spake thusly:
-> In addition to doing the bump, this commit also:
+On Wed,  6 Aug 2014 01:00:10 +0200, Paul Cercueil wrote:
+> GNU lightning is a library that generates assembly language code
+> at run-time.
 > 
->  - Refreshes all the patches
->  - Removes python-003-properly-detect-if-python-build.patch, which has
->    been applied upstream.
->  - Passes the --without-ensurepip option, like is done in Python 3, to
->    avoid having Python use PIP to automatically download stuff when it
->    is being built.
->  - PYTHON_LIBTOOL_PATH = NO is added to prevent Buildroot from trying
->    to patch a version of libtool for which we don't have matching
->    patches, which isn't a problem since we're anyway not using the
->    part of the Python sources that uses libtool (it's the built-in
->    copy of libffi, and we use the external libffi).
+> https://www.gnu.org/software/lightning/
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  package/Config.in              |  1 +
+>  package/lightning/Config.in    |  8 ++++++++
+>  package/lightning/lightning.mk | 18 ++++++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/lightning/Config.in
+>  create mode 100644 package/lightning/lightning.mk
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[run-time tested to at least print("Hello World\n") properly]
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Applied, after doing a number of changes. Note that this package was
+not compiling properly with a uClibc toolchain with the disassembler
+enabled.
 
-Regards,
-Yann E. MORIN.
+The changes I made:
 
+[Thomas:
+ - Wrap list of architectures in Config.in
+ - Introduce an explicit Config.in option for the disassembler
+   support, since it needs both binutils and zlib, which may not be
+   easy to guess.
+ - Add hash file.
+ - Bump to version 2.0.5.
+ - Add patch to fix cross-compilation issues on ARM and x86 due to
+   AC_RUN_IFELSE() tests.
+ - Adjust license information: the library is actually under LGPLv3+,
+   not GPLv3. There is a COPYING file with the text of the GPLv3 in
+   the code base, but this license doesn't seem to be used in anything
+   that is actually installed.
+ - Add AUTORECONF = YES since we're now patching configure.ac.
+ - Add missing dependency on zlib for the disassembler support.
+ - Add a special LIBS=-lintl when enabling the disassembler support
+   because binutils libraries use gettext functions, but they are not
+   linked against libintl.]
+
+See
+http://git.buildroot.net/buildroot/commit/?id=952391db0477d1baa9c451fe0b3dabbfaef5a9b7
+for the final commit.
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
