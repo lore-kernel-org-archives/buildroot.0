@@ -1,39 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 13:26:28 +0100
-Subject: [Buildroot] [PATCH 10/10] package/dvb-app: remove tests
-In-Reply-To: <1419717508-11627-11-git-send-email-romain.naour@openwide.fr>
-References: <1419717508-11627-1-git-send-email-romain.naour@openwide.fr>
- <1419717508-11627-11-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150102132628.6cef7d66@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  2 Jan 2015 13:26:27 +0100
+Subject: [Buildroot] [PATCH] linux: change Device Tree prompt
+Message-ID: <1420201587-27417-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+The current prompt seems to imply that we want to add Device Tree
+support to the Linux kernel:
 
-On Sat, 27 Dec 2014 22:58:28 +0100, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/dvb-apps/0004-Makefile-remove-test.patch | 27 ++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/dvb-apps/0004-Makefile-remove-test.patch
+    [*] Device tree support
 
-Ok, now I understand why patch 09/10 was not working.
+But what it really means is that Buildroot will build a DTB.
 
-If patch 09/10 needs patch 10/10 to work, then patch 10/10 needs to be
-*before* patch 09/10 in the series, or be squashed into it.
+Change the prompt so that it is obvious that this is the intended
+behaviour, and users do not get mislead as to why Device Tree support is
+not automatically added to their Linux kernel.
 
-Patch rejected, please resend an updated version.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Also, if you could send to upstream dvb-apps those patches (and the
-other ones we have), it would be great.
+---
+Changes v1 -> v2:
+  - tweak help entry to state this can be multiple DTBs  (Thomas)
+---
+ linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index ba4b574..bf30426 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -269,10 +269,10 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+ 	  If unsure, let this option empty.
+ 
+ config BR2_LINUX_KERNEL_DTS_SUPPORT
+-	bool "Device tree support"
++	bool "Build a Device Tree Blob (DTB)"
+ 	help
+-	  Compile a device tree source into a device tree blob.
+-	  Select the dts file to compile in the options below.
++	  Compile one or more device tree sources into device tree blobs.
++	  Select the dts files to compile in the options below.
+ 
+ if BR2_LINUX_KERNEL_DTS_SUPPORT
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
