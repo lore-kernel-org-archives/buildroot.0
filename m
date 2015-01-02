@@ -1,61 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 12:23:25 +0100
-Subject: [Buildroot] [git commit] package/libsvgtiny: enable shared library
-	build
-Message-ID: <20150102112332.9020A80825@busybox.osuosl.org>
+Date: Fri, 2 Jan 2015 12:37:42 +0100
+Subject: [Buildroot] [PATCH 1/2] graph-depends: display virtual package
+ with italic style
+In-Reply-To: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
+References: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150102123742.6e00c2b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c24f7cdd11a2045e4d018103fa36e61e556bbde6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-[Thomas: clarify the comment explaining why we only build/install the
-shared library when BR2_STATIC_SHARED_LIBS=y.]
+On Fri,  2 Jan 2015 09:49:32 +0100, Francois Perrad wrote:
+> virtual packages are found by their version,
+> so we retrieve the version of all packages
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/pkg-generic.mk        |  3 +++
+>  support/scripts/graph-depends | 34 +++++++++++++++++++++++++++++++++-
+>  2 files changed, 36 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 9643a30..87d8dd8 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -565,6 +565,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+>  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+>  endif
+>  
+> +$(1)-show-version:
+> +			@echo $$($(2)_VERSION)
+> +
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsvgtiny/libsvgtiny.mk |   18 +++++++++++++++---
- 1 files changed, 15 insertions(+), 3 deletions(-)
+This could be a separate patch, maybe?
 
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index a2d494e..3fc759f 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -11,18 +11,30 @@ LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkgconf
- LIBSVGTINY_LICENSE = MIT
- LIBSVGTINY_LICENSE_FILES = README
- 
-+# The libsvgtiny build system cannot build both the shared and static
-+# libraries. So when the Buildroot configuration requests to build
-+# both the shared and static variants, we build only the shared one.
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LIBSVGTINY_COMPONENT_TYPE = lib-shared
-+else
-+LIBSVGTINY_COMPONENT_TYPE = lib-static
-+endif
-+
- define LIBSVGTINY_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
-+		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
- endef
- 
- define LIBSVGTINY_INSTALL_STAGING_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) install
-+		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
-+		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
- endef
- 
- define LIBSVGTINY_INSTALL_TARGET_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) install
-+		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
-+		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
- endef
- 
- $(eval $(generic-package))
+> +# Execute the "make <pkg>-show-version" command to get the version of a given
+> +# list of packages, and return the version formatted as a Python dictionary.
+> +def get_version(pkgs):
+> +    sys.stderr.write("Getting version for %s\n" % pkgs)
+> +    cmd = ["make", "-s", "--no-print-directory" ]
+> +    for pkg in pkgs:
+> +        cmd.append("%s-show-version" % pkg)
+
+Good, I like the fact that we're doing only one make invocation.
+
+> +all_pkgs = {}
+> +for deps in dict_deps.values():
+> +    for dep in deps:
+> +        all_pkgs[dep] = True
+> +for dep in dict_deps.keys():
+> +    all_pkgs[dep] = True
+> +dict_version = get_version(all_pkgs.keys())
+
+I'm not sure what is going on here. Why aren't you using the existing
+'allpkgs' list? It contains the list of all packages, you would just
+have to filter the fake 'all' entry in your "for pkg in pkgs:" loop in
+the get_version() function.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
