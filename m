@@ -1,72 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 13:18:56 +0100
-Subject: [Buildroot] [PATCH 07/10] package/libxmlrpc: handle
- static/shared only install
-In-Reply-To: <1419717508-11627-8-git-send-email-romain.naour@openwide.fr>
-References: <1419717508-11627-1-git-send-email-romain.naour@openwide.fr>
- <1419717508-11627-8-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150102131856.28594262@free-electrons.com>
+Date: Fri, 2 Jan 2015 13:20:49 +0100
+Subject: [Buildroot] [git commit] package/dvb-apps: rename patches to follow
+	the new name convention
+Message-ID: <20150102122055.E0FF580816@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=d8b275b5dbc4ec51ed49a19f544696814898455e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 27 Dec 2014 22:58:25 +0100, Romain Naour wrote:
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ames.patch => 0001-Fix-generate-keynames.patch} |    0
+ ...patch => 0002-Fix-compiler-warning-flags.patch} |    0
+ ....patch => 0003-support-static-only-build.patch} |    0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
 
-> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-> index c3788d6..5796ae6 100644
-> --- a/package/libxmlrpc/libxmlrpc.mk
-> +++ b/package/libxmlrpc/libxmlrpc.mk
-> @@ -35,4 +35,15 @@ LIBXMLRPC_MAKE_ENV = \
->  	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
->  	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
->  
-> +
-> +ifeq ($(BR2_SHARED_LIBS),y)
-> +LIBXMLRPC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) \
-> +	install-shared-libraries install-headers install-bin
-> +endif
-> +
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +LIBXMLRPC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) \
-> +	install-static-libraries install-headers install-bin
-> +endif
-
-This does not work: in a BR2_SHARED_LIBS configuration, libraries are
-no longer installed in the staging directory:
-
-$ cat defconfig 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_LIBXMLRPC=y
-# BR2_TARGET_ROOTFS_TAR is not set
-$ make
-[...]
-$ LANG=C ls output/staging/usr/lib/libxmlrpc*
-ls: cannot access output/staging/usr/lib/libxmlrpc*: No such file or directory
-
-I'll mark the patch as Rejected in patchwork.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch b/package/dvb-apps/0001-Fix-generate-keynames.patch
+similarity index 100%
+rename from package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
+rename to package/dvb-apps/0001-Fix-generate-keynames.patch
+diff --git a/package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch b/package/dvb-apps/0002-Fix-compiler-warning-flags.patch
+similarity index 100%
+rename from package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch
+rename to package/dvb-apps/0002-Fix-compiler-warning-flags.patch
+diff --git a/package/dvb-apps/dvb-apps-0003-support-static-only-build.patch b/package/dvb-apps/0003-support-static-only-build.patch
+similarity index 100%
+rename from package/dvb-apps/dvb-apps-0003-support-static-only-build.patch
+rename to package/dvb-apps/0003-support-static-only-build.patch
