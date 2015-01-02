@@ -1,93 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 22:43:25 +0100
-Subject: [Buildroot] [PATCH v2 2/2] Makefile: pass host PKG_CONFIG_PATH
- at "make menuconfig" time
-In-Reply-To: <CAEYzJUEcE-ihJCMCWSdhC7W=8fTT2Mnb-ACSE7ha7SwAAHAECg@mail.gmail.com>
-References: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
- <1420145678-11134-3-git-send-email-bjorn.forsman@gmail.com>
- <20150102161603.GF4392@free.fr>
- <CAEYzJUGqVDVv5Khyr_=BGhfWSxvhp6WO6uWfuqehPCWmSYTHpg@mail.gmail.com>
- <CAEYzJUEcE-ihJCMCWSdhC7W=8fTT2Mnb-ACSE7ha7SwAAHAECg@mail.gmail.com>
-Message-ID: <20150102214325.GC24182@free.fr>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 02 Jan 2015 15:51:30 -0600
+Subject: [Buildroot] [PATCH][Resend] ffmpeg: enable freetype support
+In-Reply-To: <5494F00B.4080107@ou.edu>
+References: <5494F00B.4080107@ou.edu>
+Message-ID: <54A712E2.8080506@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bj?rn, All,
+If libfreetype has been select configure ffmpeg to use it if possible
+Since this requires fenv.h it won't happen when using uClibc except for x86 targets
 
-On 2015-01-02 22:34 +0100, Bj?rn Forsman spake thusly:
-> On 2 January 2015 at 22:28, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
-> > On 2 January 2015 at 17:16, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> Bj?rn, All,
-> >>
-> >> On 2015-01-01 21:54 +0100, Bj?rn Forsman spake thusly:
-> >>> Buildroot unexports PKG_CONFIG_PATH in the top-level Makefile for purity
-> >>> reasons. But it has an unfortunate side-effect in that "make menuconfig"
-> >>> will not (necessarily) be able to pick up ncurses via host pkg-config,
-> >>> breaking "make menuconfig" on systems where ncurses is installed in a
-> >>> non-standard location.
-> >>>
-> >>> This patch saves the original PKG_CONFIG_PATH variable in
-> >>> HOST_PKG_CONFIG_PATH and restores the original PKG_CONFIG_PATH variable
-> >>> only in the sub-processes that builds the various menuconfig/nconfig/...
-> >>> targets.
-> >>>
-> >>> With this change, I am able to run "make menuconfig" on NixOS[1].
-> >>>
-> >>> [1]: http://nixos.org/
-> >>>
-> >>> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
-> >>> ---
-> >>>  Makefile | 6 +++++-
-> >>>  1 file changed, 5 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/Makefile b/Makefile
-> >>> index 5e0b4f2..2f1108f 100644
-> >>> --- a/Makefile
-> >>> +++ b/Makefile
-> >>> @@ -264,6 +264,7 @@ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
-> >>>  export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
-> >>>
-> >>>  # Make sure pkg-config doesn't look outside the buildroot tree
-> >>> +export HOST_PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
-> >>
-> >> I think you'd want to do an immediate assignment here, and not do an
-> >> export (see below):
-> >>
-> >>     HOST_PKG_CONFIG_PATH:=$(PKG_CONFIG_PATH)
-> >
-> > Will fix.
-> 
-> Some comments. There are other HOST_* variables that are exported from
-> the top-level Makefile. I guess that's why I used 'export' in the
-> first place.
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+Noticed the stray line at the bottom of the last version
+Updated against last nights snapshot
+diff -pruN buildroot.orig/package/ffmpeg/ffmpeg.mk buildroot/package/ffmpeg/ffmpeg.mk
+--- buildroot.orig/package/ffmpeg/ffmpeg.mk	2015-01-01 17:02:23.000000000 -0600
++++ buildroot/package/ffmpeg/ffmpeg.mk	2015-01-02 15:25:30.649237010 -0600
+@@ -49,7 +49,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libopencv \
+ 	--disable-libdc1394 \
+ 	--disable-libfaac \
+-	--disable-libfreetype \
+ 	--disable-libgsm \
+ 	--disable-libmp3lame \
+ 	--disable-libnut \
+@@ -234,6 +233,22 @@ else
+ FFMPEG_CONF_OPTS += --disable-libvpx
+ endif
 
-You're right. I believe export is not needed, but for consistency sake,
-I understand you would want to use export on it.
-
-Do with an export if you want, I won't complain much. ;-) But state in
-the commit log that it is not strictly required for the current use-case,
-and is here just for consistency with other similarly-named variables.
-
-> For now, nobody but Buildroot itself uses
-> HOST_PKG_CONFIG_PATH (well, when this patch gets in), but I can see a
-> future where pkg-config is used within Buildroot for other host
-> packages too. But it is of course trivial to add the "export" at any
-> time :-)
-
-Hey! :-)
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
++# ffmpeg freetype support require fenv.h
++# which is not available in uClibc
++ifneq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++ffmpeg_environment_has_fenv ?= y
++endif
++# except for uClibc on x86
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++ffmpeg_environment_has_fenv ?= y
++endif
++ifeq ($(BR2_PACKAGE_FREETYPE)$(ffmpeg_environment_has_fenv),yy)
++FFMPEG_CONF_OPTS += --enable-libfreetype
++FFMPEG_DEPENDENCIES += freetype
++else
++FFMPEG_CONF_OPTS += --disable-libfreetype
++endif
++
+ ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
+ FFMPEG_CONF_OPTS += --enable-libx264
+ FFMPEG_DEPENDENCIES += x264
