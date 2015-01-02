@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 19:23:26 +0100
-Subject: [Buildroot] [PATCH 1/4] python3: bump to 3.4.2
-In-Reply-To: <1419800095-7808-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Jan 2015 19:24:24 +0100
+Subject: [Buildroot] [PATCH 2/4] python3: rename patches to the new
+ convention
+In-Reply-To: <1419800095-7808-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1419800095-7808-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1419800095-7808-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150102182326.GK4392@free.fr>
+ <1419800095-7808-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150102182424.GA24182@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +15,13 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-12-28 21:54 +0100, Thomas Petazzoni spake thusly:
-> This commit bumps python3 to Python 3.4.2. Two patches had to be
-> changed slightly to fix some minor conflicts.
-> 
-> PYTHON3_LIBTOOL_PATH = NO was added to prevent Buildroot from trying
-> to patch a version of libtool for which we don't have matching
-> patches, which isn't a problem since we're anyway not using the part
-> of the Python sources that uses libtool (it's the built-in copy of
-> libffi, and we use the external libffi).
+> Now that we don't use completely sequential numbers, because patches
+> below 100 are used to address cross-compilation issues in Python 3,
+> while patches above 100 are used to make more Python 3 modules
+> configurable.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[run-time testedi on ARM to at least print("Hello World\n") properly]
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
