@@ -1,70 +1,45 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  2 Jan 2015 17:39:04 +0100
-Subject: [Buildroot] [PATCH 1/2] dhcpcd: fix build on old toolchains
-	(sa_family_t)
-Message-ID: <1420216745-24218-1-git-send-email-luca@lucaceresoli.net>
+From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
+Date: Fri, 02 Jan 2015 18:02:37 +0100
+Subject: [Buildroot] [RFC] Wine package
+Message-ID: <54A6CF2D.1090706@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes error such as:
-  .../sysroot/usr/include/linux/netlink.h:31:2: error: unknown type name 'sa_family_t'
-  .../sysroot/usr/include/linux/netlink.h:31:2: error: expected specifier-qualifier-list before 'sa_family_t'
+Hi,
+I'm working on the Wine package for upstream buildroot.
+I attached Config.in and wine.mk for early review, so i don't start totally wrong.
+Note that it's not complete wrt to dependency checking.
 
-And autobuild failures:
-  http://autobuild.buildroot.net/results/d92/d92e7f2af0e64bc40f7b5c9ea081471de98bf8e8/
-  http://autobuild.buildroot.net/results/e97/e97e980a2f1e0ff4138a6dc03d86ad3ff0973e4a/
-  http://autobuild.buildroot.net/results/ca3/ca32c4de8b645c96cedb80b6270a792e9601ad84/
+For cross compilation wine needs its own tools compiled for the host architecture, therefor there is host-wine.
+As there's no easy way to only build the wine tools i disabled as much as possible.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ix-missing-sa_familiy_t-on-old-toolchains.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/dhcpcd/0001-Fix-missing-sa_familiy_t-on-old-toolchains.patch
+Are stable or up-to-date (development) versions preferred? Wine 1.6.2 (latest stable) is one year old...
+-------------- next part --------------
+config BR2_PACKAGE_WINE
+	bool "Wine"
+	depends on BR2_INET_IPV6
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	# Wine has much CPU specific code
+	depends on BR2_i386 || BR2_x86_64
+	help
+	  Wine is a compatibility layer capable of running
+	  Windows applications on Linux. Instead of simulating internal
+	  Windows logic like a virtual machine or emulator,
+	  Wine translates Windows API calls into POSIX calls on-the-fly,
+	  eliminating the performance and memory penalties of other methods.
 
-diff --git a/package/dhcpcd/0001-Fix-missing-sa_familiy_t-on-old-toolchains.patch b/package/dhcpcd/0001-Fix-missing-sa_familiy_t-on-old-toolchains.patch
-new file mode 100644
-index 0000000..f518711
---- /dev/null
-+++ b/package/dhcpcd/0001-Fix-missing-sa_familiy_t-on-old-toolchains.patch
-@@ -0,0 +1,35 @@
-+From da2b6a5180a9620e1011f52143512b69cd518bad Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Tue, 30 Dec 2014 16:08:05 +0100
-+Subject: [PATCH] Fix missing sa_familiy_t on old toolchains
-+
-+Fixes error such as:
-+  .../sysroot/usr/include/linux/netlink.h:31:2: error: unknown type name 'sa_family_t'
-+  .../sysroot/usr/include/linux/netlink.h:31:2: error: expected specifier-qualifier-list before 'sa_family_t'
-+
-+And autobuild failures:
-+  http://autobuild.buildroot.net/results/d92/d92e7f2af0e64bc40f7b5c9ea081471de98bf8e8/
-+  http://autobuild.buildroot.net/results/e97/e97e980a2f1e0ff4138a6dc03d86ad3ff0973e4a/
-+  http://autobuild.buildroot.net/results/ca3/ca32c4de8b645c96cedb80b6270a792e9601ad84/
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+
-+---
-+ configure | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/configure b/configure
-+index f250d01..93919df 100755
-+--- a/configure
-++++ b/configure
-+@@ -368,6 +368,7 @@ linux*)
-+ 	echo "DHCPCD_SRCS+=	if-linux.c" >>$CONFIG_MK
-+ 	# for RTM_NEWADDR and friends
-+ 	echo "#include <asm/types.h> /* fix broken headers */" >>$CONFIG_H
-++	echo "#include <sys/socket.h> /* for sa_family_t on old toolchains */" >>$CONFIG_H
-+ 	echo "#include <linux/rtnetlink.h>" >>$CONFIG_H
-+ 	;;
-+ kfreebsd*)
-+-- 
-+1.9.1
-+
--- 
-1.9.1
+	  http://www.winehq.org
+
+comment "Wine needs a toolchain w/ IPv6, threads"
+	depends on BR2_i386 || BR2_x86_64
+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: wine.mk
+Type: text/x-makefile
+Size: 4234 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150102/b11261be/attachment.bin>
