@@ -1,389 +1,101 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 2 Jan 2015 16:01:52 +0100
-Subject: [Buildroot] [PATCH 2/4 v9] support/download: support -q in all
-	download backends
-In-Reply-To: <a64a8b4e8ad98f4de42ac9e79265730aecc0a716.1420142462.git.yann.morin.1998@free.fr>
-References: <cover.1420142462.git.yann.morin.1998@free.fr>
- <a64a8b4e8ad98f4de42ac9e79265730aecc0a716.1420142462.git.yann.morin.1998@free.fr>
-Message-ID: <CAHkwnC_Qmf-ye+N29tdo_RXiAhiogCoE0KsRVpsjJXRdow104g@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Fri,  2 Jan 2015 16:06:02 +0100
+Subject: [Buildroot] [PATCH v2] Allow a single DHCP configuration via the
+	system configuration submenu
+Message-ID: <1420211162-9189-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 1, 2015 at 9:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Add an option flag to all backends, as well as the check-hash script, so
-> as to silence download helpers when the user wants a silent build.
->
-> Additionaly, make the default verbose.
->
-> Inspired by Fabio's patch on git/svn.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
->
-> ---
-> Note: cvs, cp and scp are not tested, because we do not have in-tree
-> packages using those transport methods.
-> ---
->  support/download/bzr        | 23 ++++++++++++++++-------
->  support/download/check-hash |  8 ++++++++
->  support/download/cp         | 20 +++++++++++++++-----
->  support/download/cvs        | 23 +++++++++++++++--------
->  support/download/git        | 24 ++++++++++++++++--------
->  support/download/hg         | 24 ++++++++++++++++--------
->  support/download/scp        | 20 +++++++++++++++-----
->  support/download/svn        | 22 +++++++++++++++-------
->  support/download/wget       | 20 +++++++++++++++-----
->  9 files changed, 131 insertions(+), 53 deletions(-)
->
-> diff --git a/support/download/bzr b/support/download/bzr
-> index c157ca8..96b0844 100755
-> --- a/support/download/bzr
-> +++ b/support/download/bzr
-> @@ -4,17 +4,26 @@
->  set -e
->
->  # Download helper for bzr, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: bzr repo
-> -#   $3: bzr revision
-> -#   $4: basename
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../bzr [-q] OUT_FILE REPO_URL REV BASENAME
-> +#
-> +# Environemnt:
->  #   BZR      : the bzr command to call
->
-> +
-> +verbose=-v
-> +while getopts :q OPT; do
+This patch allows the setup of simple a single interface to be
+automatically brought up and configured via DHCP on system startup.
 
-The colon should be removed:
+The interface name can be set via a configuration option. This patch
+does not support systemd-networkd, any complex network configuration should
+be done via overlay of /etc/network/interfaces or the relevant networkd
+configuration file
 
-:q -> q
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 
-because with the colon if there is a wrong option it exit without
-giving any error message, but without the colon it gives the following
-error:
-  ./support/download/bzr: illegal option -- t
+---
 
-This is valid for all the backends.
+v2 : - inline shell section instead of providing a script
+     - add one Config.in option instead of two
+---
+ system/Config.in                       | 18 ++++++++++++++++++
+ system/skeleton/etc/network/interfaces |  4 ----
+ system/system.mk                       | 17 +++++++++++++++++
+ 3 files changed, 35 insertions(+), 4 deletions(-)
+ delete mode 100644 system/skeleton/etc/network/interfaces
 
-BR
+diff --git a/system/Config.in b/system/Config.in
+index a3b7aff..71ba7ab 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -324,6 +324,24 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+ 
++
++config BR2_SIMPLE_DHCP
++	string "Name of the physical network interface to run DHCP on"
++	default ""
++	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
++	help
++	  The name of the network interface to configure automatically.
++	  A DHCP request will automatically happen on startup on the selected
++	  interface.
++
++	  If left empty, no automatic DHCP requests will take place.
++
++	  For more complicated network setups use an overlay to overwrite
++	  /etc/network/interfaces or add a networkd configuration file.
++
++comment "automatic network configuration via DHCP is not compatible with networkd"
++	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
++
+ config BR2_TARGET_TZ_INFO
+ 	bool "Install timezone info"
+ 	# No timezone for musl; only for uClibc or (e)glibc.
+diff --git a/system/skeleton/etc/network/interfaces b/system/skeleton/etc/network/interfaces
+deleted file mode 100644
+index 218b82c..0000000
+--- a/system/skeleton/etc/network/interfaces
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Configure Loopback
+-auto lo
+-iface lo inet loopback
+-
+diff --git a/system/system.mk b/system/system.mk
+index e4a3160..b070919 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -38,6 +38,23 @@ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+ TARGETS += host-mkpasswd
+ endif
+ 
++define SIMPLE_NETWORK
++	mkdir -p $(TARGET_DIR)/etc/network/
++
++	echo "# interface file auto-generated by buildroot" >  $(TARGET_DIR)/etc/network/interfaces
++	echo                                                >> $(TARGET_DIR)/etc/network/interfaces
++	echo "auto lo"                                      >> $(TARGET_DIR)/etc/network/interfaces
++	echo "iface lo inet loopback"                       >> $(TARGET_DIR)/etc/network/interfaces
++	echo                                                >> $(TARGET_DIR)/etc/network/interfaces
++
++	if [ -n "$(BR2_SIMPLE_DHCP)" ] ; then \
++		echo "auto $(BR2_SIMPLE_DHCP)"              >> $(TARGET_DIR)/etc/network/interfaces ; \
++		echo "iface $(BR2_SIMPLE_DHCP) inet dhcp"   >> $(TARGET_DIR)/etc/network/interfaces ; \
++	fi
++
++endef
++TARGET_FINALIZE_HOOKS += SIMPLE_NETWORK
++
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
+ define SYSTEM_ROOT_PASSWD
 -- 
-Fabio Porcedda
-
-> +    case "${OPT}" in
-> +    q)  verbose=-q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  repo="${2}"
->  rev="${3}"
->  basename="${4}"
->
-> -${BZR} export --root="${basename}/" --format=tgz "${output}" "${repo}" -r "${rev}"
-> +${BZR} export ${verbose} --root="${basename}/" --format=tgz "${output}" "${repo}" -r "${rev}"
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index b59fd2a..4c07274 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -10,6 +10,14 @@ set -e
->  #       saved as, to be able to match it to the corresponding hashes
->  #       in the .hash file
->
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  exec >/dev/null;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  h_file="${1}"
->  file="${2}"
->  base="${3}"
-> diff --git a/support/download/cp b/support/download/cp
-> index 463fc38..1c90f15 100755
-> --- a/support/download/cp
-> +++ b/support/download/cp
-> @@ -4,13 +4,23 @@
->  set -e
->
->  # Download helper for cp, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: source file
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../cp [-q] OUT_FILE SRC_FILE
-> +#
-> +# Environment:
->  #   LOCALFILES: the cp command to call
->
-> +verbose=-v
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  source="${2}"
->
-> -${LOCALFILES} "${source}" "${output}"
-> +${LOCALFILES} ${verbose} "${source}" "${output}"
-> diff --git a/support/download/cvs b/support/download/cvs
-> index 56a11c2..eca6fc4 100755
-> --- a/support/download/cvs
-> +++ b/support/download/cvs
-> @@ -4,22 +4,29 @@
->  set -e
->
->  # Download helper for cvs, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: cvs repo
-> -#   $3: cvs revision
-> -#   $4: package's name (eg. foobar)
-> -#   $5: package's basename (eg. foobar-1.2.3)
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../cvs [-q] OUT_FILE CVS_URL REV PKG_NAME BASENAME
-> +#
-> +# Environment:
->  #   CVS      : the cvs command to call
->
-> +verbose=
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=-Q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  repo="${2}"
->  rev="${3}"
->  rawname="${4}"
->  basename="${5}"
->
-> -${CVS} -z3 -d":pserver:anonymous@${repo}" \
-> +${CVS} ${verbose} -z3 -d":pserver:anonymous@${repo}" \
->         co -d "${basename}" -r ":${rev}" -P "${rawname}"
->
->  tar czf "${output}" "${basename}"
-> diff --git a/support/download/git b/support/download/git
-> index 5d36ca4..0a0e81c 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -4,14 +4,22 @@
->  set -e
->
->  # Download helper for git, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: git repo
-> -#   $3: git cset
-> -#   $4: package's basename (eg. foobar-1.2.3)
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../git [-q] OUT_FILE REPO_URL CSET BASENAME
-> +#
-> +# Environment:
->  #   GIT      : the git command to call
->
-> +verbose=-v
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=-q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  repo="${2}"
->  cset="${3}"
-> @@ -22,7 +30,7 @@ basename="${4}"
->  git_done=0
->  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
->      printf "Doing shallow clone\n"
-> -    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-> +    if ${GIT} clone ${verbose} --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
->          git_done=1
->      else
->          printf "Shallow clone failed, falling back to doing a full clone\n"
-> @@ -30,7 +38,7 @@ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
->  fi
->  if [ ${git_done} -eq 0 ]; then
->      printf "Doing full clone\n"
-> -    ${GIT} clone --bare "${repo}" "${basename}"
-> +    ${GIT} clone ${verbose} --bare "${repo}" "${basename}"
->  fi
->
->  GIT_DIR="${basename}" \
-> diff --git a/support/download/hg b/support/download/hg
-> index 66bd2ed..0d212c0 100755
-> --- a/support/download/hg
-> +++ b/support/download/hg
-> @@ -4,21 +4,29 @@
->  set -e
->
->  # Download helper for hg, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: hg repo
-> -#   $3: hg cset
-> -#   $4: package's basename (eg. foobar-1.2.3)
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../hg [-q] OUT_FILE REPO_URL CSET BASENAME
-> +#
-> +# Environment:
->  #   HG       : the hg command to call
->
-> +verbose=-v
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=-q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  repo="${2}"
->  cset="${3}"
->  basename="${4}"
->
-> -${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
-> +${HG} clone ${verbose} --noupdate --rev "${cset}" "${repo}" "${basename}"
->
-> -${HG} archive --repository "${basename}" --type tgz \
-> +${HG} archive ${verbose} --repository "${basename}" --type tgz \
->                --prefix "${basename}" --rev "${cset}" \
->                "${output}"
-> diff --git a/support/download/scp b/support/download/scp
-> index f3e92f3..189e5a4 100755
-> --- a/support/download/scp
-> +++ b/support/download/scp
-> @@ -4,13 +4,23 @@
->  set -e
->
->  # Download helper for scp, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: URL
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../scp [-q] OUT_FILE SRC_URL
-> +#
-> +# Environment:
->  #   SCP       : the scp command to call
->
-> +verbose=-v
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=-q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  url="${2}"
->
-> -${SCP} "${url}" "${output}"
-> +${SCP} ${verbose} "${url}" "${output}"
-> diff --git a/support/download/svn b/support/download/svn
-> index a960f7d..45fc4bf 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -4,19 +4,27 @@
->  set -e
->
->  # Download helper for svn, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: svn repo
-> -#   $3: svn revision
-> -#   $4: package's basename (eg. foobar-1.2.3)
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../svn [-q] OUT_FILE REPO_URL REV BASNAME
-> +#
-> +# Environment:
->  #   SVN      : the svn command to call
->
-> +verbose=
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=-q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  repo="${2}"
->  rev="${3}"
->  basename="${4}"
->
-> -${SVN} export "${repo}@${rev}" "${basename}"
-> +${SVN} export ${verbose} "${repo}@${rev}" "${basename}"
->
->  tar czf "${output}" "${basename}"
-> diff --git a/support/download/wget b/support/download/wget
-> index 6b73726..e7e1d38 100755
-> --- a/support/download/wget
-> +++ b/support/download/wget
-> @@ -4,13 +4,23 @@
->  set -e
->
->  # Download helper for wget, to be called from the download wrapper script
-> -# Expected arguments:
-> -#   $1: output file
-> -#   $2: URL
-> -# And this environment:
-> +#
-> +# Call it as:
-> +#   .../wget [-q] OUT_FILE URL
-> +#
-> +# Environment:
->  #   WGET     : the wget command to call
->
-> +verbose=-v
-> +while getopts :q OPT; do
-> +    case "${OPT}" in
-> +    q)  verbose=-q;;
-> +    \?) exit 1;;
-> +    esac
-> +done
-> +shift $((OPTIND-1))
-> +
->  output="${1}"
->  url="${2}"
->
-> -${WGET} -O "${output}" "${url}"
-> +${WGET} ${verbose} -O "${output}" "${url}"
-> --
-> 1.9.1
->
+2.1.4
