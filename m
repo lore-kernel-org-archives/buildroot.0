@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 11:21:16 +0100
-Subject: [Buildroot] [PATCH 2/2] graph-depends: add an option
- --stop-on-virtual
-In-Reply-To: <1420188573-4236-2-git-send-email-francois.perrad@gadz.org>
-References: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
- <1420188573-4236-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150102112116.7c2085eb@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  2 Jan 2015 07:41:00 -0300
+Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.22
+Message-ID: <1420195260-4169-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/memcached/memcached.hash | 4 ++--
+ package/memcached/memcached.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri,  2 Jan 2015 09:49:33 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  docs/manual/common-usage.txt  |  3 +++
->  support/scripts/graph-depends | 11 +++++++++++
->  2 files changed, 14 insertions(+)
-
-Why would we want to stop on virtual packages? I don't really see the
-use case for this additional option.
-
-Thanks,
-
-Thomas
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 7acbaf4..98e572d 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,2 +1,2 @@
+-# From http://www.memcached.org/files/memcached-1.4.21.tar.gz.sha1
+-sha1	ab10c46dd9f5d4401872d9670e575afa5bc7d66f	memcached-1.4.21.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.22.tar.gz.sha1
++sha1	5968d357d504a1f52622f9f8a3e85c29558acaa5	memcached-1.4.22.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index c057d57..8a005d4 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMCACHED_VERSION = 1.4.21
++MEMCACHED_VERSION = 1.4.22
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
