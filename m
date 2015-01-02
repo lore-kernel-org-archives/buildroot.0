@@ -1,37 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Jan 2015 14:45:13 +0100
-Subject: [Buildroot] [PATCH] linux: change Device Tree prompt
-In-Reply-To: <1420201587-27417-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 2 Jan 2015 13:26:27 +0100")
-References: <1420201587-27417-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87fvbt8ffa.fsf@dell.be.48ers.dk>
+Date: Fri, 2 Jan 2015 14:44:15 +0100
+Subject: [Buildroot] [git commit] linux: change Device Tree prompt
+Message-ID: <20150102134521.70D34803E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=be529e22189b425edb3e6c23dea91f3c1d91a694
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The current prompt seems to imply that we want to add Device Tree
- > support to the Linux kernel:
+The current prompt seems to imply that we want to add Device Tree
+support to the Linux kernel:
 
- >     [*] Device tree support
+    [*] Device tree support
 
- > But what it really means is that Buildroot will build a DTB.
+But what it really means is that Buildroot will build a DTB.
 
- > Change the prompt so that it is obvious that this is the intended
- > behaviour, and users do not get mislead as to why Device Tree support is
- > not automatically added to their Linux kernel.
+Change the prompt so that it is obvious that this is the intended
+behaviour, and users do not get mislead as to why Device Tree support is
+not automatically added to their Linux kernel.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
- > ---
- > Changes v1 -> v2:
- >   - tweak help entry to state this can be multiple DTBs  (Thomas)
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index ba4b574..bf30426 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -269,10 +269,10 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+ 	  If unsure, let this option empty.
+ 
+ config BR2_LINUX_KERNEL_DTS_SUPPORT
+-	bool "Device tree support"
++	bool "Build a Device Tree Blob (DTB)"
+ 	help
+-	  Compile a device tree source into a device tree blob.
+-	  Select the dts file to compile in the options below.
++	  Compile one or more device tree sources into device tree blobs.
++	  Select the dts files to compile in the options below.
+ 
+ if BR2_LINUX_KERNEL_DTS_SUPPORT
+ 
