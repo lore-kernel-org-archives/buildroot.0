@@ -1,90 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 2 Jan 2015 14:37:12 +0100
-Subject: [Buildroot] [git commit] mrouted: bump to version 3.9.7
-Message-ID: <20150102133731.660C07FE10@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] radvd: bump to version 2.9
+Message-ID: <20150102133731.5BF7F807FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2db1daacff21133e2c03967e4b65a67df746ce8
+commit: http://git.buildroot.net/buildroot/commit/?id=4fba9b3bb754f057732ac3b740bb91f5e5f47d41
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bcopy patch removed since code is upstream.
+0003-Improve-check-of-the-sysctl-function.patch is now upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mrouted/mrouted-bcopy.patch |   39 -----------------------------------
- package/mrouted/mrouted.mk          |   10 ++++++++-
- 2 files changed, 9 insertions(+), 40 deletions(-)
+ ...0003-Improve-check-of-the-sysctl-function.patch |   49 --------------------
+ package/radvd/radvd.hash                           |    4 +-
+ package/radvd/radvd.mk                             |    2 +-
+ 3 files changed, 3 insertions(+), 52 deletions(-)
 
-diff --git a/package/mrouted/mrouted-bcopy.patch b/package/mrouted/mrouted-bcopy.patch
+diff --git a/package/radvd/0003-Improve-check-of-the-sysctl-function.patch b/package/radvd/0003-Improve-check-of-the-sysctl-function.patch
 deleted file mode 100644
-index 74af02d..0000000
---- a/package/mrouted/mrouted-bcopy.patch
+index 3053f7b..0000000
+--- a/package/radvd/0003-Improve-check-of-the-sysctl-function.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 2d33110ee18fb59a1d6917d598fc1f4eb3c4cf83 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Mon, 7 May 2012 16:32:10 -0300
--Subject: [PATCH] Switch from bcopy to memmove
+@@ -1,49 +0,0 @@
+-From 4c86b3cbf52f810615d92835e98d83e9555a4d88 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 23 Nov 2014 12:13:47 +0100
+-Subject: [PATCH 3/3] Improve check of the sysctl() function
 -
--The bcopy() function is marked as legacy per POSIX.1-2001 and removed by
--POSIX-1.2008 thus shouldn't be used.
--So switch over to memmove()
+-Since sysctl is a deprecated system call, new architectures such as
+-ARC don't implement it. In such cases, uClibc installs the
+-<sys/sysctl.h> header, but dos not implement the sysctl()
+-function. This has the annoying side effect of breaking the sysctl
+-detection of radvd, which is purely based on the header file being
+-present.
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-To fix this, this commit adds a check based on the existence of the
+-sysctl() function.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- mtrace.c |    4 ++--
-- 1 files changed, 2 insertions(+), 2 deletions(-)
+- configure.ac   | 1 +
+- device-linux.c | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
 -
--diff --git a/mtrace.c b/mtrace.c
--index c982a67..64630bf 100644
----- a/mtrace.c
--+++ b/mtrace.c
--@@ -556,7 +556,7 @@ int send_recv(u_int32_t dst, int type, int code, int tries, struct resp_buf *sav
-- 		save->rtime = ((tr.tv_sec + JAN_1970) << 16) +
-- 		    (tr.tv_usec << 10) / 15625;
-- 		save->len = len;
---		bcopy((char *)igmp, (char *)&save->igmp, ipdatalen);
--+		memmove((char *)&save->igmp, (char *)igmp, ipdatalen);
-- 	    }
-- 	    return recvlen;
+-diff --git a/configure.ac b/configure.ac
+-index 5dde3b2..5518f71 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -161,6 +161,7 @@ AC_CHECK_HEADERS( \
+- 	time.h \
+- )
+- AC_HEADER_TIME
+-+AC_CHECK_FUNCS([sysctl])
+- 
+- dnl Checks for typedefs, structures, and compiler characteristics.
+- AC_MSG_CHECKING(whether struct sockaddr_in6 has sin6_scope_id)
+-diff --git a/device-linux.c b/device-linux.c
+-index 1ecaa6b..d9b56b8 100644
+---- a/device-linux.c
+-+++ b/device-linux.c
+-@@ -183,7 +183,7 @@ int check_ip6_forwarding(void)
+- 		value = -1;
 - 	}
--@@ -646,7 +646,7 @@ void passive_mode(void)
-- 	base.rtime = ((tr.tv_sec + JAN_1970) << 16) +
-- 	    (tr.tv_usec << 10) / 15625;
-- 	base.len = len;
---	bcopy((char *)igmp, (char *)&base.igmp, ipdatalen);
--+	memmove((char *)&base.igmp, (char *)igmp, ipdatalen);
-- 	/*
-- 	 * If the user specified which traces to monitor,
-- 	 * only accept traces that correspond to the
+- 
+--#ifdef HAVE_SYS_SYSCTL_H
+-+#if defined(HAVE_SYS_SYSCTL_H) && defined(HAVE_SYSCTL)
+- 	int forw_sysctl[] = { SYSCTL_IP6_FORWARDING };
+- 	size_t size = sizeof(value);
+- 	if (!fp && sysctl(forw_sysctl, sizeof(forw_sysctl) / sizeof(forw_sysctl[0]), &value, &size, NULL, 0) < 0) {
 --- 
--1.7.3.4
+-2.1.0
 -
-diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
-index 78fe98a..01b4a9f 100644
---- a/package/mrouted/mrouted.mk
-+++ b/package/mrouted/mrouted.mk
-@@ -4,9 +4,17 @@
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index 3ae4b69..af9e8fb 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,2 +1,2 @@
+-# From http://www.litech.org/radvd/dist/radvd-2.8.tar.gz.sha256
+-sha256	0a1041b2044dafa45882b9fc30badadb7abed76c1a20f6332fecaa53c8440df9	radvd-2.8.tar.xz
++# From http://www.litech.org/radvd/dist/radvd-2.9.tar.gz.sha256
++sha256	525ead3ba7fc6378f14c5d96a0de01ff62e9a1fea8cb7233b502a81da05bbab8	radvd-2.9.tar.xz
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index cc50ce4..6b241b7 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MROUTED_VERSION = 3.9.6
-+MROUTED_VERSION = 3.9.7
- MROUTED_SITE = $(call github,troglobit,mrouted,$(MROUTED_VERSION))
- MROUTED_DEPENDENCIES = host-bison
-+MROUTED_LICENSE = BSD-3c
-+MROUTED_LICENSE_FILES = LICENSE
-+
-+define MROUTED_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		$(TARGET_MAKE_ENV) $(@D)/configure --enable-rsrr \
-+	)
-+endef
- 
- define MROUTED_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-RADVD_VERSION = 2.8
++RADVD_VERSION = 2.9
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
