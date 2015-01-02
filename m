@@ -1,49 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  2 Jan 2015 16:53:41 +0100
-Subject: [Buildroot] [PATCH 3/3 v10] package/pkg-download: do not hard-code
-	QUIET
-In-Reply-To: <cover.1420213948.git.yann.morin.1998@free.fr>
-References: <cover.1420213948.git.yann.morin.1998@free.fr>
-Message-ID: <9b12978224418fe368d83e1ca7988619a18e9b74.1420213948.git.yann.morin.1998@free.fr>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Fri, 2 Jan 2015 17:01:24 +0100
+Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
+	with pkg-config
+In-Reply-To: <CAEYzJUEPxw12Ws4-eSu5=TgTfVKmJ1YJ6dFOt8YO0=hZuT1g1w@mail.gmail.com>
+References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
+ <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
+ <20141026164155.4c1bc8db@free-electrons.com>
+ <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
+ <CAEYzJUEV=Z5yb6+DS_vZ9NuOjtsTfX0KGU5jYFa8wjMRt=v8dw@mail.gmail.com>
+ <20141026222449.315ce1ff@free-electrons.com>
+ <CAEYzJUHHES_QH2Ozh9DmgpTFiGsj0-9siv3TgPAyPbBZ2_VKgw@mail.gmail.com>
+ <CAEYzJUFLbUpMUnEQ3MoZPRW3MQx9EzyFOwEVQkRyU_PP0tRHJg@mail.gmail.com>
+ <20141105081505.58f2d26c@free-electrons.com>
+ <CAEYzJUEPxw12Ws4-eSu5=TgTfVKmJ1YJ6dFOt8YO0=hZuT1g1w@mail.gmail.com>
+Message-ID: <CAEYzJUFPdwEMLEKRj03E+7aA+Bp9YQXJwJ03Si-YNA=XX6VzjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do not hard-code QUIET in our download commands, since it is handled in
-the backends.
+On 13 December 2014 at 20:04, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+[...]
+> It's been a few weeks now, just thought I'd check in and see if you
+> guys (Thomas, Yann) have some time now to look at synchronizing
+> kconfig with upstream.
+>
+> I'm in no rush, so just let me know whether you'd like to postpone or
+> if I should just add this change as a separate patch file in the
+> support/kconfig/patches/ directory.
 
-Suggested by Fabio.
+I take it that "no answer" means "no time" :-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-download.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I re-sent this patch (series) with the kconfig stuff as a separate
+patch file in support/kconfig/patches/.
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 9c782fe..5e74519 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -8,14 +8,14 @@
- ################################################################################
- 
- # Download method commands
--export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
-+export WGET := $(call qstrip,$(BR2_WGET))
- export SVN := $(call qstrip,$(BR2_SVN))
- export CVS := $(call qstrip,$(BR2_CVS))
- export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
--export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
--export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
--SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
-+export HG := $(call qstrip,$(BR2_HG))
-+export SCP := $(call qstrip,$(BR2_SCP))
-+SSH := $(call qstrip,$(BR2_SSH))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- DL_WRAPPER = support/download/dl-wrapper
--- 
-1.9.1
+Best regards,
+Bj?rn Forsman
