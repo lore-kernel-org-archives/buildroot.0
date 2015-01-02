@@ -1,84 +1,133 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Jan 2015 19:45:07 -0300
-Subject: [Buildroot] [PATCH 2/2] msmtp: bump to version 1.6.0
-In-Reply-To: <1420238707-5456-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1420238707-5456-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1420238707-5456-2-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat,  3 Jan 2015 00:20:00 +0100
+Subject: [Buildroot] [PATCH] package/libwebsock: fix build when openssl is
+	disabled
+Message-ID: <1420240800-9736-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also drop license comment from help, we have PKG_LICENSE* for that.
+Fixes:
+  http://autobuild.buildroot.org/results/951/95109c7e37aa21228bc71c69e9c66a6821f3174a/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/msmtp/Config.in  |  2 --
- package/msmtp/msmtp.hash |  5 +++--
- package/msmtp/msmtp.mk   | 20 ++++++++++++--------
- 3 files changed, 15 insertions(+), 12 deletions(-)
+ ...c-fully-disable-ssl-support-when-not-enab.patch | 88 ++++++++++++++++++++++
+ package/libwebsock/libwebsock.mk                   |  7 ++
+ 2 files changed, 95 insertions(+)
+ create mode 100644 package/libwebsock/0002-configure.ac-fully-disable-ssl-support-when-not-enab.patch
 
-diff --git a/package/msmtp/Config.in b/package/msmtp/Config.in
-index 385ad90..46bb198 100644
---- a/package/msmtp/Config.in
-+++ b/package/msmtp/Config.in
-@@ -5,6 +5,4 @@ config BR2_PACKAGE_MSMTP
- 	  mail to an SMTP server (for example at a free mail provider)
- 	  which takes care of further delivery.
+diff --git a/package/libwebsock/0002-configure.ac-fully-disable-ssl-support-when-not-enab.patch b/package/libwebsock/0002-configure.ac-fully-disable-ssl-support-when-not-enab.patch
+new file mode 100644
+index 0000000..753fb4f
+--- /dev/null
++++ b/package/libwebsock/0002-configure.ac-fully-disable-ssl-support-when-not-enab.patch
+@@ -0,0 +1,88 @@
++From 608297a6c6abdfb3677ddd35ed5b20a085f02a44 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 2 Jan 2015 23:58:16 +0100
++Subject: [PATCH] configure.ac: fully disable ssl support when not enabled
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ configure.ac  | 4 ++++
++ src/api.h     | 2 +-
++ src/types.h   | 4 ++--
++ src/websock.h | 4 ++--
++ 4 files changed, 9 insertions(+), 5 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index fc1cadc..dacd4f4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -48,6 +48,10 @@ AS_IF([test "x$have_ssl" = "xyes"],
++ 	[AS_IF([test "x$with_ssl" = "xyes"],
++ 		[AC_MSG_ERROR([SSL support requested but not found])
++ 	])])
+++AS_IF([test "x$have_ssl" != "xyes"],
+++	[
+++		AC_DEFINE([WEBSOCK_HAVE_SSL], [0], [Disable SSL support])
+++	])
++ 
++ AM_CONDITIONAL([HAVE_SSL], [test "x$have_ssl" = "xyes"])
++ 
++diff --git a/src/api.h b/src/api.h
++index d3e8e7c..6324b3d 100644
++--- a/src/api.h
+++++ b/src/api.h
++@@ -37,7 +37,7 @@ libwebsock_context *libwebsock_init(void);
++ libwebsock_context *libwebsock_init_flags(int flags);
++ libwebsock_context *libwebsock_init_base(struct event_base *base, int flags);
++ 
++-#ifdef WEBSOCK_HAVE_SSL
+++#if defined(WEBSOCK_HAVE_SSL) && WEBSOCK_HAVE_SSL
++ void libwebsock_bind_ssl(libwebsock_context *ctx, char *listen_host, char *port, char *keyfile, char *certfile);
++ void libwebsock_bind_ssl_real(libwebsock_context *ctx, char *listen_host, char *port, char *keyfile, char *certfile, char *chainfile);
++ #endif
++diff --git a/src/types.h b/src/types.h
++index 9c19795..6d4f1c5 100644
++--- a/src/types.h
+++++ b/src/types.h
++@@ -90,7 +90,7 @@ typedef struct _libwebsock_client_state {
++         int (*onopen)(struct _libwebsock_client_state *);
++         int (*onclose)(struct _libwebsock_client_state *);
++         int (*onpong)(struct _libwebsock_client_state *);
++-#ifdef WEBSOCK_HAVE_SSL
+++#if defined(WEBSOCK_HAVE_SSL) && WEBSOCK_HAVE_SSL
++         SSL *ssl;
++ #endif
++         libwebsock_close_info *close_info;
++@@ -132,7 +132,7 @@ typedef struct _libwebsock_fragmented {
++         struct _libwebsock_client_state *state;
++ } libwebsock_fragmented;
++ 
++-#ifdef WEBSOCK_HAVE_SSL
+++#if defined(WEBSOCK_HAVE_SSL) && WEBSOCK_HAVE_SSL
++ typedef struct _libwebsock_ssl_event_data {
++         SSL_CTX *ssl_ctx;
++         libwebsock_context *ctx;
++diff --git a/src/websock.h b/src/websock.h
++index 1bbd410..83ac9dc 100644
++--- a/src/websock.h
+++++ b/src/websock.h
++@@ -58,7 +58,7 @@
++ #include <event2/thread.h>
++ #include <wchar.h>
++ #include <errno.h>
++-#ifdef WEBSOCK_HAVE_SSL
+++#if defined(WEBSOCK_HAVE_SSL) && WEBSOCK_HAVE_SSL
++ #include <openssl/ssl.h>
++ #include <openssl/err.h>
++ #include <event2/bufferevent_ssl.h>
++@@ -149,7 +149,7 @@ void libwebsock_fragmented_add(libwebsock_fragmented *frag, char *buf, unsigned
++ void libwebsock_fragmented_finish(libwebsock_fragmented *frag);
++ libwebsock_fragmented *libwebsock_fragmented_new(libwebsock_client_state *state);
++ 
++-#ifdef WEBSOCK_HAVE_SSL
+++#if defined(WEBSOCK_HAVE_SSL) && WEBSOCK_HAVE_SSL
++ void libwebsock_handle_accept_ssl(evutil_socket_t listener, short event, void *arg);
++ #endif
++ 
++-- 
++2.2.1
++
+diff --git a/package/libwebsock/libwebsock.mk b/package/libwebsock/libwebsock.mk
+index 8458883..e57e3ea 100644
+--- a/package/libwebsock/libwebsock.mk
++++ b/package/libwebsock/libwebsock.mk
+@@ -12,4 +12,11 @@ LIBWEBSOCK_INSTALL_STAGING = YES
+ LIBWEBSOCK_LICENSE = LGPLv3
+ LIBWEBSOCK_LICENSE_FILES = COPYING.lesser
  
--	  Note that msmtp is licensed under GPLv3.
--
- 	  http://msmtp.sourceforge.net/
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index 41c6caa..2196afb 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  2bf0c5c7e78f9905f48de235a75111a1a88238793043bbeae00360b22f1a5f88  msmtp-1.4.32.tar.bz2
-+# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.0/
-+md5	1c166853b63c02ae2ab56b50f1aae57b	msmtp-1.6.0.tar.xz
-+sha1	39e597619f797ec3550c0146cd3d9e55e85947eb	msmtp-1.6.0.tar.xz
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 2d8e630..1c6de16 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -4,13 +4,22 @@
- #
- ################################################################################
- 
--MSMTP_VERSION = 1.4.32
-+MSMTP_VERSION = 1.6.0
- MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
--MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.bz2
-+MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
-+MSMTP_DEPENDENCIES = host-pkgconf
-+MSMTP_CONF_OPTS = \
-+	--without-libidn \
-+	--without-libgsasl
- MSMTP_LICENSE = GPLv3+
- MSMTP_LICENSE_FILES = COPYING
- 
--MSMTP_DEPENDENCIES += host-pkgconf
-+ifeq ($(BR2_PACKAGE_LIBSECRET),y)
-+MSMTP_CONF_OPTS += --with-libsecret
-+MSMTP_DEPENDENCIES += libsecret
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBWEBSOCK_CONF_OPTS += --with-ssl
++LIBWEBSOCK_DEPENDENCIES += openssl
 +else
-+MSMTP_CONF_OPTS += --without-libsecret
++LIBWEBSOCK_CONF_OPTS += --without-ssl
 +endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MSMTP_CONF_OPTS += --with-ssl=openssl
-@@ -26,9 +35,4 @@ else
- MSMTP_CONF_OPTS += --with-ssl=no
- endif
- 
--MSMTP_CONF_OPTS += \
--	--without-libidn \
--	--without-libgsasl \
--	--without-gnome-keyring
--
++
  $(eval $(autotools-package))
 -- 
-2.0.5
+2.2.1
