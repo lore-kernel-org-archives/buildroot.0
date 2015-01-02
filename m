@@ -1,49 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 17:16:29 +0100
-Subject: [Buildroot] [PATCH v3 1/2] Added mpd-mpc, mpc client to mpd
-In-Reply-To: <1418419480-7570-1-git-send-email-tbultel@free.fr>
-References: <1418419480-7570-1-git-send-email-tbultel@free.fr>
-Message-ID: <20150102171629.44662fe1@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Jan 2015 17:17:04 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Portability fixes for "make
+ menuconfig"
+In-Reply-To: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20150102161704.GG4392@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+Bj?rn, All,
 
-On Fri, 12 Dec 2014 22:24:39 +0100, Thierry Bultel wrote:
-> ---
+On 2015-01-01 21:54 +0100, Bj?rn Forsman spake thusly:
+> Here are two portability fixes needed to be able to run "make menuconfig" on
+> NixOS[1].
 > 
-> Changes v2 -> v3
->   - dependency to host-pkgconf (noticed by J?rg Krause)
->   - optional dependency to libiconv
->   - configure environnement for C99 compiler
+> [1]: http://nixos.org/
 > 
-> Changes v1 -> v2
->   - No needed dependency to mpd (suggested by Thomas)
->   - Added hash and license information
+> Bj?rn Forsman (2):
+>   kconfig/lxdialog: get ncurses CFLAGS with pkg-config
+>   Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time
+
+I think the order should be the other way around, because you need the
+latter for the former to work.
+
+Regards,
+Yann E. MORIN.
+
+>  Makefile                                           |  6 ++-
+>  ...dialog-get-ncurses-CFLAGS-with-pkg-config.patch | 50 ++++++++++++++++++++++
+>  support/kconfig/patches/series                     |  1 +
+>  3 files changed, 56 insertions(+), 1 deletion(-)
+>  create mode 100644 support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
 > 
-> Signed-off-by: Thierry Bultel <tbultel@free.fr>
+> -- 
+> Changes v1 -> v2:
+>   - make the kconfig/lxdialog patch a separate patch file, instead of modifying
+>     the kconfig sources (which are synced with linux from time to time).
+>     Suggested by Thomas P.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Committed, thanks, with a few changes:
-
-[Thomas:
- - Changed hash file to use SHA256
- - Remove libiconv handling, since the iconv detection in mpc is
-   broken: if it's not available in the C library, it expects to find
-   iconv() in libintl (from gettext). But it's actually libiconv that
-   provides iconv() for non-locale capable uClibc toolchains. But
-   since anyway the package builds fine without iconv() support and
-   properly detects when it's available, don't bother with this.]
-
-If you can report to upstream the libiconv detection problem, it would
-be good.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
