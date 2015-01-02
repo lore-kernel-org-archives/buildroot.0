@@ -1,39 +1,86 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Fri, 2 Jan 2015 17:01:24 +0100
-Subject: [Buildroot] [PATCH 1/2] kconfig/lxdialog: get ncurses CFLAGS
-	with pkg-config
-In-Reply-To: <CAEYzJUEPxw12Ws4-eSu5=TgTfVKmJ1YJ6dFOt8YO0=hZuT1g1w@mail.gmail.com>
-References: <1414329446-16587-1-git-send-email-bjorn.forsman@gmail.com>
- <1414329446-16587-2-git-send-email-bjorn.forsman@gmail.com>
- <20141026164155.4c1bc8db@free-electrons.com>
- <CAEYzJUGaae4Uqj_v9fWbi4kfygoSLGAku_P8=AedfDV04gCCxA@mail.gmail.com>
- <CAEYzJUEV=Z5yb6+DS_vZ9NuOjtsTfX0KGU5jYFa8wjMRt=v8dw@mail.gmail.com>
- <20141026222449.315ce1ff@free-electrons.com>
- <CAEYzJUHHES_QH2Ozh9DmgpTFiGsj0-9siv3TgPAyPbBZ2_VKgw@mail.gmail.com>
- <CAEYzJUFLbUpMUnEQ3MoZPRW3MQx9EzyFOwEVQkRyU_PP0tRHJg@mail.gmail.com>
- <20141105081505.58f2d26c@free-electrons.com>
- <CAEYzJUEPxw12Ws4-eSu5=TgTfVKmJ1YJ6dFOt8YO0=hZuT1g1w@mail.gmail.com>
-Message-ID: <CAEYzJUFPdwEMLEKRj03E+7aA+Bp9YQXJwJ03Si-YNA=XX6VzjQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Jan 2015 17:05:31 +0100
+Subject: [Buildroot] [git commit] mpd-mpc: new package
+Message-ID: <20150102160717.8634B80D94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13 December 2014 at 20:04, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
-[...]
-> It's been a few weeks now, just thought I'd check in and see if you
-> guys (Thomas, Yann) have some time now to look at synchronizing
-> kconfig with upstream.
->
-> I'm in no rush, so just let me know whether you'd like to postpone or
-> if I should just add this change as a separate patch file in the
-> support/kconfig/patches/ directory.
+commit: http://git.buildroot.net/buildroot/commit/?id=4f2367f416baa3e146f0ac8355bd7dacdcdec74d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I take it that "no answer" means "no time" :-)
+[Thomas:
+ - Changed hash file to use SHA256
+ - Remove libiconv handling, since the iconv detection in mpc is
+   broken: if it's not available in the C library, it expects to find
+   iconv() in libintl (from gettext). But it's actually libiconv that
+   provides iconv() for non-locale capable uClibc toolchains. But
+   since anyway the package builds fine without iconv() support and
+   properly detects when it's available, don't bother with this.]
 
-I re-sent this patch (series) with the kconfig stuff as a separate
-patch file in support/kconfig/patches/.
+Signed-off-by: Thierry Bultel <tbultel@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in            |    1 +
+ package/mpd-mpc/Config.in    |    7 +++++++
+ package/mpd-mpc/mpd-mpc.hash |    2 ++
+ package/mpd-mpc/mpd-mpc.mk   |   16 ++++++++++++++++
+ 4 files changed, 26 insertions(+), 0 deletions(-)
 
-Best regards,
-Bj?rn Forsman
+diff --git a/package/Config.in b/package/Config.in
+index 2def872..1abcaa8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -20,6 +20,7 @@ menu "Audio and video applications"
+ 	source "package/madplay/Config.in"
+ 	source "package/modplugtools/Config.in"
+ 	source "package/mpd/Config.in"
++	source "package/mpd-mpc/Config.in"
+ 	source "package/mpg123/Config.in"
+ 	source "package/mplayer/Config.in"
+ 	source "package/musepack/Config.in"
+diff --git a/package/mpd-mpc/Config.in b/package/mpd-mpc/Config.in
+new file mode 100644
+index 0000000..1debc83
+--- /dev/null
++++ b/package/mpd-mpc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_MPD_MPC
++	bool "mpd-mpc"
++	select BR2_PACKAGE_LIBMPDCLIENT
++	help
++	  A minimalist command line interface to MPD.
++
++	  http://www.musicpd.org/clients/mpc/
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+new file mode 100644
+index 0000000..4f348d5
+--- /dev/null
++++ b/package/mpd-mpc/mpd-mpc.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 20735f7173cce56bec50c1d8b4633751052dc68365b29a6113206dc1cdc6e242 mpc-0.26.tar.xz
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+new file mode 100644
+index 0000000..4e08c65
+--- /dev/null
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# mpd-mpc
++#
++################################################################################
++
++MPD_MPC_VERSION_MAJOR = 0
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).26
++MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
++MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
++MPD_MPC_LICENSE = GPLv2+
++MPD_MPC_LICENSE_FILES = COPYING
++MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
++MPD_MPC_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
++
++$(eval $(autotools-package))
