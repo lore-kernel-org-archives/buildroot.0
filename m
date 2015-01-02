@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 16:34:46 +0100
-Subject: [Buildroot] [PATCH 1/4 v9] Makefile: improve detection of make
- "-s" flag
-In-Reply-To: <3e5ffa778bc4dea304fd9897fc983c294a0c7dc9.1420142462.git.yann.morin.1998@free.fr>
+Date: Fri, 2 Jan 2015 16:36:57 +0100
+Subject: [Buildroot] [PATCH 3/4 v9] pkg-download: silence downloads if
+ make is silent
+In-Reply-To: <20150101220239.GL4360@free.fr>
 References: <cover.1420142462.git.yann.morin.1998@free.fr>
- <3e5ffa778bc4dea304fd9897fc983c294a0c7dc9.1420142462.git.yann.morin.1998@free.fr>
-Message-ID: <20150102163446.06b784a8@free-electrons.com>
+ <8537faa275be0b3bb0aec3da99d7aaf1c56db17c.1420142462.git.yann.morin.1998@free.fr>
+ <20150101225639.2890512b@free-electrons.com>
+ <20150101220239.GL4360@free.fr>
+Message-ID: <20150102163657.76b1df89@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +16,22 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Thu,  1 Jan 2015 21:03:50 +0100, Yann E. MORIN wrote:
-> From: Fabio Porcedda <fabio.porcedda@gmail.com>
-> 
-> Because it's just checking the presence of the "s" character even a
->   make --warn-undefined-variables
-> is detected as a silent build.
-> 
-> Fix that by filtering out long options.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 1 Jan 2015 23:02:39 +0100, Yann E. MORIN wrote:
 
-Applied, thanks.
+> Redirecting stdout is a further solution for those downloaders that
+> still want to output something on stdout, even when told to be quiet.
+> 
+> I could not test CVS, CP and SCP because we do use them in in-tree
+> packages, so it is just an additional precaution.
+
+Well, do we want to take "additional precautions" ? While I
+originally found the redirect solution nice when you proposed it, the
+fact that it doesn't work with certain backends makes it not very
+useful. So I would tend to defer the work of being quiet to each
+individual backend, and not attempt to do anything specific at the
+wrapper level.
+
+Best regards,
 
 Thomas
 -- 
