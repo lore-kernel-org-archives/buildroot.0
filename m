@@ -1,40 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 19:23:04 +0100
-Subject: [Buildroot] [v2 1/2] caps: new package
-In-Reply-To: <53E29D7E.4020906@barkynet.com>
-References: <1407283327-5150-1-git-send-email-martin@barkynet.com>
- <20140806221449.2aff1359@free-electrons.com>
- <53E29D7E.4020906@barkynet.com>
-Message-ID: <20150102192304.42b27c44@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Jan 2015 19:23:26 +0100
+Subject: [Buildroot] [PATCH 1/4] python3: bump to 3.4.2
+In-Reply-To: <1419800095-7808-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1419800095-7808-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1419800095-7808-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150102182326.GK4392@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Thomas, All,
 
-On Wed, 06 Aug 2014 22:26:22 +0100, Martin Bark wrote:
-
-> Thanks for running the test.  After a quick looks it seems the finite() 
-> and pow10f() functions are the issue.  I tried a quick change to use 
-> isfinite() and powf(10,x) instead and that builds.
+On 2014-12-28 21:54 +0100, Thomas Petazzoni spake thusly:
+> This commit bumps python3 to Python 3.4.2. Two patches had to be
+> changed slightly to fix some minor conflicts.
 > 
-> I'm off on holiday now for a week so I?ll create an updated patch when i 
-> get back.
+> PYTHON3_LIBTOOL_PATH = NO was added to prevent Buildroot from trying
+> to patch a version of libtool for which we don't have matching
+> patches, which isn't a problem since we're anyway not using the part
+> of the Python sources that uses libtool (it's the built-in copy of
+> libffi, and we use the external libffi).
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Any news about this?
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[run-time testedi on ARM to at least print("Hello World\n") properly]
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Since you did not send updated versions of this patch, I'll mark this
-patch, and the following one add alsaequal as "Changes Requested" in
-patchwork. Therefore, if you would like to see those patches merged in
-Buildroot, could you resend an updated versions that fixes the build
-issues that I reported back in August?
+Regards,
+Yann E. MORIN.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
