@@ -1,49 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jan 2015 14:44:15 +0100
-Subject: [Buildroot] [git commit] linux: change Device Tree prompt
-Message-ID: <20150102134521.70D34803E5@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Jan 2015 15:59:04 +0100
+Subject: [Buildroot] [PATCH] libevent: add optional dependency on OpenSSL
+In-Reply-To: <1420112396-7686-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1420112396-7686-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150102145904.GB4392@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be529e22189b425edb3e6c23dea91f3c1d91a694
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-The current prompt seems to imply that we want to add Device Tree
-support to the Linux kernel:
+On 2015-01-01 12:39 +0100, Thomas Petazzoni spake thusly:
+> libevent can optionally use OpenSSL, so add an optional dependency on
+> this package to explicit this possibility. This makes sure libevent
+> always gets built with OpenSSL support when the OpenSSL package is
+> enabled.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-    [*] Device tree support
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-But what it really means is that Buildroot will build a DTB.
+Regards,
+Yann E. MORIN.
 
-Change the prompt so that it is obvious that this is the intended
-behaviour, and users do not get mislead as to why Device Tree support is
-not automatically added to their Linux kernel.
+> ---
+>  package/libevent/libevent.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+> index 607b7b2..30fcb5a 100644
+> --- a/package/libevent/libevent.mk
+> +++ b/package/libevent/libevent.mk
+> @@ -22,5 +22,12 @@ ifneq ($(BR2_PACKAGE_PYTHON),y)
+>  LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +LIBEVENT_DEPENDENCIES += openssl
+> +LIBEVENT_CONF_OPTS += --enable-openssl
+> +else
+> +LIBEVENT_CONF_OPTS += --disable-openssl
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index ba4b574..bf30426 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -269,10 +269,10 @@ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
- 	  If unsure, let this option empty.
- 
- config BR2_LINUX_KERNEL_DTS_SUPPORT
--	bool "Device tree support"
-+	bool "Build a Device Tree Blob (DTB)"
- 	help
--	  Compile a device tree source into a device tree blob.
--	  Select the dts file to compile in the options below.
-+	  Compile one or more device tree sources into device tree blobs.
-+	  Select the dts files to compile in the options below.
- 
- if BR2_LINUX_KERNEL_DTS_SUPPORT
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
