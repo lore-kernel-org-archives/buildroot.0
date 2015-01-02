@@ -1,39 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 17:24:09 +0100
-Subject: [Buildroot] [PATCH 1/2] aufs-utils: initial release
-In-Reply-To: <1406576065-20263-1-git-send-email-mail@steffenhoenig.com>
-References: <1406576065-20263-1-git-send-email-mail@steffenhoenig.com>
-Message-ID: <20150102172409.7716f157@free-electrons.com>
+From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
+Date: Fri, 2 Jan 2015 16:25:42 +0000
+Subject: [Buildroot] Newbie: configure: error: cannot run test program
+ while cross compiling
+In-Reply-To: <20150102093305.GA4392@free.fr>
+References: <54A6268B.5050603@slac.stanford.edu>,
+ <20150102093305.GA4392@free.fr>
+Message-ID: <e8de2f026ebd443ebace163bec19f7ca@exch13-mail06.win.slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear steffenhoenig,
+Hi Yann,
+________________________________________
+From: Yann E. MORIN [yann.morin.1998 at gmail.com] on behalf of Yann E. MORIN [yann.morin.1998 at free.fr]
+Sent: Friday, January 2, 2015 1:33 AM
+To: Williams Jr., Ernest L.
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Newbie: configure: error: cannot run test program while cross compiling
 
-On Mon, 28 Jul 2014 21:34:24 +0200, steffenhoenig wrote:
-> Signed-off-by: steffenhoenig <mail@steffenhoenig.com>
-> ---
->  package/Config.in                |  1 +
->  package/aufs-utils/Config.in     |  4 ++++
->  package/aufs-utils/aufs-utils.mk | 27 +++++++++++++++++++++++++++
->  3 files changed, 32 insertions(+)
->  create mode 100644 package/aufs-utils/Config.in
->  create mode 100644 package/aufs-utils/aufs-utils.mk
+Ernest, All,
 
-I gave some feedback about your patches on November, 23th, and got no
-response. Since the patches cannot be applied as is, and nobody has
-worked on a version that actually works properly, I'll mark them as
-"Changes Requested" in our patch tracking system.
+On 2015-01-01 21:03 -0800, Ernest L Williams spake thusly:
+> Hi
+> I am working with the hdf5 package and having trouble getting past the
+> configuration stage :(
+> hdf5 builds fine for my host machine but fails configuration when i try to
+> build for
+> "x86_64-buildroot-linux-uclibc"
+>
+>
+> Oops,
+> package/pkg-generic.mk:172: recipe for target '/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14/.stamp_configured'
+> failed
+>
+> The hdf5 package uses autotools
+>
+> Any ideas on what I should pursue?
+>
+> By the way,  why does "package/pkg-generic.mk" show up in the output below?
+> I am using auto-tools.
+>
+>
+> checking if libtool needs -no-undefined flag to build shared libraries... no
+> checking if configure should try to set up large file support... yes
+> checking for special C compiler options needed for large files... no
+> checking for _FILE_OFFSET_BITS value needed for large files... no
+> checking if large (64-bit) files are supported on this system.... configure:
+> error: in `/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14':
+> configure: error: cannot run test program while cross compiling
 
-Please resubmit updated versions with the suggested changes if you
-want to have aufs supported in Buildroot.
+Damn, those pesky packagers that do not like cross-compilation! ;-)
 
-Thanks a lot! 
+What you can do is force the result of the test, by passing the
+appropriate value on the command line when calling configure, something
+like the following:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+    HDF5_CONF_ENV = hdf5_cv_have_lfs=$(if $(BR2_LARGEFILE),yes,no)
+
+This will tell configure not to run the test, and assume the result we
+do provide.
+
+Note-1: you can see what variable to preset by looking at configure.ac,
+line 1455:
+
+    1452   ## Now actually test to see if we can create large files after we've
+    1453   ## checked for any needed defines.
+    1454   AC_MSG_CHECKING([if large (64-bit) files are supported on this system.])
+    1455   AC_CACHE_VAL([hdf5_cv_have_lfs],
+    1456     [AC_TRY_RUN([
+    [...]
+
+Note-2: I used 'HDF5' as a prefix, assuming the package is named 'hdf5'
+in Buildroot.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>  Yes, the package name is "hdf5"
+>>>  This actually worked great :)
+>>>  Can I continue with this technique?
+>>> Next error is the following:
+
+>>> checking for struct tm.tm_zone... yes
+>>> checking for struct timezone... yes
+>>> checking whether gettimeofday() gives timezone... configure: 
+>>> error: in `/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14':
+>>> configure: error: cannot run test program while cross compiling
+>>> See `config.log' for more details
+
+>>> config.log does indeed reveal the variable name  "ac_cv_func_gettimeofday"
+>>> But what buildroot string must I use  "HDF5_CONF_ENV = hdf5_cv_have_lfs=$(if $(BR2_XXXX),yes,no) ?
+>>> Looks like I may bump into more of this ?
+
+>>> Cheers,
+Ernesto
+
+
+Regards,
+Yann E. MORIN.
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
