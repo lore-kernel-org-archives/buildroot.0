@@ -1,78 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 10:33:05 +0100
-Subject: [Buildroot] Newbie: configure: error: cannot run test program
- while cross compiling
-In-Reply-To: <54A6268B.5050603@slac.stanford.edu>
-References: <54A6268B.5050603@slac.stanford.edu>
-Message-ID: <20150102093305.GA4392@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Jan 2015 11:21:16 +0100
+Subject: [Buildroot] [PATCH 2/2] graph-depends: add an option
+ --stop-on-virtual
+In-Reply-To: <1420188573-4236-2-git-send-email-francois.perrad@gadz.org>
+References: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
+ <1420188573-4236-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150102112116.7c2085eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ernest, All,
+Dear Francois Perrad,
 
-On 2015-01-01 21:03 -0800, Ernest L Williams spake thusly:
-> Hi
-> I am working with the hdf5 package and having trouble getting past the
-> configuration stage :(
-> hdf5 builds fine for my host machine but fails configuration when i try to
-> build for
-> "x86_64-buildroot-linux-uclibc"
-> 
-> 
-> Oops,
-> package/pkg-generic.mk:172: recipe for target '/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14/.stamp_configured'
-> failed
-> 
-> The hdf5 package uses autotools
-> 
-> Any ideas on what I should pursue?
-> 
-> By the way,  why does "package/pkg-generic.mk" show up in the output below?
-> I am using auto-tools.
-> 
-> 
-> checking if libtool needs -no-undefined flag to build shared libraries... no
-> checking if configure should try to set up large file support... yes
-> checking for special C compiler options needed for large files... no
-> checking for _FILE_OFFSET_BITS value needed for large files... no
-> checking if large (64-bit) files are supported on this system.... configure:
-> error: in `/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14':
-> configure: error: cannot run test program while cross compiling
+On Fri,  2 Jan 2015 09:49:33 +0100, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  docs/manual/common-usage.txt  |  3 +++
+>  support/scripts/graph-depends | 11 +++++++++++
+>  2 files changed, 14 insertions(+)
 
-Damn, those pesky packagers that do not like cross-compilation! ;-)
+Why would we want to stop on virtual packages? I don't really see the
+use case for this additional option.
 
-What you can do is force the result of the test, by passing the
-appropriate value on the command line when calling configure, something
-like the following:
+Thanks,
 
-    HDF5_CONF_ENV = hdf5_cv_have_lfs=$(if $(BR2_LARGEFILE),yes,no)
-
-This will tell configure not to run the test, and assume the result we
-do provide.
-
-Note-1: you can see what variable to preset by looking at configure.ac,
-line 1455:
-
-    1452   ## Now actually test to see if we can create large files after we've
-    1453   ## checked for any needed defines.
-    1454   AC_MSG_CHECKING([if large (64-bit) files are supported on this system.])
-    1455   AC_CACHE_VAL([hdf5_cv_have_lfs],
-    1456     [AC_TRY_RUN([
-    [...]
-
-Note-2: I used 'HDF5' as a prefix, assuming the package is named 'hdf5'
-in Buildroot.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
