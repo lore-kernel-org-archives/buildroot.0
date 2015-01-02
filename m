@@ -1,54 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 17:17:04 +0100
-Subject: [Buildroot] [PATCH v2 0/2] Portability fixes for "make
- menuconfig"
-In-Reply-To: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1420145678-11134-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <20150102161704.GG4392@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Jan 2015 17:22:08 +0100
+Subject: [Buildroot] [PATCH 00/14] Add support for U-Boots Kbuild &
+ Kconfig build system
+In-Reply-To: <20141221234006.311fcde0@free-electrons.com>
+References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
+ <20141221234006.311fcde0@free-electrons.com>
+Message-ID: <20150102172208.7a2ef5f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bj?rn, All,
+Hello J?rg,
 
-On 2015-01-01 21:54 +0100, Bj?rn Forsman spake thusly:
-> Here are two portability fixes needed to be able to run "make menuconfig" on
-> NixOS[1].
+On Sun, 21 Dec 2014 23:40:06 +0100, Thomas Petazzoni wrote:
+
+> Thanks for working on this, definitely good to see someone tackling the
+> bump to the first kconfig-enabled U-Boot version.
 > 
-> [1]: http://nixos.org/
+> There is however one big issue with your patch series: I believe it
+> breaks backward compatibility with U-Boot versions older than 2014.10.
+> And a *lot* of people are using old versions of U-Boot, to which they
+> are stuck due to the old version being their only choice for a given
+> piece of hardware.
 > 
-> Bj?rn Forsman (2):
->   kconfig/lxdialog: get ncurses CFLAGS with pkg-config
->   Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time
-
-I think the order should be the other way around, because you need the
-latter for the former to work.
-
-Regards,
-Yann E. MORIN.
-
->  Makefile                                           |  6 ++-
->  ...dialog-get-ncurses-CFLAGS-with-pkg-config.patch | 50 ++++++++++++++++++++++
->  support/kconfig/patches/series                     |  1 +
->  3 files changed, 56 insertions(+), 1 deletion(-)
->  create mode 100644 support/kconfig/patches/17-kconfig-lxdialog-get-ncurses-CFLAGS-with-pkg-config.patch
+> So we clearly need to continue to support older versions of U-Boot,
+> that don't have the kconfig stuff. I just gave a try, and it seems like
+> the old U-Boot way of configuring/building things apparently still
+> works with U-Boot 2014.10. So your PATCH 01/14 is probably OK. However
+> starting from 02/14, I believe you'll be breaking things for U-Boot
+> versions older than 2014.10.
 > 
-> -- 
-> Changes v1 -> v2:
->   - make the kconfig/lxdialog patch a separate patch file, instead of modifying
->     the kconfig sources (which are synced with linux from time to time).
->     Suggested by Thomas P.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Can you work on a solution that preserves compatibility?
 
+Since I had no feedback about this (probably due to the winter
+holidays), I'll mark those patches as "Changes Requested" in patchwork.
+Can you resend a new version that takes into account the need for
+backward compatibility with older versions of U-Boot?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
