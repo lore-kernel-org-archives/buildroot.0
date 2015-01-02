@@ -1,65 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 00:21:23 +0100
-Subject: [Buildroot] [PATCH 2/7] linux: add option to rely on a
- bootloader-provided DTB
-In-Reply-To: <87k3169joz.fsf@dell.be.48ers.dk>
-References: <cover.1420142707.git.yann.morin.1998@free.fr>
- <e330f5c885f762feb6f4d7487fe3f6aa29c7fca3.1420142707.git.yann.morin.1998@free.fr>
- <20150101222449.18453adb@free-electrons.com>
- <20150101214435.GJ4360@free.fr>
- <20150101225102.64944ac5@free-electrons.com>
- <20150101215845.GK4360@free.fr>
- <20150101231700.75d142fd@free-electrons.com>
- <87k3169joz.fsf@dell.be.48ers.dk>
-Message-ID: <20150101232123.GO4360@free.fr>
+From: Ernest L Williams <ernesto@slac.stanford.edu>
+Date: Thu, 1 Jan 2015 21:03:07 -0800
+Subject: [Buildroot] Newbie: configure: error: cannot run test program while
+	cross compiling
+Message-ID: <54A6268B.5050603@slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, All,
+Hi
+I am working with the hdf5 package and having trouble getting past the 
+configuration stage :(
+hdf5 builds fine for my host machine but fails configuration when i try 
+to build for
+"x86_64-buildroot-linux-uclibc"
 
-On 2015-01-02 00:15 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  > Dear Yann E. MORIN,
->  > On Thu, 1 Jan 2015 22:58:45 +0100, Yann E. MORIN wrote:
-> 
->  >> However, I beg to disagree on that last part: I think we should have
->  >> this as an option in Buildroot.
->  >> 
->  >> The reason is that some platforms can be built with or without support
->  >> for the device tree. The Raspberry Pi is but one such platform; there
->  >> are others. Their defconfig do not always enable USE_OF by default, it
->  >> must be a volunteer selection from the user.
->  >> 
->  >> In that case, your opinion is to delegate to the user the responsibility
->  >> to enable that on his own, right? So, it would no longer be possible to
->  >> use in-tree defconfigs for those boards, for example.
-> 
->  > Well, to me this is a slippery slope. There are gazillions of kernel
->  > options that do platform-specific stuff. So far, we really tried hard
->  > to limit how much Buildroot modifies the kernel options, and tried to
->  > limit that to cases related to userspace components enabled by the user
->  > that really need some feature in the kernel.
-> 
->  > Let's see what Peter thinks about this, he might very well have a
->  > different opinion on this.
-> 
-> I must say I'm with Thomas on this one. Let's not fiddle with the kernel
-> .config unless we really _HAVE_ to.
 
-OK, marked as Rejected in Patchwork, dropped from my tree.
+Oops,
+package/pkg-generic.mk:172: recipe for target 
+'/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14/.stamp_configured' 
+failed
 
-Thamks! :-)
+The hdf5 package uses autotools
 
-Regards,
-Yann E. MORIN.
+Any ideas on what I should pursue?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+By the way,  why does "package/pkg-generic.mk" show up in the output below?
+I am using auto-tools.
+
+
+checking if libtool needs -no-undefined flag to build shared libraries... no
+checking if configure should try to set up large file support... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking if large (64-bit) files are supported on this system.... 
+configure: error: in 
+`/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14':
+configure: error: cannot run test program while cross compiling
+See `config.log' for more details
+package/pkg-generic.mk:172: recipe for target 
+'/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14/.stamp_configured' 
+failed
+make: *** 
+[/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14/.stamp_configured] 
+Error 1
+[ernesto at localhost buildroot-uclibc-x86_64]$
+
+Cheers,
+Ernesto
