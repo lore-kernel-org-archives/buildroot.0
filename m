@@ -1,108 +1,40 @@
-From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
-Date: Fri, 2 Jan 2015 16:25:42 +0000
-Subject: [Buildroot] Newbie: configure: error: cannot run test program
- while cross compiling
-In-Reply-To: <20150102093305.GA4392@free.fr>
-References: <54A6268B.5050603@slac.stanford.edu>,
- <20150102093305.GA4392@free.fr>
-Message-ID: <e8de2f026ebd443ebace163bec19f7ca@exch13-mail06.win.slac.stanford.edu>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri,  2 Jan 2015 17:39:05 +0100
+Subject: [Buildroot] [PATCH 2/2] Revert "dhcpcd: blacklist Sourcery PowerPC
+	toolchains"
+In-Reply-To: <1420216745-24218-1-git-send-email-luca@lucaceresoli.net>
+References: <1420216745-24218-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1420216745-24218-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-________________________________________
-From: Yann E. MORIN [yann.morin.1998 at gmail.com] on behalf of Yann E. MORIN [yann.morin.1998 at free.fr]
-Sent: Friday, January 2, 2015 1:33 AM
-To: Williams Jr., Ernest L.
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Newbie: configure: error: cannot run test program while cross compiling
+This reverts commit dfbfa6ef00ed32127bf01f5b4f525889921c3006
+("dhcpcd: blacklist Sourcery PowerPC toolchains").
 
-Ernest, All,
+Blacklisting those toolchains is not useful anymore, since a patch for
+dhcpcd 6.6.7 fixed the issue.
 
-On 2015-01-01 21:03 -0800, Ernest L Williams spake thusly:
-> Hi
-> I am working with the hdf5 package and having trouble getting past the
-> configuration stage :(
-> hdf5 builds fine for my host machine but fails configuration when i try to
-> build for
-> "x86_64-buildroot-linux-uclibc"
->
->
-> Oops,
-> package/pkg-generic.mk:172: recipe for target '/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14/.stamp_configured'
-> failed
->
-> The hdf5 package uses autotools
->
-> Any ideas on what I should pursue?
->
-> By the way,  why does "package/pkg-generic.mk" show up in the output below?
-> I am using auto-tools.
->
->
-> checking if libtool needs -no-undefined flag to build shared libraries... no
-> checking if configure should try to set up large file support... yes
-> checking for special C compiler options needed for large files... no
-> checking for _FILE_OFFSET_BITS value needed for large files... no
-> checking if large (64-bit) files are supported on this system.... configure:
-> error: in `/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14':
-> configure: error: cannot run test program while cross compiling
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dhcpcd/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-Damn, those pesky packagers that do not like cross-compilation! ;-)
-
-What you can do is force the result of the test, by passing the
-appropriate value on the command line when calling configure, something
-like the following:
-
-    HDF5_CONF_ENV = hdf5_cv_have_lfs=$(if $(BR2_LARGEFILE),yes,no)
-
-This will tell configure not to run the test, and assume the result we
-do provide.
-
-Note-1: you can see what variable to preset by looking at configure.ac,
-line 1455:
-
-    1452   ## Now actually test to see if we can create large files after we've
-    1453   ## checked for any needed defines.
-    1454   AC_MSG_CHECKING([if large (64-bit) files are supported on this system.])
-    1455   AC_CACHE_VAL([hdf5_cv_have_lfs],
-    1456     [AC_TRY_RUN([
-    [...]
-
-Note-2: I used 'HDF5' as a prefix, assuming the package is named 'hdf5'
-in Buildroot.
-
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>  Yes, the package name is "hdf5"
->>>  This actually worked great :)
->>>  Can I continue with this technique?
->>> Next error is the following:
-
->>> checking for struct tm.tm_zone... yes
->>> checking for struct timezone... yes
->>> checking whether gettimeofday() gives timezone... configure: 
->>> error: in `/home/ernesto/packages/buildroot-2014.11/buildroot-uclibc-x86_64/output/build/hdf5-1.8.14':
->>> configure: error: cannot run test program while cross compiling
->>> See `config.log' for more details
-
->>> config.log does indeed reveal the variable name  "ac_cv_func_gettimeofday"
->>> But what buildroot string must I use  "HDF5_CONF_ENV = hdf5_cv_have_lfs=$(if $(BR2_XXXX),yes,no) ?
->>> Looks like I may bump into more of this ?
-
->>> Cheers,
-Ernesto
-
-
-Regards,
-Yann E. MORIN.
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index f2ca099..ca0ad75 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_DHCPCD
+ 	bool "dhcpcd"
+ 	# No support for AI_ADDRCONFIG
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+-	# bad headers, no sa_family_t in linux/socket.h
+-	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+ 	help
+ 	  An RFC2131 compliant DHCP client
+ 
+-- 
+1.9.1
