@@ -1,42 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Jan 2015 16:41:45 +0100
-Subject: [Buildroot] [PATCH 3/4 v9] pkg-download: silence downloads if
- make is silent
-In-Reply-To: <20150102163657.76b1df89@free-electrons.com>
-References: <cover.1420142462.git.yann.morin.1998@free.fr>
- <8537faa275be0b3bb0aec3da99d7aaf1c56db17c.1420142462.git.yann.morin.1998@free.fr>
- <20150101225639.2890512b@free-electrons.com>
- <20150101220239.GL4360@free.fr>
- <20150102163657.76b1df89@free-electrons.com>
-Message-ID: <20150102154145.GD4392@free.fr>
+Date: Fri,  2 Jan 2015 16:53:37 +0100
+Subject: [Buildroot] [PATCH 0/3 v10] Improve silent builds (branch
+	yem/fabio/silent)
+Message-ID: <cover.1420213948.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello All!
 
-On 2015-01-02 16:36 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 1 Jan 2015 23:02:39 +0100, Yann E. MORIN wrote:
-> 
-> > Redirecting stdout is a further solution for those downloaders that
-> > still want to output something on stdout, even when told to be quiet.
-> > 
-> > I could not test CVS, CP and SCP because we do use them in in-tree
-> > packages, so it is just an additional precaution.
-> 
-> Well, do we want to take "additional precautions" ? While I
-> originally found the redirect solution nice when you proposed it, the
-> fact that it doesn't work with certain backends makes it not very
-> useful. So I would tend to defer the work of being quiet to each
-> individual backend, and not attempt to do anything specific at the
-> wrapper level.
+This patch set improves silent builds.
 
-OK, will do.
+Silent builds are also nice when top-level parallel make is being used
+to reduce the output clutter.
+
+Some downloaders, like git or wget, insist on reporting progress on
+stderr instead of stdout, so redirecting stdout is not enough, we need
+to pass the quiet information all the way down to the beackends, so
+they know they have to be silent. Sigh... :-(
+
+
+Changes v9 -> v10:
+  - do not redirect stdout at all  (Thomas)
+  - on unknown options, print an error message in backends  (Fabio)
+
+Changes v8 -> v9:
+  - propagate to all download backends  (Fabio)
+
+Changes v7 -> v8:
+  - simplify by just consigning stdout to oblivion  (Yann)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 81cbf0bf84bb62d1b40f9ea4e30296b5ef495556:
+
+  libevent: add optional dependency on OpenSSL (2015-01-02 16:37:48 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/fabio/silent
+
+for you to fetch changes up to 9b12978224418fe368d83e1ca7988619a18e9b74:
+
+  package/pkg-download: do not hard-code QUIET (2015-01-02 16:51:53 +0100)
+
+----------------------------------------------------------------
+Fabio Porcedda (1):
+      pkg-download: silence downloads if make is silent
+
+Yann E. MORIN (2):
+      support/download: support -q in all download backends
+      package/pkg-download: do not hard-code QUIET
+
+ package/pkg-download.mk     | 16 ++++++++++++----
+ support/download/bzr        | 23 ++++++++++++++++-------
+ support/download/check-hash |  8 ++++++++
+ support/download/cp         | 20 +++++++++++++++-----
+ support/download/cvs        | 23 +++++++++++++++--------
+ support/download/dl-wrapper | 13 +++++++------
+ support/download/git        | 24 ++++++++++++++++--------
+ support/download/hg         | 24 ++++++++++++++++--------
+ support/download/scp        | 20 +++++++++++++++-----
+ support/download/svn        | 22 +++++++++++++++-------
+ support/download/wget       | 20 +++++++++++++++-----
+ 11 files changed, 150 insertions(+), 63 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
