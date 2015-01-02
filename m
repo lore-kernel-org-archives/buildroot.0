@@ -1,67 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Jan 2015 14:37:13 +0100
-Subject: [Buildroot] [git commit] lsof: bump to version 4.88
-Message-ID: <20150102133731.791CC7FE10@busybox.osuosl.org>
+Date: Fri, 2 Jan 2015 14:37:12 +0100
+Subject: [Buildroot] [git commit] mrouted: bump to version 3.9.7
+Message-ID: <20150102133731.660C07FE10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db748e8639f79f3ca456680ec2860a792df52a88
+commit: http://git.buildroot.net/buildroot/commit/?id=e2db1daacff21133e2c03967e4b65a67df746ce8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rename patches to new convention and add hash file as well.
+bcopy patch removed since code is upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sof-0001-makefile.patch => 0001-makefile.patch} |    0
- ...f-0002-noportmap.patch => 0002-noportmap.patch} |    0
- ...ide-cflags.patch => 0003-override-cflags.patch} |    0
- ...cs.patch => 0004-remove-susvlegacy-funcs.patch} |    0
- package/lsof/lsof.hash                             |    2 ++
- package/lsof/lsof.mk                               |    5 +++--
- 6 files changed, 5 insertions(+), 2 deletions(-)
+ package/mrouted/mrouted-bcopy.patch |   39 -----------------------------------
+ package/mrouted/mrouted.mk          |   10 ++++++++-
+ 2 files changed, 9 insertions(+), 40 deletions(-)
 
-diff --git a/package/lsof/lsof-0001-makefile.patch b/package/lsof/0001-makefile.patch
-similarity index 100%
-rename from package/lsof/lsof-0001-makefile.patch
-rename to package/lsof/0001-makefile.patch
-diff --git a/package/lsof/lsof-0002-noportmap.patch b/package/lsof/0002-noportmap.patch
-similarity index 100%
-rename from package/lsof/lsof-0002-noportmap.patch
-rename to package/lsof/0002-noportmap.patch
-diff --git a/package/lsof/lsof-0003-override-cflags.patch b/package/lsof/0003-override-cflags.patch
-similarity index 100%
-rename from package/lsof/lsof-0003-override-cflags.patch
-rename to package/lsof/0003-override-cflags.patch
-diff --git a/package/lsof/lsof-0004-remove-susvlegacy-funcs.patch b/package/lsof/0004-remove-susvlegacy-funcs.patch
-similarity index 100%
-rename from package/lsof/lsof-0004-remove-susvlegacy-funcs.patch
-rename to package/lsof/0004-remove-susvlegacy-funcs.patch
-diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
-new file mode 100644
-index 0000000..d1e289a
---- /dev/null
-+++ b/package/lsof/lsof.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	fe6f9b0e26b779ccd0ea5a0b6327c2b5c38d207a6db16f61ac01bd6c44e5c99b	lsof_4.88.tar.bz2
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 75ce3d4..0a1667a 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/mrouted/mrouted-bcopy.patch b/package/mrouted/mrouted-bcopy.patch
+deleted file mode 100644
+index 74af02d..0000000
+--- a/package/mrouted/mrouted-bcopy.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 2d33110ee18fb59a1d6917d598fc1f4eb3c4cf83 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Mon, 7 May 2012 16:32:10 -0300
+-Subject: [PATCH] Switch from bcopy to memmove
+-
+-The bcopy() function is marked as legacy per POSIX.1-2001 and removed by
+-POSIX-1.2008 thus shouldn't be used.
+-So switch over to memmove()
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- mtrace.c |    4 ++--
+- 1 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/mtrace.c b/mtrace.c
+-index c982a67..64630bf 100644
+---- a/mtrace.c
+-+++ b/mtrace.c
+-@@ -556,7 +556,7 @@ int send_recv(u_int32_t dst, int type, int code, int tries, struct resp_buf *sav
+- 		save->rtime = ((tr.tv_sec + JAN_1970) << 16) +
+- 		    (tr.tv_usec << 10) / 15625;
+- 		save->len = len;
+--		bcopy((char *)igmp, (char *)&save->igmp, ipdatalen);
+-+		memmove((char *)&save->igmp, (char *)igmp, ipdatalen);
+- 	    }
+- 	    return recvlen;
+- 	}
+-@@ -646,7 +646,7 @@ void passive_mode(void)
+- 	base.rtime = ((tr.tv_sec + JAN_1970) << 16) +
+- 	    (tr.tv_usec << 10) / 15625;
+- 	base.len = len;
+--	bcopy((char *)igmp, (char *)&base.igmp, ipdatalen);
+-+	memmove((char *)&base.igmp, (char *)igmp, ipdatalen);
+- 	/*
+- 	 * If the user specified which traces to monitor,
+- 	 * only accept traces that correspond to the
+--- 
+-1.7.3.4
+-
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 78fe98a..01b4a9f 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -4,9 +4,17 @@
  #
  ################################################################################
  
--LSOF_VERSION = 4.87
-+LSOF_VERSION = 4.88
- LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
--LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof
-+# Use http mirror since master ftp site access is very draconian
-+LSOF_SITE = http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof
- LSOF_LICENSE = lsof license
- # License is repeated in each file, this is a relatively small one.
- # It is also defined in 00README, but that contains a lot of other cruft.
+-MROUTED_VERSION = 3.9.6
++MROUTED_VERSION = 3.9.7
+ MROUTED_SITE = $(call github,troglobit,mrouted,$(MROUTED_VERSION))
+ MROUTED_DEPENDENCIES = host-bison
++MROUTED_LICENSE = BSD-3c
++MROUTED_LICENSE_FILES = LICENSE
++
++define MROUTED_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(TARGET_MAKE_ENV) $(@D)/configure --enable-rsrr \
++	)
++endef
+ 
+ define MROUTED_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
