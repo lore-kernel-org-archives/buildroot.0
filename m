@@ -1,30 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 19:15:27 +0100
-Subject: [Buildroot] [PATCH 1/2] binutils: Also install libopcodes in
- staging
-In-Reply-To: <1407279610-15589-1-git-send-email-paul@crapouillou.net>
-References: <1407279610-15589-1-git-send-email-paul@crapouillou.net>
-Message-ID: <20150102191527.3fc681fe@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Jan 2015 19:15:55 +0100
+Subject: [Buildroot] [PATCH 3/4] python: bump to 2.7.9
+In-Reply-To: <1419800095-7808-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1419800095-7808-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1419800095-7808-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150102181555.GI4392@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Paul Cercueil,
+Thomas, All,
 
-On Wed,  6 Aug 2014 01:00:09 +0200, Paul Cercueil wrote:
-> This library will be used later in the "lightning" package.
+On 2014-12-28 21:54 +0100, Thomas Petazzoni spake thusly:
+> In addition to doing the bump, this commit also:
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  package/binutils/binutils.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  - Refreshes all the patches
+>  - Removes python-003-properly-detect-if-python-build.patch, which has
+>    been applied upstream.
+>  - Passes the --without-ensurepip option, like is done in Python 3, to
+>    avoid having Python use PIP to automatically download stuff when it
+>    is being built.
+>  - PYTHON_LIBTOOL_PATH = NO is added to prevent Buildroot from trying
+>    to patch a version of libtool for which we don't have matching
+>    patches, which isn't a problem since we're anyway not using the
+>    part of the Python sources that uses libtool (it's the built-in
+>    copy of libffi, and we use the external libffi).
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Applied, thanks.
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[run-time tested to at least print("Hello World\n") properly]
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
