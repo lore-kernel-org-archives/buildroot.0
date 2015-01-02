@@ -1,41 +1,58 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  2 Jan 2015 12:43:35 +0100
-Subject: [Buildroot] [RFC 4/4] toolchain-external: define actual sources for
-	arago toolchains
-In-Reply-To: <1420199015-16907-1-git-send-email-luca@lucaceresoli.net>
-References: <1420199015-16907-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1420199015-16907-5-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Jan 2015 12:47:04 +0100
+Subject: [Buildroot] [git commit] package/libxmlrpc: fix shared libraries
+	build for uClibc
+Message-ID: <20150102114810.7C9D2807E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- toolchain/toolchain-external/toolchain-external.mk | 2 ++
- 1 file changed, 2 insertions(+)
+commit: http://git.buildroot.net/buildroot/commit/?id=0ad2d6691962b4deceee4224d513c38647fbdbe6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 91edd4a..ff79c3b 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -259,6 +259,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
-+TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv7a/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
- 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
-@@ -266,6 +267,7 @@ endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
-+TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- 	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
- 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
--- 
-1.9.1
+libxmlrpc is able to build shared libraries only for (e)glibc system
+since the regexp in config.mk.in is based on "linux-gnu".
+
+Change this regexp to match "linux-uclibc".
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ....in-fix-shared-libraries-build-for-uClibc.patch |   27 ++++++++++++++++++++
+ 1 files changed, 27 insertions(+), 0 deletions(-)
+
+diff --git a/package/libxmlrpc/0005-config.mk.in-fix-shared-libraries-build-for-uClibc.patch b/package/libxmlrpc/0005-config.mk.in-fix-shared-libraries-build-for-uClibc.patch
+new file mode 100644
+index 0000000..5970df5
+--- /dev/null
++++ b/package/libxmlrpc/0005-config.mk.in-fix-shared-libraries-build-for-uClibc.patch
+@@ -0,0 +1,27 @@
++From 5d68179a54b0a34d989722dcbe3b6eb962feb27d Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Tue, 23 Dec 2014 16:04:18 +0100
++Subject: [PATCH] config.mk.in: fix shared libraries build for uClibc
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ config.mk.in | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/config.mk.in b/config.mk.in
++index c5d4160..45461cf 100644
++--- a/config.mk.in
+++++ b/config.mk.in
++@@ -166,7 +166,8 @@ shliblefn = $(1:%=%.shlibledummy)
++ # HOST_OS is usually has a version number suffix, e.g. "aix5.3.0.0", so
++ # we compare based on prefix.
++ 
++-ifeq ($(patsubst linux-gnu%,linux-gnu,$(HOST_OS)),linux-gnu)
+++# linux-uclibc is also a linux
+++ifeq ($(patsubst linux-%,linux-,$(HOST_OS)),linux-)
++   # Assume linker is GNU Compiler (gcc)
++   SHARED_LIB_TYPE = unix
++   MUST_BUILD_SHLIB = Y
++-- 
++1.9.3
++
