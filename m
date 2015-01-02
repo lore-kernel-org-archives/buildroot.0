@@ -1,40 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Jan 2015 07:41:00 -0300
-Subject: [Buildroot] [PATCH] memcached: bump to version 1.4.22
-Message-ID: <1420195260-4169-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 2 Jan 2015 12:06:21 +0100
+Subject: [Buildroot] [git commit] libsepol: change to github location
+Message-ID: <20150102110711.2E71180806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/memcached/memcached.hash | 4 ++--
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=2a68bc8c6f8fb0f6944b16ae6b852da2d5321bdf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 7acbaf4..98e572d 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,2 +1,2 @@
--# From http://www.memcached.org/files/memcached-1.4.21.tar.gz.sha1
--sha1	ab10c46dd9f5d4401872d9670e575afa5bc7d66f	memcached-1.4.21.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.22.tar.gz.sha1
-+sha1	5968d357d504a1f52622f9f8a3e85c29558acaa5	memcached-1.4.22.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index c057d57..8a005d4 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
+The old location doesn't seem active any more. Even though this github URL
+looks a bit odd, it is linked from
+https://github.com/SELinuxProject/selinux/wiki/Releases
+
+Also add a .hash file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsepol/libsepol.hash |    2 ++
+ package/libsepol/libsepol.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+new file mode 100644
+index 0000000..df5dabd
+--- /dev/null
++++ b/package/libsepol/libsepol.hash
+@@ -0,0 +1,2 @@
++# From https://github.com/SELinuxProject/selinux/wiki/Releases
++sha256	290d17f583635a4a5d8a2141511272adf0571c4205cdea38b5a68df20d58a70b  libsepol-2.1.9.tar.gz
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 356f137..1e709c6 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MEMCACHED_VERSION = 1.4.21
-+MEMCACHED_VERSION = 1.4.22
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--- 
-2.0.5
+ LIBSEPOL_VERSION = 2.1.9
+-LIBSEPOL_SITE = http://userspace.selinuxproject.org/releases/20130423
++LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
+ LIBSEPOL_LICENSE = LGPLv2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ 
