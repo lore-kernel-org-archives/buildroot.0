@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 13:20:49 +0100
-Subject: [Buildroot] [git commit] package/dvb-apps: rename patches to follow
-	the new name convention
-Message-ID: <20150102122055.E0FF580816@busybox.osuosl.org>
+Date: Fri, 2 Jan 2015 13:21:09 +0100
+Subject: [Buildroot] [PATCH 08/10] package/dvb-apps: rename patches to
+ follow the new name convention
+In-Reply-To: <1419717508-11627-9-git-send-email-romain.naour@openwide.fr>
+References: <1419717508-11627-1-git-send-email-romain.naour@openwide.fr>
+ <1419717508-11627-9-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150102132109.39561e57@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8b275b5dbc4ec51ed49a19f544696814898455e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ames.patch => 0001-Fix-generate-keynames.patch} |    0
- ...patch => 0002-Fix-compiler-warning-flags.patch} |    0
- ....patch => 0003-support-static-only-build.patch} |    0
- 3 files changed, 0 insertions(+), 0 deletions(-)
+On Sat, 27 Dec 2014 22:58:26 +0100, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/dvb-apps/0001-Fix-generate-keynames.patch  | 30 ++++++++++++++++++++++
+>  .../dvb-apps/0002-Fix-compiler-warning-flags.patch | 25 ++++++++++++++++++
+>  .../dvb-apps/0003-support-static-only-build.patch  | 20 +++++++++++++++
+>  .../dvb-apps-0001-Fix-generate-keynames.patch      | 30 ----------------------
+>  .../dvb-apps-0002-Fix-compiler-warning-flags.patch | 25 ------------------
+>  .../dvb-apps-0003-support-static-only-build.patch  | 20 ---------------
+>  6 files changed, 75 insertions(+), 75 deletions(-)
+>  create mode 100644 package/dvb-apps/0001-Fix-generate-keynames.patch
+>  create mode 100644 package/dvb-apps/0002-Fix-compiler-warning-flags.patch
+>  create mode 100644 package/dvb-apps/0003-support-static-only-build.patch
+>  delete mode 100644 package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
+>  delete mode 100644 package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch
+>  delete mode 100644 package/dvb-apps/dvb-apps-0003-support-static-only-build.patch
 
-diff --git a/package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch b/package/dvb-apps/0001-Fix-generate-keynames.patch
-similarity index 100%
-rename from package/dvb-apps/dvb-apps-0001-Fix-generate-keynames.patch
-rename to package/dvb-apps/0001-Fix-generate-keynames.patch
-diff --git a/package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch b/package/dvb-apps/0002-Fix-compiler-warning-flags.patch
-similarity index 100%
-rename from package/dvb-apps/dvb-apps-0002-Fix-compiler-warning-flags.patch
-rename to package/dvb-apps/0002-Fix-compiler-warning-flags.patch
-diff --git a/package/dvb-apps/dvb-apps-0003-support-static-only-build.patch b/package/dvb-apps/0003-support-static-only-build.patch
-similarity index 100%
-rename from package/dvb-apps/dvb-apps-0003-support-static-only-build.patch
-rename to package/dvb-apps/0003-support-static-only-build.patch
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
