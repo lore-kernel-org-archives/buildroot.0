@@ -1,66 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Jan 2015 12:37:42 +0100
-Subject: [Buildroot] [PATCH 1/2] graph-depends: display virtual package
- with italic style
-In-Reply-To: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
-References: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150102123742.6e00c2b0@free-electrons.com>
+Date: Fri, 2 Jan 2015 12:38:21 +0100
+Subject: [Buildroot] [PATCH 03/10] package/libsvgtiny: enable shared
+ library build
+In-Reply-To: <1419717508-11627-4-git-send-email-romain.naour@openwide.fr>
+References: <1419717508-11627-1-git-send-email-romain.naour@openwide.fr>
+ <1419717508-11627-4-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150102123821.6f1b3e74@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Romain Naour,
 
-On Fri,  2 Jan 2015 09:49:32 +0100, Francois Perrad wrote:
-> virtual packages are found by their version,
-> so we retrieve the version of all packages
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Sat, 27 Dec 2014 22:58:21 +0100, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/pkg-generic.mk        |  3 +++
->  support/scripts/graph-depends | 34 +++++++++++++++++++++++++++++++++-
->  2 files changed, 36 insertions(+), 1 deletion(-)
+>  package/libsvgtiny/libsvgtiny.mk | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9643a30..87d8dd8 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -565,6 +565,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
->  endif
+> diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+> index a2d494e..6cb666f 100644
+> --- a/package/libsvgtiny/libsvgtiny.mk
+> +++ b/package/libsvgtiny/libsvgtiny.mk
+> @@ -11,18 +11,28 @@ LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkgconf
+>  LIBSVGTINY_LICENSE = MIT
+>  LIBSVGTINY_LICENSE_FILES = README
 >  
-> +$(1)-show-version:
-> +			@echo $$($(2)_VERSION)
-> +
+> +# Prefer shared libraries if available
 
-This could be a separate patch, maybe?
-
-> +# Execute the "make <pkg>-show-version" command to get the version of a given
-> +# list of packages, and return the version formatted as a Python dictionary.
-> +def get_version(pkgs):
-> +    sys.stderr.write("Getting version for %s\n" % pkgs)
-> +    cmd = ["make", "-s", "--no-print-directory" ]
-> +    for pkg in pkgs:
-> +        cmd.append("%s-show-version" % pkg)
-
-Good, I like the fact that we're doing only one make invocation.
-
-> +all_pkgs = {}
-> +for deps in dict_deps.values():
-> +    for dep in deps:
-> +        all_pkgs[dep] = True
-> +for dep in dict_deps.keys():
-> +    all_pkgs[dep] = True
-> +dict_version = get_version(all_pkgs.keys())
-
-I'm not sure what is going on here. Why aren't you using the existing
-'allpkgs' list? It contains the list of all packages, you would just
-have to filter the fake 'all' entry in your "for pkg in pkgs:" loop in
-the get_version() function.
-
-Thanks!
+This comment was not really clear, so I reworded it a little bit and
+applied your patch, thanks!
 
 Thomas
 -- 
