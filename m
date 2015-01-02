@@ -1,53 +1,50 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Fri, 02 Jan 2015 15:51:30 -0600
-Subject: [Buildroot] [PATCH][Resend] ffmpeg: enable freetype support
-In-Reply-To: <5494F00B.4080107@ou.edu>
-References: <5494F00B.4080107@ou.edu>
-Message-ID: <54A712E2.8080506@ou.edu>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 02 Jan 2015 22:56:34 +0100
+Subject: [Buildroot] [PATCH 1/2] dhcpcd: fix build on old toolchains
+	(sa_family_t)
+In-Reply-To: <20150102191233.1bf32420@free-electrons.com>
+References: <1420216745-24218-1-git-send-email-luca@lucaceresoli.net>
+ <20150102191233.1bf32420@free-electrons.com>
+Message-ID: <54A71412.6030405@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If libfreetype has been select configure ffmpeg to use it if possible
-Since this requires fenv.h it won't happen when using uClibc except for x86 targets
+Hi Thomas,
 
-Signed-off-by Stephen M. Kenton <skenton@ou.edu>
----
-Noticed the stray line at the bottom of the last version
-Updated against last nights snapshot
-diff -pruN buildroot.orig/package/ffmpeg/ffmpeg.mk buildroot/package/ffmpeg/ffmpeg.mk
---- buildroot.orig/package/ffmpeg/ffmpeg.mk	2015-01-01 17:02:23.000000000 -0600
-+++ buildroot/package/ffmpeg/ffmpeg.mk	2015-01-02 15:25:30.649237010 -0600
-@@ -49,7 +49,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-libopencv \
- 	--disable-libdc1394 \
- 	--disable-libfaac \
--	--disable-libfreetype \
- 	--disable-libgsm \
- 	--disable-libmp3lame \
- 	--disable-libnut \
-@@ -234,6 +233,22 @@ else
- FFMPEG_CONF_OPTS += --disable-libvpx
- endif
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Fri,  2 Jan 2015 17:39:04 +0100, Luca Ceresoli wrote:
+>> Fixes error such as:
+>>    .../sysroot/usr/include/linux/netlink.h:31:2: error: unknown type name 'sa_family_t'
+>>    .../sysroot/usr/include/linux/netlink.h:31:2: error: expected specifier-qualifier-list before 'sa_family_t'
+>>
+>> And autobuild failures:
+>>    http://autobuild.buildroot.net/results/d92/d92e7f2af0e64bc40f7b5c9ea081471de98bf8e8/
+>>    http://autobuild.buildroot.net/results/e97/e97e980a2f1e0ff4138a6dc03d86ad3ff0973e4a/
+>>    http://autobuild.buildroot.net/results/ca3/ca32c4de8b645c96cedb80b6270a792e9601ad84/
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>
+> But if it's actually the toolchain that is broken, should we instead
+> have a patch against the toolchain headers? There are other packages
+> that had similar problems with these toolchains.
 
-+# ffmpeg freetype support require fenv.h
-+# which is not available in uClibc
-+ifneq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+ffmpeg_environment_has_fenv ?= y
-+endif
-+# except for uClibc on x86
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+ffmpeg_environment_has_fenv ?= y
-+endif
-+ifeq ($(BR2_PACKAGE_FREETYPE)$(ffmpeg_environment_has_fenv),yy)
-+FFMPEG_CONF_OPTS += --enable-libfreetype
-+FFMPEG_DEPENDENCIES += freetype
-+else
-+FFMPEG_CONF_OPTS += --disable-libfreetype
-+endif
-+
- ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
- FFMPEG_CONF_OPTS += --enable-libx264
- FFMPEG_DEPENDENCIES += x264
+Honestly I don't know. A few days ago I had the same problem with
+dhcpcd 6.6.7 and a pretty old custom toolchain. The issue only emerged
+since dhcpcd 6.6.6 (BWHAHAHA!). Changing toolchain was not an option
+here, so I came up with this quick fix.
+
+When I saw Baruch's patch today on the list I thought I'd propose my
+patch. Maybe I was too quick and should have asked before sending...
+
+At least my solution (o workaround, or whatever) is in the archives,
+and anybody with the same problem can find this workaround until a
+better solution is available.
+
+-- 
+Luca
