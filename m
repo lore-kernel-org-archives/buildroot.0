@@ -1,80 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jan 2015 22:05:47 +0100
-Subject: [Buildroot] [PATCH] package/libwebsock: fix build when openssl
- is disabled
-In-Reply-To: <1420240800-9736-1-git-send-email-s.martin49@gmail.com>
-References: <1420240800-9736-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150103220547.7e2661e2@free-electrons.com>
+Date: Sat, 3 Jan 2015 22:08:59 +0100
+Subject: [Buildroot] [git commit] libsecret: bump to version 0.18
+Message-ID: <20150103211007.8B82B803C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=cf2c54b25b8f6311fce81604a07d3d43ffbdfd3c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Jan 2015 00:20:00 +0100, Samuel Martin wrote:
+Also add hash file.
 
-> +diff --git a/configure.ac b/configure.ac
-> +index fc1cadc..dacd4f4 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -48,6 +48,10 @@ AS_IF([test "x$have_ssl" = "xyes"],
-> + 	[AS_IF([test "x$with_ssl" = "xyes"],
-> + 		[AC_MSG_ERROR([SSL support requested but not found])
-> + 	])])
-> ++AS_IF([test "x$have_ssl" != "xyes"],
-> ++	[
-> ++		AC_DEFINE([WEBSOCK_HAVE_SSL], [0], [Disable SSL support])
-> ++	])
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsecret/libsecret.hash |    2 ++
+ package/libsecret/libsecret.mk   |   15 +++++++--------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-I'm sorry but this is not the right fix. Autoconf always uses undefined
-vs. defined as a way of testing whether a feature is available.
-
-The right fix seems rather to be something like:
-
-diff --git a/src/websock.h b/src/websock.h
-index 1bbd410..690c41d 100644
---- a/src/websock.h
-+++ b/src/websock.h
-@@ -17,6 +17,7 @@
-  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
-  */
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+new file mode 100644
+index 0000000..8e5bbf7
+--- /dev/null
++++ b/package/libsecret/libsecret.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.sha256sum
++sha256	0c73aa762dbd1e38ba7b03de350e23ce818cb810b0784375e95ef61e004b02e3	libsecret-0.18.tar.xz
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index a059a79..5a230ae 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -4,22 +4,21 @@
+ #
+ ################################################################################
  
-+#include "config.h"
- #include "websock_config.h"
+-LIBSECRET_VERSION = 0.15
++LIBSECRET_VERSION = 0.18
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+-LIBSECRET_LICENSE = LGPLv2.1+
+-LIBSECRET_LICENSE_FILES = COPYING
+ LIBSECRET_INSTALL_STAGING = YES
+-
+ LIBSECRET_DEPENDENCIES = libglib2 host-intltool
+ LIBSECRET_CONF_OPTS = --disable-manpages --disable-strict --disable-coverage --enable-vala=no
++LIBSECRET_LICENSE = LGPLv2.1+
++LIBSECRET_LICENSE_FILES = COPYING
  
- //this bit hides differences between systems on big-endian conversions
-diff --git a/src/websock_config.h.in b/src/websock_config.h.in
-index a25472b..eba8f31 100644
---- a/src/websock_config.h.in
-+++ b/src/websock_config.h.in
-@@ -4,6 +4,5 @@
- #define WEBSOCK_PACKAGE_STRING @WEBSOCK_PACKAGE_STRING@
- #define WEBSOCK_PACKAGE_VERSION @WEBSOCK_PACKAGE_VERSION@
- #define WEBSOCK_PACKAGE_NAME @WEBSOCK_PACKAGE_NAME@
--#define WEBSOCK_HAVE_SSL @WEBSOCK_HAVE_SSL@
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+-	LIBSECRET_DEPENDENCIES += libgcrypt
+-	LIBSECRET_CONF_OPTS += --enable-gcrypt \
+-		--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++LIBSECRET_DEPENDENCIES += libgcrypt
++LIBSECRET_CONF_OPTS += --enable-gcrypt \
++	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+-	LIBSECRET_CONF_OPTS += --disable-gcrypt
++LIBSECRET_CONF_OPTS += --disable-gcrypt
+ endif
  
- #endif
-
-Basically, the problem is that websock_config.h.in defines
-WEBSOCK_HAVE_SSL unconditionally. When SSL is not available, it remains
-defined to @WEBSOCK_HAVE_SSL@ in the resulting websock_config.h, which
-means that for the rest of the code, WEBSOCK_HAVE_SSL is indeed defined.
-
-The fix is to get rid of this stupid line in websock_config.h.in, and
-instead make the code use config.h, which properly defines
-WEBSOCK_HAVE_SSL only when SSL is available.
-
-Could you do some testing with the above patch (I did some minimal
-amount of testing, and it seemed to work), and resubmit a new version?
-
-In the mean time, I'll mark your patch as Changes Requested in patchwork.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ $(eval $(autotools-package))
