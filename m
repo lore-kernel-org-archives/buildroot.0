@@ -1,27 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jan 2015 21:40:12 +0100
-Subject: [Buildroot] [PATCH] stunnel: bump to version 5.09
-In-Reply-To: <1420283197-19341-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1420283197-19341-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150103214012.3bed3263@free-electrons.com>
+Date: Sat, 3 Jan 2015 21:40:54 +0100
+Subject: [Buildroot] [git commit] package/upx: needs zlib
+Message-ID: <20150103204058.A6F42803FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=6457e638b5592ebd860ca331f3dc57d207e387ca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Jan 2015 08:06:37 -0300, Gustavo Zacarias wrote:
-> Change to usenix.org.uk mirror since nluug.nl doesn't seem to mirror
-> files as quickly and is down at the moment.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes build issues like, observed on a stripped-down build system:
+    compress.cpp:32:18: fatal error: zlib.h: No such file or directory
+     #include <zlib.h>
+                  ^
+    compilation terminated.
 
-Applied, thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/upx/upx.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index 30bb03b..400d283 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -10,7 +10,7 @@ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.bz2
+ UPX_LICENSE = GPLv2+
+ UPX_LICENSE_FILES = COPYING
+ 
+-HOST_UPX_DEPENDENCIES = host-ucl
++HOST_UPX_DEPENDENCIES = host-ucl host-zlib
+ 
+ # We need to specify all, otherwise the default target only prints a message
+ # stating to "please choose a target for 'make'"... :-(
