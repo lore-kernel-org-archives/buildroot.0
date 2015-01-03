@@ -1,91 +1,77 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  3 Jan 2015 15:29:12 +0100
-Subject: [Buildroot] [V2 1/2] graph-depends: display virtual package with
-	italic style
-Message-ID: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+Date: Sat,  3 Jan 2015 15:29:13 +0100
+Subject: [Buildroot] [V2 2/2] graph-depends: add an option --stop-on-virtual
+In-Reply-To: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1420295353-8065-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-virtual packages are found by their version,
-so we retrieve the version of all packages
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/pkg-generic.mk        |  3 +++
- support/scripts/graph-depends | 30 +++++++++++++++++++++++++++++-
- 2 files changed, 32 insertions(+), 1 deletion(-)
+ docs/manual/common-usage.txt  |  3 +++
+ support/scripts/graph-depends | 11 +++++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9643a30..87d8dd8 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -565,6 +565,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
- $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
- endif
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 89cd9fe..966c694 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -215,6 +215,9 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+   root package (+R+), the target packages (+T+) and the host packages
+   (+H+). Defaults to: +lightblue,grey,gainsboro+
  
-+$(1)-show-version:
-+			@echo $$($(2)_VERSION)
++* +--stop-on-virtual+, +--dont-stop-on-virtual+, to follow (or not)
++  the dependencies of virtual package
 +
- $(1)-show-depends:
- 			@echo $$($(2)_FINAL_DEPENDENCIES)
- 
+ --------------------------------
+ BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
+ --------------------------------
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 1ecfeda..28fe2f0 100755
+index 28fe2f0..4e12351 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -76,6 +76,28 @@ host_colour = colours[2]
+@@ -36,6 +36,9 @@ max_depth = 0
+ # Whether to draw the transitive dependencies
+ transitive = True
  
- allpkgs = []
- 
-+# Execute the "make <pkg>-show-version" command to get the version of a given
-+# list of packages, and return the version formatted as a Python dictionary.
-+def get_version(pkgs):
-+    sys.stderr.write("Getting version for %s\n" % pkgs)
-+    cmd = ["make", "-s", "--no-print-directory" ]
-+    for pkg in pkgs:
-+        cmd.append("%s-show-version" % pkg)
-+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
-+    output = p.communicate()[0]
-+    if p.returncode != 0:
-+        sys.stderr.write("Error getting version %s\n" % pkgs)
-+        sys.exit(1)
-+    output = output.split("\n")
-+    if len(output) != len(pkgs) + 1:
-+        sys.stderr.write("Error getting version\n")
-+        sys.exit(1)
-+    version = {}
-+    for i in range(0, len(pkgs)):
-+        pkg = pkgs[i]
-+        version[pkg] = output[i]
-+    return version
++# Stop dependency on virtual package
++stop_on_virtual = False
 +
- # Execute the "make show-targets" command to get the list of the main
- # Buildroot TARGETS and return it formatted as a Python list. This
- # list is used as the starting point for full dependency graphs
-@@ -257,6 +279,8 @@ def remove_extra_deps(deps):
-     return deps
+ parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+@@ -51,6 +54,10 @@ parser.add_argument("--transitive", dest="transitive", action='store_true',
+                     default=False)
+ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+                     help="Draw (do not draw) transitive dependencies")
++parser.add_argument("--stop-on-virtual", dest="stop_on_virtual", action='store_true',
++                    default=False)
++parser.add_argument("--dont-stop-on-virtual", dest="stop_on_virtual", action='store_false',
++                    help="Stop (or do not stop) on virtual package")
+ args = parser.parse_args()
  
- dict_deps = remove_extra_deps(dict_deps)
-+dict_version = get_version([pkg for pkg in allpkgs
-+                                if pkg != "all" and not pkg.startswith("root")])
+ if args.package is None:
+@@ -63,6 +70,8 @@ max_depth = args.depth
  
- # Print the attributes of a node: label and fill-color
- def print_attrs(pkg):
-@@ -274,7 +298,11 @@ def print_attrs(pkg):
-             color = host_colour
-         else:
-             color = target_colour
--    print("%s [label = \"%s\"]" % (name, label))
-+    version = dict_version.get(pkg)
-+    if version == "virtual":
-+        print("%s [label = <<I>%s</I>>]" % (name, label))
-+    else:
-+        print("%s [label = \"%s\"]" % (name, label))
-     print("%s [color=%s,style=filled]" % (name, color))
+ transitive = args.transitive
  
- # Print the dependency graph of a package
++stop_on_virtual = args.stop_on_virtual
++
+ # Get the colours: we need exactly three colours,
+ # so no need not split more than 4
+ # We'll let 'dot' validate the colours...
+@@ -313,6 +322,8 @@ def print_pkg_deps(depth, pkg):
+     print_attrs(pkg)
+     if pkg not in dict_deps:
+         return
++    if stop_on_virtual and dict_version.get(pkg) == "virtual":
++        return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+             print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
 -- 
 2.1.0
