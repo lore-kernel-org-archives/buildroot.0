@@ -1,38 +1,36 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat,  3 Jan 2015 16:59:15 +0100
-Subject: [Buildroot] [PATCH] package/python3: disable decimal module
-Message-ID: <1420300755-24170-1-git-send-email-s.martin49@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  3 Jan 2015 17:25:07 +0100
+Subject: [Buildroot] [PATCH] package/upx: needs zlib
+Message-ID: <1420302307-12399-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python3 decimal module needs libmpdecimal >=2.4.1.
+Fixes build issues like, observed on a stripped-down build system:
+    compress.cpp:32:18: fatal error: zlib.h: No such file or directory
+     #include <zlib.h>
+                  ^
+    compilation terminated.
 
-Fixes:
-  http://autobuild.buildroot.org/results/c9b/c9b6dd19f16a56a16ef441d5b303badab9720bd7/
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
+ package/upx/upx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Note that the mpdecimal package cannot currently be upgraded because
-its site seems unreachable.
----
- package/python3/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 375390f..d459dc3 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -57,6 +57,7 @@ config BR2_PACKAGE_PYTHON3_CURSES
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index 30bb03b..400d283 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -10,7 +10,7 @@ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.bz2
+ UPX_LICENSE = GPLv2+
+ UPX_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_PYTHON3_DECIMAL
- 	select BR2_PACKAGE_MPDECIMAL
-+	depends on BR2_BROKEN # needs libmpdecimal >=2.4.1
- 	bool "decimal module"
- 	help
- 	  decimal module for Python3.
+-HOST_UPX_DEPENDENCIES = host-ucl
++HOST_UPX_DEPENDENCIES = host-ucl host-zlib
+ 
+ # We need to specify all, otherwise the default target only prints a message
+ # stating to "please choose a target for 'make'"... :-(
 -- 
-2.2.1
+1.9.1
