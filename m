@@ -1,45 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  3 Jan 2015 08:06:37 -0300
-Subject: [Buildroot] [PATCH] stunnel: bump to version 5.09
-Message-ID: <1420283197-19341-1-git-send-email-gustavo@zacarias.com.ar>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sat, 3 Jan 2015 13:05:03 +0200
+Subject: [Buildroot] [PATCH] dmalloc: fix parallel builds
+Message-ID: <20150103110503.GA11955@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change to usenix.org.uk mirror since nluug.nl doesn't seem to mirror
-files as quickly and is down at the moment.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ This patch should fix
+ http://autobuild.buildroot.net/results/2cc40ae3fc8b7a287c43528b3e4ffdbcd5033c09/
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 337d26b..7f28905 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2014-December/000088.html
--sha256	830b21d24cd237e96f4d7993be43553d4eba4d3cfa2660faa78dec8d41d314fc	stunnel-5.08.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-announce/2015-January/000090.html
-+sha256	87b34a74061861d1edd2ab238c73eb989b3d0a17e44574b7b6ead1a16aae38c8	stunnel-5.09.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index eb24781..f7099e8 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--STUNNEL_VERSION = 5.08
--STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/archive/5.x
-+STUNNEL_VERSION = 5.09
-+STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/5.x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
+ package/dmalloc/dmalloc-deps.patch | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 package/dmalloc/dmalloc-deps.patch
+
+diff --git a/package/dmalloc/dmalloc-deps.patch b/package/dmalloc/dmalloc-deps.patch
+new file mode 100644
+index 0000000..c717e1a
+--- /dev/null
++++ b/package/dmalloc/dmalloc-deps.patch
+@@ -0,0 +1,14 @@
++Missing dmallocc.o <- dmalloc.h dependency may break parallel builds.
++dmalloc.h is generated, and may not be around by the time gcc starts
++parsing dmallocc.cc.
++
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -399,6 +399,7 @@
++ compat.o: compat.c dmalloc.h conf.h settings.h compat.h dmalloc_loc.h
++ dmalloc.o: dmalloc.c dmalloc_argv.h conf.h settings.h dmalloc.h \
++  compat.h debug_tok.h dmalloc_loc.h env.h error_val.h version.h
+++dmallocc.o: dmallocc.cc dmalloc.h return.h conf.h settings.h
++ dmalloc_argv.o: dmalloc_argv.c conf.h settings.h dmalloc_argv.h \
++  dmalloc_argv_loc.h compat.h
++ dmalloc_rand.o: dmalloc_rand.c conf.h settings.h dmalloc_rand.h
 -- 
-2.0.5
+2.0.3
