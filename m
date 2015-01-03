@@ -1,41 +1,82 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 3 Jan 2015 13:05:03 +0200
-Subject: [Buildroot] [PATCH] dmalloc: fix parallel builds
-Message-ID: <20150103110503.GA11955@vostro>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 3 Jan 2015 14:25:46 +0100
+Subject: [Buildroot] [PATCH 1/2] graph-depends: display virtual package
+ with italic style
+In-Reply-To: <20150102123742.6e00c2b0@free-electrons.com>
+References: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
+ <20150102123742.6e00c2b0@free-electrons.com>
+Message-ID: <CAB0FRsuCZoEH6hWdaAotLD3ceoUcfhpUXpwPxofk8MkGjxyVPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
----
- This patch should fix
- http://autobuild.buildroot.net/results/2cc40ae3fc8b7a287c43528b3e4ffdbcd5033c09/
+2015-01-02 12:37 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Francois Perrad,
+>
+> On Fri,  2 Jan 2015 09:49:32 +0100, Francois Perrad wrote:
+>> virtual packages are found by their version,
+>> so we retrieve the version of all packages
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/pkg-generic.mk        |  3 +++
+>>  support/scripts/graph-depends | 34 +++++++++++++++++++++++++++++++++-
+>>  2 files changed, 36 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 9643a30..87d8dd8 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -565,6 +565,9 @@ $(1)-rsync:               $$($(2)_TARGET_RSYNC)
+>>  $(1)-source:         $$($(2)_TARGET_RSYNC_SOURCE)
+>>  endif
+>>
+>> +$(1)-show-version:
+>> +                     @echo $$($(2)_VERSION)
+>> +
+>
+> This could be a separate patch, maybe?
+>
+>> +# Execute the "make <pkg>-show-version" command to get the version of a given
+>> +# list of packages, and return the version formatted as a Python dictionary.
+>> +def get_version(pkgs):
+>> +    sys.stderr.write("Getting version for %s\n" % pkgs)
+>> +    cmd = ["make", "-s", "--no-print-directory" ]
+>> +    for pkg in pkgs:
+>> +        cmd.append("%s-show-version" % pkg)
+>
+> Good, I like the fact that we're doing only one make invocation.
+>
+>> +all_pkgs = {}
+>> +for deps in dict_deps.values():
+>> +    for dep in deps:
+>> +        all_pkgs[dep] = True
+>> +for dep in dict_deps.keys():
+>> +    all_pkgs[dep] = True
+>> +dict_version = get_version(all_pkgs.keys())
+>
+> I'm not sure what is going on here. Why aren't you using the existing
+> 'allpkgs' list? It contains the list of all packages, you would just
+> have to filter the fake 'all' entry in your "for pkg in pkgs:" loop in
+> the get_version() function.
+>
 
- package/dmalloc/dmalloc-deps.patch | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
- create mode 100644 package/dmalloc/dmalloc-deps.patch
+You are right. The list 'allpkgs' could be reused (with small adjustment).
+I will post a V2.
 
-diff --git a/package/dmalloc/dmalloc-deps.patch b/package/dmalloc/dmalloc-deps.patch
-new file mode 100644
-index 0000000..c717e1a
---- /dev/null
-+++ b/package/dmalloc/dmalloc-deps.patch
-@@ -0,0 +1,14 @@
-+Missing dmallocc.o <- dmalloc.h dependency may break parallel builds.
-+dmalloc.h is generated, and may not be around by the time gcc starts
-+parsing dmallocc.cc.
-+
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -399,6 +399,7 @@
-+ compat.o: compat.c dmalloc.h conf.h settings.h compat.h dmalloc_loc.h
-+ dmalloc.o: dmalloc.c dmalloc_argv.h conf.h settings.h dmalloc.h \
-+  compat.h debug_tok.h dmalloc_loc.h env.h error_val.h version.h
-++dmallocc.o: dmallocc.cc dmalloc.h return.h conf.h settings.h
-+ dmalloc_argv.o: dmalloc_argv.c conf.h settings.h dmalloc_argv.h \
-+  dmalloc_argv_loc.h compat.h
-+ dmalloc_rand.o: dmalloc_rand.c conf.h settings.h dmalloc_rand.h
--- 
-2.0.3
+Fran?ois
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
