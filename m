@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jan 2015 22:12:25 +0100
-Subject: [Buildroot] [PATCH 1/2] libsecret: bump to version 0.18
-In-Reply-To: <1420238707-5456-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 3 Jan 2015 22:13:10 +0100
+Subject: [Buildroot] [PATCH 2/2] msmtp: bump to version 1.6.0
+In-Reply-To: <1420238707-5456-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1420238707-5456-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150103221225.42875707@free-electrons.com>
+ <1420238707-5456-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150103221310.124e2dd0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,16 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Fri,  2 Jan 2015 19:45:06 -0300, Gustavo Zacarias wrote:
-> Also add hash file.
+On Fri,  2 Jan 2015 19:45:07 -0300, Gustavo Zacarias wrote:
+> Also drop license comment from help, we have PKG_LICENSE* for that.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libsecret/libsecret.hash |  2 ++
->  package/libsecret/libsecret.mk   | 15 +++++++--------
->  2 files changed, 9 insertions(+), 8 deletions(-)
->  create mode 100644 package/libsecret/libsecret.hash
 
-Applied, thanks. It would have been good to mention in the commit log
-that you also fixed up the indentation.
-
-Thanks,
+This does much more than that: it adds an optional dependency on
+libsecret, and remove --without-gnome-keyring. I've applied the patch
+with an edited commit log, but for future patches, try to have more
+detailed commit logs (or even do multiple separate patches for separate
+issues). Thanks!
 
 Thomas
 -- 
