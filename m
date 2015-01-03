@@ -1,64 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 Jan 2015 22:08:59 +0100
-Subject: [Buildroot] [git commit] libsecret: bump to version 0.18
-Message-ID: <20150103211007.8B82B803C0@busybox.osuosl.org>
+Date: Sat, 3 Jan 2015 22:11:00 +0100
+Subject: [Buildroot] [git commit] msmtp: bump to version 1.6.0
+Message-ID: <20150103211153.856CC803C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf2c54b25b8f6311fce81604a07d3d43ffbdfd3c
+commit: http://git.buildroot.net/buildroot/commit/?id=0056ee5fca52215ab28ff12e19d1ed62b93f892c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+In addition to bumping the version:
+
+ - drop license comment from help, we have PKG_LICENSE* for that.
+ - add optional dependency on libsecret
+ - remove --without-gnome-keyring option
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsecret/libsecret.hash |    2 ++
- package/libsecret/libsecret.mk   |   15 +++++++--------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ package/msmtp/Config.in  |    2 --
+ package/msmtp/msmtp.hash |    5 +++--
+ package/msmtp/msmtp.mk   |   20 ++++++++++++--------
+ 3 files changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
-new file mode 100644
-index 0000000..8e5bbf7
---- /dev/null
-+++ b/package/libsecret/libsecret.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.sha256sum
-+sha256	0c73aa762dbd1e38ba7b03de350e23ce818cb810b0784375e95ef61e004b02e3	libsecret-0.18.tar.xz
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index a059a79..5a230ae 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -4,22 +4,21 @@
+diff --git a/package/msmtp/Config.in b/package/msmtp/Config.in
+index 385ad90..46bb198 100644
+--- a/package/msmtp/Config.in
++++ b/package/msmtp/Config.in
+@@ -5,6 +5,4 @@ config BR2_PACKAGE_MSMTP
+ 	  mail to an SMTP server (for example at a free mail provider)
+ 	  which takes care of further delivery.
+ 
+-	  Note that msmtp is licensed under GPLv3.
+-
+ 	  http://msmtp.sourceforge.net/
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index 41c6caa..2196afb 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  2bf0c5c7e78f9905f48de235a75111a1a88238793043bbeae00360b22f1a5f88  msmtp-1.4.32.tar.bz2
++# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.0/
++md5	1c166853b63c02ae2ab56b50f1aae57b	msmtp-1.6.0.tar.xz
++sha1	39e597619f797ec3550c0146cd3d9e55e85947eb	msmtp-1.6.0.tar.xz
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 2d8e630..1c6de16 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,13 +4,22 @@
  #
  ################################################################################
  
--LIBSECRET_VERSION = 0.15
-+LIBSECRET_VERSION = 0.18
- LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
--LIBSECRET_LICENSE = LGPLv2.1+
--LIBSECRET_LICENSE_FILES = COPYING
- LIBSECRET_INSTALL_STAGING = YES
--
- LIBSECRET_DEPENDENCIES = libglib2 host-intltool
- LIBSECRET_CONF_OPTS = --disable-manpages --disable-strict --disable-coverage --enable-vala=no
-+LIBSECRET_LICENSE = LGPLv2.1+
-+LIBSECRET_LICENSE_FILES = COPYING
+-MSMTP_VERSION = 1.4.32
++MSMTP_VERSION = 1.6.0
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+-MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.bz2
++MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
++MSMTP_DEPENDENCIES = host-pkgconf
++MSMTP_CONF_OPTS = \
++	--without-libidn \
++	--without-libgsasl
+ MSMTP_LICENSE = GPLv3+
+ MSMTP_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
--	LIBSECRET_DEPENDENCIES += libgcrypt
--	LIBSECRET_CONF_OPTS += --enable-gcrypt \
--		--with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+LIBSECRET_DEPENDENCIES += libgcrypt
-+LIBSECRET_CONF_OPTS += --enable-gcrypt \
-+	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
- else
--	LIBSECRET_CONF_OPTS += --disable-gcrypt
-+LIBSECRET_CONF_OPTS += --disable-gcrypt
+-MSMTP_DEPENDENCIES += host-pkgconf
++ifeq ($(BR2_PACKAGE_LIBSECRET),y)
++MSMTP_CONF_OPTS += --with-libsecret
++MSMTP_DEPENDENCIES += libsecret
++else
++MSMTP_CONF_OPTS += --without-libsecret
++endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MSMTP_CONF_OPTS += --with-ssl=openssl
+@@ -26,9 +35,4 @@ else
+ MSMTP_CONF_OPTS += --with-ssl=no
  endif
  
+-MSMTP_CONF_OPTS += \
+-	--without-libidn \
+-	--without-libgsasl \
+-	--without-gnome-keyring
+-
  $(eval $(autotools-package))
