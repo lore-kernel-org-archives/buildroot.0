@@ -1,75 +1,45 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 3 Jan 2015 14:25:46 +0100
-Subject: [Buildroot] [PATCH 1/2] graph-depends: display virtual package
- with italic style
-In-Reply-To: <20150102123742.6e00c2b0@free-electrons.com>
+Date: Sat, 3 Jan 2015 14:49:25 +0100
+Subject: [Buildroot] [PATCH 2/2] graph-depends: add an option
+	--stop-on-virtual
+In-Reply-To: <20150102112116.7c2085eb@free-electrons.com>
 References: <1420188573-4236-1-git-send-email-francois.perrad@gadz.org>
- <20150102123742.6e00c2b0@free-electrons.com>
-Message-ID: <CAB0FRsuCZoEH6hWdaAotLD3ceoUcfhpUXpwPxofk8MkGjxyVPQ@mail.gmail.com>
+ <1420188573-4236-2-git-send-email-francois.perrad@gadz.org>
+ <20150102112116.7c2085eb@free-electrons.com>
+Message-ID: <CAB0FRsucJ3kZ64JvD-r7zVW_PR8F=LSUGW7Vx60Vs63rCK-v3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-01-02 12:37 GMT+01:00 Thomas Petazzoni
+2015-01-02 11:21 GMT+01:00 Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com>:
 > Dear Francois Perrad,
 >
-> On Fri,  2 Jan 2015 09:49:32 +0100, Francois Perrad wrote:
->> virtual packages are found by their version,
->> so we retrieve the version of all packages
->>
+> On Fri,  2 Jan 2015 09:49:33 +0100, Francois Perrad wrote:
 >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 >> ---
->>  package/pkg-generic.mk        |  3 +++
->>  support/scripts/graph-depends | 34 +++++++++++++++++++++++++++++++++-
->>  2 files changed, 36 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 9643a30..87d8dd8 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -565,6 +565,9 @@ $(1)-rsync:               $$($(2)_TARGET_RSYNC)
->>  $(1)-source:         $$($(2)_TARGET_RSYNC_SOURCE)
->>  endif
->>
->> +$(1)-show-version:
->> +                     @echo $$($(2)_VERSION)
->> +
+>>  docs/manual/common-usage.txt  |  3 +++
+>>  support/scripts/graph-depends | 11 +++++++++++
+>>  2 files changed, 14 insertions(+)
 >
-> This could be a separate patch, maybe?
->
->> +# Execute the "make <pkg>-show-version" command to get the version of a given
->> +# list of packages, and return the version formatted as a Python dictionary.
->> +def get_version(pkgs):
->> +    sys.stderr.write("Getting version for %s\n" % pkgs)
->> +    cmd = ["make", "-s", "--no-print-directory" ]
->> +    for pkg in pkgs:
->> +        cmd.append("%s-show-version" % pkg)
->
-> Good, I like the fact that we're doing only one make invocation.
->
->> +all_pkgs = {}
->> +for deps in dict_deps.values():
->> +    for dep in deps:
->> +        all_pkgs[dep] = True
->> +for dep in dict_deps.keys():
->> +    all_pkgs[dep] = True
->> +dict_version = get_version(all_pkgs.keys())
->
-> I'm not sure what is going on here. Why aren't you using the existing
-> 'allpkgs' list? It contains the list of all packages, you would just
-> have to filter the fake 'all' entry in your "for pkg in pkgs:" loop in
-> the get_version() function.
+> Why would we want to stop on virtual packages? I don't really see the
+> use case for this additional option.
 >
 
-You are right. The list 'allpkgs' could be reused (with small adjustment).
-I will post a V2.
+On package point of view (not for a whole configuration),
+for example, with a package which depends on OpenGL, it is not useful
+to see the dependencies of a specific implementation of OpenGL,
+because they depend on hardware and not on the package.
+
+The graph of dependencies becomes quickly too large,
+I think to another option which doesn't display host dependencies
+but just target dependencies.
 
 Fran?ois
 
-> Thanks!
+> Thanks,
 >
 > Thomas
 > --
