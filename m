@@ -1,75 +1,151 @@
-From: Oli Vogt <oli.vogt.pub01@gmail.com>
-Date: Mon, 5 Jan 2015 11:37:34 +1300
-Subject: [Buildroot] [PATCH 1/1] python-django: new package
-In-Reply-To: <20150104220810.131bd08d@free-electrons.com>
-References: <1420244904-23270-1-git-send-email-oli.vogt.pub01@gmail.com>
- <20150104220810.131bd08d@free-electrons.com>
-Message-ID: <CAAwwcmTD55=ZS7z_iTVmZz-cSmGw27wntqtcy4Bmm0+WJ_L6HA@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 05 Jan 2015 00:10:02 +0100
+Subject: [Buildroot] [PATCH v2] package/dvb-app: handle static/shared
+ only build
+In-Reply-To: <20150104150958.GB4137@free.fr>
+References: <1420375526-8806-1-git-send-email-romain.naour@openwide.fr>
+ <20150104150958.GB4137@free.fr>
+Message-ID: <54A9C84A.6030903@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas.
+Hi Yann, all
 
-I should have put this in covering letter:
+Le 04/01/2015 16:09, Yann E. MORIN a ?crit :
+> Romain, All,
+> 
+> On 2015-01-04 13:45 +0100, Romain Naour spake thusly:
+>> Also remove tests since they require static libraries.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>> v2: remove tests (ThomasP)
+>>     rework static/shared handling logic
+>> ---
+>>  .../0003-handle-static-shared-only-build.patch     | 35 ++++++++++++++++++++++
+>>  .../dvb-apps/0003-support-static-only-build.patch  | 20 -------------
+>>  package/dvb-apps/0004-Makefile-remove-test.patch   | 27 +++++++++++++++++
+>>  package/dvb-apps/dvb-apps.mk                       |  4 ++-
+>>  4 files changed, 65 insertions(+), 21 deletions(-)
+>>  create mode 100644 package/dvb-apps/0003-handle-static-shared-only-build.patch
+>>  delete mode 100644 package/dvb-apps/0003-support-static-only-build.patch
+>>  create mode 100644 package/dvb-apps/0004-Makefile-remove-test.patch
+>>
+>> diff --git a/package/dvb-apps/0003-handle-static-shared-only-build.patch b/package/dvb-apps/0003-handle-static-shared-only-build.patch
+>> new file mode 100644
+>> index 0000000..7a7d59a
+>> --- /dev/null
+>> +++ b/package/dvb-apps/0003-handle-static-shared-only-build.patch
+>> @@ -0,0 +1,35 @@
+>> +From f461e831f8c0ee9a59c9f194c0306eb73298396b Mon Sep 17 00:00:00 2001
+>> +From: Romain Naour <romain.naour@openwide.fr>
+>> +Date: Thu, 25 Dec 2014 19:22:16 +0100
+>> +Subject: [PATCH] Make.rules: Handle static/shared only build
+>> +
+>> +Do not build .a library when disable_static is set
+>> +Do not build .so library when disable_shared is set
+>> +
+>> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> +---
+>> + Make.rules | 8 +++++++-
+>> + 1 file changed, 7 insertions(+), 1 deletion(-)
+>> +
+>> +diff --git a/Make.rules b/Make.rules
+>> +index 3410d7b..4add272 100644
+>> +--- a/Make.rules
+>> ++++ b/Make.rules
+>> +@@ -9,7 +9,13 @@ ifneq ($(lib_name),)
+>> + CFLAGS_LIB ?= -fPIC
+>> + CFLAGS += $(CFLAGS_LIB)
+>> + 
+>> +-libraries = $(lib_name).so $(lib_name).a
+>> ++ifeq ($(disable_static),)
+>> ++libraries = $(lib_name).a
+>> ++endif
+>> ++
+>> ++ifeq ($(disable_shared),)
+>> ++libraries += $(lib_name).so
+>> ++endif
+> 
+> I find it weird that one would need to _disable_stuff. I really prefer
+> we use positive logic whenever possible, it is much easier to understand.
+> 
+> What about:
+> 
+>     ifneq ($(enable_static),no)
+>     libraries += $(lib_name).a
+>     endif
+> 
+>     ifneq ($(enable_shared),no)
+>     libraries += $(lib_name).so
+>     endif
+> 
+> Ok, so this is negative logic _in_ the Makefile. It is still positive
+> from the caller::
+>   - by default both are built
+>   - it is possible to selectively disable each by passing enable_foo=no,
+>     which is not unlike the traditional way it is handled in autotools
 
- Yes it should work with Python3 however I was not able to test it as I use
-2.7. This meant I was not sure about core module dependencies. Thanks.
- Also: I only tested it as ARM cross compile.
- Sorry about the download link I 'hand-downloaded' the tarball to get
-things started and did not delete it to test. Thanks again.
+Ok, I'm fine with this change if you prefer.
 
-oli
+> 
+> [--SNIP--]
+>> diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+>> index 892af63..a5037af 100644
+>> --- a/package/dvb-apps/dvb-apps.mk
+>> +++ b/package/dvb-apps/dvb-apps.mk
+>> @@ -16,7 +16,9 @@ DVB_APPS_LDLIBS += -liconv
+>>  endif
+>>  
+>>  ifeq ($(BR2_STATIC_LIBS),y)
+>> -DVB_APPS_MAKE_OPTS += static=1
+>> +DVB_APPS_MAKE_OPTS += disable_shared=1
+>> +else ifeq ($(BR2_SHARED_LIBS),y)
+>> +DVB_APPS_MAKE_OPTS += disable_static=1
+>>  endif
+> 
+> So you'd get:
+> 
+>     ifeq ($(BR2_STATIC_LIBS),y)
+>     DVB_APPS_MAKE_OPTS += enable_shared=no
+>     endif
+>     ifeq ($(BR2_SHARED_LIBS),y)
+>     DVB_APPS_MAKE_OPTS += enable_static=no
+>     endif
+> 
+> Granted, it is very, very similar to what you're doing, but I really
+> prefer options to have positive logic, rather than negative. Also, I
+> believe this might be more easily upstreamable.
 
-On 5 January 2015 at 10:08, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+I already sent the series upstream:
+http://www.mail-archive.com/linux-media at vger.kernel.org/msg83830.html
 
-> Dear oli vogt,
->
-> On Sat,  3 Jan 2015 13:28:24 +1300, oli vogt wrote:
->
-> > diff --git a/package/python-django/Config.in
-> b/package/python-django/Config.in
-> > new file mode 100644
-> > index 0000000..c48a381
-> > --- /dev/null
-> > +++ b/package/python-django/Config.in
-> > @@ -0,0 +1,15 @@
-> > +config BR2_PACKAGE_PYTHON_DJANGO
-> > +     bool "python-django"
-> > +     depends on BR2_PACKAGE_PYTHON
->
-> What about Python 3 ? Django supports both Python 2 and Python 3. I've
-> changed this to allow Django to be built with Python 3.
->
-> > +PYTHON_DJANGO_VERSION = 1.7.1
->
-> 1.7.2 is out, so I've bumped to this version.
->
-> > +PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
-> > +PYTHON_DJANGO_SITE =
-> https://www.djangoproject.com/download/$(PYTHON_DJANGO_VERSION)/tarball/
->
-> This didn't work, because the URL to download Django is just
-> https://www.djangoproject.com/download/$(PYTHON_DJANGO_VERSION)/tarball/,
-> while Buildroot expects $(PYTHON_DJANGO_SITE)/$(PYTHON_DJANGO_SOURCE).
-> So I've switched to pypi as the source for Django.
->
-> Patch applied with those changes, see
->
-> http://git.buildroot.net/buildroot/commit/?id=71d6705ef6a3516325891bc117b3253b49ca0f5f
-> .
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150105/438084e6/attachment.html>
+But Arnout noticed that my SoB is missing on the two first patches.
+I'll resend a new version tomorrow.
+
+> 
+> Note: I read Thomas' comment on the previous iteration, and it does
+> not seem like he said he would want disable_XXX variables instead of
+> enable_XXX. Thomas, what's your opinion?
+
+Thanks for the review.
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>  DVB_APPS_INSTALL_STAGING = YES
+>> -- 
+>> 1.9.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
