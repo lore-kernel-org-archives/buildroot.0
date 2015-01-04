@@ -1,53 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jan 2015 15:21:05 +0100
-Subject: [Buildroot] [PATCH v2] erlang: selectively enable libatomic_ops
-In-Reply-To: <1419295981-30100-1-git-send-email-fhunleth@troodon-software.com>
-References: <1419295981-30100-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20150104142105.GA4137@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 04 Jan 2015 15:23:36 +0100
+Subject: [Buildroot] [PATCH 07/10] package/libxmlrpc: handle
+ static/shared only install
+In-Reply-To: <20150102131856.28594262@free-electrons.com>
+References: <1419717508-11627-1-git-send-email-romain.naour@openwide.fr>	<1419717508-11627-8-git-send-email-romain.naour@openwide.fr>
+ <20150102131856.28594262@free-electrons.com>
+Message-ID: <54A94CE8.6000203@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Hi Thomas,
 
-On 2014-12-22 19:53 -0500, Frank Hunleth spake thusly:
-> Erlang can use either the system libatomic_ops or its own version.
-> However, if using the system version, it must find implementations for
-> AO_compare_and_swap() and other calls.  Since these are not available on
-> ARM versions before armv6+, selectively enable the use of the system
-> libatomic_ops.
+Le 02/01/2015 13:18, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> Fixes:
->   http://autobuild.buildroot.net/results/eba/eba5bf85e9ff98916cd3638b5f13ab5bd54564d8/
->   http://autobuild.buildroot.net/results/c74/c743cfca629fb332bbb1327cf4ea360f0a4e4bfe/
->   http://autobuild.buildroot.net/results/095/095348d4d309c2a408a3b297b4325348ed1dd7e8/
+> On Sat, 27 Dec 2014 22:58:25 +0100, Romain Naour wrote:
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+>> index c3788d6..5796ae6 100644
+>> --- a/package/libxmlrpc/libxmlrpc.mk
+>> +++ b/package/libxmlrpc/libxmlrpc.mk
+>> @@ -35,4 +35,15 @@ LIBXMLRPC_MAKE_ENV = \
+>>  	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+>>  	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)"
+>>  
+>> +
+>> +ifeq ($(BR2_SHARED_LIBS),y)
+>> +LIBXMLRPC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) \
+>> +	install-shared-libraries install-headers install-bin
+>> +endif
+>> +
+>> +ifeq ($(BR2_STATIC_LIBS),y)
+>> +LIBXMLRPC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) \
+>> +	install-static-libraries install-headers install-bin
+>> +endif
+> 
+> This does not work: in a BR2_SHARED_LIBS configuration, libraries are
+> no longer installed in the staging directory:
 
-I've sent an alternate solution to this libatomic_ops issue:
-    http://patchwork.ozlabs.org/patch/425174/
+Yes, indeed... sorry :-/
 
-This is much simpler, Buildroot-wise, as it essentially patches erlang,
-so that it properly use libatomic_ops.
+Let's use install target and trash this patch.
 
-This is the result of a past discussion with Thomas P. on IRC, where he
-pointed me to a patch we have against libunwind, that does require CAS
-too, and for which we add `#define AO_REQUIRE_CAS', as instructed in the
-libatomic_ops documentation.
+> 
+> $ cat defconfig 
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
+> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+> BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_LIBXMLRPC=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> $ make
+> [...]
+> $ LANG=C ls output/staging/usr/lib/libxmlrpc*
+> ls: cannot access output/staging/usr/lib/libxmlrpc*: No such file or directory
+> 
+> I'll mark the patch as Rejected in patchwork.
+> 
 
-Could you please test that new patch and report on it, please?
+Thanks for testing.
+(hopefully this patch hasn't been commited)
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Romain
