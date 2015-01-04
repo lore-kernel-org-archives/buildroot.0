@@ -1,151 +1,152 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 05 Jan 2015 00:10:02 +0100
-Subject: [Buildroot] [PATCH v2] package/dvb-app: handle static/shared
- only build
-In-Reply-To: <20150104150958.GB4137@free.fr>
-References: <1420375526-8806-1-git-send-email-romain.naour@openwide.fr>
- <20150104150958.GB4137@free.fr>
-Message-ID: <54A9C84A.6030903@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Jan 2015 00:27:30 +0100
+Subject: [Buildroot] [PATCH v4 04/17] docs/manual: add documentation for
+ the pkg-rebar infrastructure
+In-Reply-To: <20150104223334.08fc134c@free-electrons.com>
+References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
+ <1418135662-773-5-git-send-email-johan.oudinet@gmail.com>
+ <20150104223334.08fc134c@free-electrons.com>
+Message-ID: <20150104232730.GE31970@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
+Thomas, Johan, All,
 
-Le 04/01/2015 16:09, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2015-01-04 13:45 +0100, Romain Naour spake thusly:
->> Also remove tests since they require static libraries.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->> v2: remove tests (ThomasP)
->>     rework static/shared handling logic
->> ---
->>  .../0003-handle-static-shared-only-build.patch     | 35 ++++++++++++++++++++++
->>  .../dvb-apps/0003-support-static-only-build.patch  | 20 -------------
->>  package/dvb-apps/0004-Makefile-remove-test.patch   | 27 +++++++++++++++++
->>  package/dvb-apps/dvb-apps.mk                       |  4 ++-
->>  4 files changed, 65 insertions(+), 21 deletions(-)
->>  create mode 100644 package/dvb-apps/0003-handle-static-shared-only-build.patch
->>  delete mode 100644 package/dvb-apps/0003-support-static-only-build.patch
->>  create mode 100644 package/dvb-apps/0004-Makefile-remove-test.patch
->>
->> diff --git a/package/dvb-apps/0003-handle-static-shared-only-build.patch b/package/dvb-apps/0003-handle-static-shared-only-build.patch
->> new file mode 100644
->> index 0000000..7a7d59a
->> --- /dev/null
->> +++ b/package/dvb-apps/0003-handle-static-shared-only-build.patch
->> @@ -0,0 +1,35 @@
->> +From f461e831f8c0ee9a59c9f194c0306eb73298396b Mon Sep 17 00:00:00 2001
->> +From: Romain Naour <romain.naour@openwide.fr>
->> +Date: Thu, 25 Dec 2014 19:22:16 +0100
->> +Subject: [PATCH] Make.rules: Handle static/shared only build
->> +
->> +Do not build .a library when disable_static is set
->> +Do not build .so library when disable_shared is set
->> +
->> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> +---
->> + Make.rules | 8 +++++++-
->> + 1 file changed, 7 insertions(+), 1 deletion(-)
->> +
->> +diff --git a/Make.rules b/Make.rules
->> +index 3410d7b..4add272 100644
->> +--- a/Make.rules
->> ++++ b/Make.rules
->> +@@ -9,7 +9,13 @@ ifneq ($(lib_name),)
->> + CFLAGS_LIB ?= -fPIC
->> + CFLAGS += $(CFLAGS_LIB)
->> + 
->> +-libraries = $(lib_name).so $(lib_name).a
->> ++ifeq ($(disable_static),)
->> ++libraries = $(lib_name).a
->> ++endif
->> ++
->> ++ifeq ($(disable_shared),)
->> ++libraries += $(lib_name).so
->> ++endif
-> 
-> I find it weird that one would need to _disable_stuff. I really prefer
-> we use positive logic whenever possible, it is much easier to understand.
-> 
-> What about:
-> 
->     ifneq ($(enable_static),no)
->     libraries += $(lib_name).a
->     endif
-> 
->     ifneq ($(enable_shared),no)
->     libraries += $(lib_name).so
->     endif
-> 
-> Ok, so this is negative logic _in_ the Makefile. It is still positive
-> from the caller::
->   - by default both are built
->   - it is possible to selectively disable each by passing enable_foo=no,
->     which is not unlike the traditional way it is handled in autotools
+[Elided comments are being dealt with without further ado.]
 
-Ok, I'm fine with this change if you prefer.
+On 2015-01-04 22:33 +0100, Thomas Petazzoni spake thusly:
+> On Tue,  9 Dec 2014 15:34:09 +0100, Johan Oudinet wrote:
+[--SNIP--]
+> > +On line 10, we tell Buildroot to install the package to the staging
+> > +directory. The staging directory, located in +output/staging/+
+> > +is the directory where all the packages are installed, including their
+> > +development files, etc. By default, packages are not installed to the
+> > +staging directory, since usually, only libraries need to be installed in
+> > +the staging directory: their development files are needed to compile
+> > +other libraries or applications depending on them.
+> 
+> Does this applies to rebar packages?
 
-> 
-> [--SNIP--]
->> diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
->> index 892af63..a5037af 100644
->> --- a/package/dvb-apps/dvb-apps.mk
->> +++ b/package/dvb-apps/dvb-apps.mk
->> @@ -16,7 +16,9 @@ DVB_APPS_LDLIBS += -liconv
->>  endif
->>  
->>  ifeq ($(BR2_STATIC_LIBS),y)
->> -DVB_APPS_MAKE_OPTS += static=1
->> +DVB_APPS_MAKE_OPTS += disable_shared=1
->> +else ifeq ($(BR2_SHARED_LIBS),y)
->> +DVB_APPS_MAKE_OPTS += disable_static=1
->>  endif
-> 
-> So you'd get:
-> 
->     ifeq ($(BR2_STATIC_LIBS),y)
->     DVB_APPS_MAKE_OPTS += enable_shared=no
->     endif
->     ifeq ($(BR2_SHARED_LIBS),y)
->     DVB_APPS_MAKE_OPTS += enable_static=no
->     endif
-> 
-> Granted, it is very, very similar to what you're doing, but I really
-> prefer options to have positive logic, rather than negative. Also, I
-> believe this might be more easily upstreamable.
+It would seem it does not, since they are interpreted packages, the
+dependencies would always be in target/
 
-I already sent the series upstream:
-http://www.mail-archive.com/linux-media at vger.kernel.org/msg83830.html
+Johan, care to expand/fix the exaplanations, please? ;-)
 
-But Arnout noticed that my SoB is missing on the two first patches.
-I'll resend a new version tomorrow.
-
+[--SNIP--]
+> > +First, all the package metadata information variables that exist in
+> > +the generic infrastructure also exist in the rebar infrastructure:
+> > ++ERLANG_FOOBAR_VERSION+, +ERLANG_FOOBAR_SOURCE+,
+> > ++ERLANG_FOOBAR_PATCH+, +ERLANG_FOOBAR_SITE+,
+> > ++ERLANG_FOOBAR_SUBDIR+, +ERLANG_FOOBAR_DEPENDENCIES+,
+> > ++ERLANG_FOOBAR_INSTALL_STAGING+, +ERLANG_FOOBAR_INSTALL_TARGET+.
 > 
-> Note: I read Thomas' comment on the previous iteration, and it does
-> not seem like he said he would want disable_XXX variables instead of
-> enable_XXX. Thomas, what's your opinion?
-
-Thanks for the review.
-
-Best regards,
-Romain
-
+> ERLANG_FOOBAR_LICENSE, ERLANG_FOOBAR_LICENSE_FILES.
 > 
-> Regards,
-> Yann E. MORIN.
+> Maybe we should refactor the documentation a bit to avoid mentioning
+> those variables over and over again.
+
+I've just written that to my TODO list. It seems it can only grow... ;-)
+
+> > +Note that the rebar infrastructure does not expect a configure script,
+> > +but does call such a script when it exists.
 > 
->>  DVB_APPS_INSTALL_STAGING = YES
->> -- 
->> 1.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+> What about <pkg>_CONFIGURE = YES ?
+
+I've rewritten that section quite a bit to make this much more explicit.
+
+> >  When a package uses both
+> > +the Autotools and rebar, it should use the rebar infrastructure.  In
+> > +this case however, the build commands do not call make, but only
+> > ++rebar compile+; this avoids triggering the download of dependencies
+> > +(as most Makefile's do when combined with rebar).  Also, note that the
+> > +install commands never call +make install+.  Instead, they install
+> > +Erlang's application directories (ebin, priv, etc.)  into a proper
+> > +location.  If this is not what you want, add custom hooks or override
+> > +rebar commands (see below).
 > 
+> What is "a proper location" ? As opposed to what ?
+
+I was thinking of just gettin rid of the implementation details. The
+details are available in pkg-rebar.mk.
+
+> > +* +ERLANG_FOOBAR_REBAR_ENV+, to specify additional environment
+> > +  variables to pass to rebar.  By default, the value sets a minimal
+> > +  PATH that only includes +HOST_DIR/bin+, +HOST_DIR/usr/bin+, and
+> > +  +/bin+.
+> 
+> <pkg>_ENV, no? At least that's what patch 03/17 does, but I indeed
+> suggested to use <pkg>_REBAR_ENV instead.
+
+Switched to using <pkg>_REBAR_ENV as you suggested in your review of the
+infra itself.
+
+> > +* +ERLANG_FOOBAR_REBAR_FLAGS+, to specify rebar flags. By default, the
+> > +  value is +deps_dir=ERLANG_FOOBAR_REBAR_DEPS_DIR+.
+> 
+> I don't see this variable used anywhere in PATCH 03/17.
+
+Inded, it is not used, and none of the following packages sets it.
+
+I'll just drop that one, unless Johan has a use-case for it?
+
+> > +* +ERLANG_FOOBAR_REBAR_DEPS_DIR+, to specify where to look for the
+> > +  package's dependencies.  By default, the value is
+> > +  +output/build/erlang-rebar-deps/target+, or
+> > +  +output/build/erlang-rebar-deps/host+ for host packages.  Note that
+> > +  if the package installs to staging as well, the rebar infrastructure
+> > +  then creates a symbolic link in this directory to
+> > +  +ERLANG_FOOBAR_ERLANG_LIBDIR+ so other packages may use it as
+> > +  a dependency.
+> 
+> Why would one want to override this? Isn't the value always set to:
+> 
+> +REBAR_HOST_DEPS_DIR = $(HOST_DIR)/usr/share/rebar/deps
+> +REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
+
+Moreover, nothing references $(2)_REBAR_DEPS_DIR at all.
+
+Johan, did we miss anything?
+
+> > +* +ERLANG_FOOBAR_ERLANG_LIBDIR+, to specify where to install the
+> > +  Erlang application.  By default, the value is
+> > +  +/usr/lib/erlang/lib/ERLANG_FOOBAR_ERLANG_APP-ERLANG_FOOBAR_VERSION+.
+> 
+> Hum, the code does:
+> 
+> +$(2)_ERLANG_LIBDIR = \
+> +	/usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
+> 
+> So it doesn't really seem to leave the freedom for the package to
+> provide its own value, no?
+
+I gues not. We really want all packages to behave the same and install
+all their files in a similar fashion.
+
+I'll drop this variable, inless Johan has a good reason to keep it.
+
+> > +* +ERLANG_FOOBAR_ENV+, to specify additional environment variables to
+> > +  pass both to the configure script and rebar.  By default, sets CC,
+> > +  CFLAGS, LDFLAGS, ERL_COMPILER_OPTIONS, and ERL_EI_LIBDIR.
+> 
+> Ah, so here we document $$(PKG)_ENV, which actually exists in the code.
+> How is that different from ERLANG_FOOBAR_REBAR_ENV above?
+
+Ah...
+
+OK, I'll rework whatever I can, for Johan to grab.
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
