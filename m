@@ -1,35 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jan 2015 18:58:05 +0100
-Subject: [Buildroot] [PATCH 0/3 v10] Improve silent builds (branch
- yem/fabio/silent)
-In-Reply-To: <cover.1420213948.git.yann.morin.1998@free.fr>
-References: <cover.1420213948.git.yann.morin.1998@free.fr>
-Message-ID: <20150104185805.5957c38d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 Jan 2015 19:10:14 +0100
+Subject: [Buildroot] [PATCH] support/download: further silence the git helper
+Message-ID: <1420395014-8961-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+We expresely call printf in the git helper, calls which were not
+addresed in the previous silent-build patchset.
 
-On Fri,  2 Jan 2015 16:53:37 +0100, Yann E. MORIN wrote:
+Just redirect stdout to oblivion when being silent.
 
-> Silent builds are also nice when top-level parallel make is being used
-> to reduce the output clutter.
-> 
-> Some downloaders, like git or wget, insist on reporting progress on
-> stderr instead of stdout, so redirecting stdout is not enough, we need
-> to pass the quiet information all the way down to the beackends, so
-> they know they have to be silent. Sigh... :-(
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Series applied, after fixing a minor typo in the first patch. Thanks to
-you and Fabio for working on this!
-
-Best regards,
-
-Thomas
+diff --git a/support/download/git b/support/download/git
+index 7f1801f..73cbc0f 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -14,7 +14,7 @@ set -e
+ verbose=-v
+ while getopts :q OPT; do
+     case "${OPT}" in
+-    q)  verbose=-q;;
++    q)  verbose=-q; exec >/dev/null;;
+     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+     esac
+ done
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
