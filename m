@@ -1,67 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Jan 2015 18:41:02 +0100
-Subject: [Buildroot] [PATCH] janus-gateway: add a patch to use
- -Wunused-but-set-variable only when available
-In-Reply-To: <1420392439-16055-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1420392439-16055-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150104174102.GB31970@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Jan 2015 18:40:05 +0100
+Subject: [Buildroot] [git commit] package/pkg-download: do not hard-code
+	QUIET
+Message-ID: <20150104175709.B55BD8041D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=4dc54da061b27379adb9728bf337ab07b2daefe2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-01-04 18:27 +0100, Thomas Petazzoni spake thusly:
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/3f0/3f07574e6e4edda9e31fcb0de520a4dbabe6b94a/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-> + AM_CFLAGS += -Wredundant-decls  # sophiasip also contains redundant declarations
-[--SNIP--]
-> +index 17870a7..ecd98e5 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -7,6 +7,13 @@ AM_SILENT_RULES([yes])
-> + AC_GNU_SOURCE
-> + 
-> + AC_PROG_CC
-> ++AX_CHECK_COMPILE_FLAG([-Wunused-but-set-variable])
-> ++
-> ++if test "${ax_cv_check_cflags___Wunused_but_set_variable}" = "yes" ; then
-> ++   GCC_WARN_UNUSED_BUT_SET=-Wunused-but-set-variable
-> ++fi
+Do not hard-code QUIET in our download commands, since it is handled in
+the backends.
 
-The canonical way to do if-blocks is with m4 macros:
+Suggested by Fabio.
 
-    AS_IF([test "${ax_cv_check_cflags___Wunused_but_set_variable}" = "yes"],
-          [GCC_WARN_UNUSED_BUT_SET=-Wunused-but-set-variable])
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-download.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-Because autoconf may expand that differently on different systems.
-
-Granted, for us Buildroot, that has virtually zero-impact, because the
-expanded code would be about the same you wrote. But if we want to
-upstream anything, better be using the state-of-the-art solution. ;-)
-
-But anyway, why don't you simply write:
-
-    AX_CHECK_COMPILE_FLAG([-Wunused-but-set-variable],
-        [GCC_WARN_UNUSED_BUT_SET=-Wunused-but-set-variable])
-    AC_SUBST([GCC_WARN_UNUSED_BUT_SET])
-
-Also, as discused on IRC: add a comment in the .mk stating that
-AUTORECONF is needed because we also touch the autostuff.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 9c782fe..5e74519 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -8,14 +8,14 @@
+ ################################################################################
+ 
+ # Download method commands
+-export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
++export WGET := $(call qstrip,$(BR2_WGET))
+ export SVN := $(call qstrip,$(BR2_SVN))
+ export CVS := $(call qstrip,$(BR2_CVS))
+ export BZR := $(call qstrip,$(BR2_BZR))
+ export GIT := $(call qstrip,$(BR2_GIT))
+-export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+-export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+-SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
++export HG := $(call qstrip,$(BR2_HG))
++export SCP := $(call qstrip,$(BR2_SCP))
++SSH := $(call qstrip,$(BR2_SSH))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ 
+ DL_WRAPPER = support/download/dl-wrapper
