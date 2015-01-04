@@ -1,53 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Jan 2015 21:39:17 +0100
-Subject: [Buildroot] [git commit] dmalloc: fix parallel build
-Message-ID: <20150104204046.4ACD38042D@busybox.osuosl.org>
+Date: Sun, 4 Jan 2015 21:41:57 +0100
+Subject: [Buildroot] [PATCH] dmalloc: fix parallel builds
+In-Reply-To: <20150104190204.GA4224@vostro>
+References: <20150103110503.GA11955@vostro>
+ <20150104183513.0cdff028@free-electrons.com>
+ <20150104190204.GA4224@vostro>
+Message-ID: <20150104214157.4057d1ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cac64f2b0cb9e6f6a39c7eede1b80152293a741a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alex Suykov,
 
-Should hopefully fix:
+On Sun, 4 Jan 2015 21:02:04 +0200, Alex Suykov wrote:
 
-  http://autobuild.buildroot.net/results/2cc40ae3fc8b7a287c43528b3e4ffdbcd5033c09/
+> The following sequence seems to trigger it more or less reliably for me:
+> 
+>     ./configure --disable-static --enable-shared --enable-cxx --enable-threads
+>     sed -i -e "s at cat \$(srcdir)/dmalloc.h.1.*@&; sleep 1@" Makefile
+>     make clean
+>     make -j4
+> 
+> What happens is a race condition between "cat ...; mv ... dmalloc.h"
+> and "g++ -c dmallocc.cc". As long as cat-mv pair is faster, it works well.
+> But if there's a delay, it breaks.
+> 
+> This should be rare, I can only reproduce it with an artificial delay,
+> and only with --disable-static. But on the other hand, it did happen
+> on autobuild somehow.
 
-[Thomas:
- - Rename patch to the new naming convention.
- - Add SoB line from Alex inside the patch itself.
- - Adjust the commit log to contain the reference to the autobuilder
-   failure.]
+Ok, thanks a lot for the explanation! I've committed your patch, with a
+few minor tweaks:
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dmalloc/0003-fix-parallel-build.patch |   18 ++++++++++++++++++
- 1 files changed, 18 insertions(+), 0 deletions(-)
+    [Thomas:
+     - Rename patch to the new naming convention.
+     - Add SoB line from Alex inside the patch itself.
+     - Adjust the commit log to contain the reference to the autobuilder
+       failure.]
 
-diff --git a/package/dmalloc/0003-fix-parallel-build.patch b/package/dmalloc/0003-fix-parallel-build.patch
-new file mode 100644
-index 0000000..d6bb6e5
---- /dev/null
-+++ b/package/dmalloc/0003-fix-parallel-build.patch
-@@ -0,0 +1,18 @@
-+Fix parallel build issue
-+
-+Missing dmallocc.o <- dmalloc.h dependency may break parallel builds.
-+dmalloc.h is generated,and may not be around by the time gcc starts
-+parsing dmallocc.cc.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -399,6 +399,7 @@
-+ compat.o: compat.c dmalloc.h conf.h settings.h compat.h dmalloc_loc.h
-+ dmalloc.o: dmalloc.c dmalloc_argv.h conf.h settings.h dmalloc.h \
-+  compat.h debug_tok.h dmalloc_loc.h env.h error_val.h version.h
-++dmallocc.o: dmallocc.cc dmalloc.h return.h conf.h settings.h
-+ dmalloc_argv.o: dmalloc_argv.c conf.h settings.h dmalloc_argv.h \
-+  dmalloc_argv_loc.h compat.h
-+ dmalloc_rand.o: dmalloc_rand.c conf.h settings.h dmalloc_rand.h
+If you're using dmalloc, I just noticed that the version we have in
+Buildroot is 5.4.3, while upstream has a 5.5.2 release. If you want to
+send a patch to bump the dmalloc version, that would be great.
+
+Also, don't hesitate to send your patch to the upstream dmalloc
+developers.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
