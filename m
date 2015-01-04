@@ -1,45 +1,37 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sun, 4 Jan 2015 21:02:04 +0200
-Subject: [Buildroot] [PATCH] dmalloc: fix parallel builds
-In-Reply-To: <20150104183513.0cdff028@free-electrons.com>
-References: <20150103110503.GA11955@vostro>
- <20150104183513.0cdff028@free-electrons.com>
-Message-ID: <20150104190204.GA4224@vostro>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Jan 2015 21:28:21 +0100
+Subject: [Buildroot] [git commit] erlang: fix comment dependencies
+Message-ID: <20150104202932.6D4147F998@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sun, Jan 04, 2015 at 06:35:13PM +0100, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=fe430adc2868f6317bab8e73625a0f32181b7ad7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On Sat, 3 Jan 2015 13:05:03 +0200, Alex Suykov wrote:
-> > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> > ---
-> >  This patch should fix
-> >  http://autobuild.buildroot.net/results/2cc40ae3fc8b7a287c43528b3e4ffdbcd5033c09/
-> > 
-> >  package/dmalloc/dmalloc-deps.patch | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >  create mode 100644 package/dmalloc/dmalloc-deps.patch
-> 
-> While it indeed looks like a parallel build issue, I haven't been able
-> to reproduce it: I've started a loop building dmalloc over and over
-> again on my build server (on which the issue was reproduced by the
-> autobuilders), and never managed to see it after an entire night
-> looping on dmalloc builds. So I'm a bit confused on this one.
+The comment was missing the dependency on BR2_USE_MMU, and was using
+'depends on !BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS' while it
+should in fact be '!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS',
+since we want show the comment *either* when we don't have threads
+*or* when we are building a purely static lib system.
 
-The following sequence seems to trigger it more or less reliably for me:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-    ./configure --disable-static --enable-shared --enable-cxx --enable-threads
-    sed -i -e "s at cat \$(srcdir)/dmalloc.h.1.*@&; sleep 1@" Makefile
-    make clean
-    make -j4
-
-What happens is a race condition between "cat ...; mv ... dmalloc.h"
-and "g++ -c dmallocc.cc". As long as cat-mv pair is faster, it works well.
-But if there's a delay, it breaks.
-
-This should be rare, I can only reproduce it with an artificial delay,
-and only with --disable-static. But on the other hand, it did happen
-on autobuild somehow.
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 51c72cb..625b7c1 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -1,6 +1,7 @@
+ comment "erlang needs a toolchain w/ threads, shared library"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_ERLANG
+ 	bool "erlang"
