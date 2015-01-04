@@ -1,37 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  4 Jan 2015 19:10:14 +0100
-Subject: [Buildroot] [PATCH] support/download: further silence the git helper
-Message-ID: <1420395014-8961-1-git-send-email-yann.morin.1998@free.fr>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sun, 4 Jan 2015 21:02:04 +0200
+Subject: [Buildroot] [PATCH] dmalloc: fix parallel builds
+In-Reply-To: <20150104183513.0cdff028@free-electrons.com>
+References: <20150103110503.GA11955@vostro>
+ <20150104183513.0cdff028@free-electrons.com>
+Message-ID: <20150104190204.GA4224@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We expresely call printf in the git helper, calls which were not
-addresed in the previous silent-build patchset.
+Sun, Jan 04, 2015 at 06:35:13PM +0100, Thomas Petazzoni wrote:
 
-Just redirect stdout to oblivion when being silent.
+> On Sat, 3 Jan 2015 13:05:03 +0200, Alex Suykov wrote:
+> > Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> > ---
+> >  This patch should fix
+> >  http://autobuild.buildroot.net/results/2cc40ae3fc8b7a287c43528b3e4ffdbcd5033c09/
+> > 
+> >  package/dmalloc/dmalloc-deps.patch | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >  create mode 100644 package/dmalloc/dmalloc-deps.patch
+> 
+> While it indeed looks like a parallel build issue, I haven't been able
+> to reproduce it: I've started a loop building dmalloc over and over
+> again on my build server (on which the issue was reproduced by the
+> autobuilders), and never managed to see it after an entire night
+> looping on dmalloc builds. So I'm a bit confused on this one.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The following sequence seems to trigger it more or less reliably for me:
 
-diff --git a/support/download/git b/support/download/git
-index 7f1801f..73cbc0f 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -14,7 +14,7 @@ set -e
- verbose=-v
- while getopts :q OPT; do
-     case "${OPT}" in
--    q)  verbose=-q;;
-+    q)  verbose=-q; exec >/dev/null;;
-     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
-     esac
- done
--- 
-1.9.1
+    ./configure --disable-static --enable-shared --enable-cxx --enable-threads
+    sed -i -e "s at cat \$(srcdir)/dmalloc.h.1.*@&; sleep 1@" Makefile
+    make clean
+    make -j4
+
+What happens is a race condition between "cat ...; mv ... dmalloc.h"
+and "g++ -c dmallocc.cc". As long as cat-mv pair is faster, it works well.
+But if there's a delay, it breaks.
+
+This should be rare, I can only reproduce it with an artificial delay,
+and only with --disable-static. But on the other hand, it did happen
+on autobuild somehow.
