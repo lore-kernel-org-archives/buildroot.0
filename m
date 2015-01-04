@@ -1,166 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  4 Jan 2015 18:27:19 +0100
-Subject: [Buildroot] [PATCH] janus-gateway: add a patch to use
-	-Wunused-but-set-variable only when available
-Message-ID: <1420392439-16055-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Jan 2015 18:28:43 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-addons: bump version
+Message-ID: <20150104172915.253AA7FD65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+commit: http://git.buildroot.net/buildroot/commit/?id=58b6d920b87f49d029f12f7c453b0544c50a9e62
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  http://autobuild.buildroot.org/results/3f0/3f07574e6e4edda9e31fcb0de520a4dbabe6b94a/
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...002-Add-test-for-Wunused-but-set-variable.patch | 137 +++++++++++++++++++++
- 1 file changed, 137 insertions(+)
- create mode 100644 package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
+ package/kodi-pvr-addons/kodi-pvr-addons.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-new file mode 100644
-index 0000000..eec1402
---- /dev/null
-+++ b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-@@ -0,0 +1,137 @@
-+From f6178b7461a884f8c214be5f5ce570301980d0ab Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 3 Jan 2015 15:09:59 +0100
-+Subject: [PATCH] Add test for -Wunused-but-set-variable
-+
-+The -Wunused-but-set-variable option does not exist in some old gcc
-+versions (gcc 4.5.x), so using it unconditionally breaks the build
-+with such compilers.
-+
-+This commit introduces the AX_CHECK_COMPILE_FLAG m4 macro taken from
-+the autoconf-archive
-+(http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_check_compile_flag.m4),
-+and uses it to detect if the -Wunused-but-set-variable option is
-+supported, and only uses it in this case.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile.am                 |  2 +-
-+ configure.ac                |  7 +++++
-+ m4/ax_check_compile_flag.m4 | 74 +++++++++++++++++++++++++++++++++++++++++++++
-+ 3 files changed, 82 insertions(+), 1 deletion(-)
-+ create mode 100644 m4/ax_check_compile_flag.m4
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 5d23e0b..0f51f6a 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -6,7 +6,7 @@ AM_CFLAGS = \
-+ 	-Wnested-externs -Wstrict-prototypes -Wunsafe-loop-optimizations \
-+ 	-Wwrite-strings -Wno-missing-field-initializers -Wno-unused-parameter \
-+ 	-Wcast-align -Wformat-nonliteral -Wformat-security -Wswitch-default \
-+-	-Wmissing-include-dirs -Waggregate-return -Wunused-but-set-variable \
-++	-Wmissing-include-dirs -Waggregate-return @GCC_WARN_UNUSED_BUT_SET@ \
-+ 	-Warray-bounds -Wold-style-definition -Wsign-compare -Wlarger-than=65537
-+ AM_CFLAGS += -Wno-undef  # sophiasip is not -Wundef--safe
-+ AM_CFLAGS += -Wredundant-decls  # sophiasip also contains redundant declarations
-+diff --git a/configure.ac b/configure.ac
-+index 17870a7..ecd98e5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -7,6 +7,13 @@ AM_SILENT_RULES([yes])
-+ AC_GNU_SOURCE
-+ 
-+ AC_PROG_CC
-++AX_CHECK_COMPILE_FLAG([-Wunused-but-set-variable])
-++
-++if test "${ax_cv_check_cflags___Wunused_but_set_variable}" = "yes" ; then
-++   GCC_WARN_UNUSED_BUT_SET=-Wunused-but-set-variable
-++fi
-++
-++AC_SUBST(GCC_WARN_UNUSED_BUT_SET)
-+ 
-+ LT_PREREQ([2.2])
-+ LT_INIT
-+diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
-+new file mode 100644
-+index 0000000..51df0c0
-+--- /dev/null
-++++ b/m4/ax_check_compile_flag.m4
-+@@ -0,0 +1,74 @@
-++# ===========================================================================
-++#   http://www.gnu.org/software/autoconf-archive/ax_check_compile_flag.html
-++# ===========================================================================
-++#
-++# SYNOPSIS
-++#
-++#   AX_CHECK_COMPILE_FLAG(FLAG, [ACTION-SUCCESS], [ACTION-FAILURE], [EXTRA-FLAGS], [INPUT])
-++#
-++# DESCRIPTION
-++#
-++#   Check whether the given FLAG works with the current language's compiler
-++#   or gives an error.  (Warnings, however, are ignored)
-++#
-++#   ACTION-SUCCESS/ACTION-FAILURE are shell commands to execute on
-++#   success/failure.
-++#
-++#   If EXTRA-FLAGS is defined, it is added to the current language's default
-++#   flags (e.g. CFLAGS) when the check is done.  The check is thus made with
-++#   the flags: "CFLAGS EXTRA-FLAGS FLAG".  This can for example be used to
-++#   force the compiler to issue an error when a bad flag is given.
-++#
-++#   INPUT gives an alternative input source to AC_COMPILE_IFELSE.
-++#
-++#   NOTE: Implementation based on AX_CFLAGS_GCC_OPTION. Please keep this
-++#   macro in sync with AX_CHECK_{PREPROC,LINK}_FLAG.
-++#
-++# LICENSE
-++#
-++#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-++#   Copyright (c) 2011 Maarten Bosmans <mkbosmans@gmail.com>
-++#
-++#   This program is free software: you can redistribute it and/or modify it
-++#   under the terms of the GNU General Public License as published by the
-++#   Free Software Foundation, either version 3 of the License, or (at your
-++#   option) any later version.
-++#
-++#   This program is distributed in the hope that it will be useful, but
-++#   WITHOUT ANY WARRANTY; without even the implied warranty of
-++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-++#   Public License for more details.
-++#
-++#   You should have received a copy of the GNU General Public License along
-++#   with this program. If not, see <http://www.gnu.org/licenses/>.
-++#
-++#   As a special exception, the respective Autoconf Macro's copyright owner
-++#   gives unlimited permission to copy, distribute and modify the configure
-++#   scripts that are the output of Autoconf when processing the Macro. You
-++#   need not follow the terms of the GNU General Public License when using
-++#   or distributing such scripts, even though portions of the text of the
-++#   Macro appear in them. The GNU General Public License (GPL) does govern
-++#   all other use of the material that constitutes the Autoconf Macro.
-++#
-++#   This special exception to the GPL applies to versions of the Autoconf
-++#   Macro released by the Autoconf Archive. When you make and distribute a
-++#   modified version of the Autoconf Macro, you may extend this special
-++#   exception to the GPL to apply to your modified version as well.
-++
-++#serial 3
-++
-++AC_DEFUN([AX_CHECK_COMPILE_FLAG],
-++[AC_PREREQ(2.59)dnl for _AC_LANG_PREFIX
-++AS_VAR_PUSHDEF([CACHEVAR],[ax_cv_check_[]_AC_LANG_ABBREV[]flags_$4_$1])dnl
-++AC_CACHE_CHECK([whether _AC_LANG compiler accepts $1], CACHEVAR, [
-++  ax_check_save_flags=$[]_AC_LANG_PREFIX[]FLAGS
-++  _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $4 $1"
-++  AC_COMPILE_IFELSE([m4_default([$5],[AC_LANG_PROGRAM()])],
-++    [AS_VAR_SET(CACHEVAR,[yes])],
-++    [AS_VAR_SET(CACHEVAR,[no])])
-++  _AC_LANG_PREFIX[]FLAGS=$ax_check_save_flags])
-++AS_IF([test x"AS_VAR_GET(CACHEVAR)" = xyes],
-++  [m4_default([$2], :)],
-++  [m4_default([$3], :)])
-++AS_VAR_POPDEF([CACHEVAR])dnl
-++])dnl AX_CHECK_COMPILE_FLAGS
-+-- 
-+2.1.0
-+
--- 
-2.1.0
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+index acd431c..fc59bc2 100644
+--- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
++++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'master'
+ # When Kodi is released this should be updated to the corresponding branch
+-KODI_PVR_ADDONS_VERSION = 89ba5bb6917a820b278688b9f43b23834002e9b5
++KODI_PVR_ADDONS_VERSION = 78397afa33774b484a1649c379d9b5e6eb3180c0
+ KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
+ KODI_PVR_ADDONS_LICENSE = GPLv3+
+ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
