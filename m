@@ -1,43 +1,93 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 04 Jan 2015 12:45:25 +0100
-Subject: [Buildroot] [PATCH v9 03/18] package/ffmpeg: Add Kodi patchset
-References: <1419356801-31525-1-git-send-email-bernd.kuhls@t-online.de>
- <1419356801-31525-4-git-send-email-bernd.kuhls@t-online.de>
- <20141226182251.79d06670@free-electrons.com>
-Message-ID: <XnsA41881C8736FEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 04 Jan 2015 12:56:06 +0100
+Subject: [Buildroot] [PATCH 09/10] package/dvb-app: handle static/shared
+ only build
+In-Reply-To: <20150102132503.7b9036cc@free-electrons.com>
+References: <1419717508-11627-1-git-send-email-romain.naour@openwide.fr>	<1419717508-11627-10-git-send-email-romain.naour@openwide.fr>
+ <20150102132503.7b9036cc@free-electrons.com>
+Message-ID: <54A92A56.7090903@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
-
 Hi Thomas,
 
-(digging through mail backlog after holiday...)
+Le 02/01/2015 13:25, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Sat, 27 Dec 2014 22:58:27 +0100, Romain Naour wrote:
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  .../0003-handle-static-shared-only-build.patch     | 35 ++++++++++++++++++++++
+>>  .../dvb-apps/0003-support-static-only-build.patch  | 20 -------------
+>>  package/dvb-apps/dvb-apps.mk                       |  6 +++-
+>>  3 files changed, 40 insertions(+), 21 deletions(-)
+>>  create mode 100644 package/dvb-apps/0003-handle-static-shared-only-build.patch
+>>  delete mode 100644 package/dvb-apps/0003-support-static-only-build.patch
+> 
+> Does not build with the following configuration:
+> 
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
+> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+> BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_DVB_APPS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> It gives:
+> 
+> CC dvbcfg_test
+> arm-linux-gcc: error: ../../lib/libdvbcfg/libdvbcfg.a: Aucun fichier ou dossier de ce type
+> ../../Make.rules:81: recipe for target 'dvbcfg_test' failed
+> 
+> Do you actually test your patches before sending them? I don't mind
+> seeing corner cases being broken, but here it's the canonical case: a
+> BR2_SHARED_LIBS=y build (which is the default) on a major architecture
+> (ARM).
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20141226182251.79d06670 at free-electrons.com: 
+See patch 10/10
 
-> I am wondering, wouldn't it be easier to have the individual patches,
-> instead of one big patch that combines all the XBMC patches?
+Usually, I test my patches before sending them, at least a build test.
+But I can make mistakes, thanks for the review and testing.
 
-Ok.
+In order to upstream the patch 0003-handle-static-shared-only-build.patch, I
+reworked the logic.
 
-> Also, have those patches been submitted upstream? Why is there an XBMC
-> patch set, instead of patches submitted to upstream ffmpeg?
+Instead of enabling static/shared libraries with
 
-Quoting FernetMenta (http://forum.kodi.tv/showthread.php?tid=177474&pid=
-1653966#pid1653966):
-"We have not accepted any ffmpeg patches not accepted upstream for more than 
-a year. Instead we do work with the ffmpeg devs and fix bugs upstream first. 
-Nevertheless XBMC has a different release cycle than ffmpeg it it is 
-necessary to backport patches."
+ifeq ($(static),1)
+libraries = $(lib_name).a
+endif
 
-> Can we expect this patch series to reduce in size over time?
+ifeq ($(shared),1)
+libraries += $(lib_name).so
+endif
 
-Yes.
+which require to set one of the two variables to build something, I renamed
+these variable to disable static/shared libraries one by one:
 
-Regards, Bernd
+ifeq ($(disable_static),)
+libraries = $(lib_name).a
+endif
+
+ifeq ($(disable_shared),)
+libraries += $(lib_name).so
+endif
+
+This preserves the original behavior.
+
+Best regards,
+Romain
