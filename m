@@ -1,28 +1,67 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Mon,  5 Jan 2015 17:35:37 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: add hash file
-In-Reply-To: <1420475737-13153-1-git-send-email-jkrause@posteo.de>
-References: <1420475737-13153-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1420475737-13153-2-git-send-email-jkrause@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jan 2015 17:37:07 +0100
+Subject: [Buildroot] [PATCH v4 05/17] erlang-goldrush: new package.
+In-Reply-To: <CAJtjsKYkHzbXw7RTzeC9L8sH40aFR3hnEwP6C1cDSHZ3HmjnHA@mail.gmail.com>
+References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
+ <1418135662-773-6-git-send-email-johan.oudinet@gmail.com>
+ <20150104223602.09aaf9da@free-electrons.com>
+ <CAJtjsKYkHzbXw7RTzeC9L8sH40aFR3hnEwP6C1cDSHZ3HmjnHA@mail.gmail.com>
+Message-ID: <20150105173707.15bb9e1c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/nodejs/nodejs.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/nodejs/nodejs.hash
+Dear Johan Oudinet,
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-new file mode 100644
-index 0000000..a6f2698
---- /dev/null
-+++ b/package/nodejs/nodejs.hash
-@@ -0,0 +1,2 @@
-+# From upstream URL: http://nodejs.org/dist/v0.10.35/SHASUMS256.txt
-+sha256	0043656bb1724cb09dbdc960a2fd6ee37d3badb2f9c75562b2d11235daa40a03  node-v0.10.35.tar.gz
+On Mon, 5 Jan 2015 15:52:27 +0100, Johan Oudinet wrote:
+
+> > No <pkg>_LICENSE ?
+> 
+> It is an ISC license, and the abbreviation is not available within Buildroot.
+
+This doesn't make sense: the <pkg>_LICENSE field is a free-form text
+field. You can put whatever you want in this field. Whenever possible,
+we prefer to use the SDPX license identifiers
+(http://spdx.org/licenses/).
+
+Also:
+
+$ git grep "LICENSE.*ISC"
+package/at/at.mk:AT_LICENSE = GPLv2+, GPLv3+, ISC
+package/bind/bind.mk:BIND_LICENSE = ISC
+package/crda/crda.mk:CRDA_LICENSE = ISC
+package/dhcp/dhcp.mk:DHCP_LICENSE = ISC
+package/harfbuzz/harfbuzz.mk:HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+package/libass/libass.mk:LIBASS_LICENSE = ISC
+package/libconfuse/libconfuse.mk:LIBCONFUSE_LICENSE = ISC
+package/libuv/libuv.mk:LIBUV_LICENSE = BSD-2c, BSD-3c, ISC, MIT
+package/odhcploc/odhcploc.mk:ODHCPLOC_LICENSE = ISC
+package/pure-ftpd/pure-ftpd.mk:PURE_FTPD_LICENSE = ISC
+package/python-certifi/python-certifi.mk:PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+package/sudo/sudo.mk:SUDO_LICENSE = ISC BSD-3c
+package/tmux/tmux.mk:TMUX_LICENSE = ISC
+package/wireless-regdb/wireless-regdb.mk:WIRELESS_REGDB_LICENSE = ISC
+package/yajl/yajl.mk:YAJL_LICENSE = ISC
+
+> Excellent idea. I've just modified pkg-rebar to do that and I'll
+> remove erlang and host-erlang-rebar from the dependencies of all
+> erlang packages.
+
+Great.
+
+> > Might be good to say a word in the commit log to explain why a host
+> > variant of this library is needed.
+> 
+> Ok. So I should not provide an host variant unless some other packages need it?
+
+Indeed. Why would we want to have dead/unused code?
+
+Best regards,
+
+Thomas
 -- 
-2.2.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
