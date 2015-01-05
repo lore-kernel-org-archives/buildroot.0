@@ -1,108 +1,45 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 5 Jan 2015 15:52:27 +0100
-Subject: [Buildroot] [PATCH v4 05/17] erlang-goldrush: new package.
-In-Reply-To: <20150104223602.09aaf9da@free-electrons.com>
-References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
- <1418135662-773-6-git-send-email-johan.oudinet@gmail.com>
- <20150104223602.09aaf9da@free-electrons.com>
-Message-ID: <CAJtjsKYkHzbXw7RTzeC9L8sH40aFR3hnEwP6C1cDSHZ3HmjnHA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 5 Jan 2015 14:57:50 +0000
+Subject: [Buildroot] [PATCH] xz: bump version to 5.2.0
+Message-ID: <1420469870-50256-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+-Bump version to 5.2.0
+-Update hash file
+-Use xz tarball instead of bz2 to save space and bandwidth
 
-On Sun, Jan 4, 2015 at 10:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Johan Oudinet,
->
-> On Tue,  9 Dec 2014 15:34:10 +0100, Johan Oudinet wrote:
->> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
->> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
->> ---
->>  package/Config.in                          |  5 +++++
->>  package/erlang-goldrush/Config.in          |  6 ++++++
->>  package/erlang-goldrush/erlang-goldrush.mk | 14 ++++++++++++++
->>  3 files changed, 25 insertions(+)
->>  create mode 100644 package/erlang-goldrush/Config.in
->>  create mode 100644 package/erlang-goldrush/erlang-goldrush.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 600a68d..06c8e04 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -392,6 +392,11 @@ endmenu
->>  menu "Interpreter languages and scripting"
->>       source "package/enscript/Config.in"
->>       source "package/erlang/Config.in"
->> +if BR2_PACKAGE_ERLANG
->
-> So all Erlang packages are not visible unless erlang is enabled. Which
-> sounds good.
->
->> +menu "Erlang libraries/modules"
->> +     source "package/erlang-goldrush/Config.in"
->> +endmenu
->> +endif
->>       source "package/guile/Config.in"
->>       source "package/haserl/Config.in"
->>       source "package/jamvm/Config.in"
->> diff --git a/package/erlang-goldrush/Config.in b/package/erlang-goldrush/Config.in
->> new file mode 100644
->> index 0000000..685a887
->> --- /dev/null
->> +++ b/package/erlang-goldrush/Config.in
->> @@ -0,0 +1,6 @@
->> +config BR2_PACKAGE_ERLANG_GOLDRUSH
->> +     bool "erlang-goldrush"
->> +     depends on BR2_PACKAGE_ERLANG
->
-> So why do we have this dependency again here?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/xz/xz.hash |    2 +-
+ package/xz/xz.mk   |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Good point. I've removed it. Thanks for noticing it.
-
->> --- /dev/null
->> +++ b/package/erlang-goldrush/erlang-goldrush.mk
->> @@ -0,0 +1,14 @@
->> +################################################################################
->> +#
->> +# erlang-goldrush
->> +#
->> +################################################################################
->> +
->> +ERLANG_GOLDRUSH_VERSION = 0.1.6
->> +ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
->> +ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
->
-> No <pkg>_LICENSE ?
-
-It is an ISC license, and the abbreviation is not available within Buildroot.
-
->
->> +ERLANG_GOLDRUSH_DEPENDENCIES = erlang host-erlang-rebar
->
-> Why are those dependencies necessary? Aren't they handled by the rebar
-> infra?
-
-Excellent idea. I've just modified pkg-rebar to do that and I'll
-remove erlang and host-erlang-rebar from the dependencies of all
-erlang packages.
-
->
->> +ERLANG_GOLDRUSH_INSTALL_STAGING = YES
->> +
->> +$(eval $(rebar-package))
->> +$(eval $(host-rebar-package))
->
-> Might be good to say a word in the commit log to explain why a host
-> variant of this library is needed.
-
-Ok. So I should not provide an host variant unless some other packages need it?
-
-Thanks for the review.
-
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 6169b83..f76b9ac 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	166c48d2842519bc4f96333bff9e265f8cdda44d38e40594ef3f9bbb52890490	xz-5.0.5.tar.bz2
++sha256  5962fe32e0b42c7065b4410b7d8ffbf2895e197e97d410c4fc374ea0d7610a14  xz-5.2.0.tar.xz
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index fbcd276..1b44678 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-XZ_VERSION = 5.0.5
+-XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
++XZ_VERSION = 5.2.0
++XZ_SOURCE = xz-$(XZ_VERSION).tar.xz
+ XZ_SITE = http://tukaani.org/xz
+ XZ_INSTALL_STAGING = YES
+ XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
-Johan
+1.7.1
