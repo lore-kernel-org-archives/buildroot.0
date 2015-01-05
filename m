@@ -1,253 +1,397 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 5 Jan 2015 14:45:42 +0100
-Subject: [Buildroot] [PATCH v3] linux: add fbtft kernel extension
-Message-ID: <trinity-6944499d-15ee-454d-9b65-a8c69cd62ac2-1420465542272@3capp-gmx-bs26>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon,  5 Jan 2015 14:48:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: new package
+Message-ID: <1420465735-5573-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello 'thebestofall007',
+This patch is based on an WIP version submitted by Romain Naour, commented by
+Arnout Vandecappelle:
+https://patchwork.ozlabs.org/patch/401270/
 
-first: please use e-mail with a real name, its much nicer to answer
-to real persons ;-)
+The package provides a default configuration which let the user initiate an
+update by using an update URL by using libcurl. The embedded webserver (a
+customized version of mongoose) and Lua support are both disabled by default.
 
-second: please keep  buildroot at busybox.net on CC, others will be interested
-in the answers too (or will answer with useful hints)...
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+CC: romain.naour at openwide.fr
+---
+ package/Config.in                                  |   1 +
+ package/swupdate/Config.in                         |  93 +++++++++++++++
+ ...wupdate-0001-Add-missing-header-for-off_t.patch |  25 ++++
+ package/swupdate/swupdate.config                   |  82 +++++++++++++
+ package/swupdate/swupdate.mk                       | 127 +++++++++++++++++++++
+ 5 files changed, 328 insertions(+)
+ create mode 100644 package/swupdate/Config.in
+ create mode 100644 package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
+ create mode 100644 package/swupdate/swupdate.config
+ create mode 100644 package/swupdate/swupdate.mk
 
-and last some real answers ;-)
- 
-On Mon, Jan 05, 2015 at 01:48:32AM -0600, thebestofall007 . wrote:
-> I found the patch and am in the process of applying it to buildroot. I
-> added the path to the patch on my system to the BR2_LINUX_KERNEL_PATCH
-> field in the make xconfig/menuconfig setup (is that how you applied the
-> patch and got it to work?). Furthermore, fergie4000 was able to apply the
-> patch to the build and got the modules to build against buildroot, as per
-> here: https://github.com/notro/fbtft/issues/209#issuecomment-68645175. I'm
-> scratching my head to figure out the steps to reproduce fergie's successful
-> build for my application, but I figure once I do, I bet it will be super
-> easy.
-> 
-
-The following sequence of commands should work:
-
-- prepare buildroot (or use your already downloaded version):
-        $ mkdir tmp
-        $ cd tmp/
-        $ wget http://buildroot.uclibc.org/downloads/buildroot-2014.11.tar.bz2
-        $ tar -xvjf buildroot-2014.11.tar.bz2
-
-- download my latest patch from patchwork:
-        $ wget -O v3-linux-add-fbtft-kernel-extension.patch https://patchwork.ozlabs.org/patch/425126/mbox/
-
-- patch the buildroot package:
-        $ cd buildroot-2014.11/
-        $ patch -p 1 < ../v3-linux-add-fbtft-kernel-extension.patch
-        $ cd ..
-
-- start a fresch build
-        $ mkdir build_rpi_001
-        $ cd build_rpi_001/
-        $ make O=$PWD -C ../buildroot-2014.11 raspberrypi_defconfig
-
-- and go to buildroot menuconfig, enable Kernel --> Linux Kernel Extensions --> fbtft patch
-        $ make menuconfig
-        $ make
-
-- the linux source under build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3 will be with fbtft support,
-so enable it in the linux config as described in the fbtft help text (see v3-linux-add-fbtft-kernel-extension.patch):
-        $ make linux-menuconfig
-
-- rebuild linux kernel and the new modules
-        $ make
-
-...install it to sd card as described in buildroot-2014.11/board/raspberrypi/readme.txt and test it...
-
-Hope the description is helpful enough?
-
-> Nice pictures, btw.
-
-...thanks...
-
-Regards,
-Peter
-
-> 
-> On Sat, Jan 3, 2015 at 2:01 PM, Peter Seiderer <ps.report@gmx.net> wrote:
-> 
-> > Tested with RaspberryPi B+ and PiTFT Mini Kit - 320x240 2.8" TFT
-> > (see [1] and [2]) and the following target configuration changes:
-> > - cmdline.txt: add 'fbcon=map:10 fbcon=font:VGA8x8'
-> > - add /etc/modules-load.d/fbtft.conf with 'fbtft_device'
-> > - add /etc/modprobe.d/00-fbtft.conf with 'options fbtft_device
-> > name=adafruit28 rotate=90 gpios=dc:25'
-> >
-> > [1]
-> > http://h65951.serverkompetenz.net/PeterSeiderer/upload/PiTFT_2_8_ct/Image9893.jpg
-> > [2]
-> > http://h65951.serverkompetenz.net/PeterSeiderer/upload/PiTFT_2_8_ct/Image9897.jpg
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 -> v2:
-> >   - added missing linux/linux-ext-fbtft.mk file
-> >
-> > Changes v2 -> v3:
-> >   - removed automatic kernel configurations changes
-> >   - added kernel configuration hint to linux/Config.ext.in help text
-> >   - added second installation directory for linux >= 3.15
-> > ---
-> >  linux/Config.ext.in      | 25 +++++++++++++++++++++++++
-> >  linux/linux-ext-fbtft.mk | 41 +++++++++++++++++++++++++++++++++++++++++
-> >  package/Config.in        |  1 +
-> >  package/fbtft/Config.in  | 13 +++++++++++++
-> >  package/fbtft/fbtft.mk   | 11 +++++++++++
-> >  5 files changed, 91 insertions(+)
-> >  create mode 100644 linux/linux-ext-fbtft.mk
-> >  create mode 100644 package/fbtft/Config.in
-> >  create mode 100644 package/fbtft/fbtft.mk
-> >
-> > diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-> > index 40c4684..c31628a 100644
-> > --- a/linux/Config.ext.in
-> > +++ b/linux/Config.ext.in
-> > @@ -42,4 +42,29 @@ config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
-> >         help
-> >           Optionally, explicitly specify the RTAI patch to use.
-> >
-> > +# fbtft
-> > +config BR2_LINUX_KERNEL_EXT_FBTFT
-> > +       bool "fbtft patch"
-> > +       select BR2_PACKAGE_FBTFT
-> > +       help
-> > +         Linux Framebuffer drivers for small TFT LCD display modules,
-> > +         e.g. Adafruit PiTFT displays for Raspberry Pi.
-> > +
-> > +         To enable fbtft, e.g. for Adafruit 2.8 PiTFT, enable the
-> > +         following kernel configuarations:
-> > +         - CONFIG_SPI: Device Drivers ---> SPI support
-> > +         - CONFIG_SPI_BCM2708: Device Drivers ---> SPI support
-> > +                                  ---> BCM2708 SPI controller driver
-> > +         - CONFIG_GPIOLIB: Device Drivers ---> GPIO Support
-> > +         - CONFIG_FB: Device Drives ---> Graphics support
-> > +                         ---> Support for frame buffer devices
-> > +         - CONFIG_FB_TFT: Device Drivers --->
-> > +                            Support for small TFT LCD display modules
-> > +         - CONFIG_FB_TFT_ILI9341: Device Drivers --->
-> > +                            Support for small TFT LCD display modules --->
-> > +                              FB driver for the ILI9341 LCD Controller
-> > +         or another FB_TFT submodule corresponding to your display.
-> > +
-> > +         https://github.com/notro/fbtft
-> > +
-> >  endmenu
-> > diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
-> > new file mode 100644
-> > index 0000000..d555a3f
-> > --- /dev/null
-> > +++ b/linux/linux-ext-fbtft.mk
-> > @@ -0,0 +1,41 @@
-> >
-> > +################################################################################
-> > +# Linux fbtft extensions
-> > +#
-> > +# Patch the linux kernel with fbtft extension
-> >
-> > +################################################################################
-> > +
-> > +ifeq ($(BR2_LINUX_KERNEL_EXT_FBTFT),y)
-> > +# Add dependency to fbtft package (download helper for the fbtft source)
-> > +LINUX_DEPENDENCIES += fbtft
-> > +
-> > +define FBTFT_PREPARE_KERNEL
-> > +       # for linux >= 3.15 install to drivers/video/fbdev/fbtft
-> > +       # for linux < 3.15 install to drivers/video/fbtft
-> > +       if [ -e $(LINUX_DIR)/drivers/video/fbdev ]; then \
-> > +               mkdir $(LINUX_DIR)/drivers/video/fbdev/fbtft; \
-> > +               $(INSTALL) $(FBTFT_DIR)/*.h \
-> > +                       $(FBTFT_DIR)/*.c \
-> > +                       $(FBTFT_DIR)/Makefile \
-> > +                       $(FBTFT_DIR)/Kconfig \
-> > +                       $(FBTFT_DIR)/README \
-> > +                       $(LINUX_DIR)/drivers/video/fbdev/fbtft; \
-> > +               echo 'source "drivers/video/fbdev/fbtft/Kconfig"' \
-> > +                       >> $(LINUX_DIR)/drivers/video/fbdev/Kconfig; \
-> > +               echo 'obj-y += fbtft/' >>
-> > $(LINUX_DIR)/drivers/video/fbdev/Makefile; \
-> > +       else \
-> > +               mkdir $(LINUX_DIR)/drivers/video/fbtft; \
-> > +               $(INSTALL) $(FBTFT_DIR)/*.h \
-> > +                       $(FBTFT_DIR)/*.c \
-> > +                       $(FBTFT_DIR)/Makefile \
-> > +                       $(FBTFT_DIR)/Kconfig \
-> > +                       $(FBTFT_DIR)/README \
-> > +                       $(LINUX_DIR)/drivers/video/fbtft; \
-> > +               echo 'source "drivers/video/fbtft/Kconfig"' \
-> > +                       >> $(LINUX_DIR)/drivers/video/Kconfig; \
-> > +               echo 'obj-y += fbtft/' >>
-> > $(LINUX_DIR)/drivers/video/Makefile; \
-> > +       fi
-> > +endef
-> > +
-> > +LINUX_PRE_PATCH_HOOKS += FBTFT_PREPARE_KERNEL
-> > +
-> > +endif #BR2_LINUX_KERNEL_EXT_FBTFT
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 3b37bb2..c658a28 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -311,6 +311,7 @@ endif
-> >         source "package/evemu/Config.in"
-> >         source "package/evtest/Config.in"
-> >         source "package/fan-ctrl/Config.in"
-> > +       source "package/fbtft/Config.in"
-> >         source "package/fconfig/Config.in"
-> >         source "package/fis/Config.in"
-> >         source "package/flashrom/Config.in"
-> > diff --git a/package/fbtft/Config.in b/package/fbtft/Config.in
-> > new file mode 100644
-> > index 0000000..eceea85
-> > --- /dev/null
-> > +++ b/package/fbtft/Config.in
-> > @@ -0,0 +1,13 @@
-> > +config BR2_PACKAGE_FBTFT
-> > +       bool "fbtft"
-> > +       depends on BR2_LINUX_KERNEL
-> > +       help
-> > +         Linux Framebuffer drivers for small TFT LCD display modules,
-> > +         e.g. Adafruit PiTFT displays for Raspberry Pi.
-> > +
-> > +         This is only the download helper for the kernel patch.
-> > +
-> > +         https://github.com/notro/fbtft
-> > +
-> > +comment "fbtft needs a Linux kernel to be built"
-> > +       depends on !BR2_LINUX_KERNEL
-> > diff --git a/package/fbtft/fbtft.mk b/package/fbtft/fbtft.mk
-> > new file mode 100644
-> > index 0000000..9f46bdb
-> > --- /dev/null
-> > +++ b/package/fbtft/fbtft.mk
-> > @@ -0,0 +1,11 @@
-> >
-> > +################################################################################
-> > +#
-> > +# fbtft
-> > +#
-> >
-> > +################################################################################
-> > +
-> > +FBTFT_VERSION = 274035404701245e7491c0c6471c5b72ade4d491
-> > +FBTFT_SITE = $(call github,notro,fbtft,$(FBTFT_VERSION))
-> > +FBTFT_LICENSE = GPLv2+
-> > +
-> > +$(eval $(generic-package))
-> > --
-> > 2.1.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
+diff --git a/package/Config.in b/package/Config.in
+index 8d91b04..3baf95f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1269,6 +1269,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ endif
+ 	source "package/smack/Config.in"
+ 	source "package/supervisor/Config.in"
++	source "package/swupdate/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/sysklogd/Config.in"
+ endif
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+new file mode 100644
+index 0000000..f8489dc
+--- /dev/null
++++ b/package/swupdate/Config.in
+@@ -0,0 +1,93 @@
++config BR2_PACKAGE_SWUPDATE
++	bool "swupdate"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_MTD
++	help
++	  swupdate provides a reliable way to update the software on an embedded
++	  system.
++
++	  https://github.com/sbabic/swupdate.git
++
++if BR2_PACKAGE_SWUPDATE
++
++config BR2_PACKAGE_SWUPDATE_CONFIG
++	string "swupdate configuration file to use?"
++	default "package/swupdate/swupdate.config"
++	help
++	  Some people may wish to use their own modified swupdate configuration
++	  file, and will specify their config file location with this option.
++
++	  Most people will just use the default swupdate configuration file.
++	  This will enable swupdate with an image downloader, as well as image
++	  handlers for UBI volumes, raw NAND or NOR flash, SD cards, shell
++	  scripts, and the U-Boot bootloader environment.
++
++config BR2_PACKAGE_SWUPDATE_LIBCURL
++	bool "Enable image downloading"
++	select BR2_PACKAGE_LIBCURL
++	default y
++	help
++	  Enable update from image URL using libcurl. Files are downloaded                                                                    ?
++	  completely before installation begins.
++
++config BR2_PACKAGE_SWUPDATE_WEBSERVER
++	bool "Enable embedded webserver"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enable firmware update from a remote device using an embedded
++	  webserver on the target.
++
++comment "Webserver support needs toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++if BR2_PACKAGE_SWUPDATE_WEBSERVER
++
++config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_IPV6
++	depends on BR2_INET_IPV6
++	bool "Webserver with IPv6 support"
++	help
++	  Enable IPv6 support for the webserver.
++
++comment "IPv6 support for the webserver needs toolchain w/ IPv6"
++	depends on !BR2_INET_IPV6
++
++config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SQL
++	bool "Webserver with SQL support"
++	depends on BR2_LARGEFILE
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_1
++	help
++	  Enable SQL support for the webserver.
++
++comment "Webservers Lua support needs a toolchain w/ largefile and a Lua 5.2 interpreter"
++	depends on !BR2_LARGEFILE || BR2_PACKAGE_LUA_5_1 || !BR2_PACKAGE_HAS_LUAINTERPRETER
++
++config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SSL
++	bool "Webserver with SSL support"
++	help
++	  Enable SSL support for the webserver.
++
++endif
++
++config BR2_PACKAGE_SWUPDATE_LIBCONFIG
++	bool "Enable libconfig parser"
++	select BR2_PACKAGE_LIBCONFIG
++	default y
++	help
++	  Use libconfig to parse the configuration file.
++	  This is the default parser. Unless you don't use your own
++	  external parser written in Lua you'll need to say Y here.
++
++config BR2_PACKAGE_SWUPDATE_LUA_SUPPORT
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_1
++	bool "Enable Lua support"
++	help
++	  Enable Lua support.
++	  Select this for using custom scripts written in Lua.
++
++comment "Lua support needs a Lua 5.2 interpreter"
++	depends on BR2_PACKAGE_LUA_5_1 || !BR2_PACKAGE_HAS_LUAINTERPRETER
++
++endif
+diff --git a/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch b/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
+new file mode 100644
+index 0000000..4be0f7b
+--- /dev/null
++++ b/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
+@@ -0,0 +1,25 @@
++From 4e382373cad64ca7e183336e33b72c53cfeed340 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 7 Sep 2014 17:31:09 +0200
++Subject: [PATCH 1/1] Add missing header for off_t
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ include/swupdate.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/swupdate.h b/include/swupdate.h
++index 78b7f85..c193397 100644
++--- a/include/swupdate.h
+++++ b/include/swupdate.h
++@@ -23,6 +23,7 @@
++ #ifndef _SWUPDATE_H
++ #define _SWUPDATE_H
++ 
+++#include <sys/types.h>
++ #include <sys/queue.h>
++ #include "flash.h"
++ #include "globals.h"
++-- 
++1.9.3
++
+diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
+new file mode 100644
+index 0000000..788f949
+--- /dev/null
++++ b/package/swupdate/swupdate.config
+@@ -0,0 +1,82 @@
++#
++# Automatically generated make config: don't edit
++# swupdate version: 2014.07.0
++# Thu Dec 18 10:00:56 2014
++#
++CONFIG_HAVE_DOT_CONFIG=y
++
++#
++# Swupdate Settings
++#
++
++#
++# General Configuration
++#
++CONFIG_SCRIPTS=y
++# CONFIG_HW_COMPATIBILITY is not set
++CONFIG_HW_COMPATIBILITY_FILE=""
++# CONFIG_LUA is not set
++# CONFIG_FEATURE_SYSLOG is not set
++
++#
++# Build Options
++#
++# CONFIG_STATIC is not set
++CONFIG_CROSS_COMPILER_PREFIX=""
++CONFIG_SYSROOT=""
++CONFIG_EXTRA_CFLAGS=""
++CONFIG_EXTRA_LDFLAGS=""
++CONFIG_EXTRA_LDLIBS=""
++
++#
++# Debugging Options
++#
++# CONFIG_DEBUG is not set
++# CONFIG_DEBUG_PESSIMIZE is not set
++# CONFIG_WERROR is not set
++# CONFIG_NOCLEANUP is not set
++CONFIG_DOWNLOAD=y
++# CONFIG_WEBSERVER is not set
++
++#
++# Webserver Features
++#
++# CONFIG_MONGOOSE is not set
++
++#
++# Mongoose Feature
++#
++# CONFIG_MONGOOSELUA is not set
++# CONFIG_MONGOOSESQL is not set
++# CONFIG_MONGOOSEIPV6 is not set
++# CONFIG_MONGOOSESSL is not set
++
++#
++# Archival Features
++#
++CONFIG_CPIO=y
++CONFIG_GUNZIP=y
++
++#
++# Parser Features
++#
++CONFIG_LIBCONFIG=y
++# CONFIG_LUAEXTERNAL is not set
++# CONFIG_SETEXTPARSERNAME is not set
++CONFIG_EXTPARSERNAME=""
++# CONFIG_SETSWDESCRIPTION is not set
++CONFIG_SWDESCRIPTION=""
++
++#
++# Image Handlers
++#
++CONFIG_UBIVOL=y
++CONFIG_UBIBLACKLIST=""
++CONFIG_UBIVIDOFFSET=0
++CONFIG_CFI=y
++CONFIG_RAW=y
++# CONFIG_LUASCRIPTHANDLER is not set
++CONFIG_SHELLSCRIPTHANDLER=y
++# CONFIG_HANDLER_IN_LUA is not set
++CONFIG_UBOOT=y
++CONFIG_UBOOT_FWENV="/etc/fw_env.config"
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+new file mode 100644
+index 0000000..c0025b5
+--- /dev/null
++++ b/package/swupdate/swupdate.mk
+@@ -0,0 +1,127 @@
++################################################################################
++#
++# swupdate
++#
++################################################################################
++
++# Choose latest commit instead of release 2014.07 for getting bug fixes and
++# image downloading feature
++SWUPDATE_VERSION = 1b0905a7f969cbb59e3fcc9ffc22b3fabfaee4a7
++SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
++SWUPDATE_LICENSE = GPLv2+
++SWUPDATE_LICENSE_FILES = COPYING
++SWUPDATE_DEPENDENCIES = zlib mtd
++
++SWUPDATE_BUILD_CONFIG = $(SWUPDATE_DIR)/.config
++
++SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
++SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig
++
++SWUPDATE_CFLAGS = \
++	$(TARGET_CFLAGS)
++
++SWUPDATE_LDFLAGS = \
++	$(TARGET_LDFLAGS)
++
++SWUPDATE_LDLIBS =
++
++# If we're using static libs do the same for swupdate
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++define SWUPDATE_PREFER_STATIC
++	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++define SWUPDATE_BUILD_OPTIONS
++	$(call KCONFIG_SET_OPT,CONFIG_CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_SYSROOT,"$(SYSROOT_DIR)",$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(SWUPDATE_CFLAGS)",$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(SWUPDATE_LDFLAGS)",$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDLIBS,"$(SWUPDATE_LDLIBS)",$(SWUPDATE_BUILD_CONFIG))
++endef
++
++ifeq ($(BR2_PACKAGE_SWUPDATE_LIBCURL),y)
++SWUPDATE_DEPENDENCIES += libcurl
++else
++define SWUPDATE_DOWNLOAD
++	$(call KCONFIG_DISABLE_OPT,CONFIG_DOWNLOAD,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++# swupate bundles its own customized version of Mongoose with a Lua licence.
++ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
++SWUPDATE_DEPENDENCIES += openssl
++SWUPDATE_LDLIBS += pthread crypto
++define SWUPDATE_WEBSERVER_MONGOOSE
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER,$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSE,$(SWUPDATE_BUILD_CONFIG))
++	$(SWUPDATE_WEBSERVER_MONGOOSE_IPV6)
++	$(SWUPDATE_WEBSERVER_MONGOOSE_LUA)
++	$(SWUPDATE_WEBSERVER_MONGOOSE_SQL)
++	$(SWUPDATE_WEBSERVER_MONGOOSE_SSL)
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_IPV6),y)
++SWUPDATE_CFLAGS += -DUSE_IPV6
++define SWUPDATE_WEBSERVER_MONGOOSE_IPV6
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSEIPV6,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SQL),y)
++SWUPDATE_CFLAGS += -DUSE_LUA_SQLITE3
++define SWUPDATE_WEBSERVER_MONGOOSE_SQL
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSESQL,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SSL),y)
++SWUPDATE_CFLAGS += -DNO_SSL_DL
++SWUPDATE_LDLIBS += ssl
++define SWUPDATE_WEBSERVER_MONGOOSE_SSL
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSESSL,$(SWUPDATE_BUILD_CONFIG))
++endef
++else
++SWUPDATE_CFLAGS += -DNO_SSL
++endif
++
++ifeq ($(BR2_PACKAGE_SWUPDATE_LIBCONFIG),y)
++SWUPDATE_DEPENDENCIES += libconfig
++else
++define SWUPDATE_LIBCONFIG_PARSER
++	$(call KCONFIG_DISABLE_OPT,CONFIG_LIBCONFIG,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_SWUPDATE_LUA_SUPPORT),y)
++SWUPDATE_DEPENDENCIES += lua
++SWUPDATE_CFLAGS += -DUSE_LUA
++SWUPDATE_LDLIBS += dl
++define SWUPDATE_LUA
++	$(call KCONFIG_ENABLE_OPT,CONFIG_LUA,$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_LUASCRIPTHANDLER,$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HANDLER_IN_LUA,$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_LUAEXTERNAL,$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSELUA,$(SWUPDATE_BUILD_CONFIG))
++endef
++endif
++
++define SWUPDATE_KCONFIG_FIXUP_CMDS
++	$(SWUPDATE_PREFER_STATIC)
++	$(SWUPDATE_BUILD_OPTIONS)
++	$(SWUPDATE_DOWNLOAD)
++	$(SWUPDATE_WEBSERVER_MONGOOSE)
++	$(SWUPDATE_LIBCONFIG_PARSER)
++	$(SWUPDATE_LUA)
++endef
++
++define SWUPDATE_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define SWUPDATE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
++endef
++
++$(eval $(kconfig-package))
+-- 
+2.2.1
