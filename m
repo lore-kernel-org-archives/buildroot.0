@@ -1,45 +1,45 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 5 Jan 2015 14:57:50 +0000
-Subject: [Buildroot] [PATCH] xz: bump version to 5.2.0
-Message-ID: <1420469870-50256-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 5 Jan 2015 15:02:25 +0000
+Subject: [Buildroot] [PATCH] lftp: bump version to 4.6.1
+Message-ID: <1420470145-53407-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--Bump version to 5.2.0
--Update hash file
--Use xz tarball instead of bz2 to save space and bandwidth
+-Bump version to 4.6.1
+-Add a hash file
+-Use xz tarball to save space and bandwidth
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/xz/xz.hash |    2 +-
- package/xz/xz.mk   |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lftp/lftp.hash |    2 ++
+ package/lftp/lftp.mk   |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+ create mode 100644 package/lftp/lftp.hash
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index 6169b83..f76b9ac 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	166c48d2842519bc4f96333bff9e265f8cdda44d38e40594ef3f9bbb52890490	xz-5.0.5.tar.bz2
-+sha256  5962fe32e0b42c7065b4410b7d8ffbf2895e197e97d410c4fc374ea0d7610a14  xz-5.2.0.tar.xz
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index fbcd276..1b44678 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
+new file mode 100644
+index 0000000..328d545
+--- /dev/null
++++ b/package/lftp/lftp.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  d1eea1ed98d05e050b909d5a90e8c7f345c84781b91af36d944fb2f33eba35bf  lftp-4.6.1.tar.xz
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 1586579..7494ea2 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--XZ_VERSION = 5.0.5
--XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
-+XZ_VERSION = 5.2.0
-+XZ_SOURCE = xz-$(XZ_VERSION).tar.xz
- XZ_SITE = http://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
- XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-LFTP_VERSION = 4.5.5
++LFTP_VERSION = 4.6.1
++LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
+ LFTP_SITE = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPLv3+
+ LFTP_LICENSE_FILES = COPYING
 -- 
 1.7.1
