@@ -1,37 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jan 2015 10:32:21 +0100
-Subject: [Buildroot] [PATCH 1/1] python-django: new package
-In-Reply-To: <CAAwwcmTD55=ZS7z_iTVmZz-cSmGw27wntqtcy4Bmm0+WJ_L6HA@mail.gmail.com>
-References: <1420244904-23270-1-git-send-email-oli.vogt.pub01@gmail.com>
- <20150104220810.131bd08d@free-electrons.com>
- <CAAwwcmTD55=ZS7z_iTVmZz-cSmGw27wntqtcy4Bmm0+WJ_L6HA@mail.gmail.com>
-Message-ID: <20150105103221.75f14d95@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 5 Jan 2015 11:28:00 +0100
+Subject: [Buildroot] [PATCH v4 00/17] ejabberd: XMPP server
+In-Reply-To: <20150105000643.GG31970@free.fr>
+References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
+ <20150105000643.GG31970@free.fr>
+Message-ID: <CAJtjsKb4i=9AJ8CcwJYDEvv1CDbCMddq8jDPP6F_BVaOyt40yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Oli Vogt,
+Yann, All,
 
-On Mon, 5 Jan 2015 11:37:34 +1300, Oli Vogt wrote:
+On Mon, Jan 5, 2015 at 1:06 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> On 2014-12-09 15:34 +0100, Johan Oudinet spake thusly:
+>> Since ejabberd build system relies on rebar to download its dependencies, we've
+>> packaged all of them separately and modified ejabberd makefile to not download
+>> any dependency.
+>>
+>>  package/ejabberd/0001-remove-deps.patch            |  20 ++
+>
+> Shouldn't we call it erlang-ejabberd as it is an Erlang package using
+> the rebar infrastructure?
 
->  Yes it should work with Python3 however I was not able to test it as I use
-> 2.7. This meant I was not sure about core module dependencies. Thanks.
+I recall we agreed on erlang libraries should be named erlang-XXX but
+not for erlang programs. I don't remember who said that but I think we
+should call it ejabberd even though it's using the rebar
+infrastructure.
 
-Ok. I assumed the same core Python 3 dependencies as with Python 2. I
-was able to "import django" in Python 3.
+>
+> I've pushed my branch there:
+>
+>     git://git.busybox.net/~ymorin/git/buildroot yem/ejabberd
+>
+> for you to fetch.
+>
+> Not even build-tested, I lacked time tonight, will work on it tomorrow.
 
-However, I noticed that the django-admin tool does not work on the
-target, but maybe this is expected.
-
->  Sorry about the download link I 'hand-downloaded' the tarball to get
-> things started and did not delete it to test. Thanks again.
-
-No problem, this was quickly fixed. Thanks for your contribution!
-
-Thomas
+Ok. I've just fetched it and saw you've already fixed several things
+pointed out by Thomas. I'm going to review your modifications and read
+all emails I've received from you and Thomas during the week-end to
+see what remains to be done.
+Thanks to both of you.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Johan
