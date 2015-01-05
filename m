@@ -1,157 +1,108 @@
-From: Steve James <ste@junkomatic.net>
-Date: Mon,  5 Jan 2015 14:47:47 +0000
-Subject: [Buildroot] [PATCH v4] leveldb: new package
-Message-ID: <1420469267-26272-1-git-send-email-ste@junkomatic.net>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 5 Jan 2015 15:52:27 +0100
+Subject: [Buildroot] [PATCH v4 05/17] erlang-goldrush: new package.
+In-Reply-To: <20150104223602.09aaf9da@free-electrons.com>
+References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
+ <1418135662-773-6-git-send-email-johan.oudinet@gmail.com>
+ <20150104223602.09aaf9da@free-electrons.com>
+Message-ID: <CAJtjsKYkHzbXw7RTzeC9L8sH40aFR3hnEwP6C1cDSHZ3HmjnHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds new package: leveldb
+Thomas, All,
 
-  LevelDB is a fast key-value storage library written at Google that
-  provides an ordered mapping from string keys to string values.
+On Sun, Jan 4, 2015 at 10:36 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Johan Oudinet,
+>
+> On Tue,  9 Dec 2014 15:34:10 +0100, Johan Oudinet wrote:
+>> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+>> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+>> ---
+>>  package/Config.in                          |  5 +++++
+>>  package/erlang-goldrush/Config.in          |  6 ++++++
+>>  package/erlang-goldrush/erlang-goldrush.mk | 14 ++++++++++++++
+>>  3 files changed, 25 insertions(+)
+>>  create mode 100644 package/erlang-goldrush/Config.in
+>>  create mode 100644 package/erlang-goldrush/erlang-goldrush.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 600a68d..06c8e04 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -392,6 +392,11 @@ endmenu
+>>  menu "Interpreter languages and scripting"
+>>       source "package/enscript/Config.in"
+>>       source "package/erlang/Config.in"
+>> +if BR2_PACKAGE_ERLANG
+>
+> So all Erlang packages are not visible unless erlang is enabled. Which
+> sounds good.
+>
+>> +menu "Erlang libraries/modules"
+>> +     source "package/erlang-goldrush/Config.in"
+>> +endmenu
+>> +endif
+>>       source "package/guile/Config.in"
+>>       source "package/haserl/Config.in"
+>>       source "package/jamvm/Config.in"
+>> diff --git a/package/erlang-goldrush/Config.in b/package/erlang-goldrush/Config.in
+>> new file mode 100644
+>> index 0000000..685a887
+>> --- /dev/null
+>> +++ b/package/erlang-goldrush/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_ERLANG_GOLDRUSH
+>> +     bool "erlang-goldrush"
+>> +     depends on BR2_PACKAGE_ERLANG
+>
+> So why do we have this dependency again here?
 
-Signed-off-by: Steve James <ste@junkomatic.net>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-Changes v3 -> v4:
-  - Don't damage global scope make macros
-  - Add dependency on threads toolchain
-Changes v2 -> v3:
-  - Re-submit without line wrapping
-Changes v1 -> v2:
-  - Upstream release labels don't include package name, giving us an
-    anonymous download archive, so use $(call github) method instead
-  - Use $(TARGET_CONFIGURE_OPTS)
-  - Support new shared vs static vs shared+static possibilities
+Good point. I've removed it. Thanks for noticing it.
 
- package/Config.in                           |  1 +
- package/leveldb/001-ssize_t-undefined.patch | 17 +++++++++
- package/leveldb/Config.in                   | 13 +++++++
- package/leveldb/leveldb.mk                  | 57 +++++++++++++++++++++++++++++
- 4 files changed, 88 insertions(+)
- create mode 100644 package/leveldb/001-ssize_t-undefined.patch
- create mode 100644 package/leveldb/Config.in
- create mode 100644 package/leveldb/leveldb.mk
+>> --- /dev/null
+>> +++ b/package/erlang-goldrush/erlang-goldrush.mk
+>> @@ -0,0 +1,14 @@
+>> +################################################################################
+>> +#
+>> +# erlang-goldrush
+>> +#
+>> +################################################################################
+>> +
+>> +ERLANG_GOLDRUSH_VERSION = 0.1.6
+>> +ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
+>> +ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
+>
+> No <pkg>_LICENSE ?
 
-diff --git a/package/Config.in b/package/Config.in
-index 8d91b04..25efec5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -630,6 +630,7 @@ menu "Database"
- 	source "package/berkeleydb/Config.in"
- 	source "package/cppdb/Config.in"
- 	source "package/gdbm/Config.in"
-+	source "package/leveldb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
- 	source "package/redis/Config.in"
-diff --git a/package/leveldb/001-ssize_t-undefined.patch b/package/leveldb/001-ssize_t-undefined.patch
-new file mode 100644
-index 0000000..9a958d8
---- /dev/null
-+++ b/package/leveldb/001-ssize_t-undefined.patch
-@@ -0,0 +1,17 @@
-+Fix leveldb issue 233 leveldb does not compile with g++ 4.8.2
-+
-+Where db_iter.cc fails to get a typedef for ssize_t when compiled by GCC.
-+
-+Upstream-Status: Submitted [https://github.com/google/leveldb/issues/233]
-+Signed-off-by: Steve James <ste@junkomatic.net>
-+
-+--- a/db/db_iter.cc.orig	2014-12-08 16:54:31.384615752 +0000
-++++ b/db/db_iter.cc	2014-12-08 16:54:35.464656890 +0000
-+@@ -13,6 +13,7 @@
-+ #include "util/logging.h"
-+ #include "util/mutexlock.h"
-+ #include "util/random.h"
-++#include <sys/types.h> // for ssize_t
-+ 
-+ namespace leveldb {
-+ 
-diff --git a/package/leveldb/Config.in b/package/leveldb/Config.in
-new file mode 100644
-index 0000000..535e217
---- /dev/null
-+++ b/package/leveldb/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LEVELDB
-+	bool "leveldb"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_SNAPPY
-+	help
-+	  LevelDB is a fast key-value storage library written at Google that
-+	  provides an ordered mapping from string keys to string values.
-+
-+	  https://github.com/google/leveldb
-+
-+comment "leveldb needs a toolchain w/ C++, threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-new file mode 100644
-index 0000000..1612c9d
---- /dev/null
-+++ b/package/leveldb/leveldb.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# leveldb
-+#
-+################################################################################
-+
-+LEVELDB_VERSION = 803d69203a62faf50f1b77897310a3a1fcae712b
-+LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
-+LEVELDB_LICENSE = BSD-3c
-+LEVELDB_LICENSE_FILES = LICENSE
-+LEVELDB_INSTALL_STAGING = YES
-+LEVELDB_DEPENDENCIES = snappy
-+
-+LEVELDB_FLAGS += -DNDEBUG -I. -I./include -pthread -DOS_LINUX -DLEVELDB_PLATFORM_POSIX
-+LEVELDB_CFLAGS += $(LEVELDB_FLAGS) $(TARGET_CFLAGS)
-+LEVELDB_CXXFLAGS += $(LEVELDB_FLAGS) $(TARGET_CXXFLAGS) -std=c++0x
-+
-+LEVELDB_MAKE_ARGS += CFLAGS="$(LEVELDB_CFLAGS)" CXXFLAGS="$(LEVELDB_CXXFLAGS)"
-+
-+# The lelveldb build has some basic autoconf-style behaviour.
-+# We hard-wire it here to the right outcome for Buildroot
-+LEVELDB_MAKE_ARGS += TARGET_OS=Linux
-+
-+define LEVELDB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(LEVELDB_MAKE_ARGS) -C $(@D)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_STAGING_STATIC
-+	$(INSTALL) -D -m 0644 $(@D)/libleveldb.a $(STAGING_DIR)/usr/lib
-+endef
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_STAGING_SHARED
-+	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(STAGING_DIR)/usr/lib
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so.1
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(STAGING_DIR)/usr/lib/libleveldb.so
-+endef
-+endif
-+
-+define LEVELDB_INSTALL_STAGING_CMDS
-+	$(LEVELDB_INSTALL_STAGING_STATIC)
-+	$(LEVELDB_INSTALL_STAGING_SHARED)
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/leveldb
-+	$(INSTALL) -D -m 0644 $(@D)/include/leveldb/*.h $(STAGING_DIR)/usr/include/leveldb
-+endef
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libleveldb.so.1.18 $(TARGET_DIR)/usr/lib
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so.1
-+	$(HOSTLN) -sf libleveldb.so.1.18 $(TARGET_DIR)/usr/lib/libleveldb.so
-+endef
-+endif
-+
-+$(eval $(generic-package))
+It is an ISC license, and the abbreviation is not available within Buildroot.
+
+>
+>> +ERLANG_GOLDRUSH_DEPENDENCIES = erlang host-erlang-rebar
+>
+> Why are those dependencies necessary? Aren't they handled by the rebar
+> infra?
+
+Excellent idea. I've just modified pkg-rebar to do that and I'll
+remove erlang and host-erlang-rebar from the dependencies of all
+erlang packages.
+
+>
+>> +ERLANG_GOLDRUSH_INSTALL_STAGING = YES
+>> +
+>> +$(eval $(rebar-package))
+>> +$(eval $(host-rebar-package))
+>
+> Might be good to say a word in the commit log to explain why a host
+> variant of this library is needed.
+
+Ok. So I should not provide an host variant unless some other packages need it?
+
+Thanks for the review.
+
 -- 
-1.9.1
+Johan
