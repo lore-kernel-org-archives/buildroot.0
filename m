@@ -1,71 +1,51 @@
-From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
-Date: Mon, 5 Jan 2015 00:14:47 +0000
-Subject: [Buildroot] Newbie: git send-emailerror: fatal:
- 0001-hdf5-new-package.patch: 1277: patch contains a line longer than 998
- characters
-In-Reply-To: <20150105000858.GH31970@free.fr>
-References: <647d2475023349518137c433cd5f6c2e@exch13-mail06.win.slac.stanford.edu>,
- <20150105000858.GH31970@free.fr>
-Message-ID: <32d754d70b50421583838e65183d2f02@exch13-mail06.win.slac.stanford.edu>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 5 Jan 2015 00:15:32 -0500
+Subject: [Buildroot] [PATCH v2] erlang: selectively enable libatomic_ops
+In-Reply-To: <20150104142105.GA4137@free.fr>
+References: <1419295981-30100-1-git-send-email-fhunleth@troodon-software.com>
+ <20150104142105.GA4137@free.fr>
+Message-ID: <CA+-urNQpwAe551i_A8yqfmr10-6-fZwXnotSaWYqq7wmv_eS1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Yann, Thomas,
 
-________________________________________
-From: Yann E. MORIN [yann.morin.1998 at gmail.com] on behalf of Yann E. MORIN [yann.morin.1998 at free.fr]
-Sent: Sunday, January 4, 2015 4:08 PM
-To: Williams Jr., Ernest L.
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Newbie: git send-emailerror: fatal: 0001-hdf5-new-package.patch: 1277: patch contains a line longer than 998 characters
-
-Ernesto, All,
-
-On 2015-01-05 00:04 +0000, Williams Jr., Ernest L. spake thusly:
-> I would like to submit a patch but receive the following error:
+On Sun, Jan 4, 2015 at 9:21 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Frank, All,
 >
-> [ernesto at localhost outgoing]$ git send-email --smtp-debug=1 --to buildroot at busybox.net --cc ernesto at slac.stanford.edu 0001-hdf5-new-package.patch
-> fatal: 0001-hdf5-new-package.patch: 1277: patch contains a line longer than 998 characters
-> warning: no patches were sent
+> On 2014-12-22 19:53 -0500, Frank Hunleth spake thusly:
+>> Erlang can use either the system libatomic_ops or its own version.
+>> However, if using the system version, it must find implementations for
+>> AO_compare_and_swap() and other calls.  Since these are not available on
+>> ARM versions before armv6+, selectively enable the use of the system
+>> libatomic_ops.
+>>
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/eba/eba5bf85e9ff98916cd3638b5f13ab5bd54564d8/
+>>   http://autobuild.buildroot.net/results/c74/c743cfca629fb332bbb1327cf4ea360f0a4e4bfe/
+>>   http://autobuild.buildroot.net/results/095/095348d4d309c2a408a3b297b4325348ed1dd7e8/
+>>
+>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 >
-> Indeed, there is a line longer 998 characters.  This is due to some auto generated code.
+> I've sent an alternate solution to this libatomic_ops issue:
+>     http://patchwork.ozlabs.org/patch/425174/
 >
-> Is there a way to get git send-email to ignore this and proceed?
+> This is much simpler, Buildroot-wise, as it essentially patches erlang,
+> so that it properly use libatomic_ops.
+>
+> This is the result of a past discussion with Thomas P. on IRC, where he
+> pointed me to a patch we have against libunwind, that does require CAS
+> too, and for which we add `#define AO_REQUIRE_CAS', as instructed in the
+> libatomic_ops documentation.
+>
+> Could you please test that new patch and report on it, please?
 
-Just run:  git help send-email
+Yes. I didn't know about AO_REQUIRE_CAS, but it does sound better.
+I'll try out the patch when I get a chance - probably Wednesday. Sorry
+that I can't try it sooner.
 
-       --[no-]validate
-           Perform sanity checks on patches. Currently, validation means
-           the following:
-
-           ?   Warn of patches that contain lines longer than 998
-               characters; this is due to SMTP limits as described by
-               http://www.ietf.org/rfc/rfc2821.txt.
-
-           Default is the value of sendemail.validate; if this is not
-           set, default to --validate.
-
-;-)
-
-Thanks, that worked. :)
-
-git send-email --smtp-debug=1 --no-validate --to buildroot at busybox.net --cc ernesto at slac.stanford.edu 0001-hdf5-new-package.patch
-
-Cheers,
-Ernest
-
-
-
-Regards,
-Yann E. MORIN.
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Frank
