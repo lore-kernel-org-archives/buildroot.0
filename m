@@ -1,64 +1,149 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 5 Jan 2015 23:01:36 +0100
-Subject: [Buildroot] [PATCH v4 03/17] package/pkg-rebar: new
- infrastructure
-In-Reply-To: <CAJtjsKb2h9h0EGSMtr8SedeneoVhXdGxU+6C3HzNB8LTQ9CVtQ@mail.gmail.com>
-References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
- <1418135662-773-4-git-send-email-johan.oudinet@gmail.com>
- <20150104222307.009f6e73@free-electrons.com>
- <20150104222038.GD31970@free.fr>
- <20150105103116.74bbc777@free-electrons.com>
- <CAJtjsKb2h9h0EGSMtr8SedeneoVhXdGxU+6C3HzNB8LTQ9CVtQ@mail.gmail.com>
-Message-ID: <20150105220136.GD5077@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 5 Jan 2015 23:34:16 +0100
+Subject: [Buildroot] Fwd:  [PATCH v3] linux: add fbtft kernel extension
+Message-ID: <trinity-9aa0a0aa-dd80-4a62-a8bb-a195c3837d2c-1420497256500@3capp-gmx-bs51>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+Hello Lou,
 
-On 2015-01-05 12:13 +0100, Johan Oudinet spake thusly:
-> On Mon, Jan 5, 2015 at 10:31 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > On Sun, 4 Jan 2015 23:20:38 +0100, Yann E. MORIN wrote:
-> >> > > +# Define the build and install commands
-> >> > > +#
-> >> > > +ifeq ($(4),target)
-> >> > > +
-> >> > > +ifeq ($$($(2)_CONFIGURE),YES)
-> >> >
-> >> > What is $(2)_CONFIGURE exactly? It is not documented in PATCH 04/17.
-> >>
-> >> Some rebar packages use autotools for the configure step, and use rebar
-> >> for the build step. Worse, some of them even require being autoreconf-ed.
-> >>
-> >> This variable, if set to YES, means that this package will use the
-> >> autotools-package infrastrucutre; otherwise, it will be trated as a
-> >> generic-package.
-> >
-> > Not sure of a better name for this one. Maybe $(2)_USE_AUTOTOOLS,
-> > defaults to no, can be overridden to YES by the packages having a
-> > configure script? Do they both autoconf and automake, or just autoconf?
-> > I guess the latter, so maybe $(2)_USE_AUTOCONF.
+On Mon, Jan 05, 2015 at 03:46:40PM -0600, Lou Crittenden wrote:
+> >Hello 'thebestofall007',
 > 
-> They use autoconf only (mostly for the rebar.config.in file). So, I
-> vote for $(2)_USE_AUTOCONF.
+> >first: please use e-mail with a real name, its much nicer to answer
+> >to real persons ;-)
+> 
+> >second: please keep  buildroot at busybox.net on CC, others will be interested
+> >in the answers too (or will answer with useful hints)...
+> 
+> Sorry about that. Is this better? I hope so. If not, please let me know. I
+> forwarded the message to buildroot at busybox.net and changed my "send as"
+> info to my real name (I also use this account on youtube)
+> 
 
-As I said in my reply to Thomas, I believe _CONFIGURE is really fit,
-because that's what people expect: the package needs to be configured.
+Much better now... ;-)
 
-But, also as I said, if Thomas prefers we use an alternative, I'd say we
-go for _AUTOTOOLS, as it matches the underlying infra we call to,
-"autotools".
+> Those commands you posted are working fabulously and am building the setup
+> as I type. Does this build all the modules, or just for the adafruit model
+> you have in the pics?
+> 
+
+With the given patch NO modules are automatically selected, you have to seclect what
+your need in the '$ make linux-menuconfig' step, see the fbtft help text:
+
++       help
++         Linux Framebuffer drivers for small TFT LCD display modules,
++         e.g. Adafruit PiTFT displays for Raspberry Pi.
++
++         To enable fbtft, e.g. for Adafruit 2.8 PiTFT, enable the
++         following kernel configuarations:
++         - CONFIG_SPI: Device Drivers ---> SPI support
++         - CONFIG_SPI_BCM2708: Device Drivers ---> SPI support
++                                  ---> BCM2708 SPI controller driver
++         - CONFIG_GPIOLIB: Device Drivers ---> GPIO Support
++         - CONFIG_FB: Device Drives ---> Graphics support
++                         ---> Support for frame buffer devices
++         - CONFIG_FB_TFT: Device Drivers ---> 
++                            Support for small TFT LCD display modules
++         - CONFIG_FB_TFT_ILI9341: Device Drivers --->
++                            Support for small TFT LCD display modules --->
++                              FB driver for the ILI9341 LCD Controller
++         or another FB_TFT submodule corresponding to your display.
+
+You mentioned somewhere you use a waveshare32b module? For this you need to enable
+submodule fb_ili9340 via CONFIG_FB_TFT_ILI9340 (translation from given module name
+to submodule is done in the file fbtft_device.c)...
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+> 
+> 
+> 
+> 
+> 
+> ---------- Forwarded message ----------
+> From: Peter Seiderer <ps.report@gmx.net>
+> Date: Mon, Jan 5, 2015 at 7:45 AM
+> Subject: Re: [Buildroot] [PATCH v3] linux: add fbtft kernel extension
+> To: "thebestofall007 ." <loucrittenden63@gmail.com>
+> Cc: buildroot at busybox.net
+> 
+> 
+> Hello 'thebestofall007',
+> 
+> first: please use e-mail with a real name, its much nicer to answer
+> to real persons ;-)
+> 
+> second: please keep  buildroot at busybox.net on CC, others will be interested
+> in the answers too (or will answer with useful hints)...
+> 
+> and last some real answers ;-)
+> 
+> On Mon, Jan 05, 2015 at 01:48:32AM -0600, thebestofall007 . wrote:
+> > I found the patch and am in the process of applying it to buildroot. I
+> > added the path to the patch on my system to the BR2_LINUX_KERNEL_PATCH
+> > field in the make xconfig/menuconfig setup (is that how you applied the
+> > patch and got it to work?). Furthermore, fergie4000 was able to apply the
+> > patch to the build and got the modules to build against buildroot, as per
+> > here: https://github.com/notro/fbtft/issues/209#issuecomment-68645175. I'm
+> > scratching my head to figure out the steps to reproduce fergie's
+> successful
+> > build for my application, but I figure once I do, I bet it will be super
+> > easy.
+> >
+> 
+> The following sequence of commands should work:
+> 
+> - prepare buildroot (or use your already downloaded version):
+>         $ mkdir tmp
+>         $ cd tmp/
+>         $ wget
+> http://buildroot.uclibc.org/downloads/buildroot-2014.11.tar.bz2
+>         $ tar -xvjf buildroot-2014.11.tar.bz2
+> 
+> - download my latest patch from patchwork:
+>         $ wget -O v3-linux-add-fbtft-kernel-extension.patch
+> https://patchwork.ozlabs.org/patch/425126/mbox/
+> 
+> - patch the buildroot package:
+>         $ cd buildroot-2014.11/
+>         $ patch -p 1 < ../v3-linux-add-fbtft-kernel-extension.patch
+>         $ cd ..
+> 
+> - start a fresch build
+>         $ mkdir build_rpi_001
+>         $ cd build_rpi_001/
+>         $ make O=$PWD -C ../buildroot-2014.11 raspberrypi_defconfig
+> 
+> - and go to buildroot menuconfig, enable Kernel --> Linux Kernel Extensions
+> --> fbtft patch
+>         $ make menuconfig
+>         $ make
+> 
+> - the linux source under
+> build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3 will be with fbtft
+> support,
+> so enable it in the linux config as described in the fbtft help text (see
+> v3-linux-add-fbtft-kernel-extension.patch):
+>         $ make linux-menuconfig
+> 
+> - rebuild linux kernel and the new modules
+>         $ make
+> 
+> 
+> ...install it to sd card as described in
+> buildroot-2014.11/board/raspberrypi/readme.txt and test it...
+> 
+> Hope the description is helpful enough?
+> 
+> > Nice pictures, btw.
+> 
+> ...thanks...
+> 
+> Regards,
+> Peter
