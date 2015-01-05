@@ -1,48 +1,45 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 5 Jan 2015 12:13:23 +0100
-Subject: [Buildroot] [PATCH v4 03/17] package/pkg-rebar: new
-	infrastructure
-In-Reply-To: <20150105103116.74bbc777@free-electrons.com>
-References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
- <1418135662-773-4-git-send-email-johan.oudinet@gmail.com>
- <20150104222307.009f6e73@free-electrons.com>
- <20150104222038.GD31970@free.fr> <20150105103116.74bbc777@free-electrons.com>
-Message-ID: <CAJtjsKb2h9h0EGSMtr8SedeneoVhXdGxU+6C3HzNB8LTQ9CVtQ@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 5 Jan 2015 12:35:47 +0100
+Subject: [Buildroot] [PATCH] support/download: further silence the git
+	helper
+In-Reply-To: <1420395014-8961-1-git-send-email-yann.morin.1998@free.fr>
+References: <1420395014-8961-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAHkwnC9Ri41gSQ5Oh+Y=XCRcvGbC0S1MSGY5W-AOpg8qLaCM+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On Mon, Jan 5, 2015 at 10:31 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Sun, 4 Jan 2015 23:20:38 +0100, Yann E. MORIN wrote:
->> > > +# Define the build and install commands
->> > > +#
->> > > +ifeq ($(4),target)
->> > > +
->> > > +ifeq ($$($(2)_CONFIGURE),YES)
->> >
->> > What is $(2)_CONFIGURE exactly? It is not documented in PATCH 04/17.
->>
->> Some rebar packages use autotools for the configure step, and use rebar
->> for the build step. Worse, some of them even require being autoreconf-ed.
->>
->> This variable, if set to YES, means that this package will use the
->> autotools-package infrastrucutre; otherwise, it will be trated as a
->> generic-package.
+On Sun, Jan 4, 2015 at 7:10 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> We expresely call printf in the git helper, calls which were not
+> addresed in the previous silent-build patchset.
 >
-> Not sure of a better name for this one. Maybe $(2)_USE_AUTOTOOLS,
-> defaults to no, can be overridden to YES by the packages having a
-> configure script? Do they both autoconf and automake, or just autoconf?
-> I guess the latter, so maybe $(2)_USE_AUTOCONF.
+> Just redirect stdout to oblivion when being silent.
+>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/download/git | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/support/download/git b/support/download/git
+> index 7f1801f..73cbc0f 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -14,7 +14,7 @@ set -e
+>  verbose=-v
+>  while getopts :q OPT; do
+>      case "${OPT}" in
+> -    q)  verbose=-q;;
+> +    q)  verbose=-q; exec >/dev/null;;
 
-They use autoconf only (mostly for the rebar.config.in file). So, I
-vote for $(2)_USE_AUTOCONF.
+As general rule It's best to use "&&" instead of ";" so any error can
+be caught, otherwise is:
+Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
+BR
 -- 
-Johan
-()  ascii ribbon campaign - against html e-mail
-/\  www.asciiribbon.org   - against proprietary attachments
+Fabio Porcedda
