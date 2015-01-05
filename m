@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jan 2015 15:16:31 +0100
-Subject: [Buildroot] [PATCH v2] package/dvb-app: handle static/shared
- only build
-In-Reply-To: <1420375526-8806-1-git-send-email-romain.naour@openwide.fr>
-References: <1420375526-8806-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150105151631.3862bb99@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 5 Jan 2015 15:29:06 +0100
+Subject: [Buildroot] [PATCH v3] svgtiny: update source url
+In-Reply-To: <20150105141547.0daa89c8@free-electrons.com>
+References: <1420455729-15649-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150105141547.0daa89c8@free-electrons.com>
+Message-ID: <CAHkwnC_aRYSYQE-b_rdOCoe5u9U+Stq1VZ6nZEdmjkv+nArQeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+On Mon, Jan 5, 2015 at 2:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Mon,  5 Jan 2015 12:02:09 +0100, Fabio Porcedda wrote:
+>
+>> Also because the git repository does not include the netsurf core
+>> buildsystem source that are needed to build this package add those
+>> sources as a patch.
+>
+> Is this core buildsystem source code available in a separate
+> repository, that we could package as a dependency of svgtiny?
 
-On Sun,  4 Jan 2015 13:45:26 +0100, Romain Naour wrote:
-> Also remove tests since they require static libraries.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> v2: remove tests (ThomasP)
->     rework static/shared handling logic
-> ---
->  .../0003-handle-static-shared-only-build.patch     | 35 ++++++++++++++++++++++
->  .../dvb-apps/0003-support-static-only-build.patch  | 20 -------------
->  package/dvb-apps/0004-Makefile-remove-test.patch   | 27 +++++++++++++++++
->  package/dvb-apps/dvb-apps.mk                       |  4 ++-
->  4 files changed, 65 insertions(+), 21 deletions(-)
->  create mode 100644 package/dvb-apps/0003-handle-static-shared-only-build.patch
->  delete mode 100644 package/dvb-apps/0003-support-static-only-build.patch
->  create mode 100644 package/dvb-apps/0004-Makefile-remove-test.patch
+Yes, the repository is:
+http://git.netsurf-browser.org/buildsystem.git/
 
-Patch marked as Changes Requested in patchwork, following the comments
-made by Yann. Romain, can you submit an updated version?
+But those sources alone do nothing, the build and install target of
+this package will be empty.
+Also to use those files at least a symbolic link must be added to the
+libsvgtiniy directory to access buildsystem.git files.
+Considering all of this it is still preferably worth adding a separate
+package for those files?
 
-Thanks,
-
-Thomas
+BR
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
