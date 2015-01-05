@@ -1,76 +1,56 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 5 Jan 2015 16:12:30 +0000
-Subject: [Buildroot] [PATCH v2] gnupg2: fix linking with intl
-In-Reply-To: <20150105163720.7b0efdf2@free-electrons.com>
-References: <1418299611-50833-1-git-send-email-Vincent.Riera@imgtec.com>	<20141211195331.48f6f7c4@free-electrons.com>	<548B0998.5000001@imgtec.com>	<20141217095737.564714af@free-electrons.com>	<54AA99FA.5010405@imgtec.com>
- <20150105163720.7b0efdf2@free-electrons.com>
-Message-ID: <54AAB7EE.40209@imgtec.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Mon, 05 Jan 2015 17:19:34 +0100
+Subject: [Buildroot] [PATCH 00/14] Add support for U-Boots Kbuild &
+ Kconfig build system
+In-Reply-To: <20150105145933.07f39dba@free-electrons.com>
+References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
+ <20141221234006.311fcde0@free-electrons.com>
+ <20150102172208.7a2ef5f1@free-electrons.com>
+ <1420463640.2905.8.camel@posteo.de>
+ <20150105145933.07f39dba@free-electrons.com>
+Message-ID: <1420474774.7357.3.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On 01/05/2015 03:37 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
+On Mo, 2015-01-05 at 14:59 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> On Mon, 5 Jan 2015 14:04:42 +0000, Vicente Olivert Riera wrote:
+> On Mon, 05 Jan 2015 14:14:00 +0100, J?rg Krause wrote:
 > 
->>> This problem was related to static linking, but the
->>> BR2_PREFER_STATIC_LIB option has been renamed to BR2_STATIC_LIBS (with
->>> a bogus Config.in.legacy handling done by me). So if you took the old
->>> config file, BR2_PREFER_STATIC_LIB was discarded, and you were doing a
->>> shared library build instead of a static library build, which explains
->>> why the problem was not appearing anymore.
->>
->> You were right. So now I was able to reproduce the problem, and taking
->> into account that it only happens for static builds, I think I could
->> change the patch to be like this:
->>
->> ifeq ($(BR2_PACKAGE_GETTEXT),y)
->> GNUPG2_DEPENDENCIES += gettext
->> ifneq ($(BR2_SHARED_LIBS),y)
->> GNUPG2_CONF_ENV += LIBS=-lintl
->> endif
->> endif
->>
->> What do you think?
+> > > > So we clearly need to continue to support older versions of U-Boot,
+> > > > that don't have the kconfig stuff. I just gave a try, and it seems like
+> > > > the old U-Boot way of configuring/building things apparently still
+> > > > works with U-Boot 2014.10. So your PATCH 01/14 is probably OK. However
+> > > > starting from 02/14, I believe you'll be breaking things for U-Boot
+> > > > versions older than 2014.10.
+> > 
+> > U-Boot 2014.10 still supports the old <board_name>_config build system.
+> > So it should be safe to update the version number only (in case the
+> > board is still supported).
 > 
-> I don't remember the entire context. Do you have a minimal defconfig
-> that exhibits the problem?
+> Yes, that's why I've applied your patch bumping the version to 2014.10:
+> http://git.buildroot.net/buildroot/commit/boot?id=143119c0ef58b04bd7109bcb7b095ef98cc5311c.
+> 
+> > I can do this. Do you have any suggestion for providing backward
+> > compatibility? I have a config option for the U-Boot menu in mind, e.g.:
+> >             U-Boot Version (2014.10) --->
+> >         [ ] Use Kconfig build system (NEW)
+> 
+> Yes, at this point, I don't really see any other solution than having a
+> Config.in option: since we support fetching U-Boot from custom
+> location, only the user can tell if the U-Boot version uses the old
+> build system, or the new Kconfig/Kbuild based build system.
+> 
+> Of course, if 2014.10 is selected, you can automatically enable the
+> usage of the Kconfig build system, but for custom
+> versions/repositories, we have no other solution than having such a new
+> Config.in option.
+> 
+> Can you work on this idea?
 
-Sure. Here you have it:
+Yes, I can. I'll try to get it submitted this week.
 
-BR2_mipsel=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_OPTIMIZATION="-pipe"
-BR2_PACKAGE_GETTEXT=y
-BR2_PACKAGE_GNUPG2=y
-
-it fails for both BR2_STATIC_LIBS and BR2_SHARED_STATIC_LIBS. That's why
-I proposed to use...
-
-ifneq ($(BR2_SHARED_LIBS),y)
-
-...in the patch.
-
-Regards,
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+J?rg
