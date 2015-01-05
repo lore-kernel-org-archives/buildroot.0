@@ -1,66 +1,79 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon,  5 Jan 2015 18:00:07 +0100
-Subject: [Buildroot] [PATCH v3] python-tornado: bump to 4.0.2
-Message-ID: <1420477207-14637-1-git-send-email-yegorslists@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Jan 2015 18:40:55 +0100
+Subject: [Buildroot] [PATCH] support/download: further silence the git
+ helper
+In-Reply-To: <CAHkwnC9Ri41gSQ5Oh+Y=XCRcvGbC0S1MSGY5W-AOpg8qLaCM+g@mail.gmail.com>
+References: <1420395014-8961-1-git-send-email-yann.morin.1998@free.fr>
+ <CAHkwnC9Ri41gSQ5Oh+Y=XCRcvGbC0S1MSGY5W-AOpg8qLaCM+g@mail.gmail.com>
+Message-ID: <20150105174054.GA5077@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add SSL runtime dependency and a hash file. Also remove obsolete
-Python dependency statement.
+Fabio, All,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v3: add hash origin
-        v2: s/add/remove in commit message
+On 2015-01-05 12:35 +0100, Fabio Porcedda spake thusly:
+> On Sun, Jan 4, 2015 at 7:10 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > We expresely call printf in the git helper, calls which were not
+> > addresed in the previous silent-build patchset.
+> >
+> > Just redirect stdout to oblivion when being silent.
+> >
+> > Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  support/download/git | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/support/download/git b/support/download/git
+> > index 7f1801f..73cbc0f 100755
+> > --- a/support/download/git
+> > +++ b/support/download/git
+> > @@ -14,7 +14,7 @@ set -e
+> >  verbose=-v
+> >  while getopts :q OPT; do
+> >      case "${OPT}" in
+> > -    q)  verbose=-q;;
+> > +    q)  verbose=-q; exec >/dev/null;;
+> 
+> As general rule It's best to use "&&" instead of ";" so any error can
+> be caught,
 
- package/python-tornado/Config.in           | 7 +++++--
- package/python-tornado/python-tornado.hash | 3 +++
- package/python-tornado/python-tornado.mk   | 2 +-
- 3 files changed, 9 insertions(+), 3 deletions(-)
- create mode 100644 package/python-tornado/python-tornado.hash
+That is really not necessary, because the backend scripts are all
+'set -e', so they exit on the first error that occurs.
 
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index 870a3de..9bbfc55 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_PYTHON_TORNADO
- 	bool "python-tornado"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_ZLIB
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
- 	help
- 	  Tornado is a Python web framework and asynchronous networking
- 	  library, originally developed at FriendFeed.
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-new file mode 100644
-index 0000000..361fe11
---- /dev/null
-+++ b/package/python-tornado/python-tornado.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha1    6152ea61b4cdf9566f3974f30603ff51b527dd87                          tornado-4.0.2.tar.gz
-+sha256  900c5124ebdb6598ca8e8a0c5888f41a5f14117952d5515258e3d20222b21bfa  tornado-4.0.2.tar.gz
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index bac3ce7..5b88dd6 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_TORNADO_VERSION = 3.1.1
-+PYTHON_TORNADO_VERSION = 4.0.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
- PYTHON_TORNADO_SITE = https://pypi.python.org/packages/source/t/tornado
- PYTHON_TORNADO_LICENSE = Apache-2.0
+Besides, even if they were not 'set -e', then the '&&' construct would
+not catch the error at all, and the script would continue without
+redirecting.
+
+Furthermore, in that case, we're doing two things:
+  - set a variable
+  - redirect stdout to /dev/null
+
+If either were to fail, you would have a hell of a bigger problem:
+  - unable to set a variable: big problem in the shell
+  - not able to redirect: /dev/null does not exist, or you do not have
+    the rights to write to it.
+
+In either case, this would be a really, *really* big problem, which I
+doubt we should care about. ;-)
+
+> otherwise is:
+> Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
