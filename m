@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jan 2015 15:14:47 +0100
-Subject: [Buildroot] [PATCH 2/2] package/shairport-sync: add hash file
-In-Reply-To: <1420466748-6155-2-git-send-email-jkrause@posteo.de>
-References: <1420466748-6155-1-git-send-email-jkrause@posteo.de>
- <1420466748-6155-2-git-send-email-jkrause@posteo.de>
-Message-ID: <20150105151447.37909932@free-electrons.com>
+Date: Mon, 5 Jan 2015 15:15:09 +0100
+Subject: [Buildroot] [git commit] support/download: further silence the git
+	helper
+Message-ID: <20150105141513.41C658079A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=4bf1174a83274df22423e6a68f0abe98acf3adfc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jan 2015 15:05:48 +0100, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> ---
->  package/shairport-sync/shairport-sync.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/shairport-sync/shairport-sync.hash
+We expresely call printf in the git helper, calls which were not
+addresed in the previous silent-build patchset.
 
-We don't add hash files for packages using the github download helper,
-because the github generated tarball may change over time. So I've
-marked this patch as rejected.
+Just redirect stdout to oblivion when being silent.
 
-Thanks,
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/git |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/download/git b/support/download/git
+index 7f1801f..73cbc0f 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -14,7 +14,7 @@ set -e
+ verbose=-v
+ while getopts :q OPT; do
+     case "${OPT}" in
+-    q)  verbose=-q;;
++    q)  verbose=-q; exec >/dev/null;;
+     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+     esac
+ done
