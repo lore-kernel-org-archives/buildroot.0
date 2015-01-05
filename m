@@ -1,35 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Jan 2015 17:38:07 +0100
-Subject: [Buildroot] [PATCH 00/14] Add support for U-Boots Kbuild &
- Kconfig build system
-In-Reply-To: <1420474774.7357.3.camel@posteo.de>
-References: <1418426171-3483-1-git-send-email-jkrause@posteo.de>
- <20141221234006.311fcde0@free-electrons.com>
- <20150102172208.7a2ef5f1@free-electrons.com>
- <1420463640.2905.8.camel@posteo.de>
- <20150105145933.07f39dba@free-electrons.com>
- <1420474774.7357.3.camel@posteo.de>
-Message-ID: <20150105173807.3097d02e@free-electrons.com>
+Date: Mon, 5 Jan 2015 17:38:53 +0100
+Subject: [Buildroot] [PATCH v4 06/17] erlang-lager: new package.
+In-Reply-To: <CAJtjsKZUp=pPN+QFDckg1eKwNdFjiy-LXTNJmxx92O530-1Aog@mail.gmail.com>
+References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
+ <1418135662-773-7-git-send-email-johan.oudinet@gmail.com>
+ <20150104223713.16258168@free-electrons.com>
+ <CAJtjsKZUp=pPN+QFDckg1eKwNdFjiy-LXTNJmxx92O530-1Aog@mail.gmail.com>
+Message-ID: <20150105173853.208d1884@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Johan Oudinet,
 
-On Mon, 05 Jan 2015 17:19:34 +0100, J?rg Krause wrote:
-
-> > Of course, if 2014.10 is selected, you can automatically enable the
-> > usage of the Kconfig build system, but for custom
-> > versions/repositories, we have no other solution than having such a new
-> > Config.in option.
-> > 
-> > Can you work on this idea?
+On Mon, 5 Jan 2015 17:10:32 +0100, Johan Oudinet wrote:
+> Thomas, All,
 > 
-> Yes, I can. I'll try to get it submitted this week.
+> On Sun, Jan 4, 2015 at 10:37 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > On Tue,  9 Dec 2014 15:34:11 +0100, Johan Oudinet wrote:
+> >
+> >> diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
+> >> new file mode 100644
+> >> index 0000000..b530c8e
+> >> --- /dev/null
+> >> +++ b/package/erlang-lager/erlang-lager.mk
+> >> @@ -0,0 +1,14 @@
+> >> +$(eval $(rebar-package))
+> >> +$(eval $(host-rebar-package))
+> >
+> > Same as previous package: why a host variant is needed?
+> 
+> host-erlang-lager is listed in ejabberd dependencies. I do not
+> remember why, so I'm going to check if it is really needed and add an
+> explanation on the commit message if so.
 
-Great, thanks!
+Ah, my review did not go all the way to ejabberd, sorry about missing
+this. Indeed, please check if host-erlang-lager is needed, and if it
+is, quickly indicate in the commit log which package uses it.
+
+Thanks a lot!
 
 Thomas
 -- 
