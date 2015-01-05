@@ -1,18 +1,21 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon,  5 Jan 2015 16:57:25 +0100
-Subject: [Buildroot] [PATCH] python-tornado: bump to 4.0.2
-Message-ID: <1420473445-13496-1-git-send-email-yegorslists@googlemail.com>
+Date: Mon,  5 Jan 2015 17:03:07 +0100
+Subject: [Buildroot] [PATCH v2] python-tornado: bump to 4.0.2
+Message-ID: <1420473787-13585-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add SSL runtime dependency and a hash file. Also add obsolete
+Add SSL runtime dependency and a hash file. Also remove obsolete
 Python dependency statement.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
+Changes:
+	v2: s/add/remove in commit message
+
  package/python-tornado/Config.in           | 7 +++++--
  package/python-tornado/python-tornado.hash | 2 ++
  package/python-tornado/python-tornado.mk   | 2 +-
