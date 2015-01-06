@@ -1,64 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 22:01:03 +0100
-Subject: [Buildroot] [PATCH v3] python-tornado: bump to 4.0.2
-In-Reply-To: <1420477207-14637-1-git-send-email-yegorslists@googlemail.com>
-References: <1420477207-14637-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150106220103.1fe958ad@free-electrons.com>
+Date: Tue, 6 Jan 2015 22:01:46 +0100
+Subject: [Buildroot] [git commit] elfutils: bump version to 0.161
+Message-ID: <20150106210437.65F45801EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=4038cbf2279ce0f04125fc1a2266f84ea8090070
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  5 Jan 2015 18:00:07 +0100, Yegor Yefremov wrote:
+- Bump version to 0.161
+- Remove the portability patch. We don't need to have it in Buildroot
+  since it includes the version number so we can download it safely
+  without having collisions between versions.
+- Adapt the patches that need to be adapted.
+- Rename patches to start from 0001.
+- Update the hash value and add a new value for the portability patch.
 
-> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-> index 870a3de..9bbfc55 100644
-> --- a/package/python-tornado/Config.in
-> +++ b/package/python-tornado/Config.in
-> @@ -1,7 +1,10 @@
->  config BR2_PACKAGE_PYTHON_TORNADO
->  	bool "python-tornado"
-> -	depends on BR2_PACKAGE_PYTHON
-> -	select BR2_PACKAGE_PYTHON_ZLIB
-> +	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-> +	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-> +	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-argp-support.patch => 0001-argp-support.patch} |   38 +-
+ package/elfutils/0001-elfutils-portability.patch   | 1875 --------------------
+ ...isable-progs.patch => 0002-disable-progs.patch} |   24 +-
+ .../elfutils/{0004-fts.patch => 0003-fts.patch}    |   34 +-
+ ...0005-disable-po.patch => 0004-disable-po.patch} |    0
+ ...-make-werror-conditional-to-build-werror.patch} |    0
+ ...0007-memcpy-def.patch => 0006-memcpy-def.patch} |    0
+ package/elfutils/elfutils.hash                     |    3 +-
+ package/elfutils/elfutils.mk                       |    3 +-
+ 9 files changed, 52 insertions(+), 1925 deletions(-)
 
-Are you sure SSL and certifi are mandatory dependencies? I see the
-following things in the source code:
-
-try:
-    import ssl
-except ImportError:
-    # ssl is not available on Google App Engine.
-    ssl = None
-
-try:
-    import certifi
-except ImportError:
-    certifi = None
-
-Which seem to indicate that those Python packages are not mandatory for
-python-tornado. They are only needed if you want to do https://
-connexions, no?
-
-> +# Locally computed:
-> +sha1    6152ea61b4cdf9566f3974f30603ff51b527dd87                          tornado-4.0.2.tar.gz
-> +sha256  900c5124ebdb6598ca8e8a0c5888f41a5f14117952d5515258e3d20222b21bfa  tornado-4.0.2.tar.gz
-
-sha256 is sufficient, no need to have sha1 in addition to it.
-
-Could you look at the dependency issue above?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patch is too large, so refusing to show it
