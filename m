@@ -1,47 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  6 Jan 2015 16:23:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 7772] New: libxml-parser-perl build failure:
- missing dependency ExtUtils/MakeMaker
-Message-ID: <bug-7772-163@https.bugs.busybox.net/>
+Date: Tue,  6 Jan 2015 17:05:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 7766] logrotate default gzip path is usually wrong
+In-Reply-To: <bug-7766-163@https.bugs.busybox.net/>
+References: <bug-7766-163@https.bugs.busybox.net/>
+Message-ID: <20150106170507.B4FE57FC2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7772
+https://bugs.busybox.net/show_bug.cgi?id=7766
 
-           Summary: libxml-parser-perl build failure: missing dependency
-                    ExtUtils/MakeMaker
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-               URL: http://sprunge.us/BNXW
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: vincent.riera at imgtec.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+--- Comment #5 from Henrik Juul Pedersen <hjp@liab.dk> 2015-01-06 17:05:07 UTC ---
+Just testet it quickly (havent have time to boot my target with it yet), but it
+looks good! :)
 
+GZIP_CONF_OPTS = --exec-prefix=/
 
-libxml-parser-perl seems to need perl-ExtUtils-MakeMaker in order to be built,
-so it fails to build on boxes which don't have perl-ExtUtils-MakeMaker
-installed:
+should be:
+GZIP_CONF_OPT = --exec-prefix=/
 
-Can't locate ExtUtils/MakeMaker.pm in @INC (@INC contains:
-/home/user/instance-0/output/host/usr/lib/perl /usr/local/lib64/perl5
-/usr/local/share/perl5 /usr/lib64/perl5/vendor_perl
-/usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at
-Makefile.PL line 3.
-BEGIN failed--compilation aborted at Makefile.PL line 3.
-
-Full log in the ${URL} field.
-
-Perhaps we should add a new perl-ExtUtils-MakeMaker package to Buildroot?
+though, and the slash can be entirely omitted.
+Good work! thanks!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
