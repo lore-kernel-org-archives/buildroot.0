@@ -1,84 +1,74 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  6 Jan 2015 15:03:03 +0100
-Subject: [Buildroot] [PATCH v5 05/16] erlang-lager: new package.
+Date: Tue,  6 Jan 2015 15:03:06 +0100
+Subject: [Buildroot] [PATCH v5 08/16] erlang-p1-xml: new package.
 In-Reply-To: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
 References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1420552994-657-6-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1420552994-657-9-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ejabberd depends on host-erlang-lager.
-Hence $(eval $(host-rebar-package)).
-
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
-Changes v4 -> v5:  (Thomas)
-  - add explanation for the host package.
----
- package/Config.in                    |  1 +
- package/erlang-lager/Config.in       | 13 +++++++++++++
- package/erlang-lager/erlang-lager.mk | 14 ++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/erlang-lager/Config.in
- create mode 100644 package/erlang-lager/erlang-lager.mk
+ package/Config.in                      |  1 +
+ package/erlang-p1-xml/Config.in        |  7 +++++++
+ package/erlang-p1-xml/erlang-p1-xml.mk | 16 ++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/erlang-p1-xml/Config.in
+ create mode 100644 package/erlang-p1-xml/erlang-p1-xml.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9e5b28a..6db6c5c 100644
+index ca26408..da4330c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -398,6 +398,7 @@ menu "Interpreter languages and scripting"
- if BR2_PACKAGE_ERLANG
+@@ -399,6 +399,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
-+	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-lager/Config.in"
++	source "package/erlang-p1-xml/Config.in"
+ 	source "package/erlang-p1-yaml/Config.in"
+ 	source "package/erlang-p1-zlib/Config.in"
  endmenu
- endif
- 	source "package/guile/Config.in"
-diff --git a/package/erlang-lager/Config.in b/package/erlang-lager/Config.in
+diff --git a/package/erlang-p1-xml/Config.in b/package/erlang-p1-xml/Config.in
 new file mode 100644
-index 0000000..b7994fe
+index 0000000..a6f4bd7
 --- /dev/null
-+++ b/package/erlang-lager/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_ERLANG_LAGER
-+	bool "erlang-lager"
-+	select BR2_PACKAGE_ERLANG_GOLDRUSH
++++ b/package/erlang-p1-xml/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_P1_XML
++	bool "erlang-p1-xml"
++	select BR2_PACKAGE_EXPAT
 +	help
-+	  Logging framework for Erlang.
-+	  
-+	  Lager (as in the beer) is a logging framework for
-+	  Erlang. Its purpose is to provide a more traditional way to
-+	  perform logging in an erlang application that plays nicely
-+	  with traditional UNIX logging tools like logrotate and
-+	  syslog.
++	  XML utilities for Erlang
 +
-+	  https://github.com/basho/lager
-diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
++	  https://github.com/processone/xml
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
 new file mode 100644
-index 0000000..b725bfd
+index 0000000..ea5d058
 --- /dev/null
-+++ b/package/erlang-lager/erlang-lager.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# erlang-lager
++# erlang-p1-xml
 +#
 +################################################################################
 +
-+ERLANG_LAGER_VERSION = 2.0.3
-+ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
-+ERLANG_LAGER_LICENSE = Apache-2.0
-+ERLANG_LAGER_LICENSE_FILES = LICENSE
-+ERLANG_LAGER_DEPENDENCIES = erlang-goldrush
++ERLANG_P1_XML_VERSION = b530983
++ERLANG_P1_XML_SITE = $(call github,processone,xml,$(ERLANG_P1_XML_VERSION))
++ERLANG_P1_XML_LICENSE = GPLv2
++ERLANG_P1_XML_LICENSE_FILES = COPYING
++ERLANG_P1_XML_DEPENDENCIES = expat
++ERLANG_P1_XML_INSTALL_STAGING = YES
++
++ERLANG_P1_XML_USE_AUTOCONF = YES
 +
 +$(eval $(rebar-package))
-+$(eval $(host-rebar-package))
 -- 
 2.1.0
