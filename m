@@ -1,58 +1,42 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 6 Jan 2015 11:05:42 +0100
-Subject: [Buildroot] [PATCH v4 03/17] package/pkg-rebar: new
-	infrastructure
-In-Reply-To: <20150106092438.1d427cc3@free-electrons.com>
-References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
- <1418135662-773-4-git-send-email-johan.oudinet@gmail.com>
- <20150104222307.009f6e73@free-electrons.com>
- <20150104222038.GD31970@free.fr> <20150105103116.74bbc777@free-electrons.com>
- <20150105215956.GC5077@free.fr> <20150106092438.1d427cc3@free-electrons.com>
-Message-ID: <CAJtjsKaKdePD-1DEKvSQyuPaLTkQ-n3L9+9ggCpzeiTXCPSDNQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  6 Jan 2015 07:35:10 -0300
+Subject: [Buildroot] [PATCH] msmtp: bump to version 1.6.1
+Message-ID: <1420540510-11937-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Yann, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/msmtp/msmtp.hash | 6 +++---
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Tue, Jan 6, 2015 at 9:24 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Mon, 5 Jan 2015 22:59:56 +0100, Yann E. MORIN wrote:
->
->> In the end, I did not implement that because it is too much overkill.
->> Also, I kept _CONFIGURE because it is what people do expect: the package
->> needs to be configured before being built. But I am not completely
->> opposed to changing the variable name. _USE_AUTOTOOLS or _USE_AUTOCONF
->> is equally fit, I guess (although I'd still prefer _AUTOTOOLS, because
->> it matches the fact that we call back to the autotools infrastructure
->> underneath.
->
-> Unfortunately, I disagree on this. "Configure" is a very vague term,
-> which does not necessarily mean "run an autoconf generated ./configure
-> script". We do have certain generic-package packages that do provide an
-> implementation for the <pkg>_CONFIGURE_CMDS that aren't calling an
-> autoconf generated ./configure script.
->
-> Moreover, a non-autoconf using rebar package may want to implement its
-> <pkg>_CONFIGURE_CMDS to do some stuff. But it would have to keep
-> <pkg>_CONFIGURE set to NO. This is really confusing.
->
-> Please, use <pkg>_USE_AUTOTOOLS, <pkg>_AUTOTOOLS or <pkg>_USE_AUTOCONF.
-> I tend to prefer the latter, because this is really what the user is
-> seeing: the package is using autoconf. You say you prefer _AUTOTOOLS
-> because it matches the fact that we're using the autotools
-> infrastructure underneath, but that's an implementation detail. It's
-> much better to expose things that make sense for the package developer
-> that things that relate to implementation details, IMO.
-
-I tend to agree with Thomas on this point and not only because I've
-already modified all erlang packages to the USE_AUTOCONF syntax ;-)
-Actually, even though pkg-rebar uses the autotools infrastructure, it
-does redefine the BUILD_CMDS. So automake is never called. Using the
-term AUTOTOOLS might be confusing to the package developer as he would
-expect its Makefile.am to be read.
-I'm going to push a new version soon, so you can modify it if you want.
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index 2196afb..a522f9d 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.0/
+-md5	1c166853b63c02ae2ab56b50f1aae57b	msmtp-1.6.0.tar.xz
+-sha1	39e597619f797ec3550c0146cd3d9e55e85947eb	msmtp-1.6.0.tar.xz
++# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.1/
++md5	6ebba4809bbc665b8a665a018d1a5ee1	msmtp-1.6.1.tar.xz
++sha1	ac70151bcb53af5e192cbb147fd2b8139c637089	msmtp-1.6.1.tar.xz
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 1c6de16..aa75dd4 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.6.0
++MSMTP_VERSION = 1.6.1
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
 -- 
-Johan
+2.0.5
