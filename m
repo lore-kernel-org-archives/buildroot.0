@@ -1,45 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 21:16:59 +0100
-Subject: [Buildroot] [PATCH v3] libmemcached: fix build failure with
- automake 1.15+
-In-Reply-To: <1420559574-31618-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1420559574-31618-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150106211659.0030bb66@free-electrons.com>
+Date: Tue, 6 Jan 2015 21:17:19 +0100
+Subject: [Buildroot] [git commit] gzip: fix installation path
+Message-ID: <20150106201728.3811180797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=09d6597cb5ab326097533cd4be7b9764b960c930
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 6 Jan 2015 15:52:54 +0000, Vicente Olivert Riera wrote:
-> Adding a patch to move AC_CONFIG_AUX_DIR up a few lines so the autotools
-> can find it.
-> 
-> This patch is based on the same solution adopted by Debian:
-> 
->   https://lists.debian.org/debian-release/2014/11/msg01231.html
-> 
-> This will prevent a build failure like this one caused by a version bump
-> of the automake package:
-> 
-> configure: error: cannot find install-sh, install.sh, or shtool in "."
-> "./.." "./../.."
-> 
-> Related:
->   http://lists.busybox.net/pipermail/buildroot/2015-January/116604.html
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v2 -> v3: subject amended as per Gustavo Zacarias suggestion
-> Changes v1 -> v2: patch name amended
+Make gzip install binaries to / rather than /usr to fix bug #7766, it's
+the FHS mandated target.
 
-Thanks, applied. Please make sure that the patch will be included in a
-future upstream release of libmemcached. Thanks!
+This also avoids duplicating binaries with busybox when both are
+installed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Also make gzip install after busybox if both are enabled to make the
+proper gzip package override any busybox version since it's usually more
+lightweight in functionality and slower.
+
+And add a hash file while at it.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gzip/gzip.hash |    2 ++
+ package/gzip/gzip.mk   |    4 ++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+new file mode 100644
+index 0000000..56f052f
+--- /dev/null
++++ b/package/gzip/gzip.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	37dfed1a485d53212c43b3fa2a7c7952f09bf5cd86e37121c222341ee1b27847  gzip-1.6.tar.xz
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index e1a7bef..4ae2ae0 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -7,6 +7,10 @@
+ GZIP_VERSION = 1.6
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
++# Some other tools expect it to be in /bin
++GZIP_CONF_OPTS = --exec-prefix=/
++# Prefer full gzip over potentially lightweight/slower from busybox
++GZIP_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ GZIP_LICENSE = GPLv3+
+ GZIP_LICENSE_FILES = COPYING
+ 
