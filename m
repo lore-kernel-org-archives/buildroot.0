@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  6 Jan 2015 15:03:11 +0100
-Subject: [Buildroot] [PATCH v5 13/16] erlang-p1-sip: new package.
+Date: Tue,  6 Jan 2015 15:03:13 +0100
+Subject: [Buildroot] [PATCH v5 15/16] erlang-p1-cache-tab: new package.
 In-Reply-To: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
 References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1420552994-657-14-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1420552994-657-16-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,85 +16,55 @@ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                                     |  1 +
- package/erlang-p1-sip/Config.in                       |  9 +++++++++
- .../erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch | 19 +++++++++++++++++++
- package/erlang-p1-sip/erlang-p1-sip.mk                | 14 ++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/erlang-p1-sip/Config.in
- create mode 100644 package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
- create mode 100644 package/erlang-p1-sip/erlang-p1-sip.mk
+ package/Config.in                                  |  1 +
+ package/erlang-p1-cache-tab/Config.in              |  7 +++++++
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk | 13 +++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/erlang-p1-cache-tab/Config.in
+ create mode 100644 package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7373b0b..471de41 100644
+index 04ea232..6b6e920 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -399,6 +399,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-sip/Config.in"
++	source "package/erlang-p1-cache-tab/Config.in"
+ 	source "package/erlang-p1-iconv/Config.in"
+ 	source "package/erlang-p1-sip/Config.in"
  	source "package/erlang-p1-stringprep/Config.in"
- 	source "package/erlang-p1-stun/Config.in"
- 	source "package/erlang-p1-tls/Config.in"
-diff --git a/package/erlang-p1-sip/Config.in b/package/erlang-p1-sip/Config.in
+diff --git a/package/erlang-p1-cache-tab/Config.in b/package/erlang-p1-cache-tab/Config.in
 new file mode 100644
-index 0000000..70cf819
+index 0000000..eed2676
 --- /dev/null
-+++ b/package/erlang-p1-sip/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ERLANG_P1_SIP
-+	bool "erlang-p1-sip"
-+	select BR2_PACKAGE_ERLANG_P1_STUN
-+	select BR2_PACKAGE_ERLANG_P1_TLS
++++ b/package/erlang-p1-cache-tab/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_P1_CACHE_TAB
++	bool "erlang-p1-cache-tab"
 +	select BR2_PACKAGE_ERLANG_P1_UTILS
 +	help
-+	  SIP library for Erlang
++	  Erlang library implementing cache tables
 +
-+	  https://github.com/processone/p1_sip
-diff --git a/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
++	  https://github.com/processone/cache_tab
+diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
 new file mode 100644
-index 0000000..80e2ab3
+index 0000000..f651b06
 --- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
-@@ -0,0 +1,19 @@
-+Description: correct include
-+ This part of the code was moved into it's own project and was packaged
-+ separately by me. To make the build process work, this small fix is
-+ necessary.
-+Author: Philipp Huebner <debalance@debian.org>
-+
-+Index: erlang-p1-sip/src/esip_socket.erl
-+===================================================================
-+--- erlang-p1-sip.orig/src/esip_socket.erl
-++++ erlang-p1-sip/src/esip_socket.erl
-+@@ -22,7 +22,7 @@
-+ 
-+ -include("esip.hrl").
-+ -include("esip_lib.hrl").
-+--include("stun.hrl").
-++-include_lib("p1_stun/include/stun.hrl").
-+ 
-+ -define(TCP_SEND_TIMEOUT, 15000).
-+ -define(CONNECT_TIMEOUT, 20000).
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-new file mode 100644
-index 0000000..df5bcdd
---- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# erlang-p1-sip
++# erlang-p1-cache-tab
 +#
 +################################################################################
 +
-+ERLANG_P1_SIP_VERSION = bba4459
-+ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
-+ERLANG_P1_SIP_LICENSE = GPLv2
-+ERLANG_P1_SIP_LICENSE_FILES = COPYING
-+ERLANG_P1_SIP_DEPENDENCIES = erlang-p1-stun erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_SIP_INSTALL_STAGING = YES
++ERLANG_P1_CACHE_TAB_VERSION = 7b89d6a
++ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
++ERLANG_P1_CACHE_TAB_LICENSE = GPLv2+
++ERLANG_P1_CACHE_TAB_LICENSE_FILES = COPYING
++ERLANG_P1_CACHE_TAB_DEPENDENCIES = erlang-p1-utils
 +
 +$(eval $(rebar-package))
 -- 
