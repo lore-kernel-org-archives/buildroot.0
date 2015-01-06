@@ -1,82 +1,69 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  6 Jan 2015 15:03:02 +0100
-Subject: [Buildroot] [PATCH v5 04/16] erlang-goldrush: new package.
+Date: Tue,  6 Jan 2015 15:03:04 +0100
+Subject: [Buildroot] [PATCH v5 06/16] erlang-p1-zlib: new package.
 In-Reply-To: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
 References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1420552994-657-5-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1420552994-657-7-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ejabberd depends on host-erlang-lager, which depends on host-erlang-goldrush.
-Hence $(eval $(host-rebar-package)).
-
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
-Changes v4 -> v5:  (Thomas)
-  - add explanation for the host package.
----
- package/Config.in                          |  5 +++++
- package/erlang-goldrush/Config.in          |  7 +++++++
- package/erlang-goldrush/erlang-goldrush.mk | 14 ++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/erlang-goldrush/Config.in
- create mode 100644 package/erlang-goldrush/erlang-goldrush.mk
+ package/Config.in                        |  1 +
+ package/erlang-p1-zlib/Config.in         |  6 ++++++
+ package/erlang-p1-zlib/erlang-p1-zlib.mk | 12 ++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/erlang-p1-zlib/Config.in
+ create mode 100644 package/erlang-p1-zlib/erlang-p1-zlib.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8d91b04..9e5b28a 100644
+index 6db6c5c..038147f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -395,6 +395,11 @@ endmenu
- menu "Interpreter languages and scripting"
- 	source "package/enscript/Config.in"
- 	source "package/erlang/Config.in"
-+if BR2_PACKAGE_ERLANG
-+menu "Erlang libraries/modules"
-+	source "package/erlang-goldrush/Config.in"
-+endmenu
-+endif
+@@ -399,6 +399,7 @@ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-lager/Config.in"
++	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
  	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
- 	source "package/jamvm/Config.in"
-diff --git a/package/erlang-goldrush/Config.in b/package/erlang-goldrush/Config.in
+diff --git a/package/erlang-p1-zlib/Config.in b/package/erlang-p1-zlib/Config.in
 new file mode 100644
-index 0000000..2ee579a
+index 0000000..583d856
 --- /dev/null
-+++ b/package/erlang-goldrush/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ERLANG_GOLDRUSH
-+	bool "erlang-goldrush"
++++ b/package/erlang-p1-zlib/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_P1_ZLIB
++	bool "erlang-p1-zlib"
 +	help
-+	  Goldrush is a small Erlang app that provides fast event
-+	  stream processing.
++	  Erlang interface to zlib
 +
-+	  https://github.com/DeadZen/goldrush
-diff --git a/package/erlang-goldrush/erlang-goldrush.mk b/package/erlang-goldrush/erlang-goldrush.mk
++	  https://github.com/processone/zlib
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
 new file mode 100644
-index 0000000..b18a8ec
+index 0000000..ae95cb4
 --- /dev/null
-+++ b/package/erlang-goldrush/erlang-goldrush.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# erlang-goldrush
++# erlang-p1-zlib
 +#
 +################################################################################
 +
-+ERLANG_GOLDRUSH_VERSION = 0.1.6
-+ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
-+ERLANG_GOLDRUSH_LICENSE = ISC
-+ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
-+ERLANG_GOLDRUSH_INSTALL_STAGING = YES
++ERLANG_P1_ZLIB_VERSION = 52e82bb
++ERLANG_P1_ZLIB_SITE = $(call github,processone,zlib,$(ERLANG_P1_ZLIB_VERSION))
++ERLANG_P1_ZLIB_LICENSE = GPLv2+
++ERLANG_P1_ZLIB_LICENSE_FILES = COPYING
 +
 +$(eval $(rebar-package))
-+$(eval $(host-rebar-package))
 -- 
 2.1.0
