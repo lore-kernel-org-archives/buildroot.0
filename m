@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  6 Jan 2015 15:03:09 +0100
-Subject: [Buildroot] [PATCH v5 11/16] erlang-p1-stun: new package.
+Date: Tue,  6 Jan 2015 15:03:10 +0100
+Subject: [Buildroot] [PATCH v5 12/16] erlang-p1-stringprep: new package.
 In-Reply-To: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
 References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1420552994-657-12-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1420552994-657-13-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,57 +16,53 @@ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                        |  1 +
- package/erlang-p1-stun/Config.in         |  8 ++++++++
- package/erlang-p1-stun/erlang-p1-stun.mk | 14 ++++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/erlang-p1-stun/Config.in
- create mode 100644 package/erlang-p1-stun/erlang-p1-stun.mk
+ package/Config.in                                    |  1 +
+ package/erlang-p1-stringprep/Config.in               |  6 ++++++
+ package/erlang-p1-stringprep/erlang-p1-stringprep.mk | 12 ++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/erlang-p1-stringprep/Config.in
+ create mode 100644 package/erlang-p1-stringprep/erlang-p1-stringprep.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bab243f..affadd6 100644
+index affadd6..7373b0b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -399,6 +399,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-stun/Config.in"
++	source "package/erlang-p1-stringprep/Config.in"
+ 	source "package/erlang-p1-stun/Config.in"
  	source "package/erlang-p1-tls/Config.in"
  	source "package/erlang-p1-utils/Config.in"
- 	source "package/erlang-p1-xml/Config.in"
-diff --git a/package/erlang-p1-stun/Config.in b/package/erlang-p1-stun/Config.in
+diff --git a/package/erlang-p1-stringprep/Config.in b/package/erlang-p1-stringprep/Config.in
 new file mode 100644
-index 0000000..70cdd91
+index 0000000..3ef77ed
 --- /dev/null
-+++ b/package/erlang-p1-stun/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_ERLANG_P1_STUN
-+	bool "erlang-p1-stun"
-+	select BR2_PACKAGE_ERLANG_P1_TLS
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
++++ b/package/erlang-p1-stringprep/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	bool "erlang-p1-stringprep"
 +	help
-+	  STUN library for Erlang
++	  Erlang interface to stringprep
 +
-+	  https://github.com/processone/stun
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
++	  https://github.com/processone/stringprep
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
 new file mode 100644
-index 0000000..7b4b1a9
+index 0000000..95b5402
 --- /dev/null
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# erlang-p1-stun
++# erlang-p1-stringprep
 +#
 +################################################################################
 +
-+ERLANG_P1_STUN_VERSION = a7c07b6
-+ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
-+ERLANG_P1_STUN_LICENSE = GPLv2+
-+ERLANG_P1_STUN_LICENSE_FILES = COPYING
-+ERLANG_P1_STUN_DEPENDENCIES = erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_STUN_INSTALL_STAGING = YES
++ERLANG_P1_STRINGPREP_VERSION = 9e9e0f8
++ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
++ERLANG_P1_STRINGPREP_LICENSE = GPLv2+
++ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.TCL
 +
 +$(eval $(rebar-package))
 -- 
