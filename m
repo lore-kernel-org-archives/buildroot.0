@@ -1,57 +1,76 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 6 Jan 2015 00:53:23 +0100
-Subject: [Buildroot] [PATCH v4 06/17] erlang-lager: new package.
-In-Reply-To: <20150105173853.208d1884@free-electrons.com>
-References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
- <1418135662-773-7-git-send-email-johan.oudinet@gmail.com>
- <20150104223713.16258168@free-electrons.com>
- <CAJtjsKZUp=pPN+QFDckg1eKwNdFjiy-LXTNJmxx92O530-1Aog@mail.gmail.com>
- <20150105173853.208d1884@free-electrons.com>
-Message-ID: <CAJtjsKbL6M92n_kF-hpRcorbpzUic9LPxgTM1ZvO1YKH4v+-gQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 5 Jan 2015 21:15:29 -0600
+Subject: [Buildroot] [PATCH 00/29] SELinux Buildroot Additions
+In-Reply-To: <CANQCQpYzQyMBd8eKvJ8NtB59JpUvSfost6J+5k1gvKKqxNU+eQ@mail.gmail.com>
+References: <1418702062-61039-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20150101224717.2a063a90@free-electrons.com>
+ <CANQCQpYzQyMBd8eKvJ8NtB59JpUvSfost6J+5k1gvKKqxNU+eQ@mail.gmail.com>
+Message-ID: <CANQCQpaUT_e3UY9-fcghHOMeVDB=X1TJ8iNi1BqV21oUn+VPeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Thomas,
 
-On Mon, Jan 5, 2015 at 5:38 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Mon, 5 Jan 2015 17:10:32 +0100, Johan Oudinet wrote:
->> On Sun, Jan 4, 2015 at 10:37 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> > On Tue,  9 Dec 2014 15:34:11 +0100, Johan Oudinet wrote:
->> >
->> >> diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
->> >> new file mode 100644
->> >> index 0000000..b530c8e
->> >> --- /dev/null
->> >> +++ b/package/erlang-lager/erlang-lager.mk
->> >> @@ -0,0 +1,14 @@
->> >> +$(eval $(rebar-package))
->> >> +$(eval $(host-rebar-package))
->> >
->> > Same as previous package: why a host variant is needed?
+On Fri, Jan 2, 2015 at 2:59 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Thomas,
+>
+> On Jan 1, 2015 3:47 PM, "Thomas Petazzoni"
+> <thomas.petazzoni@free-electrons.com> wrote:
 >>
->> host-erlang-lager is listed in ejabberd dependencies. I do not
->> remember why, so I'm going to check if it is really needed and add an
->> explanation on the commit message if so.
+>> Dear Matt Weber,
+>>
+>> On Mon, 15 Dec 2014 21:53:52 -0600, Matt Weber wrote:
+>>
+>> > ### What's in this patchset?
+>> >
+>> > This patchset adds the required userspace tools, libraries, example
+>> > QEMU target, existing package modifications, and initial policy
+>> > to Buildroot.
+>>
+<snip>
+>>
+>> Finally, I have found what appears to be the new Git repository for the
+>> SELinux development at https://github.com/SELinuxProject/selinux. And
+>> it seems that now all components are in a single Git repository. Are
+>> they still doing separate tarballs for each component? I have the
+>> feeling that packaging separately checkpolicy, libselinux, libsemanage,
+>> libsepol, policycoreutils and sepolgen is maybe not the way to go.
+>>
+>> Can you clarify this before I spend more time merging more of your
+>> patches?
 >
-> Ah, my review did not go all the way to ejabberd, sorry about missing
-> this. Indeed, please check if host-erlang-lager is needed, and if it
-> is, quickly indicate in the commit log which package uses it.
+> Definitely.  In general we errored on the side of using older stable libs
+> when we pulled our selinux config together.  (Didn't realize the possible
+> change in how the libs/tools were organized) I'll take a look at pulling
+> things to the latest and see how that impacts how those packages are built.
+> I know that there were cross compile issues with a couple of the packages
+> that we worked around so I'll see how things look porting wise.
+>
+> Thank you for the review and pulling this in.  I'll spend some time Monday
+> figuring out if we should merge these patches or update to match the new
+> repo layout.
 >
 
-It does need it otherwise ejabberd compilation failed at
-src/gen_mod.erl, which includes include/logger.hrl. At line 23 of this
-file there is such statement :
--compile([{parse_transform, lager_transform}]).
-And lager_transform is provided by erlang-lager.
+It looks like they have set things up to support backwards
+compatibility with separate releases for the different packages,
+however I'd rather refactor the patchset to use the new approach.
+This would allow us to closely track the development and make it much
+easier to update as things would be a single package with a single
+version to bump.  I did notice that since they converted it from an
+autotools based build to static Makefiles, it looks like we may have
+lost some of the capability to turn off features.  So I guess worst
+case we also would have some patching needed to add back in that
+capability.
 
-So, I'll mention that ejabberd uses host-erlang-lager in the patches
-for erlang-lager and erlang-goldrush, which is a dependency of
-erlang-lager.
+I'll can get started on rev2 of the patchset using the single package
+approach. Would it work to revert the initial 3 packages that were
+added and I will plan to pull in any updates that were made as part of
+those initial commits (I believe libsemanage had a misc patch)?
 
--- 
-Johan
+
+Thanks,
+Matt
