@@ -1,30 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 22:07:35 +0100
-Subject: [Buildroot] [PATCH 1/2] fluxbox: do not autoreconf
-In-Reply-To: <1420566154-43239-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1420566154-43239-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150106220735.25228f70@free-electrons.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue,  6 Jan 2015 17:16:53 -0500
+Subject: [Buildroot] [PATCH] linux: make custom versions and patches
+	exclusive
+Message-ID: <1420582613-27692-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+When using a custom kernel (custom tarball, repository or local tree),
+we're using the OVERRIDE_SRCDIR internally, which means we do not apply
+patches. Since this is the expected behavior, show the
+LINUX_KERNEL_PATCH option only when using a vanilla kernel.
 
-On Tue, 6 Jan 2015 17:42:33 +0000, Vicente Olivert Riera wrote:
-> There is no need to have "AUTORECONF = YES" since the patch which
-> modified the "configure.in" file was removed in the last version bump.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/fluxbox/fluxbox.mk |    2 --
->  1 files changed, 0 insertions(+), 2 deletions(-)
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ linux/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Both applied.
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index bf30426..3845758 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -119,6 +119,9 @@ config BR2_LINUX_KERNEL_VERSION
+ 
+ config BR2_LINUX_KERNEL_PATCH
+ 	string "Custom kernel patches"
++	depends on BR2_LINUX_KERNEL_LATEST_VERSION || \\
++		  BR2_LINUX_KERNEL_SAME_AS_HEADERS || \\
++		  BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	help
+ 	  A space-separated list of patches to apply to the
+ 	  kernel. Each patch can be described as an URL, a local file
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.2.1
