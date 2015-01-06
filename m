@@ -1,55 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 21:17:19 +0100
-Subject: [Buildroot] [git commit] gzip: fix installation path
-Message-ID: <20150106201728.3811180797@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  6 Jan 2015 20:18:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 7766] logrotate default gzip path is usually wrong
+In-Reply-To: <bug-7766-163@https.bugs.busybox.net/>
+References: <bug-7766-163@https.bugs.busybox.net/>
+Message-ID: <20150106201842.56DC58079A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09d6597cb5ab326097533cd4be7b9764b960c930
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7766
 
-Make gzip install binaries to / rather than /usr to fix bug #7766, it's
-the FHS mandated target.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-This also avoids duplicating binaries with busybox when both are
-installed.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Also make gzip install after busybox if both are enabled to make the
-proper gzip package override any busybox version since it's usually more
-lightweight in functionality and slower.
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-01-06 20:18:42 UTC ---
+(In reply to comment #5)
 
-And add a hash file while at it.
+> should be:
+> GZIP_CONF_OPT = --exec-prefix=/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gzip/gzip.hash |    2 ++
- package/gzip/gzip.mk   |    4 ++++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+Not in recent Buildroot versions. GZIP_CONF_OPTS is now the right variable.
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-new file mode 100644
-index 0000000..56f052f
---- /dev/null
-+++ b/package/gzip/gzip.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	37dfed1a485d53212c43b3fa2a7c7952f09bf5cd86e37121c222341ee1b27847  gzip-1.6.tar.xz
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index e1a7bef..4ae2ae0 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -7,6 +7,10 @@
- GZIP_VERSION = 1.6
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
-+# Some other tools expect it to be in /bin
-+GZIP_CONF_OPTS = --exec-prefix=/
-+# Prefer full gzip over potentially lightweight/slower from busybox
-+GZIP_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- GZIP_LICENSE = GPLv3+
- GZIP_LICENSE_FILES = COPYING
- 
+I've applied Gustavo's patch, as
+http://git.buildroot.net/buildroot/commit/?id=09d6597cb5ab326097533cd4be7b9764b960c930,
+so I'm closing this bug.
+
+Thanks Henrik and Gustavo!
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
