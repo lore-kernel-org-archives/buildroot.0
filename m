@@ -1,38 +1,155 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Tue,  6 Jan 2015 17:25:19 -0500
-Subject: [Buildroot] [PATCH v2] linux: make custom versions and patches
-	exclusive
-Message-ID: <1420583119-30111-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue,  6 Jan 2015 23:29:37 +0100
+Subject: [Buildroot] [PATCH v3] package/dvb-app: handle static/shared only
+	build
+Message-ID: <1420583377-1299-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using a custom kernel (custom tarball, repository or local tree),
-we're using the OVERRIDE_SRCDIR internally, which means we do not apply
-patches. Since this is the expected behavior, show the
-LINUX_KERNEL_PATCH option only when using a vanilla kernel.
+Also remove tests since they require static libraries.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- linux/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+v3: use positive logic for static/shared libraries handling
+    (Yann E. Morin)
+v2: remove tests (ThomasP)
+    rework static/shared handling logic
+---
+ .../0003-handle-static-shared-only-build.patch     | 44 ++++++++++++++++++++++
+ .../dvb-apps/0003-support-static-only-build.patch  | 20 ----------
+ package/dvb-apps/0004-Makefile-remove-test.patch   | 27 +++++++++++++
+ package/dvb-apps/dvb-apps.mk                       |  4 +-
+ 4 files changed, 74 insertions(+), 21 deletions(-)
+ create mode 100644 package/dvb-apps/0003-handle-static-shared-only-build.patch
+ delete mode 100644 package/dvb-apps/0003-support-static-only-build.patch
+ create mode 100644 package/dvb-apps/0004-Makefile-remove-test.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bf30426..9989b40 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -119,6 +119,9 @@ config BR2_LINUX_KERNEL_VERSION
+diff --git a/package/dvb-apps/0003-handle-static-shared-only-build.patch b/package/dvb-apps/0003-handle-static-shared-only-build.patch
+new file mode 100644
+index 0000000..4dc7c68
+--- /dev/null
++++ b/package/dvb-apps/0003-handle-static-shared-only-build.patch
+@@ -0,0 +1,44 @@
++From a826c7c722db40bfedf00e51ce38411550ae8216 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Thu, 25 Dec 2014 19:22:16 +0100
++Subject: [PATCH] Make.rules: Handle static/shared only build
++
++Do not build .a library when enable_static is set to "no"
++Do not build .so library when enable_shared is set to "no"
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Make.rules | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/Make.rules b/Make.rules
++index 3410d7b..d274e16 100644
++--- a/Make.rules
+++++ b/Make.rules
++@@ -9,7 +9,13 @@ ifneq ($(lib_name),)
++ CFLAGS_LIB ?= -fPIC
++ CFLAGS += $(CFLAGS_LIB)
++ 
++-libraries = $(lib_name).so $(lib_name).a
+++ifneq ($(enable_static),no)
+++libraries += $(lib_name).a
+++endif
+++
+++ifneq ($(enable_shared),no)
+++libraries += $(lib_name).so
+++endif
++ 
++ .PHONY: library
++ 
++@@ -23,7 +29,7 @@ prerequisites = $(subst .o,.d,$(objects)) $(addsuffix .d,$(binaries))
++ 
++ .PHONY: clean install
++ 
++-ifeq ($(static),1)
+++ifneq ($(enable_static),no)
++ LDFLAGS += -static
++ endif
++ 
++-- 
++1.9.3
++
+diff --git a/package/dvb-apps/0003-support-static-only-build.patch b/package/dvb-apps/0003-support-static-only-build.patch
+deleted file mode 100644
+index 236f1a3..0000000
+--- a/package/dvb-apps/0003-support-static-only-build.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Make.rules: don't build .so libraries when static=1
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/Make.rules
+-===================================================================
+---- a/Make.rules
+-+++ b/Make.rules
+-@@ -9,7 +9,11 @@
+- CFLAGS_LIB ?= -fPIC
+- CFLAGS += $(CFLAGS_LIB)
+- 
+-+ifeq ($(static),1)
+-+libraries = $(lib_name).a
+-+else
+- libraries = $(lib_name).so $(lib_name).a
+-+endif
+- 
+- .PHONY: library
+- 
+diff --git a/package/dvb-apps/0004-Makefile-remove-test.patch b/package/dvb-apps/0004-Makefile-remove-test.patch
+new file mode 100644
+index 0000000..45bfad9
+--- /dev/null
++++ b/package/dvb-apps/0004-Makefile-remove-test.patch
+@@ -0,0 +1,27 @@
++From c578772d6abc5fdf3ec83f632c371373e5baf9f1 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Fri, 26 Dec 2014 01:04:58 +0100
++Subject: [PATCH] Makefile: remove test
++
++Tests needs static libraries, remove them for shared only build.
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 65a2273..105c460 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -10,7 +10,6 @@ DVB_API_MINOR := $(word 3, $(shell grep -m1 "DVB_API_VERSION_MINOR" $(VERSION_FI
++ 
++ all clean install:
++ 	$(MAKE) -C lib $@
++-	$(MAKE) -C test $@
++ 	$(MAKE) -C util $@
++ 
++ update:
++-- 
++1.9.3
++
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index 892af63..2d816c5 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -16,7 +16,9 @@ DVB_APPS_LDLIBS += -liconv
+ endif
  
- config BR2_LINUX_KERNEL_PATCH
- 	string "Custom kernel patches"
-+	depends on BR2_LINUX_KERNEL_LATEST_VERSION || \
-+		  BR2_LINUX_KERNEL_SAME_AS_HEADERS || \
-+		  BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	help
- 	  A space-separated list of patches to apply to the
- 	  kernel. Each patch can be described as an URL, a local file
+ ifeq ($(BR2_STATIC_LIBS),y)
+-DVB_APPS_MAKE_OPTS += static=1
++DVB_APPS_MAKE_OPTS += enable_shared=no
++else ifeq ($(BR2_SHARED_LIBS),y)
++DVB_APPS_MAKE_OPTS += enable_static=no
+ endif
+ 
+ DVB_APPS_INSTALL_STAGING = YES
 -- 
-2.2.1
+1.9.3
