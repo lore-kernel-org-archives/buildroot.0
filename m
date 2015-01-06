@@ -1,62 +1,67 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 6 Jan 2015 15:22:18 +0000
-Subject: [Buildroot] [PATCH] automake: bump version to 1.15
-In-Reply-To: <54ABFCEE.8020807@zacarias.com.ar>
-References: <1420535267-45405-1-git-send-email-Vincent.Riera@imgtec.com>	<54ABC247.9030500@zacarias.com.ar>
- <20150106144530.6571a518@free-electrons.com>
- <54ABE7BA.4060005@zacarias.com.ar> <54ABE93B.3080506@imgtec.com>
- <54ABF7D4.8000401@imgtec.com> <54ABFCEE.8020807@zacarias.com.ar>
-Message-ID: <54ABFDAA.9030205@imgtec.com>
+From: Williams Jr., Ernest L. <ernesto@slac.stanford.edu>
+Date: Tue, 6 Jan 2015 15:39:47 +0000
+Subject: [Buildroot] Need iconv(): fatal error: iconv.h: No such file or
+ directory
+In-Reply-To: <20150106092836.134b13fb@free-electrons.com>
+References: <3f160793d89243dd860bee8dd5e7acc4@exch13-mail05.win.slac.stanford.edu>,
+ <20150106092836.134b13fb@free-electrons.com>
+Message-ID: <a137651a680a46959923e90be1485e87@exch13-mail05.win.slac.stanford.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/06/2015 03:19 PM, Gustavo Zacarias wrote:
-> On 01/06/2015 11:57 AM, Vicente Olivert Riera wrote:
-> 
->> Hi Thomas, Gustavo,
->>
->> First issue found with automake-1.15. The package libmemcached fails at
->> the configure phase with the following error:
->>
->> configure: error: cannot find install-sh, install.sh, or shtool in "."
->> "./.." "./../.."
->>
->> It works fine using the automake version we have right now in Buildroot.
->>
->> This snippet is included in the configure script if we use
->> automake-1.15, and it fails because is trying to find some files which
->> don't exist in the "." "./.." "./../.." directories:
-> 
-> Hi.
-> That's easy, patch libmemcached-1.0.18/configure.ac and move
-> AC_CONFIG_AUX_DIR & AC_CONFIG_MACRO_DIR below AC_PROG_CC and AC_PROG_CXX
-> such as:
-> 
-> -----
-> AC_CONFIG_AUX_DIR([build-aux])
-> AC_CONFIG_MACRO_DIR([m4])
-> 
-> # Setup the compilers early on
-> AC_PROG_CC([cc gcc clang])
-> AC_PROG_CXX([c++ g++ clang++])
-> -----
-> 
-> Regards.
-> 
-> PS: i want credit for this one! :)
-> 
+Hi Thomas,
 
-Sorry, but I wrote that patch before you say that solution. The patch is
-under review by my company co-workers, that why I haven't send it yet. I
-will credit Debian, not you ;-)
+In this case my package/application is external to buildroot.
 
-Regards,
--- 
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+I have set the following  in my  ".config"   using  make xconfig:
+BR2_TOOLCHAIN_BUILDROOT_LOCALE
+
+Like so,
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+
+After typing make, I expect to see  "iconv.h"  in ${STAGING_DIR}/usr/include
+But it is not, there.  :(
+
+Must, I rebuild everything from scratch ?
+
+Cheers,
+Ernest
+________________________________________
+From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
+Sent: Tuesday, January 6, 2015 12:28 AM
+To: Williams Jr., Ernest L.
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Need iconv(): fatal error: iconv.h: No such file or directory
+
+Dear Williams Jr., Ernest L.,
+
+On Tue, 6 Jan 2015 06:17:26 +0000, Williams Jr., Ernest L. wrote:
+
+> I am working with a package that needs  iconv()
+>
+> How can I get this in buildroot?
+>
+> Here is my error:
+> fatal error: iconv.h: No such file or directory
+
+iconv is either provided by your toolchain (if it has locale support),
+or by libiconv. So, your package should do in its Config.in file:
+
+        select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+
+and in the .mk file:
+
+ifeq ($(BR2_PACKAGE_LIBICONV),y)
+<pkg>_DEPENDENCIES += libiconv
+endif
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
