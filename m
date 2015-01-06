@@ -1,27 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 21:52:42 +0100
-Subject: [Buildroot] [git commit] package/nodejs: add hash file
-Message-ID: <20150106205257.A621D807B5@busybox.osuosl.org>
+Date: Tue, 6 Jan 2015 21:54:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump to version 0.10.35
+In-Reply-To: <1420475737-13153-1-git-send-email-jkrause@posteo.de>
+References: <1420475737-13153-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20150106215428.4fbe18d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d434fcbeabd9abb9b0d94ee05d6c03cba251c69c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nodejs/nodejs.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Mon,  5 Jan 2015 17:35:36 +0100, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> ---
+>  package/nodejs/nodejs.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-new file mode 100644
-index 0000000..a6f2698
---- /dev/null
-+++ b/package/nodejs/nodejs.hash
-@@ -0,0 +1,2 @@
-+# From upstream URL: http://nodejs.org/dist/v0.10.35/SHASUMS256.txt
-+sha256	0043656bb1724cb09dbdc960a2fd6ee37d3badb2f9c75562b2d11235daa40a03  node-v0.10.35.tar.gz
+Both patches applied, thanks!
+
+Since you're doing nodejs stuff, could you have a look at the thread
+"[Buildroot] Float error on SAMA5D3 Xplained using nodejs" which
+started on December, 5th on the mailing list? I proposed a patch for
+nodejs to fix a problem reported by an user, which was tested
+successfully, but I never had the time to submit it properly. If you
+have some time, could you borrow my patch, and submit it properly after
+testing?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
