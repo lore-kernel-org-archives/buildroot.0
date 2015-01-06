@@ -1,52 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 09:24:38 +0100
-Subject: [Buildroot] [PATCH v4 03/17] package/pkg-rebar: new
- infrastructure
-In-Reply-To: <20150105215956.GC5077@free.fr>
-References: <1418135662-773-1-git-send-email-johan.oudinet@gmail.com>
- <1418135662-773-4-git-send-email-johan.oudinet@gmail.com>
- <20150104222307.009f6e73@free-electrons.com>
- <20150104222038.GD31970@free.fr>
- <20150105103116.74bbc777@free-electrons.com>
- <20150105215956.GC5077@free.fr>
-Message-ID: <20150106092438.1d427cc3@free-electrons.com>
+Date: Tue, 6 Jan 2015 09:26:56 +0100
+Subject: [Buildroot] [PATCH] package/openocd: disable on blackfin
+In-Reply-To: <1420489989-21356-1-git-send-email-s.martin49@gmail.com>
+References: <1420489989-21356-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150106092656.4bfe90ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Samuel Martin,
 
-On Mon, 5 Jan 2015 22:59:56 +0100, Yann E. MORIN wrote:
+On Mon,  5 Jan 2015 21:33:09 +0100, Samuel Martin wrote:
+> The "_" symbol prefix added by the blackfin toolchain causes "undefined
+> symbol" failures during the configuration.
+> 
+> Fixes:
+>   http://autobuild.buildroot.org/results/e90/e90b4d5ad79d99487f21c9d18581e8eba7034501/
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/openocd/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+> index 7c140c7..9543c03 100644
+> --- a/package/openocd/Config.in
+> +++ b/package/openocd/Config.in
+> @@ -1,5 +1,9 @@
+>  config BR2_PACKAGE_OPENOCD
+>  	bool "openocd"
+> +	# disable openocd on blackfin because it triggers "undefined symbol" error
+> +	# becasue of the "_" prefix:
+> +	# http://autobuild.buildroot.org/results/e90/e90b4d5ad79d99487f21c9d18581e8eba7034501/
+> +	depends on !BR2_bfin
+>  	help
+>  	  OpenOCD - Open On-Chip Debugger
+>  
 
-> In the end, I did not implement that because it is too much overkill.
-> Also, I kept _CONFIGURE because it is what people do expect: the package
-> needs to be configured before being built. But I am not completely
-> opposed to changing the variable name. _USE_AUTOTOOLS or _USE_AUTOCONF
-> is equally fit, I guess (although I'd still prefer _AUTOTOOLS, because
-> it matches the fact that we call back to the autotools infrastructure
-> underneath.
-
-Unfortunately, I disagree on this. "Configure" is a very vague term,
-which does not necessarily mean "run an autoconf generated ./configure
-script". We do have certain generic-package packages that do provide an
-implementation for the <pkg>_CONFIGURE_CMDS that aren't calling an
-autoconf generated ./configure script.
-
-Moreover, a non-autoconf using rebar package may want to implement its
-<pkg>_CONFIGURE_CMDS to do some stuff. But it would have to keep
-<pkg>_CONFIGURE set to NO. This is really confusing.
-
-Please, use <pkg>_USE_AUTOTOOLS, <pkg>_AUTOTOOLS or <pkg>_USE_AUTOCONF.
-I tend to prefer the latter, because this is really what the user is
-seeing: the package is using autoconf. You say you prefer _AUTOTOOLS
-because it matches the fact that we're using the autotools
-infrastructure underneath, but that's an implementation detail. It's
-much better to expose things that make sense for the package developer
-that things that relate to implementation details, IMO.
-
-Best regards,
+This seems weird because the "_" prefix normally only causes issues
+when linking C code against assembly code. If you're only linking C
+code against C code, it *should* be fully transparent.
 
 Thomas
 -- 
