@@ -1,91 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 21:19:51 +0100
-Subject: [Buildroot] [git commit] strongswan: security bump to version 5.2.2
-Message-ID: <20150106204902.58ADA807B5@busybox.osuosl.org>
+Date: Tue, 6 Jan 2015 21:48:57 +0100
+Subject: [Buildroot] [git commit] package/strongswan: add tools option
+	deprecation notice
+Message-ID: <20150106204902.64232807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b27e6b2ee7efa761d4415940723297d8a30042f
+commit: http://git.buildroot.net/buildroot/commit/?id=0120d9f36226584ce5c1edba03b6c2a6403920b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2014-9221 - denial-of-service vulnerability triggered by an
-IKEv2 Key Exchange payload that contains the Diffie-Hellman group 1025.
-
-Also add hash file.
+It's now a split option with pki and scep, with some other tools being
+deprecated upstream so select both when tools was selected to get as
+close as possible.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/strongswan/Config.in       |   16 ++++++++++++----
- package/strongswan/strongswan.hash |    2 ++
- package/strongswan/strongswan.mk   |    9 ++++++---
- 3 files changed, 20 insertions(+), 7 deletions(-)
+ Config.in.legacy |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 3b0f47f..23131dc 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -110,13 +110,21 @@ config BR2_PACKAGE_STRONGSWAN_SQL
+diff --git a/Config.in.legacy b/Config.in.legacy
+index de2c0ba..69608c7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -102,6 +102,16 @@ endif
  
- endif
+ comment "Legacy options removed in 2015.02"
  
--config BR2_PACKAGE_STRONGSWAN_TOOLS
--	bool "Enable additional utilities (openac, scepclient and pki)"
-+config BR2_PACKAGE_STRONGSWAN_PKI
-+	bool "Enable pki certificate utility"
- 	default y
- 
-+config BR2_PACKAGE_STRONGSWAN_SCEP
-+	bool "Enable SCEP client tool"
++config BR2_PACKAGE_STRONGSWAN_TOOLS
++	bool "strongswan option has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_STRONGSWAN_PKI
++	select BR2_PACKAGE_STRONGSWAN_SCEP
++	help
++	  The tools option has been removed upstream and the different tools
++	  have been split between the pki and scep options, with others
++	  deprecated.
 +
- config BR2_PACKAGE_STRONGSWAN_SCRIPTS
--	bool "Enable additional utilities (found in directory scripts)"
--	depends on BR2_PACKAGE_STRONGSWAN_CHARON || BR2_PACKAGE_STRONGSWAN_TOOLS
-+	bool "Enable additional utilities (found in scripts directory)"
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON
-+	default y
-+
-+config BR2_PACKAGE_STRONGSWAN_VICI
-+	bool "Enable vici/swanctl"
-+	depends on BR2_PACKAGE_STRONGSWAN_CHARON
- 	default y
- 
- endif
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-new file mode 100644
-index 0000000..6073b36
---- /dev/null
-+++ b/package/strongswan/strongswan.hash
-@@ -0,0 +1,2 @@
-+# From http://download.strongswan.org/strongswan-5.2.2.tar.bz2.md5
-+md5	7ee1a33060b2bde35be0f6d78a1d26d0	strongswan-5.2.2.tar.bz2
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index bb1d268..2d23383 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRONGSWAN_VERSION = 5.1.3
-+STRONGSWAN_VERSION = 5.2.2
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPLv2+
-@@ -28,8 +28,11 @@ STRONGSWAN_CONF_OPTS +=
- 	--enable-unity=$(if $(BR2_PACKAGE_STRONGSWAN_UNITY),yes,no)                  \
- 	--enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no)                \
- 	--enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no)                      \
--	--enable-tools=$(if $(BR2_PACKAGE_STRONGSWAN_TOOLS),yes,no)                  \
--	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)
-+	--enable-pki=$(if $(BR2_PACKAGE_STRONGSWAN_PKI),yes,no)                      \
-+	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no)              \
-+	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)              \
-+	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)                    \
-+	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
- 
- ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
- STRONGSWAN_CONF_OPTS +=               \
+ config BR2_PACKAGE_XBMC_ADDON_XVDR
+ 	bool "xbmc options have been renamed"
+ 	select BR2_LEGACY
