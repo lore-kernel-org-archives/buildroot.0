@@ -1,157 +1,82 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue,  6 Jan 2015 15:03:01 +0100
-Subject: [Buildroot] [PATCH v5 03/16] docs/manual: add documentation for the
-	pkg-rebar infrastructure
+Date: Tue,  6 Jan 2015 15:03:02 +0100
+Subject: [Buildroot] [PATCH v5 04/16] erlang-goldrush: new package.
 In-Reply-To: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
 References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1420552994-657-4-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1420552994-657-5-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ejabberd depends on host-erlang-lager, which depends on host-erlang-goldrush.
+Hence $(eval $(host-rebar-package)).
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-[yann.morin.1998 at free.fr: split the doc into its own patch]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
 Changes v4 -> v5:  (Thomas)
-  - drop unused variables
-  - drop implementation details
-  - properly document the autotools case
-  - add missing licensing variables
-  - some rewording about everywhere  (YEM)
-
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+  - add explanation for the host package.
 ---
- docs/manual/adding-packages-rebar.txt | 102 ++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt       |   2 +
- 2 files changed, 104 insertions(+)
- create mode 100644 docs/manual/adding-packages-rebar.txt
+ package/Config.in                          |  5 +++++
+ package/erlang-goldrush/Config.in          |  7 +++++++
+ package/erlang-goldrush/erlang-goldrush.mk | 14 ++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/erlang-goldrush/Config.in
+ create mode 100644 package/erlang-goldrush/erlang-goldrush.mk
 
-diff --git a/docs/manual/adding-packages-rebar.txt b/docs/manual/adding-packages-rebar.txt
+diff --git a/package/Config.in b/package/Config.in
+index 8d91b04..9e5b28a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -395,6 +395,11 @@ endmenu
+ menu "Interpreter languages and scripting"
+ 	source "package/enscript/Config.in"
+ 	source "package/erlang/Config.in"
++if BR2_PACKAGE_ERLANG
++menu "Erlang libraries/modules"
++	source "package/erlang-goldrush/Config.in"
++endmenu
++endif
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/erlang-goldrush/Config.in b/package/erlang-goldrush/Config.in
 new file mode 100644
-index 0000000..be9ede0
+index 0000000..2ee579a
 --- /dev/null
-+++ b/docs/manual/adding-packages-rebar.txt
-@@ -0,0 +1,102 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/erlang-goldrush/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_GOLDRUSH
++	bool "erlang-goldrush"
++	help
++	  Goldrush is a small Erlang app that provides fast event
++	  stream processing.
 +
-+=== Infrastructure for rebar-based packages
++	  https://github.com/DeadZen/goldrush
+diff --git a/package/erlang-goldrush/erlang-goldrush.mk b/package/erlang-goldrush/erlang-goldrush.mk
+new file mode 100644
+index 0000000..b18a8ec
+--- /dev/null
++++ b/package/erlang-goldrush/erlang-goldrush.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# erlang-goldrush
++#
++################################################################################
 +
-+[[rebar-package-tutorial]]
++ERLANG_GOLDRUSH_VERSION = 0.1.6
++ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
++ERLANG_GOLDRUSH_LICENSE = ISC
++ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
++ERLANG_GOLDRUSH_INSTALL_STAGING = YES
 +
-+==== +rebar-package+ tutorial
-+
-+First, let's see how to write a +.mk+ file for a rebar-based package,
-+with an example :
-+
-+------------------------------
-+01: ################################################################################
-+02: #
-+03: # erlang-foobar
-+04: #
-+05: ################################################################################
-+06:
-+07: ERLANG_FOOBAR_VERSION = 1.0
-+08: ERLANG_FOOBAR_SOURCE = erlang-foobar-$(ERLANG_FOOBAR_VERSION).tar.xz
-+09: ERLANG_FOOBAR_SITE = http://www.foosoftware.org/download
-+10: ERLANG_FOOBAR_DEPENDENCIES = host-libaaa libbbb
-+11:
-+12: $(eval $(rebar-package))
-+--------------------------------
-+
-+On line 7, we declare the version of the package.
-+
-+On line 8 and 9, we declare the name of the tarball (xz-ed tarball
-+recommended) and the location of the tarball on the Web. Buildroot
-+will automatically download the tarball from this location.
-+
-+On line 10, we declare our dependencies, so that they are built
-+before the build process of our package starts.
-+
-+Finally, on line 12, we invoke the +rebar-package+ macro that
-+generates all the Makefile rules that actually allows the package to
-+be built.
-+
-+[[rebar-package-reference]]
-+
-+==== +rebar-package+ reference
-+
-+The main macro of the +rebar+ package infrastructure is
-++rebar-package+. It is similar to the +generic-package+ macro. The
-+ability to have host packages is also available, with the
-++host-rebar-package+ macro.
-+
-+Just like the generic infrastructure, the +rebar+ infrastructure works
-+by defining a number of variables before calling the +rebar-package+
-+macro.
-+
-+First, all the package metadata information variables that exist in
-+the generic infrastructure also exist in the +rebar+ infrastructure:
-++ERLANG_FOOBAR_VERSION+, +ERLANG_FOOBAR_SOURCE+,
-++ERLANG_FOOBAR_PATCH+, +ERLANG_FOOBAR_SITE+,
-++ERLANG_FOOBAR_SUBDIR+, +ERLANG_FOOBAR_DEPENDENCIES+,
-++ERLANG_FOOBAR_INSTALL_STAGING+, +ERLANG_FOOBAR_INSTALL_TARGET+,
-++ERLANG_FOOBAR_LICENSE+ and +ERLANG_FOOBAR_LICENSE_FILES+.
-+
-+A few additional variables, specific to the +rebar+ infrastructure,
-+can also be defined. Many of them are only useful in very specific
-+cases, typical packages will therefore only use a few of them.
-+
-+* +ERLANG_FOOBAR_USE_AUTOCONF+, to specify that the package uses
-+  _autoconf_ at the configuration step.  When a package sets this
-+  variable to +YES+, the +autotools+ infrastructure is used.
-++
-+.Note
-+You can also use some of the variables from the +autotools+
-+  infrastructure: +ERLANG_FOOBAR_CONF_ENV+, +ERLANG_FOOBAR_CONF_OPTS+,
-+  +ERLANG_FOOBAR_AUTORECONF+, +ERLANG_FOOBAR_AUTORECONF_ENV+ and
-+  +ERLANG_FOOBAR_AUTORECONF_OPTS+.
-+
-+* +ERLANG_FOOBAR_USE_BUNDLED_REBAR+, to specify that the package has
-+  a bundled version of _rebar_ *and* that it shall be used. Valid
-+  values are +YES+ or +NO+ (the default).
-++
-+.Note
-+If the package bundles a _rebar_ utility, but can use the generic
-+  one that Buildroot provides, just say +NO+ (i.e., do not specify
-+  this variable). Only set if it is mandatory to use the _rebar_
-+  utility bundled in this package.
-+
-+* +ERLANG_FOOBAR_REBAR_ENV+, to specify additional environment
-+  variables to pass to the _rebar_ utility.
-+
-+With the rebar infrastructure, all the steps required to build
-+and install the packages are already defined, and they generally work
-+well for most rebar-based packages. However, when required, it is
-+still possible to customize what is done in any particular step:
-+
-+* By adding a post-operation hook (after extract, patch, configure,
-+  build or install). See xref:hooks[] for details.
-+
-+* By overriding one of the steps. For example, even if the rebar
-+  infrastructure is used, if the package +.mk+ file defines its
-+  own +ERLANG_FOOBAR_BUILD_CMDS+ variable, it will be used instead
-+  of the default rebar one. However, using this method should be
-+  restricted to very specific cases. Do not use it in the general
-+  case.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index feb0d13..b8674f8 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -27,6 +27,8 @@ include::adding-packages-virtual.txt[]
- 
- include::adding-packages-kconfig.txt[]
- 
-+include::adding-packages-rebar.txt[]
-+
- include::adding-packages-asciidoc.txt[]
- 
- include::adding-packages-hooks.txt[]
++$(eval $(rebar-package))
++$(eval $(host-rebar-package))
 -- 
 2.1.0
