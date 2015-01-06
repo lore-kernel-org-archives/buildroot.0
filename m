@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  6 Jan 2015 14:08:08 +0000 (UTC)
+Date: Tue,  6 Jan 2015 14:20:09 +0000 (UTC)
 Subject: [Buildroot] [Bug 7766] logrotate default gzip path is usually wrong
 In-Reply-To: <bug-7766-163@https.bugs.busybox.net/>
 References: <bug-7766-163@https.bugs.busybox.net/>
-Message-ID: <20150106140808.6D4C18043A@busybox.osuosl.org>
+Message-ID: <20150106142009.926DE807DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,22 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=7766
 
-Henrik Juul Pedersen <hjp@liab.dk> changed:
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
+             Status|RESOLVED                    |REOPENED
+         Resolution|INVALID                     |
 
---- Comment #1 from Henrik Juul Pedersen <hjp@liab.dk> 2015-01-06 14:08:08 UTC ---
-After looking closer into the LSB and FSH, it seems that /bin is actually still
-used by the standard, and it states:
-
-The following programs, or symbolic links to programs, must be in /bin if the
-corresponding subsystem is installed:
-...
-gzip    The GNU compression utility (optional)
-gunzip    The GNU uncompression utility (optional)
-...
-
-So I guess that only looking for gzip in /bin/gzip is correct according to the
-standard, and the real issue is why no symlink exist in /bin/ for the two
-programs. I'll look into this, and possibly file another bug on the subject.
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-01-06 14:20:09 UTC ---
+I've never seen anyone close their own bug as invalid so fast :)
+Keep it open, it's actually valid, but you missed a few details i think.
+If you use busybox, it's gzip/gunzip is properly installed to /bin, so i'm
+assuming you're not using busybox at all (or disabled gzip in it) and using
+"big fat" gzip which installs into /usr.
+So the solution would be to make the gzip package install into / rather than
+/usr.
+I'll cook a patch and send it to the list soon.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
