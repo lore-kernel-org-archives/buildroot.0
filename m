@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jan 2015 22:05:55 +0100
-Subject: [Buildroot] [git commit] fluxbox: bump version to 1.3.6
-Message-ID: <20150106210715.6455080797@busybox.osuosl.org>
+Date: Tue, 6 Jan 2015 22:05:49 +0100
+Subject: [Buildroot] [git commit] fluxbox: do not autoreconf
+Message-ID: <20150106210715.5B36880797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d13007db6394c519c402fd01c4e684a44221df4
+commit: http://git.buildroot.net/buildroot/commit/?id=44193b00a40b21d764a0b0f7257c893cdd437fd0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 1.3.6
-- Update the hash value
+There is no need to have "AUTORECONF = YES" since the patch which
+modified the "configure.in" file was removed in the last version bump.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fluxbox/fluxbox.hash |    2 +-
- package/fluxbox/fluxbox.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fluxbox/fluxbox.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.hash b/package/fluxbox/fluxbox.hash
-index 710798d..bfbbd7f 100644
---- a/package/fluxbox/fluxbox.hash
-+++ b/package/fluxbox/fluxbox.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  164dd7bf59791d09a1e729a4fcd5e7347a1004ba675629860a5cf1a271c32983  fluxbox-1.3.5.tar.bz2
-+sha256  05cc2149b79155121cb0fff6d4fd0289e3edb669390714e0b54071bec987e686  fluxbox-1.3.6.tar.bz2
 diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 31699d5..0340465 100644
+index a0f9367..31699d5 100644
 --- a/package/fluxbox/fluxbox.mk
 +++ b/package/fluxbox/fluxbox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLUXBOX_VERSION = 1.3.5
-+FLUXBOX_VERSION = 1.3.6
- FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.bz2
- FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBOX_VERSION)
+@@ -10,8 +10,6 @@ FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBO
  FLUXBOX_LICENSE = MIT
+ FLUXBOX_LICENSE_FILES = COPYING
+ 
+-FLUXBOX_AUTORECONF = YES
+-
+ FLUXBOX_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		   --x-libraries=$(STAGING_DIR)/usr/lib
+ FLUXBOX_DEPENDENCIES = xlib_libX11 $(if $(BR2_PACKAGE_LIBICONV),libiconv)
