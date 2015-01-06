@@ -1,42 +1,90 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 Jan 2015 07:35:10 -0300
-Subject: [Buildroot] [PATCH] msmtp: bump to version 1.6.1
-Message-ID: <1420540510-11937-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  6 Jan 2015 07:35:40 -0300
+Subject: [Buildroot] [PATCH 1/2] strongswan: security bump to version 5.2.2
+Message-ID: <1420540541-11989-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes CVE-2014-9221 - denial-of-service vulnerability triggered by an
+IKEv2 Key Exchange payload that contains the Diffie-Hellman group 1025.
+
+Also add hash file.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/msmtp/msmtp.hash | 6 +++---
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/strongswan/Config.in       | 16 ++++++++++++----
+ package/strongswan/strongswan.hash |  2 ++
+ package/strongswan/strongswan.mk   |  9 ++++++---
+ 3 files changed, 20 insertions(+), 7 deletions(-)
+ create mode 100644 package/strongswan/strongswan.hash
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index 2196afb..a522f9d 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.0/
--md5	1c166853b63c02ae2ab56b50f1aae57b	msmtp-1.6.0.tar.xz
--sha1	39e597619f797ec3550c0146cd3d9e55e85947eb	msmtp-1.6.0.tar.xz
-+# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.1/
-+md5	6ebba4809bbc665b8a665a018d1a5ee1	msmtp-1.6.1.tar.xz
-+sha1	ac70151bcb53af5e192cbb147fd2b8139c637089	msmtp-1.6.1.tar.xz
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 1c6de16..aa75dd4 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index 3b0f47f..23131dc 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -110,13 +110,21 @@ config BR2_PACKAGE_STRONGSWAN_SQL
+ 
+ endif
+ 
+-config BR2_PACKAGE_STRONGSWAN_TOOLS
+-	bool "Enable additional utilities (openac, scepclient and pki)"
++config BR2_PACKAGE_STRONGSWAN_PKI
++	bool "Enable pki certificate utility"
+ 	default y
+ 
++config BR2_PACKAGE_STRONGSWAN_SCEP
++	bool "Enable SCEP client tool"
++
+ config BR2_PACKAGE_STRONGSWAN_SCRIPTS
+-	bool "Enable additional utilities (found in directory scripts)"
+-	depends on BR2_PACKAGE_STRONGSWAN_CHARON || BR2_PACKAGE_STRONGSWAN_TOOLS
++	bool "Enable additional utilities (found in scripts directory)"
++	depends on BR2_PACKAGE_STRONGSWAN_CHARON
++	default y
++
++config BR2_PACKAGE_STRONGSWAN_VICI
++	bool "Enable vici/swanctl"
++	depends on BR2_PACKAGE_STRONGSWAN_CHARON
+ 	default y
+ 
+ endif
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+new file mode 100644
+index 0000000..6073b36
+--- /dev/null
++++ b/package/strongswan/strongswan.hash
+@@ -0,0 +1,2 @@
++# From http://download.strongswan.org/strongswan-5.2.2.tar.bz2.md5
++md5	7ee1a33060b2bde35be0f6d78a1d26d0	strongswan-5.2.2.tar.bz2
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index bb1d268..2d23383 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MSMTP_VERSION = 1.6.0
-+MSMTP_VERSION = 1.6.1
- MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+-STRONGSWAN_VERSION = 5.1.3
++STRONGSWAN_VERSION = 5.2.2
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
+@@ -28,8 +28,11 @@ STRONGSWAN_CONF_OPTS +=
+ 	--enable-unity=$(if $(BR2_PACKAGE_STRONGSWAN_UNITY),yes,no)                  \
+ 	--enable-stroke=$(if $(BR2_PACKAGE_STRONGSWAN_STROKE),yes,no)                \
+ 	--enable-sql=$(if $(BR2_PACKAGE_STRONGSWAN_SQL),yes,no)                      \
+-	--enable-tools=$(if $(BR2_PACKAGE_STRONGSWAN_TOOLS),yes,no)                  \
+-	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)
++	--enable-pki=$(if $(BR2_PACKAGE_STRONGSWAN_PKI),yes,no)                      \
++	--enable-scepclient=$(if $(BR2_PACKAGE_STRONGSWAN_SCEP),yes,no)              \
++	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no)              \
++	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)                    \
++	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
+ 
+ ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
+ STRONGSWAN_CONF_OPTS +=               \
 -- 
 2.0.5
