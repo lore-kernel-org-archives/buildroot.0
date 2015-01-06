@@ -1,8 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 6 Jan 2015 15:48:44 +0000
-Subject: [Buildroot] [PATCH v2] libmemcached: fix build failure with future
-	versions of automake
-Message-ID: <1420559324-26792-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 6 Jan 2015 15:52:54 +0000
+Subject: [Buildroot] [PATCH v3] libmemcached: fix build failure with
+	automake 1.15+
+Message-ID: <1420559574-31618-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,7 +27,8 @@ Related:
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v1 -> v2: patch name ammended
+Changes v2 -> v3: subject amended as per Gustavo Zacarias suggestion
+Changes v1 -> v2: patch name amended
 
  .../libmemcached/0003-move-ac_config_aux_dir.patch |   25 ++++++++++++++++++++
  1 files changed, 25 insertions(+), 0 deletions(-)
