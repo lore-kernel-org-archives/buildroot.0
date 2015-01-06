@@ -1,66 +1,51 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 6 Jan 2015 15:42:49 +0000
-Subject: [Buildroot] [PATCH] libmemcached: fix build failure with future
-	versions of automake
-Message-ID: <1420558969-26428-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Jan 2015 16:46:15 +0100
+Subject: [Buildroot] Need iconv(): fatal error: iconv.h: No such file or
+ directory
+In-Reply-To: <a137651a680a46959923e90be1485e87@exch13-mail05.win.slac.stanford.edu>
+References: <3f160793d89243dd860bee8dd5e7acc4@exch13-mail05.win.slac.stanford.edu>
+ <20150106092836.134b13fb@free-electrons.com>
+ <a137651a680a46959923e90be1485e87@exch13-mail05.win.slac.stanford.edu>
+Message-ID: <20150106164615.72ed36f0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding a patch to move AC_CONFIG_AUX_DIR up a few lines so the autotools
-can find it.
+Dear Williams Jr., Ernest L.,
 
-This patch is based on the same solution adopted by Debian:
+On Tue, 6 Jan 2015 15:39:47 +0000, Williams Jr., Ernest L. wrote:
 
-  https://lists.debian.org/debian-release/2014/11/msg01231.html
+> In this case my package/application is external to buildroot.
+> 
+> I have set the following  in my  ".config"   using  make xconfig:
+> BR2_TOOLCHAIN_BUILDROOT_LOCALE
+> 
+> Like so,
+> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+> 
+> After typing make, I expect to see  "iconv.h"  in ${STAGING_DIR}/usr/include
+> But it is not, there.  :(
+> 
+> Must, I rebuild everything from scratch ?
 
-This will prevent a build failure like this one caused by a version bump
-of the automake package:
+Yes.
 
-configure: error: cannot find install-sh, install.sh, or shtool in "."
-"./.." "./../.."
+See http://buildroot.org/downloads/manual/manual.html#full-rebuild:
 
-Related:
-  http://lists.busybox.net/pipermail/buildroot/2015-January/116604.html
+"""
+When the toolchain configuration is changed, a complete rebuild
+generally is needed. Changing the toolchain configuration often
+involves changing the compiler version, the type of C library or its
+configuration, or some other fundamental configuration item, and these
+changes have an impact on the entire system.
+"""
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- .../libmemcached/0003-move-ax_config_aux_dir.patch |   25 ++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/libmemcached/0003-move-ax_config_aux_dir.patch
+Best regards,
 
-diff --git a/package/libmemcached/0003-move-ax_config_aux_dir.patch b/package/libmemcached/0003-move-ax_config_aux_dir.patch
-new file mode 100644
-index 0000000..790aa93
---- /dev/null
-+++ b/package/libmemcached/0003-move-ax_config_aux_dir.patch
-@@ -0,0 +1,25 @@
-+Move AC_CONFIG_AUX_DIR up a few lines so the autotools can find it
-+
-+This patch is based on the same solution adopted by Debian:
-+
-+  https://lists.debian.org/debian-release/2014/11/msg01231.html
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+diff -rup a/configure.ac b/configure.ac
-+--- a/configure.ac	2014-02-09 11:52:42.000000000 +0000
-++++ b/configure.ac	2015-01-06 15:07:10.003074775 +0000
-+@@ -13,11 +13,12 @@ m4_include([version.m4])
-+ AC_PREREQ([2.61])
-+ AC_INIT([libmemcached],VERSION_NUMBER,[http://libmemcached.org/])
-+ 
-++AC_CONFIG_AUX_DIR([build-aux])
-++
-+ # Setup the compilers early on
-+ AC_PROG_CC([cc gcc clang])
-+ AC_PROG_CXX([c++ g++ clang++])
-+ 
-+-AC_CONFIG_AUX_DIR([build-aux])
-+ AC_CONFIG_MACRO_DIR([m4])
-+ 
-+ AC_CANONICAL_HOST
+Thomas Petazzoni
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
