@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 22:36:56 +0100
-Subject: [Buildroot] [git commit] linux: hide custom patches when using a
-	local tree
-Message-ID: <20150107213703.A2D63807EA@busybox.osuosl.org>
+Date: Wed, 7 Jan 2015 22:36:44 +0100
+Subject: [Buildroot] [git commit] package/git: fix dependency against curl
+Message-ID: <20150107213703.9942E807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=727f58044e3ae3c861acff78c369b400e0334734
+commit: http://git.buildroot.net/buildroot/commit/?id=53f5e83c8710d8223028f36df417c73b94aac8b4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When using a custom local tree, we're using the OVERRIDE_SRCDIR
-internally, which means we do not apply patches. Since this is the
-expected behavior, make BR2_LINUX_KERNEL_PATCH and
-BR2_LINUX_KERNEL_CUSTOM_LOCAL options exclusive.
+Our curl package is really named libcurl.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/git/git.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bf30426..13ae1ac 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -119,6 +119,7 @@ config BR2_LINUX_KERNEL_VERSION
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 57737f2..face062 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -26,7 +26,7 @@ else
+ endif
  
- config BR2_LINUX_KERNEL_PATCH
- 	string "Custom kernel patches"
-+	depends on !BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 	help
- 	  A space-separated list of patches to apply to the
- 	  kernel. Each patch can be described as an URL, a local file
+ ifeq ($(BR2_PACKAGE_CURL),y)
+-	GIT_DEPENDENCIES += curl
++	GIT_DEPENDENCIES += libcurl
+ 	GIT_CONF_OPTS += --with-curl
+ else
+ 	GIT_CONF_OPTS += --without-curl
