@@ -1,34 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Jan 2015 16:42:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: Needs
-	BR2_PACKAGE_FFMPEG_SWSCALE
-Message-ID: <1420645368-2408-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Jan 2015 17:43:13 +0100
+Subject: [Buildroot] host-python build issue
+In-Reply-To: <54AD3069.8090309@gmail.com>
+References: <54AD3069.8090309@gmail.com>
+Message-ID: <20150107174313.3d9ea5ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/8ab/8ab84a0e690b4e778aee5ac8ee7835da5737cfb4/
-http://autobuild.buildroot.net/results/2b6/2b6a6ffb4ac464bcd41ad51c17d8a34f1967819f/
+Dear Zoltan Gyarmati,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+On Wed, 07 Jan 2015 14:11:05 +0100, Zoltan Gyarmati wrote:
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 41f7798..7d89b5b 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -38,6 +38,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_GPL
- 	select BR2_PACKAGE_FFMPEG_POSTPROC # postproc depends on GPL
-+	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JASPER
+> i'm trying to build host-python (pulled in by
+> mobile-broadband-provider-info), but some of the modules failed to build
+> (namely ossaudiodev), and even if in this case the built python binary
+> and modules work properly, the buildroot build process itself fails.
+> Should this be considered as a bug, or this is the excepted behavior?
+
+Do you have a /usr/include/linux/soundcard.h file in your system? If
+yes, can you post it on pastebin?
+
+We should probably disable the ossaudiodev module from the host Python
+build. It's completely useful and I think we already had reports of
+issues building with module with our host-python package.
+
+Thanks,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
