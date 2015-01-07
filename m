@@ -1,33 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 22:11:33 +0100
-Subject: [Buildroot] [PATCH] automake: bump version to 1.15
-In-Reply-To: <1420535267-45405-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1420535267-45405-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150107221133.0664c6e7@free-electrons.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Wed,  7 Jan 2015 16:15:28 -0500
+Subject: [Buildroot] [PATCH v3] linux: hide custom patches when using a
+	local tree
+Message-ID: <1420665328-2704-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+When using a custom local tree, we're using the OVERRIDE_SRCDIR
+internally, which means we do not apply patches. Since this is the
+expected behavior, make BR2_LINUX_KERNEL_PATCH and
+BR2_LINUX_KERNEL_CUSTOM_LOCAL options exclusive.
 
-On Tue, 6 Jan 2015 09:07:47 +0000, Vicente Olivert Riera wrote:
-> -Bump version to 1.15
-> -Add a hash file
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/automake/automake.hash |    2 ++
->  package/automake/automake.mk   |    2 +-
->  2 files changed, 3 insertions(+), 1 deletions(-)
->  create mode 100644 package/automake/automake.hash
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+---
+ linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks, applied. Let's see how many autobuilder explosions this is
-going to cause :-)
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index bf30426..13ae1ac 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -119,6 +119,7 @@ config BR2_LINUX_KERNEL_VERSION
+ 
+ config BR2_LINUX_KERNEL_PATCH
+ 	string "Custom kernel patches"
++	depends on !BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 	help
+ 	  A space-separated list of patches to apply to the
+ 	  kernel. Each patch can be described as an URL, a local file
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.2.1
