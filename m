@@ -1,62 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed,  7 Jan 2015 23:50:14 +0100
-Subject: [Buildroot] [PATCH v4] python-tornado: bump to 4.0.2
-Message-ID: <1420671014-3007-1-git-send-email-yegorslists@googlemail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 7 Jan 2015 16:51:50 -0600
+Subject: [Buildroot] [PATCH v2] linux: make custom versions and patches
+	exclusive
+In-Reply-To: <CANxTyt4HAht4DG6aac65+NQPftC+9w5Qm+4YRZX3cMw-BXdzLw@mail.gmail.com>
+References: <1420583119-30111-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <CANxTyt4spLPozy+88j5rgcA_JKjL7W2gmD8UOC6pLj3f80SJjw@mail.gmail.com>
+ <20150107183515.GA4249@free.fr>
+ <CANxTyt4HAht4DG6aac65+NQPftC+9w5Qm+4YRZX3cMw-BXdzLw@mail.gmail.com>
+Message-ID: <CAMQcK5JyKyFn2N-RB80-rs5w8ST7SSN-Zp2-BHgbMM_EWiq4Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a hash file. Also remove obsolete Python dependency statement.
+Danomi and Yann,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v4: remove sha1 checksum, SSL and certifi runtime dependency
-        v3: add hash origin
-        v2: s/add/remove in commit message
+On Wed, Jan 7, 2015 at 12:53 PM, Danomi Manchego
+<danomimanchego123@gmail.com> wrote:
+> Yann,
+>
+> On Wed, Jan 7, 2015 at 1:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Danomi, All,
+>>
+>> Well, using a patch to a custom kernel does not really make sense.
+>>
+>> I'll try to summraise the discussion we had with Vivien on IRC
+>> yesterday, which ended up with this patch (sorry, it is a bit long..)
+>>
+>> See, using a local tree or a custom git or mercurial tree, is really a
+>> case of telling Buildroot: "look, I have my custom kernel, which has my
+>> very customisation with what I need".
+>
+> I certainly understand that to be the case for the local tree (which,
+> again, I _think_ is the only one engaging the _OVERRIDE_SRCDIR
+> mechanism).  But you don't think that there would be valid cases of
+> acquiring a kernel via git that is not customized to the project?  For
+> example, at work, we use a TI part, which keeps its 2.6.37+ kernel at
+> arago-project.org.  So I get it by setting
+> BR2_LINUX_KERNEL_CUSTOM_REPO_URL to
+> "git://arago-project.org/git/projects/linux-omap3.git", and then apply
+> my project's patches to it.  Sure - I guess it _a_ custom kernel in
+> that its modified by TI, but it does not have all the mods _I_ need
+> for my specific project.  Not a valid use case?
 
- package/python-tornado/Config.in           | 4 ++--
- package/python-tornado/python-tornado.hash | 2 ++
- package/python-tornado/python-tornado.mk   | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
- create mode 100644 package/python-tornado/python-tornado.hash
+This should be a valid use case since I do something similar using the
+Freescale's custom git repo that supports the QorIQ series of
+processors. We carry a few minor patches that are on top of this git
+repository that implement a few customization we need in the kernel.
+It didn't really make much sense to maintain our own custom repository
+since the changes done are very minimal.
 
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index 870a3de..85c7891 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_TORNADO
- 	bool "python-tornado"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_ZLIB
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
- 	help
- 	  Tornado is a Python web framework and asynchronous networking
- 	  library, originally developed at FriendFeed.
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-new file mode 100644
-index 0000000..f5234d5
---- /dev/null
-+++ b/package/python-tornado/python-tornado.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  900c5124ebdb6598ca8e8a0c5888f41a5f14117952d5515258e3d20222b21bfa  tornado-4.0.2.tar.gz
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index bac3ce7..5b88dd6 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_TORNADO_VERSION = 3.1.1
-+PYTHON_TORNADO_VERSION = 4.0.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
- PYTHON_TORNADO_SITE = https://pypi.python.org/packages/source/t/tornado
- PYTHON_TORNADO_LICENSE = Apache-2.0
+I think there is a needs to be ablity to take a custom GIT repo that
+comes from somewhere on the other than official mainline kernels as
+there maybe features available in these kernels that haven't made it
+into the mainline kernel. Other examples that I can think of would be
+Xilinx's Zynq and Altera's SoCFPGA architectures in which there isn't
+full featured support for these architectures yet in the mainline
+kernel but are available from the vendor maintain git repositories.
+
+Moral of the story - I disagree with this change.
+
+Just thought of this - you would still be able to use
+BR2_GLOBAL_PATCH_DIRS in order to patch the kernel when using any of
+the other methods so I don't know why you wouldn't want to all this
+option. I believe, it was discussed some time ago about completely
+removing this option and only allow the use of BR2_GLOBAL_PATCH_DIRS.
+
+Thanks,
+-Ryan
+
 -- 
-1.9.1
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
