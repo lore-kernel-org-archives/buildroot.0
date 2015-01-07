@@ -1,350 +1,182 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 22:56:26 +0100
-Subject: [Buildroot] [PATCHv1.0] hdf5: new package
-In-Reply-To: <1420416771-3098-1-git-send-email-ernesto@slac.stanford.edu>
-References: <1420416771-3098-1-git-send-email-ernesto@slac.stanford.edu>
-Message-ID: <20150107225626.70d08125@free-electrons.com>
+Date: Wed, 7 Jan 2015 22:56:54 +0100
+Subject: [Buildroot] [git commit] dmalloc: bump version to 5.5.2
+Message-ID: <20150107215705.0C493807B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ernesto L. Williams Jr,
+commit: http://git.buildroot.net/buildroot/commit/?id=db7b7fe0ee196046c051dee09f8bd1429d29c928
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new version. From a patch formatting perspective, it
-looks OK (the patch is not line-wrapped, and has the proper format).
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dmalloc/0001-add-fpic.patch           |   16 ++++-----
+ package/dmalloc/0002-mips.patch               |   10 +++---
+ package/dmalloc/0003-fix-parallel-build.patch |   12 +++---
+ package/dmalloc/0004-fix-shlibs.patch         |   46 +++++++++++++++++++++++++
+ package/dmalloc/dmalloc.mk                    |    2 +-
+ 5 files changed, 65 insertions(+), 21 deletions(-)
 
-However, there are a number of other issues, see below for comments.
-
-On Sun,  4 Jan 2015 16:12:51 -0800, Ernesto L. Williams Jr wrote:
-
-> diff --git a/package/Config.in b/package/Config.in
-> index 8d91b04..897c1a9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -597,6 +597,7 @@ menu "Audio/Sound"
->  endmenu
->  
->  menu "Compression and decompression"
-> +	source "package/hdf5/Config.in"
-
-I'm not sure it really fits in there. I don't really understand what
-HDF5 is, but I don't think it's a compression/decompression library.
-
->  	source "package/libarchive/Config.in"
->  	source "package/lzo/Config.in"
->  	source "package/snappy/Config.in"
-> diff --git a/package/hdf5/Config.in b/package/hdf5/Config.in
-> new file mode 100644
-> index 0000000..e8ba072
-> --- /dev/null
-> +++ b/package/hdf5/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_HDF5
-> +	bool "hdf5"
-
-Really no toolchain dependency? Can you try to build with the following
-toolchain configurations, and see if it builds fine:
-
-http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
-http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
-http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
-http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config
-
-> +	help
-> +	  HDF (Hierarchical Data Format) is a data model, library,
-> +	  and file format: for storing, analyzing and managing data.
-> +	  The HDF5 data model, file format, API, library, and tools
-> +	  are open and distributed without charge.
-> +	  
-> +	  HDF5 uses the zlib library to support the HDF5 deflate
-> +	  data compression filter. 
-> +	  If you want to use HDF5 to optionally compress/encode data,
-> +	  you will also need Szip. The HDF5 Library must be
-> +	  configured and built using the Szip Library.
-
-So szip is mandatory? But you make it an optional dependency in
-your .mk file. Can you clarify.
-
-> +	  Make sure that the szip package is installed prior to
-> +	  building HDF5.
-> +	  For Szip please refer to the following URL:
-> +	  http://hdfgroup.org/doc_resource/SZIP
-
-Those lines about szip look unnecessary: Buildroot already takes care
-of dependencies.
-
-> +	    
-> +	  http://www.hdfgroup.org
-> diff --git a/package/hdf5/hdf5-Makefile-configs.patch b/package/hdf5/hdf5-Makefile-configs.patch
-> new file mode 100644
-> index 0000000..035cf6e
-> --- /dev/null
-> +++ b/package/hdf5/hdf5-Makefile-configs.patch
-
-Patch naming is wrong. See the Buildroot manual on how to name patches
-properly. It should be 0001-<some-title>.patch.
-
-Also, all patches must have a description and a SoB line.
-
-> @@ -0,0 +1,147 @@
-> +diff -urN hdf5-1.8.14.orig/src/Makefile.am hdf5-1.8.14/src/Makefile.am
-> +--- hdf5-1.8.14.orig/src/Makefile.am	2015-01-04 08:01:46.267979169 -0800
-> ++++ hdf5-1.8.14/src/Makefile.am	2015-01-04 08:25:33.523856257 -0800
-> +@@ -26,6 +26,12 @@
-> + # Use -g to force no optimization since many compilers (e.g., Intel) takes
-> + # a long time to compile it with any optimization on.  H5detect is used
-> + # to generate H5Tinit.c once. So, optimization is not critical.
-> ++
-> ++
-> ++# Modified by ELW: This autogeneration should be done by PERL or
-> ++# configure to support portability and cross compiling. 
-> ++# For now, I will take these files from a host only build
-> ++# and used them for a cross very similar to the x86_64 architecture
-
-So just a comment, on nothing changed?
-
-> + noinst_PROGRAMS = H5detect H5make_libsettings
-> + 
-> + # Our main target, the HDF5 library
-> +@@ -34,8 +40,13 @@
-> + # Add libtool numbers to the HDF5 library (from config/lt_vers.am)
-> + libhdf5_la_LDFLAGS= -version-info $(LT_VERS_INTERFACE):$(LT_VERS_REVISION):$(LT_VERS_AGE) $(AM_LDFLAGS)
-> + 
-> ++# Modified by ELW: This autogeneration should be done by PERL or
-> ++# configure to support portability
-> ++# and cross compiling. For now, I will take these files from a host only build
-> ++# and used them for a cross very similar to the x86_64 architecture
-> + # H5Tinit.c and H5lib_settings.c are generated files and should be cleaned.
-> +-MOSTLYCLEANFILES=H5Tinit.c H5lib_settings.c
-> ++#MOSTLYCLEANFILES=H5Tinit.c H5lib_settings.c
-
-Ah, the same comment is here, and now there is a real change.
-
-> ++
-> + # H5pubconf.h is generated by configure, and should be cleaned.
-> + DISTCLEANFILES=H5pubconf.h
-> + 
-> +@@ -127,24 +138,36 @@
-> + # Things should have been all set during H5detect making.
-> + # Remove the generated .c file if errors occur unless HDF5_Make_Ignore
-> + # is set to ignore the error.
-> +-H5Tinit.c: H5detect$(EXEEXT)
-> +-	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
-> +-		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
-> +-	$(RUNSERIAL) ./H5detect$(EXEEXT) > $@  ||                               \
-> +-	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
-> +-	    ($(RM) $@ ; exit 1)
-> ++
-> ++# Modified by ELW: This autogeneration should be done by PERL or
-> ++# configure to support portability and cross compiling. 
-> ++# For now, I will take these files from a host only build
-> ++# and used them for a cross very similar to the x86_64 architecture
-> ++
-> ++#H5Tinit.c: H5detect$(EXEEXT)
-> ++#	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
-> ++#		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
-> ++#	$(RUNSERIAL) ./H5detect$(EXEEXT) > $@  ||                               \
-> ++#	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
-> ++#	    ($(RM) $@ ; exit 1)
-> + 
-> + # Build configuration header file generation
-> + # The LD_LIBRARY_PATH setting is a kludge.
-> + # Things should have been all set during H5make_libsettings making.
-> + # Remove the generated .c file if errors occur unless HDF5_Make_Ignore
-> + # is set to ignore the error.
-> +-H5lib_settings.c: H5make_libsettings$(EXEEXT) libhdf5.settings
-> +-	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
-> +-		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
-> +-	$(RUNSERIAL) ./H5make_libsettings$(EXEEXT) > $@  ||                               \
-> +-	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
-> +-	    ($(RM) $@ ; exit 1)
-> ++
-> ++# Modified by ELW: This autogeneration should be done by PERL or
-> ++# configure to support portability and cross compiling. 
-> ++# For now, I will take these files from a host only build
-> ++# and used them for a cross very similar to the x86_64 architecture
-> ++
-> ++#H5lib_settings.c: H5make_libsettings$(EXEEXT) libhdf5.settings
-> ++#	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
-> ++#		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
-> ++#	$(RUNSERIAL) ./H5make_libsettings$(EXEEXT) > $@  ||                               \
-> ++#	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
-> ++#	    ($(RM) $@ ; exit 1)
-
-Don't comment, remove the code.
-
-> +diff -urN hdf5-1.8.14.orig/src/Makefile.in hdf5-1.8.14/src/Makefile.in
-> +--- hdf5-1.8.14.orig/src/Makefile.in	2015-01-04 08:01:46.269979148 -0800
-> ++++ hdf5-1.8.14/src/Makefile.in	2015-01-04 08:30:31.140015990 -0800
-
-Why do you modify both Makefile.am and Makefile.in? Ideally, please
-modify only Makefile.am, and use <pkg>_AUTORECONF = YES in the .mk file.
-
-> diff --git a/package/hdf5/hdf5-generate-H5Tinit.c.patch b/package/hdf5/hdf5-generate-H5Tinit.c.patch
-> new file mode 100644
-> index 0000000..a963d74
-> --- /dev/null
-> +++ b/package/hdf5/hdf5-generate-H5Tinit.c.patch
-
-Patch naming is wrong. I must say I'm not too happy to have a 995 lines
-file. Can't we instead generate it at build time, by building the
-necessary tools for the host? It seems like all is needed is to
-build ./H5make_libsettings and ./H5detect for the host, no?
-
-Also:
-
-> ++ * Purpose:		This machine-generated source code contains
-> ++ *			information about the various integer and
-> ++ *			floating point numeric formats found on this
-> ++ *			architecture.  The parameters below should be
-> ++ *			checked carefully and errors reported to the
-> ++ *			HDF5 maintainer.
-
-This looks scary, because it means we should really generate this file
-on the target architecture. I'm not sure how to handle that, to be
-honest. Can you work this out with the upstream HDF5 developers?
-
-> diff --git a/package/hdf5/hdf5.hash b/package/hdf5/hdf5.hash
-> new file mode 100644
-> index 0000000..d3dce7c
-> --- /dev/null
-> +++ b/package/hdf5/hdf5.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed by Ernesto Williams
-
-Just "Locally computed".
-
-> +sha256 1dbefeeef7f591897c632b2b090db96bb8d35ad035beaa36bc39cb2bc67e0639  hdf5-1.8.14.tar.gz
-> diff --git a/package/hdf5/hdf5.mk b/package/hdf5/hdf5.mk
-> new file mode 100644
-> index 0000000..1ef0059
-> --- /dev/null
-> +++ b/package/hdf5/hdf5.mk
-> @@ -0,0 +1,58 @@
-> +####################################################################
-> +#
-> +# hdf5
-> +#
-> +####################################################################
-> +
-> +HDF5_VERSION = 1.8.14
-> +HDF5_SITE = http://www.hdfgroup.org/ftp/HDF5/current/src
-> +HDF5_LICENSE = hdf5 license
-> +HDF5_LICENSE_FILES = COPYING
-> +HDF5_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
-
-Not needed, that's the default.
-
-> +HDF5_INSTALL_STAGING = YES
-> +
-> +HDF5_DEPENDENCIES += szip
-
-So, you always have szip as a dependency, so it's not an optional
-dependency. Therefore, please add 'select BR2_PACKAGE_SZIP' to this
-package Config.in.
-
-> +# For now give the correct answers to the configure stage: 
-> +# need to fix this
-
-So, fix it before submitting the patch, maybe? :-)
-
-> +HDF5_CONF_ENV = hdf5_cv_have_lfs=yes \
-> +        hdf5_cv_gettimeofday_tz=yes \
-> +        hdf5_cv_szlib_can_encode=yes \
-> +        hdf5_cv_vsnprintf_works=yes \
-> +        hdf5_cv_printf_ll=ll \
-> +        hdf5_cv_system_scope_threads=yes \
-> +        hdf5_cv_direct_io=yes \
-> +        hdf5_cv_ldouble_to_integer_works=yes \
-> +        hdf5_cv_ulong_to_float_accurate=yes \
-> +        hdf5_cv_ulong_to_fp_bottom_bit_accurate=yes \
-> +        hdf5_cv_fp_to_ullong_accurate=yes \
-> +        hdf5_cv_fp_to_ullong_right_maximum=yes \
-> +        hdf5_cv_ldouble_to_uint_accurate=yes \
-> +        hdf5_cv_ullong_to_ldouble_precision=yes \
-> +        hdf5_cv_fp_to_integer_overflow_works=yes \
-> +        hdf5_cv_ldouble_to_long_special=no \
-> +        hdf5_cv_long_to_ldouble_special=no \
-> +        hdf5_cv_ldouble_to_llong_accurate=yes \
-> +        hdf5_cv_llong_to_ldouble_correct=yes  
-> +
-> +# Needs this to support: O_DIRECT
-
-Hum?
-
-> +
-> +ifeq ($(BR2_PACKAGE_SZIP),y)
-
-If szip is mandatory, it should be selected, so this condition will
-always be true.
-
-> +     HDF5_CONF_ENV +=  \
-> +     CFLAGS="-D_GNU_SOURCE -I${STAGING_DIR}/usr/include" \
-> +     CPPFLAGS="-D_GNU_SOURCE -I${STAGING_DIR}/usr/include " \
-> +     LDFLAGS="-L${STAGING_DIR}/usr/lib -lsz"
-
-Indentation is not good, it should be:
-
-HD5_CONF_ENV = \
-	FOO=bar \
-	BAR=baz
-
-Also, $() should be used instead of ${} to reference make variables.
-
-However, -I$(STAGING_DIR)/usr/include and -L$(STAGING_DIR)/usr/lib are
-not needed: the Buildroot cross-compiler already looks in those
-locations by default.
-
-> +else
-> +     HDF5_CONF_ENV +=  \
-> +     CFLAGS="-D_GNU_SOURCE " \
-> +     CPPFLAGS="-D_GNU_SOURCE " 
-> +endif
-
-Not needed.
-
-> +
-> +ifeq ($(BR2_PACKAGE_SZIP),y)
-
-Condition not needed, it's always true.
-
-> +  HDF5_CONF_OPTS += --enable-threadsafe \
-> +  --with-szlib="${STAGING_DIR}/usr/lib" --enable-static-exec
-
-Indentation is wrong, it should be:
-
-HDF5_CONF_OPTS = \
-	--enable-threadsafe \
-	--with-szlib=$(STAGING_DIR)/usr/lib \
-	--enable-static-exec
-
-With a few comments:
-
- * --enable-threadsafe probably indicates that HDF5 requires thread
-   support in the toolchain, so maybe you need a "depends on
-   BR2_TOOLCHAIN_HAS_THREADS" in Config.in. See how other packages are
-   doing this.
-
- * --enable-static-exec seems to indicate we want to statically link
-   the executables. This is generally not what we do in Buildroot. Any
-   reason to do this?
-
-> +else
-> +  HDF5_CONF_OPTS += --enable-threadsafe --enable-static-exec
-> +endif
-
-Not needed.
-
-So all in all, the major remaining point is this issue of generated
-files that are different from one architecture to the other. This
-really needs to be solved with upstream.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dmalloc/0001-add-fpic.patch b/package/dmalloc/0001-add-fpic.patch
+index 839d3ef..230a9e1 100644
+--- a/package/dmalloc/0001-add-fpic.patch
++++ b/package/dmalloc/0001-add-fpic.patch
+@@ -15,11 +15,9 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  Makefile.in |   10 +++++-----
+  1 file changed, 5 insertions(+), 5 deletions(-)
+ 
+-Index: dmalloc-5.4.3/Makefile.in
+-===================================================================
+---- dmalloc-5.4.3.orig/Makefile.in
+-+++ dmalloc-5.4.3/Makefile.in
+-@@ -319,17 +319,17 @@
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -318,17 +318,17 @@
+  # special _th versions of objects with the LOCK_THREADS variable defined to 1
+  chunk_th.o : $(srcdir)/chunk.c
+  	rm -f $@
+@@ -39,8 +37,8 @@ Index: dmalloc-5.4.3/Makefile.in
+ +	$(CC) $(CFLAGS) -fPIC $(CPPFLAGS) $(DEFS) $(INCS) -DLOCK_THREADS=1 \
+  		-c $(srcdir)/malloc.c -o ./$@
+  
+- tests : $(TEST)
+-@@ -355,7 +355,7 @@
++ tests : $(TEST) $(TEST_FC)
++@@ -360,7 +360,7 @@
+  
+  .c.o :
+  	rm -f $@
+@@ -49,7 +47,7 @@ Index: dmalloc-5.4.3/Makefile.in
+  
+  #
+  # .cc.o auto-target doesn't work on some systems. 
+-@@ -363,7 +363,7 @@
++@@ -368,7 +368,7 @@
+  #
+  dmallocc.o : $(srcdir)/dmallocc.cc
+  	rm -f $@
+@@ -57,4 +55,4 @@ Index: dmalloc-5.4.3/Makefile.in
+ +	$(CXX) $(CFLAGS) -fPIC $(CPPFLAGS) $(DEFS) $(INCS) -c $(srcdir)/dmallocc.cc \
+  		-o ./$@
+  
+- .texi.info :
++ #
+diff --git a/package/dmalloc/0002-mips.patch b/package/dmalloc/0002-mips.patch
+index 66721fd..3e6b00e 100644
+--- a/package/dmalloc/0002-mips.patch
++++ b/package/dmalloc/0002-mips.patch
+@@ -1,6 +1,6 @@
+---- dmalloc/configure	2006-09-01 18:28:51.000000000 -0700
+-+++ dmalloc-mips/configure	2006-09-01 18:49:07.000000000 -0700
+-@@ -6114,7 +6114,7 @@
++--- a/configure
+++++ b/configure
++@@ -7107,7 +7107,7 @@
+  echo $ECHO_N "checking return.h macros work... $ECHO_C" >&6
+  if test "$cross_compiling" = yes; then
+     cat >>confdefs.h <<\_ACEOF
+@@ -9,8 +9,8 @@
+  _ACEOF
+   echo "$as_me:$LINENO: result: no" >&5
+  echo "${ECHO_T}no" >&6
+---- dmalloc/return.h	2004-10-19 07:51:21.000000000 -0700
+-+++ dmalloc-mips/return.h	2006-09-08 21:52:43.000000000 -0700
++--- a/return.h
+++++ b/return.h
+ @@ -106,26 +106,16 @@
+  /*************************************/
+  
+diff --git a/package/dmalloc/0003-fix-parallel-build.patch b/package/dmalloc/0003-fix-parallel-build.patch
+index d6bb6e5..c521a11 100644
+--- a/package/dmalloc/0003-fix-parallel-build.patch
++++ b/package/dmalloc/0003-fix-parallel-build.patch
+@@ -8,11 +8,11 @@ Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+ 
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -399,6 +399,7 @@
+- compat.o: compat.c dmalloc.h conf.h settings.h compat.h dmalloc_loc.h
+- dmalloc.o: dmalloc.c dmalloc_argv.h conf.h settings.h dmalloc.h \
+-  compat.h debug_tok.h dmalloc_loc.h env.h error_val.h version.h
++@@ -401,6 +401,7 @@
++ compat.o: compat.c conf.h settings.h dmalloc.h compat.h dmalloc_loc.h
++ dmalloc.o: dmalloc.c conf.h settings.h dmalloc_argv.h dmalloc.h compat.h \
++   debug_tok.h dmalloc_loc.h env.h error_val.h version.h
+ +dmallocc.o: dmallocc.cc dmalloc.h return.h conf.h settings.h
+  dmalloc_argv.o: dmalloc_argv.c conf.h settings.h dmalloc_argv.h \
+-  dmalloc_argv_loc.h compat.h
+- dmalloc_rand.o: dmalloc_rand.c conf.h settings.h dmalloc_rand.h
++   dmalloc_argv_loc.h compat.h
++ dmalloc_fc_t.o: dmalloc_fc_t.c conf.h settings.h dmalloc.h dmalloc_argv.h \
+diff --git a/package/dmalloc/0004-fix-shlibs.patch b/package/dmalloc/0004-fix-shlibs.patch
+new file mode 100644
+index 0000000..a99d926
+--- /dev/null
++++ b/package/dmalloc/0004-fix-shlibs.patch
+@@ -0,0 +1,46 @@
++Fix shared library rules
++
++dmalloc uses ld -shared --whole-archive -o lib.so lib.a,
++but for some reason lists regular objects in addition
++to the archive, ending up with two copies of each symbol.
++
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -257,7 +257,7 @@ shlib : $(BUILD_SL)
++ # via: http://256.com/gray/email.html
++ $(LIB_SL) : $(LIBRARY)
++ 	rm -f $@ $@.t
++-	@shlinkargs@ $(LIBRARY) $(OBJS) $(NORMAL_OBJS)
+++	@shlinkargs@ $(LIBRARY)
++ 	mv $@.t $@
++ 
++ $(LIBRARY) : $(OBJS) $(NORMAL_OBJS)
++@@ -270,7 +270,7 @@ $(LIB_TH) : $(OBJS) $(THREAD_OBJS)
++ 
++ $(LIB_TH_SL) : $(LIB_TH)
++ 	rm -f $@ $@.t
++-	@shlinkargs@ $(LIB_TH) $(OBJS) $(THREAD_OBJS)
+++	@shlinkargs@ $(LIB_TH)
++ 	mv $@.t $@
++ 
++ $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
++@@ -279,7 +279,7 @@ $(LIB_CXX) : $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
++ 
++ $(LIB_CXX_SL) : $(LIB_CXX)
++ 	rm -f $@ $@.t
++-	@shlinkargs@ $(LIB_CXX) $(OBJS) $(NORMAL_OBJS) $(CXX_OBJS)
+++	@shlinkargs@ $(LIB_CXX)
++ 	mv $@.t $@
++ 
++ $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
++@@ -288,7 +288,7 @@ $(LIB_TH_CXX) : $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
++ 
++ $(LIB_TH_CXX_SL) : $(LIB_TH_CXX)
++ 	rm -f $@ $@.t
++-	@shlinkargs@ $(LIB_TH_CXX) $(OBJS) $(THREAD_OBJS) $(CXX_OBJS)
+++	@shlinkargs@ $(LIB_TH_CXX)
++ 	mv $@.t $@
++ 
++ threadssl : $(LIB_TH_SL)
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index c095f43..581ec40 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DMALLOC_VERSION = 5.4.3
++DMALLOC_VERSION = 5.5.2
+ DMALLOC_SOURCE = dmalloc-$(DMALLOC_VERSION).tgz
+ DMALLOC_SITE = http://dmalloc.com/releases
+ 
