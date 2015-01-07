@@ -1,35 +1,61 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed,  7 Jan 2015 16:15:28 -0500
-Subject: [Buildroot] [PATCH v3] linux: hide custom patches when using a
-	local tree
-Message-ID: <1420665328-2704-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Jan 2015 22:17:14 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/lockdev: handle
+ static/shared only build
+In-Reply-To: <20150107220143.3565f3b1@free-electrons.com>
+References: <1420585564-7921-1-git-send-email-romain.naour@openwide.fr>
+ <20150107220143.3565f3b1@free-electrons.com>
+Message-ID: <20150107211713.GE4249@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using a custom local tree, we're using the OVERRIDE_SRCDIR
-internally, which means we do not apply patches. Since this is the
-expected behavior, make BR2_LINUX_KERNEL_PATCH and
-BR2_LINUX_KERNEL_CUSTOM_LOCAL options exclusive.
+Thomas, All,
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- linux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On 2015-01-07 22:01 +0100, Thomas Petazzoni spake thusly:
+> On Wed,  7 Jan 2015 00:06:03 +0100, Romain Naour wrote:
+> > Add a patch to install headers and static library separately.
+> > 
+> > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> > ---
+> > v2: Headers must always be installed in staging,
+> >     remove static library installation from install_dev target (ThomasP)
+> 
+> Thanks, both patches applied. Can you submit upstream?
+> 
+> To be honest, I am wondering if it's really a good idea to patch all
+> package to make sure they only install shared libraries in a
+> BR2_SHARED_LIBS=y build. Ideally yes, but do we want to carry patches
+> in all packages that have a crazy build system, and are for many of
+> them essentially unmaintained? I don't know.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bf30426..13ae1ac 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -119,6 +119,7 @@ config BR2_LINUX_KERNEL_VERSION
- 
- config BR2_LINUX_KERNEL_PATCH
- 	string "Custom kernel patches"
-+	depends on !BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 	help
- 	  A space-separated list of patches to apply to the
- 	  kernel. Each patch can be described as an URL, a local file
+Gustavo and I already discussed this on IRC a while back.
+
+The basic idea was to have a way to identify bad packages, and somehow
+mark them so that Buildroot would do the clean-up in a generic way.
+
+Something like: FOO_IS_NOT_SHARED_ONLY_CLEAN = YES
+and Buildroot would remove the .a files.
+
+But there are some gotchas, since we can not blindly remove any and
+every .a files, as some are really needed (from the toolchain, for
+example, or because the package really only installs a .a because a .so
+is meaningless).
+
+Anyway, I'm still thinking about that...
+
+Topic for the BDD, maybe?
+
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.2.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
