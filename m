@@ -1,29 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Jan 2015 15:57:33 +0100
-Subject: [Buildroot] [PATCH] libevent: security bump to version 2.0.22
-In-Reply-To: <1420641811-22334-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 7 Jan 2015 11:43:31 -0300")
-References: <1420641811-22334-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lhleocyq.fsf@dell.be.48ers.dk>
+Date: Wed, 7 Jan 2015 15:50:24 +0100
+Subject: [Buildroot] [git commit] vim: also install xxd
+Message-ID: <20150107145828.2137D807CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2c47b1fde62e6e24c8689867c0047debfbe1d62a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes CVE-2014-6272 - integer overflow bugs in evbuffer_add() and
- > related functions.
+Quite a number of scripts use xxd, so install it as well.
 
- > Also file hash file (was stale) and switch to sourceforge for a
- > stable/proper hash.
+Install it unconditionally as the size is trivial compared to vim (~10kb vs
+~1.5MB).
 
- > Patch 0002-Avoid-using-top_srcdir-in-TESTS.patch is upstream so remove.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vim/vim.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 01ba27e..da84d14 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -31,6 +31,7 @@ VIM_LICENSE_FILES = README.txt
+ define VIM_INSTALL_TARGET_CMDS
+ 	cd $(@D)/src; \
+ 		$(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
++		$(MAKE) DESTDIR=$(TARGET_DIR) installtools; \
+ 		$(MAKE) DESTDIR=$(TARGET_DIR) installlinks
+ endef
+ 
