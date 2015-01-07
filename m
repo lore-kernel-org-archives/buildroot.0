@@ -1,137 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Jan 2015 15:51:18 +0100
-Subject: [Buildroot] [git commit] libevent: security bump to version 2.0.22
-Message-ID: <20150107145828.2A22A7FA32@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  7 Jan 2015 16:42:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Needs
+	BR2_PACKAGE_FFMPEG_SWSCALE
+Message-ID: <1420645368-2408-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=317e295a928e9a20c11c84424582a76f9ae0964c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes
+http://autobuild.buildroot.net/results/8ab/8ab84a0e690b4e778aee5ac8ee7835da5737cfb4/
+http://autobuild.buildroot.net/results/2b6/2b6a6ffb4ac464bcd41ad51c17d8a34f1967819f/
 
-Fixes CVE-2014-6272 - integer overflow bugs in evbuffer_add() and
-related functions.
-
-Also file hash file (was stale) and switch to sourceforge for a
-stable/proper hash.
-
-Patch 0002-Avoid-using-top_srcdir-in-TESTS.patch is upstream so remove.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-Avoid-using-top_srcdir-in-TESTS.patch     |   71 --------------------
- package/libevent/libevent.hash                     |    5 +-
- package/libevent/libevent.mk                       |    7 +-
- 3 files changed, 7 insertions(+), 76 deletions(-)
+ package/kodi/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch b/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
-deleted file mode 100644
-index 54f03cc..0000000
---- a/package/libevent/0002-Avoid-using-top_srcdir-in-TESTS.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 366165fc19e862d08ff51ee2bbbff253fc234dd1 Mon Sep 17 00:00:00 2001
--From: Nick Mathewson <nickm@torproject.org>
--Date: Fri, 8 Feb 2013 22:10:05 -0500
--Subject: [PATCH 2/2] Avoid using $(top_srcdir) in TESTS.
--
--Newer automakes don't like this.
--
--Signed-off-by: Nick Mathewson <nickm@torproject.org>
------
--Patch backported from upstream:
--https://github.com/libevent/libevent/commit/2863c837007c9f28ae542663a6098c91e704b3ca.patch
--
--Slight modifications to test/Makefile.am
--
--Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-----
-- Makefile.am      |  4 +++-
-- test/Makefile.am | 10 +++++++++-
-- 2 files changed, 12 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index dc90359..c34576d 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -128,6 +128,8 @@ endif
-- 
-- SUBDIRS = . include sample
-- 
--+DISTCLEANFILES=
--+
-- if BUILD_WIN32
-- 
-- SYS_LIBS = -lws2_32 -lshell32 -ladvapi32
--@@ -239,5 +241,5 @@ doxygen: FORCE
-- 	doxygen $(srcdir)/Doxyfile
-- FORCE:
-- 
---DISTCLEANFILES = *~ libevent.pc ./include/event2/event-config.h
--+DISTCLEANFILES += *~ libevent.pc ./include/event2/event-config.h
-- 
--diff --git a/test/Makefile.am b/test/Makefile.am
--index b10c41a..e2f4f4e 100644
----- a/test/Makefile.am
--+++ b/test/Makefile.am
--@@ -5,6 +5,7 @@
-- # See LICENSE for copying information.
-- 
-- AUTOMAKE_OPTIONS = foreign
--+DISTCLEANFILES=
-- 
-- AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/compat -I$(top_srcdir)/include -I../include -DTINYTEST_LOCAL
-- 
--@@ -19,7 +20,14 @@ endif
-- EXTRA_PROGRAMS = regress
-- noinst_HEADERS = tinytest.h tinytest_macros.h regress.h tinytest_local.h
-- 
---TESTS = $(top_srcdir)/test/test.sh
--+# We need to copy this file, since automake doesn't want us to use top_srcdir
--+# in TESTS.
--+TESTS = test/test-script.sh
--+
--+test/test-script.sh: test/test.sh
--+ cp $< $@
--+
--+DISTCLEANFILES += test/test-script.s
-- 
-- BUILT_SOURCES =
-- if BUILD_REGRESS
---- 
--2.1.1
--
-diff --git a/package/libevent/libevent.hash b/package/libevent/libevent.hash
-index efa0dc5..633cf5b 100644
---- a/package/libevent/libevent.hash
-+++ b/package/libevent/libevent.hash
-@@ -1,2 +1,3 @@
--# Locally calculated after checking pgp signature
--sha256	22a530a8a5ba1cb9c080cba033206b17dacd21437762155c6d30ee6469f574f5	libevent-2.0.21-stable.tar.gz
-+# From http://sourceforge.net/projects/levent/files/libevent/libevent-2.0/
-+md5	c4c56f986aa985677ca1db89630a2e11	libevent-2.0.22-stable.tar.gz
-+sha1	a586882bc93a208318c70fc7077ed8fca9862864	libevent-2.0.22-stable.tar.gz
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 30fcb5a..c50b1d2 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
- 
--LIBEVENT_VERSION = release-2.0.21-stable
--LIBEVENT_SITE = $(call github,libevent,libevent,$(LIBEVENT_VERSION))
-+LIBEVENT_VERSION_MAJOR = 2.0
-+LIBEVENT_VERSION = $(LIBEVENT_VERSION_MAJOR).22-stable
-+LIBEVENT_SITE = http://downloads.sourceforge.net/project/levent/libevent/libevent-$(LIBEVENT_VERSION_MAJOR)
- LIBEVENT_INSTALL_STAGING = YES
- LIBEVENT_LICENSE = BSD-3c, OpenBSD
- LIBEVENT_LICENSE_FILES = LICENSE
--# Straight from the repository, need to generate autotools files
-+# For 0001-Disable-building-test-programs.patch
- LIBEVENT_AUTORECONF = YES
- 
- define LIBEVENT_REMOVE_PYSCRIPT
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 41f7798..7d89b5b 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -38,6 +38,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_GPL
+ 	select BR2_PACKAGE_FFMPEG_POSTPROC # postproc depends on GPL
++	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JASPER
+-- 
+1.7.10.4
