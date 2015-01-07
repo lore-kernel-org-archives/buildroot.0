@@ -1,50 +1,130 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 21:54:00 +0100
-Subject: [Buildroot] [git commit] package/lockdev: use LOCKDEV_MAJOR to
-	create symbolic links
-Message-ID: <20150107210039.7A79C80811@busybox.osuosl.org>
+Date: Wed, 7 Jan 2015 21:53:52 +0100
+Subject: [Buildroot] [git commit] package/lockdev: handle static/shared only
+	build
+Message-ID: <20150107210039.6F30980811@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8302f95fe57e6c36c983e228a68c617f55de925
+commit: http://git.buildroot.net/buildroot/commit/?id=559ca96b77caf04ab517c8454e3a026f6ec92565
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks to Baruch Siach for the suggestion.
+Add a patch to install headers and static library separately.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lockdev/lockdev.mk |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ ...stall-static-library-and-headers-separate.patch |   44 ++++++++++++++++++++
+ package/lockdev/lockdev.mk                         |   35 ++++++++++------
+ 2 files changed, 66 insertions(+), 13 deletions(-)
 
+diff --git a/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch b/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+new file mode 100644
+index 0000000..d5a498a
+--- /dev/null
++++ b/package/lockdev/0001-Makefile-install-static-library-and-headers-separate.patch
+@@ -0,0 +1,44 @@
++From 0dcd2368c3e23a5cc1cc4a979d9c241ed9302236 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 4 Jan 2015 16:06:07 +0100
++Subject: [PATCH] Makefile: install static library and headers separately
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile | 12 +++++++-----
++ 1 file changed, 7 insertions(+), 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index e27dcbd..ecf52d1 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -45,12 +45,10 @@ perl-lib:	static
++ 	cd LockDev && make OPTIMIZE="-O2 -g -Wall"
++ 	cd LockDev && make test
++ 
++-.PHONY: install install_dev install_dbg install_doc install_run 
++-install:	install_dev install_dbg install_doc install_run
+++.PHONY: install install_dev install_dbg install_doc install_run install_static
+++install:	install_dev install_dbg install_doc install_run install_static
++ 
++-install_dev:	${static} src/lockdev.h
++-	install -m755 -d	${libdir}
++-	install -m644 ${static}	${libdir}
+++install_dev:	src/lockdev.h
++ 	install -m755 -d	${incdir}
++ 	install -m644 src/lockdev.h	${incdir}
++ 	install -m644 src/ttylock.h	${incdir}
++@@ -69,6 +67,10 @@ install_doc:	docs/lockdev.3
++ 	install -m755 -d	${mandir}/man3
++ 	install -m644 docs/lockdev.3	${mandir}/man3
++ 
+++install_static:	${static}
+++	install -m755 -d	${libdir}
+++	install -m644 ${static}	${libdir}
+++
++ install_run:	${shared}
++ 	install -m755 -d	${libdir}
++ 	install -m644 ${shared}	${libdir}
++-- 
++1.9.3
++
 diff --git a/package/lockdev/lockdev.mk b/package/lockdev/lockdev.mk
-index 11142e6..8d2c760 100644
+index 59561ba..11142e6 100644
 --- a/package/lockdev/lockdev.mk
 +++ b/package/lockdev/lockdev.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+@@ -13,30 +13,39 @@ LOCKDEV_LICENSE_FILES = LICENSE
+ LOCKDEV_INSTALL_STAGING = YES
  
--LOCKDEV_VERSION = 1.0.3
-+LOCKDEV_MAJOR = 1
-+LOCKDEV_VERSION = $(LOCKDEV_MAJOR).0.3
- LOCKDEV_SOURCE = lockdev_$(LOCKDEV_VERSION).orig.tar.gz
- LOCKDEV_PATCH = lockdev_$(LOCKDEV_VERSION)-1.6.diff.gz
- LOCKDEV_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/l/lockdev
-@@ -26,11 +27,11 @@ endif
- ifeq ($(BR2_SHARED_STATIC_LIBS)$(BR2_SHARED_LIBS),y)
- define LOCKDEV_CREATE_LINKS_STAGING
- 	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
+ ifeq ($(BR2_STATIC_LIBS),y)
+-define LOCKDEV_BUILD_CMDS
+-	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) static
++LOCKDEV_BUILD_ARGS = static
++LOCKDEV_INSTALL_ARGS = install_static
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++LOCKDEV_BUILD_ARGS = static shared
++LOCKDEV_INSTALL_ARGS = install_run install_static
++else # BR2_SHARED_LIBS
++LOCKDEV_BUILD_ARGS = shared
++LOCKDEV_INSTALL_ARGS = install_run
++endif
++
++ifeq ($(BR2_SHARED_STATIC_LIBS)$(BR2_SHARED_LIBS),y)
++define LOCKDEV_CREATE_LINKS_STAGING
++	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
++	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
+ endef
+ 
+-define LOCKDEV_INSTALL_STAGING_CMDS
+-	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) install_dev
++define LOCKDEV_CREATE_LINKS_TARGET
++	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
+ endef
+-
+-else # BR2_STATIC_LIBS
++endif
+ 
+ define LOCKDEV_BUILD_CMDS
+-	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) static shared
++	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(LOCKDEV_BUILD_ARGS)
+ endef
+ 
+ define LOCKDEV_INSTALL_STAGING_CMDS
+-	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) install_dev install_run
+-	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so
 -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.1
-+	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(STAGING_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_MAJOR)
++	$(MAKE1) basedir=$(STAGING_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS) install_dev
++	$(LOCKDEV_CREATE_LINKS_STAGING)
  endef
  
- define LOCKDEV_CREATE_LINKS_TARGET
+ define LOCKDEV_INSTALL_TARGET_CMDS
+-	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) install_run
 -	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.1
-+	ln -sf liblockdev.$(LOCKDEV_VERSION).so $(TARGET_DIR)/usr/lib/liblockdev.so.$(LOCKDEV_MAJOR)
++	$(MAKE1) basedir=$(TARGET_DIR)/usr -C $(@D) $(LOCKDEV_INSTALL_ARGS)
++	$(LOCKDEV_CREATE_LINKS_TARGET)
  endef
- endif
+-endif # BR2_STATIC_LIBS
  
+ $(eval $(generic-package))
