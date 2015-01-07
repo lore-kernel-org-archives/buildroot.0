@@ -1,34 +1,350 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Wed, 7 Jan 2015 22:52:06 +0100
-Subject: [Buildroot] [PATCH v3 0/2] Portability fixes for "make
-	menuconfig"
-In-Reply-To: <20150107222831.170182ee@free-electrons.com>
-References: <1420243128-7708-1-git-send-email-bjorn.forsman@gmail.com>
- <20150107222831.170182ee@free-electrons.com>
-Message-ID: <CAEYzJUH6XCP_NpJmPH-idZ33g+uAOoOVC0CtJCsyPShYqSm2wg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Jan 2015 22:56:26 +0100
+Subject: [Buildroot] [PATCHv1.0] hdf5: new package
+In-Reply-To: <1420416771-3098-1-git-send-email-ernesto@slac.stanford.edu>
+References: <1420416771-3098-1-git-send-email-ernesto@slac.stanford.edu>
+Message-ID: <20150107225626.70d08125@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7 January 2015 at 22:28, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Bj?rn Forsman,
->
-> On Sat,  3 Jan 2015 00:58:46 +0100, Bj?rn Forsman wrote:
->
->> Bj?rn Forsman (2):
->>   Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time
->>   kconfig/lxdialog: get ncurses CFLAGS with pkg-config
->
-> Both patches applied, thanks!
+Dear Ernesto L. Williams Jr,
 
-Weee! Thanks.
+Thanks for this new version. From a patch formatting perspective, it
+looks OK (the patch is not line-wrapped, and has the proper format).
 
-It is one year and seven days since I first posted that
-kconfig/lxdialog patch to the upstream linux kbuild mailing list. Now
-finally it is merged both upstream and in Buildroot :-)
+However, there are a number of other issues, see below for comments.
 
-Best regards,
-Bj?rn Forsman
+On Sun,  4 Jan 2015 16:12:51 -0800, Ernesto L. Williams Jr wrote:
+
+> diff --git a/package/Config.in b/package/Config.in
+> index 8d91b04..897c1a9 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -597,6 +597,7 @@ menu "Audio/Sound"
+>  endmenu
+>  
+>  menu "Compression and decompression"
+> +	source "package/hdf5/Config.in"
+
+I'm not sure it really fits in there. I don't really understand what
+HDF5 is, but I don't think it's a compression/decompression library.
+
+>  	source "package/libarchive/Config.in"
+>  	source "package/lzo/Config.in"
+>  	source "package/snappy/Config.in"
+> diff --git a/package/hdf5/Config.in b/package/hdf5/Config.in
+> new file mode 100644
+> index 0000000..e8ba072
+> --- /dev/null
+> +++ b/package/hdf5/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_HDF5
+> +	bool "hdf5"
+
+Really no toolchain dependency? Can you try to build with the following
+toolchain configurations, and see if it builds fine:
+
+http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
+http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
+http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
+http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config
+
+> +	help
+> +	  HDF (Hierarchical Data Format) is a data model, library,
+> +	  and file format: for storing, analyzing and managing data.
+> +	  The HDF5 data model, file format, API, library, and tools
+> +	  are open and distributed without charge.
+> +	  
+> +	  HDF5 uses the zlib library to support the HDF5 deflate
+> +	  data compression filter. 
+> +	  If you want to use HDF5 to optionally compress/encode data,
+> +	  you will also need Szip. The HDF5 Library must be
+> +	  configured and built using the Szip Library.
+
+So szip is mandatory? But you make it an optional dependency in
+your .mk file. Can you clarify.
+
+> +	  Make sure that the szip package is installed prior to
+> +	  building HDF5.
+> +	  For Szip please refer to the following URL:
+> +	  http://hdfgroup.org/doc_resource/SZIP
+
+Those lines about szip look unnecessary: Buildroot already takes care
+of dependencies.
+
+> +	    
+> +	  http://www.hdfgroup.org
+> diff --git a/package/hdf5/hdf5-Makefile-configs.patch b/package/hdf5/hdf5-Makefile-configs.patch
+> new file mode 100644
+> index 0000000..035cf6e
+> --- /dev/null
+> +++ b/package/hdf5/hdf5-Makefile-configs.patch
+
+Patch naming is wrong. See the Buildroot manual on how to name patches
+properly. It should be 0001-<some-title>.patch.
+
+Also, all patches must have a description and a SoB line.
+
+> @@ -0,0 +1,147 @@
+> +diff -urN hdf5-1.8.14.orig/src/Makefile.am hdf5-1.8.14/src/Makefile.am
+> +--- hdf5-1.8.14.orig/src/Makefile.am	2015-01-04 08:01:46.267979169 -0800
+> ++++ hdf5-1.8.14/src/Makefile.am	2015-01-04 08:25:33.523856257 -0800
+> +@@ -26,6 +26,12 @@
+> + # Use -g to force no optimization since many compilers (e.g., Intel) takes
+> + # a long time to compile it with any optimization on.  H5detect is used
+> + # to generate H5Tinit.c once. So, optimization is not critical.
+> ++
+> ++
+> ++# Modified by ELW: This autogeneration should be done by PERL or
+> ++# configure to support portability and cross compiling. 
+> ++# For now, I will take these files from a host only build
+> ++# and used them for a cross very similar to the x86_64 architecture
+
+So just a comment, on nothing changed?
+
+> + noinst_PROGRAMS = H5detect H5make_libsettings
+> + 
+> + # Our main target, the HDF5 library
+> +@@ -34,8 +40,13 @@
+> + # Add libtool numbers to the HDF5 library (from config/lt_vers.am)
+> + libhdf5_la_LDFLAGS= -version-info $(LT_VERS_INTERFACE):$(LT_VERS_REVISION):$(LT_VERS_AGE) $(AM_LDFLAGS)
+> + 
+> ++# Modified by ELW: This autogeneration should be done by PERL or
+> ++# configure to support portability
+> ++# and cross compiling. For now, I will take these files from a host only build
+> ++# and used them for a cross very similar to the x86_64 architecture
+> + # H5Tinit.c and H5lib_settings.c are generated files and should be cleaned.
+> +-MOSTLYCLEANFILES=H5Tinit.c H5lib_settings.c
+> ++#MOSTLYCLEANFILES=H5Tinit.c H5lib_settings.c
+
+Ah, the same comment is here, and now there is a real change.
+
+> ++
+> + # H5pubconf.h is generated by configure, and should be cleaned.
+> + DISTCLEANFILES=H5pubconf.h
+> + 
+> +@@ -127,24 +138,36 @@
+> + # Things should have been all set during H5detect making.
+> + # Remove the generated .c file if errors occur unless HDF5_Make_Ignore
+> + # is set to ignore the error.
+> +-H5Tinit.c: H5detect$(EXEEXT)
+> +-	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
+> +-		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
+> +-	$(RUNSERIAL) ./H5detect$(EXEEXT) > $@  ||                               \
+> +-	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
+> +-	    ($(RM) $@ ; exit 1)
+> ++
+> ++# Modified by ELW: This autogeneration should be done by PERL or
+> ++# configure to support portability and cross compiling. 
+> ++# For now, I will take these files from a host only build
+> ++# and used them for a cross very similar to the x86_64 architecture
+> ++
+> ++#H5Tinit.c: H5detect$(EXEEXT)
+> ++#	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
+> ++#		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
+> ++#	$(RUNSERIAL) ./H5detect$(EXEEXT) > $@  ||                               \
+> ++#	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
+> ++#	    ($(RM) $@ ; exit 1)
+> + 
+> + # Build configuration header file generation
+> + # The LD_LIBRARY_PATH setting is a kludge.
+> + # Things should have been all set during H5make_libsettings making.
+> + # Remove the generated .c file if errors occur unless HDF5_Make_Ignore
+> + # is set to ignore the error.
+> +-H5lib_settings.c: H5make_libsettings$(EXEEXT) libhdf5.settings
+> +-	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
+> +-		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
+> +-	$(RUNSERIAL) ./H5make_libsettings$(EXEEXT) > $@  ||                               \
+> +-	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
+> +-	    ($(RM) $@ ; exit 1)
+> ++
+> ++# Modified by ELW: This autogeneration should be done by PERL or
+> ++# configure to support portability and cross compiling. 
+> ++# For now, I will take these files from a host only build
+> ++# and used them for a cross very similar to the x86_64 architecture
+> ++
+> ++#H5lib_settings.c: H5make_libsettings$(EXEEXT) libhdf5.settings
+> ++#	LD_LIBRARY_PATH="$$LD_LIBRARY_PATH`echo $(LDFLAGS) |                  \
+> ++#		sed -e 's/-L/:/g' -e 's/ //g'`"                               \
+> ++#	$(RUNSERIAL) ./H5make_libsettings$(EXEEXT) > $@  ||                               \
+> ++#	    (test $$HDF5_Make_Ignore && echo "*** Error ignored") ||          \
+> ++#	    ($(RM) $@ ; exit 1)
+
+Don't comment, remove the code.
+
+> +diff -urN hdf5-1.8.14.orig/src/Makefile.in hdf5-1.8.14/src/Makefile.in
+> +--- hdf5-1.8.14.orig/src/Makefile.in	2015-01-04 08:01:46.269979148 -0800
+> ++++ hdf5-1.8.14/src/Makefile.in	2015-01-04 08:30:31.140015990 -0800
+
+Why do you modify both Makefile.am and Makefile.in? Ideally, please
+modify only Makefile.am, and use <pkg>_AUTORECONF = YES in the .mk file.
+
+> diff --git a/package/hdf5/hdf5-generate-H5Tinit.c.patch b/package/hdf5/hdf5-generate-H5Tinit.c.patch
+> new file mode 100644
+> index 0000000..a963d74
+> --- /dev/null
+> +++ b/package/hdf5/hdf5-generate-H5Tinit.c.patch
+
+Patch naming is wrong. I must say I'm not too happy to have a 995 lines
+file. Can't we instead generate it at build time, by building the
+necessary tools for the host? It seems like all is needed is to
+build ./H5make_libsettings and ./H5detect for the host, no?
+
+Also:
+
+> ++ * Purpose:		This machine-generated source code contains
+> ++ *			information about the various integer and
+> ++ *			floating point numeric formats found on this
+> ++ *			architecture.  The parameters below should be
+> ++ *			checked carefully and errors reported to the
+> ++ *			HDF5 maintainer.
+
+This looks scary, because it means we should really generate this file
+on the target architecture. I'm not sure how to handle that, to be
+honest. Can you work this out with the upstream HDF5 developers?
+
+> diff --git a/package/hdf5/hdf5.hash b/package/hdf5/hdf5.hash
+> new file mode 100644
+> index 0000000..d3dce7c
+> --- /dev/null
+> +++ b/package/hdf5/hdf5.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed by Ernesto Williams
+
+Just "Locally computed".
+
+> +sha256 1dbefeeef7f591897c632b2b090db96bb8d35ad035beaa36bc39cb2bc67e0639  hdf5-1.8.14.tar.gz
+> diff --git a/package/hdf5/hdf5.mk b/package/hdf5/hdf5.mk
+> new file mode 100644
+> index 0000000..1ef0059
+> --- /dev/null
+> +++ b/package/hdf5/hdf5.mk
+> @@ -0,0 +1,58 @@
+> +####################################################################
+> +#
+> +# hdf5
+> +#
+> +####################################################################
+> +
+> +HDF5_VERSION = 1.8.14
+> +HDF5_SITE = http://www.hdfgroup.org/ftp/HDF5/current/src
+> +HDF5_LICENSE = hdf5 license
+> +HDF5_LICENSE_FILES = COPYING
+> +HDF5_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
+
+Not needed, that's the default.
+
+> +HDF5_INSTALL_STAGING = YES
+> +
+> +HDF5_DEPENDENCIES += szip
+
+So, you always have szip as a dependency, so it's not an optional
+dependency. Therefore, please add 'select BR2_PACKAGE_SZIP' to this
+package Config.in.
+
+> +# For now give the correct answers to the configure stage: 
+> +# need to fix this
+
+So, fix it before submitting the patch, maybe? :-)
+
+> +HDF5_CONF_ENV = hdf5_cv_have_lfs=yes \
+> +        hdf5_cv_gettimeofday_tz=yes \
+> +        hdf5_cv_szlib_can_encode=yes \
+> +        hdf5_cv_vsnprintf_works=yes \
+> +        hdf5_cv_printf_ll=ll \
+> +        hdf5_cv_system_scope_threads=yes \
+> +        hdf5_cv_direct_io=yes \
+> +        hdf5_cv_ldouble_to_integer_works=yes \
+> +        hdf5_cv_ulong_to_float_accurate=yes \
+> +        hdf5_cv_ulong_to_fp_bottom_bit_accurate=yes \
+> +        hdf5_cv_fp_to_ullong_accurate=yes \
+> +        hdf5_cv_fp_to_ullong_right_maximum=yes \
+> +        hdf5_cv_ldouble_to_uint_accurate=yes \
+> +        hdf5_cv_ullong_to_ldouble_precision=yes \
+> +        hdf5_cv_fp_to_integer_overflow_works=yes \
+> +        hdf5_cv_ldouble_to_long_special=no \
+> +        hdf5_cv_long_to_ldouble_special=no \
+> +        hdf5_cv_ldouble_to_llong_accurate=yes \
+> +        hdf5_cv_llong_to_ldouble_correct=yes  
+> +
+> +# Needs this to support: O_DIRECT
+
+Hum?
+
+> +
+> +ifeq ($(BR2_PACKAGE_SZIP),y)
+
+If szip is mandatory, it should be selected, so this condition will
+always be true.
+
+> +     HDF5_CONF_ENV +=  \
+> +     CFLAGS="-D_GNU_SOURCE -I${STAGING_DIR}/usr/include" \
+> +     CPPFLAGS="-D_GNU_SOURCE -I${STAGING_DIR}/usr/include " \
+> +     LDFLAGS="-L${STAGING_DIR}/usr/lib -lsz"
+
+Indentation is not good, it should be:
+
+HD5_CONF_ENV = \
+	FOO=bar \
+	BAR=baz
+
+Also, $() should be used instead of ${} to reference make variables.
+
+However, -I$(STAGING_DIR)/usr/include and -L$(STAGING_DIR)/usr/lib are
+not needed: the Buildroot cross-compiler already looks in those
+locations by default.
+
+> +else
+> +     HDF5_CONF_ENV +=  \
+> +     CFLAGS="-D_GNU_SOURCE " \
+> +     CPPFLAGS="-D_GNU_SOURCE " 
+> +endif
+
+Not needed.
+
+> +
+> +ifeq ($(BR2_PACKAGE_SZIP),y)
+
+Condition not needed, it's always true.
+
+> +  HDF5_CONF_OPTS += --enable-threadsafe \
+> +  --with-szlib="${STAGING_DIR}/usr/lib" --enable-static-exec
+
+Indentation is wrong, it should be:
+
+HDF5_CONF_OPTS = \
+	--enable-threadsafe \
+	--with-szlib=$(STAGING_DIR)/usr/lib \
+	--enable-static-exec
+
+With a few comments:
+
+ * --enable-threadsafe probably indicates that HDF5 requires thread
+   support in the toolchain, so maybe you need a "depends on
+   BR2_TOOLCHAIN_HAS_THREADS" in Config.in. See how other packages are
+   doing this.
+
+ * --enable-static-exec seems to indicate we want to statically link
+   the executables. This is generally not what we do in Buildroot. Any
+   reason to do this?
+
+> +else
+> +  HDF5_CONF_OPTS += --enable-threadsafe --enable-static-exec
+> +endif
+
+Not needed.
+
+So all in all, the major remaining point is this issue of generated
+files that are different from one architecture to the other. This
+really needs to be solved with upstream.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
