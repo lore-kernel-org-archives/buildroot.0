@@ -1,47 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 21:39:40 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5cinex: Add new
- Qt5CinematicExperience package.
-In-Reply-To: <1420640541-29637-1-git-send-email-pierre.lemagourou@openwide.fr>
-References: <1420640541-29637-1-git-send-email-pierre.lemagourou@openwide.fr>
-Message-ID: <20150107213940.40b78504@free-electrons.com>
+Date: Wed, 7 Jan 2015 21:47:00 +0100
+Subject: [Buildroot] [PATCH] linux: make custom versions and patches
+ exclusive
+In-Reply-To: <1420582613-27692-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1420582613-27692-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20150107214700.5474b6ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Vivien Didelot,
 
-On Wed,  7 Jan 2015 15:22:21 +0100, pierre.lemagourou at openwide.fr wrote:
-> From: Pierre Le Magourou <pierre.lemagourou@openwide.fr>
+On Tue,  6 Jan 2015 17:16:53 -0500, Vivien Didelot wrote:
+> When using a custom kernel (custom tarball, repository or local tree),
+> we're using the OVERRIDE_SRCDIR internally, which means we do not apply
+> patches. Since this is the expected behavior, show the
+> LINUX_KERNEL_PATCH option only when using a vanilla kernel.
 > 
-> Signed-off-by: Pierre Le Magourou <pierre.lemagourou@openwide.fr>
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  linux/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index bf30426..3845758 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -119,6 +119,9 @@ config BR2_LINUX_KERNEL_VERSION
+>  
+>  config BR2_LINUX_KERNEL_PATCH
+>  	string "Custom kernel patches"
+> +	depends on BR2_LINUX_KERNEL_LATEST_VERSION || \\
+> +		  BR2_LINUX_KERNEL_SAME_AS_HEADERS || \\
+> +		  BR2_LINUX_KERNEL_CUSTOM_VERSION
+>  	help
+>  	  A space-separated list of patches to apply to the
+>  	  kernel. Each patch can be described as an URL, a local file
 
-Thanks, applied, after doing a number of additional changes:
+While I agree that we cannot apply patches when using
+BR2_LINUX_KERNEL_CUSTOM_LOCAL, I think there is no reason to not
+support patches when using a custom Git or Mercurial repository. It
+works currently (contrary to the local case, which doesn't work), and I
+don't see a reason to prevent these use cases. To me, they are very
+valid: I can be using a custom vendor-provided kernel tree, and still
+need to have some local patches to adapt the kernel to my board. Of
+course, I could put those patches in my own kernel Git repository, but
+if I don't have many of them, it might be more convenient to just have
+those few patches in the Buildroot tree.
 
-    [Thomas:
-     - Change the dependency logic in the Config.in file. We don't want to
-       have a 'depends on BR2_PACKAGE_QT5GRAPHICALEFFECTS': it should be
-       selected automatically. Instead, let's have a dependency on Qt5 and
-       OpenGL, and select everything else automatically. A comment is
-       added, shown only when Qt5 is available, on the right platforms
-       (which have JSCore support), to explain that we need an OpenGL
-       backend.
-     - Change the prompt of the package to be qt5cinex, to match the
-       package name.
-     - Replace "High-definition support" by "High-definition version".
-     - Fix a typo in the Config.in help text: definifition -> definition.
-     - Add a comment in the .mk file explaining why we install a wrapper
-       shell script (explanation taken from Pierre's e-mail).
-     - Fix indentation in the install target commands.
-     - Keep only sha256 hashes, those are sufficient. Replace the comment
-       in the hash file by the more traditional "Locally computed".]
+So, I think the patch should be changed to use instead:
 
-If you could test the latest Buildroot master (which has your patch
-applied) and check that everything works fine, it would be great.
+	depends on !BR2_LINUX_KERNEL_CUSTOM_LOCAL
 
-Thanks,
+I've marked the patch as Changes Requested in patchwork.
+
+Thanks!
 
 Thomas
 -- 
