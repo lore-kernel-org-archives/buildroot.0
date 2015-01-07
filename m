@@ -1,104 +1,137 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  7 Jan 2015 11:10:49 -0600
-Subject: [Buildroot] [PATCH v2 14/28] busybox: selinux support
+Date: Wed,  7 Jan 2015 11:11:03 -0600
+Subject: [Buildroot] [PATCH v2 28/28] libsemanage: cleanup python use and
+	license definition
 In-Reply-To: <1420650663-49350-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420650663-49350-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420650663-49350-15-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420650663-49350-29-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a configure option to enable the SELinux support in the
-busybox configuration from the Buildroot menuconfig.
+The original package supported python on target, now we just use
+it as part of the host tools.  The license was also mis-assigned.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-[Matt W:
-  - Renamed to follow patch naming convention
+ package/libsemanage/Config.in      | 10 -------
+ package/libsemanage/libsemanage.mk | 54 ++++++++++++++++----------------------
+ 2 files changed, 22 insertions(+), 42 deletions(-)
 
- ...ags-strip-non-l-arguments-returned-by-pkg.patch | 28 ++++++++++++++++++++++
- package/busybox/Config.in                          |  3 +++
- package/busybox/busybox.mk                         |  8 +++++++
- 3 files changed, 39 insertions(+)
- create mode 100644 package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-
-diff --git a/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-new file mode 100644
-index 0000000..105626c
---- /dev/null
-+++ b/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-@@ -0,0 +1,28 @@
-+From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 25 Nov 2013 22:51:53 +0100
-+Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile.flags | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.flags b/Makefile.flags
-+index 307afa7..885e323 100644
-+--- a/Makefile.flags
-++++ b/Makefile.flags
-+@@ -141,7 +141,9 @@ ifeq ($(CONFIG_SELINUX),y)
-+ SELINUX_PC_MODULES = libselinux libsepol
-+ $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
-+ CPPFLAGS += $(SELINUX_CFLAGS)
-+-LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
-++LDLIBS += $(if $(SELINUX_LIBS),\
-++       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
-++       $(SELINUX_PC_MODULES:lib%=%))
-+ endif
-+ 
-+ ifeq ($(CONFIG_EFENCE),y)
-+-- 
-+1.8.1.2
-+
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 2344c4e..6a0e5d1 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -33,6 +33,9 @@ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
- comment "Busybox individual binaries depends on dynamic libraries"
- 	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
+index bef5c78..39ecb46 100644
+--- a/package/libsemanage/Config.in
++++ b/package/libsemanage/Config.in
+@@ -17,15 +17,5 @@ config BR2_PACKAGE_LIBSEMANAGE
  
-+config BR2_PACKAGE_BUSYBOX_SELINUX
-+	bool "Enable SELinux support"
-+
- config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	bool "Install the watchdog daemon startup script"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 253c29a..7232996 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -193,6 +193,13 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
+ 	  http://selinuxproject.org/page/Main_Page
+ 
+-if BR2_PACKAGE_LIBSEMANAGE
+-
+-config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
+-	depends on BR2_PACKAGE_PYTHON
+-	bool "python bindings"
+-	help
+-	  Enable building python bindings
+-
+-endif
+-
+ comment "libsemanage needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || BR2_STATIC_LIBS
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 17e8fea..b115325 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -6,66 +6,56 @@
+ 
+ LIBSEMANAGE_VERSION = 2.1.10
+ LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
+-LIBSEPOL_LICENSE = LGPLv2.1+
+-LIBSEPOL_LICENSE_FILES = COPYING
+-
++LIBSEMANAGE_LICENSE = LGPLv2.1+
++LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
+-
+ LIBSEMANAGE_INSTALL_STAGING = YES
+ 
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+ 
+-ifeq ($(BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS),y)
+-
+-LIBSEMANAGE_DEPENDENCIES += python host-swig
+-LIBSEMANAGE_MAKE_OPTS += \
+-	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
+-	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
+-
+-define LIBSEMANAGE_PYTHON_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
+-endef
+-
+-define LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install-pywrap
+-endef
+-
+-define LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install-pywrap
+-endef
+-
+-endif # End of BR2_PACKAGE_PYTHON
+-
+ define LIBSEMANAGE_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
+-	$(LIBSEMANAGE_PYTHON_BUILD_CMDS)
  endef
- endif
  
-+ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
-+BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
-+define BUSYBOX_SET_SELINUX
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
-+endef
+ define LIBSEMANAGE_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+-	$(LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS)
+ endef
+ 
+ define LIBSEMANAGE_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+-	$(LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS)
+ endef
+ 
+-HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol \
+-	host-libselinux host-ustr host-bzip2
++HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
++				host-ustr host-bzip2 host-swig
++HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
++HOST_LIBSEMANAGE_MAKE_OPTS += \
++	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
++else
++HOST_LIBSEMANAGE_DEPENDENCIES += host-python
++HOST_LIBSEMANAGE_MAKE_OPTS += \
++	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
 +endif
-+
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-@@ -231,6 +238,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
-+	$(BUSYBOX_SET_SELINUX)
+ 
+ define HOST_LIBSEMANAGE_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+ 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
++	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
  endef
  
- define BUSYBOX_CONFIGURE_CMDS
+ define HOST_LIBSEMANAGE_INSTALL_CMDS
+ 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
++	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.9.1
