@@ -1,40 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 17:51:05 +0100
-Subject: [Buildroot] host-python build issue
-In-Reply-To: <CALo-6+jKLNFqOG08oQbWZOd2RSjoeF8aFkS-zBY5Y77JNtd5Qg@mail.gmail.com>
-References: <54AD3069.8090309@gmail.com>
- <20150107174313.3d9ea5ff@free-electrons.com>
- <CALo-6+jKLNFqOG08oQbWZOd2RSjoeF8aFkS-zBY5Y77JNtd5Qg@mail.gmail.com>
-Message-ID: <20150107175105.74634f8c@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 7 Jan 2015 17:51:21 +0100
+Subject: [Buildroot] [PATCH v3] svgtiny: update source url
+In-Reply-To: <20150105173402.41315fcb@free-electrons.com>
+References: <1420455729-15649-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150105141547.0daa89c8@free-electrons.com>
+ <CAHkwnC_aRYSYQE-b_rdOCoe5u9U+Stq1VZ6nZEdmjkv+nArQeg@mail.gmail.com>
+ <20150105173402.41315fcb@free-electrons.com>
+Message-ID: <CAHkwnC_T_GV0_WhOvgUgN5Mkq4a5SkPTiy+c-1R6Uz=K6v4+Pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Krinke,
+On Mon, Jan 5, 2015 at 5:34 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Mon, 5 Jan 2015 15:29:06 +0100, Fabio Porcedda wrote:
+>
+>> Yes, the repository is:
+>> http://git.netsurf-browser.org/buildsystem.git/
+>>
+>> But those sources alone do nothing, the build and install target of
+>> this package will be empty.
+>> Also to use those files at least a symbolic link must be added to the
+>> libsvgtiniy directory to access buildsystem.git files.
+>> Considering all of this it is still preferably worth adding a separate
+>> package for those files?
+>
+> Yes, I personally believe it's preferable to have a separate package.
+> Create a netsurf-buildsystem package, which installs those files to
+> $(STAGING_DIR)/usr/share/netsurf-buildsystem/ for example. Then
+> libsvgtiny would depend on netsurf-buildsystem, and in a post-extract
+> hook, create the necessary symlink.
 
-On Wed, 7 Jan 2015 08:45:53 -0800, Charles Krinke wrote:
+Ok.
 
-> If I might also suggest describing or setting up an option for a minimal
-> python embedded target. Last week I tried to complile python for an
-> embedded target and got hung up in the audio, dbm and other missing
-> dependencies.
+> Not sure if netsurf-buildsystem should be a target package (and install
+> its stuff to staging) or a host package (and install its stuff to
+> HOST_DIR).
 
-This seems weird. The setup for Python on target is normally pretty
-minimal already, and the build is being tested every day by the
-autobuilders.
+IMHO it's a build tool like autoconf, automake, so it's a host package.
 
-Can you describe more precisely which configurations lead to build
-issues with audio, dbm and others?
-
-Please report bugs when you see issues. If we don't have bug reports,
-we can't fix/improve things.
-
-Thanks!
-
-Thomas
+BR
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
