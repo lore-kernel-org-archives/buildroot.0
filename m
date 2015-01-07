@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 22:57:43 +0100
-Subject: [Buildroot] [PATCH] dmalloc: bump version to 5.5.2
-In-Reply-To: <20150107130309.GA13648@vostro>
-References: <20150107130309.GA13648@vostro>
-Message-ID: <20150107225743.0fa7b276@free-electrons.com>
+Date: Wed, 7 Jan 2015 22:59:12 +0100
+Subject: [Buildroot] [git commit] glibc: add debug symbols when
+	BR2_ENABLE_DEBUG
+Message-ID: <20150107215918.64251807B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=1221df7bc63d755ddd4a88f6ad4e3fa69f27ae20
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 7 Jan 2015 15:03:09 +0200, Alex Suykov wrote:
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/dmalloc/0001-add-fpic.patch           | 16 ++++------
->  package/dmalloc/0002-mips.patch               | 10 +++---
->  package/dmalloc/0003-fix-parallel-build.patch | 12 +++----
->  package/dmalloc/0004-fix-shlibs.patch         | 46 +++++++++++++++++++++++++++
->  package/dmalloc/dmalloc.mk                    |  2 +-
->  5 files changed, 65 insertions(+), 21 deletions(-)
->  create mode 100644 package/dmalloc/0004-fix-shlibs.patch
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glibc/glibc.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thanks, applied. Thanks to Yann for the testing/review.
-
-Alex, could you work with the dmalloc upstream developers and see if
-you can get our 4 patches merged upstream?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 65f4ed3..0a37bb3 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -47,6 +47,10 @@ else ifeq ($(BR2_MIPS_OABI32),y)
+ GLIBC_EXTRA_CFLAGS += -mabi=32
+ endif
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++GLIBC_EXTRA_CFLAGS += -g
++endif
++
+ # The stubs.h header is not installed by install-headers, but is
+ # needed for the gcc build. An empty stubs.h will work, as explained
+ # in http://gcc.gnu.org/ml/gcc/2002-01/msg00900.html. The same trick
