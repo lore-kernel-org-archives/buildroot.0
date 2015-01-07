@@ -1,102 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Jan 2015 22:09:15 +0100
-Subject: [Buildroot] [PATCH try 2] wine: New package
-In-Reply-To: <54AC4E25.4050601@dawncrow.de>
-References: <54AC4E25.4050601@dawncrow.de>
-Message-ID: <20150107220915.3f5bbb2c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Jan 2015 22:10:12 +0100
+Subject: [Buildroot] [V2 1/2] graph-depends: display virtual package
+ with italic style
+In-Reply-To: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150107211012.GD4249@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+Fran?ois, All,
 
-On Tue, 06 Jan 2015 22:05:41 +0100, Andr? Hentschel wrote:
-> Adds new package: wine
+On 2015-01-03 15:29 +0100, Francois Perrad spake thusly:
+> virtual packages are found by their version,
+> so we retrieve the version of all packages
 > 
->   Wine is a compatibility layer capable of running Windows applications on Linux.
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
-> No comments on my last RFC makes me think it's good enough for submission.
-> try 2: Fix issue spotted by baruch
-
-Thanks for this new version. See some comments below.
-
-First, one thing that surprises me is the number of optional features
-that you try to support. Did you really tried all of them? Are you
-using all of them? In general, when we add a new package, we don't
-necessarily try to support all possible optional dependencies, because
-it's not necessarily easy.
-
-But well, as long as you're ready to fix potential build issues that
-will arise in the autobuilders after building the wine package, I'm
-fine :-)
-
-> +WINE_VERSION = 1.6.2
-> +WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
-> +WINE_SITE = http://source.winehq.org/git/wine.git/snapshot/
-
-Since you're download a tarball, please add a wine.hash file. See the
-Buildroot manual for more details about hash files.
-
-> +WINE_LICENSE = LGPLv2.1+
-> +WINE_LICENSE_FILES = COPYING.LIB
-> +WINE_INSTALL_TARGET = YES
-> +WINE_DEPENDENCIES = host-wine
+>  package/pkg-generic.mk        |  3 +++
+>  support/scripts/graph-depends | 30 +++++++++++++++++++++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 9643a30..87d8dd8 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -565,6 +565,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+>  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+>  endif
+>  
+> +$(1)-show-version:
+> +			@echo $$($(2)_VERSION)
 > +
-> +#Wine needs its own directory structure and tools for cross compiling
-> +WINE_CONF_OPTS += --with-wine-tools=../host-wine-$(WINE_VERSION)
-> +WINE_CONF_OPTS += --disable-tests
-> +WINE_CONF_OPTS += --without-opengl
-> +WINE_CONF_OPTS += $(if $(BR2_ARCH_IS_64),--enable-win64)
+>  $(1)-show-depends:
+>  			@echo $$($(2)_FINAL_DEPENDENCIES)
+>  
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index 1ecfeda..28fe2f0 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -76,6 +76,28 @@ host_colour = colours[2]
+>  
+>  allpkgs = []
+>  
+> +# Execute the "make <pkg>-show-version" command to get the version of a given
+> +# list of packages, and return the version formatted as a Python dictionary.
+> +def get_version(pkgs):
+> +    sys.stderr.write("Getting version for %s\n" % pkgs)
+> +    cmd = ["make", "-s", "--no-print-directory" ]
+> +    for pkg in pkgs:
+> +        cmd.append("%s-show-version" % pkg)
+> +    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+> +    output = p.communicate()[0]
+> +    if p.returncode != 0:
+> +        sys.stderr.write("Error getting version %s\n" % pkgs)
+> +        sys.exit(1)
+> +    output = output.split("\n")
+> +    if len(output) != len(pkgs) + 1:
+> +        sys.stderr.write("Error getting version\n")
+> +        sys.exit(1)
+> +    version = {}
+> +    for i in range(0, len(pkgs)):
+> +        pkg = pkgs[i]
+> +        version[pkg] = output[i]
+> +    return version
+> +
+>  # Execute the "make show-targets" command to get the list of the main
+>  # Buildroot TARGETS and return it formatted as a Python list. This
+>  # list is used as the starting point for full dependency graphs
+> @@ -257,6 +279,8 @@ def remove_extra_deps(deps):
+>      return deps
+>  
+>  dict_deps = remove_extra_deps(dict_deps)
+> +dict_version = get_version([pkg for pkg in allpkgs
+> +                                if pkg != "all" and not pkg.startswith("root")])
+>  
+>  # Print the attributes of a node: label and fill-color
+>  def print_attrs(pkg):
+> @@ -274,7 +298,11 @@ def print_attrs(pkg):
+>              color = host_colour
+>          else:
+>              color = target_colour
+> -    print("%s [label = \"%s\"]" % (name, label))
+> +    version = dict_version.get(pkg)
+> +    if version == "virtual":
+> +        print("%s [label = <<I>%s</I>>]" % (name, label))
+> +    else:
+> +        print("%s [label = \"%s\"]" % (name, label))
+>      print("%s [color=%s,style=filled]" % (name, color))
+>  
+>  # Print the dependency graph of a package
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Please use only one assigment:
-
-WINE_CONF_OPTS = \
-	--with-wine-tools=... \
-	--disable-tests \
-	--without-opengl \
-	$(if ...)
-
-
-> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
-> +	WINE_CONF_OPTS += --with-freetype
-> +	HOST_WINE_CONF_OPTS += --with-freetype
-> +	WINE_DEPENDENCIES += freetype
-> +	HOST_WINE_DEPENDENCIES += host-freetype
-
-This is not correct: BR2_PACKAGE_FREETYPE indicates that the target
-freetype package is enabled, not that we want freetype support in
-host-wine. Please only adjust WINE_CONF_OPTS and WINE_DEPENDENCIES, not
-HOST_WINE_CONF_OPTS and HOST_WINE_DEPENDENCIES. Unless you have a
-really good reason to do so, which should be explained in a comment.
-
-> +else
-> +	WINE_CONF_OPTS += --without-freetype
-> +	HOST_WINE_CONF_OPTS += --without-freetype
-> +endif
-
-Ditto.
-
-> +ifeq ($(BR2_PACKAGE_XORG7),y)
-> +	WINE_CONF_OPTS += --with-x
-> +	WINE_DEPENDENCIES += xlib_libX11
-> +else
-> +	WINE_CONF_OPTS += --without-x
-> +endif
-
-If you do this, then you need:
-
-	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-
-in wine/Config.in.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
