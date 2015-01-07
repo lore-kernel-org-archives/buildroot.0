@@ -1,58 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Jan 2015 00:32:14 +0100
-Subject: [Buildroot] [PATCH v2] linux: make custom versions and patches
-	exclusive
-In-Reply-To: <1420583119-30111-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1420583119-30111-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <20150106233214.GD17878@free.fr>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Wed, 07 Jan 2015 01:18:59 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump to version 0.10.35
+In-Reply-To: <20150106215428.4fbe18d4@free-electrons.com>
+References: <1420475737-13153-1-git-send-email-jkrause@posteo.de>
+ <20150106215428.4fbe18d4@free-electrons.com>
+Message-ID: <1420589939.3625.7.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vivien, All,
+Dear Thomas Petazzoni,
 
-On 2015-01-06 17:25 -0500, Vivien Didelot spake thusly:
-> When using a custom kernel (custom tarball, repository or local tree),
-> we're using the OVERRIDE_SRCDIR internally, which means we do not apply
-> patches. Since this is the expected behavior, show the
-> LINUX_KERNEL_PATCH option only when using a vanilla kernel.
+On Di, 2015-01-06 at 21:54 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  linux/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
+> On Mon,  5 Jan 2015 17:35:36 +0100, J?rg Krause wrote:
+> > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> > ---
+> >  package/nodejs/nodejs.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index bf30426..9989b40 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -119,6 +119,9 @@ config BR2_LINUX_KERNEL_VERSION
->  
->  config BR2_LINUX_KERNEL_PATCH
->  	string "Custom kernel patches"
-> +	depends on BR2_LINUX_KERNEL_LATEST_VERSION || \
-> +		  BR2_LINUX_KERNEL_SAME_AS_HEADERS || \
-> +		  BR2_LINUX_KERNEL_CUSTOM_VERSION
->  	help
->  	  A space-separated list of patches to apply to the
->  	  kernel. Each patch can be described as an URL, a local file
-> -- 
-> 2.2.1
+> Both patches applied, thanks!
 > 
+> Since you're doing nodejs stuff, could you have a look at the thread
+> "[Buildroot] Float error on SAMA5D3 Xplained using nodejs" which
+> started on December, 5th on the mailing list? I proposed a patch for
+> nodejs to fix a problem reported by an user, which was tested
+> successfully, but I never had the time to submit it properly. If you
+> have some time, could you borrow my patch, and submit it properly after
+> testing?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I'm using nodejs on an ARM-based board wich does not have a FPU. But
+I've a Beaglebone Black board which has one. So, I'll put in on my to-do
+list.
+
+J?rg
