@@ -1,48 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jan 2015 13:49:43 +0100
-Subject: [Buildroot] [PATCH 2/2] host-python: disable building
- ossaudiodev module
-In-Reply-To: <1420714168-4994-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1420714168-4994-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <1420714168-4994-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20150108134943.7afbaeb7@free-electrons.com>
+From: Steve James <ste@junkomatic.net>
+Date: Thu, 8 Jan 2015 12:50:56 +0000
+Subject: [Buildroot] [PATCH v4] leveldb: new package
+In-Reply-To: <20150108132719.02d06610@free-electrons.com>
+References: <1420469267-26272-1-git-send-email-ste@junkomatic.net>
+ <201501081209.41211.ste@junkomatic.net>
+ <20150108132719.02d06610@free-electrons.com>
+Message-ID: <201501081250.56410.ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoltan Gyarmati,
+On Thursday 08 Jan 2015 12:27:19 Thomas Petazzoni wrote:
+--snip--
 
-On Thu,  8 Jan 2015 11:49:28 +0100, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->  package/python/python.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Well, Buildroot is re-using kconfig directly from the Linux kernel
+> sources. So we haven't defined the kconfig language, and we don't want
+> to change it specifically for Buildroot.
+
+As I thought. I'll get used to it.
+
+--snip--
+
+> If you don't use a full path and do:
 > 
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 45b1f7f..bf063e9 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -33,6 +33,7 @@ HOST_PYTHON_CONF_OPTS += 	\
->  	--disable-test-modules	\
->  	--disable-bz2		\
->  	--disable-ssl		\
-> +	--disable-ossaudiodev	\
->  	--disable-pyo-build
->  
->  # Make sure that LD_LIBRARY_PATH overrides -rpath.
+> 	$(INSTALL) -D $(@D)/foo $(STAGING_DIR)/usr/lib
+> 
+> and $(STAGING_DIR)/usr/lib doesn't already exist as a directory, then a
+> file named $(STAGING_DIR)/usr/lib will be created, with the contents of
+> $(@D)/foo. Cleary not what we want.
 
-Thanks for the patches.
+I would ordinarily create destination directories first, but I hadn't in this 
+case, so good point.
 
-Should we also make it optional for the target Python?
+> > > It would be good to add a comment above all these installation rules to
+> > > indicate that the leveldb build system doesn't provide any "make
+> > > install" rule.
+> > 
+> > Or better: I'll add the missing install recipe to the Makefile.
+> 
+> Indeed.
+> 
+> However, I looked quickly at the contribution process for leveldb and
+> it's a bit annoying: you have to sign a CLA to assign the copyright of
+> your contributions. Or hopefully they might consider those
+> contributions as small enough to not be copyrightable, and avoid the
+> CLA hassle. I'll let you handle that with upstream.
 
-What about Python 3?
+Yes I saw that too. How very annoying. I'm reluctant to put my name on a 
+Google License Agreement just to tweak a Makefile. I see they even want my 
+address and phone number. Hmm.
 
-Thanks,
+Whether they accept it upstream or not, I think patching the install recipe 
+into the leveldb Makefile is a more correct solution and will be better for 
+Buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Steve.
