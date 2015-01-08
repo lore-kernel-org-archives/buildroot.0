@@ -1,57 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jan 2015 11:03:44 +0100
-Subject: [Buildroot] [PATCH try 2] wine: New package
-In-Reply-To: <54AC4E25.4050601@dawncrow.de>
-References: <54AC4E25.4050601@dawncrow.de>
-Message-ID: <20150108110344.29267904@free-electrons.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 08 Jan 2015 11:24:48 +0100
+Subject: [Buildroot] host-python build issue
+In-Reply-To: <20150108105629.2d8308bc@free-electrons.com>
+References: <54AD3069.8090309@gmail.com>	<20150107174313.3d9ea5ff@free-electrons.com>	<CALo-6+jKLNFqOG08oQbWZOd2RSjoeF8aFkS-zBY5Y77JNtd5Qg@mail.gmail.com>	<20150107175105.74634f8c@free-electrons.com>	<54AE5090.5040802@gmail.com>
+ <20150108105629.2d8308bc@free-electrons.com>
+Message-ID: <54AE5AF0.1040008@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
 
-On Tue, 06 Jan 2015 22:05:41 +0100, Andr? Hentschel wrote:
-> Adds new package: wine
+
+On 01/08/2015 10:56 AM, Thomas Petazzoni wrote:
+> Dear Zoltan Gyarmati,
 > 
->   Wine is a compatibility layer capable of running Windows applications on Linux.
+> On Thu, 08 Jan 2015 10:40:32 +0100, Zoltan Gyarmati wrote:
 > 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+>> i got some time to look into this:
+>> my system has the file /usr/include/linux/soundcard.h , but that doesn't
+>> have the missing definitions. On the other hand there is an
+>> /usr/include/linux/soundcard.h.oss3 which has them...
+>> Consequently the build error itself clearly not Buildroot specific.
+> 
+> You have the oss4-dev package installed, right?
 
-I did some actual testing of this, and here are the issues:
+Yes, and the files of the package:
+$dpkg -L oss4-dev
+/.
+/usr
+/usr/include
+/usr/include/linux
+/usr/include/linux/soundcard.h
+package diverts others to: /usr/include/linux/soundcard.h.oss3
+/usr/share
+/usr/share/doc
+/usr/share/doc/oss4-dev
+/usr/share/doc/oss4-dev/copyright
+/usr/share/doc/oss4-dev/changelog.gz
+/usr/share/doc/oss4-dev/changelog.Debian.gz
+/usr/share/doc/oss4-dev/README.Debian
 
- * host-flex should be in HOST_WINE_DEPENDENCIES. Otherwise, I get
-   "configure: error: no suitable flex found" at configure time of
-   host-wine. You didn't see the error because you have the flex
-   utility installed in your system.
+I didn't notice before that the header file in question was diverted, so
+after removing the package, host-python builds properly, thanks for the
+hint!
 
- * host-bison should be in HOST_WINE_DEPENDENCIES, for the same reason.
+> 
+>>  I created a small patchset though to make the ossaudiodev module
+>> optional (like ssl, zlib, etc), and disable it for the host-python
+>> build. Should i submit it?
+> 
+> Yes, please.
+Will do
 
- * With those issues fixed, the build still doesn't work, I get a
-   "winebuild: cannot find suitable name lister" message. More log
-   below:
 
-../../../host-wine-1.6.2/tools/winegcc/winegcc -b i586-buildroot-linux-gnu  -B../../../host-wine-1.6.2/tools/winebuild --sysroot=../.. -fasynchronous-unwind-tables -shared ./advapi32.spec advapi.o cred.o crypt.o crypt_arc4.o crypt_des.o crypt_lmhash.o crypt_md4.o crypt_md5.o crypt_sha.o eventlog.o lsa.o registry.o security.o service.o   svcctl_c.o    version.res    -o advapi32.dll.so -lrpcrt4  -Wb,-drpcrt4 ../../libs/port/libwine_port.a
-../../../host-wine-1.6.2/tools/winegcc/winegcc -b i586-buildroot-linux-gnu  -B../../../host-wine-1.6.2/tools/winebuild --sysroot=../.. -fasynchronous-unwind-tables -shared ./advapi32.spec advapi.o cred.o crypt.o crypt_arc4.o crypt_des.o crypt_lmhash.o crypt_md4.o crypt_md5.o crypt_sha.o eventlog.o lsa.o registry.o security.o service.o   svcctl_c.o    version.res    -o advapi32.dll.fake -lrpcrt4  -Wb,-drpcrt4 ../../libs/port/libwine_port.a
-winebuild: cannot find suitable name lister
-winegcc: ../../../host-wine-1.6.2/tools/winebuild/winebuild failed
-make[3]: *** [advapi32.dll.so] Error 2
-make[2]: *** [dlls/advapi32] Error 2
-../../../host-wine-1.6.2/tools/winegcc/winegcc -b i586-buildroot-linux-gnu  -B../../../host-wine-1.6.2/tools/winebuild --sysroot=../.. -fasynchronous-unwind-tables -shared ./actxprxy.spec usrmarshal.o   actxprxy_activscp_p.o actxprxy_comcat_p.o actxprxy_docobj_p.o actxprxy_hlink_p.o actxprxy_htiface_p.o actxprxy_htiframe_p.o actxprxy_objsafe_p.o actxprxy_ocmm_p.o actxprxy_servprov_p.o actxprxy_shldisp_p.o actxprxy_shobjidl_p.o actxprxy_urlhist_p.o  actxprxy_activscp_r.res actxprxy_comcat_r.res actxprxy_docobj_r.res actxprxy_hlink_r.res actxprxy_htiface_r.res actxprxy_htiframe_r.res actxprxy_objsafe_r.res actxprxy_ocmm_r.res actxprxy_servprov_r.res actxprxy_shldisp_r.res actxprxy_shobjidl_r.res actxprxy_urlhist_r.res    dlldata.o  -o actxprxy.dll.so  -luuid -loleaut32 -lole32 -lrpcrt4  ../../libs/port/libwine_port.a
-../../../host-wine-1.6.2/tools/winegcc/winegcc -b i586-buildroot-linux-gnu  -B../../../host-wine-1.6.2/tools/winebuild --sysroot=../.. -fasynchronous-unwind-tables -shared ./actxprxy.spec usrmarshal.o   actxprxy_activscp_p.o actxprxy_comcat_p.o actxprxy_docobj_p.o actxprxy_hlink_p.o actxprxy_htiface_p.o actxprxy_htiframe_p.o actxprxy_objsafe_p.o actxprxy_ocmm_p.o actxprxy_servprov_p.o actxprxy_shldisp_p.o actxprxy_shobjidl_p.o actxprxy_urlhist_p.o  actxprxy_activscp_r.res actxprxy_comcat_r.res actxprxy_docobj_r.res actxprxy_hlink_r.res actxprxy_htiface_r.res actxprxy_htiframe_r.res actxprxy_objsafe_r.res actxprxy_ocmm_r.res actxprxy_servprov_r.res actxprxy_shldisp_r.res actxprxy_shobjidl_r.res actxprxy_urlhist_r.res    dlldata.o  -o actxprxy.dll.fake  -luuid -loleaut32 -lole32 -lrpcrt4  ../../libs/port/libwine_port.a
-winebuild: cannot find suitable name lister
-winegcc: ../../../host-wine-1.6.2/tools/winebuild/winebuild failed
-make[3]: *** [actxprxy.dll.so] Error 2
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [dlls/actxprxy] Error 2
-make[1]: *** [/home/test/outputs/wine/build/wine-1.6.2/.stamp_built] Error 2
-make: *** [_all] Error 2
+> 
+> Thomas
+> 
 
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bests,
+Zoltan Gyarmati
+IRC freenode: zgyarmati
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150108/851b6d25/attachment.asc>
