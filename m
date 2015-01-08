@@ -1,57 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jan 2015 21:16:53 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.1k
-Message-ID: <20150108203538.57CE78083E@busybox.osuosl.org>
+Date: Thu, 8 Jan 2015 21:35:08 +0100
+Subject: [Buildroot] [git commit] package/mke2img: "/bin/bash" =>
+	"/usr/bin/env bash" shebang
+Message-ID: <20150108203538.604278083E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04f99f96597375245312d6730ab9a09f9b9e90f5
+commit: http://git.buildroot.net/buildroot/commit/?id=8e3dcdcdfae9aacf1e4c152680c6a75408731965
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2014-3571 - DTLS segmentation fault in dtls1_get_record
-CVE-2015-0206 - DTLS memory leak in dtls1_buffer_record
-CVE-2014-3569 - no-ssl3 configuration sets method to NULL
-CVE-2014-3572 - ECDHE silently downgrades to ECDH [Client]
-CVE-2015-0204 - RSA silently downgrades to EXPORT_RSA [Client]
-CVE-2015-0205 - DH client certificates accepted without verification
-[Server]
-CVE-2014-8275 - Certificate fingerprints can be modified
-CVE-2014-3570 - Bignum squaring may produce incorrect results
+For portability. All other Buildroot scripts (i.e. scripts that run on
+host) already use the "/usr/bin/env bash" shebang.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This change is needed for NixOS, which lacks a global /bin/bash.
+
+Signed-off-by: Bj??rn Forsman <bjorn.forsman@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/openssl.hash |    8 ++++----
- package/openssl/openssl.mk   |    2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mke2img/mke2img |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 22b1529..0d27eae 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
+diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
+index 68da6ed..5e2f62f 100755
+--- a/package/mke2img/mke2img
++++ b/package/mke2img/mke2img
 @@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.1j.tar.gz.sha1
--md5	f7175c9cd3c39bb1907ac8bba9df8ed3	openssl-1.0.1j.tar.gz
--sha1	cff86857507624f0ad42d922bb6f77c4f1c2b819	openssl-1.0.1j.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.1k.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.1k.tar.gz.sha1
-+md5	d4f002bd22a56881340105028842ae1f	openssl-1.0.1k.tar.gz
-+sha1	19d818e202558c212a9583fcdaf876995a633ddf	openssl-1.0.1k.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 5dc937a..522224c 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-#!/bin/bash
++#!/usr/bin/env bash
  
--OPENSSL_VERSION = 1.0.1j
-+OPENSSL_VERSION = 1.0.1k
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+ # Buildroot wrapper to the collection of ext2/3/4 filesystem tools:
+ # - genext2fs, to generate ext2 filesystem images
