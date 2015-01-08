@@ -1,55 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jan 2015 12:26:48 +0100
-Subject: [Buildroot] host-python build issue
-In-Reply-To: <54AE5AF0.1040008@gmail.com>
-References: <54AD3069.8090309@gmail.com>
- <20150107174313.3d9ea5ff@free-electrons.com>
- <CALo-6+jKLNFqOG08oQbWZOd2RSjoeF8aFkS-zBY5Y77JNtd5Qg@mail.gmail.com>
- <20150107175105.74634f8c@free-electrons.com>
- <54AE5090.5040802@gmail.com>
- <20150108105629.2d8308bc@free-electrons.com>
- <54AE5AF0.1040008@gmail.com>
-Message-ID: <20150108122648.26a06caf@free-electrons.com>
+Date: Thu, 8 Jan 2015 13:27:19 +0100
+Subject: [Buildroot] [PATCH v4] leveldb: new package
+In-Reply-To: <201501081209.41211.ste@junkomatic.net>
+References: <1420469267-26272-1-git-send-email-ste@junkomatic.net>
+ <20150107101218.22b5455f@free-electrons.com>
+ <201501081209.41211.ste@junkomatic.net>
+Message-ID: <20150108132719.02d06610@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoltan Gyarmati,
+Dear Steve James,
 
-On Thu, 08 Jan 2015 11:24:48 +0100, Zoltan Gyarmati wrote:
+On Thu, 8 Jan 2015 12:09:41 +0000, Steve James wrote:
 
-> Yes, and the files of the package:
-> $dpkg -L oss4-dev
-> /.
-> /usr
-> /usr/include
-> /usr/include/linux
-> /usr/include/linux/soundcard.h
-> package diverts others to: /usr/include/linux/soundcard.h.oss3
-> /usr/share
-> /usr/share/doc
-> /usr/share/doc/oss4-dev
-> /usr/share/doc/oss4-dev/copyright
-> /usr/share/doc/oss4-dev/changelog.gz
-> /usr/share/doc/oss4-dev/changelog.Debian.gz
-> /usr/share/doc/oss4-dev/README.Debian
+> OK, if you wish (I just copy-pasted from elsewhere). BTW I don't find this 
+> statement natural to read whichever way the logic is expressed. I think it 
+> would read better if "depends on" where replaced with "when" (or "if") 
+> instead:-
 > 
-> I didn't notice before that the header file in question was diverted, so
-> after removing the package, host-python builds properly, thanks for the
-> hint!
+> comment "leveldb needs a toolchain w/ C++, threads"
+> 	when !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS)
+> 
+> But maybe that's just something I have to get used to.
 
-I have no idea why this package moves a kernel headers to a different
-name. Obviously it can break quite a lot of userspace
-applications/libraries. I don't really understand why they are doing
-this.
+Well, Buildroot is re-using kconfig directly from the Linux kernel
+sources. So we haven't defined the kconfig language, and we don't want
+to change it specifically for Buildroot.
 
-That being said, I don't think the ossaudio Python module is very
-useful, so disabling its build is probably the right thing to do for
-host-python, and for target python, make it optional.
+> Fair enough. I don't like it either, for the same reason (but I thought I 
+> might get away with it :). I have been resisting making a patch for leveldb 
+> but...
 
-Thanks,
+Yes, I agree there is sometimes a balance between having a patch, and
+doing a little bit more work in the Buildroot .mk file. In this case, I
+believe having a patch makes the whole thing a lot nicer, and hopefully
+the patch can be applied upstream.
+
+
+> > Full path for the destination is needed:
+> > 
+> > 							
+> $(STAGING_DIR)/usr/lib/libleveldb.so.1.18
+> 
+> No, I don't think so. From install(1) man page:-
+
+If you don't use a full path and do:
+
+	$(INSTALL) -D $(@D)/foo $(STAGING_DIR)/usr/lib
+
+and $(STAGING_DIR)/usr/lib doesn't already exist as a directory, then a
+file named $(STAGING_DIR)/usr/lib will be created, with the contents of
+$(@D)/foo. Cleary not what we want.
+
+> > It would be good to add a comment above all these installation rules to
+> > indicate that the leveldb build system doesn't provide any "make
+> > install" rule.
+> 
+> Or better: I'll add the missing install recipe to the Makefile.
+
+Indeed.
+
+However, I looked quickly at the contribution process for leveldb and
+it's a bit annoying: you have to sign a CLA to assign the copyright of
+your contributions. Or hopefully they might consider those
+contributions as small enough to not be copyrightable, and avoid the
+CLA hassle. I'll let you handle that with upstream.
+
+Thanks!
 
 Thomas
 -- 
