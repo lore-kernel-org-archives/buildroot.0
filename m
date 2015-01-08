@@ -1,73 +1,55 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Thu, 08 Jan 2015 11:24:48 +0100
-Subject: [Buildroot] host-python build issue
-In-Reply-To: <20150108105629.2d8308bc@free-electrons.com>
-References: <54AD3069.8090309@gmail.com>	<20150107174313.3d9ea5ff@free-electrons.com>	<CALo-6+jKLNFqOG08oQbWZOd2RSjoeF8aFkS-zBY5Y77JNtd5Qg@mail.gmail.com>	<20150107175105.74634f8c@free-electrons.com>	<54AE5090.5040802@gmail.com>
- <20150108105629.2d8308bc@free-electrons.com>
-Message-ID: <54AE5AF0.1040008@gmail.com>
+Date: Thu,  8 Jan 2015 11:49:27 +0100
+Subject: [Buildroot] [PATCH 1/2] Add python patch to make ossaudiodev module
+	building optional
+Message-ID: <1420714168-4994-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ package/python/115-optional-ossaudiodev.patch | 30 +++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/python/115-optional-ossaudiodev.patch
 
-
-On 01/08/2015 10:56 AM, Thomas Petazzoni wrote:
-> Dear Zoltan Gyarmati,
-> 
-> On Thu, 08 Jan 2015 10:40:32 +0100, Zoltan Gyarmati wrote:
-> 
->> i got some time to look into this:
->> my system has the file /usr/include/linux/soundcard.h , but that doesn't
->> have the missing definitions. On the other hand there is an
->> /usr/include/linux/soundcard.h.oss3 which has them...
->> Consequently the build error itself clearly not Buildroot specific.
-> 
-> You have the oss4-dev package installed, right?
-
-Yes, and the files of the package:
-$dpkg -L oss4-dev
-/.
-/usr
-/usr/include
-/usr/include/linux
-/usr/include/linux/soundcard.h
-package diverts others to: /usr/include/linux/soundcard.h.oss3
-/usr/share
-/usr/share/doc
-/usr/share/doc/oss4-dev
-/usr/share/doc/oss4-dev/copyright
-/usr/share/doc/oss4-dev/changelog.gz
-/usr/share/doc/oss4-dev/changelog.Debian.gz
-/usr/share/doc/oss4-dev/README.Debian
-
-I didn't notice before that the header file in question was diverted, so
-after removing the package, host-python builds properly, thanks for the
-hint!
-
-> 
->>  I created a small patchset though to make the ossaudiodev module
->> optional (like ssl, zlib, etc), and disable it for the host-python
->> build. Should i submit it?
-> 
-> Yes, please.
-Will do
-
-
-> 
-> Thomas
-> 
-
+diff --git a/package/python/115-optional-ossaudiodev.patch b/package/python/115-optional-ossaudiodev.patch
+new file mode 100644
+index 0000000..de82036
+--- /dev/null
++++ b/package/python/115-optional-ossaudiodev.patch
+@@ -0,0 +1,30 @@
++From 30351d9b41a03c43d627d52d46e49ab91bfe342d Mon Sep 17 00:00:00 2001
++From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++Date: Thu, 8 Jan 2015 11:41:40 +0100
++Subject: [PATCH 1/1] Add an option to disable the ossaudiodev module
++
++Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++---
++ configure.ac | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index e8cb52a..579e05b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2717,6 +2717,12 @@ if test "$CURSES" = "no"; then
++    DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _curses _curses_panel"
++ fi
++ 
+++AC_ARG_ENABLE(ossaudiodev,
+++       AS_HELP_STRING([--disable-ossaudiodev], [disable OSSAUDIODEV]),
+++       [ if test "$enableval" = "no"; then
+++            DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ossaudiodev"
+++         fi])
+++
++ AC_SUBST(PYDOC)
++ 
++ AC_ARG_ENABLE(pydoc,
++-- 
++2.1.0
++
 -- 
-Bests,
-Zoltan Gyarmati
-IRC freenode: zgyarmati
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150108/851b6d25/attachment.asc>
+2.1.0
