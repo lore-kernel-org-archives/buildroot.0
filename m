@@ -1,141 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  8 Jan 2015 17:45:39 -0300
-Subject: [Buildroot] [PATCH 2/2] (e)glibc: add security patches for
-	CVE-2014-9402
-In-Reply-To: <1420749939-23014-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1420749939-23014-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1420749939-23014-2-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu,  8 Jan 2015 22:28:55 +0100
+Subject: [Buildroot] [PATCH] python-pyftpdlib: new package
+Message-ID: <1420752535-25196-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-9402 - denial of service in getnetbyname function.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- .../glibc/2.18-svnr23787/0004-CVE-2014-9402.patch  | 20 ++++++++++++++++++
- .../glibc/2.19-svnr25243/0003-CVE-2014-9402.patch  | 20 ++++++++++++++++++
- package/glibc/2.19/0003-CVE-2014-9402.patch        | 24 ++++++++++++++++++++++
- package/glibc/2.20/0002-CVE-2014-9402.patch        | 24 ++++++++++++++++++++++
- 4 files changed, 88 insertions(+)
- create mode 100644 package/glibc/2.18-svnr23787/0004-CVE-2014-9402.patch
- create mode 100644 package/glibc/2.19-svnr25243/0003-CVE-2014-9402.patch
- create mode 100644 package/glibc/2.19/0003-CVE-2014-9402.patch
- create mode 100644 package/glibc/2.20/0002-CVE-2014-9402.patch
+ package/Config.in                              |  1 +
+ package/python-pyftpdlib/Config.in             |  6 ++++++
+ package/python-pyftpdlib/python-pyftpdlib.hash |  2 ++
+ package/python-pyftpdlib/python-pyftpdlib.mk   | 14 ++++++++++++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/python-pyftpdlib/Config.in
+ create mode 100644 package/python-pyftpdlib/python-pyftpdlib.hash
+ create mode 100644 package/python-pyftpdlib/python-pyftpdlib.mk
 
-diff --git a/package/glibc/2.18-svnr23787/0004-CVE-2014-9402.patch b/package/glibc/2.18-svnr23787/0004-CVE-2014-9402.patch
+diff --git a/package/Config.in b/package/Config.in
+index 5ece4a5..4fd7f31 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -530,6 +530,7 @@ menu "external python modules"
+ 	source "package/python-psutil/Config.in"
+ 	source "package/python-pyasn/Config.in"
+ 	source "package/python-pycrypto/Config.in"
++	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+diff --git a/package/python-pyftpdlib/Config.in b/package/python-pyftpdlib/Config.in
 new file mode 100644
-index 0000000..c7aa12c
+index 0000000..e25c34e
 --- /dev/null
-+++ b/package/glibc/2.18-svnr23787/0004-CVE-2014-9402.patch
-@@ -0,0 +1,20 @@
-+Fix CVE-2014-9402 - denial of service in getnetbyname function.
-+Backport from https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=11e3417af6e354f1942c68a271ae51e892b2814d
-+See https://bugzilla.redhat.com/show_bug.cgi?id=1175369
++++ b/package/python-pyftpdlib/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYFTPDLIB
++	bool "python-pyftpdlib"
++	help
++	  Extremely fast and scalable Python FTP server library.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura eglibc-2.19.orig/libc/resolv/nss_dns/dns-network.c eglibc-2.19/libc/resolv/nss_dns/dns-network.c
-+--- eglibc-2.19.orig/libc/resolv/nss_dns/dns-network.c	2015-01-08 16:12:35.024977879 -0300
-++++ eglibc-2.19/libc/resolv/nss_dns/dns-network.c	2015-01-08 16:12:42.543992357 -0300
-+@@ -398,8 +398,8 @@
-+ 
-+ 	case BYNAME:
-+ 	  {
-+-	    char **ap = result->n_aliases++;
-+-	    while (*ap != NULL)
-++	    char **ap;
-++	    for (ap = result->n_aliases; *ap != NULL; ++ap)
-+ 	      {
-+ 		/* Check each alias name for being of the forms:
-+ 		   4.3.2.1.in-addr.arpa		= net 1.2.3.4
-diff --git a/package/glibc/2.19-svnr25243/0003-CVE-2014-9402.patch b/package/glibc/2.19-svnr25243/0003-CVE-2014-9402.patch
++	  https://github.com/giampaolo/pyftpdlib
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
 new file mode 100644
-index 0000000..c7aa12c
+index 0000000..e1d2e94
 --- /dev/null
-+++ b/package/glibc/2.19-svnr25243/0003-CVE-2014-9402.patch
-@@ -0,0 +1,20 @@
-+Fix CVE-2014-9402 - denial of service in getnetbyname function.
-+Backport from https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=11e3417af6e354f1942c68a271ae51e892b2814d
-+See https://bugzilla.redhat.com/show_bug.cgi?id=1175369
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura eglibc-2.19.orig/libc/resolv/nss_dns/dns-network.c eglibc-2.19/libc/resolv/nss_dns/dns-network.c
-+--- eglibc-2.19.orig/libc/resolv/nss_dns/dns-network.c	2015-01-08 16:12:35.024977879 -0300
-++++ eglibc-2.19/libc/resolv/nss_dns/dns-network.c	2015-01-08 16:12:42.543992357 -0300
-+@@ -398,8 +398,8 @@
-+ 
-+ 	case BYNAME:
-+ 	  {
-+-	    char **ap = result->n_aliases++;
-+-	    while (*ap != NULL)
-++	    char **ap;
-++	    for (ap = result->n_aliases; *ap != NULL; ++ap)
-+ 	      {
-+ 		/* Check each alias name for being of the forms:
-+ 		   4.3.2.1.in-addr.arpa		= net 1.2.3.4
-diff --git a/package/glibc/2.19/0003-CVE-2014-9402.patch b/package/glibc/2.19/0003-CVE-2014-9402.patch
++++ b/package/python-pyftpdlib/python-pyftpdlib.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  e2024de33024582ef26e30395225180048b98cab341f3e9f3a55f56397c9a4b5  python-pyftpdlib-1.4.0.tar.gz
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
 new file mode 100644
-index 0000000..d6d753e
+index 0000000..2e27ae3
 --- /dev/null
-+++ b/package/glibc/2.19/0003-CVE-2014-9402.patch
-@@ -0,0 +1,24 @@
-+Fix CVE-2014-9402 - denial of service in getnetbyname function.
-+Backport from https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=11e3417af6e354f1942c68a271ae51e892b2814d
-+See https://bugzilla.redhat.com/show_bug.cgi?id=1175369
++++ b/package/python-pyftpdlib/python-pyftpdlib.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyftpdlib
++#
++################################################################################
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++PYTHON_PYFTPDLIB_VERSION = 1.4.0
++PYTHON_PYFTPDLIB_SITE = $(call github,giampaolo,pyftpdlib,release-$(PYTHON_PYFTPDLIB_VERSION))
++PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
++PYTHON_PYFTPDLIB_LICENSE = MIT
++PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
 +
-+diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
-+index 0a77c8b..08cf0a6 100644
-+--- a/resolv/nss_dns/dns-network.c
-++++ b/resolv/nss_dns/dns-network.c
-+@@ -398,8 +398,8 @@ getanswer_r (const querybuf *answer, int anslen, struct netent *result,
-+ 
-+ 	case BYNAME:
-+ 	  {
-+-	    char **ap = result->n_aliases++;
-+-	    while (*ap != NULL)
-++	    char **ap;
-++	    for (ap = result->n_aliases; *ap != NULL; ++ap)
-+ 	      {
-+ 		/* Check each alias name for being of the forms:
-+ 		   4.3.2.1.in-addr.arpa		= net 1.2.3.4
-+-- 
-+1.7.1
-+
-diff --git a/package/glibc/2.20/0002-CVE-2014-9402.patch b/package/glibc/2.20/0002-CVE-2014-9402.patch
-new file mode 100644
-index 0000000..d6d753e
---- /dev/null
-+++ b/package/glibc/2.20/0002-CVE-2014-9402.patch
-@@ -0,0 +1,24 @@
-+Fix CVE-2014-9402 - denial of service in getnetbyname function.
-+Backport from https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=11e3417af6e354f1942c68a271ae51e892b2814d
-+See https://bugzilla.redhat.com/show_bug.cgi?id=1175369
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
-+index 0a77c8b..08cf0a6 100644
-+--- a/resolv/nss_dns/dns-network.c
-++++ b/resolv/nss_dns/dns-network.c
-+@@ -398,8 +398,8 @@ getanswer_r (const querybuf *answer, int anslen, struct netent *result,
-+ 
-+ 	case BYNAME:
-+ 	  {
-+-	    char **ap = result->n_aliases++;
-+-	    while (*ap != NULL)
-++	    char **ap;
-++	    for (ap = result->n_aliases; *ap != NULL; ++ap)
-+ 	      {
-+ 		/* Check each alias name for being of the forms:
-+ 		   4.3.2.1.in-addr.arpa		= net 1.2.3.4
-+-- 
-+1.7.1
++$(eval $(python-package))
 +
 -- 
-2.0.5
+1.9.1
