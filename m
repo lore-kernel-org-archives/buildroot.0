@@ -1,33 +1,35 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu,  8 Jan 2015 21:31:19 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Jan 2015 21:35:29 +0100
 Subject: [Buildroot] [PATCH 1/1] package/mke2img: "/bin/bash" =>
-	"/usr/bin/env bash" shebang
-Message-ID: <1420749079-29099-1-git-send-email-bjorn.forsman@gmail.com>
+ "/usr/bin/env bash" shebang
+In-Reply-To: <1420749079-29099-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1420749079-29099-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20150108213529.7ca0e484@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For portability. All other Buildroot scripts (i.e. scripts that run on
-host) already use the "/usr/bin/env bash" shebang.
+Dear Bj?rn Forsman,
 
-This change is needed for NixOS, which lacks a global /bin/bash.
+On Thu,  8 Jan 2015 21:31:19 +0100, Bj?rn Forsman wrote:
+> For portability. All other Buildroot scripts (i.e. scripts that run on
+> host) already use the "/usr/bin/env bash" shebang.
+> 
+> This change is needed for NixOS, which lacks a global /bin/bash.
+> 
+> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+> ---
+>  package/mke2img/mke2img | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- package/mke2img/mke2img | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks!
 
-diff --git a/package/mke2img/mke2img b/package/mke2img/mke2img
-index 68da6ed..5e2f62f 100755
---- a/package/mke2img/mke2img
-+++ b/package/mke2img/mke2img
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/usr/bin/env bash
- 
- # Buildroot wrapper to the collection of ext2/3/4 filesystem tools:
- # - genext2fs, to generate ext2 filesystem images
+(See: we can be fast! :-))
+
+Thomas
 -- 
-2.1.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
