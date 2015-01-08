@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jan 2015 19:21:17 +0100
-Subject: [Buildroot] [git commit] libiio: Drop requirement of threading
-	support in the toolchain
-Message-ID: <20150108201329.ACF988044C@busybox.osuosl.org>
+Date: Thu, 8 Jan 2015 21:13:42 +0100
+Subject: [Buildroot] [PATCH] libiio: Drop requirement of threading
+ support in the toolchain
+In-Reply-To: <1420711071-12455-1-git-send-email-paul.cercueil@analog.com>
+References: <1420711071-12455-1-git-send-email-paul.cercueil@analog.com>
+Message-ID: <20150108211342.05994b3a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c782df7b828eb09e433d25933b5986f841b7383
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Paul Cercueil,
 
-The libiio library will compile fine with a toolchain that doesn't
-support threads (tested with br-arm-full-nothread.config).
-Only the IIOD program requires support for threading.
+On Thu, 8 Jan 2015 10:57:51 +0100, Paul Cercueil wrote:
+> The libiio library will compile fine with a toolchain that doesn't
+> support threads (tested with br-arm-full-nothread.config).
+> Only the IIOD program requires support for threading.
+> 
+> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+> ---
+>  package/libiio/Config.in | 4 ----
+>  1 file changed, 4 deletions(-)
 
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libiio/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+Applied, thanks!
 
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-index 292ca5a..680d5dc 100644
---- a/package/libiio/Config.in
-+++ b/package/libiio/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBIIO
- 	bool "libiio"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND if !BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
- 	help
- 	  Libiio is a library to ease the development of software
-@@ -42,6 +41,3 @@ config BR2_PACKAGE_LIBIIO_TESTS
- 	  Install the test programs (iio_info, iio_genxml, iio_readdev).
- 
- endif
--
--comment "libiio needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
