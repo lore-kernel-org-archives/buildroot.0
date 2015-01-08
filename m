@@ -1,47 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Jan 2015 21:36:53 +0100
-Subject: [Buildroot] [PATCH v3 1/2] randconfig,
- allyesconfig: fix handling of legacy options
-In-Reply-To: <20141231151734.0c95b119@free-electrons.com>
-References: <1413278695-8979-1-git-send-email-arnout@mind.be>	<20141030230310.4b91e6ab@free-electrons.com>
- <20141231151734.0c95b119@free-electrons.com>
-Message-ID: <54AEEA65.1040501@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Jan 2015 21:35:43 +0100
+Subject: [Buildroot] [git commit] libmbim: bump to 1.10.2
+Message-ID: <20150108203844.BDEF78083E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31/12/14 15:17, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 30 Oct 2014 23:03:10 +0100, Thomas Petazzoni wrote:
-> 
->> I was going to apply this, and then I tested it, to discover that it
->> then causes the same problem as the one we have with randpackageconfig
->> today: none of the choice options get randomized anymore. So before
->> this patch, if you do "randconfig", you get proper randomization. After
->> this patch, if you do "randconfig", it only generates i386
->> configurations.
->>
->> I admit it's not really an issue introduced by the patch as the issue
->> already exists for randpackageconfig. But it's very annoying :/
-> 
-> Any comment about this?
+commit: http://git.buildroot.net/buildroot/commit/?id=5c5c58a19afc716aec8887fc4ce0c992af922dbd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Well, as you explained to me in Dusseldorf, the main reason to use randconfig
-is to test against buggy Config.in depends/select chains. If the choices
-wouldn't get properly randomized anymore, that would really kill this use case.
-So I guess that's a no go.
+Add locally computed hash file.
 
- Regards,
- Arnout
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmbim/libmbim.hash |    2 ++
+ package/libmbim/libmbim.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+new file mode 100644
+index 0000000..ac9b70c
+--- /dev/null
++++ b/package/libmbim/libmbim.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  c0f6611c1ea726f8801bdf3316cf3fe31772391cd60945373c4c9d128655c7bc  libmbim-1.10.2.tar.xz
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 3613d25..07fb1b6 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMBIM_VERSION = 1.10.0
++LIBMBIM_VERSION = 1.10.2
+ LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
