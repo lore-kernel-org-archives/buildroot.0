@@ -1,34 +1,27 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  8 Jan 2015 14:32:07 -0300
-Subject: [Buildroot] [PATCH] guile: needs autorecof
-Message-ID: <1420738327-29085-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 08 Jan 2015 14:34:38 -0300
+Subject: [Buildroot] [PATCH] squid: fix automake breakage
+In-Reply-To: <20150108092820.09875bec@free-electrons.com>
+References: <1420679367-24134-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150108092820.09875bec@free-electrons.com>
+Message-ID: <54AEBFAE.2020706@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's patching configure.ac and triggering an automatic autoreconf which
-doesn't end well. Fixes:
-http://autobuild.buildroot.net/results/14f/14f502687f6344a85e67b37efe9b00b8c586a266/
+On 01/08/2015 05:28 AM, Thomas Petazzoni wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/guile/guile.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> We seem to have the same problem with host-guile:
+> http://autobuild.buildroot.org/results/634/634e342f7f384fc6eba11872aa2d680c0d8dc98a/build-end.log.
+> So I'm not sure a package-specific solution is appropriate here, no?
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index e57c917..fed79a6 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -8,6 +8,8 @@ GUILE_VERSION = 2.0.11
- GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
- GUILE_SITE = $(BR2_GNU_MIRROR)/guile
- GUILE_INSTALL_STAGING = YES
-+# For 0002-calculate-csqrt_manually.patch
-+GUILE_AUTORECONF = YES
- GUILE_LICENSE = LGPLv3+
- GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
- 
--- 
-2.0.5
+For guile the problem is different, it's the fact that we're patching
+configure.ac without enabling AUTORECONF, hence autoreconf is triggered
+internally and breaks.
+For squid it seems related to the bundled libltdl (libtool). I've
+already tried to unbundle it without much success, seems to be pretty
+tied up.
+I've sent a patch to fix guile.
+Regards.
