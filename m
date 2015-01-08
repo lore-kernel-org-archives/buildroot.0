@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jan 2015 10:56:29 +0100
-Subject: [Buildroot] host-python build issue
-In-Reply-To: <54AE5090.5040802@gmail.com>
-References: <54AD3069.8090309@gmail.com>
- <20150107174313.3d9ea5ff@free-electrons.com>
- <CALo-6+jKLNFqOG08oQbWZOd2RSjoeF8aFkS-zBY5Y77JNtd5Qg@mail.gmail.com>
- <20150107175105.74634f8c@free-electrons.com>
- <54AE5090.5040802@gmail.com>
-Message-ID: <20150108105629.2d8308bc@free-electrons.com>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Thu, 8 Jan 2015 10:57:51 +0100
+Subject: [Buildroot] [PATCH] libiio: Drop requirement of threading support
+	in the toolchain
+Message-ID: <1420711071-12455-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoltan Gyarmati,
+The libiio library will compile fine with a toolchain that doesn't
+support threads (tested with br-arm-full-nothread.config).
+Only the IIOD program requires support for threading.
 
-On Thu, 08 Jan 2015 10:40:32 +0100, Zoltan Gyarmati wrote:
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+---
+ package/libiio/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-> i got some time to look into this:
-> my system has the file /usr/include/linux/soundcard.h , but that doesn't
-> have the missing definitions. On the other hand there is an
-> /usr/include/linux/soundcard.h.oss3 which has them...
-> Consequently the build error itself clearly not Buildroot specific.
-
-You have the oss4-dev package installed, right?
-
->  I created a small patchset though to make the ossaudiodev module
-> optional (like ssl, zlib, etc), and disable it for the host-python
-> build. Should i submit it?
-
-Yes, please.
-
-Thomas
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index 292ca5a..680d5dc 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBIIO
+ 	bool "libiio"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND if !BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
+ 	help
+ 	  Libiio is a library to ease the development of software
+@@ -42,6 +41,3 @@ config BR2_PACKAGE_LIBIIO_TESTS
+ 	  Install the test programs (iio_info, iio_genxml, iio_readdev).
+ 
+ endif
+-
+-comment "libiio needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
