@@ -1,37 +1,53 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 09:11:24 -0600
-Subject: [Buildroot] [PATCH v4 23/27] vim: selinux support
+Date: Fri,  9 Jan 2015 09:11:15 -0600
+Subject: [Buildroot] [PATCH v4 14/27] busybox: added linux-pam support
 In-Reply-To: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420816288-8750-24-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420816288-8750-15-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/vim/vim.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+From: Matt Weber <Matthew.Weber@rockwellcollins.com>
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index da84d14..518afaf 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -28,6 +28,13 @@ VIM_CONF_OPTS = --with-tlib=ncurses --enable-gui=no --without-x
- VIM_LICENSE = Charityware
- VIM_LICENSE_FILES = README.txt
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/busybox/busybox.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 7232996..8947593 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -193,10 +193,19 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
+ endef
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+VIM_CONF_OPTS += --enable-selinux
-+VIM_DEPENDENCIES += libselinux
-+else
-+VIM_CONF_OPTS += --disable-selinux
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define BUSYBOX_LINUX_PAM
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
++BUSYBOX_DEPENDENCIES += linux-pam
 +endif
 +
- define VIM_INSTALL_TARGET_CMDS
- 	cd $(@D)/src; \
- 		$(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
+ BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
+ define BUSYBOX_SET_SELINUX
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUXENABLED,$(BUSYBOX_BUILD_CONFIG))
++
+ endef
+ endif
+ 
+@@ -234,6 +243,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_CRYPT_SHA)
+ 	$(BUSYBOX_NETKITBASE)
+ 	$(BUSYBOX_NETKITTELNET)
++	$(BUSYBOX_LINUX_PAM)
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
 -- 
 1.9.1
