@@ -1,138 +1,171 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 09:11:12 -0600
-Subject: [Buildroot] [PATCH v4 11/27] shadow: new package
+Date: Fri,  9 Jan 2015 09:11:17 -0600
+Subject: [Buildroot] [PATCH v4 16/27] qemu_x86_selinux_defconfig: base
+	SELinux QEMU image for x86
 In-Reply-To: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420816288-8750-12-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420816288-8750-17-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+
+This will build a base SELinux system that boots with SELinux
+in permissive mode.
+
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-[Matt W:
-  - added hash
-  - bumped version
+ board/qemu/x86/linux-3.12-selinux.config | 77 ++++++++++++++++++++++++++++++++
+ configs/qemu_x86_selinux_defconfig       | 53 ++++++++++++++++++++++
+ 2 files changed, 130 insertions(+)
+ create mode 100644 board/qemu/x86/linux-3.12-selinux.config
+ create mode 100644 configs/qemu_x86_selinux_defconfig
 
- package/Config.in          |  3 +++
- package/shadow/Config.in   | 13 ++++++++++
- package/shadow/shadow.hash |  2 ++
- package/shadow/shadow.mk   | 61 ++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 79 insertions(+)
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.hash
- create mode 100644 package/shadow/shadow.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index d6d88e9..4fcd164 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1233,6 +1233,9 @@ comment "Utilities"
- 	source "package/logsurfer/Config.in"
- 	source "package/pinentry/Config.in"
- 	source "package/screen/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	source "package/shadow/Config.in"
-+endif
- 	source "package/sudo/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/time/Config.in"
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
+diff --git a/board/qemu/x86/linux-3.12-selinux.config b/board/qemu/x86/linux-3.12-selinux.config
 new file mode 100644
-index 0000000..5692ac6
+index 0000000..89ab0dc
 --- /dev/null
-+++ b/package/shadow/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_SHADOW
-+	bool "shadow"
-+	help
-+	  The shadow-utils package includes the necessary programs for
-+	  converting UNIX password files to the shadow password format, plus
-+	  programs for managing user and group accounts. The pwconv command
-+	  converts passwords to the shadow password format. The pwunconv command
-+	  unconverts shadow passwords and generates an npasswd file (a standard
-+	  UNIX password file). The pwck command checks the integrity of password
-+	  and shadow files. The lastlog command prints out the last login times
-+	  for all users. The useradd, userdel, and usermod commands are used for
-+	  managing user accounts. The groupadd, groupdel, and groupmod commands
-+	  are used for managing group accounts.
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
++++ b/board/qemu/x86/linux-3.12-selinux.config
+@@ -0,0 +1,77 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++# CONFIG_SWAP is not set
++CONFIG_AUDIT=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++# CONFIG_BLK_DEV_BSG is not set
++# CONFIG_IOSCHED_DEADLINE is not set
++# CONFIG_IOSCHED_CFQ is not set
++# CONFIG_X86_EXTENDED_PLATFORM is not set
++# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
++# CONFIG_MTRR_SANITIZER is not set
++# CONFIG_SECCOMP is not set
++# CONFIG_RELOCATABLE is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FIRMWARE_IN_KERNEL is not set
++# CONFIG_BLK_DEV is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_ATA=y
++CONFIG_ATA_PIIX=y
++CONFIG_NETDEVICES=y
++CONFIG_NE2K_PCI=y
++CONFIG_8139CP=y
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO_SERPORT is not set
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_HDA_INTEL=y
++# CONFIG_USB_SUPPORT is not set
++# CONFIG_X86_PLATFORM_DEVICES is not set
++# CONFIG_DMIID is not set
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++# CONFIG_DNOTIFY is not set
++# CONFIG_INOTIFY_USER is not set
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++# CONFIG_UNUSED_SYMBOLS is not set
++# CONFIG_FRAME_POINTER is not set
++# CONFIG_X86_VERBOSE_BOOTUP is not set
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SECURITY_SELINUX_BOOTPARAM=y
++CONFIG_CRYPTO_ANSI_CPRNG=y
++# CONFIG_VIRTUALIZATION is not set
+diff --git a/configs/qemu_x86_selinux_defconfig b/configs/qemu_x86_selinux_defconfig
 new file mode 100644
-index 0000000..efb1b60
+index 0000000..9d603cf
 --- /dev/null
-+++ b/package/shadow/shadow.hash
-@@ -0,0 +1,2 @@
-+#Locally computed
-+sha256 aa32333748d68b58ed3a83625f0165e0f6b9dc4639e6377c9300c6bf4fe978fb  shadow-4.1.5.1.tar.bz2
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-new file mode 100644
-index 0000000..fc11f3a
---- /dev/null
-+++ b/package/shadow/shadow.mk
-@@ -0,0 +1,61 @@
-+################################################################################
-+#
-+# shadow
-+#
-+################################################################################
++++ b/configs/qemu_x86_selinux_defconfig
+@@ -0,0 +1,53 @@
++# Architecture
++BR2_x86_pentiumpro=y
 +
-+SHADOW_VERSION = 4.2.1
-+SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
-+SHADOW_SITE = http://pkg-shadow.alioth.debian.org/releases/
-+SHADOW_LICENSE = BSD-3c
-+SHADOW_LICENSE_FILES = COPYING
-+SHADOW_DEPENDENCIES = acl attr busybox
++# Default to the latest Code Sourcery
++BR2_TOOLCHAIN_EXTERNAL=y
 +
-+SHADOW_INSTALL_STAGING = NO
++# Select SYSV init to provide selinux enabled init
++BR2_INIT_SYSV=y
 +
-+# --enable-subordinate-ids=no is to disable a test program build
-+# The setting of ENABLE_SUBIDS in config.h re-enables this option.
-+SHADOW_CONF_OPTS = --disable-nls --enable-subordinate-ids=no
++# Default password to allow PAM login
++BR2_TARGET_GENERIC_ROOT_PASSWD="root"
 +
-+define SHADOW_POST_PATCH_DISABLE_SUID
-+	# Disable setting suid bit when installing
-+	$(SED) 's/\(^suidu*bins = \).*/\1/' $(@D)/src/Makefile.in
-+endef
-+SHADOW_POST_PATCH_HOOKS += SHADOW_POST_PATCH_DISABLE_SUID
++# Lock to a kernel that's been tested against selinux libs
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12-selinux.config"
 +
-+define SHADOW_POST_CONFIGURE_ENABLE_SUBIDS
-+	echo "#define ENABLE_SUBIDS 1" >> $(@D)/config.h
-+endef
-+SHADOW_POST_CONFIGURE_HOOKS += SHADOW_POST_CONFIGURE_ENABLE_SUBIDS
++# Customized busybox config providing a tailored
++# balance of applets vs full apps
++BR2_PACKAGE_BUSYBOX_CONFIG="board/qemu/x86/busybox-selinux.config"
 +
-+# Shadow configuration to support audit
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+SHADOW_DEPENDENCIES += audit
-+SHADOW_CONF_OPTS += --with-audit=yes
-+endif
++# Audit service and depends
++BR2_PACKAGE_PYTHON_PY_PYC=y
++BR2_PACKAGE_AUDIT=y
 +
-+# Shadow with linux-pam support
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+SHADOW_DEPENDENCIES += linux-pam
-+SHADOW_CONF_OPTS += --with-libpam=yes
++# Enhanced authentication with selinux hooks
++BR2_PACKAGE_LINUX_PAM=y
++BR2_PACKAGE_SHADOW=y
 +
-+# Comment out all config entries that conflict with using PAM
-+define SHADOW_LOGIN_CONFIGURATION
-+	for FUNCTION in FAIL_DELAY FAILLOG_ENAB LASTLOG_ENAB MAIL_CHECK_ENAB \
-+		OBSCURE_CHECKS_ENAB PORTTIME_CHECKS_ENAB QUOTAS_ENAB CONSOLE MOTD_FILE \
-+		FTMP_FILE NOLOGINS_FILE ENV_HZ PASS_MIN_LEN SU_WHEEL_ONLY CRACKLIB_DICTPATH \
-+		PASS_CHANGE_TRIES PASS_ALWAYS_WARN CHFN_AUTH ENCRYPT_METHOD ENVIRON_FILE ; \
-+	do \
-+		sed -i "s/^$${FUNCTION}/# &/" $(TARGET_DIR)/etc/login.defs ; \
-+	done
-+endef
-+SHADOW_POST_INSTALL_TARGET_HOOKS += SHADOW_LOGIN_CONFIGURATION
-+endif
++# Dependency of libselinux
++BR2_PACKAGE_PCRE_UCP=y
 +
-+# Shadow with selinux support
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SHADOW_DEPENDENCIES += libselinux libsemanage
-+SHADOW_CONF_OPTS += --with-selinux=yes
-+endif
++# SSH daemon for secure login
++BR2_PACKAGE_OPENSSH=y
 +
-+$(eval $(autotools-package))
++# Provides tools for fs security context relabeling
++BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND=y
++
++# SELinux policy config/definition
++BR2_PACKAGE_REFPOLICY=y
++
++# log daemon
++BR2_PACKAGE_RSYSLOG=y
++
++#rootfs with spare space for fs relabel activity
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_RESBLKS=5
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Offline tools for policy analysis/building
++BR2_PACKAGE_HOST_CHECKPOLICY=y
 -- 
 1.9.1
