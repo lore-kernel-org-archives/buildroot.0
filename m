@@ -1,9 +1,10 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:33 -0600
-Subject: [Buildroot] [PATCH v3 20/27] logrotate: selinux support
+Date: Fri,  9 Jan 2015 08:18:35 -0600
+Subject: [Buildroot] [PATCH v3 22/27] util-linux: selinux, audit,
+	and pam support
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-21-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-23-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/logrotate/logrotate.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/util-linux/util-linux.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index dc26d85..a7f8290 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -11,8 +11,17 @@ LOGROTATE_LICENSE_FILES = COPYING
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index a530596..8474b78 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -51,6 +51,27 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
+ endif
  
- LOGROTATE_DEPENDENCIES = popt
- 
-+LOGROTATE_CFLAGS = $(TARGET_CFLAGS)
-+LOGROTATE_LDFLAGS = $(TARGET_LDFLAGS)
-+
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+LOGROTATE_DEPENDENCIES += libselinux
-+LOGROTATE_CFLAGS += -DWITH_SELINUX=yes
-+LOGROTATE_LDFLAGS += -lselinux
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
++else
++UTIL_LINUX_CONF_OPTS += --without-selinux
 +endif
 +
- define LOGROTATE_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" -C $(@D)
-+	$(MAKE) CC="$(TARGET_CC) $(LOGROTATE_CFLAGS)" LDFLAGS="$(LOGROTATE_LDFLAGS)" -C $(@D)
- endef
++ifeq ($(BR2_PACKAGE_PAM),y)
++UTIL_LINUX_DEPENDENCIES += pam
++UTIL_LINUX_CONF_OPTS += --with-pam
++else
++UTIL_LINUX_CONF_OPTS += --without-pam
++endif
++
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++UTIL_LINUX_DEPENDENCIES += audit
++UTIL_LINUX_CONF_OPTS += --with-audit
++else
++UTIL_LINUX_CONF_OPTS += --without-audit
++endif
++
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
  
- define LOGROTATE_INSTALL_TARGET_CMDS
 -- 
 1.9.1
