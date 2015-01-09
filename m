@@ -1,1067 +1,1330 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:28 -0600
-Subject: [Buildroot] [PATCH v3 15/27] busybox: default selinux config which
-	disables init and uses sysvinit
+Date: Fri,  9 Jan 2015 08:18:16 -0600
+Subject: [Buildroot] [PATCH v3 03/27] setools: new package
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-16-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-4-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <Matthew.Weber@rockwellcollins.com>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- board/qemu/x86/busybox-selinux.config | 1038 +++++++++++++++++++++++++++++++++
- 1 file changed, 1038 insertions(+)
- create mode 100644 board/qemu/x86/busybox-selinux.config
+[Matt W:
+  - Handle Python 2 vs. Python 3 for the host package.
+  - Added hash file
+  - Updated download site
 
-diff --git a/board/qemu/x86/busybox-selinux.config b/board/qemu/x86/busybox-selinux.config
+ package/Config.in                                  |    1 +
+ package/setools/0001-cross-compile-fixes.patch     |  121 +++
+ .../setools/0002-swig-typedef-python-fixes.patch   | 1014 ++++++++++++++++++++
+ package/setools/Config.in                          |   28 +
+ package/setools/setools.hash                       |    2 +
+ package/setools/setools.mk                         |   86 ++
+ 6 files changed, 1252 insertions(+)
+ create mode 100644 package/setools/0001-cross-compile-fixes.patch
+ create mode 100644 package/setools/0002-swig-typedef-python-fixes.patch
+ create mode 100644 package/setools/Config.in
+ create mode 100644 package/setools/setools.hash
+ create mode 100644 package/setools/setools.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 1e42469..48e7897 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1201,6 +1201,7 @@ endmenu
+ 
+ menu "Security"
+ 	source "package/sepolgen/Config.in"
++	source "package/setools/Config.in"
+ endmenu
+ 
+ menu "Shell and utilities"
+diff --git a/package/setools/0001-cross-compile-fixes.patch b/package/setools/0001-cross-compile-fixes.patch
 new file mode 100644
-index 0000000..2b365a4
+index 0000000..c931039
 --- /dev/null
-+++ b/board/qemu/x86/busybox-selinux.config
-@@ -0,0 +1,1038 @@
-+#
-+# Automatically generated make config: don't edit
-+# Busybox version: 1.22.1
-+# Tue Sep 16 07:34:52 2014
-+#
-+CONFIG_HAVE_DOT_CONFIG=y
++++ b/package/setools/0001-cross-compile-fixes.patch
+@@ -0,0 +1,121 @@
++Correct build issues to enable cross compiling.  These rechanges require the
++package to be auto reconfigured.  
 +
-+#
-+# Busybox Settings
-+#
++Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
 +
-+#
-+# General Configuration
-+#
-+CONFIG_DESKTOP=y
-+# CONFIG_EXTRA_COMPAT is not set
-+CONFIG_INCLUDE_SUSv2=y
-+# CONFIG_USE_PORTABLE_CODE is not set
-+CONFIG_PLATFORM_LINUX=y
-+CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
-+# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
-+# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
-+CONFIG_SHOW_USAGE=y
-+CONFIG_FEATURE_VERBOSE_USAGE=y
-+# CONFIG_FEATURE_COMPRESS_USAGE is not set
-+CONFIG_FEATURE_INSTALLER=y
-+# CONFIG_INSTALL_NO_USR is not set
-+# CONFIG_LOCALE_SUPPORT is not set
-+# CONFIG_UNICODE_SUPPORT is not set
-+# CONFIG_UNICODE_USING_LOCALE is not set
-+# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
-+CONFIG_SUBST_WCHAR=0
-+CONFIG_LAST_SUPPORTED_WCHAR=0
-+# CONFIG_UNICODE_COMBINING_WCHARS is not set
-+# CONFIG_UNICODE_WIDE_WCHARS is not set
-+# CONFIG_UNICODE_BIDI_SUPPORT is not set
-+# CONFIG_UNICODE_NEUTRAL_TABLE is not set
-+# CONFIG_UNICODE_PRESERVE_BROKEN is not set
-+CONFIG_LONG_OPTS=y
-+CONFIG_FEATURE_DEVPTS=y
-+CONFIG_FEATURE_CLEAN_UP=y
-+CONFIG_FEATURE_UTMP=y
-+CONFIG_FEATURE_WTMP=y
-+# CONFIG_FEATURE_PIDFILE is not set
-+CONFIG_PID_FILE_PATH=""
-+CONFIG_FEATURE_SUID=y
-+# CONFIG_FEATURE_SUID_CONFIG is not set
-+# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
-+CONFIG_SELINUX=y
-+# CONFIG_FEATURE_PREFER_APPLETS is not set
-+CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
-+CONFIG_FEATURE_SYSLOG=y
-+CONFIG_FEATURE_HAVE_RPC=y
++diff -urN a/configure.ac b/configure.ac
++--- a/configure.ac	2013-01-16 10:36:24.000000000 -0600
+++++ b/configure.ac	2013-07-12 08:22:10.380255248 -0500
++@@ -448,8 +448,9 @@
++               sepol_srcdir="")
++ if test "x${sepol_srcdir}" = "x"; then
++    sepol_srcdir=${sepol_devel_libdir}
++-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
++-      AC_MSG_ERROR([make sure libsepol-static is installed]))
+++   if test ! -f ${sepol_srcdir}/libsepol.a; then
+++      AC_MSG_ERROR([could not find precompiled libsepol.a])
+++   fi
++ else
++    AC_MSG_CHECKING([for compatible sepol source tree])
++    sepol_version=${sepol_srcdir}/VERSION
++@@ -484,8 +485,9 @@
++    AC_CHECK_HEADER([sepol/policydb/policydb.h], , AC_MSG_ERROR([could not find sepol source tree]))
++    CFLAGS="${sepol_src_save_CFLAGS}"
++    CPPFLAGS="${sepol_src_save_CPPFLAGS}"
++-   AC_CHECK_FILE([${sepol_srcdir}/libsepol.a],,
++-      AC_MSG_ERROR([could not find precompiled libsepol.a]))
+++   if test ! -f ${sepol_srcdir}/libsepol.a; then
+++      AC_MSG_ERROR([could not find precompiled libsepol.a])
+++   fi
++    sepol_devel_incdir="${sepol_srcdir}/../include"
++ fi
++ SELINUX_CFLAGS="-I${sepol_devel_incdir} -I${selinux_devel_incdir}"
++@@ -578,12 +580,13 @@
++                          [AC_LANG_SOURCE([
++ #include <sepol/policydb/expand.h>
++ int main () {
++-  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0);
+++  return expand_module_avrules(NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0);
++ }])],
++                          AC_MSG_RESULT([yes]),
++                          AC_MSG_ERROR([this version of libsepol is incompatible with SETools]))
++     fi
++     sepol_new_expand_boolmap="yes"
+++    sepol_new_user_role_mapping="yes"
++ else
++     sepol_new_expand_boolmap="no"
++ fi
++@@ -607,7 +610,8 @@
++     exit(EXIT_FAILURE);
++ }])],
++     sepol_policy_version_max=`cat conftest.data`,
++-    AC_MSG_FAILURE([could not determine maximum libsepol policy version]))
+++    AC_MSG_FAILURE([could not determine maximum libsepol policy version]),
+++    sepol_policy_version_max="26")
++ AC_DEFINE_UNQUOTED(SEPOL_POLICY_VERSION_MAX, ${sepol_policy_version_max}, [maximum policy version supported by libsepol])
++ CFLAGS="${sepol_save_CFLAGS}"
++ CPPFLAGS="${sepol_save_CPPFLAGS}"
++@@ -631,7 +635,7 @@
++     changequote([,])dnl
++     selinux_save_CFLAGS="${CFLAGS}"
++     CFLAGS="${SELINUX_CFLAGS} ${SELINUX_LIB_FLAG} -lselinux -lsepol ${CFLAGS}"
++-    gcc ${CFLAGS} -o conftest conftest.c >&5
+++    ${CC} ${CFLAGS} -o conftest conftest.c >&5
++     selinux_policy_dir=`./conftest`
++     AC_MSG_RESULT(${selinux_policy_dir})
++     CFLAGS="${selinux_save_CFLAGS}"
++diff -urN a/libqpol/src/policy_define.c b/libqpol/src/policy_define.c
++--- a/libqpol/src/policy_define.c	2013-01-16 10:36:24.000000000 -0600
+++++ b/libqpol/src/policy_define.c	2013-07-12 08:22:10.380255248 -0500
++@@ -2135,7 +2135,7 @@
++ #ifdef HAVE_SEPOL_ROLE_ATTRS
++ 	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
++ #elif HAVE_SEPOL_USER_ROLE_MAPPING
++-	if (role_set_expand(&roles, &e_roles, policydbp, NULL))
+++	if (role_set_expand(&roles, &e_roles, policydbp, NULL, NULL))
++ #else
++ 	if (role_set_expand(&roles, &e_roles, policydbp))
++ #endif
++diff -urN a/m4/ac_python_devel.m4 b/m4/ac_python_devel.m4
++--- a/m4/ac_python_devel.m4	2013-01-16 10:36:22.000000000 -0600
+++++ b/m4/ac_python_devel.m4	2013-07-12 08:22:10.380255248 -0500
++@@ -234,7 +234,7 @@
++ 	AC_MSG_CHECKING([consistency of all components of python development environment])
++ 	AC_LANG_PUSH([C])
++ 	# save current global flags
++-	LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
+++	LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
++ 	CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
++ 	AC_TRY_LINK([
++ 		#include <Python.h>
++diff -urN a/python/setools/Makefile.am b/python/setools/Makefile.am
++--- a/python/setools/Makefile.am	2013-01-16 10:36:22.000000000 -0600
+++++ b/python/setools/Makefile.am	2013-07-12 08:22:19.200251011 -0500
++@@ -22,13 +22,13 @@
++ python-build: sesearch.c seinfo.c
++ 	@mkdir -p setools
++ 	@cp __init__.py setools
++-	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" INCLUDES="$(QPOL_CFLAGS) $(APOL_CFLAGS)" $(PYTHON) setup.py build
+++	LIBS="$(QPOL_LIB_FLAG) $(APOL_LIB_FLAG)" LIBDIRS="$(PYTHON_LDFLAGS)" INCLUDES="$(PYTHON_CPPFLAGS) $(QPOL_CFLAGS) $(APOL_CFLAGS)" CC="$(CC)" CFLAGS="$(CFLAGS)" LDSHARED="$(CC) -shared" LDFLAGS="$(LDFLAGS)" $(PYTHON) setup.py build_ext
++ 
++ install-exec-hook:
++-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+++	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
++ 
++ uninstall-hook: 
++-	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
+++	$(PYTHON) setup.py uninstall `test -n "$(DESTDIR)" && echo --prefix=$(DESTDIR)/usr`
++ 
++ clean-local:
++ 	$(PYTHON) setup.py clean -a 
++--- a/python/setools/setup.py	2013-01-16 10:36:22.000000000 -0600
+++++ b/python/setools/setup.py	2013-09-04 09:17:48.452916991 -0500
++@@ -8,7 +8,7 @@
++ try:
++     inc=os.getenv("INCLUDES").split(" ")    
++     INCLUDES=map(lambda x: x[2:], inc)
++-    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split())
+++    LIBDIRS=map(lambda x: "/".join(x.split("/")[:-1]), os.getenv("LIBS").split()) + map(lambda x: x[2:], os.getenv("LIBDIRS").split())
++ except:
++     INCLUDES=""
++     LIBDIRS=""
+diff --git a/package/setools/0002-swig-typedef-python-fixes.patch b/package/setools/0002-swig-typedef-python-fixes.patch
+new file mode 100644
+index 0000000..999fed4
+--- /dev/null
++++ b/package/setools/0002-swig-typedef-python-fixes.patch
+@@ -0,0 +1,1014 @@
++Correct swig typdef naming convention errors that cause the build to break. 
 +
-+#
-+# Build Options
-+#
-+# CONFIG_STATIC is not set
-+# CONFIG_PIE is not set
-+# CONFIG_NOMMU is not set
-+CONFIG_BUILD_LIBBUSYBOX=y
-+CONFIG_FEATURE_INDIVIDUAL=y
-+# CONFIG_FEATURE_SHARED_BUSYBOX is not set
-+CONFIG_LFS=y
-+CONFIG_CROSS_COMPILER_PREFIX=""
-+CONFIG_SYSROOT=""
-+CONFIG_EXTRA_CFLAGS=""
-+CONFIG_EXTRA_LDFLAGS=""
-+CONFIG_EXTRA_LDLIBS=""
++Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
 +
-+#
-+# Debugging Options
-+#
-+# CONFIG_DEBUG is not set
-+# CONFIG_DEBUG_PESSIMIZE is not set
-+# CONFIG_WERROR is not set
-+CONFIG_NO_DEBUG_LIB=y
-+# CONFIG_DMALLOC is not set
-+# CONFIG_EFENCE is not set
++--- a/libapol/swig/apol.i	2010-04-23 11:22:08.000000000 -0500
+++++ b/libapol/swig/apol.i	2012-08-29 08:04:29.000000000 -0500
++@@ -232,7 +232,7 @@
++ %newobject wrap_apol_str_to_internal_ip(char*);
++ %rename(apol_str_to_internal_ip) wrap_apol_str_to_internal_ip;
++ %inline %{
++-	typedef struct apol_ip {
+++	typedef struct {
++ 		uint32_t ip[4];
++ 		int proto;
++ 	} apol_ip_t;
++@@ -301,7 +301,7 @@
++ %inline %{
++ 	typedef struct apol_string_vector apol_string_vector_t;
++ %}
++-typedef struct apol_vector {} apol_vector_t;
+++typedef struct {} apol_vector_t;
++ %extend apol_vector_t {
++ 	apol_vector_t() {
++ 		return apol_vector_create(NULL);
++@@ -377,7 +377,7 @@
++ 		return apol_vector_compare(a, b, NULL, NULL, &idx);
++ 	}
++ %}
++-typedef struct apol_string_vector {} apol_string_vector_t;
+++typedef struct {} apol_string_vector_t;
++ %extend apol_string_vector_t {
++ 	apol_string_vector_t() {
++ 		return (apol_string_vector_t*)apol_vector_create(free);
++@@ -460,7 +460,7 @@
++ 	APOL_POLICY_PATH_TYPE_MONOLITHIC = 0,
++ 	APOL_POLICY_PATH_TYPE_MODULAR
++ } apol_policy_path_type_e;
++-typedef struct apol_policy_path {} apol_policy_path_t;
+++typedef struct {} apol_policy_path_t;
++ %extend apol_policy_path_t {
++ 	apol_policy_path_t(apol_policy_path_type_e type, char * primary, apol_string_vector_t *modules = NULL) {
++ 		apol_policy_path_t *p;
++@@ -540,7 +540,7 @@
++ int apol_file_is_policy_path_list(const char *filename);
++ 
++ /* apol policy */
++-typedef struct apol_policy {} apol_policy_t;
+++typedef struct {} apol_policy_t;
++ #define APOL_PERMMAP_MAX_WEIGHT 10
++ #define APOL_PERMMAP_MIN_WEIGHT 1
++ #define APOL_PERMMAP_UNMAPPED	0x00
++@@ -650,7 +650,7 @@
++ };
++ 
++ /* apol type query */
++-typedef struct apol_type_query {} apol_type_query_t;
+++typedef struct {} apol_type_query_t;
++ %extend apol_type_query_t {
++ 	apol_type_query_t() {
++ 		apol_type_query_t *tq;
++@@ -692,7 +692,7 @@
++ };
++ 
++ /* apol attribute query */
++-typedef struct apol_attr_query {} apol_attr_query_t;
+++typedef struct {} apol_attr_query_t;
++ %extend apol_attr_query_t {
++ 	apol_attr_query_t() {
++ 		apol_attr_query_t *aq;
++@@ -734,7 +734,7 @@
++ };
++ 
++ /* apol role query */
++-typedef struct apol_role_query {} apol_role_query_t;
+++typedef struct {} apol_role_query_t;
++ %extend apol_role_query_t {
++ 	apol_role_query_t() {
++ 		apol_role_query_t *rq;
++@@ -786,7 +786,7 @@
++ int apol_role_has_type(apol_policy_t * p, qpol_role_t * r, qpol_type_t * t);
++ 
++ /* apol class query */
++-typedef struct apol_class_query {} apol_class_query_t;
+++typedef struct {} apol_class_query_t;
++ %extend apol_class_query_t {
++ 	apol_class_query_t() {
++ 		apol_class_query_t *cq;
++@@ -837,7 +837,7 @@
++ };
++ 
++ /* apol common query */
++-typedef struct apol_common_query {} apol_common_query_t;
+++typedef struct {} apol_common_query_t;
++ %extend apol_common_query_t {
++ 	apol_common_query_t() {
++ 		apol_common_query_t *cq;
++@@ -879,7 +879,7 @@
++ };
++ 
++ /* apol perm query */
++-typedef struct apol_perm_query {} apol_perm_query_t;
+++typedef struct {} apol_perm_query_t;
++ %extend apol_perm_query_t {
++ 	apol_perm_query_t() {
++ 		apol_perm_query_t *pq;
++@@ -921,7 +921,7 @@
++ };
++ 
++ /* apol bool query */
++-typedef struct apol_bool_query {} apol_bool_query_t;
+++typedef struct {} apol_bool_query_t;
++ %extend apol_bool_query_t {
++ 	apol_bool_query_t() {
++ 		apol_bool_query_t *bq;
++@@ -963,7 +963,7 @@
++ };
++ 
++ /* apol mls level */
++-typedef struct apol_mls_level {} apol_mls_level_t;
+++typedef struct {} apol_mls_level_t;
++ %extend apol_mls_level_t {
++ 	apol_mls_level_t() {
++ 		apol_mls_level_t *aml;
++@@ -1122,11 +1122,11 @@
++ %typemap(in) apol_mls_level_t *lvl {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_level, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_level_t, 0 |  0 );
++ 	$1 = (apol_mls_level_t*)x;
++ }
++ #endif
++-typedef struct apol_mls_range {} apol_mls_range_t;
+++typedef struct {} apol_mls_range_t;
++ %extend apol_mls_range_t {
++ 	apol_mls_range_t() {
++ 		apol_mls_range_t *amr;
++@@ -1276,7 +1276,7 @@
++ %}
++ 
++ /* apol level query */
++-typedef struct apol_level_query {} apol_level_query_t;
+++typedef struct {} apol_level_query_t;
++ %extend apol_level_query_t {
++ 	apol_level_query_t() {
++ 		apol_level_query_t * alq;
++@@ -1327,7 +1327,7 @@
++ };
++ 
++ /* apol cat query */
++-typedef struct apol_cat_query {} apol_cat_query_t;
+++typedef struct {} apol_cat_query_t;
++ %extend apol_cat_query_t {
++ 	apol_cat_query_t() {
++ 		apol_cat_query_t * acq;
++@@ -1373,11 +1373,11 @@
++ %typemap(in) apol_mls_range_t *rng {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_range, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_mls_range_t, 0 |  0 );
++ 	$1 = (apol_mls_range_t*)x;
++ }
++ #endif
++-typedef struct apol_user_query {} apol_user_query_t;
+++typedef struct {} apol_user_query_t;
++ %extend apol_user_query_t {
++ 	apol_user_query_t() {
++ 		apol_user_query_t *auq;
++@@ -1446,7 +1446,7 @@
++ };
++ 
++ /* apol context */
++-typedef struct apol_context {} apol_context_t;
+++typedef struct {} apol_context_t;
++ %extend apol_context_t {
++ 	apol_context_t() {
++ 		apol_context_t *ctx;
++@@ -1581,7 +1581,7 @@
++ int apol_context_compare(apol_policy_t * p, apol_context_t * target, apol_context_t * search, unsigned int range_compare_type);
++ 
++ /* apol constraint query */
++-typedef struct apol_constraint_query {} apol_constraint_query_t;
+++typedef struct {} apol_constraint_query_t;
++ %extend apol_constraint_query_t {
++ 	apol_constraint_query_t() {
++ 		apol_constraint_query_t *acq;
++@@ -1632,7 +1632,7 @@
++ };
++ 
++ /* apol validatetrans query */
++-typedef struct apol_validatetrans_query {} apol_validatetrans_query_t;
+++typedef struct {} apol_validatetrans_query_t;
++ %extend apol_validatetrans_query_t {
++ 	apol_validatetrans_query_t() {
++ 		apol_validatetrans_query_t *avq;
++@@ -1678,11 +1678,11 @@
++ %typemap(in) apol_context_t *ctx {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_context, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_context_t, 0 |  0 );
++ 	$1 = (apol_context_t*)x;
++ }
++ #endif
++-typedef struct apol_genfscon_query {} apol_genfscon_query_t;
+++typedef struct {} apol_genfscon_query_t;
++ %extend apol_genfscon_query_t {
++ 	apol_genfscon_query_t() {
++ 		apol_genfscon_query_t *agq;
++@@ -1744,7 +1744,7 @@
++ char *apol_genfscon_render(apol_policy_t * p, qpol_genfscon_t * genfscon);
++ 
++ /* apol fs_use query */
++-typedef struct apol_fs_use_query {} apol_fs_use_query_t;
+++typedef struct {} apol_fs_use_query_t;
++ %extend apol_fs_use_query_t {
++ 	apol_fs_use_query_t() {
++ 		apol_fs_use_query_t *afq;
++@@ -1797,7 +1797,7 @@
++ char *apol_fs_use_render(apol_policy_t * p, qpol_fs_use_t * fsuse);
++ 
++ /* apol initial sid query */
++-typedef struct apol_isid_query {} apol_isid_query_t;
+++typedef struct {} apol_isid_query_t;
++ %extend apol_isid_query_t {
++ 	apol_isid_query_t() {
++ 		apol_isid_query_t *aiq;
++@@ -1839,7 +1839,7 @@
++ };
++ 
++ /* apol portcon query */
++-typedef struct apol_portcon_query {} apol_portcon_query_t;
+++typedef struct {} apol_portcon_query_t;
++ %extend apol_portcon_query_t {
++ 	apol_portcon_query_t() {
++ 		apol_portcon_query_t *apq;
++@@ -1883,7 +1883,7 @@
++ char *apol_portcon_render(apol_policy_t * p, qpol_portcon_t * portcon);
++ 
++ /* apol netifcon query */
++-typedef struct apol_netifcon_query {} apol_netifcon_query_t;
+++typedef struct {} apol_netifcon_query_t;
++ %extend apol_netifcon_query_t {
++ 	apol_netifcon_query_t() {
++ 		apol_netifcon_query_t *anq;
++@@ -1930,7 +1930,7 @@
++ char *apol_netifcon_render(apol_policy_t * p, qpol_netifcon_t * netifcon);
++ 
++ /* apol nodecon query */
++-typedef struct apol_nodecon_query {} apol_nodecon_query_t;
+++typedef struct {} apol_nodecon_query_t;
++ %extend apol_nodecon_query_t {
++ 	apol_nodecon_query_t() {
++ 		apol_nodecon_query_t *anq;
++@@ -2010,7 +2010,7 @@
++ char *apol_nodecon_render(apol_policy_t * p, qpol_nodecon_t * nodecon);
++ 
++ /* apol avrule query */
++-typedef struct apol_avrule_query {} apol_avrule_query_t;
+++typedef struct {} apol_avrule_query_t;
++ %extend apol_avrule_query_t {
++ 	apol_avrule_query_t() {
++ 		apol_avrule_query_t *avq;
++@@ -2161,7 +2161,7 @@
++ %}
++ 
++ /* apol terule query */
++-typedef struct apol_terule_query {} apol_terule_query_t;
+++typedef struct {} apol_terule_query_t;
++ %extend apol_terule_query_t {
++ 	apol_terule_query_t() {
++ 		apol_terule_query_t *atq;
++@@ -2285,7 +2285,7 @@
++ apol_vector_t *apol_terule_list_to_syn_terules(apol_policy_t * p, apol_vector_t * rules);
++ 
++ /* apol cond rule query */
++-typedef struct apol_cond_query {} apol_cond_query_t;
+++typedef struct {} apol_cond_query_t;
++ %extend apol_cond_query_t {
++ 	apol_cond_query_t() {
++ 		apol_cond_query_t *acq;
++@@ -2329,7 +2329,7 @@
++ char *apol_cond_expr_render(apol_policy_t * p, qpol_cond_t * cond);
++ 
++ /* apol role allow query */
++-typedef struct apol_role_allow_query {} apol_role_allow_query_t;
+++typedef struct {} apol_role_allow_query_t;
++ %extend apol_role_allow_query_t {
++ 	apol_role_allow_query_t() {
++ 		apol_role_allow_query_t *arq;
++@@ -2385,7 +2385,7 @@
++ char *apol_role_allow_render(apol_policy_t * policy, qpol_role_allow_t * rule);
++ 
++ /* apol role transition rule query */
++-typedef struct apol_role_trans_query {} apol_role_trans_query_t;
+++typedef struct {} apol_role_trans_query_t;
++ %extend apol_role_trans_query_t {
++ 	apol_role_trans_query_t() {
++ 		apol_role_trans_query_t *arq;
++@@ -2450,7 +2450,7 @@
++ char *apol_role_trans_render(apol_policy_t * policy, qpol_role_trans_t * rule);
++ 
++ /* apol range transition rule query */
++-typedef struct apol_range_trans_query {} apol_range_trans_query_t;
+++typedef struct {} apol_range_trans_query_t;
++ %extend apol_range_trans_query_t {
++ 	apol_range_trans_query_t() {
++ 		apol_range_trans_query_t *arq;
++@@ -2529,7 +2529,7 @@
++ #define APOL_DOMAIN_TRANS_SEARCH_VALID		0x01
++ #define APOL_DOMAIN_TRANS_SEARCH_INVALID	0x02
++ #define APOL_DOMAIN_TRANS_SEARCH_BOTH		(APOL_DOMAIN_TRANS_SEARCH_VALID|APOL_DOMAIN_TRANS_SEARCH_INVALID)
++-typedef struct apol_domain_trans_analysis {} apol_domain_trans_analysis_t;
+++typedef struct {} apol_domain_trans_analysis_t;
++ %extend apol_domain_trans_analysis_t {
++ 	apol_domain_trans_analysis_t() {
++ 		apol_domain_trans_analysis_t *dta;
++@@ -2620,7 +2620,7 @@
++ 		return v;
++ 	};
++ };
++-typedef struct apol_domain_trans_result {} apol_domain_trans_result_t;
+++typedef struct {} apol_domain_trans_result_t;
++ %extend apol_domain_trans_result_t {
++ 	apol_domain_trans_result_t(apol_domain_trans_result_t *in) {
++ 		apol_domain_trans_result_t *dtr;
++@@ -2703,7 +2703,7 @@
++ 		*in = NULL;
++ 	}
++ %}
++-typedef struct apol_infoflow {} apol_infoflow_t;
+++typedef struct {} apol_infoflow_t;
++ %extend apol_infoflow_t {
++ 	apol_infoflow_t() {
++ 		BEGIN_EXCEPTION
++@@ -2728,7 +2728,7 @@
++ 		return v;
++ 	};
++ };
++-typedef struct apol_infoflow_analysis {} apol_infoflow_analysis_t;
+++typedef struct {} apol_infoflow_analysis_t;
++ %extend apol_infoflow_analysis_t {
++ 	apol_infoflow_analysis_t() {
++ 		apol_infoflow_analysis_t *aia;
++@@ -2821,7 +2821,7 @@
++ 		return;
++ 	};
++ };
++-typedef struct apol_infoflow_graph {} apol_infoflow_graph_t;
+++typedef struct {} apol_infoflow_graph_t;
++ %extend apol_infoflow_graph_t {
++ 	apol_infoflow_graph_t() {
++ 		BEGIN_EXCEPTION
++@@ -2865,7 +2865,7 @@
++ 		return retval;
++ 	};
++ };
++-typedef struct apol_infoflow_result {} apol_infoflow_result_t;
+++typedef struct {} apol_infoflow_result_t;
++ %extend apol_infoflow_result_t {
++ 	apol_infoflow_result_t() {
++ 		BEGIN_EXCEPTION
++@@ -2899,7 +2899,7 @@
++ 		return (apol_infoflow_result_t*)x;
++ 	};
++ %}
++-typedef struct apol_infoflow_step {} apol_infoflow_step_t;
+++typedef struct {} apol_infoflow_step_t;
++ %extend apol_infoflow_step_t {
++ 	apol_infoflow_step_t() {
++ 		BEGIN_EXCEPTION
++@@ -2936,7 +2936,7 @@
++ #define APOL_RELABEL_DIR_FROM    0x02
++ #define APOL_RELABEL_DIR_BOTH    (APOL_RELABEL_DIR_TO|APOL_RELABEL_DIR_FROM)
++ #define APOL_RELABEL_DIR_SUBJECT 0x04
++-typedef struct apol_relabel_analysis {} apol_relabel_analysis_t;
+++typedef struct {} apol_relabel_analysis_t;
++ %extend apol_relabel_analysis_t {
++ 	apol_relabel_analysis_t() {
++ 		apol_relabel_analysis_t *ara;
++@@ -3009,7 +3009,7 @@
++ 		return;
++ 	};
++ };
++-typedef struct apol_relabel_result {} apol_relabel_result_t;
+++typedef struct {} apol_relabel_result_t;
++ %extend apol_relabel_result_t {
++ 	apol_relabel_result_t() {
++ 		BEGIN_EXCEPTION
++@@ -3040,7 +3040,7 @@
++ 		return (apol_relabel_result_t*)x;
++ 	};
++ %}
++-typedef struct apol_relabel_result_pair {} apol_relabel_result_pair_t;
+++typedef struct {} apol_relabel_result_pair_t;
++ %extend apol_relabel_result_pair_t {
++ 	apol_relabel_result_pair_t() {
++ 		BEGIN_EXCEPTION
++@@ -3082,7 +3082,7 @@
++ #define APOL_TYPES_RELATION_DIRECT_FLOW 0x1000
++ #define APOL_TYPES_RELATION_TRANS_FLOW_AB 0x4000
++ #define APOL_TYPES_RELATION_TRANS_FLOW_BA 0x8000
++-typedef struct apol_types_relation_analysis {} apol_types_relation_analysis_t;
+++typedef struct {} apol_types_relation_analysis_t;
++ %extend apol_types_relation_analysis_t {
++ 	apol_types_relation_analysis_t() {
++ 		apol_types_relation_analysis_t *atr;
++@@ -3137,7 +3137,7 @@
++ 		return;
++ 	};
++ };
++-typedef struct apol_types_relation_result {} apol_types_relation_result_t;
+++typedef struct {} apol_types_relation_result_t;
++ %extend apol_types_relation_result_t {
++ 	apol_types_relation_result_t() {
++ 		BEGIN_EXCEPTION
++@@ -3192,7 +3192,7 @@
++ 		return apol_types_relation_result_get_domainsBA(self);
++ 	};
++ };
++-typedef struct apol_types_relation_access {} apol_types_relation_access_t;
+++typedef struct {} apol_types_relation_access_t;
++ %extend apol_types_relation_access_t {
++ 	apol_types_relation_access_t() {
++ 		BEGIN_EXCEPTION
++--- a/libqpol/swig/qpol.i	2010-04-30 11:23:28.000000000 -0500
+++++ b/libqpol/swig/qpol.i	2012-08-29 07:52:17.000000000 -0500
++@@ -226,7 +226,7 @@
++ #define QPOL_MODULE_UNKNOWN 0
++ #define QPOL_MODULE_BASE    1
++ #define QPOL_MODULE_OTHER   2
++-typedef struct qpol_module {} qpol_module_t;
+++typedef struct {} qpol_module_t;
++ %extend qpol_module_t {
++ 	qpol_module_t(const char *path) {
++ 		qpol_module_t *m;
++@@ -310,7 +310,7 @@
++ #define QPOL_POLICY_OPTION_NO_NEVERALLOWS 0x00000001
++ #define QPOL_POLICY_OPTION_NO_RULES       0x00000002
++ #define QPOL_POLICY_OPTION_MATCH_SYSTEM   0x00000004
++-typedef struct qpol_policy {} qpol_policy_t;
+++typedef struct {} qpol_policy_t;
++ typedef void (*qpol_callback_fn_t) (void *varg, struct qpol_policy * policy, int level, const char *fmt, va_list va_args);
++ #define QPOL_POLICY_UNKNOWN       -1
++ #define QPOL_POLICY_KERNEL_SOURCE  0
++@@ -684,7 +684,7 @@
++ };
++ 
++ /* qpol iterator */
++-typedef struct qpol_iterator {} qpol_iterator_t;
+++typedef struct {} qpol_iterator_t;
++ %extend qpol_iterator_t {
++ 	/* user never directly creates, but SWIG expects a constructor */
++ 	qpol_iterator_t() {
++@@ -734,7 +734,7 @@
++ };
++ 
++ /* qpol type */
++-typedef struct qpol_type {} qpol_type_t;
+++typedef struct {} qpol_type_t;
++ %extend qpol_type_t {
++ 	qpol_type_t(qpol_policy_t *p, const char *name) {
++ 		BEGIN_EXCEPTION
++@@ -849,7 +849,7 @@
++ %}
++ 
++ /* qpol role */
++-typedef struct qpol_role {} qpol_role_t;
+++typedef struct {} qpol_role_t;
++ %extend qpol_role_t {
++ 	qpol_role_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_role_t *r;
++@@ -917,7 +917,7 @@
++ %}
++ 
++ /* qpol level */
++-typedef struct qpol_level {} qpol_level_t;
+++typedef struct {} qpol_level_t;
++ %extend qpol_level_t {
++ 	qpol_level_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_level_t *l;
++@@ -995,7 +995,7 @@
++ %}
++ 
++ /* qpol cat */
++-typedef struct qpol_cat {} qpol_cat_t;
+++typedef struct {} qpol_cat_t;
++ %extend qpol_cat_t {
++ 	qpol_cat_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_cat_t *c;
++@@ -1062,7 +1062,7 @@
++ %}
++ 
++ /* qpol mls range */
++-typedef struct qpol_mls_range {} qpol_mls_range_t;
+++typedef struct {} qpol_mls_range_t;
++ %extend qpol_mls_range_t {
++ 	qpol_mls_range_t() {
++ 		BEGIN_EXCEPTION
++@@ -1103,7 +1103,7 @@
++ %}
++ 
++ /* qpol mls level */
++-typedef struct qpol_mls_level {} qpol_mls_level_t;
+++typedef struct {} qpol_mls_level_t;
++ %extend qpol_mls_level_t {
++ 	qpol_mls_level_t() {
++ 		BEGIN_EXCEPTION
++@@ -1145,7 +1145,7 @@
++ %}
++ 
++ /* qpol user */
++-typedef struct qpol_user {} qpol_user_t;
+++typedef struct {} qpol_user_t;
++ %extend qpol_user_t {
++ 	qpol_user_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_user_t *u;
++@@ -1221,7 +1221,7 @@
++ %}
++ 
++ /* qpol bool */
++-typedef struct qpol_bool {} qpol_bool_t;
+++typedef struct {} qpol_bool_t;
++ %extend qpol_bool_t {
++ 	qpol_bool_t(qpol_policy_t *p, const char *name) {
++ 		qpol_bool_t *b;
++@@ -1293,7 +1293,7 @@
++ %}
++ 
++ /* qpol context */
++-typedef struct qpol_context {} qpol_context_t;
+++typedef struct {} qpol_context_t;
++ %extend qpol_context_t {
++ 	qpol_context_t() {
++ 		BEGIN_EXCEPTION
++@@ -1354,7 +1354,7 @@
++ %}
++ 
++ /* qpol class */
++-typedef struct qpol_class {} qpol_class_t;
+++typedef struct {} qpol_class_t;
++ %extend qpol_class_t {
++ 	qpol_class_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_class_t *c;
++@@ -1441,7 +1441,7 @@
++ %}
++ 
++ /* qpol common */
++-typedef struct qpol_common {} qpol_common_t;
+++typedef struct {} qpol_common_t;
++ %extend qpol_common_t {
++ 	qpol_common_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_common_t *c;
++@@ -1514,7 +1514,7 @@
++ #define QPOL_FS_USE_NONE  5U
++ #define QPOL_FS_USE_PSID  6U
++ #endif
++-typedef struct qpol_fs_use {} qpol_fs_use_t;
+++typedef struct {} qpol_fs_use_t;
++ %extend qpol_fs_use_t {
++ 	qpol_fs_use_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_fs_use_t *f;
++@@ -1592,7 +1592,7 @@
++ #define QPOL_CLASS_LNK_FILE   9U
++ #define QPOL_CLASS_SOCK_FILE 12U
++ #endif
++-typedef struct qpol_genfscon {} qpol_genfscon_t;
+++typedef struct {} qpol_genfscon_t;
++ %extend qpol_genfscon_t {
++ 	qpol_genfscon_t(qpol_policy_t *p, const char *name, const char *path) {
++ 		qpol_genfscon_t *g;
++@@ -1655,7 +1655,7 @@
++ %}
++ 
++ /* qpol isid */
++-typedef struct qpol_isid {} qpol_isid_t;
+++typedef struct {} qpol_isid_t;
++ %extend qpol_isid_t {
++ 	qpol_isid_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_isid_t *i;
++@@ -1699,7 +1699,7 @@
++ %}
++ 
++ /* qpol netifcon */
++-typedef struct qpol_netifcon {} qpol_netifcon_t;
+++typedef struct {} qpol_netifcon_t;
++ %extend qpol_netifcon_t {
++ 	qpol_netifcon_t(qpol_policy_t *p, const char *name) {
++ 		const qpol_netifcon_t *n;
++@@ -1755,7 +1755,7 @@
++ /* qpol nodecon */
++ #define QPOL_IPV4 0
++ #define QPOL_IPV6 1
++-typedef struct qpol_nodecon {} qpol_nodecon_t;
+++typedef struct {} qpol_nodecon_t;
++ %extend qpol_nodecon_t {
++ 	qpol_nodecon_t(qpol_policy_t *p, int addr[4], int mask[4], int protocol) {
++ 		uint32_t a[4], m[4];
++@@ -1828,7 +1828,7 @@
++ /* from netinet/in.h */
++ #define IPPROTO_TCP 6
++ #define IPPROTO_UDP 17
++-typedef struct qpol_portcon {} qpol_portcon_t;
+++typedef struct {} qpol_portcon_t;
++ %extend qpol_portcon_t {
++ 	qpol_portcon_t(qpol_policy_t *p, uint16_t low, uint16_t high, uint8_t protocol) {
++ 		const qpol_portcon_t *qp;
++@@ -1892,7 +1892,7 @@
++ %}
++ 
++ /* qpol constraint */
++-typedef struct qpol_constraint {} qpol_constraint_t;
+++typedef struct {} qpol_constraint_t;
++ %extend qpol_constraint_t {
++ 	qpol_constraint_t() {
++ 		BEGIN_EXCEPTION
++@@ -1944,7 +1944,7 @@
++ %}
++ 
++ /* qpol validatetrans */
++-typedef struct qpol_validatetrans {} qpol_validatetrans_t;
+++typedef struct {} qpol_validatetrans_t;
++ %extend qpol_validatetrans_t {
++ 	qpol_validatetrans_t() {
++ 		BEGIN_EXCEPTION
++@@ -2009,7 +2009,7 @@
++ #define QPOL_CEXPR_OP_DOM    3
++ #define QPOL_CEXPR_OP_DOMBY  4
++ #define QPOL_CEXPR_OP_INCOMP 5
++-typedef struct qpol_constraint_expr_node {} qpol_constraint_expr_node_t;
+++typedef struct {} qpol_constraint_expr_node_t;
++ %extend qpol_constraint_expr_node_t {
++ 	qpol_constraint_expr_node_t() {
++ 		BEGIN_EXCEPTION
++@@ -2071,7 +2071,7 @@
++ %}
++ 
++ /* qpol role allow */
++-typedef struct qpol_role_allow {} qpol_role_allow_t;
+++typedef struct {} qpol_role_allow_t;
++ %extend qpol_role_allow_t {
++ 	qpol_role_allow_t() {
++ 		BEGIN_EXCEPTION
++@@ -2112,7 +2112,7 @@
++ %}
++ 
++ /* qpol role trans */
++-typedef struct qpol_role_trans {} qpol_role_trans_t;
+++typedef struct {} qpol_role_trans_t;
++ %extend qpol_role_trans_t {
++ 	qpol_role_trans_t() {
++ 		BEGIN_EXCEPTION
++@@ -2163,7 +2163,7 @@
++ %}
++ 
++ /* qpol range trans */
++-typedef struct qpol_range_trans {} qpol_range_trans_t;
+++typedef struct {} qpol_range_trans_t;
++ %extend qpol_range_trans_t {
++ 	qpol_range_trans_t() {
++ 		BEGIN_EXCEPTION
++@@ -2226,7 +2226,7 @@
++ #define QPOL_RULE_NEVERALLOW  128
++ #define QPOL_RULE_AUDITALLOW    2
++ #define QPOL_RULE_DONTAUDIT     4
++-typedef struct qpol_avrule {} qpol_avrule_t;
+++typedef struct {} qpol_avrule_t;
++ %extend qpol_avrule_t {
++ 	qpol_avrule_t() {
++ 		BEGIN_EXCEPTION
++@@ -2346,7 +2346,7 @@
++ #define QPOL_RULE_TYPE_TRANS   16
++ #define QPOL_RULE_TYPE_CHANGE  64
++ #define QPOL_RULE_TYPE_MEMBER  32
++-typedef struct qpol_terule {} qpol_terule_t;
+++typedef struct {} qpol_terule_t;
++ %extend qpol_terule_t {
++ 	qpol_terule_t() {
++ 		BEGIN_EXCEPTION
++@@ -2462,7 +2462,7 @@
++ %}
++ 
++ /* qpol conditional */
++-typedef struct qpol_cond {} qpol_cond_t;
+++typedef struct {} qpol_cond_t;
++ %extend qpol_cond_t {
++ 	qpol_cond_t() {
++ 		BEGIN_EXCEPTION
++@@ -2555,7 +2555,7 @@
++ #define QPOL_COND_EXPR_XOR  5      /* bool ^ bool */
++ #define QPOL_COND_EXPR_EQ   6      /* bool == bool */
++ #define QPOL_COND_EXPR_NEQ  7      /* bool != bool */
++-typedef struct qpol_cond_expr_node {} qpol_cond_expr_node_t;
+++typedef struct {} qpol_cond_expr_node_t;
++ %extend qpol_cond_expr_node_t {
++ 	qpol_cond_expr_node_t() {
++ 		BEGIN_EXCEPTION
++@@ -2600,7 +2600,7 @@
++ %}
++ 
++ /* qpol type set */
++-typedef struct qpol_type_set {} qpol_type_set_t;
+++typedef struct {} qpol_type_set_t;
++ %extend qpol_type_set_t {
++ 	qpol_type_set_t() {
++ 		BEGIN_EXCEPTION
++@@ -2663,7 +2663,7 @@
++ %}
++ 
++ /* qpol syn av rule */
++-typedef struct qpol_syn_avrule {} qpol_syn_avrule_t;
+++typedef struct {} qpol_syn_avrule_t;
++ %extend qpol_syn_avrule_t {
++ 	qpol_syn_avrule_t() {
++ 		BEGIN_EXCEPTION
++@@ -2776,7 +2776,7 @@
++ %}
++ 
++ /* qpol syn te rule */
++-typedef struct qpol_syn_terule {} qpol_syn_terule_t;
+++typedef struct {} qpol_syn_terule_t;
++ %extend qpol_syn_terule_t {
++ 	qpol_syn_terule_t() {
++ 		BEGIN_EXCEPTION
++--- a/libpoldiff/swig/poldiff.i	2007-10-31 16:03:33.000000000 -0500
+++++ b/libpoldiff/swig/poldiff.i	2012-08-29 08:08:02.000000000 -0500
++@@ -258,7 +258,7 @@
++ 
++ /* for handling the get_stats function */
++ %{
++-	typedef struct poldiff_stats {
+++	typedef struct {
++ 		size_t stats[5];
++ 	} poldiff_stats_t;
++ 	poldiff_stats_t *poldiff_stats_create() {
++@@ -271,7 +271,7 @@
++ 		*x = NULL;
++ 	}
++ %}
++-typedef struct poldiff_stats {} poldiff_stats_t;
+++typedef struct {} poldiff_stats_t;
++ %extend poldiff_stats_t {
++ 	poldiff_stats_t() {
++ 		poldiff_stats_t *s;
++@@ -336,17 +336,17 @@
++ %typemap(in) apol_policy_t *op {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy_t, 0 |  0 );
++ 	$1 = (apol_policy_t*)x;
++ }
++ %typemap(in) apol_policy_t *mp {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_apol_policy_t, 0 |  0 );
++ 	$1 = (apol_policy_t*)x;
++ }
++ #endif
++-typedef struct poldiff {} poldiff_t;
+++typedef struct {} poldiff_t;
++ %extend poldiff_t {
++ 	poldiff_t(apol_policy_t *op, apol_policy_t *mp) {
++ 		poldiff_t *p;
++@@ -476,7 +476,7 @@
++ };
++ 
++ /* attribute diff */
++-typedef struct poldiff_attrib {} poldiff_attrib_t;
+++typedef struct {} poldiff_attrib_t;
++ %extend poldiff_attrib_t {
++    poldiff_attrib_t () {
++       BEGIN_EXCEPTION
++@@ -521,7 +521,7 @@
++ %}
++ 
++ /* av rule diff */
++-typedef struct poldiff_avrule {} poldiff_avrule_t;
+++typedef struct {} poldiff_avrule_t;
++ %extend poldiff_avrule_t {
++    poldiff_avrule_t() {
++       BEGIN_EXCEPTION
++@@ -629,7 +629,7 @@
++ %}
++ 
++ /* boolean diff */
++-typedef struct poldiff_bool {} poldiff_bool_t;
+++typedef struct {} poldiff_bool_t;
++ %extend poldiff_bool_t {
++ 	poldiff_bool_t() {
++       BEGIN_EXCEPTION
++@@ -668,7 +668,7 @@
++ %}
++ 
++ /* category diff */
++-typedef struct poldiff_cat {} poldiff_cat_t;
+++typedef struct {} poldiff_cat_t;
++ %extend poldiff_cat_t {
++ 	poldiff_cat_t() {
++       BEGIN_EXCEPTION
++@@ -707,7 +707,7 @@
++ %}
++ 
++ /* class diff */
++-typedef struct poldiff_class {} poldiff_class_t;
+++typedef struct {} poldiff_class_t;
++ %extend poldiff_class_t {
++ 	poldiff_class_t() {
++       BEGIN_EXCEPTION
++@@ -752,7 +752,7 @@
++ %}
++ 
++ /* common diff */
++-typedef struct poldiff_common {} poldiff_common_t;
+++typedef struct {} poldiff_common_t;
++ %extend poldiff_common_t {
++ 	poldiff_common_t() {
++       BEGIN_EXCEPTION
++@@ -797,7 +797,7 @@
++ %}
++ 
++ /* level diff */
++-typedef struct poldiff_level {} poldiff_level_t;
+++typedef struct {} poldiff_level_t;
++ %extend poldiff_level_t {
++ 	poldiff_level_t() {
++       BEGIN_EXCEPTION
++@@ -857,7 +857,7 @@
++ %}
++ 
++ /* range diff */
++-typedef struct poldiff_range {} poldiff_range_t;
+++typedef struct {} poldiff_range_t;
++ %extend poldiff_range_t {
++ 	poldiff_range_t() {
++       BEGIN_EXCEPTION
++@@ -908,7 +908,7 @@
++ %}
++ 
++ /* range_transition rule diff */
++-typedef struct poldiff_range_trans {} poldiff_range_trans_t;
+++typedef struct {} poldiff_range_trans_t;
++ %extend poldiff_range_trans_t {
++ 	poldiff_range_trans_t() {
++       BEGIN_EXCEPTION
++@@ -956,7 +956,7 @@
++ %}
++ 
++ /* role allow rule diff */
++-typedef struct poldiff_role_allow {} poldiff_role_allow_t;
+++typedef struct {} poldiff_role_allow_t;
++ %extend poldiff_role_allow_t {
++ 	poldiff_role_allow_t() {
++       BEGIN_EXCEPTION
++@@ -1004,7 +1004,7 @@
++ %}
++ 
++ /* role_transition rule diff */
++-typedef struct poldiff_role_trans {} poldiff_role_trans_t;
+++typedef struct {} poldiff_role_trans_t;
++ %extend poldiff_role_trans_t {
++ 	poldiff_role_trans_t() {
++       BEGIN_EXCEPTION
++@@ -1052,7 +1052,7 @@
++ %}
++ 
++ /* role diff */
++-typedef struct poldiff_role {} poldiff_role_t;
+++typedef struct {} poldiff_role_t;
++ %extend poldiff_role_t {
++ 	poldiff_role_t() {
++       BEGIN_EXCEPTION
++@@ -1097,7 +1097,7 @@
++ %}
++ 
++ /* te rule diff */
++-typedef struct poldiff_terule {} poldiff_terule_t;
+++typedef struct {} poldiff_terule_t;
++ %extend poldiff_terule_t {
++ 	poldiff_terule_t() {
++       BEGIN_EXCEPTION
++@@ -1178,7 +1178,7 @@
++ %}
++ 
++ /* type diff */
++-typedef struct poldiff_type {} poldiff_type_t;
+++typedef struct {} poldiff_type_t;
++ %extend poldiff_type_t {
++ 	poldiff_type_t() {
++       BEGIN_EXCEPTION
++@@ -1223,7 +1223,7 @@
++ %}
++ 
++ /* user diff */
++-typedef struct poldiff_user {} poldiff_user_t;
+++typedef struct {} poldiff_user_t;
++ %extend poldiff_user_t {
++ 	poldiff_user_t() {
++       BEGIN_EXCEPTION
++@@ -1280,7 +1280,7 @@
++ %}
++ 
++ /* type remap */
++-typedef struct poldiff_type_remap_entry {} poldiff_type_remap_entry_t;
+++typedef struct {} poldiff_type_remap_entry_t;
++ %extend poldiff_type_remap_entry_t {
++ 	poldiff_type_remap_entry_t() {
++       BEGIN_EXCEPTION
++--- a/libseaudit/swig/seaudit.i	2007-10-31 16:03:33.000000000 -0500
+++++ b/libseaudit/swig/seaudit.i	2012-08-29 08:11:39.000000000 -0500
++@@ -240,7 +240,7 @@
++ %{
++ 	typedef struct tm tm_t;
++ %}
++-typedef struct tm {
+++typedef struct {
++ 	int tm_sec;   /* seconds */
++ 	int tm_min;   /* minutes */
++ 	int tm_hour;  /* hours */
++@@ -278,7 +278,7 @@
++ 	SEAUDIT_LOG_TYPE_SYSLOG,
++ 	SEAUDIT_LOG_TYPE_AUDITD
++ } seaudit_log_type_e;
++-typedef struct seaudit_log {} seaudit_log_t;
+++typedef struct {} seaudit_log_t;
++ %extend seaudit_log_t {
++ 	seaudit_log_t() {
++ 		seaudit_log_t *slog;
++@@ -355,7 +355,7 @@
++ 	SEAUDIT_MESSAGE_TYPE_AVC,
++ 	SEAUDIT_MESSAGE_TYPE_LOAD
++ } seaudit_message_type_e;
++-typedef struct seaudit_message {} seaudit_message_t;
+++typedef struct {} seaudit_message_t;
++ %extend seaudit_message_t {
++ 	seaudit_message_t() {
++ 		BEGIN_EXCEPTION
++@@ -427,7 +427,7 @@
++ %}
++ 
++ /* seaudit load message */
++-typedef struct seaudit_load_message {} seaudit_load_message_t;
+++typedef struct {} seaudit_load_message_t;
++ %extend seaudit_load_message_t {
++ 	seaudit_load_message_t() {
++ 		BEGIN_EXCEPTION
++@@ -448,7 +448,7 @@
++ %}
++ 
++ /* seaudit bool message */
++-typedef struct seaudit_bool_message {} seaudit_bool_message_t;
+++typedef struct {} seaudit_bool_message_t;
++ %extend seaudit_bool_message_t {
++ 	seaudit_bool_message_t(void *msg) {
++ 		BEGIN_EXCEPTION
++@@ -475,7 +475,7 @@
++ 	SEAUDIT_AVC_DENIED,
++ 	SEAUDIT_AVC_GRANTED
++ } seaudit_avc_message_type_e;
++-typedef struct seaudit_avc_message {} seaudit_avc_message_t;
+++typedef struct {} seaudit_avc_message_t;
++ %extend seaudit_avc_message_t {
++ 	seaudit_avc_message_t() {
++ 		BEGIN_EXCEPTION
++@@ -606,7 +606,7 @@
++ 	SEAUDIT_FILTER_DATE_MATCH_AFTER,
++ 	SEAUDIT_FILTER_DATE_MATCH_BETWEEN
++ } seaudit_filter_date_match_e;
++-typedef struct seaudit_filter {} seaudit_filter_t;
+++typedef struct {} seaudit_filter_t;
++ %extend seaudit_filter_t {
++ 	seaudit_filter_t(char *name = NULL) {
++ 		seaudit_filter_t *sf = NULL;
++@@ -1012,7 +1012,7 @@
++ %}
++ 
++ /* seaudit sort */
++-typedef struct seaudit_sort {} seaudit_sort_t;
+++typedef struct {} seaudit_sort_t;
++ %extend seaudit_sort_t {
++ 	seaudit_sort_t() {
++ 		BEGIN_EXCEPTION
++@@ -1101,17 +1101,17 @@
++ %typemap(in) seaudit_filter_t *filter {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_filter, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_filter_t, 0 |  0 );
++ 	$1 = (seaudit_filter_t*)x;
++ }
++ %typemap(in) seaudit_sort_t *ssort {
++ 	void *x = NULL;
++ 	Py_IncRef($input);
++-	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_sort, 0 |  0 );
+++	SWIG_ConvertPtr($input, &x,SWIGTYPE_p_seaudit_sort_t, 0 |  0 );
++ 	$1 = (seaudit_sort_t*)x;
++ }
++ #endif
++-typedef struct seaudit_model {} seaudit_model_t;
+++typedef struct {} seaudit_model_t;
++ %extend seaudit_model_t {
++ 	seaudit_model_t(char *name = NULL, seaudit_log_t *slog = NULL) {
++ 		seaudit_model_t *smod;
++@@ -1309,7 +1309,7 @@
++ 	SEAUDIT_REPORT_FORMAT_TEXT,
++ 	SEAUDIT_REPORT_FORMAT_HTML
++ } seaudit_report_format_e;
++-typedef struct seaudit_report {} seaudit_report_t;
+++typedef struct {} seaudit_report_t;
++ %extend seaudit_report_t {
++ 	seaudit_report_t(seaudit_model_t *m) {
++ 		seaudit_report_t *sr;
+diff --git a/package/setools/Config.in b/package/setools/Config.in
+new file mode 100644
+index 0000000..d19896c
+--- /dev/null
++++ b/package/setools/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_SETOOLS
++	bool "setools"
++	select BR2_PACKAGE_LIBSELINUX
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_BZIP2
++	# No direct limitation to build other arch or libc(s).
++	# Limiting based on qemu tested arch(s).
++	depends on BR2_powerpc || BR2_powerpc64 || \
++		BR2_i386 || BR2_x86_64 || BR2_arm
++	depends on BR2_TOOLCHAIN_USES_GLIBC # UCLIBC needs testing
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LARGEFILE
++	help
++	  SETools is an open source project designed to facilitate
++	  SELinux policy analysis. The primary tools are:
++	   * apol - analyze a SELinux policy.
++	   * seaudit - analyze audit messages from SELinux.
++	   * seaudit-report - generate highly-customized audit log
++	     reports.
++	   * sechecker - command line tool for performing modular
++	     checks on an SELinux policy.
++	   * sediff - semantic policy difference tool for SELinux.
++	   * secmds - command-line tools to analyze and search SELinux
++             policy.
 +
++comment "setools needs a toolchain w/ largefile, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+diff --git a/package/setools/setools.hash b/package/setools/setools.hash
+new file mode 100644
+index 0000000..8429218
+--- /dev/null
++++ b/package/setools/setools.hash
+@@ -0,0 +1,2 @@
++#Locally computed
++sha256 44387ecc9a231ec536a937783440cd8960a72c51f14bffc1604b7525e341e999  setools-3.3.8.tar.bz2
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+new file mode 100644
+index 0000000..4491835
+--- /dev/null
++++ b/package/setools/setools.mk
+@@ -0,0 +1,86 @@
++################################################################################
 +#
-+# Installation Options ("make install" behavior)
++# setools
 +#
-+CONFIG_INSTALL_APPLET_SYMLINKS=y
-+# CONFIG_INSTALL_APPLET_HARDLINKS is not set
-+# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
-+# CONFIG_INSTALL_APPLET_DONT is not set
-+# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
-+# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
-+# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
-+CONFIG_PREFIX="./_install"
++################################################################################
 +
-+#
-+# Busybox Library Tuning
-+#
-+# CONFIG_FEATURE_SYSTEMD is not set
-+CONFIG_FEATURE_RTMINMAX=y
-+CONFIG_PASSWORD_MINLEN=6
-+CONFIG_MD5_SMALL=1
-+CONFIG_SHA3_SMALL=1
-+# CONFIG_FEATURE_FAST_TOP is not set
-+# CONFIG_FEATURE_ETC_NETWORKS is not set
-+CONFIG_FEATURE_USE_TERMIOS=y
-+CONFIG_FEATURE_EDITING=y
-+CONFIG_FEATURE_EDITING_MAX_LEN=1024
-+CONFIG_FEATURE_EDITING_VI=y
-+CONFIG_FEATURE_EDITING_HISTORY=999
-+CONFIG_FEATURE_EDITING_SAVEHISTORY=y
-+# CONFIG_FEATURE_EDITING_SAVE_ON_EXIT is not set
-+CONFIG_FEATURE_REVERSE_SEARCH=y
-+CONFIG_FEATURE_TAB_COMPLETION=y
-+# CONFIG_FEATURE_USERNAME_COMPLETION is not set
-+CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
-+# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
-+CONFIG_FEATURE_NON_POSIX_CP=y
-+# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
-+CONFIG_FEATURE_COPYBUF_KB=4
-+CONFIG_FEATURE_SKIP_ROOTFS=y
-+CONFIG_MONOTONIC_SYSCALL=y
-+CONFIG_IOCTL_HEX2STR_ERROR=y
-+CONFIG_FEATURE_HWIB=y
++SETOOLS_VERSION = 3.3.8
++SETOOLS_SITE = https://github.com/TresysTechnology/setools3/archive/
++SETOOLS_DEPENDENCIES = libselinux sqlite libxml2 bzip2
 +
-+#
-+# Applets
-+#
++SETOOLS_INSTALL_STAGING = YES
 +
-+#
-+# Archival Utilities
-+#
-+# CONFIG_FEATURE_SEAMLESS_XZ is not set
-+# CONFIG_FEATURE_SEAMLESS_LZMA is not set
-+# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
-+# CONFIG_FEATURE_SEAMLESS_GZ is not set
-+# CONFIG_FEATURE_SEAMLESS_Z is not set
-+CONFIG_AR=y
-+# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
-+CONFIG_FEATURE_AR_CREATE=y
-+# CONFIG_UNCOMPRESS is not set
-+CONFIG_GUNZIP=y
-+CONFIG_BUNZIP2=y
-+CONFIG_UNLZMA=y
-+# CONFIG_FEATURE_LZMA_FAST is not set
-+CONFIG_LZMA=y
-+CONFIG_UNXZ=y
-+CONFIG_XZ=y
-+# CONFIG_BZIP2 is not set
-+CONFIG_CPIO=y
-+# CONFIG_FEATURE_CPIO_O is not set
-+# CONFIG_FEATURE_CPIO_P is not set
-+# CONFIG_DPKG is not set
-+# CONFIG_DPKG_DEB is not set
-+# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
-+CONFIG_GZIP=y
-+# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
-+CONFIG_GZIP_FAST=0
-+# CONFIG_LZOP is not set
-+# CONFIG_LZOP_COMPR_HIGH is not set
-+# CONFIG_RPM is not set
-+# CONFIG_RPM2CPIO is not set
-+CONFIG_TAR=y
-+CONFIG_FEATURE_TAR_CREATE=y
-+# CONFIG_FEATURE_TAR_AUTODETECT is not set
-+CONFIG_FEATURE_TAR_FROM=y
-+# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
-+# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
-+CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
-+CONFIG_FEATURE_TAR_LONG_OPTIONS=y
-+CONFIG_FEATURE_TAR_TO_COMMAND=y
-+# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
-+# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
-+CONFIG_FEATURE_TAR_SELINUX=y
-+CONFIG_UNZIP=y
++SETOOLS_AUTORECONF = YES
++SETOOLS_AUTORECONF_OPTS = -i -s
++SETOOLS_LIBTOOL_PATCH = NO
 +
-+#
-+# Coreutils
-+#
-+CONFIG_BASENAME=y
-+CONFIG_CAT=y
-+CONFIG_DATE=y
-+CONFIG_FEATURE_DATE_ISOFMT=y
-+# CONFIG_FEATURE_DATE_NANO is not set
-+CONFIG_FEATURE_DATE_COMPAT=y
-+CONFIG_HOSTID=y
-+CONFIG_ID=y
-+CONFIG_GROUPS=y
-+CONFIG_TEST=y
-+CONFIG_FEATURE_TEST_64=y
-+CONFIG_TOUCH=y
-+CONFIG_FEATURE_TOUCH_NODEREF=y
-+CONFIG_FEATURE_TOUCH_SUSV3=y
-+CONFIG_TR=y
-+CONFIG_FEATURE_TR_CLASSES=y
-+CONFIG_FEATURE_TR_EQUIV=y
-+# CONFIG_BASE64 is not set
-+CONFIG_WHO=y
-+CONFIG_USERS=y
-+# CONFIG_CAL is not set
-+CONFIG_CATV=y
-+CONFIG_CHGRP=y
-+CONFIG_CHMOD=y
-+CONFIG_CHOWN=y
-+# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
-+CONFIG_CHROOT=y
-+CONFIG_CKSUM=y
-+# CONFIG_COMM is not set
-+CONFIG_CP=y
-+# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
-+CONFIG_CUT=y
-+CONFIG_DD=y
-+CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
-+# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
-+CONFIG_FEATURE_DD_IBS_OBS=y
-+CONFIG_DF=y
-+# CONFIG_FEATURE_DF_FANCY is not set
-+CONFIG_DIRNAME=y
-+CONFIG_DOS2UNIX=y
-+CONFIG_UNIX2DOS=y
-+CONFIG_DU=y
-+CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
-+CONFIG_ECHO=y
-+CONFIG_FEATURE_FANCY_ECHO=y
-+CONFIG_ENV=y
-+# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
-+# CONFIG_EXPAND is not set
-+# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
-+CONFIG_EXPR=y
-+CONFIG_EXPR_MATH_SUPPORT_64=y
-+CONFIG_FALSE=y
-+CONFIG_FOLD=y
-+# CONFIG_FSYNC is not set
-+CONFIG_HEAD=y
-+CONFIG_FEATURE_FANCY_HEAD=y
-+CONFIG_INSTALL=y
-+CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
-+CONFIG_LN=y
-+CONFIG_LOGNAME=y
-+CONFIG_LS=y
-+CONFIG_FEATURE_LS_FILETYPES=y
-+CONFIG_FEATURE_LS_FOLLOWLINKS=y
-+CONFIG_FEATURE_LS_RECURSIVE=y
-+CONFIG_FEATURE_LS_SORTFILES=y
-+CONFIG_FEATURE_LS_TIMESTAMPS=y
-+CONFIG_FEATURE_LS_USERNAME=y
-+CONFIG_FEATURE_LS_COLOR=y
-+CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
-+CONFIG_MD5SUM=y
-+CONFIG_MKDIR=y
-+CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
-+CONFIG_MKFIFO=y
-+CONFIG_MKNOD=y
-+CONFIG_MV=y
-+CONFIG_FEATURE_MV_LONG_OPTIONS=y
-+CONFIG_NICE=y
-+CONFIG_NOHUP=y
-+CONFIG_OD=y
-+CONFIG_PRINTENV=y
-+CONFIG_PRINTF=y
-+CONFIG_PWD=y
-+CONFIG_READLINK=y
-+CONFIG_FEATURE_READLINK_FOLLOW=y
-+CONFIG_REALPATH=y
-+CONFIG_RM=y
-+CONFIG_RMDIR=y
-+# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
-+CONFIG_SEQ=y
-+CONFIG_SHA1SUM=y
-+CONFIG_SHA256SUM=y
-+CONFIG_SHA512SUM=y
-+CONFIG_SHA3SUM=y
-+CONFIG_SLEEP=y
-+CONFIG_FEATURE_FANCY_SLEEP=y
-+CONFIG_FEATURE_FLOAT_SLEEP=y
-+CONFIG_SORT=y
-+CONFIG_FEATURE_SORT_BIG=y
-+# CONFIG_SPLIT is not set
-+# CONFIG_FEATURE_SPLIT_FANCY is not set
-+# CONFIG_STAT is not set
-+# CONFIG_FEATURE_STAT_FORMAT is not set
-+CONFIG_STTY=y
-+# CONFIG_SUM is not set
-+CONFIG_SYNC=y
-+# CONFIG_TAC is not set
-+CONFIG_TAIL=y
-+CONFIG_FEATURE_FANCY_TAIL=y
-+CONFIG_TEE=y
-+CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
-+CONFIG_TRUE=y
-+CONFIG_TTY=y
-+CONFIG_UNAME=y
-+# CONFIG_UNEXPAND is not set
-+# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
-+CONFIG_UNIQ=y
-+CONFIG_USLEEP=y
-+CONFIG_UUDECODE=y
-+CONFIG_UUENCODE=y
-+CONFIG_WC=y
-+# CONFIG_FEATURE_WC_LARGE is not set
-+CONFIG_WHOAMI=y
-+CONFIG_YES=y
++# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
++#        selinux enabled.
++SETOOLS_CONF_OPTS = \
++	--disable-debug \
++	--disable-gui \
++	--disable-bwidget-check \
++	--disable-selinux-check \
++	--disable-swig-java \
++	--disable-swig-python \
++	--disable-swig-tcl \
++	--with-sepol-devel="$(STAGING_DIR)/usr" \
++	--with-selinux-devel="$(STAGING_DIR)/usr"
 +
-+#
-+# Common options for cp and mv
-+#
-+CONFIG_FEATURE_PRESERVE_HARDLINKS=y
 +
-+#
-+# Common options for ls, more and telnet
-+#
-+CONFIG_FEATURE_AUTOWIDTH=y
++HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
++	host-libxml2 host-bzip2
 +
-+#
-+# Common options for df, du, ls
-+#
-+CONFIG_FEATURE_HUMAN_READABLE=y
++HOST_SETOOLS_AUTORECONF = YES
++HOST_SETOOLS_AUTORECONF_OPTS = -i -s
 +
-+#
-+# Common options for md5sum, sha1sum, sha256sum, sha512sum, sha3sum
-+#
-+CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
++# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
++#        selinux enabled.
++HOST_SETOOLS_CONF_OPTS = \
++	--disable-debug \
++	--disable-gui \
++	--disable-bwidget-check \
++	--disable-selinux-check \
++	--disable-swig-java \
++	--disable-swig-python \
++	--disable-swig-tcl \
++	--with-sepol-devel="$(HOST_DIR)/usr" \
++	--with-selinux-devel="$(HOST_DIR)/usr"
 +
-+#
-+# Console Utilities
-+#
-+CONFIG_CHVT=y
-+# CONFIG_FGCONSOLE is not set
-+CONFIG_CLEAR=y
-+CONFIG_DEALLOCVT=y
-+CONFIG_DUMPKMAP=y
-+# CONFIG_KBD_MODE is not set
-+CONFIG_LOADFONT=y
-+CONFIG_LOADKMAP=y
-+CONFIG_OPENVT=y
-+CONFIG_RESET=y
-+CONFIG_RESIZE=y
-+CONFIG_FEATURE_RESIZE_PRINT=y
-+CONFIG_SETCONSOLE=y
-+# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
-+# CONFIG_SETFONT is not set
-+# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
-+CONFIG_DEFAULT_SETFONT_DIR=""
-+CONFIG_SETKEYCODES=y
-+CONFIG_SETLOGCONS=y
-+# CONFIG_SHOWKEY is not set
++# python related conf options
++HOST_SETOOLS_DEPENDENCIES += host-swig
++HOST_SETOOLS_CONF_ENV += \
++	am_cv_pathless_PYTHON=python \
++	ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
++	am_cv_python_platform=linux2
++HOST_SETOOLS_CONF_OPTS += \
++	--enable-swig-python \
++	PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/"
 +
-+#
-+# Common options for loadfont and setfont
-+#
-+CONFIG_FEATURE_LOADFONT_PSF2=y
-+CONFIG_FEATURE_LOADFONT_RAW=y
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++HOST_SETOOLS_DEPENDENCIES += host-python3
++HOST_SETOOLS_CONF_ENV += \
++	am_cv_python_version=$(PYTHON3_VERSION) \
++	am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
++HOST_SETOOLS_CONF_OPTS += \
++	PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)" \
++	PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages" \
++	PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON3_VERSION_MAJOR)"
++else
++HOST_SETOOLS_DEPENDENCIES += host-python
++HOST_SETOOLS_CONF_ENV += \
++	am_cv_python_version=$(PYTHON_VERSION) \
++	am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
++HOST_SETOOLS_CONF_OPTS += \
++	--enable-swig-python \
++	PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
++	PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++	PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON_VERSION_MAJOR)"
++endif
 +
-+#
-+# Debian Utilities
-+#
-+CONFIG_MKTEMP=y
-+CONFIG_PIPE_PROGRESS=y
-+CONFIG_RUN_PARTS=y
-+CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
-+# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
-+CONFIG_START_STOP_DAEMON=y
-+CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
-+CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
-+CONFIG_WHICH=y
-+
-+#
-+# Editors
-+#
-+CONFIG_AWK=y
-+# CONFIG_FEATURE_AWK_LIBM is not set
-+CONFIG_FEATURE_AWK_GNU_EXTENSIONS=y
-+CONFIG_CMP=y
-+CONFIG_DIFF=y
-+# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
-+CONFIG_FEATURE_DIFF_DIR=y
-+# CONFIG_ED is not set
-+CONFIG_PATCH=y
-+CONFIG_SED=y
-+CONFIG_VI=y
-+CONFIG_FEATURE_VI_MAX_LEN=4096
-+CONFIG_FEATURE_VI_8BIT=y
-+CONFIG_FEATURE_VI_COLON=y
-+CONFIG_FEATURE_VI_YANKMARK=y
-+CONFIG_FEATURE_VI_SEARCH=y
-+# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
-+CONFIG_FEATURE_VI_USE_SIGNALS=y
-+CONFIG_FEATURE_VI_DOT_CMD=y
-+CONFIG_FEATURE_VI_READONLY=y
-+CONFIG_FEATURE_VI_SETOPTS=y
-+CONFIG_FEATURE_VI_SET=y
-+CONFIG_FEATURE_VI_WIN_RESIZE=y
-+CONFIG_FEATURE_VI_ASK_TERMINAL=y
-+CONFIG_FEATURE_ALLOW_EXEC=y
-+
-+#
-+# Finding Utilities
-+#
-+CONFIG_FIND=y
-+CONFIG_FEATURE_FIND_PRINT0=y
-+CONFIG_FEATURE_FIND_MTIME=y
-+CONFIG_FEATURE_FIND_MMIN=y
-+CONFIG_FEATURE_FIND_PERM=y
-+CONFIG_FEATURE_FIND_TYPE=y
-+CONFIG_FEATURE_FIND_XDEV=y
-+CONFIG_FEATURE_FIND_MAXDEPTH=y
-+CONFIG_FEATURE_FIND_NEWER=y
-+# CONFIG_FEATURE_FIND_INUM is not set
-+CONFIG_FEATURE_FIND_EXEC=y
-+CONFIG_FEATURE_FIND_USER=y
-+CONFIG_FEATURE_FIND_GROUP=y
-+CONFIG_FEATURE_FIND_NOT=y
-+CONFIG_FEATURE_FIND_DEPTH=y
-+CONFIG_FEATURE_FIND_PAREN=y
-+CONFIG_FEATURE_FIND_SIZE=y
-+CONFIG_FEATURE_FIND_PRUNE=y
-+# CONFIG_FEATURE_FIND_DELETE is not set
-+CONFIG_FEATURE_FIND_PATH=y
-+CONFIG_FEATURE_FIND_REGEX=y
-+# CONFIG_FEATURE_FIND_CONTEXT is not set
-+# CONFIG_FEATURE_FIND_LINKS is not set
-+CONFIG_GREP=y
-+CONFIG_FEATURE_GREP_EGREP_ALIAS=y
-+CONFIG_FEATURE_GREP_FGREP_ALIAS=y
-+CONFIG_FEATURE_GREP_CONTEXT=y
-+CONFIG_XARGS=y
-+# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
-+CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
-+CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
-+CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
-+
-+#
-+# Init Utilities
-+#
-+# CONFIG_BOOTCHARTD is not set
-+# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
-+# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
-+# CONFIG_HALT is not set
-+# CONFIG_FEATURE_CALL_TELINIT is not set
-+CONFIG_TELINIT_PATH=""
-+# CONFIG_INIT is not set
-+# CONFIG_FEATURE_USE_INITTAB is not set
-+# CONFIG_FEATURE_KILL_REMOVED is not set
-+CONFIG_FEATURE_KILL_DELAY=0
-+# CONFIG_FEATURE_INIT_SCTTY is not set
-+# CONFIG_FEATURE_INIT_SYSLOG is not set
-+# CONFIG_FEATURE_EXTRA_QUIET is not set
-+# CONFIG_FEATURE_INIT_COREDUMPS is not set
-+# CONFIG_FEATURE_INITRD is not set
-+CONFIG_INIT_TERMINAL_TYPE=""
-+CONFIG_MESG=y
-+CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
-+
-+#
-+# Login/Password Management Utilities
-+#
-+# CONFIG_ADD_SHELL is not set
-+# CONFIG_REMOVE_SHELL is not set
-+# CONFIG_FEATURE_SHADOWPASSWDS is not set
-+# CONFIG_USE_BB_PWD_GRP is not set
-+# CONFIG_USE_BB_SHADOW is not set
-+# CONFIG_USE_BB_CRYPT is not set
-+# CONFIG_USE_BB_CRYPT_SHA is not set
-+# CONFIG_ADDUSER is not set
-+# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_CHECK_NAMES is not set
-+CONFIG_FIRST_SYSTEM_ID=0
-+CONFIG_LAST_SYSTEM_ID=0
-+# CONFIG_ADDGROUP is not set
-+# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
-+# CONFIG_DELUSER is not set
-+# CONFIG_DELGROUP is not set
-+# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
-+CONFIG_GETTY=y
-+CONFIG_LOGIN=y
-+CONFIG_LOGIN_SESSION_AS_CHILD=y
-+CONFIG_PAM=y
-+CONFIG_LOGIN_SCRIPTS=y
-+CONFIG_FEATURE_NOLOGIN=y
-+CONFIG_FEATURE_SECURETTY=y
-+# CONFIG_PASSWD is not set
-+# CONFIG_FEATURE_PASSWD_WEAK_CHECK is not set
-+# CONFIG_CRYPTPW is not set
-+# CONFIG_CHPASSWD is not set
-+CONFIG_FEATURE_DEFAULT_PASSWD_ALGO=""
-+# CONFIG_SU is not set
-+# CONFIG_FEATURE_SU_SYSLOG is not set
-+# CONFIG_FEATURE_SU_CHECKS_SHELLS is not set
-+# CONFIG_SULOGIN is not set
-+# CONFIG_VLOCK is not set
-+
-+#
-+# Linux Ext2 FS Progs
-+#
-+# CONFIG_CHATTR is not set
-+# CONFIG_FSCK is not set
-+# CONFIG_LSATTR is not set
-+# CONFIG_TUNE2FS is not set
-+
-+#
-+# Linux Module Utilities
-+#
-+# CONFIG_MODINFO is not set
-+# CONFIG_MODPROBE_SMALL is not set
-+# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
-+# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
-+# CONFIG_INSMOD is not set
-+# CONFIG_RMMOD is not set
-+# CONFIG_LSMOD is not set
-+# CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT is not set
-+# CONFIG_MODPROBE is not set
-+# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
-+# CONFIG_DEPMOD is not set
-+
-+#
-+# Options common to multiple modutils
-+#
-+# CONFIG_FEATURE_2_4_MODULES is not set
-+# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
-+# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
-+# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
-+# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
-+# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
-+# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
-+# CONFIG_FEATURE_CHECK_TAINTED_MODULE is not set
-+# CONFIG_FEATURE_MODUTILS_ALIAS is not set
-+# CONFIG_FEATURE_MODUTILS_SYMBOLS is not set
-+CONFIG_DEFAULT_MODULES_DIR=""
-+CONFIG_DEFAULT_DEPMOD_FILE=""
-+
-+#
-+# Linux System Utilities
-+#
-+# CONFIG_BLOCKDEV is not set
-+CONFIG_FSTRIM=y
-+CONFIG_MDEV=y
-+CONFIG_FEATURE_MDEV_CONF=y
-+CONFIG_FEATURE_MDEV_RENAME=y
-+# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
-+CONFIG_FEATURE_MDEV_EXEC=y
-+# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
-+# CONFIG_REV is not set
-+# CONFIG_ACPID is not set
-+# CONFIG_FEATURE_ACPID_COMPAT is not set
-+CONFIG_BLKID=y
-+# CONFIG_FEATURE_BLKID_TYPE is not set
-+CONFIG_DMESG=y
-+CONFIG_FEATURE_DMESG_PRETTY=y
-+# CONFIG_FBSET is not set
-+# CONFIG_FEATURE_FBSET_FANCY is not set
-+# CONFIG_FEATURE_FBSET_READMODE is not set
-+CONFIG_FDFLUSH=y
-+CONFIG_FDFORMAT=y
-+CONFIG_FDISK=y
-+# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
-+CONFIG_FEATURE_FDISK_WRITABLE=y
-+# CONFIG_FEATURE_AIX_LABEL is not set
-+# CONFIG_FEATURE_SGI_LABEL is not set
-+# CONFIG_FEATURE_SUN_LABEL is not set
-+# CONFIG_FEATURE_OSF_LABEL is not set
-+CONFIG_FEATURE_GPT_LABEL=y
-+CONFIG_FEATURE_FDISK_ADVANCED=y
-+# CONFIG_FINDFS is not set
-+# CONFIG_FLOCK is not set
-+CONFIG_FREERAMDISK=y
-+# CONFIG_FSCK_MINIX is not set
-+# CONFIG_MKFS_EXT2 is not set
-+# CONFIG_MKFS_MINIX is not set
-+# CONFIG_FEATURE_MINIX2 is not set
-+# CONFIG_MKFS_REISER is not set
-+# CONFIG_MKFS_VFAT is not set
-+CONFIG_GETOPT=y
-+CONFIG_FEATURE_GETOPT_LONG=y
-+CONFIG_HEXDUMP=y
-+# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
-+# CONFIG_HD is not set
-+CONFIG_HWCLOCK=y
-+CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
-+CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
-+CONFIG_IPCRM=y
-+CONFIG_IPCS=y
-+CONFIG_LOSETUP=y
-+CONFIG_LSPCI=y
-+CONFIG_LSUSB=y
-+CONFIG_MKSWAP=y
-+# CONFIG_FEATURE_MKSWAP_UUID is not set
-+CONFIG_MORE=y
-+CONFIG_MOUNT=y
-+# CONFIG_FEATURE_MOUNT_FAKE is not set
-+CONFIG_FEATURE_MOUNT_VERBOSE=y
-+CONFIG_FEATURE_MOUNT_HELPERS=y
-+CONFIG_FEATURE_MOUNT_LABEL=y
-+CONFIG_FEATURE_MOUNT_NFS=y
-+CONFIG_FEATURE_MOUNT_CIFS=y
-+CONFIG_FEATURE_MOUNT_FLAGS=y
-+CONFIG_FEATURE_MOUNT_FSTAB=y
-+# CONFIG_PIVOT_ROOT is not set
-+CONFIG_RDATE=y
-+# CONFIG_RDEV is not set
-+CONFIG_READPROFILE=y
-+# CONFIG_RTCWAKE is not set
-+# CONFIG_SCRIPT is not set
-+# CONFIG_SCRIPTREPLAY is not set
-+CONFIG_SETARCH=y
-+CONFIG_SWAPONOFF=y
-+# CONFIG_FEATURE_SWAPON_PRI is not set
-+CONFIG_SWITCH_ROOT=y
-+CONFIG_UMOUNT=y
-+CONFIG_FEATURE_UMOUNT_ALL=y
-+
-+#
-+# Common options for mount/umount
-+#
-+CONFIG_FEATURE_MOUNT_LOOP=y
-+CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
-+# CONFIG_FEATURE_MTAB_SUPPORT is not set
-+CONFIG_VOLUMEID=y
-+
-+#
-+# Filesystem/Volume identification
-+#
-+# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
-+# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
-+CONFIG_FEATURE_VOLUMEID_EXFAT=y
-+CONFIG_FEATURE_VOLUMEID_EXT=y
-+CONFIG_FEATURE_VOLUMEID_F2FS=y
-+CONFIG_FEATURE_VOLUMEID_FAT=y
-+# CONFIG_FEATURE_VOLUMEID_HFS is not set
-+# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
-+# CONFIG_FEATURE_VOLUMEID_JFS is not set
-+# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
-+# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
-+# CONFIG_FEATURE_VOLUMEID_LUKS is not set
-+# CONFIG_FEATURE_VOLUMEID_NILFS is not set
-+# CONFIG_FEATURE_VOLUMEID_NTFS is not set
-+# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
-+# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
-+# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
-+# CONFIG_FEATURE_VOLUMEID_SQUASHFS is not set
-+# CONFIG_FEATURE_VOLUMEID_SYSV is not set
-+# CONFIG_FEATURE_VOLUMEID_UDF is not set
-+# CONFIG_FEATURE_VOLUMEID_XFS is not set
-+
-+#
-+# Miscellaneous Utilities
-+#
-+# CONFIG_CONSPY is not set
-+CONFIG_LESS=y
-+CONFIG_FEATURE_LESS_MAXLINES=9999999
-+CONFIG_FEATURE_LESS_BRACKETS=y
-+CONFIG_FEATURE_LESS_FLAGS=y
-+# CONFIG_FEATURE_LESS_MARKS is not set
-+CONFIG_FEATURE_LESS_REGEXP=y
-+# CONFIG_FEATURE_LESS_WINCH is not set
-+# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
-+# CONFIG_FEATURE_LESS_DASHCMD is not set
-+# CONFIG_FEATURE_LESS_LINENUMS is not set
-+# CONFIG_NANDWRITE is not set
-+# CONFIG_NANDDUMP is not set
-+# CONFIG_RFKILL is not set
-+CONFIG_SETSERIAL=y
-+# CONFIG_UBIATTACH is not set
-+# CONFIG_UBIDETACH is not set
-+# CONFIG_UBIMKVOL is not set
-+# CONFIG_UBIRMVOL is not set
-+# CONFIG_UBIRSVOL is not set
-+# CONFIG_UBIUPDATEVOL is not set
-+# CONFIG_WALL is not set
-+# CONFIG_ADJTIMEX is not set
-+# CONFIG_BBCONFIG is not set
-+# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
-+# CONFIG_BEEP is not set
-+CONFIG_FEATURE_BEEP_FREQ=0
-+CONFIG_FEATURE_BEEP_LENGTH_MS=0
-+# CONFIG_CHAT is not set
-+# CONFIG_FEATURE_CHAT_NOFAIL is not set
-+# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
-+# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
-+# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
-+# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
-+# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
-+# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
-+CONFIG_CHRT=y
-+CONFIG_CROND=y
-+# CONFIG_FEATURE_CROND_D is not set
-+# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
-+CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
-+CONFIG_CRONTAB=y
-+CONFIG_DC=y
-+# CONFIG_FEATURE_DC_LIBM is not set
-+# CONFIG_DEVFSD is not set
-+# CONFIG_DEVFSD_MODLOAD is not set
-+# CONFIG_DEVFSD_FG_NP is not set
-+# CONFIG_DEVFSD_VERBOSE is not set
-+# CONFIG_FEATURE_DEVFS is not set
-+CONFIG_DEVMEM=y
-+CONFIG_EJECT=y
-+# CONFIG_FEATURE_EJECT_SCSI is not set
-+# CONFIG_FBSPLASH is not set
-+# CONFIG_FLASHCP is not set
-+# CONFIG_FLASH_LOCK is not set
-+# CONFIG_FLASH_UNLOCK is not set
-+# CONFIG_FLASH_ERASEALL is not set
-+# CONFIG_IONICE is not set
-+# CONFIG_INOTIFYD is not set
-+CONFIG_LAST=y
-+CONFIG_FEATURE_LAST_SMALL=y
-+# CONFIG_FEATURE_LAST_FANCY is not set
-+CONFIG_HDPARM=y
-+CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
-+# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
-+CONFIG_MAKEDEVS=y
-+# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
-+CONFIG_FEATURE_MAKEDEVS_TABLE=y
-+# CONFIG_MAN is not set
-+CONFIG_MICROCOM=y
-+CONFIG_MOUNTPOINT=y
-+CONFIG_MT=y
-+# CONFIG_RAIDAUTORUN is not set
-+# CONFIG_READAHEAD is not set
-+CONFIG_RUNLEVEL=y
-+# CONFIG_RX is not set
-+CONFIG_SETSID=y
-+CONFIG_STRINGS=y
-+# CONFIG_TASKSET is not set
-+# CONFIG_FEATURE_TASKSET_FANCY is not set
-+CONFIG_TIME=y
-+# CONFIG_TIMEOUT is not set
-+# CONFIG_TTYSIZE is not set
-+# CONFIG_VOLNAME is not set
-+CONFIG_WATCHDOG=y
-+
-+#
-+# Networking Utilities
-+#
-+CONFIG_NAMEIF=y
-+# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
-+# CONFIG_NBDCLIENT is not set
-+# CONFIG_NC is not set
-+# CONFIG_NC_SERVER is not set
-+# CONFIG_NC_EXTRA is not set
-+# CONFIG_NC_110_COMPAT is not set
-+CONFIG_PING=y
-+# CONFIG_PING6 is not set
-+CONFIG_FEATURE_FANCY_PING=y
-+# CONFIG_WHOIS is not set
-+CONFIG_FEATURE_IPV6=y
-+# CONFIG_FEATURE_UNIX_LOCAL is not set
-+# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
-+# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
-+# CONFIG_ARP is not set
-+CONFIG_ARPING=y
-+# CONFIG_BRCTL is not set
-+# CONFIG_FEATURE_BRCTL_FANCY is not set
-+# CONFIG_FEATURE_BRCTL_SHOW is not set
-+CONFIG_DNSD=y
-+CONFIG_ETHER_WAKE=y
-+# CONFIG_FAKEIDENTD is not set
-+# CONFIG_FTPD is not set
-+# CONFIG_FEATURE_FTP_WRITE is not set
-+# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
-+# CONFIG_FTPGET is not set
-+# CONFIG_FTPPUT is not set
-+# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
-+CONFIG_HOSTNAME=y
-+# CONFIG_HTTPD is not set
-+# CONFIG_FEATURE_HTTPD_RANGES is not set
-+# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
-+# CONFIG_FEATURE_HTTPD_SETUID is not set
-+# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
-+# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
-+# CONFIG_FEATURE_HTTPD_CGI is not set
-+# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
-+# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
-+# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
-+# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
-+# CONFIG_FEATURE_HTTPD_PROXY is not set
-+# CONFIG_FEATURE_HTTPD_GZIP is not set
-+CONFIG_IFCONFIG=y
-+CONFIG_FEATURE_IFCONFIG_STATUS=y
-+CONFIG_FEATURE_IFCONFIG_SLIP=y
-+CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
-+CONFIG_FEATURE_IFCONFIG_HW=y
-+# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
-+# CONFIG_IFENSLAVE is not set
-+# CONFIG_IFPLUGD is not set
-+CONFIG_IFUPDOWN=y
-+CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
-+CONFIG_FEATURE_IFUPDOWN_IP=y
-+# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
-+# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
-+CONFIG_FEATURE_IFUPDOWN_IPV4=y
-+CONFIG_FEATURE_IFUPDOWN_IPV6=y
-+CONFIG_FEATURE_IFUPDOWN_MAPPING=y
-+# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
-+# CONFIG_INETD is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN is not set
-+# CONFIG_FEATURE_INETD_RPC is not set
-+CONFIG_IP=y
-+CONFIG_FEATURE_IP_ADDRESS=y
-+CONFIG_FEATURE_IP_LINK=y
-+CONFIG_FEATURE_IP_ROUTE=y
-+CONFIG_FEATURE_IP_TUNNEL=y
-+CONFIG_FEATURE_IP_RULE=y
-+CONFIG_FEATURE_IP_SHORT_FORMS=y
-+# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
-+CONFIG_IPADDR=y
-+CONFIG_IPLINK=y
-+CONFIG_IPROUTE=y
-+CONFIG_IPTUNNEL=y
-+CONFIG_IPRULE=y
-+# CONFIG_IPCALC is not set
-+# CONFIG_FEATURE_IPCALC_FANCY is not set
-+# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
-+CONFIG_NETSTAT=y
-+# CONFIG_FEATURE_NETSTAT_WIDE is not set
-+# CONFIG_FEATURE_NETSTAT_PRG is not set
-+CONFIG_NSLOOKUP=y
-+# CONFIG_NTPD is not set
-+# CONFIG_FEATURE_NTPD_SERVER is not set
-+# CONFIG_PSCAN is not set
-+CONFIG_ROUTE=y
-+# CONFIG_SLATTACH is not set
-+# CONFIG_TCPSVD is not set
-+CONFIG_TELNET=y
-+CONFIG_FEATURE_TELNET_TTYPE=y
-+CONFIG_FEATURE_TELNET_AUTOLOGIN=y
-+# CONFIG_TELNETD is not set
-+# CONFIG_FEATURE_TELNETD_STANDALONE is not set
-+# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
-+CONFIG_TFTP=y
-+# CONFIG_TFTPD is not set
-+
-+#
-+# Common options for tftp/tftpd
-+#
-+CONFIG_FEATURE_TFTP_GET=y
-+CONFIG_FEATURE_TFTP_PUT=y
-+CONFIG_FEATURE_TFTP_BLOCKSIZE=y
-+# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
-+# CONFIG_TFTP_DEBUG is not set
-+CONFIG_TRACEROUTE=y
-+# CONFIG_TRACEROUTE6 is not set
-+# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
-+# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
-+# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
-+# CONFIG_TUNCTL is not set
-+# CONFIG_FEATURE_TUNCTL_UG is not set
-+# CONFIG_UDHCPC6 is not set
-+# CONFIG_UDHCPD is not set
-+# CONFIG_DHCPRELAY is not set
-+# CONFIG_DUMPLEASES is not set
-+# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
-+# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
-+CONFIG_DHCPD_LEASES_FILE=""
-+CONFIG_UDHCPC=y
-+CONFIG_FEATURE_UDHCPC_ARPING=y
-+# CONFIG_FEATURE_UDHCP_PORT is not set
-+CONFIG_UDHCP_DEBUG=0
-+# CONFIG_FEATURE_UDHCP_RFC3397 is not set
-+CONFIG_FEATURE_UDHCP_8021Q=y
-+CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
-+CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
-+# CONFIG_UDPSVD is not set
-+CONFIG_VCONFIG=y
-+CONFIG_WGET=y
-+CONFIG_FEATURE_WGET_STATUSBAR=y
-+CONFIG_FEATURE_WGET_AUTHENTICATION=y
-+CONFIG_FEATURE_WGET_LONG_OPTIONS=y
-+CONFIG_FEATURE_WGET_TIMEOUT=y
-+# CONFIG_ZCIP is not set
-+
-+#
-+# Print Utilities
-+#
-+# CONFIG_LPD is not set
-+# CONFIG_LPR is not set
-+# CONFIG_LPQ is not set
-+
-+#
-+# Mail Utilities
-+#
-+# CONFIG_MAKEMIME is not set
-+CONFIG_FEATURE_MIME_CHARSET=""
-+# CONFIG_POPMAILDIR is not set
-+# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
-+# CONFIG_REFORMIME is not set
-+# CONFIG_FEATURE_REFORMIME_COMPAT is not set
-+# CONFIG_SENDMAIL is not set
-+
-+#
-+# Process Utilities
-+#
-+# CONFIG_IOSTAT is not set
-+CONFIG_LSOF=y
-+# CONFIG_MPSTAT is not set
-+# CONFIG_NMETER is not set
-+# CONFIG_PMAP is not set
-+# CONFIG_POWERTOP is not set
-+# CONFIG_PSTREE is not set
-+# CONFIG_PWDX is not set
-+# CONFIG_SMEMCAP is not set
-+CONFIG_TOP=y
-+CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
-+CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
-+# CONFIG_FEATURE_TOP_SMP_CPU is not set
-+# CONFIG_FEATURE_TOP_DECIMALS is not set
-+# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
-+# CONFIG_FEATURE_TOPMEM is not set
-+CONFIG_UPTIME=y
-+# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
-+CONFIG_FREE=y
-+CONFIG_FUSER=y
-+CONFIG_KILL=y
-+CONFIG_KILLALL=y
-+CONFIG_KILLALL5=y
-+# CONFIG_PGREP is not set
-+CONFIG_PIDOF=y
-+CONFIG_FEATURE_PIDOF_SINGLE=y
-+CONFIG_FEATURE_PIDOF_OMIT=y
-+# CONFIG_PKILL is not set
-+CONFIG_PS=y
-+# CONFIG_FEATURE_PS_WIDE is not set
-+# CONFIG_FEATURE_PS_LONG is not set
-+# CONFIG_FEATURE_PS_TIME is not set
-+# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
-+# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
-+CONFIG_RENICE=y
-+CONFIG_BB_SYSCTL=y
-+# CONFIG_FEATURE_SHOW_THREADS is not set
-+CONFIG_WATCH=y
-+
-+#
-+# Runit Utilities
-+#
-+# CONFIG_RUNSV is not set
-+# CONFIG_RUNSVDIR is not set
-+# CONFIG_FEATURE_RUNSVDIR_LOG is not set
-+# CONFIG_SV is not set
-+CONFIG_SV_DEFAULT_SERVICE_DIR=""
-+# CONFIG_SVLOGD is not set
-+# CONFIG_CHPST is not set
-+# CONFIG_SETUIDGID is not set
-+# CONFIG_ENVUIDGID is not set
-+# CONFIG_ENVDIR is not set
-+# CONFIG_SOFTLIMIT is not set
-+
-+#
-+# SELinux Utilities
-+#
-+# CONFIG_CHCON is not set
-+# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
-+# CONFIG_GETENFORCE is not set
-+# CONFIG_GETSEBOOL is not set
-+# CONFIG_LOAD_POLICY is not set
-+# CONFIG_MATCHPATHCON is not set
-+# CONFIG_RESTORECON is not set
-+# CONFIG_RUNCON is not set
-+# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
-+# CONFIG_SELINUXENABLED is not set
-+# CONFIG_SETENFORCE is not set
-+# CONFIG_SETFILES is not set
-+# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
-+# CONFIG_SETSEBOOL is not set
-+# CONFIG_SESTATUS is not set
-+
-+#
-+# Shells
-+#
-+CONFIG_ASH=y
-+CONFIG_ASH_BASH_COMPAT=y
-+CONFIG_ASH_IDLE_TIMEOUT=y
-+CONFIG_ASH_JOB_CONTROL=y
-+CONFIG_ASH_ALIAS=y
-+CONFIG_ASH_GETOPTS=y
-+CONFIG_ASH_BUILTIN_ECHO=y
-+CONFIG_ASH_BUILTIN_PRINTF=y
-+CONFIG_ASH_BUILTIN_TEST=y
-+CONFIG_ASH_CMDCMD=y
-+# CONFIG_ASH_MAIL is not set
-+CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
-+CONFIG_ASH_RANDOM_SUPPORT=y
-+CONFIG_ASH_EXPAND_PRMT=y
-+# CONFIG_CTTYHACK is not set
-+# CONFIG_HUSH is not set
-+# CONFIG_HUSH_BASH_COMPAT is not set
-+# CONFIG_HUSH_BRACE_EXPANSION is not set
-+# CONFIG_HUSH_HELP is not set
-+# CONFIG_HUSH_INTERACTIVE is not set
-+# CONFIG_HUSH_SAVEHISTORY is not set
-+# CONFIG_HUSH_JOB is not set
-+# CONFIG_HUSH_TICK is not set
-+# CONFIG_HUSH_IF is not set
-+# CONFIG_HUSH_LOOPS is not set
-+# CONFIG_HUSH_CASE is not set
-+# CONFIG_HUSH_FUNCTIONS is not set
-+# CONFIG_HUSH_LOCAL is not set
-+# CONFIG_HUSH_RANDOM_SUPPORT is not set
-+# CONFIG_HUSH_EXPORT_N is not set
-+# CONFIG_HUSH_MODE_X is not set
-+# CONFIG_MSH is not set
-+CONFIG_FEATURE_SH_IS_ASH=y
-+# CONFIG_FEATURE_SH_IS_HUSH is not set
-+# CONFIG_FEATURE_SH_IS_NONE is not set
-+CONFIG_FEATURE_BASH_IS_ASH=y
-+# CONFIG_FEATURE_BASH_IS_HUSH is not set
-+# CONFIG_FEATURE_BASH_IS_NONE is not set
-+CONFIG_SH_MATH_SUPPORT=y
-+# CONFIG_SH_MATH_SUPPORT_64 is not set
-+CONFIG_FEATURE_SH_EXTRA_QUIET=y
-+# CONFIG_FEATURE_SH_STANDALONE is not set
-+# CONFIG_FEATURE_SH_NOFORK is not set
-+# CONFIG_FEATURE_SH_HISTFILESIZE is not set
-+
-+#
-+# System Logging Utilities
-+#
-+# CONFIG_SYSLOGD is not set
-+# CONFIG_FEATURE_ROTATE_LOGFILE is not set
-+# CONFIG_FEATURE_REMOTE_LOG is not set
-+# CONFIG_FEATURE_SYSLOGD_DUP is not set
-+# CONFIG_FEATURE_SYSLOGD_CFG is not set
-+CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=0
-+# CONFIG_FEATURE_IPC_SYSLOG is not set
-+CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
-+# CONFIG_LOGREAD is not set
-+# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
-+# CONFIG_FEATURE_KMSG_SYSLOG is not set
-+# CONFIG_KLOGD is not set
-+# CONFIG_FEATURE_KLOGD_KLOGCTL is not set
-+CONFIG_LOGGER=y
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.9.1
