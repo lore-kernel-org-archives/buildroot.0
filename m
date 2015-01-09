@@ -1,236 +1,1067 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:25 -0600
-Subject: [Buildroot] [PATCH v3 12/27] busybox: applets as individual binaries
+Date: Fri,  9 Jan 2015 08:18:28 -0600
+Subject: [Buildroot] [PATCH v3 15/27] busybox: default selinux config which
+	disables init and uses sysvinit
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-13-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-16-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The individual binaries option of busybox allows for the applets
-that would usually be symlinks to be built as individual applications
-that link against a shared library.
+From: Matt Weber <Matthew.Weber@rockwellcollins.com>
 
-This feature is needed for SELinux to allow the applications to run
-under the correct SELinux context.
-
-The patch being added allows the individual applications to be
-installed and will be upstreamed to the busybox developers.
-
-The initial work for this change was done by Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>.
-
-Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-[Matt W:
-  - Renamed to follow latest patch naming convention
+ board/qemu/x86/busybox-selinux.config | 1038 +++++++++++++++++++++++++++++++++
+ 1 file changed, 1038 insertions(+)
+ create mode 100644 board/qemu/x86/busybox-selinux.config
 
- ...s-Add-installation-of-individual-binaries.patch | 103 +++++++++++++++++++++
- package/busybox/Config.in                          |   7 ++
- package/busybox/busybox.mk                         |  34 +++++++
- 3 files changed, 144 insertions(+)
- create mode 100644 package/busybox/0007-applets-Add-installation-of-individual-binaries.patch
-
-diff --git a/package/busybox/0007-applets-Add-installation-of-individual-binaries.patch b/package/busybox/0007-applets-Add-installation-of-individual-binaries.patch
+diff --git a/board/qemu/x86/busybox-selinux.config b/board/qemu/x86/busybox-selinux.config
 new file mode 100644
-index 0000000..e7b9178
+index 0000000..2b365a4
 --- /dev/null
-+++ b/package/busybox/0007-applets-Add-installation-of-individual-binaries.patch
-@@ -0,0 +1,103 @@
-+From 3451b55054a6fe2073a21301938802a27dec835d Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
-+Date: Mon, 16 Dec 2013 14:45:33 -0600
-+Subject: [PATCH 5/5] applets: Add installation of individual binaries
++++ b/board/qemu/x86/busybox-selinux.config
+@@ -0,0 +1,1038 @@
++#
++# Automatically generated make config: don't edit
++# Busybox version: 1.22.1
++# Tue Sep 16 07:34:52 2014
++#
++CONFIG_HAVE_DOT_CONFIG=y
 +
-+Adding support to install individual binaries if the option is
-+enabled. This also installs the shared libbusybox.so.* library.
++#
++# Busybox Settings
++#
 +
-+Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-+---
-+ Makefile.custom    |    4 ++++
-+ applets/install.sh |   26 ++++++++++++++++++++++++--
-+ 2 files changed, 28 insertions(+), 2 deletions(-)
++#
++# General Configuration
++#
++CONFIG_DESKTOP=y
++# CONFIG_EXTRA_COMPAT is not set
++CONFIG_INCLUDE_SUSv2=y
++# CONFIG_USE_PORTABLE_CODE is not set
++CONFIG_PLATFORM_LINUX=y
++CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
++# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
++# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
++CONFIG_SHOW_USAGE=y
++CONFIG_FEATURE_VERBOSE_USAGE=y
++# CONFIG_FEATURE_COMPRESS_USAGE is not set
++CONFIG_FEATURE_INSTALLER=y
++# CONFIG_INSTALL_NO_USR is not set
++# CONFIG_LOCALE_SUPPORT is not set
++# CONFIG_UNICODE_SUPPORT is not set
++# CONFIG_UNICODE_USING_LOCALE is not set
++# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
++CONFIG_SUBST_WCHAR=0
++CONFIG_LAST_SUPPORTED_WCHAR=0
++# CONFIG_UNICODE_COMBINING_WCHARS is not set
++# CONFIG_UNICODE_WIDE_WCHARS is not set
++# CONFIG_UNICODE_BIDI_SUPPORT is not set
++# CONFIG_UNICODE_NEUTRAL_TABLE is not set
++# CONFIG_UNICODE_PRESERVE_BROKEN is not set
++CONFIG_LONG_OPTS=y
++CONFIG_FEATURE_DEVPTS=y
++CONFIG_FEATURE_CLEAN_UP=y
++CONFIG_FEATURE_UTMP=y
++CONFIG_FEATURE_WTMP=y
++# CONFIG_FEATURE_PIDFILE is not set
++CONFIG_PID_FILE_PATH=""
++CONFIG_FEATURE_SUID=y
++# CONFIG_FEATURE_SUID_CONFIG is not set
++# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
++CONFIG_SELINUX=y
++# CONFIG_FEATURE_PREFER_APPLETS is not set
++CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
++CONFIG_FEATURE_SYSLOG=y
++CONFIG_FEATURE_HAVE_RPC=y
 +
-+diff --git a/Makefile.custom b/Makefile.custom
-+index 6da79e6..e4dc4dc 100644
-+--- a/Makefile.custom
-++++ b/Makefile.custom
-+@@ -23,6 +23,10 @@ ifeq ($(CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER),y)
-+ INSTALL_OPTS:= --scriptwrapper
-+ endif
-+ endif
-++ifeq ($(CONFIG_FEATURE_INDIVIDUAL),y)
-++INSTALL_OPTS:= --binaries
-++LIBBUSYBOX_SONAME:= 0_lib/libbusybox.so.$(BB_VER)
-++endif
-+ install: $(srctree)/applets/install.sh busybox busybox.links
-+ 	$(Q)DO_INSTALL_LIBS="$(strip $(LIBBUSYBOX_SONAME) $(DO_INSTALL_LIBS))" \
-+ 		$(SHELL) $< $(CONFIG_PREFIX) $(INSTALL_OPTS)
-+diff --git a/applets/install.sh b/applets/install.sh
-+index 95b4719..d01c98d 100755
-+--- a/applets/install.sh
-++++ b/applets/install.sh
-+@@ -5,19 +5,26 @@ export LC_CTYPE=POSIX
-+ 
-+ prefix=$1
-+ if [ -z "$prefix" ]; then
-+-	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--scriptwrapper]"
-++	echo "usage: applets/install.sh DESTINATION [--symlinks/--hardlinks/--binaries/--scriptwrapper]"
-+ 	exit 1
-+ fi
-+ 
-++# Source the configuration
-++. ./.config
-++
-+ h=`sort busybox.links | uniq`
-+ 
-++sharedlib_dir="0_lib"
-++
-+ linkopts=""
-+ scriptwrapper="n"
-++binaries="n"
-+ cleanup="0"
-+ noclobber="0"
-+ case "$2" in
-+ 	--hardlinks)     linkopts="-f";;
-+ 	--symlinks)      linkopts="-fs";;
-++	--binaries)      binaries="y";;
-+ 	--scriptwrapper) scriptwrapper="y";swrapall="y";;
-+ 	--sw-sh-hard)    scriptwrapper="y";linkopts="-f";;
-+ 	--sw-sh-sym)     scriptwrapper="y";linkopts="-fs";;
-+@@ -40,8 +47,9 @@ if [ -n "$DO_INSTALL_LIBS" ] && [ "$DO_INSTALL_LIBS" != "n" ]; then
-+ 	for i in $DO_INSTALL_LIBS; do
-+ 		rm -f "$prefix/$libdir/$i" || exit 1
-+ 		if [ -f "$i" ]; then
-++			echo "   Installing $i to the target@$prefix/$libdir/"
-+ 			cp -pPR "$i" "$prefix/$libdir/" || exit 1
-+-			chmod 0644 "$prefix/$libdir/$i" || exit 1
-++			chmod 0644 "$prefix/$libdir/`basename $i`" || exit 1
-+ 		fi
-+ 	done
-+ fi
-+@@ -68,6 +76,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
-+ 
-+ for i in $h; do
-+ 	appdir=`dirname "$i"`
-++	app=`basename "$i"`
-+ 	mkdir -p "$prefix/$appdir" || exit 1
-+ 	if [ "$scriptwrapper" = "y" ]; then
-+ 		if [ "$swrapall" != "y" ] && [ "$i" = "/bin/sh" ]; then
-+@@ -78,6 +87,19 @@ for i in $h; do
-+ 			chmod +x "$prefix/$i"
-+ 		fi
-+ 		echo "	$prefix/$i"
-++	elif [ "$binaries" = "y" ]; then
-++		# Copy the binary over rather
-++		if [ -e $sharedlib_dir/$app ]; then
-++			if [ "$noclobber" = "0" ] || [ ! -e "$prefix/$i" ]; then
-++				echo "   Copying $sharedlib_dir/$app to $prefix/$i"
-++				cp -a $sharedlib_dir/$app $prefix/$i || exit 1
-++			else
-++				echo "  $prefix/$i already exists"
-++			fi
-++		else
-++			echo "Error: Could not find $sharedlib_dir/$app"
-++			exit 1
-++		fi
-+ 	else
-+ 		if [ "$2" = "--hardlinks" ]; then
-+ 			bb_path="$prefix/bin/busybox"
-+-- 
-+1.7.1
++#
++# Build Options
++#
++# CONFIG_STATIC is not set
++# CONFIG_PIE is not set
++# CONFIG_NOMMU is not set
++CONFIG_BUILD_LIBBUSYBOX=y
++CONFIG_FEATURE_INDIVIDUAL=y
++# CONFIG_FEATURE_SHARED_BUSYBOX is not set
++CONFIG_LFS=y
++CONFIG_CROSS_COMPILER_PREFIX=""
++CONFIG_SYSROOT=""
++CONFIG_EXTRA_CFLAGS=""
++CONFIG_EXTRA_LDFLAGS=""
++CONFIG_EXTRA_LDLIBS=""
 +
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index f2f2990..2344c4e 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -26,6 +26,13 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  Show packages in menuconfig that are potentially also provided
- 	  by busybox.
- 
-+config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
-+	bool "Individual binaries"
-+	depends on !BR2_PREFER_STATIC_LIB
++#
++# Debugging Options
++#
++# CONFIG_DEBUG is not set
++# CONFIG_DEBUG_PESSIMIZE is not set
++# CONFIG_WERROR is not set
++CONFIG_NO_DEBUG_LIB=y
++# CONFIG_DMALLOC is not set
++# CONFIG_EFENCE is not set
 +
-+comment "Busybox individual binaries depends on dynamic libraries"
-+	depends on BR2_PREFER_STATIC_LIB
++#
++# Installation Options ("make install" behavior)
++#
++CONFIG_INSTALL_APPLET_SYMLINKS=y
++# CONFIG_INSTALL_APPLET_HARDLINKS is not set
++# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
++# CONFIG_INSTALL_APPLET_DONT is not set
++# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
++# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
++# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
++CONFIG_PREFIX="./_install"
 +
- config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	bool "Install the watchdog daemon startup script"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f68a2f8..253c29a 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -49,10 +49,31 @@ BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_PERMISSIONS
-+# Applets with BB_SUID_REQUIRE
-+/usr/bin/crontab		 f 4755	0 0 - - - - -
-+/bin/login			 f 4755	0 0 - - - - -
-+/usr/bin/passwd		 f 4755	0 0 - - - - -
-+/bin/su			 f 4755	0 0 - - - - -
-+/usr/bin/vlock			 f 4755	0 0 - - - - -
-+/usr/bin/wall			 f 4755	0 0 - - - - -
-+# Applets with BB_SUID_MAYBE
-+/bin/ping			 f 4755	0 0 - - - - -
-+/bin/ping6			 f 4755	0 0 - - - - -
-+/sbin/findfs			 f 4755	0 0 - - - - -
-+/bin/mount			 f 4755	0 0 - - - - -
-+/usr/bin/traceroute		 f 4755	0 0 - - - - -
-+/usr/bin/traceroute6		 f 4755	0 0 - - - - -
-+# Other files
-+/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-+endef
-+else
- define BUSYBOX_PERMISSIONS
- 	/bin/busybox                     f 4755 0  0 - - - - -
- 	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
- endef
-+endif
- 
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-@@ -161,6 +182,17 @@ define BUSYBOX_SET_INIT
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
-+endef
++#
++# Busybox Library Tuning
++#
++# CONFIG_FEATURE_SYSTEMD is not set
++CONFIG_FEATURE_RTMINMAX=y
++CONFIG_PASSWORD_MINLEN=6
++CONFIG_MD5_SMALL=1
++CONFIG_SHA3_SMALL=1
++# CONFIG_FEATURE_FAST_TOP is not set
++# CONFIG_FEATURE_ETC_NETWORKS is not set
++CONFIG_FEATURE_USE_TERMIOS=y
++CONFIG_FEATURE_EDITING=y
++CONFIG_FEATURE_EDITING_MAX_LEN=1024
++CONFIG_FEATURE_EDITING_VI=y
++CONFIG_FEATURE_EDITING_HISTORY=999
++CONFIG_FEATURE_EDITING_SAVEHISTORY=y
++# CONFIG_FEATURE_EDITING_SAVE_ON_EXIT is not set
++CONFIG_FEATURE_REVERSE_SEARCH=y
++CONFIG_FEATURE_TAB_COMPLETION=y
++# CONFIG_FEATURE_USERNAME_COMPLETION is not set
++CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
++# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
++CONFIG_FEATURE_NON_POSIX_CP=y
++# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
++CONFIG_FEATURE_COPYBUF_KB=4
++CONFIG_FEATURE_SKIP_ROOTFS=y
++CONFIG_MONOTONIC_SYSCALL=y
++CONFIG_IOCTL_HEX2STR_ERROR=y
++CONFIG_FEATURE_HWIB=y
 +
-+define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
-+	rm -f $(TARGET_DIR)/bin/busybox
-+endef
-+endif
++#
++# Applets
++#
 +
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-@@ -198,6 +230,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
- endef
- 
- define BUSYBOX_CONFIGURE_CMDS
-@@ -221,6 +254,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
- endef
- 
- $(eval $(kconfig-package))
++#
++# Archival Utilities
++#
++# CONFIG_FEATURE_SEAMLESS_XZ is not set
++# CONFIG_FEATURE_SEAMLESS_LZMA is not set
++# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
++# CONFIG_FEATURE_SEAMLESS_GZ is not set
++# CONFIG_FEATURE_SEAMLESS_Z is not set
++CONFIG_AR=y
++# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
++CONFIG_FEATURE_AR_CREATE=y
++# CONFIG_UNCOMPRESS is not set
++CONFIG_GUNZIP=y
++CONFIG_BUNZIP2=y
++CONFIG_UNLZMA=y
++# CONFIG_FEATURE_LZMA_FAST is not set
++CONFIG_LZMA=y
++CONFIG_UNXZ=y
++CONFIG_XZ=y
++# CONFIG_BZIP2 is not set
++CONFIG_CPIO=y
++# CONFIG_FEATURE_CPIO_O is not set
++# CONFIG_FEATURE_CPIO_P is not set
++# CONFIG_DPKG is not set
++# CONFIG_DPKG_DEB is not set
++# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
++CONFIG_GZIP=y
++# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
++CONFIG_GZIP_FAST=0
++# CONFIG_LZOP is not set
++# CONFIG_LZOP_COMPR_HIGH is not set
++# CONFIG_RPM is not set
++# CONFIG_RPM2CPIO is not set
++CONFIG_TAR=y
++CONFIG_FEATURE_TAR_CREATE=y
++# CONFIG_FEATURE_TAR_AUTODETECT is not set
++CONFIG_FEATURE_TAR_FROM=y
++# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
++# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
++CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
++CONFIG_FEATURE_TAR_LONG_OPTIONS=y
++CONFIG_FEATURE_TAR_TO_COMMAND=y
++# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
++# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
++CONFIG_FEATURE_TAR_SELINUX=y
++CONFIG_UNZIP=y
++
++#
++# Coreutils
++#
++CONFIG_BASENAME=y
++CONFIG_CAT=y
++CONFIG_DATE=y
++CONFIG_FEATURE_DATE_ISOFMT=y
++# CONFIG_FEATURE_DATE_NANO is not set
++CONFIG_FEATURE_DATE_COMPAT=y
++CONFIG_HOSTID=y
++CONFIG_ID=y
++CONFIG_GROUPS=y
++CONFIG_TEST=y
++CONFIG_FEATURE_TEST_64=y
++CONFIG_TOUCH=y
++CONFIG_FEATURE_TOUCH_NODEREF=y
++CONFIG_FEATURE_TOUCH_SUSV3=y
++CONFIG_TR=y
++CONFIG_FEATURE_TR_CLASSES=y
++CONFIG_FEATURE_TR_EQUIV=y
++# CONFIG_BASE64 is not set
++CONFIG_WHO=y
++CONFIG_USERS=y
++# CONFIG_CAL is not set
++CONFIG_CATV=y
++CONFIG_CHGRP=y
++CONFIG_CHMOD=y
++CONFIG_CHOWN=y
++# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
++CONFIG_CHROOT=y
++CONFIG_CKSUM=y
++# CONFIG_COMM is not set
++CONFIG_CP=y
++# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
++CONFIG_CUT=y
++CONFIG_DD=y
++CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
++# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
++CONFIG_FEATURE_DD_IBS_OBS=y
++CONFIG_DF=y
++# CONFIG_FEATURE_DF_FANCY is not set
++CONFIG_DIRNAME=y
++CONFIG_DOS2UNIX=y
++CONFIG_UNIX2DOS=y
++CONFIG_DU=y
++CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
++CONFIG_ECHO=y
++CONFIG_FEATURE_FANCY_ECHO=y
++CONFIG_ENV=y
++# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
++# CONFIG_EXPAND is not set
++# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
++CONFIG_EXPR=y
++CONFIG_EXPR_MATH_SUPPORT_64=y
++CONFIG_FALSE=y
++CONFIG_FOLD=y
++# CONFIG_FSYNC is not set
++CONFIG_HEAD=y
++CONFIG_FEATURE_FANCY_HEAD=y
++CONFIG_INSTALL=y
++CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
++CONFIG_LN=y
++CONFIG_LOGNAME=y
++CONFIG_LS=y
++CONFIG_FEATURE_LS_FILETYPES=y
++CONFIG_FEATURE_LS_FOLLOWLINKS=y
++CONFIG_FEATURE_LS_RECURSIVE=y
++CONFIG_FEATURE_LS_SORTFILES=y
++CONFIG_FEATURE_LS_TIMESTAMPS=y
++CONFIG_FEATURE_LS_USERNAME=y
++CONFIG_FEATURE_LS_COLOR=y
++CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
++CONFIG_MD5SUM=y
++CONFIG_MKDIR=y
++CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
++CONFIG_MKFIFO=y
++CONFIG_MKNOD=y
++CONFIG_MV=y
++CONFIG_FEATURE_MV_LONG_OPTIONS=y
++CONFIG_NICE=y
++CONFIG_NOHUP=y
++CONFIG_OD=y
++CONFIG_PRINTENV=y
++CONFIG_PRINTF=y
++CONFIG_PWD=y
++CONFIG_READLINK=y
++CONFIG_FEATURE_READLINK_FOLLOW=y
++CONFIG_REALPATH=y
++CONFIG_RM=y
++CONFIG_RMDIR=y
++# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
++CONFIG_SEQ=y
++CONFIG_SHA1SUM=y
++CONFIG_SHA256SUM=y
++CONFIG_SHA512SUM=y
++CONFIG_SHA3SUM=y
++CONFIG_SLEEP=y
++CONFIG_FEATURE_FANCY_SLEEP=y
++CONFIG_FEATURE_FLOAT_SLEEP=y
++CONFIG_SORT=y
++CONFIG_FEATURE_SORT_BIG=y
++# CONFIG_SPLIT is not set
++# CONFIG_FEATURE_SPLIT_FANCY is not set
++# CONFIG_STAT is not set
++# CONFIG_FEATURE_STAT_FORMAT is not set
++CONFIG_STTY=y
++# CONFIG_SUM is not set
++CONFIG_SYNC=y
++# CONFIG_TAC is not set
++CONFIG_TAIL=y
++CONFIG_FEATURE_FANCY_TAIL=y
++CONFIG_TEE=y
++CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
++CONFIG_TRUE=y
++CONFIG_TTY=y
++CONFIG_UNAME=y
++# CONFIG_UNEXPAND is not set
++# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
++CONFIG_UNIQ=y
++CONFIG_USLEEP=y
++CONFIG_UUDECODE=y
++CONFIG_UUENCODE=y
++CONFIG_WC=y
++# CONFIG_FEATURE_WC_LARGE is not set
++CONFIG_WHOAMI=y
++CONFIG_YES=y
++
++#
++# Common options for cp and mv
++#
++CONFIG_FEATURE_PRESERVE_HARDLINKS=y
++
++#
++# Common options for ls, more and telnet
++#
++CONFIG_FEATURE_AUTOWIDTH=y
++
++#
++# Common options for df, du, ls
++#
++CONFIG_FEATURE_HUMAN_READABLE=y
++
++#
++# Common options for md5sum, sha1sum, sha256sum, sha512sum, sha3sum
++#
++CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
++
++#
++# Console Utilities
++#
++CONFIG_CHVT=y
++# CONFIG_FGCONSOLE is not set
++CONFIG_CLEAR=y
++CONFIG_DEALLOCVT=y
++CONFIG_DUMPKMAP=y
++# CONFIG_KBD_MODE is not set
++CONFIG_LOADFONT=y
++CONFIG_LOADKMAP=y
++CONFIG_OPENVT=y
++CONFIG_RESET=y
++CONFIG_RESIZE=y
++CONFIG_FEATURE_RESIZE_PRINT=y
++CONFIG_SETCONSOLE=y
++# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
++# CONFIG_SETFONT is not set
++# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
++CONFIG_DEFAULT_SETFONT_DIR=""
++CONFIG_SETKEYCODES=y
++CONFIG_SETLOGCONS=y
++# CONFIG_SHOWKEY is not set
++
++#
++# Common options for loadfont and setfont
++#
++CONFIG_FEATURE_LOADFONT_PSF2=y
++CONFIG_FEATURE_LOADFONT_RAW=y
++
++#
++# Debian Utilities
++#
++CONFIG_MKTEMP=y
++CONFIG_PIPE_PROGRESS=y
++CONFIG_RUN_PARTS=y
++CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
++# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
++CONFIG_START_STOP_DAEMON=y
++CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
++CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
++CONFIG_WHICH=y
++
++#
++# Editors
++#
++CONFIG_AWK=y
++# CONFIG_FEATURE_AWK_LIBM is not set
++CONFIG_FEATURE_AWK_GNU_EXTENSIONS=y
++CONFIG_CMP=y
++CONFIG_DIFF=y
++# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
++CONFIG_FEATURE_DIFF_DIR=y
++# CONFIG_ED is not set
++CONFIG_PATCH=y
++CONFIG_SED=y
++CONFIG_VI=y
++CONFIG_FEATURE_VI_MAX_LEN=4096
++CONFIG_FEATURE_VI_8BIT=y
++CONFIG_FEATURE_VI_COLON=y
++CONFIG_FEATURE_VI_YANKMARK=y
++CONFIG_FEATURE_VI_SEARCH=y
++# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
++CONFIG_FEATURE_VI_USE_SIGNALS=y
++CONFIG_FEATURE_VI_DOT_CMD=y
++CONFIG_FEATURE_VI_READONLY=y
++CONFIG_FEATURE_VI_SETOPTS=y
++CONFIG_FEATURE_VI_SET=y
++CONFIG_FEATURE_VI_WIN_RESIZE=y
++CONFIG_FEATURE_VI_ASK_TERMINAL=y
++CONFIG_FEATURE_ALLOW_EXEC=y
++
++#
++# Finding Utilities
++#
++CONFIG_FIND=y
++CONFIG_FEATURE_FIND_PRINT0=y
++CONFIG_FEATURE_FIND_MTIME=y
++CONFIG_FEATURE_FIND_MMIN=y
++CONFIG_FEATURE_FIND_PERM=y
++CONFIG_FEATURE_FIND_TYPE=y
++CONFIG_FEATURE_FIND_XDEV=y
++CONFIG_FEATURE_FIND_MAXDEPTH=y
++CONFIG_FEATURE_FIND_NEWER=y
++# CONFIG_FEATURE_FIND_INUM is not set
++CONFIG_FEATURE_FIND_EXEC=y
++CONFIG_FEATURE_FIND_USER=y
++CONFIG_FEATURE_FIND_GROUP=y
++CONFIG_FEATURE_FIND_NOT=y
++CONFIG_FEATURE_FIND_DEPTH=y
++CONFIG_FEATURE_FIND_PAREN=y
++CONFIG_FEATURE_FIND_SIZE=y
++CONFIG_FEATURE_FIND_PRUNE=y
++# CONFIG_FEATURE_FIND_DELETE is not set
++CONFIG_FEATURE_FIND_PATH=y
++CONFIG_FEATURE_FIND_REGEX=y
++# CONFIG_FEATURE_FIND_CONTEXT is not set
++# CONFIG_FEATURE_FIND_LINKS is not set
++CONFIG_GREP=y
++CONFIG_FEATURE_GREP_EGREP_ALIAS=y
++CONFIG_FEATURE_GREP_FGREP_ALIAS=y
++CONFIG_FEATURE_GREP_CONTEXT=y
++CONFIG_XARGS=y
++# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
++CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
++CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
++CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
++
++#
++# Init Utilities
++#
++# CONFIG_BOOTCHARTD is not set
++# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
++# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
++# CONFIG_HALT is not set
++# CONFIG_FEATURE_CALL_TELINIT is not set
++CONFIG_TELINIT_PATH=""
++# CONFIG_INIT is not set
++# CONFIG_FEATURE_USE_INITTAB is not set
++# CONFIG_FEATURE_KILL_REMOVED is not set
++CONFIG_FEATURE_KILL_DELAY=0
++# CONFIG_FEATURE_INIT_SCTTY is not set
++# CONFIG_FEATURE_INIT_SYSLOG is not set
++# CONFIG_FEATURE_EXTRA_QUIET is not set
++# CONFIG_FEATURE_INIT_COREDUMPS is not set
++# CONFIG_FEATURE_INITRD is not set
++CONFIG_INIT_TERMINAL_TYPE=""
++CONFIG_MESG=y
++CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
++
++#
++# Login/Password Management Utilities
++#
++# CONFIG_ADD_SHELL is not set
++# CONFIG_REMOVE_SHELL is not set
++# CONFIG_FEATURE_SHADOWPASSWDS is not set
++# CONFIG_USE_BB_PWD_GRP is not set
++# CONFIG_USE_BB_SHADOW is not set
++# CONFIG_USE_BB_CRYPT is not set
++# CONFIG_USE_BB_CRYPT_SHA is not set
++# CONFIG_ADDUSER is not set
++# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
++# CONFIG_FEATURE_CHECK_NAMES is not set
++CONFIG_FIRST_SYSTEM_ID=0
++CONFIG_LAST_SYSTEM_ID=0
++# CONFIG_ADDGROUP is not set
++# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
++# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
++# CONFIG_DELUSER is not set
++# CONFIG_DELGROUP is not set
++# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
++CONFIG_GETTY=y
++CONFIG_LOGIN=y
++CONFIG_LOGIN_SESSION_AS_CHILD=y
++CONFIG_PAM=y
++CONFIG_LOGIN_SCRIPTS=y
++CONFIG_FEATURE_NOLOGIN=y
++CONFIG_FEATURE_SECURETTY=y
++# CONFIG_PASSWD is not set
++# CONFIG_FEATURE_PASSWD_WEAK_CHECK is not set
++# CONFIG_CRYPTPW is not set
++# CONFIG_CHPASSWD is not set
++CONFIG_FEATURE_DEFAULT_PASSWD_ALGO=""
++# CONFIG_SU is not set
++# CONFIG_FEATURE_SU_SYSLOG is not set
++# CONFIG_FEATURE_SU_CHECKS_SHELLS is not set
++# CONFIG_SULOGIN is not set
++# CONFIG_VLOCK is not set
++
++#
++# Linux Ext2 FS Progs
++#
++# CONFIG_CHATTR is not set
++# CONFIG_FSCK is not set
++# CONFIG_LSATTR is not set
++# CONFIG_TUNE2FS is not set
++
++#
++# Linux Module Utilities
++#
++# CONFIG_MODINFO is not set
++# CONFIG_MODPROBE_SMALL is not set
++# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
++# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
++# CONFIG_INSMOD is not set
++# CONFIG_RMMOD is not set
++# CONFIG_LSMOD is not set
++# CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT is not set
++# CONFIG_MODPROBE is not set
++# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
++# CONFIG_DEPMOD is not set
++
++#
++# Options common to multiple modutils
++#
++# CONFIG_FEATURE_2_4_MODULES is not set
++# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
++# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
++# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
++# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
++# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
++# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
++# CONFIG_FEATURE_CHECK_TAINTED_MODULE is not set
++# CONFIG_FEATURE_MODUTILS_ALIAS is not set
++# CONFIG_FEATURE_MODUTILS_SYMBOLS is not set
++CONFIG_DEFAULT_MODULES_DIR=""
++CONFIG_DEFAULT_DEPMOD_FILE=""
++
++#
++# Linux System Utilities
++#
++# CONFIG_BLOCKDEV is not set
++CONFIG_FSTRIM=y
++CONFIG_MDEV=y
++CONFIG_FEATURE_MDEV_CONF=y
++CONFIG_FEATURE_MDEV_RENAME=y
++# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
++CONFIG_FEATURE_MDEV_EXEC=y
++# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
++# CONFIG_REV is not set
++# CONFIG_ACPID is not set
++# CONFIG_FEATURE_ACPID_COMPAT is not set
++CONFIG_BLKID=y
++# CONFIG_FEATURE_BLKID_TYPE is not set
++CONFIG_DMESG=y
++CONFIG_FEATURE_DMESG_PRETTY=y
++# CONFIG_FBSET is not set
++# CONFIG_FEATURE_FBSET_FANCY is not set
++# CONFIG_FEATURE_FBSET_READMODE is not set
++CONFIG_FDFLUSH=y
++CONFIG_FDFORMAT=y
++CONFIG_FDISK=y
++# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
++CONFIG_FEATURE_FDISK_WRITABLE=y
++# CONFIG_FEATURE_AIX_LABEL is not set
++# CONFIG_FEATURE_SGI_LABEL is not set
++# CONFIG_FEATURE_SUN_LABEL is not set
++# CONFIG_FEATURE_OSF_LABEL is not set
++CONFIG_FEATURE_GPT_LABEL=y
++CONFIG_FEATURE_FDISK_ADVANCED=y
++# CONFIG_FINDFS is not set
++# CONFIG_FLOCK is not set
++CONFIG_FREERAMDISK=y
++# CONFIG_FSCK_MINIX is not set
++# CONFIG_MKFS_EXT2 is not set
++# CONFIG_MKFS_MINIX is not set
++# CONFIG_FEATURE_MINIX2 is not set
++# CONFIG_MKFS_REISER is not set
++# CONFIG_MKFS_VFAT is not set
++CONFIG_GETOPT=y
++CONFIG_FEATURE_GETOPT_LONG=y
++CONFIG_HEXDUMP=y
++# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
++# CONFIG_HD is not set
++CONFIG_HWCLOCK=y
++CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
++CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
++CONFIG_IPCRM=y
++CONFIG_IPCS=y
++CONFIG_LOSETUP=y
++CONFIG_LSPCI=y
++CONFIG_LSUSB=y
++CONFIG_MKSWAP=y
++# CONFIG_FEATURE_MKSWAP_UUID is not set
++CONFIG_MORE=y
++CONFIG_MOUNT=y
++# CONFIG_FEATURE_MOUNT_FAKE is not set
++CONFIG_FEATURE_MOUNT_VERBOSE=y
++CONFIG_FEATURE_MOUNT_HELPERS=y
++CONFIG_FEATURE_MOUNT_LABEL=y
++CONFIG_FEATURE_MOUNT_NFS=y
++CONFIG_FEATURE_MOUNT_CIFS=y
++CONFIG_FEATURE_MOUNT_FLAGS=y
++CONFIG_FEATURE_MOUNT_FSTAB=y
++# CONFIG_PIVOT_ROOT is not set
++CONFIG_RDATE=y
++# CONFIG_RDEV is not set
++CONFIG_READPROFILE=y
++# CONFIG_RTCWAKE is not set
++# CONFIG_SCRIPT is not set
++# CONFIG_SCRIPTREPLAY is not set
++CONFIG_SETARCH=y
++CONFIG_SWAPONOFF=y
++# CONFIG_FEATURE_SWAPON_PRI is not set
++CONFIG_SWITCH_ROOT=y
++CONFIG_UMOUNT=y
++CONFIG_FEATURE_UMOUNT_ALL=y
++
++#
++# Common options for mount/umount
++#
++CONFIG_FEATURE_MOUNT_LOOP=y
++CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
++# CONFIG_FEATURE_MTAB_SUPPORT is not set
++CONFIG_VOLUMEID=y
++
++#
++# Filesystem/Volume identification
++#
++# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
++# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
++CONFIG_FEATURE_VOLUMEID_EXFAT=y
++CONFIG_FEATURE_VOLUMEID_EXT=y
++CONFIG_FEATURE_VOLUMEID_F2FS=y
++CONFIG_FEATURE_VOLUMEID_FAT=y
++# CONFIG_FEATURE_VOLUMEID_HFS is not set
++# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
++# CONFIG_FEATURE_VOLUMEID_JFS is not set
++# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
++# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
++# CONFIG_FEATURE_VOLUMEID_LUKS is not set
++# CONFIG_FEATURE_VOLUMEID_NILFS is not set
++# CONFIG_FEATURE_VOLUMEID_NTFS is not set
++# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
++# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
++# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
++# CONFIG_FEATURE_VOLUMEID_SQUASHFS is not set
++# CONFIG_FEATURE_VOLUMEID_SYSV is not set
++# CONFIG_FEATURE_VOLUMEID_UDF is not set
++# CONFIG_FEATURE_VOLUMEID_XFS is not set
++
++#
++# Miscellaneous Utilities
++#
++# CONFIG_CONSPY is not set
++CONFIG_LESS=y
++CONFIG_FEATURE_LESS_MAXLINES=9999999
++CONFIG_FEATURE_LESS_BRACKETS=y
++CONFIG_FEATURE_LESS_FLAGS=y
++# CONFIG_FEATURE_LESS_MARKS is not set
++CONFIG_FEATURE_LESS_REGEXP=y
++# CONFIG_FEATURE_LESS_WINCH is not set
++# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
++# CONFIG_FEATURE_LESS_DASHCMD is not set
++# CONFIG_FEATURE_LESS_LINENUMS is not set
++# CONFIG_NANDWRITE is not set
++# CONFIG_NANDDUMP is not set
++# CONFIG_RFKILL is not set
++CONFIG_SETSERIAL=y
++# CONFIG_UBIATTACH is not set
++# CONFIG_UBIDETACH is not set
++# CONFIG_UBIMKVOL is not set
++# CONFIG_UBIRMVOL is not set
++# CONFIG_UBIRSVOL is not set
++# CONFIG_UBIUPDATEVOL is not set
++# CONFIG_WALL is not set
++# CONFIG_ADJTIMEX is not set
++# CONFIG_BBCONFIG is not set
++# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
++# CONFIG_BEEP is not set
++CONFIG_FEATURE_BEEP_FREQ=0
++CONFIG_FEATURE_BEEP_LENGTH_MS=0
++# CONFIG_CHAT is not set
++# CONFIG_FEATURE_CHAT_NOFAIL is not set
++# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
++# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
++# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
++# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
++# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
++# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
++CONFIG_CHRT=y
++CONFIG_CROND=y
++# CONFIG_FEATURE_CROND_D is not set
++# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
++CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
++CONFIG_CRONTAB=y
++CONFIG_DC=y
++# CONFIG_FEATURE_DC_LIBM is not set
++# CONFIG_DEVFSD is not set
++# CONFIG_DEVFSD_MODLOAD is not set
++# CONFIG_DEVFSD_FG_NP is not set
++# CONFIG_DEVFSD_VERBOSE is not set
++# CONFIG_FEATURE_DEVFS is not set
++CONFIG_DEVMEM=y
++CONFIG_EJECT=y
++# CONFIG_FEATURE_EJECT_SCSI is not set
++# CONFIG_FBSPLASH is not set
++# CONFIG_FLASHCP is not set
++# CONFIG_FLASH_LOCK is not set
++# CONFIG_FLASH_UNLOCK is not set
++# CONFIG_FLASH_ERASEALL is not set
++# CONFIG_IONICE is not set
++# CONFIG_INOTIFYD is not set
++CONFIG_LAST=y
++CONFIG_FEATURE_LAST_SMALL=y
++# CONFIG_FEATURE_LAST_FANCY is not set
++CONFIG_HDPARM=y
++CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
++# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
++# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
++CONFIG_MAKEDEVS=y
++# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
++CONFIG_FEATURE_MAKEDEVS_TABLE=y
++# CONFIG_MAN is not set
++CONFIG_MICROCOM=y
++CONFIG_MOUNTPOINT=y
++CONFIG_MT=y
++# CONFIG_RAIDAUTORUN is not set
++# CONFIG_READAHEAD is not set
++CONFIG_RUNLEVEL=y
++# CONFIG_RX is not set
++CONFIG_SETSID=y
++CONFIG_STRINGS=y
++# CONFIG_TASKSET is not set
++# CONFIG_FEATURE_TASKSET_FANCY is not set
++CONFIG_TIME=y
++# CONFIG_TIMEOUT is not set
++# CONFIG_TTYSIZE is not set
++# CONFIG_VOLNAME is not set
++CONFIG_WATCHDOG=y
++
++#
++# Networking Utilities
++#
++CONFIG_NAMEIF=y
++# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
++# CONFIG_NBDCLIENT is not set
++# CONFIG_NC is not set
++# CONFIG_NC_SERVER is not set
++# CONFIG_NC_EXTRA is not set
++# CONFIG_NC_110_COMPAT is not set
++CONFIG_PING=y
++# CONFIG_PING6 is not set
++CONFIG_FEATURE_FANCY_PING=y
++# CONFIG_WHOIS is not set
++CONFIG_FEATURE_IPV6=y
++# CONFIG_FEATURE_UNIX_LOCAL is not set
++# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
++# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
++# CONFIG_ARP is not set
++CONFIG_ARPING=y
++# CONFIG_BRCTL is not set
++# CONFIG_FEATURE_BRCTL_FANCY is not set
++# CONFIG_FEATURE_BRCTL_SHOW is not set
++CONFIG_DNSD=y
++CONFIG_ETHER_WAKE=y
++# CONFIG_FAKEIDENTD is not set
++# CONFIG_FTPD is not set
++# CONFIG_FEATURE_FTP_WRITE is not set
++# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
++# CONFIG_FTPGET is not set
++# CONFIG_FTPPUT is not set
++# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
++CONFIG_HOSTNAME=y
++# CONFIG_HTTPD is not set
++# CONFIG_FEATURE_HTTPD_RANGES is not set
++# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
++# CONFIG_FEATURE_HTTPD_SETUID is not set
++# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
++# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
++# CONFIG_FEATURE_HTTPD_CGI is not set
++# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
++# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
++# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
++# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
++# CONFIG_FEATURE_HTTPD_PROXY is not set
++# CONFIG_FEATURE_HTTPD_GZIP is not set
++CONFIG_IFCONFIG=y
++CONFIG_FEATURE_IFCONFIG_STATUS=y
++CONFIG_FEATURE_IFCONFIG_SLIP=y
++CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
++CONFIG_FEATURE_IFCONFIG_HW=y
++# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
++# CONFIG_IFENSLAVE is not set
++# CONFIG_IFPLUGD is not set
++CONFIG_IFUPDOWN=y
++CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
++CONFIG_FEATURE_IFUPDOWN_IP=y
++# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
++# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
++CONFIG_FEATURE_IFUPDOWN_IPV4=y
++CONFIG_FEATURE_IFUPDOWN_IPV6=y
++CONFIG_FEATURE_IFUPDOWN_MAPPING=y
++# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
++# CONFIG_INETD is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME is not set
++# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN is not set
++# CONFIG_FEATURE_INETD_RPC is not set
++CONFIG_IP=y
++CONFIG_FEATURE_IP_ADDRESS=y
++CONFIG_FEATURE_IP_LINK=y
++CONFIG_FEATURE_IP_ROUTE=y
++CONFIG_FEATURE_IP_TUNNEL=y
++CONFIG_FEATURE_IP_RULE=y
++CONFIG_FEATURE_IP_SHORT_FORMS=y
++# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
++CONFIG_IPADDR=y
++CONFIG_IPLINK=y
++CONFIG_IPROUTE=y
++CONFIG_IPTUNNEL=y
++CONFIG_IPRULE=y
++# CONFIG_IPCALC is not set
++# CONFIG_FEATURE_IPCALC_FANCY is not set
++# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
++CONFIG_NETSTAT=y
++# CONFIG_FEATURE_NETSTAT_WIDE is not set
++# CONFIG_FEATURE_NETSTAT_PRG is not set
++CONFIG_NSLOOKUP=y
++# CONFIG_NTPD is not set
++# CONFIG_FEATURE_NTPD_SERVER is not set
++# CONFIG_PSCAN is not set
++CONFIG_ROUTE=y
++# CONFIG_SLATTACH is not set
++# CONFIG_TCPSVD is not set
++CONFIG_TELNET=y
++CONFIG_FEATURE_TELNET_TTYPE=y
++CONFIG_FEATURE_TELNET_AUTOLOGIN=y
++# CONFIG_TELNETD is not set
++# CONFIG_FEATURE_TELNETD_STANDALONE is not set
++# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
++CONFIG_TFTP=y
++# CONFIG_TFTPD is not set
++
++#
++# Common options for tftp/tftpd
++#
++CONFIG_FEATURE_TFTP_GET=y
++CONFIG_FEATURE_TFTP_PUT=y
++CONFIG_FEATURE_TFTP_BLOCKSIZE=y
++# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
++# CONFIG_TFTP_DEBUG is not set
++CONFIG_TRACEROUTE=y
++# CONFIG_TRACEROUTE6 is not set
++# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
++# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
++# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
++# CONFIG_TUNCTL is not set
++# CONFIG_FEATURE_TUNCTL_UG is not set
++# CONFIG_UDHCPC6 is not set
++# CONFIG_UDHCPD is not set
++# CONFIG_DHCPRELAY is not set
++# CONFIG_DUMPLEASES is not set
++# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
++# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
++CONFIG_DHCPD_LEASES_FILE=""
++CONFIG_UDHCPC=y
++CONFIG_FEATURE_UDHCPC_ARPING=y
++# CONFIG_FEATURE_UDHCP_PORT is not set
++CONFIG_UDHCP_DEBUG=0
++# CONFIG_FEATURE_UDHCP_RFC3397 is not set
++CONFIG_FEATURE_UDHCP_8021Q=y
++CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
++CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
++CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
++# CONFIG_UDPSVD is not set
++CONFIG_VCONFIG=y
++CONFIG_WGET=y
++CONFIG_FEATURE_WGET_STATUSBAR=y
++CONFIG_FEATURE_WGET_AUTHENTICATION=y
++CONFIG_FEATURE_WGET_LONG_OPTIONS=y
++CONFIG_FEATURE_WGET_TIMEOUT=y
++# CONFIG_ZCIP is not set
++
++#
++# Print Utilities
++#
++# CONFIG_LPD is not set
++# CONFIG_LPR is not set
++# CONFIG_LPQ is not set
++
++#
++# Mail Utilities
++#
++# CONFIG_MAKEMIME is not set
++CONFIG_FEATURE_MIME_CHARSET=""
++# CONFIG_POPMAILDIR is not set
++# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
++# CONFIG_REFORMIME is not set
++# CONFIG_FEATURE_REFORMIME_COMPAT is not set
++# CONFIG_SENDMAIL is not set
++
++#
++# Process Utilities
++#
++# CONFIG_IOSTAT is not set
++CONFIG_LSOF=y
++# CONFIG_MPSTAT is not set
++# CONFIG_NMETER is not set
++# CONFIG_PMAP is not set
++# CONFIG_POWERTOP is not set
++# CONFIG_PSTREE is not set
++# CONFIG_PWDX is not set
++# CONFIG_SMEMCAP is not set
++CONFIG_TOP=y
++CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
++CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
++# CONFIG_FEATURE_TOP_SMP_CPU is not set
++# CONFIG_FEATURE_TOP_DECIMALS is not set
++# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
++# CONFIG_FEATURE_TOPMEM is not set
++CONFIG_UPTIME=y
++# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
++CONFIG_FREE=y
++CONFIG_FUSER=y
++CONFIG_KILL=y
++CONFIG_KILLALL=y
++CONFIG_KILLALL5=y
++# CONFIG_PGREP is not set
++CONFIG_PIDOF=y
++CONFIG_FEATURE_PIDOF_SINGLE=y
++CONFIG_FEATURE_PIDOF_OMIT=y
++# CONFIG_PKILL is not set
++CONFIG_PS=y
++# CONFIG_FEATURE_PS_WIDE is not set
++# CONFIG_FEATURE_PS_LONG is not set
++# CONFIG_FEATURE_PS_TIME is not set
++# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
++# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
++CONFIG_RENICE=y
++CONFIG_BB_SYSCTL=y
++# CONFIG_FEATURE_SHOW_THREADS is not set
++CONFIG_WATCH=y
++
++#
++# Runit Utilities
++#
++# CONFIG_RUNSV is not set
++# CONFIG_RUNSVDIR is not set
++# CONFIG_FEATURE_RUNSVDIR_LOG is not set
++# CONFIG_SV is not set
++CONFIG_SV_DEFAULT_SERVICE_DIR=""
++# CONFIG_SVLOGD is not set
++# CONFIG_CHPST is not set
++# CONFIG_SETUIDGID is not set
++# CONFIG_ENVUIDGID is not set
++# CONFIG_ENVDIR is not set
++# CONFIG_SOFTLIMIT is not set
++
++#
++# SELinux Utilities
++#
++# CONFIG_CHCON is not set
++# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
++# CONFIG_GETENFORCE is not set
++# CONFIG_GETSEBOOL is not set
++# CONFIG_LOAD_POLICY is not set
++# CONFIG_MATCHPATHCON is not set
++# CONFIG_RESTORECON is not set
++# CONFIG_RUNCON is not set
++# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
++# CONFIG_SELINUXENABLED is not set
++# CONFIG_SETENFORCE is not set
++# CONFIG_SETFILES is not set
++# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
++# CONFIG_SETSEBOOL is not set
++# CONFIG_SESTATUS is not set
++
++#
++# Shells
++#
++CONFIG_ASH=y
++CONFIG_ASH_BASH_COMPAT=y
++CONFIG_ASH_IDLE_TIMEOUT=y
++CONFIG_ASH_JOB_CONTROL=y
++CONFIG_ASH_ALIAS=y
++CONFIG_ASH_GETOPTS=y
++CONFIG_ASH_BUILTIN_ECHO=y
++CONFIG_ASH_BUILTIN_PRINTF=y
++CONFIG_ASH_BUILTIN_TEST=y
++CONFIG_ASH_CMDCMD=y
++# CONFIG_ASH_MAIL is not set
++CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
++CONFIG_ASH_RANDOM_SUPPORT=y
++CONFIG_ASH_EXPAND_PRMT=y
++# CONFIG_CTTYHACK is not set
++# CONFIG_HUSH is not set
++# CONFIG_HUSH_BASH_COMPAT is not set
++# CONFIG_HUSH_BRACE_EXPANSION is not set
++# CONFIG_HUSH_HELP is not set
++# CONFIG_HUSH_INTERACTIVE is not set
++# CONFIG_HUSH_SAVEHISTORY is not set
++# CONFIG_HUSH_JOB is not set
++# CONFIG_HUSH_TICK is not set
++# CONFIG_HUSH_IF is not set
++# CONFIG_HUSH_LOOPS is not set
++# CONFIG_HUSH_CASE is not set
++# CONFIG_HUSH_FUNCTIONS is not set
++# CONFIG_HUSH_LOCAL is not set
++# CONFIG_HUSH_RANDOM_SUPPORT is not set
++# CONFIG_HUSH_EXPORT_N is not set
++# CONFIG_HUSH_MODE_X is not set
++# CONFIG_MSH is not set
++CONFIG_FEATURE_SH_IS_ASH=y
++# CONFIG_FEATURE_SH_IS_HUSH is not set
++# CONFIG_FEATURE_SH_IS_NONE is not set
++CONFIG_FEATURE_BASH_IS_ASH=y
++# CONFIG_FEATURE_BASH_IS_HUSH is not set
++# CONFIG_FEATURE_BASH_IS_NONE is not set
++CONFIG_SH_MATH_SUPPORT=y
++# CONFIG_SH_MATH_SUPPORT_64 is not set
++CONFIG_FEATURE_SH_EXTRA_QUIET=y
++# CONFIG_FEATURE_SH_STANDALONE is not set
++# CONFIG_FEATURE_SH_NOFORK is not set
++# CONFIG_FEATURE_SH_HISTFILESIZE is not set
++
++#
++# System Logging Utilities
++#
++# CONFIG_SYSLOGD is not set
++# CONFIG_FEATURE_ROTATE_LOGFILE is not set
++# CONFIG_FEATURE_REMOTE_LOG is not set
++# CONFIG_FEATURE_SYSLOGD_DUP is not set
++# CONFIG_FEATURE_SYSLOGD_CFG is not set
++CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=0
++# CONFIG_FEATURE_IPC_SYSLOG is not set
++CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
++# CONFIG_LOGREAD is not set
++# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
++# CONFIG_FEATURE_KMSG_SYSLOG is not set
++# CONFIG_KLOGD is not set
++# CONFIG_FEATURE_KLOGD_KLOGCTL is not set
++CONFIG_LOGGER=y
 -- 
 1.9.1
