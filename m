@@ -1,171 +1,104 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:29 -0600
-Subject: [Buildroot] [PATCH v3 16/27] qemu_x86_selinux_defconfig: base
-	SELinux QEMU image for x86
+Date: Fri,  9 Jan 2015 08:18:26 -0600
+Subject: [Buildroot] [PATCH v3 13/27] busybox: selinux support
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-17-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-14-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Add a configure option to enable the SELinux support in the
+busybox configuration from the Buildroot menuconfig.
 
-This will build a base SELinux system that boots with SELinux
-in permissive mode.
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- board/qemu/x86/linux-3.12-selinux.config | 77 ++++++++++++++++++++++++++++++++
- configs/qemu_x86_selinux_defconfig       | 53 ++++++++++++++++++++++
- 2 files changed, 130 insertions(+)
- create mode 100644 board/qemu/x86/linux-3.12-selinux.config
- create mode 100644 configs/qemu_x86_selinux_defconfig
+[Matt W:
+  - Renamed to follow patch naming convention
 
-diff --git a/board/qemu/x86/linux-3.12-selinux.config b/board/qemu/x86/linux-3.12-selinux.config
+ ...ags-strip-non-l-arguments-returned-by-pkg.patch | 28 ++++++++++++++++++++++
+ package/busybox/Config.in                          |  3 +++
+ package/busybox/busybox.mk                         |  8 +++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+
+diff --git a/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
 new file mode 100644
-index 0000000..89ab0dc
+index 0000000..105626c
 --- /dev/null
-+++ b/board/qemu/x86/linux-3.12-selinux.config
-@@ -0,0 +1,77 @@
-+# CONFIG_LOCALVERSION_AUTO is not set
-+# CONFIG_SWAP is not set
-+CONFIG_AUDIT=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_MODULES=y
-+# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_X86_EXTENDED_PLATFORM is not set
-+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
-+# CONFIG_MTRR_SANITIZER is not set
-+# CONFIG_SECCOMP is not set
-+# CONFIG_RELOCATABLE is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_FIRMWARE_IN_KERNEL is not set
-+# CONFIG_BLK_DEV is not set
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_SERPORT is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_DEVKMEM is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
-+# CONFIG_USB_SUPPORT is not set
-+# CONFIG_X86_PLATFORM_DEVICES is not set
-+# CONFIG_DMIID is not set
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT2_FS_XATTR=y
-+CONFIG_EXT2_FS_POSIX_ACL=y
-+CONFIG_EXT2_FS_SECURITY=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_POSIX_ACL=y
-+CONFIG_EXT3_FS_SECURITY=y
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+# CONFIG_ENABLE_MUST_CHECK is not set
-+# CONFIG_UNUSED_SYMBOLS is not set
-+# CONFIG_FRAME_POINTER is not set
-+# CONFIG_X86_VERBOSE_BOOTUP is not set
-+CONFIG_SECURITY=y
-+CONFIG_SECURITY_NETWORK=y
-+CONFIG_SECURITY_SELINUX=y
-+CONFIG_SECURITY_SELINUX_BOOTPARAM=y
-+CONFIG_CRYPTO_ANSI_CPRNG=y
-+# CONFIG_VIRTUALIZATION is not set
-diff --git a/configs/qemu_x86_selinux_defconfig b/configs/qemu_x86_selinux_defconfig
-new file mode 100644
-index 0000000..9d603cf
---- /dev/null
-+++ b/configs/qemu_x86_selinux_defconfig
-@@ -0,0 +1,53 @@
-+# Architecture
-+BR2_x86_pentiumpro=y
++++ b/package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+@@ -0,0 +1,28 @@
++From 67eb23d2be8aba3c474dac81a15b0fa11e5847b7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 25 Nov 2013 22:51:53 +0100
++Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
 +
-+# Default to the latest Code Sourcery
-+BR2_TOOLCHAIN_EXTERNAL=y
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.flags | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+# Select SYSV init to provide selinux enabled init
-+BR2_INIT_SYSV=y
++diff --git a/Makefile.flags b/Makefile.flags
++index 307afa7..885e323 100644
++--- a/Makefile.flags
+++++ b/Makefile.flags
++@@ -141,7 +141,9 @@ ifeq ($(CONFIG_SELINUX),y)
++ SELINUX_PC_MODULES = libselinux libsepol
++ $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
++ CPPFLAGS += $(SELINUX_CFLAGS)
++-LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
+++LDLIBS += $(if $(SELINUX_LIBS),\
+++       $(patsubst -l%,%,$(filter -l%,$(SELINUX_LIBS))),\
+++       $(SELINUX_PC_MODULES:lib%=%))
++ endif
++ 
++ ifeq ($(CONFIG_EFENCE),y)
++-- 
++1.8.1.2
 +
-+# Default password to allow PAM login
-+BR2_TARGET_GENERIC_ROOT_PASSWD="root"
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 2344c4e..6a0e5d1 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -33,6 +33,9 @@ config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
+ comment "Busybox individual binaries depends on dynamic libraries"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
++config BR2_PACKAGE_BUSYBOX_SELINUX
++	bool "Enable SELinux support"
 +
-+# Lock to a kernel that's been tested against selinux libs
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.12-selinux.config"
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 253c29a..7232996 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -193,6 +193,13 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
++BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
++define BUSYBOX_SET_SELINUX
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
++endef
++endif
 +
-+# Customized busybox config providing a tailored
-+# balance of applets vs full apps
-+BR2_PACKAGE_BUSYBOX_CONFIG="board/qemu/x86/busybox-selinux.config"
-+
-+# Audit service and depends
-+BR2_PACKAGE_PYTHON_PY_PYC=y
-+BR2_PACKAGE_AUDIT=y
-+
-+# Enhanced authentication with selinux hooks
-+BR2_PACKAGE_LINUX_PAM=y
-+BR2_PACKAGE_SHADOW=y
-+
-+# Dependency of libselinux
-+BR2_PACKAGE_PCRE_UCP=y
-+
-+# SSH daemon for secure login
-+BR2_PACKAGE_OPENSSH=y
-+
-+# Provides tools for fs security context relabeling
-+BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND=y
-+
-+# SELinux policy config/definition
-+BR2_PACKAGE_REFPOLICY=y
-+
-+# log daemon
-+BR2_PACKAGE_RSYSLOG=y
-+
-+#rootfs with spare space for fs relabel activity
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_RESBLKS=5
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Offline tools for policy analysis/building
-+BR2_PACKAGE_HOST_CHECKPOLICY=y
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+@@ -231,6 +238,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
++	$(BUSYBOX_SET_SELINUX)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
 -- 
 1.9.1
