@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:17 -0600
-Subject: [Buildroot] [PATCH v3 04/27] python-pyparsing: Add host build option
+Date: Fri,  9 Jan 2015 08:18:15 -0600
+Subject: [Buildroot] [PATCH v3 02/27] sqlite: Add host build support
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-5-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,17 @@ From: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
 Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/python-pyparsing/python-pyparsing.mk | 1 +
+ package/sqlite/sqlite.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index 8e83f34..0f5fb71 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -12,3 +12,4 @@ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = distutils
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index a4920eb..8713dfa 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -57,3 +57,4 @@ SQLITE_CONF_OPTS += --disable-readline
+ endif
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.9.1
