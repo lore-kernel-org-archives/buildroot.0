@@ -1,54 +1,228 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  9 Jan 2015 18:03:25 +0100
-Subject: [Buildroot] [PATCH] package/xz-utils: does not require threads
-Message-ID: <1420823005-950-1-git-send-email-yann.morin.1998@free.fr>
+From: Steve James <ste@junkomatic.net>
+Date: Fri,  9 Jan 2015 17:09:46 +0000
+Subject: [Buildroot] [PATCH v5] leveldb: new package
+Message-ID: <1420823386-18874-1-git-send-email-ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 799c12e (xz-utils: needs threads) tried to fix an autobuild
-failure by requiring threads. But xz-utils can be configured without
-thread support (even though it is one of the most prominent
-selling-points of the latest release!).
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Steve James <ste@junkomatic.net>
 ---
- package/xz/Config.in | 4 ----
- package/xz/xz.mk     | 2 ++
- 2 files changed, 2 insertions(+), 4 deletions(-)
+Changes v4 -> v5:
+  - Simplify our make by patching Buildroot support into upstream
+Changes v3 -> v4:
+  - Don't damage global scope make macros
+  - Add dependency on threads toolchain
+Changes v2 -> v3:
+  - Re-submit without line wrapping
+Changes v1 -> v2:
+  - Upstream release labels don't include package name, giving us an
+    anonymous download archive, so use $(call github) method instead
+  - Use $(TARGET_CONFIGURE_OPTS)
+  - Support new shared vs static vs shared+static possibilities
 
-diff --git a/package/xz/Config.in b/package/xz/Config.in
-index 55beb42..50116f2 100644
---- a/package/xz/Config.in
-+++ b/package/xz/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_XZ
- 	bool "xz-utils"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  XZ is the successor to the Lempel-Ziv/Markov-chain Algorithm
- 	  compression format, which provides memory-hungry but powerful
-@@ -13,6 +12,3 @@ config BR2_PACKAGE_XZ
- 	  package.
- 
- 	  http://tukaani.org/xz/
--
--comment "xz-utils needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 24b1adb..11c15fa 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -12,5 +12,7 @@ XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- XZ_LICENSE = GPLv2+ GPLv3+ LGPLv2.1+
- XZ_LICENSE_FILES = COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
- 
-+XZ_CONF_OPTS = --enable-threads=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,no)
+ package/Config.in                                  |  1 +
+ package/leveldb/001-ssize_t-undefined.patch        | 17 +++++
+ ...002-facilitate-integration-into-buildroot.patch | 78 ++++++++++++++++++++++
+ package/leveldb/Config.in                          | 13 ++++
+ package/leveldb/leveldb.mk                         | 46 +++++++++++++
+ 5 files changed, 155 insertions(+)
+ create mode 100644 package/leveldb/001-ssize_t-undefined.patch
+ create mode 100644 package/leveldb/002-facilitate-integration-into-buildroot.patch
+ create mode 100644 package/leveldb/Config.in
+ create mode 100644 package/leveldb/leveldb.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 90d334c..e9f2255 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -631,6 +631,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/leveldb/Config.in"
+ 	source "package/mysql/Config.in"
+ 	source "package/postgresql/Config.in"
+ 	source "package/redis/Config.in"
+diff --git a/package/leveldb/001-ssize_t-undefined.patch b/package/leveldb/001-ssize_t-undefined.patch
+new file mode 100644
+index 0000000..9a958d8
+--- /dev/null
++++ b/package/leveldb/001-ssize_t-undefined.patch
+@@ -0,0 +1,17 @@
++Fix leveldb issue 233 leveldb does not compile with g++ 4.8.2
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++Where db_iter.cc fails to get a typedef for ssize_t when compiled by GCC.
++
++Upstream-Status: Submitted [https://github.com/google/leveldb/issues/233]
++Signed-off-by: Steve James <ste@junkomatic.net>
++
++--- a/db/db_iter.cc.orig	2014-12-08 16:54:31.384615752 +0000
+++++ b/db/db_iter.cc	2014-12-08 16:54:35.464656890 +0000
++@@ -13,6 +13,7 @@
++ #include "util/logging.h"
++ #include "util/mutexlock.h"
++ #include "util/random.h"
+++#include <sys/types.h> // for ssize_t
++ 
++ namespace leveldb {
++ 
+diff --git a/package/leveldb/002-facilitate-integration-into-buildroot.patch b/package/leveldb/002-facilitate-integration-into-buildroot.patch
+new file mode 100644
+index 0000000..c256f34
+--- /dev/null
++++ b/package/leveldb/002-facilitate-integration-into-buildroot.patch
+@@ -0,0 +1,78 @@
++From 83d4b0db22f661718e9568e8bcde549ad3fd4222 Mon Sep 17 00:00:00 2001
++From: Steve James <ste@junkomatic.net>
++Date: Fri, 9 Jan 2015 10:38:21 +0000
++Subject: [PATCH 1/1] facilitate integration into Buildroot:
++  - Add Buildroot TARGET_OS
++  - Allow flags from the environment
++  - Add install recipe
++
++Signed-off-by: Steve James <ste@junkomatic.net>
++Upstream-Status: Submitted [https://github.com/google/leveldb/pull/274]
++---
++ Makefile              | 25 +++++++++++++++++++++----
++ build_detect_platform |  8 ++++++++
++ 2 files changed, 29 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 24f214a..130fd19 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -20,11 +20,11 @@ $(shell CC="$(CC)" CXX="$(CXX)" TARGET_OS="$(TARGET_OS)" \
++ # this file is generated by the previous line to set build flags and sources
++ include build_config.mk
++ 
++-CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
++-CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
+++override CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
+++override CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
++ 
++-LDFLAGS += $(PLATFORM_LDFLAGS)
++-LIBS += $(PLATFORM_LIBS)
+++override LDFLAGS += $(PLATFORM_LDFLAGS)
+++override LIBS += $(PLATFORM_LIBS)
++ 
++ LIBOBJECTS = $(SOURCES:.cc=.o)
++ MEMENVOBJECTS = $(MEMENV_SOURCES:.cc=.o)
++@@ -229,3 +229,20 @@ else
++ .c.o:
++ 	$(CC) $(CFLAGS) -c $< -o $@
++ endif
+++
+++INSTALL_ROOT =
+++INSTALL_PREFIX= usr
+++
+++install: $(SHARED) $(LIBRARY)
+++	install -d -m 0755 $(INSTALL_ROOT)/$(INSTALL_PREFIX)/include/leveldb
+++	install -D -m 0644 include/leveldb/*.h $(INSTALL_ROOT)/$(INSTALL_PREFIX)/include/leveldb
+++	install -d -m 0755 $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
+++  ifneq (,$(LIBRARY))
+++	install -m 0644 $(LIBRARY) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
+++  endif
+++  ifneq (,$(SHARED))
+++	install -m 0755 $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
+++	ln -sf $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib/$(SHARED1)
+++	ln -sf $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib/$(SHARED2)
+++  endif
+++
++diff --git a/build_detect_platform b/build_detect_platform
++index bb76c4f..0ad4f8d 100755
++--- a/build_detect_platform
+++++ b/build_detect_platform
++@@ -147,6 +147,14 @@ case "$TARGET_OS" in
++         PLATFORM_SHARED_CFLAGS=
++         PLATFORM_SHARED_VERSIONED=
++         ;;
+++    Buildroot)
+++        PLATFORM=OS_LINUX
+++        COMMON_FLAGS="$MEMCMP_FLAG -pthread -DOS_LINUX -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT"
+++        PLATFORM_LDFLAGS="-pthread"
+++        PLATFORM_CXXFLAGS="-std=c++0x"
+++        PORT_FILE=port/port_posix.cc
+++        CROSS_COMPILE=true
+++        ;;
++     *)
++         echo "Unknown platform!" >&2
++         exit 1
++-- 
++1.9.1
++
+diff --git a/package/leveldb/Config.in b/package/leveldb/Config.in
+new file mode 100644
+index 0000000..af097e5
+--- /dev/null
++++ b/package/leveldb/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LEVELDB
++	bool "leveldb"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_SNAPPY
++	help
++	  LevelDB is a fast key-value storage library written at Google that
++	  provides an ordered mapping from string keys to string values.
++
++	  https://github.com/google/leveldb
++
++comment "leveldb needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+new file mode 100644
+index 0000000..ffbcc3e
+--- /dev/null
++++ b/package/leveldb/leveldb.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# leveldb
++#
++################################################################################
++
++LEVELDB_VERSION = 803d69203a62faf50f1b77897310a3a1fcae712b
++LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
++LEVELDB_LICENSE = BSD-3c
++LEVELDB_LICENSE_FILES = LICENSE
++LEVELDB_INSTALL_STAGING = YES
++LEVELDB_DEPENDENCIES = snappy
++
++LEVELDB_MAKE_ARGS += TARGET_OS=Buildroot
++
++# We will pass optimisation level via CFLAGS so remove leveldb default
++LEVELDB_MAKE_ARGS += OPTIM=
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),)
++# Dynamic library not required
++LEVELDB_MAKE_ARGS += SHARED=
++endif
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),)
++# Static library not required
++LEVELDB_MAKE_ARGS += LIBRARY=
++endif
++
++define LEVELDB_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(LEVELDB_MAKE_ARGS) -C $(@D)
++endef
++
++define LEVELDB_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(LEVELDB_MAKE_ARGS) -C $(@D) INSTALL_ROOT=$(STAGING_DIR) install
++endef
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++define LEVELDB_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		$(LEVELDB_MAKE_ARGS) -C $(@D) INSTALL_ROOT=$(TARGET_DIR) install
++endef
++endif
++
++$(eval $(generic-package))
 -- 
 1.9.1
