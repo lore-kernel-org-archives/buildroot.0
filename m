@@ -1,25 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Jan 2015 03:44:14 -0300
-Subject: [Buildroot] [PATCH] xz: fix stray hash
-Message-ID: <1420785854-29928-1-git-send-email-gustavo@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri,  9 Jan 2015 08:14:01 +0100
+Subject: [Buildroot] [PATCH v4 0/2]  libsvgtiny: fix source url
+Message-ID: <1420787643-6167-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/xz/xz.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v4:
+ - Move NetSurf buildsystem files to a new pacakge (Thomas P.)
+v3:
+ - Add missing netsurf core buildsystem sources.
+v2:
+ - Use http for git (suggested by Baruch) (done by Thomas P.).
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index f76b9ac..9a5a9ff 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  5962fe32e0b42c7065b4410b7d8ffbf2895e197e97d410c4fc374ea0d7610a14  xz-5.2.0.tar.xz
-+sha256  f7357d7455a1670229b3cca021da71dd5d13b789db62743c20624bdffc9cc4a5  xz-5.2.0.tar.bz2
+Fabio Porcedda (2):
+  netsurf-buildsystem: new package
+  libsvgtiny: update source url
+
+ package/libsvgtiny/libsvgtiny.mk                   | 12 +++++++++---
+ package/netsurf-buildsystem/netsurf-buildsystem.mk | 20 ++++++++++++++++++++
+ 2 files changed, 29 insertions(+), 3 deletions(-)
+ create mode 100644 package/netsurf-buildsystem/netsurf-buildsystem.mk
+
 -- 
-2.0.5
+2.2.1
