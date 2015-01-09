@@ -1,228 +1,78 @@
-From: Steve James <ste@junkomatic.net>
-Date: Fri,  9 Jan 2015 17:09:46 +0000
-Subject: [Buildroot] [PATCH v5] leveldb: new package
-Message-ID: <1420823386-18874-1-git-send-email-ste@junkomatic.net>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 9 Jan 2015 18:15:39 +0000
+Subject: [Buildroot] [PATCH] system: run getty on boot console by default
+In-Reply-To: <1419411780.3420.5.camel@synopsys.com>
+References: <1419336373-30919-1-git-send-email-abrodkin@synopsys.com>
+ <CAGm1_ktp7gkprBXNLTvd3gE7LMv_9cyUXyF3eb3r83OGPie0NQ@mail.gmail.com>
+ <1419337919.2781.6.camel@synopsys.com>
+ <CAGm1_ktzvRWMrZHEVfrQnRdACs-N++Kwx5dq3Xp30YPxN-gQHw@mail.gmail.com>
+ <1419345339.2781.9.camel@synopsys.com>
+ <20141223205201.021ee085@free-electrons.com>
+ <1419369534.3284.4.camel@synopsys.com>
+ <20141223231052.6973e707@free-electrons.com>
+ <1419411780.3420.5.camel@synopsys.com>
+Message-ID: <1420827339.5917.1.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Steve James <ste@junkomatic.net>
----
-Changes v4 -> v5:
-  - Simplify our make by patching Buildroot support into upstream
-Changes v3 -> v4:
-  - Don't damage global scope make macros
-  - Add dependency on threads toolchain
-Changes v2 -> v3:
-  - Re-submit without line wrapping
-Changes v1 -> v2:
-  - Upstream release labels don't include package name, giving us an
-    anonymous download archive, so use $(call github) method instead
-  - Use $(TARGET_CONFIGURE_OPTS)
-  - Support new shared vs static vs shared+static possibilities
+Hi Thomas,
 
- package/Config.in                                  |  1 +
- package/leveldb/001-ssize_t-undefined.patch        | 17 +++++
- ...002-facilitate-integration-into-buildroot.patch | 78 ++++++++++++++++++++++
- package/leveldb/Config.in                          | 13 ++++
- package/leveldb/leveldb.mk                         | 46 +++++++++++++
- 5 files changed, 155 insertions(+)
- create mode 100644 package/leveldb/001-ssize_t-undefined.patch
- create mode 100644 package/leveldb/002-facilitate-integration-into-buildroot.patch
- create mode 100644 package/leveldb/Config.in
- create mode 100644 package/leveldb/leveldb.mk
+On Wed, 2014-12-24 at 12:03 +0300, Alexey Brodkin wrote:
+> > On Tue, 23 Dec 2014 21:18:56 +0000, Alexey Brodkin wrote:
+> > 
+> > > Interesting, then how it worked for me?
+> > > 
+> > > I have the same login prompt as usual:
+> > > --->---
+> > > Welcome to Buildroot
+> > > buildroot login:
+> > > --->---
+> > > 
+> > > Here I enter "root" as usual, press Enter and that's it.
+> > > "whoami" says "root" and I may modify any files etc.
+> > > 
+> > > What do I do wrong?
+> > 
+> > Weird, when I tested I had to add "console" to /etc/securetty,
+> > otherwise login would not let me log in as root. Are you using just
+> > Busybox, or some other login/getty implementation? Are you using an
+> > unmodified /etc/securetty?
+> 
+> Indeed it's strange.
+> I've just re-tested it and still see root login working perfectly.
+> 
+> I'm on mainline/master branch with my patch applied (no other changes):
+> --->---
+> (my patch) 7af7de3 system: run getty on boot console by default
+> f7add51 qemu: add host/target Linux version check
+> --->---
+> 
+> And this is output of "make savedefconfig":
+> --->---
+> BR2_x86_pentiumpro=y
+> BR2_KERNEL_HEADERS_VERSION=y
+> BR2_DEFAULT_KERNEL_VERSION="3.18"
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.18.config"
+> BR2_TARGET_ROOTFS_EXT2=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> --->---
+> 
+> Note that this is based on "qemu_x86_defconfig" and with my patch
+> applied that's why you don't see mention of "console".
+> 
+> You may try even without my patch and manually set
+> BR2_TARGET_GENERIC_GETTY_PORT=console
 
-diff --git a/package/Config.in b/package/Config.in
-index 90d334c..e9f2255 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -631,6 +631,7 @@ menu "Database"
- 	source "package/berkeleydb/Config.in"
- 	source "package/cppdb/Config.in"
- 	source "package/gdbm/Config.in"
-+	source "package/leveldb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
- 	source "package/redis/Config.in"
-diff --git a/package/leveldb/001-ssize_t-undefined.patch b/package/leveldb/001-ssize_t-undefined.patch
-new file mode 100644
-index 0000000..9a958d8
---- /dev/null
-+++ b/package/leveldb/001-ssize_t-undefined.patch
-@@ -0,0 +1,17 @@
-+Fix leveldb issue 233 leveldb does not compile with g++ 4.8.2
-+
-+Where db_iter.cc fails to get a typedef for ssize_t when compiled by GCC.
-+
-+Upstream-Status: Submitted [https://github.com/google/leveldb/issues/233]
-+Signed-off-by: Steve James <ste@junkomatic.net>
-+
-+--- a/db/db_iter.cc.orig	2014-12-08 16:54:31.384615752 +0000
-++++ b/db/db_iter.cc	2014-12-08 16:54:35.464656890 +0000
-+@@ -13,6 +13,7 @@
-+ #include "util/logging.h"
-+ #include "util/mutexlock.h"
-+ #include "util/random.h"
-++#include <sys/types.h> // for ssize_t
-+ 
-+ namespace leveldb {
-+ 
-diff --git a/package/leveldb/002-facilitate-integration-into-buildroot.patch b/package/leveldb/002-facilitate-integration-into-buildroot.patch
-new file mode 100644
-index 0000000..c256f34
---- /dev/null
-+++ b/package/leveldb/002-facilitate-integration-into-buildroot.patch
-@@ -0,0 +1,78 @@
-+From 83d4b0db22f661718e9568e8bcde549ad3fd4222 Mon Sep 17 00:00:00 2001
-+From: Steve James <ste@junkomatic.net>
-+Date: Fri, 9 Jan 2015 10:38:21 +0000
-+Subject: [PATCH 1/1] facilitate integration into Buildroot:
-+  - Add Buildroot TARGET_OS
-+  - Allow flags from the environment
-+  - Add install recipe
-+
-+Signed-off-by: Steve James <ste@junkomatic.net>
-+Upstream-Status: Submitted [https://github.com/google/leveldb/pull/274]
-+---
-+ Makefile              | 25 +++++++++++++++++++++----
-+ build_detect_platform |  8 ++++++++
-+ 2 files changed, 29 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 24f214a..130fd19 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -20,11 +20,11 @@ $(shell CC="$(CC)" CXX="$(CXX)" TARGET_OS="$(TARGET_OS)" \
-+ # this file is generated by the previous line to set build flags and sources
-+ include build_config.mk
-+ 
-+-CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
-+-CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
-++override CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
-++override CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
-+ 
-+-LDFLAGS += $(PLATFORM_LDFLAGS)
-+-LIBS += $(PLATFORM_LIBS)
-++override LDFLAGS += $(PLATFORM_LDFLAGS)
-++override LIBS += $(PLATFORM_LIBS)
-+ 
-+ LIBOBJECTS = $(SOURCES:.cc=.o)
-+ MEMENVOBJECTS = $(MEMENV_SOURCES:.cc=.o)
-+@@ -229,3 +229,20 @@ else
-+ .c.o:
-+ 	$(CC) $(CFLAGS) -c $< -o $@
-+ endif
-++
-++INSTALL_ROOT =
-++INSTALL_PREFIX= usr
-++
-++install: $(SHARED) $(LIBRARY)
-++	install -d -m 0755 $(INSTALL_ROOT)/$(INSTALL_PREFIX)/include/leveldb
-++	install -D -m 0644 include/leveldb/*.h $(INSTALL_ROOT)/$(INSTALL_PREFIX)/include/leveldb
-++	install -d -m 0755 $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
-++  ifneq (,$(LIBRARY))
-++	install -m 0644 $(LIBRARY) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
-++  endif
-++  ifneq (,$(SHARED))
-++	install -m 0755 $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
-++	ln -sf $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib/$(SHARED1)
-++	ln -sf $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib/$(SHARED2)
-++  endif
-++
-+diff --git a/build_detect_platform b/build_detect_platform
-+index bb76c4f..0ad4f8d 100755
-+--- a/build_detect_platform
-++++ b/build_detect_platform
-+@@ -147,6 +147,14 @@ case "$TARGET_OS" in
-+         PLATFORM_SHARED_CFLAGS=
-+         PLATFORM_SHARED_VERSIONED=
-+         ;;
-++    Buildroot)
-++        PLATFORM=OS_LINUX
-++        COMMON_FLAGS="$MEMCMP_FLAG -pthread -DOS_LINUX -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT"
-++        PLATFORM_LDFLAGS="-pthread"
-++        PLATFORM_CXXFLAGS="-std=c++0x"
-++        PORT_FILE=port/port_posix.cc
-++        CROSS_COMPILE=true
-++        ;;
-+     *)
-+         echo "Unknown platform!" >&2
-+         exit 1
-+-- 
-+1.9.1
-+
-diff --git a/package/leveldb/Config.in b/package/leveldb/Config.in
-new file mode 100644
-index 0000000..af097e5
---- /dev/null
-+++ b/package/leveldb/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LEVELDB
-+	bool "leveldb"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_SNAPPY
-+	help
-+	  LevelDB is a fast key-value storage library written at Google that
-+	  provides an ordered mapping from string keys to string values.
-+
-+	  https://github.com/google/leveldb
-+
-+comment "leveldb needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
-new file mode 100644
-index 0000000..ffbcc3e
---- /dev/null
-+++ b/package/leveldb/leveldb.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# leveldb
-+#
-+################################################################################
-+
-+LEVELDB_VERSION = 803d69203a62faf50f1b77897310a3a1fcae712b
-+LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
-+LEVELDB_LICENSE = BSD-3c
-+LEVELDB_LICENSE_FILES = LICENSE
-+LEVELDB_INSTALL_STAGING = YES
-+LEVELDB_DEPENDENCIES = snappy
-+
-+LEVELDB_MAKE_ARGS += TARGET_OS=Buildroot
-+
-+# We will pass optimisation level via CFLAGS so remove leveldb default
-+LEVELDB_MAKE_ARGS += OPTIM=
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),)
-+# Dynamic library not required
-+LEVELDB_MAKE_ARGS += SHARED=
-+endif
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),)
-+# Static library not required
-+LEVELDB_MAKE_ARGS += LIBRARY=
-+endif
-+
-+define LEVELDB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(LEVELDB_MAKE_ARGS) -C $(@D)
-+endef
-+
-+define LEVELDB_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(LEVELDB_MAKE_ARGS) -C $(@D) INSTALL_ROOT=$(STAGING_DIR) install
-+endef
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+define LEVELDB_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		$(LEVELDB_MAKE_ARGS) -C $(@D) INSTALL_ROOT=$(TARGET_DIR) install
-+endef
-+endif
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+I'm wondering if there's anything else I may help with this one?
+Or if there're no other objections please consider applying.
+
+Regards,
+Alexey
