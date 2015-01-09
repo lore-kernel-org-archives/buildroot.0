@@ -1,38 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Jan 2015 07:40:55 -0300
-Subject: [Buildroot] [PATCH] xz-utils: needs threads
-Message-ID: <1420800055-6710-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Jan 2015 13:26:12 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 3.18.2
+Message-ID: <20150109122634.94A7680DF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's one of the major features of the 5.2.0 release. Fixes:
-http://autobuild.buildroot.net/results/e86/e86e97ff7887f1bdc6bf913498392ff50f56ea88/
+commit: http://git.buildroot.net/buildroot/commit/?id=c67a6b2b00d28ff41b1a69b31429a88a9650a92c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xz/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xz/Config.in b/package/xz/Config.in
-index 50116f2..55beb42 100644
---- a/package/xz/Config.in
-+++ b/package/xz/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XZ
- 	bool "xz-utils"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  XZ is the successor to the Lempel-Ziv/Markov-chain Algorithm
- 	  compression format, which provides memory-hungry but powerful
-@@ -12,3 +13,6 @@ config BR2_PACKAGE_XZ
- 	  package.
+diff --git a/linux/Config.in b/linux/Config.in
+index 13ae1ac..a670802 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- 	  http://tukaani.org/xz/
-+
-+comment "xz-utils needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.0.5
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.18.1"
++	bool "3.18.2"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.18.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.18.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
