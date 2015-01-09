@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Jan 2015 03:43:34 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.18.2
-In-Reply-To: <1420785814-7799-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1420785814-7799-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1420785814-7799-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  9 Jan 2015 03:44:14 -0300
+Subject: [Buildroot] [PATCH] xz: fix stray hash
+Message-ID: <1420785854-29928-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/xz/xz.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 13ae1ac..a670802 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.18.1"
-+	bool "3.18.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.18.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.18.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index f76b9ac..9a5a9ff 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  5962fe32e0b42c7065b4410b7d8ffbf2895e197e97d410c4fc374ea0d7610a14  xz-5.2.0.tar.xz
++sha256  f7357d7455a1670229b3cca021da71dd5d13b789db62743c20624bdffc9cc4a5  xz-5.2.0.tar.bz2
 -- 
 2.0.5
