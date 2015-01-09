@@ -1,270 +1,179 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:13 -0600
-Subject: [Buildroot] [PATCH v3 00/27] SELinux Buildroot Additions
-Message-ID: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Fri,  9 Jan 2015 08:18:23 -0600
+Subject: [Buildroot] [PATCH v3 10/27] refpolicy: custom git repo
+In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-11-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-### Highlevel updates in v3 of these patches
-* sepolgen is reconfigured as solely a host package
-
-
-### What's SELinux?
-
-Security-Enhanced Linux (SELinux) is a Linux feature that provides
-a variety of security policies, including U.S. Department of Defense
-style mandatory access controls (MAC), through the use of Linux
-Security Modules (LSM) in the Linux kernel. It is not a Linux
-distribution, but rather a set of modifications that can be applied
-to Unix-like operating systems, such as Linux and BSD.
-
-Running SELinux under a Linux distribution requires three things:
-An SELinux enabled kernel, SELinux Userspace tools and libraries,
-and SELinux Policies (mostly based on the Reference Policy). Some
-common Linux programs will also need to be patched/compiled with
-SELinux features. (Credit Archlinux wiki)
-
-### What's in this patchset?
-
-This patchset adds the required userspace tools, libraries, example
-QEMU target, existing package modifications, and initial policy
-to Buildroot.
-The design approach took a minimalist view to the selinux capability.
-The necessary packages have been added but all the ways in which they
-could be used (target vs host) are not exposed.  One example is
-the audit2allow framework that requires python.  This is currently
-setup for "host only use" to post analyze audit service output.  It
-could also be setup for target use but it would require the target
-to have python and other supporting libs present.
-Another aspect that utilized known SELinux capable applications
-was for init and logging.  We choose to use sysvinit and rsyslog
-instead of the busybox applet version.  This simplified getting
-this initial configuration pulled together.  Use of busybox
-applications is definitely an area where things could slim down
-with more time and testing.
-Lastly, the building of libselinux was limited to a set of
-architectures and libraries that have been tested.  An area for
-future work will be to enable broader use.
-
-Some references to help with the review of this patchset.
-Arch and Gentoo implementation and design details:
-  https://wiki.archlinux.org/index.php/SELinux
-  http://wiki.gentoo.org/wiki/SELinux
-  http://wiki.gentoo.org/wiki/SELinux/Installation
-
-### Details of changes from previous patchsets
-
-This is a new round of patches based on the v5 patchset from
-last year.  The changes since v5 consist of:
-  * The removal of on target policy debugging using audit2allow.
-    The host tools have been setup to provide a offline capability
-    for analyzing audit output.
-  * The example qemu configuration defaults to using full versions
-    of applications instead of the busybox applets.  This simplified
-    the configuration but as a side affect grew the filesystem size.
-    There is definitely opportunity to slim down the approach to
-    just using busybox applets (I've still included the patches
-    that enable the capability to create individual applets).
-  * Added documentation of the qemu target to that targets readme
-  * Updated for structural changes (OPTS vs OPT, patch naming,
-    improvements to existing packages)
-  * Autobuilder was modified to run against our upstreaming
-    branch and has has logged a number of builds.  There are
-    definitely uclibc issues.
-
-Since Refpolicy is heavily tailored for a projects use, the
-package exposed options of using the provided version with
-patches or a custom GIT repo. Here's a bit more detail on
-those assumptions.
-  * Refpolicy as the package defines with default patches
-    plus possibly some global patches applied.  Using a default
-    modules config file provided in the package folder or
-    provided by the user.
-  * Refpolicy looking at specific git repo revisions.  Using a
-    modules config file from within that git repo.
-  * Repolicy using src override which assumes the same as the
-    git repo case for where the modules config file originates.
-
-### What's next:
-
-* Testing out support for using busybox applets instead of
-  sysvinit/util-linux/etc.
-* Updating the qemu example to use a auto generated busybox config
-  based on package selections and selinux being enabled.
-* qemu targets for ARM and PPC
-
-
-
-Clayton Shotwell (11):
-  checkpolicy: new package
-  sepolgen: new package
-  sqlite: Add host build support
-  setools: new package
-  python-pyparsing: Add host build option
-  audit: new package
-  policycoreutils: new package
-  python-pyxml: new package
-  refpolicy: new package
-  qemu_x86_selinux_defconfig: base SELinux QEMU image for x86
-
-Matt Weber (18):
-  repolicy: base policy modifications for embedded target
-  refpolicy: custom git repo
-  shadow: new package
-  busybox: applets as individual binaries
-  busybox: selinux support
-  busybox: added linux-pam support
-  busybox: default selinux config which disables init and uses sysvinit
-  linux-pam: selinux support
-  sysvinit: added libselinux dependency
-  dbus: selinux file context support
-  logrotate: selinux support
-  openssh: selinux and pam support
-  util-linux: selinux, audit, and pam support
-  vim: selinux support
-  rsyslog: fix config file comment style
-  qemu x86 readme: documented selinux target
-  readline: host support for host-sqlite
-  libsemanage: cleanup python use and license definition
-
- board/qemu/x86/busybox-selinux.config              | 1038 ++++++++++++++
- board/qemu/x86/linux-3.12-selinux.config           |   77 ++
- board/qemu/x86/readme.txt                          |   20 +-
- configs/qemu_x86_selinux_defconfig                 |   53 +
- package/Config.in                                  |   18 +-
- package/Config.in.host                             |    1 +
- .../0001-cross-compile-header-creation-fix.patch   | 1424 ++++++++++++++++++++
- package/audit/0002-remove-zos-plugin.patch         |   35 +
- package/audit/Config.in                            |   10 +
- package/audit/S01auditd                            |  172 +++
- package/audit/audit.hash                           |    2 +
- package/audit/audit.mk                             |   57 +
- ...s-Add-installation-of-individual-binaries.patch |  103 ++
- ...ags-strip-non-l-arguments-returned-by-pkg.patch |   28 +
- package/busybox/Config.in                          |   10 +
- package/busybox/busybox.mk                         |   52 +
- package/dbus/S30dbus                               |    4 +
- package/dbus/dbus.mk                               |   14 +
- package/libsemanage/Config.in                      |   10 -
- package/libsemanage/libsemanage.mk                 |   54 +-
- .../linux-pam-08-audit-log-acct_message_ret.patch  |   16 +
- package/linux-pam/linux-pam.mk                     |   58 +-
- package/linux-pam/system-auth.pamd                 |   15 +
- package/logrotate/logrotate.mk                     |   11 +-
- package/openssh/openssh.mk                         |   12 +
- .../policycoreutils/0001-cross-compile-fixes.patch |  332 +++++
- package/policycoreutils/Config.in                  |   71 +
- package/policycoreutils/S15restorecond             |   85 ++
- package/policycoreutils/policycoreutils.hash       |    2 +
- package/policycoreutils/policycoreutils.mk         |  243 ++++
- package/python-pyparsing/python-pyparsing.mk       |    1 +
- package/python-pyxml/Config.in                     |   11 +
- package/python-pyxml/python-xml.hash               |    2 +
- package/python-pyxml/python-xml.mk                 |   32 +
- package/readline/readline.mk                       |    1 +
- package/refpolicy-contrib/Config.in                |   20 +
- package/refpolicy-contrib/refpolicy-contrib.mk     |   19 +
- package/refpolicy/0001-gentoo-hardened-fixes.patch | 1250 +++++++++++++++++
- package/refpolicy/0002-baseDirectoryChanges.patch  |   32 +
- package/refpolicy/0003-filesChanges.patch          |   62 +
- package/refpolicy/0004-initChanges.patch           |   20 +
- package/refpolicy/0005-selinuxutilChanges.patch    |   96 ++
- package/refpolicy/0006-sshChanges.patch            |   22 +
- package/refpolicy/0007-loggingChanges.patch        |   80 ++
- package/refpolicy/0008-mountChanges.patch          |   11 +
- package/refpolicy/0009-sysadmChanges.patch         |   24 +
- package/refpolicy/0010-authloginChanges.patch      |   14 +
- package/refpolicy/0011-localloginChanges.patch     |   13 +
- package/refpolicy/0012-udevChanges.patch           |   14 +
- package/refpolicy/0013-netutilsChanges.patch       |   13 +
- package/refpolicy/0014-devicesChanges.patch        |   48 +
- package/refpolicy/0015-awk-fix.patch               |   37 +
- .../refpolicy/0016-enablePolyinstantiation.patch   |   11 +
- package/refpolicy/Config.in                        |   93 ++
- package/refpolicy/S12selinux                       |  137 ++
- package/refpolicy/config                           |    8 +
- package/refpolicy/modules.conf                     |  406 ++++++
- package/refpolicy/refpolicy.hash                   |    2 +
- package/refpolicy/refpolicy.mk                     |  109 ++
- package/rsyslog/rsyslog.mk                         |    4 +
- package/sepolgen/Config.in.host                    |    7 +
- package/sepolgen/sepolgen.hash                     |    2 +
- package/sepolgen/sepolgen.mk                       |   30 +
- package/setools/0001-cross-compile-fixes.patch     |  121 ++
- .../setools/0002-swig-typedef-python-fixes.patch   | 1014 ++++++++++++++
- package/setools/Config.in                          |   28 +
- package/setools/setools.hash                       |    2 +
- package/setools/setools.mk                         |   86 ++
- package/shadow/Config.in                           |   13 +
- package/shadow/shadow.hash                         |    2 +
- package/shadow/shadow.mk                           |   61 +
- package/sqlite/sqlite.mk                           |    1 +
- .../sysvinit-0010-fix-WITH-SELINUX-define.patch    |   24 +
- package/sysvinit/sysvinit.mk                       |   11 +-
- package/util-linux/util-linux.mk                   |   21 +
- package/vim/vim.mk                                 |    7 +
- 76 files changed, 8002 insertions(+), 47 deletions(-)
- create mode 100644 board/qemu/x86/busybox-selinux.config
- create mode 100644 board/qemu/x86/linux-3.12-selinux.config
- create mode 100644 configs/qemu_x86_selinux_defconfig
- create mode 100644 package/audit/0001-cross-compile-header-creation-fix.patch
- create mode 100644 package/audit/0002-remove-zos-plugin.patch
- create mode 100644 package/audit/Config.in
- create mode 100644 package/audit/S01auditd
- create mode 100644 package/audit/audit.hash
- create mode 100644 package/audit/audit.mk
- create mode 100644 package/busybox/0007-applets-Add-installation-of-individual-binaries.patch
- create mode 100644 package/busybox/0008-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
- mode change 100755 => 100644 package/dbus/S30dbus
- create mode 100644 package/linux-pam/linux-pam-08-audit-log-acct_message_ret.patch
- create mode 100644 package/linux-pam/system-auth.pamd
- create mode 100644 package/policycoreutils/0001-cross-compile-fixes.patch
- create mode 100644 package/policycoreutils/Config.in
- create mode 100644 package/policycoreutils/S15restorecond
- create mode 100644 package/policycoreutils/policycoreutils.hash
- create mode 100644 package/policycoreutils/policycoreutils.mk
- create mode 100644 package/python-pyxml/Config.in
- create mode 100644 package/python-pyxml/python-xml.hash
- create mode 100644 package/python-pyxml/python-xml.mk
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/refpolicy-contrib/Config.in            | 20 +++++++++++++++++
+ package/refpolicy-contrib/refpolicy-contrib.mk | 19 ++++++++++++++++
+ package/refpolicy/Config.in                    | 22 +++++++++++++++++++
+ package/refpolicy/refpolicy.mk                 | 30 ++++++++++++++++++++++----
+ 4 files changed, 87 insertions(+), 4 deletions(-)
  create mode 100644 package/refpolicy-contrib/Config.in
  create mode 100644 package/refpolicy-contrib/refpolicy-contrib.mk
- create mode 100644 package/refpolicy/0001-gentoo-hardened-fixes.patch
- create mode 100644 package/refpolicy/0002-baseDirectoryChanges.patch
- create mode 100644 package/refpolicy/0003-filesChanges.patch
- create mode 100644 package/refpolicy/0004-initChanges.patch
- create mode 100644 package/refpolicy/0005-selinuxutilChanges.patch
- create mode 100644 package/refpolicy/0006-sshChanges.patch
- create mode 100644 package/refpolicy/0007-loggingChanges.patch
- create mode 100644 package/refpolicy/0008-mountChanges.patch
- create mode 100644 package/refpolicy/0009-sysadmChanges.patch
- create mode 100644 package/refpolicy/0010-authloginChanges.patch
- create mode 100644 package/refpolicy/0011-localloginChanges.patch
- create mode 100644 package/refpolicy/0012-udevChanges.patch
- create mode 100644 package/refpolicy/0013-netutilsChanges.patch
- create mode 100644 package/refpolicy/0014-devicesChanges.patch
- create mode 100644 package/refpolicy/0015-awk-fix.patch
- create mode 100644 package/refpolicy/0016-enablePolyinstantiation.patch
- create mode 100644 package/refpolicy/Config.in
- create mode 100644 package/refpolicy/S12selinux
- create mode 100644 package/refpolicy/config
- create mode 100644 package/refpolicy/modules.conf
- create mode 100644 package/refpolicy/refpolicy.hash
- create mode 100644 package/refpolicy/refpolicy.mk
- create mode 100644 package/sepolgen/Config.in.host
- create mode 100644 package/sepolgen/sepolgen.hash
- create mode 100644 package/sepolgen/sepolgen.mk
- create mode 100644 package/setools/0001-cross-compile-fixes.patch
- create mode 100644 package/setools/0002-swig-typedef-python-fixes.patch
- create mode 100644 package/setools/Config.in
- create mode 100644 package/setools/setools.hash
- create mode 100644 package/setools/setools.mk
- create mode 100644 package/shadow/Config.in
- create mode 100644 package/shadow/shadow.hash
- create mode 100644 package/shadow/shadow.mk
- create mode 100644 package/sysvinit/sysvinit-0010-fix-WITH-SELINUX-define.patch
 
+diff --git a/package/refpolicy-contrib/Config.in b/package/refpolicy-contrib/Config.in
+new file mode 100644
+index 0000000..1fc0c31
+--- /dev/null
++++ b/package/refpolicy-contrib/Config.in
+@@ -0,0 +1,20 @@
++if BR2_REFPOLICY_CUSTOM_GIT
++
++comment "A refpolicy contrib repository is required if using a refpolicy repo. (Contrib is a GIT submodule of refpolicy)"
++
++config BR2_PACKAGE_REFPOLICY_CONTRIB
++	bool "refpolicy-contrib"
++	help
++	  A GIT submodule of the refpolicy package.
++
++
++config BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_URL
++	string "URL of custom contrib submodule repository"
++
++config BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION
++	string "Custom contrib submodule repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  e.g. a SHA id, a tag, branch, ..
++
++endif
+diff --git a/package/refpolicy-contrib/refpolicy-contrib.mk b/package/refpolicy-contrib/refpolicy-contrib.mk
+new file mode 100644
+index 0000000..e13a3ff
+--- /dev/null
++++ b/package/refpolicy-contrib/refpolicy-contrib.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# refpolicy-contrib
++#
++################################################################################
++
++ifeq ($(BR2_REFPOLICY_CUSTOM_GIT),y)
++REFPOLICY_CONTRIB_SITE = $(call qstrip,$(BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_URL))
++REFPOLICY_CONTRIB_VERSION = $(call qstrip,$(BR2_REFPOLICY_CONTRIB_CUSTOM_REPO_VERSION))
++REFPOLICY_CONTRIB_SITE_METHOD = git
++
++# Inherits license from refpolicy as normally this is a submodule
++REFPOLICY_CONTRIB_LICENSE = GPLv2
++REFPOLICY_CONTRIB_LICENSE_FILES = COPYING
++endif
++
++# If refpolicy is from release archive, this contrib content is part of it.
++
++$(eval $(generic-package))
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index 39bebca..51e2142 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -59,6 +59,8 @@ config BR2_PACKAGE_REFPOLICY_MODULES_FILE
+ 	  SELinux policy modules to be included in the compiled
+ 	  policy. See policy/modules.conf in the refpolicy sources for
+ 	  the complete list of available modules.
++	  NOTE: This file is only used if a Custom GIT repo is
++	  not specified.
+ 
+ config BR2_PACKAGE_REFPOLICY_MODULAR
+ 	bool "Build a modular SELinux policy"
+@@ -68,4 +70,24 @@ config BR2_PACKAGE_REFPOLICY_MODULAR
+ 	  target. A modular policy can also be built if policies
+ 	  need to be modified without reloading the target.
+ 
++config BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++	bool "Custom Git repository"
++	select BR2_PACKAGE_REFPOLICY_CONTRIB
++	help
++	 This option allows Buildroot to get the refpolicy source
++	 code from a Git repository.
++
++if BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  e.g. a SHA id, a tag, branch, ..
++
++endif
++
+ endif
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 81e104c..382f141 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -4,16 +4,23 @@
+ #
+ ################################################################################
+ 
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
++REFPOLICY_VERSION = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION))
++REFPOLICY_SITE_METHOD = git
++REFPOLICY_DEPENDENCIES += refpolicy-contrib
++else
+ REFPOLICY_VERSION = 2.20130424
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+ REFPOLICY_SITE = http://oss.tresys.com/files/refpolicy/
++endif
+ REFPOLICY_LICENSE = GPLv2
+ REFPOLICY_LICENSE_FILES = COPYING
+ 
+ # Cannot use multiple threads to build the reference policy
+ REFPOLICY_MAKE = $(TARGET_MAKE_ENV) $(MAKE1)
+ 
+-REFPOLICY_DEPENDENCIES = host-m4 host-checkpolicy host-policycoreutils \
++REFPOLICY_DEPENDENCIES += host-m4 host-checkpolicy host-policycoreutils \
+ 	host-setools host-python-pyxml host-gawk policycoreutils
+ 
+ REFPOLICY_INSTALL_STAGING = YES
+@@ -37,18 +44,33 @@ else
+ 	REFPOLICY_MONOLITHIC = y
+ endif
+ 
++ifeq ($(BR2_PACKAGE_REFPOLICY_CUSTOM_GIT),y)
++define REFPOLICY_GIT_SUBMODULE_SETUP
++	rsync -ar $(REFPOLICY_CONTRIB_DIR)/* $(@D)/policy/modules/contrib/
++endef
++else
++define REFPOLICY_CUSTOM_MODULES_CONF
++	cp -f $(REFPOLICY_MODULES_FILE) $(@D)/policy/modules.conf
++endef
++endif
++
+ define REFPOLICY_CONFIGURE_CMDS
+ 	$(REFPOLICY_GIT_SUBMODULE_SETUP)
+ 	# If an external repo is used to build refpolicy, this preserves the
+ 	# custom modules.conf which defines the enabled components.
+-	[ -f $(@D)/policy/modules.conf ] && mv $(@D)/policy/modules.conf $(@D)/modules.conf.bk
++	if [ -f $(@D)/policy/modules.conf ]; then \
++		mv $(@D)/policy/modules.conf $(@D)/modules.conf.bk ; \
++	fi
+ 	$(REFPOLICY_MAKE) -C $(@D) bare $(REFPOLICY_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+ 	$(SED) "/TYPE/c\TYPE = $(BR2_PACKAGE_REFPOLICY_TYPE)" $(@D)/build.conf
+ 	$(SED) "/MONOLITHIC/c\MONOLITHIC = $(REFPOLICY_MONOLITHIC)" $(@D)/build.conf
+ 	$(SED) "/NAME/c\NAME = $(REFPOLICY_POLICY_NAME)" $(@D)/build.conf
+ 	$(REFPOLICY_MAKE) -C $(@D) conf $(REFPOLICY_MAKE_CMDS) DESTDIR=$(STAGING_DIR)
+-	[ -f $(@D)/modules.conf.bk ] &&  echo "[Preserved modules.conf]" && \
+-		mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf
++	if [ -f $(@D)/modules.conf.bk ]; then \
++		echo "[Preserved modules.conf]" ; \
++		mv $(@D)/modules.conf.bk $(@D)/policy/modules.conf ; \
++	fi
++	$(REFPOLICY_CUSTOM_MODULES_CONF)
+ endef
+ 
+ define REFPOLICY_INSTALL_STAGING_CMDS
 -- 
 1.9.1
