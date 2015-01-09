@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:32 -0600
-Subject: [Buildroot] [PATCH v3 19/27] dbus: selinux file context support
+Date: Fri,  9 Jan 2015 08:18:33 -0600
+Subject: [Buildroot] [PATCH v3 20/27] logrotate: selinux support
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-20-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-21-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/dbus/S30dbus |  4 ++++
- package/dbus/dbus.mk | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
- mode change 100755 => 100644 package/dbus/S30dbus
+ package/logrotate/logrotate.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
-old mode 100755
-new mode 100644
-index 0d15c73..be51807
---- a/package/dbus/S30dbus
-+++ b/package/dbus/S30dbus
-@@ -17,6 +17,10 @@
- [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
- [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
- [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
-+[ -d /var/lib/dbus ] || mkdir -p /var/lib/dbus
-+if [ -e /sbin/restorecon ]; then
-+   restorecon -R /var/run/dbus /var/lock/subsys /tmp/dbus /var/lib/dbus
-+fi
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index dc26d85..a7f8290 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -11,8 +11,17 @@ LOGROTATE_LICENSE_FILES = COPYING
  
- RETVAL=0
+ LOGROTATE_DEPENDENCIES = popt
  
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index faad2b5..35a97aa 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -44,6 +44,20 @@ ifeq ($(BR2_microblaze),y)
- DBUS_CONF_OPTS += --disable-inotify
- endif
- 
++LOGROTATE_CFLAGS = $(TARGET_CFLAGS)
++LOGROTATE_LDFLAGS = $(TARGET_LDFLAGS)
++
 +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+DBUS_CONF_OPTS += --enable-selinux
-+DBUS_DEPENDENCIES += libselinux
-+else
-+DBUS_CONF_OPTS += --disable-selinux
++LOGROTATE_DEPENDENCIES += libselinux
++LOGROTATE_CFLAGS += -DWITH_SELINUX=yes
++LOGROTATE_LDFLAGS += -lselinux
 +endif
 +
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+DBUS_CONF_OPTS += --enable-libaudit
-+DBUS_DEPENDENCIES += audit libcap-ng
-+else
-+DBUS_CONF_OPTS += --disable-libaudit
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- DBUS_CONF_OPTS += --with-x
- DBUS_DEPENDENCIES += xlib_libX11
+ define LOGROTATE_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" -C $(@D)
++	$(MAKE) CC="$(TARGET_CC) $(LOGROTATE_CFLAGS)" LDFLAGS="$(LOGROTATE_LDFLAGS)" -C $(@D)
+ endef
+ 
+ define LOGROTATE_INSTALL_TARGET_CMDS
 -- 
 1.9.1
