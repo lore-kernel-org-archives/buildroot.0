@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Jan 2015 13:26:05 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{18, 17, 14,
-	10}.x series
-Message-ID: <20150109122634.8CD5A800EF@busybox.osuosl.org>
+Date: Fri, 9 Jan 2015 13:26:27 +0100
+Subject: [Buildroot] [git commit] xz-utils: needs threads
+Message-ID: <20150109122634.A4514800EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d83ce6cc2e4c703f60ca429fbea4d5e413e80aa6
+commit: http://git.buildroot.net/buildroot/commit/?id=799c12ebe6c830338124f90a81d12feaa08de391
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+It's one of the major features of the 5.2.0 release. Fixes:
+http://autobuild.buildroot.net/results/e86/e86e97ff7887f1bdc6bf913498392ff50f56ea88/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/xz/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ed994c1..23bb201 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -174,13 +174,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.66"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.105"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.63"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.64"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.35"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.27"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.28"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
--	default "3.17.7"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.1"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
-+	default "3.18.2"	if BR2_KERNEL_HEADERS_3_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/xz/Config.in b/package/xz/Config.in
+index 50116f2..55beb42 100644
+--- a/package/xz/Config.in
++++ b/package/xz/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XZ
+ 	bool "xz-utils"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  XZ is the successor to the Lempel-Ziv/Markov-chain Algorithm
+ 	  compression format, which provides memory-hungry but powerful
+@@ -12,3 +13,6 @@ config BR2_PACKAGE_XZ
+ 	  package.
+ 
+ 	  http://tukaani.org/xz/
++
++comment "xz-utils needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
