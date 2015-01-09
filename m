@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  9 Jan 2015 08:18:36 -0600
-Subject: [Buildroot] [PATCH v3 23/27] vim: selinux support
+Date: Fri,  9 Jan 2015 08:18:37 -0600
+Subject: [Buildroot] [PATCH v3 24/27] rsyslog: fix config file comment style
 In-Reply-To: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420813120-50848-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1420813120-50848-24-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1420813120-50848-25-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/vim/vim.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/rsyslog/rsyslog.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index da84d14..518afaf 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -28,6 +28,13 @@ VIM_CONF_OPTS = --with-tlib=ncurses --enable-gui=no --without-x
- VIM_LICENSE = Charityware
- VIM_LICENSE_FILES = README.txt
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 688a335..58f588d 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -54,6 +54,10 @@ endef
+ define RSYSLOG_INSTALL_CONF
+ 	$(INSTALL) -m 0644 -D $(@D)/platform/redhat/rsyslog.conf \
+ 		$(TARGET_DIR)/etc/rsyslog.conf
++	# Fix invalid config file comment style
++	$(SED) 's~\/\* ~#  ~g' $(TARGET_DIR)/etc/rsyslog.conf
++	$(SED) 's~ \*\/~# ~g' $(TARGET_DIR)/etc/rsyslog.conf
++	$(SED) 's~ \*~# ~g' $(TARGET_DIR)/etc/rsyslog.conf
+ 	mkdir -p $(TARGET_DIR)/etc/rsyslog.d
+ endef
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+VIM_CONF_OPTS += --enable-selinux
-+VIM_DEPENDENCIES += libselinux
-+else
-+VIM_CONF_OPTS += --disable-selinux
-+endif
-+
- define VIM_INSTALL_TARGET_CMDS
- 	cd $(@D)/src; \
- 		$(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
 -- 
 1.9.1
