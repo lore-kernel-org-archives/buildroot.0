@@ -1,67 +1,51 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Fri, 9 Jan 2015 14:36:45 +0200
-Subject: [Buildroot] [PATCH] dillo: avoid poisoned paths in configure
-Message-ID: <20150109123645.GA23533@vostro>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  9 Jan 2015 09:41:29 -0300
+Subject: [Buildroot] [PATCH] configs/olimex_imx233_olinuxino: bump kernel to
+	version 3.18.2
+Message-ID: <1420807289-12458-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/10f/10f7ba386a13753c942139b8bc13ca74d8932f3a/
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dillo/0002-usr-local-include.patch | 41 ++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/dillo/0002-usr-local-include.patch
+ .../imx233_olinuxino/{linux-3.17.config => linux-3.18.config}     | 0
+ configs/olimex_imx233_olinuxino_defconfig                         | 8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename board/olimex/imx233_olinuxino/{linux-3.17.config => linux-3.18.config} (100%)
 
-diff --git a/package/dillo/0002-usr-local-include.patch b/package/dillo/0002-usr-local-include.patch
-new file mode 100644
-index 0000000..eb27742
---- /dev/null
-+++ b/package/dillo/0002-usr-local-include.patch
-@@ -0,0 +1,41 @@
-+Do not add (possibly poisoned) /usr/local/include and /usr/local/lib
-+to gcc and ld search paths in configure.
-+
-+With BR2_COMPILER_PARANOID_UNSAFE_PATH enabled, poisoned paths result
-+in hard errors, failing affected configure tests.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/configure
-++++ b/configure
-+@@ -5543,11 +5543,6 @@
-+   esac
-+ 
-+ 
-+-if test "`$CPP -v < /dev/null 2>&1 | grep '/usr/local/include' 2>&1`" = ""; then
-+-  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-+-  LDFLAGS="$LDFLAGS -L/usr/local/lib"
-+-fi
-+-
-+ for ac_func in gethostbyname
-+ do :
-+   ac_fn_c_check_func "$LINENO" "gethostbyname" "ac_cv_func_gethostbyname"
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -57,16 +57,6 @@
-+ AC_TYPE_INT32_T
-+ AC_TYPE_UINT32_T
-+ 
-+-dnl --------------------------------------
-+-dnl Check whether to add /usr/local or not
-+-dnl (this is somewhat a religious problem)
-+-dnl --------------------------------------
-+-dnl
-+-if test "`$CPP -v < /dev/null 2>&1 | grep '/usr/local/include' 2>&1`" = ""; then
-+-  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-+-  LDFLAGS="$LDFLAGS -L/usr/local/lib"
-+-fi
-+-
-+ dnl ------------------------------------
-+ dnl Check for socket libs (AIX, Solaris)
-+ dnl ------------------------------------
+diff --git a/board/olimex/imx233_olinuxino/linux-3.17.config b/board/olimex/imx233_olinuxino/linux-3.18.config
+similarity index 100%
+rename from board/olimex/imx233_olinuxino/linux-3.17.config
+rename to board/olimex/imx233_olinuxino/linux-3.18.config
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index cbe4504..49a9f0f 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -15,8 +15,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.17"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
++BR2_DEFAULT_KERNEL_VERSION="3.18.2"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ 
+ # Bootloader
+ BR2_TARGET_MXS_BOOTLETS=y
+@@ -27,9 +27,9 @@ BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME="imx23_olinuxino_dev"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.17"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.2"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.17.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.18.config"
+ BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
+ 
 -- 
-2.0.3
+2.0.5
