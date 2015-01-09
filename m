@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Jan 2015 16:32:30 +0100
-Subject: [Buildroot] [PATCH v4 05/27] audit: new package
-In-Reply-To: <1420816288-8750-6-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Fri, 9 Jan 2015 16:37:33 +0100
+Subject: [Buildroot] [PATCH v4 03/27] setools: new package
+In-Reply-To: <1420816288-8750-4-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1420816288-8750-6-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20150109163230.0f7acc59@free-electrons.com>
+ <1420816288-8750-4-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20150109163733.3b7a0c8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,258 +13,140 @@ To: buildroot@busybox.net
 
 Dear Matt Weber,
 
-On Fri,  9 Jan 2015 09:11:06 -0600, Matt Weber wrote:
+On Fri,  9 Jan 2015 09:11:04 -0600, Matt Weber wrote:
 
-> diff --git a/package/audit/0001-cross-compile-header-creation-fix.patch b/package/audit/0001-cross-compile-header-creation-fix.patch
+> diff --git a/package/setools/0001-cross-compile-fixes.patch b/package/setools/0001-cross-compile-fixes.patch
 > new file mode 100644
-> index 0000000..65d98d5
+> index 0000000..c931039
 > --- /dev/null
-> +++ b/package/audit/0001-cross-compile-header-creation-fix.patch
-> @@ -0,0 +1,1424 @@
-> +Rework the build system to generate the required header files using a 
-> +Python script rather than compiling executables.  This change has
-> +to be made because the executables that are generated are built for
-> +the target architecture and are generally not compilable on the host
-> +build machine.  
+> +++ b/package/setools/0001-cross-compile-fixes.patch
+> @@ -0,0 +1,121 @@
+> +Correct build issues to enable cross compiling.  These rechanges require the
+> +package to be auto reconfigured.  
 > +
-> +The code has been submitted to the audit maintainers for review.
-> +The first of three patches can be seen at the following link.
-> +https://www.redhat.com/archives/linux-audit/2013-August/msg00043.html
+> +Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
 
-Have you received some feedback from the maintainers?
+This seems to be a mixed bag of various issues. Can we split that up
+into separate patches? Can they be submitted upstream? I don't require
+them to be applied upstream, but if possible at least submitted.
 
-This stuff looks really, really scary. Please include in the patch
-description an explanation of why a rewrite in Python is needed instead
-of using a C version. I remember we had this discussion a while ago,
-but I don't remember the reason.
-
-In general, whenever something is weird/unusual, please add comments.
-Either in the code (preferred) or in the commit log. This will help
-review immensely, as it will answer questions that reviewers will have.
-
-> diff --git a/package/audit/Config.in b/package/audit/Config.in
+> diff --git a/package/setools/0002-swig-typedef-python-fixes.patch b/package/setools/0002-swig-typedef-python-fixes.patch
 > new file mode 100644
-> index 0000000..c51b6e4
+> index 0000000..999fed4
 > --- /dev/null
-> +++ b/package/audit/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_AUDIT
-> +	bool "audit"
-> +	help
-> +	  The audit package contains the user space utilities for
-> +	  storing and searching the audit records generate by
-> +	  the audit subsystem in the Linux 2.6 kernel
+> +++ b/package/setools/0002-swig-typedef-python-fixes.patch
+> @@ -0,0 +1,1014 @@
+> +Correct swig typdef naming convention errors that cause the build to break. 
 > +
-> +	  Note: The z/OS remote plugin is disabled in this package
-> +
-> +	  http://people.redhat.com/sgrubb/audit/
-> diff --git a/package/audit/S01auditd b/package/audit/S01auditd
+> +Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
+
+Why is this error happening? Why isn't this fixed upstream? Are we
+using a different swig version?
+
+> diff --git a/package/setools/setools.mk b/package/setools/setools.mk
 > new file mode 100644
-> index 0000000..23a7761
+> index 0000000..4491835
 > --- /dev/null
-> +++ b/package/audit/S01auditd
-> @@ -0,0 +1,172 @@
-> +#!/bin/sh
-> +#
-> +# auditd        This starts and stops auditd
-> +#
-> +# description: This starts the Linux Auditing System Daemon, \
-> +#              which collects security related events in a dedicated \
-> +#              audit log. If this daemon is turned off, audit events \
-> +#              will be sent to syslog.
-> +#
-> +# processname: /sbin/auditd
-> +# config: /etc/sysconfig/auditd
-> +# config: /etc/audit/auditd.conf
-> +# pidfile: /var/run/auditd.pid
-> +#
-> +# Return values according to LSB for all commands but status:
-> +# 0 - success
-> +# 1 - generic or unspecified error
-> +# 3 - unimplemented feature (e.g. "reload")
-> +# 4 - insufficient privilege
-> +# 5 - program is not installed
-> +# 6 - program is not configured
-> +# 7 - program is not running
-
-We don't have this error code stuff in any other Buildroot init script.
-
-> +#
-> +prog="auditd"
-> +
-> +# Check that we are root ... so non-root users stop here
-> +test $EUID=0  ||  exit 4
-> +
-> +# Check config
-> +test -f /etc/sysconfig/auditd && . /etc/sysconfig/auditd
-> +
-> +RETVAL=0
-> +LOCK=/var/lock/subsys/auditd
-> +
-> +start(){
-> +   echo -n "Initializing $prog: "
-> +
-> +   if [ ! -e $LOCK ]; then
-> +      test -x /sbin/auditd  || exit 5
-> +      test -f /etc/audit/auditd.conf  || exit 6
-> +   
-> +      # Create dir to store log files in if one doesn't exist
-> +      test -d /var/log/audit || mkdir -p /var/log/audit && /sbin/restorecon /var/log/audit
-> +   
-> +      # Run audit daemon executable
-> +      $prog
-> +      RETVAL=$?
-> +      if test $RETVAL = 0 ; then
-> +         test -d /var/lock/subsys || mkdir -p /var/lock/subsys
-> +         touch $LOCK
-> +         # Load the default rules
-> +         test -f /etc/audit/audit.rules && /sbin/auditctl -R /etc/audit/audit.rules >/dev/null
-> +         echo "OK"
-> +      else
-> +         echo "FAILED: auditd failed to start"
-> +      fi
-> +   else
-> +      echo "FAILED: auditd already started, stop first"
-> +      RETVAL=1
-> +   fi
-> +   return $RETVAL
-> +}
-> +
-> +stop(){
-> +   echo -n "Uninitializing $prog: "
-> +   if [ -e $LOCK ]; then
-> +      killall -TERM $prog
-> +      RETVAL=$?
-> +      if [ $RETVAL ]; then
-> +         rm -f $LOCK
-> +         # Remove watches so shutdown works cleanly
-> +         if test x"$AUDITD_CLEAN_STOP" != "x" ; then
-> +            if test "`echo $AUDITD_CLEAN_STOP | tr 'NO' 'no'`" != "no"
-> +            then
-> +               /sbin/auditctl -D >/dev/null
-> +            fi
-> +         fi
-> +         if test x"$AUDITD_STOP_DISABLE" != "x" ; then
-> +            if test "`echo $AUDITD_STOP_DISABLE | tr 'NO' 'no'`" != "no"
-> +            then
-> +               /sbin/auditctl -e 0 >/dev/null
-> +            fi
-> +         fi
-> +         echo "OK"
-> +      else
-> +         echo "FAILED: auditd not stopped"
-> +      fi
-> +   else
-> +      echo "FAILED: auditd not started"
-> +      RETVAL=1
-> +   fi
-> +   return $RETVAL
-> +}
-
-Can we use start-stop-daemon and make the whole initscript look more
-like other Buildroot provided init scripts?
-
-> +rotate(){
-> +   echo -n "Rotating auditd logs: "  
-> +   if [ -e $LOCK ]; then
-> +      killall -USR1 $prog
-> +      RETVAL=$?
-> +      if [ $RETVAL ]; then
-> +         echo "OK"
-> +      else
-> +         echo "FAILED"
-> +      fi
-> +   else
-> +      echo "FAILED: auditd not started"
-> +      RETVAL=1
-> +   fi
-> +   return $RETVAL
-> +}
-
-We don't have this in any other Buildroot init script.
-
-Can you make this more Buildroot-looking?
-
-
-> diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-> new file mode 100644
-> index 0000000..c8576b2
-> --- /dev/null
-> +++ b/package/audit/audit.mk
-> @@ -0,0 +1,57 @@
+> +++ b/package/setools/setools.mk
+> @@ -0,0 +1,86 @@
 > +################################################################################
 > +#
-> +# audit
+> +# setools
 > +#
 > +################################################################################
 > +
-> +AUDIT_VERSION:=2.3.2
-> +AUDIT_SITE:=http://people.redhat.com/sgrubb/audit/
-
-No :=, please use =.
-
-> +AUDIT_DEPENDENCIES = host-python-pyparsing
-
-I think explicitly depending on host-python here would be good.
-
-> +AUDIT_LICENSE = GPLv2
-> +AUDIT_LICENSE_FILES = COPYING
+> +SETOOLS_VERSION = 3.3.8
+> +SETOOLS_SITE = https://github.com/TresysTechnology/setools3/archive/
+> +SETOOLS_DEPENDENCIES = libselinux sqlite libxml2 bzip2
 > +
-> +AUDIT_INSTALL_STAGING = YES
+> +SETOOLS_INSTALL_STAGING = YES
 > +
-> +AUDIT_AUTORECONF = YES
-> +AUDIT_AUTORECONF_OPTS = -i -s -I m4
-> +AUDIT_LIBTOOL_PATCH = NO
+> +SETOOLS_AUTORECONF = YES
+> +SETOOLS_AUTORECONF_OPTS = -i -s
+> +SETOOLS_LIBTOOL_PATCH = NO
 
-Please add comments about why autoreconf is needed, and while the
-libtool patch needs to be disabled.
+Please comments to explain why. Especially the libtool patch disabling.
 
+> +# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
+> +#        selinux enabled.
+> +SETOOLS_CONF_OPTS = \
+> +	--disable-debug \
+> +	--disable-gui \
+> +	--disable-bwidget-check \
+> +	--disable-selinux-check \
+> +	--disable-swig-java \
+> +	--disable-swig-python \
+> +	--disable-swig-tcl \
+> +	--with-sepol-devel="$(STAGING_DIR)/usr" \
+> +	--with-selinux-devel="$(STAGING_DIR)/usr"
 > +
-> +# Audit will be looking for applications to be in the root
-> +# /sbin folder rather than in /usr/sbin folder
-> +AUDIT_CONF_OPTS = --sbindir=/sbin
 > +
-> +AUDIT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)"
-> +AUDIT_CONF_OPTS += --with-python=no
-
-This seems crazy: you're saying to not use python, but you're passing
-some -I flags to the Python headers. Please add more comments to
-explain what's going on.
-
+> +HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
+> +	host-libxml2 host-bzip2
 > +
-> +ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
-> +	AUDIT_DEPENDENCIES += libcap-ng
-> +	AUDIT_CONF_OPTS += --with-libcap-ng=yes
-
-We typically don't intend those lines anymore.
-
+> +HOST_SETOOLS_AUTORECONF = YES
+> +HOST_SETOOLS_AUTORECONF_OPTS = -i -s
+> +
+> +# Notes: Need "disable-selinux-check" so the configure does not check to see if host has
+> +#        selinux enabled.
+> +HOST_SETOOLS_CONF_OPTS = \
+> +	--disable-debug \
+> +	--disable-gui \
+> +	--disable-bwidget-check \
+> +	--disable-selinux-check \
+> +	--disable-swig-java \
+> +	--disable-swig-python \
+> +	--disable-swig-tcl \
+> +	--with-sepol-devel="$(HOST_DIR)/usr" \
+> +	--with-selinux-devel="$(HOST_DIR)/usr"
+> +
+> +# python related conf options
+> +HOST_SETOOLS_DEPENDENCIES += host-swig
+> +HOST_SETOOLS_CONF_ENV += \
+> +	am_cv_pathless_PYTHON=python \
+> +	ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
+> +	am_cv_python_platform=linux2
+> +HOST_SETOOLS_CONF_OPTS += \
+> +	--enable-swig-python \
+> +	PYTHON_LDFLAGS="-L$(HOST_DIR)/usr/lib/"
+> +
+> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> +HOST_SETOOLS_DEPENDENCIES += host-python3
+> +HOST_SETOOLS_CONF_ENV += \
+> +	am_cv_python_version=$(PYTHON3_VERSION) \
+> +	am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> +	am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
+> +	am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+> +HOST_SETOOLS_CONF_OPTS += \
+> +	PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)" \
+> +	PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages" \
+> +	PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON3_VERSION_MAJOR)"
 > +else
-> +	AUDIT_CONF_OPTS += --with-libcap-ng=no
-> +endif
-> +
-> +ifeq ($(BR2_armeb),y)
-> +	AUDIT_CONF_OPT += --with-armeb
-> +endif
-> +ifeq ($(BR2_arm),y)
-> +	AUDIT_CONF_OPT += --with-armeb
-> +endif
-> +ifeq ($(BR2_aarch64),y)
-> +	AUDIT_CONF_OPT += --with-aarch64
+> +HOST_SETOOLS_DEPENDENCIES += host-python
+> +HOST_SETOOLS_CONF_ENV += \
+> +	am_cv_python_version=$(PYTHON_VERSION) \
+> +	am_cv_python_pythondir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+> +	am_cv_python_pyexecdir=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+> +	am_cv_python_includes=-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+> +HOST_SETOOLS_CONF_OPTS += \
+> +	--enable-swig-python \
+
+This option is already passed above.
+
+> +	PYTHON_CPPFLAGS="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+> +	PYTHON_SITE_PKG="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+> +	PYTHON_EXTRA_LIBS="-lpthread -ldl -lutil -lpython$(PYTHON_VERSION_MAJOR)"
 > +endif
 
-What happens for the other architectures? Why only armeb, arm and
-aarch64 have special handling?
+This really looks like a big mess of options. The configure script of
+setools is that stupid that it needs to be told gazillions of details?
+Some of them several times like am_cv_python_includes +
+PYTHON_CPPFLAGS ?
 
-> +
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +	AUDIT_CONF_OPTS += --enable-shared=no
-> +endif
+Also, please add a comment explaining why the host variant depends on
+python, but not the target variant.
 
-Buildroot is already passing --disable-shared when BR2_STATIC_LIBS=y,
-which is the same as --enable-shared=no with the autotools. So this
-looks unneeded.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
