@@ -1,49 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 15:27:40 +0100
-Subject: [Buildroot] [PATCH v3] linux: add fbtft kernel extension
-In-Reply-To: <1420315307-22645-1-git-send-email-ps.report@gmx.net>
-References: <1420315307-22645-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150110152740.6a817647@free-electrons.com>
+Date: Sat, 10 Jan 2015 15:28:00 +0100
+Subject: [Buildroot] [git commit] package/gd: Add explicit support for tiff
+Message-ID: <20150110142818.85CDB801F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=668efc5fbf1aa9e4b42df2ae92d24ee6fe0b252a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Jan 2015 21:01:47 +0100, Peter Seiderer wrote:
-> Tested with RaspberryPi B+ and PiTFT Mini Kit - 320x240 2.8" TFT
-> (see [1] and [2]) and the following target configuration changes:
-> - cmdline.txt: add 'fbcon=map:10 fbcon=font:VGA8x8'
-> - add /etc/modules-load.d/fbtft.conf with 'fbtft_device'
-> - add /etc/modprobe.d/00-fbtft.conf with 'options fbtft_device name=adafruit28 rotate=90 gpios=dc:25'
-> 
-> [1] http://h65951.serverkompetenz.net/PeterSeiderer/upload/PiTFT_2_8_ct/Image9893.jpg
-> [2] http://h65951.serverkompetenz.net/PeterSeiderer/upload/PiTFT_2_8_ct/Image9897.jpg
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+This ensures reproducible builds.
 
-Thanks, applied, after doing a bunch of (hopefully) improvements:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gd/gd.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-    [Thomas:
-      - Rename prompt of the Linux extension to "FB TFT drivers"
-      - Remove the full name of the kernel config options in the help
-        text. Giving their CONFIG_<foo> name is enough.
-      - Remove the mention of CONFIG_SPI_BCM2708, since this makes the
-        description RaspberryPi specific, while these drivers can work
-        with any SPI controller.
-      - Refactor the code in linux-ext-fbtft.mk to avoid duplication
-        between the < 3.15 and >= 3.15 cases.
-      - Make the fbtft package a promptless package, since there is no
-        point in selecting only this package, without the kernel
-        extension.
-      - Change the license to GPLv2, since it's kernel code.]
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 868b45e..d7a6512 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -52,6 +52,13 @@ else
+ GD_CONF_OPTS += --without-png
+ endif
+ 
++ifeq ($(BR2_PACKAGE_TIFF),y)
++GD_DEPENDENCIES += tiff
++GD_CONF_OPTS += --with-tiff
++else
++GD_CONF_OPTS += --without-tiff
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
+ GD_DEPENDENCIES += xlib_libXpm
+ GD_CONF_OPTS += --with-xpm
