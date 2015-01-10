@@ -1,93 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 15:46:49 +0100
-Subject: [Buildroot] [git commit] boards/raspberrypi: update readme with
-	Device Tree instructions
-Message-ID: <20150110144654.48BE08019A@busybox.osuosl.org>
+Date: Sat, 10 Jan 2015 15:47:38 +0100
+Subject: [Buildroot] [PATCH 0/2 v3] RPi: enable building a
+ device-tree-enabled kernel (branch yem/rpi-dt)
+In-Reply-To: <cover.1420895562.git.yann.morin.1998@free.fr>
+References: <cover.1420895562.git.yann.morin.1998@free.fr>
+Message-ID: <20150110154738.6cd3d7c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb60ad9ba4e009d4a4bbac7b5abd9561ef17e9db
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/raspberrypi/readme.txt |   31 +++++++++++++++++++++++++++----
- 1 files changed, 27 insertions(+), 4 deletions(-)
+On Sat, 10 Jan 2015 14:14:54 +0100, Yann E. MORIN wrote:
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index a6d3dd4..725ad9d 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -23,6 +23,10 @@ work on this defconfig:
- 
-   $ make raspberrypi_defconfig
- 
-+Alternatively, if you want to test support for the Device Tree:
-+
-+  $ make raspberrypi_dt_defconfig
-+
- If you want to use a persistent rootfs, skip to "Build the rootfs", below.
- 
- For a volatile rootfs, you have to slightly adjust the configuration:
-@@ -51,16 +55,22 @@ Result of the build
- After building, you should obtain this tree:
- 
-     output/images/
--    +-- rootfs.tar
--    +-- rpi-firmware
-+    +-- rootfs.tar                              [0]
-+    +-- rpi-firmware/
-+    |   +-- bcm2708-rpi-b.dtb                   [1]
-+    |   +-- bcm2708-rpi-b-plus.dtb              [1]
-     |   +-- bootcode.bin
-     |   +-- config.txt
-     |   +-- fixup.dat
-     |   `-- start.elf
-     `-- zImage
- 
--Note for Volatile: rootfs.tar will only be there if you kept
--"tar the root filesystem" option selected in "Filesystem images".
-+[0] Note for Volatile: rootfs.tar will only be there if you kept
-+    "tar the root filesystem" option selected in "Filesystem images".
-+
-+[1] The DTBs (Device Tree Blobs) will only be present if you setup
-+    Buildroot to install the DTBs from the rpi-firmware package, and
-+    will only be used if your kernel has support for the Device Tree.
- 
- Prepare you SDCard
- ==================
-@@ -89,17 +99,30 @@ Install the binaries to the SDCard
- At the root of the boot partition, the RaspberryPi must find the following
- files:
- 
-+    * bcm2708-rpi-b.dtb         [2]
-+    * bcm2708-rpi-b-plus.dtb    [2]
-     * bootcode.bin
-     * config.txt
-     * fixup.dat
-     * start.elf
-     * zImage
- 
-+[2] Only needed if your kernel has support for the Device Tree.
-+
- For example:
- 
-  $ cp output/images/rpi-firmware/* /mnt/mountpointboot
-+
-+If your kernel does *not* have support for the Device Tree, then install
-+it with:
-+
-  $ cp output/images/zImage /mnt/mountpointboot
- 
-+If your kernel *does* have support for the Device Tree, then install it
-+with:
-+
-+  $ ./output/host/usr/bin/mkknlimg output/images/zImage /mnt/mountpointboot/zImage
-+
- Note: The kernel image file name is defined in config.txt like this:
- kernel=zImage
- 
+> Yann E. MORIN (2):
+>       configs: add a DT-enabled Raspberry Pi defconfig
+>       boards/raspberrypi: update readme with Device Tree instructions
+
+Thanks, both applied.
+
+Ultimately, it'd be great to have one single configuration, but we'll
+see when that becomes possible.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
