@@ -1,35 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 18:02:11 +0100
-Subject: [Buildroot] [PATCHv2 1/4] toolchain-external: split target
- installation from staging installation
-In-Reply-To: <1417470100-32657-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1417470100-32657-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150110180211.7ee7164a@free-electrons.com>
+Date: Sat, 10 Jan 2015 18:24:06 +0100
+Subject: [Buildroot] [git commit] qt: split script and webkit supported
+	arches in two different variables
+Message-ID: <20150110172429.1F0A58019D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=4eedd313cf1180c125ad49aadee797d2e8d05234
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  1 Dec 2014 22:41:37 +0100, Thomas Petazzoni wrote:
-> Currently, all the installation work of the toolchain-external package
-> is done during the install-staging step. However, in order to be able
-> to properly collect the size added by each package to the target
-> filesystem, we need to make sure that toolchain-external installs its
-> files to $(TARGET_DIR) during the install-target step.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 36 +++++++++++++++++-----
->  1 file changed, 29 insertions(+), 7 deletions(-)
+Currently in Buildroot we have a BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+variable indicating which architectures support Qt Webkit. We also make
+Qt Script depending on that variable, so we are assuming that Qt Script
+is supported for exactly the same architectures which support Qt Webkit,
+and that's not true.
 
-Since this has been tested by J?r?me, I applied it.
+For instance, Qt Webkit is not supported for MIPS64 when
+using the n32 ABI, but Qt Script is actually supported. So, if we make
+BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT depending on !BR2_MIPS_NABI32 we
+will also disable Qt Script, because as I said before, Qt Script depends
+on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT, and we don't want that because
+Qt Script works.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We fix this by creating another variable called
+BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT to state which architectures support
+Qt Script, so now we can differentiate them from the ones supporting Qt
+Webkit.
+
+Related:
+  http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/grantlee/Config.in |    4 ++--
+ package/qt/Config.in       |   23 +++++++++++++++++------
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+index 900c39e..6227d7f 100644
+--- a/package/grantlee/Config.in
++++ b/package/grantlee/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_GRANTLEE
+ 	bool "grantlee"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # Qt Script
+-	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT && BR2_PACKAGE_QT) || BR2_PACKAGE_QT5
++	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+@@ -14,4 +14,4 @@ config BR2_PACKAGE_GRANTLEE
+ 
+ comment "grantlee needs a toolchain with NPTL"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT || BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT || BR2_PACKAGE_QT5
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 543d807..44710f5 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -364,10 +364,12 @@ config BR2_PACKAGE_QT_NETWORK
+ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	bool
+ 	# see src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
+-	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
+-		BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+-		BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb || \
+-		BR2_sparc || BR2_x86_64
++	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
++	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
++		BR2_microblazebe || BR2_mips || BR2_mipsel || \
++		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
++		BR2_powerpc64 || BR2_powerpc64el || BR2_sh4 || BR2_sh4eb || \
++		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
+ 
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
+@@ -401,9 +403,18 @@ config BR2_PACKAGE_QT_OPENSSL
+ 	  target.
+ 	  If unsure, say n.
+ 
++config BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT
++	bool
++	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
++	default y if BR2_arm || BR2_armeb || aarch64 || BR2_i386 || \
++		BR2_microblazeel || BR2_microblazebe || BR2_mips || BR2_mipsel || \
++		BR2_mips64 || BR2_mips64el || BR2_nios2 || BR2_powerpc || \
++		BR2_powerpc64 || BR2_powerpc64el || BR2_sh4 || BR2_sh4eb || \
++		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
++
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
+-	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # needs pthread_getattr_np()
+ 	default y
+ 	help
+@@ -412,7 +423,7 @@ config BR2_PACKAGE_QT_SCRIPT
+ 
+ comment "Script Module needs a toolchain with NPTL"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
++	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT
+ 
+ config BR2_PACKAGE_QT_SCRIPTTOOLS
+ 	bool "Script Tools Module"
