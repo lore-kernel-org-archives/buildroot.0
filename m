@@ -1,42 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 18:55:05 +0100
-Subject: [Buildroot] [PATCH 1/3] xtables-addons: new package
-In-Reply-To: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150110185505.6d929cd2@free-electrons.com>
+Date: Sat, 10 Jan 2015 19:04:31 +0100
+Subject: [Buildroot] [git commit] postgresql: add systemd service file
+Message-ID: <20150110180452.CBA1B803E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=828d7b2f0d22885c70e50b247b79268101c5bed1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Oct 2014 18:10:50 -0300, Gustavo Zacarias wrote:
-> The geoip "helpers" are basically scripts that download and reformat
-> the geoip database in a form usable by xt_geoip.
-> The netfilter (kernel & userland) sides of it are built and installed.
-> Since there are many considerations to geoip databases (free, commercial
-> and variants for each) it's left to the user to deal with that if they
-> plan to use the extension which is only one among many.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: indent using tabs.]
 
-Thanks, I've applied the three patches of this series, only after doing
-a minor set of changes on the first patch:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/postgresql/postgresql.mk      |    8 ++++++++
+ package/postgresql/postgresql.service |   24 ++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+), 0 deletions(-)
 
-    [Thomas:
-     - Take into account the rename of BR2_PREFER_STATIC_LIB to
-       BR2_STATIC_LIBS
-     - Remove "depends on BR2_LINUX_KERNEL" as suggested by Arnout.
-     - Move XTABLES_ADDONS_CONF_OPTS a bit further down, with newlines
-       around it, and adjust the indentation of the first line. Just to
-       make it slightly more readable.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index ea663a2..e53b9dd 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -69,4 +69,12 @@ define POSTGRESQL_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50postgresql
+ endef
+ 
++define POSTGRESQL_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/postgresql/postgresql.service \
++		$(TARGET_DIR)/etc/systemd/system/postgresql.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../postgresql.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+new file mode 100644
+index 0000000..4a96258
+--- /dev/null
++++ b/package/postgresql/postgresql.service
+@@ -0,0 +1,24 @@
++[Unit]
++Description=PostgreSQL database server
++After=network.target
++
++[Service]
++Type=forking
++
++# start timeout disabled because initdb may run a little
++# longer (eg. 5 minutes on RaspberryPi)
++TimeoutStartSec=0
++
++User=postgres
++Group=postgres
++
++SyslogIdentifier=postgres
++PIDFile=/var/lib/pgsql/postmaster.pid
++
++ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
++ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
++ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
++ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
++
++[Install]
++WantedBy=multi-user.target
