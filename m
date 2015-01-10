@@ -1,29 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 11:51:00 +0100
-Subject: [Buildroot] [PATCH] newt: avoid poisoned paths
-In-Reply-To: <20150110081048.GA18077@vostro>
-References: <20150110081048.GA18077@vostro>
-Message-ID: <20150110115100.525446f7@free-electrons.com>
+Date: Sat, 10 Jan 2015 11:58:36 +0100
+Subject: [Buildroot] [git commit] newt: cleanup patches
+Message-ID: <20150110105935.77FF5801D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=05b5b5d38b6d4e927128fbcd98a00cd70fe1dd28
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Jan 2015 10:10:48 +0200, Alex Suykov wrote:
-> Fixes http://autobuild.buildroot.net/results/cb908f73b14e1510bea890167b3927afbf708d6f/
-> 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+This commit slightly cleans up the newt patches: use Git formatted
+patches, improve title and description. This was done in preparation
+for the upstream submission of those patches.
 
-Thanks, applied, even though I would have preferred to see two patches:
-one renaming the existing patch, one adding the new patch.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...instead-of-CPP-to-generate-.depend-files.patch} |   29 +++++++++--------
+ ...e-bogus-I-usr-include-slang-from-CPPFLAGS.patch |   33 ++++++++++++++++++++
+ package/newt/0002-slang-include-dir.patch          |   15 ---------
+ 3 files changed, 49 insertions(+), 28 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/newt/0001-newt-fix-makefile.patch b/package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
+similarity index 58%
+rename from package/newt/0001-newt-fix-makefile.patch
+rename to package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
+index 84152fb..853472b 100644
+--- a/package/newt/0001-newt-fix-makefile.patch
++++ b/package/newt/0001-Use-CC-instead-of-CPP-to-generate-.depend-files.patch
+@@ -1,30 +1,30 @@
+-Fix Makefile.in
++From 65754effe16506a7a0a04069c8b6e1281811604d Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sat, 10 Jan 2015 11:54:10 +0100
++Subject: [PATCH newt 1/2] Use $(CC) instead of $(CPP) to generate .depend
++ files
+ 
+-* Use $(CC) instead of $(CPP) to generate .depend file because
+-  '$(CPP) -M' call does not support multiple input files.
+-  This avoid the following error:
++Use $(CC) instead of $(CPP) to generate .depend file because '$(CPP)
++-M' call does not support multiple input files.  This avoid the
++following error:
+ 
+ make[1]: Entering directory `/opt/br/output/build/newt-0.51.0'
+ /opt/br/output/host/usr/bin/arm-none-linux-gnueabi-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -M newt.c button.c form.c checkbox.c entry.c label.c listbox.c scrollbar.c textbox.c scale.c grid.c windows.c buttonbar.c checkboxtree.c > .depend
+ arm-none-linux-gnueabi-cpp: too many input files
+ make[1]: *** [depend] Error 1
+-make[1]: Leaving directory 
+-`/opt/br/output/build/newt-0.51.0'
+-make: *** 
+-[/opt/br/output/build/newt-0.51.0/.stamp_built] Error 2
+ 
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+-
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+- Makefile.in |    2 +-
++ Makefile.in | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-Index: b/Makefile.in
+-===================================================================
++diff --git a/Makefile.in b/Makefile.in
++index 7989203..17853e0 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -121,7 +121,7 @@
++@@ -121,7 +121,7 @@ clean:
+  		$(SHAREDDIR)/*.o *.$(SOEXT)*
+  
+  depend:
+@@ -33,3 +33,6 @@ Index: b/Makefile.in
+  
+  $(SHAREDDIR):
+  	mkdir -p $(SHAREDDIR)
++-- 
++2.1.0
++
+diff --git a/package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch b/package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch
+new file mode 100644
+index 0000000..eb445dd
+--- /dev/null
++++ b/package/newt/0002-Remove-bogus-I-usr-include-slang-from-CPPFLAGS.patch
+@@ -0,0 +1,33 @@
++From 28145b46649165b94666ee585d064b41306e10fd Mon Sep 17 00:00:00 2001
++From: Alex Suykov <alex.suykov@gmail.com>
++Date: Sat, 10 Jan 2015 11:55:32 +0100
++Subject: [PATCH newt 2/2] Remove bogus -I/usr/include/slang from CPPFLAGS
++
++Hardcoding -I/usr/include/slang in CPPFLAGS is bogus for
++cross-compilation. With recent versions of slang, the headers are
++installed in ${sysroot}/usr/include directly, so there is no need for
++an additional flag. And if one was needed, it should be added by the
++configure script, after detecting the right header location.
++
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 17853e0..d32d784 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -5,7 +5,7 @@ CC = @CC@
++ CPP = @CPP@
++ CFLAGS = @CFLAGS@
++ LDFLAGS = @LDFLAGS@
++-CPPFLAGS = -D_GNU_SOURCE -I/usr/include/slang @CPPFLAGS@ 
+++CPPFLAGS = -D_GNU_SOURCE @CPPFLAGS@
++ GNU_LD = @GNU_LD@
++ 
++ VERSION = @VERSION@
++-- 
++2.1.0
++
+diff --git a/package/newt/0002-slang-include-dir.patch b/package/newt/0002-slang-include-dir.patch
+deleted file mode 100644
+index a88ee70..0000000
+--- a/package/newt/0002-slang-include-dir.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-slang.h is in sysroot/usr/include, no need to use -I
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -5,7 +5,7 @@
+- CPP = @CPP@
+- CFLAGS = @CFLAGS@
+- LDFLAGS = @LDFLAGS@
+--CPPFLAGS = -D_GNU_SOURCE -I/usr/include/slang @CPPFLAGS@ 
+-+CPPFLAGS = -D_GNU_SOURCE @CPPFLAGS@ 
+- GNU_LD = @GNU_LD@
+- 
+- VERSION = @VERSION@
