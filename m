@@ -1,59 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 15:58:21 +0100
-Subject: [Buildroot] [git commit] python: add patch to make ossaudiodev
-	module optional
-Message-ID: <20150110153345.3AC1E80159@busybox.osuosl.org>
+Date: Sat, 10 Jan 2015 16:19:26 +0100
+Subject: [Buildroot] [git commit] python: add an option to make the
+	ossaudiodev module optional for the target
+Message-ID: <20150110153345.500A8803D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ad8036ef2a07884ceef6ca13f2fc13194916ee0
+commit: http://git.buildroot.net/buildroot/commit/?id=9b79f2a637f6fa9a42ebabc6605ff3bbed792e47
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This module causes some build failures in certain setups and is not
-very useful.
+Now that we have a configure option in Python to enable/disable the
+ossaudiodev module, this commit adds a configuration option to the
+target Python to explicitly enable/disable this module.
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/115-optional-ossaudiodev.patch |   30 +++++++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ package/python/Config.in |    5 +++++
+ package/python/python.mk |    6 ++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/python/115-optional-ossaudiodev.patch b/package/python/115-optional-ossaudiodev.patch
-new file mode 100644
-index 0000000..de82036
---- /dev/null
-+++ b/package/python/115-optional-ossaudiodev.patch
-@@ -0,0 +1,30 @@
-+From 30351d9b41a03c43d627d52d46e49ab91bfe342d Mon Sep 17 00:00:00 2001
-+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+Date: Thu, 8 Jan 2015 11:41:40 +0100
-+Subject: [PATCH 1/1] Add an option to disable the ossaudiodev module
+diff --git a/package/python/Config.in b/package/python/Config.in
+index 8b27630..87defad 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -60,6 +60,11 @@ config BR2_PACKAGE_PYTHON_CURSES
+ 	help
+ 	  curses module for Python.
+ 
++config BR2_PACKAGE_PYTHON_OSSAUDIODEV
++	bool "ossaudiodev module"
++	help
++	  ossaudiodev module for Python.
 +
-+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+---
-+ configure.ac | 6 ++++++
-+ 1 file changed, 6 insertions(+)
+ config BR2_PACKAGE_PYTHON_PYEXPAT
+ 	select BR2_PACKAGE_EXPAT
+ 	bool "pyexpat"
+diff --git a/package/python/python.mk b/package/python/python.mk
+index bf063e9..4a3e71c 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -120,6 +120,12 @@ ifeq ($(BR2_PACKAGE_PYTHON_HASHLIB),y)
+ PYTHON_DEPENDENCIES += openssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON_OSSAUDIODEV),y)
++PYTHON_CONF_OPTS += --enable-ossaudiodev
++else
++PYTHON_CONF_OPTS += --disable-ossaudiodev
++endif
 +
-+diff --git a/configure.ac b/configure.ac
-+index e8cb52a..579e05b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2717,6 +2717,12 @@ if test "$CURSES" = "no"; then
-+    DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _curses _curses_panel"
-+ fi
-+ 
-++AC_ARG_ENABLE(ossaudiodev,
-++       AS_HELP_STRING([--disable-ossaudiodev], [disable OSSAUDIODEV]),
-++       [ if test "$enableval" = "no"; then
-++            DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ossaudiodev"
-++         fi])
-++
-+ AC_SUBST(PYDOC)
-+ 
-+ AC_ARG_ENABLE(pydoc,
-+-- 
-+2.1.0
-+
+ PYTHON_CONF_ENV += \
+ 	ac_cv_have_long_long_format=yes \
+ 	ac_cv_file__dev_ptmx=yes \
