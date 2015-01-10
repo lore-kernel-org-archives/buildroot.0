@@ -1,62 +1,118 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 10 Jan 2015 02:13:32 +0100
-Subject: [Buildroot] [PATCH] Linux kernel module for Waveshare 3.2inch
- RPi LCD (B) V3 touch controller
-Message-ID: <trinity-1952e396-b250-47cb-af17-8f840cae0bc2-1420852412854@3capp-gmx-bs28>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 09 Jan 2015 19:59:46 -0600
+Subject: [Buildroot] [RFC] xorriso: new package
+Message-ID: <54B08792.4070309@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
 
-On Fri, Jan 09, 2015 at 11:48:14PM +0100, Yann E. MORIN wrote:
-> Peter, All,
-> 
-> On 2015-01-09 22:40 +0100, Yann E. MORIN spake thusly:
-> > On 2015-01-09 21:21 +0100, Peter Seiderer spake thusly:
-> [--SNIP--]
-> > > Maybe the way to go is to wait (or add?) for raspberry pi linux-3.18
-> > > kernel support in buildroot with device tree overlay support (see [1],[2])?
-> > 
-> > I'm working on it, and should be able to submit it shortly. You can see
-> > the previous attempt in that thread:
-> >     http://lists.busybox.net/pipermail/buildroot/2015-January/116241.html
-> 
-> I've updated my branch, and have now submitted the series:
->     http://lists.busybox.net/pipermail/buildroot/2015-January/116919.html
-> 
+libburnia is a project for reading, mastering and writing
+optical discs. Currently it is comprised of libraries named
+libisofs, libburn, libisoburn, a cdrecord emulator named cdrskin,
+and an integrated multi-session tool named xorriso.
+The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
+It is base of the  GNU xorriso package and is actively maintained.
 
-Thanks, great work. My RaspberryPi B+ booted with the new linux-kernel/DT support.
+The source code for the libburnia project is distributed under
+the terms of the  GNU General Public License version 2 or later
+(GPLv2+). Be aware that linking libisoburn with GPLv3+ library
+libreadline-6 will automatically change the license of the resulting
+libisoburn.so and xorriso binary to GPLv3+.
 
-The only thing I had to change is the kernel compression standard
-(in the kernel config file) from CONFIG_KERNEL_XZ=y to CONFIG_KERNEL_GZIP=y
-because otherweise the script mkknlimg failed with:
-"* Is this a valid kernel? In pass-through mode."
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+I added xorriso to "Target packages > Hardware handling"
+since that is where cdrkit resides
 
-Maybe some uncompress tool is missing or is to old on my host? Is
-it possible to run mkknlimg automatically (with buildroot host/usr/bin path)
-to avoid such errors (and avoid someone installing zImage without running
-mkknlimg)?
+Test builds run with both uClibc and glibc
 
-No DT overlays tested so far (will do soon to enable the buttons on my adafruit28
-which need gpios configured to input with pull-up)...
+config BR2_PACKAGE_XORRISO
+	bool "xorriso"
+	select BR2_LIBICONV
+	depends on BR2_USE_WCHAR && BR2_LARGEFILE
 
-So far:
+I don't understand why "select BR2_LIBICONV" is needed because I thought
+that libiconv was implied by "depends on BR2_USE_WCHAR && BR2_LARGEFILE"
+but without it the uClibc build ends with the error below
+.
+.
+.
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking for _LARGE_FILES value needed for large files... no
+checking for _LARGEFILE_SOURCE value needed for large files... no
+checking for fseeko... yes
+checking for fseeko... (cached) yes
+checking for iconv() in separate -liconv ... no
+checking for libiconv in -liconv... no
+checking for const qualifier with iconv() ... const
+checking for iconv() to be accessible now ... no
 
-Tested-by: Peter Seiderer <ps.report@gmx.net>
+Cannot get function iconv() to work. Configuration aborted.
+Check whether your system needs a separate libiconv installed.
+If it is installed but not found, try something like
+  export LDFLAGS="$LDFLAGS -L/usr/local/lib"
+  export CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+  export LIBS="$LIBS -liconv"
+You may override this test by exporting variable
+  XORRISO_ASSUME_ICONV=yes
 
-Regards,
-Peter
+make: *** [/home/steve/test/buildroot.uClibc/output/build/xorriso-1.3.8/.stamp_configured] Error 1
 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-09 15:52:22.000000000 -0600
++++ buildroot/package/Config.in	2015-01-09 18:59:47.030390893 -0600
+@@ -391,6 +391,7 @@ endif
+ 	source "package/usbutils/Config.in"
+ 	source "package/w_scan/Config.in"
+ 	source "package/wipe/Config.in"
++	source "package/xorriso/Config.in"
+ endmenu
+
+ menu "Interpreter languages and scripting"
+diff -pruN buildroot.ori/package/xorriso/Config.in buildroot/package/xorriso/Config.in
+--- buildroot.ori/package/xorriso/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/xorriso/Config.in	2015-01-09 19:19:29.758413581 -0600
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_XORRISO
++	bool "xorriso"
++	select BR2_LIBICONV
++	depends on BR2_USE_WCHAR && BR2_LARGEFILE
++	help
++	  xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
++
++	  libburnia is a project for reading, mastering and writing
++	  optical discs. Currently it is comprised of libraries named
++	  libisofs, libburn, libisoburn, a cdrecord emulator named cdrskin,
++	  and an integrated multi-session tool named xorriso.
++	  The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
++	  It is base of the  GNU xorriso package and is actively maintained.
++
++	  The source code for the libburnia project is distributed under
++	  the terms of the  GNU General Public License version 2 or later
++	  (GPLv2+). Be aware that linking libisoburn with GPLv3+ library
++	  libreadline-6 will automatically change the license of the resulting
++	  libisoburn.so and xorriso binary to GPLv3+.
++	
++	  http://libburnia-project.org/
++	  http://www.gnu.org/software/xorriso
+diff -pruN buildroot.ori/package/xorriso/xorriso.mk buildroot/package/xorriso/xorriso.mk
+--- buildroot.ori/package/xorriso/xorriso.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/xorriso/xorriso.mk	2015-01-09 19:03:27.778395128 -0600
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# XORRISO
++#
++#############################################################
++XORRISO_VERSION = 1.3.8
++XORRISO_SOURCE = xorriso-$(XORRISO_VERSION).tar.gz
++XORRISO_SITE = http://www.gnu.org/software/xorriso
++XORRISO_INSTALL_STAGING = NO
++XORRISO_INSTALL_TARGET = YES
++XORRISO_LICENSE = GPLv3+
++
++$(eval $(autotools-package))
