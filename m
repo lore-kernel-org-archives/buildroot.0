@@ -1,44 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 16:45:40 +0100
-Subject: [Buildroot] [PATCH v5 06/16] erlang-p1-zlib: new package.
-In-Reply-To: <1420552994-657-7-git-send-email-johan.oudinet@gmail.com>
-References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
- <1420552994-657-7-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150110164540.4bd7cbaa@free-electrons.com>
+Date: Sat, 10 Jan 2015 16:51:34 +0100
+Subject: [Buildroot] [PATCH v4 00/27] SELinux Buildroot Additions
+In-Reply-To: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1420816288-8750-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20150110165134.617b741c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+Dear Matt Weber,
 
-On Tue,  6 Jan 2015 15:03:04 +0100, Johan Oudinet wrote:
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+On Fri,  9 Jan 2015 09:11:01 -0600, Matt Weber wrote:
 
-That many SoB lines? :-)
+> ### What's SELinux?
+> 
+> Security-Enhanced Linux (SELinux) is a Linux feature that provides
+> a variety of security policies, including U.S. Department of Defense
+> style mandatory access controls (MAC), through the use of Linux
+> Security Modules (LSM) in the Linux kernel. It is not a Linux
+> distribution, but rather a set of modifications that can be applied
+> to Unix-like operating systems, such as Linux and BSD.
 
-> diff --git a/package/erlang-p1-zlib/Config.in b/package/erlang-p1-zlib/Config.in
-> new file mode 100644
-> index 0000000..583d856
-> --- /dev/null
-> +++ b/package/erlang-p1-zlib/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_ERLANG_P1_ZLIB
-> +	bool "erlang-p1-zlib"
+Thanks for your persistence with this major effort. I must say overall
+I am still a bit scared by the amount of patches needed in the various
+SELinux components to get them to behave properly in a
+cross-compilation environment, and I believe those changes should be
+submitted upstream.
 
-Are you sure you shouldn't select BR2_PACKAGE_ZLIB here.
+I made the exact same comment back when you submitted the first
+version in September 2013, but apparently no work has been done to
+improve upstream with regarding to cross-compilation. I'm certainly not
+asking for the entire work to be done. But the fact that within the 1.5
+years since you first submitted this patch series, you have apparently
+not worked with upstream to resolve those issues does not make me very
+comfortable. What tells me that this upstreaming work will start at
+some point?
 
-> +ERLANG_P1_ZLIB_VERSION = 52e82bb
-> +ERLANG_P1_ZLIB_SITE = $(call github,processone,zlib,$(ERLANG_P1_ZLIB_VERSION))
-> +ERLANG_P1_ZLIB_LICENSE = GPLv2+
-> +ERLANG_P1_ZLIB_LICENSE_FILES = COPYING
+Main examples:
 
-and depend on zlib here?
+ - The Swig / setools patch. This patch is quite long, but fairly
+   trivial. Why hasn't it been submitted upstream?
+
+ - Clearly, the thing that scares me the most if the replacement of the
+   audit header generation by a Python script. Can we get at least some
+   feedback from upstream on what approach they could accept? See also
+   what Yocto is doing to solve this problem:
+   http://git.yoctoproject.org/cgit/cgit.cgi/meta-selinux/tree/recipes-security/audit/audit/audit-for-cross-compiling.patch
+
+Can you give me your plans about upstreaming those cross-compilation
+changes?
+
+Thanks,
 
 Thomas
 -- 
