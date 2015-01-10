@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 17:53:23 +0100
-Subject: [Buildroot] [PATCH v3 2/2] mpd: group client and libraries
- under the same menu
-In-Reply-To: <1418419480-7570-2-git-send-email-tbultel@free.fr>
-References: <1418419480-7570-1-git-send-email-tbultel@free.fr>
- <1418419480-7570-2-git-send-email-tbultel@free.fr>
-Message-ID: <20150110175323.680f85d0@free-electrons.com>
+Date: Sat, 10 Jan 2015 17:55:37 +0100
+Subject: [Buildroot] [git commit] ruby: fix verconf.h related build failure
+Message-ID: <20150110165542.BB8E1803E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+commit: http://git.buildroot.net/buildroot/commit/?id=20d1d8be0f701391d1581bc69bbab7b071db358e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 12 Dec 2014 22:24:40 +0100, Thierry Bultel wrote:
-> Signed-off-by: Thierry Bultel <tbultel@free.fr>
-> ---
->  package/Config.in     |  6 ------
->  package/mpd/Config.in | 21 +++++++++++++++++++++
->  2 files changed, 21 insertions(+), 6 deletions(-)
+See [1] for failure analysis.
 
-We don't typically try to create categories for such a small number of
-packages. I've asked Yann and Gustavo, and they agree with this
-opinion. So I'm sorry, but we'll reject this patch.
+Fixes:
+   http://autobuild.buildroot.net/results/c94fef5d2cfb00a336905ae3c110d7680f6d5416/
+   http://autobuild.buildroot.net/results/4375cb1e325a336dbf59f22f975be9165ad0648a/
 
-Best regards,
+[1] http://lists.busybox.net/pipermail/buildroot/2014-December/114273.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ruby/ruby.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 20a2a11..00a785c 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -64,6 +64,13 @@ else
+ 	RUBY_CONF_OPTS += --without-gmp
+ endif
+ 
++# workaround for amazing build failure, see
++# http://lists.busybox.net/pipermail/buildroot/2014-December/114273.html
++define RUBY_REMOVE_VERCONF_H
++	rm -f $(@D)/verconf.h
++endef
++RUBY_POST_CONFIGURE_HOOKS += RUBY_REMOVE_VERCONF_H
++
+ # Remove rubygems and friends, as they need extensions that aren't
+ # built and a target compiler.
+ RUBY_EXTENSIONS_REMOVE = rake* rdoc* rubygems*
