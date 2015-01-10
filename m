@@ -1,45 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 12:36:13 +0100
-Subject: [Buildroot] [PATCH] dillo: avoid poisoned paths in configure
-In-Reply-To: <20150109123645.GA23533@vostro>
-References: <20150109123645.GA23533@vostro>
-Message-ID: <20150110123613.6fecd66c@free-electrons.com>
+Date: Sat, 10 Jan 2015 13:03:21 +0100
+Subject: [Buildroot] [git commit] netsurf-buildsystem: new package
+Message-ID: <20150110121528.581318002A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=adeb2f117cee0cc3f72097c2d6bbe6169a098dde
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 9 Jan 2015 14:36:45 +0200, Alex Suykov wrote:
+This is the NetSurf project shared build system, used by various NetSurf
+sub-projects like the libsvgtiny project.
 
-> diff --git a/package/dillo/0002-usr-local-include.patch b/package/dillo/0002-usr-local-include.patch
-> new file mode 100644
-> index 0000000..eb27742
-> --- /dev/null
-> +++ b/package/dillo/0002-usr-local-include.patch
-> @@ -0,0 +1,41 @@
-> +Do not add (possibly poisoned) /usr/local/include and /usr/local/lib
-> +to gcc and ld search paths in configure.
-> +
-> +With BR2_COMPILER_PARANOID_UNSAFE_PATH enabled, poisoned paths result
-> +in hard errors, failing affected configure tests.
-> +
-> +Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+[Thomas: use cp -dpfr instead of just cp -r, to match what we do in
+other Buildroot packages.]
 
-Thanks. But can you make a patch that only changes configure.ac, and
-not configure? This package is already autoreconf'ed. Also, please
-adjust the comment above DILLO_AUTORECONF = YES in the .mk file to
-mention that we also autoreconf for this new patch?
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsurf-buildsystem/netsurf-buildsystem.mk |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
 
-And additionally, please submit this patch to the upstream Dillo
-developers!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/netsurf-buildsystem/netsurf-buildsystem.mk b/package/netsurf-buildsystem/netsurf-buildsystem.mk
+new file mode 100644
+index 0000000..3478850
+--- /dev/null
++++ b/package/netsurf-buildsystem/netsurf-buildsystem.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# netsurf-buildsystem
++#
++################################################################################
++
++NETSURF_BUILDSYSTEM_VERSION = 7574b41345968b5f7e9ca5875faccb1478ce0555
++NETSURF_BUILDSYSTEM_SITE = http://git.netsurf-browser.org/buildsystem.git
++NETSURF_BUILDSYSTEM_SITE_METHOD = git
++NETSURF_BUILDSYSTEM_LICENSE = MIT, BSD-3c (for llvm/* files)
++NETSURF_BUILDSYSTEM_LICENSE_FILES = llvm/LICENSE.TXT
++
++NETSURF_BUILDSYSTEM_INSTALL_DIR = $(HOST_DIR)/usr/share/netsurf-buildsystem
++
++define HOST_NETSURF_BUILDSYSTEM_INSTALL_CMDS
++	mkdir -p $(NETSURF_BUILDSYSTEM_INSTALL_DIR)
++	cp -dpfr $(@D)/* $(NETSURF_BUILDSYSTEM_INSTALL_DIR)
++endef
++
++$(eval $(host-generic-package))
