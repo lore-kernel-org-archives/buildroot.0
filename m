@@ -1,149 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 11:11:04 +0100
-Subject: [Buildroot] [RFC] xorriso: new package
-In-Reply-To: <54B08792.4070309@ou.edu>
-References: <54B08792.4070309@ou.edu>
-Message-ID: <20150110111104.19ed65dc@free-electrons.com>
+Date: Sat, 10 Jan 2015 11:19:50 +0100
+Subject: [Buildroot] [PATCH v5] leveldb: new package
+In-Reply-To: <1420823386-18874-1-git-send-email-ste@junkomatic.net>
+References: <1420823386-18874-1-git-send-email-ste@junkomatic.net>
+Message-ID: <20150110111950.45e3baf2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Dear Steve James,
 
-Thanks for this contribution! See some comments below.
+Thanks for this new version!
 
-On Fri, 09 Jan 2015 19:59:46 -0600, Steve Kenton wrote:
+On Fri,  9 Jan 2015 17:09:46 +0000, Steve James wrote:
 
-> I added xorriso to "Target packages > Hardware handling"
-> since that is where cdrkit resides
+> diff --git a/package/leveldb/002-facilitate-integration-into-buildroot.patch b/package/leveldb/002-facilitate-integration-into-buildroot.patch
+> new file mode 100644
+> index 0000000..c256f34
+> --- /dev/null
+> +++ b/package/leveldb/002-facilitate-integration-into-buildroot.patch
+> @@ -0,0 +1,78 @@
+> +From 83d4b0db22f661718e9568e8bcde549ad3fd4222 Mon Sep 17 00:00:00 2001
+> +From: Steve James <ste@junkomatic.net>
+> +Date: Fri, 9 Jan 2015 10:38:21 +0000
+> +Subject: [PATCH 1/1] facilitate integration into Buildroot:
+> +  - Add Buildroot TARGET_OS
+> +  - Allow flags from the environment
+> +  - Add install recipe
 
-Seems good.
+There are three different things being done, so it should be three
+separate patches, especially for upstream submission.
 
-> config BR2_PACKAGE_XORRISO
-> 	bool "xorriso"
-> 	select BR2_LIBICONV
-> 	depends on BR2_USE_WCHAR && BR2_LARGEFILE
-> 
-> I don't understand why "select BR2_LIBICONV" is needed because I thought
-> that libiconv was implied by "depends on BR2_USE_WCHAR && BR2_LARGEFILE"
-> but without it the uClibc build ends with the error below
+However, I believe adding a Buildroot TARGET_OS is a mistake, and has
+no chance of being merged upstream. Buildroot is not an OS. It builds
+Linux based systems, so the existing TARGET_OS=Linux should work just
+fine for Buildroot.
 
-So, you have several possibilities:
+> +-CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
+> +-CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
+> ++override CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
+> ++override CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
+> + 
+> +-LDFLAGS += $(PLATFORM_LDFLAGS)
+> +-LIBS += $(PLATFORM_LIBS)
+> ++override LDFLAGS += $(PLATFORM_LDFLAGS)
+> ++override LIBS += $(PLATFORM_LIBS)
 
- * With glibc, iconv support is always available in the C library,
-   since locale support is always built into glibc.
+So this should be one patch.
 
- * With uClibc, iconv support is built into the library if locale
-   support is enabled, and iconv support is not available is locale
-   support is disabled. In this last case, we can use the separate
-   libiconv package.
+> + 
+> + LIBOBJECTS = $(SOURCES:.cc=.o)
+> + MEMENVOBJECTS = $(MEMENV_SOURCES:.cc=.o)
+> +@@ -229,3 +229,20 @@ else
+> + .c.o:
+> + 	$(CC) $(CFLAGS) -c $< -o $@
+> + endif
+> ++
+> ++INSTALL_ROOT =
+> ++INSTALL_PREFIX= usr
+> ++
+> ++install: $(SHARED) $(LIBRARY)
+> ++	install -d -m 0755 $(INSTALL_ROOT)/$(INSTALL_PREFIX)/include/leveldb
+> ++	install -D -m 0644 include/leveldb/*.h $(INSTALL_ROOT)/$(INSTALL_PREFIX)/include/leveldb
+> ++	install -d -m 0755 $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
+> ++  ifneq (,$(LIBRARY))
+> ++	install -m 0644 $(LIBRARY) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
+> ++  endif
+> ++  ifneq (,$(SHARED))
+> ++	install -m 0755 $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib
+> ++	ln -sf $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib/$(SHARED1)
+> ++	ln -sf $(SHARED3) $(INSTALL_ROOT)/$(INSTALL_PREFIX)/lib/$(SHARED2)
+> ++  endif
 
-So, what you should do is:
+This should be another patch.
 
-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> ++    Buildroot)
+> ++        PLATFORM=OS_LINUX
+> ++        COMMON_FLAGS="$MEMCMP_FLAG -pthread -DOS_LINUX -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT"
+> ++        PLATFORM_LDFLAGS="-pthread"
+> ++        PLATFORM_CXXFLAGS="-std=c++0x"
+> ++        PORT_FILE=port/port_posix.cc
+> ++        CROSS_COMPILE=true
+> ++        ;;
 
-in Config.in, and:
+This should not be needed.
 
-<foo>_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-
-in the .mk file.
-
-> diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
-> --- buildroot.ori/package/Config.in	2015-01-09 15:52:22.000000000 -0600
-> +++ buildroot/package/Config.in	2015-01-09 18:59:47.030390893 -0600
-
-Can you use Git instead to create the patch?
-
-> @@ -391,6 +391,7 @@ endif
->  	source "package/usbutils/Config.in"
->  	source "package/w_scan/Config.in"
->  	source "package/wipe/Config.in"
-> +	source "package/xorriso/Config.in"
->  endmenu
-> 
->  menu "Interpreter languages and scripting"
-> diff -pruN buildroot.ori/package/xorriso/Config.in buildroot/package/xorriso/Config.in
-> --- buildroot.ori/package/xorriso/Config.in	1969-12-31 18:00:00.000000000 -0600
-> +++ buildroot/package/xorriso/Config.in	2015-01-09 19:19:29.758413581 -0600
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_XORRISO
-> +	bool "xorriso"
-> +	select BR2_LIBICONV
-
-See above on how to improve this.
-
-> +	depends on BR2_USE_WCHAR && BR2_LARGEFILE
-> +	help
-> +	  xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
+> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),)
+> +# Dynamic library not required
+> +LEVELDB_MAKE_ARGS += SHARED=
+> +endif
 > +
-> +	  libburnia is a project for reading, mastering and writing
-> +	  optical discs. Currently it is comprised of libraries named
-> +	  libisofs, libburn, libisoburn, a cdrecord emulator named cdrskin,
-> +	  and an integrated multi-session tool named xorriso.
-> +	  The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
-> +	  It is base of the  GNU xorriso package and is actively maintained.
-> +
-> +	  The source code for the libburnia project is distributed under
-> +	  the terms of the  GNU General Public License version 2 or later
-> +	  (GPLv2+). Be aware that linking libisoburn with GPLv3+ library
-> +	  libreadline-6 will automatically change the license of the resulting
-> +	  libisoburn.so and xorriso binary to GPLv3+.
+> +ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),)
+> +# Static library not required
+> +LEVELDB_MAKE_ARGS += LIBRARY=
+> +endif
 
-I don't think this last paragraph is really needed.
+I found this a bit odd to read, maybe:
 
-> +	
-> +	  http://libburnia-project.org/
-> +	  http://www.gnu.org/software/xorriso
+# Disable the static library for shared only build
+ifeq ($(BR2_SHARED_LIBS),y)
+LEVELDB_MAKE_ARGS += LIBRARY=
+endif
 
-You must add a comment here about the wchar and largefile dependencies:
+# Disable the shared library for static only build
+ifeq ($(BR2_STATIC_LIBS),y)
+LEVELDB_MAKE_ARGS += SHARED=
+endif
 
-comment "xorriso needs a toolchain w/ wchar, largefile"
-	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
+is more readable.
 
-see
-http://buildroot.org/downloads/manual/manual.html#_literal_config_in_literal_file,
-section "17.2.2. Dependencies on target and toolchain options".
+> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
 
-> diff -pruN buildroot.ori/package/xorriso/xorriso.mk buildroot/package/xorriso/xorriso.mk
-> --- buildroot.ori/package/xorriso/xorriso.mk	1969-12-31 18:00:00.000000000 -0600
-> +++ buildroot/package/xorriso/xorriso.mk	2015-01-09 19:03:27.778395128 -0600
-> @@ -0,0 +1,13 @@
-> +#############################################################
-> +#
-> +# XORRISO
-> +#
-> +#############################################################
+Not needed, just call install unconditionally. It will install the
+static library to $(TARGET_DIR), but that's not a problem, as it gets
+removed afterwards by Buildroot anyway.
 
-We have settled on 80 # signs for the comment header. The name of the
-package should be in lower case. And there should be an empty new line
-between this header and the first variable. Yes, those are silly rules,
-but they allow us to have some consistent across Buildroot.
-
-> +XORRISO_VERSION = 1.3.8
-> +XORRISO_SOURCE = xorriso-$(XORRISO_VERSION).tar.gz
-
-This line is not needed, since it's the default.
-
-> +XORRISO_SITE = http://www.gnu.org/software/xorriso
-
-Please use $(BR2_GNU_MIRROR). You can grep in the Buildroot source code
-to see how it's used.
-
-> +XORRISO_INSTALL_STAGING = NO
-> +XORRISO_INSTALL_TARGET = YES
-
-Those two lines are not needed, since it's the default.
-
-> +XORRISO_LICENSE = GPLv3+
-
-Can you also add XORRISO_LICENSE_FILES ?
-
-Other than that, it looks good. Could you take into account those
-comments, and send an updated version?
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
