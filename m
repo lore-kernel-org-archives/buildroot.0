@@ -1,37 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 16:43:55 +0100
-Subject: [Buildroot] [PATCH v2 4/8] boot/uboot: Add uboot-menuconfig and
- friends
-In-Reply-To: <1420897647-25001-5-git-send-email-jkrause@posteo.de>
-References: <1420897647-25001-1-git-send-email-jkrause@posteo.de>
- <1420897647-25001-5-git-send-email-jkrause@posteo.de>
-Message-ID: <20150110164355.17d96522@free-electrons.com>
+Date: Sat, 10 Jan 2015 16:45:40 +0100
+Subject: [Buildroot] [PATCH v5 06/16] erlang-p1-zlib: new package.
+In-Reply-To: <1420552994-657-7-git-send-email-johan.oudinet@gmail.com>
+References: <1420552994-657-1-git-send-email-johan.oudinet@gmail.com>
+ <1420552994-657-7-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20150110164540.4bd7cbaa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Johan Oudinet,
 
-On Sat, 10 Jan 2015 14:47:23 +0100, J?rg Krause wrote:
+On Tue,  6 Jan 2015 15:03:04 +0100, Johan Oudinet wrote:
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
->  ifeq ($(BR2_TARGET_UBOOT),y)
-> +ifeq ($(BR2_TARGET_UBOOT_USE_KBUILD_KCONFIG),y)
-> +uboot-menuconfig uboot-xconfig uboot-gconfig uboot-nconfig: uboot-configure
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> +	rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
-> +uboot-savedefconfig: uboot-configure
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> +ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
-> +uboot-update-defconfig: uboot-savedefconfig
-> +	cp -f $(UBOOT_DIR)/defconfig $(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)
-> +else
-> +uboot-update-defconfig: ;
-> +endif # BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
-> +endif # BR2_TARGET_UBOOT_USE_KBUILD_KCONFIG
+That many SoB lines? :-)
 
-Please use the kconfig-package infrastructure.
+> diff --git a/package/erlang-p1-zlib/Config.in b/package/erlang-p1-zlib/Config.in
+> new file mode 100644
+> index 0000000..583d856
+> --- /dev/null
+> +++ b/package/erlang-p1-zlib/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_ERLANG_P1_ZLIB
+> +	bool "erlang-p1-zlib"
+
+Are you sure you shouldn't select BR2_PACKAGE_ZLIB here.
+
+> +ERLANG_P1_ZLIB_VERSION = 52e82bb
+> +ERLANG_P1_ZLIB_SITE = $(call github,processone,zlib,$(ERLANG_P1_ZLIB_VERSION))
+> +ERLANG_P1_ZLIB_LICENSE = GPLv2+
+> +ERLANG_P1_ZLIB_LICENSE_FILES = COPYING
+
+and depend on zlib here?
 
 Thomas
 -- 
