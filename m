@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 18:45:23 +0100
-Subject: [Buildroot] [git commit] xtables-addons: enable necessary kernel
-	options
-Message-ID: <20150110175417.4B03B803E5@busybox.osuosl.org>
+Date: Sat, 10 Jan 2015 18:55:05 +0100
+Subject: [Buildroot] [PATCH 1/3] xtables-addons: new package
+In-Reply-To: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1413925852-12765-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150110185505.6d929cd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5d715dda5b42e15ae3526c111d26307c9f13638
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Enable the required conntrack/netfilter options, otherwise
-xtables-addons will fail to build.
-The basic iptables options are already covered by the iptables package
-which is a required dependency anyway.
+On Tue, 21 Oct 2014 18:10:50 -0300, Gustavo Zacarias wrote:
+> The geoip "helpers" are basically scripts that download and reformat
+> the geoip database in a form usable by xt_geoip.
+> The netfilter (kernel & userland) sides of it are built and installed.
+> Since there are many considerations to geoip databases (free, commercial
+> and variants for each) it's left to the user to deal with that if they
+> plan to use the extension which is only one among many.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+Thanks, I've applied the three patches of this series, only after doing
+a minor set of changes on the first patch:
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index a3efbb2..680521c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -217,6 +217,9 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
+    [Thomas:
+     - Take into account the rename of BR2_PREFER_STATIC_LIB to
+       BR2_STATIC_LIBS
+     - Remove "depends on BR2_LINUX_KERNEL" as suggested by Arnout.
+     - Move XTABLES_ADDONS_CONF_OPTS a bit further down, with newlines
+       around it, and adjust the indentation of the first line. Just to
+       make it slightly more readable.]
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
