@@ -1,144 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 17:12:00 +0100
-Subject: [Buildroot] [git commit] glmark2: new package
-Message-ID: <20150110165103.E283980105@busybox.osuosl.org>
+Date: Sat, 10 Jan 2015 17:45:45 +0100
+Subject: [Buildroot] [git commit] nftables: making interactive console
+	optional
+Message-ID: <20150110165103.EFE8580105@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8304c360b051ebd55078134241d052758a66f665
+commit: http://git.buildroot.net/buildroot/commit/?id=9d1aa46c9e42670513d02c428f452fef7baa481a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This lets you (by default enabled) compile out its readline
+dependency.
+
+[Thomas:
+  - remove the patch, which is now unneeded, since we've bumped to
+    nftables 0.4, which as the patch to make readline optional.
+  - remove the new Config.in option, just enable the interactive
+    console when the readline package is enabled.]
+
+Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/glmark2/Config.in  |   31 ++++++++++++++++++++
- package/glmark2/glmark2.mk |   67 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 99 insertions(+), 0 deletions(-)
+ package/nftables/Config.in   |    1 -
+ package/nftables/nftables.mk |   10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9f3f732..db02394 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -190,6 +190,7 @@ menu "Graphic libraries and applications (graphic/text)"
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index 4ddfdbd..1e0798e 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_NFTABLES
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_LIBMNL
+ 	select BR2_PACKAGE_LIBNFTNL
+-	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	help
+ 	  nftables is the project that aims to replace the existing
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 6be05ed..35c56e8 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -7,12 +7,18 @@
+ NFTABLES_VERSION = 0.4
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
+-NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
++NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+ 	host-pkgconf $(if $(BR2_NEEDS_GETTEXT),gettext)
+ NFTABLES_LICENSE = GPLv2
+ NFTABLES_LICENSE_FILES = COPYING
  
- comment "Graphic applications"
- 	source "package/fswebcam/Config.in"
-+	source "package/glmark2/Config.in"
- 	source "package/gnuplot/Config.in"
- 	source "package/jhead/Config.in"
- 	source "package/mesa3d-demos/Config.in"
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-new file mode 100644
-index 0000000..2d799fe
---- /dev/null
-+++ b/package/glmark2/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_GLMARK2_EGL_GLES
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_MESA3D
-+
-+config BR2_PACKAGE_GLMARK2_GL
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_MESA3D
-+
-+comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
-+	depends on BR2_LARGEFILE
-+	depends on !BR2_PACKAGE_GLMARK2_GL && !BR2_PACKAGE_GLMARK2_EGL_GLES
-+
-+config BR2_PACKAGE_GLMARK2
-+	bool "glmark2"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  glmark2 is an OpenGL 2.0 and ES 2.0 benchmark.
-+
-+	  https://github.com/glmark2/glmark2
-+
-+comment "glmark2 needs udev /dev management and a toolchain w/ C++, largefile, NPTL"
-+	depends on !BR2_LARGEFILE || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-new file mode 100644
-index 0000000..ffaea73
---- /dev/null
-+++ b/package/glmark2/glmark2.mk
-@@ -0,0 +1,67 @@
-+################################################################################
-+#
-+# glmark2
-+#
-+################################################################################
-+
-+GLMARK2_VERSION = 499aa81a68fb4c8aac1c80f0d6a4cce05941c4cc
-+GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
-+GLMARK2_LICENSE = GPLv3+ SGIv1
-+GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
-+GLMARK2_DEPENDENCIES = host-pkgconf jpeg libpng \
-+	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
-+	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
-+	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+GLMARK2_DEPENDENCIES += xlib_libX11
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
-+GLMARK2_FLAVORS += x11-glesv2
-+endif
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+GLMARK2_FLAVORS += x11-gl
-+endif
+-NFTABLES_LIBS = -lncurses
++ifeq ($(BR2_PACKAGE_READLINE),y)
++NFTABLES_DEPENDENCIES += readline
++NFTABLES_LIBS += -lncurses
++else
++NFTABLES_CONF_OPTS = --without-cli
 +endif
 +
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
-+GLMARK2_FLAVORS += drm-glesv2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL),yy)
-+GLMARK2_FLAVORS += drm-gl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yyy)
-+GLMARK2_DEPENDENCIES += wayland
-+GLMARK2_FLAVORS += wayland-glesv2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_HAS_LIBGL),yy)
-+GLMARK2_DEPENDENCIES += wayland
-+GLMARK2_FLAVORS += wayland-gl
-+endif
-+
-+GLMARK2_CONF_OPTS += \
-+	--prefix=/usr \
-+	--with-flavors=$(subst $(space),$(comma),$(GLMARK2_FLAVORS))
-+
-+define GLMARK2_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
-+		python_LDFLAGS="" \
-+		python_LIBDIR="" \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(GLMARK2_CONF_ENV) \
-+		./waf configure $(GLMARK2_CONF_OPTS) \
-+	)
-+endef
-+
-+define GLMARK2_BUILD_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./waf
-+endef
-+
-+define GLMARK2_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
+ NFTABLES_LIBS += -ljansson -lm
+ endif
