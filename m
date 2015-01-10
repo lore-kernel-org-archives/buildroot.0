@@ -1,162 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 18:41:31 +0100
-Subject: [Buildroot] Patchwork review and cleanup
-Message-ID: <20150110184131.028aa273@free-electrons.com>
+Date: Sat, 10 Jan 2015 18:43:59 +0100
+Subject: [Buildroot] [git commit] xtables-addons: new package
+Message-ID: <20150110175417.3AE8C80170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=490917387a0ff6969f8130be38993eed5f06f73e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Here is an e-mail to hopefully trigger some review/help to make
-progress towards cleaning up the patchwork. Contrary to Thomas DS who
-was looking at the oldest patches, I'll start from the most recent
-ones and will not go all the way to the end of the list.
+The geoip "helpers" are basically scripts that download and reformat
+the geoip database in a form usable by xt_geoip.
 
- * Wine package
+The netfilter (kernel & userland) sides of it are built and installed.
+Since there are many considerations to geoip databases (free,
+commercial and variants for each) it's left to the user to deal with
+that if they plan to use the extension which is only one among many.
 
-   I'm not entirely happy to have this package depend on
-   BR2_TOOLCHAIN_BUILDROOT simply because it has a limited build
-   system that assumes that the --host value and the toolchain prefix
-   *must* match. Do others have opinions about this?
+[Thomas:
+ - Take into account the rename of BR2_PREFER_STATIC_LIB to
+   BR2_STATIC_LIBS
+ - Remove "depends on BR2_LINUX_KERNEL" as suggested by Arnout.
+ - Move XTABLES_ADDONS_CONF_OPTS a bit further down, with newlines
+   around it, and adjust the indentation of the first line. Just to
+   make it slightly more readable.]
 
- * The SELinux stuff
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |    1 +
+ package/xtables-addons/Config.in           |   20 +++++++++++++++++
+ package/xtables-addons/xtables-addons.hash |    3 ++
+ package/xtables-addons/xtables-addons.mk   |   33 ++++++++++++++++++++++++++++
+ 4 files changed, 57 insertions(+), 0 deletions(-)
 
-   I've started reviewing this, and even applied a few of the patches
-   from the previous iterations. But I find that several packages,
-   especially the audit package, have very scary patches, that I'd
-   prefer to see upstreamed before we merged this in Buildroot.
-
-   Also, I'm a bit concerned by the amount of interest in SELinux. For
-   sure, our friends at Rockwell are interested in this. But who else
-   is interested by that?
-
- * Allow a single DHCP configuration via the system configuration
-   submenu
-
-   I think the principle is OK and matches what we have
-   discussed. Could someone review and test this? Any volunteer?
-
- * squid: fix automake breakage
-
-   I am not entirely happy with this one. Why would we have to passs
-   ACLOCALE and AUTOMAKE specifically for squid, and not globally for
-   all autoreconf'ed packages? Gustavo?
-
- * The Erlang stuff
-
-   Review is on-going, I still have some comments on the
-   infrastructure. But this is getting better and better.
-
- * package/swupdate: new package
-
-   Someone needs to review and test this. Any volunteer?
-
- * graph-depends improvements from Fran?ois
-
-   I'm fine with the first patch (display virtual packages with italic
-   style), but I don't really like the second patch (stopping the
-   dependency tree on virtual packages), as it doesn't seem to be very
-   useful to me. Thoughts? Opinions?
-
- * ffmpeg: enable freetype support
-
-   I don't really like our handling of the "fenv" problem. Should we
-   introduce an hidden BR2_PACKAGE_TOOLCHAIN_HAS_FENV, which would be
-   true for glibc, true for uClibc on i386 and x86-64 and false
-   otherwise (musl case remain to be checked). Thoughts?
-
- * [1/2] dhcpcd: fix build on old toolchains (sa_family_t)
-   [2/2] Revert "dhcpcd: blacklist Sourcery PowerPC toolchains"
-
-   My understand was that the problem was more a toolchain problem
-   than a dhcpcd problem. Gustavo, can we patch the toolchain headers
-   instead?
-
- * [RFC,1/4] legal-info: remove FOO_MANIFEST_TARBALL and
-   FOO_MANIFEST_SITE defaults [RFC,2/4] legal-info: allow to declare
-   the actual sources for binary packages [RFC,3/4] toolchain-externel:
-   mass-define actual source tarball for known patterns [RFC,4/4]
-   toolchain-external: define actual sources for arago toolchains
-
-   Could someone review this?
-
- * ssp stuff from Yann
-
-   Not very nice to have all this stuff just for some minor corner
-   cases, but I don't really have good alternatives to
-   offer. Opinions?
-
- * [3/4] qt5: bump to version 5.4.0
-   [4/4] qt5: update URLs to use Qt's new domain
-
-   Could someone help to review the licensing changes? That's the main
-   blocking point on this series.
-
- * qt5multimedia: enable gstreamer-1.x support
-
-   This is incompatible with the Qt 5.4.0 bump, and I'd prefer to
-   merge the Qt 5.4.0 bump first. Should I mark this as Changes
-   Requested?
-
- * [1/1] binutils, gcc: add support for GCC flag -flto
-
-   Someone needs to test/review this. Any volunteer?
-
- * [v2] ncurses: add support for 256 colors
-   [1/1] xterm: add support for 256 colors
-   [1/1] screen: add support for 256 colors
-
-   Do we really want to have Config.in options in xterm and screen for
-   a simple feature such as 256 colors support?
-
-   I must say I really don't know what to do with those patches, but
-   we need to take a decision. Opinions?
-
- * The autobuild-run patches
-
-   Many good features, I still need to look at them.
-
- * [v2] gnupg2: fix linking with intl
-
-   Can someone test and review that the proposed solution is the
-   correct one?
-
- * The i.MX6 patch series
-
-   I would like to have a review of Bernd on "[v5,01/15] mesa3d: Give
-   possibility to external backends to enable DRI/Gallium".
-
-   Also, what do people think about "[v5,03/15] gpu-viv-bin-mx6q: fix
-   compiling issues with EGL_API_FB", which consist in hard-coding in
-   the OpenGL headers which graphic backend (fb or x11) is used,
-   instead of having the clients of the OpenGL headers specify that at
-   build time. I'm not too happy with this, but it's true that it
-   simplifies things a bit.
-
- * The size-stats stuff
-
-   Could someone review/test this stuff? It's my stuff so I can hardly
-   do it for myself :-)
-
- * [v2] libgpg-error: bump version to 1.17
-
-   I'm not happy with the new architecture dependent stuff, but it
-   seems to be there for real. Could someone review/test this patch?
-
-[... skipping a bunch of patches ...]
-
- * The umask stuff
-
-   Could someone knowledgeable with this stuff have a look, and
-   comment/review?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index db02394..10e50c2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1188,6 +1188,7 @@ endif
+ 	source "package/wvdial/Config.in"
+ 	source "package/xinetd/Config.in"
+ 	source "package/xl2tp/Config.in"
++	source "package/xtables-addons/Config.in"
+ 	source "package/znc/Config.in"
+ 
+ endmenu
+diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
+new file mode 100644
+index 0000000..36dbd48
+--- /dev/null
++++ b/package/xtables-addons/Config.in
+@@ -0,0 +1,20 @@
++comment "xtables-addons needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++comment "xtables-addons needs a toolchain w/ dynamic library, largefile, threads"
++	depends on BR2_STATIC_LIBS || !BR2_LARGEFILE || \
++		!BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_XTABLES_ADDONS
++	bool "xtables-addons"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # extensions are .so
++	select BR2_PACKAGE_IPTABLES
++	help
++	  Xtables-addons is the successor to patch-o-matic(-ng).
++	  Likewise, it contains extensions that were not, or are not yet,
++	  accepted in the main kernel/iptables packages.
++
++	  http://xtables-addons.sourceforge.net/
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+new file mode 100644
+index 0000000..d742aed
+--- /dev/null
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.6/
++md5	087835ba7e564481b6fd398692268340	xtables-addons-2.6.tar.xz
++sha1	10586961a70fd4fe4f972cb3f31962c6766b359c	xtables-addons-2.6.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+new file mode 100644
+index 0000000..dcfbd5e
+--- /dev/null
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# xtables-addons
++#
++################################################################################
++
++XTABLES_ADDONS_VERSION = 2.6
++XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
++XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
++XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
++XTABLES_ADDONS_LICENSE = GPLv2+
++XTABLES_ADDONS_LICENSE_FILES = LICENSE
++
++XTABLES_ADDONS_CONF_OPTS = \
++	--with-kbuild="$(LINUX_DIR)" \
++	--with-xtables="$(STAGING_DIR)/usr" \
++	--with-xtlibdir="/usr/lib/xtables"
++
++# geoip helpers need perl with modules and unzip so disable
++define XTABLES_DISABLE_GEOIP_HELPERS
++	$(SED) 's/ geoip//' $(@D)/Makefile.in
++endef
++XTABLES_ADDONS_POST_PATCH_HOOKS += XTABLES_DISABLE_GEOIP_HELPERS
++
++define XTABLES_ADDONS_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS)
++endef
++
++define XTABLES_ADDONS_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(autotools-package))
