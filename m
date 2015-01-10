@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 11:42:01 +0100
-Subject: [Buildroot] [PATCH] lua: add a uptstream patch
-In-Reply-To: <1420878653-17988-1-git-send-email-francois.perrad@gadz.org>
-References: <1420878653-17988-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150110114201.64c14fa1@free-electrons.com>
+Date: Sat, 10 Jan 2015 11:49:51 +0100
+Subject: [Buildroot] [git commit] newt: bump version to 0.52.18
+Message-ID: <20150110105031.AEBB37FC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=d8ceb223fe629b2877da97855381444961843f39
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 10 Jan 2015 09:30:53 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua/5.2.3/0012-fix-ephemeron-table.patch | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->  create mode 100644 package/lua/5.2.3/0012-fix-ephemeron-table.patch
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/newt/newt.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks, applied after fixing the commit title.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index d11a534..4c5d241 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NEWT_VERSION = 0.52.17
++NEWT_VERSION = 0.52.18
+ NEWT_SITE = https://fedorahosted.org/releases/n/e/newt
+ NEWT_INSTALL_STAGING = YES
+ NEWT_DEPENDENCIES = popt slang \
