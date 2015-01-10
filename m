@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 16:35:41 +0100
-Subject: [Buildroot] [git commit] package/sane-backends: rename patches to
-	the new naming convention
-Message-ID: <20150110153551.66B518019E@busybox.osuosl.org>
+Date: Sat, 10 Jan 2015 16:36:07 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sane-backends: rename patches
+ to the new naming convention
+In-Reply-To: <1420902661-20721-1-git-send-email-romain.naour@openwide.fr>
+References: <1420902661-20721-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150110163607.7fdd5d3a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c9a66cba3758b588af631856d665049254b721f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...s-1.0.22-qcam-x86.patch => 0001-qcam-x86.patch} |    0
- ...ne-backends-1.0.22-v4l.patch => 0002-v4l.patch} |    0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+On Sat, 10 Jan 2015 16:11:00 +0100, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-diff --git a/package/sane-backends/sane-backends-1.0.22-qcam-x86.patch b/package/sane-backends/0001-qcam-x86.patch
-similarity index 100%
-rename from package/sane-backends/sane-backends-1.0.22-qcam-x86.patch
-rename to package/sane-backends/0001-qcam-x86.patch
-diff --git a/package/sane-backends/sane-backends-1.0.22-v4l.patch b/package/sane-backends/0002-v4l.patch
-similarity index 100%
-rename from package/sane-backends/sane-backends-1.0.22-v4l.patch
-rename to package/sane-backends/0002-v4l.patch
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
