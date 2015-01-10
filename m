@@ -1,54 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Jan 2015 12:27:25 +0100
-Subject: [Buildroot] [PATCH 0/5 v2] RPi: enable building a
- device-tree-enabled kernel (branch yem/rpi-dt)
-In-Reply-To: <20150110122335.18905a24@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Jan 2015 12:28:31 +0100
+Subject: [Buildroot] [PATCH 5/5 v2] configs: add a DT-enabled Raspberry
+ Pi defconfig
+In-Reply-To: <20150110121751.0bddd30b@free-electrons.com>
 References: <cover.1420843412.git.yann.morin.1998@free.fr>
- <20150110122335.18905a24@free-electrons.com>
-Message-ID: <20150110112725.GB3934@free.fr>
+ <b65d009bf4aeb83b97e02a9fd03c14888b5f1ce2.1420843412.git.yann.morin.1998@free.fr>
+ <20150110121751.0bddd30b@free-electrons.com>
+Message-ID: <20150110122831.42767a7f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2015-01-10 12:23 +0100, Thomas Petazzoni spake thusly:
-> On Fri,  9 Jan 2015 23:46:19 +0100, Yann E. MORIN wrote:
+On Sat, 10 Jan 2015 12:17:51 +0100, Thomas Petazzoni wrote:
+
+> >   - we can not use the minimalist RPi defconfig bundled with the kernel,
+> >     namely bcmrpi_quick_defconfig, because it is not DT-enabled, and
+> >     sets CONFIG_ARM_PATCH_PHYS_VIRT to 'n', which prompts a value for
+> >     CONFIG_PHYS_OFFSET, as it as no default for the bcm familly;
+> > 
+> >   - we have to use the 'default' but bloated bcmrpi_defconfig, which
+> >     makes for a very fat kernel with lots of modules, and takes ages to
+> >     build;
+> > 
+> >   - most importantly, the rpi-3.18.y branch is constantly rebased, so
+> >     there is no guarantee that the sha1 I use today will still be usable
+> >     in the long term. Using the name of hte branch is not better either.
 > 
-> > Yann E. MORIN (5):
-> >       package/rpi-firmware: add DT-aware marking script
-> >       package/rpi-firmware: install DTB blobs
-> >       boards/raspberrypi: don't document non-existent files
-> 
-> Those ones applied. I just did a minor change on PATCH 2/5, to explain
-> why we need to change the version when installing DTBs is enabled.
+> Well, you could alternatively decide to have a custom kernel defconfig
+> in board/raspberrypi/, which would be the same as bcmrpi_quick, with
+> just the modifications you need for DT. Sure it means it will have to
+> be updated from time to time, but hopefully at some point in the future
+> the official bcmrpi_quick defconfig will have DT support enabled.
 
-Thanks! :-)
+Another motivation would be to switch back to an internal toolchain.
+Using an external toolchain here is quite inefficient: for an ARMv6
+such as the RPi, we will fallback to the CodeSourcery toolchain, which
+will generate ARMv5 soft-float code. Not nice for a VFP-using ARMv6.
 
-> >       boards/raspberrypi: update readme with Device Tree instructions
-> >       configs: add a DT-enabled Raspberry Pi defconfig
-> 
-> For those ones, I'm waiting for your input on using a custom defconfig
-> instead of a default one that is too big.
-
-In fact, that's the way I originally went for; I do have such a
-minimalist defconfig, which is just bcmrpi_quick with DT enabled.
-
-But then I thought that it would be easier to maintain usign the bundled
-defconfig, even though it is much bigger.
-
-But if you prefer, I can just restore my minimalist defconfig before I
-respin.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
