@@ -1,68 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 15:29:15 +0100
-Subject: [Buildroot] [git commit] dillo: remove poisoned paths from configure
-Message-ID: <20150110142952.A053F801F5@busybox.osuosl.org>
+Date: Sat, 10 Jan 2015 15:40:50 +0100
+Subject: [Buildroot] [git commit] package/vnstat: New package
+Message-ID: <20150110144536.CCBF78019A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ecf332e50fb5366b1f7fd186d0b4c9ccfc11bd2f
+commit: http://git.buildroot.net/buildroot/commit/?id=bc13478bd2eb877f7333a25b0b497bb642bbaef4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/10f/10f7ba386a13753c942139b8bc13ca74d8932f3a/
+[Thomas:
+  - Rename the VNSTAT_INSTALL_VNSTATI to VNSTAT_INSTALL_VNSTATI_CMDS,
+    and use 'define ... endef'.
+  - Use full paths for the destinations when using $(INSTALL)]
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dillo/0002-usr-local-include.patch |   27 +++++++++++++++++++++++++++
- package/dillo/dillo.mk                     |    2 +-
- 2 files changed, 28 insertions(+), 1 deletions(-)
+ package/Config.in          |    1 +
+ package/vnstat/Config.in   |   11 +++++++++++
+ package/vnstat/vnstat.hash |    2 ++
+ package/vnstat/vnstat.mk   |   30 ++++++++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/package/dillo/0002-usr-local-include.patch b/package/dillo/0002-usr-local-include.patch
+diff --git a/package/Config.in b/package/Config.in
+index 878aa72..9f3f732 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1172,6 +1172,7 @@ endif
+ 	source "package/ushare/Config.in"
+ 	source "package/ussp-push/Config.in"
+ 	source "package/vde2/Config.in"
++	source "package/vnstat/Config.in"
+ 	source "package/vpnc/Config.in"
+ 	source "package/vsftpd/Config.in"
+ 	source "package/vtun/Config.in"
+diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
 new file mode 100644
-index 0000000..0c3fed2
+index 0000000..0df4982
 --- /dev/null
-+++ b/package/dillo/0002-usr-local-include.patch
-@@ -0,0 +1,27 @@
-+Do not add (possibly poisoned) /usr/local/include and /usr/local/lib
-+to gcc and ld search paths in configure.
++++ b/package/vnstat/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_VNSTAT
++	bool "vnstat"
++	depends on BR2_USE_MMU # fork()
++	help
++	  vnStat is a console-based network traffic monitor that keeps a log of
++	  network traffic for the selected interface(s). It uses the network
++	  interface statistics provided by the kernel as information source.
++	  This means that vnStat won't actually be sniffing any traffic and also
++	  ensures light use of system resources.
 +
-+With BR2_COMPILER_PARANOID_UNSAFE_PATH enabled, poisoned paths result
-+in hard errors, failing affected configure tests.
++	  http://humdi.net/vnstat
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+new file mode 100644
+index 0000000..a3334d6
+--- /dev/null
++++ b/package/vnstat/vnstat.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	af1050d9c1b22d4b9742fe0d1818de9eb1037b8e7f9ba67b962e108d8527be69	vnstat-1.12.tar.gz
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+new file mode 100644
+index 0000000..e0a64d5
+--- /dev/null
++++ b/package/vnstat/vnstat.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# vnstat
++#
++################################################################################
 +
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++VNSTAT_VERSION = 1.12
++VNSTAT_SITE = http://humdi.net/vnstat
++VNSTAT_LICENSE = GPLv2
++VNSTAT_LICENSE_FILES = COPYING
 +
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -57,16 +57,6 @@
-+ AC_TYPE_INT32_T
-+ AC_TYPE_UINT32_T
-+ 
-+-dnl --------------------------------------
-+-dnl Check whether to add /usr/local or not
-+-dnl (this is somewhat a religious problem)
-+-dnl --------------------------------------
-+-dnl
-+-if test "`$CPP -v < /dev/null 2>&1 | grep '/usr/local/include' 2>&1`" = ""; then
-+-  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-+-  LDFLAGS="$LDFLAGS -L/usr/local/lib"
-+-fi
-+-
-+ dnl ------------------------------------
-+ dnl Check for socket libs (AIX, Solaris)
-+ dnl ------------------------------------
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index 9bdd56f..d2dc761 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -9,7 +9,7 @@ DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
- DILLO_SITE = http://www.dillo.org/download
- DILLO_LICENSE = GPLv3+
- DILLO_LICENSE_FILES = COPYING
--# For 0001-configure.ac-change-fltk-config-test-to-be-more-cros.patch
-+# configure.ac gets patched, so autoreconf is necessary
- DILLO_AUTORECONF = YES
- DILLO_DEPENDENCIES = fltk zlib \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
++VNSTAT_DEPENDENCIES = gd
++VNSTAT_GD_MAKE_OPT = all
++define VNSTAT_INSTALL_VNSTATI_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/src/vnstati $(TARGET_DIR)/usr/bin/vnstati
++endef
++endif
++
++define VNSTAT_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(VNSTAT_GD_MAKE_OPT)
++endef
++
++define VNSTAT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/src/vnstat $(TARGET_DIR)/usr/bin/vnstat
++	$(INSTALL) -D -m 0755 $(@D)/src/vnstatd $(TARGET_DIR)/usr/sbin/vnstatd
++	$(VNSTAT_INSTALL_VNSTATI_CMDS)
++endef
++
++$(eval $(generic-package))
