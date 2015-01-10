@@ -1,43 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 21:02:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glmark2: Fix mesa3d dependency
-In-Reply-To: <1420917400-6556-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1420917400-6556-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150110210259.6bbf4373@free-electrons.com>
+Date: Sat, 10 Jan 2015 21:13:06 +0100
+Subject: [Buildroot] Reminder about the FOSDEM Buildroot meeting
+Message-ID: <20150110211306.7c34717e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello all,
 
-On Sat, 10 Jan 2015 20:16:40 +0100, Bernd Kuhls wrote:
-> Compilation fails with this defconfig, provided by Thomas
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
-> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-> BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_GLMARK2=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_RPI_USERLAND=y
-> 
-> because rpi-userland is used a provider for libegl/gles.
-> Fix this by depending on the corresponding mesa3d suboptions.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This is a kind reminder about the Buildroot Developers meeting we are
+organizing right after FOSDEM. It will take place on February 2-3 in
+Brussels, right after the great FOSDEM conference.
 
-I don't really understand: this means that we can't use glmark2 with an
-OpenGL implementation other than Mesa3D ?
+If you're a regular Buildroot contributor, you should really plan on
+attending, both FOSDEM and the meeting. The meeting is a nice way to
+meet several of the other core contributors, make progress on various
+development topics, define some of the upcoming goals for Buildroot,
+and more.
+
+Registration is free, the event is sponsored and hosted by Google. See
+http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015 for more details.
+Contact me if you want to participate.
+
+Best regards,
 
 Thomas
 -- 
