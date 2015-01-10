@@ -1,45 +1,37 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Sat, 10 Jan 2015 14:47:26 +0100
-Subject: [Buildroot] [PATCH v2 7/8] docs/manual/customize-quick-guide.txt:
-	Add uboot documentation
-In-Reply-To: <1420897647-25001-1-git-send-email-jkrause@posteo.de>
-References: <1420897647-25001-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1420897647-25001-8-git-send-email-jkrause@posteo.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 10 Jan 2015 15:25:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gd: Add explicit support for tiff
+Message-ID: <1420899924-20218-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on the Barebox documentation text.
+This ensures reproducible builds.
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - None
----
- docs/manual/customize-quick-guide.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ package/gd/gd.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/docs/manual/customize-quick-guide.txt b/docs/manual/customize-quick-guide.txt
-index 4ff185a..627ecba 100644
---- a/docs/manual/customize-quick-guide.txt
-+++ b/docs/manual/customize-quick-guide.txt
-@@ -20,6 +20,7 @@ your project can be skipped.
-    * +BR2_UCLIBC_CONFIG+
-    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
-    * +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+
-+   * +BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE+
- 1. Write the configuration files:
-    * +make linux-update-defconfig+
-    * +make busybox-update-config+
-@@ -27,6 +28,7 @@ your project can be skipped.
-    * +cp <output>/build/at91bootstrap3-*/.config
-      board/<manufacturer>/<boardname>/at91bootstrap3.config+
-    * +make barebox-update-defconfig+
-+   * +make uboot-update-defconfig+
- 1. Create +board/<manufacturer>/<boardname>/rootfs-overlay/+ and fill it
-    with additional files you need on your rootfs, e.g.
-    +board/<manufacturer>/<boardname>/rootfs-overlay/etc/inittab+.
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 868b45e..d7a6512 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -52,6 +52,13 @@ else
+ GD_CONF_OPTS += --without-png
+ endif
+ 
++ifeq ($(BR2_PACKAGE_TIFF),y)
++GD_DEPENDENCIES += tiff
++GD_CONF_OPTS += --with-tiff
++else
++GD_CONF_OPTS += --without-tiff
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
+ GD_DEPENDENCIES += xlib_libXpm
+ GD_CONF_OPTS += --with-xpm
 -- 
-2.2.1
+1.7.10.4
