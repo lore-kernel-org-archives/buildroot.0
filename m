@@ -1,33 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Jan 2015 16:35:25 +0100
-Subject: [Buildroot] [PATCH 1/2] Add python patch to make ossaudiodev
- module building optional
-In-Reply-To: <1420714168-4994-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1420714168-4994-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20150110163525.163a349d@free-electrons.com>
+Date: Sat, 10 Jan 2015 16:35:41 +0100
+Subject: [Buildroot] [git commit] package/sane-backends: rename patches to
+	the new naming convention
+Message-ID: <20150110153551.66B518019E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoltan Gyarmati,
+commit: http://git.buildroot.net/buildroot/commit/?id=8c9a66cba3758b588af631856d665049254b721f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Jan 2015 11:49:27 +0100, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
->  package/python/115-optional-ossaudiodev.patch | 30 +++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/python/115-optional-ossaudiodev.patch
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...s-1.0.22-qcam-x86.patch => 0001-qcam-x86.patch} |    0
+ ...ne-backends-1.0.22-v4l.patch => 0002-v4l.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-Thanks, both patches applied. I've also added one patch to make
-ossaudiodev optional for the target Python, and done the same work for
-Python 3.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sane-backends/sane-backends-1.0.22-qcam-x86.patch b/package/sane-backends/0001-qcam-x86.patch
+similarity index 100%
+rename from package/sane-backends/sane-backends-1.0.22-qcam-x86.patch
+rename to package/sane-backends/0001-qcam-x86.patch
+diff --git a/package/sane-backends/sane-backends-1.0.22-v4l.patch b/package/sane-backends/0002-v4l.patch
+similarity index 100%
+rename from package/sane-backends/sane-backends-1.0.22-v4l.patch
+rename to package/sane-backends/0002-v4l.patch
