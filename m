@@ -1,129 +1,43 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 10 Jan 2015 10:10:48 +0200
-Subject: [Buildroot] [PATCH] newt: avoid poisoned paths
-Message-ID: <20150110081048.GA18077@vostro>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 10 Jan 2015 09:30:53 +0100
+Subject: [Buildroot] [PATCH] lua: add a uptstream patch
+Message-ID: <1420878653-17988-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/cb908f73b14e1510bea890167b3927afbf708d6f/
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-newt-fix-makefile.patch renamed to 0001-newt-fix-makefile.patch
+ package/lua/5.2.3/0012-fix-ephemeron-table.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/lua/5.2.3/0012-fix-ephemeron-table.patch
 
- package/newt/0001-newt-fix-makefile.patch | 35 +++++++++++++++++++++++++++++++
- package/newt/0002-slang-include-dir.patch | 15 +++++++++++++
- package/newt/newt-fix-makefile.patch      | 35 -------------------------------
- 3 files changed, 50 insertions(+), 35 deletions(-)
- create mode 100644 package/newt/0001-newt-fix-makefile.patch
- create mode 100644 package/newt/0002-slang-include-dir.patch
- delete mode 100644 package/newt/newt-fix-makefile.patch
-
-diff --git a/package/newt/0001-newt-fix-makefile.patch b/package/newt/0001-newt-fix-makefile.patch
+diff --git a/package/lua/5.2.3/0012-fix-ephemeron-table.patch b/package/lua/5.2.3/0012-fix-ephemeron-table.patch
 new file mode 100644
-index 0000000..84152fb
+index 0000000..f231016
 --- /dev/null
-+++ b/package/newt/0001-newt-fix-makefile.patch
-@@ -0,0 +1,35 @@
-+Fix Makefile.in
++++ b/package/lua/5.2.3/0012-fix-ephemeron-table.patch
+@@ -0,0 +1,19 @@
++Ephemeron table can wrongly collect entry with strong key.
 +
-+* Use $(CC) instead of $(CPP) to generate .depend file because
-+  '$(CPP) -M' call does not support multiple input files.
-+  This avoid the following error:
++Fetch from: http://www.lua.org/bugs.html#5.2.3-2
 +
-+make[1]: Entering directory `/opt/br/output/build/newt-0.51.0'
-+/opt/br/output/host/usr/bin/arm-none-linux-gnueabi-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -M newt.c button.c form.c checkbox.c entry.c label.c listbox.c scrollbar.c textbox.c scale.c grid.c windows.c buttonbar.c checkboxtree.c > .depend
-+arm-none-linux-gnueabi-cpp: too many input files
-+make[1]: *** [depend] Error 1
-+make[1]: Leaving directory 
-+`/opt/br/output/build/newt-0.51.0'
-+make: *** 
-+[/opt/br/output/build/newt-0.51.0/.stamp_built] Error 2
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+
-+---
-+ Makefile.in |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: b/Makefile.in
++Index: b/src/lgc.c
 +===================================================================
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -121,7 +121,7 @@
-+ 		$(SHAREDDIR)/*.o *.$(SOEXT)*
-+ 
-+ depend:
-+-	$(CPP) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
-++	$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
-+ 
-+ $(SHAREDDIR):
-+ 	mkdir -p $(SHAREDDIR)
-diff --git a/package/newt/0002-slang-include-dir.patch b/package/newt/0002-slang-include-dir.patch
-new file mode 100644
-index 0000000..a88ee70
---- /dev/null
-+++ b/package/newt/0002-slang-include-dir.patch
-@@ -0,0 +1,15 @@
-+slang.h is in sysroot/usr/include, no need to use -I
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -5,7 +5,7 @@
-+ CPP = @CPP@
-+ CFLAGS = @CFLAGS@
-+ LDFLAGS = @LDFLAGS@
-+-CPPFLAGS = -D_GNU_SOURCE -I/usr/include/slang @CPPFLAGS@ 
-++CPPFLAGS = -D_GNU_SOURCE @CPPFLAGS@ 
-+ GNU_LD = @GNU_LD@
-+ 
-+ VERSION = @VERSION@
-diff --git a/package/newt/newt-fix-makefile.patch b/package/newt/newt-fix-makefile.patch
-deleted file mode 100644
-index 84152fb..0000000
---- a/package/newt/newt-fix-makefile.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Fix Makefile.in
--
--* Use $(CC) instead of $(CPP) to generate .depend file because
--  '$(CPP) -M' call does not support multiple input files.
--  This avoid the following error:
--
--make[1]: Entering directory `/opt/br/output/build/newt-0.51.0'
--/opt/br/output/host/usr/bin/arm-none-linux-gnueabi-cpp -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -M newt.c button.c form.c checkbox.c entry.c label.c listbox.c scrollbar.c textbox.c scale.c grid.c windows.c buttonbar.c checkboxtree.c > .depend
--arm-none-linux-gnueabi-cpp: too many input files
--make[1]: *** [depend] Error 1
--make[1]: Leaving directory 
--`/opt/br/output/build/newt-0.51.0'
--make: *** 
--[/opt/br/output/build/newt-0.51.0/.stamp_built] Error 2
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
--
-----
-- Makefile.in |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -121,7 +121,7 @@
-- 		$(SHAREDDIR)/*.o *.$(SOEXT)*
-- 
-- depend:
---	$(CPP) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
--+	$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
-- 
-- $(SHAREDDIR):
-- 	mkdir -p $(SHAREDDIR)
++--- a/src/lgc.c
+++++ b/src/lgc.c
++@@ -403,7 +403,7 @@
++       reallymarkobject(g, gcvalue(gval(n)));  /* mark it now */
++     }
++   }
++-  if (prop)
+++  if (g->gcstate != GCSatomic || prop)
++     linktable(h, &g->ephemeron);  /* have to propagate again */
++   else if (hasclears)  /* does table have white keys? */
++     linktable(h, &g->allweak);  /* may have to clean white keys */
 -- 
-2.0.3
+2.1.0
