@@ -1,231 +1,121 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 11 Jan 2015 15:04:27 +0100
-Subject: [Buildroot] Fwd: Fwd: Fwd: [PATCH v3] linux: add fbtft kernel
- extension
-Message-ID: <trinity-3a75cd50-ebc5-4e21-a866-a58cc78ffc4c-1420985066979@3capp-gmx-bs22>
+Date: Sun, 11 Jan 2015 19:16:04 +0100
+Subject: [Buildroot] [PATCH v2 2/4] dtc: bump version to 1.4.1
+In-Reply-To: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
+References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1421000166-24963-2-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Lou,
+Patch 0001-separate-lib-install.patch is no longer needed,
+original Makefile already contains separate install-lib target.
 
-On Sat, Jan 10, 2015 at 08:00:15PM -0600, Lou Crittenden wrote:
-> Thanks for this info. I have some questions to ask:
-> 
-> I saw that you have updated your patch. What did you do to it?
->
+Adjust 0002-extra-cflags.patch.
 
-The downloaded patch via the described command:
+Add hash file.
 
- $ wget -O v3-linux-add-fbtft-kernel-extension.patch https://patchwork.ozlabs.org/patch/425126/mbox/
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - delete additional invalid comment
+---
+ package/dtc/0001-separate-lib-install.patch | 28 ----------------------------
+ package/dtc/0002-extra-cflags.patch         |  2 +-
+ package/dtc/dtc.hash                        |  2 ++
+ package/dtc/dtc.mk                          |  7 +++----
+ 4 files changed, 6 insertions(+), 33 deletions(-)
+ delete mode 100644 package/dtc/0001-separate-lib-install.patch
+ create mode 100644 package/dtc/dtc.hash
 
-was already my latest patch (Thomas did some changes on the committed patch, but
-introduced a bug, see [1][2]), but the downloaded one is good ;-).
-
-> Did you have to manually create the /etc/modules-load.d and /etc/modprobe.d
-> folders and the text files you named in your setup? Mine didn't have those.
-> I manually made the directories and text files as laid out but the device
-> still didn't work.
-
-Yes you have to create this two files with the described content (thats why I
-wrote 'add', otherwiese it would be 'change' ;-) ).
-
-But I do this advice 'blindly' because I own a different display device...
-
-> 
-> How did you build the fbtft drivers in your menuconfig: as add-on modules
-> (with the option asterisked) or built-in (with the option checkmarked)?
->
-
-I did enable the 'linux-menuconfig' SPI configs with 'y'/'*' (built in)
-and the FB_TFT ones with 'm'/'M' (modules)...
-
-Please do the following:
-$ cd  build_rpi_001
-$ grep -E "^CONFIG_SPI|^CONFIG_GPIO|^CONFIG_FB" build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/.config
-
-Output should be like the following:
-CONFIG_SPI=y
-CONFIG_SPI_MASTER=y
-CONFIG_SPI_BCM2708=y
-CONFIG_GPIO_DEVRES=y
-CONFIG_GPIOLIB=y
-CONFIG_FB=y
-CONFIG_FB_CFB_FILLRECT=y
-CONFIG_FB_CFB_COPYAREA=y
-CONFIG_FB_CFB_IMAGEBLIT=y
-CONFIG_FB_SYS_FILLRECT=y
-CONFIG_FB_SYS_COPYAREA=y
-CONFIG_FB_SYS_IMAGEBLIT=y
-CONFIG_FB_SYS_FOPS=y
-CONFIG_FB_DEFERRED_IO=y
-CONFIG_FB_BACKLIGHT=y
-CONFIG_FB_BCM2708=y
-CONFIG_FB_TFT=y
-CONFIG_FB_TFT_ILI9340=m
-CONFIG_FB_TFT_FBTFT_DEVICE=m
-
-Please send your output...
-
-> I couldn't find a "waveshare32b" model in any driver list, so I'm using the
-> "flexfb" module that my factory image uses. Still no go.
-
-There is now waveshare32b module, only the fbtft_device module (a helper module for
-the various displays). If you load btft_device by hand,e.g.:
-
-$ insmod fbtft_device name=waveshare32b
-
-you give your display type via the module parameter 'name=waveshare32b'
-
-> 
-> What I've done thus far:
-> I used lsmod on the flexfb.ko, and while the command goes through fine
-> without error, but nothing happens with the display (what am I missing
-> parameters wise?). I then ran dd if=/dev/urandom of=/dev/fb1. Nothing.
-
-flexfb is the 'old' universal module, you have to give a lot of parameters
-for your device, the way via fbtft_device is a shortcut/helper for this
-(and added recently to fbtft for your device [3]), see file
-build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/fbtft/fbtft_device.c:
-
-1012         }, {
-1013                 .name = "waveshare32b",
-1014                 .spi = &(struct spi_board_info) {
-1015                         .modalias = "fb_ili9340",
-1016                         .max_speed_hz = 48000000,
-1017                         .mode = SPI_MODE_0,
-1018                         .platform_data = &(struct fbtft_platform_data) {
-1019                                 .display = {
-1020                                         .buswidth = 8,
-1021                                         .backlight = 1,
-1022                                         .init_sequence = waveshare32b_init_sequence,
-1023                                 },
-1024                                 .bgr = true,
-1025                                 .gpios = (const struct fbtft_gpio []) {
-1026                                         { "reset", 27 },
-1027                                         { "dc", 22 },
-1028                                         {},
-1029                                 },
-1030                         }
-1031                 }
-1032         }, {
-
-> 
-> I ran insmod /lib/modules/3.12.28/kernel/drivers/video/fbtft/ili9340.ko. It
-> complains "cannot load module: no such file or directory" even if I use an
-> absolute path where "ili9340.ko" is located.
-> 
-
-The module should be named 'fb_ili9340.ko'
-
-> 
-> I have my buildroot .config file in the attachments if you wish to take a
-> look at my setup to compare and maybe edit/reupload.
->
-
-The buildroot .config is o.k., both options are enabled:
-BR2_LINUX_KERNEL_EXT_FBTFT=y
-BR2_PACKAGE_FBTFT=y
-
-One more try for remote debugging, please send the output of the
-following commands from your buildroot build directory:
-
-$ cd build_rpi_001
-$ grep -E "^CONFIG_SPI|^CONFIG_GPIO|^CONFIG_FB" build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/.config
-$ find target/lib/modules
-
-And the output from the following commands from your Raspberry Pi device:
-
-$ lsmod
-$ cat /proc/cmdline
-$ cat /etc/modules-load.d/fbtft.conf
-$ cat /etc/modprobe.d/00-fbtft.conf
-$ find /lib/modules
-$ insmod fbtft_device name=waveshare32b
-$ dmesg
-$ ls -l /dev/fb*
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
-[2] http://lists.busybox.net/pipermail/buildroot/2015-January/117062.html
-[3] https://github.com/notro/fbtft/commit/e67014490a9df34b9a4bf04e49c50254aebc10a8
-
-
-> ---------- Forwarded message ----------
-> From: Peter Seiderer <ps.report@gmx.net>
-> Date: Wed, Jan 7, 2015 at 8:12 AM
-> Subject: Aw: Fwd: Fwd: [Buildroot] [PATCH v3] linux: add fbtft kernel
-> extension
-> To: Lou Crittenden <loucrittenden63@gmail.com>
-> Cc: buildroot at busybox.net
-> 
-> 
-> Hello Lou,
-> 
-> > Gesendet: Mittwoch, 07. Januar 2015 um 14:06 Uhr
-> > Von: "Lou Crittenden" <loucrittenden63@gmail.com>
-> > An: buildroot at busybox.net, "Peter Seiderer" <ps.report@gmx.net>
-> > Betreff: Fwd: Fwd: [Buildroot] [PATCH v3] linux: add fbtft kernel
-> extension
-> >
-> > Alright, I have the buildroot built and a resultant bootable system, but
-> the screen doesn't initialize. Did you have to
-> > create an /etc/modules file and the corresponding /etc/init.d script to
-> load the modules/drivers at boot or something?
-> >
-> 
-> Sorry, forgot to mention this part in my 'instruction' e-mail (but a
-> description was already included in [1]).
-> 
-> For your case the following configuration changes should be needed:
-> 
-> On the sd-card boot partition:
-> - cmdline.txt: add 'fbcon=map:10 fbcon=font:VGA8x8'
-> 
-> On the sd-card root partition:
-> - add /etc/modules-load.d/fbtft.conf with 'fbtft_device'
-> - add /etc/modprobe.d/00-fbtft.conf with 'options fbtft_device
-> name=waveshare32b'
-> 
-> If this works for you its fine, if not try to load the fbtft_device module
-> via
-> insmod and play with the module parameters....and take a look at the
-> dmesg commnd output....on success a second frame buffer device /dev/fb1
-> should
-> be available (/dev/fb0 is the hdmi output)...
-> 
-> $ dd if=/dev/urandom of=/dev/fb1
-> 
-> should fill your waveshare device with random snow...
-> 
-> Or take a look at [2] and [3], seems similare displays...
-> 
-> Regards,
-> Peter
-> 
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2014-December/116096.html
-> [2] https://github.com/notro/rpi-firmware/issues/6
-> [3]https://github.com/notro/fbtft/issues/215
-> 
-> >
-> > ---------- Forwarded message ----------
-> > From: Lou Crittenden <loucrittenden63@gmail.com>
-> > Date: Mon, Jan 5, 2015 at 5:03 PM
-> > Subject: Re: Fwd: [Buildroot] [PATCH v3] linux: add fbtft kernel extension
-> > To: Peter Seiderer <ps.report at gmx.net[ps.report@gmx.net]>,
-> buildroot at busybox.net[buildroot at busybox.net]
-> >
-> >
-> > Yes, I'm using a waveshare32b. I bought it from here:
-> http://www.ebay.com/itm/331320440420[http://www.ebay.com/itm/331320440420]
-> >
-> > I didn't know this was an ili9340 device. I've tried looking up the
-> controller type, but it's been difficult, as they are a
-> > little sketchy. I was able to enable this screen in raspbmc through the
-> use of the "flexfb" driver, as the factory raspbian
-> > image also uses this driver. The touchscreen controller is an ads7846.
+diff --git a/package/dtc/0001-separate-lib-install.patch b/package/dtc/0001-separate-lib-install.patch
+deleted file mode 100644
+index c86d587..0000000
+--- a/package/dtc/0001-separate-lib-install.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Makefile: add a rule to only install libfdt
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+----
+-Patch not sent upstream.
+-
+-It's really specific to buildroot, and is probably not
+-good (aka generic) enough to be pushed upstream.
+-
+-diff --git a/Makefile b/Makefile
+-index 1169e6c..39e7190 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -160,10 +160,12 @@ endif
+- # intermediate target and building them again "for real"
+- .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
+- 
+--install: all $(SCRIPTS)
+-+install: all $(SCRIPTS) libfdt_install
+- 	@$(VECHO) INSTALL
+- 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
+- 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+-+
+-+libfdt_install: libfdt
+- 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
+- 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
+- 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
+diff --git a/package/dtc/0002-extra-cflags.patch b/package/dtc/0002-extra-cflags.patch
+index 51b7957..f070692 100644
+--- a/package/dtc/0002-extra-cflags.patch
++++ b/package/dtc/0002-extra-cflags.patch
+@@ -23,7 +23,7 @@ index 962f94eba661..bf6b317158cf 100644
+  CPPFLAGS = -I libfdt -I .
+ -WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
+ +WARNINGS = -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
+- 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
++ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls -Wshadow
+ -CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
+ +CFLAGS ?= -g -Os
+ +CFLAGS += -fPIC $(WARNINGS)
+diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
+new file mode 100644
+index 0000000..8b3af33
+--- /dev/null
++++ b/package/dtc/dtc.hash
+@@ -0,0 +1,2 @@
++# from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
++sha256 77992ad8eac7b68f553d0ba58e5b51604ac803d126196c99e3ae38aaae28bb94  dtc-1.4.1.tar.xz
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 6fd5064..c96f881 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DTC_VERSION = 1.4.0
++DTC_VERSION = 1.4.1
+ DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
+ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPLv2+/BSD-2c
+@@ -29,8 +29,7 @@ endif
+ else # $(BR2_PACKAGE_DTC_PROGRAMS) != y
+ 
+ DTC_BUILD_GOAL = libfdt
+-#?libfdt_install is our own install rule added by our patch
+-DTC_INSTALL_GOAL = libfdt_install
++DTC_INSTALL_GOAL = install-lib
+ 
+ endif # $(BR2_PACKAGE_DTC_PROGRAMS) != y
+ 
+@@ -42,7 +41,7 @@ endef
+ 
+ # For staging, only the library is needed
+ define DTC_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
++	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib
+ endef
+ 
+ define DTC_INSTALL_TARGET_CMDS
+-- 
+2.1.2
