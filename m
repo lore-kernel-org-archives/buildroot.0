@@ -1,54 +1,72 @@
-From: Thomas Ruschival <t.ruschival@gmail.com>
-Date: Sun, 11 Jan 2015 20:17:44 -0200
-Subject: [Buildroot] Repository information during build
-In-Reply-To: <XnsA41FE0AE5C843berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <CAAOPk_zdYo4RhifBpQq8mtBQmt4_xfmhm0rQw+ubZ9DOUDy1SQ@mail.gmail.com>
- <XnsA41FE0AE5C843berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <54B2F688.9010406@gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sun, 11 Jan 2015 16:17:54 -0600
+Subject: [Buildroot] Fwd: Re:  [PATCH] libpng: add  libpng12
+In-Reply-To: <54B2F652.4020402@ou.edu>
+References: <54B2F652.4020402@ou.edu>
+Message-ID: <54B2F692.7010304@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
-thanks for the reply.
-
-> TVHEADEND_VERSION = c051d0bda5b69ce61e64a97fd4a41db899dcfb53
-> TVHEADEND_SITE=$(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
-
-In your example the version is already in the makefile. The source  is
-retrieved by its SHA1.
-What I wanted to do is to let the makefile always check out the master
-branch. I don't like to update my buildroot makefiles if the master
-branch changes its HEAD revision.
-
-... maybe I have to rethink the integration strategy. But even if, I
-really would like to have this feature....
-
-Best regards
-Thomas
 
 
 
-On 01/11/2015 07:05 PM, Bernd Kuhls wrote:
-> Thomas Ruschival <t.ruschival@gmail.com> wrote 
-> in news:CAAOPk_zdYo4RhifBpQq8mtBQmt4_xfmhm0rQw+ubZ9DOUDy1SQ at mail.gmail.com:
+-------- Forwarded Message --------
+Subject: Re: [Buildroot] [PATCH] libpng: add  libpng12
+Date: Sun, 11 Jan 2015 16:16:50 -0600
+From: Steve Kenton <skenton@ou.edu>
+To: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+On 01/11/2015 01:58 PM, Steve Kenton wrote:
+>> The freetype support in dvdauthor specifies libpng12
+> I'll try changing to libpng16 and see if it works
 > 
->> I.e. how do I find out the revision of the "master" branch Buildroot used
->> to create the tarball?
-> 
-> Hi,
-> 
-> an example: 
-> http://git.buildroot.net/buildroot/tree/package/tvheadend/tvheadend.mk
-> 
-> You are looking for $(TVHEADEND_VERSION).
-> 
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+The source of the libpng12 problem is information leaking in
+from the Ubuntu 14.04 host. When configure is run for
+dvdauthor it finds the wrong freetype-config
+
+config.log:configure:5176: checking for freetype-config
+config.log:configure:5192: found /usr/bin/freetype-config
+
+which results in
+
+config.log:FREETYPE_LIBS='-L/usr/lib/x86_64-linux-gnu -lfreetype -lz -lpng12'
+
+The Config.in and dvdauthor.mk files (below) are pretty basic
+Any thoughts on where I went wrong?
+
+Thanks - Steve
+
+
+###############################################################################
+# dvdauthor
+#
+###############################################################################
+
+DVDAUTHOR_VERSION = 0.7.1
+#DVDAUTHOR_SOURCE = dvdauthor-$(DVDAUTHOR_VERSION).tar.gz
+DVDAUTHOR_SITE = http://sourceforge.net/projects/dvdauthor/files/dvdauthor/$(DVDAUTHOR_VERSION)
+DVDAUTHOR_DEPENDENCIES = host-pkgconf host-libxml2 libxml2 libpng freetype libdvdread
+DVDAUTHOR_LICENSE = GPLv2
+DVDAUTHOR_LICENSE_FILES = COPYING
+
+$(eval $(autotools-package))
+
+
+
+config BR2_PACKAGE_DVDAUTHOR
+	bool "dvdauthor"
+	select BR2_PACKAGE_LIBXML2
+	select BR2_PACKAGE_LIBPNG
+	select BR2_PACKAGE_FREETYPE
+	select BR2_PACKAGE_LIBDVDREAD
+	help
+	  DVDAuthor is a set of tools to help you author the file and directory
+	  structure of a DVD-Video disc, including programmatic commands for
+	  implementing interactive behaviour. It is driven by command lines and
+	  XML control files, though there are other programs that provide
+	  GUI-based front ends if you prefer
+	
+	  http://dvdauthor.sourceforge.net
