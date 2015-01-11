@@ -1,72 +1,67 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Sun, 11 Jan 2015 16:17:54 -0600
-Subject: [Buildroot] Fwd: Re:  [PATCH] libpng: add  libpng12
-In-Reply-To: <54B2F652.4020402@ou.edu>
-References: <54B2F652.4020402@ou.edu>
-Message-ID: <54B2F692.7010304@ou.edu>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 11 Jan 2015 23:27:32 +0100
+Subject: [Buildroot] [PATCH] linux: fix fbtft kernel extension
+In-Reply-To: <20150111194805.02290e5a@free-electrons.com>
+References: <1420982335-6015-1-git-send-email-ps.report@gmx.net>,
+ <20150111194805.02290e5a@free-electrons.com>
+Message-ID: <trinity-ce2b7205-25e9-43cf-b68d-1ce7c190d861-1421015252763@3capp-gmx-bs24>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
-
-
--------- Forwarded Message --------
-Subject: Re: [Buildroot] [PATCH] libpng: add  libpng12
-Date: Sun, 11 Jan 2015 16:16:50 -0600
-From: Steve Kenton <skenton@ou.edu>
-To: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-On 01/11/2015 01:58 PM, Steve Kenton wrote:
->> The freetype support in dvdauthor specifies libpng12
-> I'll try changing to libpng16 and see if it works
+> Gesendet: Sonntag, 11. Januar 2015 um 19:48 Uhr
+> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: buildroot at busybox.net, "Richard Fergusson" <fergie4000@gmail.com>
+> Betreff: Re: [PATCH] linux: fix fbtft kernel extension
+>
+> Dear Peter Seiderer,
 > 
-The source of the libpng12 problem is information leaking in
-from the Ubuntu 14.04 host. When configure is run for
-dvdauthor it finds the wrong freetype-config
+> On Sun, 11 Jan 2015 14:18:55 +0100, Peter Seiderer wrote:
+> > Fixes fbtft kernel extension bug reported by Richard Fergusson ([1]):
+> > 
+> > drivers/video/Kconfig:2525: can't open file
+> > "drivers/video/fbdev/fbtft/Kconfig"
+> > 
+> > Fix: write the right fbtft/KConfig path to video/Kconfig or
+> > video/fbdev/Kconfig (instead of hard coded one)
+> > 
+> > [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
+> > 
+> > Reported-by: Richard Fergusson <fergie4000@gmail.com>
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> I only had a quick look, but I don't really see the relationship
+> between the bug report and this fix. Could you elaborate a bit?
+> 
 
-config.log:configure:5176: checking for freetype-config
-config.log:configure:5192: found /usr/bin/freetype-config
+Without this patch (and raspberrypi_defconfig and BR2_LINUX_KERNEL_EXT_FBTFT=y)
+a wrong path is added to drivers/video/Kconfig
 
-which results in
+$ tail -2 build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/Kconfig 
+endmenu
+source "drivers/video/fbdev/fbtft/Kconfig"
 
-config.log:FREETYPE_LIBS='-L/usr/lib/x86_64-linux-gnu -lfreetype -lz -lpng12'
+$ ls build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/fbtft/Kconfig 
+build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/fbtft/Kconfig
 
-The Config.in and dvdauthor.mk files (below) are pretty basic
-Any thoughts on where I went wrong?
+The patch changes the wrong addition 'source "drivers/video/fbdev/fbtft/Kconfig"' to
+the right 'source "drivers/video/fbtft/Kconfig"' in case linux < 3.15...
 
-Thanks - Steve
+Hope this explenation is better?
 
+Regards,
+Peter
 
-###############################################################################
-# dvdauthor
-#
-###############################################################################
-
-DVDAUTHOR_VERSION = 0.7.1
-#DVDAUTHOR_SOURCE = dvdauthor-$(DVDAUTHOR_VERSION).tar.gz
-DVDAUTHOR_SITE = http://sourceforge.net/projects/dvdauthor/files/dvdauthor/$(DVDAUTHOR_VERSION)
-DVDAUTHOR_DEPENDENCIES = host-pkgconf host-libxml2 libxml2 libpng freetype libdvdread
-DVDAUTHOR_LICENSE = GPLv2
-DVDAUTHOR_LICENSE_FILES = COPYING
-
-$(eval $(autotools-package))
-
-
-
-config BR2_PACKAGE_DVDAUTHOR
-	bool "dvdauthor"
-	select BR2_PACKAGE_LIBXML2
-	select BR2_PACKAGE_LIBPNG
-	select BR2_PACKAGE_FREETYPE
-	select BR2_PACKAGE_LIBDVDREAD
-	help
-	  DVDAuthor is a set of tools to help you author the file and directory
-	  structure of a DVD-Video disc, including programmatic commands for
-	  implementing interactive behaviour. It is driven by command lines and
-	  XML control files, though there are other programs that provide
-	  GUI-based front ends if you prefer
-	
-	  http://dvdauthor.sourceforge.net
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> 
