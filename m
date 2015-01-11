@@ -1,33 +1,46 @@
-From: Thomas Ruschival <t.ruschival@gmail.com>
-Date: Sun, 11 Jan 2015 18:29:01 -0200
-Subject: [Buildroot] Repository information during build
-Message-ID: <CAAOPk_zdYo4RhifBpQq8mtBQmt4_xfmhm0rQw+ubZ9DOUDy1SQ@mail.gmail.com>
+From: Richard Fergusson <fergie4000@gmail.com>
+Date: Mon, 12 Jan 2015 07:20:54 +1030
+Subject: [Buildroot] [PATCH] linux: fix fbtft kernel extension
+Message-ID: <CAOUPwSpVc3zPd6UePmKzsv-0Q27Ej13A=Z=-EQcisi3gfrbM3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In a cmake project I use a git and some cmake-macros to extract the current
-commit hash of the source code and generate a C file with the information.
-This way the executable can print out with the revision.
+The old version of the file assumes the location of the fbtft Kconfig
+to be drivers/video/fbdev/fbtft/Kconfig regardless of what is actually
+determined in the check earlier in the file. The new version correctly
+uses the value of $${dest} to build the correct location.
 
-Using Buildroot this aproach fails rather obviously. (Buildroot clones the
-repository, checks out the requested branch/tag/commit and generates a
-tarball without the git information which is used for build)
+- Richard
 
-I extended the CMakeLists of the project, The git-revision can be also
-passed as definition (cmake -DGIT_COMMIT_HASH=12345 ....) and cmake only
-uses git to get the commit hash if it is not defined.
-
-Is there a canonical way to access the git revision of a package in the
-package.mk file to pass it to the build of the package?
-
-I.e. how do I find out the revision of the "master" branch Buildroot used
-to create the tarball?
-
-Thanks in advance & Best regards
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150111/06770916/attachment.html>
+On 12 January 2015 at 05:18, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Dear Peter Seiderer,
+>
+> On Sun, 11 Jan 2015 14:18:55 +0100, Peter Seiderer wrote:
+> > Fixes fbtft kernel extension bug reported by Richard Fergusson ([1]):
+> >
+> > drivers/video/Kconfig:2525: can't open file
+> > "drivers/video/fbdev/fbtft/Kconfig"
+> >
+> > Fix: write the right fbtft/KConfig path to video/Kconfig or
+> > video/fbdev/Kconfig (instead of hard coded one)
+> >
+> > [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
+> >
+> > Reported-by: Richard Fergusson <fergie4000@gmail.com>
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> I only had a quick look, but I don't really see the relationship
+> between the bug report and this fix. Could you elaborate a bit?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
