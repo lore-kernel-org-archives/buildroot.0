@@ -1,42 +1,78 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 11 Jan 2015 08:10:02 -0300
-Subject: [Buildroot] [PATCH] openntpd: needs NPTL
-Message-ID: <1420974602-24764-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 11 Jan 2015 14:16:37 +0100
+Subject: [Buildroot] [PATCH v3] linux: add fbtft kernel extension
+Message-ID: <trinity-6aa3e4f8-3d2e-4266-b6ed-fe53b3ba47d2-1420982197660@3capp-gmx-bs22>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Openntpd in fact needs nptl threads, basic threads aren't enough. Fixes:
-http://autobuild.buildroot.net/results/f4d/f4dd964231a5dbbc12a7237127fa9c45d6aa0d06/
+Hello Richard,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openntpd/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sun, Jan 11, 2015 at 04:04:42PM +1030, Richard Fergusson wrote:
+> Not sure I'm doing this right, but here goes. With this extension
+> enabled the kernel will not build. It gives the error below. The
+> problem seems to be with line 21 of linux-ext-fbtft.mk. I have
+> edited the file to make it work and have attached the changed file.
 
-diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
-index 3d545e4..192576f 100644
---- a/package/openntpd/Config.in
-+++ b/package/openntpd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_OPENNTPD
- 	bool "openntpd"
- 	depends on BR2_INET_IPV6
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork ()
- 	depends on !BR2_PACKAGE_NTP # conflicting binaries
- 	help
-@@ -12,6 +12,6 @@ config BR2_PACKAGE_OPENNTPD
- 
- 	  http://www.openntpd.org/
- 
--comment "openntpd needs a toolchain w/ threads, IPv6"
-+comment "openntpd needs a toolchain w/ NPTL, IPv6"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
--- 
-2.0.5
+Many thanks for testing and reporting this bug (introduced by Thomas
+on beautifying by original patch and I did not catch the bug on
+review), patch will follow soon (a little different from yours to
+avoid the double if statement)...
+
+Regards,
+Peter
+
+> 
+> - Richard
+> 
+> $ make linux
+> >>> linux c256eb9968c8997dce47350d2075e42f1b3991d3 Download
+> additional patches
+> >>> linux c256eb9968c8997dce47350d2075e42f1b3991d3 Extracting
+> gzip -d -c /home/richard/buildroot/dl/linux-c256eb9968c8997dce47350d2075e42f1b3991d3.tar.gz
+> | tar --strip-components=1 -C /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3
+> -xf -
+> >>> linux c256eb9968c8997dce47350d2075e42f1b3991d3 Patching
+> if [ -e /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/fbdev
+> ]; then dest=/home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/fbdev
+> ; else dest=/home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/
+> ; fi ; mkdir -p ${dest}/fbtft; cp -dpfr /home/richard/buildroot/output/build/fbtft-274035404701245e7491c0c6471c5b72ade4d491/*
+> ${dest}/fbtft/ ; echo 'source "drivers/video/fbdev/fbtft/Kconfig"'
+> >> ${dest}/Kconfig ; echo 'obj-y += fbtft/' >> ${dest}/Makefile
+> for p in board/raspi/kernel-patches/ ; do if echo $p | grep -q -E
+> "^ftp://|^http://" ; then support/scripts/apply-patches.sh /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3
+> /home/richard/buildroot/dl `basename $p` ; elif test -d $p ; then
+> support/scripts/apply-patches.sh /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3
+> $p linux-\*.patch ; else support/scripts/apply-patches.sh /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3
+> `dirname $p` `basename $p` ; fi done
+> >>> linux c256eb9968c8997dce47350d2075e42f1b3991d3 Configuring
+> /usr/bin/install -m 0644 "board/raspi/linux.config" /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/arch/arm/configs/buildroot_defconfig
+> PATH="/home/richard/buildroot/output/host/bin:/home/richard/buildroot/output/host/sbin:/home/richard/buildroot/output/host/usr/bin:/home/richard/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/richard/Android/adt-bundle-linux-x86-20130514/sdk/platform-tools:/home/richard/Android/adt-bundle-linux-x86-20130514/sdk/platform-tools"
+> /usr/bin/make -j1 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+> INSTALL_MOD_PATH=/home/richard/buildroot/output/target
+> CROSS_COMPILE=" /home/richard/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-"
+> DEPMOD=/home/richard/buildroot/output/host/sbin/depmod -C /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3
+> buildroot_defconfig
+> make[1]: Entering directory '/home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3'
+>   HOSTCC  scripts/basic/fixdep
+>   HOSTCC  scripts/kconfig/conf.o
+>   SHIPPED scripts/kconfig/zconf.tab.c
+>   SHIPPED scripts/kconfig/zconf.lex.c
+>   SHIPPED scripts/kconfig/zconf.hash.c
+>   HOSTCC  scripts/kconfig/zconf.tab.o
+>   HOSTLD  scripts/kconfig/conf
+> drivers/video/Kconfig:2525: can't open file
+> "drivers/video/fbdev/fbtft/Kconfig"
+> /home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/scripts/kconfig/Makefile:105:
+> recipe for target 'buildroot_defconfig' failed
+> make[2]: *** [buildroot_defconfig] Error 1
+> Makefile:503: recipe for target 'buildroot_defconfig' failed
+> make[1]: *** [buildroot_defconfig] Error 2
+> make[1]: Leaving directory '/home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3'
+> package/pkg-generic.mk:172: recipe for target '/home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/.stamp_configured'
+> failed
+> make: *** [/home/richard/buildroot/output/build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/.stamp_configured]
+> Error 2
+> 
