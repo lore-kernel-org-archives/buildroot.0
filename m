@@ -1,38 +1,42 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 11 Jan 2015 09:25:31 +0100
-Subject: [Buildroot] [PATCH] dtc: update source url
-Message-ID: <1420964731-10432-1-git-send-email-fabio.porcedda@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 11 Jan 2015 08:10:02 -0300
+Subject: [Buildroot] [PATCH] openntpd: needs NPTL
+Message-ID: <1420974602-24764-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The url of the git repository is changed so use the updated one.
+Openntpd in fact needs nptl threads, basic threads aren't enough. Fixes:
+http://autobuild.buildroot.net/results/f4d/f4dd964231a5dbbc12a7237127fa9c45d6aa0d06/
 
-This fix the error:
-
-fatal: unable to connect to git.jdl.com:
-git.jdl.com[0: 208.123.73.151]: errno=Connection refused
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dtc/dtc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/openntpd/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index 51b5b4e..ba1280e 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
+index 3d545e4..192576f 100644
+--- a/package/openntpd/Config.in
++++ b/package/openntpd/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_OPENNTPD
+ 	bool "openntpd"
+ 	depends on BR2_INET_IPV6
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork ()
+ 	depends on !BR2_PACKAGE_NTP # conflicting binaries
+ 	help
+@@ -12,6 +12,6 @@ config BR2_PACKAGE_OPENNTPD
  
- DTC_VERSION = v1.4.0
--DTC_SITE = git://git.jdl.com/software/dtc.git
-+DTC_SITE = https://git.kernel.org/pub/scm/utils/dtc/dtc.git
-+DTC_SITE_METHOD = git
- DTC_LICENSE = GPLv2+/BSD-2c
- DTC_LICENSE_FILES = README.license GPL
- DTC_INSTALL_STAGING = YES
+ 	  http://www.openntpd.org/
+ 
+-comment "openntpd needs a toolchain w/ threads, IPv6"
++comment "openntpd needs a toolchain w/ NPTL, IPv6"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
-2.1.0
+2.0.5
