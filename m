@@ -1,34 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 11 Jan 2015 16:42:16 -0300
-Subject: [Buildroot] [PATCH] libpng: add  libpng12
-In-Reply-To: <54B2C5B5.4070703@ou.edu>
-References: <54B2C5B5.4070703@ou.edu>
-Message-ID: <54B2D218.2030304@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Jan 2015 20:44:52 +0100
+Subject: [Buildroot] [git commit] bandwidthd: Add systemd unit file and
+	install it to run at startup.
+Message-ID: <20150111194509.BF9448015F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/11/2015 03:49 PM, Steve Kenton wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=f1b07c06fa44fc33efab515a549f62f721315d21
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Some programs still link using the legacy -lpng12 version
-> of libpng for handling PNG (Portable Network Graphics)
-> images. It is still maintained for security fixes so
-> make it available.
-> 
-> http://www.libpng.org
-> 
-> Signed-off-by Stephen M. Kenton <skenton@ou.edu>
-> ---
-> The png support in freetype uses libpng v1.2 instead of v1.6.
-> Currently freetype is configured without png support but another
-> package I am investigating wants it, so here is a patch to enable it.
-> I copied and modified the files from libpng and do not know if the
-> arm specific option is needed for v1.2 since I'm only using x86.
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bandwidthd/bandwidthd.mk      |   10 ++++++++++
+ package/bandwidthd/bandwidthd.service |   11 +++++++++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-Hi.
-Which programs?
-Freetype works and links against libpng(16) just fine.
-So i don't see any reason for libpng12 right now.
-Regards.
+diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+index ca991f9..2773490 100644
+--- a/package/bandwidthd/bandwidthd.mk
++++ b/package/bandwidthd/bandwidthd.mk
+@@ -31,4 +31,14 @@ else
+ BANDWIDTHD_CONF_OPTS += --with-sqlite-storage=false
+ endif
+ 
++define BANDWIDTHD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/bandwidthd/bandwidthd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/bandwidthd.service
++
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++
++	ln -sf /usr/lib/systemd/system/bandwidthd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/bandwidthd.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/bandwidthd/bandwidthd.service b/package/bandwidthd/bandwidthd.service
+new file mode 100644
+index 0000000..9c03d42
+--- /dev/null
++++ b/package/bandwidthd/bandwidthd.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=Bandwidth usage monitor and reporter
++After=network.target
++
++[Service]
++Type=forking
++ExecStart=/usr/bin/bandwidthd
++PIDFile=/var/run/bandwidthd.pid
++
++[Install]
++WantedBy=multi-user.target
