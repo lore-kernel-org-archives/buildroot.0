@@ -1,54 +1,61 @@
 From: Nathaniel Roach <nroach44@gmail.com>
-Date: Sun, 11 Jan 2015 13:31:34 +0800
-Subject: [Buildroot] [PATCH] bandwidthd: Add systemd unit file and install
-	it to run at startup.
-Message-ID: <1420954296-27101-1-git-send-email-nroach44@gmail.com>
+Date: Sun, 11 Jan 2015 13:31:36 +0800
+Subject: [Buildroot] [PATCH] bind: Add systemd unit file and install it to
+	run at startup.
+In-Reply-To: <1420954296-27101-1-git-send-email-nroach44@gmail.com>
+References: <1420954296-27101-1-git-send-email-nroach44@gmail.com>
+Message-ID: <1420954296-27101-3-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The unit file is taken from debian, but tested working.
+We'll call it named.service to match the sysV initscript.
+
 Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 ---
- package/bandwidthd/bandwidthd.mk      | 10 ++++++++++
- package/bandwidthd/bandwidthd.service | 11 +++++++++++
+ package/bind/bind.mk       |  9 +++++++++
+ package/bind/named.service | 12 ++++++++++++
  2 files changed, 21 insertions(+)
- create mode 100644 package/bandwidthd/bandwidthd.service
+ create mode 100644 package/bind/named.service
 
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-index ca991f9..2773490 100644
---- a/package/bandwidthd/bandwidthd.mk
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -31,4 +31,14 @@ else
- BANDWIDTHD_CONF_OPTS += --with-sqlite-storage=false
- endif
- 
-+define BANDWIDTHD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/bandwidthd/bandwidthd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/bandwidthd.service
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 983fa20..a98a4c4 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -82,6 +82,15 @@ define BIND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/bind/S81named \
+ 		$(TARGET_DIR)/etc/init.d/S81named
+ endef
++define BIND_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/bind/named.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/named.service
 +
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 +
-+	ln -sf /usr/lib/systemd/system/bandwidthd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/bandwidthd.service
++	ln -sf /usr/lib/systemd/system/named.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/named.service
 +endef
-+
- $(eval $(autotools-package))
-diff --git a/package/bandwidthd/bandwidthd.service b/package/bandwidthd/bandwidthd.service
+ else
+ BIND_POST_INSTALL_TARGET_HOOKS += BIND_TARGET_REMOVE_SERVER
+ endif
+diff --git a/package/bind/named.service b/package/bind/named.service
 new file mode 100644
-index 0000000..9c03d42
+index 0000000..be0158b
 --- /dev/null
-+++ b/package/bandwidthd/bandwidthd.service
-@@ -0,0 +1,11 @@
++++ b/package/bind/named.service
+@@ -0,0 +1,12 @@
 +[Unit]
-+Description=Bandwidth usage monitor and reporter
++Description=BIND Domain Name Server
++Documentation=man:named(8)
 +After=network.target
 +
 +[Service]
-+Type=forking
-+ExecStart=/usr/bin/bandwidthd
-+PIDFile=/var/run/bandwidthd.pid
++ExecStart=/usr/sbin/named -f -u named
++ExecReload=/usr/sbin/rndc reload
++ExecStop=/usr/sbin/rndc stop
 +
 +[Install]
 +WantedBy=multi-user.target
