@@ -1,46 +1,65 @@
-From: Richard Fergusson <fergie4000@gmail.com>
-Date: Mon, 12 Jan 2015 07:20:54 +1030
-Subject: [Buildroot] [PATCH] linux: fix fbtft kernel extension
-Message-ID: <CAOUPwSpVc3zPd6UePmKzsv-0Q27Ej13A=Z=-EQcisi3gfrbM3A@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Sun, 11 Jan 2015 22:04:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: fix hard float error
+Message-ID: <1421010259-10281-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old version of the file assumes the location of the fbtft Kconfig
-to be drivers/video/fbdev/fbtft/Kconfig regardless of what is actually
-determined in the check earlier in the file. The new version correctly
-uses the value of $${dest} to build the correct location.
+Add support for building nodejs with hard floating ABI if supported by the
+target and remove bogus comment. Buildroot does propose this tuning.
 
-- Richard
+Basically, you have three cases of floating point strategies:
 
-On 12 January 2015 at 05:18, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Dear Peter Seiderer,
->
-> On Sun, 11 Jan 2015 14:18:55 +0100, Peter Seiderer wrote:
-> > Fixes fbtft kernel extension bug reported by Richard Fergusson ([1]):
-> >
-> > drivers/video/Kconfig:2525: can't open file
-> > "drivers/video/fbdev/fbtft/Kconfig"
-> >
-> > Fix: write the right fbtft/KConfig path to video/Kconfig or
-> > video/fbdev/Kconfig (instead of hard coded one)
-> >
-> > [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
-> >
-> > Reported-by: Richard Fergusson <fergie4000@gmail.com>
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> I only had a quick look, but I don't really see the relationship
-> between the bug report and this fix. Could you elaborate a bit?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+ * soft float, i.e 'soft' in nodejs speak. This is enabled in Buildroot
+   when BR2_ARM_EABI=y and BR2_SOFT_FLOAT=y.
+
+ * hard float using integer registers to pass floating point arguments,
+   i.e 'softfp' in nodejs speak. This is enabled in Buildroot when
+   BR2_ARM_EABI=y and BR2_SOFT_FLOAT is disabled.
+
+ * hard float using floating pointer registers to pass floating point
+   arguments, i.e 'hard' in nodejs speak. This is enabled in Buildroot
+   when BR2_ARM_EABIHF=y.
+
+This patch fixes "[Buildroot] Float error on SAMA5D3 Xplained using nodejs":
+http://lists.busybox.net/pipermail/buildroot/2014-December/114254.html
+
+Tested at run-time by me on a TI Beaglebone Black.
+
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Reported-by: C?dric Heyman <c.heyman@til-technologies.fr>
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/nodejs.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index ad598d9..3389c3c 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -56,14 +56,16 @@ else ifeq ($(BR2_mipsel),y)
+ NODEJS_CPU = mipsel
+ else ifeq ($(BR2_arm),y)
+ NODEJS_CPU = arm
+-# V8 needs to know what floating point ABI the target is using.  There's also
+-# a 'hard' option which we're not exposing here at the moment, because
+-# buildroot itself doesn't really support it at present.
++# V8 needs to know what floating point ABI the target is using.
++ifeq ($(BR2_ARM_EABIHF),y)
++NODEJS_ARM_FP = hard
++else
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ NODEJS_ARM_FP = soft
+ else
+ NODEJS_ARM_FP = softfp
+-endif
++endif # BR2_SOFT_FLOAT
++endif # BR2_ARM_EABIHF
+ endif
+ 
+ define NODEJS_CONFIGURE_CMDS
+-- 
+2.2.1
