@@ -1,74 +1,85 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Jan 2015 23:39:17 +0100
-Subject: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi
- overlay support
-In-Reply-To: <20150112215052.48005c8d@free-electrons.com>
-References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
- <1421000166-24963-4-git-send-email-ps.report@gmx.net>,
- <20150112215052.48005c8d@free-electrons.com>
-Message-ID: <trinity-b7b3f76f-e86c-4740-afdf-f26001183958-1421102357546@3capp-gmx-bs16>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 12 Jan 2015 23:47:28 +0100
+Subject: [Buildroot] [PATCHv2 4/4] Makefile: implement a size-stats
+	target
+In-Reply-To: <1417470100-32657-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1417470100-32657-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1417470100-32657-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54B44F00.9060207@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi Thomas,
 
-> Gesendet: Montag, 12. Januar 2015 um 21:50 Uhr
-> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net
-> Betreff: Re: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi overlay support
->
-> Dear Peter Seiderer,
+Le 01/12/2014 22:41, Thomas Petazzoni a ?crit :
+> This commit implements a size-stats target that calls the script of
+> the same name to generate the graph and CSV files related to package
+> and file sizes.
 > 
-> On Sun, 11 Jan 2015 19:16:06 +0100, Peter Seiderer wrote:
-> > See [1] for documentation of raspberry pi kernel dt overlay support.
-> > 
-> > The following patches (see original download urls) where adjusted to dtc-1.4.1:
-> > 
-> > - 0003-dtc-Dynamic-symbols-fixup-support.patch
-> > https://github.com/RobertCNelson/dtc/commit/dd6a0533e846e8d5e690a618fa35cc15a6103efb.patch
-> > 
-> > - 0004-dtc-v-takes-no-argument-drop-extra.patch
-> > https://github.com/RobertCNelson/dtc/commit/f345d9e48c9e1169edf047de742da142cc5687bc.patch
-> > 
-> > [1] https://github.com/raspberrypi/documentation/blob/master/configuration/device-tree.md
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  .../0003-dtc-Dynamic-symbols-fixup-support.patch   | 581 +++++++++++++++++++++
-> >  .../0004-dtc-v-takes-no-argument-drop-extra.patch  |  44 ++
-> >  2 files changed, 625 insertions(+)
-> >  create mode 100644 package/dtc/0003-dtc-Dynamic-symbols-fixup-support.patch
-> >  create mode 100644 package/dtc/0004-dtc-v-takes-no-argument-drop-extra.patch
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> We normally don't really like to include patches adding new features:
+> diff --git a/Makefile b/Makefile
+> index ad018c8..56b2b93 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -677,6 +677,16 @@ graph-depends: graph-depends-requirements
+>  	|tee $(BASE_DIR)/graphs/$(@).dot \
+>  	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
+>  
+> +size-stats:
+> +	@[ -f $(O)/build/packages-file-list.txt ] || \
+> +		{ echo "ERROR: No package size information available, please rebuild with BR2_COLLECT_FILE_SIZE_STATS" ; exit 1; }
+> +	@$(INSTALL) -d $(O)/graphs
+> +	@cd "$(CONFIG_DIR)"; \
+> +	$(TOPDIR)/support/scripts/graph-size --builddir $(O) \
 
-Yes, expected this point...
+graph-size -> size-stats ?
 
-> those should be included upstream first. However, for the case of the
-> DT overlay mechanism, it's now being more and more widely used for the
-> BeagleBone Black and the Raspberry Pi, so maybe we should make an
-> exception for this.
+> +		--graph $(O)/graphs/graph-size.$(BR_GRAPH_OUT) \
+> +		--file-size-csv $(O)/build/file-size-stats.csv \
+> +		--package-size-csv $(O)/build/package-size-stats.csv
+> +
+>  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>  
+>  all: menuconfig
+> @@ -889,6 +899,7 @@ endif
+>  	@echo '  manual-epub            - build manual in ePub'
+>  	@echo '  graph-build            - generate graphs of the build times'
+>  	@echo '  graph-depends          - generate graph of the dependency tree'
+> +	@echo '  size-stats             - generate stats of the filesystem size'
+>  	@echo
+>  	@echo 'Miscellaneous:'
+>  	@echo '  source                 - download all sources needed for offline-build'
+> 
 
-Hoped for this...the RPI/BeagleBone description is download some magic
-script (which will download/git clone the https://github.com/RobertCNelson/dtc
-version and compile)..., the aproach with official package plus 2 patches
-is a little bit nicer (and more up to date)...
+But with that fixed I get:
+$ make O=test/xfsprogs/ size-stats
+Traceback (most recent call last):
+  File "/home/naourr/git/buildroot/support/scripts/size-stats", line 217, in <module>
+    pkgdict = build_package_dict(args.builddir)
+  File "/home/naourr/git/buildroot/support/scripts/size-stats", line 68, in build_package_dict
+    with open(os.path.join(builddir, "build", "packages-file-list.txt")) as filelistf:
+IOError: [Errno 2] No such file or directory: 'test/xfsprogs/build/packages-file-list.txt'
 
-Regards,
-Peter
+But this file exist:
+$ ls test/xfsprogs/build/packages-file-list.txt
+test/xfsprogs/build/packages-file-list.txt
 
-> 
-> Opinion of other Buildroot developers on this is welcome.
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+Also I noticed that the man pages (and headers) 
+are taken into account in packages-file-list.txt:
+[...]
+tmux,./usr/bin/tmux
+tmux,./usr/share/man/man1/tmux.1
+
+Since they are removed at the end, I think we want to 
+remove them from packages-file-list.txt during
+TARGET_DIR cleanup ?
+
+Best regards,
+Romain
