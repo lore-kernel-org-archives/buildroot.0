@@ -1,60 +1,46 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 12 Jan 2015 22:26:05 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libftdi: fix libftdi.pc
-In-Reply-To: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
-References: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1421097965-15600-2-git-send-email-s.martin49@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Mon, 12 Jan 2015 22:35:21 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/nodejs: fix hard float error
+In-Reply-To: <20150112221827.7ed3765d@free-electrons.com>
+References: <1421095921-2816-1-git-send-email-jkrause@posteo.de>
+ <20150112221827.7ed3765d@free-electrons.com>
+Message-ID: <1421098521.1971.10.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes libftdi pkg-config module, so that packages linking
-against libftdi correctly have all needed CFLAGS and LIBS defined,
-especially when running a static build.
+Thomas,
 
-Fixes:
-  http://autobuild.buildroot.org/results/e90/e90b4d5ad79d99487f21c9d18581e8eba7034501/
+On Mo, 2015-01-12 at 22:18 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
+> 
+> On Mon, 12 Jan 2015 21:52:01 +0100, J?rg Krause wrote:
+> 
+> > +# V8 needs to know what floating point ABI the target is using.
+> > +NODEJS_ARM_FP = $(BR2_GCC_TARGET_FLOAT_ABI)
+> 
+> Since this variable is a string, I've added a $(call qstrip,...), for
+> good measure. And then applied your patch, thanks!
+> 
+> Since you're looking at nodejs, can you have a look at the thread
+> http://lists.busybox.net/pipermail/buildroot/2014-November/112880.html
+> (which contains one patch), and send an updated patch series to make
+> the necessary modifications? They looked good in principle, but not
+> nicely separated in multiple patches.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- ...di.pc.in-requires-libusb-fix-static-build.patch | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch
+I've already looked at this:
+http://lists.busybox.net/pipermail/buildroot/2014-December/115275.html
 
-diff --git a/package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch b/package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch
-new file mode 100644
-index 0000000..7b0d9c7
---- /dev/null
-+++ b/package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch
-@@ -0,0 +1,25 @@
-+From c0d957b08b46385da570d8ff2f728369822ad2c1 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Mon, 12 Jan 2015 22:10:49 +0100
-+Subject: [PATCH] libftdi.pc.in: requires libusb (fix static build)
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ libftdi.pc.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libftdi.pc.in b/libftdi.pc.in
-+index 2061b91..95eb491 100644
-+--- a/libftdi.pc.in
-++++ b/libftdi.pc.in
-+@@ -6,6 +6,7 @@ includedir=@includedir@
-+ Name: libftdi
-+ Description: Library to program and control the FTDI USB controller
-+ Requires:
-++Requires.private: libusb
-+ Version: @VERSION@
-+ Libs: -L${libdir} -lftdi -lusb
-+ Cflags: -I${includedir}
-+-- 
-+2.2.1
-+
--- 
-2.2.1
+In short:
+  * newer npm is only installed as a module on the target, but not used
+as the package manager for installing the node modules
+  * I cannot find any resources about the npm options --target_arch and
+--prefix
+
+IMO, the only thing to think about is to use the -g option. This will
+install also the binaries of node modules to usr/bin. But I've to check
+this.
+
+J?rg
