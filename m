@@ -1,45 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 12 Jan 2015 17:05:06 -0300
-Subject: [Buildroot] [PATCH] squid: fix automake breakage
-In-Reply-To: <20150112205811.6cb75c60@free-electrons.com>
-References: <1420679367-24134-1-git-send-email-gustavo@zacarias.com.ar>
- <20150112205811.6cb75c60@free-electrons.com>
-Message-ID: <54B428F2.9010102@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jan 2015 21:07:03 +0100
+Subject: [Buildroot] [PATCH v2 2/4] dtc: bump version to 1.4.1
+In-Reply-To: <1421000166-24963-2-git-send-email-ps.report@gmx.net>
+References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
+ <1421000166-24963-2-git-send-email-ps.report@gmx.net>
+Message-ID: <20150112210703.240c3518@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/12/2015 04:58 PM, Thomas Petazzoni wrote:
+Dear Peter Seiderer,
 
-> Even though I am not too happy about the fix, I applied it in order to
-> fix the autobuilder issues.
+On Sun, 11 Jan 2015 19:16:04 +0100, Peter Seiderer wrote:
+> Patch 0001-separate-lib-install.patch is no longer needed,
+> original Makefile already contains separate install-lib target.
 > 
-> I'd like to understand better why the libltdl bundled in Squid thinks
-> it should autoreconf itself.
+> Adjust 0002-extra-cflags.patch.
+> 
+> Add hash file.
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - delete additional invalid comment
 
-I couldn't find the why yet, but i did find that the fact that we don't
-autoreconf libtool causes it since libtool 2.4.4 is packaged with
-automake 1.14.1.
-In a project where host-libtool (i.e. autoreconfs) see:
+This patch breaks the build, when building only the libfdt and not the
+programs:
 
-output/target/usr/share/libtool/aclocal.m4 ->
-[AM_AUTOMAKE_VERSION([1.14.1])dnl
-(circa line 54)
+>>> dtc 1.4.1 Installing to staging directory
+/usr/bin/make -j5 -C /home/thomas/projets/buildroot/output/build/dtc-1.4.1 DESTDIR=/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot PREFIX=/usr install-lib
+make[1]: Entering directory '/home/thomas/projets/buildroot/output/build/dtc-1.4.1'
+	CHK version_gen.h
+	 CC util.o
+	 CC srcpos.o
+	 CC convert-dtsv0-lexer.lex.o
+	 CC dtc.o
+	 CC checks.o
+	 CC data.o
+	 CC flattree.o
+	 CC fstree.o
+	 CC livetree.o
+	 CC dtc-lexer.lex.o
+	 CC treesource.o
+	 CC dtc-parser.tab.o
+	 CC fdtdump.o
+	 CC fdtget.o
+	 CC fdtput.o
+	 LD fdtdump
+	 LD convert-dtsv0
+	 LD fdtget
+	 LD dtc
+/usr/bin/ld: libfdt/libfdt.a(fdt.o): Relocations in generic ELF (EM: 40)
+libfdt/libfdt.a: error adding symbols: File in wrong format
+collect2: error: ld returned 1 exit status
+Makefile:236: recipe for target 'fdtget' failed
+make[1]: *** [fdtget] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory '/home/thomas/projets/buildroot/output/build/dtc-1.4.1'
 
-Since libtoolize blindly copies this at some point libltdl
-automatically-triggered autoreconf uses this version (actually
-am__api_version='1.14' in line 35) to call it, hence breaking.
+This is due to the fact that the install-lib target depends on all.
+When building only libfdt, we do "make libfdt" during the build step,
+and then "make install-lib" during the install step, and this triggers
+the build of the DTC programs, due to the dependency on the all target.
+Unfortunately, since we don't pass CC, LD and al. at install time, this
+doesn't work.
 
-One solution would be to autoreconf libtool which doesn't seem
-straightforward.
-Another is to "hack" libtool and s/1.14.1/1.15/ + s/1.14/1.15/ that file
-(tested to work).
-We could also define ACLOCAL & co in the autotools infra, it shouldn't
-hurt any package, though i haven't tested this.
+So I would suggest to just build everything (i.e plain "make" for the
+build), and then use install-lib.
 
-In any case it seems to be a problem limited to squid only or we would
-have seen more of these.
+Best regards,
 
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
