@@ -1,66 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 22:03:17 +0100
-Subject: [Buildroot] [git commit] package/nodejs: fix hard float error
-Message-ID: <20150112211103.5474980504@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 12 Jan 2015 22:17:13 +0100
+Subject: [Buildroot] [PATCH 1/2] linux/linux.mk: added https:// pattern
+ for kernel patches
+In-Reply-To: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
+References: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
+Message-ID: <20150112211713.GA9000@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f09b5b484af374b86af0db9e171f22fffffc8f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ivo, All,
 
-Add support for building nodejs with hard floating ABI if supported by the
-target and remove bogus comment. Buildroot does propose this tuning.
+On 2015-01-12 17:37 +0100, Ivo Slanina spake thusly:
+> Patches located at https:// scheme URL were threated as directories,
+> causing build failures.
+> 
+> Fixed by adding https:// pattern.
+> 
+> Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
 
-Basically, you have three cases of floating point strategies:
+Yep, sounds legit. ;-)
 
- * soft float, i.e 'soft' in nodejs speak. This is enabled in Buildroot
-   when BR2_ARM_EABI=y and BR2_SOFT_FLOAT=y.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- * hard float using integer registers to pass floating point arguments,
-   i.e 'softfp' in nodejs speak. This is enabled in Buildroot when
-   BR2_ARM_EABI=y and BR2_SOFT_FLOAT is disabled.
+Regards,
+Yann E. MORIN.
 
- * hard float using floating pointer registers to pass floating point
-   arguments, i.e 'hard' in nodejs speak. This is enabled in Buildroot
-   when BR2_ARM_EABIHF=y.
+> ---
+>  linux/linux.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 680521c..d02b02b 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -147,7 +147,7 @@ endif # BR2_LINUX_KERNEL_VMLINUX
+>  define LINUX_DOWNLOAD_PATCHES
+>  	$(if $(LINUX_PATCHES),
+>  		@$(call MESSAGE,"Download additional patches"))
+> -	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCHES)),\
+> +	$(foreach patch,$(filter ftp://% http://% https://%,$(LINUX_PATCHES)),\
+>  		$(call DOWNLOAD,$(patch))$(sep))
+>  endef
+>  
+> @@ -155,7 +155,7 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+>  
+>  define LINUX_APPLY_PATCHES
+>  	for p in $(LINUX_PATCHES) ; do \
+> -		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
+> +		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
+>  			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
+>  		elif test -d $$p ; then \
+>  			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This patch fixes "[Buildroot] Float error on SAMA5D3 Xplained using nodejs":
-http://lists.busybox.net/pipermail/buildroot/2014-December/114254.html
-
-Tested at run-time by me on a TI Beaglebone Black.
-
-[Thomas: add qstrip call when using the BR2_GCC_TARGET_FLOAT_ABI
-variable.]
-
-Signed-off-by: J??rg Krause <jkrause@posteo.de>
-Reported-by: C??dric Heyman <c.heyman@til-technologies.fr>
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nodejs/nodejs.mk |   10 ++--------
- 1 files changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index ad598d9..c2cb05e 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -56,14 +56,8 @@ else ifeq ($(BR2_mipsel),y)
- NODEJS_CPU = mipsel
- else ifeq ($(BR2_arm),y)
- NODEJS_CPU = arm
--# V8 needs to know what floating point ABI the target is using.  There's also
--# a 'hard' option which we're not exposing here at the moment, because
--# buildroot itself doesn't really support it at present.
--ifeq ($(BR2_SOFT_FLOAT),y)
--NODEJS_ARM_FP = soft
--else
--NODEJS_ARM_FP = softfp
--endif
-+# V8 needs to know what floating point ABI the target is using.
-+NODEJS_ARM_FP = $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
- endif
- 
- define NODEJS_CONFIGURE_CMDS
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
