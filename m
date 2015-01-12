@@ -1,410 +1,81 @@
-From: Lou Crittenden <loucrittenden63@gmail.com>
-Date: Sun, 11 Jan 2015 22:55:25 -0600
-Subject: [Buildroot] Fwd: Fwd: Fwd: Fwd: [PATCH v3] linux: add fbtft
- kernel extension
-In-Reply-To: <trinity-1ce487a2-4744-40b5-881f-77436e223543-1421020939196@3capp-gmx-bs65>
-References: <trinity-1ce487a2-4744-40b5-881f-77436e223543-1421020939196@3capp-gmx-bs65>
-Message-ID: <CAFGceHHN+TNZZVisChr2vSmfJNihcEnWSTxEuF1bit3pDDBEvw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jan 2015 08:30:12 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-01-11
+Message-ID: <20150112073013.6A56E1010FA@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good news! The screen works, however the orientation is portrait instead of
-landscape and I'd like it to be landscape. Also, how do I make this driver
-load on boot so I do not have to keep loading "insmod
-/lib/modules/3.12.28/kernel/
-drivers/video/fbtft/fbtft_device.ko name=waveshare32b" every time, so I can
-have this screen be the default? I also want to load the ads7846
-touchscreen driver as well for touchscreen.
+Build statistics for 2015-01-11
+===============================
 
-Again, thanks a bunch.
+        success : 203
+       failures : 29 
+       timeouts : 6  
+          TOTAL : 238
 
-On Sun, Jan 11, 2015 at 6:02 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+Classification of failures by reason
+====================================
 
-> Hello Lou,
->
-> On Sun, Jan 11, 2015 at 03:23:09PM -0600, Lou Crittenden wrote:
-> > >Please do the following:
-> > >$ cd  build_rpi_001
-> > >$ grep -E "^CONFIG_SPI|^CONFIG_GPIO|^
-> > >CONFIG_FB" build/linux-c256eb9968c8997dce47350d2075e4>2f1b3991d3/.config
-> >
-> > >Please send your output...
-> > The output of the command is located in the attachment named "output of
-> > grep -E "^CONFIG_SPi"
-> >
->
-> CONFIG_SPI=y
-> CONFIG_SPI_MASTER=y
-> CONFIG_SPI_BCM2708=m
-> CONFIG_SPI_SPIDEV=y
-> CONFIG_GPIO_DEVRES=y
-> CONFIG_GPIOLIB=y
-> CONFIG_GPIO_SYSFS=y
-> CONFIG_FB=y
-> CONFIG_FB_CFB_FILLRECT=y
-> CONFIG_FB_CFB_COPYAREA=y
-> CONFIG_FB_CFB_IMAGEBLIT=y
-> CONFIG_FB_SYS_FILLRECT=y
-> CONFIG_FB_SYS_COPYAREA=y
-> CONFIG_FB_SYS_IMAGEBLIT=y
-> CONFIG_FB_SYS_FOPS=y
-> CONFIG_FB_DEFERRED_IO=y
-> CONFIG_FB_BACKLIGHT=y
-> CONFIG_FB_BCM2708=y
-> CONFIG_FB_TFT=y
-> CONFIG_FB_TFT_ILI9340=m
-> CONFIG_FB_FLEX=m
-> CONFIG_FB_TFT_FBTFT_DEVICE=y
->
-> Looks good until 'CONFIG_FB_TFT_FBTFT_DEVICE=y', please change to
-> 'CONFIG_FB_TFT_FBTFT_DEVICE=m'
-> (best done with make linux-menuconfig from buildroot, will trigger the
-> right rebuild on
-> next make command).
->
-> The problem is with 'y' fbtft_device is bulltin and configuration hase to
-> be done via kernel
-> commandline. If compiled as module fbtft_device.ko configuration can be
-> done at module loading
-> time...
->
-> > the output of the command "find target/lib/modules" is located in the
-> > attachment "output_of_find"
-> >
->
-> Looks good, beside the misssing fbtft_device.ko (see above)...
->
-> > the output of the following commands are in the named attachments:
-> > lsmod: lsmod
-> >
-> > cat /proc/cmdline: no output. Also checked that directory, and it didn't
-> > contain anything.
-> >
-> > cat /etc/modules-load.d/fbtft.conf: fbtft.conf
-> >
->
-> Looks good...
->
-> > cat /etc/modprobe.d/00-fbtft.conf: 00-fbtft.conf
->
-> Looks good...
->
-> >
-> > find /lib/modules: findlibmodules
-> >
->
-> Looks good, beside the misssing fbtft_device.ko (see above)...
->
-> > insmod fbtft_device name=waveshare32b: I get "insmod: ERROR: could not
-> load
-> > module fbtft_device: no such file or directory"
->
-> Sorry, shoold have been:
->
-> $ insmod /lib/modules/3.12.28/kernel/drivers/video/fbtft/fbtft_device.ko
-> name=waveshare32b
->
-> And should work when fbtft_device.ko module is build and copied to
-> target....
->
-> >
-> > dmesg: dmesg
-> >
->
-> [    0.000000] Kernel command line: dma.dmachans=0x7f35
-> bcm2708_fb.fbwidth=720 bcm2708_fb.fbheight=480
-> +bcm2708.boardrev=0x10 bcm2708.serial=0xd81a36af
-> smsc95xx.macaddr=B8:27:EB:1A:36:AF bcm2708.disk_led_gpio=47
-> +bcm2708.disk_led_active_low=0 sdhci-bcm2708.emmc_clock_freq=250000000
-> vc_mem.mem_base=0x1ec00000
-> +vc_mem.mem_size=0x20000000  dwc_otg.fiq_fix_enable=1
-> sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0
-> +console=tty1 root=/dev/mmcblk0p2 rootwait
->
-> The following is missing 'fbcon=map:10 fbcon=font:VGA8x8', needed for
-> automatic console output on the
-> new display (after fbtft_device.ko is laoded successul), add to
-> cmdline.txt if you want this feature...
->
-> > ls -l /dev/fb*: dev_fb*
->
-> O.k., no fbtft_device.ko loaded, no second /dev/fb1 device entry....
->
-> Hope for more success after fbtft_device modules is enabled ;-)
->
-> Regards,
-> Peter
->
-> >
-> > ---------- Forwarded message ----------
-> > From: Peter Seiderer <ps.report@gmx.net>
-> > Date: Sun, Jan 11, 2015 at 8:04 AM
-> > Subject: Re: Fwd: Fwd: Fwd: [Buildroot] [PATCH v3] linux: add fbtft
-> kernel
-> > extension
-> > To: Lou Crittenden <loucrittenden63@gmail.com>
-> > Cc: buildroot at busybox.net
-> >
-> >
-> > Hello Lou,
-> >
-> > On Sat, Jan 10, 2015 at 08:00:15PM -0600, Lou Crittenden wrote:
-> > > Thanks for this info. I have some questions to ask:
-> > >
-> > > I saw that you have updated your patch. What did you do to it?
-> > >
-> >
-> > The downloaded patch via the described command:
-> >
-> >  $ wget -O v3-linux-add-fbtft-kernel-extension.patch
-> > https://patchwork.ozlabs.org/patch/425126/mbox/
-> >
-> > was already my latest patch (Thomas did some changes on the committed
-> > patch, but
-> > introduced a bug, see [1][2]), but the downloaded one is good ;-).
-> >
-> > > Did you have to manually create the /etc/modules-load.d and
-> > /etc/modprobe.d
-> > > folders and the text files you named in your setup? Mine didn't have
-> > those.
-> > > I manually made the directories and text files as laid out but the
-> device
-> > > still didn't work.
-> >
-> > Yes you have to create this two files with the described content (thats
-> why
-> > I
-> > wrote 'add', otherwiese it would be 'change' ;-) ).
-> >
-> > But I do this advice 'blindly' because I own a different display
-> device...
-> >
-> > >
-> > > How did you build the fbtft drivers in your menuconfig: as add-on
-> modules
-> > > (with the option asterisked) or built-in (with the option checkmarked)?
-> > >
-> >
-> > I did enable the 'linux-menuconfig' SPI configs with 'y'/'*' (built in)
-> > and the FB_TFT ones with 'm'/'M' (modules)...
-> >
-> > Please do the following:
-> > $ cd  build_rpi_001
-> > $ grep -E "^CONFIG_SPI|^CONFIG_GPIO|^CONFIG_FB"
-> > build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/.config
-> >
-> > Output should be like the following:
-> > CONFIG_SPI=y
-> > CONFIG_SPI_MASTER=y
-> > CONFIG_SPI_BCM2708=y
-> > CONFIG_GPIO_DEVRES=y
-> > CONFIG_GPIOLIB=y
-> > CONFIG_FB=y
-> > CONFIG_FB_CFB_FILLRECT=y
-> > CONFIG_FB_CFB_COPYAREA=y
-> > CONFIG_FB_CFB_IMAGEBLIT=y
-> > CONFIG_FB_SYS_FILLRECT=y
-> > CONFIG_FB_SYS_COPYAREA=y
-> > CONFIG_FB_SYS_IMAGEBLIT=y
-> > CONFIG_FB_SYS_FOPS=y
-> > CONFIG_FB_DEFERRED_IO=y
-> > CONFIG_FB_BACKLIGHT=y
-> > CONFIG_FB_BCM2708=y
-> > CONFIG_FB_TFT=y
-> > CONFIG_FB_TFT_ILI9340=m
-> > CONFIG_FB_TFT_FBTFT_DEVICE=m
-> >
-> > Please send your output...
-> >
-> > > I couldn't find a "waveshare32b" model in any driver list, so I'm using
-> > the
-> > > "flexfb" module that my factory image uses. Still no go.
-> >
-> > There is now waveshare32b module, only the fbtft_device module (a helper
-> > module for
-> > the various displays). If you load btft_device by hand,e.g.:
-> >
-> > $ insmod fbtft_device name=waveshare32b
-> >
-> > you give your display type via the module parameter 'name=waveshare32b'
-> >
-> > >
-> > > What I've done thus far:
-> > > I used lsmod on the flexfb.ko, and while the command goes through fine
-> > > without error, but nothing happens with the display (what am I missing
-> > > parameters wise?). I then ran dd if=/dev/urandom of=/dev/fb1. Nothing.
-> >
-> > flexfb is the 'old' universal module, you have to give a lot of
-> parameters
-> > for your device, the way via fbtft_device is a shortcut/helper for this
-> > (and added recently to fbtft for your device [3]), see file
-> >
-> build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/drivers/video/fbtft/fbtft_device.c:
-> >
-> > 1012         }, {
-> > 1013                 .name = "waveshare32b",
-> > 1014                 .spi = &(struct spi_board_info) {
-> > 1015                         .modalias = "fb_ili9340",
-> > 1016                         .max_speed_hz = 48000000,
-> > 1017                         .mode = SPI_MODE_0,
-> > 1018                         .platform_data = &(struct
-> fbtft_platform_data)
-> > {
-> > 1019                                 .display = {
-> > 1020                                         .buswidth = 8,
-> > 1021                                         .backlight = 1,
-> > 1022                                         .init_sequence =
-> > waveshare32b_init_sequence,
-> > 1023                                 },
-> > 1024                                 .bgr = true,
-> > 1025                                 .gpios = (const struct fbtft_gpio
-> []) {
-> > 1026                                         { "reset", 27 },
-> > 1027                                         { "dc", 22 },
-> > 1028                                         {},
-> > 1029                                 },
-> > 1030                         }
-> > 1031                 }
-> > 1032         }, {
-> >
-> > >
-> > > I ran insmod
-> /lib/modules/3.12.28/kernel/drivers/video/fbtft/ili9340.ko.
-> > It
-> > > complains "cannot load module: no such file or directory" even if I
-> use an
-> > > absolute path where "ili9340.ko" is located.
-> > >
-> >
-> > The module should be named 'fb_ili9340.ko'
-> >
-> > >
-> > > I have my buildroot .config file in the attachments if you wish to
-> take a
-> > > look at my setup to compare and maybe edit/reupload.
-> > >
-> >
-> > The buildroot .config is o.k., both options are enabled:
-> > BR2_LINUX_KERNEL_EXT_FBTFT=y
-> > BR2_PACKAGE_FBTFT=y
-> >
-> > One more try for remote debugging, please send the output of the
-> > following commands from your buildroot build directory:
-> >
-> > $ cd build_rpi_001
-> > $ grep -E "^CONFIG_SPI|^CONFIG_GPIO|^CONFIG_FB"
-> > build/linux-c256eb9968c8997dce47350d2075e42f1b3991d3/.config
-> > $ find target/lib/modules
-> >
-> > And the output from the following commands from your Raspberry Pi device:
-> >
-> > $ lsmod
-> > $ cat /proc/cmdline
-> > $ cat /etc/modules-load.d/fbtft.conf
-> > $ cat /etc/modprobe.d/00-fbtft.conf
-> > $ find /lib/modules
-> > $ insmod fbtft_device name=waveshare32b
-> > $ dmesg
-> > $ ls -l /dev/fb*
-> >
-> > Regards,
-> > Peter
-> >
-> > [1]
-> http://lists.busybox.net/pipermail/buildroot/2015-January/117057.html
-> > [2]
-> http://lists.busybox.net/pipermail/buildroot/2015-January/117062.html
-> > [3]
-> >
-> https://github.com/notro/fbtft/commit/e67014490a9df34b9a4bf04e49c50254aebc10a8
-> >
-> >
-> > > ---------- Forwarded message ----------
-> > > From: Peter Seiderer <ps.report@gmx.net>
-> > > Date: Wed, Jan 7, 2015 at 8:12 AM
-> > > Subject: Aw: Fwd: Fwd: [Buildroot] [PATCH v3] linux: add fbtft kernel
-> > > extension
-> > > To: Lou Crittenden <loucrittenden63@gmail.com>
-> > > Cc: buildroot at busybox.net
-> > >
-> > >
-> > > Hello Lou,
-> > >
-> > > > Gesendet: Mittwoch, 07. Januar 2015 um 14:06 Uhr
-> > > > Von: "Lou Crittenden" <loucrittenden63@gmail.com>
-> > > > An: buildroot at busybox.net, "Peter Seiderer" <ps.report@gmx.net>
-> > > > Betreff: Fwd: Fwd: [Buildroot] [PATCH v3] linux: add fbtft kernel
-> > > extension
-> > > >
-> > > > Alright, I have the buildroot built and a resultant bootable system,
-> but
-> > > the screen doesn't initialize. Did you have to
-> > > > create an /etc/modules file and the corresponding /etc/init.d script
-> to
-> > > load the modules/drivers at boot or something?
-> > > >
-> > >
-> > > Sorry, forgot to mention this part in my 'instruction' e-mail (but a
-> > > description was already included in [1]).
-> > >
-> > > For your case the following configuration changes should be needed:
-> > >
-> > > On the sd-card boot partition:
-> > > - cmdline.txt: add 'fbcon=map:10 fbcon=font:VGA8x8'
-> > >
-> > > On the sd-card root partition:
-> > > - add /etc/modules-load.d/fbtft.conf with 'fbtft_device'
-> > > - add /etc/modprobe.d/00-fbtft.conf with 'options fbtft_device
-> > > name=waveshare32b'
-> > >
-> > > If this works for you its fine, if not try to load the fbtft_device
-> module
-> > > via
-> > > insmod and play with the module parameters....and take a look at the
-> > > dmesg commnd output....on success a second frame buffer device /dev/fb1
-> > > should
-> > > be available (/dev/fb0 is the hdmi output)...
-> > >
-> > > $ dd if=/dev/urandom of=/dev/fb1
-> > >
-> > > should fill your waveshare device with random snow...
-> > >
-> > > Or take a look at [2] and [3], seems similare displays...
-> > >
-> > > Regards,
-> > > Peter
-> > >
-> > >
-> > > [1]
-> http://lists.busybox.net/pipermail/buildroot/2014-December/116096.html
-> > > [2] https://github.com/notro/rpi-firmware/issues/6
-> > > [3]https://github.com/notro/fbtft/issues/215
-> > >
-> > > >
-> > > > ---------- Forwarded message ----------
-> > > > From: Lou Crittenden <loucrittenden63@gmail.com>
-> > > > Date: Mon, Jan 5, 2015 at 5:03 PM
-> > > > Subject: Re: Fwd: [Buildroot] [PATCH v3] linux: add fbtft kernel
-> > extension
-> > > > To: Peter Seiderer <ps.report at gmx.net[ps.report@gmx.net]>,
-> > > buildroot at busybox.net[buildroot at busybox.net]
-> > > >
-> > > >
-> > > > Yes, I'm using a waveshare32b. I bought it from here:
-> > >
-> http://www.ebay.com/itm/331320440420[http://www.ebay.com/itm/331320440420]
-> > > >
-> > > > I didn't know this was an ili9340 device. I've tried looking up the
-> > > controller type, but it's been difficult, as they are a
-> > > > little sketchy. I was able to enable this screen in raspbmc through
-> the
-> > > use of the "flexfb" driver, as the factory raspbian
-> > > > image also uses this driver. The touchscreen controller is an
-> ads7846.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150111/599114ff/attachment.html>
+                  squid-3.4.10 | 13
+              host-erlang-17.4 | 6 
+          sane-backends-1.0.22 | 2 
+          qt5xmlpatterns-5.3.2 | 1 
+           python-pyzmq-14.3.1 | 1 
+                pinentry-0.9.0 | 1 
+                openntpd-5.7p1 | 1 
+                   slang-2.3.0 | 1 
+                libsrtp-v1.5.0 | 1 
+freerdp-440916eae2e07463912... | 1 
+libwebsock-3c1615eeadb0b582... | 1 
+make: *** [target-finalize]... | 1 
+               openswan-2.6.42 | 1 
+               lightning-2.0.5 | 1 
+           libmemcached-1.0.18 | 1 
+checking size of size_t... ... | 1 
+tvheadend-c051d0bda5b69ce61... | 1 
+
+Detail of failures
+===================
+
+    mips64el | checking size of size_t... ... | TIM | http://autobuild.buildroot.net/results/89885757539341d94764cf5647de18927d017a81/
+         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/d403e4a472e9f94bc732844ce71412dee58d1725/
+      x86_64 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/2cd32a45055a007073a78a808242185ef26381e5/
+     aarch64 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/6dab74ca3295b4090ae508929c2fcbc507e59942/
+     aarch64 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/22ce0c5fb40e7c6a0338c326d7d8d6e99d46819b/
+         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/47d5f6b4f9fab387ef56e6ba203f5e5e435e30fa/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/78ebe36da6f691a415399bb976b5f8b008d33516/
+         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/766c51f59695d7edf40b2c2da6868349bedc744f/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/6ae86ce4ab3c3f3eacc01595959a5519e7c23975/
+        bfin |                 libsrtp-v1.5.0 | NOK | http://autobuild.buildroot.net/results/6ffc163fee4e645487f2dcdde756ed90e6f6e36a/
+        bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/c0d22dc40d7d7b48e3fa720722050837ac7c08cc/
+     powerpc |                lightning-2.0.5 | NOK | http://autobuild.buildroot.net/results/61ef1ae1829e5470ebb91850a73d9d02c70c971b/
+        i686 | make: *** [target-finalize]... | TIM | http://autobuild.buildroot.net/results/a141fa00b1a3adfbaf3a8917a4c7f01d6d2c41b4/
+         arc |                 openntpd-5.7p1 | NOK | http://autobuild.buildroot.net/results/f4dd964231a5dbbc12a7237127fa9c45d6aa0d06/
+     powerpc |                openswan-2.6.42 | TIM | http://autobuild.buildroot.net/results/77da3f9930ffa347d22df2c0ea1428ba8f6c7a54/
+         arm |                 pinentry-0.9.0 | NOK | http://autobuild.buildroot.net/results/179e4cc5e025e495d4819d1de1a05c68495f167d/
+         arm |            python-pyzmq-14.3.1 | NOK | http://autobuild.buildroot.net/results/7ee46c2c9ad115e7cb8f010c1336ca50faa52b51/
+        i686 |           qt5xmlpatterns-5.3.2 | TIM | http://autobuild.buildroot.net/results/226b954eefc640c335fe9c0ac7c059cdf7d67a41/
+     aarch64 |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/ecc6c0eeb4304e1fdca0477928737540f6edff34/
+         arm |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/c389c6a253ed980c8ee91aae099b5b8c71aaa900/
+    mips64el |                    slang-2.3.0 | TIM | http://autobuild.buildroot.net/results/7983b54f98fe3d9f9d7f38b584754a3af118c308/
+        i686 |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/5f944e5b330d94f2420e57e18e67654edb5605bf/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/043135039dda1fb18d4766b727102b58c067425c/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/9ee393016c009f7ab42ee96d5175989bbde64c61/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/912c3f668bb04b12741f0b2772a46843a721b5cb/
+        i686 |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/7614115691928cc3e878fd9ede675691783921cb/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/5ca4204e6c507b0f63a113a7ec2ecbc677fd9713/
+    mips64el |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/c79cad84520691d315a875b001ebd3a818d0ffaf/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/b1418cfeb965628750595a2f92da250171b9fa53/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/dd932c4f1e13849cb4634df5023935167d2fca63/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/afee5aa6a4e343d8a627e1fd4d312e0a385be540/
+         arc |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/f452223302261c1f2afe766d623f09e6985b1eba/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/9e9ca5ed7a65388a4d5e6049c21fd09812e993a9/
+         arm |                   squid-3.4.10 | NOK | http://autobuild.buildroot.net/results/11f7d272ca176e0aa73f5664a447d813297cc9b9/
+      x86_64 | tvheadend-c051d0bda5b69ce61... | TIM | http://autobuild.buildroot.net/results/df2136b48cc2a5ba8059883b4473852a5f3a4d05/
+
+
+-- 
+http://autobuild.buildroot.net
