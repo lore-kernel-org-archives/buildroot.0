@@ -1,62 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 21:42:33 +0100
-Subject: [Buildroot] [PATCH v2 3/4] dtc: add host build
-In-Reply-To: <1421000166-24963-3-git-send-email-ps.report@gmx.net>
-References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
- <1421000166-24963-3-git-send-email-ps.report@gmx.net>
-Message-ID: <20150112214233.3f5edf16@free-electrons.com>
+From: Peter Spierenburg <peter.spierenburg@nautel.com>
+Date: Mon, 12 Jan 2015 20:35:50 +0000
+Subject: [Buildroot] Building for blackfin-bf609
+Message-ID: <1421094949987.30667@nautel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Greetings,
 
-On Sun, 11 Jan 2015 19:16:05 +0100, Peter Seiderer wrote:
 
-> diff --git a/package/dtc/Config.in.host b/package/dtc/Config.in.host
-> new file mode 100644
-> index 0000000..cbabf0a
-> --- /dev/null
-> +++ b/package/dtc/Config.in.host
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_HOST_DTC
-> +	bool "host dtc"
-> +	help
-> +	  The Device Tree Compiler, dtc, takes as input a device-tree in
-> +	  a given format and outputs a device-tree in another format.
-> +
-> +	  Install host tools: dtc, convert-dtsv0, fdtdump, fdtget and fdtput.
-> +
-> +	  https://git.kernel.org/cgit/utils/dtc/dtc.git
+I am trying to use buildroot for a blackfin bf609 processor. My steps are as follows:
 
-I'd like to understand a bit more how this is going to be used exactly,
-to see whether there is really a need for a menuconfig option for this
-host package. Most host packages are merely build dependencies for
-another package, and as such, don't need to appear in menuconfig.
 
-How is host dtc going to be used in your use case?
+- Starting from buildroot-2014.11
 
-> +# host build
-> +HOST_DTC_DEPENDENCIES = host-bison host-flex
+- make menuconfig
 
-Not really needed, those dependencies are automatically inherited from
-DTC_DEPENDENCIES.
+- Target Architecture set to Blackfin (the default Target CPU is bf609 which is serendipitous)
 
-> +define HOST_DTC_BUILD_CMDS
-> +	$(HOST_CONFIGURE_OPTS)    \
-> +	CFLAGS="$(HOST_CFLAGS)"   \
+- Linux Kernel
 
-Not needed, this definition of CFLAGS is already in
-$(HOST_CONFIGURE_OPTS).
+- Default Kernel version is 3.17.4 which is fine
 
-Otherwise, looks good.
+- Set Defconfig name to BF609-EZKIT
 
-Thanks,
+- Exit and save
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+- make
+
+
+After a few minutes of furious downloading and compiling, I get:
+
+
+cc1: error: -mcpu=bf609-0.0 is not valid
+cc1: error: unrecognized command line option "-mcpu=bf609-0.0"
+make[2]: *** [kernel/bounds.s] Error 1
+make[1]: *** [prepare0] Error 2
+make[1]: *** Waiting for unfinished jobs....
+  CC      scripts/mod/empty.o
+  HOSTCC  scripts/mod/mk_elfconfig
+  CC      scripts/mod/devicetable-offsets.s
+cc1: error: -mcpu=bf609-0.0 is not valid
+cc1: error: unrecognized command line option "-mcpu=bf609-0.0"
+make[3]: *** [scripts/mod/empty.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+cc1: error: -mcpu=bf609-0.0 is not valid
+cc1: error: unrecognized command line option "-mcpu=bf609-0.0"
+make[3]: *** [scripts/mod/devicetable-offsets.s] Error 1
+make[2]: *** [scripts/mod] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [scripts] Error 2
+make[1]: Leaving directory `/home/peter/buildroot/buildroot-2014.11/output/build/linux-3.17.4'
+make: *** [/home/peter/buildroot/buildroot-2014.11/output/build/linux-3.17.4/.stamp_built] Error 2
+
+What am I doing wrong?
+
+Peter.
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150112/622b2407/attachment.html>
