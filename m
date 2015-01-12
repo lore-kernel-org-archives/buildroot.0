@@ -1,53 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 12:33:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: fix hard float error
-In-Reply-To: <1421010259-10281-1-git-send-email-jkrause@posteo.de>
-References: <1421010259-10281-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20150112123342.5b5a616c@free-electrons.com>
+Date: Mon, 12 Jan 2015 12:36:02 +0100
+Subject: [Buildroot] [git commit] postgresql: bump version to 9.4.0
+Message-ID: <20150112113706.558788001C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=ff8832a5b55c186c02998a120de6aa20a8ddd3b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 11 Jan 2015 22:04:19 +0100, J?rg Krause wrote:
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/postgresql/postgresql.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index ad598d9..3389c3c 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -56,14 +56,16 @@ else ifeq ($(BR2_mipsel),y)
->  NODEJS_CPU = mipsel
->  else ifeq ($(BR2_arm),y)
->  NODEJS_CPU = arm
-> -# V8 needs to know what floating point ABI the target is using.  There's also
-> -# a 'hard' option which we're not exposing here at the moment, because
-> -# buildroot itself doesn't really support it at present.
-> +# V8 needs to know what floating point ABI the target is using.
-> +ifeq ($(BR2_ARM_EABIHF),y)
-> +NODEJS_ARM_FP = hard
-> +else
->  ifeq ($(BR2_SOFT_FLOAT),y)
->  NODEJS_ARM_FP = soft
->  else
->  NODEJS_ARM_FP = softfp
-> -endif
-> +endif # BR2_SOFT_FLOAT
-> +endif # BR2_ARM_EABIHF
->  endif
-
-Why don't we simply do:
-
-NODEJS_ARM_FP = $(BR2_GCC_TARGET_FLOAT_ABI)
-
- ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e53b9dd..6fc9656 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.3.5
++POSTGRESQL_VERSION = 9.4.0
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
