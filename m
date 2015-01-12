@@ -1,9 +1,9 @@
 From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 12 Jan 2015 10:32:17 +0100
-Subject: [Buildroot] [PATCH v6 13/16] erlang-p1-sip: new package.
+Date: Mon, 12 Jan 2015 10:32:18 +0100
+Subject: [Buildroot] [PATCH v6 14/16] erlang-p1-iconv: new package.
 In-Reply-To: <1421055140-5092-1-git-send-email-johan.oudinet@gmail.com>
 References: <1421055140-5092-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <1421055140-5092-14-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1421055140-5092-15-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +13,60 @@ To: buildroot@busybox.net
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/Config.in                                     |  1 +
- package/erlang-p1-sip/Config.in                       |  9 +++++++++
- .../erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch | 19 +++++++++++++++++++
- package/erlang-p1-sip/erlang-p1-sip.mk                | 14 ++++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/erlang-p1-sip/Config.in
- create mode 100644 package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
- create mode 100644 package/erlang-p1-sip/erlang-p1-sip.mk
+ package/Config.in                          |  1 +
+ package/erlang-p1-iconv/Config.in          |  7 +++++++
+ package/erlang-p1-iconv/erlang-p1-iconv.mk | 18 ++++++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/erlang-p1-iconv/Config.in
+ create mode 100644 package/erlang-p1-iconv/erlang-p1-iconv.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d48c305..da5e2f2 100644
+index da5e2f2..8a7f723 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -402,6 +402,7 @@ if BR2_PACKAGE_ERLANG
  menu "Erlang libraries/modules"
  	source "package/erlang-goldrush/Config.in"
  	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-sip/Config.in"
++	source "package/erlang-p1-iconv/Config.in"
+ 	source "package/erlang-p1-sip/Config.in"
  	source "package/erlang-p1-stringprep/Config.in"
  	source "package/erlang-p1-stun/Config.in"
- 	source "package/erlang-p1-tls/Config.in"
-diff --git a/package/erlang-p1-sip/Config.in b/package/erlang-p1-sip/Config.in
+diff --git a/package/erlang-p1-iconv/Config.in b/package/erlang-p1-iconv/Config.in
 new file mode 100644
-index 0000000..70cf819
+index 0000000..98efb21
 --- /dev/null
-+++ b/package/erlang-p1-sip/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ERLANG_P1_SIP
-+	bool "erlang-p1-sip"
-+	select BR2_PACKAGE_ERLANG_P1_STUN
-+	select BR2_PACKAGE_ERLANG_P1_TLS
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
++++ b/package/erlang-p1-iconv/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_P1_ICONV
++	bool "erlang-p1-iconv"
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 +	help
-+	  SIP library for Erlang
++	  Erlang interface to libiconv
 +
-+	  https://github.com/processone/p1_sip
-diff --git a/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
++	  https://github.com/processone/eiconv
+diff --git a/package/erlang-p1-iconv/erlang-p1-iconv.mk b/package/erlang-p1-iconv/erlang-p1-iconv.mk
 new file mode 100644
-index 0000000..80e2ab3
+index 0000000..2189f01
 --- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
-@@ -0,0 +1,19 @@
-+Description: correct include
-+ This part of the code was moved into it's own project and was packaged
-+ separately by me. To make the build process work, this small fix is
-+ necessary.
-+Author: Philipp Huebner <debalance@debian.org>
-+
-+Index: erlang-p1-sip/src/esip_socket.erl
-+===================================================================
-+--- erlang-p1-sip.orig/src/esip_socket.erl
-++++ erlang-p1-sip/src/esip_socket.erl
-+@@ -22,7 +22,7 @@
-+ 
-+ -include("esip.hrl").
-+ -include("esip_lib.hrl").
-+--include("stun.hrl").
-++-include_lib("p1_stun/include/stun.hrl").
-+ 
-+ -define(TCP_SEND_TIMEOUT, 15000).
-+ -define(CONNECT_TIMEOUT, 20000).
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-new file mode 100644
-index 0000000..df5bcdd
---- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
-@@ -0,0 +1,14 @@
++++ b/package/erlang-p1-iconv/erlang-p1-iconv.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# erlang-p1-sip
++# erlang-p1-iconv
 +#
 +################################################################################
 +
-+ERLANG_P1_SIP_VERSION = bba4459
-+ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
-+ERLANG_P1_SIP_LICENSE = GPLv2
-+ERLANG_P1_SIP_LICENSE_FILES = COPYING
-+ERLANG_P1_SIP_DEPENDENCIES = erlang-p1-stun erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_SIP_INSTALL_STAGING = YES
++ERLANG_P1_ICONV_VERSION = dff5ee5
++ERLANG_P1_ICONV_SITE = $(call github,processone,eiconv,$(ERLANG_P1_ICONV_VERSION))
++ERLANG_P1_ICONV_LICENSE = GPLv2+
++ERLANG_P1_ICONV_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++ERLANG_P1_ICONV_DEPENDENCIES += libiconv
++endif
++
++ERLANG_P1_ICONV_USE_AUTOCONF = YES
 +
 +$(eval $(rebar-package))
 -- 
