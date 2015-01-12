@@ -1,23 +1,60 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 12 Jan 2015 22:26:04 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libftdi: rename patches to the new
-	naming convention
-Message-ID: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+Date: Mon, 12 Jan 2015 22:26:05 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libftdi: fix libftdi.pc
+In-Reply-To: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+References: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1421097965-15600-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch fixes libftdi pkg-config module, so that packages linking
+against libftdi correctly have all needed CFLAGS and LIBS defined,
+especially when running a static build.
+
+Fixes:
+  http://autobuild.buildroot.org/results/e90/e90b4d5ad79d99487f21c9d18581e8eba7034501/
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...libftdi-0.19-01_pkgconfig_libusb.patch => 0001_pkgconfig_libusb.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/libftdi/{libftdi-0.19-01_pkgconfig_libusb.patch => 0001_pkgconfig_libusb.patch} (100%)
+ ...di.pc.in-requires-libusb-fix-static-build.patch | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch
 
-diff --git a/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch b/package/libftdi/0001_pkgconfig_libusb.patch
-similarity index 100%
-rename from package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
-rename to package/libftdi/0001_pkgconfig_libusb.patch
+diff --git a/package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch b/package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch
+new file mode 100644
+index 0000000..7b0d9c7
+--- /dev/null
++++ b/package/libftdi/0002-libftdi.pc.in-requires-libusb-fix-static-build.patch
+@@ -0,0 +1,25 @@
++From c0d957b08b46385da570d8ff2f728369822ad2c1 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Mon, 12 Jan 2015 22:10:49 +0100
++Subject: [PATCH] libftdi.pc.in: requires libusb (fix static build)
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ libftdi.pc.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libftdi.pc.in b/libftdi.pc.in
++index 2061b91..95eb491 100644
++--- a/libftdi.pc.in
+++++ b/libftdi.pc.in
++@@ -6,6 +6,7 @@ includedir=@includedir@
++ Name: libftdi
++ Description: Library to program and control the FTDI USB controller
++ Requires:
+++Requires.private: libusb
++ Version: @VERSION@
++ Libs: -L${libdir} -lftdi -lusb
++ Cflags: -I${includedir}
++-- 
++2.2.1
++
 -- 
 2.2.1
