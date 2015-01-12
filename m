@@ -1,79 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Jan 2015 23:56:50 +0100
-Subject: [Buildroot] Fwd: Fwd: Fwd: Fwd: [PATCH v3] linux: add fbtft
- kernel extension
-Message-ID: <trinity-9944ca55-371d-46d5-a1df-b254e2282bf5-1421103410794@3capp-gmx-bs54>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 12 Jan 2015 23:57:40 +0100
+Subject: [Buildroot] Reminder about the FOSDEM Buildroot meeting
+In-Reply-To: <20150110211306.7c34717e@free-electrons.com>
+References: <20150110211306.7c34717e@free-electrons.com>
+Message-ID: <20150112225740.GE9000@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Lou,
+Thomas, All,
 
-On Mon, Jan 12, 2015 at 01:48:02AM -0600, Lou Crittenden wrote:
-> Oh, I forgot to enable the TOUCHSCREEN_ADS7846 option. Is this [y] or [m]?
-> I chose [y].
+On 2015-01-10 21:13 +0100, Thomas Petazzoni spake thusly:
+> This is a kind reminder about the Buildroot Developers meeting we are
+> organizing right after FOSDEM. It will take place on February 2-3 in
+> Brussels, right after the great FOSDEM conference.
+> 
+> If you're a regular Buildroot contributor, you should really plan on
+> attending, both FOSDEM and the meeting. The meeting is a nice way to
+> meet several of the other core contributors, make progress on various
+> development topics, define some of the upcoming goals for Buildroot,
+> and more.
 
-I would chose [m]...but use my patch from [1], it will enable all
-kernel-configs automatically...
-
-You need the ads7846_device.ko module in addition, see [2] or take
-a closer look at the patch...
+Yeah! Good times ahead! Thanks! :-)
 
 Regards,
-Peter
+Yann E. MORIN.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-January/116799.html
-[2] https://github.com/notro/fbtft_tools/wiki/ads7846_device
-> 
-> On Mon, Jan 12, 2015 at 1:39 AM, Lou Crittenden <loucrittenden63@gmail.com>
-> wrote:
-> 
-> > Here's my latest buildroot config for your consideration. At least we know
-> > it works.
-> >
-> > On Mon, Jan 12, 2015 at 1:29 AM, Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> >> Hello Lou,
-> >>
-> >> > Gesendet: Montag, 12. Januar 2015 um 05:55 Uhr
-> >> > Von: "Lou Crittenden" <loucrittenden63@gmail.com>
-> >> > An: "Peter Seiderer" <ps.report@gmx.net>, buildroot at busybox.net
-> >> > Betreff: Re: Fwd: Fwd: Fwd: Fwd: [Buildroot] [PATCH v3] linux: add
-> >> fbtft kernel extension
-> >> >
-> >> > Good news! The screen works, however the orientation is portrait
-> >> instead of landscape and I'd
-> >> > like it to be landscape. Also, how do I make this driver load on boot
-> >> so I do not have to
-> >> > keep loading "insmod
-> >> /lib/modules/3.12.28/kernel/drivers/video/fbtft/fbtft_device.ko
-> >> name=waveshare32b"
-> >> > every time, so I can have this screen be the default? I also want to
-> >> load the ads7846
-> >> > touchscreen driver as well for touchscreen.
-> >>
-> >> The rotation part is the easy one, try
-> >>
-> >> $ insmod /lib/modules/3.12.28/kernel/drivers/video/fbtft/fbtft_device.ko
-> >> name=waveshare32b rotation=90
-> >>
-> >> The automatic loading should work with the /etc/modules-load.d/fbtft.conf
-> >> and /etc/modprobe.d/00-fbtft.conf
-> >> entries (do not forget to add rotation=90 to 00-fbtft-conf), but I have
-> >> to take a closer look at your
-> >> buildroot config whats missing or is different from my one, needs some
-> >> time ;-)
-> >>
-> >> For the touchscreen try [1]...
-> >>
-> >> > Again, thanks a bunch.
-> >>
-> >> Your welcome,
-> >> Peter
-> >>
-> >> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/116799.html
-> >>
-> >
-> >
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
