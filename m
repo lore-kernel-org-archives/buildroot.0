@@ -1,44 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 16:37:37 +0100
-Subject: [Buildroot] [PATCH] dvdauthor : new package
-In-Reply-To: <54B3E959.2010504@ou.edu>
-References: <54B317DE.9090105@ou.edu>
- <20150112092800.08ce4350@free-electrons.com>
- <54B3E959.2010504@ou.edu>
-Message-ID: <20150112163737.6739827b@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 12 Jan 2015 17:01:37 +0100
+Subject: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi
+ overlay support
+In-Reply-To: <CANQCQpaCnaOxWDo4d+PbjFGxUWeUKdWs11piPfn1+UQZ_Lxgww@mail.gmail.com>
+References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
+ <1421000166-24963-4-git-send-email-ps.report@gmx.net>,
+ <CANQCQpaCnaOxWDo4d+PbjFGxUWeUKdWs11piPfn1+UQZ_Lxgww@mail.gmail.com>
+Message-ID: <trinity-dff92bff-3fff-4490-88d0-d346b7d96ccd-1421078497336@3capp-gmx-bs23>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Hello Matthew,
 
-> >> compilation terminated.
-> >> make[3]: *** [readxml.o] Error 1
-> The build triggers lots of automatic reconfiguration, I guess it must be something on
-> the host side getting rebuilt then. I'll double check while I'm updating the patch.
-
-Not sure to understand exactly what you mean here.
-
-
-> > I'm a little bit surprised by the need for host-libxml2 and
-> > host-freetype, but I admittedly haven't looked in detail.
-> I added them because of host side configure problems:
+> Gesendet: Montag, 12. Januar 2015 um 14:57 Uhr
+> Von: "Matthew Weber" <matthew.weber@rockwellcollins.com>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: buildroot at busybox.net
+> Betreff: Re: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi overlay support
+>
+> Peter,
 > 
-> checking for libxml - version >= 2.6.0... no
-> *** The xml2-config script installed by LIBXML could not be found
+> On Sun, Jan 11, 2015 at 12:16 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+> > See [1] for documentation of raspberry pi kernel dt overlay support.
 > 
-> configure:5176: checking for freetype-config
-> configure:5192: found /usr/bin/freetype-config
+> Do you happen to know if this overlay support is identical to the
+> approach used in the beaglebone dts overlays?  (I'm guessing so)
 
-Hu? This does not indicate a host dependency: it indicates that it's
-incorrectly using the host freetype-config, while it should be using
-the one in $(STAGING_DIR). Generally, this is solved by passing some
-ac_cv_path_<foo> variable.
+Looking at [2] I think so too, same input format, same
+dtc paraemter '-@' and same source [3] for the dtc tool
+enhancement....
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Currently the beaglebone support in Buildroot lacks overlay support.
+> So if the capability is similar, I'll work on an update to the
+> beaglebone package to use the dtc package instead of the linux kernel
+> dtc (I think the kernel dtc install may need a new check to see if the
+> dtc is enabled to prevent it from installing the kernel dtc).
+
+Good point, will add kernel dtc install prevention (missed this one until now)
+on next patch iteration...
+
+Regards,
+Peter
+
+[2] https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
+[3] https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
+
+> <snip>
+> 
+> -- 
+> Matthew L Weber / Pr Software Engineer
+> Airborne Information Systems / Security Systems and Software
+> www.rockwellcollins.com
+> 
