@@ -1,32 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Jan 2015 23:57:40 +0100
-Subject: [Buildroot] Reminder about the FOSDEM Buildroot meeting
-In-Reply-To: <20150110211306.7c34717e@free-electrons.com>
-References: <20150110211306.7c34717e@free-electrons.com>
-Message-ID: <20150112225740.GE9000@free.fr>
+Date: Tue, 13 Jan 2015 00:00:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libftdi: rename patches to the
+ new naming convention
+In-Reply-To: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+References: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150112230041.GA1879@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Samuel, All,
 
-On 2015-01-10 21:13 +0100, Thomas Petazzoni spake thusly:
-> This is a kind reminder about the Buildroot Developers meeting we are
-> organizing right after FOSDEM. It will take place on February 2-3 in
-> Brussels, right after the great FOSDEM conference.
-> 
-> If you're a regular Buildroot contributor, you should really plan on
-> attending, both FOSDEM and the meeting. The meeting is a nice way to
-> meet several of the other core contributors, make progress on various
-> development topics, define some of the upcoming goals for Buildroot,
-> and more.
+On 2015-01-12 22:26 +0100, Samuel Martin spake thusly:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Yeah! Good times ahead! Thanks! :-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  ...libftdi-0.19-01_pkgconfig_libusb.patch => 0001_pkgconfig_libusb.patch} | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/libftdi/{libftdi-0.19-01_pkgconfig_libusb.patch => 0001_pkgconfig_libusb.patch} (100%)
+> 
+> diff --git a/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch b/package/libftdi/0001_pkgconfig_libusb.patch
+> similarity index 100%
+> rename from package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
+> rename to package/libftdi/0001_pkgconfig_libusb.patch
+> -- 
+> 2.2.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
