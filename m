@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 12:36:02 +0100
-Subject: [Buildroot] [git commit] postgresql: bump version to 9.4.0
-Message-ID: <20150112113706.558788001C@busybox.osuosl.org>
+Date: Mon, 12 Jan 2015 12:37:21 +0100
+Subject: [Buildroot] [PATCH] postgresql: bump version to 9.4.0
+In-Reply-To: <1420954296-27101-2-git-send-email-nroach44@gmail.com>
+References: <1420954296-27101-1-git-send-email-nroach44@gmail.com>
+ <1420954296-27101-2-git-send-email-nroach44@gmail.com>
+Message-ID: <20150112123721.10b5887a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff8832a5b55c186c02998a120de6aa20a8ddd3b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Nathaniel Roach,
 
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/postgresql/postgresql.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 11 Jan 2015 13:31:35 +0800, Nathaniel Roach wrote:
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+> ---
+>  package/postgresql/postgresql.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index e53b9dd..6fc9656 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 9.3.5
-+POSTGRESQL_VERSION = 9.4.0
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
