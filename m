@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 22:18:27 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/nodejs: fix hard float error
-In-Reply-To: <1421095921-2816-1-git-send-email-jkrause@posteo.de>
-References: <1421095921-2816-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20150112221827.7ed3765d@free-electrons.com>
+Date: Mon, 12 Jan 2015 22:19:10 +0100
+Subject: [Buildroot] [PATCH v2] xbmc-pvr-addons: Bump version
+In-Reply-To: <1414356597-27279-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1414356597-27279-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150112221910.5296b9bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Maxime Hadjinlian,
 
-On Mon, 12 Jan 2015 21:52:01 +0100, J?rg Krause wrote:
+On Sun, 26 Oct 2014 21:49:57 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+> v1 -> v2:
+>    - The correct cset is the HEAD of the Gotham branch.
+> ---
+>  package/xbmc-pvr-addons/xbmc-pvr-addons.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +# V8 needs to know what floating point ABI the target is using.
-> +NODEJS_ARM_FP = $(BR2_GCC_TARGET_FLOAT_ABI)
-
-Since this variable is a string, I've added a $(call qstrip,...), for
-good measure. And then applied your patch, thanks!
-
-Since you're looking at nodejs, can you have a look at the thread
-http://lists.busybox.net/pipermail/buildroot/2014-November/112880.html
-(which contains one patch), and send an updated patch series to make
-the necessary modifications? They looked good in principle, but not
-nicely separated in multiple patches.
-
-Thanks a lot!
+Since this patch was sent, we've switched to Kodi, so I've marked this
+patch as Superseded.
 
 Thomas
 -- 
