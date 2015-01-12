@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 21:58:33 +0100
-Subject: [Buildroot] Building for blackfin-bf609
-In-Reply-To: <1421094949987.30667@nautel.com>
-References: <1421094949987.30667@nautel.com>
-Message-ID: <20150112215833.4e320e1c@free-electrons.com>
+Date: Mon, 12 Jan 2015 22:00:44 +0100
+Subject: [Buildroot] [PATCH] bootstrap: remove development/debug files
+In-Reply-To: <1421094218-2999-1-git-send-email-yegorslists@googlemail.com>
+References: <1421094218-2999-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20150112220044.0db3d53b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Spierenburg,
+Dear Yegor Yefremov,
 
-On Mon, 12 Jan 2015 20:35:50 +0000, Peter Spierenburg wrote:
-
-> I am trying to use buildroot for a blackfin bf609 processor. My steps are as follows:
-
-Great, one Blackfin user! We do have support for the Blackfin
-architecture, but we very rarely get reports from users, so it's great
-to see some interest in this!
-
-> - Starting from buildroot-2014.11
-> - make menuconfig
-> - Target Architecture set to Blackfin (the default Target CPU is bf609 which is serendipitous)
-> - Linux Kernel
-> - Default Kernel version is 3.17.4 which is fine
-> - Set Defconfig name to BF609-EZKIT
-> - Exit and save
-> - make
+On Mon, 12 Jan 2015 21:23:38 +0100, Yegor Yefremov wrote:
+> *.min.* files are sufficient for a production system, so
+> remove other files, that will be used during development
+> stage.
 > 
-> After a few minutes of furious downloading and compiling, I get:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/bootstrap/bootstrap.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> cc1: error: -mcpu=bf609-0.0 is not valid
+> diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
+> index 1bf8aa2..f79a00f 100644
+> --- a/package/bootstrap/bootstrap.mk
+> +++ b/package/bootstrap/bootstrap.mk
+> @@ -16,6 +16,11 @@ endef
+>  define BOOTSTRAP_INSTALL_TARGET_CMDS
+>  	mkdir -p $(TARGET_DIR)/var/www/bootstrap
+>  	cp -dpfr $(@D)/dist/* $(TARGET_DIR)/var/www/bootstrap
+> +
+> +	rm $(TARGET_DIR)/var/www/bootstrap/css/bootstrap-theme.css*
+> +	rm $(TARGET_DIR)/var/www/bootstrap/css/bootstrap.css*
+> +	rm $(TARGET_DIR)/var/www/bootstrap/js/npm.js
+> +	rm $(TARGET_DIR)/var/www/bootstrap/js/bootstrap.js
+>  endef
+>  
+>  $(eval $(generic-package))
 
-Hum, are you sure you did not specify BR2_GCC_TARGET_CPU_REVISION="0.0"
-in your configuration? Can you send your full Buildroot .config file?
-
-Note that Blackfin is mainly compile tested using the External toolchain
-provided by ADI, which you can select in the "Toolchain" menu.
+At this point, I am wondering if it is not simpler/shorter to install
+only the necessary files, rather than install everything and remove
+what's unneeded. Can you compare the two options?
 
 Thanks,
 
