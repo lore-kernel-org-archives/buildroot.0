@@ -1,65 +1,52 @@
-From: Peter Spierenburg <peter.spierenburg@nautel.com>
-Date: Mon, 12 Jan 2015 20:35:50 +0000
-Subject: [Buildroot] Building for blackfin-bf609
-Message-ID: <1421094949987.30667@nautel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jan 2015 21:50:52 +0100
+Subject: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi
+ overlay support
+In-Reply-To: <1421000166-24963-4-git-send-email-ps.report@gmx.net>
+References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
+ <1421000166-24963-4-git-send-email-ps.report@gmx.net>
+Message-ID: <20150112215052.48005c8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Dear Peter Seiderer,
 
+On Sun, 11 Jan 2015 19:16:06 +0100, Peter Seiderer wrote:
+> See [1] for documentation of raspberry pi kernel dt overlay support.
+> 
+> The following patches (see original download urls) where adjusted to dtc-1.4.1:
+> 
+> - 0003-dtc-Dynamic-symbols-fixup-support.patch
+> https://github.com/RobertCNelson/dtc/commit/dd6a0533e846e8d5e690a618fa35cc15a6103efb.patch
+> 
+> - 0004-dtc-v-takes-no-argument-drop-extra.patch
+> https://github.com/RobertCNelson/dtc/commit/f345d9e48c9e1169edf047de742da142cc5687bc.patch
+> 
+> [1] https://github.com/raspberrypi/documentation/blob/master/configuration/device-tree.md
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  .../0003-dtc-Dynamic-symbols-fixup-support.patch   | 581 +++++++++++++++++++++
+>  .../0004-dtc-v-takes-no-argument-drop-extra.patch  |  44 ++
+>  2 files changed, 625 insertions(+)
+>  create mode 100644 package/dtc/0003-dtc-Dynamic-symbols-fixup-support.patch
+>  create mode 100644 package/dtc/0004-dtc-v-takes-no-argument-drop-extra.patch
 
-I am trying to use buildroot for a blackfin bf609 processor. My steps are as follows:
+We normally don't really like to include patches adding new features:
+those should be included upstream first. However, for the case of the
+DT overlay mechanism, it's now being more and more widely used for the
+BeagleBone Black and the Raspberry Pi, so maybe we should make an
+exception for this.
 
+Opinion of other Buildroot developers on this is welcome.
 
-- Starting from buildroot-2014.11
+Thanks,
 
-- make menuconfig
-
-- Target Architecture set to Blackfin (the default Target CPU is bf609 which is serendipitous)
-
-- Linux Kernel
-
-- Default Kernel version is 3.17.4 which is fine
-
-- Set Defconfig name to BF609-EZKIT
-
-- Exit and save
-
-- make
-
-
-After a few minutes of furious downloading and compiling, I get:
-
-
-cc1: error: -mcpu=bf609-0.0 is not valid
-cc1: error: unrecognized command line option "-mcpu=bf609-0.0"
-make[2]: *** [kernel/bounds.s] Error 1
-make[1]: *** [prepare0] Error 2
-make[1]: *** Waiting for unfinished jobs....
-  CC      scripts/mod/empty.o
-  HOSTCC  scripts/mod/mk_elfconfig
-  CC      scripts/mod/devicetable-offsets.s
-cc1: error: -mcpu=bf609-0.0 is not valid
-cc1: error: unrecognized command line option "-mcpu=bf609-0.0"
-make[3]: *** [scripts/mod/empty.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-cc1: error: -mcpu=bf609-0.0 is not valid
-cc1: error: unrecognized command line option "-mcpu=bf609-0.0"
-make[3]: *** [scripts/mod/devicetable-offsets.s] Error 1
-make[2]: *** [scripts/mod] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [scripts] Error 2
-make[1]: Leaving directory `/home/peter/buildroot/buildroot-2014.11/output/build/linux-3.17.4'
-make: *** [/home/peter/buildroot/buildroot-2014.11/output/build/linux-3.17.4/.stamp_built] Error 2
-
-What am I doing wrong?
-
-Peter.
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150112/622b2407/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
