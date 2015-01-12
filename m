@@ -1,57 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Jan 2015 17:01:37 +0100
-Subject: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi
- overlay support
-In-Reply-To: <CANQCQpaCnaOxWDo4d+PbjFGxUWeUKdWs11piPfn1+UQZ_Lxgww@mail.gmail.com>
-References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
- <1421000166-24963-4-git-send-email-ps.report@gmx.net>,
- <CANQCQpaCnaOxWDo4d+PbjFGxUWeUKdWs11piPfn1+UQZ_Lxgww@mail.gmail.com>
-Message-ID: <trinity-dff92bff-3fff-4490-88d0-d346b7d96ccd-1421078497336@3capp-gmx-bs23>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 12 Jan 2015 10:14:39 -0600
+Subject: [Buildroot] [PATCH] dvdauthor : new package
+In-Reply-To: <20150112163737.6739827b@free-electrons.com>
+References: <54B317DE.9090105@ou.edu>	<20150112092800.08ce4350@free-electrons.com>	<54B3E959.2010504@ou.edu>
+ <20150112163737.6739827b@free-electrons.com>
+Message-ID: <54B3F2EF.4040304@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matthew,
-
-> Gesendet: Montag, 12. Januar 2015 um 14:57 Uhr
-> Von: "Matthew Weber" <matthew.weber@rockwellcollins.com>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net
-> Betreff: Re: [Buildroot] [PATCH v2 4/4] dtc: add patches for raspberry pi overlay support
->
-> Peter,
+On 01/12/2015 09:37 AM, Thomas Petazzoni wrote:
+> Dear Steve Kenton,
 > 
-> On Sun, Jan 11, 2015 at 12:16 PM, Peter Seiderer <ps.report@gmx.net> wrote:
-> > See [1] for documentation of raspberry pi kernel dt overlay support.
+>>>> compilation terminated.
+>>>> make[3]: *** [readxml.o] Error 1
+>> The build triggers lots of automatic reconfiguration, I guess it must be something on
+>> the host side getting rebuilt then. I'll double check while I'm updating the patch.
 > 
-> Do you happen to know if this overlay support is identical to the
-> approach used in the beaglebone dts overlays?  (I'm guessing so)
+> Not sure to understand exactly what you mean here.
+Messages on a white background of the form >>> package_name Autoreconfiguring
 
-Looking at [2] I think so too, same input format, same
-dtc paraemter '-@' and same source [3] for the dtc tool
-enhancement....
+I'm still trying to get my head around the cross build environment with
+separate host and target - so I'm not sure *I* understand what I mean :-(
 
-> Currently the beaglebone support in Buildroot lacks overlay support.
-> So if the capability is similar, I'll work on an update to the
-> beaglebone package to use the dtc package instead of the linux kernel
-> dtc (I think the kernel dtc install may need a new check to see if the
-> dtc is enabled to prevent it from installing the kernel dtc).
-
-Good point, will add kernel dtc install prevention (missed this one until now)
-on next patch iteration...
-
-Regards,
-Peter
-
-[2] https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
-[3] https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
-
-> <snip>
+I appreciate the gentle feedback by the way.
 > 
-> -- 
-> Matthew L Weber / Pr Software Engineer
-> Airborne Information Systems / Security Systems and Software
-> www.rockwellcollins.com
 > 
+>>
+>> configure:5176: checking for freetype-config
+>> configure:5192: found /usr/bin/freetype-config
+> 
+> Hu? This does not indicate a host dependency: it indicates that it's
+> incorrectly using the host freetype-config, while it should be using
+> the one in $(STAGING_DIR). Generally, this is solved by passing some
+> ac_cv_path_<foo> variable.
+OK, will investigate more
+
+Thanks - Steve
