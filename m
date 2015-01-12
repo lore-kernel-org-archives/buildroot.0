@@ -1,43 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 20:58:11 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Jan 2015 17:05:06 -0300
 Subject: [Buildroot] [PATCH] squid: fix automake breakage
-In-Reply-To: <1420679367-24134-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <20150112205811.6cb75c60@free-electrons.com>
 References: <1420679367-24134-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150112205811.6cb75c60@free-electrons.com>
+ <20150112205811.6cb75c60@free-electrons.com>
+Message-ID: <54B428F2.9010102@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 01/12/2015 04:58 PM, Thomas Petazzoni wrote:
 
-On Wed,  7 Jan 2015 22:09:27 -0300, Gustavo Zacarias wrote:
-> Squid bundles a copy of libltdl (from libtool) which autoreconfigures on
-> its own.
-> For some odd reason when automake was bumped to version 1.15 and if the host
-> system has another automake version, for example 1.14, the ACLOCAL and
-> AUTOMAKE variables don't expand properly when the internal autoreconf is
-> triggered hence calling the missing handler which in turn tries to use
-> an incorrect automake version.
-> The solution is to pass unexpanded ACLOCAL and AUTOMAKE variables that
-> defer the evaluation to a later moment and avoid the issue.
+> Even though I am not too happy about the fix, I applied it in order to
+> fix the autobuilder issues.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/73f/73fcffafbea320f8c64378bbe8a96922b5e7c6b5/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> I'd like to understand better why the libltdl bundled in Squid thinks
+> it should autoreconf itself.
 
-Even though I am not too happy about the fix, I applied it in order to
-fix the autobuilder issues.
+I couldn't find the why yet, but i did find that the fact that we don't
+autoreconf libtool causes it since libtool 2.4.4 is packaged with
+automake 1.14.1.
+In a project where host-libtool (i.e. autoreconfs) see:
 
-I'd like to understand better why the libltdl bundled in Squid thinks
-it should autoreconf itself.
+output/target/usr/share/libtool/aclocal.m4 ->
+[AM_AUTOMAKE_VERSION([1.14.1])dnl
+(circa line 54)
 
-Thanks!
+Since libtoolize blindly copies this at some point libltdl
+automatically-triggered autoreconf uses this version (actually
+am__api_version='1.14' in line 35) to call it, hence breaking.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+One solution would be to autoreconf libtool which doesn't seem
+straightforward.
+Another is to "hack" libtool and s/1.14.1/1.15/ + s/1.14/1.15/ that file
+(tested to work).
+We could also define ACLOCAL & co in the autotools infra, it shouldn't
+hurt any package, though i haven't tested this.
+
+In any case it seems to be a problem limited to squid only or we would
+have seen more of these.
+
+Regards.
