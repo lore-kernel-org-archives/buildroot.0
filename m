@@ -1,24 +1,48 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Mon, 12 Jan 2015 12:53:17 -0600
-Subject: [Buildroot] [PATCH] dvdauthor : new package
-In-Reply-To: <20150112193238.01e9bf95@free-electrons.com>
-References: <54B317DE.9090105@ou.edu>	<20150112092800.08ce4350@free-electrons.com>	<54B3E959.2010504@ou.edu>	<20150112163737.6739827b@free-electrons.com>	<54B403C9.8050207@ou.edu>
- <20150112193238.01e9bf95@free-electrons.com>
-Message-ID: <54B4181D.5060209@ou.edu>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jan 2015 20:57:06 +0100
+Subject: [Buildroot] [git commit] squid: fix automake breakage
+Message-ID: <20150112195711.D3F88807A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/12/2015 12:32 PM, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=e27ccbabc1fe5cafdd0b56098bb04e7213319002
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> You have to do something like:
-> 
-> DVDAUTHOR_CONF_ENV = \
-> 	ac_cv_prog_FREETYPECONFIG=$(STAGING_DIR)/usr/bin/freetype-config
+Squid bundles a copy of libltdl (from libtool) which autoreconfigures on
+its own.
+For some odd reason when automake was bumped to version 1.15 and if the host
+system has another automake version, for example 1.14, the ACLOCAL and
+AUTOMAKE variables don't expand properly when the internal autoreconf is
+triggered hence calling the missing handler which in turn tries to use
+an incorrect automake version.
+The solution is to pass unexpanded ACLOCAL and AUTOMAKE variables that
+defer the evaluation to a later moment and avoid the issue.
 
-Ah! The light brightens slightly and the darkness disperses a bit.
-I had somehow completely overlooked the *_CONF_ENV
+Fixes:
+http://autobuild.buildroot.net/results/73f/73fcffafbea320f8c64378bbe8a96922b5e7c6b5/
 
-Thanks - Steve
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/squid.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e9e821d..403818a 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -20,7 +20,9 @@ SQUID_CONF_ENV = \
+ 	ac_cv_func_va_copy=yes \
+ 	ac_cv_func___va_copy=yes \
+ 	ac_cv_func_strnstr=no \
+-	ac_cv_have_squid=yes
++	ac_cv_have_squid=yes \
++	ACLOCAL="$(ACLOCAL)" \
++	AUTOMAKE="$(AUTOMAKE)"
+ SQUID_CONF_OPTS = \
+ 	--enable-async-io=8 \
+ 	--enable-linux-netfilter \
