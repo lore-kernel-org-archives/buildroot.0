@@ -1,31 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Jan 2015 22:19:10 +0100
-Subject: [Buildroot] [PATCH v2] xbmc-pvr-addons: Bump version
-In-Reply-To: <1414356597-27279-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414356597-27279-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150112221910.5296b9bb@free-electrons.com>
+Date: Mon, 12 Jan 2015 22:21:44 +0100
+Subject: [Buildroot] [git commit] package/glmark2: Fix mesa3d dependency
+Message-ID: <20150112212151.CE58C80403@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=a5f3db697f37d81b87a99dc3fdce9a6a7f4e0754
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Oct 2014 21:49:57 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
-> v1 -> v2:
->    - The correct cset is the HEAD of the Gotham branch.
-> ---
->  package/xbmc-pvr-addons/xbmc-pvr-addons.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Compilation fails with this defconfig, provided by Thomas
 
-Since this patch was sent, we've switched to Kodi, so I've marked this
-patch as Superseded.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
+BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_GLMARK2=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_RPI_USERLAND=y
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+because rpi-userland is used a provider for libegl/gles.
+Fix this by depending on the corresponding mesa3d suboptions.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glmark2/Config.in |    8 +++-----
+ 1 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+index 2d799fe..65e077b 100644
+--- a/package/glmark2/Config.in
++++ b/package/glmark2/Config.in
+@@ -1,15 +1,13 @@
+ config BR2_PACKAGE_GLMARK2_EGL_GLES
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+-	depends on BR2_PACKAGE_HAS_LIBGLES
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
++	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
+ 
+ config BR2_PACKAGE_GLMARK2_GL
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 
+ comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
+ 	depends on BR2_LARGEFILE
