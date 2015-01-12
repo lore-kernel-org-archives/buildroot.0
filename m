@@ -1,53 +1,62 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Mon, 12 Jan 2015 21:42:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: fix hard float error
-In-Reply-To: <20150112123342.5b5a616c@free-electrons.com>
-References: <1421010259-10281-1-git-send-email-jkrause@posteo.de>
- <20150112123342.5b5a616c@free-electrons.com>
-Message-ID: <1421095338.1971.1.camel@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jan 2015 21:42:33 +0100
+Subject: [Buildroot] [PATCH v2 3/4] dtc: add host build
+In-Reply-To: <1421000166-24963-3-git-send-email-ps.report@gmx.net>
+References: <1421000166-24963-1-git-send-email-ps.report@gmx.net>
+ <1421000166-24963-3-git-send-email-ps.report@gmx.net>
+Message-ID: <20150112214233.3f5edf16@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Peter Seiderer,
 
-On Mo, 2015-01-12 at 12:33 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Sun, 11 Jan 2015 22:04:19 +0100, J?rg Krause wrote:
-> 
-> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > index ad598d9..3389c3c 100644
-> > --- a/package/nodejs/nodejs.mk
-> > +++ b/package/nodejs/nodejs.mk
-> > @@ -56,14 +56,16 @@ else ifeq ($(BR2_mipsel),y)
-> >  NODEJS_CPU = mipsel
-> >  else ifeq ($(BR2_arm),y)
-> >  NODEJS_CPU = arm
-> > -# V8 needs to know what floating point ABI the target is using.  There's also
-> > -# a 'hard' option which we're not exposing here at the moment, because
-> > -# buildroot itself doesn't really support it at present.
-> > +# V8 needs to know what floating point ABI the target is using.
-> > +ifeq ($(BR2_ARM_EABIHF),y)
-> > +NODEJS_ARM_FP = hard
-> > +else
-> >  ifeq ($(BR2_SOFT_FLOAT),y)
-> >  NODEJS_ARM_FP = soft
-> >  else
-> >  NODEJS_ARM_FP = softfp
-> > -endif
-> > +endif # BR2_SOFT_FLOAT
-> > +endif # BR2_ARM_EABIHF
-> >  endif
-> 
-> Why don't we simply do:
-> 
-> NODEJS_ARM_FP = $(BR2_GCC_TARGET_FLOAT_ABI)
+On Sun, 11 Jan 2015 19:16:05 +0100, Peter Seiderer wrote:
 
-Nice, I one-liner :-) Didn't know about BR2_GCC_TARGET_FLOAT_ABI, but
-it's exactly what we need. I submit a second version soon.
+> diff --git a/package/dtc/Config.in.host b/package/dtc/Config.in.host
+> new file mode 100644
+> index 0000000..cbabf0a
+> --- /dev/null
+> +++ b/package/dtc/Config.in.host
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_HOST_DTC
+> +	bool "host dtc"
+> +	help
+> +	  The Device Tree Compiler, dtc, takes as input a device-tree in
+> +	  a given format and outputs a device-tree in another format.
+> +
+> +	  Install host tools: dtc, convert-dtsv0, fdtdump, fdtget and fdtput.
+> +
+> +	  https://git.kernel.org/cgit/utils/dtc/dtc.git
 
-Best regards
-J?rg
+I'd like to understand a bit more how this is going to be used exactly,
+to see whether there is really a need for a menuconfig option for this
+host package. Most host packages are merely build dependencies for
+another package, and as such, don't need to appear in menuconfig.
+
+How is host dtc going to be used in your use case?
+
+> +# host build
+> +HOST_DTC_DEPENDENCIES = host-bison host-flex
+
+Not really needed, those dependencies are automatically inherited from
+DTC_DEPENDENCIES.
+
+> +define HOST_DTC_BUILD_CMDS
+> +	$(HOST_CONFIGURE_OPTS)    \
+> +	CFLAGS="$(HOST_CFLAGS)"   \
+
+Not needed, this definition of CFLAGS is already in
+$(HOST_CONFIGURE_OPTS).
+
+Otherwise, looks good.
+
+Thanks,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
