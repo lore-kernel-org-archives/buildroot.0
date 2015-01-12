@@ -1,71 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Jan 2015 22:17:13 +0100
-Subject: [Buildroot] [PATCH 1/2] linux/linux.mk: added https:// pattern
- for kernel patches
-In-Reply-To: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
-References: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
-Message-ID: <20150112211713.GA9000@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Jan 2015 22:18:27 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/nodejs: fix hard float error
+In-Reply-To: <1421095921-2816-1-git-send-email-jkrause@posteo.de>
+References: <1421095921-2816-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20150112221827.7ed3765d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ivo, All,
+Dear J?rg Krause,
 
-On 2015-01-12 17:37 +0100, Ivo Slanina spake thusly:
-> Patches located at https:// scheme URL were threated as directories,
-> causing build failures.
-> 
-> Fixed by adding https:// pattern.
-> 
-> Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
+On Mon, 12 Jan 2015 21:52:01 +0100, J?rg Krause wrote:
 
-Yep, sounds legit. ;-)
+> +# V8 needs to know what floating point ABI the target is using.
+> +NODEJS_ARM_FP = $(BR2_GCC_TARGET_FLOAT_ABI)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Since this variable is a string, I've added a $(call qstrip,...), for
+good measure. And then applied your patch, thanks!
 
-Regards,
-Yann E. MORIN.
+Since you're looking at nodejs, can you have a look at the thread
+http://lists.busybox.net/pipermail/buildroot/2014-November/112880.html
+(which contains one patch), and send an updated patch series to make
+the necessary modifications? They looked good in principle, but not
+nicely separated in multiple patches.
 
-> ---
->  linux/linux.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 680521c..d02b02b 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -147,7 +147,7 @@ endif # BR2_LINUX_KERNEL_VMLINUX
->  define LINUX_DOWNLOAD_PATCHES
->  	$(if $(LINUX_PATCHES),
->  		@$(call MESSAGE,"Download additional patches"))
-> -	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCHES)),\
-> +	$(foreach patch,$(filter ftp://% http://% https://%,$(LINUX_PATCHES)),\
->  		$(call DOWNLOAD,$(patch))$(sep))
->  endef
->  
-> @@ -155,7 +155,7 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
->  
->  define LINUX_APPLY_PATCHES
->  	for p in $(LINUX_PATCHES) ; do \
-> -		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
-> +		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
->  			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
->  		elif test -d $$p ; then \
->  			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks a lot!
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
