@@ -1,39 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 13 Jan 2015 15:07:44 -0300
-Subject: [Buildroot] [PATCH] geoip: bump to version 1.6.4
-Message-ID: <1421172464-29237-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 13 Jan 2015 19:23:48 +0100
+Subject: [Buildroot] [PATCH 2/2] linux/linux.mk: fixed downloading
+ kernel patches
+In-Reply-To: <54B4F427.7080405@gmail.com>
+References: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
+ <1421080646-26230-2-git-send-email-ivo.slanina@gmail.com>
+ <20150112213812.GB9000@free.fr> <54B4F427.7080405@gmail.com>
+Message-ID: <20150113182348.GA7168@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/geoip/geoip.hash | 2 +-
- package/geoip/geoip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ivo, All,
 
-diff --git a/package/geoip/geoip.hash b/package/geoip/geoip.hash
-index 717bec4..6f1b909 100644
---- a/package/geoip/geoip.hash
-+++ b/package/geoip/geoip.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  8ef059ee3680b39db967248331ec41188f4b45f86a4a77e39247ff41b61efd7c  GeoIP-1.6.2.tar.gz
-+sha256  36b31c9b8447bd0a56a70b651022e918d0a0654e140cc2492948e6f2175ff5b1  GeoIP-1.6.4.tar.gz
-diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
-index 5664f03..0afb4e2 100644
---- a/package/geoip/geoip.mk
-+++ b/package/geoip/geoip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GEOIP_VERSION = 1.6.2
-+GEOIP_VERSION = 1.6.4
- GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
- GEOIP_SITE = https://github.com/maxmind/geoip-api-c/releases/download/v$(GEOIP_VERSION)/
- GEOIP_INSTALL_STAGING = YES
+On 2015-01-13 11:32 +0100, Ivo Slanina spake thusly:
+> On 01/12/2015 10:38 PM, Yann E. MORIN wrote:
+> > Ivo, All,
+> > On 2015-01-12 17:37 +0100, Ivo Slanina spake thusly:
+> >> Patches located at ftp or http(s) URLs were downloaded using DOWNLOAD
+> >> macro. For example, if linux source was located at external git
+> >> repository, DOWNLOAD macro uses git scheme as well and buildroot
+> >> tried to downlod a path using DOWNLOAD_GIT macro. As a result, nothing
+> >> was downloaded and build siletly passes.
+[--SNIP--]
+> > Which still prompts a question: what if the user has patches he want to
+> > download via scp? We do not handle this case for now, right. Should we?
+> 
+> Yes, this is true. Another solution would be to add optional parameter
+> to DOWNLOAD macro in order to force execute scheme="$(call geturischeme,$(1))".
+> 
+> When I get back from my work, I'll send another patch version :)
+
+No need to "fix" your patch: it is just correct, that's why I replied
+with:
+
+> > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Supporting scp would be a new feature, so shouold be done in a separate
+patch. You are welcome to provide such another patch if you want, of
+course! ;-)
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.0.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
