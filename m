@@ -1,45 +1,50 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 13 Jan 2015 20:40:07 +0100
-Subject: [Buildroot] [PATCH v3 7/7] linux: install dtc only in case package
-	host dtc is not selected
-In-Reply-To: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
-References: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1421178007-11877-8-git-send-email-ps.report@gmx.net>
+Date: Tue, 13 Jan 2015 20:49:35 +0100
+Subject: [Buildroot] Fwd: Fwd: Fwd: Fwd: [PATCH v3] linux: add fbtft
+ kernel extension
+Message-ID: <trinity-65dc17c7-9533-4870-8a7e-11cd22cd200f-1421178575629@3capp-gmx-bs51>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suggested by Matthew Weber (see [1]) to avoid double installation
-of host dtc.
+Hello Lou,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-January/117121.html
+On Mon, Jan 12, 2015 at 05:30:22PM -0600, Lou Crittenden wrote:
+> I did another make with TOUCHSCREEN_ADS7846 option as m this time, and now
+> I have the ads7846_device.ko file. I also applied the patch and we'll see
+> how it goes. I hope Thomas P. didn't get you down on that day.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+No the linux kernel CONFIG_TOUCHSCREEN_ADS7846=m buills only the
+'basic' ads7846.ko kernel module. You need the additional
+ads7846_device.ko kernel module which will configure your basic
+ads7846.ko module. Therefore the buildroot patch which will
+build the ads7846_device.ko module for you (and will do the
+right kernel config additions)....
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 8256641..de15650 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -284,13 +284,14 @@ endef
- endif
- 
- 
-+ifeq ($BR2_PACKAGE_HOST_DTC,)
- define LINUX_INSTALL_HOST_TOOLS
- 	# Installing dtc (device tree compiler) as host tool, if selected
- 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
- 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ;	\
- 	fi
- endef
--
-+endif
- 
- define LINUX_INSTALL_IMAGES_CMDS
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
--- 
-2.1.2
+Regards,
+Peter
+
+> 
+> On Mon, Jan 12, 2015 at 4:56 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+> > Hello Lou,
+> >
+> > On Mon, Jan 12, 2015 at 01:48:02AM -0600, Lou Crittenden wrote:
+> > > Oh, I forgot to enable the TOUCHSCREEN_ADS7846 option. Is this [y] or
+> > [m]?
+> > > I chose [y].
+> >
+> > I would chose [m]...but use my patch from [1], it will enable all
+> > kernel-configs automatically...
+> >
+> > You need the ads7846_device.ko module in addition, see [2] or take
+> > a closer look at the patch...
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] http://lists.busybox.net/pipermail/buildroot/2015-January/116799.html
+> > [2] https://github.com/notro/fbtft_tools/wiki/ads7846_device
+> > >
