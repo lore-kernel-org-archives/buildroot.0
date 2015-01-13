@@ -1,44 +1,27 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 13 Jan 2015 18:50:40 +0100
-Subject: [Buildroot] [PATCH] dtc: update source url
-In-Reply-To: <20150112225439.GD9000@free.fr>
-References: <1420964731-10432-1-git-send-email-fabio.porcedda@gmail.com>
- <20150112225439.GD9000@free.fr>
-Message-ID: <CAHkwnC9C4zaMo6FJ53kGo07ZzJ_Y-chQPaQJSSq0sT2Btuqf_Q@mail.gmail.com>
+From: Ravi Chhabra <ravi.chhabra@broadcom.com>
+Date: Tue, 13 Jan 2015 17:54:11 +0000
+Subject: [Buildroot] image size reduction
+Message-ID: <79A788F82B01BC478629DC5CC23739B00275374B@IRVEXCHMB15.corp.ad.broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 12, 2015 at 11:54 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Fabio, All,
->
-> On 2015-01-11 09:25 +0100, Fabio Porcedda spake thusly:
->> The url of the git repository is changed so use the updated one.
->>
->> This fix the error:
->>
->> fatal: unable to connect to git.jdl.com:
->> git.jdl.com[0: 208.123.73.151]: errno=Connection refused
->
-> Yup, it is dead now... :-(
->
-> However, Peter S. has a current series handling the same issue, with
-> further enhancement to dtc:
->     http://patchwork.ozlabs.org/patch/427484/  (fix URL)
->     http://patchwork.ozlabs.org/patch/427483/  (bump)
->     http://patchwork.ozlabs.org/patch/427485/  (host-dtc)
->     http://patchwork.ozlabs.org/patch/427486/  (overlay support)
 
-I've missed that patch set, thanks for letting me know.
+Hi All,
 
-> So, I've marked your patch as Superseded in PAtchwork (even though Peter
-> was asked to do some changes on his series. Care to have a look when he
-> respins? Thanks!
+I am trying to boot linux on quad core Aarch64 system with only 8MB on chip RAM which I plan to use for storage and loading the image.
 
-Sure
+I intend to shrink the size of image file by reducing all possible components and simplifying the build. I am using latest buildroot 14.11 release with ulibc option, no application and minimal busybox options which brought the root filesystem (unzipped cpio) size down to ~3MB which is still quite big.
 
-BR
--- 
-Fabio Porcedda
+I would be interested to reduce the size of kernel as well and further reduce the size of filesystem to reduce the size of image (axf file)
+
+Kindly guide the right way to do that.
+
+Thanks,
+Ravi C
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150113/af48a1f7/attachment.html>
