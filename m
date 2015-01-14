@@ -1,36 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:49:11 +0100
-Subject: [Buildroot] [PATCH v3 0/7] dtc: update and add raspberry pi
- overlay support
-In-Reply-To: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
-References: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150114204911.2158cece@free-electrons.com>
+Date: Wed, 14 Jan 2015 20:50:12 +0100
+Subject: [Buildroot] [git commit] squid: add sysv initscript
+Message-ID: <20150114195016.D892080DE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=141eba419c19edc8e8e1e46a03c12298b71f1445
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 13 Jan 2015 20:40:00 +0100, Peter Seiderer wrote:
+Add SysV-style initscript, complete rewrite from
+http://patchwork.ozlabs.org/patch/412057/
 
-> Peter Seiderer (7):
->   dtc: fix project and download url
->   dtc: rename patches to new convention
->   dtc: bump version to 1.4.1
->   dtc: add hash
+'stop' is handled by squid itself to gracefully (as possible) close
+every pending connection and commit changes to disk. By default this is
+configured for 30 seconds and can be configured via shutdown_lifetime in
+/etc/squid.conf if someone is too anxious.
+The script won't block until squid is properly shutdown - but people
+should _REALLY_ use restart or reload if that's what they want, instead
+of stop+start.
 
-I've applied those four initial patches.
+'restart' is handled by squid itself, since if we do a stop/start cycle
+we must wait for a clean shutdown cycle (takes time).
 
->   dtc: add host build
->   dtc: add patches for raspberry pi overlay support
->   linux: install dtc only in case package host dtc is not selected
+'reload' is also handled by squid itself and it's not the same as
+restart, it will just trigger a configuration reload without purging
+runtime cache (RAM) contents.
 
-I'm not quite decided about those ones yet.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/S97squid |   40 ++++++++++++++++++++++++++++++++++++++++
+ package/squid/squid.mk |    5 +++++
+ 2 files changed, 45 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/squid/S97squid b/package/squid/S97squid
+new file mode 100755
+index 0000000..b30af5b
+--- /dev/null
++++ b/package/squid/S97squid
+@@ -0,0 +1,40 @@
++#!/bin/sh
++
++[ -x /usr/sbin/squid ] || exit 0
++[ -f /etc/squid.conf ] || exit 0
++
++case "$1" in
++  start)
++    echo -n "Starting squid: "
++    if [ ! -d /var/log/squid ]; then
++      mkdir -p /var/log/squid
++      chown squid:squid /var/log/squid
++    fi
++    start-stop-daemon -S -x /usr/sbin/squid
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++
++   stop)
++    echo -n "Stopping squid: "
++    /usr/sbin/squid -k shutdown
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++
++  reload)
++    echo -n "Reloading squid configuration: "
++    /usr/sbin/squid -k reconfigure
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++
++  restart)
++    echo -n "Restarting squid: "
++    /usr/sbin/squid -k restart
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++
++  *)
++    echo "Usage: $0 {start|stop|reload|restart}"
++    exit 1
++esac
++
++exit 0
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 5e2e659..0bf516f 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -65,4 +65,9 @@ define SQUID_USERS
+ 	squid -1 squid -1 * - - - Squid proxy cache
+ endef
+ 
++define SQUID_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/squid/S97squid \
++		$(TARGET_DIR)/etc/init.d/S97squid
++endef
++
+ $(eval $(autotools-package))
