@@ -1,43 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:28:34 +0100
-Subject: [Buildroot] [git commit] rsyslog: enable more basic features
-Message-ID: <20150114192851.547B380DE0@busybox.osuosl.org>
+Date: Wed, 14 Jan 2015 20:26:43 +0100
+Subject: [Buildroot] [git commit] rsyslog: clean up sysv initscript
+Message-ID: <20150114192851.3A7C280DE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e7733e90e18a87dd8248b3284242e8e736a4140
+commit: http://git.buildroot.net/buildroot/commit/?id=7ffa7389af80bd99e5930c0cf2556f47dcb0793a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable all of the basic modules that don't require any dependencies.
-Reasoning is simple, if someone wants rsyslog over a smaller busybox
-logger or sysklogd it's probably looking for features.
-
-[Thomas: fix indentation.]
+Fix indentation, remove redundant comment, print real start/stop status.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rsyslog/rsyslog.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/rsyslog/S01logging |   41 ++++++++++++++++++++---------------------
+ 1 files changed, 20 insertions(+), 21 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index fb5249c..a45111d 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -10,7 +10,12 @@ RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
--RSYSLOG_CONF_OPTS = --disable-generate-man-pages
-+RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
-+	mmanon mmaudit mmfields mmjsonparse mmpstrucdata mmsequence mmutf8fix \
-+	mail omprog omruleset omstdout omuxsock \
-+	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
-+RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
-+	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+diff --git a/package/rsyslog/S01logging b/package/rsyslog/S01logging
+index 0c4bbc7..97d519a 100644
+--- a/package/rsyslog/S01logging
++++ b/package/rsyslog/S01logging
+@@ -1,38 +1,37 @@
+ #!/bin/sh
+-#
+-# Starts rsyslog.
+-#
  
- # Build after BusyBox
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ start() {
+-	echo -n "Starting rsyslog daemon: "
+-	umask 077
+-	start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
+-	echo "OK"
++  echo -n "Starting rsyslog daemon: "
++  umask 077
++  start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
++  [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
++
+ stop() {
+-	echo -n "Stopping rsyslog daemon: "
+-	start-stop-daemon -K -q -p /var/run/rsyslogd.pid
+-	echo "OK"
++  echo -n "Stopping rsyslog daemon: "
++  start-stop-daemon -K -q -p /var/run/rsyslogd.pid
++  [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
++
+ restart() {
+-	stop
+-	start
++  stop
++  sleep 1
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++    ;;
+   stop)
+-	stop
+-	;;
++    stop
++    ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++    ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
+ esac
+ 
+ exit $?
+-
