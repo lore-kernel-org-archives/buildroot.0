@@ -1,32 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 22:05:21 +0100
-Subject: [Buildroot] [git commit] rsyslog: remove pointless umask from sysv
-	initscript
-Message-ID: <20150114211411.C029B80D95@busybox.osuosl.org>
+Date: Wed, 14 Jan 2015 22:07:14 +0100
+Subject: [Buildroot] [git commit] rsyslog: add 'else' clause to mysql and
+	postgresql support
+Message-ID: <20150114211411.E4E9280D95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82e4f72546248b1b9abde9e9babffc7428071180
+commit: http://git.buildroot.net/buildroot/commit/?id=1f902e743e04e3ee0b91a0400fc6f5a0a276af38
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Having 'else' clauses handling the absence of mysql and postgresql
+support to explicitly disable such features helps to avoid
+misdetection of system-installed packages.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rsyslog/S01logging |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/rsyslog/rsyslog.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/rsyslog/S01logging b/package/rsyslog/S01logging
-index 97d519a..6471676 100644
---- a/package/rsyslog/S01logging
-+++ b/package/rsyslog/S01logging
-@@ -2,7 +2,6 @@
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index fe28d2f..1e0953f 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -40,12 +40,16 @@ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ RSYSLOG_DEPENDENCIES += mysql
+ RSYSLOG_CONF_OPTS += --enable-mysql
+ RSYSLOG_CONF_ENV += ac_cv_prog_MYSQL_CONFIG=$(STAGING_DIR)/usr/bin/mysql_config
++else
++RSYSLOG_CONF_OPTS += --disable-mysql
+ endif
  
- start() {
-   echo -n "Starting rsyslog daemon: "
--  umask 077
-   start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
-   [ $? = 0 ] && echo "OK" || echo "FAIL"
- }
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ RSYSLOG_DEPENDENCIES += postgresql
+ RSYSLOG_CONF_OPTS += --enable-pgsql
+ RSYSLOG_CONF_ENV += ac_cv_prog_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
++else
++RSYSLOG_CONF_OPTS += --disable-pgsql
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
