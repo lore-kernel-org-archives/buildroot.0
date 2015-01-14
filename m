@@ -1,33 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 14 Jan 2015 16:48:56 +0100
-Subject: [Buildroot] [git commit] libgtk2: remove redundant INSTALL_TARGET
-Message-ID: <20150114154902.16FF580142@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux/linux.mk: added https:// pattern for
+	kernel patches
+Message-ID: <20150114154902.3613D80142@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33d7aad9f35f027173f08c9bcfd8fc4a6bc90686
+commit: http://git.buildroot.net/buildroot/commit/?id=fc6ee4cadbe39fc5803f3d603b7ab4c3948b1bbc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-INSTALL_TARGET defaults to YES.
+Patches located at https:// scheme URL were threated as directories,
+causing build failures.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixed by adding https:// pattern.
+
+Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ linux/linux.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index eeb56f5..dfc1f5b 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -10,7 +10,6 @@ LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).18
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
- LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_INSTALL_STAGING = YES
--LIBGTK2_INSTALL_TARGET = YES
- LIBGTK2_LICENSE = LGPLv2+
- LIBGTK2_LICENSE_FILES = COPYING
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 680521c..d02b02b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -147,7 +147,7 @@ endif # BR2_LINUX_KERNEL_VMLINUX
+ define LINUX_DOWNLOAD_PATCHES
+ 	$(if $(LINUX_PATCHES),
+ 		@$(call MESSAGE,"Download additional patches"))
+-	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCHES)),\
++	$(foreach patch,$(filter ftp://% http://% https://%,$(LINUX_PATCHES)),\
+ 		$(call DOWNLOAD,$(patch))$(sep))
+ endef
  
+@@ -155,7 +155,7 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+ 
+ define LINUX_APPLY_PATCHES
+ 	for p in $(LINUX_PATCHES) ; do \
+-		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
++		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
+ 			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
+ 		elif test -d $$p ; then \
+ 			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
