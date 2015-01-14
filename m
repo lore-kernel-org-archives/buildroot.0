@@ -1,9 +1,9 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 14 Jan 2015 22:50:24 +0100
-Subject: [Buildroot] [PATCH 2/3] libqmi: bump to 1.12.0
+Date: Wed, 14 Jan 2015 22:50:25 +0100
+Subject: [Buildroot] [PATCH 3/3] libmbim: bump to 1.12.0
 In-Reply-To: <1421272225-5076-1-git-send-email-yegorslists@googlemail.com>
 References: <1421272225-5076-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1421272225-5076-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1421272225-5076-3-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 2 +-
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index a42aebc..df592b1 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index ac9b70c..b082772 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
 @@ -1,2 +1,2 @@
  # Locally computed:
--sha256  963cce068968d749e22973dce0afc05543915e4accea736963a7d426f6b29a80  libqmi-1.10.6.tar.xz
-+sha256  7bf0a5b70a6e8214932ec32c264e59d5290c6bd181fa1341c028a063181f64ff  libqmi-1.12.0.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index dd87d73..7ef1dcf 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
+-sha256  c0f6611c1ea726f8801bdf3316cf3fe31772391cd60945373c4c9d128655c7bc  libmbim-1.10.2.tar.xz
++sha256  b5b9e72d6b0a4d9e5a92b913c16426946f8f6cf60e648635306ebade44ace553  libmbim-1.12.0.tar.xz
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 07fb1b6..fa42d1d 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.10.6
-+LIBQMI_VERSION = 1.12.0
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+-LIBMBIM_VERSION = 1.10.2
++LIBMBIM_VERSION = 1.12.0
+ LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
 -- 
 2.1.0
