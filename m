@@ -1,26 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 16:54:45 +0100
-Subject: [Buildroot] [PATCH 1/3] botan: remove redundant INSTALL_TARGET
-In-Reply-To: <b6614b5357753ff8a3580e80936d8fd19e0857bd.1421152567.git.baruch@tkos.co.il>
-References: <b6614b5357753ff8a3580e80936d8fd19e0857bd.1421152567.git.baruch@tkos.co.il>
-Message-ID: <20150114165445.58c41293@free-electrons.com>
+Date: Wed, 14 Jan 2015 16:54:59 +0100
+Subject: [Buildroot] [PATCH] bootstrap: install production files only
+In-Reply-To: <1421105437-14443-1-git-send-email-yegorslists@googlemail.com>
+References: <1421105437-14443-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20150114165459.5a80b811@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Yegor Yefremov,
 
-On Tue, 13 Jan 2015 14:36:05 +0200, Baruch Siach wrote:
-> INSTALL_TARGET defaults to YES.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Tue, 13 Jan 2015 00:30:37 +0100, Yegor Yefremov wrote:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/botan/botan.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  package/bootstrap/bootstrap.mk | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 
-All three patches applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
