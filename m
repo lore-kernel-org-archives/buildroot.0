@@ -1,51 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 22:03:16 +0100
-Subject: [Buildroot] [PATCH V2] dvdauthor : new package
-In-Reply-To: <54B47B2C.1010504@ou.edu>
-References: <54B47B2C.1010504@ou.edu>
-Message-ID: <20150114220316.49b1e5b6@free-electrons.com>
+Date: Wed, 14 Jan 2015 22:03:55 +0100
+Subject: [Buildroot] [git commit] python-pyinotify: new package
+Message-ID: <20150114210448.1577880DE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+commit: http://git.buildroot.net/buildroot/commit/?id=52620d1eac198145c1a1abc97ddac3d7513e0673
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Jan 2015 19:55:56 -0600, Steve Kenton wrote:
-> DVDAuthor is a set of tools to help you author the file and directory
-> structure of a DVD-Video disc, including programmatic commands for
-> implementing interactive behaviour. It is driven by command lines and
-> XML control files, though there are other programs that provide
-> GUI-based front ends if you prefer
-> 	
-> Note - Despite lack of a version bump the two line gentoo
-> patch to src/spuunmux.c against "stock" dvdauthor-0.7.1
->     if (setjmp(png_ptr->jmpbuf))
->     if (setjmp(png_jmpbuf(png_ptr)))
-> # to allow use of libpng15/16 is already applied to downloadable
-> # dvdauthor-0.7.1.tar.gz
-> 
-> http://dvdauthor.sourceforge.net
-> 
-> Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                              |    1 +
+ package/python-pyinotify/Config.in             |    6 ++++++
+ package/python-pyinotify/python-pyinotify.hash |    2 ++
+ package/python-pyinotify/python-pyinotify.mk   |   13 +++++++++++++
+ 4 files changed, 22 insertions(+), 0 deletions(-)
 
-Thanks, applied, after doing a number of changes:
-
-[Thomas:
- - Make the libdvdread dependency optional: it is only needed for the
-   dvdunauthor program, which can be disabled using a configure
-   option. So a separate Config.in option was added for dvdunauthor.
- - Adjust license to GPLv2+, as can be seen in the source code itself.
- - Add optional dependency on fontconfig and imagemagick. Make sure we
-   don't pick up a host installed GraphicsMagick (which is different
-   from ImageMagick!)
- - Add a hash file.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 77f0823..0299830 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -535,6 +535,7 @@ menu "external python modules"
+ 	source "package/python-pycrypto/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
++	source "package/python-pyinotify/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyro/Config.in"
+diff --git a/package/python-pyinotify/Config.in b/package/python-pyinotify/Config.in
+new file mode 100644
+index 0000000..b3e74e1
+--- /dev/null
++++ b/package/python-pyinotify/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYINOTIFY
++	bool "python-pyinotify"
++	help
++	  Monitoring filesystems events with inotify on Linux.
++
++	  https://github.com/seb-m/pyinotify
+diff --git a/package/python-pyinotify/python-pyinotify.hash b/package/python-pyinotify/python-pyinotify.hash
+new file mode 100644
+index 0000000..a51718d
+--- /dev/null
++++ b/package/python-pyinotify/python-pyinotify.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  d22d94e5f1dfd19ff2f98b9bb9b31a869892652389b8f5c0a27c7de77550b1e4  python-pyinotify-0.9.5.tar.gz
+diff --git a/package/python-pyinotify/python-pyinotify.mk b/package/python-pyinotify/python-pyinotify.mk
+new file mode 100644
+index 0000000..e43dcd0
+--- /dev/null
++++ b/package/python-pyinotify/python-pyinotify.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pyinotify
++#
++################################################################################
++
++PYTHON_PYINOTIFY_VERSION = 0.9.5
++PYTHON_PYINOTIFY_SITE = $(call github,seb-m,pyinotify,$(PYTHON_PYINOTIFY_VERSION))
++PYTHON_PYINOTIFY_SETUP_TYPE = setuptools
++PYTHON_PYINOTIFY_LICENSE = MIT
++PYTHON_PYINOTIFY_LICENSE_FILES = COPYING
++
++$(eval $(python-package))
