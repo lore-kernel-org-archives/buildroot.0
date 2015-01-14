@@ -1,55 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 11:08:06 +0100
-Subject: [Buildroot] image size reduction
-In-Reply-To: <79A788F82B01BC478629DC5CC23739B00275374B@IRVEXCHMB15.corp.ad.broadcom.com>
-References: <79A788F82B01BC478629DC5CC23739B00275374B@IRVEXCHMB15.corp.ad.broadcom.com>
-Message-ID: <20150114110806.36e883b4@free-electrons.com>
+From: Steve James <ste@junkomatic.net>
+Date: Wed, 14 Jan 2015 14:58:44 +0000
+Subject: [Buildroot] [PATCH] libcli: new package
+Message-ID: <1421247524-29918-1-git-send-email-ste@junkomatic.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ravi Chhabra,
+Libcli provides a shared library for including a Cisco-like command-
+line interface into other software. It's a telnet interface which
+supports command-line editing, history, authentication and callbacks
+for a user-definable function tree.
 
-On Tue, 13 Jan 2015 17:54:11 +0000, Ravi Chhabra wrote:
+Signed-off-by: Steve James <ste@junkomatic.net>
+---
+ package/Config.in        |  1 +
+ package/libcli/Config.in | 10 ++++++++++
+ package/libcli/libcli.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 package/libcli/Config.in
+ create mode 100644 package/libcli/libcli.mk
 
-> I am trying to boot linux on quad core Aarch64 system with only 8MB
-> on chip RAM which I plan to use for storage and loading the image.
-
-Great to see people using Buildroot to bring up AArch64 systems!
-
-> I intend to shrink the size of image file by reducing all possible
-> components and simplifying the build. I am using latest buildroot
-> 14.11 release with ulibc option, no application and minimal busybox
-> options which brought the root filesystem (unzipped cpio) size down
-> to ~3MB which is still quite big.
-
-Well, 3 MB is generally considered quite small for a Linux root
-filesystem. Here is what I could propose to further reduce the size:
-
- * Tune the Busybox configuration, to reduce the size of the Busybox
-   binary. Run 'make busybox-menuconfig', and disable all applets you
-   don't use.
-
- * Enable BR2_STATIC_LIBS=y (was named BR2_PREFER_STATIC_LIB=y). This
-   way, Busybox will be linked statically, and you won't have any C
-   library on your target.
-
-However, I'm a bit surprised: how do you have uClibc support for
-AArch64 ? Or are you building an ARMv7 root filesystem ?
-
-> I would be interested to reduce the size of kernel as well and
-> further reduce the size of filesystem to reduce the size of image
-> (axf file)
-
-Well, for the kernel, just adjust your kernel configuration and remove
-stuff, I believe it's quite obvious.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/package/Config.in b/package/Config.in
+index f866c0d..7bd31e8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -964,6 +964,7 @@ endmenu
+ menu "Text and terminal handling"
+ 	source "package/enchant/Config.in"
+ 	source "package/icu/Config.in"
++	source "package/libcli/Config.in"
+ 	source "package/libedit/Config.in"
+ 	source "package/libenca/Config.in"
+ 	source "package/libestr/Config.in"
+diff --git a/package/libcli/Config.in b/package/libcli/Config.in
+new file mode 100644
+index 0000000..41d022e
+--- /dev/null
++++ b/package/libcli/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBCLI
++	bool "libcli"
++	help
++	  Libcli provides a shared library for including a Cisco-like command-
++	  line interface into other software. It's a telnet interface which
++	  supports command-line editing, history, authentication and callbacks
++	  for a user-definable function tree.
++
++	  http://sites.dparrish.com/libcli
++
+diff --git a/package/libcli/libcli.mk b/package/libcli/libcli.mk
+new file mode 100644
+index 0000000..17eed79
+--- /dev/null
++++ b/package/libcli/libcli.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# libcli
++#
++################################################################################
++
++LIBCLI_VERSION = c63c9d35144939c8b4fa3c5394aed2e29ff517b0
++LIBCLI_SITE = $(call github,dparrish,libcli,$(LIBCLI_VERSION))
++LIBCLI_LICENSE = LGPLv2.1
++LIBCLI_LICENSE_FILES = COPYING
++LIBCLI_INSTALL_STAGING = YES
++
++# We will pass optimisation level via CFLAGS so remove libcli default
++LIBCLI_MAKE_ARGS += OPTIM=
++
++# We can't run the test harness
++LIBCLI_MAKE_ARGS += TESTS=
++
++# Disable the static library for shared only build
++ifeq ($(BR2_SHARED_LIBS),y)
++LIBCLI_MAKE_ARGS += STATIC_LIB=
++endif
++
++# Disable the shared library for static only build
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBCLI_MAKE_ARGS += DYNAMIC_LIB=
++endif
++
++define LIBCLI_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
++		$(LIBCLI_MAKE_ARGS)
++endef
++
++define LIBCLI_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
++		$(LIBCLI_MAKE_ARGS) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
++endef
++
++define LIBCLI_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
++		$(LIBCLI_MAKE_ARGS) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
