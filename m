@@ -1,47 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:51:51 +0100
-Subject: [Buildroot] [PATCH 2/2] squid: add sysv initscript
-In-Reply-To: <1421262884-5512-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1421262884-5512-1-git-send-email-gustavo@zacarias.com.ar>
- <1421262884-5512-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150114205151.18568a75@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 14 Jan 2015 21:11:06 +0100
+Subject: [Buildroot] [PATCH] python-pyinotify: new package
+Message-ID: <1421266266-3299-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                              |  1 +
+ package/python-pyinotify/Config.in             |  6 ++++++
+ package/python-pyinotify/python-pyinotify.hash |  2 ++
+ package/python-pyinotify/python-pyinotify.mk   | 13 +++++++++++++
+ 4 files changed, 22 insertions(+)
+ create mode 100644 package/python-pyinotify/Config.in
+ create mode 100644 package/python-pyinotify/python-pyinotify.hash
+ create mode 100644 package/python-pyinotify/python-pyinotify.mk
 
-On Wed, 14 Jan 2015 16:14:44 -0300, Gustavo Zacarias wrote:
-
-> diff --git a/package/squid/S97squid b/package/squid/S97squid
-> new file mode 100755
-> index 0000000..b30af5b
-> --- /dev/null
-> +++ b/package/squid/S97squid
-> @@ -0,0 +1,40 @@
-> +#!/bin/sh
-> +
-> +[ -x /usr/sbin/squid ] || exit 0
-> +[ -f /etc/squid.conf ] || exit 0
-
-I must say I'm not very happy with those "if something is missing,
-let's bail out silently" tests. We're doing the same in other init
-scripts (as we discussed on IRC), but I think we should probably
-rethink that a bit, and at least display an error message.
-
-Also, checking for /usr/sbin/squid sound a bit silly, since the init
-script is installed by the squid package, which also has installed the
-squid binary.
-
-I've nonetheless applied. Follow-up patches welcome, maybe as part of a
-more global overhaul of our init scripts.
-
-Thanks,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 7bd31e8..5f6d782 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -534,6 +534,7 @@ menu "external python modules"
+ 	source "package/python-pycrypto/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
++	source "package/python-pyinotify/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyro/Config.in"
+diff --git a/package/python-pyinotify/Config.in b/package/python-pyinotify/Config.in
+new file mode 100644
+index 0000000..b3e74e1
+--- /dev/null
++++ b/package/python-pyinotify/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PYINOTIFY
++	bool "python-pyinotify"
++	help
++	  Monitoring filesystems events with inotify on Linux.
++
++	  https://github.com/seb-m/pyinotify
+diff --git a/package/python-pyinotify/python-pyinotify.hash b/package/python-pyinotify/python-pyinotify.hash
+new file mode 100644
+index 0000000..a51718d
+--- /dev/null
++++ b/package/python-pyinotify/python-pyinotify.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  d22d94e5f1dfd19ff2f98b9bb9b31a869892652389b8f5c0a27c7de77550b1e4  python-pyinotify-0.9.5.tar.gz
+diff --git a/package/python-pyinotify/python-pyinotify.mk b/package/python-pyinotify/python-pyinotify.mk
+new file mode 100644
+index 0000000..e43dcd0
+--- /dev/null
++++ b/package/python-pyinotify/python-pyinotify.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pyinotify
++#
++################################################################################
++
++PYTHON_PYINOTIFY_VERSION = 0.9.5
++PYTHON_PYINOTIFY_SITE = $(call github,seb-m,pyinotify,$(PYTHON_PYINOTIFY_VERSION))
++PYTHON_PYINOTIFY_SETUP_TYPE = setuptools
++PYTHON_PYINOTIFY_LICENSE = MIT
++PYTHON_PYINOTIFY_LICENSE_FILES = COPYING
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
