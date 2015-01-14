@@ -1,23 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Jan 2015 15:33:58 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.4.11
-In-Reply-To: <20150114165731.29a53c1a@free-electrons.com>
-References: <1421229527-836-1-git-send-email-gustavo@zacarias.com.ar>
- <20150114165731.29a53c1a@free-electrons.com>
-Message-ID: <54B6B696.6050102@zacarias.com.ar>
+Date: Wed, 14 Jan 2015 16:14:43 -0300
+Subject: [Buildroot] [PATCH 1/2] squid: create a user/group
+Message-ID: <1421262884-5512-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/14/2015 12:57 PM, Thomas Petazzoni wrote:
+Even though squid uses nobody/nogroup it ain't good for security if
+every daemon around uses it, specially since squid is used as a caching
+proxy most of the time and that would mean other daemons/scripts run as
+nobody would have access to potentially sensitive information.
 
-> Since you're looking at squid, could you please look at
-> http://patchwork.ozlabs.org/patch/412057/, and maybe resend an updated
-> version with the appropriate fixes?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I'll try to cook up something generic, but squid is a complicated beast
-to say the least (i.e. can't set runtime user outside the config for
-example, store dirs must be pre-initialized and so on).
-Regards.
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index c8d7417..5e2e659 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -39,7 +39,8 @@ SQUID_CONF_OPTS = \
+ 	--with-logdir=/var/log/squid/ \
+ 	--with-pidfile=/var/run/squid.pid \
+ 	--with-swapdir=/var/cache/squid/ \
+-	--enable-icap-client
++	--enable-icap-client \
++	--with-default-user=squid
+ 
+ # On uClibc librt needs libpthread
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
+@@ -60,4 +61,8 @@ endef
+ 
+ SQUID_POST_INSTALL_TARGET_HOOKS += SQUID_CLEANUP_TARGET
+ 
++define SQUID_USERS
++	squid -1 squid -1 * - - - Squid proxy cache
++endef
++
+ $(eval $(autotools-package))
+-- 
+2.0.5
