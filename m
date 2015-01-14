@@ -1,99 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Jan 2015 16:14:44 -0300
-Subject: [Buildroot] [PATCH 2/2] squid: add sysv initscript
-In-Reply-To: <1421262884-5512-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1421262884-5512-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1421262884-5512-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Jan 2015 20:26:25 +0100
+Subject: [Buildroot] [git commit] rsyslog: rename sysv initscript to
+	S01logging
+Message-ID: <20150114192851.31B4980DE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add SysV-style initscript, complete rewrite from
-http://patchwork.ozlabs.org/patch/412057/
+commit: http://git.buildroot.net/buildroot/commit/?id=3f74996c1e168f5ab910033e5f7f3039e3831d58
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-'stop' is handled by squid itself to gracefully (as possible) close
-every pending connection and commit changes to disk. By default this is
-configured for 30 seconds and can be configured via shutdown_lifetime in
-/etc/squid.conf if someone is too anxious.
-The script won't block until squid is properly shutdown - but people
-should _REALLY_ use restart or reload if that's what they want, instead
-of stop+start.
-
-'restart' is handled by squid itself, since if we do a stop/start cycle
-we must wait for a clean shutdown cycle (takes time).
-
-'reload' is also handled by squid itself and it's not the same as
-restart, it will just trigger a configuration reload without purging
-runtime cache (RAM) contents.
+Do it to avoid having duplicate and conflicting functionality with
+busybox's S01logging.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/S97squid | 40 ++++++++++++++++++++++++++++++++++++++++
- package/squid/squid.mk |  5 +++++
- 2 files changed, 45 insertions(+)
- create mode 100755 package/squid/S97squid
+ package/rsyslog/{S01rsyslog => S01logging} |    0
+ package/rsyslog/rsyslog.mk                 |    4 ++--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/S97squid b/package/squid/S97squid
-new file mode 100755
-index 0000000..b30af5b
---- /dev/null
-+++ b/package/squid/S97squid
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+
-+[ -x /usr/sbin/squid ] || exit 0
-+[ -f /etc/squid.conf ] || exit 0
-+
-+case "$1" in
-+  start)
-+    echo -n "Starting squid: "
-+    if [ ! -d /var/log/squid ]; then
-+      mkdir -p /var/log/squid
-+      chown squid:squid /var/log/squid
-+    fi
-+    start-stop-daemon -S -x /usr/sbin/squid
-+    [ $? = 0 ] && echo "OK" || echo "FAIL"
-+    ;;
-+
-+   stop)
-+    echo -n "Stopping squid: "
-+    /usr/sbin/squid -k shutdown
-+    [ $? = 0 ] && echo "OK" || echo "FAIL"
-+    ;;
-+
-+  reload)
-+    echo -n "Reloading squid configuration: "
-+    /usr/sbin/squid -k reconfigure
-+    [ $? = 0 ] && echo "OK" || echo "FAIL"
-+    ;;
-+
-+  restart)
-+    echo -n "Restarting squid: "
-+    /usr/sbin/squid -k restart
-+    [ $? = 0 ] && echo "OK" || echo "FAIL"
-+    ;;
-+
-+  *)
-+    echo "Usage: $0 {start|stop|reload|restart}"
-+    exit 1
-+esac
-+
-+exit 0
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 5e2e659..0bf516f 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -65,4 +65,9 @@ define SQUID_USERS
- 	squid -1 squid -1 * - - - Squid proxy cache
+diff --git a/package/rsyslog/S01rsyslog b/package/rsyslog/S01logging
+similarity index 100%
+rename from package/rsyslog/S01rsyslog
+rename to package/rsyslog/S01logging
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 688a335..27a72da 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -39,8 +39,8 @@ else
+ endif
+ 
+ define RSYSLOG_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D package/rsyslog/S01rsyslog \
+-		$(TARGET_DIR)/etc/init.d/S01rsyslog
++	$(INSTALL) -m 0755 -D package/rsyslog/S01logging \
++		$(TARGET_DIR)/etc/init.d/S01logging
  endef
  
-+define SQUID_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D package/squid/S97squid \
-+		$(TARGET_DIR)/etc/init.d/S97squid
-+endef
-+
- $(eval $(autotools-package))
--- 
-2.0.5
+ define RSYSLOG_INSTALL_INIT_SYSTEMD
