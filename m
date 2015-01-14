@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:24:34 +0100
-Subject: [Buildroot] [git commit] libestr: bump to version 0.1.10
-Message-ID: <20150114192851.1D90680DE0@busybox.osuosl.org>
+Date: Wed, 14 Jan 2015 20:28:34 +0100
+Subject: [Buildroot] [git commit] rsyslog: enable more basic features
+Message-ID: <20150114192851.547B380DE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e3dc8f9de561e81a2804149cd9bf3a32788e6e0
+commit: http://git.buildroot.net/buildroot/commit/?id=0e7733e90e18a87dd8248b3284242e8e736a4140
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+Enable all of the basic modules that don't require any dependencies.
+Reasoning is simple, if someone wants rsyslog over a smaller busybox
+logger or sysklogd it's probably looking for features.
+
+[Thomas: fix indentation.]
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libestr/libestr.hash |    2 ++
- package/libestr/libestr.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/rsyslog/rsyslog.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/libestr/libestr.hash b/package/libestr/libestr.hash
-new file mode 100644
-index 0000000..e37cbb1
---- /dev/null
-+++ b/package/libestr/libestr.hash
-@@ -0,0 +1,2 @@
-+# From http://libestr.adiscon.com/download/libestr-0-1-10/
-+sha256	bd655e126e750edd18544b88eb1568d200a424a0c23f665eb14bbece07ac703c	libestr-0.1.10.tar.gz
-diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
-index d5ff986..e9783d3 100644
---- a/package/libestr/libestr.mk
-+++ b/package/libestr/libestr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index fb5249c..a45111d 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -10,7 +10,12 @@ RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+ RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
+ RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
+-RSYSLOG_CONF_OPTS = --disable-generate-man-pages
++RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
++	mmanon mmaudit mmfields mmjsonparse mmpstrucdata mmsequence mmutf8fix \
++	mail omprog omruleset omstdout omuxsock \
++	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
++RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
++	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
  
--LIBESTR_VERSION = 0.1.9
-+LIBESTR_VERSION = 0.1.10
- LIBESTR_SITE = http://libestr.adiscon.com/files/download
- LIBESTR_LICENSE = LGPLv2.1+
- LIBESTR_LICENSE_FILES = COPYING
+ # Build after BusyBox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
