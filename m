@@ -1,110 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Jan 2015 19:05:57 -0300
-Subject: [Buildroot] [PATCH] gd: bump to version 2.1.1
-Message-ID: <1421273157-2423-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Jan 2015 23:06:28 +0100
+Subject: [Buildroot] [PATCH v2 1/3] gpu-amd-bin-mx51: new package
+In-Reply-To: <1417252360-10929-2-git-send-email-jezz@sysmic.org>
+References: <1417252360-10929-1-git-send-email-jezz@sysmic.org>
+ <1417252360-10929-2-git-send-email-jezz@sysmic.org>
+Message-ID: <20150114230628.4a382640@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
-Remove CVE patch since it's upstream.
-Rename patches to new naming convention.
-Kill some whitespace.
+Dear J?r?me Pouiller,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...-gdlib-config.patch => 0001-gdlib-config.patch} |  0
- .../gd/{gd-02-no-zlib.patch => 0002-no-zlib.patch} |  0
- ...tch => 0003-gd_bmp-fix-build-with-uClibc.patch} |  0
- package/gd/gd-04-CVE-2014-2497.patch               | 33 ----------------------
- package/gd/gd.hash                                 |  2 ++
- package/gd/gd.mk                                   |  3 +-
- 6 files changed, 3 insertions(+), 35 deletions(-)
- rename package/gd/{gd-01-gdlib-config.patch => 0001-gdlib-config.patch} (100%)
- rename package/gd/{gd-02-no-zlib.patch => 0002-no-zlib.patch} (100%)
- rename package/gd/{gd-03-gd_bmp-fix-build-with-uClibc.patch => 0003-gd_bmp-fix-build-with-uClibc.patch} (100%)
- delete mode 100644 package/gd/gd-04-CVE-2014-2497.patch
- create mode 100644 package/gd/gd.hash
+On Sat, 29 Nov 2014 10:12:38 +0100, J?r?me Pouiller wrote:
+> Freescale libraries, headers and executables for the
+> AMD GPU on the i.MX51, containing OpenGL/ES, OpenVG
+> and EGL support.
+> 
+> Tested using:
+>     mx5loco_defconfig:
+>     BR2_TOOLCHAIN_EXTERNAL=y
+>     BR2_PACKAGE_QT5=y
+>     BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>     BR2_PACKAGE_QT5BASE_EXAMPLES=y
+>     BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+>     BR2_PACKAGE_QT5BASE_EGLFS=y
+>     BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+>     BR2_PACKAGE_QT5BASE_GIF=y
+>     BR2_PACKAGE_QT5BASE_JPEG=y
+>     BR2_PACKAGE_QT5BASE_PNG=y
+>     BR2_PACKAGE_QT5QUICKCONTROLS=y
+>     BR2_PACKAGE_FREESCALE_IMX=y
+>     BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53=y
+>     BR2_PACKAGE_GPU_AMD_BIN_MX51=y
+> 
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-diff --git a/package/gd/gd-01-gdlib-config.patch b/package/gd/0001-gdlib-config.patch
-similarity index 100%
-rename from package/gd/gd-01-gdlib-config.patch
-rename to package/gd/0001-gdlib-config.patch
-diff --git a/package/gd/gd-02-no-zlib.patch b/package/gd/0002-no-zlib.patch
-similarity index 100%
-rename from package/gd/gd-02-no-zlib.patch
-rename to package/gd/0002-no-zlib.patch
-diff --git a/package/gd/gd-03-gd_bmp-fix-build-with-uClibc.patch b/package/gd/0003-gd_bmp-fix-build-with-uClibc.patch
-similarity index 100%
-rename from package/gd/gd-03-gd_bmp-fix-build-with-uClibc.patch
-rename to package/gd/0003-gd_bmp-fix-build-with-uClibc.patch
-diff --git a/package/gd/gd-04-CVE-2014-2497.patch b/package/gd/gd-04-CVE-2014-2497.patch
-deleted file mode 100644
-index d30bfbb..0000000
---- a/package/gd/gd-04-CVE-2014-2497.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 463c3bd09bfe8e924e19acad7a2a6af16953a704 Mon Sep 17 00:00:00 2001
--From: Remi Collet <fedora@famillecollet.com>
--Date: Mon, 4 Aug 2014 10:31:25 +0200
--Subject: [PATCH] CVE-2014-2497, NULL pointer dereference, fix #126
--
-----
-- src/gdxpm.c | 10 ++++++++++
-- 1 file changed, 10 insertions(+)
--
--diff --git a/src/gdxpm.c b/src/gdxpm.c
--index ae6e336..15603a6 100644
----- a/src/gdxpm.c
--+++ b/src/gdxpm.c
--@@ -83,6 +83,16 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromXpm(char *filename)
-- 	if(overflow2(sizeof(int), number)) {
-- 		goto done;
-- 	}
--+	for(i = 0; i < number; i++) {
--+		/*
--+		   avoid NULL pointer dereference
--+		   TODO better fix need to manage monochrome/monovisual
--+		   see m_color or g4_color or g_color
--+		*/
--+		if (!image.colorTable[i].c_color) {
--+			goto done;
--+		}
--+	}
-- 
-- 	colors = (int *)gdMalloc(sizeof(int) * number);
-- 	if(colors == NULL) {
---- 
--1.8.5.2
--
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-new file mode 100644
-index 0000000..8edbb1a
---- /dev/null
-+++ b/package/gd/gd.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	9ada1ed45594abc998ebc942cef12b032fbad672e73efc22bc9ff54f5df2b285	libgd-2.1.1.tar.xz
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index d7a6512..2991cd5 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--GD_VERSION = 2.1.0
-+GD_VERSION = 2.1.1
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://bitbucket.org/libgd/gd-libgd/downloads
- GD_INSTALL_STAGING = YES
- GD_LICENSE = GD license
- GD_LICENSE_FILES = COPYING
--
- GD_CONFIG_SCRIPTS = gdlib-config
- GD_CONF_OPTS = --without-x --disable-rpath
- GD_DEPENDENCIES = host-pkgconf
+Thanks, applied. I only did some minor Config.in formatting cleanup
+when applying.
+
+Thanks!
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
