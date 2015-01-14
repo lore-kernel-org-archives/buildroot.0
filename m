@@ -1,30 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 14 Jan 2015 22:15:02 +0100
-Subject: [Buildroot] Using a local kernel tarball?
-In-Reply-To: <20150113131925.58ca1219@black>
-References: <20150113131925.58ca1219@black>
-Message-ID: <18C83A04-432F-4D73-ADAC-ED64715C267E@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Jan 2015 22:15:49 +0100
+Subject: [Buildroot] [PATCH 1/2] rsyslog: remove pointless umask from
+ sysv initscript
+In-Reply-To: <1421266617-9201-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1421266617-9201-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150114221549.5f12df01@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bill,
+Dear Gustavo Zacarias,
 
-On January 13, 2015 8:19:25 PM CET, Bill Borton <security@conwin.com> wrote:
->Hi guys,
->
->It would appear I can use a local directory, repository or a custom
->tarball URL... but not a local tarball?
->
->If my kernel src is in say
->buildroot/boards/company/product/kernel.tar.bz how do I tell Buildroot
->to use it?
->
->I'm betting I've missed something obvious...
+On Wed, 14 Jan 2015 17:16:56 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/rsyslog/S01logging | 1 -
+>  1 file changed, 1 deletion(-)
 
-Use file:// as URL prefix to point to a local file...
+Thanks, both patches applied. I've added 3 more patches on top to do
+some further minor cleanup/improvements in rsyslog.mk.
 
-Best regards,
+Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
