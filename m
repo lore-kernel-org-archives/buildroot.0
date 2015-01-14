@@ -1,29 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:31:33 +0100
-Subject: [Buildroot] [PATCH 7/7] rsyslog: enable more basic features
-In-Reply-To: <1421191022-5509-7-git-send-email-gustavo@zacarias.com.ar>
-References: <1421191022-5509-1-git-send-email-gustavo@zacarias.com.ar>
- <1421191022-5509-7-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150114203133.039c18be@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Jan 2015 16:33:58 -0300
+Subject: [Buildroot] [PATCH 3/7] rsyslog: rename sysv initscript to
+	S01logging
+In-Reply-To: <20150114203051.513c370c@free-electrons.com>
+References: <1421191022-5509-1-git-send-email-gustavo@zacarias.com.ar>	<1421191022-5509-3-git-send-email-gustavo@zacarias.com.ar>
+ <20150114203051.513c370c@free-electrons.com>
+Message-ID: <54B6C4A6.6010204@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 01/14/2015 04:30 PM, Thomas Petazzoni wrote:
+> To be honest, I wasn't really sure whether the right approach to handle
+> this issue was to rename the init script as you did, or to have rsyslog
+> explicitly remove S01logging when Busybox is enabled.
+> 
+> Since the rest of patch series was doing some cleanup on the renamed
+> S01logging, I decided to take your approach, but I must say I wasn't
+> entirely sure on how to handle this.
+> 
+> Comments from others are welcome, I don't consider the proposed
+> solution to be set in stone.
 
-On Tue, 13 Jan 2015 20:17:02 -0300, Gustavo Zacarias wrote:
-
-> +RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
-> +		$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
-
-Only one tab on the second line. I fixed that when applying.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+It's the best deterministic option we've got, rsyslog builds after
+busybox (famous dependency trickery) but then again there's no clear
+winner with sysklogd (the default shell dilemma).
+We could throw an option for logger, but i think that would be crowding
+things a little.
+I'm not opposed to it or other solutions though.
+Regards.
