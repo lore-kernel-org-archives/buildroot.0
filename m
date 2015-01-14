@@ -1,84 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:26:43 +0100
-Subject: [Buildroot] [git commit] rsyslog: clean up sysv initscript
-Message-ID: <20150114192851.3A7C280DE0@busybox.osuosl.org>
+Date: Wed, 14 Jan 2015 20:29:35 +0100
+Subject: [Buildroot] [PATCH 1/7] libestr: bump to version 0.1.10
+In-Reply-To: <1421191022-5509-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1421191022-5509-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150114202935.2aac09ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ffa7389af80bd99e5930c0cf2556f47dcb0793a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Fix indentation, remove redundant comment, print real start/stop status.
+On Tue, 13 Jan 2015 20:16:56 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libestr/libestr.hash | 2 ++
+>  package/libestr/libestr.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/libestr/libestr.hash
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rsyslog/S01logging |   41 ++++++++++++++++++++---------------------
- 1 files changed, 20 insertions(+), 21 deletions(-)
+I've applied the entire patch series, but I'll make a few comments on
+certain patches.
 
-diff --git a/package/rsyslog/S01logging b/package/rsyslog/S01logging
-index 0c4bbc7..97d519a 100644
---- a/package/rsyslog/S01logging
-+++ b/package/rsyslog/S01logging
-@@ -1,38 +1,37 @@
- #!/bin/sh
--#
--# Starts rsyslog.
--#
- 
- start() {
--	echo -n "Starting rsyslog daemon: "
--	umask 077
--	start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
--	echo "OK"
-+  echo -n "Starting rsyslog daemon: "
-+  umask 077
-+  start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
-+  [ $? = 0 ] && echo "OK" || echo "FAIL"
- }
-+
- stop() {
--	echo -n "Stopping rsyslog daemon: "
--	start-stop-daemon -K -q -p /var/run/rsyslogd.pid
--	echo "OK"
-+  echo -n "Stopping rsyslog daemon: "
-+  start-stop-daemon -K -q -p /var/run/rsyslogd.pid
-+  [ $? = 0 ] && echo "OK" || echo "FAIL"
- }
-+
- restart() {
--	stop
--	start
-+  stop
-+  sleep 1
-+  start
- }
- 
- case "$1" in
-   start)
--	start
--	;;
-+    start
-+    ;;
-   stop)
--	stop
--	;;
-+    stop
-+    ;;
-   restart|reload)
--	restart
--	;;
-+    restart
-+    ;;
-   *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
-+    echo "Usage: $0 {start|stop|restart}"
-+    exit 1
- esac
- 
- exit $?
--
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
