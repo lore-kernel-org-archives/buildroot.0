@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 16:55:15 +0100
-Subject: [Buildroot] [PATCH 1/2] linux/linux.mk: added https:// pattern
- for kernel patches
-In-Reply-To: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
-References: <1421080646-26230-1-git-send-email-ivo.slanina@gmail.com>
-Message-ID: <20150114165515.04be4ac9@free-electrons.com>
+Date: Wed, 14 Jan 2015 16:55:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libftdi: rename patches to the
+ new naming convention
+In-Reply-To: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+References: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150114165541.7d46ed7e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ivo Slanina,
+Dear Samuel Martin,
 
-On Mon, 12 Jan 2015 17:37:25 +0100, Ivo Slanina wrote:
-> Patches located at https:// scheme URL were threated as directories,
-> causing build failures.
-> 
-> Fixed by adding https:// pattern.
-> 
-> Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
+On Mon, 12 Jan 2015 22:26:04 +0100, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  linux/linux.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  ...libftdi-0.19-01_pkgconfig_libusb.patch => 0001_pkgconfig_libusb.patch} | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/libftdi/{libftdi-0.19-01_pkgconfig_libusb.patch => 0001_pkgconfig_libusb.patch} (100%)
 
-Both patches applied, thanks.
+Patch applied. I haven't applied PATCH 2/2 though. See my comments
+about it.
+
+Best regards,
 
 Thomas
 -- 
