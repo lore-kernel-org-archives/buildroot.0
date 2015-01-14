@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 14 Jan 2015 16:48:56 +0100
-Subject: [Buildroot] [git commit] linux/linux.mk: fixed downloading kernel
-	patches
-Message-ID: <20150114154902.3E54480142@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] omniorb: remove redundant INSTALL_TARGET
+Message-ID: <20150114154902.20D4E80142@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9d575e0b2e2be130be7e92955bac92afc23c10c
+commit: http://git.buildroot.net/buildroot/commit/?id=9f252bcc3a761a4be8550638ac128834f36fab9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patches located at ftp or http(s) URLs were downloaded using DOWNLOAD
-macro. For example, if linux source was located at external git
-repository, DOWNLOAD macro uses git scheme as well and buildroot
-tried to downlod a path using DOWNLOAD_GIT macro. As a result, nothing
-was downloaded and build siletly passes.
+INSTALL_TARGET defaults to YES.
 
-Patches located at mentioned URLs is now downloaded directly with
-DOWNLOAD_WGET macro.
-
-Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/omniorb/omniorb.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d02b02b..29f59e8 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -148,7 +148,7 @@ define LINUX_DOWNLOAD_PATCHES
- 	$(if $(LINUX_PATCHES),
- 		@$(call MESSAGE,"Download additional patches"))
- 	$(foreach patch,$(filter ftp://% http://% https://%,$(LINUX_PATCHES)),\
--		$(call DOWNLOAD,$(patch))$(sep))
-+		$(call DOWNLOAD_WGET,$(patch),$(notdir $(patch)))$(sep))
- endef
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index b59d256..bf5ba47 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -12,7 +12,6 @@ OMNIORB_LICENSE = GPL2+ LGPLv2.1+
+ OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
+ OMNIORB_DEPENDENCIES = host-omniorb
+ HOST_OMNIORB_DEPENDENCIES = host-python
+-OMNIORB_INSTALL_TARGET = YES
  
- LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+ # 0001-uclinux-is-also-linux.patch touches configure.ac
+ OMNIORB_AUTORECONF = YES
