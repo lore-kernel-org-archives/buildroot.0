@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:31:12 +0100
-Subject: [Buildroot] [PATCH 4/7] rsyslog: clean up sysv initscript
-In-Reply-To: <1421191022-5509-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 14 Jan 2015 20:31:33 +0100
+Subject: [Buildroot] [PATCH 7/7] rsyslog: enable more basic features
+In-Reply-To: <1421191022-5509-7-git-send-email-gustavo@zacarias.com.ar>
 References: <1421191022-5509-1-git-send-email-gustavo@zacarias.com.ar>
- <1421191022-5509-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150114203112.3412efb6@free-electrons.com>
+ <1421191022-5509-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150114203133.039c18be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,14 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 13 Jan 2015 20:16:59 -0300, Gustavo Zacarias wrote:
+On Tue, 13 Jan 2015 20:17:02 -0300, Gustavo Zacarias wrote:
 
->  start() {
-> -	echo -n "Starting rsyslog daemon: "
-> -	umask 077
-> -	start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
-> -	echo "OK"
-> +  echo -n "Starting rsyslog daemon: "
-> +  umask 077
+> +RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+> +		$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
 
-Do we really need this umask 077 ?
+Only one tab on the second line. I fixed that when applying.
 
->  restart() {
-> -	stop
-> -	start
-> +  stop
-> +  sleep 1
-
-And this sleep 1 ?
+Thanks,
 
 Thomas
 -- 
