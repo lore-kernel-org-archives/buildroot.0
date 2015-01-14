@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 14 Jan 2015 16:48:56 +0100
-Subject: [Buildroot] [git commit] botan: remove redundant INSTALL_TARGET
-Message-ID: <20150114154902.0BF5C80142@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libgtk2: remove redundant INSTALL_TARGET
+Message-ID: <20150114154902.16FF580142@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5cb5492ec5603737b8e3162f4844dfcfc7a21ae7
+commit: http://git.buildroot.net/buildroot/commit/?id=33d7aad9f35f027173f08c9bcfd8fc4a6bc90686
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 INSTALL_TARGET defaults to YES.
@@ -16,18 +16,18 @@ INSTALL_TARGET defaults to YES.
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/botan/botan.mk |    1 -
+ package/libgtk2/libgtk2.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 9c41c9b..27926a8 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -11,7 +11,6 @@ BOTAN_LICENSE = BSD-2c
- BOTAN_LICENSE_FILES = doc/license.txt
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index eeb56f5..dfc1f5b 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -10,7 +10,6 @@ LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).18
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_INSTALL_STAGING = YES
+-LIBGTK2_INSTALL_TARGET = YES
+ LIBGTK2_LICENSE = LGPLv2+
+ LIBGTK2_LICENSE_FILES = COPYING
  
- BOTAN_INSTALL_STAGING = YES
--BOTAN_INSTALL_TARGET = YES
- 
- BOTAN_CONF_OPTS = \
- 	--cpu=$(BR2_ARCH) \
