@@ -1,37 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:44:14 +0100
-Subject: [Buildroot] [PATCH 4/7] rsyslog: clean up sysv initscript
-In-Reply-To: <54B6C512.3090006@zacarias.com.ar>
-References: <1421191022-5509-1-git-send-email-gustavo@zacarias.com.ar>
- <1421191022-5509-4-git-send-email-gustavo@zacarias.com.ar>
- <20150114203112.3412efb6@free-electrons.com>
- <54B6C512.3090006@zacarias.com.ar>
-Message-ID: <20150114204414.3b1d4990@free-electrons.com>
+Date: Wed, 14 Jan 2015 20:40:39 +0100
+Subject: [Buildroot] [git commit] dtc: rename patches to new convention
+Message-ID: <20150114194650.969898081A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=304755acf59bf2fedd2b226314a089d54b65c729
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Jan 2015 16:35:46 -0300, Gustavo Zacarias wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...stall.patch => 0001-separate-lib-install.patch} |    0
+ ...-extra_cflags.patch => 0002-extra-cflags.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-> > Do we really need this umask 077 ?
-> 
-> Leftover, i'll kill it.
-
-Thanks.
-
-> > And this sleep 1 ?
-> 
-> Unfortunately yes, it seems rsyslogd doesn't exit immediately from the
-> tests i've made, otherwise i got restart problems in very few cases.
-
-Argh, I hate this. But OK :)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/0001-separate-lib-install.patch
+similarity index 100%
+rename from package/dtc/dtc-separate-lib-install.patch
+rename to package/dtc/0001-separate-lib-install.patch
+diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/0002-extra-cflags.patch
+similarity index 100%
+rename from package/dtc/dtc-extra_cflags.patch
+rename to package/dtc/0002-extra-cflags.patch
