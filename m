@@ -1,39 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 22:41:28 +0100
-Subject: [Buildroot] [PATCH] xorriso: new package
-In-Reply-To: <54B17F87.4020002@ou.edu>
-References: <54B17F87.4020002@ou.edu>
-Message-ID: <20150114224128.33fa0f17@free-electrons.com>
+Date: Wed, 14 Jan 2015 22:42:46 +0100
+Subject: [Buildroot] Help on pending mesa related patches
+Message-ID: <20150114224246.5781508f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Hello Bernd,
 
-On Sat, 10 Jan 2015 13:37:43 -0600, Steve Kenton wrote:
-> xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
-> 
-> libburnia is a project for reading, mastering and writing
-> optical discs. Currently it is comprised of libraries named
-> libisofs, libburn, libisoburn, a cdrecord emulator named cdrskin,
-> and an integrated multi-session tool named xorriso.
-> The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
-> It is base of the  GNU xorriso package and is actively maintained.
-> 
-> Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+Could you review/comment on the following mesa3d related patches?
 
-Thanks, applied, after doing a number of additional changes:
+  http://patchwork.ozlabs.org/patch/419054/
+  http://patchwork.ozlabs.org/patch/398857/
+  http://patchwork.ozlabs.org/patch/398858/
 
-[Thomas:
- - Rewrap Config.in help text
- - Add optional dependencies on libcdio, readline, acl, attr, zlib,
-   bzip2.
- - Handle thread support.
- - Add hash file.]
+It would help me to see what we should do with those patches.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
