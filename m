@@ -1,54 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:40:25 +0100
-Subject: [Buildroot] [git commit] dtc: fix project and download url
-Message-ID: <20150114194650.8D0E08081A@busybox.osuosl.org>
+Date: Wed, 14 Jan 2015 20:49:11 +0100
+Subject: [Buildroot] [PATCH v3 0/7] dtc: update and add raspberry pi
+ overlay support
+In-Reply-To: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
+References: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150114204911.2158cece@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=12c3bc1f230fffde14b3d58e0c79c0bcc8124da2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-This fix the error:
+On Tue, 13 Jan 2015 20:40:00 +0100, Peter Seiderer wrote:
 
-fatal: unable to connect to git.jdl.com:
-git.jdl.com[0: 208.123.73.151]: errno=Connection refused
+> Peter Seiderer (7):
+>   dtc: fix project and download url
+>   dtc: rename patches to new convention
+>   dtc: bump version to 1.4.1
+>   dtc: add hash
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dtc/Config.in |    2 +-
- package/dtc/dtc.mk    |    5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+I've applied those four initial patches.
 
-diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-index 7b02dd2..39223f7 100644
---- a/package/dtc/Config.in
-+++ b/package/dtc/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_DTC
- 	  Note that only the library is installed.
- 	  If you want the programs, say 'y' here, and to "dtc programs", below.
- 
--	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-+	  https://git.kernel.org/cgit/utils/dtc/dtc.git
- 
- if BR2_PACKAGE_DTC
- 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index 51b5b4e..6fd5064 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--DTC_VERSION = v1.4.0
--DTC_SITE = git://git.jdl.com/software/dtc.git
-+DTC_VERSION = 1.4.0
-+DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
-+DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
- DTC_LICENSE = GPLv2+/BSD-2c
- DTC_LICENSE_FILES = README.license GPL
- DTC_INSTALL_STAGING = YES
+>   dtc: add host build
+>   dtc: add patches for raspberry pi overlay support
+>   linux: install dtc only in case package host dtc is not selected
+
+I'm not quite decided about those ones yet.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
