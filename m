@@ -1,247 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 23:03:48 +0100
-Subject: [Buildroot] [git commit] gpu-amd-bin-mx51: new package
-Message-ID: <20150114220439.5EBDB80831@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Jan 2015 19:05:57 -0300
+Subject: [Buildroot] [PATCH] gd: bump to version 2.1.1
+Message-ID: <1421273157-2423-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ea8df5abc1f845bbc86940167546b1f0817718c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also add hash file.
+Remove CVE patch since it's upstream.
+Rename patches to new naming convention.
+Kill some whitespace.
 
-Freescale libraries, headers and executables for the AMD GPU on the
-i.MX51, containing OpenGL/ES, OpenVG and EGL support.
-
-Tested using:
-    mx5loco_defconfig:
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_QT5=y
-    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-    BR2_PACKAGE_QT5BASE_EXAMPLES=y
-    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-    BR2_PACKAGE_QT5BASE_EGLFS=y
-    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-    BR2_PACKAGE_QT5BASE_GIF=y
-    BR2_PACKAGE_QT5BASE_JPEG=y
-    BR2_PACKAGE_QT5BASE_PNG=y
-    BR2_PACKAGE_QT5QUICKCONTROLS=y
-    BR2_PACKAGE_FREESCALE_IMX=y
-    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53=y
-    BR2_PACKAGE_GPU_AMD_BIN_MX51=y
-
-[Thomas:
- - Order Config.in packages alphabetically
- - Minor formatting cleanup in Config.in file.]
-
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freescale-imx/Config.in                    |    1 +
- package/freescale-imx/gpu-amd-bin-mx51/Config.in   |   60 +++++++++++++++++
- package/freescale-imx/gpu-amd-bin-mx51/egl.pc      |   10 +++
- package/freescale-imx/gpu-amd-bin-mx51/glesv2.pc   |   10 +++
- .../gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk           |   67 ++++++++++++++++++++
- package/freescale-imx/gpu-amd-bin-mx51/vg.pc       |   10 +++
- 6 files changed, 158 insertions(+), 0 deletions(-)
+ ...-gdlib-config.patch => 0001-gdlib-config.patch} |  0
+ .../gd/{gd-02-no-zlib.patch => 0002-no-zlib.patch} |  0
+ ...tch => 0003-gd_bmp-fix-build-with-uClibc.patch} |  0
+ package/gd/gd-04-CVE-2014-2497.patch               | 33 ----------------------
+ package/gd/gd.hash                                 |  2 ++
+ package/gd/gd.mk                                   |  3 +-
+ 6 files changed, 3 insertions(+), 35 deletions(-)
+ rename package/gd/{gd-01-gdlib-config.patch => 0001-gdlib-config.patch} (100%)
+ rename package/gd/{gd-02-no-zlib.patch => 0002-no-zlib.patch} (100%)
+ rename package/gd/{gd-03-gd_bmp-fix-build-with-uClibc.patch => 0003-gd_bmp-fix-build-with-uClibc.patch} (100%)
+ delete mode 100644 package/gd/gd-04-CVE-2014-2497.patch
+ create mode 100644 package/gd/gd.hash
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 71b7f0b..72d3c59 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -46,6 +46,7 @@ source "package/freescale-imx/imx-lib/Config.in"
- source "package/freescale-imx/imx-vpu/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
-+source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
- source "package/freescale-imx/libz160/Config.in"
- endif
- if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/Config.in b/package/freescale-imx/gpu-amd-bin-mx51/Config.in
+diff --git a/package/gd/gd-01-gdlib-config.patch b/package/gd/0001-gdlib-config.patch
+similarity index 100%
+rename from package/gd/gd-01-gdlib-config.patch
+rename to package/gd/0001-gdlib-config.patch
+diff --git a/package/gd/gd-02-no-zlib.patch b/package/gd/0002-no-zlib.patch
+similarity index 100%
+rename from package/gd/gd-02-no-zlib.patch
+rename to package/gd/0002-no-zlib.patch
+diff --git a/package/gd/gd-03-gd_bmp-fix-build-with-uClibc.patch b/package/gd/0003-gd_bmp-fix-build-with-uClibc.patch
+similarity index 100%
+rename from package/gd/gd-03-gd_bmp-fix-build-with-uClibc.patch
+rename to package/gd/0003-gd_bmp-fix-build-with-uClibc.patch
+diff --git a/package/gd/gd-04-CVE-2014-2497.patch b/package/gd/gd-04-CVE-2014-2497.patch
+deleted file mode 100644
+index d30bfbb..0000000
+--- a/package/gd/gd-04-CVE-2014-2497.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 463c3bd09bfe8e924e19acad7a2a6af16953a704 Mon Sep 17 00:00:00 2001
+-From: Remi Collet <fedora@famillecollet.com>
+-Date: Mon, 4 Aug 2014 10:31:25 +0200
+-Subject: [PATCH] CVE-2014-2497, NULL pointer dereference, fix #126
+-
+----
+- src/gdxpm.c | 10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-diff --git a/src/gdxpm.c b/src/gdxpm.c
+-index ae6e336..15603a6 100644
+---- a/src/gdxpm.c
+-+++ b/src/gdxpm.c
+-@@ -83,6 +83,16 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromXpm(char *filename)
+- 	if(overflow2(sizeof(int), number)) {
+- 		goto done;
+- 	}
+-+	for(i = 0; i < number; i++) {
+-+		/*
+-+		   avoid NULL pointer dereference
+-+		   TODO better fix need to manage monochrome/monovisual
+-+		   see m_color or g4_color or g_color
+-+		*/
+-+		if (!image.colorTable[i].c_color) {
+-+			goto done;
+-+		}
+-+	}
+- 
+- 	colors = (int *)gdMalloc(sizeof(int) * number);
+- 	if(colors == NULL) {
+--- 
+-1.8.5.2
+-
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
 new file mode 100644
-index 0000000..0ef9682
+index 0000000..8edbb1a
 --- /dev/null
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/Config.in
-@@ -0,0 +1,60 @@
-+comment "gpu-amd-bin-mx51 needs an (e)glibc EABI toolchain w/ C++"
-+	depends on BR2_arm
-+	depends on !BR2_ARM_EABI || !BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_GPU_AMD_BIN_MX51
-+	bool "gpu-amd-bin-mx51 (also imx53)"
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_LIBOPENVG
-+	depends on BR2_ARM_EABI
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Freescale libraries, headers and executables for the
-+	  AMD GPU on i.MX5x, containing OpenGL/ES, OpenVG
-+	  and EGL support.
-+
-+if BR2_PACKAGE_GPU_AMD_BIN_MX51
-+
-+choice
-+	prompt "Output option"
-+	help
-+	  There are two versions of this library: one for
-+	  direct framebuffer access, one for X11 rendering.
-+	  Choose here which version to install.
-+
-+config BR2_PACKAGE_GPU_AMD_BIN_MX51_OUTPUT_X11
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	select BR2_PACKAGE_XLIB_LIBXDMCP
-+	select BR2_PACKAGE_XLIB_LIBXAU
-+	bool "X11"
-+
-+comment "X11 backend needs X.org enabled"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_GPU_AMD_BIN_MX51_OUTPUT_FB
-+	bool "Framebuffer"
-+
-+endchoice
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "gpu-amd-bin-mx51"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "gpu-amd-bin-mx51"
-+
-+config BR2_PACKAGE_PROVIDES_LIBOPENVG
-+	default "gpu-amd-bin-mx51"
-+
-+config BR2_PACKAGE_GPU_AMD_BIN_MX51_EXAMPLES
-+	bool "install examples"
-+	help
-+	  Copy the examples to the target.
-+
-+endif
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/egl.pc b/package/freescale-imx/gpu-amd-bin-mx51/egl.pc
-new file mode 100644
-index 0000000..b0ff229
---- /dev/null
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/egl.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: egl
-+Description: Freescale amd-gpu-bin-mx51 implementation of EGL
-+Version: 7.11.0
-+Libs: -L${libdir} -lEGL
-+Cflags: -I${includedir}
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/glesv2.pc b/package/freescale-imx/gpu-amd-bin-mx51/glesv2.pc
-new file mode 100644
-index 0000000..6f9b7fc
---- /dev/null
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/glesv2.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: glesv2
-+Description: Freescale amd-gpu-bin-mx51 implementation of OpenGL ESv2
-+Version: 7.11.0
-+Libs: -L${libdir} -lGLESv2
-+Cflags: -I${includedir}
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
-new file mode 100644
-index 0000000..44a6b4c
---- /dev/null
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.mk
-@@ -0,0 +1,67 @@
-+################################################################################
-+#
-+# gpu-amd-bin-mx51
-+#
-+################################################################################
-+
-+GPU_AMD_BIN_MX51_SITE = $(FREESCALE_IMX_SITE)
-+GPU_AMD_BIN_MX51_BASE_VERSION = 11.09.01
-+ifeq ($(BR2_PACKAGE_GPU_AMD_BIN_MX51_OUTPUT_FB),y)
-+GPU_AMD_BIN_MX51_VERSION = $(GPU_AMD_BIN_MX51_BASE_VERSION)-fb
-+GPU_AMD_BIN_MX51_SOURCE = amd-gpu-bin-mx51-$(GPU_AMD_BIN_MX51_BASE_VERSION).bin
-+else
-+GPU_AMD_BIN_MX51_VERSION = $(GPU_AMD_BIN_MX51_BASE_VERSION)-x11
-+GPU_AMD_BIN_MX51_SOURCE = amd-gpu-x11-bin-mx51-$(GPU_AMD_BIN_MX51_BASE_VERSION).bin
-+GPU_AMD_BIN_MX51_DEPENDENCIES = libxcb xlib_libX11 xlib_libXext \
-+	xlib_libXrender xlib_libXau xlib_libXdmcp
-+endif
-+GPU_AMD_BIN_MX51_PROVIDES = libegl libgles libopenvg
-+GPU_AMD_BIN_MX51_INSTALL_STAGING = YES
-+
-+GPU_AMD_BIN_MX51_LICENSE = Freescale Semiconductor Software License Agreement
-+GPU_AMD_BIN_MX51_LICENSE_FILES = EULA
-+GPU_AMD_BIN_MX51_REDISTRIBUTE = NO
-+
-+define GPU_AMD_BIN_MX51_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(GPU_AMD_BIN_MX51_SOURCE))
-+endef
-+
-+# Upstream headers need to be compiled with -D_LINUX. It is more convenient
-+# to rely on __linux__ which is defined in compiler itself
-+define GPU_AMD_BIN_MX51_FIXUP_HEADERS
-+	$(SED) 's/_LINUX/__linux__/g' $(@D)/usr/include/*/*.h
-+endef
-+GPU_AMD_BIN_MX51_POST_PATCH_HOOKS += GPU_AMD_BIN_MX51_FIXUP_HEADERS
-+
-+# eglplatform_1.4.h contains X11 compatible headers
-+ifeq ($(BR2_PACKAGE_GPU_AMD_BIN_MX51_OUTPUT_X11),y)
-+define GPU_AMD_BIN_MX51_FIXUP_EGL_HEADERS
-+	mv $(STAGING_DIR)/usr/include/EGL/eglplatform_1.4.h $(STAGING_DIR)/usr/include/EGL/eglplatform.h
-+endef
-+endif
-+
-+define GPU_AMD_BIN_MX51_INSTALL_STAGING_CMDS
-+	$(INSTALL) -d $(STAGING_DIR)/usr/lib/pkgconfig
-+	$(INSTALL) -m 644 package/freescale-imx/gpu-amd-bin-mx51/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-+	$(INSTALL) -m 755 $(@D)/usr/lib/lib* $(STAGING_DIR)/usr/lib/
-+	cp -r $(@D)/usr/include/* $(STAGING_DIR)/usr/include
-+	$(GPU_AMD_BIN_MX51_FIXUP_EGL_HEADERS)
-+endef
-+
-+ifeq ($(BR2_PACKAGE_GPU_AMD_BIN_MX51_EXAMPLES),y)
-+define GPU_AMD_BIN_MX51_INSTALL_EXAMPLES
-+	$(INSTALL) -d $(TARGET_DIR)/usr/share/examples/gpu_amd_samples
-+	$(INSTALL) -m 755 $(@D)/usr/bin/* $(TARGET_DIR)/usr/share/examples/gpu_amd_samples
-+endef
-+endif
-+
-+define GPU_AMD_BIN_MX51_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/usr/lib/lib*so* $(TARGET_DIR)/usr/lib/
-+	$(GPU_AMD_BIN_MX51_INSTALL_EXAMPLES)
-+endef
-+
-+define GPU_AMD_BIN_MX51_DEVICES
-+	/dev/gsl_kmod c 640 0 0 249 0 1 4
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/vg.pc b/package/freescale-imx/gpu-amd-bin-mx51/vg.pc
-new file mode 100644
-index 0000000..8fe956e
---- /dev/null
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/vg.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: vg
-+Description: Freescale amd-gpu-bin-mx51 implementation of OpenVG
-+Version: 1.1
-+Libs: -L${libdir} -lOpenVG
-+Cflags: -I${includedir}/
++++ b/package/gd/gd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	9ada1ed45594abc998ebc942cef12b032fbad672e73efc22bc9ff54f5df2b285	libgd-2.1.1.tar.xz
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index d7a6512..2991cd5 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-GD_VERSION = 2.1.0
++GD_VERSION = 2.1.1
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://bitbucket.org/libgd/gd-libgd/downloads
+ GD_INSTALL_STAGING = YES
+ GD_LICENSE = GD license
+ GD_LICENSE_FILES = COPYING
+-
+ GD_CONFIG_SCRIPTS = gdlib-config
+ GD_CONF_OPTS = --without-x --disable-rpath
+ GD_DEPENDENCIES = host-pkgconf
+-- 
+2.0.5
