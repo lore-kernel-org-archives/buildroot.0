@@ -1,104 +1,58 @@
-From: Steve James <ste@junkomatic.net>
-Date: Wed, 14 Jan 2015 14:58:44 +0000
-Subject: [Buildroot] [PATCH] libcli: new package
-Message-ID: <1421247524-29918-1-git-send-email-ste@junkomatic.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 14 Jan 2015 16:33:40 +0100
+Subject: [Buildroot] [git commit] read-edid: make available for !x86
+Message-ID: <20150114153612.45CC27FFF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libcli provides a shared library for including a Cisco-like command-
-line interface into other software. It's a telnet interface which
-supports command-line editing, history, authentication and callbacks
-for a user-definable function tree.
+commit: http://git.buildroot.net/buildroot/commit/?id=71539b69ae9bf521aaf8c2adb48545a9355dce5b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Steve James <ste@junkomatic.net>
+It is only the get-edid tool that is x86 specific, parse-edid builds and
+works fine on other architectures so make it available everywhere.
+
+Also drop the custom install step as 'make install' does the right thing.
+This does cause us to install into /usr/sbin instead of /sbin, but as that
+is what upstream wants we can consider that a bugfix.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in        |  1 +
- package/libcli/Config.in | 10 ++++++++++
- package/libcli/libcli.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+)
- create mode 100644 package/libcli/Config.in
- create mode 100644 package/libcli/libcli.mk
+ package/read-edid/Config.in    |    3 ++-
+ package/read-edid/read-edid.mk |    5 -----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f866c0d..7bd31e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -964,6 +964,7 @@ endmenu
- menu "Text and terminal handling"
- 	source "package/enchant/Config.in"
- 	source "package/icu/Config.in"
-+	source "package/libcli/Config.in"
- 	source "package/libedit/Config.in"
- 	source "package/libenca/Config.in"
- 	source "package/libestr/Config.in"
-diff --git a/package/libcli/Config.in b/package/libcli/Config.in
-new file mode 100644
-index 0000000..41d022e
---- /dev/null
-+++ b/package/libcli/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBCLI
-+	bool "libcli"
-+	help
-+	  Libcli provides a shared library for including a Cisco-like command-
-+	  line interface into other software. It's a telnet interface which
-+	  supports command-line editing, history, authentication and callbacks
-+	  for a user-definable function tree.
+diff --git a/package/read-edid/Config.in b/package/read-edid/Config.in
+index bdcb7a7..f1ad1c4 100644
+--- a/package/read-edid/Config.in
++++ b/package/read-edid/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_READ_EDID
+ 	bool "read-edid"
+-	depends on BR2_i386
+ 	help
+ 	  Read-edid is a pair of tools for reading the EDID from a
+ 	  monitor.  It should work with most monitors made since 1996
+@@ -11,4 +10,6 @@ config BR2_PACKAGE_READ_EDID
+ 	  which turns the raw binary information into an
+ 	  XF86Config-compatible monitor section.
+ 
++	  Notice that the get-edid tool is only available on x86.
 +
-+	  http://sites.dparrish.com/libcli
-+
-diff --git a/package/libcli/libcli.mk b/package/libcli/libcli.mk
-new file mode 100644
-index 0000000..17eed79
---- /dev/null
-+++ b/package/libcli/libcli.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# libcli
-+#
-+################################################################################
-+
-+LIBCLI_VERSION = c63c9d35144939c8b4fa3c5394aed2e29ff517b0
-+LIBCLI_SITE = $(call github,dparrish,libcli,$(LIBCLI_VERSION))
-+LIBCLI_LICENSE = LGPLv2.1
-+LIBCLI_LICENSE_FILES = COPYING
-+LIBCLI_INSTALL_STAGING = YES
-+
-+# We will pass optimisation level via CFLAGS so remove libcli default
-+LIBCLI_MAKE_ARGS += OPTIM=
-+
-+# We can't run the test harness
-+LIBCLI_MAKE_ARGS += TESTS=
-+
-+# Disable the static library for shared only build
-+ifeq ($(BR2_SHARED_LIBS),y)
-+LIBCLI_MAKE_ARGS += STATIC_LIB=
-+endif
-+
-+# Disable the shared library for static only build
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBCLI_MAKE_ARGS += DYNAMIC_LIB=
-+endif
-+
-+define LIBCLI_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		$(LIBCLI_MAKE_ARGS)
-+endef
-+
-+define LIBCLI_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		$(LIBCLI_MAKE_ARGS) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
-+endef
-+
-+define LIBCLI_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		$(LIBCLI_MAKE_ARGS) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+ 	  http://polypux.org/projects/read-edid/
+diff --git a/package/read-edid/read-edid.mk b/package/read-edid/read-edid.mk
+index 54064d3..f047e79 100644
+--- a/package/read-edid/read-edid.mk
++++ b/package/read-edid/read-edid.mk
+@@ -13,9 +13,4 @@ define READ_EDID_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+-define READ_EDID_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/sbin/get-edid
+-	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/sbin/parse-edid
+-endef
+-
+ $(eval $(autotools-package))
