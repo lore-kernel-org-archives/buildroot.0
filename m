@@ -1,72 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Jan 2015 20:27:53 +0100
-Subject: [Buildroot] [git commit] rsyslog: bump to version 8.7.0
-Message-ID: <20150114192851.4C7A380DE0@busybox.osuosl.org>
+Date: Wed, 14 Jan 2015 20:24:34 +0100
+Subject: [Buildroot] [git commit] libestr: bump to version 0.1.10
+Message-ID: <20150114192851.1D90680DE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5222d956a6463ebf6705d70e2ee3a36c70e3a8ea
+commit: http://git.buildroot.net/buildroot/commit/?id=1e3dc8f9de561e81a2804149cd9bf3a32788e6e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rsyslog/Config.in    |    5 +++--
- package/rsyslog/rsyslog.hash |    4 ++--
- package/rsyslog/rsyslog.mk   |    8 +++-----
- 3 files changed, 8 insertions(+), 9 deletions(-)
+ package/libestr/libestr.hash |    2 ++
+ package/libestr/libestr.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
-index 1f94104..d66132f 100644
---- a/package/rsyslog/Config.in
-+++ b/package/rsyslog/Config.in
-@@ -6,11 +6,12 @@ config BR2_PACKAGE_RSYSLOG
- 	select BR2_PACKAGE_JSON_C
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # modules
- 	help
- 	  Rsyslog is a powerful and flexible syslog implementation
- 
- 	  http://www.rsyslog.com
- 
--comment "rsyslog needs a toolchain w/ threads"
-+comment "rsyslog needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index ed51326..4a0ae5a 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,2 +1,2 @@
--# From http://www.rsyslog.com/downloads/download-v7-stable/
--sha256	fc29d2d9cbf3396091dd0bab2eb6f847aed4a44ef73138a97ddf9447446125ee	rsyslog-7.6.7.tar.gz
-+# From http://www.rsyslog.com/downloads/download-v8-stable/
-+sha256	c77125b67a623569c9bdca8136b9aac013f1c6fd82fb8595e3ea267e61800f9c	rsyslog-8.7.0.tar.gz
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 27a72da..fb5249c 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -4,15 +4,13 @@
+diff --git a/package/libestr/libestr.hash b/package/libestr/libestr.hash
+new file mode 100644
+index 0000000..e37cbb1
+--- /dev/null
++++ b/package/libestr/libestr.hash
+@@ -0,0 +1,2 @@
++# From http://libestr.adiscon.com/download/libestr-0-1-10/
++sha256	bd655e126e750edd18544b88eb1568d200a424a0c23f665eb14bbece07ac703c	libestr-0.1.10.tar.gz
+diff --git a/package/libestr/libestr.mk b/package/libestr/libestr.mk
+index d5ff986..e9783d3 100644
+--- a/package/libestr/libestr.mk
++++ b/package/libestr/libestr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RSYSLOG_VERSION = 7.6.7
-+RSYSLOG_VERSION = 8.7.0
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPLv3 LGPLv3 Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
--
--RSYSLOG_CONF_OPTS = --disable-testbench \
--		   --enable-cached-man-pages \
--		   --disable-generate-man-pages
-+RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
-+RSYSLOG_CONF_OPTS = --disable-generate-man-pages
- 
- # Build after BusyBox
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-LIBESTR_VERSION = 0.1.9
++LIBESTR_VERSION = 0.1.10
+ LIBESTR_SITE = http://libestr.adiscon.com/files/download
+ LIBESTR_LICENSE = LGPLv2.1+
+ LIBESTR_LICENSE_FILES = COPYING
