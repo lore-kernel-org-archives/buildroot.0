@@ -1,53 +1,60 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Thu, 15 Jan 2015 21:55:45 +0100
-Subject: [Buildroot] [PATCH v2 4/8] boot/uboot: Add uboot-menuconfig and
- friends
-In-Reply-To: <20150110164355.17d96522@free-electrons.com>
-References: <1420897647-25001-1-git-send-email-jkrause@posteo.de>
- <1420897647-25001-5-git-send-email-jkrause@posteo.de>
- <20150110164355.17d96522@free-electrons.com>
-Message-ID: <1421355345.2625.29.camel@posteo.de>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 15 Jan 2015 13:04:44 -0800
+Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
+In-Reply-To: <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
+References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
+ <20150115181324.48fc51e9@tux.kirchner>
+ <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
+ <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
+ <20150115200634.598a27a3@tux.kirchner>
+ <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
+ <20150115212231.08000b68@tux.kirchner>
+ <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
+Message-ID: <CALo-6+jTAcUEOWeES1rCUdSHS1NbccG6L+oEBB3VTJYMEu6coQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+On the invocation of the qt program, perhaps this argument might help
 
-On Sa, 2015-01-10 at 16:43 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Sat, 10 Jan 2015 14:47:23 +0100, J?rg Krause wrote:
-> 
-> >  ifeq ($(BR2_TARGET_UBOOT),y)
-> > +ifeq ($(BR2_TARGET_UBOOT_USE_KBUILD_KCONFIG),y)
-> > +uboot-menuconfig uboot-xconfig uboot-gconfig uboot-nconfig: uboot-configure
-> > +	$(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> > +	rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
-> > +uboot-savedefconfig: uboot-configure
-> > +	$(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> > +ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
-> > +uboot-update-defconfig: uboot-savedefconfig
-> > +	cp -f $(UBOOT_DIR)/defconfig $(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)
-> > +else
-> > +uboot-update-defconfig: ;
-> > +endif # BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
-> > +endif # BR2_TARGET_UBOOT_USE_KBUILD_KCONFIG
-> 
-> Please use the kconfig-package infrastructure.
+-plugin Tslib:/dev/input/event0
 
-Using the kconfig-package infrastructure requires a .config file to be
-set with UBOOT_KCONFIG_FILE. This .config file is copied to UBOOT_DIR
-after patching and before configuration starts.
 
-This causes me some trouble since in the U-Boot build process
-the .config file (and also spl/.config and tpl/.config) is written by
-make <board>_defconfig. This command is called in UBOOT_CONFIGURE_CMDS
-which runs after copying .config to UBOOT_DIR.
 
-The patches are mainly based on the Linux and Barebox packages, which
-also uses the make _defconfig build step to make the .config file.
+On Thu, Jan 15, 2015 at 12:44 PM, Santhosh Ramani <srcoolz@gmail.com> wrote:
 
-Best regards
-J?rg Krause
+> So, you did something like this?
+>> # export TSLIB_TSDEVICE=/dev/input/event0
+>> # export QWS_MOUSE_PROTO="tslib:/dev/input/event0"
+>> # <qtExample>
+>> And there the touch screen worked correctly? And your program didn't?
+>
+>
+> Yes that is correct. However, I still don't understand why export doesn't
+> work within a script. I understood your explanation; the TI file system
+> uses profile.d to export these variables again in bash. I will try doing
+> that with profile file in etc to make it part of the startup routine.
+>
+> I'm going to try and compile my application with the Qt built by buildroot
+> and I will reply back with my findings.
+>
+> Thanks once again for your patience and help.
+> Regards
+>
+> Santhosh
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
+-- 
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/e5a7ff6a/attachment.html>
