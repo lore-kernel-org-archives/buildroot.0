@@ -1,366 +1,88 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 15 Jan 2015 08:21:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package: indentation cleanup
-Message-ID: <1421306499-16540-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Jan 2015 08:30:15 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-01-14
+Message-ID: <20150115073015.A8D5B100ED3@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/alsa-lib/alsa-lib.mk                 |   14 ++++++++------
- package/bcusdk/bcusdk.mk                     |   13 +++++++++----
- package/enlightenment/enlightenment.mk       |    7 ++++---
- package/fluxbox/fluxbox.mk                   |    5 +++--
- package/giblib/giblib.mk                     |    5 +++--
- package/jimtcl/jimtcl.mk                     |    7 ++++---
- package/libgtk3/libgtk3.mk                   |    8 +++++---
- package/libnspr/libnspr.mk                   |    5 +++--
- package/linknx/linknx.mk                     |    8 ++++++--
- package/schifra/schifra.mk                   |    5 +++--
- package/socat/socat.mk                       |    9 +++++----
- package/speex/speex.mk                       |    7 ++++---
- package/strace/strace.mk                     |    5 +++--
- package/uclibc/uclibc.mk                     |    5 +++--
- package/x11r7/xapp_xconsole/xapp_xconsole.mk |    5 +++--
- package/x11r7/xapp_xdm/xapp_xdm.mk           |    5 +++--
- package/x11r7/xapp_xlogo/xapp_xlogo.mk       |    5 +++--
- package/xerces/xerces.mk                     |    5 +++--
- 18 files changed, 75 insertions(+), 48 deletions(-)
+Build statistics for 2015-01-14
+===============================
 
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 2890a38..16d184e 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -12,10 +12,11 @@ ALSA_LIB_LICENSE_FILES = COPYING
- ALSA_LIB_INSTALL_STAGING = YES
- ALSA_LIB_CFLAGS = $(TARGET_CFLAGS)
- ALSA_LIB_AUTORECONF = YES
--ALSA_LIB_CONF_OPTS = --with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVDIR)) \
--		    --with-pcm-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS))" \
--		    --with-ctl-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS))" \
--		    --without-versioned
-+ALSA_LIB_CONF_OPTS = \
-+	--with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVDIR)) \
-+	--with-pcm-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS))" \
-+	--with-ctl-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS))" \
-+	--without-versioned
- 
- # Can't build with static & shared at the same time (1.0.25+)
- ifeq ($(BR2_STATIC_LIBS),y)
-@@ -73,7 +74,8 @@ ifeq ($(BR2_bfin),y)
- ALSA_LIB_CFLAGS += -Dversionsort=alphasort
- endif
- 
--ALSA_LIB_CONF_ENV = CFLAGS="$(ALSA_LIB_CFLAGS)" \
--		    LDFLAGS="$(TARGET_LDFLAGS) -lm"
-+ALSA_LIB_CONF_ENV = \
-+	CFLAGS="$(ALSA_LIB_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS) -lm"
- 
- $(eval $(autotools-package))
-diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
-index bbf988d..80c98af 100644
---- a/package/bcusdk/bcusdk.mk
-+++ b/package/bcusdk/bcusdk.mk
-@@ -10,10 +10,15 @@ BCUSDK_SITE = http://www.auto.tuwien.ac.at/~mkoegler/eib
- BCUSDK_LICENSE = GPLv2+
- BCUSDK_LICENSE_FILES = COPYING
- BCUSDK_INSTALL_STAGING = YES
--BCUSDK_CONF_OPTS = --enable-onlyeibd --enable-ft12 --enable-pei16 \
--		 --enable-eibnetip --enable-eibnetipserver \
--		 --enable-eibnetiptunnel --without-pth-test \
--		 --with-pth=$(STAGING_DIR)/usr
-+BCUSDK_CONF_OPTS = \
-+	--enable-onlyeibd \
-+	--enable-ft12 \
-+	--enable-pei16 \
-+	--enable-eibnetip \
-+	--enable-eibnetipserver \
-+	--enable-eibnetiptunnel \
-+	--without-pth-test \
-+	--with-pth=$(STAGING_DIR)/usr
- 
- BCUSDK_DEPENDENCIES = libpthsem
- 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index a1ca4da..ddebe06 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -24,9 +24,10 @@ ENLIGHTENMENT_DEPENDENCIES = 	\
- 	host-libeet		\
- 	xcb-util-keysyms
- 
--ENLIGHTENMENT_CONF_OPTS = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
--			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet \
--			 --disable-rpath
-+ENLIGHTENMENT_CONF_OPTS = \
-+	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--disable-rpath
- 
- # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 0340465..30255c4 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -10,8 +10,9 @@ FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBO
- FLUXBOX_LICENSE = MIT
- FLUXBOX_LICENSE_FILES = COPYING
- 
--FLUXBOX_CONF_OPTS = --x-includes=$(STAGING_DIR)/usr/include/X11 \
--		   --x-libraries=$(STAGING_DIR)/usr/lib
-+FLUXBOX_CONF_OPTS = \
-+	--x-includes=$(STAGING_DIR)/usr/include/X11 \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
- FLUXBOX_DEPENDENCIES = xlib_libX11 $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
-diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
-index 8d11426..b0a9620 100644
---- a/package/giblib/giblib.mk
-+++ b/package/giblib/giblib.mk
-@@ -9,8 +9,9 @@ GIBLIB_SITE = http://linuxbrit.co.uk/downloads
- GIBLIB_INSTALL_STAGING = YES
- GIBLIB_DEPENDENCIES = imlib2
- GIBLIB_AUTORECONF = YES
--GIBLIB_CONF_OPTS = --with-imlib2-prefix=$(STAGING_DIR)/usr \
--		  --with-imlib2-exec-prefix=$(STAGING_DIR)/usr
-+GIBLIB_CONF_OPTS = \
-+	--with-imlib2-prefix=$(STAGING_DIR)/usr \
-+	--with-imlib2-exec-prefix=$(STAGING_DIR)/usr
- GIBLIB_CONFIG_SCRIPTS = giblib-config
- GIBLIB_LICENSE = MIT
- GIBLIB_LICENSE_FILES = COPYING
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index d573276..75c0382 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -32,9 +32,10 @@ JIMTCL_INSTALL_LIB =
- else
- JIMTCL_SHARED = --shared
- JIMTCL_LIB = so.$(JIMTCL_VERSION)
--JIMTCL_INSTALL_LIB = $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
--		     $(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
--		     ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
-+JIMTCL_INSTALL_LIB = \
-+	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
-+	$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
-+	ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
- endif
- 
- define JIMTCL_CONFIGURE_CMDS
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index b406c09..07c669d 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -18,7 +18,8 @@ LIBGTK3_CONF_ENV = \
- 	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
- 	PKG_CONFIG_FOR_BUILD=$(HOST_DIR)/usr/bin/pkgconf
- 
--LIBGTK3_CONF_OPTS = --disable-glibtest \
-+LIBGTK3_CONF_OPTS = \
-+	--disable-glibtest \
- 	--enable-explicit-deps=no \
- 	--enable-gtk2-dependency \
- 	--disable-introspection
-@@ -147,8 +148,9 @@ HOST_LIBGTK3_DEPENDENCIES = \
- 	host-gdk-pixbuf \
- 	host-pkgconf
- 
--HOST_LIBGTK3_CFLAGS = $(shell $(HOST_DIR)/usr/bin/pkgconf \
--		      --cflags --libs gdk-pixbuf-2.0)
-+HOST_LIBGTK3_CFLAGS = \
-+	$(shell $(HOST_DIR)/usr/bin/pkgconf \
-+	--cflags --libs gdk-pixbuf-2.0)
- 
- define HOST_LIBGTK3_CONFIGURE_CMDS
- 	echo "#define GETTEXT_PACKAGE \"gtk30\"" >> $(@D)/gtk/config.h
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 702978c..c4f86cc 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -14,8 +14,9 @@ LIBNSPR_LICENSE = MPLv2.0
- LIBNSPR_LICENSE_FILES = nspr/LICENSE
- 
- # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
--LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
--		   HOST_LDFLAGS="-lc"
-+LIBNSPR_CONF_ENV = \
-+	HOST_CFLAGS="-g -O2" \
-+	HOST_LDFLAGS="-lc"
- # NSPR mixes up --build and --host
- LIBNSPR_CONF_OPTS = --host=$(GNU_HOST_NAME)
- LIBNSPR_CONF_OPTS += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index f117b9c..a7e6adb 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -8,8 +8,12 @@ LINKNX_VERSION = 0.0.1.32
- LINKNX_SITE = http://downloads.sourceforge.net/project/linknx/linknx/linknx-$(LINKNX_VERSION)
- LINKNX_LICENSE = GPLv2+
- LINKNX_INSTALL_STAGING = YES
--LINKNX_CONF_OPTS = --without-lua --without-log4cpp --without-pth-test \
--		  --with-pth=$(STAGING_DIR)/usr --disable-smtp
-+LINKNX_CONF_OPTS = \
-+	--without-lua \
-+	--without-log4cpp \
-+	--without-pth-test \
-+	--with-pth=$(STAGING_DIR)/usr \
-+	--disable-smtp
- 
- LINKNX_DEPENDENCIES = libpthsem
- 
-diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
-index e55bf02..661ef04 100644
---- a/package/schifra/schifra.mk
-+++ b/package/schifra/schifra.mk
-@@ -11,8 +11,9 @@ SCHIFRA_INSTALL_STAGING = YES
- SCHIFRA_LICENSE = schifra license
- SCHIFRA_LICENSE_FILES = schifra_license.txt
- 
--SCHIFRA_MAKE_OPTS = COMPILER="$(TARGET_CXX)" \
--		   OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
-+SCHIFRA_MAKE_OPTS = \
-+	COMPILER="$(TARGET_CXX)" \
-+	OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
- 
- # The examples are the only buildable artefacts.
- ifeq ($(BR2_PACKAGE_SCHIFRA_EXAMPLES),y)
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 711e20e..bae4b4c 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -9,10 +9,11 @@ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
- SOCAT_SITE = http://www.dest-unreach.org/socat/download
- SOCAT_LICENSE = GPLv2
- SOCAT_LICENSE_FILES = COPYING
--SOCAT_CONF_ENV = sc_cv_termios_ispeed=no \
--		 sc_cv_sys_crdly_shift=9 \
--		 sc_cv_sys_tabdly_shift=11 \
--		 sc_cv_sys_csize_shift=4
-+SOCAT_CONF_ENV = \
-+	sc_cv_termios_ispeed=no \
-+	sc_cv_sys_crdly_shift=9 \
-+	sc_cv_sys_tabdly_shift=11 \
-+	sc_cv_sys_csize_shift=4
- 
- # We need to run autoconf to regenerate the configure script, in order
- # to ensure that the test checking linux/ext2_fs.h works
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index 0bf2de0..595ae16 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -11,9 +11,10 @@ SPEEX_LICENSE_FILES = COPYING
- 
- SPEEX_INSTALL_STAGING = YES
- SPEEX_DEPENDENCIES = libogg
--SPEEX_CONF_OPTS = --with-ogg-libraries=$(STAGING_DIR)/usr/lib \
--		 --with-ogg-includes=$(STAGING_DIR)/usr/include \
--		 --enable-fixed-point
-+SPEEX_CONF_OPTS = \
-+	--with-ogg-libraries=$(STAGING_DIR)/usr/lib \
-+	--with-ogg-includes=$(STAGING_DIR)/usr/include \
-+	--enable-fixed-point
- 
- ifeq ($(BR2_PACKAGE_SPEEX_ARM4),y)
- 	SPEEX_CONF_OPTS += --enable-arm4-asm
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 2ac3b17..e1299aa 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -10,8 +10,9 @@ STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VE
- STRACE_LICENSE = BSD-3c
- STRACE_LICENSE_FILES = COPYING
- 
--STRACE_CONF_ENV = ac_cv_header_linux_if_packet_h=yes \
--		  ac_cv_header_linux_netlink_h=yes
-+STRACE_CONF_ENV = \
-+	ac_cv_header_linux_if_packet_h=yes \
-+	ac_cv_header_linux_netlink_h=yes
- 
- define STRACE_REMOVE_STRACE_GRAPH
- 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index d3b11f6..8654926 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -54,8 +54,9 @@ ifeq ($(UCLIBC_GENERATE_LOCALES),)
- UCLIBC_LOCALES = en_US
- else
- # Strip out the encoding part of locale names, if any
--UCLIBC_LOCALES = $(foreach locale,$(UCLIBC_GENERATE_LOCALES),\
--		   $(firstword $(subst .,$(space),$(locale))))
-+UCLIBC_LOCALES = \
-+	$(foreach locale,$(UCLIBC_GENERATE_LOCALES),\
-+	$(firstword $(subst .,$(space),$(locale))))
- endif
- 
- #
-diff --git a/package/x11r7/xapp_xconsole/xapp_xconsole.mk b/package/x11r7/xapp_xconsole/xapp_xconsole.mk
-index b04b737..971b1b3 100644
---- a/package/x11r7/xapp_xconsole/xapp_xconsole.mk
-+++ b/package/x11r7/xapp_xconsole/xapp_xconsole.mk
-@@ -9,7 +9,8 @@ XAPP_XCONSOLE_SOURCE = xconsole-$(XAPP_XCONSOLE_VERSION).tar.bz2
- XAPP_XCONSOLE_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XCONSOLE_LICENSE = MIT
- XAPP_XCONSOLE_LICENSE_FILES = COPYING
--XAPP_XCONSOLE_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXt xproto_xproto \
--			     xlib_libXmu
-+XAPP_XCONSOLE_DEPENDENCIES = \
-+	xlib_libX11 xlib_libXaw xlib_libXt xproto_xproto \
-+	xlib_libXmu
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
-index 955dc1c..8f846a8 100644
---- a/package/x11r7/xapp_xdm/xapp_xdm.mk
-+++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
-@@ -11,8 +11,9 @@ XAPP_XDM_LICENSE = MIT
- XAPP_XDM_LICENSE_FILES = COPYING
- XAPP_XDM_CONF_ENV = ac_cv_file__dev_urandom=yes
- XAPP_XDM_DEPENDENCIES = xapp_sessreg xapp_xrdb xlib_libX11 xlib_libXaw xlib_libXdmcp xlib_libXinerama xlib_libXt xproto_xineramaproto xproto_xproto
--XAPP_XDM_CONF_OPTS = --with-utmp-file=/var/adm/utmpx \
--		    --with-wtmp-file=/var/adm/wtmpx
-+XAPP_XDM_CONF_OPTS = \
-+	--with-utmp-file=/var/adm/utmpx \
-+	--with-wtmp-file=/var/adm/wtmpx
- 
- define XAPP_XDM_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/x11r7/xapp_xdm/S99xdm \
-diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.mk b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-index af5b222..380acfc 100644
---- a/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-+++ b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-@@ -9,7 +9,8 @@ XAPP_XLOGO_SOURCE = xlogo-$(XAPP_XLOGO_VERSION).tar.bz2
- XAPP_XLOGO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLOGO_LICENSE = MIT
- XAPP_XLOGO_LICENSE_FILES = COPYING
--XAPP_XLOGO_DEPENDENCIES = xlib_libXaw xlib_libXrender \
--			  xlib_libXft host-pkgconf
-+XAPP_XLOGO_DEPENDENCIES = \
-+	xlib_libXaw xlib_libXrender \
-+	xlib_libXft host-pkgconf
- 
- $(eval $(autotools-package))
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 9b2bb81..59b8d8a 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -11,8 +11,9 @@ XERCES_LICENSE = Apache-2.0
- XERCES_LICENSE_FILES = LICENSE
- XERCES_MAKE = $(MAKE1)
- XERCES_INSTALL_STAGING = YES
--XERCES_CONF_OPTS = --disable-threads \
--		  --with-gnu-ld
-+XERCES_CONF_OPTS = \
-+	--disable-threads \
-+	--with-gnu-ld
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- XERCES_CONF_ENV += LIBS=-liconv
+        success : 303
+       failures : 37 
+       timeouts : 1  
+          TOTAL : 341
+
+Classification of failures by reason
+====================================
+
+              host-erlang-17.4 | 8 
+             libselinux-2.1.13 | 5 
+kexec-lite-fb8543fea3beb052... | 3 
+                    qemu-2.1.2 | 2 
+               lightning-2.0.5 | 2 
+               host-qemu-2.1.2 | 2 
+               iptables-1.4.21 | 2 
+                jasper-1.900.1 | 1 
+              strongswan-5.2.2 | 1 
+                    fltk-1.3.2 | 1 
+        gst1-plugins-bad-1.4.5 | 1 
+                     rpm-5.2.0 | 1 
+     start-stop-daemon-1.16.15 | 1 
+                 xorriso-1.3.8 | 1 
+       directfb-examples-1.6.0 | 1 
+              libarchive-3.1.2 | 1 
+            host-heimdal-1.5.3 | 1 
+                      make-4.1 | 1 
+                  zeromq-4.0.5 | 1 
+                  python-2.7.9 | 1 
+               qt5webkit-5.3.2 | 1 
+
+Detail of failures
+===================
+
+        bfin |        directfb-examples-1.6.0 | NOK | http://autobuild.buildroot.net/results/cc79cd46cf426b77098b55e9bed723f4137cec16/
+      x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/14f3e7d188d80ffaa910ef1d127654b5d4dd7d1c/
+     powerpc |         gst1-plugins-bad-1.4.5 | NOK | http://autobuild.buildroot.net/results/12d20d80f097112e77a2f7cc45ab5de859a37dc5/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/a15d5955904f42beb7c41b90cc6a7ab9bfc44b68/
+      x86_64 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/fc44f32944ec415a633f76d76ea3254f874aec5f/
+        i686 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/c1668bf9e21b85d121c24f7979953a85f2f3e367/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/c2f8289721ddf32321ca6b1ab28137f0746dc978/
+         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/e9ecf7559f7c2d8b880e4a11acf181d2757a3184/
+      x86_64 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/e542196417e08bf04e7c0a7955842debd4748a23/
+         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/0c151ca521a2aa0934bb34d9ac28d5251c52ebd0/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/87a18adab153b64f0fc5c3ef9f414ec31733ebc3/
+    mips64el |             host-heimdal-1.5.3 | TIM | http://autobuild.buildroot.net/results/d284248b8d2ca2982aa4b5084245016f5b4354b2/
+      mipsel |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/5ce0f0c6955969f823448fca52412b3c1950b111/
+        sh4a |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/98084aaf392c62ba095b208f2065a722fa1010b9/
+        bfin |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/81e7674f99192e5b3bddadb92174e1803a8feb84/
+        bfin |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/38d66308d1baf1799863a71e94ddec09504ade3b/
+      xtensa |                 jasper-1.900.1 | NOK | http://autobuild.buildroot.net/results/ea87d946a3b62d0d41f1aec01bc2f67009080bdc/
+     powerpc | kexec-lite-fb8543fea3beb052... | NOK | http://autobuild.buildroot.net/results/d66fde2763351f298bc459d594f3ff243ba926c4/
+     powerpc | kexec-lite-fb8543fea3beb052... | NOK | http://autobuild.buildroot.net/results/df8e01f9c5ceb7faee537985fefed169f95d6ceb/
+     powerpc | kexec-lite-fb8543fea3beb052... | NOK | http://autobuild.buildroot.net/results/adc486c525e3aafaa5e6d11a43d964bcd9f2a774/
+        bfin |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/eea2d593bc526655fd483f979a0bd4d099c1fe2f/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/28022e83816454827e738dd76ed7bab540bcf941/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/a4127f250b5aee81c196bf5d70febd1bfd696dda/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/f42902b973a5bdbbd2cf978f408d4102bd139040/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/1aaa48a4b93e8f5693fc71949c7fd6a2be6afdc6/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/55d897773569b3c6a569ade5678d4862868739a1/
+         arm |                lightning-2.0.5 | NOK | http://autobuild.buildroot.net/results/1c510d3dda02aac584782f96ac79cf5a0c5dac7e/
+     powerpc |                lightning-2.0.5 | NOK | http://autobuild.buildroot.net/results/0637d15a83fb6c25613d79e2593928f91c148283/
+      x86_64 |                       make-4.1 | NOK | http://autobuild.buildroot.net/results/4f5dfb994134377d5936d3062c2146bf7a6d8d15/
+      mipsel |                   python-2.7.9 | NOK | http://autobuild.buildroot.net/results/74deae1f7c81e319d1e7d00177f7c8e2c97b8ce8/
+        i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/5d879c98c176886b1d7ddf28e66641483589311a/
+        i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/3587dadd2f1008e79201aba0c5040ac0691be848/
+         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/cb2fde6b47b41ad453916a87141059e3e347fb97/
+    mips64el |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/88f07675b9daa104968e752afa45e0b8b06ab1dd/
+      xtensa |      start-stop-daemon-1.16.15 | NOK | http://autobuild.buildroot.net/results/445bf4742d78a0bf93b4c75dc733c4315530031e/
+microblazeel |               strongswan-5.2.2 | NOK | http://autobuild.buildroot.net/results/3ba43bd50e6f987a3a070d49261d444c140845f4/
+         arm |                  xorriso-1.3.8 | NOK | http://autobuild.buildroot.net/results/941bb7d5c8ffa14fad54343d515b56e8ae1a98d9/
+        bfin |                   zeromq-4.0.5 | NOK | http://autobuild.buildroot.net/results/8a6c4d376bf9c89a83a74b2481129cc66aa982be/
+
+
 -- 
-1.7.9.5
+http://autobuild.buildroot.net
