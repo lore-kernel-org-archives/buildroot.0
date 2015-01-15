@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jan 2015 09:35:31 +0100
-Subject: [Buildroot] [PATCH 1/3] modem-manager: bump to 1.4.2
-In-Reply-To: <1421272225-5076-1-git-send-email-yegorslists@googlemail.com>
-References: <1421272225-5076-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150115093531.1a1d80d0@free-electrons.com>
+Date: Thu, 15 Jan 2015 09:36:26 +0100
+Subject: [Buildroot] [PATCH] gd: bump to version 2.1.1
+In-Reply-To: <1421273157-2423-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1421273157-2423-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150115093626.15a92746@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Gustavo Zacarias,
 
-On Wed, 14 Jan 2015 22:50:23 +0100, Yegor Yefremov wrote:
-> Add hash file.
+On Wed, 14 Jan 2015 19:05:57 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
+> Remove CVE patch since it's upstream.
+> Rename patches to new naming convention.
+> Kill some whitespace.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/modem-manager/modem-manager.hash | 2 ++
->  package/modem-manager/modem-manager.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/modem-manager/modem-manager.hash
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-All three patches applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
