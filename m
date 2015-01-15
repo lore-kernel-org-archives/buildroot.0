@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jan 2015 09:34:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iojs: new package
-In-Reply-To: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
-References: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
-Message-ID: <20150115093427.0b5118b2@free-electrons.com>
+Date: Thu, 15 Jan 2015 09:34:49 +0100
+Subject: [Buildroot] [git commit] modem-manager: bump to 1.4.2
+Message-ID: <20150115083519.D5D6D8083B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=c0ff90694e4e157533c9fc9f090daf02c37a8195
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Jan 2015 00:38:16 +0100, J?rg Krause wrote:
-> io.js is a fork of Node.js. This package is mainly based on the nodejs
-> package, except for the patches.
-> 
-> io.js is currently marked as unstable and there is no stable release for now.
-> 
-> Signed-off-by: J?rg Krause <jkrause@posteo.de>
+Add hash file.
 
-Immediate question that comes to mind: is the code base diverging from
-Node.js ? Do we need two separate packages ? Does this fork has a
-chance of becoming widely used ? I'm a bit concerned by the fact of
-having two separate packages for basically the same thing.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/modem-manager/modem-manager.hash |    2 ++
+ package/modem-manager/modem-manager.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+new file mode 100644
+index 0000000..eae148f
+--- /dev/null
++++ b/package/modem-manager/modem-manager.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  07d332fbe6f45f788f740810951e04042aaf023bd5ecf8ef0b3a06e37703585d  ModemManager-1.4.2.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 1c554a2..349517d 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.4.0
++MODEM_MANAGER_VERSION = 1.4.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
