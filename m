@@ -1,52 +1,53 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
-Date: Thu, 15 Jan 2015 20:58:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iojs: new package
-In-Reply-To: <20150115093427.0b5118b2@free-electrons.com>
-References: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
- <20150115093427.0b5118b2@free-electrons.com>
-Message-ID: <1421351925.2625.14.camel@posteo.de>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Thu, 15 Jan 2015 14:01:14 -0600
+Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
+In-Reply-To: <20150115200634.598a27a3@tux.kirchner>
+References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
+ <20150115181324.48fc51e9@tux.kirchner>
+ <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
+ <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
+ <20150115200634.598a27a3@tux.kirchner>
+Message-ID: <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hello Bjorn,
 
-On Do, 2015-01-15 at 09:34 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Thu, 15 Jan 2015 00:38:16 +0100, J?rg Krause wrote:
-> > io.js is a fork of Node.js. This package is mainly based on the nodejs
-> > package, except for the patches.
-> > 
-> > io.js is currently marked as unstable and there is no stable release for now.
-> > 
-> > Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> 
-> Immediate question that comes to mind: is the code base diverging from
-> Node.js ?
+Thanks once again for your reply.
 
-Yes, it is.
+Does the capital 'T' in "Tslib" make any difference? I've only seen
+> it written as 't', yet. Do you reboot between calibration and starting
+> of your program? In my case the devices changed occasionally between
+> reboots, so /dev/input/event0 was not always the correct device.
 
-> Do we need two separate packages ?
 
-I would say yes. io.js is build against modern versions of V8 and libuv
-and bundles a recent npm package. This enables the user the new features
-from the upcoming JavaScript ECMA-262 specification (ES6).
+I tried with both options, but the results are the same. In my case, it's
+always /dev/input/event0 so I think I'm okay here.
 
-From io.js ChangeLog:
-"The io.js codebase inherits the majority of the changes found in the
-v0.11 branch of the joyent/node repository and therefore can be seen as
-an extension to v0.11."
+I'm not quite sure here. If you start a script which exports environment
+> variables, I think those exportes variables only exist in this script
+> and in its child processes. So, if you start ts_calibrate with a start
+> script and after that your program from a differnt script or directly
+> from your login shell, I suppose those variables aren't set anymore.
+> Please try to export them either in a start script for your application
+> or, as a quick test, in the shell you use to start your program. Just
+> to make sure...
 
-> Does this fork has a chance of becoming widely used ? I'm a bit concerned by the fact of
-> having two separate packages for basically the same thing.
 
-I think of Node.js as an enterprise-driven and io.js as an
-community-driven project. Both have different goals, and will have
-different feature sets in the future. IMO it's good for the user to
-decide, which platform he want to use concerning his demands.
+I tried exporting the variables from command line along with the scripts
+and also the method you suggested, but there was no change in operation. I
+was able to run the qt examples and once I exported the variables from
+command line those examples worked fine.
 
-Best regards
-J?rg Krause
+I'm going to try to compile my Qt application with the library built by
+buildroot and see if that helps. Do you have any other suggestions?
+
+Thanks
+
+- Santhosh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/f6b45c3d/attachment.html>
