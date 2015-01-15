@@ -1,49 +1,27 @@
-From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Thu, 15 Jan 2015 11:58:57 -0600
-Subject: [Buildroot]  Qt4 Application - Touch detection
-Message-ID: <CADKZYYLEP2mVxch3j=zHP71AvtW-43=KzuA-aWXi3h6kwyNdzg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Jan 2015 15:06:49 -0300
+Subject: [Buildroot] [PATCH] gdb: bump to version 7.8.2
+Message-ID: <1421345209-25603-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bjorn,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gdb/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the quick reply.
-
-1. Is environment variable TSLIB_TSDEVICE set to the correct input
->    device found under /dev/input/eventX ?
-> 2. Is environment variable QWS_MOUSE_PROTO set to
->    "tslib:/dev/input/eventX" ?
-
-
-I do have a startup script where I export these variables prior to
-ts_calibrate.  Do you want me to re-export them before running the
-application? I export the following variables:
-
-export TSLIB_TSDEVICE=/dev/input/event0
-export TSLIB_TSEVENTTYPE=INPUT
-export TSLIB_CONFFILE=/etc/ts.conf
-export TSLIB_CALIBFILE=/etc/pointercal
-export QWS_MOUSE_PROTO="Tslib:/dev/input/event0"
-
-I do have a question - when I print the environment variables, these do not
-show up. I use the 'printenv' command, and these are not listed. Is that a
-problem?
-
-
- I used Qt 4.8.x on x86 with a touch screen. But I built it with
-> buildroot and didn't copy it from a SDK. With that buildroot built Qt
-> it worked very well.
-
-
-I will test this out and reply back to you.
-
-Thank you once again.
-Regards
-
-Santhosh
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/7541fa52/attachment.html>
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index e8402b7..7f9df3a 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -55,4 +55,4 @@ config BR2_GDB_VERSION
+ 	default "arc-2014.08-gdb" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
+-	default "7.8.1"	   if BR2_GDB_VERSION_7_8
++	default "7.8.2"	   if BR2_GDB_VERSION_7_8
+-- 
+2.0.5
