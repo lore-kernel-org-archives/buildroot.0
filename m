@@ -1,27 +1,43 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Jan 2015 15:06:49 -0300
-Subject: [Buildroot] [PATCH] gdb: bump to version 7.8.2
-Message-ID: <1421345209-25603-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 15 Jan 2015 15:10:53 -0300
+Subject: [Buildroot] [PATCH 1/1] pppd: add config option to install
+ scripts shipped with pppd's source
+In-Reply-To: <1421195844-865-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1421195844-865-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <54B802AD.2070701@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gdb/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 01/13/2015 09:37 PM, Zoltan Gyarmati wrote:
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index e8402b7..7f9df3a 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -55,4 +55,4 @@ config BR2_GDB_VERSION
- 	default "arc-2014.08-gdb" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
--	default "7.8.1"	   if BR2_GDB_VERSION_7_8
-+	default "7.8.2"	   if BR2_GDB_VERSION_7_8
--- 
-2.0.5
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+> ---
+>  package/pppd/Config.in | 8 ++++++++
+>  package/pppd/pppd.mk   | 5 +++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+> index b77d7b0..6933fcf 100644
+> --- a/package/pppd/Config.in
+> +++ b/package/pppd/Config.in
+> @@ -22,6 +22,14 @@ config BR2_PACKAGE_PPPD_RADIUS
+>  	help
+>  	  Install RADIUS support for pppd
+>  
+> +config BR2_PACKAGE_PPPD_INSTALL_SCRIPTS
+> +	string "Install these PPP scripts"
+> +	default ""
+> +	help
+> +	  Space delimited list to specify which scripts
+> +	  need to be installed from pppd source tree's
+> +	  scripts directory
+> +
+
+Hi.
+Isn't just simpler to copy those scripts that are useful/have no extra
+dependencies (like bash, expect, perl)?
+Otherwise it's just like a post-build script.
+Regards.
