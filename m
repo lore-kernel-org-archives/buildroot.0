@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jan 2015 09:19:32 +0100
-Subject: [Buildroot] [PATCH] xorriso: new package
-In-Reply-To: <54B7010B.7090103@ou.edu>
-References: <54B17F87.4020002@ou.edu>
- <20150114224128.33fa0f17@free-electrons.com>
- <54B7010B.7090103@ou.edu>
-Message-ID: <20150115091932.507e8bd0@free-electrons.com>
+Date: Thu, 15 Jan 2015 09:34:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iojs: new package
+In-Reply-To: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
+References: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
+Message-ID: <20150115093427.0b5118b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Dear J?rg Krause,
 
-Please keep the Buildroot list in Cc, thanks!
+On Thu, 15 Jan 2015 00:38:16 +0100, J?rg Krause wrote:
+> io.js is a fork of Node.js. This package is mainly based on the nodejs
+> package, except for the patches.
+> 
+> io.js is currently marked as unstable and there is no stable release for now.
+> 
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
-On Wed, 14 Jan 2015 17:51:39 -0600, Steve Kenton wrote:
+Immediate question that comes to mind: is the code base diverging from
+Node.js ? Do we need two separate packages ? Does this fork has a
+chance of becoming widely used ? I'm a bit concerned by the fact of
+having two separate packages for basically the same thing.
 
-> > [Thomas:
-> >   - Rewrap Config.in help text
-> >   - Add optional dependencies on libcdio, readline, acl, attr, zlib,
-> >     bzip2.
-> >   - Handle thread support.
-> How do you identify that these are needed so I can try to catch them in 
-> the future?
-
-I look at the configure.ac script, and at ./configure --help.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
