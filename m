@@ -1,42 +1,45 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 15 Jan 2015 11:55:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-01-13
-In-Reply-To: <20150114073013.B78E1100B35@stock.ovh.net>
-References: <20150114073013.B78E1100B35@stock.ovh.net>
-Message-ID: <54B79C90.4030102@imgtec.com>
+Date: Thu, 15 Jan 2015 11:57:27 +0100
+Subject: [Buildroot] [PATCH] autobuild-run: do not build python using a
+	non-working toolchain
+Message-ID: <1421319447-9659-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Python package can't be built using this uClibc toolchain due to a
+problem with redefinitions:
 
-On 14/01/15 08:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-01-13
->      mips64el |      start-stop-daemon-1.16.15 | NOK | http://autobuild.buildroot.net/results/24e37550749dc15ed7223fd515fa4628803f341e/
+setregid.c:(.text+0x0): multiple definition of
+`setregid'setregid.c:(.text+0x0): multiple definition of `setregid'
 
-On 15/01/15 08:30, Thomas Petazzoni wrote:
- > Build statistics for 2015-01-14
->      xtensa |        start-stop-daemon-1.16.15 | NOK | http://autobuild.buildroot.net/results/445bf4742d78a0bf93b4c75dc733c4315530031e/
+Reported upstream:
+  http://lists.busybox.net/pipermail/uclibc/2014-October/048699.html
 
-this can be fixed by replacing this:
+Fixes:
+  http://autobuild.buildroot.net/results/74d/74deae1f7c81e319d1e7d00177f7c8e2c97b8ce8/
 
-dpkg_arch=$($srcdir/run-script $PERL scripts/dpkg-architecture.pl 
--t$host -qDEB_HOST_ARCH 2>/dev/null)
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ scripts/autobuild-run | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-with this:
-
-dpkg_arch=$(uname -m)
-
-in the configure script. Does anyone know a more elegant way to fix this?
-
-Regards,
-
---
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index b27b2fc..fb61a1d 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -306,6 +306,10 @@ def fixup_config(instance, sysinfo):
+     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
+         return False
++    # This MIPS uClibc toolchain fails to build the python package
++    if 'BR2_PACKAGE_PYTHON=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
++        return False
+ 
+     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+         configf.writelines(configlines)
+-- 
+2.0.5
