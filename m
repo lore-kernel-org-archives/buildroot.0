@@ -1,53 +1,49 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 15 Jan 2015 14:58:10 +0000
-Subject: [Buildroot] [PATCH] autobuild-run: do not build python using a
- non-working toolchain
-In-Reply-To: <20150115122426.64e67772@free-electrons.com>
-References: <1421319447-9659-1-git-send-email-Vincent.Riera@imgtec.com>,
- <20150115122426.64e67772@free-electrons.com>
-Message-ID: <38121FAB319C3344930C920E7B518313210694AC@LEMAIL01.le.imgtec.org>
+From: Bill Borton <security@conwin.com>
+Date: Thu, 15 Jan 2015 09:19:49 -0600
+Subject: [Buildroot] Using a local kernel tarball?
+In-Reply-To: <18C83A04-432F-4D73-ADAC-ED64715C267E@gmail.com>
+References: <20150113131925.58ca1219@black>
+ <18C83A04-432F-4D73-ADAC-ED64715C267E@gmail.com>
+Message-ID: <20150115091949.48929a49@black>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Thank you sir.
 
-yes, I will send an updated patch. Thanks.
+That was actually one of the first things I tried:
+"file://board/company/product/kernel.tar.bz"
+which doesn't work. I also tried ../ and ../../
 
-Best regards,
---
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
-________________________________________
-From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
-Sent: 15 January 2015 11:24
-To: Vincent Olivert Riera
-Cc: buildroot at buildroot.org
-Subject: Re: [Buildroot] [PATCH] autobuild-run: do not build python using a non-working toolchain
+With your suggestion I went back and tried again:
+"file://../../../board/company/product/kernel.tar.bz"
+Does the trick...
 
-Dear Vicente Olivert Riera,
+I knew there must be a simple solution.
 
-On Thu, 15 Jan 2015 11:57:27 +0100, Vicente Olivert Riera wrote:
+Thanks again,
+-Bill
 
-> +    # This MIPS uClibc toolchain fails to build the python package
-> +    if 'BR2_PACKAGE_PYTHON=y\n' in configlines and \
-> +       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
 
-No, this is not good: we don't want to disable Python completely for
-this toolchain. We want to disable it only for BR2_STATIC_LIBS=y
-builds, because that's the only situation that's causing this problem.
-
-Can you resend an updated patch?
-
-Thanks,
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Wed, 14 Jan 2015 22:15:02 +0100
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+> Hi Bill,
+> 
+> On January 13, 2015 8:19:25 PM CET, Bill Borton <security@conwin.com> wrote:
+> >Hi guys,
+> >
+> >It would appear I can use a local directory, repository or a custom
+> >tarball URL... but not a local tarball?
+> >
+> >If my kernel src is in say
+> >buildroot/boards/company/product/kernel.tar.bz how do I tell Buildroot
+> >to use it?
+> >
+> >I'm betting I've missed something obvious...
+> 
+> Use file:// as URL prefix to point to a local file...
+> 
+> Best regards,
+> Thomas
