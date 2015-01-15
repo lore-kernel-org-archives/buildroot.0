@@ -1,54 +1,36 @@
-From: =?ISO-8859-15?B?Qmr2cm4=?= Kirchner <bjoern@am-soft.de>
-Date: Thu, 15 Jan 2015 18:13:24 +0100
-Subject: [Buildroot] Qt4 Application - Touch detection
-In-Reply-To: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
-Message-ID: <20150115181324.48fc51e9@tux.kirchner>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Thu, 15 Jan 2015 18:18:14 +0100
+Subject: [Buildroot] [PATCH 1/1] jimtcl: change the way of define
+	JIMTCL_INSTALL_LIB variable
+Message-ID: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 15 Jan 2015 11:03:38 -0600
-schrieb Santhosh Ramani <srcoolz@gmail.com>:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/jimtcl/jimtcl.mk |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> Hello Everyone,
-> 
-> I am having some problems with running a Qt4 application with the
-> buildroot RFS. The application renders fine and the screen looks
-> perfect but touch detection does not work consistently and also seems
-> to be off.
-> 
-> I have calibrated the touch with ts_calibrate and ts_test also works
-> perfectly. However when I run my app, touch detection doesn't work
-> properly. I have built my app in Qt 4.8.4 and used the libraries from
-> the TI SDK. I have also copied all the relevant libraries to the RFS
-> and I don't get any errors for library dependency.
-> 
-
-I used Qt 4.8.x on x86 with a touch screen. But I built it with
-buildroot and didn't copy it from a SDK. With that buildroot built Qt
-it worked very well. Two things for you to check:
-
-1. Is environment variable TSLIB_TSDEVICE set to the correct input
-   device found under /dev/input/eventX ?
-2. Is environment variable QWS_MOUSE_PROTO set to
-   "tslib:/dev/input/eventX" ?
-
-> When I enable the mouse pointer to be displayed in my application, I
-> can see that the pointer shows up in completely the wrong spot. But
-> if I kill my application and start the ts_test it works perfectly;
-> that is how I can know that the calibration is good.
-> 
-> Can someone please point me in the right direction? Thank you for your
-> help, it's much appreciated :)
-> 
-> Regards
-> 
-> Santhosh
-> 
-
-Regards
-
-Bj?rn
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index 75c0382..c2e04ff 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -32,10 +32,11 @@ JIMTCL_INSTALL_LIB =
+ else
+ JIMTCL_SHARED = --shared
+ JIMTCL_LIB = so.$(JIMTCL_VERSION)
+-JIMTCL_INSTALL_LIB = \
++define JIMTCL_INSTALL_LIB
+ 	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
+-	$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
++		$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
+ 	ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
++endef
+ endif
+ 
+ define JIMTCL_CONFIGURE_CMDS
+-- 
+1.7.9.5
