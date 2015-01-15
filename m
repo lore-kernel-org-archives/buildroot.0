@@ -1,36 +1,29 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Thu, 15 Jan 2015 23:48:55 +0100
-Subject: [Buildroot] [PATCH] toolchain: Use the correct target name
-Message-ID: <54B843D7.1030602@dawncrow.de>
+From: Cjw X <cjwfirmware@vxmdesign.com>
+Date: Thu, 15 Jan 2015 17:57:32 -0500
+Subject: [Buildroot] support for cortex m3/m4 with newlib
+Message-ID: <CAOudHSX=sc7hwE0PObED1jtDp7pOs-=PPVG_Rsh6+di9iYWojA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using an external toolchain we need to use the toolchain prefix
-for the staging directory and e.g. for configure.
+I've been working on modifying buildroot to support cortex m3/m4 processors
+against the newlib library.
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
-This fixes cross compiling Wine (not yet upstream because of that).
+This way I can use buildroot to build RTOS's for those processors. I've
+been using buildroot for years to build linux systems and I would like to
+expand that for the smaller processors with different operating systems.
 
- package/Makefile.in | 4 ++++
- 1 file changed, 4 insertions(+)
+I am making some progress. The toolchain already works. I'm now starting to
+go down the road of supporting RTOS's.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2055f00..0a00c7e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -36,7 +36,11 @@ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
- endif
+I'm going to keep going regardless, but I wanted to check to find out if
+this interests the community.
 
- # Compute GNU_TARGET_NAME
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
-+else
-+GNU_TARGET_NAME = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-+endif
+Does this interest people?
 
- # FLAT binary format needs uclinux
- ifeq ($(BR2_BINFMT_FLAT),y)
+-Chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/69cdafb8/attachment.html>
