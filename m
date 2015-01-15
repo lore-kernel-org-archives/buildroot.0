@@ -1,28 +1,35 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 15 Jan 2015 07:49:49 +0200
-Subject: [Buildroot] [PATCHv2] docs/manual: add FAQ entry about speeding
- up the build process
-In-Reply-To: <1421272093-29974-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1421272093-29974-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150115054948.GK2481@sapphire.tkos.co.il>
+Date: Thu, 15 Jan 2015 09:19:36 +0200
+Subject: [Buildroot] [PATCH] rt-tests: fix build of NTPL dependent tests
+Message-ID: <e8a70d168927c7e195ed376137ebec128762427f.1421306376.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Commit 143fe5b443da4 (rt-tests: allow building subset of tests with non-NPTL
+toolchains) disabled build of NPTL dependent tests unconditionally. Fix this.
 
-On Wed, Jan 14, 2015 at 10:48:13PM +0100, Thomas Petazzoni wrote:
-> + * Buy, or convince your boss to new hardware. SSDs and lots of RAM
-> +   are key to speeding up the builds.
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Reported-by: "Williams Jr., Ernest L." <ernesto@slac.stanford.edu>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/rt-tests/rt-tests.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-"Buy, or convince your boss to buy new hardware" (added 'buy'). Alternatively: 
-"Buy new hardware, or convince your boss to do so".
-
-baruch
-
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index e0c7748c9c3b..009e9a6818ce 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -15,6 +15,8 @@ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
+ RT_TESTS_HAVE_NPTL=no
++else
++RT_TESTS_HAVE_NPTL=yes
+ endif
+ 
+ define RT_TESTS_BUILD_CMDS
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
