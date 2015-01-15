@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Jan 2015 09:38:02 +0100
-Subject: [Buildroot] [git commit] mpd: bump to version 0.19.8
-Message-ID: <20150115083836.D378680DF4@busybox.osuosl.org>
+Date: Thu, 15 Jan 2015 09:38:30 +0100
+Subject: [Buildroot] [git commit] xorriso: needs threads and mmu
+Message-ID: <20150115083836.DE1E280DF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eedb7cb6fd4a2c8761196c9a799304a976ae1193
+commit: http://git.buildroot.net/buildroot/commit/?id=56c27a0235a1dc03dc587e30181d73ab880c127b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes (threads):
+http://autobuild.buildroot.net/results/c2f/c2fb1cd4e9fe022e152bf6db7d5d819b08d673cd/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/mpd.hash |    2 +-
- package/mpd/mpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xorriso/Config.in |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 51d5fbb..5cb6102 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	16d96332ec09d58ae2b914cfa509862e5f5b854dd52fdd6bda7336d66e888278	mpd-0.19.7.tar.xz
-+sha256	d3c069d2867e362b343c5babea3e7fe9e6780d3dcb1be38808a8ea48911bae50	mpd-0.19.8.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 2e664a3..7333164 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/xorriso/Config.in b/package/xorriso/Config.in
+index cd60d7f..14d81fa 100644
+--- a/package/xorriso/Config.in
++++ b/package/xorriso/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_XORRISO
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
  
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).7
-+MPD_VERSION = $(MPD_VERSION_MAJOR).8
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+@@ -17,5 +19,6 @@ config BR2_PACKAGE_XORRISO
+ 	  http://libburnia-project.org/
+ 	  http://www.gnu.org/software/xorriso
+ 
+-comment "xorriso needs a toolchain w/ wchar, largefile"
+-	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
++comment "xorriso needs a toolchain w/ wchar, largefile, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
