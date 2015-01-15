@@ -1,45 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Jan 2015 13:26:32 -0300
-Subject: [Buildroot] [PATCH v3] Allow a single DHCP configuration via
- the system configuration submenu
-In-Reply-To: <CABbD_XCR9JPtU3FV2tb-D17G0J+i_buXdt=5=cU3XPsdAkzVcg@mail.gmail.com>
-References: <1420709805-13040-1-git-send-email-jeremy.rosen@openwide.fr>
- <CABbD_XCR9JPtU3FV2tb-D17G0J+i_buXdt=5=cU3XPsdAkzVcg@mail.gmail.com>
-Message-ID: <54B7EA38.8010006@zacarias.com.ar>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Thu, 15 Jan 2015 11:03:38 -0600
+Subject: [Buildroot] Qt4 Application - Touch detection
+Message-ID: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/09/2015 07:28 AM, K?roly Kasza wrote:
+Hello Everyone,
 
-Hi J?r?my, K?roly, the rest.
+I am having some problems with running a Qt4 application with the buildroot
+RFS. The application renders fine and the screen looks perfect but touch
+detection does not work consistently and also seems to be off.
 
-> Tested-by: Karoly Kasza <kaszak at gmail.com <mailto:kaszak@gmail.com>>
-> Reviewed-by: Karoly Kasza <kaszak at gmail.com <mailto:kaszak@gmail.com>>
-> 
-> Tested with uClibc, successfully built different rootfs.ext images and
-> booted them.
-> Tested with master branch, x86_64 arch in QEMU, internal toolchain GCC
-> 4.9.2 w/ uclibc, Linux 3.18.1.
-> 
-> I recommend maybe adding a dependency in Config.in later for package
-> ifupdown (not yet merged, proposed by Gustavo), if no Busybox is present
-> in the system.
+I have calibrated the touch with ts_calibrate and ts_test also works
+perfectly. However when I run my app, touch detection doesn't work
+properly. I have built my app in Qt 4.8.4 and used the libraries from the
+TI SDK. I have also copied all the relevant libraries to the RFS and I
+don't get any errors for library dependency.
 
-I wouldn't go as far as selecting ifupdown, but possibly depending on
-BR2_PACKAGE_BUSYBOX | BR2_PACKAGE_IFUPDOWN because the option will
-always be "set" (it's a string) and you can't do that easily.
-That way the option will vanish if there's no proper provider of
-ifupdown which is the interpreter of /etc/network/interfaces.
-Of course busybox may lack ifupdown for custom configs, but that's the
-case for so many things (a shell, for example) that we can't cover weird
-scenarios in a sane way, and it might just be intended.
-Other than that:
+When I enable the mouse pointer to be displayed in my application, I can
+see that the pointer shows up in completely the wrong spot. But if I kill
+my application and start the ts_test it works perfectly; that is how I can
+know that the calibration is good.
 
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Can someone please point me in the right direction? Thank you for your
+help, it's much appreciated :)
 
-(qemu-arm-versatile-defconfig default busybox init and systemd).
-Regards.
+Regards
+
+Santhosh
+
+-- 
+Greater the Difficulty....Sweeter is the Victory
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/ee263cd8/attachment.html>
