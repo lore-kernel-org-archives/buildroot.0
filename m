@@ -1,60 +1,31 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Thu, 15 Jan 2015 13:04:44 -0800
-Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
-In-Reply-To: <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
- <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
- <20150115200634.598a27a3@tux.kirchner>
- <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
- <20150115212231.08000b68@tux.kirchner>
- <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
-Message-ID: <CALo-6+jTAcUEOWeES1rCUdSHS1NbccG6L+oEBB3VTJYMEu6coQ@mail.gmail.com>
+From: Lou Crittenden <loucrittenden63@gmail.com>
+Date: Thu, 15 Jan 2015 15:44:42 -0600
+Subject: [Buildroot] Setting up audio/video playback backends on raspberry pi
+Message-ID: <CAFGceHE53EiS632nzCV68LDWzupYYU0akKpHwKphVrDTaw93Yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On the invocation of the qt program, perhaps this argument might help
+Hello all, I am in the process of setting up a minimalist buildroot based
+touchscreen multimedia player and was wondering how to get the audio and
+video backends working properly. I can play a file with mplayer (no
+arguments) from the console and there is no sound. I also have alsautils
+and pulseaudio installed, as well as the gstreamer framework, but still no
+go. I would like to get some info on how to configure it, please. For the
+display, I have one of those waveshare32b displays I got working thanks to
+Peter Seiderer's help (thanks Peter!). I'm now on the audio and video
+playback backend configuration stages.
 
--plugin Tslib:/dev/input/event0
-
-
-
-On Thu, Jan 15, 2015 at 12:44 PM, Santhosh Ramani <srcoolz@gmail.com> wrote:
-
-> So, you did something like this?
->> # export TSLIB_TSDEVICE=/dev/input/event0
->> # export QWS_MOUSE_PROTO="tslib:/dev/input/event0"
->> # <qtExample>
->> And there the touch screen worked correctly? And your program didn't?
->
->
-> Yes that is correct. However, I still don't understand why export doesn't
-> work within a script. I understood your explanation; the TI file system
-> uses profile.d to export these variables again in bash. I will try doing
-> that with profile file in etc to make it part of the startup routine.
->
-> I'm going to try and compile my application with the Qt built by buildroot
-> and I will reply back with my findings.
->
-> Thanks once again for your patience and help.
-> Regards
->
-> Santhosh
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
-
--- 
-Charles Krinke
+Included in the attachment is my buildroot configuration.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/e5a7ff6a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/0b4c7c9d/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 80244 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/0b4c7c9d/attachment-0001.obj>
