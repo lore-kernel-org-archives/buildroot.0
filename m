@@ -1,33 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Jan 2015 07:37:02 -0300
-Subject: [Buildroot] [PATCH] package/gcc: disable libitm for sparc <v9
-In-Reply-To: <20150115093742.1fb23f1f@free-electrons.com>
-References: <1421281784-5243-1-git-send-email-gustavo@zacarias.com.ar>
- <20150115093742.1fb23f1f@free-electrons.com>
-Message-ID: <54B7984E.7090705@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 15 Jan 2015 11:55:12 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-01-13
+In-Reply-To: <20150114073013.B78E1100B35@stock.ovh.net>
+References: <20150114073013.B78E1100B35@stock.ovh.net>
+Message-ID: <54B79C90.4030102@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/15/2015 05:37 AM, Thomas Petazzoni wrote:
+Dear all,
 
-> Applied, thanks. Is it only SPARCv8 that doesn't have libitm support,
-> or could other architectures be affected? If other architectures are
-> affected, we may want to introduce a BR2_ARCH_HAS_LIBITM or some other
-> similar thing.
-> 
-> Another weird thing: we're not enabling libitm, so why is gcc enabling
-> it by itself, if it knows that the architecture cannot support it?
+On 14/01/15 08:30, Thomas Petazzoni wrote:
+> Build statistics for 2015-01-13
+>      mips64el |      start-stop-daemon-1.16.15 | NOK | http://autobuild.buildroot.net/results/24e37550749dc15ed7223fd515fa4628803f341e/
 
-There are other architectures that could be affected, most notably old
-processors/cores.
-I don't think we need to do anything more special about it, most of the
-time gcc will detect and enable it if the architecture supports it,
-which basically boils down to your second question, it's failing to
-realize sparc v8 can't handle it.
-It probably has to do with the sparc tuple being used for sparc64 as
-well (64 bit kernel 32 bit userland) and sparc v8 being terribly old and
-hardly used outside of LEON (V9 dates from 1993!).
-Regards.
+On 15/01/15 08:30, Thomas Petazzoni wrote:
+ > Build statistics for 2015-01-14
+>      xtensa |        start-stop-daemon-1.16.15 | NOK | http://autobuild.buildroot.net/results/445bf4742d78a0bf93b4c75dc733c4315530031e/
+
+this can be fixed by replacing this:
+
+dpkg_arch=$($srcdir/run-script $PERL scripts/dpkg-architecture.pl 
+-t$host -qDEB_HOST_ARCH 2>/dev/null)
+
+with this:
+
+dpkg_arch=$(uname -m)
+
+in the configure script. Does anyone know a more elegant way to fix this?
+
+Regards,
+
+--
+Vicente Olivert Riera
+Graduate Software Engineer, MIPS Platforms
+Imagination Technologies Limited
+t: +44 (0)113 2429814
+www.imgtec.com
