@@ -1,75 +1,52 @@
-From: =?ISO-8859-15?B?Qmr2cm4=?= Kirchner <bjoern@am-soft.de>
-Date: Thu, 15 Jan 2015 20:06:34 +0100
-Subject: [Buildroot] Fwd:  Qt4 Application - Touch detection
-In-Reply-To: <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
- <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
-Message-ID: <20150115200634.598a27a3@tux.kirchner>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <jkrause@posteo.de>
+Date: Thu, 15 Jan 2015 20:58:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iojs: new package
+In-Reply-To: <20150115093427.0b5118b2@free-electrons.com>
+References: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
+ <20150115093427.0b5118b2@free-electrons.com>
+Message-ID: <1421351925.2625.14.camel@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 15 Jan 2015 11:57:20 -0600
-schrieb Santhosh Ramani <srcoolz@gmail.com>:
+Dear Thomas Petazzoni,
 
-> Hello Bjorn,
+On Do, 2015-01-15 at 09:34 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> Thanks for the quick reply.
+> On Thu, 15 Jan 2015 00:38:16 +0100, J?rg Krause wrote:
+> > io.js is a fork of Node.js. This package is mainly based on the nodejs
+> > package, except for the patches.
+> > 
+> > io.js is currently marked as unstable and there is no stable release for now.
+> > 
+> > Signed-off-by: J?rg Krause <jkrause@posteo.de>
 > 
-> 1. Is environment variable TSLIB_TSDEVICE set to the correct input
-> >    device found under /dev/input/eventX ?
-> > 2. Is environment variable QWS_MOUSE_PROTO set to
-> >    "tslib:/dev/input/eventX" ?
-> 
-> 
-> I do have a startup script where I export these variables prior to
-> ts_calibrate.  Do you want me to re-export them before running the
-> application? I export the following variables:
-> 
-> export TSLIB_TSDEVICE=/dev/input/event0
-> export TSLIB_TSEVENTTYPE=INPUT
-> export TSLIB_CONFFILE=/etc/ts.conf
-> export TSLIB_CALIBFILE=/etc/pointercal
-> export QWS_MOUSE_PROTO="Tslib:/dev/input/event0"
-> 
+> Immediate question that comes to mind: is the code base diverging from
+> Node.js ?
 
-Does the capital 'T' in "Tslib" make any difference? I've only seen
-it written as 't', yet. Do you reboot between calibration and starting
-of your program? In my case the devices changed occasionally between
-reboots, so /dev/input/event0 was not always the correct device.
+Yes, it is.
 
-> I do have a question - when I print the environment variables, these
-> do not show up. I use the 'printenv' command, and these are not
-> listed. Is that a problem?
+> Do we need two separate packages ?
 
-I'm not quite sure here. If you start a script which exports environment
-variables, I think those exportes variables only exist in this script
-and in its child processes. So, if you start ts_calibrate with a start
-script and after that your program from a differnt script or directly
-from your login shell, I suppose those variables aren't set anymore.
-Please try to export them either in a start script for your application
-or, as a quick test, in the shell you use to start your program. Just
-to make sure...
+I would say yes. io.js is build against modern versions of V8 and libuv
+and bundles a recent npm package. This enables the user the new features
+from the upcoming JavaScript ECMA-262 specification (ES6).
 
-> 
-> 
->  I used Qt 4.8.x on x86 with a touch screen. But I built it with
-> > buildroot and didn't copy it from a SDK. With that buildroot built
-> > Qt it worked very well.
-> 
-> 
-> I will test this out and reply back to you.
-> 
-> Thank you once again.
-> Regards
-> 
-> Santhosh
-> 
-> 
-> 
-> 
-> 
+From io.js ChangeLog:
+"The io.js codebase inherits the majority of the changes found in the
+v0.11 branch of the joyent/node repository and therefore can be seen as
+an extension to v0.11."
+
+> Does this fork has a chance of becoming widely used ? I'm a bit concerned by the fact of
+> having two separate packages for basically the same thing.
+
+I think of Node.js as an enterprise-driven and io.js as an
+community-driven project. Both have different goals, and will have
+different feature sets in the future. IMO it's good for the user to
+decide, which platform he want to use concerning his demands.
+
+Best regards
+J?rg Krause
