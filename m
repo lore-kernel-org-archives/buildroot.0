@@ -1,126 +1,86 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Jan 2015 10:40:32 -0300
-Subject: [Buildroot] [PATCH 2/2] haserl: remove deprecated 0.8.x version
-In-Reply-To: <1421329232-21302-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1421329232-21302-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1421329232-21302-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 15 Jan 2015 11:03:19 -0300
+Subject: [Buildroot] [PATCH] samba4: security bump to version 4.1.16
+Message-ID: <1421330599-28068-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It'll be a year for the 2015.02 release so remove the old/deprecated
-0.8.x version for the release.
+Fixes CVE-2014-8143 - dsdb-samldb: Check for extended access rights
+before we allow changes to userAccountControl.
 
-Also update hash to match sourceforge (original) one.
-
-And rename patch to new naming convention.
+Also rename patches to new naming convention.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/haserl/0.8.0/haserl-0.8.0-legacy.patch     | 12 ---------
- ....inc.patch => 0001-add-haserl_lualib.inc.patch} |  0
- package/haserl/Config.in                           | 30 +---------------------
- package/haserl/haserl.hash                         |  6 ++---
- package/haserl/haserl.mk                           |  6 +----
- 5 files changed, 5 insertions(+), 49 deletions(-)
- delete mode 100644 package/haserl/0.8.0/haserl-0.8.0-legacy.patch
- rename package/haserl/{0.9.33/haserl-001-add-haserl_lualib.inc.patch => 0001-add-haserl_lualib.inc.patch} (100%)
+ ...via-array.patch => 0001-build-find-FILE_OFFSET_BITS-via-array.patch} | 0
+ ...ides.patch => 0002-build-allow-some-python-variable-overrides.patch} | 0
+ ...ze-via-array.patch => 0003-build-find-blkcnt_t-size-via-array.patch} | 0
+ ...x-endian-tests.patch => 0004-build-unify-and-fix-endian-tests.patch} | 0
+ ...> 0005-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch} | 0
+ ...OF-utmp-ut_line.patch => 0006-build-tweak-SIZEOF-utmp-ut_line.patch} | 0
+ .../{samba4-0009-disable-libbsd.patch => 0007-disable-libbsd.patch}     | 0
+ package/samba4/samba4.hash                                              | 2 +-
+ package/samba4/samba4.mk                                                | 2 +-
+ 9 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/samba4/{samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch => 0001-build-find-FILE_OFFSET_BITS-via-array.patch} (100%)
+ rename package/samba4/{samba4-0004-build-allow-some-python-variable-overrides.patch => 0002-build-allow-some-python-variable-overrides.patch} (100%)
+ rename package/samba4/{samba4-0005-build-find-blkcnt_t-size-via-array.patch => 0003-build-find-blkcnt_t-size-via-array.patch} (100%)
+ rename package/samba4/{samba4-0006-build-unify-and-fix-endian-tests.patch => 0004-build-unify-and-fix-endian-tests.patch} (100%)
+ rename package/samba4/{samba4-0007-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch => 0005-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch} (100%)
+ rename package/samba4/{samba4-0008-build-tweak-SIZEOF-utmp-ut_line.patch => 0006-build-tweak-SIZEOF-utmp-ut_line.patch} (100%)
+ rename package/samba4/{samba4-0009-disable-libbsd.patch => 0007-disable-libbsd.patch} (100%)
 
-diff --git a/package/haserl/0.8.0/haserl-0.8.0-legacy.patch b/package/haserl/0.8.0/haserl-0.8.0-legacy.patch
-deleted file mode 100644
-index bb6f3b0..0000000
---- a/package/haserl/0.8.0/haserl-0.8.0-legacy.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -urN haserl-0.8.0-0rig/src/haserl.c haserl-0.8.0/src/haserl.c
----- haserl-0.8.0-0rig/src/haserl.c	2004-11-10 18:59:35.000000000 +0100
--+++ haserl-0.8.0/src/haserl.c	2007-10-12 14:36:28.000000000 +0200
--@@ -131,7 +131,7 @@
-- 	if (strlen(prefix)) { memcpy (entry, prefix, strlen(prefix)); }
-- 	memcpy ((char *) (entry + strlen(prefix)), newbuf, strlen(newbuf));
-- 
---	keylen = (size_t) (index (entry, '=') - entry);
--+	keylen = (size_t) (strchr (entry, '=') - entry);
-- 	
-- 	if ( keylen <= 0 ) {
-- 			free (entry);
-diff --git a/package/haserl/0.9.33/haserl-001-add-haserl_lualib.inc.patch b/package/haserl/0001-add-haserl_lualib.inc.patch
+diff --git a/package/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch b/package/samba4/0001-build-find-FILE_OFFSET_BITS-via-array.patch
 similarity index 100%
-rename from package/haserl/0.9.33/haserl-001-add-haserl_lualib.inc.patch
-rename to package/haserl/0001-add-haserl_lualib.inc.patch
-diff --git a/package/haserl/Config.in b/package/haserl/Config.in
-index 680e280..1620d72 100644
---- a/package/haserl/Config.in
-+++ b/package/haserl/Config.in
-@@ -8,37 +8,9 @@ config BR2_PACKAGE_HASERL
- 
- 	  http://haserl.sourceforge.net/
- 
--if BR2_PACKAGE_HASERL
--
- config BR2_PACKAGE_HASERL_WITH_LUA
- 	bool "Lua support"
--	depends on BR2_PACKAGE_HASERL_VERSION_0_9_X
-+	depends on BR2_PACKAGE_HASERL
- 	select BR2_PACKAGE_LUA
- 	help
- 	  Enable Lua support for haserl
--
--choice
--	prompt "Haserl version"
--	default BR2_PACKAGE_HASERL_VERSION_0_9_X
--	help
--	  Select the older stable version, or the newer developer version
--
--config BR2_PACKAGE_HASERL_VERSION_0_8_X
--	bool	"v 0.8.x"
--	depends on BR2_DEPRECATED_SINCE_2014_02
--	help
--	  stable version
--
--config BR2_PACKAGE_HASERL_VERSION_0_9_X
--	bool	"v 0.9.x"
--	help
--	  developer version - seems OK though
--
--endchoice
--
--endif
--
--config BR2_PACKAGE_HASERL_VERSION
--	string
--	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_X
--	default "0.9.33"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
-diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
-index 3573fa9..7b1bfa2 100644
---- a/package/haserl/haserl.hash
-+++ b/package/haserl/haserl.hash
-@@ -1,3 +1,3 @@
--# Locally computed:
--sha256  ba261a21539e1f204ba74590d313c501007e546b54aa9ae7210a99eaf3c097be  haserl-0.8.0.tar.gz
--sha256  9a65b14dc721643fc5b85c79117cb6d824bd3683b246744137bb5d978df7621b  haserl-0.9.33.tar.gz
-+# From http://sourceforge.net/projects/haserl/files/haserl-devel/
-+md5	a9decddb508944d56f71dd2f821e2ec5	haserl-0.9.33.tar.gz
-+sha1	bbb5d55db911fdb854828794181e57a1a275e65d	haserl-0.9.33.tar.gz
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index f0de790..4985c09 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
-@@ -4,12 +4,8 @@
+rename from package/samba4/samba4-0003-build-find-FILE_OFFSET_BITS-via-array.patch
+rename to package/samba4/0001-build-find-FILE_OFFSET_BITS-via-array.patch
+diff --git a/package/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch b/package/samba4/0002-build-allow-some-python-variable-overrides.patch
+similarity index 100%
+rename from package/samba4/samba4-0004-build-allow-some-python-variable-overrides.patch
+rename to package/samba4/0002-build-allow-some-python-variable-overrides.patch
+diff --git a/package/samba4/samba4-0005-build-find-blkcnt_t-size-via-array.patch b/package/samba4/0003-build-find-blkcnt_t-size-via-array.patch
+similarity index 100%
+rename from package/samba4/samba4-0005-build-find-blkcnt_t-size-via-array.patch
+rename to package/samba4/0003-build-find-blkcnt_t-size-via-array.patch
+diff --git a/package/samba4/samba4-0006-build-unify-and-fix-endian-tests.patch b/package/samba4/0004-build-unify-and-fix-endian-tests.patch
+similarity index 100%
+rename from package/samba4/samba4-0006-build-unify-and-fix-endian-tests.patch
+rename to package/samba4/0004-build-unify-and-fix-endian-tests.patch
+diff --git a/package/samba4/samba4-0007-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch b/package/samba4/0005-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch
+similarity index 100%
+rename from package/samba4/samba4-0007-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch
+rename to package/samba4/0005-build-make-wafsamba-CHECK_SIZEOF-cross-compile-friendl.patch
+diff --git a/package/samba4/samba4-0008-build-tweak-SIZEOF-utmp-ut_line.patch b/package/samba4/0006-build-tweak-SIZEOF-utmp-ut_line.patch
+similarity index 100%
+rename from package/samba4/samba4-0008-build-tweak-SIZEOF-utmp-ut_line.patch
+rename to package/samba4/0006-build-tweak-SIZEOF-utmp-ut_line.patch
+diff --git a/package/samba4/samba4-0009-disable-libbsd.patch b/package/samba4/0007-disable-libbsd.patch
+similarity index 100%
+rename from package/samba4/samba4-0009-disable-libbsd.patch
+rename to package/samba4/0007-disable-libbsd.patch
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index bd6f6e9..bff18a8 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	9d84112124512428ddc9cc0d9975524bab730b9a598a9ff90458666afb3f42f4	samba-4.1.15.tar.gz
++sha256	12a09c167bfa25f50b82775bcbeda94c71c5d71d3b0d1210f6dae0f23020a87b	samba-4.1.16.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4a2f207..4239b42 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HASERL_VERSION = $(call qstrip,$(BR2_PACKAGE_HASERL_VERSION))
--ifeq ($(BR2_PACKAGE_HASERL_VERSION_0_8_X),y)
--HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl/$(HASERL_VERSION)
--else
-+HASERL_VERSION = 0.9.33
- HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
--endif
- HASERL_LICENSE = GPLv2
- HASERL_LICENSE_FILES = COPYING
- HASERL_DEPENDENCIES = host-pkgconf
+-SAMBA4_VERSION = 4.1.15
++SAMBA4_VERSION = 4.1.16
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_LICENSE = GPLv3+
 -- 
 2.0.5
