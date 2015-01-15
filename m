@@ -1,11 +1,7 @@
 From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Thu, 15 Jan 2015 11:57:20 -0600
-Subject: [Buildroot] Fwd:  Qt4 Application - Touch detection
-In-Reply-To: <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
-Message-ID: <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
+Date: Thu, 15 Jan 2015 11:58:57 -0600
+Subject: [Buildroot]  Qt4 Application - Touch detection
+Message-ID: <CADKZYYLEP2mVxch3j=zHP71AvtW-43=KzuA-aWXi3h6kwyNdzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -48,13 +44,6 @@ Thank you once again.
 Regards
 
 Santhosh
-
-
-
-
-
--- 
-Greater the Difficulty....Sweeter is the Victory
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/7a28e6c2/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/7541fa52/attachment.html>
