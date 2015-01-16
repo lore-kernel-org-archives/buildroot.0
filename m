@@ -1,41 +1,92 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 16 Jan 2015 11:29:26 +0100
-Subject: [Buildroot] Python: ctype: find_library support
-In-Reply-To: <CAGm1_kso0sheGZqzPugfxHba-9wVj-AwJHUd++DN+tRqqd=czg@mail.gmail.com>
-References: <CAGm1_kso0sheGZqzPugfxHba-9wVj-AwJHUd++DN+tRqqd=czg@mail.gmail.com>
-Message-ID: <CAGm1_kvnbZ=XfNZ7vr8D48z8A88Pb1S_DDauKhMjrYLDbbvH2Q@mail.gmail.com>
+From: David Bender <codehero@gmail.com>
+Date: Fri, 16 Jan 2015 08:03:01 -0500
+Subject: [Buildroot] [PATCH 1/1] benejson: new package
+Message-ID: <1421413381-25236-1-git-send-email-codehero@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 14, 2015 at 8:54 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> This subject was brought up yesterday on IRC.
->
-> Some packages like pyudev
-> (https://pyudev.readthedocs.org/en/latest/index.html) require
-> find_library support in order to emit proper *.so name. To do so,
-> Python uses either /sbin/ldconfig, objdump or gcc (see
-> https://docs.python.org/2/library/ctypes.html#finding-shared-libraries).
-> See build/python-2.7.9/Lib/ctypes/util.py for implementation details.
->
-> As we don't supply target gcc and objdump, /sbin/ldconfig seems to be
-> the only solution. But in the default configuration of internally
-> built toolchain library cache is disabled and in external toolchains
-> (Sourcery CodeBench ARM 2014.05 for example), ldconfig is not provided
-> at all.
->
-> How can we solve this issue?
+From: David Bender <codehero@yahoo.com>
 
-Hm. We seem not to be alone. There is a related, but unresolved and
-uncommented bug in Python's bug tracker:
-http://bugs.python.org/issue13508
+Added C/C++ JSON parsing package benejson.
 
-I've also found this BR thread:
-http://lists.busybox.net/pipermail/buildroot/2013-October/081219.html
+Signed-off-by: Dave Bender <bender@benegon.com>
+---
+ package/Config.in            |    1 +
+ package/benejson/Config.in   |    6 ++++++
+ package/benejson/benejson.mk |   37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 0 deletions(-)
+ create mode 100644 package/benejson/Config.in
+ create mode 100644 package/benejson/benejson.mk
 
-Wojciech, have you tried to contact Python devs?
-
-Yegor
+diff --git a/package/Config.in b/package/Config.in
+index 266de13..5a09608 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -761,6 +761,7 @@ menu "Javascript"
+ endmenu
+ 
+ menu "JSON/XML"
++	source "package/benejson/Config.in"
+ 	source "package/cjson/Config.in"
+ 	source "package/expat/Config.in"
+ 	source "package/ezxml/Config.in"
+diff --git a/package/benejson/Config.in b/package/benejson/Config.in
+new file mode 100644
+index 0000000..6d8d2a3
+--- /dev/null
++++ b/package/benejson/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_BENEJSON
++	bool "benejson"
++	help
++	  "streaming JSON parsing library with C and C++ APIs"
++
++		https://codehero.github.io/benejson/
+diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
+new file mode 100644
+index 0000000..851b95e
+--- /dev/null
++++ b/package/benejson/benejson.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# benejson
++#
++################################################################################
++
++BENEJSON_VERSION = 0.9.7
++BENEJSON_SITE =  $(call github,codehero,benejson,$(BENEJSON_VERSION))
++BENEJSON_LICENSE = BSD-3c
++BENEJSON_LICENSE_FILES = COPYING
++BENEJSON_INSTALL_STAGING = YES
++
++BENEJSON_DEPENDENCIES = host-scons
++
++BENEJSON_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS)
++
++define BENEJSON_BUILD_CMDS
++	(cd $(@D); \
++		$(BENEJSON_SCONS_ENV) \
++		$(SCONS) \
++		$(BENEJSON_SCONS_OPTS))
++endef
++
++define BENEJSON_INSTALL_STAGING_CMDS
++	(cd $(@D); \
++		cp -ra include/benejson $(STAGING_DIR)/usr/include; \
++		cp lib/libbenejson.{so,a} $(STAGING_DIR)/usr/lib \
++		)
++endef
++
++define BENEJSON_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		cp lib/libbenejson.{so,a} $(TARGET_DIR)/usr/lib \
++		)
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.8.6
