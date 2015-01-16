@@ -1,64 +1,56 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Fri, 16 Jan 2015 16:30:11 +0100 (CET)
-Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via
- the system configuration submenu
-In-Reply-To: <20150116161921.5fa45e55@free-electrons.com>
-Message-ID: <1114301633.30415740.1421422210368.JavaMail.root@openwide.fr>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Fri, 16 Jan 2015 17:04:20 +0100
+Subject: [Buildroot] [PATCH v5 07/15] xdriver_xf86-video-imx-viv: new
+	package
+In-Reply-To: <20141227214325.2135108d@free-electrons.com>
+References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
+ <1418132813-32642-8-git-send-email-jezz@sysmic.org>
+ <20141227214325.2135108d@free-electrons.com>
+Message-ID: <1673331.jGUK3KeLGv@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Dear J?r?my Rosen,
+Hello Thomas,
+
+On Saturday 27 December 2014 21:43:25 Thomas Petazzoni wrote:
+> Dear J?r?me Pouiller,
 > 
-> On Fri, 16 Jan 2015 14:08:39 +0100, J?r?my Rosen wrote:
+> On Tue,  9 Dec 2014 14:46:45 +0100, J?r?me Pouiller wrote:
 > 
-> > +config BR2_SIMPLE_DHCP
-> > +	string "Name of the physical network interface to run DHCP on"
-> > +	default ""
-> > +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && (BR2_PACKAGE_BUSYBOX
-> > || BR2_PACKAGE_IFUPDOWN)
-> > +	help
-> > +	  The name of the network interface to configure automatically.
-> > +	  A DHCP request will automatically happen on startup on the
-> > selected
-> > +	  interface.
+> > diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in 
+b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> > new file mode 100644
+> > index 0000000..d91ba79
+> > --- /dev/null
+> > +++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+> > @@ -0,0 +1,31 @@
 > > +
-> > +	  If left empty, no automatic DHCP requests will take place.
-> > +
-> > +	  For more complicated network setups use an overlay to overwrite
-> > +	  /etc/network/interfaces or add a networkd configuration file.
-> > +
-> > +comment "automatic network configuration via DHCP is not
-> > compatible with networkd"
-> > +	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
-> > +
-> > +comment "automatic network configuration via DHCP needs ifupdown
-> > or busybox"
-> > +	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
 > 
-> I'm still not really happy with this. It's
-> really /etc/network/interfaces as a whole that doesn't make sense in
-> a
-> context where you don't have Busybox ifupdown, or the full blown
-> ifupdown, no? Not just the DHCP part of it.
+> Unneeded empty line.
 > 
-
-
-i'm not sure how you want me to correct that...
-
-* not generate network/interfaces at all if ifupdown is not available
-* correct the comment sections "generation of /etc/network/interfaces needs  ifupdown"
-  (but that does not reflect what the option is when it is available)
-* something else
-
-please tell me and i'll send a new patch
-
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> > +config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+> > +	bool "xf86-video-imx-viv"
+> > +	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
+> > +	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with 
+glx/dri
+> > +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
 > 
+> The world of OpenGL stuff will always surprise me. Why on earth does a
+> X.org driver that uses a proprietary OpenGL implementation needs
+> Mesa3D ?!?
+
+In fact, xf86-video-imx-viv does not depends directly on mesa3d. However, it 
+depend on xorg server compiled with --enable-dri --enable-glx. But, these 
+options are enabled only if BR2_PACKAGE_MESA3D_DRI_DRIVER is enabled.
+
+
+
+Else, I am going to send an updated version of this patch this evening.
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
