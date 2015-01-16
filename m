@@ -1,45 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jan 2015 22:36:09 +0100
-Subject: [Buildroot] [git commit] dtc: install libfdt headers to staging
-Message-ID: <20150116213818.1EB03807EB@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Sat, 17 Jan 2015 00:33:57 +0100
+Subject: [Buildroot] [PATCH v6 01/15] mesa3d: Give possibility to external
+	backends to enable DRI/Gallium
+In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
+References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
+Message-ID: <1421451251-23366-2-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fc87f5bc60bd70083663cc5006f913fe944f8a2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The newly introduced install-lib target that we use since commit 8b500c1b63dc
-(dtc: bump version to 1.4.1) does not install headers. Add install-includes to
-DTC_INSTALL_STAGING_CMDS to make dependent packages like kexec-lite build.
-
-Fixes:
-http://autobuild.buildroot.net/results/515/515d32e45957e911fda6345f909fa9200df311ff/
-http://autobuild.buildroot.net/results/b09/b09f15c7b59e972d2180d071804810315d2ee047/
-http://autobuild.buildroot.net/results/023/02376cd3dccc98d10a58e5398b9f8db75239f263/
-...
-
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/dtc/dtc.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/mesa3d/mesa3d.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index c01fe7b..e094f7b 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -36,7 +36,8 @@ endef
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f6f6b0f..e96bba6 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -64,7 +64,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
  
- # For staging, only the library is needed
- define DTC_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib
-+	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib \
-+		install-includes
- endef
+-ifeq ($(MESA3D_GALLIUM_DRIVERS-y),)
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-gallium-drivers
+ else
+@@ -73,7 +73,7 @@ MESA3D_CONF_OPTS += \
+ 	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
+ endif
  
- define DTC_INSTALL_TARGET_CMDS
+-ifeq ($(MESA3D_DRI_DRIVERS-y),)
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-dri-drivers --without-dri --disable-dri3
+ else
+-- 
+1.9.1
