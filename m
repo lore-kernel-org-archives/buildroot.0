@@ -1,42 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Jan 2015 15:11:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 7802] New: host-python build hangs compiling
-	getbuildinfo.o
-Message-ID: <bug-7802-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Jan 2015 16:19:21 +0100
+Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via
+ the system configuration submenu
+In-Reply-To: <1421413719-10383-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1421413719-10383-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <20150116161921.5fa45e55@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7802
+Dear J?r?my Rosen,
 
-           Summary: host-python build hangs compiling getbuildinfo.o
-           Product: buildroot
-           Version: 2014.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: codehero at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Fri, 16 Jan 2015 14:08:39 +0100, J?r?my Rosen wrote:
 
+> +config BR2_SIMPLE_DHCP
+> +	string "Name of the physical network interface to run DHCP on"
+> +	default ""
+> +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && (BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
+> +	help
+> +	  The name of the network interface to configure automatically.
+> +	  A DHCP request will automatically happen on startup on the selected
+> +	  interface.
+> +
+> +	  If left empty, no automatic DHCP requests will take place.
+> +
+> +	  For more complicated network setups use an overlay to overwrite
+> +	  /etc/network/interfaces or add a networkd configuration file.
+> +
+> +comment "automatic network configuration via DHCP is not compatible with networkd"
+> +	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
+> +
+> +comment "automatic network configuration via DHCP needs ifupdown or busybox"
+> +	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
 
-Created attachment 5810
-  --> https://bugs.busybox.net/attachment.cgi?id=5810
-kos_tom's patch to disable hg and svn build info tags
+I'm still not really happy with this. It's
+really /etc/network/interfaces as a whole that doesn't make sense in a
+context where you don't have Busybox ifupdown, or the full blown
+ifupdown, no? Not just the DHCP part of it.
 
-When building the host python, hg or svn is invoked to create build info tags.
-This can result in a socket hang, blocking compilation from completion.
-
-The solution, as determined by kos_tom on #buildroot (THANK YOU), was to
-disable hg and svn from python's automake.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
