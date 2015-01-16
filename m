@@ -1,97 +1,76 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 16 Jan 2015 10:10:57 -0800
-Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
-In-Reply-To: <CADKZYYL5giF=q-gojpoT_5JmseqLPFMPzHtnNFbTH4wfAUrFFA@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
- <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
- <20150115200634.598a27a3@tux.kirchner>
- <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
- <20150115212231.08000b68@tux.kirchner>
- <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
- <CALo-6+jTAcUEOWeES1rCUdSHS1NbccG6L+oEBB3VTJYMEu6coQ@mail.gmail.com>
- <CADKZYYLrKJZGErU7_1K1LG9r6eL4SL5R665NAXastQqFn8Xhwg@mail.gmail.com>
- <8110c0cb2d1abaa590e539411c24b775.squirrel@3p.am-soft.de>
- <CADKZYYL5giF=q-gojpoT_5JmseqLPFMPzHtnNFbTH4wfAUrFFA@mail.gmail.com>
-Message-ID: <CALo-6+iLAX-9K0F+BV3E3dQPVU9k=siWXjFPEYY9snTufVA-9A@mail.gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 16 Jan 2015 12:13:20 -0600
+Subject: [Buildroot] [PATCH] mjpegtools: new package
+Message-ID: <54B954C0.4010503@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hang on a minute, Santhosh. You just said something that clicked. I
-"always" use Qt applications built only on buildroot for running on a
-buildroot generated filesystem with the Qt libraries. I cannot imagine
-cross-library stuff working properly, regardless of what the Qt folks say.
+The mjpegtools programs are a set of tools
+that can do recording of videos and playback,
+simple cut-and-paste editing and the MPEG
+compression of audio and video under Linux.
 
-The Qt developers I support grumbled and wanted to use windows and linux PC
-Qt, but I set them up with the tools in buildroot that were used to compile
-the libraries to ensure things worked properly.
+http://mjpeg.sourceforge.net
 
-On Fri, Jan 16, 2015 at 9:26 AM, Santhosh Ramani <srcoolz@gmail.com> wrote:
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+Build tested with both uClibc and glibc against last nights snapshot
 
-> Hello Bjorn,
->
-> Thank you for the detailed explanation of the environmental variables - it
-> was really helpful. I've made sure that my startup scripts export all the
-> necessary variables. Additionally I have also added it to my profile.d so
-> that in case I kill the app and restart it, it can have access to those
-> variables. I hope this approach is okay?
->
-> My program is launched as root and I have only 1 user. I also looked at
-> permissions for the /etc/pointercal - it seems fine to me. It has read
-> permissions for all levels and rw for root. My colleague is gonna build the
-> application using Qt built from buildroot and I'll post the results here
-> once we run the application on our board.
->
-> Thanks once again for your time and patience.
-> Regards
->
-> Santhosh
->
->
->
-> On 15 January 2015 at 23:53, <bjoern@am-soft.de> wrote:
->
->> >>
->> >> On the invocation of the qt program, perhaps this argument might help
->> >> -plugin Tslib:/dev/input/event0
->> >
->> >
->> > Hello Charles,
->> >
->> > Thanks for the suggestion, I tried it but there is still no difference.
->> > Additionally I added a mouse pointer to be visible in my application
->> and I
->> > can see that the touchevent is picked up, just that it's completely off
->> > even if I calibrate it every time at power up.
->> >
->>
->> Just a thought: Does your program (or better, the user who starts it)
->> sufficent rights to access the calibration file?
->> Do the Qt libraries load additional external libs at runtime? Or try to
->> do so and fail (for example: tslib components)? Maybe they fall back in
->> this case to a "wrong" input method?
->>
->> > Regards
->> >
->> > Santhosh
->> >
->>
->>
->>
->
->
-> --
-> Greater the Difficulty....Sweeter is the Victory
->
+Every buildroot patch I generate turns out to be a learning experience
+So, let's see what I don't know this time ...
 
+Finding the higher level dependencies is still beyond me, so I think
+I'll concentrate on learning to use git as a next step. Thanks for
+all the help getting these packages in shape. Obviously I'm working
+on multi-media stuff. If there is a wish list for other related
+packages let me know and I'll try and work them up for submission.
 
-
--- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150116/cf83c7cf/attachment.html>
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-15 02:41:42.000000000 -0600
++++ buildroot/package/Config.in	2015-01-16 11:37:56.681909014 -0600
+@@ -19,6 +19,7 @@ menu "Audio and video applications"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
++	source "package/mjpegtools/Config.in"
+ 	source "package/modplugtools/Config.in"
+ 	source "package/mpd/Config.in"
+ 	source "package/mpd-mpc/Config.in"
+diff -pruN buildroot.ori/package/mjpegtools/Config.in buildroot/package/mjpegtools/Config.in
+--- buildroot.ori/package/mjpegtools/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/mjpegtools/Config.in	2015-01-16 11:05:54.949872151 -0600
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_MJPEGTOOLS
++	bool "mjpegtools"
++	select BR2_PACKAGE_JPEG
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  The mjpegtools programs are a set of tools
++	  that can do recording of videos and playback,
++	  simple cut-and-paste editing and the MPEG
++	  compression of audio and video under Linux.
++
++	  http://mjpeg.sourceforge.net
++
++comment "mjpegtools needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff -pruN buildroot.ori/package/mjpegtools/mjpegtools.mk buildroot/package/mjpegtools/mjpegtools.mk
+--- buildroot.ori/package/mjpegtools/mjpegtools.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/mjpegtools/mjpegtools.mk	2015-01-16 11:05:03.121871157 -0600
+@@ -0,0 +1,13 @@
++###############################################################################
++#
++# mjpegtools
++#
++###############################################################################
++
++MJPEGTOOLS_VERSION = 2.1.0
++MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
++MJPEGTOOLS_DEPENDENCIES = jpeg
++MJPEGTOOLS_LICENSE = GPLv2
++MJPEGTOOLS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
