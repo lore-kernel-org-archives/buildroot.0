@@ -1,90 +1,87 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 00:34:05 +0100
-Subject: [Buildroot] [PATCH v6 09/15] qt5base: fix compilation with Vivante
-	headers.
+Date: Sat, 17 Jan 2015 00:34:11 +0100
+Subject: [Buildroot] [PATCH v6 15/15] qmx6_qt5_demo_defconfig: new defconfig
 In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
 References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421451251-23366-10-git-send-email-jezz@sysmic.org>
+Message-ID: <1421451251-23366-16-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This new defconfig is based on qmx6_defconfig. In add:
+- it enable support for graphical drivers
+- it enable Qt5 (eglfs)
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/qt5/qt5base/0004-xcb-egl-fixes.patch | 63 ++++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/qt5/qt5base/0004-xcb-egl-fixes.patch
+ configs/qmx6_qt5_demo_defconfig | 57 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 configs/qmx6_qt5_demo_defconfig
 
-diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
+diff --git a/configs/qmx6_qt5_demo_defconfig b/configs/qmx6_qt5_demo_defconfig
 new file mode 100644
-index 0000000..2bbd849
+index 0000000..22c6e15
 --- /dev/null
-+++ b/package/qt5/qt5base/0004-xcb-egl-fixes.patch
-@@ -0,0 +1,63 @@
-+The vivante headers pull in X11 defines which break eglconvenience
++++ b/configs/qmx6_qt5_demo_defconfig
+@@ -0,0 +1,57 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.10.17"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
 +
-+* Adds a missing include to qeglplatformcontext.cpp
-+* Fix namespace collision on CursorShape, pulled in from X11/X.h
-+* Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
 +
-+[based on patch from Yocto project]
-+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++# kernel
++# Notice you need a recent version of u-boot (with DT support) to be able
++# to boot this kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
++# Last version of branch cgt_imx_3.10.17_1.0.0
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
++BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +
++# Graphics drivers
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
++BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
++BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB=y
 +
-+diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-+--- a/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/eglconvenience.pri	2014-08-07 16:54:52.874278651 -0400
-+@@ -30,8 +30,10 @@
-+         }
-+     }
-+ 
-+-    # Avoid X11 header collision
-+-    DEFINES += MESA_EGL_NO_X11_HEADERS
-++    !contains(QT_CONFIG,xcb) {
-++        # Avoid X11 header collision
-++        DEFINES += MESA_EGL_NO_X11_HEADERS
-++    }
-+ 
-+     contains(QT_CONFIG,xlib) {
-+         HEADERS += \
-+diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp
-+--- a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/qeglplatformcontext.cpp	2014-08-07 16:56:00.630280249 -0400
-+@@ -39,6 +39,7 @@
-+ **
-+ ****************************************************************************/
-+ 
-++#include <qtextstream.h>
-+ #include "qeglplatformcontext_p.h"
-+ #include "qeglconvenience_p.h"
-+ #include "qeglpbuffer_p.h"
-+--- a/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/qeglplatformcursor_p.h	2014-08-07 16:58:49.014284222 -0400
-+@@ -42,6 +42,11 @@
-+ #ifndef QEGLPLATFORMCURSOR_H
-+ #define QEGLPLATFORMCURSOR_H
-+ 
-++// avoid namespace collision with X11/X.h
-++#ifdef CursorShape
-++#undef CursorShape
-++#endif
-++
-+ #include <qpa/qplatformcursor.h>
-+ #include <qpa/qplatformscreen.h>
-+ 
-+--- a/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 16:53:50.038277168 -0400
-++++ b/src/platformsupport/eglconvenience/qeglplatformcursor.cpp	2014-08-07 17:00:36.806286766 -0400
-+@@ -49,8 +49,8 @@
-+ 
-+ #include <QtPlatformSupport/private/qdevicediscovery_p.h>
-+ 
-+-#include "qeglplatformcursor_p.h"
-+ #include "qeglplatformintegration_p.h"
-++#include "qeglplatformcursor_p.h"
-+ 
-+ QT_BEGIN_NAMESPACE
-+ 
++# Enable Qt5
++BR2_PACKAGE_QT5=y
++BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
++BR2_PACKAGE_QT5BASE_GUI=y
++BR2_PACKAGE_QT5BASE_EGLFS=y
++BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
++BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
++BR2_PACKAGE_QT5BASE_PNG=y
++
++# u-boot
++# Change boardname depending of your product number
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
++
++# Images
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_3=y
++
++# Usefull host packages
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 1.9.1
