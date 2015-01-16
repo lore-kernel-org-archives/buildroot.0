@@ -1,8 +1,8 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 16 Jan 2015 20:27:50 +0100
+Date: Fri, 16 Jan 2015 20:34:07 +0100
 Subject: [Buildroot] Fwd: Fwd: Fwd: Fwd: [PATCH v3] linux: add fbtft
  kernel extension
-Message-ID: <trinity-a6486201-a20c-4039-855f-1f9021f5a3ef-1421436470765@3capp-gmx-bs34>
+Message-ID: <trinity-d2d4b82d-35d8-48ec-8783-e3431c7b263f-1421436846986@3capp-gmx-bs34>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,20 +11,20 @@ To: buildroot@busybox.net
 
 Hello Lou,
 
-On Tue, Jan 13, 2015 at 07:37:03PM -0600, Lou Crittenden wrote:
-> I looked at my configuration and in the make config evtest was not enabled,
-> so I have to enable it so I can test my touchscreen.
-> 
-> Again, thanks for all the info!
->
+On Wed, Jan 14, 2015 at 04:22:04PM -0600, Lou Crittenden wrote:
+> So far, so good! The screen is still working great, as well as the
+> touchscreen driver. Once again, Thanks a bunch for helping me out on this.
 
-Your welcome...
- 
-> Just curious: How long have you been working in embedded systems and
-> linux???
+You where lucky I tried to enable similare display/touch with buildroot
+at the same time ;-)
+
+> Do you take donations?
 > 
 
-Working with Linux back to the 90's, embedded systems more and more recently...
+Thanks, but testing and giving feedback for buildroot patches is enough
+support ;-), its a spare time/fun project from my side (at least the
+raspberry pi support, but sometimes I use buildroot for money earning
+jobs as well)...
 
 Regards,
 Peter
