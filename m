@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jan 2015 22:33:27 +0100
-Subject: [Buildroot] [PATCH] gdb: bump to version 7.8.2
-In-Reply-To: <1421345209-25603-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1421345209-25603-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150116223327.39682d2c@free-electrons.com>
+Date: Fri, 16 Jan 2015 22:34:03 +0100
+Subject: [Buildroot] [PATCH] busybox: add patches for vi and modutils
+In-Reply-To: <1421324998-17310-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1421324998-17310-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150116223403.11e1db3d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,14 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Thu, 15 Jan 2015 15:06:49 -0300, Gustavo Zacarias wrote:
+On Thu, 15 Jan 2015 09:29:58 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gdb/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/busybox/0003-vi.patch       |  54 ++++++++++
+>  package/busybox/0004-modprobe.patch | 208 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 262 insertions(+)
+>  create mode 100644 package/busybox/0003-vi.patch
+>  create mode 100644 package/busybox/0004-modprobe.patch
 
 Applied, thanks.
 
