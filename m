@@ -1,42 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jan 2015 08:37:35 +0200
-Subject: [Buildroot] [PATCH] dtc: install libfdt headers to staging
-Message-ID: <dcb93a863d98147bb850079e63f6a45231e24660.1421390255.git.baruch@tkos.co.il>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Fri, 16 Jan 2015 07:07:25 +0000
+Subject: [Buildroot] support for cortex m3/m4 with newlib
+In-Reply-To: <CAOudHSX=sc7hwE0PObED1jtDp7pOs-=PPVG_Rsh6+di9iYWojA@mail.gmail.com>
+References: <CAOudHSX=sc7hwE0PObED1jtDp7pOs-=PPVG_Rsh6+di9iYWojA@mail.gmail.com>
+Message-ID: <DB3PR04MB10881DC255B126BDF70B7FCEA4F0@DB3PR04MB108.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The newly introduced install-lib target that we use since commit 8b500c1b63dc
-(dtc: bump version to 1.4.1) does not install headers. Add install-includes to
-DTC_INSTALL_STAGING_CMDS to make dependent packages like kexec-lite build.
+Hi Chris,
 
-Fixes:
-http://autobuild.buildroot.net/results/515/515d32e45957e911fda6345f909fa9200df311ff/
-http://autobuild.buildroot.net/results/b09/b09f15c7b59e972d2180d071804810315d2ee047/
-http://autobuild.buildroot.net/results/023/02376cd3dccc98d10a58e5398b9f8db75239f263/
-...
+I have some boards from ST (Discovery and Disco), they are base on STM32 processor.
+I was thinking about having support of those boards with buildroot, but never find time to check this out.
+I know that buildroot has support of Blackfin processors, which are also Cortex M3/M4 based, but don?t know what would be the extra work to port this uClinux support to more Cortex M3/M4 processor.
+What are you looking for? Do you plan to add support for uClinux, FreeRTOS, eCos, RTEMS or another operating system (perhaps in-house)?
+For which kind of Cortex M3/M4 processor have you done the port?
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/dtc/dtc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Regards
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index c01fe7b40078..e094f7bf782f 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -36,7 +36,8 @@ endef
- 
- # For staging, only the library is needed
- define DTC_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib
-+	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib \
-+		install-includes
- endef
- 
- define DTC_INSTALL_TARGET_CMDS
--- 
-2.1.4
+Fabrice
+
+Von: buildroot [mailto:buildroot-bounces at busybox.net] Im Auftrag von Cjw X
+Gesendet: Donnerstag, 15. Januar 2015 23:58
+An: buildroot at busybox.net
+Betreff: [Buildroot] support for cortex m3/m4 with newlib
+
+I've been working on modifying buildroot to support cortex m3/m4 processors against the newlib library.
+This way I can use buildroot to build RTOS's for those processors. I've been using buildroot for years to build linux systems and I would like to expand that for the smaller processors with different operating systems.
+
+I am making some progress. The toolchain already works. I'm now starting to go down the road of supporting RTOS's.
+I'm going to keep going regardless, but I wanted to check to find out if this interests the community.
+
+Does this interest people?
+-Chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150116/49edf836/attachment.html>
