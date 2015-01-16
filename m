@@ -1,44 +1,42 @@
-From: bjoern at am-soft.de <bjoern@am-soft.de>
-Date: Fri, 16 Jan 2015 06:53:06 +0100 (CET)
-Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
-In-Reply-To: <CADKZYYLrKJZGErU7_1K1LG9r6eL4SL5R665NAXastQqFn8Xhwg@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
- <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
- <20150115200634.598a27a3@tux.kirchner>
- <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
- <20150115212231.08000b68@tux.kirchner>
- <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
- <CALo-6+jTAcUEOWeES1rCUdSHS1NbccG6L+oEBB3VTJYMEu6coQ@mail.gmail.com>
- <CADKZYYLrKJZGErU7_1K1LG9r6eL4SL5R665NAXastQqFn8Xhwg@mail.gmail.com>
-Message-ID: <8110c0cb2d1abaa590e539411c24b775.squirrel@3p.am-soft.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 16 Jan 2015 08:37:35 +0200
+Subject: [Buildroot] [PATCH] dtc: install libfdt headers to staging
+Message-ID: <dcb93a863d98147bb850079e63f6a45231e24660.1421390255.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>
->> On the invocation of the qt program, perhaps this argument might help
->> -plugin Tslib:/dev/input/event0
->
->
-> Hello Charles,
->
-> Thanks for the suggestion, I tried it but there is still no difference.
-> Additionally I added a mouse pointer to be visible in my application and I
-> can see that the touchevent is picked up, just that it's completely off
-> even if I calibrate it every time at power up.
->
+The newly introduced install-lib target that we use since commit 8b500c1b63dc
+(dtc: bump version to 1.4.1) does not install headers. Add install-includes to
+DTC_INSTALL_STAGING_CMDS to make dependent packages like kexec-lite build.
 
-Just a thought: Does your program (or better, the user who starts it)
-sufficent rights to access the calibration file?
-Do the Qt libraries load additional external libs at runtime? Or try to
-do so and fail (for example: tslib components)? Maybe they fall back in
-this case to a "wrong" input method?
+Fixes:
+http://autobuild.buildroot.net/results/515/515d32e45957e911fda6345f909fa9200df311ff/
+http://autobuild.buildroot.net/results/b09/b09f15c7b59e972d2180d071804810315d2ee047/
+http://autobuild.buildroot.net/results/023/02376cd3dccc98d10a58e5398b9f8db75239f263/
+...
 
-> Regards
->
-> Santhosh
->
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dtc/dtc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index c01fe7b40078..e094f7bf782f 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -36,7 +36,8 @@ endef
+ 
+ # For staging, only the library is needed
+ define DTC_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib
++	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib \
++		install-includes
+ endef
+ 
+ define DTC_INSTALL_TARGET_CMDS
+-- 
+2.1.4
