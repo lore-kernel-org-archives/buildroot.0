@@ -1,75 +1,51 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 00:33:59 +0100
-Subject: [Buildroot] [PATCH v6 03/15] gpu-viv-bin-mx6q: make fb/x11 choice
-	explicit
+Date: Sat, 17 Jan 2015 00:34:00 +0100
+Subject: [Buildroot] [PATCH v6 04/15] gpu-viv-bin-mx6q: remove useless build
+	time deps
 In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
 References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421451251-23366-4-git-send-email-jezz@sysmic.org>
+Message-ID: <1421451251-23366-5-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since gpu-viv-bin-mx6q is provided as binary package, there is no build
+time dependencies.
+
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in   | 23 ++++++++++++++++++++--
- .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  2 +-
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in           | 4 ++--
+ package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 1 -
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-index 4e83dd3..0947f17 100644
+index 0947f17..7fbddbf 100644
 --- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
 +++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-@@ -7,8 +7,6 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_LIBOPENVG
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	depends on BR2_arm # Only relevant for i.MX6
- 	# Library binaries are linked against libc.so.6
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-@@ -25,6 +23,27 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+@@ -32,8 +32,8 @@ choice
  
- if BR2_PACKAGE_GPU_VIV_BIN_MX6Q
+ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
+ 	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+-	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE # Runtime dependency
++	select BR2_PACKAGE_XLIB_LIBXEXT # Runtime dependency
+ 	bool "X11"
  
-+choice
-+	prompt "Output option"
-+	help
-+	  There are two versions of this library: one for
-+	  direct framebuffer access, one for X11 rendering.
-+	  Choose here which version to install.
-+
-+config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	bool "X11"
-+
-+comment "X11 backend needs Xorg package"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
-+	bool "Framebuffer"
-+
-+endchoice
-+
- config BR2_PACKAGE_PROVIDES_LIBEGL
- 	default "gpu-viv-bin-mx6q"
- 
+ comment "X11 backend needs Xorg package"
 diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index eb54b80..7895023 100644
+index 7895023..35ba1c6 100644
 --- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
 +++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -21,7 +21,7 @@ GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
- GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
+@@ -22,7 +22,6 @@ GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
  
  # DirectFB is not supported (wrong version)
--ifeq ($(BR2_PACKAGE_XORG7),y)
-+ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
- GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
+ ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
+-GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
  GPU_VIV_BIN_MX6Q_LIB_TARGET = x11
  else
+ GPU_VIV_BIN_MX6Q_LIB_TARGET = fb
 -- 
 1.9.1
