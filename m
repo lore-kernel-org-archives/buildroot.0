@@ -1,7 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 16 Jan 2015 22:09:50 +0100
-Subject: [Buildroot] [PATCH 1/6] lua: add 5.3.x serie
-Message-ID: <1421442595-27575-1-git-send-email-francois.perrad@gadz.org>
+Date: Fri, 16 Jan 2015 22:09:51 +0100
+Subject: [Buildroot] [PATCH 2/6] lua-modules: fix dependencies with version
+	of lua
+In-Reply-To: <1421442595-27575-1-git-send-email-francois.perrad@gadz.org>
+References: <1421442595-27575-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1421442595-27575-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,293 +13,101 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua/5.3.0/0001-root-path.patch           | 17 ++++++
- package/lua/5.3.0/0002-shared-libs-for-lua.patch | 78 ++++++++++++++++++++++++
- package/lua/5.3.0/0004-lua-pc.patch              | 40 ++++++++++++
- package/lua/5.3.0/0011-linenoise.patch           | 26 ++++++++
- package/lua/Config.in                            |  4 ++
- package/lua/lua.mk                               | 15 ++++-
- package/luarocks/luarocks.mk                     |  6 +-
- 7 files changed, 182 insertions(+), 4 deletions(-)
- create mode 100644 package/lua/5.3.0/0001-root-path.patch
- create mode 100644 package/lua/5.3.0/0002-shared-libs-for-lua.patch
- create mode 100644 package/lua/5.3.0/0004-lua-pc.patch
- create mode 100644 package/lua/5.3.0/0011-linenoise.patch
+ package/lbase64/Config.in            | 5 +++--
+ package/lrandom/lrandom.mk           | 2 +-
+ package/lua-msgpack-native/Config.in | 5 +++--
+ package/luaposix/Config.in           | 4 ++++
+ package/lunit/Config.in              | 5 +++--
+ 5 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/package/lua/5.3.0/0001-root-path.patch b/package/lua/5.3.0/0001-root-path.patch
-new file mode 100644
-index 0000000..660bc15
---- /dev/null
-+++ b/package/lua/5.3.0/0001-root-path.patch
-@@ -0,0 +1,17 @@
-+Adjust installation location to /usr.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/src/luaconf.h
-+===================================================================
-+--- a/src/luaconf.h
-++++ b/src/luaconf.h
-+@@ -175,7 +175,7 @@
-+
-+ #else			/* }{ */
-+
-+-#define LUA_ROOT	"/usr/local/"
-++#define LUA_ROOT	"/usr/"
-+ #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
-+ #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
-+ #define LUA_PATH_DEFAULT  \
-diff --git a/package/lua/5.3.0/0002-shared-libs-for-lua.patch b/package/lua/5.3.0/0002-shared-libs-for-lua.patch
-new file mode 100644
-index 0000000..493828c
---- /dev/null
-+++ b/package/lua/5.3.0/0002-shared-libs-for-lua.patch
-@@ -0,0 +1,78 @@
-+Add the compilation of a shared library.
-+Compile the lua binary with the shared library.
-+And install the shared library.
-+The variable BUILDMODE allows to switch between static and dynamic mode.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -42,6 +42,7 @@
-+ TO_BIN= lua luac
-+ TO_INC= lua.h luaconf.h lualib.h lauxlib.h lua.hpp
-+ TO_LIB= liblua.a
-++TO_SOLIB = liblua.so.$(R)
-+ TO_MAN= lua.1 luac.1
-+ 
-+ # Lua version and release.
-+@@ -60,6 +61,8 @@
-+ install: dummy
-+ 	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
-+ 	cd src && $(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
-++	test -f src/$(TO_SOLIB) && cd src && $(INSTALL_EXEC) $(TO_SOLIB) $(INSTALL_LIB) || :
-++	test -f src/$(TO_SOLIB) && ln -sf $(TO_SOLIB) $(INSTALL_LIB)/liblua.so || :
-+ 	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
-+ 	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
-+ 	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
-+Index: b/src/Makefile
-+===================================================================
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -29,6 +29,7 @@
-+ PLATS= aix bsd c89 freebsd generic linux macosx mingw posix solaris
-+ 
-+ LUA_A=	liblua.a
-++LUA_SO=	liblua.so
-+ CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o \
-+ 	lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o \
-+ 	ltm.o lundump.o lvm.o lzio.o
-+@@ -43,8 +44,13 @@
-+ LUAC_O=	luac.o
-+ 
-+ ALL_O= $(BASE_O) $(LUA_O) $(LUAC_O)
-++ifneq (dynamic,$(BUILDMODE))
-+ ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T)
-++else
-++ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
-++endif
-+ ALL_A= $(LUA_A)
-++ALL_SO= $(LUA_SO)
-+ 
-+ # Targets start here.
-+ default: $(PLAT)
-+@@ -55,12 +61,23 @@
-+ 
-+ a:	$(ALL_A)
-+ 
-++so:	$(ALL_SO)
-++
-+ $(LUA_A): $(BASE_O)
-+ 	$(AR) $@ $(BASE_O)
-+ 	$(RANLIB) $@
-+ 
-++$(LUA_SO): $(CORE_O) $(LIB_O)
-++	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
-++	ln -fs $@.$(PKG_VERSION) $@
-++
-++ifneq (dynamic,$(BUILDMODE))
-+ $(LUA_T): $(LUA_O) $(LUA_A)
-+ 	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
-++else
-++$(LUA_T): $(LUA_O) $(LUA_SO)
-++	$(CC) -o $@ -L. $(LDFLAGS) $(LUA_O) -llua $(LIBS)
-++endif
-+ 
-+ $(LUAC_T): $(LUAC_O) $(LUA_A)
-+ 	$(CC) -o $@ $(LDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
-diff --git a/package/lua/5.3.0/0004-lua-pc.patch b/package/lua/5.3.0/0004-lua-pc.patch
-new file mode 100644
-index 0000000..d3129d7
---- /dev/null
-+++ b/package/lua/5.3.0/0004-lua-pc.patch
-@@ -0,0 +1,40 @@
-+add lua.pc
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/etc/lua.pc
-+===================================================================
-+--- /dev/null
-++++ b/etc/lua.pc
-+@@ -0,0 +1,31 @@
-++# lua.pc -- pkg-config data for Lua
-++
-++# vars from install Makefile
-++
-++# grep '^V=' ../Makefile
-++V= 5.3
-++# grep '^R=' ../Makefile
-++R= 5.3.0
-++
-++# grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
-++prefix= /usr
-++INSTALL_BIN= ${prefix}/bin
-++INSTALL_INC= ${prefix}/include
-++INSTALL_LIB= ${prefix}/lib
-++INSTALL_MAN= ${prefix}/man/man1
-++INSTALL_LMOD= ${prefix}/share/lua/${V}
-++INSTALL_CMOD= ${prefix}/lib/lua/${V}
-++
-++# canonical vars
-++exec_prefix=${prefix}
-++libdir=${exec_prefix}/lib
-++includedir=${prefix}/include
-++
-++Name: Lua
-++Description: An Extensible Extension Language
-++Version: ${R}
-++Requires: 
-++Libs: -L${libdir} -llua -lm
-++Cflags: -I${includedir}
-++
-++# (end of lua.pc)
-diff --git a/package/lua/5.3.0/0011-linenoise.patch b/package/lua/5.3.0/0011-linenoise.patch
-new file mode 100644
-index 0000000..b2e5695
---- /dev/null
-+++ b/package/lua/5.3.0/0011-linenoise.patch
-@@ -0,0 +1,26 @@
-+Add support of linenoise (replace readline)
-+
-+see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/src/lua.c
-+===================================================================
-+--- a/src/lua.c
-++++ b/src/lua.c
-+@@ -85,6 +85,15 @@
-+           add_history(lua_tostring(L, idx));  /* add it to history */
-+ #define lua_freeline(L,b)	((void)L, free(b))
-+
-++#elif defined(LUA_USE_LINENOISE)
-++
-++#include <linenoise.h>
-++#define lua_readline(L,b,p)	((void)L, ((b)=linenoise(p)) != NULL)
-++#define lua_saveline(L,idx) \
-++	if (lua_rawlen(L,idx) > 0)  /* non-empty line? */ \
-++	  linenoiseHistoryAdd(lua_tostring(L, idx));  /* add it to history */
-++#define lua_freeline(L,b)	((void)L, free(b))
-++
-+ #else				/* }{ */
-+
-+ #define lua_readline(L,b,p) \
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 0e31858..dde999f 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -23,11 +23,15 @@ choice
- 	config BR2_PACKAGE_LUA_5_2
- 		bool "Lua 5.2.x"
+diff --git a/package/lbase64/Config.in b/package/lbase64/Config.in
+index 48d3fdb..5ef91bf 100644
+--- a/package/lbase64/Config.in
++++ b/package/lbase64/Config.in
+@@ -1,11 +1,12 @@
+ config BR2_PACKAGE_LBASE64
+ 	bool "lbase64"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	depends on !BR2_PACKAGE_LUA_5_2
++	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+ 	help
+ 	  A base64 library for Lua
  
-+	config BR2_PACKAGE_LUA_5_3
-+		bool "Lua 5.3.x"
-+
- endchoice
+ 	  http://luaforge.net/projects/lbase64/
  
- config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.1"	if BR2_PACKAGE_LUA_5_1
- 	default "5.2"	if BR2_PACKAGE_LUA_5_2
-+	default "5.3"	if BR2_PACKAGE_LUA_5_3
- 
- choice
- 	prompt "Lua command-line editing"
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index f1164ec..0e30186 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -4,11 +4,15 @@
+ comment "lbase64 needs a Lua 5.1 interpreter"
+-	depends on BR2_PACKAGE_LUA_5_2
++	depends on !BR2_PACKAGE_LUA_5_1
++	depends on !BR2_PACKAGE_LUAJIT
+diff --git a/package/lrandom/lrandom.mk b/package/lrandom/lrandom.mk
+index f0ee1e9..09b62c9 100644
+--- a/package/lrandom/lrandom.mk
++++ b/package/lrandom/lrandom.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+LUA_VERSION = 5.3.0
-+else
- ifeq ($(BR2_PACKAGE_LUA_5_2),y)
- LUA_VERSION = 5.2.3
+-ifeq ($(BR2_PACKAGE_LUA_5_2),y)
++ifeq ($(BR2_PACKAGE_LUA_5_2)$(BR2_PACKAGE_LUA_5_3),y)
+ LRANDOM_VERSION = 20120430.52-1
  else
- LUA_VERSION = 5.1.5
- endif
-+endif
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- LUA_LICENSE = MIT
-@@ -23,10 +27,11 @@ LUA_PROVIDES = luainterpreter
- LUA_CFLAGS = -Wall -fPIC -DLUA_USE_POSIX
+ LRANDOM_VERSION = 20120430.51-1
+diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
+index c7b3373..3837228 100644
+--- a/package/lua-msgpack-native/Config.in
++++ b/package/lua-msgpack-native/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ 	bool "lua-msgpack-native"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	depends on !BR2_PACKAGE_LUA_5_2
++	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+ 	help
+ 	  This is a native, C language implementation of msgpack
+ 	  (http://msgpack.org) library/protocol for Lua language
+@@ -9,4 +9,5 @@ config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ 	  https://github.com/kengonakajima/lua-msgpack-native
  
- ifeq ($(BR2_PACKAGE_LUA_5_2),y)
--LUA_CFLAGS += -DLUA_COMPAT_ALL
--ifneq ($(BR2_LARGEFILE),y)
--LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
-+	LUA_CFLAGS += -DLUA_COMPAT_ALL
- endif
+ comment "lua-msgpack-native needs a Lua 5.1 interpreter"
+-	depends on BR2_PACKAGE_LUA_5_2
++	depends on !BR2_PACKAGE_LUA_5_1
++	depends on !BR2_PACKAGE_LUAJIT
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index a40c3f9..439dc42 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUAPOSIX
+ 	bool "luaposix"
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_3
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1
+ 	# LuaBitOp is already included in LuaJIT
+@@ -13,3 +14,6 @@ config BR2_PACKAGE_LUAPOSIX
+ 	  APIs
+ 
+ 	  https://github.com/luaposix/luaposix
 +
-+ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+	LUA_CFLAGS += -DLUA_COMPAT_5_2
- endif
++comment "luaposix needs a Lua 5.1/5.2 interpreter"
++	depends on BR2_PACKAGE_LUA_5_3
+diff --git a/package/lunit/Config.in b/package/lunit/Config.in
+index b3620ef..d6c2c6b 100644
+--- a/package/lunit/Config.in
++++ b/package/lunit/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_LUNIT
+ 	bool "lunit"
+-	depends on !BR2_PACKAGE_LUA_5_2
++	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
+ 	help
+ 	  A unit testing framework for Lua.
  
- ifeq ($(BR2_STATIC_LIBS),y)
-@@ -49,6 +54,10 @@ ifeq ($(BR2_PACKAGE_LUA_LINENOISE),y)
- endif
- endif
+ 	  http://www.mroth.net/lunit/
  
-+ifneq ($(BR2_LARGEFILE),y)
-+	LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
-+endif
-+
- # We never want to have host-readline and host-ncurses as dependencies
- # of host-lua.
- HOST_LUA_DEPENDENCIES =
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 44bd520..40fdc91 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -13,6 +13,10 @@ HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
- 
- LUAROCKS_CONFIG_DIR = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
-+LUAROCKS_CFLAGS = $(TARGET_CFLAGS) -fPIC
-+ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+	LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
-+endif
- 
- HOST_LUAROCKS_CONF_OPTS = \
- 	--prefix=$(HOST_DIR)/usr \
-@@ -37,7 +41,7 @@ define HOST_LUAROCKS_INSTALL_CMDS
- 	echo "   LUA_LIBDIR = [[$(STAGING_DIR)/usr/lib]],"      >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   CC = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   LD = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
--	echo "   CFLAGS = [[$(TARGET_CFLAGS) -fPIC]],"          >> $(LUAROCKS_CONFIG_FILE)
-+	echo "   CFLAGS = [[$(LUAROCKS_CFLAGS)]],"              >> $(LUAROCKS_CONFIG_FILE)
- 	echo "   LIBFLAG = [[-shared $(TARGET_LDFLAGS)]],"      >> $(LUAROCKS_CONFIG_FILE)
- 	echo "}"                                                >> $(LUAROCKS_CONFIG_FILE)
- 	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
+ comment "lunit needs a Lua 5.1 interpreter"
+-	depends on BR2_PACKAGE_LUA_5_2
++	depends on !BR2_PACKAGE_LUA_5_1
++	depends on !BR2_PACKAGE_LUAJIT
 -- 
 2.1.0
