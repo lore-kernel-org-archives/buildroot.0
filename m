@@ -1,59 +1,34 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 00:34:02 +0100
-Subject: [Buildroot] [PATCH v6 06/15] gpu-viv-bin-mx6q: change output
-	selection mechanism
+Date: Sat, 17 Jan 2015 00:34:08 +0100
+Subject: [Buildroot] [PATCH v6 12/15] nitrogen6x_defconfig: bump kernel to
+	3.10.17_1.0.1_ga
 In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
 References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421451251-23366-7-git-send-email-jezz@sysmic.org>
+Message-ID: <1421451251-23366-13-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move output selection to Config.in. It easier to add new backends selection
-(wayland, directfb, ...).
-
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/Config.in           | 5 +++++
- package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 8 +-------
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ configs/nitrogen6x_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-index 7fbddbf..2392d9a 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/Config.in
-@@ -44,6 +44,11 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
- 
- endchoice
- 
-+config BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT
-+	string
-+	default "x11" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	default "fb" if BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB
-+
- config BR2_PACKAGE_PROVIDES_LIBEGL
- 	default "gpu-viv-bin-mx6q"
- 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index 7845a25..501b124 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -19,13 +19,7 @@ GPU_VIV_BIN_MX6Q_LICENSE_FILES = EULA
- GPU_VIV_BIN_MX6Q_REDISTRIBUTE = NO
- 
- GPU_VIV_BIN_MX6Q_PROVIDES = libegl libgles libopenvg
--
--# DirectFB is not supported (wrong version)
--ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11),y)
--GPU_VIV_BIN_MX6Q_LIB_TARGET = x11
--else
--GPU_VIV_BIN_MX6Q_LIB_TARGET = fb
--endif
-+GPU_VIV_BIN_MX6Q_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT))
- 
- define GPU_VIV_BIN_MX6Q_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(GPU_VIV_BIN_MX6Q_SOURCE))
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index e56bd60..d75f780 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -26,7 +26,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/898627a/linux-imx6-898627a.tar.gz"
++# Last version of branch boundary-imx_3.10.17_1.0.1_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/ea957c5/linux-imx6-ea957c5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
 -- 
 1.9.1
