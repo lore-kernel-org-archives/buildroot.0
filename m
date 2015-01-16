@@ -1,73 +1,78 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 00:34:11 +0100
-Subject: [Buildroot] [PATCH v6 15/15] qmx6_qt5_demo_defconfig: new defconfig
+Date: Sat, 17 Jan 2015 00:34:10 +0100
+Subject: [Buildroot] [PATCH v6 14/15] qmx6_defconfig: update
 In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
 References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421451251-23366-16-git-send-email-jezz@sysmic.org>
+Message-ID: <1421451251-23366-15-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new defconfig is based on qmx6_defconfig. In add:
-- it enable support for graphical drivers
-- it enable Qt5 (eglfs)
+- Update kernel
+- Add u-boot configuration
+- 6q_bootscript.txt is no more needed by new version of u-boot
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- configs/qmx6_qt5_demo_defconfig | 57 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 configs/qmx6_qt5_demo_defconfig
+ board/congatec/qmx6/6q_bootscript.txt |  2 --
+ board/congatec/qmx6/post-build.sh     |  7 -------
+ configs/qmx6_defconfig                | 25 +++++++++++++++++++++----
+ 3 files changed, 21 insertions(+), 13 deletions(-)
+ delete mode 100644 board/congatec/qmx6/6q_bootscript.txt
+ delete mode 100755 board/congatec/qmx6/post-build.sh
 
-diff --git a/configs/qmx6_qt5_demo_defconfig b/configs/qmx6_qt5_demo_defconfig
-new file mode 100644
-index 0000000..22c6e15
---- /dev/null
-+++ b/configs/qmx6_qt5_demo_defconfig
-@@ -0,0 +1,57 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_KERNEL_HEADERS_VERSION=y
+diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
+deleted file mode 100644
+index 1382220..0000000
+--- a/board/congatec/qmx6/6q_bootscript.txt
++++ /dev/null
+@@ -1,2 +0,0 @@
+-set bootargs console=ttymxc1,115200 root=/dev/mmcblk0p1 rootwait consoleblank=0
+-${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
+diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
+deleted file mode 100755
+index 92251a5..0000000
+--- a/board/congatec/qmx6/post-build.sh
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#!/bin/sh
+-
+-TARGET_DIR=$1
+-BOARD_DIR="$(dirname $0)"
+-
+-mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" \
+-    -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
+diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
+index 143e058..ff035a9 100644
+--- a/configs/qmx6_defconfig
++++ b/configs/qmx6_defconfig
+@@ -1,16 +1,33 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.0.101"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
 +BR2_DEFAULT_KERNEL_VERSION="3.10.17"
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
 +
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+
-+# kernel
 +# Notice you need a recent version of u-boot (with DT support) to be able
 +# to boot this kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
 +# Last version of branch cgt_imx_3.10.17_1.0.0
 +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
-+BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+ BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
 +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
 +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +
-+# Graphics drivers
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-+BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
-+BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_FB=y
-+
-+# Enable Qt5
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
-+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-+BR2_PACKAGE_QT5BASE_PNG=y
-+
-+# u-boot
 +# Change boardname depending of your product number
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
@@ -77,11 +82,9 @@ index 0000000..22c6e15
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
 +
-+# Images
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_3=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_3=y
 +
-+# Usefull host packages
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 1.9.1
