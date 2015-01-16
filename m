@@ -1,79 +1,38 @@
-From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Fri, 16 Jan 2015 11:26:00 -0600
-Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
-In-Reply-To: <8110c0cb2d1abaa590e539411c24b775.squirrel@3p.am-soft.de>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
- <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
- <20150115200634.598a27a3@tux.kirchner>
- <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
- <20150115212231.08000b68@tux.kirchner>
- <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
- <CALo-6+jTAcUEOWeES1rCUdSHS1NbccG6L+oEBB3VTJYMEu6coQ@mail.gmail.com>
- <CADKZYYLrKJZGErU7_1K1LG9r6eL4SL5R665NAXastQqFn8Xhwg@mail.gmail.com>
- <8110c0cb2d1abaa590e539411c24b775.squirrel@3p.am-soft.de>
-Message-ID: <CADKZYYL5giF=q-gojpoT_5JmseqLPFMPzHtnNFbTH4wfAUrFFA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 16 Jan 2015 14:39:53 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{18, 14, 10}.x series
+Message-ID: <1421429994-23163-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bjorn,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thank you for the detailed explanation of the environmental variables - it
-was really helpful. I've made sure that my startup scripts export all the
-necessary variables. Additionally I have also added it to my profile.d so
-that in case I kill the app and restart it, it can have access to those
-variables. I hope this approach is okay?
-
-My program is launched as root and I have only 1 user. I also looked at
-permissions for the /etc/pointercal - it seems fine to me. It has read
-permissions for all levels and rw for root. My colleague is gonna build the
-application using Qt built from buildroot and I'll post the results here
-once we run the application on our board.
-
-Thanks once again for your time and patience.
-Regards
-
-Santhosh
-
-
-
-On 15 January 2015 at 23:53, <bjoern@am-soft.de> wrote:
-
-> >>
-> >> On the invocation of the qt program, perhaps this argument might help
-> >> -plugin Tslib:/dev/input/event0
-> >
-> >
-> > Hello Charles,
-> >
-> > Thanks for the suggestion, I tried it but there is still no difference.
-> > Additionally I added a mouse pointer to be visible in my application and
-> I
-> > can see that the touchevent is picked up, just that it's completely off
-> > even if I calibrate it every time at power up.
-> >
->
-> Just a thought: Does your program (or better, the user who starts it)
-> sufficent rights to access the calibration file?
-> Do the Qt libraries load additional external libs at runtime? Or try to
-> do so and fail (for example: tslib components)? Maybe they fall back in
-> this case to a "wrong" input method?
->
-> > Regards
-> >
-> > Santhosh
-> >
->
->
->
-
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f4f80d1..33ab75f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -174,13 +174,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.66"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.105"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.64"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.65"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.36"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.28"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.29"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.2"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.3"	if BR2_KERNEL_HEADERS_3_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Greater the Difficulty....Sweeter is the Victory
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150116/02b94042/attachment.html>
+2.0.5
