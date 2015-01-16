@@ -1,89 +1,82 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 00:33:58 +0100
-Subject: [Buildroot] [PATCH v6 02/15] gpu-viv-bin-mx6q: fix compiling issues
-	with EGL_API_FB
+Date: Sat, 17 Jan 2015 00:34:06 +0100
+Subject: [Buildroot] [PATCH v6 10/15] qt5base: fix "Unable to find an X11
+	visual" error
 In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
 References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421451251-23366-3-git-send-email-jezz@sysmic.org>
+Message-ID: <1421451251-23366-11-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To compile with Vivante header and use framebuffer, it is necessary to
-pass option -DEGL_API_FB. This option is declared in pkg-config file of
-Vivante library. But many packages (especialy qt5 components) does not
-consider these flags.
-
-So instead of patching every packages that use EGL, it is more
-convenient to patch Vivante headers.
-
-This commit add #define EGL_API_FB on top of eglvivante.h when
-necessary.
+Fix "Unable to find an X11 visual" bug that produce at runtime with Vivante
+drivers. Add a conditionnal patch and add variable QT5BASE_EXTRA_CFLAGS in
+order to enable workaround.
 
 Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/freescale-imx/gpu-viv-bin-mx6q/egl.pc              |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc           |  2 +-
- package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk | 10 ++++++----
- package/freescale-imx/gpu-viv-bin-mx6q/vg.pc               |  2 +-
- 4 files changed, 9 insertions(+), 7 deletions(-)
+ .../qt5/qt5base/0001-Force_egl_visual_ID_33.patch  | 26 ++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk                     |  6 +++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
+ create mode 100644 package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
 
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-index c984247..d1d09a0 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/egl.pc
-@@ -7,4 +7,4 @@ Name: egl
- Description: Freescale gpu-viv-bin-mx6q implementation of EGL
- Version: 1.0
- Libs: -L${libdir} -lGAL -lEGL
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-index 7cfb5e7..74ce792 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/glesv2.pc
-@@ -7,4 +7,4 @@ Name: glesv2
- Description: Freescale gpu-viv-bin-mx6q implementation of OpenGL ESv2
- Version: 2.0
- Libs: -L${libdir} -lGAL -lEGL -lGLESv2
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-index 79c7a92..eb54b80 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk
-@@ -48,14 +48,16 @@ endef
+diff --git a/package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch b/package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
+new file mode 100644
+index 0000000..e7e6c5e
+--- /dev/null
++++ b/package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
+@@ -0,0 +1,26 @@
++Workaround EGL initialization failure due visual mismatch
++
++Error:
++
++Warning: EGL suggested using X Visual ID 33 (RGB888) for EGL config 28 (RGB444), but this is incompatable
++Unable to find an X11 visual which matches EGL config 28
++Could not initialize EGL
++Aborted
++
++Upstream-Status: Inappropriate [workaround]
++
++Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
++
++diff -Naur qtbase-opensource-src-5.1.1_original/src/platformsupport/eglconvenience/qxlibeglintegration.cpp qtbase-opensource-src-5.1.1/src/platformsupport/eglconvenience/qxlibeglintegration.cpp
++--- qtbase-opensource-src-5.1.1_original/src/platformsupport/eglconvenience/qxlibeglintegration.cpp	2013-12-25 19:08:42.163895341 -0800
+++++ qtbase-opensource-src-5.1.1/src/platformsupport/eglconvenience/qxlibeglintegration.cpp	2013-12-25 19:09:37.207893799 -0800
++@@ -180,5 +180,9 @@
++     }
++ 
++     qWarning("Unable to find an X11 visual which matches EGL config %d", configId);
+++#ifdef ENABLE_MX6_WORKAROUND
+++    return (VisualID)33;
+++#else
++     return (VisualID)0;
+++#endif
++ }
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index a36359d..4796785 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -172,6 +172,8 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
  
- define GPU_VIV_BIN_MX6Q_INSTALL_STAGING_CMDS
- 	cp -r $(@D)/usr/* $(STAGING_DIR)/usr
-+	if [ $(GPU_VIV_BIN_MX6Q_LIB_TARGET) == fb ]; then \
-+		$(SED) '/#define EGLAPIENTRY/ a \
-+			#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
-+			#define EGL_API_FB \n\
-+			#endif' $(STAGING_DIR)/usr/include/EGL/eglvivante.h; \
-+	fi
- 	for lib in egl glesv2 vg; do \
- 		$(INSTALL) -m 0644 -D \
- 			package/freescale-imx/gpu-viv-bin-mx6q/$${lib}.pc \
- 			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--		if [ "$(GPU_VIV_BIN_MX6Q_LIB_TARGET)" != "fb" ]; then \
--			$(SED) "s/-DEGL_API_FB=1//" \
--				$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
--		fi; \
- 	done
- endef
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
  
-diff --git a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-index fb14005..677a7ee 100644
---- a/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-+++ b/package/freescale-imx/gpu-viv-bin-mx6q/vg.pc
-@@ -7,4 +7,4 @@ Name: vg
- Description: Freescale gpu-viv-bin-mx6q implementation of OpenVG
- Version: 1.1
- Libs: -L${libdir} -lGAL -lEGL -lOpenVG
--Cflags: -I${includedir}/ -DEGL_API_FB=1
-+Cflags: -I${includedir}/
++QT5BASE_EXTRA_CFLAGS = $(if $(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),-DENABLE_MX6_WORKAROUND)
++
+ define QT5BASE_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+@@ -192,8 +194,8 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-device buildroot \
+ 		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		-device-option BR_CCACHE="$(CCACHE)" \
+-		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
+-		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
++		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)$(QT5BASE_EXTRA_CFLAGS)" \
++		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)$(QT5BASE_EXTRA_CFLAGS)" \
+ 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+ 		-no-c++11 \
+ 		$(QT5BASE_CONFIGURE_OPTS) \
 -- 
 1.9.1
