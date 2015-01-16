@@ -1,63 +1,66 @@
-From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Thu, 15 Jan 2015 17:33:47 -0600
-Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
-In-Reply-To: <CALo-6+gkbrsnvX4sy9ZKgycK2MzPU2wNRu7TQpCSJ9_2SmfYZw@mail.gmail.com>
-References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
- <20150115181324.48fc51e9@tux.kirchner>
- <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
- <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
- <20150115200634.598a27a3@tux.kirchner>
- <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
- <20150115212231.08000b68@tux.kirchner>
- <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
- <CALo-6+jTAcUEOWeES1rCUdSHS1NbccG6L+oEBB3VTJYMEu6coQ@mail.gmail.com>
- <CADKZYYLrKJZGErU7_1K1LG9r6eL4SL5R665NAXastQqFn8Xhwg@mail.gmail.com>
- <CALo-6+gkbrsnvX4sy9ZKgycK2MzPU2wNRu7TQpCSJ9_2SmfYZw@mail.gmail.com>
-Message-ID: <CADKZYYLFe1gz8Oof_wpN6PTEWJ18g1nZJPH_+kiOKr3U2LOmYg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 16 Jan 2015 07:10:33 +0200
+Subject: [Buildroot] [PATCH] start-stop-daemon: fix build on non listed
+	architectures
+Message-ID: <80da3f9ea8ed6a75fbd4cbafb1e43843671cd8f0.1421385033.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the help Charles.
+Not all Buildroot supported architectures are known to dpkg. Convert the
+configure error to a warning.
 
-On 15 January 2015 at 16:27, Charles Krinke <charles.krinke@gmail.com>
-wrote:
+Fixes:
+http://autobuild.buildroot.net/results/24e/24e37550749dc15ed7223fd515fa4628803f341e/
+http://autobuild.buildroot.net/results/445/445bf4742d78a0bf93b4c75dc733c4315530031e/
+http://autobuild.buildroot.net/results/952/952051485f23b67ffc449360886d6757c385331f/
 
-> Interesting. I have an AM3517 and did all the things you did and it
-> worked. The -plugin was one of the last. It feels like this is some some of
-> Qt compile and invocation issue, not necessarily a root filesystem issue.
->
-> On Thu, Jan 15, 2015 at 2:09 PM, Santhosh Ramani <srcoolz@gmail.com>
-> wrote:
->
->> On the invocation of the qt program, perhaps this argument might help
->>> -plugin Tslib:/dev/input/event0
->>
->>
->> Hello Charles,
->>
->> Thanks for the suggestion, I tried it but there is still no difference.
->> Additionally I added a mouse pointer to be visible in my application and I
->> can see that the touchevent is picked up, just that it's completely off
->> even if I calibrate it every time at power up.
->>
->> Regards
->>
->> Santhosh
->>
->>
->
->
-> --
-> Charles Krinke
->
->
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0002-just-warn-on-missing-arch.patch              | 19 +++++++++++++++++++
+ package/start-stop-daemon/start-stop-daemon.mk        |  2 ++
+ 2 files changed, 21 insertions(+)
+ create mode 100644 package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
 
-
+diff --git a/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch b/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
+new file mode 100644
+index 000000000000..2b9cd3db1766
+--- /dev/null
++++ b/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
+@@ -0,0 +1,19 @@
++Just warn on missing arch
++
++Some architectures are not listed in dpkg list (e.g. mips64el, xtensa, sh4a).
++Don't break the build for that.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -Nuar dpkg-1.16.15-orig/m4/dpkg-arch.m4 dpkg-1.16.15/m4/dpkg-arch.m4
++--- dpkg-1.16.15-orig/m4/dpkg-arch.m4	2014-05-30 02:47:25.000000000 +0300
+++++ dpkg-1.16.15/m4/dpkg-arch.m4	2015-01-16 06:55:19.701596362 +0200
++@@ -57,7 +57,7 @@
++ AC_MSG_CHECKING([dpkg architecture name])
++ _DPKG_ARCHITECTURE([DEB_HOST_ARCH], [dpkg_arch])
++ if test "x$dpkg_arch" = "x"; then
++-	AC_MSG_ERROR([cannot determine host dpkg architecture])
+++	AC_MSG_WARN([cannot determine host dpkg architecture])
++ else
++ 	AC_MSG_RESULT([$dpkg_arch])
++ fi
+diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
+index 021edd19c8cf..5df44d4cfbe1 100644
+--- a/package/start-stop-daemon/start-stop-daemon.mk
++++ b/package/start-stop-daemon/start-stop-daemon.mk
+@@ -20,6 +20,8 @@ START_STOP_DAEMON_CONF_ENV = \
+ 	dpkg_cv_c99_snprintf=yes
+ START_STOP_DAEMON_DEPENDENCIES = host-pkgconf \
+ 	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
++# Patching m4/dpkg-arch.m4
++START_STOP_DAEMON_AUTORECONF = YES
+ START_STOP_DAEMON_LICENSE = GPLv2+
+ START_STOP_DAEMON_LICENSE_FILES = COPYING
+ 
 -- 
-Greater the Difficulty....Sweeter is the Victory
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150115/1310fae2/attachment.html>
+2.1.4
