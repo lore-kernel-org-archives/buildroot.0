@@ -1,46 +1,75 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 16 Jan 2015 09:07:05 +0100
-Subject: [Buildroot] [PATCH] linux: clarify help text for 'custom tarball'
-Message-ID: <1421395625-2672-1-git-send-email-patrickdepinguin@gmail.com>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Fri, 16 Jan 2015 07:56:23 +0000
+Subject: [Buildroot] support for cortex m3/m4 with newlib
+In-Reply-To: <CAOudHSVE_H85gBwZnBkf=_DAzN+XcmcHYRk9SA8s4qZ94+xXKQ@mail.gmail.com>
+References: <CAOudHSX=sc7hwE0PObED1jtDp7pOs-=PPVG_Rsh6+di9iYWojA@mail.gmail.com>
+ <DB3PR04MB108A30595D5D2347E0366E1EA4F0@DB3PR04MB108.eurprd04.prod.outlook.com>
+ <CAOudHSVE_H85gBwZnBkf=_DAzN+XcmcHYRk9SA8s4qZ94+xXKQ@mail.gmail.com>
+Message-ID: <DB3PR04MB1081BE3A3017D73CFE2F7A2EA4F0@DB3PR04MB108.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+I didn?t know ChibiOS, it seems to be interesting, but my interest is more focused on uClinux ;-)
+I don?t have many extra time left, but perhaps I could give you some help.
+Do you have publish your work on a platform like github/sourceforge or something like that?
+What is your next step?
+I have a stm32f4 discovery board, so I could help you on this platform. I?m not an expert, but want to learn more about uClinux and buildroot. I seems to be a good opportunity.
 
-The help text for Linux option 'Custom tarball' only refers to ftp or
-http tarballs, while in reality file or scp protocols are also
-supported.
+What are you next planned steps?
 
-Triggered by a recent support question, update the help text to clarify
-this.
+Regards
+Fabrice
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- linux/Config.in | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Von: cjwfirmware at gmail.com [mailto:cjwfirmware at gmail.com] Im Auftrag von Cjw X
+Gesendet: Freitag, 16. Januar 2015 08:20
+An: Fabrice Mousset | GEOCEPT GmbH
+Betreff: Re: [Buildroot] support for cortex m3/m4 with newlib
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a670802..1df0a49 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -48,8 +48,13 @@ config BR2_LINUX_KERNEL_CUSTOM_VERSION
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 	help
--	  This option allows to specify the http or ftp location of a
--	  specific kernel source tarball
-+	  This option allows to specify a URL pointing to a kernel source
-+	  tarball. This URL can use any protocol recognized by Buildroot,
-+	  like http://, ftp://, file:// or scp://.
-+
-+	  When pointing to a local tarball using file://, you may want to
-+	  use a make variable like $(TOPDIR) to reference the root of the
-+	  Buildroot tree.
- 
- config BR2_LINUX_KERNEL_CUSTOM_GIT
- 	bool "Custom Git repository"
--- 
-1.8.5.1
+It is targeting stm32f4. Right now it is being developed against a discovery board, but it will eventually target my own board.
+So far I've looked into
+ChibiOS
+uClinux
+and Nuttx
+
+Right now it is generating the toolchain with newlib and uClibc++. It is doing this as target arm-none-eabi-* since I've seen a variety of packages assume that cross compiler. (That is what arm's launchpad creates). I will also probably try and figure out how to integrate libopencm3.
+My plan is it support the three above (eventually) for my own stuff. Right now I'm just feeling out if there is much community interest. There is a big difference in effort between "do it for me" and "do it for everyone" and I don't have huge amounts of extra time. I think this stuff is cool though, so I'm thinking other people might also.
+
+Thanks,
+-Chris
+
+
+
+
+On Fri, Jan 16, 2015 at 1:40 AM, Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset at geocept.com<mailto:fabrice.mousset@geocept.com>> wrote:
+Hi Chris,
+
+I have some boards from ST (Discovery and Disco), they are base on STM32 processor.
+I was thinking about having support of those boards with buildroot, but never find time to check this out.
+I know that buildroot has support of Blackfin processors, which are also Cortex M3/M4 based, but don?t know what would be the extra work to port this uClinux support to more Cortex M3/M4 processor.
+What are you looking for? Do you plan to add support for uClinux, FreeRTOS, eCos, RTEMS or another operating system (perhaps in-house)?
+For which kind of Cortex M3/M4 processor have you done the port?
+
+Regards
+
+Fabrice
+
+Von: buildroot [mailto:buildroot-bounces at busybox.net<mailto:buildroot-bounces@busybox.net>] Im Auftrag von Cjw X
+Gesendet: Donnerstag, 15. Januar 2015 23:58
+An: buildroot at busybox.net<mailto:buildroot@busybox.net>
+Betreff: [Buildroot] support for cortex m3/m4 with newlib
+
+I've been working on modifying buildroot to support cortex m3/m4 processors against the newlib library.
+This way I can use buildroot to build RTOS's for those processors. I've been using buildroot for years to build linux systems and I would like to expand that for the smaller processors with different operating systems.
+
+I am making some progress. The toolchain already works. I'm now starting to go down the road of supporting RTOS's.
+I'm going to keep going regardless, but I wanted to check to find out if this interests the community.
+
+Does this interest people?
+-Chris
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150116/4bebd8bd/attachment.html>
