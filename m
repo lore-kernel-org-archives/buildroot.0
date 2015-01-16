@@ -1,32 +1,41 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 16 Jan 2015 10:42:08 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-01-15
-In-Reply-To: <20150116073014.07A21100B3E@stock.ovh.net>
-References: <20150116073014.07A21100B3E@stock.ovh.net>
-Message-ID: <54B8DCF0.1030002@imgtec.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 16 Jan 2015 11:29:26 +0100
+Subject: [Buildroot] Python: ctype: find_library support
+In-Reply-To: <CAGm1_kso0sheGZqzPugfxHba-9wVj-AwJHUd++DN+tRqqd=czg@mail.gmail.com>
+References: <CAGm1_kso0sheGZqzPugfxHba-9wVj-AwJHUd++DN+tRqqd=czg@mail.gmail.com>
+Message-ID: <CAGm1_kvnbZ=XfNZ7vr8D48z8A88Pb1S_DDauKhMjrYLDbbvH2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+On Wed, Jan 14, 2015 at 8:54 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> This subject was brought up yesterday on IRC.
+>
+> Some packages like pyudev
+> (https://pyudev.readthedocs.org/en/latest/index.html) require
+> find_library support in order to emit proper *.so name. To do so,
+> Python uses either /sbin/ldconfig, objdump or gcc (see
+> https://docs.python.org/2/library/ctypes.html#finding-shared-libraries).
+> See build/python-2.7.9/Lib/ctypes/util.py for implementation details.
+>
+> As we don't supply target gcc and objdump, /sbin/ldconfig seems to be
+> the only solution. But in the default configuration of internally
+> built toolchain library cache is disabled and in external toolchains
+> (Sourcery CodeBench ARM 2014.05 for example), ldconfig is not provided
+> at all.
+>
+> How can we solve this issue?
 
-On 16/01/15 08:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-01-15
+Hm. We seem not to be alone. There is a related, but unresolved and
+uncommented bug in Python's bug tracker:
+http://bugs.python.org/issue13508
 
->      mips64el |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/7b3a05868a1b17512e87f98a69984ef82d08c54c/
+I've also found this BR thread:
+http://lists.busybox.net/pipermail/buildroot/2013-October/081219.html
 
-Caused by building sdl_sound with debug symbols.
-Reported upstream: 
-http://lists.libsdl.org/pipermail/sdl-libsdl.org/2014-November/096804.html
-Related: http://patchwork.ozlabs.org/patch/400969/
+Wojciech, have you tried to contact Python devs?
 
-Regards,
---
-Vicente Olivert Riera
-Graduate Software Engineer, MIPS Platforms
-Imagination Technologies Limited
-t: +44 (0)113 2429814
-www.imgtec.com
+Yegor
