@@ -1,32 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jan 2015 22:25:56 +0100
-Subject: [Buildroot] [PATCH 1/6] lua: add 5.3.x serie
-In-Reply-To: <1421442595-27575-1-git-send-email-francois.perrad@gadz.org>
-References: <1421442595-27575-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150116222556.7a9c92ab@free-electrons.com>
+Date: Fri, 16 Jan 2015 22:32:01 +0100
+Subject: [Buildroot] [PATCH] openntpd: fix license info/file
+In-Reply-To: <1421325064-18264-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1421325064-18264-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150116223201.7070963e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Gustavo Zacarias,
 
-On Fri, 16 Jan 2015 22:09:50 +0100, Francois Perrad wrote:
+On Thu, 15 Jan 2015 09:31:04 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/openntpd/openntpd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-> +LUA_VERSION = 5.3.0
-> +else
->  ifeq ($(BR2_PACKAGE_LUA_5_2),y)
->  LUA_VERSION = 5.2.3
->  else
->  LUA_VERSION = 5.1.5
->  endif
-
-Can we get rid of Lua 5.1 ? If not, at what point do you think it will
-be possible ?
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
