@@ -1,92 +1,117 @@
-From: David Bender <codehero@gmail.com>
-Date: Fri, 16 Jan 2015 08:03:01 -0500
-Subject: [Buildroot] [PATCH 1/1] benejson: new package
-Message-ID: <1421413381-25236-1-git-send-email-codehero@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Fri, 16 Jan 2015 14:08:39 +0100
+Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via the
+	system configuration submenu
+Message-ID: <1421413719-10383-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David Bender <codehero@yahoo.com>
+This patch allows the setup of simple a single interface to be
+automatically brought up and configured via DHCP on system startup.
 
-Added C/C++ JSON parsing package benejson.
+The interface name can be set via a configuration option. This patch
+does not support systemd-networkd, any complex network configuration should
+be done via overlay of /etc/network/interfaces or the relevant networkd
+configuration file
 
-Signed-off-by: Dave Bender <bender@benegon.com>
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+
 ---
- package/Config.in            |    1 +
- package/benejson/Config.in   |    6 ++++++
- package/benejson/benejson.mk |   37 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/benejson/Config.in
- create mode 100644 package/benejson/benejson.mk
+v4 : - changed condition to also depend on ifupdown or busybox
+       suggestion by Gustavo Zacarias
 
-diff --git a/package/Config.in b/package/Config.in
-index 266de13..5a09608 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -761,6 +761,7 @@ menu "Javascript"
- endmenu
+v3 : - move the condition from shell logic to make logic
+       (reusing the code proposed by Thomas Petazzoni)
+
+v2 : - inline shell section instead of providing a script
+     - add one Config.in option instead of two
+---
+ system/Config.in                       | 21 +++++++++++++++++++++
+ system/skeleton/etc/network/interfaces |  4 ----
+ system/system.mk                       | 25 +++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 4 deletions(-)
+ delete mode 100644 system/skeleton/etc/network/interfaces
+
+diff --git a/system/Config.in b/system/Config.in
+index 4d7a4e3..71d8689 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -324,6 +324,27 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
  
- menu "JSON/XML"
-+	source "package/benejson/Config.in"
- 	source "package/cjson/Config.in"
- 	source "package/expat/Config.in"
- 	source "package/ezxml/Config.in"
-diff --git a/package/benejson/Config.in b/package/benejson/Config.in
-new file mode 100644
-index 0000000..6d8d2a3
---- /dev/null
-+++ b/package/benejson/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_BENEJSON
-+	bool "benejson"
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+ 
++
++config BR2_SIMPLE_DHCP
++	string "Name of the physical network interface to run DHCP on"
++	default ""
++	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && (BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
 +	help
-+	  "streaming JSON parsing library with C and C++ APIs"
++	  The name of the network interface to configure automatically.
++	  A DHCP request will automatically happen on startup on the selected
++	  interface.
 +
-+		https://codehero.github.io/benejson/
-diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
-new file mode 100644
-index 0000000..851b95e
---- /dev/null
-+++ b/package/benejson/benejson.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# benejson
-+#
-+################################################################################
++	  If left empty, no automatic DHCP requests will take place.
 +
-+BENEJSON_VERSION = 0.9.7
-+BENEJSON_SITE =  $(call github,codehero,benejson,$(BENEJSON_VERSION))
-+BENEJSON_LICENSE = BSD-3c
-+BENEJSON_LICENSE_FILES = COPYING
-+BENEJSON_INSTALL_STAGING = YES
++	  For more complicated network setups use an overlay to overwrite
++	  /etc/network/interfaces or add a networkd configuration file.
 +
-+BENEJSON_DEPENDENCIES = host-scons
++comment "automatic network configuration via DHCP is not compatible with networkd"
++	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
 +
-+BENEJSON_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS)
++comment "automatic network configuration via DHCP needs ifupdown or busybox"
++	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
 +
-+define BENEJSON_BUILD_CMDS
-+	(cd $(@D); \
-+		$(BENEJSON_SCONS_ENV) \
-+		$(SCONS) \
-+		$(BENEJSON_SCONS_OPTS))
+ config BR2_TARGET_TZ_INFO
+ 	bool "Install timezone info"
+ 	# No timezone for musl; only for uClibc or (e)glibc.
+diff --git a/system/skeleton/etc/network/interfaces b/system/skeleton/etc/network/interfaces
+deleted file mode 100644
+index 218b82c..0000000
+--- a/system/skeleton/etc/network/interfaces
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Configure Loopback
+-auto lo
+-iface lo inet loopback
+-
+diff --git a/system/system.mk b/system/system.mk
+index e4a3160..96aa342 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -38,6 +38,31 @@ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+ TARGETS += host-mkpasswd
+ endif
+ 
++define SET_NETWORK_LOCALHOST
++        echo "# interface file auto-generated by buildroot" >  $(TARGET_DIR)/etc/network/interfaces
++        echo                                                >> $(TARGET_DIR)/etc/network/interfaces
++        echo "auto lo"                                      >> $(TARGET_DIR)/etc/network/interfaces
++        echo "iface lo inet loopback"                       >> $(TARGET_DIR)/etc/network/interfaces
++        echo                                                >> $(TARGET_DIR)/etc/network/interfaces
 +endef
 +
-+define BENEJSON_INSTALL_STAGING_CMDS
-+	(cd $(@D); \
-+		cp -ra include/benejson $(STAGING_DIR)/usr/include; \
-+		cp lib/libbenejson.{so,a} $(STAGING_DIR)/usr/lib \
-+		)
++NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SIMPLE_DHCP))
++
++ifneq ($(NETWORK_DHCP_IFACE),)
++define SET_NETWORK_DHCP
++        echo "auto $(NETWORK_DHCP_IFACE)"                   >> $(TARGET_DIR)/etc/network/interfaces
++        echo "iface $(NETWORK_DHCP_IFACE) inet dhcp"        >> $(TARGET_DIR)/etc/network/interfaces
++endef
++endif
++
++define SET_NETWORK
++        mkdir -p $(TARGET_DIR)/etc/network/
++        $(SET_NETWORK_LOCALHOST)
++        $(SET_NETWORK_DHCP)
 +endef
 +
-+define BENEJSON_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		cp lib/libbenejson.{so,a} $(TARGET_DIR)/usr/lib \
-+		)
-+endef
++TARGET_FINALIZE_HOOKS += SET_NETWORK
 +
-+$(eval $(generic-package))
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
+ define SYSTEM_ROOT_PASSWD
 -- 
-1.7.8.6
+2.1.4
