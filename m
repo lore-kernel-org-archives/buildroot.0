@@ -1,81 +1,32 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 16 Jan 2015 10:03:39 +0100
-Subject: [Buildroot] [PATCH] start-stop-daemon: fix build on non listed
- architectures
-In-Reply-To: <80da3f9ea8ed6a75fbd4cbafb1e43843671cd8f0.1421385033.git.baruch@tkos.co.il>
-References: <80da3f9ea8ed6a75fbd4cbafb1e43843671cd8f0.1421385033.git.baruch@tkos.co.il>
-Message-ID: <54B8D3EB.6030909@imgtec.com>
+Date: Fri, 16 Jan 2015 10:42:08 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-01-15
+In-Reply-To: <20150116073014.07A21100B3E@stock.ovh.net>
+References: <20150116073014.07A21100B3E@stock.ovh.net>
+Message-ID: <54B8DCF0.1030002@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hello everyone,
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On 16/01/15 08:30, Thomas Petazzoni wrote:
+> Build statistics for 2015-01-15
 
-Best regards,
+>      mips64el |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/7b3a05868a1b17512e87f98a69984ef82d08c54c/
+
+Caused by building sdl_sound with debug symbols.
+Reported upstream: 
+http://lists.libsdl.org/pipermail/sdl-libsdl.org/2014-November/096804.html
+Related: http://patchwork.ozlabs.org/patch/400969/
+
+Regards,
 --
 Vicente Olivert Riera
 Graduate Software Engineer, MIPS Platforms
 Imagination Technologies Limited
 t: +44 (0)113 2429814
 www.imgtec.com
-
-On 16/01/15 06:10, Baruch Siach wrote:
-> Not all Buildroot supported architectures are known to dpkg. Convert the
-> configure error to a warning.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/24e/24e37550749dc15ed7223fd515fa4628803f341e/
-> http://autobuild.buildroot.net/results/445/445bf4742d78a0bf93b4c75dc733c4315530031e/
-> http://autobuild.buildroot.net/results/952/952051485f23b67ffc449360886d6757c385331f/
->
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->   .../0002-just-warn-on-missing-arch.patch              | 19 +++++++++++++++++++
->   package/start-stop-daemon/start-stop-daemon.mk        |  2 ++
->   2 files changed, 21 insertions(+)
->   create mode 100644 package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
->
-> diff --git a/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch b/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
-> new file mode 100644
-> index 000000000000..2b9cd3db1766
-> --- /dev/null
-> +++ b/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
-> @@ -0,0 +1,19 @@
-> +Just warn on missing arch
-> +
-> +Some architectures are not listed in dpkg list (e.g. mips64el, xtensa, sh4a).
-> +Don't break the build for that.
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +diff -Nuar dpkg-1.16.15-orig/m4/dpkg-arch.m4 dpkg-1.16.15/m4/dpkg-arch.m4
-> +--- dpkg-1.16.15-orig/m4/dpkg-arch.m4	2014-05-30 02:47:25.000000000 +0300
-> ++++ dpkg-1.16.15/m4/dpkg-arch.m4	2015-01-16 06:55:19.701596362 +0200
-> +@@ -57,7 +57,7 @@
-> + AC_MSG_CHECKING([dpkg architecture name])
-> + _DPKG_ARCHITECTURE([DEB_HOST_ARCH], [dpkg_arch])
-> + if test "x$dpkg_arch" = "x"; then
-> +-	AC_MSG_ERROR([cannot determine host dpkg architecture])
-> ++	AC_MSG_WARN([cannot determine host dpkg architecture])
-> + else
-> + 	AC_MSG_RESULT([$dpkg_arch])
-> + fi
-> diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
-> index 021edd19c8cf..5df44d4cfbe1 100644
-> --- a/package/start-stop-daemon/start-stop-daemon.mk
-> +++ b/package/start-stop-daemon/start-stop-daemon.mk
-> @@ -20,6 +20,8 @@ START_STOP_DAEMON_CONF_ENV = \
->   	dpkg_cv_c99_snprintf=yes
->   START_STOP_DAEMON_DEPENDENCIES = host-pkgconf \
->   	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
-> +# Patching m4/dpkg-arch.m4
-> +START_STOP_DAEMON_AUTORECONF = YES
->   START_STOP_DAEMON_LICENSE = GPLv2+
->   START_STOP_DAEMON_LICENSE_FILES = COPYING
->
->
