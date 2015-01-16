@@ -1,66 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 Jan 2015 07:10:33 +0200
-Subject: [Buildroot] [PATCH] start-stop-daemon: fix build on non listed
-	architectures
-Message-ID: <80da3f9ea8ed6a75fbd4cbafb1e43843671cd8f0.1421385033.git.baruch@tkos.co.il>
+From: bjoern at am-soft.de <bjoern@am-soft.de>
+Date: Fri, 16 Jan 2015 06:49:44 +0100 (CET)
+Subject: [Buildroot] Fwd: Qt4 Application - Touch detection
+In-Reply-To: <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
+References: <CADKZYYLgvvnaur+Rc0J0UVshsQesEWZ2Feenb3WHA0gQztaKKA@mail.gmail.com>
+ <20150115181324.48fc51e9@tux.kirchner>
+ <CADKZYYKDoizsdEo28Ynwb=ndhJXmHW3Zoqx=aSpP-1BMnDYujw@mail.gmail.com>
+ <CADKZYYK12mXBKQq=R2k7aAky-2i1FcfAyyaXqLdsnd5cpoQdXg@mail.gmail.com>
+ <20150115200634.598a27a3@tux.kirchner>
+ <CADKZYYL-uKCvyEU9w7eAWi-yZv4bky5dTEz+RpUNAJQchjw2-Q@mail.gmail.com>
+ <20150115212231.08000b68@tux.kirchner>
+ <CADKZYYJArGCAPBOkzTcKvc-BgiUieZpx0Qjw-0zDycwJVPAX5A@mail.gmail.com>
+Message-ID: <6779ce2913b65ea70633d09a38e1cbdf.squirrel@3p.am-soft.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not all Buildroot supported architectures are known to dpkg. Convert the
-configure error to a warning.
+>>
+>> So, you did something like this?
+>> # export TSLIB_TSDEVICE=/dev/input/event0
+>> # export QWS_MOUSE_PROTO="tslib:/dev/input/event0"
+>> # <qtExample>
+>> And there the touch screen worked correctly? And your program didn't?
+>
+>
+> Yes that is correct. However, I still don't understand why export doesn't
+> work within a script. I understood your explanation; the TI file system
+> uses profile.d to export these variables again in bash. I will try doing
+> that with profile file in etc to make it part of the startup routine.
+>
 
-Fixes:
-http://autobuild.buildroot.net/results/24e/24e37550749dc15ed7223fd515fa4628803f341e/
-http://autobuild.buildroot.net/results/445/445bf4742d78a0bf93b4c75dc733c4315530031e/
-http://autobuild.buildroot.net/results/952/952051485f23b67ffc449360886d6757c385331f/
+Imagine the processes on a linux system as a tree. For example:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0002-just-warn-on-missing-arch.patch              | 19 +++++++++++++++++++
- package/start-stop-daemon/start-stop-daemon.mk        |  2 ++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
+/sbin/init
+|
+|
+A
+|
++--> B
+|    |
+|    |
+|    C
+|
+D
 
-diff --git a/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch b/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
-new file mode 100644
-index 000000000000..2b9cd3db1766
---- /dev/null
-+++ b/package/start-stop-daemon/0002-just-warn-on-missing-arch.patch
-@@ -0,0 +1,19 @@
-+Just warn on missing arch
-+
-+Some architectures are not listed in dpkg list (e.g. mips64el, xtensa, sh4a).
-+Don't break the build for that.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+diff -Nuar dpkg-1.16.15-orig/m4/dpkg-arch.m4 dpkg-1.16.15/m4/dpkg-arch.m4
-+--- dpkg-1.16.15-orig/m4/dpkg-arch.m4	2014-05-30 02:47:25.000000000 +0300
-++++ dpkg-1.16.15/m4/dpkg-arch.m4	2015-01-16 06:55:19.701596362 +0200
-+@@ -57,7 +57,7 @@
-+ AC_MSG_CHECKING([dpkg architecture name])
-+ _DPKG_ARCHITECTURE([DEB_HOST_ARCH], [dpkg_arch])
-+ if test "x$dpkg_arch" = "x"; then
-+-	AC_MSG_ERROR([cannot determine host dpkg architecture])
-++	AC_MSG_WARN([cannot determine host dpkg architecture])
-+ else
-+ 	AC_MSG_RESULT([$dpkg_arch])
-+ fi
-diff --git a/package/start-stop-daemon/start-stop-daemon.mk b/package/start-stop-daemon/start-stop-daemon.mk
-index 021edd19c8cf..5df44d4cfbe1 100644
---- a/package/start-stop-daemon/start-stop-daemon.mk
-+++ b/package/start-stop-daemon/start-stop-daemon.mk
-@@ -20,6 +20,8 @@ START_STOP_DAEMON_CONF_ENV = \
- 	dpkg_cv_c99_snprintf=yes
- START_STOP_DAEMON_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+# Patching m4/dpkg-arch.m4
-+START_STOP_DAEMON_AUTORECONF = YES
- START_STOP_DAEMON_LICENSE = GPLv2+
- START_STOP_DAEMON_LICENSE_FILES = COPYING
- 
--- 
-2.1.4
+If you export a variable in process B this variable will be also available
+in process C. But B cannot change the environment of process A. Therefore
+this environment variable exported by B will not be available in process D.
+
+Does profile.d change non-login environments? If your program starts via
+a service at boot time I'm not sure if it gets an environment set up by
+the files in profile.d.
+
+I used the pragmatic approach and used start scripts for my programs that
+need specific environment variables set.
+
+> I'm going to try and compile my application with the Qt built by buildroot
+> and I will reply back with my findings.
+>
+> Thanks once again for your patience and help.
+> Regards
+>
+> Santhosh
+>
