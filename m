@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jan 2015 22:32:58 +0100
-Subject: [Buildroot] [git commit] openntpd: fix license info/file
-Message-ID: <20150116213305.25956800AE@busybox.osuosl.org>
+Date: Fri, 16 Jan 2015 22:33:11 +0100
+Subject: [Buildroot] [git commit] gdb: bump to version 7.8.2
+Message-ID: <20150116213315.3B57B800AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0aecdd4d948b2aaf7278689fc290f2ec74592330
+commit: http://git.buildroot.net/buildroot/commit/?id=4aad9515f17d91150ac4bd449c4d6a35a486a1a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openntpd/openntpd.mk |    2 +-
+ package/gdb/Config.in.host |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index c23b613..158ac85 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -7,7 +7,7 @@
- OPENNTPD_VERSION = 5.7p1
- OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
- OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
--OPENNTPD_LICENSE_FILES = LICENCE
-+OPENNTPD_LICENSE_FILES = COPYING
- 
- define OPENNTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/openntpd/S49ntp \
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index e8402b7..7f9df3a 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -55,4 +55,4 @@ config BR2_GDB_VERSION
+ 	default "arc-2014.08-gdb" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
+-	default "7.8.1"	   if BR2_GDB_VERSION_7_8
++	default "7.8.2"	   if BR2_GDB_VERSION_7_8
