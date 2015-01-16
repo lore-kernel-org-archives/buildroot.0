@@ -1,48 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jan 2015 09:29:44 +0100
-Subject: [Buildroot] [PATCH] toolchain: Use the correct target name
-In-Reply-To: <54B843D7.1030602@dawncrow.de>
-References: <54B843D7.1030602@dawncrow.de>
-Message-ID: <20150116092944.06e31910@free-electrons.com>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Fri, 16 Jan 2015 08:35:52 +0000
+Subject: [Buildroot] support for cortex m3/m4 with newlib
+In-Reply-To: <20150116092339.3021abf7@free-electrons.com>
+References: <CAOudHSX=sc7hwE0PObED1jtDp7pOs-=PPVG_Rsh6+di9iYWojA@mail.gmail.com>
+ <DB3PR04MB10881DC255B126BDF70B7FCEA4F0@DB3PR04MB108.eurprd04.prod.outlook.com>
+ <20150116092339.3021abf7@free-electrons.com>
+Message-ID: <DB3PR04MB1082367823D75E5248735F7EA4F0@DB3PR04MB108.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+Oh sorry, I've got a mistake about blackfine and analog devices  ADu processors family!
 
-On Thu, 15 Jan 2015 23:48:55 +0100, Andr? Hentschel wrote:
-> When using an external toolchain we need to use the toolchain prefix
-> for the staging directory and e.g. for configure.
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
-> This fixes cross compiling Wine (not yet upstream because of that).
-> 
->  package/Makefile.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 2055f00..0a00c7e 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -36,7 +36,11 @@ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
->  endif
-> 
->  # Compute GNU_TARGET_NAME
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
-> +else
-> +GNU_TARGET_NAME = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-> +endif
+Regards
 
-I am not sure we want to do this actually. There is nothing that forces
-the toolchain to have the same prefix as the host tuple. Except Wine
-and its original build system.
+Fabrice
+
+
+-----Urspr?ngliche Nachricht-----
+Von: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Gesendet: Freitag, 16. Januar 2015 09:24
+An: Fabrice Mousset | GEOCEPT GmbH
+Cc: buildroot at busybox.net
+Betreff: Re: [Buildroot] support for cortex m3/m4 with newlib
+
+Hello,
+
+On Fri, 16 Jan 2015 07:07:25 +0000, Fabrice Mousset | GEOCEPT GmbH
+wrote:
+
+> I know that buildroot has support of Blackfin processors, which are 
+> also Cortex M3/M4 based, but don?t know what would be the extra work 
+> to port this uClinux support to more Cortex M3/M4 processor.
+
+Blackfin processors are not Cortex M3/M4 based. Blackfin is a custom DSP architecture, which has nothing to do with ARM Cortex M3/M4.
+
+Best regards,
 
 Thomas
--- 
+--
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
