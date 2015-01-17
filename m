@@ -1,185 +1,96 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 00:34:03 +0100
-Subject: [Buildroot] [PATCH v6 07/15] xdriver_xf86-video-imx-viv: new package
-In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421451251-23366-8-git-send-email-jezz@sysmic.org>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 16 Jan 2015 18:04:11 -0600
+Subject: [Buildroot] [PATCH] dvd+rw-tools: new package
+Message-ID: <54B9A6FB.5080801@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xorg driver for imx6. Inspired from Yocto project.
+The dvd+rw-tools are used to master Blu-ray Disc
+and DVD Disc media, both +RW/+R and -RW/-R. The
++RW in the name is a historical artifact. This
+package contains the widely used growisofs program.
+	
+http://fy.chalmers.se/~appro/linux/DVD+RW/tools
 
-I did not find any problem, but notice Yocto project force Xorg xserver
-1.14.4 while we use 1.16.
-
-Notice Vivante driver should be able to provide Desktop OpenGL implementation.
-However, this feature seems broken for a while[1]. Yocto use Mesa3D/swraster
-to provide Desktop OpenGL API[2].
-
-[1] http://comments.gmane.org/gmane.linux.embedded.yocto.meta-freescale/8253
-[2] See recipes-graphics/xorg-driver/xf86-video-imxfb-vivante_3.10.17-1.0.1.bb
-    in meta-fsl-arm layer
-
-Tested with:
-    subsequent qt5base and libdrm fixes +
-    QMX6 board +
-    BR2_ARM_EABIHF= both tested
-    BR2_ARM_ENABLE_NEON=y
-    BR2_ARM_FPU_NEON=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-    BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_CUSTOM_GIT=y
-    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
-    BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-    BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-    BR2_LINUX_KERNEL_DTS_SUPPORT=y
-    BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-qmx6"
-    BR2_PACKAGE_QT5=y
-    BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-    BR2_PACKAGE_QT5BASE_EXAMPLES=y
-    BR2_PACKAGE_QT5BASE_OPENGL_ES2=y
-    BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-    BR2_PACKAGE_QT5BASE_XCB=y
-    BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
-    BR2_PACKAGE_QT5BASE_GIF=y
-    BR2_PACKAGE_QT5BASE_JPEG=y
-    BR2_PACKAGE_QT5BASE_PNG=y
-    BR2_PACKAGE_QT5QUICKCONTROLS=y
-    BR2_PACKAGE_XORG7=y
-    BR2_PACKAGE_XSERVER_XORG_SERVER=y
-    BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-    BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-    BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV=y
-    BR2_PACKAGE_FREESCALE_IMX=y
-    BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-    BR2_PACKAGE_GPU_VIV_BIN_MX6Q=y
-    BR2_PACKAGE_GPU_VIV_BIN_MX6Q_EXAMPLES=y
-
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 ---
- package/x11r7/Config.in                            |  1 +
- .../0001-Fix-LoadExtenions.patch                   | 15 ++++++++++
- package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 31 ++++++++++++++++++++
- .../xdriver_xf86-video-imx-viv.mk                  | 33 ++++++++++++++++++++++
- 4 files changed, 80 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+This is the last new package I currently have in the pipeline.
+Build tested with both uClibc and glibc against last nights snapshot.
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 2fd1ff0..5480d9a 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -160,6 +160,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-glide/Config.in
- 		source package/x11r7/xdriver_xf86-video-glint/Config.in
- 		source package/x11r7/xdriver_xf86-video-i128/Config.in
-+		source package/x11r7/xdriver_xf86-video-imx-viv/Config.in
- 		source package/x11r7/xdriver_xf86-video-intel/Config.in
- 		source package/x11r7/xdriver_xf86-video-mach64/Config.in
- 		source package/x11r7/xdriver_xf86-video-mga/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-new file mode 100644
-index 0000000..3e2d47c
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-@@ -0,0 +1,15 @@
-+Fix compilation with Xorg xserver 1.16.
+uClibc make savedefconfig
+BR2_PACKAGE_DVDRW_TOOLS=y
+
+glibc make savedefconfig
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_DVDRW_TOOLS=y
+
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-15 02:41:42.000000000 -0600
++++ buildroot/package/Config.in	2015-01-16 17:25:21.126029016 -0600
+@@ -7,6 +7,7 @@ menu "Audio and video applications"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
+ 	source "package/dvdauthor/Config.in"
++	source "package/dvdrw-tools/Config.in"
+ 	source "package/espeak/Config.in"
+ 	source "package/faad2/Config.in"
+ 	source "package/ffmpeg/Config.in"
+diff -pruN buildroot.ori/package/dvdrw-tools/0001-limits.h.patch buildroot/package/dvdrw-tools/0001-limits.h.patch
+--- buildroot.ori/package/dvdrw-tools/0001-limits.h.patch	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/dvdrw-tools/0001-limits.h.patch	2015-01-16 17:25:02.558028659 -0600
+@@ -0,0 +1,12 @@
++diff -ru dvd+rw-tools-7.1.clean/transport.hxx dvd+rw-tools-7.1.modified/transport.hxx
++--- dvd+rw-tools-7.1.clean/transport.hxx	2008-03-01 04:34:43.000000000 -0600
+++++ dvd+rw-tools-7.1.modified/transport.hxx	2014-12-16 16:34:04.208459745 -0600
++@@ -9,6 +9,7 @@
++ #if defined(__unix) || defined(__unix__)
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <limits.h>
++ #include <unistd.h>
++ #include <string.h>
++ #include <sys/types.h>
 +
-+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-+
-+--- a/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-07-25 15:38:24.000000000 +0200
-++++ b/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-10-02 21:00:58.755409342 +0200
-+@@ -261,7 +261,7 @@
-+         setupDone = TRUE;
-+         xf86AddDriver(&FBDEV, module, HaveDriverFuncs);
-+         if(gVivFb)
-+-            LoadExtension(&VIVExt, FALSE);
-++            LoadExtensionList(&VIVExt, 1, FALSE);
-+ 		return (pointer)1;
-+     } else {
-+         if (errmaj) *errmaj = LDR_ONCEONLY;
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-new file mode 100644
-index 0000000..8926a50
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
-+	bool "xf86-video-imx-viv"
-+	depends on BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-+	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+diff -pruN buildroot.ori/package/dvdrw-tools/Config.in buildroot/package/dvdrw-tools/Config.in
+--- buildroot.ori/package/dvdrw-tools/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/dvdrw-tools/Config.in	2015-01-16 17:25:02.558028659 -0600
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DVDRW_TOOLS
++	bool "dvdrw-tools"
 +	help
-+	  X.Org driver for iMX6 GPU (Vivante)
-+
-+	  Notice EGL and GLes2 APIs are correctly supported. This driver should
-+	  also be able to provide Desktop OpenGL implementation but, this
-+	  feature seems broken since quite some time.
-+
-+	  To use this driver, add correct configuration to your
-+	  /etc/X11/xorg.conf:
-+
-+	  Section "Device"
-+	    [...]
-+	    Driver          "vivante"
-+	    Option          "vivante_fbdev" "/dev/fbX"
-+	  EndSection
-+
-+	  Don't forget to load galcore.ko and create /dev/galcore before using
-+	  this driver (else, Xorg will exit with an obscur message like
-+	  "Segmentation fault at address 0xc").
-+
-+comment "xf86-video-imx-viv depends on gpu-viv-bin-mx6q with X11 output"
-+	depends on BR2_arm
-+	depends on !BR2_PACKAGE_GPU_VIV_BIN_MX6Q_OUTPUT_X11
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-new file mode 100644
-index 0000000..44d98d5
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -0,0 +1,33 @@
-+################################################################################
++	  The dvd+rw-tools are used to master Blu-ray Disc
++	  and DVD Disc media, both +RW/+R and -RW/-R. The
++	  +RW in the name is a historical artifact. This
++	  package contains the widely used growisofs program.
++	
++	  http://fy.chalmers.se/~appro/linux/DVD+RW/tools
+diff -pruN buildroot.ori/package/dvdrw-tools/dvdrw-tools.mk buildroot/package/dvdrw-tools/dvdrw-tools.mk
+--- buildroot.ori/package/dvdrw-tools/dvdrw-tools.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/dvdrw-tools/dvdrw-tools.mk	2015-01-16 17:25:02.558028659 -0600
+@@ -0,0 +1,23 @@
++#############################################################
 +#
-+# xdriver_xf86-video-imx-viv
++# dvdrw-tools
 +#
-+################################################################################
++#############################################################
++DVDRW_TOOLS_VERSION = 7.1
++DVDRW_TOOLS_SOURCE = dvd+rw-tools-$(DVDRW_TOOLS_VERSION).tar.gz
++DVDRW_TOOLS_SITE = http://fy.chalmers.se/~appro/linux/DVD+RW/tools
++DVDRW_TOOLS_INSTALL_TARGET = YES
 +
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
-+XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
-+XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
-+XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = gpu-viv-bin-mx6q xserver_xorg-server \
-+	xproto_xproto xproto_xf86driproto libdrm
-+XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = GPLv2
-+XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
-+XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
-+
-+define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
-+	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
-+		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
-+		CFLAGS="$(TARGET_CFLAGS) -I$(@D)/DRI_1.10.4/src"
++define DVDRW_TOOLS_BUILD_CMDS
++	$(MAKE) -C $(@D)
 +endef
 +
-+define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
-+	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(STAGING_DIR)/usr install
-+	$(INSTALL) -m 644 $(@D)/EXA/src/vivante_gal/vivante_priv.h $(STAGING_DIR)/usr/include
-+	$(INSTALL) -m 644 $(@D)/EXA/src/vivante_gal/vivante_gal.h $(STAGING_DIR)/usr/include
-+endef
-+
-+define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_TARGET_CMDS
-+	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) prefix=$(TARGET_DIR)/usr install
++define DVDRW_TOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/dvd-ram-control $(TARGET_DIR)/usr/bin/dvd-ram-control
++	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-booktype $(TARGET_DIR)/usr/bin/dvd+rw-booktype
++	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-format $(TARGET_DIR)/usr/bin/dvd+rw-format
++	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-mediainfo $(TARGET_DIR)/usr/bin/dvd+rw-mediainfo
++	$(INSTALL) -m 0755 -D $(@D)/growisofs $(TARGET_DIR)/usr/bin/growisofs
 +endef
 +
 +$(eval $(generic-package))
-+
--- 
-1.9.1
