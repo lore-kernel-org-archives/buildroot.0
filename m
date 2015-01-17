@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Jan 2015 18:03:55 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/mesa3d: Enable support for
-	Radeon r600 gallium driver
-In-Reply-To: <1421514235-27122-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1421514235-27122-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1421514235-27122-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 Jan 2015 18:03:54 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/mesa3d: Refactor XA support to
+	prepare support for ATI drivers
+Message-ID: <1421514235-27122-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +10,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 --
-v2: - rebased patch from micro1183: http://patchwork.ozlabs.org/patch/398858/
-    - removed support for r300 & radeonsi because they need llvm support
-      which is not provided by buildroot
+v2: - rebased patch by micro1183: http://patchwork.ozlabs.org/patch/398857/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in |    9 +++++++++
- package/mesa3d/mesa3d.mk |    1 +
- 2 files changed, 10 insertions(+)
+ package/mesa3d/Config.in |    5 +++++
+ package/mesa3d/mesa3d.mk |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 6b3ccce..0d0501c 100644
+index eb977b6..6b3ccce 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -47,6 +47,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+@@ -43,6 +43,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_NOUVEAU
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
  	help
  	  Supports all Nvidia GPUs.
  
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	bool "Gallium Radeon R600 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
-+	help
-+	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	bool "Gallium vmware svga driver"
+@@ -51,6 +52,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
  	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_VMWGFX
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	help
+ 	  This is a virtual GPU driver for VMWare virtual machines.
+ 
+@@ -61,6 +63,9 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
++config BR2_PACKAGE_MESA3D_NEEDS_XA
++	bool
++
+ comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_XORG7
+ 
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index ef324b2..18255a7 100644
+index f6f6b0f..ef324b2 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -56,6 +56,7 @@ endif
- 
- #Gallium Drivers
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
- # DRI Drivers
+@@ -36,7 +36,7 @@ MESA3D_DEPENDENCIES += \
+ 	libxcb
+ MESA3D_CONF_OPTS += --enable-glx
+ # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
+-ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
++ifneq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),)
+ MESA3D_CONF_OPTS += --enable-xa
+ else
+ MESA3D_CONF_OPTS += --disable-xa
 -- 
 1.7.10.4
