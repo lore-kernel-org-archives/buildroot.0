@@ -1,65 +1,29 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Jan 2015 18:03:54 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/mesa3d: Refactor XA support to
-	prepare support for ATI drivers
-Message-ID: <1421514235-27122-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 Jan 2015 19:22:35 +0100
+Subject: [Buildroot] [PATCH V2] dvd+rw-tools: new package
+References: <54B9B774.9030204@ou.edu>
+Message-ID: <XnsA425C51B017E9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---
-v2: - rebased patch by micro1183: http://patchwork.ozlabs.org/patch/398857/
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/Config.in |    5 +++++
- package/mesa3d/mesa3d.mk |    2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+Steve Kenton <skenton@ou.edu> wrote in 
+news:54B9B774.9030204 at ou.edu:
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index eb977b6..6b3ccce 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -43,6 +43,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_NOUVEAU
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Supports all Nvidia GPUs.
- 
-@@ -51,6 +52,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_VMWGFX
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  This is a virtual GPU driver for VMWare virtual machines.
- 
-@@ -61,6 +63,9 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
-+config BR2_PACKAGE_MESA3D_NEEDS_XA
-+	bool
-+
- comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_XORG7
- 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f6f6b0f..ef324b2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -36,7 +36,7 @@ MESA3D_DEPENDENCIES += \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx
- # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
--ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
-+ifneq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),)
- MESA3D_CONF_OPTS += --enable-xa
- else
- MESA3D_CONF_OPTS += --disable-xa
--- 
-1.7.10.4
+> +     $(INSTALL) -m 0755 -D $(@D)/growisofs $(TARGET_DIR)/usr/bin/growisofs
+> +endef
+
+Hi,
+
+according to Beyond Linux From Scratch you need libisoburn or a similar 
+package which provides xorrisofs, otherwise "the growisofs command will not 
+function properly"
+http://www.linuxfromscratch.org/blfs/view/svn/multimedia/dvd-rw-tools.html
+
+Did your package work without xorrisofs during your tests?
+
+Regards, Bernd
