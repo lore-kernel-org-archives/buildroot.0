@@ -1,29 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 18 Jan 2015 00:32:46 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/udoo_quad_defconfig: new
- defconfig
-In-Reply-To: <1421533112-5265-1-git-send-email-ivo.slanina@gmail.com>
-References: <1421533112-5265-1-git-send-email-ivo.slanina@gmail.com>
-Message-ID: <20150117223246.GH2827@tarshish>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sat, 17 Jan 2015 16:34:24 -0600
+Subject: [Buildroot] [PATCH V2] dvd+rw-tools: new package
+In-Reply-To: <XnsA425C51B017E9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <54B9B774.9030204@ou.edu>
+ <XnsA425C51B017E9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <54BAE370.7060404@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ivo,
+On 01/17/2015 12:22 PM, Bernd Kuhls wrote:
+> according to Beyond Linux From Scratch you need libisoburn or a similar 
+> package which provides xorrisofs, otherwise "the growisofs command will not 
+> function properly"
+> http://www.linuxfromscratch.org/blfs/view/svn/multimedia/dvd-rw-tools.html
+> 
+> Did your package work without xorrisofs during your tests?
+> 
+> Regards, Bernd
+I was working on xorriso, dvdauthor, dvd+rw-tools and mjpegtools simultaneously
+for my embedded project. Once they all worked I cleaned them up for submission.
+GNU Xorriso includes all the libburnia libraries as well as the xorriso burner program.
+FYI - Xorriso and dvdauthor were just committed. I did not think to check for hidden runtime
+dependencies when I was working up the submission for those four packages individually. I just
+worked on getting each of them to build in a clean buildroot snapshot for both uClibc and glibc.
 
-On Sat, Jan 17, 2015 at 11:18:32PM +0100, Ivo Slanina wrote:
-> Added defconfig for UDOO Quad board. Used official kernel 3.0.35.
-> Kernel is patched in order to use gcc version 4.8 and above,
-> according to mailing list at
-> https://lists.yoctoproject.org/pipermail/meta-freescale/2013-July/003531.html
+If it was not a feature that I needed for my project right then it probably did not get
+run time tested. So I can well believe there may be other dependencies that I did not discover.
+Thanks for the tip, I'll try it out stand-alone and see what I find.
 
-Why can't you use mainline kernel for this board?
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Steve
