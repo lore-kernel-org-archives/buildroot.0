@@ -1,57 +1,97 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Sat, 17 Jan 2015 01:11:03 +0100
-Subject: [Buildroot] [PATCH v5 07/15] xdriver_xf86-video-imx-viv: new
-	package
-In-Reply-To: <20150116171533.64116d5f@free-electrons.com>
-References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
- <1673331.jGUK3KeLGv@aquila> <20150116171533.64116d5f@free-electrons.com>
-Message-ID: <1664407.TbGWHQXnSi@sagittea>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 16 Jan 2015 19:14:28 -0600
+Subject: [Buildroot] [PATCH V2] dvd+rw-tools: new package
+Message-ID: <54B9B774.9030204@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 16 January 2015 17:15:33 Thomas Petazzoni wrote:
-> Dear J?r?me Pouiller,
-> 
-> On Fri, 16 Jan 2015 17:04:20 +0100, J?r?me Pouiller wrote:
-> 
-> > > The world of OpenGL stuff will always surprise me. Why on earth does a
-> > > X.org driver that uses a proprietary OpenGL implementation needs
-> > > Mesa3D ?!?
-> > 
-> > In fact, xf86-video-imx-viv does not depends directly on mesa3d. However, it 
-> > depend on xorg server compiled with --enable-dri --enable-glx. But, these 
-> > options are enabled only if BR2_PACKAGE_MESA3D_DRI_DRIVER is enabled.
-> 
-> Maybe this should be changed, so that other drivers can enable it,
-> without referencing Mesa related options, no?
-> 
-> Also, the code in the xserver package does:
-> 
-> ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
-> XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
-> else
-> XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
-> endif
-> 
-> So it really builds mesa as well. Is this needed ?
-We cannot use gpu-viv-bin-mx6q to compile Xorg with DRI and GLX since 
-it does not provide all necessary files. Especially, OpenGL headers 
-(GL/gl.h, GL/glx.h, ...) are missing[1]. We may solve this issue using
-"opengl-registry" posted by Yann a few months ago. It may be 
-sufficient.
+The dvd+rw-tools are used to master Blu-ray Disc
+and DVD Disc media, both +RW/+R and -RW/-R. The
++RW in the name is a historical artifact. This
+package contains the widely used growisofs program.
+	
+http://fy.chalmers.se/~appro/linux/DVD+RW/tools
 
-Note that the current implementation is same than the one used in Yocto
-and it is officially supported by Freescale. (I do not say it is the
-right way, but it is a sufficient justification for many users)
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+V2 - added the licensing information
+Build tested with both uClibc and glibc against last nights snapshot
 
+uClibc make savedefconfig
+BR2_PACKAGE_DVDRW_TOOLS=y
 
-[1] https://community.freescale.com/thread/312546
+glibc make savedefconfig
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_DVDRW_TOOLS=y
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-15 02:41:42.000000000 -0600
++++ buildroot/package/Config.in	2015-01-16 19:05:22.878144144 -0600
+@@ -7,6 +7,7 @@ menu "Audio and video applications"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
+ 	source "package/dvdauthor/Config.in"
++	source "package/dvdrw-tools/Config.in"
+ 	source "package/espeak/Config.in"
+ 	source "package/faad2/Config.in"
+ 	source "package/ffmpeg/Config.in"
+diff -pruN buildroot.ori/package/dvdrw-tools/0001-limits.h.patch buildroot/package/dvdrw-tools/0001-limits.h.patch
+--- buildroot.ori/package/dvdrw-tools/0001-limits.h.patch	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/dvdrw-tools/0001-limits.h.patch	2015-01-16 19:04:53.170143574 -0600
+@@ -0,0 +1,12 @@
++diff -ru dvd+rw-tools-7.1.clean/transport.hxx dvd+rw-tools-7.1.modified/transport.hxx
++--- dvd+rw-tools-7.1.clean/transport.hxx	2008-03-01 04:34:43.000000000 -0600
+++++ dvd+rw-tools-7.1.modified/transport.hxx	2014-12-16 16:34:04.208459745 -0600
++@@ -9,6 +9,7 @@
++ #if defined(__unix) || defined(__unix__)
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <limits.h>
++ #include <unistd.h>
++ #include <string.h>
++ #include <sys/types.h>
++
+diff -pruN buildroot.ori/package/dvdrw-tools/Config.in buildroot/package/dvdrw-tools/Config.in
+--- buildroot.ori/package/dvdrw-tools/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/dvdrw-tools/Config.in	2015-01-16 19:04:53.170143574 -0600
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DVDRW_TOOLS
++	bool "dvdrw-tools"
++	help
++	  The dvd+rw-tools are used to master Blu-ray Disc
++	  and DVD Disc media, both +RW/+R and -RW/-R. The
++	  +RW in the name is a historical artifact. This
++	  package contains the widely used growisofs program.
++	
++	  http://fy.chalmers.se/~appro/linux/DVD+RW/tools
+diff -pruN buildroot.ori/package/dvdrw-tools/dvdrw-tools.mk buildroot/package/dvdrw-tools/dvdrw-tools.mk
+--- buildroot.ori/package/dvdrw-tools/dvdrw-tools.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/dvdrw-tools/dvdrw-tools.mk	2015-01-16 19:04:53.170143574 -0600
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# dvdrw-tools
++#
++#############################################################
++DVDRW_TOOLS_VERSION = 7.1
++DVDRW_TOOLS_SOURCE = dvd+rw-tools-$(DVDRW_TOOLS_VERSION).tar.gz
++DVDRW_TOOLS_SITE = http://fy.chalmers.se/~appro/linux/DVD+RW/tools
++DVDRW_TOOLS_LICENSE = GPLv2
++DVDRW_TOOLS_LICENSE_FILES = LICENSE
++
++define DVDRW_TOOLS_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define DVDRW_TOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/dvd-ram-control $(TARGET_DIR)/usr/bin/dvd-ram-control
++	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-booktype $(TARGET_DIR)/usr/bin/dvd+rw-booktype
++	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-format $(TARGET_DIR)/usr/bin/dvd+rw-format
++	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-mediainfo $(TARGET_DIR)/usr/bin/dvd+rw-mediainfo
++	$(INSTALL) -m 0755 -D $(@D)/growisofs $(TARGET_DIR)/usr/bin/growisofs
++endef
++
++$(eval $(generic-package))
