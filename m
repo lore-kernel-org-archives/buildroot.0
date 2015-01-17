@@ -1,29 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 Jan 2015 19:22:35 +0100
-Subject: [Buildroot] [PATCH V2] dvd+rw-tools: new package
-References: <54B9B774.9030204@ou.edu>
-Message-ID: <XnsA425C51B017E9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 17 Jan 2015 21:21:44 +0200
+Subject: [Buildroot] [PATCH 1/1] cgic: new package
+In-Reply-To: <1421425415-6601-1-git-send-email-codehero@gmail.com>
+References: <1421425415-6601-1-git-send-email-codehero@gmail.com>
+Message-ID: <20150117192144.GA2827@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Hi David,
 
-Steve Kenton <skenton@ou.edu> wrote in 
-news:54B9B774.9030204 at ou.edu:
+On Fri, Jan 16, 2015 at 11:23:35AM -0500, David Bender wrote:
+> +CGIC_ENV = AR=$(TARGET_CROSS)ar \
+> +	CC=$(TARGET_CROSS)gcc \
+> +	RANLIB=$(TARGET_CROSS)ranlib
 
-> +     $(INSTALL) -m 0755 -D $(@D)/growisofs $(TARGET_DIR)/usr/bin/growisofs
+TARGET_CONFIGURE_OPTS already includes all these and more.
+
+> +
+> +define CGIC_BUILD_CMDS
+> +	(cd $(@D); \
+> +		$(CGIC_ENV) \
+> +		make libcgic.a \
+> +		)
 > +endef
 
-Hi,
+baruch
 
-according to Beyond Linux From Scratch you need libisoburn or a similar 
-package which provides xorrisofs, otherwise "the growisofs command will not 
-function properly"
-http://www.linuxfromscratch.org/blfs/view/svn/multimedia/dvd-rw-tools.html
-
-Did your package work without xorrisofs during your tests?
-
-Regards, Bernd
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
