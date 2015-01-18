@@ -1,70 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 20:26:34 +0100
-Subject: [Buildroot] [PATCH 01/11 v4] package/python-lxml: new package
-In-Reply-To: <CAGm1_ksWvJcap__h4Xte0osgJo7TKotYxbWthj3=mmynKyVpOw@mail.gmail.com>
-References: <cover.1421582718.git.yann.morin.1998@free.fr>
- <24d0ff88170493e141dd07c29c3bcf262a67692f.1421582718.git.yann.morin.1998@free.fr>
- <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
- <20150118180310.GC16593@free.fr>
- <CAGm1_ksWvJcap__h4Xte0osgJo7TKotYxbWthj3=mmynKyVpOw@mail.gmail.com>
-Message-ID: <20150118192634.GD16593@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 18 Jan 2015 20:53:06 +0100
+Subject: [Buildroot] [PATCH v2 1/5] package/rpm: sort selected packages
+Message-ID: <1421610790-18508-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+Sort selected packages alphabetically in Config.in
 
-On 2015-01-18 20:14 +0100, Yegor Yefremov spake thusly:
-> On Sun, Jan 18, 2015 at 7:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Yegor, All,
-> >
-> > On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
-> >> On Sun, Jan 18, 2015 at 1:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> > The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
-> >> > and libxslt.
-> >> Trying to build lxml as normal package and get following error:
-> >
-> > You mean, as a target package?
-> >
-> > It can not work as-is, because I only declared the host variant.
-> > You'd have to add the target variant if you want the target package.
-> 
-> I've created needed files like Config.in etc.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+v2: new patch
 
-OK, I guessed you did, but was trying the obvious... ;-)
+ package/rpm/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-[--SNIP--]
-> >> compilation terminated.
-> >
-> > Well, I just tried, and it builds fine, even when I remove the libxml2
-> > development files from my host:
-[--SNIP--]
-> >
-> > I don't know what would break for the target package. Maybe it includes
-> > unsafe paths (-I and/or -L) ?
-> 
-> Have you also installed libxslt-dev on your PC?
-
-No, I do not have libxslt development files installed on the host.
-
-> After I've done this,
-> I could cross-compile lxml, but it is not very "legal" approach :-)
-
-Smells like unclean include paths to me. I'll investigate further on the
-target-side package
-
-Adding the target variant can come in a later patch, no? And that should
-not impact the host variant from being comitted as-is, would it?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 620eb1a..379b15b 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -7,12 +7,12 @@ config BR2_PACKAGE_RPM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_BEECRYPT
+-	select BR2_PACKAGE_POPT
+-	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_NEON
++	select BR2_PACKAGE_NEON_SSL
+ 	select BR2_PACKAGE_NEON_XML
+ 	select BR2_PACKAGE_NEON_ZLIB
+-	select BR2_PACKAGE_NEON_SSL
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  The RPM package management system.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
