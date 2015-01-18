@@ -1,54 +1,50 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 18 Jan 2015 23:27:57 +0100
-Subject: [Buildroot] [RFC] python-lxml: add target package variant
-In-Reply-To: <20150118222657.GG16593@free.fr>
-References: <1421619459-26270-1-git-send-email-yegorslists@googlemail.com>
- <CAGm1_ksk2RqtAHWqQHCaPeGGR4VLiD37X=HMOtzwaHz8yZp-Eg@mail.gmail.com>
- <20150118222657.GG16593@free.fr>
-Message-ID: <CAGm1_kvctZjNXRxtERm8EfjrrqrRbr9kRaJKuzB8oSPhrOnBbA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Jan 2015 00:13:30 +0100
+Subject: [Buildroot] [PATCH] package/kodi: add missing dependency on libdrm
+Message-ID: <1421622810-6318-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 18, 2015 at 11:26 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Yegor, All,
->
-> On 2015-01-18 23:23 +0100, Yegor Yefremov spake thusly:
->> On Sun, Jan 18, 2015 at 11:17 PM, Yegor Yefremov
->> <yegorslists@googlemail.com> wrote:
-> [--SNIP--]
->> > -PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
->> > +PYTHON_LXML_DEPENDENCIES = libxml2 libxslt host-libxslt
->> >
->> > +
->> > +$(eval $(python-package))
->> >  $(eval $(host-python-package))
->>
->> After adding host-xslt I don't have compiler errors, but linking:
->>
->> >>> python-lxml 3.4.1 Building
-> [--SNIP--]
->> build/lib.linux-x86_64-2.7/lxml/etree.so
->> /home/user/Documents/versioned/buildroot/output/host/usr/lib/libxslt.so:
->> file not recognized: File format not recognized
->> collect2: error: ld returned 1 exit status
->> error: command '/home/user/Documents/versioned/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc'
->> failed with exit status 1
->> package/pkg-generic.mk:182: recipe for target
->> '/home/user/Documents/versioned/buildroot/output/build/python-lxml-3.4.1/.stamp_built'
->> failed
->> make: *** [/home/user/Documents/versioned/buildroot/output/build/python-lxml-3.4.1/.stamp_built]
->> Error 1
->>
->> The whole stuff tries to link against host variant.  Samuel Martin, do
->> you have any idea?
->
-> I'll take a look shortly.
->
-> In the meantime, I've marked this patch as "Changes requested", too.
+When building Kodi with X11 support, libdrm is a mandatory dependency,
+and it uses pkg-config to find it.
 
-Thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/kodi/Config.in | 1 +
+ package/kodi/kodi.mk   | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-Yegor
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 7d89b5b..5141629 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -85,6 +85,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TIFF
+ 	select BR2_PACKAGE_TINYXML
++	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_KODI_GL
+ 	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
+ 	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_KODI_GL
+ 	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 1fb7256..3e649f7 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -77,9 +77,11 @@ endif
+ 
+ # quote from kodi/configure.in: "GLES overwrites GL if both set to yes."
+ # we choose the opposite because opengl offers more features, like libva support
++# GL means X11, and under X11, Kodi needs libdrm; libdrm is forcefully selected
++# by a modular Xorg server, which Kodi already depends on.
+ ifeq ($(BR2_PACKAGE_KODI_GL),y)
+ KODI_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
+-	xlib_libXmu xlib_libXrandr xlib_libXt
++	xlib_libXmu xlib_libXrandr xlib_libXt libdrm
+ KODI_CONF_OPTS += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
+ ifeq ($(BR2_PACKAGE_KODI_RSXS),y)
+ # fix rsxs compile
+-- 
+1.9.1
