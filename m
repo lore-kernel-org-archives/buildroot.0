@@ -1,66 +1,80 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 18 Jan 2015 20:57:31 +0100
-Subject: [Buildroot] [PATCH 01/11 v4] package/python-lxml: new package
-In-Reply-To: <20150118192634.GD16593@free.fr>
-References: <cover.1421582718.git.yann.morin.1998@free.fr>
- <24d0ff88170493e141dd07c29c3bcf262a67692f.1421582718.git.yann.morin.1998@free.fr>
- <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
- <20150118180310.GC16593@free.fr>
- <CAGm1_ksWvJcap__h4Xte0osgJo7TKotYxbWthj3=mmynKyVpOw@mail.gmail.com>
- <20150118192634.GD16593@free.fr>
-Message-ID: <CAGm1_ks9ENNvk6afHy644TsUk8Z0bABwZknjF0qHS8U9wGzFDw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 18 Jan 2015 22:50:24 +0100
+Subject: [Buildroot] [PATCH v3 0/7] dtc: update and add raspberry pi
+ overlay support
+In-Reply-To: <20150118164909.GS4275@free.fr>
+References: <1421178007-11877-1-git-send-email-ps.report@gmx.net>,
+ <20150118164909.GS4275@free.fr>
+Message-ID: <trinity-0f11c97e-b1da-4aec-8c51-55ebc24e6ee2-1421617824701@3capp-gmx-bs51>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 18, 2015 at 8:26 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Yegor, All,
->
-> On 2015-01-18 20:14 +0100, Yegor Yefremov spake thusly:
->> On Sun, Jan 18, 2015 at 7:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > Yegor, All,
->> >
->> > On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
->> >> On Sun, Jan 18, 2015 at 1:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> >> > The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
->> >> > and libxslt.
->> >> Trying to build lxml as normal package and get following error:
->> >
->> > You mean, as a target package?
->> >
->> > It can not work as-is, because I only declared the host variant.
->> > You'd have to add the target variant if you want the target package.
->>
->> I've created needed files like Config.in etc.
->
-> OK, I guessed you did, but was trying the obvious... ;-)
->
-> [--SNIP--]
->> >> compilation terminated.
->> >
->> > Well, I just tried, and it builds fine, even when I remove the libxml2
->> > development files from my host:
-> [--SNIP--]
->> >
->> > I don't know what would break for the target package. Maybe it includes
->> > unsafe paths (-I and/or -L) ?
->>
->> Have you also installed libxslt-dev on your PC?
->
-> No, I do not have libxslt development files installed on the host.
->
->> After I've done this,
->> I could cross-compile lxml, but it is not very "legal" approach :-)
->
-> Smells like unclean include paths to me. I'll investigate further on the
-> target-side package
->
-> Adding the target variant can come in a later patch, no? And that should
-> not impact the host variant from being comitted as-is, would it?
+Hello Yann,
 
-No, that should not impact your patch. I'll send mine as RFC on top of
-yours. Thanks for your help.
+> Gesendet: Sonntag, 18. Januar 2015 um 17:49 Uhr
+> Von: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: buildroot at busybox.net, "Fabio Porcedda" <fabio.porcedda@gmail.com>, "Jeremy Kerr" <jk@ozlabs.org>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Matthew Weber" <matthew.weber@rockwellcollins.com>
+> Betreff: Re: [PATCH v3 0/7] dtc: update and add raspberry pi overlay support
+>
+> Peter, All,
+> 
+> On 2015-01-13 20:40 +0100, Peter Seiderer spake thusly:
+> > There are two different dtb files used for raspberry pi booting:
+> > - overwrite the firmware provided videocore dtb configuration ([1])
+> > - linux kernel dtb configuration and dtb overlays ([2])
+> 
+> Well, I haven't yet tried to use overlays, but from what I understood,
+> DTB overlays can be handled seamlessly from the RPi bootloader:
+> 
+>     device_tree_overlay=path/to-overlay.dtb
+> 
 
-Yegor
+Yes thats the way you 'activate' a given overlay...
+
+> So, is it really required that we do patch dtc for overlay support?
+> 
+
+Yes, you have to patch the dtc tool to be able to generate a suitable overlay dtb file...
+
+> Instead, I would very much prefer we stick to what upstream dtc provide,
+> and when overlay support has been merged in there, we can bump our dtc
+> version (or backport just the overlay support if bumping is not
+> practical).
+
+This means no overlay dtb file generation until 'official' support (do not know if
+the patches where ever suggested upstream)?
+
+> 
+> It would be very unmaintainable to bundle overlay support in Buildroot,
+> if upstream eventually decide to not support them, or decide to support
+> them in a very different way. We can not afford this, I'm afraid.
+> 
+
+If this happens the 'patch' support could be dropped easily...
+
+> In the meantime, and that's unfortunate, we won't support overlays in
+> dtc... :-(
+>
+
+Though people have to find the right patches again and again...
+
+But I understand the point that patch care in buildroot is not easy...
+
+Regards,
+Peter
+
+> Regards,
+> Yann E. MORIN.
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> 
