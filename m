@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 17:49:09 +0100
-Subject: [Buildroot] [PATCH v3 0/7] dtc: update and add raspberry pi
-	overlay support
-In-Reply-To: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
+Date: Sun, 18 Jan 2015 17:51:09 +0100
+Subject: [Buildroot] [PATCH v3 5/7] dtc: add host build
+In-Reply-To: <1421178007-11877-6-git-send-email-ps.report@gmx.net>
 References: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150118164909.GS4275@free.fr>
+ <1421178007-11877-6-git-send-email-ps.report@gmx.net>
+Message-ID: <20150118165109.GT4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,39 @@ To: buildroot@busybox.net
 Peter, All,
 
 On 2015-01-13 20:40 +0100, Peter Seiderer spake thusly:
-> There are two different dtb files used for raspberry pi booting:
-> - overwrite the firmware provided videocore dtb configuration ([1])
-> - linux kernel dtb configuration and dtb overlays ([2])
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[--SNIP--]
+> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+> index c01fe7b..b0e2f28 100644
+> --- a/package/dtc/dtc.mk
+> +++ b/package/dtc/dtc.mk
+> @@ -43,4 +43,14 @@ define DTC_INSTALL_TARGET_CMDS
+>  	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
+>  endef
+>  
+> +# host build
+> +define HOST_DTC_BUILD_CMDS
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr
 
-Well, I haven't yet tried to use overlays, but from what I understood,
-DTB overlays can be handled seamlessly from the RPi bootloader:
+This is a host tool, you should set PREFIX=$(HOST_DIR)/usr  ...
 
-    device_tree_overlay=path/to-overlay.dtb
+> +endef
+> +
+> +define HOST_DTC_INSTALL_CMDS
+> +	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) PREFIX=/usr install-bin
 
-So, is it really required that we do patch dtc for overlay support?
-
-Instead, I would very much prefer we stick to what upstream dtc provide,
-and when overlay support has been merged in there, we can bump our dtc
-version (or backport just the overlay support if bumping is not
-practical).
-
-It would be very unmaintainable to bundle overlay support in Buildroot,
-if upstream eventually decide to not support them, or decide to support
-them in a very different way. We can not afford this, I'm afraid.
-
-In the meantime, and that's unfortunate, we won't support overlays in
-dtc... :-(
+... ditto, and not set a DESTDIR.
 
 Regards,
 Yann E. MORIN.
+
+> +endef
+> +
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
+> -- 
+> 2.1.2
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
