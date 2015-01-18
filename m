@@ -1,55 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 17:29:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iojs: new package
-In-Reply-To: <1421351925.2625.14.camel@posteo.de>
-References: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
- <20150115093427.0b5118b2@free-electrons.com>
- <1421351925.2625.14.camel@posteo.de>
-Message-ID: <20150118162959.GQ4275@free.fr>
+Date: Sun, 18 Jan 2015 17:34:44 +0100
+Subject: [Buildroot] [PATCHv2] docs/manual: add FAQ entry about speeding
+ up the build process
+In-Reply-To: <1421272093-29974-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1421272093-29974-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150118163444.GR4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Thomas, All,
 
-On 2015-01-15 20:58 +0100, J?rg Krause spake thusly:
-> On Do, 2015-01-15 at 09:34 +0100, Thomas Petazzoni wrote:
-> > On Thu, 15 Jan 2015 00:38:16 +0100, J?rg Krause wrote:
-> > > io.js is a fork of Node.js. This package is mainly based on the nodejs
-> > > package, except for the patches.
-> > > 
-> > > io.js is currently marked as unstable and there is no stable release for now.
-> > > 
-> > > Signed-off-by: J?rg Krause <jkrause@posteo.de>
-> > 
-> > Immediate question that comes to mind: is the code base diverging from
-> > Node.js ?
+On 2015-01-14 22:48 +0100, Thomas Petazzoni spake thusly:
+> This is a very frequently asked question, so let's add a FAQ entry
+> about it, that we can progressively extend with more advices for our
+> users.
 > 
-> Yes, it is.
-> 
-> > Do we need two separate packages ?
-> 
-> I would say yes. io.js is build against modern versions of V8 and libuv
-> and bundles a recent npm package. This enables the user the new features
-> from the upcoming JavaScript ECMA-262 specification (ES6).
-> 
-> From io.js ChangeLog:
-> "The io.js codebase inherits the majority of the changes found in the
-> v0.11 branch of the joyent/node repository and therefore can be seen as
-> an extension to v0.11."
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-OK, so in the long run, will we need to have a virtual package for the
-NodeJS feature?
+Except for the nit Baruch noticed:
 
-That is, are there packages that would work with either NodeJS or iojs?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We need not add such a virtual package for now, but will need to when/if
-we package in Buildroot new packages that can use either one.
+> ---
+> Changes since v1:
+> 
+>  - Take into account the feedback from Yann, provided in
+>    http://patchwork.ozlabs.org/patch/397717/. The only place where I
+>    tend to disagree a bit is on having the download folder on the
+>    network. It does have an impact, albeit small. So I've changed the
+>    phrasing to insist on *not* doing an NFS build, and suggesting to
+>    also have a local download directory.
+
+I like how you rephrased it. Thanks! :-)
 
 Regards,
 Yann E. MORIN.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+> index b30b4ac..e24fe9c 100644
+> --- a/docs/manual/faq-troubleshooting.txt
+> +++ b/docs/manual/faq-troubleshooting.txt
+> @@ -205,3 +205,37 @@ On this matter, the Buildroot developers make this position statement:
+>     upgrades by upgrading the entire root filesystem image at once,
+>     the image deployed to the embedded system is guaranteed to really
+>     be the one that has been tested and validated.
+> +
+> +[[faq-speeding-up-build]]
+> +=== How to speed-up the build process?
+> +
+> +Since Buildroot often involves doing full rebuilds of the entire
+> +system that can be quite long, we provide below a number of tips to
+> +help reduce the build time:
+> +
+> + * Use a pre-built external toolchain instead of the default Buildroot
+> +   internal toolchain. By using a pre-built Linaro toolchain (on ARM)
+> +   or a Sourcery CodeBench toolchain (for ARM, x86, x86-64, MIPS,
+> +   etc.), you will save the build time of the toolchain at each
+> +   complete rebuild, approximately 15 to 20 minutes. Note that
+> +   temporarily using an external toolchain does not prevent you to
+> +   switch back to an internal toolchain (that may provide a higher
+> +   level of customization) once the rest of your system is working;
+> +
+> + * Use the +ccache+ compiler cache (see: xref:ccache[]);
+> +
+> + * Learn about rebuilding only the few packages you actually care
+> +   about (see xref:rebuild-pkg[]), but beware that sometimes full
+> +   rebuilds are anyway necessary (see xref:full-rebuild[]);
+> +
+> + * Make sure you are not using a virtual machine for the Linux system
+> +   used to run Buildroot. Most of the virtual machine technologies are
+> +   known to cause a significant performance impact on I/O, which is
+> +   really important for building source code;
+> +
+> + * Make sure that you're using only local files: do not attempt to do
+> +   a build over NFS, which significantly slows down the build. Having
+> +   the Buildroot download folder available locally also helps a bit.
+> +
+> + * Buy, or convince your boss to new hardware. SSDs and lots of RAM
+> +   are key to speeding up the builds.
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
