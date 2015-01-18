@@ -1,93 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 15:21:35 +0100
-Subject: [Buildroot] [PATCH 1/3] package/rpm: add gettext dependency
-In-Reply-To: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
-References: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150118142135.GF4275@free.fr>
+From: Alexander Clouter <alex+buildroot@digriz.org.uk>
+Date: Sun, 18 Jan 2015 14:23:20 +0000
+Subject: [Buildroot]  [PATCH] loosen threads dependency for nftables
+Message-ID: <20150118142320.GR27361@marmot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+nftables works fine without threads, only the XML parsing support requires
+-lpthreads so move the depends into BR2_PACKAGE_LIBNFTNL_XML.
 
-On 2015-01-18 12:34 +0100, Romain Naour spake thusly:
-> rpm check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
-> 
-> checking for GNU gettext in libintl... yes
-> checking whether to use NLS... yes
-> checking where the gettext function comes from... external libintl
-> checking how to link with libintl... -lintl
+Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
+--
+ package/libnftnl/Config.in |   10 ++++++----
+ package/nftables/Config.in |    6 ++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-Do you ave a defconfig with which I could test, please?
-
-> But the dependency on gettext package is missing to ensures
-> reproducible builds.
-> 
-> Also, sort selected packages alphabetically in Config.in
-
-I would prefer we do not mix feature changes with eye-candy, it makes
-reviewing a bit more complicated than it should be. Next time, could you
-just do that in a different patch, please?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/rpm/Config.in | 7 ++++---
->  package/rpm/rpm.mk    | 4 ++++
->  2 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-> index 620eb1a..5ec4167 100644
-> --- a/package/rpm/Config.in
-> +++ b/package/rpm/Config.in
-> @@ -7,12 +7,13 @@ config BR2_PACKAGE_RPM
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
->  	depends on BR2_USE_MMU # fork()
->  	select BR2_PACKAGE_BEECRYPT
-> -	select BR2_PACKAGE_POPT
-> -	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
->  	select BR2_PACKAGE_NEON
-> +	select BR2_PACKAGE_NEON_SSL
->  	select BR2_PACKAGE_NEON_XML
->  	select BR2_PACKAGE_NEON_ZLIB
-> -	select BR2_PACKAGE_NEON_SSL
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_POPT
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  The RPM package management system.
-> diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-> index c4215b5..74f5b88 100644
-> --- a/package/rpm/rpm.mk
-> +++ b/package/rpm/rpm.mk
-> @@ -26,6 +26,10 @@ RPM_CONF_OPTS = \
->  	--with-libbeecrypt=$(STAGING_DIR) \
->  	--with-popt=$(STAGING_DIR)
->  
-> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-> +RPM_DEPENDENCIES += gettext
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_PCRE),y)
->  RPM_DEPENDENCIES += pcre
->  RPM_CONF_OPTS += --with-pcre=external
-> -- 
-> 1.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
+index ffd9d5b..af0bb4a 100644
+--- a/package/libnftnl/Config.in
++++ b/package/libnftnl/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBNFTNL
+ 	bool "libnftnl"
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# bad headers, no sa_family_t in linux/socket.h
+ 	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
+ 	select BR2_PACKAGE_LIBMNL
+@@ -25,12 +24,15 @@ config BR2_PACKAGE_LIBNFTNL_JSON
+ 
+ config BR2_PACKAGE_LIBNFTNL_XML
+ 	bool "enable XML support"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_MXML
+ 	help
+ 	  Enable XML parsing support
+ 
++comment "libnftnl XML parsing support needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ endif
+ 
+-comment "libnftnl needs a toolchain w/ threads, IPv6, largefile"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
+-		!BR2_LARGEFILE
++comment "libnftnl needs a toolchain w/ IPv6, largefile"
++	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index 1e0798e..b7af244 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_NFTABLES
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_LIBMNL
+@@ -18,7 +17,6 @@ config BR2_PACKAGE_NFTABLES
+ 
+ 	  http://www.netfilter.org/projects/nftables/index.html
+ 
+-comment "nftables needs a toolchain w/ IPv6, largefile, threads, wchar, headers >= 3.4"
++comment "nftables needs a toolchain w/ IPv6, largefile, wchar, headers >= 3.4"
+ 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
