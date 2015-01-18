@@ -1,66 +1,51 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Jan 2015 12:34:58 +0100
-Subject: [Buildroot] [PATCH 1/3] package/rpm: add gettext dependency
-Message-ID: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 18 Jan 2015 12:34:59 +0100
+Subject: [Buildroot] [PATCH 2/3] package/rpm: use external xz library
+In-Reply-To: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
+References: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1421580900-15186-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rpm check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
-
-checking for GNU gettext in libintl... yes
-checking whether to use NLS... yes
-checking where the gettext function comes from... external libintl
-checking how to link with libintl... -lintl
-
-But the dependency on gettext package is missing to ensures
-reproducible builds.
-
-Also, sort selected packages alphabetically in Config.in
+Fixes:
+http://autobuild.buildroot.net/results/2c6/2c61562008418ff58fa3085a3342b0e304923073/
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/rpm/Config.in | 7 ++++---
- package/rpm/rpm.mk    | 4 ++++
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/rpm/Config.in | 1 +
+ package/rpm/rpm.mk    | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index 620eb1a..5ec4167 100644
+index 5ec4167..fe7a38a 100644
 --- a/package/rpm/Config.in
 +++ b/package/rpm/Config.in
-@@ -7,12 +7,13 @@ config BR2_PACKAGE_RPM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_BEECRYPT
--	select BR2_PACKAGE_POPT
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_NEON
-+	select BR2_PACKAGE_NEON_SSL
- 	select BR2_PACKAGE_NEON_XML
- 	select BR2_PACKAGE_NEON_ZLIB
--	select BR2_PACKAGE_NEON_SSL
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_ZLIB
+@@ -31,6 +31,7 @@ config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
+ config BR2_PACKAGE_RPM_XZ_PAYLOADS
+ 	bool "support for xz payloads"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_XZ
  	help
- 	  The RPM package management system.
+ 	  Support for xz payloads in RPM.
+ 
 diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index c4215b5..74f5b88 100644
+index 74f5b88..ce7189e 100644
 --- a/package/rpm/rpm.mk
 +++ b/package/rpm/rpm.mk
-@@ -26,6 +26,10 @@ RPM_CONF_OPTS = \
- 	--with-libbeecrypt=$(STAGING_DIR) \
- 	--with-popt=$(STAGING_DIR)
+@@ -45,7 +45,10 @@ RPM_CONF_OPTS += --with-file=no
+ endif
  
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+RPM_DEPENDENCIES += gettext
-+endif
-+
- ifeq ($(BR2_PACKAGE_PCRE),y)
- RPM_DEPENDENCIES += pcre
- RPM_CONF_OPTS += --with-pcre=external
+ ifeq ($(BR2_PACKAGE_RPM_XZ_PAYLOADS),y)
+-RPM_CONF_OPTS += --with-xz
++RPM_CONF_OPTS += --with-xz=external
++RPM_DEPENDENCIES += xz
++else
++RPM_CONF_OPTS += --with-xz=none
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RPM_BZIP2_PAYLOADS),y)
 -- 
 1.9.3
