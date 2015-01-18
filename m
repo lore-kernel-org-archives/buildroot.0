@@ -1,35 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 18:34:09 +0100
-Subject: [Buildroot] [PATCH 5/7] bison: bump to version 3.0.3
-In-Reply-To: <1421332222-15098-5-git-send-email-gustavo@zacarias.com.ar>
-References: <1421332222-15098-1-git-send-email-gustavo@zacarias.com.ar>
- <1421332222-15098-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150118173409.GA16593@free.fr>
+Date: Sun, 18 Jan 2015 18:51:01 +0100
+Subject: [Buildroot] [PATCH 01/11 v4] package/python-lxml: new package
+In-Reply-To: <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
+References: <cover.1421582718.git.yann.morin.1998@free.fr>
+ <24d0ff88170493e141dd07c29c3bcf262a67692f.1421582718.git.yann.morin.1998@free.fr>
+ <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
+Message-ID: <20150118175101.GB16593@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gustavo, All,
+Yegor, All,
 
-On 2015-01-15 11:30 -0300, Gustavo Zacarias spake thusly:
-> Also add hash file and remove patch since it's no longer necessary.
+On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
+> On Sun, Jan 18, 2015 at 1:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
+> > and libxslt.
+[--SNIP--]
+> > +$(eval $(host-python-package))
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Trying to build lxml as normal package and get following error:
+> 
+> running build_ext
+> building 'lxml.etree' extension
+> creating build/temp.linux-x86_64-2.7
+> creating build/temp.linux-x86_64-2.7/src
+> creating build/temp.linux-x86_64-2.7/src/lxml
+> /home/user/Documents/versioned/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+> -fno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -Os -DNDEBUG -g -fwrapv -O3 -Wall
+> -Wstrict-prototypes -fPIC
+> -I/home/user/Documents/versioned/buildroot/output/build/python-lxml-3.4.1/src/lxml/includes
+> -I/home/user/Documents/versioned/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/python2.7
+> -c src/lxml/lxml.etree.c -o
+> build/temp.linux-x86_64-2.7/src/lxml/lxml.etree.o -w
+> In file included from src/lxml/lxml.etree.c:239:0:
+> /home/user/Documents/versioned/buildroot/output/build/python-lxml-3.4.1/src/lxml/includes/etree_defs.h:14:31:
+> fatal error: libxml/xmlversion.h: No such file or directory
+>  #include "libxml/xmlversion.h"
+>                                ^
+> compilation terminated.
+> 
+> What should I pass to setup.py? Should I pass include path to
+> include/libxml2? How does it work for the host-package?
 
-Manually downloaded, and hash manualy checked to be OK.
+Oh.. Good question. I just checked, and I do have the libxml2 development
+files installed on my distro. I'll respin a build here with libxml2-dev
+uninstalled, see if it still works, and report back.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-> diff --git a/package/bison/bison.hash b/package/bison/bison.hash
-> new file mode 100644
-> index 0000000..dd10086
-> --- /dev/null
-> +++ b/package/bison/bison.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated after checking pgp signature
-> +sha256	5940efbdd6b5d80e55ec16a01d2322e2892da21863391049b9b692570649177c	bison-3.0.3.tar.xz
+Thanks for spotting that.
 
 Regards,
 Yann E. MORIN.
@@ -41,10 +62,3 @@ Yann E. MORIN.
 | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150118/68fe6116/attachment.asc>
