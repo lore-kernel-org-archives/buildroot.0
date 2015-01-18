@@ -1,147 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 18 Jan 2015 17:36:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tiff: Add utilities submenu and
-	more utility options
-Message-ID: <1421599012-21491-1-git-send-email-bernd.kuhls@t-online.de>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sun, 18 Jan 2015 10:37:16 -0600
+Subject: [Buildroot] [PATCH  V2] mjpegtools: new package
+Message-ID: <54BBE13C.7000600@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The mjpegtools programs are a set of tools
+that can do recording of videos and playback,
+simple cut-and-paste editing and the MPEG
+compression of audio and video under Linux.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+http://mjpeg.sourceforge.net
+
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 ---
- package/tiff/Config.in |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
- package/tiff/tiff.mk   |   36 +++++++++++++++++++++++++++---------
- 2 files changed, 75 insertions(+), 9 deletions(-)
+V2 Added hash file
+Build tested with both uClibc and glibc against last nights snapshot
 
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index 3a929f7..4b0e7db 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -60,14 +60,62 @@ config BR2_PACKAGE_TIFF_JBIG
- 	default y
- endmenu
- 
-+menu "tiff Utilities"
-+
-+config BR2_PACKAGE_TIFF_BMP2TIFF
-+	bool "bmp2tiff"
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-16 15:37:56.000000000 -0600
++++ buildroot/package/Config.in	2015-01-18 10:33:32.020756992 -0600
+@@ -19,6 +19,7 @@ menu "Audio and video applications"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
++	source "package/mjpegtools/Config.in"
+ 	source "package/modplugtools/Config.in"
+ 	source "package/mpd/Config.in"
+ 	source "package/mpd-mpc/Config.in"
+diff -pruN buildroot.ori/package/mjpegtools/Config.in buildroot/package/mjpegtools/Config.in
+--- buildroot.ori/package/mjpegtools/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/mjpegtools/Config.in	2015-01-16 11:05:54.949872151 -0600
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_MJPEGTOOLS
++	bool "mjpegtools"
++	select BR2_PACKAGE_JPEG
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  bmp2tiff utility
++	  The mjpegtools programs are a set of tools
++	  that can do recording of videos and playback,
++	  simple cut-and-paste editing and the MPEG
++	  compression of audio and video under Linux.
 +
-+config BR2_PACKAGE_TIFF_FAX2PS
-+	bool "fax2ps"
-+	help
-+	  fax2ps utility
++	  http://mjpeg.sourceforge.net
 +
-+config BR2_PACKAGE_TIFF_FAX2TIFF
-+	bool "fax2tiff"
-+	help
-+	  fax2tiff utility
++comment "mjpegtools needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff -pruN buildroot.ori/package/mjpegtools/mjpegtools.hash buildroot/package/mjpegtools/mjpegtools.hash
+--- buildroot.ori/package/mjpegtools/mjpegtools.hash	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/mjpegtools/mjpegtools.hash	2015-01-18 10:27:16.696749792 -0600
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/mjpeg/files/mjpegtools/2.1.0/
++md5	57bf5dd78976ca9bac972a6511b236f3	mjpegtools-2.1.0.tar.gz
++sha1	b9effa86280e23d67369e842e5cb645948583097	mjpegtools-2.1.0.tar.gz
+diff -pruN buildroot.ori/package/mjpegtools/mjpegtools.mk buildroot/package/mjpegtools/mjpegtools.mk
+--- buildroot.ori/package/mjpegtools/mjpegtools.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/mjpegtools/mjpegtools.mk	2015-01-16 11:05:03.121871157 -0600
+@@ -0,0 +1,13 @@
++###############################################################################
++#
++# mjpegtools
++#
++###############################################################################
 +
-+config BR2_PACKAGE_TIFF_GIF2TIFF
-+	bool "gif2tiff"
-+	help
-+	  gif2tiff utility
++MJPEGTOOLS_VERSION = 2.1.0
++MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
++MJPEGTOOLS_DEPENDENCIES = jpeg
++MJPEGTOOLS_LICENSE = GPLv2
++MJPEGTOOLS_LICENSE_FILES = COPYING
 +
-+config BR2_PACKAGE_TIFF_PAL2RGB
-+	bool "pal2rgb"
-+	help
-+	  pal2rgb utility
-+
-+config BR2_PACKAGE_TIFF_PPM2TIFF
-+	bool "ppm2tiff"
-+	help
-+	  ppm2tiff utility
-+
-+config BR2_PACKAGE_TIFF_RAS2TIFF
-+	bool "ras2tiff"
-+	help
-+	  ras2tiff utility
-+
-+config BR2_PACKAGE_TIFF_RAW2TIFF
-+	bool "raw2tiff"
-+	help
-+	  raw2tiff utility
-+
- config BR2_PACKAGE_TIFF_TIFF2PDF
- 	bool "tiff2pdf"
- 	help
- 	  tiff2pdf utility
- 
-+config BR2_PACKAGE_TIFF_TIFF2PS
-+	bool "tiff2ps"
-+	help
-+	  tiff2ps utility
-+
- config BR2_PACKAGE_TIFF_TIFFCP
- 	bool "tiffcp"
- 	help
- 	  tiffcp utility
-+endmenu
- 
- endif
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 43f96b7..f801d04 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -16,18 +16,9 @@ TIFF_CONF_OPTS = \
- TIFF_DEPENDENCIES = host-pkgconf
- 
- TIFF_TOOLS_TO_DELETE = \
--	bmp2tiff \
--	fax2ps \
--	fax2tiff \
--	gif2tiff \
--	pal2rgb \
--	ppm2tiff \
--	ras2tiff \
--	raw2tiff \
- 	rgb2ycbcr \
- 	thumbnail \
- 	tiff2bw \
--	tiff2ps \
- 	tiff2rgba \
- 	tiffcmp \
- 	tiffcrop \
-@@ -38,9 +29,36 @@ TIFF_TOOLS_TO_DELETE = \
- 	tiffset \
- 	tiffsplit \
- 
-+ifeq ($(BR2_PACKAGE_TIFF_BMP2TIFF),)
-+	TIFF_TOOLS_TO_DELETE += bmp2tiff
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_FAX2PS),)
-+	TIFF_TOOLS_TO_DELETE += fax2ps
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_FAX2TIFF),)
-+	TIFF_TOOLS_TO_DELETE += fax2tiff
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_GIF2TIFF),)
-+	TIFF_TOOLS_TO_DELETE += gif2tiff
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_PAL2RGB),)
-+	TIFF_TOOLS_TO_DELETE += pal2rgb
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_PPM2TIFF),)
-+	TIFF_TOOLS_TO_DELETE += ppm2tiff
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_RAS2TIFF),)
-+	TIFF_TOOLS_TO_DELETE += ras2tiff
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_RAW2TIFF),)
-+	TIFF_TOOLS_TO_DELETE += raw2tiff
-+endif
- ifeq ($(BR2_PACKAGE_TIFF_TIFF2PDF),)
- 	TIFF_TOOLS_TO_DELETE += tiff2pdf
- endif
-+ifeq ($(BR2_PACKAGE_TIFF_TIFF2PS),)
-+	TIFF_TOOLS_TO_DELETE += tiff2ps
-+endif
- ifeq ($(BR2_PACKAGE_TIFF_TIFFCP),)
- 	TIFF_TOOLS_TO_DELETE += tiffcp
- endif
--- 
-1.7.10.4
++$(eval $(autotools-package))
