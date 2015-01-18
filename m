@@ -1,57 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 16:42:33 +0100
-Subject: [Buildroot] [PATCH] bootlader/grub2: disable x86-64-efi choice
- on !BR2_ARCH_IS_64
-In-Reply-To: <1421431115-5202-1-git-send-email-s.martin49@gmail.com>
-References: <1421431115-5202-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150118154233.GM4275@free.fr>
+Date: Sun, 18 Jan 2015 16:54:14 +0100
+Subject: [Buildroot] [PATCH 1/1] jimtcl: change the way of define
+ JIMTCL_INSTALL_LIB variable
+In-Reply-To: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20150118155414.GN4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Jerzy, All,
 
-On 2015-01-16 18:58 +0100, Samuel Martin spake thusly:
-> When x86-64-efi platform is selected, grub2 automatically adds -m64 to the
-> CFLAGS. This makes the configure script failed when the toolchain does not
-> have multilib support (like the Buildroot ones).
-> 
-> Reported-by: Noe Rubinstein <nrubinstein@aldebaran-robotics.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-I fail to see a case where we would want to build a 64-bit EFI GRUB to
-later start a 32-bit kernel and userland.
-
-Since we do not support multilib, the user would have to have two
-builds: one for the 32-bit kernel+userland, one for the 64-bit
-bootloader (if that is even possible to boot a 32-bit kernel from a
-64-bit EFI GRUB).
+On 2015-01-15 18:18 +0100, Jerzy Grzegorek spake thusly:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+However, there is something really fishy in _INSTALL_STAGING_CMDS:
+
+    define JIMTCL_INSTALL_STAGING_CMDS
+        for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
+                cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ || exit 1 ; \
+        done; \
+        $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
+        ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
+    endef
+
+In case we're static-only, JIMTCL_LIB=a , so we're linking the static
+library to the shared one. Surely this is just busted. no?
+
+While you're at touching jimctl, would you care having a look, please?
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  boot/grub2/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/jimtcl/jimtcl.mk |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-> index 626344a..c465a4d 100644
-> --- a/boot/grub2/Config.in
-> +++ b/boot/grub2/Config.in
-> @@ -132,6 +132,7 @@ config BR2_TARGET_GRUB2_I386_EFI
+> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+> index 75c0382..c2e04ff 100644
+> --- a/package/jimtcl/jimtcl.mk
+> +++ b/package/jimtcl/jimtcl.mk
+> @@ -32,10 +32,11 @@ JIMTCL_INSTALL_LIB =
+>  else
+>  JIMTCL_SHARED = --shared
+>  JIMTCL_LIB = so.$(JIMTCL_VERSION)
+> -JIMTCL_INSTALL_LIB = \
+> +define JIMTCL_INSTALL_LIB
+>  	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
+> -	$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
+> +		$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
+>  	ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
+> +endef
+>  endif
 >  
->  config BR2_TARGET_GRUB2_X86_64_EFI
->  	bool "x86-64-efi"
-> +	depends on BR2_ARCH_IS_64
->  	help
->  	  Select this option if the platform you're targetting has a
->  	  64 bits EFI BIOS.
+>  define JIMTCL_CONFIGURE_CMDS
 > -- 
-> 2.1.0
+> 1.7.9.5
 > 
 > _______________________________________________
 > buildroot mailing list
