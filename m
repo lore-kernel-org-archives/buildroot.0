@@ -1,34 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 18 Jan 2015 16:06:38 +0200
-Subject: [Buildroot] [PATCH] package/nettle: bump version
-In-Reply-To: <1421589567-19731-1-git-send-email-yann.morin.1998@free.fr>
-References: <1421589567-19731-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150118140638.GI2555@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jan 2015 15:08:04 +0100
+Subject: [Buildroot] [PATCH 4/4] package/tvheadend: bump version
+In-Reply-To: <1421583404-25251-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1421583404-25251-1-git-send-email-bernd.kuhls@t-online.de>
+ <1421583404-25251-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150118140804.GE4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Bernd, All,
 
-On Sun, Jan 18, 2015 at 02:59:27PM +0100, Yann E. MORIN wrote:
-> The patch we had to fix shared-only builds is no longer needed.
-> The licensing has changed to a mix of GPLv2+, GPLv3+ and LGPLv3+.
+On 2015-01-18 13:16 +0100, Bernd Kuhls spake thusly:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-You mention GPLv2+ here ...
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> -NETTLE_LICENSE = LGPLv2.1+
-> -NETTLE_LICENSE_FILES = COPYING.LIB
-> +NETTLE_LICENSE = GPLv3+, LGPLv3+
+Regards,
+Yann E. MORIN.
 
-... but here GPLv2+ is missing.
-
-> +NETTLE_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
-
-baruch
+> ---
+>  package/tvheadend/tvheadend.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index 01feb82..d6b77da 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TVHEADEND_VERSION = c051d0bda5b69ce61e64a97fd4a41db899dcfb53
+> +TVHEADEND_VERSION = 7006b9fd88ce0cf54d59399df40fe4ee003c4180
+>  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+>  TVHEADEND_LICENSE = GPLv3+
+>  TVHEADEND_LICENSE_FILES = LICENSE.md
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
