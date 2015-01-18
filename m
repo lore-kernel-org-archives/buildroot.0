@@ -1,103 +1,147 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 17:34:44 +0100
-Subject: [Buildroot] [PATCHv2] docs/manual: add FAQ entry about speeding
- up the build process
-In-Reply-To: <1421272093-29974-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1421272093-29974-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150118163444.GR4275@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 18 Jan 2015 17:36:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tiff: Add utilities submenu and
+	more utility options
+Message-ID: <1421599012-21491-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2015-01-14 22:48 +0100, Thomas Petazzoni spake thusly:
-> This is a very frequently asked question, so let's add a FAQ entry
-> about it, that we can progressively extend with more advices for our
-> users.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tiff/Config.in |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/tiff/tiff.mk   |   36 +++++++++++++++++++++++++++---------
+ 2 files changed, 75 insertions(+), 9 deletions(-)
 
-Except for the nit Baruch noticed:
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-> ---
-> Changes since v1:
-> 
->  - Take into account the feedback from Yann, provided in
->    http://patchwork.ozlabs.org/patch/397717/. The only place where I
->    tend to disagree a bit is on having the download folder on the
->    network. It does have an impact, albeit small. So I've changed the
->    phrasing to insist on *not* doing an NFS build, and suggesting to
->    also have a local download directory.
-
-I like how you rephrased it. Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/faq-troubleshooting.txt | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-> index b30b4ac..e24fe9c 100644
-> --- a/docs/manual/faq-troubleshooting.txt
-> +++ b/docs/manual/faq-troubleshooting.txt
-> @@ -205,3 +205,37 @@ On this matter, the Buildroot developers make this position statement:
->     upgrades by upgrading the entire root filesystem image at once,
->     the image deployed to the embedded system is guaranteed to really
->     be the one that has been tested and validated.
-> +
-> +[[faq-speeding-up-build]]
-> +=== How to speed-up the build process?
-> +
-> +Since Buildroot often involves doing full rebuilds of the entire
-> +system that can be quite long, we provide below a number of tips to
-> +help reduce the build time:
-> +
-> + * Use a pre-built external toolchain instead of the default Buildroot
-> +   internal toolchain. By using a pre-built Linaro toolchain (on ARM)
-> +   or a Sourcery CodeBench toolchain (for ARM, x86, x86-64, MIPS,
-> +   etc.), you will save the build time of the toolchain at each
-> +   complete rebuild, approximately 15 to 20 minutes. Note that
-> +   temporarily using an external toolchain does not prevent you to
-> +   switch back to an internal toolchain (that may provide a higher
-> +   level of customization) once the rest of your system is working;
-> +
-> + * Use the +ccache+ compiler cache (see: xref:ccache[]);
-> +
-> + * Learn about rebuilding only the few packages you actually care
-> +   about (see xref:rebuild-pkg[]), but beware that sometimes full
-> +   rebuilds are anyway necessary (see xref:full-rebuild[]);
-> +
-> + * Make sure you are not using a virtual machine for the Linux system
-> +   used to run Buildroot. Most of the virtual machine technologies are
-> +   known to cause a significant performance impact on I/O, which is
-> +   really important for building source code;
-> +
-> + * Make sure that you're using only local files: do not attempt to do
-> +   a build over NFS, which significantly slows down the build. Having
-> +   the Buildroot download folder available locally also helps a bit.
-> +
-> + * Buy, or convince your boss to new hardware. SSDs and lots of RAM
-> +   are key to speeding up the builds.
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index 3a929f7..4b0e7db 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -60,14 +60,62 @@ config BR2_PACKAGE_TIFF_JBIG
+ 	default y
+ endmenu
+ 
++menu "tiff Utilities"
++
++config BR2_PACKAGE_TIFF_BMP2TIFF
++	bool "bmp2tiff"
++	help
++	  bmp2tiff utility
++
++config BR2_PACKAGE_TIFF_FAX2PS
++	bool "fax2ps"
++	help
++	  fax2ps utility
++
++config BR2_PACKAGE_TIFF_FAX2TIFF
++	bool "fax2tiff"
++	help
++	  fax2tiff utility
++
++config BR2_PACKAGE_TIFF_GIF2TIFF
++	bool "gif2tiff"
++	help
++	  gif2tiff utility
++
++config BR2_PACKAGE_TIFF_PAL2RGB
++	bool "pal2rgb"
++	help
++	  pal2rgb utility
++
++config BR2_PACKAGE_TIFF_PPM2TIFF
++	bool "ppm2tiff"
++	help
++	  ppm2tiff utility
++
++config BR2_PACKAGE_TIFF_RAS2TIFF
++	bool "ras2tiff"
++	help
++	  ras2tiff utility
++
++config BR2_PACKAGE_TIFF_RAW2TIFF
++	bool "raw2tiff"
++	help
++	  raw2tiff utility
++
+ config BR2_PACKAGE_TIFF_TIFF2PDF
+ 	bool "tiff2pdf"
+ 	help
+ 	  tiff2pdf utility
+ 
++config BR2_PACKAGE_TIFF_TIFF2PS
++	bool "tiff2ps"
++	help
++	  tiff2ps utility
++
+ config BR2_PACKAGE_TIFF_TIFFCP
+ 	bool "tiffcp"
+ 	help
+ 	  tiffcp utility
++endmenu
+ 
+ endif
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 43f96b7..f801d04 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -16,18 +16,9 @@ TIFF_CONF_OPTS = \
+ TIFF_DEPENDENCIES = host-pkgconf
+ 
+ TIFF_TOOLS_TO_DELETE = \
+-	bmp2tiff \
+-	fax2ps \
+-	fax2tiff \
+-	gif2tiff \
+-	pal2rgb \
+-	ppm2tiff \
+-	ras2tiff \
+-	raw2tiff \
+ 	rgb2ycbcr \
+ 	thumbnail \
+ 	tiff2bw \
+-	tiff2ps \
+ 	tiff2rgba \
+ 	tiffcmp \
+ 	tiffcrop \
+@@ -38,9 +29,36 @@ TIFF_TOOLS_TO_DELETE = \
+ 	tiffset \
+ 	tiffsplit \
+ 
++ifeq ($(BR2_PACKAGE_TIFF_BMP2TIFF),)
++	TIFF_TOOLS_TO_DELETE += bmp2tiff
++endif
++ifeq ($(BR2_PACKAGE_TIFF_FAX2PS),)
++	TIFF_TOOLS_TO_DELETE += fax2ps
++endif
++ifeq ($(BR2_PACKAGE_TIFF_FAX2TIFF),)
++	TIFF_TOOLS_TO_DELETE += fax2tiff
++endif
++ifeq ($(BR2_PACKAGE_TIFF_GIF2TIFF),)
++	TIFF_TOOLS_TO_DELETE += gif2tiff
++endif
++ifeq ($(BR2_PACKAGE_TIFF_PAL2RGB),)
++	TIFF_TOOLS_TO_DELETE += pal2rgb
++endif
++ifeq ($(BR2_PACKAGE_TIFF_PPM2TIFF),)
++	TIFF_TOOLS_TO_DELETE += ppm2tiff
++endif
++ifeq ($(BR2_PACKAGE_TIFF_RAS2TIFF),)
++	TIFF_TOOLS_TO_DELETE += ras2tiff
++endif
++ifeq ($(BR2_PACKAGE_TIFF_RAW2TIFF),)
++	TIFF_TOOLS_TO_DELETE += raw2tiff
++endif
+ ifeq ($(BR2_PACKAGE_TIFF_TIFF2PDF),)
+ 	TIFF_TOOLS_TO_DELETE += tiff2pdf
+ endif
++ifeq ($(BR2_PACKAGE_TIFF_TIFF2PS),)
++	TIFF_TOOLS_TO_DELETE += tiff2ps
++endif
+ ifeq ($(BR2_PACKAGE_TIFF_TIFFCP),)
+ 	TIFF_TOOLS_TO_DELETE += tiffcp
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
