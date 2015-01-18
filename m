@@ -1,72 +1,40 @@
-From: Alexander Clouter <alex+buildroot@digriz.org.uk>
-Date: Sun, 18 Jan 2015 14:23:20 +0000
-Subject: [Buildroot]  [PATCH] loosen threads dependency for nftables
-Message-ID: <20150118142320.GR27361@marmot>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jan 2015 15:35:03 +0100
+Subject: [Buildroot] [PATCH] package/nettle: bump version
+In-Reply-To: <20150118140638.GI2555@sapphire.tkos.co.il>
+References: <1421589567-19731-1-git-send-email-yann.morin.1998@free.fr>
+ <20150118140638.GI2555@sapphire.tkos.co.il>
+Message-ID: <20150118143503.GG4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nftables works fine without threads, only the XML parsing support requires
--lpthreads so move the depends into BR2_PACKAGE_LIBNFTNL_XML.
+Baruch, All,
 
-Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
---
- package/libnftnl/Config.in |   10 ++++++----
- package/nftables/Config.in |    6 ++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+On 2015-01-18 16:06 +0200, Baruch Siach spake thusly:
+> On Sun, Jan 18, 2015 at 02:59:27PM +0100, Yann E. MORIN wrote:
+> > The patch we had to fix shared-only builds is no longer needed.
+> > The licensing has changed to a mix of GPLv2+, GPLv3+ and LGPLv3+.
+> 
+> You mention GPLv2+ here ...
+> 
+> > -NETTLE_LICENSE = LGPLv2.1+
+> > -NETTLE_LICENSE_FILES = COPYING.LIB
+> > +NETTLE_LICENSE = GPLv3+, LGPLv3+
+> 
+> ... but here GPLv2+ is missing.
 
-diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
-index ffd9d5b..af0bb4a 100644
---- a/package/libnftnl/Config.in
-+++ b/package/libnftnl/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBNFTNL
- 	bool "libnftnl"
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# bad headers, no sa_family_t in linux/socket.h
- 	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
- 	select BR2_PACKAGE_LIBMNL
-@@ -25,12 +24,15 @@ config BR2_PACKAGE_LIBNFTNL_JSON
- 
- config BR2_PACKAGE_LIBNFTNL_XML
- 	bool "enable XML support"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_MXML
- 	help
- 	  Enable XML parsing support
- 
-+comment "libnftnl XML parsing support needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- endif
- 
--comment "libnftnl needs a toolchain w/ threads, IPv6, largefile"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
--		!BR2_LARGEFILE
-+comment "libnftnl needs a toolchain w/ IPv6, largefile"
-+	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE
-diff --git a/package/nftables/Config.in b/package/nftables/Config.in
-index 1e0798e..b7af244 100644
---- a/package/nftables/Config.in
-+++ b/package/nftables/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_NFTABLES
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_LIBMNL
-@@ -18,7 +17,6 @@ config BR2_PACKAGE_NFTABLES
- 
- 	  http://www.netfilter.org/projects/nftables/index.html
- 
--comment "nftables needs a toolchain w/ IPv6, largefile, threads, wchar, headers >= 3.4"
-+comment "nftables needs a toolchain w/ IPv6, largefile, wchar, headers >= 3.4"
- 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+Ah, damn, you're right. Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
