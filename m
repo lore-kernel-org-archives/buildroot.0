@@ -1,106 +1,224 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 13:11:27 +0100
-Subject: [Buildroot] [PATCH 05/11 v4] package/openmax-registry: new package
+Date: Sun, 18 Jan 2015 13:11:28 +0100
+Subject: [Buildroot] [PATCH 06/11 v4] package/nvidia-driver: add NVidia's
+	OpenGL binary blob
 In-Reply-To: <cover.1421582718.git.yann.morin.1998@free.fr>
 References: <cover.1421582718.git.yann.morin.1998@free.fr>
-Message-ID: <f08bfea87d9d45de14661d39bb606b26991ea23e.1421582718.git.yann.morin.1998@free.fr>
+Message-ID: <753dee9344f6a389ddf611f64cb76d78159abd62.1421582718.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenMAX Registry provides all OpenMAX headers, directly from the
-Khronos group.
-
-Those headers are needed when an OpenMAX implementation does not
-provide them, like the NVidia binary blob.
+This patch only adds the userland part. Unless other such other packages
+(which we named like: rpi-userland), we do not replicate this naming
+scheme with this package, as a future patch will also enable building
+the kernel part of the driver. So, it is better to just name that
+package with -driver, rather than with -userland and renaming it
+afterwards.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/opengl/khronos-registry/Config.in          |  1 +
- .../khronos-registry/openmax-registry/Config.in    | 20 ++++++++++++++++
- .../openmax-registry/opengl-registry.hash          |  3 +++
- .../openmax-registry/opengl-registry.mk            | 27 ++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
- create mode 100644 package/opengl/khronos-registry/openmax-registry/Config.in
- create mode 100644 package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
- create mode 100644 package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
+ package/Config.in                        |   1 +
+ package/nvidia-driver/Config.in          |  51 ++++++++++++++
+ package/nvidia-driver/nvidia-driver.hash |   3 +
+ package/nvidia-driver/nvidia-driver.mk   | 110 +++++++++++++++++++++++++++++++
+ 4 files changed, 165 insertions(+)
+ create mode 100644 package/nvidia-driver/Config.in
+ create mode 100644 package/nvidia-driver/nvidia-driver.hash
+ create mode 100644 package/nvidia-driver/nvidia-driver.mk
 
-diff --git a/package/opengl/khronos-registry/Config.in b/package/opengl/khronos-registry/Config.in
-index ee550e9..e936b9e 100644
---- a/package/opengl/khronos-registry/Config.in
-+++ b/package/opengl/khronos-registry/Config.in
-@@ -1,3 +1,4 @@
- source "package/opengl/khronos-registry/khrplatform-registry/Config.in"
- source "package/opengl/khronos-registry/openkode-registry/Config.in"
- source "package/opengl/khronos-registry/opengl-registry/Config.in"
-+source "package/opengl/khronos-registry/openmax-registry/Config.in"
-diff --git a/package/opengl/khronos-registry/openmax-registry/Config.in b/package/opengl/khronos-registry/openmax-registry/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 266de13..0ca776e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -351,6 +351,7 @@ endif
+ 	source "package/minicom/Config.in"
+ 	source "package/nanocom/Config.in"
+ 	source "package/neard/Config.in"
++	source "package/nvidia-driver/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
 new file mode 100644
-index 0000000..c9af0bb
+index 0000000..071e85e
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openmax-registry/Config.in
-@@ -0,0 +1,20 @@
-+# Note: this package has no prompt, because it is to be selected by
-+# packages that need it, and does not make sense on its own.
-+# Further more, we want to avoid it being enabled alongside any other
-+# package that provide their own OpenMAX headers, like rpi-userland...
++++ b/package/nvidia-driver/Config.in
+@@ -0,0 +1,51 @@
++comment "nvidia-driver needs an (e)glibc toolchain and a modular Xorg server"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
 +
-+config BR2_PACKAGE_OPENMAX_REGISTRY
-+	bool
-+	select BR2_PACKAGE_KHRPLATFORM_REGISTRY
++config BR2_PACKAGE_NVIDIA_DRIVER
++	bool "nvidia-driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
++	select BR2_PACKAGE_OPENGL_REGISTRY
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
 +	help
-+	  The OpenMAX IL registry contains specifications of the core API;
-+	  specifications of Khronos- and vendor-approved OpenMAX IL extensions;
-+	  header files corresponding to the specifications; and other related
-+	  documentation.
++	  The binary-only driver blob for NVidia cards.
++	  This is the userland part only.
 +
-+	  This package installs the OpenMAX header files. You do not need them
-+	  if the OpenMAX implementation provides its own headers.
-+	  Currently, the only known implementation requiring OpenGL Resgistry
-+	  is the NVidia proprietary driver.
++	  http://www.nvidia.com/
 +
-+	  https://www.khronos.org/registry/omxil/
-diff --git a/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash b/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
++if BR2_PACKAGE_NVIDIA_DRIVER
++
++config BR2_PACKAGE_PROVIDES_LIBGL
++	default "nvidia-driver"
++
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "nvidia-driver"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "nvidia-driver"
++
++config BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++	bool "CUDA support"
++
++config BR2_PACKAGE_NVIDIA_DRIVER_OPENCL
++	bool "OpenCL support"
++	depends on BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++
++config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
++	bool "Install private libraries"
++	help
++	  Two libraries require special agreement with NVidia to develop code
++	  linking to those libraries: libnvidia-ifr.so and libnvidia-fbc.so
++	  (to grab and encode an OpenGL buffer or an X framebuffer.)
++
++	  Say 'y' here if you plan on running a program that uses those
++	  private libraries.
++
++endif # BR2_PACKAGE_NVIDIA_DRIVER
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
 new file mode 100644
-index 0000000..e2f5014
+index 0000000..137590f
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
 @@ -0,0 +1,3 @@
-+# Locally computed:
-+sha1   35b2c565a050b4235feac3f22bbbf4bf80092a00                          OpenMAX_IL_1_1_2_Header.zip
-+sha256 9e8aee85f37946202ff15a52836233f983e90a751c0816ba341ba0c1ffedf99e  OpenMAX_IL_1_1_2_Header.zip
-diff --git a/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk b/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
++# Locally computed
++sha256  bba63c30c730ad7b8500a77c81cae58562b9f9b57cd576b61f37a2d8bc45df25  NVIDIA-Linux-x86-346.35.run
++sha256  8625acbbc7a2abdda436a5cb9d06f2a7f5913b16e0a35ac4f9f106853a94d086  NVIDIA-Linux-x86_64-346.35.run
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
 new file mode 100644
-index 0000000..aecca00
+index 0000000..a2e3500
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
-@@ -0,0 +1,27 @@
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -0,0 +1,110 @@
 +################################################################################
 +#
-+# openmax-registry
++# nvidia-driver
 +#
 +################################################################################
 +
-+# Using last revision at which the 'api' directory was *changed*
-+OPENMAX_REGISTRY_VERSION = 1.1.2
-+OPENMAX_REGISTRY_SOURCE = OpenMAX_IL_$(subst .,_,$(OPENMAX_REGISTRY_VERSION))_Header.zip
-+OPENMAX_REGISTRY_SITE = https://www.khronos.org/registry/omxil/api/$(OPENMAX_REGISTRY_VERSION)
-+OPENMAX_REGISTRY_LICENSE = MIT
++NVIDIA_DRIVER_VERSION = 346.35
++NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
++NVIDIA_DRIVER_SITE = ftp://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
++NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
++NVIDIA_DRIVER_LICENSE = NVIDIA Software License
++NVIDIA_DRIVER_LICENSE_FILES = LICENSE
++NVIDIA_DRIVER_REDISTRIBUTE = NO
++NVIDIA_DRIVER_INSTALL_STAGING = YES
 +
-+# The registry only installs header files
-+OPENMAX_REGISTRY_INSTALL_STAGING = YES
-+OPENMAX_REGISTRY_INSTALL_TARGET = NO
++NVIDIA_DRIVER_DEPENDENCIES = opengl-registry xlib_libX11 xlib_libXext
++NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
 +
-+define OPENMAX_REGISTRY_EXTRACT_CMDS
-+	$(UNZIP) $(DL_DIR)/$(OPENMAX_REGISTRY_SOURCE) -d $(@D)
++# We have two variables that contains a list of libraries to install:
++#   NVIDIA_DRIVER_LIBS
++#       contains the libraries whose filename end up in .so.$(VERSION); rather
++#       than duplicate the version string for all of them, we just store their
++#       basename, and append the version string below.
++#   NVIDIA_DRIVER_LIBS_NO_VERSION
++#       contains all libraries the do not use the NVidia version; since there
++#       is currently only one such library, we store its full name.
++
++# Each line corresponds to a specific set of libraries
++NVIDIA_DRIVER_LIBS = \
++	libEGL libGLESv1_CM libGLESv2 libGL \
++	libnvidia-glcore libnvidia-eglcore libnvidia-glsi \
++	tls/libnvidia-tls \
++	libvdpau libvdpau_nvidia \
++	libnvidia-ml
++
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
++NVIDIA_DRIVER_LIBS += libcuda libnvidia-compiler libnvcuvid libnvidia-encode
++endif
++
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_OPENCL),y)
++NVIDIA_DRIVER_LIBS_NO_VERSION += libOpenCL.so.1.0.0
++NVIDIA_DRIVER_LIBS += libnvidia-opencl
++endif
++
++# Those libraries are 'private' libraries requiring an agreement with
++# NVidia to develop code for those libs. There seems to be no restriction
++# on using those libraries (e.g. if the user has such an agreement, or
++# wants to run a third-party program developped under such an agreement).
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
++NVIDIA_DRIVER_LIBS += libnvidia-ifr libnvidia-fbc
++endif
++
++# We refer to the destination path; the origin file has no directory component
++NVIDIA_DRIVER_X_MODS = drivers/nvidia_drv.so \
++	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
++
++# The downloaded archive is in fact an auto-extract script. So, it can run
++# virtually everywhere, and it is fine enough to provide useful options.
++# Except it can't extract into an existing (even empty) directory.
++define NVIDIA_DRIVER_EXTRACT_CMDS
++	$(SHELL) $(DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only --target \
++		$(@D)/tmp-extract
++	mv $(@D)/tmp-extract/* $(@D)/tmp-extract/.manifest $(@D)
++	rm -rf $(@D)/tmp-extract
 +endef
 +
-+define OPENMAX_REGISTRY_INSTALL_STAGING_CMDS
-+	for h in $(@D)/*.h; do \
-+		$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${h##*/} || exit 1; \
++# Helper to install libraries
++# $1: destination directory (target or staging)
++#
++# For all libraries that need it, we append the NVidia version string.
++# The for all libraries, we install them and create a symlink using their
++# SONAME, so we can link to them at runtime; we also create the no-version
++# symlink, so we can link to them at build time.
++define NVIDIA_DRIVER_INSTALL_LIBS
++	for lib in $(patsubst %,%.so.$(NVIDIA_DRIVER_VERSION),$(NVIDIA_DRIVER_LIBS)) \
++	           $(NVIDIA_DRIVER_LIBS_NO_VERSION); \
++	do \
++		$(INSTALL) -D -m 0644 $(@D)/$${lib} $(1)/usr/lib/$${lib##*/}; \
++		n="$$( $(TARGET_READELF) -d "$(@D)/$${lib}" \
++		       |sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
++		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
++			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
++		fi; \
++		n="$${lib##*/}"; n="$${n/.so*}.so"; \
++		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
++			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
++		fi; \
++	done
++endef
++
++# For staging, install libraries and development files
++define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
++	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(STAGING_DIR))
++	$(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:__GENERATED_BY__.*:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
++endef
++
++# For target, install libraries and X.org modules
++define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
++	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
++	for m in $(NVIDIA_DRIVER_X_MODS); do \
++		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
++			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
 +	done
 +endef
 +
