@@ -1,102 +1,104 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Jan 2015 19:57:31 +0100
-Subject: [Buildroot] [PATCH 2/3] package/rpm: use external xz library
-In-Reply-To: <20150118145937.GH4275@free.fr>
-References: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
- <1421580900-15186-2-git-send-email-romain.naour@openwide.fr>
- <20150118145937.GH4275@free.fr>
-Message-ID: <54BC021B.7070809@openwide.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 18 Jan 2015 20:14:45 +0100
+Subject: [Buildroot] [PATCH 01/11 v4] package/python-lxml: new package
+In-Reply-To: <20150118180310.GC16593@free.fr>
+References: <cover.1421582718.git.yann.morin.1998@free.fr>
+ <24d0ff88170493e141dd07c29c3bcf262a67692f.1421582718.git.yann.morin.1998@free.fr>
+ <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
+ <20150118180310.GC16593@free.fr>
+Message-ID: <CAGm1_ksWvJcap__h4Xte0osgJo7TKotYxbWthj3=mmynKyVpOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
+On Sun, Jan 18, 2015 at 7:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Yegor, All,
+>
+> On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
+>> On Sun, Jan 18, 2015 at 1:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> > The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
+>> > and libxslt.
+>> Trying to build lxml as normal package and get following error:
+>
+> You mean, as a target package?
+>
+> It can not work as-is, because I only declared the host variant.
+> You'd have to add the target variant if you want the target package.
 
-Le 18/01/2015 15:59, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2015-01-18 12:34 +0100, Romain Naour spake thusly:
->> Fixes:
->> http://autobuild.buildroot.net/results/2c6/2c61562008418ff58fa3085a3342b0e304923073/
-> 
-> Weird, this build error is about being unable to link with libintl.so
-> (indeed while building the xz backend, but still about libintl).
+I've created needed files like Config.in etc.
 
-I seems that the internal xz backend is statically linked and needs libintl
-library when BR2_NEEDS_GETTEXT_IF_LOCALE is set. But since it's a shared only
-build, there is no static libintl available in the sysroot.
-
-> 
-> Igues I could use that autobuild failure to test your patch 1/3,
-> though...
-
-Yes.
-
-> 
-> Otherwise, I have some comments, see below...
-> 
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> ---
->>  package/rpm/Config.in | 1 +
->>  package/rpm/rpm.mk    | 5 ++++-
->>  2 files changed, 5 insertions(+), 1 deletion(-)
+>> running build_ext
+>> building 'lxml.etree' extension
+>> creating build/temp.linux-x86_64-2.7
+>> creating build/temp.linux-x86_64-2.7/src
+>> creating build/temp.linux-x86_64-2.7/src/lxml
+>> /home/user/Documents/versioned/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+>> -fno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> -D_FILE_OFFSET_BITS=64 -Os -DNDEBUG -g -fwrapv -O3 -Wall
+>> -Wstrict-prototypes -fPIC
+>> -I/home/user/Documents/versioned/buildroot/output/build/python-lxml-3.4.1/src/lxml/includes
+>> -I/home/user/Documents/versioned/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/python2.7
+>> -c src/lxml/lxml.etree.c -o
+>> build/temp.linux-x86_64-2.7/src/lxml/lxml.etree.o -w
+>> In file included from src/lxml/lxml.etree.c:239:0:
+>> /home/user/Documents/versioned/buildroot/output/build/python-lxml-3.4.1/src/lxml/includes/etree_defs.h:14:31:
+>> fatal error: libxml/xmlversion.h: No such file or directory
+>>  #include "libxml/xmlversion.h"
+>>                                ^
+>> compilation terminated.
 >>
->> diff --git a/package/rpm/Config.in b/package/rpm/Config.in
->> index 5ec4167..fe7a38a 100644
->> --- a/package/rpm/Config.in
->> +++ b/package/rpm/Config.in
->> @@ -31,6 +31,7 @@ config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
->>  config BR2_PACKAGE_RPM_XZ_PAYLOADS
->>  	bool "support for xz payloads"
->>  	depends on BR2_INSTALL_LIBSTDCPP
->> +	select BR2_PACKAGE_XZ
-> 
-> I know you are fixing existing code, but we usually do not have such
-> sub-options, and we instead rely entirely on the dependant package in
-> the .mk, without adding such sub-options...
+>> What should I pass to setup.py? Should I pass include path to
+>> include/libxml2? How does it work for the host-package?
+>
+> Well, I just tried, and it builds fine, even when I remove the libxml2
+> development files from my host:
+>
+> running build_ext
+> building 'lxml.etree' extension
+> creating build/temp.linux-x86_64-2.7
+> creating build/temp.linux-x86_64-2.7/src
+> creating build/temp.linux-x86_64-2.7/src/lxml
+> /usr/bin/gcc -pthread -fno-strict-aliasing -O2
+> -I/home/ymorin/dev/buildroot/O/host/usr/include -DNDEBUG -g -fwrapv -O3
+> -Wall -Wstrict-prototypes -fPIC
+> -I/home/ymorin/dev/buildroot/O/host/usr/include
+> -I/home/ymorin/dev/buildroot/O/host/usr/include/libxml2
+> -I/home/ymorin/dev/buildroot/O/build/host-python-lxml-3.4.1/src/lxml/includes
+> -I/home/ymorin/dev/buildroot/O/host/usr/include/python2.7 -c
+> src/lxml/lxml.etree.c -o
+> build/temp.linux-x86_64-2.7/src/lxml/lxml.etree.o -w
+> /usr/bin/gcc -pthread -shared -L/home/ymorin/dev/buildroot/O/host/lib
+> -L/home/ymorin/dev/buildroot/O/host/usr/lib
+> -Wl,-rpath,/home/ymorin/dev/buildroot/O/host/usr/lib
+> -Wl,--enable-new-dtags build/temp.linux-x86_64-2.7/src/lxml/lxml.etree.o
+> -L/home/ymorin/dev/buildroot/O/host/usr/lib
+> -L/home/ymorin/dev/buildroot/O/host/usr/lib -lxslt -lexslt -lxml2 -lz
+> -lm -lpython2.7 -o build/lib.linux-x86_64-2.7/lxml/etree.so
+> building 'lxml.objectify' extension
+> /usr/bin/gcc -pthread -fno-strict-aliasing -O2
+> -I/home/ymorin/dev/buildroot/O/host/usr/include -DNDEBUG -g -fwrapv -O3
+> -Wall -Wstrict-prototypes -fPIC
+> -I/home/ymorin/dev/buildroot/O/host/usr/include
+> -I/home/ymorin/dev/buildroot/O/host/usr/include/libxml2
+> -I/home/ymorin/dev/buildroot/O/build/host-python-lxml-3.4.1/src/lxml/includes
+> -I/home/ymorin/dev/buildroot/O/host/usr/include/python2.7 -c
+> src/lxml/lxml.objectify.c -o
+> build/temp.linux-x86_64-2.7/src/lxml/lxml.objectify.o -w
+> /usr/bin/gcc -pthread -shared -L/home/ymorin/dev/buildroot/O/host/lib
+> -L/home/ymorin/dev/buildroot/O/host/usr/lib
+> -Wl,-rpath,/home/ymorin/dev/buildroot/O/host/usr/lib
+> -Wl,--enable-new-dtags
+> build/temp.linux-x86_64-2.7/src/lxml/lxml.objectify.o
+> -L/home/ymorin/dev/buildroot/O/host/usr/lib
+> -L/home/ymorin/dev/buildroot/O/host/usr/lib -lxslt -lexslt -lxml2 -lz
+> -lm -lpython2.7 -o build/lib.linux-x86_64-2.7/lxml/objectify.so
+>
+> I don't know what would break for the target package. Maybe it includes
+> unsafe paths (-I and/or -L) ?
 
-OK, I will update this series and remove BR2_PACKAGE_RPM_BZIP2_PAYLOADS and
-BR2_PACKAGE_RPM_XZ_PAYLOADS in Config.in, then modify
-BR2_PACKAGE_RPM_XZ_PAYLOADS by BR2_PACKAGE_XZ (the same for bzip2) in the .mk
+Have you also installed libxslt-dev on your PC? After I've done this,
+I could cross-compile lxml, but it is not very "legal" approach :-)
 
-By the way, what's the use case for rpm and opkg for a rootfs build with Buildroot ?
-
-Best regards,
-Romain
-
-> 
->>  	help
->>  	  Support for xz payloads in RPM.
->>  
->> diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
->> index 74f5b88..ce7189e 100644
->> --- a/package/rpm/rpm.mk
->> +++ b/package/rpm/rpm.mk
->> @@ -45,7 +45,10 @@ RPM_CONF_OPTS += --with-file=no
->>  endif
->>  
->>  ifeq ($(BR2_PACKAGE_RPM_XZ_PAYLOADS),y)
->> -RPM_CONF_OPTS += --with-xz
->> +RPM_CONF_OPTS += --with-xz=external
->> +RPM_DEPENDENCIES += xz
->> +else
->> +RPM_CONF_OPTS += --with-xz=none
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>  endif
->>  
->>  ifeq ($(BR2_PACKAGE_RPM_BZIP2_PAYLOADS),y)
->> -- 
->> 1.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Yegor
