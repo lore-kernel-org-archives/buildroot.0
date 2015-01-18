@@ -1,46 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 15:08:04 +0100
-Subject: [Buildroot] [PATCH 4/4] package/tvheadend: bump version
-In-Reply-To: <1421583404-25251-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1421583404-25251-1-git-send-email-bernd.kuhls@t-online.de>
- <1421583404-25251-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150118140804.GE4275@free.fr>
+Date: Sun, 18 Jan 2015 15:21:35 +0100
+Subject: [Buildroot] [PATCH 1/3] package/rpm: add gettext dependency
+In-Reply-To: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
+References: <1421580900-15186-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150118142135.GF4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Romain, All,
 
-On 2015-01-18 13:16 +0100, Bernd Kuhls spake thusly:
+On 2015-01-18 12:34 +0100, Romain Naour spake thusly:
+> rpm check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> checking for GNU gettext in libintl... yes
+> checking whether to use NLS... yes
+> checking where the gettext function comes from... external libintl
+> checking how to link with libintl... -lintl
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Do you ave a defconfig with which I could test, please?
+
+> But the dependency on gettext package is missing to ensures
+> reproducible builds.
+> 
+> Also, sort selected packages alphabetically in Config.in
+
+I would prefer we do not mix feature changes with eye-candy, it makes
+reviewing a bit more complicated than it should be. Next time, could you
+just do that in a different patch, please?
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/tvheadend/tvheadend.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/rpm/Config.in | 7 ++++---
+>  package/rpm/rpm.mk    | 4 ++++
+>  2 files changed, 8 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index 01feb82..d6b77da 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+> index 620eb1a..5ec4167 100644
+> --- a/package/rpm/Config.in
+> +++ b/package/rpm/Config.in
+> @@ -7,12 +7,13 @@ config BR2_PACKAGE_RPM
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+>  	depends on BR2_USE_MMU # fork()
+>  	select BR2_PACKAGE_BEECRYPT
+> -	select BR2_PACKAGE_POPT
+> -	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+>  	select BR2_PACKAGE_NEON
+> +	select BR2_PACKAGE_NEON_SSL
+>  	select BR2_PACKAGE_NEON_XML
+>  	select BR2_PACKAGE_NEON_ZLIB
+> -	select BR2_PACKAGE_NEON_SSL
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_POPT
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+>  	  The RPM package management system.
+> diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+> index c4215b5..74f5b88 100644
+> --- a/package/rpm/rpm.mk
+> +++ b/package/rpm/rpm.mk
+> @@ -26,6 +26,10 @@ RPM_CONF_OPTS = \
+>  	--with-libbeecrypt=$(STAGING_DIR) \
+>  	--with-popt=$(STAGING_DIR)
 >  
-> -TVHEADEND_VERSION = c051d0bda5b69ce61e64a97fd4a41db899dcfb53
-> +TVHEADEND_VERSION = 7006b9fd88ce0cf54d59399df40fe4ee003c4180
->  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
->  TVHEADEND_LICENSE = GPLv3+
->  TVHEADEND_LICENSE_FILES = LICENSE.md
+> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+> +RPM_DEPENDENCIES += gettext
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_PCRE),y)
+>  RPM_DEPENDENCIES += pcre
+>  RPM_CONF_OPTS += --with-pcre=external
 > -- 
-> 1.7.10.4
+> 1.9.3
 > 
 > _______________________________________________
 > buildroot mailing list
