@@ -1,40 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jan 2015 17:27:37 +0100
-Subject: [Buildroot] [PATCH] toolchain: Use the correct target name
-In-Reply-To: <54BBAAD7.3040207@dawncrow.de>
-References: <54B843D7.1030602@dawncrow.de>
- <20150116092944.06e31910@free-electrons.com>
- <54BBAAD7.3040207@dawncrow.de>
-Message-ID: <20150118172737.46ef9c70@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jan 2015 17:29:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iojs: new package
+In-Reply-To: <1421351925.2625.14.camel@posteo.de>
+References: <1421278696-15122-1-git-send-email-jkrause@posteo.de>
+ <20150115093427.0b5118b2@free-electrons.com>
+ <1421351925.2625.14.camel@posteo.de>
+Message-ID: <20150118162959.GQ4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+J?rg, All,
 
-On Sun, 18 Jan 2015 13:45:11 +0100, Andr? Hentschel wrote:
-
-> This was based on the irc discussion (14.01.2015):
-> (20:49:23) kos_tom: Andre_H: well, I'm not happy with the BR2_TOOLCHAIN_BUILDROOT dependency
-> (20:49:40) kos_tom: Andre_H: we normally don't accept packages that would not build with external toolchains.
-> (20:55:05) Andre_H: kos_tom: we either need symbolic links for the external toolchain, so that the name fits the tupel, or we need to pass the external tupel. i guess the first strategy is more foolproof. what do you think about it?
-> (20:56:13) kos_tom: nope, we want the second strategy: a way to pass the prefix of the toolchain.
+On 2015-01-15 20:58 +0100, J?rg Krause spake thusly:
+> On Do, 2015-01-15 at 09:34 +0100, Thomas Petazzoni wrote:
+> > On Thu, 15 Jan 2015 00:38:16 +0100, J?rg Krause wrote:
+> > > io.js is a fork of Node.js. This package is mainly based on the nodejs
+> > > package, except for the patches.
+> > > 
+> > > io.js is currently marked as unstable and there is no stable release for now.
+> > > 
+> > > Signed-off-by: J?rg Krause <jkrause@posteo.de>
+> > 
+> > Immediate question that comes to mind: is the code base diverging from
+> > Node.js ?
 > 
-> I guess you missed my suggestion (16.01.2015):
-> (19:55:51) Andre_H: kos_tom: hi, what about redoing my wine makefile and doing it as a generic package with special configure rules?
-> (22:19:17) kos_tom: Andre_H: which special configure rules would solve the problem?
-> (22:19:50) kos_tom: iamb: you can do whatever sort of target filesystem changes in a post-build script.
-> (23:07:31) Andre_H: kos_tom: e.g. passing BR2_TOOLCHAIN_EXTERNAL_PREFIX instead of GNU_TARGET_NAME if possible
+> Yes, it is.
+> 
+> > Do we need two separate packages ?
+> 
+> I would say yes. io.js is build against modern versions of V8 and libuv
+> and bundles a recent npm package. This enables the user the new features
+> from the upcoming JavaScript ECMA-262 specification (ES6).
+> 
+> From io.js ChangeLog:
+> "The io.js codebase inherits the majority of the changes found in the
+> v0.11 branch of the joyent/node repository and therefore can be seen as
+> an extension to v0.11."
 
-I indeed missed your suggestion, sorry about that. And your patch is
-doing it globally for all packages.
+OK, so in the long run, will we need to have a virtual package for the
+NodeJS feature?
 
-Thanks,
+That is, are there packages that would work with either NodeJS or iojs?
 
-Thomas
+We need not add such a virtual package for now, but will need to when/if
+we package in Buildroot new packages that can use either one.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
