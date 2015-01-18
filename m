@@ -1,101 +1,66 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 18 Jan 2015 20:53:08 +0100
-Subject: [Buildroot] [PATCH v2 3/5] package/rpm: don't use sub-options for
-	bzip2 and xz features
-In-Reply-To: <1421610790-18508-1-git-send-email-romain.naour@openwide.fr>
-References: <1421610790-18508-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1421610790-18508-3-git-send-email-romain.naour@openwide.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 18 Jan 2015 20:57:31 +0100
+Subject: [Buildroot] [PATCH 01/11 v4] package/python-lxml: new package
+In-Reply-To: <20150118192634.GD16593@free.fr>
+References: <cover.1421582718.git.yann.morin.1998@free.fr>
+ <24d0ff88170493e141dd07c29c3bcf262a67692f.1421582718.git.yann.morin.1998@free.fr>
+ <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
+ <20150118180310.GC16593@free.fr>
+ <CAGm1_ksWvJcap__h4Xte0osgJo7TKotYxbWthj3=mmynKyVpOw@mail.gmail.com>
+ <20150118192634.GD16593@free.fr>
+Message-ID: <CAGm1_ks9ENNvk6afHy644TsUk8Z0bABwZknjF0qHS8U9wGzFDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow enabling features depends on the relying packages.
+On Sun, Jan 18, 2015 at 8:26 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Yegor, All,
+>
+> On 2015-01-18 20:14 +0100, Yegor Yefremov spake thusly:
+>> On Sun, Jan 18, 2015 at 7:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> > Yegor, All,
+>> >
+>> > On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
+>> >> On Sun, Jan 18, 2015 at 1:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> >> > The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
+>> >> > and libxslt.
+>> >> Trying to build lxml as normal package and get following error:
+>> >
+>> > You mean, as a target package?
+>> >
+>> > It can not work as-is, because I only declared the host variant.
+>> > You'd have to add the target variant if you want the target package.
+>>
+>> I've created needed files like Config.in etc.
+>
+> OK, I guessed you did, but was trying the obvious... ;-)
+>
+> [--SNIP--]
+>> >> compilation terminated.
+>> >
+>> > Well, I just tried, and it builds fine, even when I remove the libxml2
+>> > development files from my host:
+> [--SNIP--]
+>> >
+>> > I don't know what would break for the target package. Maybe it includes
+>> > unsafe paths (-I and/or -L) ?
+>>
+>> Have you also installed libxslt-dev on your PC?
+>
+> No, I do not have libxslt development files installed on the host.
+>
+>> After I've done this,
+>> I could cross-compile lxml, but it is not very "legal" approach :-)
+>
+> Smells like unclean include paths to me. I'll investigate further on the
+> target-side package
+>
+> Adding the target variant can come in a later patch, no? And that should
+> not impact the host variant from being comitted as-is, would it?
 
-Add the old sub-options to Config.in.legacy.
+No, that should not impact your patch. I'll send mine as RFC on top of
+yours. Thanks for your help.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-v2: new patch
----
- Config.in.legacy      | 16 ++++++++++++++++
- package/rpm/Config.in | 19 -------------------
- package/rpm/rpm.mk    |  5 +++--
- 3 files changed, 19 insertions(+), 21 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 69608c7..7fc9d9d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -102,6 +102,22 @@ endif
- 
- comment "Legacy options removed in 2015.02"
- 
-+config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
-+	bool "rpm's bzip2 payloads option has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_BZIP2
-+	help
-+	  The bzip2 payloads option rely entirely on the dependant package bzip2.
-+	  So, you need to select it to enable this feature.
-+
-+config BR2_PACKAGE_RPM_XZ_PAYLOADS
-+	bool "rpm's xz payloads option has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_XZ
-+	help
-+	  The xz payloads option rely entirely on the dependant package xz.
-+	  So, you need to select it to enable this feature.
-+
- config BR2_PACKAGE_STRONGSWAN_TOOLS
- 	bool "strongswan option has been removed"
- 	select BR2_LEGACY
-diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index 5ec4167..c6fc3b7 100644
---- a/package/rpm/Config.in
-+++ b/package/rpm/Config.in
-@@ -19,22 +19,3 @@ config BR2_PACKAGE_RPM
- 	  The RPM package management system.
- 
- 	  http://rpm5.org
--
--if BR2_PACKAGE_RPM
--
--config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
--	bool "support for bzip2 payloads"
--	select BR2_PACKAGE_BZIP2
--	help
--	  Support for bzip2 payloads in RPM.
--
--config BR2_PACKAGE_RPM_XZ_PAYLOADS
--	bool "support for xz payloads"
--	depends on BR2_INSTALL_LIBSTDCPP
--	help
--	  Support for xz payloads in RPM.
--
--comment "xz payload support needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
--
--endif
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 74f5b88..68d964a 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -44,11 +44,12 @@ else
- RPM_CONF_OPTS += --with-file=no
- endif
- 
--ifeq ($(BR2_PACKAGE_RPM_XZ_PAYLOADS),y)
-+# xz payload support needs a toolchain w/ C++
-+ifeq ($(BR2_PACKAGE_XZ)$(BR2_INSTALL_LIBSTDCPP),yy)
- RPM_CONF_OPTS += --with-xz
- endif
- 
--ifeq ($(BR2_PACKAGE_RPM_BZIP2_PAYLOADS),y)
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
- RPM_CONF_OPTS += --with-bzip2
- RPM_DEPENDENCIES += bzip2
- endif
--- 
-1.9.3
+Yegor
