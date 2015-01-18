@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 13:11:32 +0100
-Subject: [Buildroot] [PATCH 10/11 v4] package/nvidia-tegra23-binaries:
-	provides JPEG
+Date: Sun, 18 Jan 2015 13:11:33 +0100
+Subject: [Buildroot] [PATCH 11/11 v4] package/nvidia-tegra23-codecs: new
+	package
 In-Reply-To: <cover.1421582718.git.yann.morin.1998@free.fr>
 References: <cover.1421582718.git.yann.morin.1998@free.fr>
-Message-ID: <72e28e63e29a995320c2503b05536bbeaf7f5714.1421582718.git.yann.morin.1998@free.fr>
+Message-ID: <cdf9d026f9e02b9a4c73069bcdbf2cc6e3cf54e3.1421582718.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,74 +13,105 @@ To: buildroot@busybox.net
 
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
-nvidia-tegra23-binaries provides HW-accelerated JPEG.
-
-The existing JPEG providers are select via a choice in the virtual jpeg
-package (which makes them very unlike other providers of virtual
-packages). But we can not do that for nvidia-tegra23-binaries, because
-it is a package in its own right, with a lot more features.
-
-Instead, we create a new 'dummy' entry in the JPEG choice, that depends
-on nvidia-tegra32-binaries. This new entry does not define a new
-package, unlike the existign entries, but allows for a seamless
-integration into the existing infra.
+nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
+as: AAC3, h264, jpeg, MP3...
 
 Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[yann.morin.1998 at free.fr: split out into its own patch]
+[me:
+  - split codecs from binaries into this patch
+  - use our extractor helpers
+]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Note: I (YEM) realy do not like the fact that the virtual package
-JPEG behaves so differently from other virtual packages, and that
-the providers get selected from a choice entry. That's just ugly,
-ugly... :-(
----
- package/jpeg/Config.in                                         | 10 ++++++++++
- .../nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk         |  5 +++++
- 2 files changed, 15 insertions(+)
+ package/nvidia-tegra23/Config.in                   |  1 +
+ .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |  7 ++++
+ .../nvidia-tegra23-codecs.hash                     |  3 ++
+ .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk | 41 ++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
 
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index f337aeb..a1a99aa 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -30,6 +30,15 @@ config BR2_PACKAGE_JPEG_TURBO
- 
- 	  http://www.libjpeg-turbo.org
- 
-+config BR2_PACKAGE_JPEG_TEGRA23
-+	bool "jpeg accelerated for tegra2 or tegra3"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
-+	select BR2_PACKAGE_HAS_JPEG
-+	help
-+	  Accelerated libjpeg for tegra
-+
-+	  https://developer.nvidia.com/linux-tegra
-+
+diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
+index 950f2f8..89bdf83 100644
+--- a/package/nvidia-tegra23/Config.in
++++ b/package/nvidia-tegra23/Config.in
+@@ -28,6 +28,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
  endchoice
  
- config BR2_PACKAGE_HAS_JPEG
-@@ -39,5 +48,6 @@ config BR2_PACKAGE_PROVIDES_JPEG
- 	string
- 	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
- 	default "jpeg-turbo" if BR2_PACKAGE_JPEG_TURBO
-+	default "nvidia-tegra23-binaries" if BR2_PACKAGE_JPEG_TEGRA23
- 
+ source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
++source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
  endif
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-index 01284d8..9cd6cdd 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-@@ -57,6 +57,11 @@ NVIDIA_TEGRA23_BINARIES_DRV = \
- NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS = \
- 	libgstnv4l2.so libgstnvvidconv.so libgstnvxvimagesink.so libgstomx.so
  
-+ifeq ($(BR2_PACKAGE_JPEG_TEGRA23),y)
-+NVIDIA_TEGRA23_BINARIES_PROVIDES = jpeg
-+NVIDIA_TEGRA23_BINARIES_LIBRARIES += libjpeg.so
-+endif
+ comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+new file mode 100644
+index 0000000..07a8e74
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
++	bool "nvidia-tegra23 codecs"
++	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++	help
++	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.4.0
 +
- NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS = nvgstplayer nvgstcapture
- 
- NVIDIA_TEGRA23_BINARIES_PKGCONFIG = egl.pc gles.pc glesv2.pc
++	  https://developer.nvidia.com/linux-tegra-rel-16
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+new file mode 100644
+index 0000000..de4a461
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+@@ -0,0 +1,3 @@
++# From https://developer.nvidia.com/linux-tegra-rel-16
++sha1 d0889bf0ca408583a1e88657c6fd18f3659ef1bb Tegra20_Linux-codecs_R16.4.0_armhf.tbz2
++sha1 a9f298222d3b6a618ef96a6bed9641929b152c8a Tegra30_Linux-codecs_R16.4.0_armhf.tbz2
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+new file mode 100644
+index 0000000..d05dbb8
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# nvidia-tegra23-codecs
++#
++################################################################################
++
++NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
++NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
++NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
++NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
++NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
++NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
++NVIDIA_TEGRA23_CODECS_DEPENDENCIES = nvidia-tegra23-binaries
++NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO
++NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES
++
++NVIDIA_TEGRA23_CODECS_FIRMWARE = \
++	nvmm_aacdec.axf nvmm_adtsdec.axf nvmm_h264dec.axf nvmm_h264dec2x.axf \
++	nvmm_jpegdec.axf nvmm_jpegenc.axf nvmm_manager.axf nvmm_mp3dec.axf \
++	nvmm_mpeg4dec.axf nvmm_service.axf
++
++# The archive contains an archive with the firmware codecs
++define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
++	$(INSTALL) -d $(@D)
++	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
++		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
++	$(INSTALL) -d $(@D)/restricted_codecs
++	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
++		$(@D)/restricted_codecs.tbz2 | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
++endef
++
++define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
++	$(foreach codec,$(NVIDIA_TEGRA23_CODECS_FIRMWARE),
++		$(INSTALL) -D -m 0644 $(@D)/restricted_codecs/lib/firmware/$(codec) \
++			$(TARGET_DIR)/lib/firmware/$(codec); \
++	)
++endef
++
++$(eval $(generic-package))
 -- 
 1.9.1
