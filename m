@@ -1,40 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jan 2015 17:38:35 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/udoo_quad_defconfig: new
- defconfig
-In-Reply-To: <20150117223246.GH2827@tarshish>
-References: <1421533112-5265-1-git-send-email-ivo.slanina@gmail.com>
- <20150117223246.GH2827@tarshish>
-Message-ID: <20150118173835.2bb56f26@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jan 2015 17:49:09 +0100
+Subject: [Buildroot] [PATCH v3 0/7] dtc: update and add raspberry pi
+	overlay support
+In-Reply-To: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
+References: <1421178007-11877-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150118164909.GS4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Peter, All,
 
-On Sun, 18 Jan 2015 00:32:46 +0200, Baruch Siach wrote:
-> Hi Ivo,
-> 
-> On Sat, Jan 17, 2015 at 11:18:32PM +0100, Ivo Slanina wrote:
-> > Added defconfig for UDOO Quad board. Used official kernel 3.0.35.
-> > Kernel is patched in order to use gcc version 4.8 and above,
-> > according to mailing list at
-> > https://lists.yoctoproject.org/pipermail/meta-freescale/2013-July/003531.html
-> 
-> Why can't you use mainline kernel for this board?
+On 2015-01-13 20:40 +0100, Peter Seiderer spake thusly:
+> There are two different dtb files used for raspberry pi booting:
+> - overwrite the firmware provided videocore dtb configuration ([1])
+> - linux kernel dtb configuration and dtb overlays ([2])
 
-Well, on i.MX6, as far as know, you can't get OpenGL support with a
-mainline kernel. So even though I definitely support and encourage
-people to use mainline kernels, I believe for Buildroot defconfigs, it
-sometimes makes sense to use the vendor kernel when it is absolutely
-necessary to enable certain important features, like 3D acceleration.
+Well, I haven't yet tried to use overlays, but from what I understood,
+DTB overlays can be handled seamlessly from the RPi bootloader:
 
-Best regards,
+    device_tree_overlay=path/to-overlay.dtb
 
-Thomas
+So, is it really required that we do patch dtc for overlay support?
+
+Instead, I would very much prefer we stick to what upstream dtc provide,
+and when overlay support has been merged in there, we can bump our dtc
+version (or backport just the overlay support if bumping is not
+practical).
+
+It would be very unmaintainable to bundle overlay support in Buildroot,
+if upstream eventually decide to not support them, or decide to support
+them in a very different way. We can not afford this, I'm afraid.
+
+In the meantime, and that's unfortunate, we won't support overlays in
+dtc... :-(
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
