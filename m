@@ -1,125 +1,107 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 13:11:25 +0100
-Subject: [Buildroot] [PATCH 03/11 v4] package/openkode-registry: new package
+Date: Sun, 18 Jan 2015 13:11:27 +0100
+Subject: [Buildroot] [PATCH 05/11 v4] package/openmax-registry: new package
 In-Reply-To: <cover.1421582718.git.yann.morin.1998@free.fr>
 References: <cover.1421582718.git.yann.morin.1998@free.fr>
-Message-ID: <77c3f4cd052fca9a5c6d7f40c6885e9f6f74779f.1421582718.git.yann.morin.1998@free.fr>
+Message-ID: <f08bfea87d9d45de14661d39bb606b26991ea23e.1421582718.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenKODE Registry provides all OpenKODE headers, directly from the
+The OpenMAX Registry provides all OpenMAX headers, directly from the
 Khronos group.
 
-Those headers are needed when an OpenKODE implementation does not
-provide them, like the NVidia binary blobs.
+Those headers are needed when an OpenMAX implementation does not
+provide them, like the NVidia binary blob.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
  package/opengl/khronos-registry/Config.in          |  1 +
- .../khronos-registry/openkode-registry/Config.in   | 15 +++++++
- .../openkode-registry/openkode-registry.hash       |  7 ++++
- .../openkode-registry/openkode-registry.mk         | 48 ++++++++++++++++++++++
- 4 files changed, 71 insertions(+)
- create mode 100644 package/opengl/khronos-registry/openkode-registry/Config.in
- create mode 100644 package/opengl/khronos-registry/openkode-registry/openkode-registry.hash
- create mode 100644 package/opengl/khronos-registry/openkode-registry/openkode-registry.mk
+ .../khronos-registry/openmax-registry/Config.in    | 20 ++++++++++++++++
+ .../openmax-registry/opengl-registry.hash          |  3 +++
+ .../openmax-registry/opengl-registry.mk            | 27 ++++++++++++++++++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 package/opengl/khronos-registry/openmax-registry/Config.in
+ create mode 100644 package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
+ create mode 100644 package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
 
 diff --git a/package/opengl/khronos-registry/Config.in b/package/opengl/khronos-registry/Config.in
-index 8def807..770c9be 100644
+index ee550e9..e936b9e 100644
 --- a/package/opengl/khronos-registry/Config.in
 +++ b/package/opengl/khronos-registry/Config.in
-@@ -1 +1,2 @@
+@@ -1,3 +1,4 @@
  source "package/opengl/khronos-registry/khrplatform-registry/Config.in"
-+source "package/opengl/khronos-registry/openkode-registry/Config.in"
-diff --git a/package/opengl/khronos-registry/openkode-registry/Config.in b/package/opengl/khronos-registry/openkode-registry/Config.in
+ source "package/opengl/khronos-registry/openkode-registry/Config.in"
+ source "package/opengl/khronos-registry/opengl-registry/Config.in"
++source "package/opengl/khronos-registry/openmax-registry/Config.in"
+diff --git a/package/opengl/khronos-registry/openmax-registry/Config.in b/package/opengl/khronos-registry/openmax-registry/Config.in
 new file mode 100644
-index 0000000..b161235
+index 0000000..c9af0bb
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openkode-registry/Config.in
-@@ -0,0 +1,15 @@
++++ b/package/opengl/khronos-registry/openmax-registry/Config.in
+@@ -0,0 +1,20 @@
 +# Note: this package has no prompt, because it is to be selected by
 +# packages that need it, and does not make sense on its own.
 +# Further more, we want to avoid it being enabled alongside any other
-+# package that provide their own OpenKODE headers
++# package that provide their own OpenMAX headers, like rpi-userland...
 +
-+config BR2_PACKAGE_OPENKODE_REGISTRY
++config BR2_PACKAGE_OPENMAX_REGISTRY
 +	bool
 +	select BR2_PACKAGE_KHRPLATFORM_REGISTRY
 +	help
-+	  The OpenKODE Registry contains specifications of the core API and
-+	  headers, optional OpenKODE extensions and headers, points to other
-+	  Khronos APIs required by a conformant OpenKODE implementation, and
-+	  includes some related documentation.
++	  The OpenMAX IL registry contains specifications of the core API;
++	  specifications of Khronos- and vendor-approved OpenMAX IL extensions;
++	  header files corresponding to the specifications; and other related
++	  documentation.
 +
-+	  https://www.khronos.org/registry/kode/
-diff --git a/package/opengl/khronos-registry/openkode-registry/openkode-registry.hash b/package/opengl/khronos-registry/openkode-registry/openkode-registry.hash
++	  This package installs the OpenMAX header files. You do not need them
++	  if the OpenMAX implementation provides its own headers.
++	  Currently, the only known implementation requiring OpenGL Resgistry
++	  is the NVidia proprietary driver.
++
++	  https://www.khronos.org/registry/omxil/
+diff --git a/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash b/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
 new file mode 100644
-index 0000000..2a66ea8
+index 0000000..e2f5014
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openkode-registry/openkode-registry.hash
-@@ -0,0 +1,7 @@
-+# Locally computed
-+sha256 e55f962ec91f9a58824a8c42d3556ea1d803b589f5d7b1b6d1ab5bae929fd1cd  kd.h
-+sha256 a51e0cbda20c393585e08a5035fe1bb6b9bed239a80f95e843686d1567a9f513  kdplatform.h
-+sha256 331835322e53fc131774b6116318a2445651b3487e41510a786d5a27ce556e91  KHR_float64.h
-+sha256 37a7596ec5377bb17fb157750a584b39b8bc7955a96b4fb29ff0c6cdf7a3fd9e  KHR_formatted.h
-+sha256 cea58f28b749c59790327f61c445b09a202ef71c97b13cbbce1310316121c23e  KHR_perfcounter.h
-+sha256 aa2bfc742d209e195580a0194352e1b375f9b71688ce7f6b222ab020c397e7f9  KHR_thread_storage.h
-diff --git a/package/opengl/khronos-registry/openkode-registry/openkode-registry.mk b/package/opengl/khronos-registry/openkode-registry/openkode-registry.mk
++++ b/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha1   35b2c565a050b4235feac3f22bbbf4bf80092a00                          OpenMAX_IL_1_1_2_Header.zip
++sha256 9e8aee85f37946202ff15a52836233f983e90a751c0816ba341ba0c1ffedf99e  OpenMAX_IL_1_1_2_Header.zip
+diff --git a/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk b/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
 new file mode 100644
-index 0000000..fd7711d
+index 0000000..aecca00
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openkode-registry/openkode-registry.mk
-@@ -0,0 +1,48 @@
++++ b/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# openkode-registry
++# openmax-registry
 +#
 +################################################################################
 +
-+OPENKODE_REGISTRY_VERSION = 1.0.3
-+OPENKODE_REGISTRY_SITE = https://www.khronos.org/registry/kode/api/$(OPENKODE_REGISTRY_VERSION)
-+
-+# There is no archive available. So, we just have a buncha files to download.
-+# Just download everything as _EXTRA downloads.
-+# The first two headers are the base for OpenKODE; the KHR headers are core
-+# extensions which we always want anyway.
-+OPENKODE_REGISTRY_SOURCE =
-+OPENKODE_REGISTRY_EXTRA_DOWNLOADS = kd.h kdplatform.h \
-+	../KHR/KHR_float64.h \
-+	../KHR/KHR_formatted.h \
-+	../KHR/KHR_perfcounter.h \
-+	../KHR/KHR_thread_storage.h
-+
-+OPENKODE_REGISTRY_LICENSE = Unknown
++# Using last revision at which the 'api' directory was *changed*
++OPENMAX_REGISTRY_VERSION = 1.1.2
++OPENMAX_REGISTRY_SOURCE = OpenMAX_IL_$(subst .,_,$(OPENMAX_REGISTRY_VERSION))_Header.zip
++OPENMAX_REGISTRY_SITE = https://www.khronos.org/registry/omxil/api/$(OPENMAX_REGISTRY_VERSION)
++OPENMAX_REGISTRY_LICENSE = MIT
 +
 +# The registry only installs header files
-+OPENKODE_REGISTRY_INSTALL_STAGING = YES
-+OPENKODE_REGISTRY_INSTALL_TARGET = NO
++OPENMAX_REGISTRY_INSTALL_STAGING = YES
++OPENMAX_REGISTRY_INSTALL_TARGET = NO
 +
-+# We could well completely do without an EXTRACT phase, because we will
-+# then just copy the files again over to staging. But if we need to patch
-+# them, we must have them in the package build dir.
-+define OPENKODE_REGISTRY_EXTRACT_CMDS
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/kd.h $(@D)/KD/kd.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/kdplatform.h $(@D)/KD/kdplatform.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_float64.h $(@D)/KHR/KHR_float64.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_formatted.h $(@D)/KHR/KHR_formatted.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_perfcounter.h $(@D)/KHR/KHR_perfcounter.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_thread_storage.h $(@D)/KHR/KHR_thread_storage.h
++define OPENMAX_REGISTRY_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(OPENMAX_REGISTRY_SOURCE) -d $(@D)
 +endef
 +
-+define OPENKODE_REGISTRY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/KD/kd.h $(STAGING_DIR)/usr/include/KD/kd.h
-+	$(INSTALL) -D -m 0644 $(@D)/KD/kdplatform.h $(STAGING_DIR)/usr/include/KD/kdplatform.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_float64.h $(STAGING_DIR)/usr/include/KHR/KHR_float64.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_formatted.h $(STAGING_DIR)/usr/include/KHR/KHR_formatted.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_perfcounter.h $(STAGING_DIR)/usr/include/KHR/KHR_perfcounter.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_thread_storage.h $(STAGING_DIR)/usr/include/KHR/KHR_thread_storage.h
++define OPENMAX_REGISTRY_INSTALL_STAGING_CMDS
++	for h in $(@D)/*.h; do \
++		$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${h##*/} || exit 1; \
++	done
 +endef
 +
 +$(eval $(generic-package))
