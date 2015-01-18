@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 18:51:01 +0100
+Date: Sun, 18 Jan 2015 19:03:10 +0100
 Subject: [Buildroot] [PATCH 01/11 v4] package/python-lxml: new package
 In-Reply-To: <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
 References: <cover.1421582718.git.yann.morin.1998@free.fr>
  <24d0ff88170493e141dd07c29c3bcf262a67692f.1421582718.git.yann.morin.1998@free.fr>
  <CAGm1_ksf4gvkx5A4PjxDax=ZQvewETuQL=O5=BmZ8h=UrNrKYg@mail.gmail.com>
-Message-ID: <20150118175101.GB16593@free.fr>
+Message-ID: <20150118180310.GC16593@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,11 +18,13 @@ On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
 > On Sun, Jan 18, 2015 at 1:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > > The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
 > > and libxslt.
-[--SNIP--]
-> > +$(eval $(host-python-package))
-> 
 > Trying to build lxml as normal package and get following error:
-> 
+
+You mean, as a target package?
+
+It can not work as-is, because I only declared the host variant.
+You'd have to add the target variant if you want the target package.
+
 > running build_ext
 > building 'lxml.etree' extension
 > creating build/temp.linux-x86_64-2.7
@@ -46,11 +48,51 @@ On 2015-01-18 18:27 +0100, Yegor Yefremov spake thusly:
 > What should I pass to setup.py? Should I pass include path to
 > include/libxml2? How does it work for the host-package?
 
-Oh.. Good question. I just checked, and I do have the libxml2 development
-files installed on my distro. I'll respin a build here with libxml2-dev
-uninstalled, see if it still works, and report back.
+Well, I just tried, and it builds fine, even when I remove the libxml2
+development files from my host:
 
-Thanks for spotting that.
+running build_ext
+building 'lxml.etree' extension
+creating build/temp.linux-x86_64-2.7
+creating build/temp.linux-x86_64-2.7/src
+creating build/temp.linux-x86_64-2.7/src/lxml
+/usr/bin/gcc -pthread -fno-strict-aliasing -O2
+-I/home/ymorin/dev/buildroot/O/host/usr/include -DNDEBUG -g -fwrapv -O3
+-Wall -Wstrict-prototypes -fPIC
+-I/home/ymorin/dev/buildroot/O/host/usr/include
+-I/home/ymorin/dev/buildroot/O/host/usr/include/libxml2
+-I/home/ymorin/dev/buildroot/O/build/host-python-lxml-3.4.1/src/lxml/includes
+-I/home/ymorin/dev/buildroot/O/host/usr/include/python2.7 -c
+src/lxml/lxml.etree.c -o
+build/temp.linux-x86_64-2.7/src/lxml/lxml.etree.o -w
+/usr/bin/gcc -pthread -shared -L/home/ymorin/dev/buildroot/O/host/lib
+-L/home/ymorin/dev/buildroot/O/host/usr/lib
+-Wl,-rpath,/home/ymorin/dev/buildroot/O/host/usr/lib
+-Wl,--enable-new-dtags build/temp.linux-x86_64-2.7/src/lxml/lxml.etree.o
+-L/home/ymorin/dev/buildroot/O/host/usr/lib
+-L/home/ymorin/dev/buildroot/O/host/usr/lib -lxslt -lexslt -lxml2 -lz
+-lm -lpython2.7 -o build/lib.linux-x86_64-2.7/lxml/etree.so
+building 'lxml.objectify' extension
+/usr/bin/gcc -pthread -fno-strict-aliasing -O2
+-I/home/ymorin/dev/buildroot/O/host/usr/include -DNDEBUG -g -fwrapv -O3
+-Wall -Wstrict-prototypes -fPIC
+-I/home/ymorin/dev/buildroot/O/host/usr/include
+-I/home/ymorin/dev/buildroot/O/host/usr/include/libxml2
+-I/home/ymorin/dev/buildroot/O/build/host-python-lxml-3.4.1/src/lxml/includes
+-I/home/ymorin/dev/buildroot/O/host/usr/include/python2.7 -c
+src/lxml/lxml.objectify.c -o
+build/temp.linux-x86_64-2.7/src/lxml/lxml.objectify.o -w
+/usr/bin/gcc -pthread -shared -L/home/ymorin/dev/buildroot/O/host/lib
+-L/home/ymorin/dev/buildroot/O/host/usr/lib
+-Wl,-rpath,/home/ymorin/dev/buildroot/O/host/usr/lib
+-Wl,--enable-new-dtags
+build/temp.linux-x86_64-2.7/src/lxml/lxml.objectify.o
+-L/home/ymorin/dev/buildroot/O/host/usr/lib
+-L/home/ymorin/dev/buildroot/O/host/usr/lib -lxslt -lexslt -lxml2 -lz
+-lm -lpython2.7 -o build/lib.linux-x86_64-2.7/lxml/objectify.so
+
+I don't know what would break for the target package. Maybe it includes
+unsafe paths (-I and/or -L) ?
 
 Regards,
 Yann E. MORIN.
