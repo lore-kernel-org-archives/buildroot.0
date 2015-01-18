@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Jan 2015 13:11:31 +0100
-Subject: [Buildroot] [PATCH 09/11 v4] package.nvidia-tegra23-binaries: add
-	gstreamer plugins
+Date: Sun, 18 Jan 2015 13:11:32 +0100
+Subject: [Buildroot] [PATCH 10/11 v4] package/nvidia-tegra23-binaries:
+	provides JPEG
 In-Reply-To: <cover.1421582718.git.yann.morin.1998@free.fr>
 References: <cover.1421582718.git.yann.morin.1998@free.fr>
-Message-ID: <c3130feb92c0aee15690a21a41cca815f73eaedd.1421582718.git.yann.morin.1998@free.fr>
+Message-ID: <72e28e63e29a995320c2503b05536bbeaf7f5714.1421582718.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,105 +13,74 @@ To: buildroot@busybox.net
 
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[yann.morin.1998 at free.fr: split out into their own patch]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- .../nvidia-tegra23-binaries/Config.in              | 15 +++++++++++
- .../nvidia-tegra23-binaries.mk                     | 30 ++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+nvidia-tegra23-binaries provides HW-accelerated JPEG.
 
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-index 568aa4a..49e2751 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-@@ -92,4 +92,19 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI
- 	default 13 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
- 	default 14 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
+The existing JPEG providers are select via a choice in the virtual jpeg
+package (which makes them very unlike other providers of virtual
+packages). But we can not do that for nvidia-tegra23-binaries, because
+it is a package in its own right, with a lot more features.
+
+Instead, we create a new 'dummy' entry in the JPEG choice, that depends
+on nvidia-tegra32-binaries. This new entry does not define a new
+package, unlike the existign entries, but allows for a seamless
+integration into the existing infra.
+
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+[yann.morin.1998 at free.fr: split out into its own patch]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+---
+Note: I (YEM) realy do not like the fact that the virtual package
+JPEG behaves so differently from other virtual packages, and that
+the providers get selected from a choice entry. That's just ugly,
+ugly... :-(
+---
+ package/jpeg/Config.in                                         | 10 ++++++++++
+ .../nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk         |  5 +++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index f337aeb..a1a99aa 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -30,6 +30,15 @@ config BR2_PACKAGE_JPEG_TURBO
  
-+config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
-+	bool "GStreamer 0.10.x plugins"
-+	depends on BR2_PACKAGE_GSTREAMER # Run-time only
+ 	  http://www.libjpeg-turbo.org
+ 
++config BR2_PACKAGE_JPEG_TEGRA23
++	bool "jpeg accelerated for tegra2 or tegra3"
++	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++	select BR2_PACKAGE_HAS_JPEG
 +	help
-+	  GStreamer 0.10.x plugins
++	  Accelerated libjpeg for tegra
 +
-+config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
-+	bool "NVIDIA multimedia sample apps"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
-+	help
-+	  nvgstplayer and nvgstcapture multimedia test applications.
++	  https://developer.nvidia.com/linux-tegra
 +
-+comment "GStreamer 0.10.x plugins need GStreamer 0.10"
-+	depends on !BR2_PACKAGE_GSTREAMER
-+
+ endchoice
+ 
+ config BR2_PACKAGE_HAS_JPEG
+@@ -39,5 +48,6 @@ config BR2_PACKAGE_PROVIDES_JPEG
+ 	string
+ 	default "libjpeg"    if BR2_PACKAGE_LIBJPEG
+ 	default "jpeg-turbo" if BR2_PACKAGE_JPEG_TURBO
++	default "nvidia-tegra23-binaries" if BR2_PACKAGE_JPEG_TEGRA23
+ 
  endif
 diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-index 3fbde96..01284d8 100644
+index 01284d8..9cd6cdd 100644
 --- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
 +++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-@@ -10,6 +10,10 @@ NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARI
+@@ -57,6 +57,11 @@ NVIDIA_TEGRA23_BINARIES_DRV = \
+ NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS = \
+ 	libgstnv4l2.so libgstnvvidconv.so libgstnvxvimagesink.so libgstomx.so
  
- NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
- NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+NVIDIA_TEGRA23_BINARIES_LICENSE += LGPLv2.1
-+NVIDIA_TEGRA23_BINARIES_LICENSE_FILES += nv_tegra/nv_sample_apps/LICENSE.gst-openmax
++ifeq ($(BR2_PACKAGE_JPEG_TEGRA23),y)
++NVIDIA_TEGRA23_BINARIES_PROVIDES = jpeg
++NVIDIA_TEGRA23_BINARIES_LIBRARIES += libjpeg.so
 +endif
- 
- NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
- NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES
-@@ -50,6 +54,11 @@ NVIDIA_TEGRA23_BINARIES_LIBRARIES = \
- NVIDIA_TEGRA23_BINARIES_DRV = \
- 	nv_tegra/nvidia_drivers/usr/lib/xorg/modules/drivers/tegra_drv.abi$(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI).so
- 
-+NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS = \
-+	libgstnv4l2.so libgstnvvidconv.so libgstnvxvimagesink.so libgstomx.so
 +
-+NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS = nvgstplayer nvgstcapture
-+
+ NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS = nvgstplayer nvgstcapture
+ 
  NVIDIA_TEGRA23_BINARIES_PKGCONFIG = egl.pc gles.pc glesv2.pc
- 
- define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
-@@ -76,12 +85,31 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
- 	)
- endef
- 
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+define NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS
-+	$(foreach gst_plug,$(NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),
-+		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/lib/gstreamer-0.10/$(gst_plug) \
-+			$(1)/usr/lib/gstreamer-0.10/$(gst_plug); \
-+	)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS),y)
-+define NVIDIA_TEGRA23_BINARIES_INSTALL_APPS
-+	$(foreach apps,$(NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS),
-+		$(INSTALL) -D -m 0755 $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/bin/$(apps) \
-+			$(TARGET_DIR)/usr/bin/$(apps); \
-+	)
-+endef
-+endif
-+
- define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
- 	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
- 	$(foreach pkgconfig,$(NVIDIA_TEGRA23_BINARIES_PKGCONFIG),
- 		$(INSTALL) -D -m 0644 package/nvidia-tegra23/nvidia-tegra23-binaries/$(pkgconfig) \
- 			$(STAGING_DIR)/usr/lib/pkgconfig/$(pkgconfig); \
- 	)
-+	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(STAGING_DIR))
- endef
- 
- define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
-@@ -94,6 +122,8 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/etc/nv_tegra_release
- 	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
- 		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
-+	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(TARGET_DIR))
-+	$(NVIDIA_TEGRA23_BINARIES_INSTALL_APPS)
- endef
- 
- $(eval $(generic-package))
 -- 
 1.9.1
