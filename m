@@ -1,77 +1,104 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Sun, 18 Jan 2015 10:00:53 -0600
-Subject: [Buildroot] [PATCH][RFC] cdrtools: new package
-Message-ID: <54BBD8B5.5090102@ou.edu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Jan 2015 17:17:33 +0100
+Subject: [Buildroot] [PATCH 1/2] distcc: remove deprecated package
+In-Reply-To: <1421329232-21302-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1421329232-21302-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150118161733.GO4275@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cdrtools is a set of command line programs that
-allows to record CD/DVD/BluRay media. This
-package contains the cdrecord & mkisofs programs.
-	
-http://sourceforge.net/projects/cdrtools
+gustavo, All,
 
-Signed-off-by Stephen M. Kenton <skenton@ou.edu>
----
-OK, here is an RFC patch to add cdrtools v3.00
-against last night's snapshot.
+On 2015-01-15 10:40 -0300, Gustavo Zacarias spake thusly:
+> It's been deprecated since feb 2014 and it'll be a year for the 2015.02
+> release so remove it.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Can someone point me at an example of how to
-Let dvd+rw-tools select either cdrtools or
-xorriso as the back end at build time?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff -pruN buildroot.ori/package/cdrtools/cdrtools.mk buildroot/package/cdrtools/cdrtools.mk
---- buildroot.ori/package/cdrtools/cdrtools.mk	1969-12-31 18:00:00.000000000 -0600
-+++ buildroot/package/cdrtools/cdrtools.mk	2015-01-18 09:55:43.788713482 -0600
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# cdrtools
-+#
-+#############################################################
-+CDRTOOLS_VERSION = 3.00
-+CDRTOOLS_SITE = http://sourceforge.net/projects/cdrtools/files
-+CDRTOOLS_LICENSE = Various parts under GPLv2.0, LGPLv2.1, CDDL - see COPYING
-+CDRTOOLS_LICENSE_FILES = COPYING
-+
-+define CDRTOOLS_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define CDRTOOLS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/cdrecord/OBJ/x86_64-linux-cc/cdrecord $(TARGET_DIR)/usr/bin/cdrecord
-+	$(INSTALL) -m 0755 -D $(@D)/readcd/OBJ/x86_64-linux-cc/readcd $(TARGET_DIR)/usr/bin/readcd
-+	$(INSTALL) -m 0755 -D $(@D)/mkisofs/OBJ/x86_64-linux-cc/mkisofs $(TARGET_DIR)/usr/bin/mkisofs
-+endef
-+
-+$(eval $(generic-package))
-diff -pruN buildroot.ori/package/cdrtools/Config.in buildroot/package/cdrtools/Config.in
---- buildroot.ori/package/cdrtools/Config.in	1969-12-31 18:00:00.000000000 -0600
-+++ buildroot/package/cdrtools/Config.in	2015-01-18 09:55:43.788713482 -0600
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_CDRTOOLS
-+	bool "cdrtools"
-+	depends on BR2_USE_WCHAR && BR2_LARGEFILE
-+	help
-+	  Cdrtools is a set of command line programs that
-+	  allows to record CD/DVD/BluRay media. This
-+	  package contains the cdrecord & mkisofs programs.
-+	
-+	  http://sourceforge.net/projects/cdrtools
-+
-+comment "cdrtools needs a toolchain w/ wchar, largefile"
-+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
-diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
---- buildroot.ori/package/Config.in	2015-01-16 15:37:56.000000000 -0600
-+++ buildroot/package/Config.in	2015-01-18 09:55:31.644713249 -0600
-@@ -6,6 +6,7 @@ menu "Audio and video applications"
- 	source "package/alsa-utils/Config.in"
- 	source "package/aumix/Config.in"
- 	source "package/bellagio/Config.in"
-+	source "package/cdrtools/Config.in"
- 	source "package/dvdauthor/Config.in"
- 	source "package/espeak/Config.in"
- 	source "package/faad2/Config.in"
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/Config.in        |  3 ---
+>  package/distcc/Config.in | 11 -----------
+>  package/distcc/distcc.mk | 19 -------------------
+>  3 files changed, 33 deletions(-)
+>  delete mode 100644 package/distcc/Config.in
+>  delete mode 100644 package/distcc/distcc.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index b1375ae..eeb363a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -108,9 +108,6 @@ menu "Development tools"
+>  	source "package/cvs/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/diffutils/Config.in"
+> -endif
+> -	source "package/distcc/Config.in"
+> -if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/findutils/Config.in"
+>  endif
+>  	source "package/flex/Config.in"
+> diff --git a/package/distcc/Config.in b/package/distcc/Config.in
+> deleted file mode 100644
+> index 08e1ab3..0000000
+> --- a/package/distcc/Config.in
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -config BR2_PACKAGE_DISTCC
+> -	bool "distcc"
+> -	# needs fork()
+> -	depends on BR2_USE_MMU
+> -	depends on BR2_DEPRECATED_SINCE_2014_02
+> -	help
+> -	  Distributed compiler client and server.  Allows you to
+> -	  distribute compilation of C code across several machines
+> -	  on a network.
+> -
+> -	  http://distcc.samba.org/
+> diff --git a/package/distcc/distcc.mk b/package/distcc/distcc.mk
+> deleted file mode 100644
+> index eae5fb8..0000000
+> --- a/package/distcc/distcc.mk
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -################################################################################
+> -#
+> -# distcc
+> -#
+> -################################################################################
+> -
+> -DISTCC_VERSION = 2.18.3
+> -DISTCC_SOURCE = distcc-$(DISTCC_VERSION).tar.bz2
+> -DISTCC_SITE = http://distcc.googlecode.com/files
+> -DISTCC_CONF_OPTS = --with-included-popt --without-gtk --without-gnome
+> -DISTCC_LICENSE = GPLv2+
+> -DISTCC_LICENSE_FILES = COPYING
+> -
+> -define DISTCC_INSTALL_TARGET_CMDS
+> -	$(INSTALL) -D $(@D)/distccd $(TARGET_DIR)/usr/bin/distccd
+> -	$(INSTALL) -D $(@D)/distcc $(TARGET_DIR)/usr/bin/distcc
+> -endef
+> -
+> -$(eval $(autotools-package))
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
