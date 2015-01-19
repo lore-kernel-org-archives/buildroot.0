@@ -1,117 +1,125 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 21:40:32 +0100
-Subject: [Buildroot] [PATCH 02/11 v5] package/khrplatform-registry: new
-	package
+Date: Mon, 19 Jan 2015 21:40:33 +0100
+Subject: [Buildroot] [PATCH 03/11 v5] package/openkode-registry: new package
 In-Reply-To: <cover.1421699898.git.yann.morin.1998@free.fr>
 References: <cover.1421699898.git.yann.morin.1998@free.fr>
-Message-ID: <e54ab4506debce9d07fda2797b739c6d20d34d3d.1421699898.git.yann.morin.1998@free.fr>
+Message-ID: <c57fe89d2a420c6e74666d56bb76e270e64aaafd.1421699898.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Khronos is the group behind OpenGL and its siblings, OpenMAX and all
-other Open-something.
+The OpenKODE Registry provides all OpenKODE headers, directly from the
+Khronos group.
 
-Khronos maintains the Registry, in which the reference headers for the
-different Open-something are maintained.
-
-khrplatform is the header used by most other Khronos headers.
-
-Note: there is no version for that file, so we rely on the hash to
-decide whether we have to re-download it or not. That's unfortunate,
-however, as an old build will not be reproducible in the future... :-(
+Those headers are needed when an OpenKODE implementation does not
+provide them, like the NVidia binary blobs.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/opengl/Config.in                           |  3 +++
  package/opengl/khronos-registry/Config.in          |  1 +
- .../opengl/khronos-registry/khronos-registry.mk    |  1 +
- .../khrplatform-registry/Config.in                 |  7 ++++++
- .../khrplatform-registry/khrplatform-registry.hash |  2 ++
- .../khrplatform-registry/khrplatform-registry.mk   | 25 ++++++++++++++++++++++
- 6 files changed, 39 insertions(+)
- create mode 100644 package/opengl/khronos-registry/Config.in
- create mode 100644 package/opengl/khronos-registry/khronos-registry.mk
- create mode 100644 package/opengl/khronos-registry/khrplatform-registry/Config.in
- create mode 100644 package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.hash
- create mode 100644 package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.mk
+ .../khronos-registry/openkode-registry/Config.in   | 15 +++++++
+ .../openkode-registry/openkode-registry.hash       |  7 ++++
+ .../openkode-registry/openkode-registry.mk         | 48 ++++++++++++++++++++++
+ 4 files changed, 71 insertions(+)
+ create mode 100644 package/opengl/khronos-registry/openkode-registry/Config.in
+ create mode 100644 package/opengl/khronos-registry/openkode-registry/openkode-registry.hash
+ create mode 100644 package/opengl/khronos-registry/openkode-registry/openkode-registry.mk
 
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 20ee28b..47d00d1 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -3,3 +3,6 @@ source "package/opengl/libegl/Config.in"
- source "package/opengl/libgles/Config.in"
- source "package/opengl/libopenvg/Config.in"
- source "package/opengl/libopenmax/Config.in"
-+
-+# Khronos headers, from the Khronos Registries
-+source "package/opengl/khronos-registry/Config.in"
 diff --git a/package/opengl/khronos-registry/Config.in b/package/opengl/khronos-registry/Config.in
-new file mode 100644
-index 0000000..8def807
---- /dev/null
+index 8def807..770c9be 100644
+--- a/package/opengl/khronos-registry/Config.in
 +++ b/package/opengl/khronos-registry/Config.in
-@@ -0,0 +1 @@
-+source "package/opengl/khronos-registry/khrplatform-registry/Config.in"
-diff --git a/package/opengl/khronos-registry/khronos-registry.mk b/package/opengl/khronos-registry/khronos-registry.mk
+@@ -1 +1,2 @@
+ source "package/opengl/khronos-registry/khrplatform-registry/Config.in"
++source "package/opengl/khronos-registry/openkode-registry/Config.in"
+diff --git a/package/opengl/khronos-registry/openkode-registry/Config.in b/package/opengl/khronos-registry/openkode-registry/Config.in
 new file mode 100644
-index 0000000..6bf916c
+index 0000000..b161235
 --- /dev/null
-+++ b/package/opengl/khronos-registry/khronos-registry.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard package/opengl/khronos-registry/*/*.mk))
-diff --git a/package/opengl/khronos-registry/khrplatform-registry/Config.in b/package/opengl/khronos-registry/khrplatform-registry/Config.in
-new file mode 100644
-index 0000000..dcff578
---- /dev/null
-+++ b/package/opengl/khronos-registry/khrplatform-registry/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KHRPLATFORM_REGISTRY
++++ b/package/opengl/khronos-registry/openkode-registry/Config.in
+@@ -0,0 +1,15 @@
++# Note: this package has no prompt, because it is to be selected by
++# packages that need it, and does not make sense on its own.
++# Further more, we want to avoid it being enabled alongside any other
++# package that provide their own OpenKODE headers
++
++config BR2_PACKAGE_OPENKODE_REGISTRY
 +	bool
++	select BR2_PACKAGE_KHRPLATFORM_REGISTRY
 +	help
-+	  khrplatform installs the khrplatform.h headers, used by most
-+	  other Khronos headers.
++	  The OpenKODE Registry contains specifications of the core API and
++	  headers, optional OpenKODE extensions and headers, points to other
++	  Khronos APIs required by a conformant OpenKODE implementation, and
++	  includes some related documentation.
 +
-+	  https://www.khronos.org/registry/
-diff --git a/package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.hash b/package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.hash
++	  https://www.khronos.org/registry/kode/
+diff --git a/package/opengl/khronos-registry/openkode-registry/openkode-registry.hash b/package/opengl/khronos-registry/openkode-registry/openkode-registry.hash
 new file mode 100644
-index 0000000..9abb73c
+index 0000000..2a66ea8
 --- /dev/null
-+++ b/package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.hash
-@@ -0,0 +1,2 @@
++++ b/package/opengl/khronos-registry/openkode-registry/openkode-registry.hash
+@@ -0,0 +1,7 @@
 +# Locally computed
-+sha256  7631de0f2ce64747bfd893486eaa41aa08b9e8c5e5c6501b81c045c6ebf04b2a  khrplatform.h
-diff --git a/package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.mk b/package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.mk
++sha256 e55f962ec91f9a58824a8c42d3556ea1d803b589f5d7b1b6d1ab5bae929fd1cd  kd.h
++sha256 a51e0cbda20c393585e08a5035fe1bb6b9bed239a80f95e843686d1567a9f513  kdplatform.h
++sha256 331835322e53fc131774b6116318a2445651b3487e41510a786d5a27ce556e91  KHR_float64.h
++sha256 37a7596ec5377bb17fb157750a584b39b8bc7955a96b4fb29ff0c6cdf7a3fd9e  KHR_formatted.h
++sha256 cea58f28b749c59790327f61c445b09a202ef71c97b13cbbce1310316121c23e  KHR_perfcounter.h
++sha256 aa2bfc742d209e195580a0194352e1b375f9b71688ce7f6b222ab020c397e7f9  KHR_thread_storage.h
+diff --git a/package/opengl/khronos-registry/openkode-registry/openkode-registry.mk b/package/opengl/khronos-registry/openkode-registry/openkode-registry.mk
 new file mode 100644
-index 0000000..f32dbb2
+index 0000000..fd7711d
 --- /dev/null
-+++ b/package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.mk
-@@ -0,0 +1,25 @@
++++ b/package/opengl/khronos-registry/openkode-registry/openkode-registry.mk
+@@ -0,0 +1,48 @@
 +################################################################################
 +#
-+# khrplatform-registry
++# openkode-registry
 +#
 +################################################################################
 +
-+# There is no version for that file :-(
++OPENKODE_REGISTRY_VERSION = 1.0.3
++OPENKODE_REGISTRY_SITE = https://www.khronos.org/registry/kode/api/$(OPENKODE_REGISTRY_VERSION)
 +
-+KHRPLATFORM_REGISTRY_SOURCE = khrplatform.h
-+KHRPLATFORM_REGISTRY_SITE = https://www.khronos.org/registry/egl/api/KHR
++# There is no archive available. So, we just have a buncha files to download.
++# Just download everything as _EXTRA downloads.
++# The first two headers are the base for OpenKODE; the KHR headers are core
++# extensions which we always want anyway.
++OPENKODE_REGISTRY_SOURCE =
++OPENKODE_REGISTRY_EXTRA_DOWNLOADS = kd.h kdplatform.h \
++	../KHR/KHR_float64.h \
++	../KHR/KHR_formatted.h \
++	../KHR/KHR_perfcounter.h \
++	../KHR/KHR_thread_storage.h
 +
-+# Only installs a header
-+KHRPLATFORM_REGISTRY_INSTALL_STAGING = YES
-+KHRPLATFORM_REGISTRY_INSTALL_TARGET = NO
++OPENKODE_REGISTRY_LICENSE = Unknown
 +
-+define KHRPLATFORM_REGISTRY_EXTRACT_CMDS
-+	$(INSTALL) -d $(@D)
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/khrplatform.h $(@D)/khrplatform.h
++# The registry only installs header files
++OPENKODE_REGISTRY_INSTALL_STAGING = YES
++OPENKODE_REGISTRY_INSTALL_TARGET = NO
++
++# We could well completely do without an EXTRACT phase, because we will
++# then just copy the files again over to staging. But if we need to patch
++# them, we must have them in the package build dir.
++define OPENKODE_REGISTRY_EXTRACT_CMDS
++	$(INSTALL) -D -m 0644 $(DL_DIR)/kd.h $(@D)/KD/kd.h
++	$(INSTALL) -D -m 0644 $(DL_DIR)/kdplatform.h $(@D)/KD/kdplatform.h
++	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_float64.h $(@D)/KHR/KHR_float64.h
++	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_formatted.h $(@D)/KHR/KHR_formatted.h
++	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_perfcounter.h $(@D)/KHR/KHR_perfcounter.h
++	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_thread_storage.h $(@D)/KHR/KHR_thread_storage.h
 +endef
 +
-+define KHRPLATFORM_REGISTRY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/khrplatform.h $(STAGING_DIR)/usr/include/KHR/khrplatform.h
++define OPENKODE_REGISTRY_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/KD/kd.h $(STAGING_DIR)/usr/include/KD/kd.h
++	$(INSTALL) -D -m 0644 $(@D)/KD/kdplatform.h $(STAGING_DIR)/usr/include/KD/kdplatform.h
++	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_float64.h $(STAGING_DIR)/usr/include/KHR/KHR_float64.h
++	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_formatted.h $(STAGING_DIR)/usr/include/KHR/KHR_formatted.h
++	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_perfcounter.h $(STAGING_DIR)/usr/include/KHR/KHR_perfcounter.h
++	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_thread_storage.h $(STAGING_DIR)/usr/include/KHR/KHR_thread_storage.h
 +endef
 +
 +$(eval $(generic-package))
