@@ -1,73 +1,77 @@
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
-Date: Mon, 19 Jan 2015 18:14:15 +0200
-Subject: [Buildroot] [PATCH 15/16] package/vim: add default vimrc
+Date: Mon, 19 Jan 2015 18:14:16 +0200
+Subject: [Buildroot] [PATCH 16/16] package/rng-tools: add systemd support
+	for rngd
 In-Reply-To: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
 References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
-Message-ID: <1421684056-5266-16-git-send-email-maxtram95@gmail.com>
+Message-ID: <1421684056-5266-17-git-send-email-maxtram95@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support /etc/vim/vimrc as system-wide vimrc file. Add some default
-sample vimrc.
+Add rngd.service for systemd. Also patch rngd with patch from Fedora to
+ignore failure if no hwrng present:
+https://bugzilla.redhat.com/show_bug.cgi?id=892178
 
 Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
 ---
- package/vim/vim.mk | 11 +++++++++++
- package/vim/vimrc  | 14 ++++++++++++++
- 2 files changed, 25 insertions(+)
- create mode 100644 package/vim/vimrc
+ package/rng-tools/rng-tools.mk         |  8 ++++++++
+ package/rng-tools/rngd-exit-code.patch | 11 +++++++++++
+ package/rng-tools/rngd.service         |  9 +++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/rng-tools/rngd-exit-code.patch
+ create mode 100644 package/rng-tools/rngd.service
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index da84d14..992e41b 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -28,6 +28,12 @@ VIM_CONF_OPTS = --with-tlib=ncurses --enable-gui=no --without-x
- VIM_LICENSE = Charityware
- VIM_LICENSE_FILES = README.txt
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 5b89656..13352cc 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -21,4 +21,12 @@ else
+ RNG_TOOLS_CONF_OPTS += --without-libgcrypt
+ endif
  
-+define VIM_VIMRC_HOOK
-+	echo '#define SYS_VIMRC_FILE "/etc/vim/vimrc"' >> $(@D)/src/feature.h
++define RNG_TOOLS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/rng-tools/rngd.service \
++		$(TARGET_DIR)/lib/systemd/system/rngd.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs /lib/systemd/system/rngd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rngd.service
 +endef
 +
-+VIM_PRE_CONFIGURE_HOOKS += VIM_VIMRC_HOOK
-+
- define VIM_INSTALL_TARGET_CMDS
- 	cd $(@D)/src; \
- 		$(MAKE) DESTDIR=$(TARGET_DIR) installvimbin; \
-@@ -51,6 +57,11 @@ define VIM_INSTALL_VI_SYMLINK
- endef
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
- 
-+define VIM_INSTALL_VIMRC
-+	$(INSTALL) -D -m 644 package/vim/vimrc $(TARGET_DIR)/etc/vim/vimrc
-+endef
-+VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VIMRC
-+
- ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_RUNTIME_CMDS
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_REMOVE_DOCS
-diff --git a/package/vim/vimrc b/package/vim/vimrc
+ $(eval $(autotools-package))
+diff --git a/package/rng-tools/rngd-exit-code.patch b/package/rng-tools/rngd-exit-code.patch
 new file mode 100644
-index 0000000..bfc2087
+index 0000000..5f87161
 --- /dev/null
-+++ b/package/vim/vimrc
-@@ -0,0 +1,14 @@
-+set nocompatible
++++ b/package/rng-tools/rngd-exit-code.patch
+@@ -0,0 +1,11 @@
++--- a/rngd.c
+++++ b/rngd.c
++@@ -319,7 +319,7 @@ int main(int argc, char **argv)
++ 			message(LOG_DAEMON|LOG_ERR,
++ 				"Maybe RNG device modules are not loaded\n");
++ 		}
++-		return 1;
+++		return 66;
++ 	}
++ 
++ 	if (arguments->verbose) {
+diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
+new file mode 100644
+index 0000000..3bdc4c1
+--- /dev/null
++++ b/package/rng-tools/rngd.service
+@@ -0,0 +1,9 @@
++[Unit]
++Description=Hardware RNG Entropy Gatherer Daemon
 +
-+set ai
-+set background=dark
-+set backspace=indent,eol,start
-+set nomodeline
-+set ruler
++[Service]
++ExecStart=/usr/sbin/rngd -f
++SuccessExitStatus=66
 +
-+set ignorecase smartcase incsearch hlsearch
-+
-+syntax on
-+
-+filetype plugin on
-+filetype indent on
++[Install]
++WantedBy=multi-user.target
 -- 
 2.2.1
