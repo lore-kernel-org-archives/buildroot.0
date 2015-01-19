@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 23:28:23 +0100
-Subject: [Buildroot] [PATCH 1/2] package/intel-microcode: bump version
-In-Reply-To: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 19 Jan 2015 23:30:11 +0100
+Subject: [Buildroot] [PATCH 2/2] package/iucode-tool: bump version
+In-Reply-To: <1419156571-12002-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150119222823.GG4217@free.fr>
+ <1419156571-12002-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150119223011.GH4217@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +14,50 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2014-12-21 11:09 +0100, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> - updated upstream location
+>   http://metadata.ftp-master.debian.org/changelogs/contrib/i/iucode-tool/unstable_changelog
+>   "iucode-tool (1.0.2-1) unstable; urgency=low
+>    [...]
+>    * debian/control: update for new upstream location at Gitorious"
 
-Sorry for the delay...
-
-There is a newer version available, 20150107:
-    http://feeds.downloadcenter.intel.com/rss/?p=2371
-
-Would you care to update, please?
-
-Thank you! :-)
+Version 1.1.1 is now available, too. Care to update, please?
+Add me in Cc when respinning, please, so I don;t miss them and can
+review quickly (hopefully).
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/intel-microcode/intel-microcode.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/iucode-tool/Config.in      |    2 +-
+>  package/iucode-tool/iucode-tool.mk |    4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index bae953d..640d6fb 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
+> index 8f90350..b996b36 100644
+> --- a/package/iucode-tool/Config.in
+> +++ b/package/iucode-tool/Config.in
+> @@ -6,4 +6,4 @@ config BR2_PACKAGE_IUCODE_TOOL
+>  	help
+>  	  Intel processor microcode tool
+>  
+> -	  http://packages.debian.org/source/iucode-tool
+> +	  https://gitorious.org/iucode-tool
+> diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
+> index 081b086..44d49d9 100644
+> --- a/package/iucode-tool/iucode-tool.mk
+> +++ b/package/iucode-tool/iucode-tool.mk
+> @@ -4,8 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -INTEL_MICROCODE_VERSION = 20140122
-> +INTEL_MICROCODE_VERSION = 20140913
->  INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
-> -INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/23574/eng
-> +INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24290/eng
->  INTEL_MICROCODE_LICENSE = PROPRIETARY
->  INTEL_MICROCODE_LICENSE_FILES = license.txt
->  INTEL_MICROCODE_REDISTRIBUTE = NO
+> -IUCODE_TOOL_VERSION = v1.0.1
+> -IUCODE_TOOL_SITE = git://git.debian.org/users/hmh/iucode-tool.git
+> +IUCODE_TOOL_VERSION = 1cbd73013cd4c6b2b287f07f6189eef35cb83ca0
+> +IUCODE_TOOL_SITE = git://gitorious.org/iucode-tool/iucode-tool.git
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>  IUCODE_TOOL_CONF_ENV = LIBS="-largp"
+>  IUCODE_TOOL_DEPENDENCIES = argp-standalone
 > -- 
 > 1.7.10.4
 > 
