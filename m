@@ -1,49 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Jan 2015 00:41:03 +0100
-Subject: [Buildroot] [git commit] usb_modeswitch_data: bump to version
-	20150115
-Message-ID: <20150119234523.457467FF0E@busybox.osuosl.org>
+Date: Tue, 20 Jan 2015 00:44:06 +0100
+Subject: [Buildroot] [git commit] libtool: bump to version 2.4.5
+Message-ID: <20150119234523.6566A7FF0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51bc911a4fc4b9d6ad6684d8ea360fdb8449c608
+commit: http://git.buildroot.net/buildroot/commit/?id=9ff11e0dffa9d453843fc60820fafba469ee956a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file, and rename patch to new naming convention.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tch_data-makefile.patch => 0001-makefile.patch} |    0
- .../usb_modeswitch_data/usb_modeswitch_data.hash   |    2 ++
- package/usb_modeswitch_data/usb_modeswitch_data.mk |    2 +-
- 3 files changed, 3 insertions(+), 1 deletions(-)
+ package/libtool/libtool.hash |    2 +-
+ package/libtool/libtool.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/0001-makefile.patch
-similarity index 100%
-rename from package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-rename to package/usb_modeswitch_data/0001-makefile.patch
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-new file mode 100644
-index 0000000..2ccb3fc
---- /dev/null
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	90549f589835a68279369c3dc0d47eb7338ee3bad09d737e7b85e1ab15bd2d8b	usb-modeswitch-data-20150115.tar.bz2
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index 6ab9cea..01b0614 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+diff --git a/package/libtool/libtool.hash b/package/libtool/libtool.hash
+index ffa3ea5..06a562d 100644
+--- a/package/libtool/libtool.hash
++++ b/package/libtool/libtool.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	a8295b5853bf82a46635c944031e84970f2aa79c19df7a0c28f3ec8e11c07f6c	libtool-2.4.4.tar.xz
++sha256	84aac136513b009278896ffa255e4d685bcdb0cb0e5363be36adad64c986177e	libtool-2.4.5.tar.xz
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 92c6dce..3332cfc 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USB_MODESWITCH_DATA_VERSION = 20140529
-+USB_MODESWITCH_DATA_VERSION = 20150115
- USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
- USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
+-LIBTOOL_VERSION = 2.4.4
++LIBTOOL_VERSION = 2.4.5
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+ LIBTOOL_INSTALL_STAGING = YES
