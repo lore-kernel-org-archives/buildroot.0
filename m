@@ -1,88 +1,40 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
-Date: Mon, 19 Jan 2015 20:35:37 +0100
-Subject: [Buildroot] [PATCH] spidev_test: use the one from the kernel we
-	build
-Message-ID: <1421696137-17377-1-git-send-email-vincent.stehle@freescale.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 19 Jan 2015 20:42:31 +0100
+Subject: [Buildroot] ][PATCH V3] dvd+rw-tools: new package
+References: <54BB54A4.8080301@ou.edu>
+Message-ID: <XnsA427D2A8DC928berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a configuration option to use the spidev_test.c from the Linux kernel we
-build. This allows to be perfectly consistent between spidev_test and the
-kernel in use.
+[posted and mailed]
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
+Steve Kenton <skenton@ou.edu> wrote in 
+news:54BB54A4.8080301 at ou.edu:
+
+> +config BR2_PACKAGE_DVDRW_TOOLS
+> +     bool "dvdrw-tools"
+> +     select BR2_PACKAGE_XORRISO
+> +     help
+> +       The dvd+rw-tools are used to master Blu-ray Disc
+> +       and DVD Disc media, both +RW/+R and -RW/-R. The
+> +       +RW in the name is a historical artifact. This
+> +       package contains the widely used growisofs program.
+> +     
+> +       http://fy.chalmers.se/~appro/linux/DVD+RW/tools
+> +
+> +comment "dvdrw-tools needs a toolchain w/ wchar, largefile"
+> +     depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
 
 Hi,
 
-Do not hesitate to let me know if you don't like the variables names; for
-example BR2_PACKAGE_SPIDEV_TEST_FROM_KERNEL and SPIDEV_TEST_C_FILE_SRC.
+xorriso has more dependencies than dvd+rw-tools, namely
 
-Best regards,
+depends on BR2_TOOLCHAIN_HAS_THREADS
+depends on BR2_USE_MMU # fork()
 
-V.
+which should also be followed in dvdrw-tools.
 
- package/spidev_test/Config.in      | 11 +++++++++++
- package/spidev_test/spidev_test.mk | 13 ++++++++++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/package/spidev_test/Config.in b/package/spidev_test/Config.in
-index 0d8214c..8da096e 100644
---- a/package/spidev_test/Config.in
-+++ b/package/spidev_test/Config.in
-@@ -15,3 +15,14 @@ config BR2_PACKAGE_SPIDEV_TEST
- 	  toolchain is too old.
- 
- 	  https://www.kernel.org/doc/Documentation/spi/spidev_test.c
-+
-+if BR2_PACKAGE_SPIDEV_TEST
-+
-+config BR2_PACKAGE_SPIDEV_TEST_FROM_KERNEL
-+	bool "spidev_test.c of the linux kernel we build"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Use directly the spidev_test.c from the kernel sources we build,
-+	  instead of retrieving from kernel.org.
-+
-+endif
-diff --git a/package/spidev_test/spidev_test.mk b/package/spidev_test/spidev_test.mk
-index 646372f..5ab80a6 100644
---- a/package/spidev_test/spidev_test.mk
-+++ b/package/spidev_test/spidev_test.mk
-@@ -4,6 +4,14 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_PACKAGE_SPIDEV_TEST_FROM_KERNEL),y)
-+# Use the spidev_test.c from the kernel we build.
-+SPIDEV_TEST_SOURCE =
-+SPIDEV_TEST_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+SPIDEV_TEST_DEPENDENCIES = linux
-+SPIDEV_TEST_C_FILE_SRC = $(LINUX_DIR)/Documentation/spi/spidev_test.c
-+else
-+# Get spidev_test.c from kernel.org.
- # v3.15+ requires SPI_TX_QUAD/SPI_RX_QUAD to build
- # Normally kernel headers can't be newer than kernel so switch based on that.
- # If you need quad-pumped spi support you need to upgrade your toolchain.
-@@ -14,10 +22,13 @@ SPIDEV_TEST_VERSION = v3.0
- endif
- SPIDEV_TEST_SITE = http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/plain/Documentation/spi
- SPIDEV_TEST_SOURCE = spidev_test.c?id=$(SPIDEV_TEST_VERSION)
-+SPIDEV_TEST_C_FILE_SRC = $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE)
-+endif
-+
- SPIDEV_TEST_LICENSE = GPLv2
- 
- define SPIDEV_TEST_EXTRACT_CMDS
--	cp $(BR2_DL_DIR)/$(SPIDEV_TEST_SOURCE) $(@D)/spidev_test.c
-+	cp $(SPIDEV_TEST_C_FILE_SRC) $(@D)/spidev_test.c
- endef
- 
- define SPIDEV_TEST_BUILD_CMDS
--- 
-2.1.4
+Regards, Bernd
