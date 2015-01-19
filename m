@@ -1,115 +1,229 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 21:40:41 +0100
-Subject: [Buildroot] [PATCH 11/11 v5] package/nvidia-tegra23-codecs: new
-	package
+Date: Mon, 19 Jan 2015 21:40:36 +0100
+Subject: [Buildroot] [PATCH 06/11 v5] package/nvidia-driver: add NVidia's
+	OpenGL binary blob
 In-Reply-To: <cover.1421699898.git.yann.morin.1998@free.fr>
 References: <cover.1421699898.git.yann.morin.1998@free.fr>
-Message-ID: <7d2c57b65c15c550508c615aa1986420ad1780cb.1421699898.git.yann.morin.1998@free.fr>
+Message-ID: <38defbca2c222a8bbcc2a3bb5a87c2e97282ee6e.1421699898.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+This patch only adds the userland part. Unless other such other packages
+(which we named like: rpi-userland), we do not replicate this naming
+scheme with this package, as a future patch will also enable building
+the kernel part of the driver. So, it is better to just name that
+package with -driver, rather than with -userland and renaming it
+afterwards.
 
-nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
-as: AAC3, h264, jpeg, MP3...
-
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[me:
-  - split codecs from binaries into this patch
-  - use our extractor helpers
-]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/nvidia-tegra23/Config.in                   |  1 +
- .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |  7 ++++
- .../nvidia-tegra23-codecs.hash                     |  3 ++
- .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk | 41 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
 
-diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
-index 950f2f8..89bdf83 100644
---- a/package/nvidia-tegra23/Config.in
-+++ b/package/nvidia-tegra23/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
- endchoice
- 
- source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
-+source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
- endif
- 
- comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+---
+Changes v4 -> v5:
+  - fix libGL.la for stupid libtool
+---
+ package/Config.in                        |   1 +
+ package/nvidia-driver/Config.in          |  51 ++++++++++++++
+ package/nvidia-driver/nvidia-driver.hash |   3 +
+ package/nvidia-driver/nvidia-driver.mk   | 110 +++++++++++++++++++++++++++++++
+ 4 files changed, 165 insertions(+)
+ create mode 100644 package/nvidia-driver/Config.in
+ create mode 100644 package/nvidia-driver/nvidia-driver.hash
+ create mode 100644 package/nvidia-driver/nvidia-driver.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 266de13..0ca776e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -351,6 +351,7 @@ endif
+ 	source "package/minicom/Config.in"
+ 	source "package/nanocom/Config.in"
+ 	source "package/neard/Config.in"
++	source "package/nvidia-driver/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
 new file mode 100644
-index 0000000..07a8e74
+index 0000000..071e85e
 --- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
-+	bool "nvidia-tegra23 codecs"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++++ b/package/nvidia-driver/Config.in
+@@ -0,0 +1,51 @@
++comment "nvidia-driver needs an (e)glibc toolchain and a modular Xorg server"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
++
++config BR2_PACKAGE_NVIDIA_DRIVER
++	bool "nvidia-driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
++	select BR2_PACKAGE_OPENGL_REGISTRY
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
 +	help
-+	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.4.0
++	  The binary-only driver blob for NVidia cards.
++	  This is the userland part only.
 +
-+	  https://developer.nvidia.com/linux-tegra-rel-16
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
++	  http://www.nvidia.com/
++
++if BR2_PACKAGE_NVIDIA_DRIVER
++
++config BR2_PACKAGE_PROVIDES_LIBGL
++	default "nvidia-driver"
++
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "nvidia-driver"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "nvidia-driver"
++
++config BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++	bool "CUDA support"
++
++config BR2_PACKAGE_NVIDIA_DRIVER_OPENCL
++	bool "OpenCL support"
++	depends on BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++
++config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
++	bool "Install private libraries"
++	help
++	  Two libraries require special agreement with NVidia to develop code
++	  linking to those libraries: libnvidia-ifr.so and libnvidia-fbc.so
++	  (to grab and encode an OpenGL buffer or an X framebuffer.)
++
++	  Say 'y' here if you plan on running a program that uses those
++	  private libraries.
++
++endif # BR2_PACKAGE_NVIDIA_DRIVER
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
 new file mode 100644
-index 0000000..de4a461
+index 0000000..137590f
 --- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
++++ b/package/nvidia-driver/nvidia-driver.hash
 @@ -0,0 +1,3 @@
-+# From https://developer.nvidia.com/linux-tegra-rel-16
-+sha1 d0889bf0ca408583a1e88657c6fd18f3659ef1bb Tegra20_Linux-codecs_R16.4.0_armhf.tbz2
-+sha1 a9f298222d3b6a618ef96a6bed9641929b152c8a Tegra30_Linux-codecs_R16.4.0_armhf.tbz2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
++# Locally computed
++sha256  bba63c30c730ad7b8500a77c81cae58562b9f9b57cd576b61f37a2d8bc45df25  NVIDIA-Linux-x86-346.35.run
++sha256  8625acbbc7a2abdda436a5cb9d06f2a7f5913b16e0a35ac4f9f106853a94d086  NVIDIA-Linux-x86_64-346.35.run
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
 new file mode 100644
-index 0000000..d05dbb8
+index 0000000..8ebc503
 --- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-@@ -0,0 +1,41 @@
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -0,0 +1,110 @@
 +################################################################################
 +#
-+# nvidia-tegra23-codecs
++# nvidia-driver
 +#
 +################################################################################
 +
-+NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
-+NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
-+NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
-+NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
-+NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
-+NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
-+NVIDIA_TEGRA23_CODECS_DEPENDENCIES = nvidia-tegra23-binaries
-+NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO
-+NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES
++NVIDIA_DRIVER_VERSION = 346.35
++NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
++NVIDIA_DRIVER_SITE = ftp://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
++NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
++NVIDIA_DRIVER_LICENSE = NVIDIA Software License
++NVIDIA_DRIVER_LICENSE_FILES = LICENSE
++NVIDIA_DRIVER_REDISTRIBUTE = NO
++NVIDIA_DRIVER_INSTALL_STAGING = YES
 +
-+NVIDIA_TEGRA23_CODECS_FIRMWARE = \
-+	nvmm_aacdec.axf nvmm_adtsdec.axf nvmm_h264dec.axf nvmm_h264dec2x.axf \
-+	nvmm_jpegdec.axf nvmm_jpegenc.axf nvmm_manager.axf nvmm_mp3dec.axf \
-+	nvmm_mpeg4dec.axf nvmm_service.axf
++NVIDIA_DRIVER_DEPENDENCIES = opengl-registry xlib_libX11 xlib_libXext
++NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
 +
-+# The archive contains an archive with the firmware codecs
-+define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
-+	$(INSTALL) -d $(@D)
-+	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
-+		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
-+	$(INSTALL) -d $(@D)/restricted_codecs
-+	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
-+		$(@D)/restricted_codecs.tbz2 | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
++# We have two variables that contains a list of libraries to install:
++#   NVIDIA_DRIVER_LIBS
++#       contains the libraries whose filename end up in .so.$(VERSION); rather
++#       than duplicate the version string for all of them, we just store their
++#       basename, and append the version string below.
++#   NVIDIA_DRIVER_LIBS_NO_VERSION
++#       contains all libraries the do not use the NVidia version; since there
++#       is currently only one such library, we store its full name.
++
++# Each line corresponds to a specific set of libraries
++NVIDIA_DRIVER_LIBS = \
++	libEGL libGLESv1_CM libGLESv2 libGL \
++	libnvidia-glcore libnvidia-eglcore libnvidia-glsi \
++	tls/libnvidia-tls \
++	libvdpau libvdpau_nvidia \
++	libnvidia-ml
++
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
++NVIDIA_DRIVER_LIBS += libcuda libnvidia-compiler libnvcuvid libnvidia-encode
++endif
++
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_OPENCL),y)
++NVIDIA_DRIVER_LIBS_NO_VERSION += libOpenCL.so.1.0.0
++NVIDIA_DRIVER_LIBS += libnvidia-opencl
++endif
++
++# Those libraries are 'private' libraries requiring an agreement with
++# NVidia to develop code for those libs. There seems to be no restriction
++# on using those libraries (e.g. if the user has such an agreement, or
++# wants to run a third-party program developped under such an agreement).
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
++NVIDIA_DRIVER_LIBS += libnvidia-ifr libnvidia-fbc
++endif
++
++# We refer to the destination path; the origin file has no directory component
++NVIDIA_DRIVER_X_MODS = drivers/nvidia_drv.so \
++	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
++
++# The downloaded archive is in fact an auto-extract script. So, it can run
++# virtually everywhere, and it is fine enough to provide useful options.
++# Except it can't extract into an existing (even empty) directory.
++define NVIDIA_DRIVER_EXTRACT_CMDS
++	$(SHELL) $(DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only --target \
++		$(@D)/tmp-extract
++	mv $(@D)/tmp-extract/* $(@D)/tmp-extract/.manifest $(@D)
++	rm -rf $(@D)/tmp-extract
 +endef
 +
-+define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
-+	$(foreach codec,$(NVIDIA_TEGRA23_CODECS_FIRMWARE),
-+		$(INSTALL) -D -m 0644 $(@D)/restricted_codecs/lib/firmware/$(codec) \
-+			$(TARGET_DIR)/lib/firmware/$(codec); \
-+	)
++# Helper to install libraries
++# $1: destination directory (target or staging)
++#
++# For all libraries that need it, we append the NVidia version string.
++# The for all libraries, we install them and create a symlink using their
++# SONAME, so we can link to them at runtime; we also create the no-version
++# symlink, so we can link to them at build time.
++define NVIDIA_DRIVER_INSTALL_LIBS
++	for lib in $(patsubst %,%.so.$(NVIDIA_DRIVER_VERSION),$(NVIDIA_DRIVER_LIBS)) \
++	           $(NVIDIA_DRIVER_LIBS_NO_VERSION); \
++	do \
++		$(INSTALL) -D -m 0644 $(@D)/$${lib} $(1)/usr/lib/$${lib##*/}; \
++		n="$$( $(TARGET_READELF) -d "$(@D)/$${lib}" \
++		       |sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
++		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
++			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
++		fi; \
++		n="$${lib##*/}"; n="$${n/.so*}.so"; \
++		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
++			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
++		fi; \
++	done
++endef
++
++# For staging, install libraries and development files
++define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
++	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(STAGING_DIR))
++	$(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
++endef
++
++# For target, install libraries and X.org modules
++define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
++	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
++	for m in $(NVIDIA_DRIVER_X_MODS); do \
++		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
++			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
++	done
 +endef
 +
 +$(eval $(generic-package))
