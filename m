@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Jan 2015 00:31:14 +0100
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.8
-In-Reply-To: <1421672392-21309-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 19 Jan 2015 09:59:52 -0300")
-References: <1421672392-21309-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bnlu9wl9.fsf@dell.be.48ers.dk>
+Date: Tue, 20 Jan 2015 00:31:56 +0100
+Subject: [Buildroot] [PATCH] imagemagick: bump to version 6.9.0-4
+In-Reply-To: <1421673040-19719-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 19 Jan 2015 10:10:40 -0300")
+References: <1421673040-19719-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877fwi9wk3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
