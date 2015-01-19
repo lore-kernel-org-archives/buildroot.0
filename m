@@ -1,96 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 23:40:35 +0100
-Subject: [Buildroot] [PATCH v2] package/sane-backends: remove unsafe
- headers path
-In-Reply-To: <1420905112-31654-1-git-send-email-romain.naour@openwide.fr>
-References: <1420905112-31654-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150119224035.GJ4217@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 19 Jan 2015 23:47:58 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libftdi: fix libftdi.pc
+In-Reply-To: <20150113141549.4737488b@free-electrons.com>
+References: <1421097965-15600-1-git-send-email-s.martin49@gmail.com>
+ <1421097965-15600-2-git-send-email-s.martin49@gmail.com>
+ <20150113141549.4737488b@free-electrons.com>
+Message-ID: <CAHXCMMJHH-v+sxv+P62hT4Us8DSXha7Q40Lp32QVGjhWfTi8UQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Thomas, all,
 
-On 2015-01-10 16:51 +0100, Romain Naour spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/deb/deb3d45416633b9217d3cc09664273687c809464/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+On Tue, Jan 13, 2015 at 2:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Samuel Martin,
+>
+> On Mon, 12 Jan 2015 22:26:05 +0100, Samuel Martin wrote:
+>
+>> +diff --git a/libftdi.pc.in b/libftdi.pc.in
+>> +index 2061b91..95eb491 100644
+>> +--- a/libftdi.pc.in
+>> ++++ b/libftdi.pc.in
+>> +@@ -6,6 +6,7 @@ includedir=@includedir@
+>> + Name: libftdi
+>> + Description: Library to program and control the FTDI USB controller
+>> + Requires:
+>> ++Requires.private: libusb
+>> + Version: @VERSION@
+>> + Libs: -L${libdir} -lftdi -lusb
+>> + Cflags: -I${includedir}
+>
+> Are you sure this is the right fix? I believe the right fix is rather:
+>
+> -Requires:
+> +Requires: libusb
+> ...
+> -Libs: -L${libdir} -lftdi -lusb
+> +Libs: -L${libdir} -lftdi
+>
+> This properly declares the fact that libftdi requires libusb. And
+> libusb.pc already has the appropriate Requires.private field on
+> libusb-1.0. With this change, you get what I believe is the correct
+> behavior:
+>
+> When linking dynamically, we're only linked against -lusb (i.e the
+> libusb-compat library) :
+>
+> $ ./output/host/usr/bin/pkg-config --libs libftdi
+> -lftdi -L/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lusb
+>
+> When linking statically, we correct get both -lusb and -lusb-1.0:
+>
+> $ ./output/host/usr/bin/pkg-config --static --libs libftdi
+> -lftdi -lusb -L/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lusb-1.0 -pthread
+>
+> This is more or less what was done upstream at
+> http://developer.intra2net.com/git/?p=libftdi;a=commitdiff;h=ac5790a7af9ffb45c00bde056b308643cd52537e,
+> though this commit was after they switched to libusb instead of
+> libusb-compat.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Right, it is a much better fix. I'll respin shortly.
 
 Regards,
-Yann E. MORIN.
 
-> ---
-> v2: remove entirely "INCLUDES=" line (Thomas Petazzoni)
-> ---
->  .../0003-remove-unsafe-headers-path.patch          | 28 ++++++++++++++++++++++
->  package/sane-backends/sane-backends.mk             |  2 ++
->  2 files changed, 30 insertions(+)
->  create mode 100644 package/sane-backends/0003-remove-unsafe-headers-path.patch
-> 
-> diff --git a/package/sane-backends/0003-remove-unsafe-headers-path.patch b/package/sane-backends/0003-remove-unsafe-headers-path.patch
-> new file mode 100644
-> index 0000000..29b8d04
-> --- /dev/null
-> +++ b/package/sane-backends/0003-remove-unsafe-headers-path.patch
-> @@ -0,0 +1,28 @@
-> +From 3c03e4b81c9de73e57a56029f7f8cda8bec24e91 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Sat, 10 Jan 2015 15:48:21 +0100
-> +Subject: [PATCH] configure.in: remove unsafe headers path
-> +
-> +Forcing /usr/local/include headers path in CFLAGS is unsafe for
-> +cross-compilation.
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> +---
-> + configure.in | 1 -
-> + 1 file changed, 1 deletion(-)
-> +
-> +diff --git a/configure.in b/configure.in
-> +index a8fc950..93a4b77 100644
-> +--- a/configure.in
-> ++++ b/configure.in
-> +@@ -82,7 +82,6 @@ AM_CONDITIONAL(CROSS_COMPILING, test x$cross_compiling = xyes)
-> + dnl ***********************************************************************
-> + dnl set compiler/linker flags
-> + dnl ***********************************************************************
-> +-INCLUDES="${INCLUDES} -I/usr/local/include"
-> + AC_SUBST(INCLUDES)
-> + SANE_SET_CFLAGS([$is_release])
-> + SANE_SET_LDFLAGS
-> +-- 
-> +1.9.3
-> +
-> diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-> index f8c59e8..bde8e6a 100644
-> --- a/package/sane-backends/sane-backends.mk
-> +++ b/package/sane-backends/sane-backends.mk
-> @@ -10,6 +10,8 @@ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
->  SANE_BACKENDS_LICENSE = GPLv2+
->  SANE_BACKENDS_LICENSE_FILES = COPYING
->  SANE_BACKENDS_INSTALL_STAGING = YES
-> +# 0003-remove-unsafe-headers-path.patch patch configure.in
-> +SANE_BACKENDS_AUTORECONF = YES
->  
->  ifeq ($(BR2_PACKAGE_LIBUSB),y)
->  SANE_BACKENDS_DEPENDENCIES += libusb
-> -- 
-> 1.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
