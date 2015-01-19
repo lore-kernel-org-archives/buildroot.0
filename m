@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 Jan 2015 09:59:52 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.8
-Message-ID: <1421672392-21309-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 19 Jan 2015 10:10:40 -0300
+Subject: [Buildroot] [PATCH] imagemagick: bump to version 6.9.0-4
+Message-ID: <1421673040-19719-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 57269fe..def3b30 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index f23795b..f425c3d 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	70ca0b8884a6b145b7f777724670566e2b4f3cde	sqlite-autoconf-3080704.tar.gz
-+sha1	abb7570b7e331ffede7f40f0037be6e0c03b73af	sqlite-autoconf-3080800.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index a4920eb..c1baae3 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256	f00452ba2c05c2df9624c62d7adb49ecf17140edd6e5f355cceca051dab1fb38  ImageMagick-6.9.0-3.tar.xz
++sha256	996aa8081dced3f3bbf23d90fca861b30332f734329f89367c6fc35173a74957  ImageMagick-6.9.0-4.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4e76332..f78fcd3 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3080704
-+SQLITE_VERSION = 3080800
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = http://www.sqlite.org/2014
-+SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
- SQLITE_INSTALL_STAGING = YES
- 
+-IMAGEMAGICK_VERSION = 6.9.0-3
++IMAGEMAGICK_VERSION = 6.9.0-4
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
 -- 
 2.0.5
