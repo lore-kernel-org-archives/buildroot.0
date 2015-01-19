@@ -1,83 +1,53 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon, 19 Jan 2015 08:23:32 +0100
-Subject: [Buildroot] [PATCH 1/1] jimtcl: change the way of define
- JIMTCL_INSTALL_LIB variable
-In-Reply-To: <20150118155414.GN4275@free.fr>
-References: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <20150118155414.GN4275@free.fr>
-Message-ID: <54BCB0F4.2050501@trzebnica.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Jan 2015 08:30:11 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-01-18
+Message-ID: <20150119073011.9A959100CDC@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Build statistics for 2015-01-18
+===============================
 
-> Jerzy, All,
->
-> On 2015-01-15 18:18 +0100, Jerzy Grzegorek spake thusly:
->> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> However, there is something really fishy in _INSTALL_STAGING_CMDS:
->
->      define JIMTCL_INSTALL_STAGING_CMDS
->          for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
->                  cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ || exit 1 ; \
->          done; \
->          $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
->          ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
->      endef
->
-> In case we're static-only, JIMTCL_LIB=a , so we're linking the static
-> library to the shared one. Surely this is just busted. no?
+        success : 248
+       failures : 12 
+       timeouts : 1  
+          TOTAL : 261
 
-Yes, indeed.
+Classification of failures by reason
+====================================
 
->
-> While you're at touching jimctl, would you care having a look, please?
+              host-erlang-17.4 | 2 
+               lightning-2.0.5 | 2 
+                  thrift-0.9.2 | 1 
+           libmemcached-1.0.18 | 1 
+             libselinux-2.1.13 | 1 
+               qt5webkit-5.3.2 | 1 
+               ding-libs-0_4_0 | 1 
+               sdl_sound-1.0.3 | 1 
+        gst1-plugins-bad-1.4.5 | 1 
+               dvdauthor-0.7.1 | 1 
+                 webkit-1.11.5 | 1 
 
-OK, will fix.
-Thanks for review.
+Detail of failures
+===================
 
-Regards,
-Jerzy
-  
+        bfin |                ding-libs-0_4_0 | NOK | http://autobuild.buildroot.net/results/5247ef7cea04245cb87cd38fc721dc645bae24b1/
+        bfin |                dvdauthor-0.7.1 | NOK | http://autobuild.buildroot.net/results/4e68bf45b55b272b3e83bee4c4f678e2b5a6db50/
+         arm |         gst1-plugins-bad-1.4.5 | NOK | http://autobuild.buildroot.net/results/e62eeb75ea85d1ff0a9bf130b6fd0c3fcc885624/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/b3a8d87579f95624202e430f701e716d4fe67256/
+        i686 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/4c28e5ff94ef908e12ae45dcc6398c582ce35f48/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/cc6a59fc23b2b9f648f34bd08157126336451a65/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/a77023bbf7de493ee563c29dae4898e632c29a8e/
+     powerpc |                lightning-2.0.5 | NOK | http://autobuild.buildroot.net/results/20bff98659d641030c488654609322a20cae5a60/
+     powerpc |                lightning-2.0.5 | NOK | http://autobuild.buildroot.net/results/e49890a67c00ae19bf6d119bdc1d22dc1a12c3cc/
+         arm |                qt5webkit-5.3.2 | NOK | http://autobuild.buildroot.net/results/6336614d5df148594bd3b62d240552f944fa0815/
+     aarch64 |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/edc21e6eb171c2e35edd91d8b021345746217df1/
+        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/39f4863e393c371d3430ffeba33a984ef28cd770/
+         arm |                  webkit-1.11.5 | TIM | http://autobuild.buildroot.net/results/4699b3248a67a9a43a758493d918de829b43dda6/
 
 
->
-> Thanks! :-)
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>   package/jimtcl/jimtcl.mk |    5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
->> index 75c0382..c2e04ff 100644
->> --- a/package/jimtcl/jimtcl.mk
->> +++ b/package/jimtcl/jimtcl.mk
->> @@ -32,10 +32,11 @@ JIMTCL_INSTALL_LIB =
->>   else
->>   JIMTCL_SHARED = --shared
->>   JIMTCL_LIB = so.$(JIMTCL_VERSION)
->> -JIMTCL_INSTALL_LIB = \
->> +define JIMTCL_INSTALL_LIB
->>   	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
->> -	$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
->> +		$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
->>   	ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
->> +endef
->>   endif
->>   
->>   define JIMTCL_CONFIGURE_CMDS
->> -- 
->> 1.7.9.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+http://autobuild.buildroot.net
