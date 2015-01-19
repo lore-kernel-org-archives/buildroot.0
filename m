@@ -1,78 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 23:20:43 +0100
-Subject: [Buildroot] [PATCH v5 07/15] xdriver_xf86-video-imx-viv: new
- package
-In-Reply-To: <1664407.TbGWHQXnSi@sagittea>
-References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
- <1673331.jGUK3KeLGv@aquila>
- <20150116171533.64116d5f@free-electrons.com>
- <1664407.TbGWHQXnSi@sagittea>
-Message-ID: <20150119222043.GF4217@free.fr>
+Date: Mon, 19 Jan 2015 23:28:23 +0100
+Subject: [Buildroot] [PATCH 1/2] package/intel-microcode: bump version
+In-Reply-To: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150119222823.GG4217@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Bernd, All,
 
-On 2015-01-17 01:11 +0100, J?r?me Pouiller spake thusly:
-> On Friday 16 January 2015 17:15:33 Thomas Petazzoni wrote:
-> > Dear J?r?me Pouiller,
-> > 
-> > On Fri, 16 Jan 2015 17:04:20 +0100, J?r?me Pouiller wrote:
-> > 
-> > > > The world of OpenGL stuff will always surprise me. Why on earth does a
-> > > > X.org driver that uses a proprietary OpenGL implementation needs
-> > > > Mesa3D ?!?
-> > > 
-> > > In fact, xf86-video-imx-viv does not depends directly on mesa3d. However, it 
-> > > depend on xorg server compiled with --enable-dri --enable-glx. But, these 
-> > > options are enabled only if BR2_PACKAGE_MESA3D_DRI_DRIVER is enabled.
-> > 
-> > Maybe this should be changed, so that other drivers can enable it,
-> > without referencing Mesa related options, no?
-> > 
-> > Also, the code in the xserver package does:
-> > 
-> > ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> > XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
-> > XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
-> > else
-> > XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
-> > endif
-> > 
-> > So it really builds mesa as well. Is this needed ?
-> We cannot use gpu-viv-bin-mx6q to compile Xorg with DRI and GLX since 
-> it does not provide all necessary files. Especially, OpenGL headers 
-> (GL/gl.h, GL/glx.h, ...) are missing[1]. We may solve this issue using
-> "opengl-registry" posted by Yann a few months ago. It may be 
-> sufficient.
+On 2014-12-21 11:09 +0100, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-For the records, I've posted an updated series:
-    http://lists.busybox.net/pipermail/buildroot/2015-January/117642.html
+Sorry for the delay...
 
-Care to see if it is posible to update your series to use the Khronos
-registry/ies? If so, it would great if you could review/ack the patches
-so they get applied soon, so you can in turn repost an updated series of
-yours! ;-)
+There is a newer version available, 20150107:
+    http://feeds.downloadcenter.intel.com/rss/?p=2371
 
-/me is trying to get some reviewers interested! Muhahaha! ;-)
+Would you care to update, please?
+
+Thank you! :-)
 
 Regards,
 Yann E. MORIN.
 
-> Note that the current implementation is same than the one used in Yocto
-> and it is officially supported by Freescale. (I do not say it is the
-> right way, but it is a sufficient justification for many users)
+> ---
+>  package/intel-microcode/intel-microcode.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> 
-> [1] https://community.freescale.com/thread/312546
-> 
+> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+> index bae953d..640d6fb 100644
+> --- a/package/intel-microcode/intel-microcode.mk
+> +++ b/package/intel-microcode/intel-microcode.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -INTEL_MICROCODE_VERSION = 20140122
+> +INTEL_MICROCODE_VERSION = 20140913
+>  INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+> -INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/23574/eng
+> +INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24290/eng
+>  INTEL_MICROCODE_LICENSE = PROPRIETARY
+>  INTEL_MICROCODE_LICENSE_FILES = license.txt
+>  INTEL_MICROCODE_REDISTRIBUTE = NO
 > -- 
-> J?r?me Pouiller, Sysmic
-> Embedded Linux specialist
-> http://www.sysmic.fr
+> 1.7.10.4
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
