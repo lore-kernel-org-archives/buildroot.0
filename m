@@ -1,39 +1,55 @@
 From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <nrubinstein@aldebaran.com>
-Date: Mon, 19 Jan 2015 20:52:56 +0100
-Subject: [Buildroot] [PATCH 2/3] fs/iso9660: remove obsolete code
+Date: Mon, 19 Jan 2015 20:52:57 +0100
+Subject: [Buildroot] [PATCH 3/3] docs/manual/beyond-buildroot: building and
+	testing live-CDs
 In-Reply-To: <1421697177-12995-1-git-send-email-nrubinstein@aldebaran.com>
 References: <1421697177-12995-1-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <1421697177-12995-2-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <1421697177-12995-3-git-send-email-nrubinstein@aldebaran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This rule is superseded by a rule defined in fs/common.mk:
-
-    rootfs-$(1)-show-depends:
-            @echo $$(ROOTFS_$(2)_DEPENDENCIES)
-
 Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
 ---
- fs/iso9660/iso9660.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ docs/manual/beyond-buildroot.txt | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 0c6e526..58e90c6 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -77,9 +77,6 @@ endif
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+index b8b1973..d5d7089 100644
+--- a/docs/manual/beyond-buildroot.txt
++++ b/docs/manual/beyond-buildroot.txt
+@@ -35,3 +35,29 @@ you should be aware of:
  
- rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
- 
--rootfs-iso9660-show-depends:
--	@echo $(ROOTFS_ISO9660_DEPENDENCIES)
--
- ################################################################################
- #
- # Toplevel Makefile options
+ * Buildroot does not currently provide +host-qemu+ and +binfmt+
+   correctly built and set for that kind of use.
++
++==== Live-CD
++
++To build a live-CD image, enable _iso image_ in the _Filesystem images_ menu.
++(This works only on x86 and x86_64.)
++
++You can build a live-CD image with either ISOLINUX or Grub as a bootloader,
++but only ISOLINUX supports using this image with a live-USB drive.
++
++You can test your live-CD image using QEMU:
++
++-------------------
++qemu-system-i386 -cdrom output/images/rootfs.iso9660
++-------------------
++
++Or use it as a hard-drive image if it is an hybrid ISO:
++
++-------------------
++qemu-system-i386 -hda output/images/rootfs.iso9660
++-------------------
++
++It can be easily flashed to an USB drive with +dd+:
++
++-------------------
++dd if=output/images/rootfs.iso9660 of=/dev/sdb
++-------------------
 -- 
 2.1.4
 
