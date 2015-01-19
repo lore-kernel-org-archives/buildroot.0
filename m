@@ -1,231 +1,117 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 21:40:36 +0100
-Subject: [Buildroot] [PATCH 06/11 v5] package/nvidia-driver: add NVidia's
-	OpenGL binary blob
+Date: Mon, 19 Jan 2015 21:40:39 +0100
+Subject: [Buildroot] [PATCH 09/11 v5] package.nvidia-tegra23-binaries: add
+	gstreamer plugins
 In-Reply-To: <cover.1421699898.git.yann.morin.1998@free.fr>
 References: <cover.1421699898.git.yann.morin.1998@free.fr>
-Message-ID: <38defbca2c222a8bbcc2a3bb5a87c2e97282ee6e.1421699898.git.yann.morin.1998@free.fr>
+Message-ID: <eedb32ef50dcfca97e8a1c7b45d97739497b3a2f.1421699898.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch only adds the userland part. Unless other such other packages
-(which we named like: rpi-userland), we do not replicate this naming
-scheme with this package, as a future patch will also enable building
-the kernel part of the driver. So, it is better to just name that
-package with -driver, rather than with -userland and renaming it
-afterwards.
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+[yann.morin.1998 at free.fr: split out into their own patch]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Changes v4 -> v5:
-  - fix libGL.la for stupid libtool
----
- package/Config.in                        |   1 +
- package/nvidia-driver/Config.in          |  51 ++++++++++++++
- package/nvidia-driver/nvidia-driver.hash |   3 +
- package/nvidia-driver/nvidia-driver.mk   | 110 +++++++++++++++++++++++++++++++
- 4 files changed, 165 insertions(+)
- create mode 100644 package/nvidia-driver/Config.in
- create mode 100644 package/nvidia-driver/nvidia-driver.hash
- create mode 100644 package/nvidia-driver/nvidia-driver.mk
+ .../nvidia-tegra23-binaries/Config.in              | 15 +++++++++++
+ .../nvidia-tegra23-binaries.mk                     | 30 ++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 266de13..0ca776e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -351,6 +351,7 @@ endif
- 	source "package/minicom/Config.in"
- 	source "package/nanocom/Config.in"
- 	source "package/neard/Config.in"
-+	source "package/nvidia-driver/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-new file mode 100644
-index 0000000..071e85e
---- /dev/null
-+++ b/package/nvidia-driver/Config.in
-@@ -0,0 +1,51 @@
-+comment "nvidia-driver needs an (e)glibc toolchain and a modular Xorg server"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC \
-+		|| !BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
-+
-+config BR2_PACKAGE_NVIDIA_DRIVER
-+	bool "nvidia-driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
-+	select BR2_PACKAGE_OPENGL_REGISTRY
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+index 568aa4a..49e2751 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+@@ -92,4 +92,19 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI
+ 	default 13 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
+ 	default 14 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
+ 
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
++	bool "GStreamer 0.10.x plugins"
++	depends on BR2_PACKAGE_GSTREAMER # Run-time only
 +	help
-+	  The binary-only driver blob for NVidia cards.
-+	  This is the userland part only.
++	  GStreamer 0.10.x plugins
 +
-+	  http://www.nvidia.com/
-+
-+if BR2_PACKAGE_NVIDIA_DRIVER
-+
-+config BR2_PACKAGE_PROVIDES_LIBGL
-+	default "nvidia-driver"
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "nvidia-driver"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "nvidia-driver"
-+
-+config BR2_PACKAGE_NVIDIA_DRIVER_CUDA
-+	bool "CUDA support"
-+
-+config BR2_PACKAGE_NVIDIA_DRIVER_OPENCL
-+	bool "OpenCL support"
-+	depends on BR2_PACKAGE_NVIDIA_DRIVER_CUDA
-+
-+config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
-+	bool "Install private libraries"
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
++	bool "NVIDIA multimedia sample apps"
++	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
 +	help
-+	  Two libraries require special agreement with NVidia to develop code
-+	  linking to those libraries: libnvidia-ifr.so and libnvidia-fbc.so
-+	  (to grab and encode an OpenGL buffer or an X framebuffer.)
++	  nvgstplayer and nvgstcapture multimedia test applications.
 +
-+	  Say 'y' here if you plan on running a program that uses those
-+	  private libraries.
++comment "GStreamer 0.10.x plugins need GStreamer 0.10"
++	depends on !BR2_PACKAGE_GSTREAMER
 +
-+endif # BR2_PACKAGE_NVIDIA_DRIVER
-diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
-new file mode 100644
-index 0000000..137590f
---- /dev/null
-+++ b/package/nvidia-driver/nvidia-driver.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  bba63c30c730ad7b8500a77c81cae58562b9f9b57cd576b61f37a2d8bc45df25  NVIDIA-Linux-x86-346.35.run
-+sha256  8625acbbc7a2abdda436a5cb9d06f2a7f5913b16e0a35ac4f9f106853a94d086  NVIDIA-Linux-x86_64-346.35.run
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-new file mode 100644
-index 0000000..8ebc503
---- /dev/null
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -0,0 +1,110 @@
-+################################################################################
-+#
-+# nvidia-driver
-+#
-+################################################################################
+ endif
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+index 3fbde96..01284d8 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+@@ -10,6 +10,10 @@ NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARI
+ 
+ NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
+ NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
++NVIDIA_TEGRA23_BINARIES_LICENSE += LGPLv2.1
++NVIDIA_TEGRA23_BINARIES_LICENSE_FILES += nv_tegra/nv_sample_apps/LICENSE.gst-openmax
++endif
+ 
+ NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
+ NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES
+@@ -50,6 +54,11 @@ NVIDIA_TEGRA23_BINARIES_LIBRARIES = \
+ NVIDIA_TEGRA23_BINARIES_DRV = \
+ 	nv_tegra/nvidia_drivers/usr/lib/xorg/modules/drivers/tegra_drv.abi$(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI).so
+ 
++NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS = \
++	libgstnv4l2.so libgstnvvidconv.so libgstnvxvimagesink.so libgstomx.so
 +
-+NVIDIA_DRIVER_VERSION = 346.35
-+NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
-+NVIDIA_DRIVER_SITE = ftp://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
-+NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
-+NVIDIA_DRIVER_LICENSE = NVIDIA Software License
-+NVIDIA_DRIVER_LICENSE_FILES = LICENSE
-+NVIDIA_DRIVER_REDISTRIBUTE = NO
-+NVIDIA_DRIVER_INSTALL_STAGING = YES
++NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS = nvgstplayer nvgstcapture
 +
-+NVIDIA_DRIVER_DEPENDENCIES = opengl-registry xlib_libX11 xlib_libXext
-+NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
-+
-+# We have two variables that contains a list of libraries to install:
-+#   NVIDIA_DRIVER_LIBS
-+#       contains the libraries whose filename end up in .so.$(VERSION); rather
-+#       than duplicate the version string for all of them, we just store their
-+#       basename, and append the version string below.
-+#   NVIDIA_DRIVER_LIBS_NO_VERSION
-+#       contains all libraries the do not use the NVidia version; since there
-+#       is currently only one such library, we store its full name.
-+
-+# Each line corresponds to a specific set of libraries
-+NVIDIA_DRIVER_LIBS = \
-+	libEGL libGLESv1_CM libGLESv2 libGL \
-+	libnvidia-glcore libnvidia-eglcore libnvidia-glsi \
-+	tls/libnvidia-tls \
-+	libvdpau libvdpau_nvidia \
-+	libnvidia-ml
-+
-+ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
-+NVIDIA_DRIVER_LIBS += libcuda libnvidia-compiler libnvcuvid libnvidia-encode
+ NVIDIA_TEGRA23_BINARIES_PKGCONFIG = egl.pc gles.pc glesv2.pc
+ 
+ define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
+@@ -76,12 +85,31 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
+ 	)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
++define NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS
++	$(foreach gst_plug,$(NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),
++		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/lib/gstreamer-0.10/$(gst_plug) \
++			$(1)/usr/lib/gstreamer-0.10/$(gst_plug); \
++	)
++endef
 +endif
 +
-+ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_OPENCL),y)
-+NVIDIA_DRIVER_LIBS_NO_VERSION += libOpenCL.so.1.0.0
-+NVIDIA_DRIVER_LIBS += libnvidia-opencl
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS),y)
++define NVIDIA_TEGRA23_BINARIES_INSTALL_APPS
++	$(foreach apps,$(NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS),
++		$(INSTALL) -D -m 0755 $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/bin/$(apps) \
++			$(TARGET_DIR)/usr/bin/$(apps); \
++	)
++endef
 +endif
 +
-+# Those libraries are 'private' libraries requiring an agreement with
-+# NVidia to develop code for those libs. There seems to be no restriction
-+# on using those libraries (e.g. if the user has such an agreement, or
-+# wants to run a third-party program developped under such an agreement).
-+ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
-+NVIDIA_DRIVER_LIBS += libnvidia-ifr libnvidia-fbc
-+endif
-+
-+# We refer to the destination path; the origin file has no directory component
-+NVIDIA_DRIVER_X_MODS = drivers/nvidia_drv.so \
-+	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
-+	libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
-+
-+# The downloaded archive is in fact an auto-extract script. So, it can run
-+# virtually everywhere, and it is fine enough to provide useful options.
-+# Except it can't extract into an existing (even empty) directory.
-+define NVIDIA_DRIVER_EXTRACT_CMDS
-+	$(SHELL) $(DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only --target \
-+		$(@D)/tmp-extract
-+	mv $(@D)/tmp-extract/* $(@D)/tmp-extract/.manifest $(@D)
-+	rm -rf $(@D)/tmp-extract
-+endef
-+
-+# Helper to install libraries
-+# $1: destination directory (target or staging)
-+#
-+# For all libraries that need it, we append the NVidia version string.
-+# The for all libraries, we install them and create a symlink using their
-+# SONAME, so we can link to them at runtime; we also create the no-version
-+# symlink, so we can link to them at build time.
-+define NVIDIA_DRIVER_INSTALL_LIBS
-+	for lib in $(patsubst %,%.so.$(NVIDIA_DRIVER_VERSION),$(NVIDIA_DRIVER_LIBS)) \
-+	           $(NVIDIA_DRIVER_LIBS_NO_VERSION); \
-+	do \
-+		$(INSTALL) -D -m 0644 $(@D)/$${lib} $(1)/usr/lib/$${lib##*/}; \
-+		n="$$( $(TARGET_READELF) -d "$(@D)/$${lib}" \
-+		       |sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
-+		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
-+			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
-+		fi; \
-+		n="$${lib##*/}"; n="$${n/.so*}.so"; \
-+		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
-+			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
-+		fi; \
-+	done
-+endef
-+
-+# For staging, install libraries and development files
-+define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
-+	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(STAGING_DIR))
-+	$(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
-+	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
-+endef
-+
-+# For target, install libraries and X.org modules
-+define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
-+	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
-+	for m in $(NVIDIA_DRIVER_X_MODS); do \
-+		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
-+			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
-+	done
-+endef
-+
-+$(eval $(generic-package))
+ define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
+ 	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
+ 	$(foreach pkgconfig,$(NVIDIA_TEGRA23_BINARIES_PKGCONFIG),
+ 		$(INSTALL) -D -m 0644 package/nvidia-tegra23/nvidia-tegra23-binaries/$(pkgconfig) \
+ 			$(STAGING_DIR)/usr/lib/pkgconfig/$(pkgconfig); \
+ 	)
++	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(STAGING_DIR))
+ endef
+ 
+ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+@@ -94,6 +122,8 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/etc/nv_tegra_release
+ 	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
+ 		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
++	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(TARGET_DIR))
++	$(NVIDIA_TEGRA23_BINARIES_INSTALL_APPS)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.9.1
