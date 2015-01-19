@@ -1,63 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 23:30:11 +0100
-Subject: [Buildroot] [PATCH 2/2] package/iucode-tool: bump version
-In-Reply-To: <1419156571-12002-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1419156571-12002-1-git-send-email-bernd.kuhls@t-online.de>
- <1419156571-12002-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150119223011.GH4217@free.fr>
+Date: Mon, 19 Jan 2015 23:33:51 +0100
+Subject: [Buildroot] [PATCH] imx6slevk: fix uImage load address
+In-Reply-To: <1421578654-11857-1-git-send-email-gilles.talis@gmail.com>
+References: <1421578654-11857-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20150119223351.GI4217@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Gilles, All,
 
-On 2014-12-21 11:09 +0100, Bernd Kuhls spake thusly:
-> - updated upstream location
->   http://metadata.ftp-master.debian.org/changelogs/contrib/i/iucode-tool/unstable_changelog
->   "iucode-tool (1.0.2-1) unstable; urgency=low
->    [...]
->    * debian/control: update for new upstream location at Gitorious"
+On 2015-01-18 11:57 +0100, Gilles Talis spake thusly:
+> i.MX6 SoloLite SoC has a different external memory base address
+> than the other i.MX6 family SoCs (0x80000000 for i.MX6 SoloLite
+> vs 0x10000000 for the others).
 
-Version 1.1.1 is now available, too. Care to update, please?
-Add me in Cc when respinning, please, so I don;t miss them and can
-review quickly (hopefully).
+Could you share a pointer to the reference for this, please?
+
+It is a bit difficult to ACK such a patch without such areference, for
+those that do not have the board / the SoC.
+
+Of course, the change is pretty obvious, though, so this gets my:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+which you can add when you respin with a reference pointer (unless it
+gets applied in the meantime).
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 > ---
->  package/iucode-tool/Config.in      |    2 +-
->  package/iucode-tool/iucode-tool.mk |    4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  configs/freescale_imx6sololiteevk_defconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
-> index 8f90350..b996b36 100644
-> --- a/package/iucode-tool/Config.in
-> +++ b/package/iucode-tool/Config.in
-> @@ -6,4 +6,4 @@ config BR2_PACKAGE_IUCODE_TOOL
->  	help
->  	  Intel processor microcode tool
+> diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
+> index f8ecc7b..2bb47af 100644
+> --- a/configs/freescale_imx6sololiteevk_defconfig
+> +++ b/configs/freescale_imx6sololiteevk_defconfig
+> @@ -11,7 +11,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+>  BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+> -BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
 >  
-> -	  http://packages.debian.org/source/iucode-tool
-> +	  https://gitorious.org/iucode-tool
-> diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-> index 081b086..44d49d9 100644
-> --- a/package/iucode-tool/iucode-tool.mk
-> +++ b/package/iucode-tool/iucode-tool.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -IUCODE_TOOL_VERSION = v1.0.1
-> -IUCODE_TOOL_SITE = git://git.debian.org/users/hmh/iucode-tool.git
-> +IUCODE_TOOL_VERSION = 1cbd73013cd4c6b2b287f07f6189eef35cb83ca0
-> +IUCODE_TOOL_SITE = git://gitorious.org/iucode-tool/iucode-tool.git
->  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
->  IUCODE_TOOL_CONF_ENV = LIBS="-largp"
->  IUCODE_TOOL_DEPENDENCIES = argp-standalone
 > -- 
 > 1.7.10.4
 > 
