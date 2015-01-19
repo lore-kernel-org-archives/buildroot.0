@@ -1,21 +1,83 @@
-From: Lou Crittenden <loucrittenden63@gmail.com>
-Date: Sun, 18 Jan 2015 22:46:56 -0600
-Subject: [Buildroot] setting up xorg in buildroot
-Message-ID: <CAFGceHEBvOKS3J87otvRnpWWQ=ZNjKBkzrntrf7irfLEzhZA+Q@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Mon, 19 Jan 2015 08:23:32 +0100
+Subject: [Buildroot] [PATCH 1/1] jimtcl: change the way of define
+ JIMTCL_INSTALL_LIB variable
+In-Reply-To: <20150118155414.GN4275@free.fr>
+References: <1421342294-11952-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20150118155414.GN4275@free.fr>
+Message-ID: <54BCB0F4.2050501@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was wondering how to set up X in buildroot to work with the waveshare32b
-display, and to where it will work with the touchscreen we got working
-earlier. I have xorg and xorg-server installed, but when I run it as root,
-it outputs: "*Caught signal 11 (Segmentation fault). Server aborting*" when
-I run it on my raspberry pi. It outputs "server must be suid root", but
-oddly when I run it in a qemu-based raspberry pi emulator, it starts up,
-but I can't use a keyboard or mouse. I was also able to get X to start up
-at boot by editing /etc/init.d/rcs, but with the same symptoms.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150118/c3c7041d/attachment.html>
+Hi Yann,
+
+> Jerzy, All,
+>
+> On 2015-01-15 18:18 +0100, Jerzy Grzegorek spake thusly:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> However, there is something really fishy in _INSTALL_STAGING_CMDS:
+>
+>      define JIMTCL_INSTALL_STAGING_CMDS
+>          for i in $(JIMTCL_HEADERS_TO_INSTALL); do \
+>                  cp -a $(@D)/$$i $(STAGING_DIR)/usr/include/ || exit 1 ; \
+>          done; \
+>          $(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.$(JIMTCL_LIB);
+>          ln -s libjim.$(JIMTCL_LIB) $(STAGING_DIR)/usr/lib/libjim.so
+>      endef
+>
+> In case we're static-only, JIMTCL_LIB=a , so we're linking the static
+> library to the shared one. Surely this is just busted. no?
+
+Yes, indeed.
+
+>
+> While you're at touching jimctl, would you care having a look, please?
+
+OK, will fix.
+Thanks for review.
+
+Regards,
+Jerzy
+  
+
+
+>
+> Thanks! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>>   package/jimtcl/jimtcl.mk |    5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+>> index 75c0382..c2e04ff 100644
+>> --- a/package/jimtcl/jimtcl.mk
+>> +++ b/package/jimtcl/jimtcl.mk
+>> @@ -32,10 +32,11 @@ JIMTCL_INSTALL_LIB =
+>>   else
+>>   JIMTCL_SHARED = --shared
+>>   JIMTCL_LIB = so.$(JIMTCL_VERSION)
+>> -JIMTCL_INSTALL_LIB = \
+>> +define JIMTCL_INSTALL_LIB
+>>   	$(INSTALL) -D $(@D)/libjim.$(JIMTCL_LIB) \
+>> -	$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB); \
+>> +		$(TARGET_DIR)/usr/lib/libjim.$(JIMTCL_LIB)
+>>   	ln -s libjim.$(JIMTCL_LIB) $(TARGET_DIR)/usr/lib/libjim.so
+>> +endef
+>>   endif
+>>   
+>>   define JIMTCL_CONFIGURE_CMDS
+>> -- 
+>> 1.7.9.5
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
