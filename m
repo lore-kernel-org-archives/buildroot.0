@@ -1,107 +1,115 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 21:40:35 +0100
-Subject: [Buildroot] [PATCH 05/11 v5] package/openmax-registry: new package
+Date: Mon, 19 Jan 2015 21:40:41 +0100
+Subject: [Buildroot] [PATCH 11/11 v5] package/nvidia-tegra23-codecs: new
+	package
 In-Reply-To: <cover.1421699898.git.yann.morin.1998@free.fr>
 References: <cover.1421699898.git.yann.morin.1998@free.fr>
-Message-ID: <973d00044e134a2ae3e81af368f6c2e03a11ebaa.1421699898.git.yann.morin.1998@free.fr>
+Message-ID: <7d2c57b65c15c550508c615aa1986420ad1780cb.1421699898.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenMAX Registry provides all OpenMAX headers, directly from the
-Khronos group.
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
-Those headers are needed when an OpenMAX implementation does not
-provide them, like the NVidia binary blob.
+nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
+as: AAC3, h264, jpeg, MP3...
 
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+[me:
+  - split codecs from binaries into this patch
+  - use our extractor helpers
+]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/opengl/khronos-registry/Config.in          |  1 +
- .../khronos-registry/openmax-registry/Config.in    | 20 ++++++++++++++++
- .../openmax-registry/opengl-registry.hash          |  3 +++
- .../openmax-registry/opengl-registry.mk            | 27 ++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
- create mode 100644 package/opengl/khronos-registry/openmax-registry/Config.in
- create mode 100644 package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
- create mode 100644 package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
+ package/nvidia-tegra23/Config.in                   |  1 +
+ .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |  7 ++++
+ .../nvidia-tegra23-codecs.hash                     |  3 ++
+ .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk | 41 ++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
 
-diff --git a/package/opengl/khronos-registry/Config.in b/package/opengl/khronos-registry/Config.in
-index ee550e9..e936b9e 100644
---- a/package/opengl/khronos-registry/Config.in
-+++ b/package/opengl/khronos-registry/Config.in
-@@ -1,3 +1,4 @@
- source "package/opengl/khronos-registry/khrplatform-registry/Config.in"
- source "package/opengl/khronos-registry/openkode-registry/Config.in"
- source "package/opengl/khronos-registry/opengl-registry/Config.in"
-+source "package/opengl/khronos-registry/openmax-registry/Config.in"
-diff --git a/package/opengl/khronos-registry/openmax-registry/Config.in b/package/opengl/khronos-registry/openmax-registry/Config.in
+diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
+index 950f2f8..89bdf83 100644
+--- a/package/nvidia-tegra23/Config.in
++++ b/package/nvidia-tegra23/Config.in
+@@ -28,6 +28,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
+ endchoice
+ 
+ source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
++source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
+ endif
+ 
+ comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
 new file mode 100644
-index 0000000..c9af0bb
+index 0000000..07a8e74
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openmax-registry/Config.in
-@@ -0,0 +1,20 @@
-+# Note: this package has no prompt, because it is to be selected by
-+# packages that need it, and does not make sense on its own.
-+# Further more, we want to avoid it being enabled alongside any other
-+# package that provide their own OpenMAX headers, like rpi-userland...
-+
-+config BR2_PACKAGE_OPENMAX_REGISTRY
-+	bool
-+	select BR2_PACKAGE_KHRPLATFORM_REGISTRY
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
++	bool "nvidia-tegra23 codecs"
++	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
 +	help
-+	  The OpenMAX IL registry contains specifications of the core API;
-+	  specifications of Khronos- and vendor-approved OpenMAX IL extensions;
-+	  header files corresponding to the specifications; and other related
-+	  documentation.
++	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.4.0
 +
-+	  This package installs the OpenMAX header files. You do not need them
-+	  if the OpenMAX implementation provides its own headers.
-+	  Currently, the only known implementation requiring OpenGL Resgistry
-+	  is the NVidia proprietary driver.
-+
-+	  https://www.khronos.org/registry/omxil/
-diff --git a/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash b/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
++	  https://developer.nvidia.com/linux-tegra-rel-16
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
 new file mode 100644
-index 0000000..e2f5014
+index 0000000..de4a461
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openmax-registry/opengl-registry.hash
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
 @@ -0,0 +1,3 @@
-+# Locally computed:
-+sha1   35b2c565a050b4235feac3f22bbbf4bf80092a00                          OpenMAX_IL_1_1_2_Header.zip
-+sha256 9e8aee85f37946202ff15a52836233f983e90a751c0816ba341ba0c1ffedf99e  OpenMAX_IL_1_1_2_Header.zip
-diff --git a/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk b/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
++# From https://developer.nvidia.com/linux-tegra-rel-16
++sha1 d0889bf0ca408583a1e88657c6fd18f3659ef1bb Tegra20_Linux-codecs_R16.4.0_armhf.tbz2
++sha1 a9f298222d3b6a618ef96a6bed9641929b152c8a Tegra30_Linux-codecs_R16.4.0_armhf.tbz2
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
 new file mode 100644
-index 0000000..aecca00
+index 0000000..d05dbb8
 --- /dev/null
-+++ b/package/opengl/khronos-registry/openmax-registry/opengl-registry.mk
-@@ -0,0 +1,27 @@
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+@@ -0,0 +1,41 @@
 +################################################################################
 +#
-+# openmax-registry
++# nvidia-tegra23-codecs
 +#
 +################################################################################
 +
-+# Using last revision at which the 'api' directory was *changed*
-+OPENMAX_REGISTRY_VERSION = 1.1.2
-+OPENMAX_REGISTRY_SOURCE = OpenMAX_IL_$(subst .,_,$(OPENMAX_REGISTRY_VERSION))_Header.zip
-+OPENMAX_REGISTRY_SITE = https://www.khronos.org/registry/omxil/api/$(OPENMAX_REGISTRY_VERSION)
-+OPENMAX_REGISTRY_LICENSE = MIT
++NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
++NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
++NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
++NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
++NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
++NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
++NVIDIA_TEGRA23_CODECS_DEPENDENCIES = nvidia-tegra23-binaries
++NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO
++NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES
 +
-+# The registry only installs header files
-+OPENMAX_REGISTRY_INSTALL_STAGING = YES
-+OPENMAX_REGISTRY_INSTALL_TARGET = NO
++NVIDIA_TEGRA23_CODECS_FIRMWARE = \
++	nvmm_aacdec.axf nvmm_adtsdec.axf nvmm_h264dec.axf nvmm_h264dec2x.axf \
++	nvmm_jpegdec.axf nvmm_jpegenc.axf nvmm_manager.axf nvmm_mp3dec.axf \
++	nvmm_mpeg4dec.axf nvmm_service.axf
 +
-+define OPENMAX_REGISTRY_EXTRACT_CMDS
-+	$(UNZIP) $(DL_DIR)/$(OPENMAX_REGISTRY_SOURCE) -d $(@D)
++# The archive contains an archive with the firmware codecs
++define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
++	$(INSTALL) -d $(@D)
++	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
++		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
++	$(INSTALL) -d $(@D)/restricted_codecs
++	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
++		$(@D)/restricted_codecs.tbz2 | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
 +endef
 +
-+define OPENMAX_REGISTRY_INSTALL_STAGING_CMDS
-+	for h in $(@D)/*.h; do \
-+		$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${h##*/} || exit 1; \
-+	done
++define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
++	$(foreach codec,$(NVIDIA_TEGRA23_CODECS_FIRMWARE),
++		$(INSTALL) -D -m 0644 $(@D)/restricted_codecs/lib/firmware/$(codec) \
++			$(TARGET_DIR)/lib/firmware/$(codec); \
++	)
 +endef
 +
 +$(eval $(generic-package))
