@@ -1,30 +1,27 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Jan 2015 21:43:36 +0100
-Subject: [Buildroot] [PATCH 1/1] nvidia-tegra23: new package
-In-Reply-To: <20150119085120.45433ef6@nserafini-N550JK>
-References: <1415202733-13295-1-git-send-email-nicolas.serafini@sensefly.com>
- <20150118121445.GA4275@free.fr>
- <20150119085120.45433ef6@nserafini-N550JK>
-Message-ID: <20150119204336.GA4217@free.fr>
+Date: Mon, 19 Jan 2015 21:44:16 +0100
+Subject: [Buildroot] [PATCH] package/nettle: bump version
+In-Reply-To: <54BCF8E3.7090106@zacarias.com.ar>
+References: <1421589567-19731-1-git-send-email-yann.morin.1998@free.fr>
+ <54BCF8E3.7090106@zacarias.com.ar>
+Message-ID: <20150119204416.GB4217@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas, All,
+Gustavo, All,
 
-On 2015-01-19 08:51 +0100, Nicolas Serafini spake thusly:
-> Thank you for this patch, I will take time between today and tomorrow to
-> test it on my platform.
+On 2015-01-19 09:30 -0300, Gustavo Zacarias spake thusly:
+> On 01/18/2015 10:59 AM, Yann E. MORIN wrote:
+> 
+> > -NETTLE_VERSION = 2.7.1
+> > +NETTLE_VERSION = 3.0
+> 
+> Careful there, nettle 3 breaks API a bit and gnutls doesn't like it as is.
 
-Just for your information: I've sent an updated version of the series:
-    http://lists.busybox.net/pipermail/buildroot/2015-January/117642.html
-
-That should fix the opengl-registry build issue I had in a minimalist
-environment.
-
-Please test that everything is still on the rails! ;-)
+OK, I'll withdraw that patch, then. Thanks! :-)
 
 Regards,
 Yann E. MORIN.
