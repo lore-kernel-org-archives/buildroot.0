@@ -1,22 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Jan 2015 00:40:09 +0100
-Subject: [Buildroot] [PATCH] radvd: add license info
-In-Reply-To: <1421673770-521-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 19 Jan 2015 10:22:50 -0300")
-References: <1421673770-521-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738769w6e.fsf@dell.be.48ers.dk>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Mon, 19 Jan 2015 17:40:16 -0600
+Subject: [Buildroot] NFS boot
+In-Reply-To: <20150116222247.77a1c18a@free-electrons.com>
+References: <CADKZYYKc9a-2MNu_iS9XUvrh8FPnKQatZbbB4PidvOLVNKgd1g@mail.gmail.com>
+ <20150116222247.77a1c18a@free-electrons.com>
+Message-ID: <CADKZYYJxN5Epg9jaCnVnbHfk1=s6MwY2zPwAAQLVv_=iNJqVyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hello Thomas,
 
- > It's BSD-4c with a few extras, so BSD-4c-like.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I apologize for the delay in replying back to you. The contents of the
+/etc/network/interfaces file are:
 
-Committed, thanks.
+*# Configure Loopback*
+*auto lo*
+*iface lo inet loopback*
+
+*# The primary network interface - use DHCP to find our address*
+*auto eth0*
+*iface eth0 inet dhcp*
+
+I would like to add that I followed this link -
+http://cchia-cwp.blogspot.com/2010/05/running-buildroot-system.html to
+modify the default interfaces file.
+
+Thank you for your help.
+Regards
+
+Santhosh
+
+
+
+On 16 January 2015 at 15:22, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Santhosh Ramani,
+>
+> On Fri, 16 Jan 2015 11:48:08 -0600, Santhosh Ramani wrote:
+>
+> > Later I changed the S40network script on the NFS file system to not start
+> > the network if it's NFS mount and then it worked. S40network is a
+> buildroot
+> > generated script - am I missing something in the config that will
+> generate
+> > the correct S40network script to allow NFS mount as well.
+>
+> What is the contents of your /etc/network/interfaces file?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+
+
 
 -- 
-Bye, Peter Korsgaard
+Greater the Difficulty....Sweeter is the Victory
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150119/677a0b06/attachment.html>
