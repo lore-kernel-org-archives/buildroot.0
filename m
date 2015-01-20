@@ -1,72 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 20 Jan 2015 14:24:21 +0000
-Subject: [Buildroot] [PATCH] lightning: add -lintl only when needed
-Message-ID: <1421763861-38874-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Jan 2015 16:02:57 +0100
+Subject: [Buildroot] NFS boot
+In-Reply-To: <CADKZYYJxN5Epg9jaCnVnbHfk1=s6MwY2zPwAAQLVv_=iNJqVyQ@mail.gmail.com>
+References: <CADKZYYKc9a-2MNu_iS9XUvrh8FPnKQatZbbB4PidvOLVNKgd1g@mail.gmail.com>
+ <20150116222247.77a1c18a@free-electrons.com>
+ <CADKZYYJxN5Epg9jaCnVnbHfk1=s6MwY2zPwAAQLVv_=iNJqVyQ@mail.gmail.com>
+Message-ID: <20150120160257.4d3f53bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding -lintl to LIBS causes a failure in the configure phase when using
-a toolchain which already has locale support because the intl library is
-not present in the staging area. We fix this by adding -lintl only when
-is needed.
+Dear Santhosh Ramani,
 
-This is the configure error:
+On Mon, 19 Jan 2015 17:40:16 -0600, Santhosh Ramani wrote:
 
-checking whether the C compiler works... no
-configure: error: in
-`/br/output/build/lightning-2.0.5':
-configure: error: C compiler cannot create executables
-See `config.log' for more details
+> I apologize for the delay in replying back to you. The contents of the
+> /etc/network/interfaces file are:
+> 
+> *# Configure Loopback*
+> *auto lo*
+> *iface lo inet loopback*
+> 
+> *# The primary network interface - use DHCP to find our address*
+> *auto eth0*
+> *iface eth0 inet dhcp*
 
-This is the message in the config.log:
+Then indeed, if you do DHCP on eth0, your IP address might change
+during the boot process, and your platform running Buildroot is no
+longer able to reach the NFS server.
 
-configure:3351: /br/output/host/usr/bin/mips-linux-gnu-gcc
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-conftest.c -lintl >&5
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/4.9.1/../../../../mips-linux-gnu/bin/ld:
-cannot find -lintl
-collect2: error: ld returned 1 exit status
+See also https://bugs.busybox.net/show_bug.cgi?id=4790.
 
-Fixes:
-  http://autobuild.buildroot.net/results/280/28006ab35379a9b7f380d40b99a760bec1b69e84/
+Best regards,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lightning/Config.in    |    1 +
- package/lightning/lightning.mk |    5 ++++-
- 2 files changed, 5 insertions(+), 1 deletions(-)
-
-diff --git a/package/lightning/Config.in b/package/lightning/Config.in
-index 8caf39f..cd5ab96 100644
---- a/package/lightning/Config.in
-+++ b/package/lightning/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIGHTNING_DISASSEMBLER
- 	bool "enable disassembler"
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on !BR2_aarch64 && !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
- 	help
-diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
-index 00fed73..33831e2 100644
---- a/package/lightning/lightning.mk
-+++ b/package/lightning/lightning.mk
-@@ -17,7 +17,10 @@ ifeq ($(BR2_PACKAGE_LIGHTNING_DISASSEMBLER),y)
- LIGHTNING_DEPENDENCIES += binutils zlib
- LIGHTNING_CONF_OPTS += --enable-disassembler
- # binutils libraries are not explicitly linked against gettext
--LIGHTNING_CONF_ENV += $(if $(BR2_PACKAGE_GETTEXT),LIBS=-lintl)
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+LIGHTNING_DEPENDENCIES += gettext
-+LIGHTNING_CONF_ENV += LIBS=-lintl
-+endif
- endif
- 
- $(eval $(autotools-package))
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
