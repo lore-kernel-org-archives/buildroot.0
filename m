@@ -1,76 +1,90 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 20 Jan 2015 21:41:38 +0100
-Subject: [Buildroot] [PATCH] python-pyxb: new package
-Message-ID: <1421786498-3330-1-git-send-email-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 20 Jan 2015 22:42:50 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/udoo_quad_defconfig: new
+ defconfig
+In-Reply-To: <54BE0BC4.4030707@gmail.com>
+References: <1421533112-5265-1-git-send-email-ivo.slanina@gmail.com>
+ <20150117223246.GH2827@tarshish> <54BBA8CB.9060302@gmail.com>
+ <20150118131032.GH2555@sapphire.tkos.co.il>
+ <54BE0BC4.4030707@gmail.com>
+Message-ID: <20150120204250.GG2146@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                    |  1 +
- package/python-pyxb/Config.in        |  7 +++++++
- package/python-pyxb/python-pyxb.hash |  3 +++
- package/python-pyxb/python-pyxb.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-pyxb/Config.in
- create mode 100644 package/python-pyxb/python-pyxb.hash
- create mode 100644 package/python-pyxb/python-pyxb.mk
+Hi Ivo,
 
-diff --git a/package/Config.in b/package/Config.in
-index 32d6755..5f6ebc2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -545,6 +545,7 @@ menu "external python modules"
- 	source "package/python-pysnmp-apps/Config.in"
- 	source "package/python-pysnmp-mibs/Config.in"
- 	source "package/python-pyusb/Config.in"
-+	source "package/python-pyxb/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
-diff --git a/package/python-pyxb/Config.in b/package/python-pyxb/Config.in
-new file mode 100644
-index 0000000..f122671
---- /dev/null
-+++ b/package/python-pyxb/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYXB
-+	bool "python-pyxb"
-+	help
-+	  PyXB is a pure Python package that generates Python code
-+	  for classes that correspond to data structures defined by XMLSchema.
-+
-+	  http://pyxb.sourceforge.net/
-diff --git a/package/python-pyxb/python-pyxb.hash b/package/python-pyxb/python-pyxb.hash
-new file mode 100644
-index 0000000..6da3abc
---- /dev/null
-+++ b/package/python-pyxb/python-pyxb.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  14ced19ecce51e7cd26434446f9bd6b4e309e91806f1f6fc5e21f4ac736aa0de  python-pyxb-1.2.4.tar.gz
-+
-diff --git a/package/python-pyxb/python-pyxb.mk b/package/python-pyxb/python-pyxb.mk
-new file mode 100644
-index 0000000..bd607b6
---- /dev/null
-+++ b/package/python-pyxb/python-pyxb.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-pyxb
-+#
-+################################################################################
-+
-+PYTHON_PYXB_VERSION = 1.2.4
-+PYTHON_PYXB_SITE = $(call github,pabigot,pyxb,PyXB-$(PYTHON_PYXB_VERSION))
-+PYTHON_PYXB_LICENSE = Apache License 2.0
-+PYTHON_PYXB_LICENSE_FILES = LICENSE
-+PYTHON_PYXB_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+On Tue, Jan 20, 2015 at 09:03:16AM +0100, Ivo Slanina wrote:
+> Thanks for help, I didn't notice device tree source file for UDOO in Linux 
+> sources.
+> But after copying .dtb file into SD card, board still doesn't boot up.
+> 
+> Here is output, what I get:
+> 
+> U-Boot 2013.10-rc3 (Jan 18 2015 - 17:53:27)
+> 
+> CPU:   Freescale i.MX6Q rev1.2 at 792 MHz
+> Reset cause: POR
+> Board: UDOO
+> DRAM:  1 GiB
+> MMC:   FSL_SDHC: 0
+> *** Warning - bad CRC, using default environment
+> 
+> No panel detected: default to LDB-WVGA
+> Display: LDB-WVGA (800x480)
+> In:    serial
+> Out:   serial
+> Err:   serial
+> Net:   using phy at 6
+> FEC [PRIME]
+> Hit any key to stop autoboot:  0 
+> mmc0 is current device
+> ** File not found boot.scr **
+> 5489632 bytes read in 361 ms (14.5 MiB/s)
+> Booting from mmc ...
+> 27547 bytes read in 129 ms (208 KiB/s)
+> ## Booting kernel from Legacy Image at 12000000 ...
+>    Image Name:   Linux-3.18.3
+>    Image Type:   ARM Linux Kernel Image (uncompressed)
+>    Data Size:    5489568 Bytes = 5.2 MiB
+>    Load Address: 10008000
+>    Entry Point:  10008000
+>    Verifying Checksum ... OK
+> ## Flattened Device Tree blob at 11000000
+>    Booting using the fdt blob at 0x11000000
+>    Loading Kernel Image ... OK
+>    Using Device Tree in place at 11000000, end 11009b9a
+> 
+> Starting kernel ... 
+> 
+> It seems to be some trivial problem to me, but I can't fix this by myself.
+> I not really understand uImage load address. I know that at 0x1000000 address
+> starts MMC zone, but I'm not sure what is 0x8000 offset from that address.
+> I took the value from freescale_imx6qsabresd_defconfig.
+> 
+> Please, can you give me some other clue?
+
+This is really quite off topic for this list. I agree with Thomas that if 
+mainline kernel does not work for you for whatever reason, then you should 
+stick with a kernel that works. Yet I think that the reason for choosing 
+something other then mainline kernel should at least appear in the commit log. 
+That is the reason I asked you about it.
+
+I will only say that your next debugging step is called "earlyprintk". See the 
+links below for some more details.
+
+http://nishanthmenon.blogspot.co.il/2010/09/my-kernel-doesnt-boot-magic-of.html 
+http://nothingtechnicalaboutit.blogspot.co.il/2012/02/linux-early-boot-debug.html 
+
+If you have any further questions on kernel bring-up, please direct them to 
+the linux-arm-kernel mailing list 
+(http://lists.infradead.org/mailman/listinfo/linux-arm-kernel).
+
+baruch
+
 -- 
-2.1.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
