@@ -1,41 +1,36 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 12:24:39 +0100
-Subject: [Buildroot] [PATCH 3/3] qt: Force arm mode instead of Thumb1 mode
-In-Reply-To: <1421753079-27665-1-git-send-email-richard.genoud@gmail.com>
-References: <1421753079-27665-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <1421753079-27665-3-git-send-email-richard.genoud@gmail.com>
+Date: Tue, 20 Jan 2015 12:29:53 +0100
+Subject: [Buildroot] [PATCH 1/2] dropbear: install start script only if it
+	doesn't already exists
+Message-ID: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt has some assembly that doesn't exist in thumb1 mode.
-So, force arm mode for Qt
+That way, we can use a different start script in a custom skeleton.
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/qt/qt.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/dropbear/dropbear.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 255d6d2ab0e4..80605ca514d5 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -52,6 +52,14 @@ endif
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 696095dc4f40..ab2456dae0bd 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -54,8 +54,9 @@ endef
  
- endif
- 
-+# Qt has some assembly function that are not present in thumb1 mode:
-+# Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
-+# so, we desactivate thumb mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+QT_CFLAGS += -marm
-+QT_CXXFLAGS += -marm
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
- QT_CONFIGURE_OPTS += -qt3support
+ ifeq ($(BR2_USE_MMU),y)
+ define DROPBEAR_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
+-		$(TARGET_DIR)/etc/init.d/S50dropbear
++	[ -f $(TARGET_DIR)/etc/init.d/S50dropbear ] || \
++		$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
++			$(TARGET_DIR)/etc/init.d/S50dropbear
+ endef
  else
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
 -- 
 2.0.0
