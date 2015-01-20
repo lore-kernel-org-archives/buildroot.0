@@ -1,38 +1,39 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 11:16:02 +0100
-Subject: [Buildroot] [PATCH] infozip: fix compilation with LARGE_FILE_SUPPORT
-Message-ID: <1421748962-838-1-git-send-email-richard.genoud@gmail.com>
+Date: Tue, 20 Jan 2015 11:17:28 +0100
+Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if QT_SHARED
+	is not selected
+Message-ID: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+If Qt is compile as a static library, there's no point compiling qwt as
+a shared library, otherwise, we will have a huge qwt lib and a huge Qt
+application.
+
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/infozip/infozip.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/qwt/qwt.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-index 229299c52f11..d857df6dd3e9 100644
---- a/package/infozip/infozip.mk
-+++ b/package/infozip/infozip.mk
-@@ -14,9 +14,15 @@ ifeq ($(BR2_PACKAGE_BZIP2),y)
- INFOZIP_DEPENDENCIES += bzip2
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index a92d6b4b1540..d783314f7e40 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -32,6 +32,12 @@ else
+ 	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
  endif
  
-+INFOZIP_CFLAGS = -I. -DUNIX
-+
-+ifeq ($(BR2_LARGEFILE),y)
-+INFOZIP_CFLAGS += -DLARGE_FILE_SUPPORT
++ifeq ($(BR2_PACKAGE_QT_SHARED),y)
++	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/QWT_CONFIG += QwtDll/'
++else
++	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/\# QWT_CONFIG += QwtDll/'
 +endif
 +
- define INFOZIP_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		CFLAGS="$(TARGET_CFLAGS) -I. -DUNIX" \
-+		CFLAGS="$(TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
- 		AS="$(TARGET_CC) -c" \
- 		-f unix/Makefile generic
- endef
+ define QWT_CONFIGURE_CMDS
+ 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
 -- 
 2.0.0
