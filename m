@@ -1,8 +1,10 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 12:29:53 +0100
-Subject: [Buildroot] [PATCH 1/2] dropbear: install start script only if it
+Date: Tue, 20 Jan 2015 12:29:54 +0100
+Subject: [Buildroot] [PATCH 2/2] connman: install start script only if it
 	doesn't already exists
-Message-ID: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
+In-Reply-To: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
+References: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
+Message-ID: <1421753394-32029-2-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +15,22 @@ That way, we can use a different start script in a custom skeleton.
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/dropbear/dropbear.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/connman/connman.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 696095dc4f40..ab2456dae0bd 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -54,8 +54,9 @@ endef
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 4d9b03ef1508..108ad848e92c 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -28,7 +28,8 @@ CONNMAN_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
  
- ifeq ($(BR2_USE_MMU),y)
- define DROPBEAR_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
--		$(TARGET_DIR)/etc/init.d/S50dropbear
-+	[ -f $(TARGET_DIR)/etc/init.d/S50dropbear ] || \
-+		$(INSTALL) -D -m 755 package/dropbear/S50dropbear \
-+			$(TARGET_DIR)/etc/init.d/S50dropbear
+ define CONNMAN_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
++	[ -f $(TARGET_DIR)/etc/init.d/S45connman ] || \
++		$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
  endef
- else
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_STANDALONE
+ 
+ 
 -- 
 2.0.0
