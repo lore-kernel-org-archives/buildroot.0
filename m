@@ -1,78 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 20 Jan 2015 23:31:51 +0100
-Subject: [Buildroot] [RFC] python-lxml: new package
-In-Reply-To: <1421792916-8946-1-git-send-email-yegorslists@googlemail.com>
-References: <1421792916-8946-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kv=Dbu5g0pPJmxMNSUeFCu1NETXW3+_PGLH028__0Kk-g@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 20 Jan 2015 23:43:08 +0100
+Subject: [Buildroot] [PATCH v4 1/3] dtc: add host build
+Message-ID: <1421793790-32237-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v3 -> v4:
+  - fix host build/install commands (use PREFIX=$(HOST_DIR)/usr)
+    (suggested by Yann E. MORIN)
 
-On Tue, Jan 20, 2015 at 11:28 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                  |  1 +
->  package/python-lxml/Config.in      |  9 +++++++++
->  package/python-lxml/python-lxml.mk | 16 ++++++++++++++++
->  3 files changed, 26 insertions(+)
->  create mode 100644 package/python-lxml/Config.in
->  create mode 100644 package/python-lxml/python-lxml.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 266de13..366e393 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -519,6 +519,7 @@ menu "external python modules"
->         source "package/python-json-schema-validator/Config.in"
->         source "package/python-keyring/Config.in"
->         source "package/python-libconfig/Config.in"
-> +       source "package/python-lxml/Config.in"
->         source "package/python-mad/Config.in"
->         source "package/python-markdown/Config.in"
->         source "package/python-markupsafe/Config.in"
-> diff --git a/package/python-lxml/Config.in b/package/python-lxml/Config.in
-> new file mode 100644
-> index 0000000..4806073
-> --- /dev/null
-> +++ b/package/python-lxml/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_LXML
-> +       bool "python-lxml"
-> +       select BR2_PACKAGE_LIBXML2
-> +       select BR2_PACKAGE_LIBXSLT
-> +       help
-> +         The lxml XML toolkit is a Pythonic binding for the C libraries
-> +         libxml2 and libxslt.
-> +
-> +         http://lxml.de/
-> diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-> new file mode 100644
-> index 0000000..ec32782
-> --- /dev/null
-> +++ b/package/python-lxml/python-lxml.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# python-lxml
-> +#
-> +################################################################################
-> +
-> +PYTHON_LXML_VERSION = 3.4.1
-> +PYTHON_LXML_SITE = http://lxml.de/files/
-> +PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
-> +PYTHON_LXML_SETUP_TYPE = setuptools
-> +PYTHON_LXML_LICENSE = MIT
-> +PYTHON_LXML_LICENSE_FILES = LICENSE
-> +PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
-> +PYTHON_LXML_BUILD_OPTS = --with-xslt-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xslt-config --with-xml2-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xml2-config
+Changes v2 -> v3:
+  - remove extra HOST_DTC_DEPENDENCIES (suggested by Thomas Petazzoni)
+  - no need for extra CFLAGS setting (suggested by Thomas Petazzoni)
 
-These build options seem to help. I'll test it tomorrow on real
-hardware. Btw. it seems like lxml needs zlib. There is no need for
-host-libxslt.
+Changes v1 -> v2:
+  - fix host build command (use native compiler instead of
+    cross compiler)
+---
+ package/Config.in.host     |  1 +
+ package/dtc/Config.in.host |  9 +++++++++
+ package/dtc/dtc.mk         | 10 ++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/dtc/Config.in.host
 
-Yegor
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 94981ad..6a63e57 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -5,6 +5,7 @@ menu "Host utilities"
+ 	source "package/dfu-util/Config.in.host"
+ 	source "package/dos2unix/Config.in.host"
+ 	source "package/dosfstools/Config.in.host"
++	source "package/dtc/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+diff --git a/package/dtc/Config.in.host b/package/dtc/Config.in.host
+new file mode 100644
+index 0000000..cbabf0a
+--- /dev/null
++++ b/package/dtc/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_DTC
++	bool "host dtc"
++	help
++	  The Device Tree Compiler, dtc, takes as input a device-tree in
++	  a given format and outputs a device-tree in another format.
++
++	  Install host tools: dtc, convert-dtsv0, fdtdump, fdtget and fdtput.
++
++	  https://git.kernel.org/cgit/utils/dtc/dtc.git
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index e094f7b..f3b6f3b 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -44,4 +44,14 @@ define DTC_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
+ endef
+ 
++# host build
++define HOST_DTC_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr
++endef
++
++define HOST_DTC_INSTALL_CMDS
++	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+2.1.2
