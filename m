@@ -1,7 +1,7 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 20 Jan 2015 21:38:55 +0100
-Subject: [Buildroot] [PATCH] python-pysendfile: new package
-Message-ID: <1421786335-3067-1-git-send-email-yegorslists@googlemail.com>
+Date: Tue, 20 Jan 2015 21:41:38 +0100
+Subject: [Buildroot] [PATCH] python-pyxb: new package
+Message-ID: <1421786498-3330-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +10,66 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                                |  1 +
- package/python-pysendfile/Config.in              |  6 ++++++
- package/python-pysendfile/python-pysendfile.hash |  3 +++
- package/python-pysendfile/python-pysendfile.mk   | 13 +++++++++++++
- 4 files changed, 23 insertions(+)
- create mode 100644 package/python-pysendfile/Config.in
- create mode 100644 package/python-pysendfile/python-pysendfile.hash
- create mode 100644 package/python-pysendfile/python-pysendfile.mk
+ package/Config.in                    |  1 +
+ package/python-pyxb/Config.in        |  7 +++++++
+ package/python-pyxb/python-pyxb.hash |  3 +++
+ package/python-pyxb/python-pyxb.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-pyxb/Config.in
+ create mode 100644 package/python-pyxb/python-pyxb.hash
+ create mode 100644 package/python-pyxb/python-pyxb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 266de13..32d6755 100644
+index 32d6755..5f6ebc2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -540,6 +540,7 @@ menu "external python modules"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyro/Config.in"
-+	source "package/python-pysendfile/Config.in"
- 	source "package/python-pysnmp/Config.in"
+@@ -545,6 +545,7 @@ menu "external python modules"
  	source "package/python-pysnmp-apps/Config.in"
  	source "package/python-pysnmp-mibs/Config.in"
-diff --git a/package/python-pysendfile/Config.in b/package/python-pysendfile/Config.in
+ 	source "package/python-pyusb/Config.in"
++	source "package/python-pyxb/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+diff --git a/package/python-pyxb/Config.in b/package/python-pyxb/Config.in
 new file mode 100644
-index 0000000..5a919dd
+index 0000000..f122671
 --- /dev/null
-+++ b/package/python-pysendfile/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYSENDFILE
-+	bool "python-pysendfile"
++++ b/package/python-pyxb/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYXB
++	bool "python-pyxb"
 +	help
-+	  A Python interface to sendfile(2) syscall
++	  PyXB is a pure Python package that generates Python code
++	  for classes that correspond to data structures defined by XMLSchema.
 +
-+	  https://github.com/giampaolo/pysendfile
-diff --git a/package/python-pysendfile/python-pysendfile.hash b/package/python-pysendfile/python-pysendfile.hash
++	  http://pyxb.sourceforge.net/
+diff --git a/package/python-pyxb/python-pyxb.hash b/package/python-pyxb/python-pyxb.hash
 new file mode 100644
-index 0000000..3cedb3f
+index 0000000..6da3abc
 --- /dev/null
-+++ b/package/python-pysendfile/python-pysendfile.hash
++++ b/package/python-pyxb/python-pyxb.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256  f4ca8a7f0be67e3d710c0633dd9aadab6881203c31cb9eb9be4f10361ad3f937  python-pysendfile-2.0.1.tar.gz
++sha256  14ced19ecce51e7cd26434446f9bd6b4e309e91806f1f6fc5e21f4ac736aa0de  python-pyxb-1.2.4.tar.gz
 +
-diff --git a/package/python-pysendfile/python-pysendfile.mk b/package/python-pysendfile/python-pysendfile.mk
+diff --git a/package/python-pyxb/python-pyxb.mk b/package/python-pyxb/python-pyxb.mk
 new file mode 100644
-index 0000000..bb8f057
+index 0000000..bd607b6
 --- /dev/null
-+++ b/package/python-pysendfile/python-pysendfile.mk
++++ b/package/python-pyxb/python-pyxb.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-pysendfile
++# python-pyxb
 +#
 +################################################################################
 +
-+PYTHON_PYSENDFILE_VERSION = 2.0.1
-+PYTHON_PYSENDFILE_SITE = $(call github,giampaolo,pysendfile,release-$(PYTHON_PYSENDFILE_VERSION))
-+PYTHON_PYSENDFILE_SETUP_TYPE = setuptools
-+PYTHON_PYSENDFILE_LICENSE = MIT
-+PYTHON_PYSENDFILE_LICENSE_FILES = LICENSE
++PYTHON_PYXB_VERSION = 1.2.4
++PYTHON_PYXB_SITE = $(call github,pabigot,pyxb,PyXB-$(PYTHON_PYXB_VERSION))
++PYTHON_PYXB_LICENSE = Apache License 2.0
++PYTHON_PYXB_LICENSE_FILES = LICENSE
++PYTHON_PYXB_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
