@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jan 2015 17:41:08 +0100
-Subject: [Buildroot] [PATCH] infozip: fix compilation with
- LARGE_FILE_SUPPORT
-In-Reply-To: <1421748962-838-1-git-send-email-richard.genoud@gmail.com>
-References: <1421748962-838-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <20150120174108.5a6ecd37@free-electrons.com>
+Date: Tue, 20 Jan 2015 17:45:07 +0100
+Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
+ QT_SHARED is not selected
+In-Reply-To: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
+References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
+Message-ID: <20150120174507.1d11ab61@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,38 @@ To: buildroot@busybox.net
 
 Dear Richard Genoud,
 
-On Tue, 20 Jan 2015 11:16:02 +0100, Richard Genoud wrote:
-
-> +INFOZIP_CFLAGS = -I. -DUNIX
-> +
-> +ifeq ($(BR2_LARGEFILE),y)
-> +INFOZIP_CFLAGS += -DLARGE_FILE_SUPPORT
+On Tue, 20 Jan 2015 11:17:28 +0100, Richard Genoud wrote:
+> If Qt is compile as a static library, there's no point compiling qwt as
+> a shared library, otherwise, we will have a huge qwt lib and a huge Qt
+> application.
+> 
+> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+> ---
+>  package/qwt/qwt.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+> index a92d6b4b1540..d783314f7e40 100644
+> --- a/package/qwt/qwt.mk
+> +++ b/package/qwt/qwt.mk
+> @@ -32,6 +32,12 @@ else
+>  	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+> +	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/QWT_CONFIG += QwtDll/'
+> +else
+> +	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/\# QWT_CONFIG += QwtDll/'
 > +endif
 
-Things are not really clear: the INSTALL file from infozip says:
+I think we should get rid of BR2_PACKAGE_QT_SHARED completely, and use
+BR2_STATIC_LIBS here instead.
 
-    This flag should be set automatically on Unix, Win32, and some
-    other ports.  Setting NO_LARGE_FILE_SUPPORT turns this flag off.
+Moreover, we're using Qwt 6.1.0, and this version is in fact compatible
+with both Qt >= 4.4 and Qt >= 5.0, so it should be adapted to this, and
+not use a qt4 specific Config.in option.
 
-So according to this, it should not be necessary to set this flag
-explicitly. However, after a quick look at the unix/configure script, I
-haven't seen any logic doing this. Can you confirm?
+Can you work on this and resend an updated version?
 
 Thanks,
 
