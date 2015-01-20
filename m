@@ -1,31 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 20 Jan 2015 10:54:59 +0200
-Subject: [Buildroot] [PATCH 4/4] boot/syslinux: add host-perl dependency
-In-Reply-To: <1421710198-20898-4-git-send-email-romain.naour@openwide.fr>
-References: <1421710198-20898-1-git-send-email-romain.naour@openwide.fr>
- <1421710198-20898-4-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150120085330.GA2146@tarshish>
+From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
+Date: Tue, 20 Jan 2015 10:02:21 +0100
+Subject: [Buildroot] [PATCH] spidev_test: use the one from the kernel we
+ build
+In-Reply-To: <20150119213258.GD4217@free.fr>
+References: <1421696137-17377-1-git-send-email-vincent.stehle@freescale.com>
+ <20150119211348.GC4217@free.fr> <20150119213258.GD4217@free.fr>
+Message-ID: <54BE199D.7080006@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+On 01/19/2015 10:32 PM, Yann E. MORIN wrote:
+..
+> Anything I missed?
 
-On Tue, Jan 20, 2015 at 12:29:58AM +0100, Romain Naour wrote:
-> Syslinux use a perl interpreter in it's build system,
-> so add host-perl as dependency.
+Hi Yann,
 
-Buildroot expects perl to be installed on the host system already. See ?2.1 
-(Mandatory packages) in the manual. AFAIK host-perl is only used to build perl 
-itself for the target.
+Thanks for your concern.
 
-Have you encountered any specific build failure?
+I am not sure about all those headers and kernel version constrains, sorry.
 
-baruch
+The point of the proposed patch was more to be able to keep both the
+kernel and spidev_test.c in one place, in sync.
+  This is especially useful when fiddling into an SPI driver for
+example, and adapting the userspace test in the mean time.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Do you think the patch needs to be further modified?
+
+Best regards,
+
+V.
