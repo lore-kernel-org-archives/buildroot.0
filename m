@@ -1,33 +1,58 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 11:17:29 +0100
-Subject: [Buildroot] [PATCH 2/2] qwt: add license information
-In-Reply-To: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
-References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <1421749049-1431-2-git-send-email-richard.genoud@gmail.com>
+Date: Tue, 20 Jan 2015 11:49:11 +0100
+Subject: [Buildroot] [PATCH] qt: add QT_COORD_TYPE to double option
+Message-ID: <1421750951-28114-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Julien D'Ascenzio <jdascenzio@paratronic.fr>
+
+On ARM-based platforms, qreal is a typedef for float for performance
+reasons.
+But we may want a double precision anyway.
+
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/qwt/qwt.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/qt/Config.in | 7 +++++++
+ package/qt/qt.mk     | 5 +++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index d783314f7e40..b843618aa6fe 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -10,6 +10,9 @@ QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
- QWT_DEPENDENCIES = qt
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 44710f52e627..fbc068b360b9 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -88,6 +88,13 @@ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	  This option allows to set the path of such a configuration
+ 	  file, which Buildroot will give to Qt at compile time.
  
-+QWT_LICENSE = LGPLv2.1 with exceptions
-+QWT_LICENSE_FILES = COPYING
++config BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE
++	bool "QT_COORD_TYPE to double"
++	help
++	  Set QT_COORD_TYPE to double
++	  On ARM-based platforms, qreal is a typedef for float for performance reasons.
++	  If unsure say n.
 +
- QWT_CONFIG = 's%QWT_INSTALL_PREFIX.*/usr/local/.*%QWT_INSTALL_PREFIX = /usr%'
- QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDesigner.*$$/\# QWT_CONFIG += QwtDesigner/'
- QWT_CONFIG += -e 's%/features%/mkspecs/features%'
+ config BR2_PACKAGE_QT_QT3SUPPORT
+ 	bool "Compatibility with Qt3"
+ 	depends on BR2_PACKAGE_QT_GUI_MODULE
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 98fc0e65f9c0..8fbbd63521c3 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -60,6 +60,11 @@ QT_CFLAGS+=-marm
+ QT_CXXFLAGS+=-marm
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE),y)
++QT_CFLAGS += -DQT_COORD_TYPE=double
++QT_CXXFLAGS += -DQT_COORD_TYPE=double
++endif
++
+ ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
+ QT_CONFIGURE_OPTS += -qt3support
+ else
 -- 
 2.0.0
