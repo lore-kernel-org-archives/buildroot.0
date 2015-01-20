@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jan 2015 16:56:17 +0100
-Subject: [Buildroot] Change package version in buildroot.
-In-Reply-To: <54BE1A0E.8000004@gmail.com>
-References: <54BE1A0E.8000004@gmail.com>
-Message-ID: <20150120165617.669d2e02@free-electrons.com>
+Date: Tue, 20 Jan 2015 17:01:16 +0100
+Subject: [Buildroot] [git commit] qextserialport: add license file
+Message-ID: <20150120160220.4AEB6801A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Piotr Rudzki,
+commit: http://git.buildroot.net/buildroot/commit/?id=58c5022029e58a59f7504a781240c80b4f03a3a1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Jan 2015 10:04:14 +0100, Piotr Rudzki wrote:
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qextserialport/qextserialport.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-> I'm trying to change version of package in buildroot. I've copied files
-> from package/squashfs to proper path in $BR2_EXTERNAL and changed
-> version of sources to 4.2.
-
-This is not supported. The $BR2_EXTERNAL mechanism can only be used to
-add distinct packages from the ones available in Buildroot itself. You
-cannot use it to override packages that exist in Buildroot with the
-same name.
-
-Possible solutions are:
-
- *) Create a new package with a different name in your $BR2_EXTERNAL
-    directory.
-
- *) Change Buildroot itself, and keep your changes in a separate branch.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 2949da9..61f7b05 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -9,6 +9,7 @@ QEXTSERIALPORT_SITE = https://qextserialport.googlecode.com/git
+ QEXTSERIALPORT_SITE_METHOD = git
+ 
+ QEXTSERIALPORT_LICENSE = MIT
++QEXTSERIALPORT_LICENSE_FILES = LICENSE
+ 
+ QEXTSERIALPORT_INSTALL_STAGING = YES
+ 
