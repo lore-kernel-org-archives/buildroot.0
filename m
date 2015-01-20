@@ -1,36 +1,58 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 12:29:54 +0100
-Subject: [Buildroot] [PATCH 2/2] connman: install start script only if it
-	doesn't already exists
-In-Reply-To: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
-References: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <1421753394-32029-2-git-send-email-richard.genoud@gmail.com>
+Date: Tue, 20 Jan 2015 12:38:35 +0100
+Subject: [Buildroot] [PATCH] busybox: S01logging: implement restart
+Message-ID: <1421753915-4313-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That way, we can use a different start script in a custom skeleton.
+restart wasn't doing anything, and the expected behaviour is stop/start.
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/connman/connman.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/busybox/S01logging | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 4d9b03ef1508..108ad848e92c 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -28,7 +28,8 @@ CONNMAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
+diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+index b7af2a7d5dbc..29093707888e 100644
+--- a/package/busybox/S01logging
++++ b/package/busybox/S01logging
+@@ -3,20 +3,30 @@
+ # Start logging
+ #
  
- define CONNMAN_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
-+	[ -f $(TARGET_DIR)/etc/init.d/S45connman ] || \
-+		$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
- endef
- 
- 
+-case "$1" in
+-  start)
++start() {
+ 	echo -n "Starting logging: "
+ 	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
+ 	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
+ 	echo "OK"
+-	;;
+-  stop)
++}
++
++stop() {
+ 	echo -n "Stopping logging: "
+ 	start-stop-daemon -K -q -p /var/run/syslogd.pid
+ 	start-stop-daemon -K -q -p /var/run/klogd.pid
+ 	echo "OK"
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
+ 	;;
+   restart|reload)
++	stop
++	start
+ 	;;
+   *)
+ 	echo "Usage: $0 {start|stop|restart}"
 -- 
 2.0.0
