@@ -1,80 +1,51 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue, 20 Jan 2015 14:36:37 +0100
-Subject: [Buildroot] [PATCH] lightning: Add a patch to fix PPC build when
-	disassembler is enabled
-Message-ID: <1421760997-31684-1-git-send-email-paul@crapouillou.net>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 20 Jan 2015 14:51:40 +0100
+Subject: [Buildroot] [PATCH 04/11 v5] package/opengl-registry: new
+	package
+In-Reply-To: <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
+References: <cover.1421699898.git.yann.morin.1998@free.fr>
+ <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
+Message-ID: <1509892.j25xWyjvC8@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is backported from upstream.
+Hello Yann,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- .../0002-ppc-disassembler-build-fix.patch          | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/lightning/0002-ppc-disassembler-build-fix.patch
+On Monday 19 January 2015 21:40:34 Yann E. MORIN wrote:
+> The OpenGL Registry provides all GL headers, save for gl.h itself. We
+> vampirise the one from mesa3d (at the version we currently package),
+> which is as good as any other.
+> 
+> Those headers are needed when an OpenGL/EGL/GLES implementation does
+> not provide its own headers, like the NVidia binary blob (to come in
+> follow-up patches.)
+> 
+> Note that, even though this is a generic package, and we could
+> everything in the BUILD_CMDS, we decided to split the tweaking of glx.h
+> in a post-build script, to really make it clear we are tweaking a
+> generated file.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[...]
 
-diff --git a/package/lightning/0002-ppc-disassembler-build-fix.patch b/package/lightning/0002-ppc-disassembler-build-fix.patch
-new file mode 100644
-index 0000000..4c812b3
---- /dev/null
-+++ b/package/lightning/0002-ppc-disassembler-build-fix.patch
-@@ -0,0 +1,53 @@
-+From 361caf28545aa0c2b2ab8d1cbd334fbdd952f373 Mon Sep 17 00:00:00 2001
-+From: Paulo Andrade <pcpa@gnu.org>
-+Date: Thu, 15 Jan 2015 14:56:38 -0200
-+Subject: [PATCH 4/4] PPC: Only call binutils function if it is available
-+
-+	* configure.ac, lib/jit_disasm.c: Rewrite workaround
-+	to apparent problem to initialize powerpc disassembler.
-+---
-+diff --git a/configure.ac b/configure.ac
-+index 749659b..d26e777 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -230,6 +230,13 @@ elif test $cpu = arm; then
-+ 	return 1;
-+     }
-+     ]])],[ac_cv_test_arm_swf=yes],[],[ac_cv_test_arm_swf=no])
-++elif test $cpu = ppc; then
-++    if test "x$DISASSEMBLER" != "xno"; then
-++	save_LIBS="$LIBS"
-++	LIBS="$LIBS $SHLIB"
-++	AC_CHECK_FUNCS(disassemble_init_for_target disassemble_init_powerpc)
-++	LIBS="$save_LIBS"
-++    fi
-+ fi
-+ CFLAGS=$save_CFLAGS
-+ 
-+diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
-+index 01158de..86e5441 100644
-+--- a/lib/jit_disasm.c
-++++ b/lib/jit_disasm.c
-+@@ -91,11 +91,19 @@ jit_init_debug(const char *progname)
-+ #  if defined(__powerpc__)
-+     disasm_info.arch = bfd_arch_powerpc;
-+     disasm_info.mach = bfd_mach_ppc64;
-++#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
-++    disassemble_init_for_target(&disasm_info);
-++#    elif HAVE_DISASSEMBLE_INIT_POWERPC
-+     disassemble_init_powerpc(&disasm_info);
-++#    endif
-+ #    if defined(__powerpc64__)
-+     disasm_info.disassembler_options = "64";
-+ #    endif
-++#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
-++    disassemble_init_for_target(&disasm_info);
-++#    elif HAVE_DISASSEMBLE_INIT_POWERPC
-+     disassemble_init_powerpc(&disasm_info);
-++#    endif
-+ #  endif
-+ #  if defined(__sparc__)
-+     disasm_info.endian = disasm_info.display_endian = BFD_ENDIAN_BIG;
-+-- 
-+2.1.4
-+
+> +# Always install gl.h since the others may depend on it, and
+> +# we are sure at least one OpenGL variants will be installed.
+> +define OPENGL_REGISTRY_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0644 package/opengl/khronos-registry/opengl-registry/gl.h \
+> +		   $(STAGING_DIR)/usr/include/GL/gl.h
+> +	for d in $(OPENGL_REGISTRY_DIRS); do \
+> +		for h in $(@D)/$${d}/*.h; do \
+> +			$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${d}/$${h##*/} \
+> +			|| exit 1; \
+> +		done \
+> +	done
+> +endef
+I think we should also provide gl.pc, egl.pc, glesv1_cm.pc, etc... no?
+
 -- 
-2.1.4
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
