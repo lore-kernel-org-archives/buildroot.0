@@ -1,7 +1,7 @@
 From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 11:15:06 +0100
-Subject: [Buildroot] [PATCH] iperf: add license information
-Message-ID: <1421748906-417-1-git-send-email-richard.genoud@gmail.com>
+Date: Tue, 20 Jan 2015 11:16:02 +0100
+Subject: [Buildroot] [PATCH] infozip: fix compilation with LARGE_FILE_SUPPORT
+Message-ID: <1421748962-838-1-git-send-email-richard.genoud@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +10,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- package/iperf/iperf.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/infozip/infozip.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index 2947e5241974..4ec56e0f2c23 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
-@@ -6,6 +6,7 @@
+diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
+index 229299c52f11..d857df6dd3e9 100644
+--- a/package/infozip/infozip.mk
++++ b/package/infozip/infozip.mk
+@@ -14,9 +14,15 @@ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ INFOZIP_DEPENDENCIES += bzip2
+ endif
  
- IPERF_VERSION = 2.0.5
- IPERF_SITE = http://downloads.sourceforge.net/project/iperf
-+IPERF_LICENSE_FILES = COPYING
- 
- IPERF_CONF_ENV = \
- 	ac_cv_func_malloc_0_nonnull=yes \
++INFOZIP_CFLAGS = -I. -DUNIX
++
++ifeq ($(BR2_LARGEFILE),y)
++INFOZIP_CFLAGS += -DLARGE_FILE_SUPPORT
++endif
++
+ define INFOZIP_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		CFLAGS="$(TARGET_CFLAGS) -I. -DUNIX" \
++		CFLAGS="$(TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
+ 		AS="$(TARGET_CC) -c" \
+ 		-f unix/Makefile generic
+ endef
 -- 
 2.0.0
