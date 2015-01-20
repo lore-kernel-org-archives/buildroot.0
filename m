@@ -1,58 +1,80 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Tue, 20 Jan 2015 12:38:35 +0100
-Subject: [Buildroot] [PATCH] busybox: S01logging: implement restart
-Message-ID: <1421753915-4313-1-git-send-email-richard.genoud@gmail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue, 20 Jan 2015 14:36:37 +0100
+Subject: [Buildroot] [PATCH] lightning: Add a patch to fix PPC build when
+	disassembler is enabled
+Message-ID: <1421760997-31684-1-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-restart wasn't doing anything, and the expected behaviour is stop/start.
+This patch is backported from upstream.
 
-Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/busybox/S01logging | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ .../0002-ppc-disassembler-build-fix.patch          | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/lightning/0002-ppc-disassembler-build-fix.patch
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index b7af2a7d5dbc..29093707888e 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -3,20 +3,30 @@
- # Start logging
- #
- 
--case "$1" in
--  start)
-+start() {
- 	echo -n "Starting logging: "
- 	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
- 	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
- 	echo "OK"
--	;;
--  stop)
-+}
+diff --git a/package/lightning/0002-ppc-disassembler-build-fix.patch b/package/lightning/0002-ppc-disassembler-build-fix.patch
+new file mode 100644
+index 0000000..4c812b3
+--- /dev/null
++++ b/package/lightning/0002-ppc-disassembler-build-fix.patch
+@@ -0,0 +1,53 @@
++From 361caf28545aa0c2b2ab8d1cbd334fbdd952f373 Mon Sep 17 00:00:00 2001
++From: Paulo Andrade <pcpa@gnu.org>
++Date: Thu, 15 Jan 2015 14:56:38 -0200
++Subject: [PATCH 4/4] PPC: Only call binutils function if it is available
 +
-+stop() {
- 	echo -n "Stopping logging: "
- 	start-stop-daemon -K -q -p /var/run/syslogd.pid
- 	start-stop-daemon -K -q -p /var/run/klogd.pid
- 	echo "OK"
-+}
++	* configure.ac, lib/jit_disasm.c: Rewrite workaround
++	to apparent problem to initialize powerpc disassembler.
++---
++diff --git a/configure.ac b/configure.ac
++index 749659b..d26e777 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -230,6 +230,13 @@ elif test $cpu = arm; then
++ 	return 1;
++     }
++     ]])],[ac_cv_test_arm_swf=yes],[],[ac_cv_test_arm_swf=no])
+++elif test $cpu = ppc; then
+++    if test "x$DISASSEMBLER" != "xno"; then
+++	save_LIBS="$LIBS"
+++	LIBS="$LIBS $SHLIB"
+++	AC_CHECK_FUNCS(disassemble_init_for_target disassemble_init_powerpc)
+++	LIBS="$save_LIBS"
+++    fi
++ fi
++ CFLAGS=$save_CFLAGS
++ 
++diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
++index 01158de..86e5441 100644
++--- a/lib/jit_disasm.c
+++++ b/lib/jit_disasm.c
++@@ -91,11 +91,19 @@ jit_init_debug(const char *progname)
++ #  if defined(__powerpc__)
++     disasm_info.arch = bfd_arch_powerpc;
++     disasm_info.mach = bfd_mach_ppc64;
+++#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
+++    disassemble_init_for_target(&disasm_info);
+++#    elif HAVE_DISASSEMBLE_INIT_POWERPC
++     disassemble_init_powerpc(&disasm_info);
+++#    endif
++ #    if defined(__powerpc64__)
++     disasm_info.disassembler_options = "64";
++ #    endif
+++#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
+++    disassemble_init_for_target(&disasm_info);
+++#    elif HAVE_DISASSEMBLE_INIT_POWERPC
++     disassemble_init_powerpc(&disasm_info);
+++#    endif
++ #  endif
++ #  if defined(__sparc__)
++     disasm_info.endian = disasm_info.display_endian = BFD_ENDIAN_BIG;
++-- 
++2.1.4
 +
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
- 	;;
-   restart|reload)
-+	stop
-+	start
- 	;;
-   *)
- 	echo "Usage: $0 {start|stop|restart}"
 -- 
-2.0.0
+2.1.4
