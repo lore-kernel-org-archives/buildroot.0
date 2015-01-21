@@ -1,119 +1,111 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Jan 2015 09:21:42 -0300
-Subject: [Buildroot] [PATCH] redis: bump to version 2.8.19
-Message-ID: <1421842902-2410-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 21 Jan 2015 10:35:21 -0300
+Subject: [Buildroot] [PATCH] olsr: bump to version 0.6.8
+Message-ID: <1421847321-6463-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash file.
-Drop redis-002-lua-AR.patch (upstream).
-Rename patches to new naming convention.
+Also:
+
+* Add hash file
+* Rename patch to new naming convention
+* Revamp/cleanup initscript
+* Install sample config to the correct location
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../{redis-001-uclibc.patch => 0001-uclibc.patch}  |  0
- ...tch => 0002-largefile-conditional-define.patch} |  0
- package/redis/Config.in                            |  6 ++--
- package/redis/redis-002-lua-AR.patch               | 32 ----------------------
- package/redis/redis.hash                           |  2 ++
- package/redis/redis.mk                             |  2 +-
- 6 files changed, 7 insertions(+), 35 deletions(-)
- rename package/redis/{redis-001-uclibc.patch => 0001-uclibc.patch} (100%)
- rename package/redis/{redis-003-largefile-conditional-define.patch => 0002-largefile-conditional-define.patch} (100%)
- delete mode 100644 package/redis/redis-002-lua-AR.patch
- create mode 100644 package/redis/redis.hash
+ ...nfig.patch => 0001-configurable-ldconfig.patch} |  0
+ package/olsr/S50olsr                               | 26 ++++++++++++----------
+ package/olsr/olsr.hash                             |  2 ++
+ package/olsr/olsr.mk                               |  9 ++++----
+ 4 files changed, 21 insertions(+), 16 deletions(-)
+ rename package/olsr/{olsr-configurable-ldconfig.patch => 0001-configurable-ldconfig.patch} (100%)
+ create mode 100644 package/olsr/olsr.hash
 
-diff --git a/package/redis/redis-001-uclibc.patch b/package/redis/0001-uclibc.patch
+diff --git a/package/olsr/olsr-configurable-ldconfig.patch b/package/olsr/0001-configurable-ldconfig.patch
 similarity index 100%
-rename from package/redis/redis-001-uclibc.patch
-rename to package/redis/0001-uclibc.patch
-diff --git a/package/redis/redis-003-largefile-conditional-define.patch b/package/redis/0002-largefile-conditional-define.patch
-similarity index 100%
-rename from package/redis/redis-003-largefile-conditional-define.patch
-rename to package/redis/0002-largefile-conditional-define.patch
-diff --git a/package/redis/Config.in b/package/redis/Config.in
-index b370e7d..d2a7556 100644
---- a/package/redis/Config.in
-+++ b/package/redis/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_REDIS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_LARGEFILE
-+	depends on BR2_INET_IPV6
- 	help
- 	  Redis is an open source, advanced key-value store. It is
- 	  often referred to as a data structure server since keys can
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_REDIS
+rename from package/olsr/olsr-configurable-ldconfig.patch
+rename to package/olsr/0001-configurable-ldconfig.patch
+diff --git a/package/olsr/S50olsr b/package/olsr/S50olsr
+index 9f052da..b79aa79 100755
+--- a/package/olsr/S50olsr
++++ b/package/olsr/S50olsr
+@@ -1,21 +1,23 @@
+ #!/bin/sh
+-#
+-# Starts OLSRD daemon
+-#
  
- 	  http://www.redis.io
+ case "$1" in
+   start)
+-  	echo "Starting OLSRd daemon: "
+-	/usr/sbin/olsrd -d 0
+-	;;
++    echo -n "Starting oslrd daemon: "
++    start-stop-daemon -S -q -x /usr/sbin/olsrd -- -d 0 -pidfile /run/olsrd.pid
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
+   stop)
+-  	echo "Stopping OLSRd daemon: "
+-	killall olsrd
+-	;;
++    echo -n "Stopping olsrd daemon: "
++    start-stop-daemon -K -q -p /run/olsrd.pid
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++  restart)
++    $0 stop
++    $0 start
++    ;;
+   *)
+-	echo "Usage: $0 {start|stop}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
+ esac
  
--comment "redis needs a toolchain w/ largefile, threads"
-+comment "redis needs a toolchain w/ IPv6, largefile, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INET_IPV6
-diff --git a/package/redis/redis-002-lua-AR.patch b/package/redis/redis-002-lua-AR.patch
-deleted file mode 100644
-index 68ee70c..0000000
---- a/package/redis/redis-002-lua-AR.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
+ exit $?
 -
--redis-002-lua-AR.patch: Improve redis Makefiles to handle Lua's unusual
--definition of AR.  Patch originates from:
--
--  Define AR to help with lua cross-compilation
--  https://github.com/antirez/redis/pull/997
--  Daniel Price, daniel.price at gmail.com
--
--Signed-off-by: Daniel Price <daniel.price@gmail.com>
--
--=========================================================================
--diff --git a/deps/Makefile b/deps/Makefile
--index d58ee56..c9d7116 100644
----- a/deps/Makefile
--+++ b/deps/Makefile
--@@ -60,10 +60,15 @@ endif
-- 
-- LUA_CFLAGS+= -O2 -Wall -DLUA_ANSI $(CFLAGS)
-- LUA_LDFLAGS+= $(LDFLAGS)
--+# lua's Makefile defines AR="ar rcu", which is unusual, and makes it more
--+# challenging to cross-compile lua (and redis).  These defines make it easier
--+# to fit redis into cross-compilation environments, which typically set AR.
--+AR = ar
--+ARFLAGS = rcu
-- 
-- lua: .make-prerequisites
-- 	@printf '%b %b\n' $(MAKECOLOR)MAKE$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR)
---	cd lua/src && $(MAKE) all CFLAGS="$(LUA_CFLAGS)" MYLDFLAGS="$(LUA_LDFLAGS)"
--+	cd lua/src && $(MAKE) all CFLAGS="$(LUA_CFLAGS)" MYLDFLAGS="$(LUA_LDFLAGS)" AR="$(AR) $(ARFLAGS)"
-- 
-- .PHONY: lua
-- 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+diff --git a/package/olsr/olsr.hash b/package/olsr/olsr.hash
 new file mode 100644
-index 0000000..5f91766
+index 0000000..5b8abc7
 --- /dev/null
-+++ b/package/redis/redis.hash
++++ b/package/olsr/olsr.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	29bb08abfc3d392b2f0c3e7f48ec46dd09ab1023f9a5575fc2a93546f4ca5145	redis-2.8.19.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 00490e7..4cad061 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
++# From http://www.olsr.org/releases/0.6/SHA256SUM-0.6.8
++sha256	692de2eb144f0be2e1dfc5dc5275b6c61b80af080e8f733e0b26b6a860442d27	olsrd-0.6.8.tar.bz2
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 539386d..7e28b1e 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--REDIS_VERSION = 2.6.17
-+REDIS_VERSION = 2.8.19
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ OLSR_VERSION_MAJOR = 0.6
+-OLSR_VERSION = $(OLSR_VERSION_MAJOR).6.2
++OLSR_VERSION = $(OLSR_VERSION_MAJOR).8
+ OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
+ OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
+ OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
+@@ -31,12 +31,13 @@ define OLSR_INSTALL_TARGET_CMDS
+ 			LDCONFIG=/bin/true DESTDIR=$(TARGET_DIR) \
+ 			prefix="/usr" install ; \
+ 	done
+-	test -r $(TARGET_DIR)/etc/olsrd.conf || \
+-		$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq $(TARGET_DIR)/etc/olsrd.conf
++	$(INSTALL) -D -m 0644 $(@D)/files/olsrd.conf.default.lq \
++		$(TARGET_DIR)/etc/olsrd/olsrd.conf
+ endef
+ 
+ define OLSR_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 0755 package/olsr/S50olsr $(TARGET_DIR)/etc/init.d/S50olsr
++	$(INSTALL) -D -m 0755 package/olsr/S50olsr \
++		$(TARGET_DIR)/etc/init.d/S50olsr
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.0.5
