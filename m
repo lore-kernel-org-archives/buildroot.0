@@ -1,30 +1,39 @@
-From: Ben Ben <carmazen84@gmail.com>
-Date: Wed, 21 Jan 2015 11:39:03 +0100
-Subject: [Buildroot]  [PATCH 1/1] nvidia-tegra23: new package
-Message-ID: <CA+GxxTdWyTkj+HJWr8J0Zf7p3Gm7JgVcd6_msqJF9yvN-WSAMQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 Jan 2015 08:15:53 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.8.1
+Message-ID: <1421838953-26640-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I tried this patch directly from git://git.busybox.net/~ymorin/git/buildroot
-yem/gfx
-
-I got some header problems with opengl.
-Qt5 looking for sysroot/usr/include/GLES/gl2platform.h and can't find it.
-
-I tried with mesa3d instead of tegra driver. That's works fine.
-
-I assume that this header should come with opengl-registery ?
-
-I have tegra3 platform, nvidia-tergra23 binaries and codecs are selected.
-X11 ABI 14 version.
-
-Best regards,
-Benoit.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150121/3010ea77/attachment.html>
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index def3b30..f282da7 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,2 +1,2 @@
+ # From http://www.sqlite.org/download.html
+-sha1	abb7570b7e331ffede7f40f0037be6e0c03b73af	sqlite-autoconf-3080800.tar.gz
++sha1	a140e3ada8a91a7bacf7a58cfd8f5f0e76796258	sqlite-autoconf-3080801.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index c1baae3..9207c5c 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3080800
++SQLITE_VERSION = 3080801
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
+-- 
+2.0.5
