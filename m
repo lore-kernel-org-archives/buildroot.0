@@ -1,71 +1,58 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 22 Jan 2015 00:07:46 +0100
-Subject: [Buildroot] [PATCH try 4] wine: New package
-In-Reply-To: <54BED214.6080601@dawncrow.de>
-References: <54BED214.6080601@dawncrow.de>
-Message-ID: <54C03142.4010105@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 22 Jan 2015 00:09:47 +0100
+Subject: [Buildroot] [RFC v2] python-lxml: add target package variant
+In-Reply-To: <1421871981-3146-1-git-send-email-yegorslists@googlemail.com>
+References: <1421871981-3146-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20150121230947.GL4375@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andr?,
+Yegor, All,
 
-Le 20/01/2015 23:09, Andr? Hentschel a ?crit :
-> Adds new package: wine
-> 
->   Wine is a compatibility layer capable of running Windows applications on Linux.
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
-> I hope i addressed all the comments in the correct manner
-> try 2: Fix issue spotted by baruch
-> try 3: Added comments, added hash file, fixed X11 check, depend on internal toolchain, added bison and flex to host dependencies
-> try 4: instead of depending on internal toolchains add the expected tuple via --host
-> 
->  package/Config.in      |   1 +
->  package/wine/Config.in |  21 ++++
->  package/wine/wine.hash |   2 +
->  package/wine/wine.mk   | 270 +++++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 294 insertions(+)
-> 
+On 2015-01-21 21:26 +0100, Yegor Yefremov spake thusly:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[--SNIP--]
+> diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+> index 758ce87..a7f072f 100644
+> --- a/package/python-lxml/python-lxml.mk
+> +++ b/package/python-lxml/python-lxml.mk
+> @@ -20,6 +20,13 @@ PYTHON_LXML_LICENSE_FILES = \
+>  # So, we use setuptools.
+>  PYTHON_LXML_SETUP_TYPE = setuptools
+>  
+> -PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
+> +PYTHON_LXML_DEPENDENCIES = libxml2 libxslt zlib
 
-[...]
+OK, I did not need zlib for the host variant, so we'll have to
+differentiate the host dependencies and the target ones. I'll do
+that.
 
-> +
-> +# To support freetype in wine we also need freetype in host-wine for the cross compiling tools
-> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
-> +	WINE_CONF_OPTS += --with-freetype
-> +	HOST_WINE_CONF_OPTS += --with-freetype
-> +	WINE_DEPENDENCIES += freetype
-> +	HOST_WINE_DEPENDENCIES += host-freetype
-> +else
-> +	WINE_CONF_OPTS += --without-freetype
-> +	HOST_WINE_CONF_OPTS += --without-freetype
-> +endif
+> +# python-lxml needs these scripts in order to properly detect libxml2 and
+> +# libxslt compiler and linker flags
+> +PYTHON_LXML_BUILD_OPTS = \
+> +	--with-xslt-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xslt-config \
+> +	--with-xml2-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xml2-config
 
-I'm building your wine package on my 64bits host and the build fail
-because freetype library in HOST_DIR is build for it, but wine is
-build for 32bits host.
+Well, there's much simpler: $(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot
+is exactly what we call $(STAGING_DIR).
 
-see my config.log output:
-configure:10886: checking for -lfreetype
-configure:10911: /usr/bin/gcc -m32 -o conftest -O2 -I/home/naourr/git/buildroot/test/wine/host/usr/include -I/home/naourr/git/buildroot/test/wine/host/usr/include -I/home/naourr/git/buildroot/test/wine/host/usr/include/freetype2   -L/home/naourr/git/buildroot/test/wine/host/lib -L/home/naourr/git/buildroot/test/wine/host/usr/lib -Wl,-rpath,/home/naourr/git/buildroot/test/wine/host/usr/lib conftest.c -lfreetype -L/home/naourr/git/buildroot/test/wine/host/usr/lib -lfreetype    >&5
-/usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-/usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-/usr/bin/ld: skipping incompatible /usr/lib64/libfreetype.so when searching for -lfreetype
-/usr/bin/ld: cannot find -lfreetype
-/usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-/usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-/usr/bin/ld: skipping incompatible /usr/lib64/libfreetype.so when searching for -lfreetype
-/usr/bin/ld: cannot find -lfreetype
-collect2: error: ld returned 1 exit status
+Beside, what you wrote would not work with anything else that an
+arm-buildroot-linux-gnueabi. ;-)
 
-It seems that --enable-win64 must be added to HOST_WINE_CONF_OPTS
-for 64bits host.
+I'll fix that too.
 
-Best regards,
-Romain Naour
+Thanks! :-)
 
-[...]
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
