@@ -1,78 +1,51 @@
 From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 21 Jan 2015 09:41:58 +0100
-Subject: [Buildroot] [PATCH v5 07/15] xdriver_xf86-video-imx-viv: new
+Date: Wed, 21 Jan 2015 10:06:07 +0100
+Subject: [Buildroot] [PATCH 02/11 v5] package/khrplatform-registry: new
 	package
-In-Reply-To: <20150119222043.GF4217@free.fr>
-References: <1418132813-32642-1-git-send-email-jezz@sysmic.org>
- <1664407.TbGWHQXnSi@sagittea> <20150119222043.GF4217@free.fr>
-Message-ID: <2046060.LHRJYafqiX@aquila>
+In-Reply-To: <e54ab4506debce9d07fda2797b739c6d20d34d3d.1421699898.git.yann.morin.1998@free.fr>
+References: <cover.1421699898.git.yann.morin.1998@free.fr>
+ <e54ab4506debce9d07fda2797b739c6d20d34d3d.1421699898.git.yann.morin.1998@free.fr>
+Message-ID: <2749165.eXeClDSXxM@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Hello Yann,
 
-On Monday 19 January 2015 23:20:43 Yann E. MORIN wrote:
-> J?r?me, All,
+On Monday 19 January 2015 21:40:32 Yann E. MORIN wrote:
+> Khronos is the group behind OpenGL and its siblings, OpenMAX and all
+> other Open-something.
 > 
-> On 2015-01-17 01:11 +0100, J?r?me Pouiller spake thusly:
-> > On Friday 16 January 2015 17:15:33 Thomas Petazzoni wrote:
-> > > Dear J?r?me Pouiller,
-> > > 
-> > > On Fri, 16 Jan 2015 17:04:20 +0100, J?r?me Pouiller wrote:
-> > > 
-> > > > > The world of OpenGL stuff will always surprise me. Why on earth does a
-> > > > > X.org driver that uses a proprietary OpenGL implementation needs
-> > > > > Mesa3D ?!?
-> > > > 
-> > > > In fact, xf86-video-imx-viv does not depends directly on mesa3d. However, it 
-> > > > depend on xorg server compiled with --enable-dri --enable-glx. But, these 
-> > > > options are enabled only if BR2_PACKAGE_MESA3D_DRI_DRIVER is enabled.
-> > > 
-> > > Maybe this should be changed, so that other drivers can enable it,
-> > > without referencing Mesa related options, no?
-> > > 
-> > > Also, the code in the xserver package does:
-> > > 
-> > > ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> > > XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
-> > > XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
-> > > else
-> > > XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
-> > > endif
-> > > 
-> > > So it really builds mesa as well. Is this needed ?
-> > We cannot use gpu-viv-bin-mx6q to compile Xorg with DRI and GLX since 
-> > it does not provide all necessary files. Especially, OpenGL headers 
-> > (GL/gl.h, GL/glx.h, ...) are missing[1]. We may solve this issue using
-> > "opengl-registry" posted by Yann a few months ago. It may be 
-> > sufficient.
+> Khronos maintains the Registry, in which the reference headers for the
+> different Open-something are maintained.
 > 
-> For the records, I've posted an updated series:
->     http://lists.busybox.net/pipermail/buildroot/2015-January/117642.html
+> khrplatform is the header used by most other Khronos headers.
 > 
-> Care to see if it is posible to update your series to use the Khronos
-> registry/ies? If so, it would great if you could review/ack the patches
-> so they get applied soon, so you can in turn repost an updated series of
-> yours! ;-)
+> Note: there is no version for that file, so we rely on the hash to
+> decide whether we have to re-download it or not. That's unfortunate,
+> however, as an old build will not be reproducible in the future... :-(
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/opengl/Config.in                           |  3 +++
+>  package/opengl/khronos-registry/Config.in          |  1 +
+>  .../opengl/khronos-registry/khronos-registry.mk    |  1 +
+>  .../khrplatform-registry/Config.in                 |  7 ++++++
+>  .../khrplatform-registry/khrplatform-registry.hash |  2 ++
+>  .../khrplatform-registry/khrplatform-registry.mk   | 25 ++++++++++++++++++++++
+>  6 files changed, 39 insertions(+)
+>  create mode 100644 package/opengl/khronos-registry/Config.in
+>  create mode 100644 package/opengl/khronos-registry/khronos-registry.mk
+>  create mode 100644 package/opengl/khronos-registry/khrplatform-registry/Config.in
+>  create mode 100644 package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.hash
+>  create mode 100644 package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.mk
+Until now, there are no packages two levels of subdirectories (ie. 
+packages/1/2/real_package). IMHO, it would be better to place
+'khronos-registry' directly in 'package'.
 
-I am able to build xorg-xserver w/ --enable-dri --enable-glx and 
-without mesa3d. Instead of mesa3d, I built opengl-registry and a libGL
-provider (I used gpu-viv-bin-mx6q, but it should also work with 
-nvidia-driver).
 
-In add, I need to manually add gl.pc, dri.pc and GL/internal/dri_interface.h
-(picked from mesa3d)
-
-I will try to generate a cleaner patch in order to begin a discussion 
-about this issue.
-
-However, I think this work is an improvement of dri/glx support and is
-not really related to "Xorg support for iMX6" series.
-
-[...]
 -- 
 J?r?me Pouiller, Sysmic
 Embedded Linux specialist
