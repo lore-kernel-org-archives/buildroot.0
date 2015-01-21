@@ -1,38 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Jan 2015 23:40:45 +0100
-Subject: [Buildroot] [PATCH 04/11 v5] package/opengl-registry: new
-	package
-In-Reply-To: <20150120181244.7b007fc4@nserafini-N550JK>
-References: <cover.1421699898.git.yann.morin.1998@free.fr>
- <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
- <20150120181244.7b007fc4@nserafini-N550JK>
-Message-ID: <20150121224045.GJ4375@free.fr>
+Date: Thu, 22 Jan 2015 00:06:14 +0100
+Subject: [Buildroot] [RFC v2] python-lxml: add target package variant
+In-Reply-To: <CAGm1_kt6Shu_9LLkdoUtLc2WQzT5LD+a3dejConJ-RvitXxx3A@mail.gmail.com>
+References: <1421871981-3146-1-git-send-email-yegorslists@googlemail.com>
+ <CAGm1_kt6Shu_9LLkdoUtLc2WQzT5LD+a3dejConJ-RvitXxx3A@mail.gmail.com>
+Message-ID: <20150121230614.GK4375@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas, All,
+Yegor, All,
 
-On 2015-01-20 18:12 +0100, Nicolas Serafini spake thusly:
-> I have done some test using Nvidia tegra binary blob and I was not able
-> to build package that has dependency (like QT5 with OpenglES) because
-> some headers files are missing.
-> EGL/eglplatform.h
-> GLES/glplatform.h
-> GLES2/gl2platform.h
-> GLES3/gl3platform.h
+On 2015-01-21 21:30 +0100, Yegor Yefremov spake thusly:
+> On Wed, Jan 21, 2015 at 9:26 PM, Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> > Changes:
+> >         v2: add working dependencies and provide path to XML libraries configs
+> 
+> This patch has http://patchwork.ozlabs.org/patch/430681/ as dependency.
+> 
+> Yann, does it make sense to integrate this patch into your series?
 
-So, it seems they are not present in opengl-registry at all. I'll have a
-look if another reistry provides them...
+Yes, I'll cary it in my series. Thanks! :-)
 
-> If I add them manually it's working.
-
-Where did you get those from?
-
-Regards,
-Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
