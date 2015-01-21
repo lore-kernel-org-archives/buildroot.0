@@ -1,35 +1,64 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Thu, 22 Jan 2015 00:20:02 +0100
-Subject: [Buildroot] [PATCH try 4] wine: New package
-In-Reply-To: <54C03142.4010105@openwide.fr>
-References: <54BED214.6080601@dawncrow.de> <54C03142.4010105@openwide.fr>
-Message-ID: <54C03422.8050500@dawncrow.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 22 Jan 2015 00:21:17 +0100
+Subject: [Buildroot] [RFC v2] python-lxml: add target package variant
+In-Reply-To: <CAGm1_kv3kL8m9R_5FZedhpYEP4kKEqcz2o5nA1NwuRq5APdn5g@mail.gmail.com>
+References: <1421871981-3146-1-git-send-email-yegorslists@googlemail.com>
+ <20150121230947.GL4375@free.fr>
+ <CAGm1_kv3kL8m9R_5FZedhpYEP4kKEqcz2o5nA1NwuRq5APdn5g@mail.gmail.com>
+Message-ID: <20150121232117.GM4375@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 22.01.2015 um 00:07 schrieb Romain Naour:
-> I'm building your wine package on my 64bits host and the build fail
-> because freetype library in HOST_DIR is build for it, but wine is
-> build for 32bits host.
-> 
-> see my config.log output:
-> configure:10886: checking for -lfreetype
-> configure:10911: /usr/bin/gcc -m32 -o conftest -O2 -I/home/naourr/git/buildroot/test/wine/host/usr/include -I/home/naourr/git/buildroot/test/wine/host/usr/include -I/home/naourr/git/buildroot/test/wine/host/usr/include/freetype2   -L/home/naourr/git/buildroot/test/wine/host/lib -L/home/naourr/git/buildroot/test/wine/host/usr/lib -Wl,-rpath,/home/naourr/git/buildroot/test/wine/host/usr/lib conftest.c -lfreetype -L/home/naourr/git/buildroot/test/wine/host/usr/lib -lfreetype    >&5
-> /usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-> /usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-> /usr/bin/ld: skipping incompatible /usr/lib64/libfreetype.so when searching for -lfreetype
-> /usr/bin/ld: cannot find -lfreetype
-> /usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-> /usr/bin/ld: skipping incompatible /home/naourr/git/buildroot/test/wine/host/usr/lib/libfreetype.so when searching for -lfreetype
-> /usr/bin/ld: skipping incompatible /usr/lib64/libfreetype.so when searching for -lfreetype
-> /usr/bin/ld: cannot find -lfreetype
-> collect2: error: ld returned 1 exit status
-> 
-> It seems that --enable-win64 must be added to HOST_WINE_CONF_OPTS
-> for 64bits host.
+Yegor, All,
 
-Wow, good catch, thanks!
-Guess it didn't failed on my machine because i also have 32-bit freetype installed on the host.
+On 2015-01-22 00:17 +0100, Yegor Yefremov spake thusly:
+> On Thu, Jan 22, 2015 at 12:09 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2015-01-21 21:26 +0100, Yegor Yefremov spake thusly:
+> >> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > [--SNIP--]
+> >> diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+> >> index 758ce87..a7f072f 100644
+> >> --- a/package/python-lxml/python-lxml.mk
+> >> +++ b/package/python-lxml/python-lxml.mk
+> >> @@ -20,6 +20,13 @@ PYTHON_LXML_LICENSE_FILES = \
+> >>  # So, we use setuptools.
+> >>  PYTHON_LXML_SETUP_TYPE = setuptools
+> >>
+> >> -PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
+> >> +PYTHON_LXML_DEPENDENCIES = libxml2 libxslt zlib
+> >
+> > OK, I did not need zlib for the host variant, so we'll have to
+> > differentiate the host dependencies and the target ones. I'll do
+> > that.
+> >
+> >> +# python-lxml needs these scripts in order to properly detect libxml2 and
+> >> +# libxslt compiler and linker flags
+> >> +PYTHON_LXML_BUILD_OPTS = \
+> >> +     --with-xslt-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xslt-config \
+> >> +     --with-xml2-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xml2-config
+> >
+> > Well, there's much simpler: $(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot
+> > is exactly what we call $(STAGING_DIR).
+> >
+> > Beside, what you wrote would not work with anything else that an
+> > arm-buildroot-linux-gnueabi. ;-)
+> 
+> I was to high, I got it compiled at all :-)
+
+Hehe! I know the feeling! ;-)
+
+Cheers!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
