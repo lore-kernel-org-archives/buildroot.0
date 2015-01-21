@@ -1,43 +1,47 @@
 From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 21 Jan 2015 12:23:28 +0100
-Subject: [Buildroot] [RFC 4/4] xorg-server: Depends on libgl to enable
-	DRI/GLX
-In-Reply-To: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
-References: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1421839408-15839-5-git-send-email-jezz@sysmic.org>
+Date: Wed, 21 Jan 2015 12:23:24 +0100
+Subject: [Buildroot] [RFC 0/4] Try to clean up proprietary OpenGL drivers
+Message-ID: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xorg-server should be able to compile DRI/GLX interface using any libGL
-provider (not only mesa3d). If a libGL provider break xorg-server DRI/GLX
-interface, it should be fixed.
+Until now, xorg-xserver depends on mesa3d to compile with GLX/DRI support.
+However, there was problem with proprietary OpenGL drivers. These ones depends
+on GLX/DRI support (so, they depends on mesa3d) and overwrite files provided by
+mesa3d (so, they conflict with mesa3d).
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Thanks to opengl-registry, it is possible to change proprietary OpenGL drivers
+in real LibGL provider and compile GLX/DRI support using proprietary drivers
+instead of mesa3d.
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 5baa515..3240284 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -105,9 +105,12 @@ else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+# Note: --enable-glx use DRI interface (provided by GL/internal/dri_interface.h)
-+# in any case. So enable GLX without DRI just fail.
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
--XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
-+XSERVER_XORG_SERVER_DEPENDENCIES += libgl xproto_xf86driproto
- else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
- endif
+Notice this series aim to highlight the problem described above. It does not
+aim to be upstreamed. It apply on top of Yann series about nvidia driver and
+my series about imx6 gpu driver.
+
+J?r?me Pouiller (4):
+  nvidia-driver: Add gl.pc
+  gpu-viv-bin-mx6q: is a libgl provider
+  opengl-registry: Also provide DRI interface
+  xorg-server: Depends on libgl to enable DRI/GLX
+
+ package/freescale-imx/gpu-viv-bin-mx6q/Config.in   |    5 +
+ package/freescale-imx/gpu-viv-bin-mx6q/gl.pc       |   10 +
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |    5 +-
+ package/nvidia-driver/gl.pc                        |   11 +
+ package/nvidia-driver/nvidia-driver.mk             |    1 +
+ .../opengl/khronos-registry/opengl-registry/dri.pc |   11 +
+ .../opengl-registry/dri_interface.h                | 1464 ++++++++++++++++++++
+ .../opengl-registry/opengl-registry.mk             |    4 +
+ package/x11r7/xdriver_xf86-video-imx-viv/Config.in |    2 -
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    7 +-
+ 10 files changed, 1514 insertions(+), 6 deletions(-)
+ create mode 100644 package/freescale-imx/gpu-viv-bin-mx6q/gl.pc
+ create mode 100644 package/nvidia-driver/gl.pc
+ create mode 100644 package/opengl/khronos-registry/opengl-registry/dri.pc
+ create mode 100644 package/opengl/khronos-registry/opengl-registry/dri_interface.h
+
 -- 
 1.9.1
