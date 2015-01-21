@@ -1,65 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Jan 2015 19:19:54 +0100
-Subject: [Buildroot] [PATCH 1/1] pppd: add config option to install
- scripts shipped with pppd's source
-In-Reply-To: <54B802AD.2070701@zacarias.com.ar>
-References: <1421195844-865-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <54B802AD.2070701@zacarias.com.ar>
-Message-ID: <20150121181954.GI4375@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 21 Jan 2015 21:26:21 +0100
+Subject: [Buildroot] [RFC v2] python-lxml: add target package variant
+Message-ID: <1421871981-3146-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zoltan, All,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v2: add working dependencies and provide path to XML libraries configs
 
-On 2015-01-15 15:10 -0300, Gustavo Zacarias spake thusly:
-> On 01/13/2015 09:37 PM, Zoltan Gyarmati wrote:
-> 
-> > Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> > ---
-> >  package/pppd/Config.in | 8 ++++++++
-> >  package/pppd/pppd.mk   | 5 +++++
-> >  2 files changed, 13 insertions(+)
-> > 
-> > diff --git a/package/pppd/Config.in b/package/pppd/Config.in
-> > index b77d7b0..6933fcf 100644
-> > --- a/package/pppd/Config.in
-> > +++ b/package/pppd/Config.in
-> > @@ -22,6 +22,14 @@ config BR2_PACKAGE_PPPD_RADIUS
-> >  	help
-> >  	  Install RADIUS support for pppd
-> >  
-> > +config BR2_PACKAGE_PPPD_INSTALL_SCRIPTS
-> > +	string "Install these PPP scripts"
-> > +	default ""
-> > +	help
-> > +	  Space delimited list to specify which scripts
-> > +	  need to be installed from pppd source tree's
-> > +	  scripts directory
-> > +
-> 
-> Hi.
-> Isn't just simpler to copy those scripts that are useful/have no extra
-> dependencies (like bash, expect, perl)?
-> Otherwise it's just like a post-build script.
-> Regards.
+ package/Config.in                  |  1 +
+ package/python-lxml/Config.in      | 10 ++++++++++
+ package/python-lxml/python-lxml.mk |  9 ++++++++-
+ 3 files changed, 19 insertions(+), 1 deletion(-)
+ create mode 100644 package/python-lxml/Config.in
 
-I concur with Gustavo: just install them, conditionally to the required
-package being enabled, like:
-
-  - needs nothing? Install it.
-  - needs bash? Install if bash is 'y'.
-  - And so on...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 266de13..366e393 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -519,6 +519,7 @@ menu "external python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-lxml/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+diff --git a/package/python-lxml/Config.in b/package/python-lxml/Config.in
+new file mode 100644
+index 0000000..1ccaa5e
+--- /dev/null
++++ b/package/python-lxml/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_LXML
++	bool "python-lxml"
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
++	select BR2_PACKAGE_ZLIB
++	help
++	  The lxml XML toolkit is a Pythonic binding for the C libraries
++	  libxml2 and libxslt.
++
++	  http://lxml.de/
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 758ce87..a7f072f 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -20,6 +20,13 @@ PYTHON_LXML_LICENSE_FILES = \
+ # So, we use setuptools.
+ PYTHON_LXML_SETUP_TYPE = setuptools
+ 
+-PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
++PYTHON_LXML_DEPENDENCIES = libxml2 libxslt zlib
+ 
++# python-lxml needs these scripts in order to properly detect libxml2 and
++# libxslt compiler and linker flags
++PYTHON_LXML_BUILD_OPTS = \
++	--with-xslt-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xslt-config \
++	--with-xml2-config=$(HOST_DIR)/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin/xml2-config
++
++$(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.0
