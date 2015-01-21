@@ -1,63 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Jan 2015 18:32:22 +0100
-Subject: [Buildroot] [PATCH 02/11 v5] package/khrplatform-registry: new
- package
-In-Reply-To: <2749165.eXeClDSXxM@aquila>
+Date: Wed, 21 Jan 2015 18:34:54 +0100
+Subject: [Buildroot] [PATCH 04/11 v5] package/opengl-registry: new
+	package
+In-Reply-To: <1509892.j25xWyjvC8@aquila>
 References: <cover.1421699898.git.yann.morin.1998@free.fr>
- <e54ab4506debce9d07fda2797b739c6d20d34d3d.1421699898.git.yann.morin.1998@free.fr>
- <2749165.eXeClDSXxM@aquila>
-Message-ID: <20150121173222.GB4375@free.fr>
+ <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
+ <1509892.j25xWyjvC8@aquila>
+Message-ID: <20150121173454.GC4375@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+J?r^ome, All,
 
-On 2015-01-21 10:06 +0100, J?r?me Pouiller spake thusly:
-> On Monday 19 January 2015 21:40:32 Yann E. MORIN wrote:
-> > Khronos is the group behind OpenGL and its siblings, OpenMAX and all
-> > other Open-something.
+On 2015-01-20 14:51 +0100, J?r?me Pouiller spake thusly:
+> On Monday 19 January 2015 21:40:34 Yann E. MORIN wrote:
+> > The OpenGL Registry provides all GL headers, save for gl.h itself. We
+> > vampirise the one from mesa3d (at the version we currently package),
+> > which is as good as any other.
 > > 
-> > Khronos maintains the Registry, in which the reference headers for the
-> > different Open-something are maintained.
+> > Those headers are needed when an OpenGL/EGL/GLES implementation does
+> > not provide its own headers, like the NVidia binary blob (to come in
+> > follow-up patches.)
 > > 
-> > khrplatform is the header used by most other Khronos headers.
-> > 
-> > Note: there is no version for that file, so we rely on the hash to
-> > decide whether we have to re-download it or not. That's unfortunate,
-> > however, as an old build will not be reproducible in the future... :-(
+> > Note that, even though this is a generic package, and we could
+> > everything in the BUILD_CMDS, we decided to split the tweaking of glx.h
+> > in a post-build script, to really make it clear we are tweaking a
+> > generated file.
 > > 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/opengl/Config.in                           |  3 +++
-> >  package/opengl/khronos-registry/Config.in          |  1 +
-> >  .../opengl/khronos-registry/khronos-registry.mk    |  1 +
-> >  .../khrplatform-registry/Config.in                 |  7 ++++++
-> >  .../khrplatform-registry/khrplatform-registry.hash |  2 ++
-> >  .../khrplatform-registry/khrplatform-registry.mk   | 25 ++++++++++++++++++++++
-> >  6 files changed, 39 insertions(+)
-> >  create mode 100644 package/opengl/khronos-registry/Config.in
-> >  create mode 100644 package/opengl/khronos-registry/khronos-registry.mk
-> >  create mode 100644 package/opengl/khronos-registry/khrplatform-registry/Config.in
-> >  create mode 100644 package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.hash
-> >  create mode 100644 package/opengl/khronos-registry/khrplatform-registry/khrplatform-registry.mk
-> Until now, there are no packages two levels of subdirectories (ie. 
-> packages/1/2/real_package). IMHO, it would be better to place
-> 'khronos-registry' directly in 'package'.
+> [...]
+> 
+> > +# Always install gl.h since the others may depend on it, and
+> > +# we are sure at least one OpenGL variants will be installed.
+> > +define OPENGL_REGISTRY_INSTALL_STAGING_CMDS
+> > +	$(INSTALL) -D -m 0644 package/opengl/khronos-registry/opengl-registry/gl.h \
+> > +		   $(STAGING_DIR)/usr/include/GL/gl.h
+> > +	for d in $(OPENGL_REGISTRY_DIRS); do \
+> > +		for h in $(@D)/$${d}/*.h; do \
+> > +			$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${d}/$${h##*/} \
+> > +			|| exit 1; \
+> > +		done \
+> > +	done
+> > +endef
+> I think we should also provide gl.pc, egl.pc, glesv1_cm.pc, etc... no?
 
-Well, i do not mind squeezing the directory depth, but I still think
-they should at least be in package/opengl , like:
+I think the providers of the GL libraries are to provide the .pc files,
+because only them know what they really depend on.
 
-    package/opengl/khronos-registry-khrplatform/
-    package/opengl/khronos-registry-opengl/
-    package/opengl/khronos-registry-openkode/
-    package/opengl/khronos-registry-openmax/
+For example, the Rpi stuff wants to link with -lvcos for example, while
+the iMX6 may want to link with -limx6-hal  (for example), so we can not
+provide the .pc files from the registry, which only installs headers.
 
-I am not too focused on the names, although I'd like to keep them to
-look like something that relates to 'Khronos' and 'registry', something
-like khr-reg-something would be as good. ;-)
+(but it seems you did just that in your series, right?)
+
+Thansk for the reviews! :-)
 
 Regards,
 Yann E. MORIN.
