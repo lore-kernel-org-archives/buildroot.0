@@ -1,34 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Jan 2015 18:56:40 +0100
-Subject: [Buildroot] [PATCH 1/1] nvidia-tegra23: new package
-In-Reply-To: <CA+GxxTdWyTkj+HJWr8J0Zf7p3Gm7JgVcd6_msqJF9yvN-WSAMQ@mail.gmail.com>
-References: <CA+GxxTdWyTkj+HJWr8J0Zf7p3Gm7JgVcd6_msqJF9yvN-WSAMQ@mail.gmail.com>
-Message-ID: <20150121175640.GH4375@free.fr>
+Date: Wed, 21 Jan 2015 19:19:54 +0100
+Subject: [Buildroot] [PATCH 1/1] pppd: add config option to install
+ scripts shipped with pppd's source
+In-Reply-To: <54B802AD.2070701@zacarias.com.ar>
+References: <1421195844-865-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ <54B802AD.2070701@zacarias.com.ar>
+Message-ID: <20150121181954.GI4375@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-01-21 11:39 +0100, Ben Ben spake thusly:
-> I tried this patch directly from git://git.busybox.net/~ymorin/git/buildroot
-> yem/gfx
-> 
-> I got some header problems with opengl.
-> Qt5 looking for sysroot/usr/include/GLES/gl2platform.h and can't find it.
-> 
-> I tried with mesa3d instead of tegra driver. That's works fine.
-> 
-> I assume that this header should come with opengl-registery ?
+Zoltan, All,
 
-I honestly do not know who should be responsible for providing that one
-header. Probably opengl-registry should, indeed.
+On 2015-01-15 15:10 -0300, Gustavo Zacarias spake thusly:
+> On 01/13/2015 09:37 PM, Zoltan Gyarmati wrote:
+> 
+> > Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+> > ---
+> >  package/pppd/Config.in | 8 ++++++++
+> >  package/pppd/pppd.mk   | 5 +++++
+> >  2 files changed, 13 insertions(+)
+> > 
+> > diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+> > index b77d7b0..6933fcf 100644
+> > --- a/package/pppd/Config.in
+> > +++ b/package/pppd/Config.in
+> > @@ -22,6 +22,14 @@ config BR2_PACKAGE_PPPD_RADIUS
+> >  	help
+> >  	  Install RADIUS support for pppd
+> >  
+> > +config BR2_PACKAGE_PPPD_INSTALL_SCRIPTS
+> > +	string "Install these PPP scripts"
+> > +	default ""
+> > +	help
+> > +	  Space delimited list to specify which scripts
+> > +	  need to be installed from pppd source tree's
+> > +	  scripts directory
+> > +
+> 
+> Hi.
+> Isn't just simpler to copy those scripts that are useful/have no extra
+> dependencies (like bash, expect, perl)?
+> Otherwise it's just like a post-build script.
+> Regards.
 
-I'll queue that to the other comments that were made about missing
-headers.
+I concur with Gustavo: just install them, conditionally to the required
+package being enabled, like:
 
-Next time, can you please reply to the mail in the series, rather than
-start a new thread; it makes it easier to not miss it later on...
+  - needs nothing? Install it.
+  - needs bash? Install if bash is 'y'.
+  - And so on...
 
 Regards,
 Yann E. MORIN.
