@@ -1,78 +1,43 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 21 Jan 2015 21:46:28 +0100
-Subject: [Buildroot] [PATCH 1/1] pppd: add config option to install
- scripts shipped with pppd's source
-In-Reply-To: <20150121181954.GI4375@free.fr>
-References: <1421195844-865-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <54B802AD.2070701@zacarias.com.ar> <20150121181954.GI4375@free.fr>
-Message-ID: <54C01024.8020706@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Jan 2015 23:40:45 +0100
+Subject: [Buildroot] [PATCH 04/11 v5] package/opengl-registry: new
+	package
+In-Reply-To: <20150120181244.7b007fc4@nserafini-N550JK>
+References: <cover.1421699898.git.yann.morin.1998@free.fr>
+ <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
+ <20150120181244.7b007fc4@nserafini-N550JK>
+Message-ID: <20150121224045.GJ4375@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Morin, Gustavo,
+Nicolas, All,
 
-On 01/21/2015 07:19 PM, Yann E. MORIN wrote:
-> Zoltan, All,
-> 
-> On 2015-01-15 15:10 -0300, Gustavo Zacarias spake thusly:
->> On 01/13/2015 09:37 PM, Zoltan Gyarmati wrote:
->>
->>> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
->>> ---
->>>  package/pppd/Config.in | 8 ++++++++
->>>  package/pppd/pppd.mk   | 5 +++++
->>>  2 files changed, 13 insertions(+)
->>>
->>> diff --git a/package/pppd/Config.in b/package/pppd/Config.in
->>> index b77d7b0..6933fcf 100644
->>> --- a/package/pppd/Config.in
->>> +++ b/package/pppd/Config.in
->>> @@ -22,6 +22,14 @@ config BR2_PACKAGE_PPPD_RADIUS
->>>  	help
->>>  	  Install RADIUS support for pppd
->>>  
->>> +config BR2_PACKAGE_PPPD_INSTALL_SCRIPTS
->>> +	string "Install these PPP scripts"
->>> +	default ""
->>> +	help
->>> +	  Space delimited list to specify which scripts
->>> +	  need to be installed from pppd source tree's
->>> +	  scripts directory
->>> +
->>
->> Hi.
->> Isn't just simpler to copy those scripts that are useful/have no extra
->> dependencies (like bash, expect, perl)?
->> Otherwise it's just like a post-build script.
->> Regards.
-> 
-> I concur with Gustavo: just install them, conditionally to the required
-> package being enabled, like:
-> 
->   - needs nothing? Install it.
->   - needs bash? Install if bash is 'y'.
->   - And so on...
+On 2015-01-20 18:12 +0100, Nicolas Serafini spake thusly:
+> I have done some test using Nvidia tegra binary blob and I was not able
+> to build package that has dependency (like QT5 with OpenglES) because
+> some headers files are missing.
+> EGL/eglplatform.h
+> GLES/glplatform.h
+> GLES2/gl2platform.h
+> GLES3/gl3platform.h
 
-OK, looking beck now it sounds better than my first approach, will
-resend an updated patch, thanks for the review!
+So, it seems they are not present in opengl-registry at all. I'll have a
+look if another reistry provides them...
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+> If I add them manually it's working.
+
+Where did you get those from?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bests,
-Zoltan Gyarmati
-IRC freenode: zgyarmati
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150121/6e79d5b3/attachment.asc>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
