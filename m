@@ -1,43 +1,64 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Wed, 21 Jan 2015 22:47:57 -0800
-Subject: [Buildroot] [PATCH v6 00/15] Add Xorg support for iMX6
-In-Reply-To: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-References: <1421451251-23366-1-git-send-email-jezz@sysmic.org>
-Message-ID: <CADCpmyOp078FVzrQqR8xehha56O4Db3roVKPQL2Zj97NwFJoUQ@mail.gmail.com>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Thu, 22 Jan 2015 08:12:25 +0100
+Subject: [Buildroot] [PATCH 04/11 v5] package/opengl-registry: new
+ package
+In-Reply-To: <20150121173631.GD4375@free.fr>
+References: <cover.1421699898.git.yann.morin.1998@free.fr>
+ <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
+ <20150120181244.7b007fc4@nserafini-N550JK>
+ <20150121173631.GD4375@free.fr>
+Message-ID: <20150122081225.004e5ff2@nserafini-N550JK>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerome,
+Yann, all,
 
-On Fri, Jan 16, 2015 at 3:33 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
-> Hello,
->
-> Main purpose of this serie is to add support of Vivante GPU (found on imx6) to
-> Xorg. This work is mainly adapted from Yocto.
->
-> v6:
->   - Rebase on master
->   - Add license for xdriver_xf86-video-imx-viv. Notice this package does not
->     provide any license file.
->   - Fix typos suggested by Thomas P.
->   - Fix dependency on libdrm (gpu-viv-bin-mx6q does not depends on libdrm, but
->     xdriver_xf86-video-imx-viv does depend)
->   - Add a note about runtime dependencies in gpu-viv-bin-mx6q
->   - Splited patch 6/15 in 3 parts
->   - Splited patch 10/15 in 2 parts
->   - Make 0001-Force_egl_visual_ID_33.patch contionnal
->
+On Wed, 21 Jan 2015 18:36:31 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-I confirm this patchset applies and builds fine on master. However I
-couldn't get X to start properly as it was complaining that no screen
-was available (using the same setup as before: nitrogen6x + HDMI
-monitor). I didn't have time to investigate any further but have you
-had any issue? I think the X server version has been bumped lately,
-are you still using the same xorg.conf?
-I'll try to get more info before the end of the week.
+> Nicolas, All,
+> 
+> On 2015-01-20 18:12 +0100, Nicolas Serafini spake thusly:
+> > I have done some test using Nvidia tegra binary blob and I was not
+> > able to build package that has dependency (like QT5 with OpenglES)
+> > because some headers files are missing.
+> > EGL/eglplatform.h
+> > GLES/glplatform.h
+> > GLES2/gl2platform.h
+> > GLES3/gl3platform.h
+> > 
+> > If I add them manually it's working.
+> 
+> Do you mean that they are present in opengl-registry, but not
+> installed? If so, I may have missed something. I'll have a look later
+> tonight.
 
-Thanks,
-Gary
+No they are not present in opengl-registry. I looked into the Makefile
+if there is an option to enable the generation of these files but I saw
+nothing.
+
+I took the missing files on this page
+https://www.khronos.org/registry/
+
+> 
+> Thanks!
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+Regards,
+Nicolas 
+
+
+-- 
+Nicolas Serafini
+R&D Embedded Software Engineer
+
+www.sensefly.com
+Route de Gen?ve 38
+1033 Cheseaux-Lausanne
+Switzerland
