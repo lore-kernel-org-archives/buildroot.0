@@ -1,82 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 22 Jan 2015 22:51:54 +0100
-Subject: [Buildroot] [PATCH 3/3] use TARGET_CONFIGURE_OPTS instead of
- homegrown ENV
-In-Reply-To: <CANxTyt7+xC2zY3W7M-njuAC4P1wP1NKC-wQQt6yM_odzOr7Hsw@mail.gmail.com>
-References: <20150117192144.GA2827@tarshish>
- <1421953904-9156-1-git-send-email-codehero@gmail.com>
- <1421953904-9156-3-git-send-email-codehero@gmail.com>
- <CANxTyt7+xC2zY3W7M-njuAC4P1wP1NKC-wQQt6yM_odzOr7Hsw@mail.gmail.com>
-Message-ID: <20150122215154.GA3970@free.fr>
+From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
+Date: Thu, 22 Jan 2015 23:13:30 +0100
+Subject: [Buildroot] [PATCH try 4] wine: New package
+In-Reply-To: <20150121233549.GN4375@free.fr>
+References: <54BED214.6080601@dawncrow.de> <20150121233549.GN4375@free.fr>
+Message-ID: <54C1760A.5010802@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, David,All,
+Am 22.01.2015 um 00:35 schrieb Yann E. MORIN:
+> Andr?, All,
+> 
+> On 2015-01-20 23:09 +0100, Andr? Hentschel spake thusly:
+>> Adds new package: wine
+> 
+> Sorry for jumoing late in the wagon, but here are some minor comments...
 
-On 2015-01-22 16:32 -0500, Danomi Manchego spake thusly:
-> David,
-> Seems like you should have squashed this into a single "cigic: new
-> package" patch, no?  Forgot to rebase?
+Hi Yann,
 
-In fact, I asked David to send his patches as-is, because we discussed
-on IRC an issue remaining about licensing information that did not get
-saved for some of the packages while it got saved for the others.
+Thx for the review!
 
-I was supposed to review the patches tonight (UTC+1), but got delayed
-due to heavy electricity work in the house...
+>> +comment "wine needs a (e)glibc toolchain w/ IPv6, threads"
+>> +	depends on BR2_i386 || BR2_x86_64
+>> +	depends on BR2_TOOLCHAIN_BUILDROOT
+> 
+> Did you forget to remove that dependency for the comment?
 
-Of course, you are entirely right: the patches about each single package
-should have been squahes. That can be done later when we have solved the
-licensing info issue.
+yes, thx
 
-Thanks for your early review! ;-)
+>> +# Wine needs the host tupel of the external toolchain for cross compiling
+>> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),)
+>> +	WINE_CONF_OPTS += --host=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+>> +endif
+> 
+> I know this has already been discussed at length on the list, but it
+> really warrants a bit more explanations here.
 
-Regards,
-Yann E. MORIN.
+sure, done
 
-> On Thu, Jan 22, 2015 at 2:11 PM, David Bender <codehero@gmail.com> wrote:
-> >
-> > Signed-off-by: David Bender <codehero@gmail.com>
-> > ---
-> >  package/cgic/cgic.mk |    7 ++-----
-> >  1 files changed, 2 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/cgic/cgic.mk b/package/cgic/cgic.mk
-> > index 378e1cd..a575a16 100644
-> > --- a/package/cgic/cgic.mk
-> > +++ b/package/cgic/cgic.mk
-> > @@ -9,14 +9,11 @@ CGIC_SOURCE = cgic206.tar.gz
-> >  CGIC_SITE = http://boutell.com/cgic
-> >  CGIC_LICENSE = Custom
-> >  CGIC_LICENSE_FILES = license.txt
-> > -
-> > -CGIC_ENV = AR=$(TARGET_CROSS)ar \
-> > -       CC=$(TARGET_CROSS)gcc \
-> > -       RANLIB=$(TARGET_CROSS)ranlib
-> > +CGIC_INSTALL_STAGING = YES
-> >
-> >  define CGIC_BUILD_CMDS
-> >         (cd $(@D); \
-> > -               $(CGIC_ENV) \
-> > +               $(TARGET_CONFIGURE_OPTS) \
-> >                 make libcgic.a \
-> >                 )
-> >  endef
-> > --
-> > 1.7.8.6
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+>> +ifeq ($(BR2_PACKAGE_CUPS),y)
+>> +	WINE_CONF_OPTS += --with-cups
+>> +	WINE_DEPENDENCIES += cups
+>> +else
+>> +	WINE_CONF_OPTS += --without-cups
+>> +endif
+> 
+> I do appreciate that you did all that work to enable/disable optional
+> features. That's a great work! :-)
+> 
+> However, for very complex packages, my opinion is that it is much
+> simpler to review and test (and write!) a new complex package with
+> everything disabled. It makes for smaller patches to review, and faster
+> builds to test. Then, new features can be added one by one in subsequent
+> patches, once the core has been upstreamed.
+> 
+> Note that I do not ask you to remove that, jsut keep it. Just suggesting
+> that in case you're fool^Wbold enough to try packaging some other big
+> stuff  in the future! Hehe! ;-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+:D
+honestly i'd have a project in mind...
+
+> [--SNIP--]
+>> +HOST_WINE_CONF_OPTS += \
+>> +	--disable-tests \
+>> +	--disable-win16 \
+> [--SNIP--]
+>> +	--without-xxf86vm \
+>> +	--without-zlib
+> 
+> Like you disabled everthing here.
+
+added a comment for this now, too. as it has its reason.
+
+
+>> +$(eval $(autotools-package))
+>> +$(eval $(host-autotools-package))
+> 
+> I haven't much more to say, I'll try to have some time this WE to have a
+> further look.
+
+cool, i'll send try 5 as soon as i tested it
