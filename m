@@ -1,96 +1,95 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Thu, 22 Jan 2015 15:33:26 -0300
-Subject: [Buildroot] [PATCH 2/4] arm: update processor types
-In-Reply-To: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1421951608-31233-3-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: David Bender <codehero@gmail.com>
+Date: Thu, 22 Jan 2015 14:10:05 -0500
+Subject: [Buildroot] [PATCH 1/3] benejson: new package
+In-Reply-To: <20150117193703.GB2827@tarshish>
+References: <20150117193703.GB2827@tarshish>
+Message-ID: <1421953807-8902-1-git-send-email-codehero@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Guido Mart?nez <guido@vanguardiasur.com.ar>
+From: David Bender <codehero@yahoo.com>
 
-Add the Cortex M3 variant. These microcontrollers don't support regular
-ARM instructions and don't have an MMU.
+Added C/C++ JSON parsing package benejson.
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+Signed-off-by: Dave Bender <bender@benegon.com>
+Signed-off-by: David Bender <codehero@gmail.com>
 ---
- arch/Config.in                | 8 ++++----
- arch/Config.in.arm            | 5 +++++
- toolchain/toolchain-common.in | 6 ++++--
- 3 files changed, 13 insertions(+), 6 deletions(-)
+ package/Config.in            |    1 +
+ package/benejson/Config.in   |    6 ++++++
+ package/benejson/benejson.mk |   37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 0 deletions(-)
+ create mode 100644 package/benejson/Config.in
+ create mode 100644 package/benejson/benejson.mk
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 890e7e2..6f7d608 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -258,13 +258,13 @@ config BR2_BINFMT_SUPPORTS_SHARED
- # Set up target binary format
- choice
- 	prompt "Target Binary Format"
--	default BR2_BINFMT_ELF if !(BR2_bfin || BR2_m68k)
-+	default BR2_BINFMT_ELF if !(BR2_bfin || BR2_m68k || BR2_cortex_m3)
- 	default BR2_BINFMT_FDPIC if BR2_bfin
--	default BR2_BINFMT_FLAT if BR2_m68k
-+	default BR2_BINFMT_FLAT if BR2_m68k || BR2_cortex_m3
+diff --git a/package/Config.in b/package/Config.in
+index 266de13..5a09608 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -761,6 +761,7 @@ menu "Javascript"
+ endmenu
  
- config BR2_BINFMT_ELF
- 	bool "ELF"
--	depends on !BR2_bfin && !BR2_m68k
-+	depends on !BR2_bfin && !BR2_m68k && !BR2_cortex_m3
- 	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  ELF (Executable and Linkable Format) is a format for libraries and
-@@ -283,7 +283,7 @@ config BR2_BINFMT_FDPIC
- 
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
--	depends on BR2_bfin || BR2_m68k
-+	depends on BR2_bfin || BR2_m68k || BR2_cortex_m3
- 	help
- 	  FLAT binary is a relatively simple and lightweight executable format
- 	  based on the original a.out format. It is widely used in environment
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index a2d113a..1e22ab8 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -134,6 +134,10 @@ config BR2_cortex_a15
- 	select BR2_ARM_CPU_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
-+config BR2_cortex_m3
-+	bool "cortex-M3"
-+	select BR2_ARM_CPU_HAS_THUMB
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_fa526
- 	bool "fa526/626"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -396,6 +400,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a9"	if BR2_cortex_a9
- 	default "cortex-a12"	if BR2_cortex_a12
- 	default "cortex-a15"	if BR2_cortex_a15
-+	default "cortex-m3"	if BR2_cortex_m3
- 	default "fa526"		if BR2_fa526
- 	default "marvell-pj4"	if BR2_pj4
- 	default "strongarm"	if BR2_strongarm
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 2ee2019..fd6ef53 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -114,8 +114,10 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
- 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
- 
- config BR2_USE_MMU
--	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
--	default y if !BR2_bfin
-+	bool "Enable MMU support"
-+	depends on BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
-+	depends on !BR2_cortex_m3 && !BR2_bfin
-+	default y
- 	help
- 	  If your target has a MMU, you should say Y here.  If you
- 	  are unsure, just say Y.
+ menu "JSON/XML"
++	source "package/benejson/Config.in"
+ 	source "package/cjson/Config.in"
+ 	source "package/expat/Config.in"
+ 	source "package/ezxml/Config.in"
+diff --git a/package/benejson/Config.in b/package/benejson/Config.in
+new file mode 100644
+index 0000000..6d8d2a3
+--- /dev/null
++++ b/package/benejson/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_BENEJSON
++	bool "benejson"
++	help
++	  "streaming JSON parsing library with C and C++ APIs"
++
++		https://codehero.github.io/benejson/
+diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
+new file mode 100644
+index 0000000..851b95e
+--- /dev/null
++++ b/package/benejson/benejson.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# benejson
++#
++################################################################################
++
++BENEJSON_VERSION = 0.9.7
++BENEJSON_SITE =  $(call github,codehero,benejson,$(BENEJSON_VERSION))
++BENEJSON_LICENSE = BSD-3c
++BENEJSON_LICENSE_FILES = COPYING
++BENEJSON_INSTALL_STAGING = YES
++
++BENEJSON_DEPENDENCIES = host-scons
++
++BENEJSON_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS)
++
++define BENEJSON_BUILD_CMDS
++	(cd $(@D); \
++		$(BENEJSON_SCONS_ENV) \
++		$(SCONS) \
++		$(BENEJSON_SCONS_OPTS))
++endef
++
++define BENEJSON_INSTALL_STAGING_CMDS
++	(cd $(@D); \
++		cp -ra include/benejson $(STAGING_DIR)/usr/include; \
++		cp lib/libbenejson.{so,a} $(STAGING_DIR)/usr/lib \
++		)
++endef
++
++define BENEJSON_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		cp lib/libbenejson.{so,a} $(TARGET_DIR)/usr/lib \
++		)
++endef
++
++$(eval $(generic-package))
 -- 
-2.2.1
+1.7.8.6
