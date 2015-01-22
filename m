@@ -1,36 +1,76 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Jan 2015 21:10:41 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-cmake: fix host-cmake-package type
-In-Reply-To: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <CAHXCMMKQyqYnuhxtXrSGEE9JyF+NYmYspVOC=-LQ33f5qxCerw@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 22 Jan 2015 16:25:34 -0500
+Subject: [Buildroot] [PATCH 1/3] cgic: new package
+In-Reply-To: <1421953904-9156-1-git-send-email-codehero@gmail.com>
+References: <20150117192144.GA2827@tarshish>
+ <1421953904-9156-1-git-send-email-codehero@gmail.com>
+Message-ID: <CANxTyt6LcBao5NVi1ttonGU1yCYDZgqscBuW8cVjcjENyOJizg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 22, 2015 at 5:53 PM, Ryan Barnett
-<ryan.barnett@rockwellcollins.com> wrote:
-> When trying to compile a host-cmake-package type such as host-cdrkit,
-> an error happens in regards to HOSTCC and HOSTCXX not being found.
->
->   /bin/sh: HOSTCC: command not found
->   /bin/sh: HOSTCXX: command not found
->
-> This due to the fact that the environment is incorrectly configured by
-> having the following:
->
->   -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
->
-> This is due to having too many dollar signs. The fix is to remove the
-> extra dollar sign.
->
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+David,
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+On Thu, Jan 22, 2015 at 2:11 PM, David Bender <codehero@gmail.com> wrote:
+snip
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# cgic
+> +#
+> +################################################################################
+> +
+> +CGIC_VERSION = 2.06
+> +CGIC_SOURCE = cgic206.tar.gz
+> +CGIC_SITE = http://boutell.com/cgic
+> +CGIC_LICENSE = Custom
+> +CGIC_LICENSE_FILES = license.txt
+> +
+> +CGIC_ENV = AR=$(TARGET_CROSS)ar \
+> +       CC=$(TARGET_CROSS)gcc \
+> +       RANLIB=$(TARGET_CROSS)ranlib
+> +
 
-Regards,
+Could use TARGET_CONFIGURE_OPTS instead of defining your own CGIC_ENV.
 
--- 
-Samuel
+> +define CGIC_BUILD_CMDS
+> +       (cd $(@D); \
+> +               $(CGIC_ENV) \
+> +               make libcgic.a \
+> +               )
+> +endef
+
+Instead of a compound cd/make, why not just use -C?
+Should use $(MAKE) as well.
+
+define CGIC_BUILD_CMDS
+    $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) libcgic.a
+endef
+
+Same comment for the steps below.
+
+Danomi -
+
+> +
+> +define CGIC_INSTALL_STAGING_CMDS
+> +       (cd $(@D); \
+> +               PREFIX=$(STAGING_DIR) make install \
+> +               )
+> +endef
+> +
+> +define CGIC_INSTALL_TARGET_CMDS
+> +       (cd $(@D); \
+> +               PREFIX=$(TARGET_DIR) make install \
+> +               )
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.7.8.6
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
