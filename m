@@ -1,22 +1,46 @@
-From: dosrulez at libero.it <dosrulez@libero.it>
-Date: Thu, 22 Jan 2015 17:03:34 +0100 (CET)
-Subject: [Buildroot] buildroot + leon3 + gdb
-Message-ID: <1360834790.663881421942614585.JavaMail.defaultUser@defaultHost>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 22 Jan 2015 10:53:16 -0600
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake: fix host-cmake-package type
+Message-ID: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I'm having a problem trying to build a specific linux kernel for leon3 &amp; spartan6 (Xilinx). 
-What I want is build a customized linux kernel using Buildroot and the toolchain provided by Gaisler, including an instance of gdb server which is going to be executed on the target.
-Whenever I try to include gdb into the build process I get the error "Could not find gdbserver in external toolchain" and I cannot find a way to fix this.
-Could you help me?
+When trying to compile a host-cmake-package type such as host-cdrkit,
+an error happens in regards to HOSTCC and HOSTCXX not being found.
 
-Thank you in advance!
+  /bin/sh: HOSTCC: command not found
+  /bin/sh: HOSTCXX: command not found
 
-Stefano
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150122/672d9aa8/attachment.html>
+This due to the fact that the environment is incorrectly configured by
+having the following:
+
+  -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
+
+This is due to having too many dollar signs. The fix is to remove the
+extra dollar sign.
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+ package/pkg-cmake.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 1037513..eac244f 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -27,8 +27,8 @@ CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
+ CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
+ CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
+ else
+-CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
+-CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
++CMAKE_HOST_C_COMPILER="$(HOSTCC)"
++CMAKE_HOST_CXX_COMPILER="$(HOSTCXX)"
+ endif
+ 
+ ################################################################################
+-- 
+1.9.1
