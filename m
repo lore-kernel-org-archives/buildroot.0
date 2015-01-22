@@ -1,85 +1,50 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Thu, 22 Jan 2015 23:13:30 +0100
-Subject: [Buildroot] [PATCH try 4] wine: New package
-In-Reply-To: <20150121233549.GN4375@free.fr>
-References: <54BED214.6080601@dawncrow.de> <20150121233549.GN4375@free.fr>
-Message-ID: <54C1760A.5010802@dawncrow.de>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 23 Jan 2015 00:43:25 +0100
+Subject: [Buildroot] [PATCH] infozip: fix compilation with
+	LARGE_FILE_SUPPORT
+In-Reply-To: <20150120174108.5a6ecd37@free-electrons.com>
+References: <1421748962-838-1-git-send-email-richard.genoud@gmail.com>
+ <20150120174108.5a6ecd37@free-electrons.com>
+Message-ID: <54C18B1D.6030206@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 22.01.2015 um 00:35 schrieb Yann E. MORIN:
-> Andr?, All,
+Richard, Thomas,
+
+Le 20/01/2015 17:41, Thomas Petazzoni a ?crit :
+> Dear Richard Genoud,
 > 
-> On 2015-01-20 23:09 +0100, Andr? Hentschel spake thusly:
->> Adds new package: wine
+> On Tue, 20 Jan 2015 11:16:02 +0100, Richard Genoud wrote:
 > 
-> Sorry for jumoing late in the wagon, but here are some minor comments...
-
-Hi Yann,
-
-Thx for the review!
-
->> +comment "wine needs a (e)glibc toolchain w/ IPv6, threads"
->> +	depends on BR2_i386 || BR2_x86_64
->> +	depends on BR2_TOOLCHAIN_BUILDROOT
-> 
-> Did you forget to remove that dependency for the comment?
-
-yes, thx
-
->> +# Wine needs the host tupel of the external toolchain for cross compiling
->> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT),)
->> +	WINE_CONF_OPTS += --host=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+>> +INFOZIP_CFLAGS = -I. -DUNIX
+>> +
+>> +ifeq ($(BR2_LARGEFILE),y)
+>> +INFOZIP_CFLAGS += -DLARGE_FILE_SUPPORT
 >> +endif
 > 
-> I know this has already been discussed at length on the list, but it
-> really warrants a bit more explanations here.
-
-sure, done
-
->> +ifeq ($(BR2_PACKAGE_CUPS),y)
->> +	WINE_CONF_OPTS += --with-cups
->> +	WINE_DEPENDENCIES += cups
->> +else
->> +	WINE_CONF_OPTS += --without-cups
->> +endif
+> Things are not really clear: the INSTALL file from infozip says:
 > 
-> I do appreciate that you did all that work to enable/disable optional
-> features. That's a great work! :-)
+>     This flag should be set automatically on Unix, Win32, and some
+>     other ports.  Setting NO_LARGE_FILE_SUPPORT turns this flag off.
 > 
-> However, for very complex packages, my opinion is that it is much
-> simpler to review and test (and write!) a new complex package with
-> everything disabled. It makes for smaller patches to review, and faster
-> builds to test. Then, new features can be added one by one in subsequent
-> patches, once the core has been upstreamed.
+> So according to this, it should not be necessary to set this flag
+> explicitly. However, after a quick look at the unix/configure script, I
+> haven't seen any logic doing this. Can you confirm?
 > 
-> Note that I do not ask you to remove that, jsut keep it. Just suggesting
-> that in case you're fool^Wbold enough to try packaging some other big
-> stuff  in the future! Hehe! ;-)
-
-:D
-honestly i'd have a project in mind...
-
-> [--SNIP--]
->> +HOST_WINE_CONF_OPTS += \
->> +	--disable-tests \
->> +	--disable-win16 \
-> [--SNIP--]
->> +	--without-xxf86vm \
->> +	--without-zlib
+> Thanks,
 > 
-> Like you disabled everthing here.
-
-added a comment for this now, too. as it has its reason.
-
-
->> +$(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
+> Thomas
 > 
-> I haven't much more to say, I'll try to have some time this WE to have a
-> further look.
 
-cool, i'll send try 5 as soon as i tested it
+Sorry, I made a mistake in commit cc4dedd9...
+
+This week I updated from 2013.08 to 2014.11 and I had a runtime error with zip:
+"zip warning : Not supported (uzoff_t not same size as zoff_t)"
+
+I'm sending a series to fit this.
+
+Best regards,
+Romain Naour
