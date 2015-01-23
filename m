@@ -1,72 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 Jan 2015 12:56:39 +0100
-Subject: [Buildroot] wrap Buildroot compilation for static analysis
-In-Reply-To: <CAG--3ku7jZbAiiueUH6ukXwZG4dJQ+XBr9TEiafG3SOt2cRwVQ@mail.gmail.com>
-References: <CAG--3ku7jZbAiiueUH6ukXwZG4dJQ+XBr9TEiafG3SOt2cRwVQ@mail.gmail.com>
-Message-ID: <20150123115639.GC8089@free.fr>
+Date: Fri, 23 Jan 2015 13:39:04 +0100
+Subject: [Buildroot] [PATCH 04/11 v5] package/opengl-registry: new
+	package
+In-Reply-To: <20150122081225.004e5ff2@nserafini-N550JK>
+References: <cover.1421699898.git.yann.morin.1998@free.fr>
+ <a262173c20d1679301970131f119c65bc916d8be.1421699898.git.yann.morin.1998@free.fr>
+ <20150120181244.7b007fc4@nserafini-N550JK>
+ <20150121173631.GD4375@free.fr>
+ <20150122081225.004e5ff2@nserafini-N550JK>
+Message-ID: <20150123123904.GD8089@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doug, All,
+Nicolas, All,
 
-On 2015-01-23 07:55 +0000, spam at douglasheld.net spake thusly:
-> I have some commercial software called Fortify SCA that wraps a compiler
-> command, to build an analysis model of the code.  I would like to analyze
-> OpenWRT and I see that it implements Buildroot.
-
-Well, although it's true that OpenWRT is a fork of Buildroot, the fork
-occured a looong time ago, and the two are now completely different.
-OpenWRT is now its own build system in its own right, and is no longer
-correlated to Buildroot.
-
-I would suggest that you direct OpenWRT related questions to the OpenWRT
-support channels.
-
-> But I am finding the Buildroot build sequence a
-> little incomprehensible.
+On 2015-01-22 08:12 +0100, Nicolas Serafini spake thusly:
+> On Wed, 21 Jan 2015 18:36:31 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > On 2015-01-20 18:12 +0100, Nicolas Serafini spake thusly:
+> > > I have done some test using Nvidia tegra binary blob and I was not
+> > > able to build package that has dependency (like QT5 with OpenglES)
+> > > because some headers files are missing.
+> > > EGL/eglplatform.h
+> > > GLES/glplatform.h
+> > > GLES2/gl2platform.h
+> > > GLES3/gl3platform.h
+> > > 
+> > > If I add them manually it's working.
+> > 
+> > Do you mean that they are present in opengl-registry, but not
+> > installed? If so, I may have missed something. I'll have a look later
+> > tonight.
 > 
-> For example, a shortcut I tried is:
+> No they are not present in opengl-registry. I looked into the Makefile
+> if there is an option to enable the generation of these files but I saw
+> nothing.
 > 
-> #i.e., build the toolchain and then the product
-> make
-> # find and remove selected object files
-> find ./package/libnl-tiny | egrep '\.o$|\.so$' | xargs rm
-> # try my wrapper on limited number of files
-> sourceanalyzer <sca args> make
-> 
-> But the final command doesn't detect the missing .o files and rebuild
-> them.  Instead it indicates a fatal error in libnl-tiny.so not existing as
-> expected.
+> I took the missing files on this page
+> https://www.khronos.org/registry/
 
-I don't know how OpenWRT behaves in this respect, but Buildroot does not
-detect such changes.
+Ok, so it the same location as I had found, too.
 
-What happens is that, after each step: configure, build install...,
-Buildroot will create a stamp file in the package build directory, like;
-    build/PKG-NAME-VERSION/.stamp_downloaded
-    build/PKG-NAME-VERSION/.stamp_extracted
-    build/PKG-NAME-VERSION/.stamp_configured
-    build/PKG-NAME-VERSION/.stamp_built
-and so on...
+So, here's what I've done to get those headers:
+    http://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/gfx&id=0d2cdbc1bac3065383b8f31c1c8b954359550c77
 
-Then, Buildroot uses those files to detect whether the package needs
-configuring, building, etc... So, as long as those files are present,
-Buildroot would believe it has nothing to do about that package.
+It's not as clean as I had liked, but it works. I still have some minor
+cleanups to do before I respin the series, though...
 
-What you want to do is use one of the re-do targets, like:
-    make PKG-reconfigure
-    make PKG-rebuild
-
-But I don't know how that would translate for OpenWRT...
-
-> Any indication where I should be looking? I didn't imagine the OpenWRT guys
-> would be able to answer questions about the underlying build system.
-
-I guess they would, since OpenWRT is no longer related to Buildroot
-nowdays...
+Thank you! :-)
 
 Regards,
 Yann E. MORIN.
