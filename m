@@ -1,36 +1,24 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Fri, 23 Jan 2015 15:43:10 +0100
-Subject: [Buildroot] [PATCH 1/2] dropbear: install start script only if
- it doesn't already exists
-In-Reply-To: <20150120172243.79f2cec6@free-electrons.com>
-References: <1421753394-32029-1-git-send-email-richard.genoud@gmail.com>
- <20150120172243.79f2cec6@free-electrons.com>
-Message-ID: <CACQ1gAh9G7vjvbR+D1fq3-XSxNsrzFin8zN=0nTOCKg+i6tcMQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Jan 2015 16:42:58 +0100
+Subject: [Buildroot] [PATCH] patch: security bump to version 2.7.3
+In-Reply-To: <1422010076-14647-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 23 Jan 2015 07:47:56 -0300")
+References: <1422010076-14647-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sif17bb1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-01-20 17:22 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Richard Genoud,
->
-> On Tue, 20 Jan 2015 12:29:53 +0100, Richard Genoud wrote:
->> That way, we can use a different start script in a custom skeleton.
->>
->> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
->> ---
->>  package/dropbear/dropbear.mk | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> Sorry, but we precisely recently removed such conditions, because they
-> are not needed.
->
-> Don't use a custom skeleton, instead use a post-build script or a
-> rootfs overlay. With both of those methods, your custom init script
-> will take precedence over the one installed by Buildroot.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Ok, I'll look into the rootfs overlay.
+ > Fixes CVE-2015-1196 - allows remote attackers to write to arbitrary
+ > files via a symlink attack in a patch file.
 
-Thanks !
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
