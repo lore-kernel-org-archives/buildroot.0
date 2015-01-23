@@ -1,158 +1,210 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:34 +0100
-Subject: [Buildroot] [PATCH 05/14 v6] package/mesa3d-headers: new package
+Date: Sat, 24 Jan 2015 00:24:35 +0100
+Subject: [Buildroot] [PATCH 06/14 v6] package/khronos-registry-opengl: new
+	package
 In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
 References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <8aa48a64d97804de81ed6b22585fac12325d453e.1422055104.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some headers required to build GL/EGL/GLES/... stuff are not provided by
-Khronos, so we must find an alternate source for those headers.
-Currently, we're missing:
-  - gl.h for full GL (gl.h for GLES is available from Khronos)
-  - dri_interface.h to be able to build GL-enabled Xorg
+The OpenGL Registry provides all GL headers, save for gl.h itself. We
+vampirise the one from mesa3d (at the version we currently package),
+which is as good as any other.
 
-mesa3d provides all of them, and they are generic enough that they can
-be re-used even for other GL/EGL/GLES/... implementations.
+Those headers are needed when an OpenGL/EGL/GLES implementation does
+not provide its own headers, like the NVidia binary blob (to come in
+follow-up patches.)
 
-Unfortunately, modifying mesa3d so that it only installs its headers is
-no trivial task, and would render the mesa3d package really ugly and
-unmaintainable in the long run.
-
-Instead, we introduce a stripped-down mesa3d-headers package, which sole
-purpose is to install those missing headers.
-
-Alongside the dri_interface.h header, we also need to install a
-pkg-config file, dri.pc, so that Xorg et al. are content and believe
-they have DRI available.
-
-Since we do only really require a very limited subset of files from
-mesa3d, we do not really care of the version we use, so there is no
-reason to keep them both in sync, and no reason to add a comment in
-mesa3d to that effect.
+Note that, even though this is a generic package, and we could
+everything in the BUILD_CMDS, we decided to split the tweaking of glx.h
+in a post-build script, to really make it clear we are tweaking a
+generated file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+--
+Tested by building XBMC against the NVidia proprietary blob.
+
+Note: their svn repository holds many other things, even non-public
+stuff, so the svn revision we use is the one at which the api directory
+was *changed*, which might be lagging behind the revision the repository
+is currently at
+
 ---
-Notes:
+Changes v5 -> v6:
+  - depend on mesa3d-headers to provide gl.h, so ditch our bundled copy
 
-It should not be possible to select both mesa3d *and* mesa3d-headers at
-the same time, but it is difficult to foresee the multiple combinations
-we may have, due to poor understanding on how binary drivers may behave
-and may require, as well as my own poor understanding of the GL stack(s).
+Changes v4 -> v5:
+  - fix env when calling make
 
-So I decided to just print a warning in that case, and just depend on
-mesa3d, which would ultimately provide the headers we are interested in
-anyway. This can be turned into an error if preferred.
+Changes v3 -> v4:
+  - move to a sub-dir of opengl/ because we'll add some more Khronos
+    registry packages (OpenMAX...)
+  - bump revision
 ---
- package/Config.in                          |  1 +
- package/mesa3d-headers/Config.in           |  8 +++++
- package/mesa3d-headers/mesa3d-headers.hash |  2 ++
- package/mesa3d-headers/mesa3d-headers.mk   | 57 ++++++++++++++++++++++++++++++
- 4 files changed, 68 insertions(+)
- create mode 100644 package/mesa3d-headers/Config.in
- create mode 100644 package/mesa3d-headers/mesa3d-headers.hash
- create mode 100644 package/mesa3d-headers/mesa3d-headers.mk
+ package/opengl/Config.in                           |  1 +
+ .../0001-run-from-current-dir.patch                | 17 +++++
+ package/opengl/khronos-registry-opengl/Config.in   | 25 +++++++
+ .../khronos-registry-opengl.mk                     | 83 ++++++++++++++++++++++
+ 4 files changed, 126 insertions(+)
+ create mode 100644 package/opengl/khronos-registry-opengl/0001-run-from-current-dir.patch
+ create mode 100644 package/opengl/khronos-registry-opengl/Config.in
+ create mode 100644 package/opengl/khronos-registry-opengl/khronos-registry-opengl.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 6b2b2a3..b808483 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -215,6 +215,7 @@ endif
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
- 	source "package/mesa3d/Config.in"
-+	source "package/mesa3d-headers/Config.in"
- 	source "package/ocrad/Config.in"
- 	source "package/psplash/Config.in"
- 	source "package/sawman/Config.in"
-diff --git a/package/mesa3d-headers/Config.in b/package/mesa3d-headers/Config.in
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index d9a5c37..0c3f2cb 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -7,3 +7,4 @@ source "package/opengl/libopenmax/Config.in"
+ # Khronos headers, from the Khronos Registries
+ source "package/opengl/khronos-registry-khrplatform/Config.in"
+ source "package/opengl/khronos-registry-openkode/Config.in"
++source "package/opengl/khronos-registry-opengl/Config.in"
+diff --git a/package/opengl/khronos-registry-opengl/0001-run-from-current-dir.patch b/package/opengl/khronos-registry-opengl/0001-run-from-current-dir.patch
 new file mode 100644
-index 0000000..a64fc0c
+index 0000000..4b042ab
 --- /dev/null
-+++ b/package/mesa3d-headers/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MESA3D_HEADERS
++++ b/package/opengl/khronos-registry-opengl/0001-run-from-current-dir.patch
+@@ -0,0 +1,17 @@
++Makefile: allow running without the current dir in PATH
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++Index: a/Makefile
++===================================================================
++--- a/Makefile	(revision 27863)
+++++ a/Makefile	(working copy)
++@@ -24,7 +24,7 @@
++ 
++ PYFILES = genheaders.py reg.py
++ GENOPTS =
++-GENHEADERS = genheaders.py $(GENOPTS)
+++GENHEADERS = ./genheaders.py $(GENOPTS)
++ 
++ # Generate all headers for GL / GLES / WGL / GLX / EGL
++ # Different headers depend on different XML registry files
+diff --git a/package/opengl/khronos-registry-opengl/Config.in b/package/opengl/khronos-registry-opengl/Config.in
+new file mode 100644
+index 0000000..b320e77
+--- /dev/null
++++ b/package/opengl/khronos-registry-opengl/Config.in
+@@ -0,0 +1,25 @@
++# Note: this package has no prompt, because it is to be selected by
++# packages that need it, and does not make sense on its own.
++# Further more, we want to avoid it being enabled alongside any other
++# package that provide their own OpenGL headers, like mesa3d or
++# rpi-userland...
++
++config BR2_PACKAGE_KHRONOS_REGISTRY_OPENGL
 +	bool
++	select BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
++	select BR2_PACKAGE_MESA3D_HEADERS
 +	help
-+	  Mesa 3D, an open-source implementation of the OpenGL specification.
++	  The OpenGL Registry contains specifications, header files, and
++	  related documentation for OpenGL and related APIs including GLU,
++	  GLX, and WGL. In addition to the core API specifications, many
++	  extensions to these APIs have been defined by vendors, groups of
++	  vendors, and the ARB. The Registry also contains specifications
++	  and header files for all registered extensions, written as
++	  modifications to the appropriate core API specifications.
 +
-+	  This package only installs headers needed by other packages.
++	  This package installs the openGL header files. You do not need them
++	  if the OpenGL/EGL/GLES implementation provides its own headers.
++	  Currently, the only known implementation requiring OpenGL Resgistry
++	  is the NVidia proprietary driver.
 +
-+	  http://mesa3d.org
-diff --git a/package/mesa3d-headers/mesa3d-headers.hash b/package/mesa3d-headers/mesa3d-headers.hash
++	  https://www.opengl.org/registry/
+diff --git a/package/opengl/khronos-registry-opengl/khronos-registry-opengl.mk b/package/opengl/khronos-registry-opengl/khronos-registry-opengl.mk
 new file mode 100644
-index 0000000..df309b5
+index 0000000..a66def4
 --- /dev/null
-+++ b/package/mesa3d-headers/mesa3d-headers.hash
-@@ -0,0 +1,2 @@
-+# From http://mesa3d.org/relnotes/10.4.2.html
-+sha256	08a119937d9f2aa2f66dd5de97baffc2a6e675f549e40e699a31f5485d15327f	MesaLib-10.4.2.tar.bz2
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-new file mode 100644
-index 0000000..5bfb3c6
---- /dev/null
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -0,0 +1,57 @@
++++ b/package/opengl/khronos-registry-opengl/khronos-registry-opengl.mk
+@@ -0,0 +1,83 @@
 +################################################################################
 +#
-+# mesa3d-headers
++# khronos-registry-opengl
 +#
 +################################################################################
 +
-+# mesa3d-headers is inherently incompatible with mesa3d, so if mesa3d
-+# is enabled, just rely on it.
++# Using last revision at which the 'api' directory was *changed*, which might
++# not be the latest revision the repository is currently at.
++KHRONOS_REGISTRY_OPENGL_VERSION = 29537
++KHRONOS_REGISTRY_OPENGL_SITE = https://cvs.khronos.org/svn/repos/ogl/trunk/doc/registry/public/api
++KHRONOS_REGISTRY_OPENGL_SITE_METHOD = svn
 +
-+ifeq ($(BR2_PACKAGE_MESA3D),y)
++# No license file, license text in all generated headers
++KHRONOS_REGISTRY_OPENGL_LICENSE = MIT
 +
-+ifeq ($(BR2_PACKAGE_MESA3D_HEADERS),y)
-+$(warning mesa3d-headers enabled, but mesa3d enabled too)
-+endif
++KHRONOS_REGISTRY_OPENGL_DEPENDENCIES = host-python host-python-lxml \
++	khronos-registry-khrplatform mesa3d-headers
 +
-+MESA3D_HEADERS_SOURCE =
-+MESA3D_HEADERS_DEPENDENCIES = mesa3d
++# The registry only installs header files
++KHRONOS_REGISTRY_OPENGL_INSTALL_STAGING = YES
++KHRONOS_REGISTRY_OPENGL_INSTALL_TARGET = NO
 +
-+else # mesa3d
++# opengl-registry depends on at least one of those virtual packages,
++# so we can be sure we'll have _DIRS set to non-empty.
++KHRONOS_REGISTRY_OPENGL_DIRS = \
++	$(if $(BR2_PACKAGE_HAS_LIBGL),GL) \
++	$(if $(BR2_PACKAGE_HAS_LIBEGL),EGL) \
++	$(if $(BR2_PACKAGE_HAS_LIBGLES),GLES GLES2 GLES3)
 +
-+# Not possible to directly refer to mesa3d variables, because of first/second
-+# expansion trickery...
-+MESA3D_HEADERS_VERSION = 10.4.2
-+MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
-+MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
-+MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-+MESA3D_HEADERS_LICENSE_FILES = docs/license.html
++# Remove pre-generated files
++define KHRONOS_REGISTRY_OPENGL_RM_H
++	rm -f $(@D)/GL/*.h
++endef
++KHRONOS_REGISTRY_OPENGL_POST_EXTRACT_HOOKS += KHRONOS_REGISTRY_OPENGL_RM_H
 +
-+# Only installs header files
-+MESA3D_HEADERS_INSTALL_STAGING = YES
-+MESA3D_HEADERS_INSTALL_TARGET = NO
-+
-+# Not using $(SED) because we do not want to work in-place, and $(SED)
-+# contains -i.
-+define MESA3D_HEADERS_BUILD_CMDS
-+	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
-+	    -e 's:@libdir@:${exec_prefix}/lib:' \
-+	    -e 's:@includedir@:${prefix}/include:' \
-+	    -e 's:@DRI_DRIVER_INSTALL_DIR@:${libdir}/dri:' \
-+	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
-+	    -e 's:@DRI_PC_REQ_PRIV@::' \
-+	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
-+	    >$(@D)/src/mesa/drivers/dri/dri.pc
++define KHRONOS_REGISTRY_OPENGL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+define MESA3D_HEADERS_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/include/GL/gl.h \
-+		$(STAGING_DIR)/usr/include/GL/gl.h
-+	$(INSTALL) -D -m 0644 $(@D)/include/GL/internal/dri_interface.h \
-+		$(STAGING_DIR)/usr/include/GL/internal/dri_interface.h
-+	$(INSTALL) -D -m 0644 $(@D)/src/mesa/drivers/dri/dri.pc \
-+		$(STAGING_DIR)/usr/lib/pkg-config/dri.pc
++# We need to tweak the generated glx.h to:
++# - include the X11 headers it needs
++# - include glxext.h like mesa3d's one does
++# - define the glxext prototypes
++define KHRONOS_REGISTRY_OPENGL_FIX_GLX_H
++	awk 'BEGIN { def_proto=1; } \
++	 $$0=="#ifdef GLX_GLXEXT_PROTOTYPES" && def_proto==1 { \
++		print "#define GLX_GLXEXT_PROTOTYPES 1 /* Added by Buildroot */"; \
++		def_proto=0; \
++	 } \
++	 $$0=="#endif /* GLX_VERSION_1_4 */" { \
++		print ""; \
++		print "/* Added by Buildroot */"; \
++		print "#ifndef GLX_GLXEXT_LEGACY"; \
++		print "#include <GL/glxext.h>"; \
++		print "#endif /* GLX_GLXEXT_LEGACY */"; \
++		print "/* End added by Buildroot */"; \
++		print ""; \
++	 } \
++	 { print; } \
++	 $$0=="#define GLX_VERSION_1_0 1" { \
++		print ""; \
++		print "/* Added by Buildroot */"; \
++		print "#include <X11/Xlib.h>"; \
++		print "#include <X11/Xutil.h>"; \
++		print "#include <GL/gl.h>"; \
++		print "/* End added by Buildroot */"; \
++		print ""; \
++	 } \
++	' $(@D)/GL/glx.h >$(@D)/GL/glx.h.tmp
++	mv $(@D)/GL/glx.h.tmp $(@D)/GL/glx.h
 +endef
++KHRONOS_REGISTRY_OPENGL_POST_BUILD_HOOKS += KHRONOS_REGISTRY_OPENGL_FIX_GLX_H
 +
-+endif # !mesa3d
++define KHRONOS_REGISTRY_OPENGL_INSTALL_STAGING_CMDS
++	for d in $(KHRONOS_REGISTRY_OPENGL_DIRS); do \
++		for h in $(@D)/$${d}/*.h; do \
++			$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${d}/$${h##*/} \
++			|| exit 1; \
++		done \
++	done
++endef
 +
 +$(eval $(generic-package))
 -- 
