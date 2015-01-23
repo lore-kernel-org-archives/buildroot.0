@@ -1,72 +1,66 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Fri, 23 Jan 2015 14:17:04 -0600
-Subject: [Buildroot] [PATCH v3 1/1] pkg-cmake: fix host-cmake-package type
-Message-ID: <1422044224-22598-1-git-send-email-ryan.barnett@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Jan 2015 21:17:54 +0100
+Subject: [Buildroot] [PATCH] python-pysendfile: new package
+In-Reply-To: <1421786335-3067-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Tue, 20 Jan 2015 21:38:55 +0100")
+References: <1421786335-3067-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <877fwd6ykt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When trying to compile a host-cmake-package type such as host-cdrkit,
-an error happens in regards to HOSTCC and HOSTCXX not being found.
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-  /bin/sh: HOSTCC: command not found
-  /bin/sh: HOSTCXX: command not found
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ >  package/Config.in                                |  1 +
+ >  package/python-pysendfile/Config.in              |  6 ++++++
+ >  package/python-pysendfile/python-pysendfile.hash |  3 +++
+ >  package/python-pysendfile/python-pysendfile.mk   | 13 +++++++++++++
+ >  4 files changed, 23 insertions(+)
+ >  create mode 100644 package/python-pysendfile/Config.in
+ >  create mode 100644 package/python-pysendfile/python-pysendfile.hash
+ >  create mode 100644 package/python-pysendfile/python-pysendfile.mk
 
-This due to the fact that the environment is incorrectly configured by
-having the following:
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 266de13..32d6755 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -540,6 +540,7 @@ menu "external python modules"
+ >  	source "package/python-pyparsing/Config.in"
+ >  	source "package/python-pypcap/Config.in"
+ >  	source "package/python-pyro/Config.in"
+ > +	source "package/python-pysendfile/Config.in"
+ >  	source "package/python-pysnmp/Config.in"
+ >  	source "package/python-pysnmp-apps/Config.in"
+ >  	source "package/python-pysnmp-mibs/Config.in"
+ > diff --git a/package/python-pysendfile/Config.in b/package/python-pysendfile/Config.in
+ > new file mode 100644
+ > index 0000000..5a919dd
+ > --- /dev/null
+ > +++ b/package/python-pysendfile/Config.in
+ > @@ -0,0 +1,6 @@
+ > +config BR2_PACKAGE_PYTHON_PYSENDFILE
+ > +	bool "python-pysendfile"
+ > +	help
+ > +	  A Python interface to sendfile(2) syscall
+ > +
+ > +	  https://github.com/giampaolo/pysendfile
+ > diff --git a/package/python-pysendfile/python-pysendfile.hash b/package/python-pysendfile/python-pysendfile.hash
+ > new file mode 100644
+ > index 0000000..3cedb3f
+ > --- /dev/null
+ > +++ b/package/python-pysendfile/python-pysendfile.hash
+ > @@ -0,0 +1,3 @@
+ > +# Locally computed:
+ > +sha256  f4ca8a7f0be67e3d710c0633dd9aadab6881203c31cb9eb9be4f10361ad3f937  python-pysendfile-2.0.1.tar.gz
+ > +
 
-  -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
+Extra newline here, otherwise it looks good.
 
-This is due to having too many dollar signs. The fix is to remove the
-extra dollar sign.
+Committed, thanks.
 
-Also removing the unncessary quotes since the HOSTCC/HOSTCXX will
-already contain quotes. This could cause an issue with make as double
-quotes are not interpreted by make.
-
-Minor formatting fix too.
-
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-v1 -> v2
- - Implemented spacing and quote concerns from Yann E. MORIN and
-   Samuel Marin.
-
-v2 -> v3
- - More quote removed
-
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
----
- package/pkg-cmake.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 1037513..6c9955d 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -22,13 +22,13 @@
- 
- # Set compiler variables.
- ifeq ($(BR2_CCACHE),y)
--CMAKE_HOST_C_COMPILER="$(HOST_DIR)/usr/bin/ccache"
--CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
--CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
--CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
-+CMAKE_HOST_C_COMPILER = $(HOST_DIR)/usr/bin/ccache
-+CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/usr/bin/ccache
-+CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
-+CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
- else
--CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
--CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
-+CMAKE_HOST_C_COMPILER = $(HOSTCC)
-+CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
- endif
- 
- ################################################################################
 -- 
-1.9.1
+Bye, Peter Korsgaard
