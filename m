@@ -1,119 +1,117 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:40 +0100
-Subject: [Buildroot] [PATCH 11/14 v6] package/nvidia-driver: build the
-	kernel module
+Date: Sat, 24 Jan 2015 00:24:37 +0100
+Subject: [Buildroot] [PATCH 08/14 v6] package/khronos-registry-openmaxil:
+	new package
 In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
 References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <ebbebba5ff23b0fe5fd7869924282328ff48ab6f.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <cdd844f872ef2316b998a4b8a78c46abe0e2d8f4.1422055104.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add option to build the nvidia.ko module. If CUDA is enabled on x86_64,
-also build the nvidia-uvm.ko kernel module (for Unified Memory access),
-which is required by the CUDA user-land library.
+The OpenMAX Registry provides all OpenMAX headers, directly from the
+Khronos group.
 
-Substancially inspired by the corresponding Gentoo ebuild:
-    http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-340.32.ebuild?revision=1.2&view=markup
+Those headers are needed when an OpenMAX implementation does not
+provide them, like the NVidia binary blob.
+
+These are the OpenMAX Inegration Layer (IL) headers.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/nvidia-driver/Config.in        | 14 ++++++++++
- package/nvidia-driver/nvidia-driver.mk | 50 ++++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
+ package/opengl/Config.in                           |  1 +
+ .../opengl/khronos-registry-openmaxil/Config.in    | 20 ++++++++++++++
+ .../khronos-registry-openmax.hash                  |  3 ++
+ .../khronos-registry-openmaxil.mk                  | 32 ++++++++++++++++++++++
+ 4 files changed, 56 insertions(+)
+ create mode 100644 package/opengl/khronos-registry-openmaxil/Config.in
+ create mode 100644 package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash
+ create mode 100644 package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index e1d2946..9579c7a 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -48,4 +48,18 @@ config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
- 	  Say 'y' here if you plan on running a program that uses those
- 	  private libraries.
- 
-+comment "nvidia kernel module needs a kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index 0c3f2cb..efe31a3 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -8,3 +8,4 @@ source "package/opengl/libopenmax/Config.in"
+ source "package/opengl/khronos-registry-khrplatform/Config.in"
+ source "package/opengl/khronos-registry-openkode/Config.in"
+ source "package/opengl/khronos-registry-opengl/Config.in"
++source "package/opengl/khronos-registry-openmaxil/Config.in"
+diff --git a/package/opengl/khronos-registry-openmaxil/Config.in b/package/opengl/khronos-registry-openmaxil/Config.in
+new file mode 100644
+index 0000000..35dddf9
+--- /dev/null
++++ b/package/opengl/khronos-registry-openmaxil/Config.in
+@@ -0,0 +1,20 @@
++# Note: this package has no prompt, because it is to be selected by
++# packages that need it, and does not make sense on its own.
++# Further more, we want to avoid it being enabled alongside any other
++# package that provide their own OpenMAX headers, like rpi-userland...
 +
-+config BR2_PACKAGE_NVIDIA_DRIVER_MODULE
-+	bool "nvidia kernel module"
-+	depends on BR2_LINUX_KERNEL
++config BR2_PACKAGE_KHRONOS_REGISTRY_OPENMAXIL
++	bool
++	select BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
 +	help
-+	  Build the nvidia.ko kernel module.
++	  The OpenMAX IL registry contains specifications of the core API;
++	  specifications of Khronos- and vendor-approved OpenMAX IL extensions;
++	  header files corresponding to the specifications; and other related
++	  documentation.
 +
-+	  If CUDA support (above) is set, and the target is x86_64, then
-+	  this will also build the nvidia-uvm.ko kernel module, which
-+	  provides Unified Memory access to the GPU and CPU memories for
-+	  CUDA programs.
++	  This package installs the OpenMAX header files. You do not need them
++	  if the OpenMAX implementation provides its own headers.
++	  Currently, the only known implementation requiring OpenGL Resgistry
++	  is the NVidia proprietary driver.
 +
- endif # BR2_PACKAGE_NVIDIA_DRIVER
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index d53dc06..d1b2c25 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -65,6 +65,55 @@ define NVIDIA_DRIVER_EXTRACT_CMDS
- 	rm -rf $(@D)/tmp-extract
- endef
- 
-+# Build and install the kernel modules if needed
-+ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_MODULE),y)
++	  https://www.khronos.org/registry/omxil/
+diff --git a/package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash
+new file mode 100644
+index 0000000..e2f5014
+--- /dev/null
++++ b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha1   35b2c565a050b4235feac3f22bbbf4bf80092a00                          OpenMAX_IL_1_1_2_Header.zip
++sha256 9e8aee85f37946202ff15a52836233f983e90a751c0816ba341ba0c1ffedf99e  OpenMAX_IL_1_1_2_Header.zip
+diff --git a/package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk
+new file mode 100644
+index 0000000..10b6896
+--- /dev/null
++++ b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# khronos-registry-openmaxil
++#
++################################################################################
 +
-+NVIDIA_DRIVER_DEPENDENCIES += linux
++# The latest 'stable' version is 1.1.2; the 1.2.0 version is only
++# considered "provisional", so we keep using 1.1.2 for now.
++KHRONOS_REGISTRY_OPENMAXIL_VERSION = 1.1.2
++KHRONOS_REGISTRY_OPENMAXIL_SOURCE = OpenMAX_IL_$(subst .,_,$(KHRONOS_REGISTRY_OPENMAXIL_VERSION))_Header.zip
++KHRONOS_REGISTRY_OPENMAXIL_SITE = https://www.khronos.org/registry/omxil/api/$(KHRONOS_REGISTRY_OPENMAXIL_VERSION)
 +
-+# NVidia uses the legacy naming scheme for the x86 architecture, when i386
-+# and x86_64 were still considered two separate architectures in the Linux
-+# kernel.
-+NVIDIA_DRIVER_ARCH = $(if $(BR2_i386),i386,$(BR2_ARCH))
++# No license file, license text in each header file
++KHRONOS_REGISTRY_OPENMAXIL_LICENSE = MIT
 +
-+NVIDIA_DRIVER_MOD_DIRS = kernel
-+NVIDIA_DRIVER_MOD_FILES = kernel/nvidia.ko
-+# nvidia-uvm.ko only available for x86_64
-+ifeq ($(BR2_x86_64)$(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),yy)
-+NVIDIA_DRIVER_MOD_DIRS += kernel/uvm
-+NVIDIA_DRIVER_MOD_FILES += kernel/uvm/nvidia-uvm.ko
-+endif
++# The registry only installs header files
++KHRONOS_REGISTRY_OPENMAXIL_INSTALL_STAGING = YES
++KHRONOS_REGISTRY_OPENMAXIL_INSTALL_TARGET = NO
 +
-+# We can not use '$(MAKE) -C $(@D)/$${dir}' because NVidia's uses its own
-+# Makefile to build a kernel module, which includes a lot of assumptions
-+# on where to find its own sub-Makefile fragments, and fails if make is
-+# not run from the directory where the module's source files are. Hence
-+# our little trick to cd in there first.
-+# That's also the reason why we do not use LINUX_MAKE_FLAGS or the other
-+# linux-specific variables, since NVidia's Makefile does not understand
-+# them.
-+define NVIDIA_DRIVER_BUILD_CMDS
-+	for dir in $(NVIDIA_DRIVER_MOD_DIRS); do \
-+		( cd $(@D)/$${dir} && \
-+		  $(MAKE) SYSSRC=$(LINUX_DIR) SYSOUT=$(LINUX_DIR) \
-+				CC=$(TARGET_CC) LD=$(TARGET_LD) HOSTCC=$(HOSTCC) \
-+				ARCH=$(NVIDIA_DRIVER_ARCH) module ) || exit 1; \
++define KHRONOS_REGISTRY_OPENMAXIL_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(KHRONOS_REGISTRY_OPENMAXIL_SOURCE) -d $(@D)
++endef
++
++# OpenMAX headers go directly into /usr/include, no sub-dir
++# At least, that's what bellagio does...
++define KHRONOS_REGISTRY_OPENMAXIL_INSTALL_STAGING_CMDS
++	for h in $(@D)/*.h; do \
++		$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${h##*/} || exit 1; \
 +	done
 +endef
 +
-+# We do not use module-install because NVidia's Makefile requires root.
-+# Also, we do not install it in the expected location (in nvidia/ rather
-+# than in kernel/drivers/video/ )
-+define NVIDIA_DRIVER_INSTALL_KERNEL_MODULE
-+	for mod in $(NVIDIA_DRIVER_MOD_FILES); do \
-+		$(INSTALL) -D -m 0644 $(@D)/$${mod} \
-+			$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/nvidia/$${mod##*/} \
-+		|| exit 1; \
-+	done
-+	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
-+endef
-+
-+endif # BR2_PACKAGE_NVIDIA_DRIVER_MODULE == y
-+
- # Helper to install libraries
- # $1: destination directory (target or staging)
- #
-@@ -106,6 +155,7 @@ define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
- 		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
- 			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
- 	done
-+	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
- endef
- 
- $(eval $(generic-package))
++$(eval $(generic-package))
 -- 
 1.9.1
