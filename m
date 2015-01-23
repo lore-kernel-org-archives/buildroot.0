@@ -1,100 +1,116 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 23 Jan 2015 19:34:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: New package
-Message-ID: <1422038085-2042-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Jan 2015 17:35:43 +0100
+Subject: [Buildroot] [git commit] eudev: really bump version
+Message-ID: <20150123185533.AFE25801E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=14af550d5eb50222196ece3042d2f1e2a9466cf6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The configure script checks for linux/btrfs.h which is only available since
+3.9 (55e301fd57a6239ec: Btrfs: move fs/btrfs/ioctl.h to
+include/uapi/linux/btrfs.h).
+
+It now also uses static_assert which is only available since GCC 4.6, so
+handle it as well in the legacy patch.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                      |    1 +
- package/mjpg-streamer/Config.in        |   16 ++++++++++++++
- package/mjpg-streamer/mjpg-streamer.mk |   38 ++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+)
- create mode 100644 package/mjpg-streamer/Config.in
- create mode 100644 package/mjpg-streamer/mjpg-streamer.mk
+ ...y-use-pragma-for-ignoring-diagnostics-if-.patch |   30 ++++++++++---------
+ package/eudev/eudev.mk                             |    2 +-
+ system/Config.in                                   |    6 ++-
+ 3 files changed, 21 insertions(+), 17 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 266de13..568de5b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1094,6 +1094,7 @@ endif
- 	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
- 	source "package/minidlna/Config.in"
-+	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
- 	source "package/mongoose/Config.in"
- 	source "package/mongrel2/Config.in"
-diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
-new file mode 100644
-index 0000000..0c61d7f
---- /dev/null
-+++ b/package/mjpg-streamer/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_MJPG_STREAMER
-+	bool "mjpg-streamer"
-+	# linux/uvcvideo.h was added in kernel 2.6.40
-+	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  MJPG-streamer takes JPGs from Linux-UVC compatible webcams, filesystem
-+	  or other input plugins and streams them as M-JPEG via HTTP to
-+	  webbrowsers, VLC and other software.
-+
-+	  http://mjpg-streamer.sourceforge.net
-+
-+comment "mjpg-streamer needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-new file mode 100644
-index 0000000..9d282de
---- /dev/null
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# mjpg-streamer
-+#
-+################################################################################
-+
-+# Original source is located at
-+# http://sourceforge.net/p/mjpg-streamer/code/commit_browser
-+# oliv3r forked the repo to add support for 3.16 and 3.17 kernels:
-+# http://sourceforge.net/p/mjpg-streamer/patches/14/
-+MJPG_STREAMER_VERSION = 730b5bcdc378b6a201131c6c2620eedbe0f6eb30
-+MJPG_STREAMER_SITE = $(call github,oliv3r,mjpg-streamer,$(MJPG_STREAMER_VERSION))
-+MJPG_STREAMER_LICENSE = GPLv2+
-+MJPG_STREAMER_LICENSE_FILES = LICENSE
-+MJPG_STREAMER_DEPENDENCIES = jpeg
-+
-+define MJPG_STREAMER_FIX_MAKEFILE
-+	cd $(@D); \
-+	for i in `find -iname Makefile`; do \
-+		$(SED) "s/^CC = gcc/#CC = gcc/g" $$i; \
-+	done
-+endef
-+
-+MJPG_STREAMER_PRE_CONFIGURE_HOOKS = MJPG_STREAMER_FIX_MAKEFILE
-+
-+define MJPG_STREAMER_BUILD_CMDS
-+	CC=$(TARGET_CC) \
-+	CFLAGS="$(TARGET_CFLAGS)" \
-+	$(MAKE) -C $(@D)
-+endef
-+
-+MJPG_STREAMER_INSTALL_TARGET_OPTS = DESTDIR="$(TARGET_DIR)" install
-+
-+define MJPG_STREAMER_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+diff --git a/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch b/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+index 8b70fbf..3046ba5 100644
+--- a/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
++++ b/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+@@ -4,34 +4,36 @@ Date: Wed, 2 Apr 2014 12:36:52 +0200
+ Subject: [PATCH] libudev: Only use #pragma for ignoring diagnostics if GCC
+  version supports it.
+ 
+-
++[Peter: update for 2.1.1, fix shared_assert issue]
+ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ ---
+- src/libudev/macro.h |    5 +++++
+- 1 file changed, 5 insertions(+)
++ src/shared/macro.h |    8 +++++
++ 1 file changed, 8 insertions(+)
+ 
+-diff --git a/src/libudev/macro.h b/src/libudev/macro.h
+-index ac2a23f..fb55983 100644
+---- a/src/libudev/macro.h
+-+++ b/src/libudev/macro.h
+-@@ -40,12 +40,17 @@
++diff --git a/src/shared/macro.h b/src/shared/macro.h
++--- a/src/shared/macro.h
+++++ b/src/shared/macro.h
++@@ -38,6 +38,7 @@
+  #define _cleanup_(x) __attribute__((cleanup(x)))
+  
+- 
++ /* Temporarily disable some warnings */
+ +#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+- #define DISABLE_WARNING_FORMAT_NONLITERAL                               \
++ #define DISABLE_WARNING_DECLARATION_AFTER_STATEMENT                     \
+          _Pragma("GCC diagnostic push");                                 \
+-         _Pragma("GCC diagnostic ignored \"-Wformat-nonliteral\"")
++         _Pragma("GCC diagnostic ignored \"-Wdeclaration-after-statement\"")
++@@ -48,6 +49,13 @@
+  
+  #define REENABLE_WARNING                                                \
+          _Pragma("GCC diagnostic pop")
+ +#else
+++#define DISABLE_WARNING_DECLARATION_AFTER_STATEMENT
+ +#define DISABLE_WARNING_FORMAT_NONLITERAL
+ +#define REENABLE_WARNING
+++/* glibc unconditionally defines this, but it needs GCC 4.6+ */
+++#undef static_assert
+ +#endif
+  
+- /* Rounds up */
+- 
++ #define XCONCATENATE(x, y) x ## y
++ #define CONCATENATE(x, y) XCONCATENATE(x, y)
+ -- 
+ 1.7.9.5
+-
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 3cd22be..2221966 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EUDEV_VERSION = 1.9
++EUDEV_VERSION = 2.1.1
+ EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+diff --git a/system/Config.in b/system/Config.in
+index 4d7a4e3..e9f2428 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -129,12 +129,14 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # eudev
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 	select BR2_PACKAGE_EUDEV
+ 
+-comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
++comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
+ 	depends on !BR2_avr32 # eudev
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 
+ endchoice
+ 
