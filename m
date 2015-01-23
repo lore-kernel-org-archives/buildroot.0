@@ -1,22 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 16:49:40 +0100
-Subject: [Buildroot] [PATCH] agentpp: bump to 4.0.3
-In-Reply-To: <1421849398-9409-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 21 Jan 2015 15:09:58 +0100")
-References: <1421849398-9409-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87bnlp7azv.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 23 Jan 2015 16:50:43 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake: fix host-cmake-package type
+In-Reply-To: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
+References: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
+Message-ID: <20150123155043.GB19129@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+Ryan, All,
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+On 2015-01-22 10:53 -0600, Ryan Barnett spake thusly:
+> When trying to compile a host-cmake-package type such as host-cdrkit,
+> an error happens in regards to HOSTCC and HOSTCXX not being found.
+> 
+>   /bin/sh: HOSTCC: command not found
+>   /bin/sh: HOSTCXX: command not found
+> 
+> This due to the fact that the environment is incorrectly configured by
+> having the following:
+> 
+>   -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
 
-Committed, thanks. It would be good if you could add a .hash file as
-well.
+As you may have noticed, the double-quaotes are doubled...
+
+> This is due to having too many dollar signs. The fix is to remove the
+> extra dollar sign.
+> 
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+> ---
+>  package/pkg-cmake.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 1037513..eac244f 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -27,8 +27,8 @@ CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
+>  CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
+>  CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
+>  else
+> -CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
+> -CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
+> +CMAKE_HOST_C_COMPILER="$(HOSTCC)"
+> +CMAKE_HOST_CXX_COMPILER="$(HOSTCXX)"
+
+That's because of here; in Makefile syntax, double-quotes are not
+interpreted by make, and are part of the value.
+
+So, you should also drop the double-quotes here.
+
+Regards,
+Yann E. MORIN.
+
+>  endif
+>  
+>  ################################################################################
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
