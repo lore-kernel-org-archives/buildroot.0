@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 21:43:50 +0100
-Subject: [Buildroot] [PATCH 1/2] openntpd: bump to version 5.7p2
-In-Reply-To: <1421796686-19858-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 20 Jan 2015 20:31:25 -0300")
-References: <1421796686-19858-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87twzh5it5.fsf@dell.be.48ers.dk>
+Date: Fri, 23 Jan 2015 21:45:40 +0100
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.8.1
+In-Reply-To: <1421838953-26640-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 21 Jan 2015 08:15:53 -0300")
+References: <1421838953-26640-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ppa55iq3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
