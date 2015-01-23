@@ -1,46 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 16:44:27 +0100
-Subject: [Buildroot] [git commit] php: security bump to version 5.5.21
-Message-ID: <20150123155105.7E7518014A@busybox.osuosl.org>
+Date: Fri, 23 Jan 2015 16:48:56 +0100
+Subject: [Buildroot] [git commit] agentpp: bump to 4.0.3
+Message-ID: <20150123155105.99B0E80E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=626030fb1b9de47430254fce4dcf5ac5c526242f
+commit: http://git.buildroot.net/buildroot/commit/?id=818f5865e687e558b39643252d9c761da87b2cb9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2015-0231 - Use After Free Vulnerability in PHP's unserialize()
-CVE-2014-9427 - Out of bounds read crashes php-cgi
-CVE-2015-0232 - Free called on unitialized pointer
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash |    2 +-
- package/php/php.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/agentpp/agentpp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 0117289..cd27b10 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--md5	51377838dfee2d7bb4715674ac715394	php-5.5.20.tar.xz
-+md5	79664ce44f7c93f355a25a3fe3dcc91b	php-5.5.21.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index a5f4574..4bcbe18 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
+index a1edbb0..3d95ff4 100644
+--- a/package/agentpp/agentpp.mk
++++ b/package/agentpp/agentpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 5.5.20
-+PHP_VERSION = 5.5.21
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-AGENTPP_VERSION = 4.0.2
++AGENTPP_VERSION = 4.0.3
+ AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
+ AGENTPP_SITE = http://www.agentpp.com
+ AGENTPP_LICENSE = Apache-2.0
