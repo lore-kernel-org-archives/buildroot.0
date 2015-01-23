@@ -1,130 +1,158 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:33 +0100
-Subject: [Buildroot] [PATCH 04/14 v6] package/khronos-registry-openkode: new
-	package
+Date: Sat, 24 Jan 2015 00:24:34 +0100
+Subject: [Buildroot] [PATCH 05/14 v6] package/mesa3d-headers: new package
 In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
 References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <ee66b653533e932eb57498f72a3a1f314888f38d.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenKODE Registry provides all OpenKODE headers, directly from the
-Khronos group.
+Some headers required to build GL/EGL/GLES/... stuff are not provided by
+Khronos, so we must find an alternate source for those headers.
+Currently, we're missing:
+  - gl.h for full GL (gl.h for GLES is available from Khronos)
+  - dri_interface.h to be able to build GL-enabled Xorg
 
-Those headers are needed when an OpenKODE implementation does not
-provide them, like the NVidia binary blobs.
+mesa3d provides all of them, and they are generic enough that they can
+be re-used even for other GL/EGL/GLES/... implementations.
+
+Unfortunately, modifying mesa3d so that it only installs its headers is
+no trivial task, and would render the mesa3d package really ugly and
+unmaintainable in the long run.
+
+Instead, we introduce a stripped-down mesa3d-headers package, which sole
+purpose is to install those missing headers.
+
+Alongside the dri_interface.h header, we also need to install a
+pkg-config file, dri.pc, so that Xorg et al. are content and believe
+they have DRI available.
+
+Since we do only really require a very limited subset of files from
+mesa3d, we do not really care of the version we use, so there is no
+reason to keep them both in sync, and no reason to add a comment in
+mesa3d to that effect.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- package/opengl/Config.in                           |  1 +
- package/opengl/khronos-registry-openkode/Config.in | 15 +++++++
- .../khronos-registry-openkode.hash                 |  7 ++++
- .../khronos-registry-openkode.mk                   | 49 ++++++++++++++++++++++
- 4 files changed, 72 insertions(+)
- create mode 100644 package/opengl/khronos-registry-openkode/Config.in
- create mode 100644 package/opengl/khronos-registry-openkode/khronos-registry-openkode.hash
- create mode 100644 package/opengl/khronos-registry-openkode/khronos-registry-openkode.mk
 
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 0afb158..d9a5c37 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -6,3 +6,4 @@ source "package/opengl/libopenmax/Config.in"
- 
- # Khronos headers, from the Khronos Registries
- source "package/opengl/khronos-registry-khrplatform/Config.in"
-+source "package/opengl/khronos-registry-openkode/Config.in"
-diff --git a/package/opengl/khronos-registry-openkode/Config.in b/package/opengl/khronos-registry-openkode/Config.in
+---
+Notes:
+
+It should not be possible to select both mesa3d *and* mesa3d-headers at
+the same time, but it is difficult to foresee the multiple combinations
+we may have, due to poor understanding on how binary drivers may behave
+and may require, as well as my own poor understanding of the GL stack(s).
+
+So I decided to just print a warning in that case, and just depend on
+mesa3d, which would ultimately provide the headers we are interested in
+anyway. This can be turned into an error if preferred.
+---
+ package/Config.in                          |  1 +
+ package/mesa3d-headers/Config.in           |  8 +++++
+ package/mesa3d-headers/mesa3d-headers.hash |  2 ++
+ package/mesa3d-headers/mesa3d-headers.mk   | 57 ++++++++++++++++++++++++++++++
+ 4 files changed, 68 insertions(+)
+ create mode 100644 package/mesa3d-headers/Config.in
+ create mode 100644 package/mesa3d-headers/mesa3d-headers.hash
+ create mode 100644 package/mesa3d-headers/mesa3d-headers.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 6b2b2a3..b808483 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -215,6 +215,7 @@ endif
+ 	source "package/linux-fusion/Config.in"
+ 	source "package/lite/Config.in"
+ 	source "package/mesa3d/Config.in"
++	source "package/mesa3d-headers/Config.in"
+ 	source "package/ocrad/Config.in"
+ 	source "package/psplash/Config.in"
+ 	source "package/sawman/Config.in"
+diff --git a/package/mesa3d-headers/Config.in b/package/mesa3d-headers/Config.in
 new file mode 100644
-index 0000000..ea3e5e7
+index 0000000..a64fc0c
 --- /dev/null
-+++ b/package/opengl/khronos-registry-openkode/Config.in
-@@ -0,0 +1,15 @@
-+# Note: this package has no prompt, because it is to be selected by
-+# packages that need it, and does not make sense on its own.
-+# Further more, we want to avoid it being enabled alongside any other
-+# package that provide their own OpenKODE headers
-+
-+config BR2_PACKAGE_KHRONOS_REGISTRY_OPENKODE
++++ b/package/mesa3d-headers/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MESA3D_HEADERS
 +	bool
-+	select BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
 +	help
-+	  The OpenKODE Registry contains specifications of the core API and
-+	  headers, optional OpenKODE extensions and headers, points to other
-+	  Khronos APIs required by a conformant OpenKODE implementation, and
-+	  includes some related documentation.
++	  Mesa 3D, an open-source implementation of the OpenGL specification.
 +
-+	  https://www.khronos.org/registry/kode/
-diff --git a/package/opengl/khronos-registry-openkode/khronos-registry-openkode.hash b/package/opengl/khronos-registry-openkode/khronos-registry-openkode.hash
++	  This package only installs headers needed by other packages.
++
++	  http://mesa3d.org
+diff --git a/package/mesa3d-headers/mesa3d-headers.hash b/package/mesa3d-headers/mesa3d-headers.hash
 new file mode 100644
-index 0000000..2a66ea8
+index 0000000..df309b5
 --- /dev/null
-+++ b/package/opengl/khronos-registry-openkode/khronos-registry-openkode.hash
-@@ -0,0 +1,7 @@
-+# Locally computed
-+sha256 e55f962ec91f9a58824a8c42d3556ea1d803b589f5d7b1b6d1ab5bae929fd1cd  kd.h
-+sha256 a51e0cbda20c393585e08a5035fe1bb6b9bed239a80f95e843686d1567a9f513  kdplatform.h
-+sha256 331835322e53fc131774b6116318a2445651b3487e41510a786d5a27ce556e91  KHR_float64.h
-+sha256 37a7596ec5377bb17fb157750a584b39b8bc7955a96b4fb29ff0c6cdf7a3fd9e  KHR_formatted.h
-+sha256 cea58f28b749c59790327f61c445b09a202ef71c97b13cbbce1310316121c23e  KHR_perfcounter.h
-+sha256 aa2bfc742d209e195580a0194352e1b375f9b71688ce7f6b222ab020c397e7f9  KHR_thread_storage.h
-diff --git a/package/opengl/khronos-registry-openkode/khronos-registry-openkode.mk b/package/opengl/khronos-registry-openkode/khronos-registry-openkode.mk
++++ b/package/mesa3d-headers/mesa3d-headers.hash
+@@ -0,0 +1,2 @@
++# From http://mesa3d.org/relnotes/10.4.2.html
++sha256	08a119937d9f2aa2f66dd5de97baffc2a6e675f549e40e699a31f5485d15327f	MesaLib-10.4.2.tar.bz2
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
 new file mode 100644
-index 0000000..aaf0ed2
+index 0000000..5bfb3c6
 --- /dev/null
-+++ b/package/opengl/khronos-registry-openkode/khronos-registry-openkode.mk
-@@ -0,0 +1,49 @@
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -0,0 +1,57 @@
 +################################################################################
 +#
-+# khronos-registry-openkode
++# mesa3d-headers
 +#
 +################################################################################
 +
-+KHRONOS_REGISTRY_OPENKODE_VERSION = 1.0.3
-+KHRONOS_REGISTRY_OPENKODE_SITE = https://www.khronos.org/registry/kode/api/$(KHRONOS_REGISTRY_OPENKODE_VERSION)
++# mesa3d-headers is inherently incompatible with mesa3d, so if mesa3d
++# is enabled, just rely on it.
 +
-+# There is no archive available. So, we just have a buncha files to download.
-+# Just download everything as _EXTRA downloads.
-+# The first two headers are the base for OpenKODE; the KHR headers are core
-+# extensions which we always want anyway.
-+KHRONOS_REGISTRY_OPENKODE_SOURCE =
-+KHRONOS_REGISTRY_OPENKODE_EXTRA_DOWNLOADS = kd.h kdplatform.h \
-+	../KHR/KHR_float64.h \
-+	../KHR/KHR_formatted.h \
-+	../KHR/KHR_perfcounter.h \
-+	../KHR/KHR_thread_storage.h
++ifeq ($(BR2_PACKAGE_MESA3D),y)
 +
-+KHRONOS_REGISTRY_OPENKODE_LICENSE = Unknown
-+KHRONOS_REGISTRY_OPENKODE_DEPENDENCIES = khronos-registry-khrplatform
++ifeq ($(BR2_PACKAGE_MESA3D_HEADERS),y)
++$(warning mesa3d-headers enabled, but mesa3d enabled too)
++endif
 +
-+# The registry only installs header files
-+KHRONOS_REGISTRY_OPENKODE_INSTALL_STAGING = YES
-+KHRONOS_REGISTRY_OPENKODE_INSTALL_TARGET = NO
++MESA3D_HEADERS_SOURCE =
++MESA3D_HEADERS_DEPENDENCIES = mesa3d
 +
-+# We could well completely do without an EXTRACT phase, because we will
-+# then just copy the files again over to staging. But if we need to patch
-+# them, we must have them in the package build dir.
-+define KHRONOS_REGISTRY_OPENKODE_EXTRACT_CMDS
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/kd.h $(@D)/KD/kd.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/kdplatform.h $(@D)/KD/kdplatform.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_float64.h $(@D)/KHR/KHR_float64.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_formatted.h $(@D)/KHR/KHR_formatted.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_perfcounter.h $(@D)/KHR/KHR_perfcounter.h
-+	$(INSTALL) -D -m 0644 $(DL_DIR)/KHR_thread_storage.h $(@D)/KHR/KHR_thread_storage.h
++else # mesa3d
++
++# Not possible to directly refer to mesa3d variables, because of first/second
++# expansion trickery...
++MESA3D_HEADERS_VERSION = 10.4.2
++MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
++MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
++MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
++MESA3D_HEADERS_LICENSE_FILES = docs/license.html
++
++# Only installs header files
++MESA3D_HEADERS_INSTALL_STAGING = YES
++MESA3D_HEADERS_INSTALL_TARGET = NO
++
++# Not using $(SED) because we do not want to work in-place, and $(SED)
++# contains -i.
++define MESA3D_HEADERS_BUILD_CMDS
++	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
++	    -e 's:@libdir@:${exec_prefix}/lib:' \
++	    -e 's:@includedir@:${prefix}/include:' \
++	    -e 's:@DRI_DRIVER_INSTALL_DIR@:${libdir}/dri:' \
++	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
++	    -e 's:@DRI_PC_REQ_PRIV@::' \
++	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
++	    >$(@D)/src/mesa/drivers/dri/dri.pc
 +endef
 +
-+define KHRONOS_REGISTRY_OPENKODE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/KD/kd.h $(STAGING_DIR)/usr/include/KD/kd.h
-+	$(INSTALL) -D -m 0644 $(@D)/KD/kdplatform.h $(STAGING_DIR)/usr/include/KD/kdplatform.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_float64.h $(STAGING_DIR)/usr/include/KHR/KHR_float64.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_formatted.h $(STAGING_DIR)/usr/include/KHR/KHR_formatted.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_perfcounter.h $(STAGING_DIR)/usr/include/KHR/KHR_perfcounter.h
-+	$(INSTALL) -D -m 0644 $(@D)/KHR/KHR_thread_storage.h $(STAGING_DIR)/usr/include/KHR/KHR_thread_storage.h
++define MESA3D_HEADERS_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/include/GL/gl.h \
++		$(STAGING_DIR)/usr/include/GL/gl.h
++	$(INSTALL) -D -m 0644 $(@D)/include/GL/internal/dri_interface.h \
++		$(STAGING_DIR)/usr/include/GL/internal/dri_interface.h
++	$(INSTALL) -D -m 0644 $(@D)/src/mesa/drivers/dri/dri.pc \
++		$(STAGING_DIR)/usr/lib/pkg-config/dri.pc
 +endef
++
++endif # !mesa3d
 +
 +$(eval $(generic-package))
 -- 
