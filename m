@@ -1,55 +1,119 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:39 +0100
-Subject: [Buildroot] [PATCH 10/14 v6] package/nvidia-driver: Add gl.pc
+Date: Sat, 24 Jan 2015 00:24:40 +0100
+Subject: [Buildroot] [PATCH 11/14 v6] package/nvidia-driver: build the
+	kernel module
 In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
 References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <f86baec76e7a2f004cc033818a3ce305cced7385.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <ebbebba5ff23b0fe5fd7869924282328ff48ab6f.1422055104.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: J?r?me Pouiller <jezz@sysmic.org>
+Add option to build the nvidia.ko module. If CUDA is enabled on x86_64,
+also build the nvidia-uvm.ko kernel module (for Unified Memory access),
+which is required by the CUDA user-land library.
 
-In order to compile xserver, libgl provider have to provide gl.pc file.
+Substancially inspired by the corresponding Gentoo ebuild:
+    http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-340.32.ebuild?revision=1.2&view=markup
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/nvidia-driver/gl.pc            | 11 +++++++++++
- package/nvidia-driver/nvidia-driver.mk |  1 +
- 2 files changed, 12 insertions(+)
- create mode 100644 package/nvidia-driver/gl.pc
+ package/nvidia-driver/Config.in        | 14 ++++++++++
+ package/nvidia-driver/nvidia-driver.mk | 50 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 64 insertions(+)
 
-diff --git a/package/nvidia-driver/gl.pc b/package/nvidia-driver/gl.pc
-new file mode 100644
-index 0000000..d822763
---- /dev/null
-+++ b/package/nvidia-driver/gl.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
+index e1d2946..9579c7a 100644
+--- a/package/nvidia-driver/Config.in
++++ b/package/nvidia-driver/Config.in
+@@ -48,4 +48,18 @@ config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
+ 	  Say 'y' here if you plan on running a program that uses those
+ 	  private libraries.
+ 
++comment "nvidia kernel module needs a kernel to be built"
++	depends on !BR2_LINUX_KERNEL
 +
-+Name: gl
-+Description: Nvidia OpenGL library
-+Version: 10.4.2
-+Libs: -L${libdir} -lGL -lm -lXext -lX11 -ldl
-+Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-+glx_tls: no
++config BR2_PACKAGE_NVIDIA_DRIVER_MODULE
++	bool "nvidia kernel module"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Build the nvidia.ko kernel module.
++
++	  If CUDA support (above) is set, and the target is x86_64, then
++	  this will also build the nvidia-uvm.ko kernel module, which
++	  provides Unified Memory access to the GPU and CPU memories for
++	  CUDA programs.
++
+ endif # BR2_PACKAGE_NVIDIA_DRIVER
 diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 714892d..d53dc06 100644
+index d53dc06..d1b2c25 100644
 --- a/package/nvidia-driver/nvidia-driver.mk
 +++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -96,6 +96,7 @@ define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
- 	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
- 	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
- 	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
+@@ -65,6 +65,55 @@ define NVIDIA_DRIVER_EXTRACT_CMDS
+ 	rm -rf $(@D)/tmp-extract
  endef
  
- # For target, install libraries and X.org modules
++# Build and install the kernel modules if needed
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_MODULE),y)
++
++NVIDIA_DRIVER_DEPENDENCIES += linux
++
++# NVidia uses the legacy naming scheme for the x86 architecture, when i386
++# and x86_64 were still considered two separate architectures in the Linux
++# kernel.
++NVIDIA_DRIVER_ARCH = $(if $(BR2_i386),i386,$(BR2_ARCH))
++
++NVIDIA_DRIVER_MOD_DIRS = kernel
++NVIDIA_DRIVER_MOD_FILES = kernel/nvidia.ko
++# nvidia-uvm.ko only available for x86_64
++ifeq ($(BR2_x86_64)$(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),yy)
++NVIDIA_DRIVER_MOD_DIRS += kernel/uvm
++NVIDIA_DRIVER_MOD_FILES += kernel/uvm/nvidia-uvm.ko
++endif
++
++# We can not use '$(MAKE) -C $(@D)/$${dir}' because NVidia's uses its own
++# Makefile to build a kernel module, which includes a lot of assumptions
++# on where to find its own sub-Makefile fragments, and fails if make is
++# not run from the directory where the module's source files are. Hence
++# our little trick to cd in there first.
++# That's also the reason why we do not use LINUX_MAKE_FLAGS or the other
++# linux-specific variables, since NVidia's Makefile does not understand
++# them.
++define NVIDIA_DRIVER_BUILD_CMDS
++	for dir in $(NVIDIA_DRIVER_MOD_DIRS); do \
++		( cd $(@D)/$${dir} && \
++		  $(MAKE) SYSSRC=$(LINUX_DIR) SYSOUT=$(LINUX_DIR) \
++				CC=$(TARGET_CC) LD=$(TARGET_LD) HOSTCC=$(HOSTCC) \
++				ARCH=$(NVIDIA_DRIVER_ARCH) module ) || exit 1; \
++	done
++endef
++
++# We do not use module-install because NVidia's Makefile requires root.
++# Also, we do not install it in the expected location (in nvidia/ rather
++# than in kernel/drivers/video/ )
++define NVIDIA_DRIVER_INSTALL_KERNEL_MODULE
++	for mod in $(NVIDIA_DRIVER_MOD_FILES); do \
++		$(INSTALL) -D -m 0644 $(@D)/$${mod} \
++			$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/nvidia/$${mod##*/} \
++		|| exit 1; \
++	done
++	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
++endef
++
++endif # BR2_PACKAGE_NVIDIA_DRIVER_MODULE == y
++
+ # Helper to install libraries
+ # $1: destination directory (target or staging)
+ #
+@@ -106,6 +155,7 @@ define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
+ 		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
+ 			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
+ 	done
++	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.9.1
