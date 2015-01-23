@@ -1,117 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 16:45:38 +0100
-Subject: [Buildroot] [git commit] redis: bump to version 2.8.19
-Message-ID: <20150123155105.906B880E3B@busybox.osuosl.org>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Fri, 23 Jan 2015 17:00:31 +0100
+Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
+ QT_SHARED is not selected
+In-Reply-To: <20150120174507.1d11ab61@free-electrons.com>
+References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
+ <20150120174507.1d11ab61@free-electrons.com>
+Message-ID: <CACQ1gAhMPLWkod2SRKjDDS8mnDa6DknZnT0EHY5SZx_ENpg8mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d226500192dcac84e5fdeba6867ee51ceb402c4c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2015-01-20 17:45 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Richard Genoud,
+>
+> On Tue, 20 Jan 2015 11:17:28 +0100, Richard Genoud wrote:
+>> If Qt is compile as a static library, there's no point compiling qwt as
+>> a shared library, otherwise, we will have a huge qwt lib and a huge Qt
+>> application.
+>>
+>> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+>> ---
+>>  package/qwt/qwt.mk | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+>> index a92d6b4b1540..d783314f7e40 100644
+>> --- a/package/qwt/qwt.mk
+>> +++ b/package/qwt/qwt.mk
+>> @@ -32,6 +32,12 @@ else
+>>       QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
+>>  endif
+>>
+>> +ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+>> +     QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/QWT_CONFIG += QwtDll/'
+>> +else
+>> +     QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/\# QWT_CONFIG += QwtDll/'
+>> +endif
+>
+> I think we should get rid of BR2_PACKAGE_QT_SHARED completely, and use
+> BR2_STATIC_LIBS here instead.
+you mean BR2_PREFER_STATIC_LIB, right ?
 
-Add hash file.
-Drop redis-002-lua-AR.patch (upstream).
-Rename patches to new naming convention.
+> Moreover, we're using Qwt 6.1.0, and this version is in fact compatible
+> with both Qt >= 4.4 and Qt >= 5.0, so it should be adapted to this, and
+> not use a qt4 specific Config.in option.
+Ok, I'll check that this works with both Qts.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../{redis-001-uclibc.patch => 0001-uclibc.patch}  |    0
- ...tch => 0002-largefile-conditional-define.patch} |    0
- package/redis/Config.in                            |    6 ++-
- package/redis/redis-002-lua-AR.patch               |   32 --------------------
- package/redis/redis.hash                           |    2 +
- package/redis/redis.mk                             |    2 +-
- 6 files changed, 7 insertions(+), 35 deletions(-)
+I may have misunderstood your 1st remark, but are you planning to
+deprecate BR2_PACKAGE_QT_SHARED ?
 
-diff --git a/package/redis/redis-001-uclibc.patch b/package/redis/0001-uclibc.patch
-similarity index 100%
-rename from package/redis/redis-001-uclibc.patch
-rename to package/redis/0001-uclibc.patch
-diff --git a/package/redis/redis-003-largefile-conditional-define.patch b/package/redis/0002-largefile-conditional-define.patch
-similarity index 100%
-rename from package/redis/redis-003-largefile-conditional-define.patch
-rename to package/redis/0002-largefile-conditional-define.patch
-diff --git a/package/redis/Config.in b/package/redis/Config.in
-index b370e7d..d2a7556 100644
---- a/package/redis/Config.in
-+++ b/package/redis/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_REDIS
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_LARGEFILE
-+	depends on BR2_INET_IPV6
- 	help
- 	  Redis is an open source, advanced key-value store. It is
- 	  often referred to as a data structure server since keys can
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_REDIS
- 
- 	  http://www.redis.io
- 
--comment "redis needs a toolchain w/ largefile, threads"
-+comment "redis needs a toolchain w/ IPv6, largefile, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INET_IPV6
-diff --git a/package/redis/redis-002-lua-AR.patch b/package/redis/redis-002-lua-AR.patch
-deleted file mode 100644
-index 68ee70c..0000000
---- a/package/redis/redis-002-lua-AR.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--
--redis-002-lua-AR.patch: Improve redis Makefiles to handle Lua's unusual
--definition of AR.  Patch originates from:
--
--  Define AR to help with lua cross-compilation
--  https://github.com/antirez/redis/pull/997
--  Daniel Price, daniel.price at gmail.com
--
--Signed-off-by: Daniel Price <daniel.price@gmail.com>
--
--=========================================================================
--diff --git a/deps/Makefile b/deps/Makefile
--index d58ee56..c9d7116 100644
----- a/deps/Makefile
--+++ b/deps/Makefile
--@@ -60,10 +60,15 @@ endif
-- 
-- LUA_CFLAGS+= -O2 -Wall -DLUA_ANSI $(CFLAGS)
-- LUA_LDFLAGS+= $(LDFLAGS)
--+# lua's Makefile defines AR="ar rcu", which is unusual, and makes it more
--+# challenging to cross-compile lua (and redis).  These defines make it easier
--+# to fit redis into cross-compilation environments, which typically set AR.
--+AR = ar
--+ARFLAGS = rcu
-- 
-- lua: .make-prerequisites
-- 	@printf '%b %b\n' $(MAKECOLOR)MAKE$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR)
---	cd lua/src && $(MAKE) all CFLAGS="$(LUA_CFLAGS)" MYLDFLAGS="$(LUA_LDFLAGS)"
--+	cd lua/src && $(MAKE) all CFLAGS="$(LUA_CFLAGS)" MYLDFLAGS="$(LUA_LDFLAGS)" AR="$(AR) $(ARFLAGS)"
-- 
-- .PHONY: lua
-- 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-new file mode 100644
-index 0000000..5f91766
---- /dev/null
-+++ b/package/redis/redis.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	29bb08abfc3d392b2f0c3e7f48ec46dd09ab1023f9a5575fc2a93546f4ca5145	redis-2.8.19.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 00490e7..4cad061 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 2.6.17
-+REDIS_VERSION = 2.8.19
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+otherwise, I could do something like:
+
+ifeq($(sort $(BR2_PREFER_STATIC_LIB) $(BR2_PACKAGE_QT_STATIC)),y)
+ [ compile static qwt ]
+else
+  [ compile shared qwt ]
+endif
+
+what do you think ?
+
+
+regards,
+Richard
