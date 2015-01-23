@@ -1,73 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 21:17:25 +0100
-Subject: [Buildroot] [git commit] python-pysendfile: new package
-Message-ID: <20150123204619.3205E80E44@busybox.osuosl.org>
+Date: Fri, 23 Jan 2015 21:42:04 +0100
+Subject: [Buildroot] [git commit] mono: bump to version 3.12.0
+Message-ID: <20150123204619.478A280E44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5d88d8cca5b2017da69eb191914bdb77aab6be6
+commit: http://git.buildroot.net/buildroot/commit/?id=69b32200a623ccb9b7252e1ad8964d8f9b92f1a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+This patch bumps version of mono to the latest 3.12.0
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                |    1 +
- package/python-pysendfile/Config.in              |    6 ++++++
- package/python-pysendfile/python-pysendfile.hash |    2 ++
- package/python-pysendfile/python-pysendfile.mk   |   13 +++++++++++++
- 4 files changed, 22 insertions(+), 0 deletions(-)
+ package/mono/mono.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 266de13..32d6755 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -540,6 +540,7 @@ menu "external python modules"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyro/Config.in"
-+	source "package/python-pysendfile/Config.in"
- 	source "package/python-pysnmp/Config.in"
- 	source "package/python-pysnmp-apps/Config.in"
- 	source "package/python-pysnmp-mibs/Config.in"
-diff --git a/package/python-pysendfile/Config.in b/package/python-pysendfile/Config.in
-new file mode 100644
-index 0000000..5a919dd
---- /dev/null
-+++ b/package/python-pysendfile/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYSENDFILE
-+	bool "python-pysendfile"
-+	help
-+	  A Python interface to sendfile(2) syscall
-+
-+	  https://github.com/giampaolo/pysendfile
-diff --git a/package/python-pysendfile/python-pysendfile.hash b/package/python-pysendfile/python-pysendfile.hash
-new file mode 100644
-index 0000000..755be50
---- /dev/null
-+++ b/package/python-pysendfile/python-pysendfile.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  f4ca8a7f0be67e3d710c0633dd9aadab6881203c31cb9eb9be4f10361ad3f937  python-pysendfile-2.0.1.tar.gz
-diff --git a/package/python-pysendfile/python-pysendfile.mk b/package/python-pysendfile/python-pysendfile.mk
-new file mode 100644
-index 0000000..bb8f057
---- /dev/null
-+++ b/package/python-pysendfile/python-pysendfile.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-pysendfile
-+#
-+################################################################################
-+
-+PYTHON_PYSENDFILE_VERSION = 2.0.1
-+PYTHON_PYSENDFILE_SITE = $(call github,giampaolo,pysendfile,release-$(PYTHON_PYSENDFILE_VERSION))
-+PYTHON_PYSENDFILE_SETUP_TYPE = setuptools
-+PYTHON_PYSENDFILE_LICENSE = MIT
-+PYTHON_PYSENDFILE_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 3d50ac1..0bbf338 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-MONO_VERSION = 3.10.0
++MONO_VERSION = 3.12.0
+ MONO_SITE = http://download.mono-project.com/sources/mono/
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
