@@ -1,75 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 Jan 2015 16:50:43 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-cmake: fix host-cmake-package type
-In-Reply-To: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1421945596-53762-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <20150123155043.GB19129@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 23 Jan 2015 16:38:50 +0100
+Subject: [Buildroot] [git commit] eudev: bump version
+Message-ID: <20150123155105.63ADE800BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=9711d8b824ff0cee786ef9c131e8f38ddc324b91
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-01-22 10:53 -0600, Ryan Barnett spake thusly:
-> When trying to compile a host-cmake-package type such as host-cdrkit,
-> an error happens in regards to HOSTCC and HOSTCXX not being found.
-> 
->   /bin/sh: HOSTCC: command not found
->   /bin/sh: HOSTCXX: command not found
-> 
-> This due to the fact that the environment is incorrectly configured by
-> having the following:
-> 
->   -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
+Add hash and update/rename patch for new naming convention.
 
-As you may have noticed, the double-quaotes are doubled...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-use-pragma-for-ignoring-diagnostics-if-.patch} |    0
+ package/eudev/eudev.hash                           |    2 ++
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-> This is due to having too many dollar signs. The fix is to remove the
-> extra dollar sign.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> ---
->  package/pkg-cmake.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 1037513..eac244f 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -27,8 +27,8 @@ CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
->  CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
->  CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
->  else
-> -CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
-> -CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
-> +CMAKE_HOST_C_COMPILER="$(HOSTCC)"
-> +CMAKE_HOST_CXX_COMPILER="$(HOSTCXX)"
-
-That's because of here; in Makefile syntax, double-quotes are not
-interpreted by make, and are part of the value.
-
-So, you should also drop the double-quotes here.
-
-Regards,
-Yann E. MORIN.
-
->  endif
->  
->  ################################################################################
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/eudev/eudev-0003-libudev-Only-use-pragma-for-ignoring-diagnostics-if-.patch b/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+similarity index 100%
+rename from package/eudev/eudev-0003-libudev-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+rename to package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+new file mode 100644
+index 0000000..6a85508
+--- /dev/null
++++ b/package/eudev/eudev.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	6aef101c5496a2dc45e669307d478dbccb0ee0462a285512edcda51ff12e0e6a  eudev-2.1.1.tar.gz
