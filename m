@@ -1,68 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:30 +0100
-Subject: [Buildroot] [PATCH 01/14 v6] package/python-lxml: new host package
+Date: Sat, 24 Jan 2015 00:24:32 +0100
+Subject: [Buildroot] [PATCH 03/14 v6] package/khronos-registry-khrplatform:
+	new package
 In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
 References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <3a36236c36026baf580c10d9bfc2a8cf7387e643.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <7af218fa9953837f6ee8de02e73193c646961946.1422055104.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
-and libxslt.
+Khronos is the group behind OpenGL and its siblings, OpenMAX and all
+other GFX-related Open-something.
+
+Khronos maintains the Registry, in which the reference headers for the
+different Open-something are maintained.
+
+khrplatform is the header used by most (if not all) other Khronos headers.
+
+Note: there is no version for that file, so we rely on the hash to
+decide whether we have to re-download it or not. That's unfortunate,
+however, as an old build will not be reproducible in the future... :-(
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-This is a host-only package for now, because I only needed it to build
-opengl-registry.
----
- package/python-lxml/python-lxml.hash |  2 ++
- package/python-lxml/python-lxml.mk   | 25 +++++++++++++++++++++++++
- 2 files changed, 27 insertions(+)
- create mode 100644 package/python-lxml/python-lxml.hash
- create mode 100644 package/python-lxml/python-lxml.mk
+ package/opengl/Config.in                           |  3 +++
+ .../opengl/khronos-registry-khrplatform/Config.in  | 11 +++++++++
+ .../khronos-registry-khrplatform.hash              |  2 ++
+ .../khronos-registry-khrplatform.mk                | 28 ++++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/opengl/khronos-registry-khrplatform/Config.in
+ create mode 100644 package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.hash
+ create mode 100644 package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.mk
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index 20ee28b..0afb158 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -3,3 +3,6 @@ source "package/opengl/libegl/Config.in"
+ source "package/opengl/libgles/Config.in"
+ source "package/opengl/libopenvg/Config.in"
+ source "package/opengl/libopenmax/Config.in"
++
++# Khronos headers, from the Khronos Registries
++source "package/opengl/khronos-registry-khrplatform/Config.in"
+diff --git a/package/opengl/khronos-registry-khrplatform/Config.in b/package/opengl/khronos-registry-khrplatform/Config.in
 new file mode 100644
-index 0000000..470a245
+index 0000000..c653a69
 --- /dev/null
-+++ b/package/python-lxml/python-lxml.hash
++++ b/package/opengl/khronos-registry-khrplatform/Config.in
+@@ -0,0 +1,11 @@
++# Promptless package, because we do not want the user be responsible
++# for enabling this package. Instead, it should be selected by those
++# packages that need the KHR header(s).
++
++config BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
++	bool
++	help
++	  khrplatform installs the khrplatform.h headers, used by most
++	  other Khronos headers.
++
++	  https://www.khronos.org/registry/
+diff --git a/package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.hash b/package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.hash
+new file mode 100644
+index 0000000..9abb73c
+--- /dev/null
++++ b/package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256  069594837d0376a1bacf5cc42aa9a1be2e1c1396dc62f7d07f7358afecd34adf  lxml-3.4.1.tgz
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
++sha256  7631de0f2ce64747bfd893486eaa41aa08b9e8c5e5c6501b81c045c6ebf04b2a  khrplatform.h
+diff --git a/package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.mk b/package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.mk
 new file mode 100644
-index 0000000..758ce87
+index 0000000..a8ea4cc
 --- /dev/null
-+++ b/package/python-lxml/python-lxml.mk
-@@ -0,0 +1,25 @@
++++ b/package/opengl/khronos-registry-khrplatform/khronos-registry-khrplatform.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# python-lxml
++# khronos-registry-khrplatform
 +#
 +################################################################################
 +
-+PYTHON_LXML_VERSION = 3.4.1
-+PYTHON_LXML_SITE = http://lxml.de/files
-+PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
++# There is no version for that file :-(
 +
-+# Not including the GPL, because it is used only for the test scripts.
-+PYTHON_LXML_LICENSE = BSD-3c, Others
-+PYTHON_LXML_LICENSE_FILES = \
-+	LICENSES.txt \
-+	doc/licenses/BSD.txt \
-+	doc/licenses/elementtree.txt \
-+	src/lxml/isoschematron/resources/rng/iso-schematron.rng
++KHRONOS_REGISTRY_KHRPLATFORM_SOURCE = khrplatform.h
++KHRONOS_REGISTRY_KHRPLATFORM_SITE = https://www.khronos.org/registry/egl/api/KHR
 +
-+# python-lxml can use either setuptools, or distutils as a fallback.
-+# So, we use setuptools.
-+PYTHON_LXML_SETUP_TYPE = setuptools
++# No license file, license in the header file itself
++KHRONOS_REGISTRY_KHRPLATFORM_LICENSE = MIT
 +
-+PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
++# Only installs a header
++KHRONOS_REGISTRY_KHRPLATFORM_INSTALL_STAGING = YES
++KHRONOS_REGISTRY_KHRPLATFORM_INSTALL_TARGET = NO
 +
-+$(eval $(host-python-package))
++define KHRONOS_REGISTRY_KHRPLATFORM_EXTRACT_CMDS
++	$(INSTALL) -d $(@D)
++	$(INSTALL) -D -m 0644 $(DL_DIR)/khrplatform.h $(@D)/khrplatform.h
++endef
++
++define KHRONOS_REGISTRY_KHRPLATFORM_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/khrplatform.h $(STAGING_DIR)/usr/include/KHR/khrplatform.h
++endef
++
++$(eval $(generic-package))
 -- 
 1.9.1
