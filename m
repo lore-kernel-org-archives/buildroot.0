@@ -1,168 +1,146 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 23:32:23 +0100
-Subject: [Buildroot] [git commit] qt: add X11 support
-Message-ID: <20150123223239.CD19680E38@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 24 Jan 2015 00:05:50 +0100
+Subject: [Buildroot] [PATCH 0/2 v2] docs: move website to its own sub-dir
+	(branch yem/website)
+Message-ID: <cover.1422054324.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfdf173a4c7ca1c8584833a7286df37cb008fdb2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-There are two possible configurations for Qt4 installation: standard
-(with X11) and embedded (for framebuffer). Both configurations cannot be
-used together for one installation and some options are specific to one
-configuration or the other.
+This series moves the website to its own sub-dir, so it is not mixed
+with the rest of the documentation, especially the manual.
 
-Add a choice to select the standard or the embedded installation to add
-X11 support.
+It will allow to reorganise the locations where we store manual-related
+configuration files, in my gendoc/asciidoc series.
 
-The integration is done in order to make maximum use of the current
-configuration logic, for example by using the same mkspecs files.
+The first patch can be applied right now, and is just a temporary
+kludge that has no impact, except makign the website available both in
+the current location, and the new one.
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt/Config.in |   46 ++++++++++++++++++++++++++++++++++++++++++++++
- package/qt/qt.mk     |   15 +++++++++++++++
- 2 files changed, 61 insertions(+), 0 deletions(-)
+This means the website won't be impacted, and we can switch the deploy
+scripts to use the new location.
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 44710f5..ba71e12 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -17,6 +17,40 @@ menuconfig BR2_PACKAGE_QT
- 
- if BR2_PACKAGE_QT
- 
-+choice
-+	prompt "Qt installation"
-+	help
-+	  Selects the type of installation: standard or embedded
-+
-+config BR2_PACKAGE_QT_EMBEDDED
-+	bool "Qt embedded"
-+	help
-+	  The embedded Qt installation targets embedded systems without X.org.
-+	  Provides backends for framebuffer.
-+	  If unsure, say Y.
-+
-+comment "Qt standard (X11) not available (need X.org)"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_QT_X11
-+	bool "Qt standard (X11)"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXV
-+	select BR2_PACKAGE_QT_SYSTEMFREETYPE
-+	select BR2_PACKAGE_QT_GUI_MODULE
-+	help
-+	  The standard Qt installation provides X.org backend. If you don't want to
-+	  use X.org, say N.
-+
-+endchoice
-+
- config BR2_PACKAGE_QT_DEBUG
- 	bool "Compile with debug support"
- 	help
-@@ -105,6 +139,9 @@ config BR2_PACKAGE_QT_GUI_MODULE
- 	  video output, or you don't require Qt GUI, say n.
- 
- if BR2_PACKAGE_QT_GUI_MODULE
-+
-+if BR2_PACKAGE_QT_EMBEDDED
-+
- menu "Pixel depths"
- comment "Deselecting each option leads to Qt's default (8,16,32)"
- 
-@@ -162,6 +199,8 @@ config BR2_PACKAGE_QT_FONT_UNIFONT
- 
- endmenu
- 
-+endif # BR2_PACKAGE_QT_EMBEDDED
-+
- choice
- 	prompt "freetype2 support"
- 	default BR2_PACKAGE_QT_NOFREETYPE
-@@ -170,11 +209,16 @@ choice
- 
- config BR2_PACKAGE_QT_NOFREETYPE
- 	bool "no freetype2 support"
-+	depends on BR2_PACKAGE_QT_EMBEDDED
- 	help
- 	  Do not compile in Freetype2 support.
- 
-+comment "Qt freetype2 needs Qt embedded"
-+	depends on BR2_PACKAGE_QT_X11
-+
- config BR2_PACKAGE_QT_QTFREETYPE
- 	bool "Qt freetype2"
-+	depends on BR2_PACKAGE_QT_EMBEDDED
- 	help
- 	  Use the libfreetype bundled with Qt.
- 
-@@ -275,9 +319,11 @@ endchoice
- 
- source "package/qt/Config.sql.in"
- if BR2_PACKAGE_QT_GUI_MODULE
-+if BR2_PACKAGE_QT_EMBEDDED
- source "package/qt/Config.gfx.in"
- source "package/qt/Config.mouse.in"
- source "package/qt/Config.keyboard.in"
-+endif
- 
- config BR2_PACKAGE_QT_PHONON
- 	bool "Phonon Module"
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 255d6d2..36afaad 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -231,7 +231,20 @@ else
- QT_EMB_PLATFORM = generic
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT_X11),y)
-+QT_DEPENDENCIES += fontconfig xlib_libXi xlib_libX11 xlib_libXrender \
-+                xlib_libXcursor xlib_libXrandr xlib_libXext xlib_libXv
-+# Using pkg-config avoids us some logic to redefine and sed again mkspecs files
-+# to add X11 include path and link options
-+QT_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags x11)
-+QT_CXXFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags x11)
-+QT_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs x11 xext)
-+QT_CONFIGURE_OPTS += -arch $(QT_EMB_PLATFORM) \
-+		-xplatform qws/linux-$(QT_EMB_PLATFORM)-g++ -x11 -no-gtkstyle -no-sm \
-+		-no-openvg
-+else # if BR2_PACKAGE_QT_EMBEDDED
- QT_CONFIGURE_OPTS += -embedded $(QT_EMB_PLATFORM)
-+endif
- 
- ifneq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- QT_CONFIGURE_OPTS += -no-gui
-@@ -650,6 +663,7 @@ define QT_INSTALL_TARGET_IMPORTS
- endef
- 
- # Fonts installation
-+ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
- ifneq ($(QT_FONTS),)
- define QT_INSTALL_TARGET_FONTS
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
-@@ -663,6 +677,7 @@ define QT_INSTALL_TARGET_FONTS_TTF
- 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
- endef
- endif
-+endif # BR2_PACKAGE_QT_EMBEDDED
- 
- ifeq ($(BR2_PACKAGE_QT_GFX_POWERVR),y)
- define QT_INSTALL_TARGET_POWERVR
+Once the scripts have been updated, the second patch does the actual
+move, and the website is only available from the new location.
+
+
+Changes v1 -> v2:
+  - misc typoes in commit logs
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit dfdf173a4c7ca1c8584833a7286df37cb008fdb2:
+
+  qt: add X11 support (2015-01-23 23:32:23 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/website
+
+for you to fetch changes up to d6aafa8a13597213dceff4ba0da8e9f1194c317b:
+
+  docs: really move the website (2015-01-23 23:54:58 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      docs: prepare moving the website
+      docs: really move the website
+
+ docs/images                                                |   1 +
+ docs/{ => website}/about.html                              |   0
+ docs/{ => website}/contribute.html                         |   0
+ docs/{ => website}/copyright.txt                           |   0
+ docs/{ => website}/css/bootstrap.min.css                   |   0
+ docs/{ => website}/css/bootswatch.less                     |   0
+ docs/{ => website}/css/buildroot.css                       |   0
+ docs/{ => website}/css/variables.less                      |   0
+ docs/{ => website}/docs.html                               |   0
+ docs/{ => website}/download.html                           |   0
+ docs/{ => website}/favicon.ico                             | Bin
+ docs/{ => website}/fonts/glyphicons-halflings-regular.woff | Bin
+ docs/{ => website}/footer.html                             |   0
+ docs/{ => website}/git.html                                |   0
+ docs/{ => website}/header.html                             |   0
+ docs/{ => website}/images/boundary-devices-logo.png        | Bin
+ docs/{ => website}/images/calao-logo.png                   | Bin
+ docs/{ => website}/images/circuitco-logo.png               | Bin
+ docs/{ => website}/images/fluendo-logo.png                 | Bin
+ docs/{ => website}/images/free-electrons-logo.png          | Bin
+ docs/{ => website}/images/glyphicons-halflings-white.png   | Bin
+ docs/{ => website}/images/glyphicons-halflings.png         | Bin
+ docs/{ => website}/images/google-logo.png                  | Bin
+ docs/{ => website}/images/gplus.png                        | Bin
+ docs/{ => website}/images/imgtec-logo.png                  | Bin
+ docs/{ => website}/images/logo.png                         | Bin
+ docs/{ => website}/images/logo.xcf                         | Bin
+ docs/{ => website}/images/logo_small.png                   | Bin
+ docs/{ => website}/images/menuconfig.png                   | Bin
+ docs/{ => website}/images/menuconfig_small.png             | Bin
+ docs/{ => website}/images/mind-logo.png                    | Bin
+ docs/{ => website}/images/synopsys-logo.png                | Bin
+ docs/{ => website}/images/valid-html401.png                | Bin
+ docs/{ => website}/index.html                              |   0
+ docs/{ => website}/js/bootstrap.min.js                     |   0
+ docs/{ => website}/js/buildroot.js                         |   0
+ docs/{ => website}/js/jquery-1.11.1.min.js                 |   0
+ docs/{ => website}/news.html                               |   0
+ docs/{ => website}/robots.txt                              |   0
+ docs/{ => website}/sponsors.html                           |   0
+ docs/{ => website}/support.html                            |   0
+ 41 files changed, 1 insertion(+)
+ create mode 120000 docs/images
+ rename docs/{ => website}/about.html (100%)
+ rename docs/{ => website}/contribute.html (100%)
+ rename docs/{ => website}/copyright.txt (100%)
+ rename docs/{ => website}/css/bootstrap.min.css (100%)
+ rename docs/{ => website}/css/bootswatch.less (100%)
+ rename docs/{ => website}/css/buildroot.css (100%)
+ rename docs/{ => website}/css/variables.less (100%)
+ rename docs/{ => website}/docs.html (100%)
+ rename docs/{ => website}/download.html (100%)
+ rename docs/{ => website}/favicon.ico (100%)
+ rename docs/{ => website}/fonts/glyphicons-halflings-regular.woff (100%)
+ rename docs/{ => website}/footer.html (100%)
+ rename docs/{ => website}/git.html (100%)
+ rename docs/{ => website}/header.html (100%)
+ rename docs/{ => website}/images/boundary-devices-logo.png (100%)
+ rename docs/{ => website}/images/calao-logo.png (100%)
+ rename docs/{ => website}/images/circuitco-logo.png (100%)
+ rename docs/{ => website}/images/fluendo-logo.png (100%)
+ rename docs/{ => website}/images/free-electrons-logo.png (100%)
+ rename docs/{ => website}/images/glyphicons-halflings-white.png (100%)
+ rename docs/{ => website}/images/glyphicons-halflings.png (100%)
+ rename docs/{ => website}/images/google-logo.png (100%)
+ rename docs/{ => website}/images/gplus.png (100%)
+ rename docs/{ => website}/images/imgtec-logo.png (100%)
+ rename docs/{ => website}/images/logo.png (100%)
+ rename docs/{ => website}/images/logo.xcf (100%)
+ rename docs/{ => website}/images/logo_small.png (100%)
+ rename docs/{ => website}/images/menuconfig.png (100%)
+ rename docs/{ => website}/images/menuconfig_small.png (100%)
+ rename docs/{ => website}/images/mind-logo.png (100%)
+ rename docs/{ => website}/images/synopsys-logo.png (100%)
+ rename docs/{ => website}/images/valid-html401.png (100%)
+ rename docs/{ => website}/index.html (100%)
+ rename docs/{ => website}/js/bootstrap.min.js (100%)
+ rename docs/{ => website}/js/buildroot.js (100%)
+ rename docs/{ => website}/js/jquery-1.11.1.min.js (100%)
+ rename docs/{ => website}/news.html (100%)
+ rename docs/{ => website}/robots.txt (100%)
+ rename docs/{ => website}/sponsors.html (100%)
+ rename docs/{ => website}/support.html (100%)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
