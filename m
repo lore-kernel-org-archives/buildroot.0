@@ -1,116 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 23 Jan 2015 17:35:43 +0100
-Subject: [Buildroot] [git commit] eudev: really bump version
-Message-ID: <20150123185533.AFE25801E6@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 23 Jan 2015 20:34:48 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake: fix host-cmake-package type
+In-Reply-To: <20150123183127.GD19129@free.fr>
+References: <1422036622-54535-1-git-send-email-ryan.barnett@rockwellcollins.com>
+ <20150123183127.GD19129@free.fr>
+Message-ID: <CAHXCMMJ-QNMZEaFL-DtGE5E6G0rhqngi3TpS+VuXa6KCexwF0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14af550d5eb50222196ece3042d2f1e2a9466cf6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Ryan,
 
-The configure script checks for linux/btrfs.h which is only available since
-3.9 (55e301fd57a6239ec: Btrfs: move fs/btrfs/ioctl.h to
-include/uapi/linux/btrfs.h).
+On Fri, Jan 23, 2015 at 7:31 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Ryan, All,
+>
+> On 2015-01-23 12:10 -0600, Ryan Barnett spake thusly:
+>> When trying to compile a host-cmake-package type such as host-cdrkit,
+>> an error happens in regards to HOSTCC and HOSTCXX not being found.
+>>
+>>   /bin/sh: HOSTCC: command not found
+>>   /bin/sh: HOSTCXX: command not found
+>>
+>> This due to the fact that the environment is incorrectly configured by
+>> having the following:
+>>
+>>   -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
+>>
+>> This is due to having too many dollar signs. The fix is to remove the
+>> extra dollar sign.
+>>
+>> Also removing the unncessary quotes since the HOSTCC/HOSTCXX will
+>> already contain quotes. This could cause an issue with make as double
+>> quotes are not interpreted by make.
+>>
+>> Minor formatting fix too.
+>>
+>> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+>> Acked-by: Samuel Martin <s.martin49@gmail.com>
+>> CC: Yann E. MORIN <yann.morin.1998@free.fr>
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>> v1 -> v2
+>>  - Implemented spacing and quote concerns from Yann E. MORIN and
+>>    Samuel Marin.
+>>
+>> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+>> ---
+>>  package/pkg-cmake.mk | 12 ++++++------
+>>  1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+>> index 1037513..e738ba9 100644
+>> --- a/package/pkg-cmake.mk
+>> +++ b/package/pkg-cmake.mk
+>> @@ -22,13 +22,13 @@
+>>
+>>  # Set compiler variables.
+>>  ifeq ($(BR2_CCACHE),y)
+>> -CMAKE_HOST_C_COMPILER="$(HOST_DIR)/usr/bin/ccache"
+>> -CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
+>> -CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
+>> -CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
+>> +CMAKE_HOST_C_COMPILER = "$(HOST_DIR)/usr/bin/ccache"
+>> +CMAKE_HOST_CXX_COMPILER = "$(HOST_DIR)/usr/bin/ccache"
 
-It now also uses static_assert which is only available since GCC 4.6, so
-handle it as well in the legacy patch.
+No need for double quotes here (when used, this variable is surrounded
+by quotes [1]).
+Otherwise, it looks good.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...y-use-pragma-for-ignoring-diagnostics-if-.patch |   30 ++++++++++---------
- package/eudev/eudev.mk                             |    2 +-
- system/Config.in                                   |    6 ++-
- 3 files changed, 21 insertions(+), 17 deletions(-)
 
-diff --git a/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch b/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
-index 8b70fbf..3046ba5 100644
---- a/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
-+++ b/package/eudev/0001-Only-use-pragma-for-ignoring-diagnostics-if-.patch
-@@ -4,34 +4,36 @@ Date: Wed, 2 Apr 2014 12:36:52 +0200
- Subject: [PATCH] libudev: Only use #pragma for ignoring diagnostics if GCC
-  version supports it.
- 
--
-+[Peter: update for 2.1.1, fix shared_assert issue]
- Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
- ---
-- src/libudev/macro.h |    5 +++++
-- 1 file changed, 5 insertions(+)
-+ src/shared/macro.h |    8 +++++
-+ 1 file changed, 8 insertions(+)
- 
--diff --git a/src/libudev/macro.h b/src/libudev/macro.h
--index ac2a23f..fb55983 100644
----- a/src/libudev/macro.h
--+++ b/src/libudev/macro.h
--@@ -40,12 +40,17 @@
-+diff --git a/src/shared/macro.h b/src/shared/macro.h
-+--- a/src/shared/macro.h
-++++ b/src/shared/macro.h
-+@@ -38,6 +38,7 @@
-  #define _cleanup_(x) __attribute__((cleanup(x)))
-  
-- 
-+ /* Temporarily disable some warnings */
- +#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-- #define DISABLE_WARNING_FORMAT_NONLITERAL                               \
-+ #define DISABLE_WARNING_DECLARATION_AFTER_STATEMENT                     \
-          _Pragma("GCC diagnostic push");                                 \
--         _Pragma("GCC diagnostic ignored \"-Wformat-nonliteral\"")
-+         _Pragma("GCC diagnostic ignored \"-Wdeclaration-after-statement\"")
-+@@ -48,6 +49,13 @@
-  
-  #define REENABLE_WARNING                                                \
-          _Pragma("GCC diagnostic pop")
- +#else
-++#define DISABLE_WARNING_DECLARATION_AFTER_STATEMENT
- +#define DISABLE_WARNING_FORMAT_NONLITERAL
- +#define REENABLE_WARNING
-++/* glibc unconditionally defines this, but it needs GCC 4.6+ */
-++#undef static_assert
- +#endif
-  
-- /* Rounds up */
-- 
-+ #define XCONCATENATE(x, y) x ## y
-+ #define CONCATENATE(x, y) XCONCATENATE(x, y)
- -- 
- 1.7.9.5
--
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 3cd22be..2221966 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EUDEV_VERSION = 1.9
-+EUDEV_VERSION = 2.1.1
- EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
-diff --git a/system/Config.in b/system/Config.in
-index 4d7a4e3..e9f2428 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -129,12 +129,14 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # eudev
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 	select BR2_PACKAGE_EUDEV
- 
--comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
-+comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
- 	depends on !BR2_avr32 # eudev
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 
- endchoice
- 
+>> +CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
+>> +CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
+>>  else
+>> -CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
+>> -CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
+>> +CMAKE_HOST_C_COMPILER = $(HOSTCC)
+>> +CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+>>  endif
+>>
+>>  ################################################################################
+>> --
+>> 1.9.1
+>>
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+[1] http://git.buildroot.net/buildroot/tree/package/pkg-cmake.mk#n110
+
+
+Regards,
+
+-- 
+Samuel
