@@ -1,117 +1,392 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:37 +0100
-Subject: [Buildroot] [PATCH 08/14 v6] package/khronos-registry-openmaxil:
-	new package
+Date: Sat, 24 Jan 2015 00:24:41 +0100
+Subject: [Buildroot] [PATCH 12/14 v6] package/nvidia-tegra23-binaries: new
+	package
 In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
 References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <cdd844f872ef2316b998a4b8a78c46abe0e2d8f4.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <c51b22347b65d6afefcdd92b7cbc36b62b3e8c2e.1422055104.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OpenMAX Registry provides all OpenMAX headers, directly from the
-Khronos group.
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
-Those headers are needed when an OpenMAX implementation does not
-provide them, like the NVidia binary blob.
+This patch adds a new package for all libraries and drivers
+provided by Nvidia Linux4Tegra release 16.4.0.
 
-These are the OpenMAX Inegration Layer (IL) headers.
+We have intermediate .mk and Config.in, because those values will be
+shared with the codecs package, to come in a follow-up patch, like we
+have for the Freescale stuff.
 
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+[yann.morin.1998 at free.fr:
+  - split jpeg into its own patch
+  - split codecs and gstreamer plugins out into their own packages
+  - do not patch for .pc files, just bundle them in $(@D)
+]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/opengl/Config.in                           |  1 +
- .../opengl/khronos-registry-openmaxil/Config.in    | 20 ++++++++++++++
- .../khronos-registry-openmax.hash                  |  3 ++
- .../khronos-registry-openmaxil.mk                  | 32 ++++++++++++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/opengl/khronos-registry-openmaxil/Config.in
- create mode 100644 package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash
- create mode 100644 package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk
+ package/Config.in                                  |   1 +
+ package/nvidia-tegra23/Config.in                   |  36 ++++++++
+ .../nvidia-tegra23-binaries/Config.in              |  95 ++++++++++++++++++++
+ .../nvidia-tegra23/nvidia-tegra23-binaries/egl.pc  |  10 +++
+ .../nvidia-tegra23/nvidia-tegra23-binaries/gles.pc |  10 +++
+ .../nvidia-tegra23-binaries/glesv2.pc              |  10 +++
+ .../nvidia-tegra23-binaries.hash                   |   3 +
+ .../nvidia-tegra23-binaries.mk                     | 100 +++++++++++++++++++++
+ package/nvidia-tegra23/nvidia-tegra23.mk           |  17 ++++
+ 9 files changed, 282 insertions(+)
+ create mode 100644 package/nvidia-tegra23/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23.mk
 
-diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-index 0c3f2cb..efe31a3 100644
---- a/package/opengl/Config.in
-+++ b/package/opengl/Config.in
-@@ -8,3 +8,4 @@ source "package/opengl/libopenmax/Config.in"
- source "package/opengl/khronos-registry-khrplatform/Config.in"
- source "package/opengl/khronos-registry-openkode/Config.in"
- source "package/opengl/khronos-registry-opengl/Config.in"
-+source "package/opengl/khronos-registry-openmaxil/Config.in"
-diff --git a/package/opengl/khronos-registry-openmaxil/Config.in b/package/opengl/khronos-registry-openmaxil/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index d5382f6..89526f5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -353,6 +353,7 @@ endif
+ 	source "package/nanocom/Config.in"
+ 	source "package/neard/Config.in"
+ 	source "package/nvidia-driver/Config.in"
++	source "package/nvidia-tegra23/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
 new file mode 100644
-index 0000000..35dddf9
+index 0000000..950f2f8
 --- /dev/null
-+++ b/package/opengl/khronos-registry-openmaxil/Config.in
-@@ -0,0 +1,20 @@
-+# Note: this package has no prompt, because it is to be selected by
-+# packages that need it, and does not make sense on its own.
-+# Further more, we want to avoid it being enabled alongside any other
-+# package that provide their own OpenMAX headers, like rpi-userland...
-+
-+config BR2_PACKAGE_KHRONOS_REGISTRY_OPENMAXIL
-+	bool
-+	select BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
++++ b/package/nvidia-tegra23/Config.in
+@@ -0,0 +1,36 @@
++menuconfig BR2_PACKAGE_NVIDIA_TEGRA23
++	bool "nvidia-tegra23"
++	depends on BR2_cortex_a9
++	depends on BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_XORG7
 +	help
-+	  The OpenMAX IL registry contains specifications of the core API;
-+	  specifications of Khronos- and vendor-approved OpenMAX IL extensions;
-+	  header files corresponding to the specifications; and other related
-+	  documentation.
++	  Install NVidia proprietary blobs to drive Tegra2 or Tegra3
++	  GPUs found in some mobile-targeted ARM SoCs.
 +
-+	  This package installs the OpenMAX header files. You do not need them
-+	  if the OpenMAX implementation provides its own headers.
-+	  Currently, the only known implementation requiring OpenGL Resgistry
-+	  is the NVidia proprietary driver.
++if BR2_PACKAGE_NVIDIA_TEGRA23
 +
-+	  https://www.khronos.org/registry/omxil/
-diff --git a/package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash
++choice
++	prompt "Tegra platform"
++	help
++	  Select the SOC platform.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2
++	bool "Tegra 2"
++	help
++	  NVIDIA Tegra 2 is a dual-core Cortex-A9 without NEON.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
++	bool "Tegra 3"
++	depends on BR2_ARM_CPU_HAS_NEON
++	help
++	  NVIDIA Tegra 3 is a quad-core Cortex-A9 with NEON.
++
++endchoice
++
++source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
++endif
++
++comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
++	depends on BR2_cortex_a9
++	depends on !BR2_ARM_EABIHF || !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_PACKAGE_XORG7
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
 new file mode 100644
-index 0000000..e2f5014
+index 0000000..66bb8c3
 --- /dev/null
-+++ b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmax.hash
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+@@ -0,0 +1,95 @@
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++	bool "nvidia-tegra23 binaries"
++	select BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
++	select BR2_PACKAGE_KHRONOS_REGISTRY_OPENGL
++	select BR2_PACKAGE_KHRONOS_REGISTRY_OPENKODE
++	select BR2_PACKAGE_KHRONOS_REGISTRY_OPENMAXIL
++	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXV
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_HAS_LIBOPENMAX
++	help
++	  Those packages provide libraries, drivers and firmware that comes from
++	  NVIDIA Linux For Tegra.
++
++	  https://developer.nvidia.com/linux-tegra
++
++if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "nvidia-tegra23-binaries"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "nvidia-tegra23-binaries"
++
++config BR2_PACKAGE_PROVIDES_LIBOPENMAX
++	default "nvidia-tegra23-binaries"
++
++choice
++	prompt "X11 ABI version"
++	default BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
++	help
++	  Select Tegra X11 ABI version.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V5
++	bool "X11 ABI 5"
++	help
++	  Tegra X11 ABI 5.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V6
++	bool "X11 ABI 6"
++	help
++	  Tegra X11 ABI 6.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V7
++	bool "X11 ABI 7"
++	help
++	  Tegra X11 ABI 7.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V8
++	bool "X11 ABI 8"
++	help
++	  Tegra X11 ABI 8.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V10
++	bool "X11 ABI 10"
++	help
++	  Tegra X11 ABI 10.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
++	bool "X11 ABI 11"
++	help
++	  Tegra X11 ABI 11.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V12
++	bool "X11 ABI 12"
++	help
++	  Tegra X11 ABI 12.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
++	bool "X11 ABI 13"
++	help
++	  Tegra X11 ABI 13.
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
++	bool "X11 ABI 14"
++	help
++	  Tegra X11 ABI 14.
++
++endchoice
++
++config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI
++	int
++	default 5  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V5
++	default 6  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V6
++	default 7  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V7
++	default 8  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V8
++	default 10 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V10
++	default 11 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
++	default 12 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V12
++	default 13 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
++	default 14 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
++
++endif
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc b/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
+new file mode 100644
+index 0000000..3af7eec
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=/usr/lib
++includedir=/usr/include
++
++Name: egl
++Description: EGL implementation
++Version: 1
++Cflags: -I${includedir}/EGL
++Libs: -L${libdir} -lEGL
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc b/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
+new file mode 100644
+index 0000000..91387c9
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=/usr/lib
++includedir=/usr/include
++
++Name: glesv2
++Description: OpenGL ES 1.1 implementation
++Version: 1.1
++Cflags: -I${includedir}/GLES
++Libs: -L${libdir} -lGLESv1_CM
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc b/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
+new file mode 100644
+index 0000000..356a1cb
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=/usr/lib
++includedir=/usr/include
++
++Name: glesv2
++Description: OpenGL ES 2 implementation
++Version: 2
++Cflags: -I${includedir}/GLESv2
++Libs: -L${libdir} -lGLESv2
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
+new file mode 100644
+index 0000000..8185593
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
 @@ -0,0 +1,3 @@
-+# Locally computed:
-+sha1   35b2c565a050b4235feac3f22bbbf4bf80092a00                          OpenMAX_IL_1_1_2_Header.zip
-+sha256 9e8aee85f37946202ff15a52836233f983e90a751c0816ba341ba0c1ffedf99e  OpenMAX_IL_1_1_2_Header.zip
-diff --git a/package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk
++# From https://developer.nvidia.com/linux-tegra-rel-16
++sha1 6b57b43f8f9c5b76fa3763144e57c0c16047b1a8 Tegra20_Linux_R16.4.0_armhf.tbz2
++sha1 44e7f84dd6e3b80d37ecddf9cc133031b2653004 Tegra30_Linux_R16.4.0_armhf.tbz2
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
 new file mode 100644
-index 0000000..10b6896
+index 0000000..5998bbf
 --- /dev/null
-+++ b/package/opengl/khronos-registry-openmaxil/khronos-registry-openmaxil.mk
-@@ -0,0 +1,32 @@
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+@@ -0,0 +1,100 @@
 +################################################################################
 +#
-+# khronos-registry-openmaxil
++# nvidia-tegra3-binaries
 +#
 +################################################################################
 +
-+# The latest 'stable' version is 1.1.2; the 1.2.0 version is only
-+# considered "provisional", so we keep using 1.1.2 for now.
-+KHRONOS_REGISTRY_OPENMAXIL_VERSION = 1.1.2
-+KHRONOS_REGISTRY_OPENMAXIL_SOURCE = OpenMAX_IL_$(subst .,_,$(KHRONOS_REGISTRY_OPENMAXIL_VERSION))_Header.zip
-+KHRONOS_REGISTRY_OPENMAXIL_SITE = https://www.khronos.org/registry/omxil/api/$(KHRONOS_REGISTRY_OPENMAXIL_VERSION)
++NVIDIA_TEGRA23_BINARIES_VERSION	= $(NVIDIA_TEGRA23_VERSION)
++NVIDIA_TEGRA23_BINARIES_SITE = $(NVIDIA_TEGRA23_SITE)
++NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARIES_VERSION)_armhf.tbz2
 +
-+# No license file, license text in each header file
-+KHRONOS_REGISTRY_OPENMAXIL_LICENSE = MIT
++NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
++NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
 +
-+# The registry only installs header files
-+KHRONOS_REGISTRY_OPENMAXIL_INSTALL_STAGING = YES
-+KHRONOS_REGISTRY_OPENMAXIL_INSTALL_TARGET = NO
++NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
++NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES
 +
-+define KHRONOS_REGISTRY_OPENMAXIL_EXTRACT_CMDS
-+	$(UNZIP) $(DL_DIR)/$(KHRONOS_REGISTRY_OPENMAXIL_SOURCE) -d $(@D)
++NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = \
++	khronos-registry-opengl khronos-registry-openkode \
++	khronos-registry-openmax khronos-registry-khrplatform \
++	xlib_libX11 xlib_libXext xlib_libXv
++
++NVIDIA_TEGRA23_BINARIES_PROVIDES = libegl libgles libopenmax
++
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_TEGRA2),y)
++NVIDIA_TEGRA23_BINARIES_FIRMWARE = \
++	nvrm_avp.bin nvavp_vid_ucode_alt.bin nvavp_os_0ff00000.bin \
++	nvavp_os_eff00000.bin
++endif
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_TEGRA3),y)
++NVIDIA_TEGRA23_BINARIES_FIRMWARE = \
++	nvrm_avp_0ff00000.bin nvrm_avp_8e000000.bin nvrm_avp_9e000000.bin \
++	nvrm_avp_be000000.bin nvrm_avp_eff00000.bin nvavp_vid_ucode_alt.bin \
++	nvavp_os_0ff00000.bin nvavp_os_eff00000.bin
++endif
++
++NVIDIA_TEGRA23_BINARIES_LIBRARIES = \
++	libardrv_dynamic.so libcgdrv.so libEGL.so.1 libGLESv1_CM.so.1 libGLESv2.so.2 \
++	libKD.so libnvapputil.so libnvavp.so libnvcwm.so libnvdc.so \
++	libnvddk_2d.so libnvddk_2d_v2.so libnvddk_disp.so libnvddk_kbc.so \
++	libnvddk_mipihsi.so libnvddk_nand.so libnvddk_se.so libnvddk_snor.so \
++	libnvddk_spif.so libnvddk_usbphy.so libnvdispatch_helper.so libnvglsi.so \
++	libnvmedia_audio.so libnvmm_audio.so libnvmm_camera.so libnvmm_contentpipe.so \
++	libnvmm_image.so libnvmmlite_audio.so libnvmmlite_image.so libnvmmlite.so \
++	libnvmmlite_utils.so libnvmmlite_video.so libnvmm_manager.so libnvmm_parser.so \
++	libnvmm_service.so libnvmm.so libnvmm_utils.so libnvmm_video.so libnvmm_writer.so \
++	libnvodm_disp.so libnvodm_dtvtuner.so libnvodm_imager.so libnvodm_misc.so \
++	libnvodm_query.so libnvomxilclient.so libnvomx.so libnvos.so libnvparser.so \
++	libnvrm_graphics.so libnvrm.so libnvsm.so libnvtestio.so libnvtestresults.so \
++	libnvtvmr.so libnvwinsys.so libnvwsi.so
++
++NVIDIA_TEGRA23_BINARIES_DRV = \
++	nv_tegra/nvidia_drivers/usr/lib/xorg/modules/drivers/tegra_drv.abi$(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI).so
++
++NVIDIA_TEGRA23_BINARIES_PKGCONFIG = egl.pc gles.pc glesv2.pc
++
++define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
++	$(INSTALL) -d $(@D)/nv_tegra/nvidia_drivers
++	$(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
++		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
++	$(INSTALL) -d $(@D)/nv_tegra/nv_sample_apps/nvgstapps
++	$(call suitable-extractor,$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2) \
++		$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2 | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
++endef
++NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS += NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
++
++define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
++	$(foreach lib,$(NVIDIA_TEGRA23_BINARIES_LIBRARIES),
++		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nvidia_drivers/usr/lib/$(lib) \
++			$(1)/usr/lib/$(lib); \
++	)
++	(cd $(1)/usr/lib; \
++		ln -sf libGLESv2.so.2 libGLESv2.so; \
++		ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
++		ln -sf libEGL.so.1 libEGL.so \
++	)
 +endef
 +
-+# OpenMAX headers go directly into /usr/include, no sub-dir
-+# At least, that's what bellagio does...
-+define KHRONOS_REGISTRY_OPENMAXIL_INSTALL_STAGING_CMDS
-+	for h in $(@D)/*.h; do \
-+		$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$${h##*/} || exit 1; \
-+	done
++define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
++	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
++	$(foreach pkgconfig,$(NVIDIA_TEGRA23_BINARIES_PKGCONFIG),
++		$(INSTALL) -D -m 0644 package/nvidia-tegra23/nvidia-tegra23-binaries/$(pkgconfig) \
++			$(STAGING_DIR)/usr/lib/pkgconfig/$(pkgconfig); \
++	)
++endef
++
++define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
++	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(TARGET_DIR))
++	$(foreach firmware,$(NVIDIA_TEGRA23_BINARIES_FIRMWARE),
++		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nvidia_drivers/lib/firmware/$(firmware) \
++			$(TARGET_DIR)/lib/firmware/$(firmware); \
++	)
++	$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nvidia_drivers/etc/nv_tegra_release \
++		$(TARGET_DIR)/etc/nv_tegra_release
++	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
++		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
 +endef
 +
 +$(eval $(generic-package))
+diff --git a/package/nvidia-tegra23/nvidia-tegra23.mk b/package/nvidia-tegra23/nvidia-tegra23.mk
+new file mode 100644
+index 0000000..46a7e04
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# nvidia-tegra23
++#
++################################################################################
++
++NVIDIA_TEGRA23_SITE = https://developer.nvidia.com/sites/default/files/akamai/mobile/files/L4T
++NVIDIA_TEGRA23_VERSION = 16.4.0
++
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2),y)
++NVIDIA_TEGRA23_BASE = Tegra20_Linux
++endif
++ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3),y)
++NVIDIA_TEGRA23_BASE = Tegra30_Linux
++endif
++
++include $(sort $(wildcard package/nvidia-tegra23/*/*.mk))
 -- 
 1.9.1
