@@ -1,38 +1,35 @@
 From: Erico Nunes <erico.nunes@datacom.ind.br>
-Date: Fri, 23 Jan 2015 18:58:13 -0200
-Subject: [Buildroot] [PATCH 1/3] python-jinja2: add python-markupsafe as
-	dependency
-Message-ID: <1422046695-2354-1-git-send-email-erico.nunes@datacom.ind.br>
+Date: Fri, 23 Jan 2015 18:58:14 -0200
+Subject: [Buildroot] [PATCH 2/3] python-markupsafe: allow build as host
+	package
+In-Reply-To: <1422046695-2354-1-git-send-email-erico.nunes@datacom.ind.br>
+References: <1422046695-2354-1-git-send-email-erico.nunes@datacom.ind.br>
+Message-ID: <1422046695-2354-2-git-send-email-erico.nunes@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_PYTHON_JINJA2 selects the BR2_PACKAGE_PYTHON_MARKUPSAFE
-option but doesn't depend on it in python-jinja2.mk.
-
-This turned in an error in an attempt to build python-jinja2 for host:
-"No local packages or download links found for markupsafe"
-
-Adding the python-markupsafe fixes this error and also ensures that it
-builds before python-jinja2 in any case.
+python-markupsafe is a dependency for python-jinja2, which can be used
+during build time as a host tool to generate code based on templates.
+This package is being added host package support mostly to allow
+host-python-jinja2 to build.
+This has been tested to build and work correctly as a host tool as well.
 
 Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
 ---
- package/python-jinja2/python-jinja2.mk | 1 +
+ package/python-markupsafe/python-markupsafe.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 49625e3..01f743b 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -10,5 +10,6 @@ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3c
- PYTHON_JINJA2_LICENSE_FILES = LICENSE
-+PYTHON_JINJA2_DEPENDENCIES = python-markupsafe
+diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
+index 9c7eb14..c815728 100644
+--- a/package/python-markupsafe/python-markupsafe.mk
++++ b/package/python-markupsafe/python-markupsafe.mk
+@@ -12,3 +12,4 @@ PYTHON_MARKUPSAFE_LICENSE = BSD-3c
+ PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE
  
  $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 1.9.1
