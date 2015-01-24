@@ -1,50 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 18:02:31 +0100
-Subject: [Buildroot] [RFC 0/4] Try to clean up proprietary OpenGL drivers
-In-Reply-To: <20150123105742.GB8089@free.fr>
-References: <1421839408-15839-1-git-send-email-jezz@sysmic.org>
- <20150123105742.GB8089@free.fr>
-Message-ID: <20150124170231.GA4001@free.fr>
+Date: Sat, 24 Jan 2015 18:04:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: bump version
+	to 20150107
+In-Reply-To: <1422117876-20617-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1422117876-20617-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150124170442.GB4001@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Bernd, All,
 
-On 2015-01-23 11:57 +0100, Yann E. MORIN spake thusly:
-> On 2015-01-21 12:23 +0100, J?r?me Pouiller spake thusly:
-> > Until now, xorg-xserver depends on mesa3d to compile with GLX/DRI support.
-> > However, there was problem with proprietary OpenGL drivers. These ones depends
-> > on GLX/DRI support (so, they depends on mesa3d) and overwrite files provided by
-> > mesa3d (so, they conflict with mesa3d).
-> > 
-> > Thanks to opengl-registry, it is possible to change proprietary OpenGL drivers
-> > in real LibGL provider and compile GLX/DRI support using proprietary drivers
-> > instead of mesa3d.
-> > 
-> > Notice this series aim to highlight the problem described above. It does not
-> > aim to be upstreamed. It apply on top of Yann series about nvidia driver and
-> > my series about imx6 gpu driver.
-> > 
-> > J?r?me Pouiller (4):
-> >   nvidia-driver: Add gl.pc
-> >   gpu-viv-bin-mx6q: is a libgl provider
-> >   opengl-registry: Also provide DRI interface
-> >   xorg-server: Depends on libgl to enable DRI/GLX
-[--SNIP--]
-> Finally, I am not too fond of bundling the dri header, neither in the
-> OpenGL registry package, nor in any other package.
-[--SNIP--]
-> An alternative would be to provide a prompt-less, stripped mesa3d
-> package that woudl install only headers; [...]
+On 2015-01-24 17:44 +0100, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/intel-microcode/intel-microcode.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+> index 640d6fb..4e8ea90 100644
+> --- a/package/intel-microcode/intel-microcode.mk
+> +++ b/package/intel-microcode/intel-microcode.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -INTEL_MICROCODE_VERSION = 20140913
+> +INTEL_MICROCODE_VERSION = 20150107
+>  INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+> -INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24290/eng
+> +INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
+>  INTEL_MICROCODE_LICENSE = PROPRIETARY
+>  INTEL_MICROCODE_LICENSE_FILES = license.txt
+>  INTEL_MICROCODE_REDISTRIBUTE = NO
 
-So, I've pushed an updated series that does exactly that: add a
-mesa3d-headers package, which is responsible for providing gl.h
-(un-bundled from a previous series), dir_interface.h and dri.pc.
+The microcode is a sensitive piece of stuff, so having a hash file for
+it would be really nice. Here's the sah256 computed locally here:
 
-Thanks for the input! :-)
+    sha256  f5e7fb58643b2bf327eedf7bd91780fd5dfe74397552977cc77194c165910255  microcode-20150107.tgz
 
 Regards,
 Yann E. MORIN.
