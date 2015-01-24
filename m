@@ -1,117 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 00:24:43 +0100
-Subject: [Buildroot] [PATCH 14/14 v6] package/nvidia-tegra23-codecs: new
-	package
-In-Reply-To: <cover.1422055104.git.yann.morin.1998@free.fr>
-References: <cover.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <a7e8708b7a6bd74374470fd8a453c612de9a60dd.1422055104.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 24 Jan 2015 01:10:58 +0100
+Subject: [Buildroot] [PATCH 1/1] qt: make QtDeclarative depend on QtSql
+In-Reply-To: <1410488495-2146-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Thu, 11 Sep 2014 22:21:35 -0400")
+References: <1410488495-2146-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87egql597x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
-as: AAC3, h264, jpeg, MP3...
+Hi,
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[me:
-  - split codecs from binaries into this patch
-  - use our extractor helpers
-]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/nvidia-tegra23/Config.in                   |  1 +
- .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |  7 ++++
- .../nvidia-tegra23-codecs.hash                     |  3 ++
- .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk | 41 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+ > As indicated by QtDeclarative.pc, QtDeclarative needs QtSql.
+ > It builds fine without it, but then you get a run-time error.
+ > So add QtSql to the QtDeclarative depends-on list.
 
-diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
-index 950f2f8..89bdf83 100644
---- a/package/nvidia-tegra23/Config.in
-+++ b/package/nvidia-tegra23/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
- endchoice
- 
- source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
-+source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
- endif
- 
- comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-new file mode 100644
-index 0000000..07a8e74
---- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
-+	bool "nvidia-tegra23 codecs"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
-+	help
-+	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.4.0
-+
-+	  https://developer.nvidia.com/linux-tegra-rel-16
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-new file mode 100644
-index 0000000..de4a461
---- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-@@ -0,0 +1,3 @@
-+# From https://developer.nvidia.com/linux-tegra-rel-16
-+sha1 d0889bf0ca408583a1e88657c6fd18f3659ef1bb Tegra20_Linux-codecs_R16.4.0_armhf.tbz2
-+sha1 a9f298222d3b6a618ef96a6bed9641929b152c8a Tegra30_Linux-codecs_R16.4.0_armhf.tbz2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-new file mode 100644
-index 0000000..d05dbb8
---- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# nvidia-tegra23-codecs
-+#
-+################################################################################
-+
-+NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
-+NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
-+NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
-+NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
-+NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
-+NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
-+NVIDIA_TEGRA23_CODECS_DEPENDENCIES = nvidia-tegra23-binaries
-+NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO
-+NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES
-+
-+NVIDIA_TEGRA23_CODECS_FIRMWARE = \
-+	nvmm_aacdec.axf nvmm_adtsdec.axf nvmm_h264dec.axf nvmm_h264dec2x.axf \
-+	nvmm_jpegdec.axf nvmm_jpegenc.axf nvmm_manager.axf nvmm_mp3dec.axf \
-+	nvmm_mpeg4dec.axf nvmm_service.axf
-+
-+# The archive contains an archive with the firmware codecs
-+define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
-+	$(INSTALL) -d $(@D)
-+	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
-+		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
-+	$(INSTALL) -d $(@D)/restricted_codecs
-+	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
-+		$(@D)/restricted_codecs.tbz2 | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
-+endef
-+
-+define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
-+	$(foreach codec,$(NVIDIA_TEGRA23_CODECS_FIRMWARE),
-+		$(INSTALL) -D -m 0644 $(@D)/restricted_codecs/lib/firmware/$(codec) \
-+			$(TARGET_DIR)/lib/firmware/$(codec); \
-+	)
-+endef
-+
-+$(eval $(generic-package))
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
