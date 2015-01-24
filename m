@@ -1,78 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 24 Jan 2015 21:28:58 +0100
-Subject: [Buildroot] [PATCH] python-zope-interface: new package
-Message-ID: <1422131338-4470-1-git-send-email-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 24 Jan 2015 22:47:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 7826] Building of cdparanoia
+In-Reply-To: <bug-7826-163@https.bugs.busybox.net/>
+References: <bug-7826-163@https.bugs.busybox.net/>
+Message-ID: <20150124224712.C8559803DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                                        |  1 +
- package/python-zope-interface/Config.in                  |  9 +++++++++
- package/python-zope-interface/python-zope-interface.hash |  2 ++
- package/python-zope-interface/python-zope-interface.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-zope-interface/Config.in
- create mode 100644 package/python-zope-interface/python-zope-interface.hash
- create mode 100644 package/python-zope-interface/python-zope-interface.mk
+https://bugs.busybox.net/show_bug.cgi?id=7826
 
-diff --git a/package/Config.in b/package/Config.in
-index 5f6ebc2..9674d4a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -558,6 +558,7 @@ menu "external python modules"
- 	source "package/python-versiontools/Config.in"
- 	source "package/python-webpy/Config.in"
- 	source "package/python-werkzeug/Config.in"
-+	source "package/python-zope-interface/Config.in"
- endmenu
- endif
- 	source "package/ruby/Config.in"
-diff --git a/package/python-zope-interface/Config.in b/package/python-zope-interface/Config.in
-new file mode 100644
-index 0000000..01f4a94
---- /dev/null
-+++ b/package/python-zope-interface/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
-+	bool "python-zope-interface"
-+	help
-+	  This package provides an implementation of "object interfaces" for
-+	  Python. Interfaces are a mechanism for labeling objects as conforming
-+	  to a given API or contract. So, this package can be considered as
-+	  implementation of the Design By Contract methodology support in Python.
-+
-+	  http://docs.zope.org/zope.interface/
-diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
-new file mode 100644
-index 0000000..bdd05d7
---- /dev/null
-+++ b/package/python-zope-interface/python-zope-interface.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  441fefcac1fbac57c55239452557d3598571ab82395198b2565a29d45d1232f6  zope.interface-4.1.2.tar.gz
-diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
-new file mode 100644
-index 0000000..a271f77
---- /dev/null
-+++ b/package/python-zope-interface/python-zope-interface.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-zope-interface
-+#
-+################################################################################
-+
-+PYTHON_ZOPE_INTERFACE_VERSION = 4.1.2
-+PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
-+PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/source/z/zope.interface/
-+PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
-+PYTHON_ZOPE_INTERFACE_LICENSE = ZPLv2.1
-+PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> 2015-01-24 22:47:11 UTC ---
+(In reply to comment #0)
+> I tried to package cdparanoia by myself. 
+
+ In order for us to help us, you will need to give more information.
+
+* The .config you use;
+* The custom Config.in and cdparanoia.mk files you have made.
+
+ BTW for this kind of question we prefer to use the mailing list rather than
+bugzilla.
+
+> This is what I get:
+> 
+> checking for grep that handles long lines and -e... /bin/grep
+> checking for egrep... /bin/grep -E
+> checking for ANSI C header files... no
+> checking for sys/types.h... no
+> checking for sys/stat.h... no
+> checking for stdlib.h... no
+
+ There's clearly something wrong with the compiler. Check the settings of CC
+and CFLAGS that you add to the configure script. Did you use autotools-package?
+
 -- 
-2.1.0
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
