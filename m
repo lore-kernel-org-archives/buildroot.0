@@ -1,53 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 18:04:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/intel-microcode: bump version
-	to 20150107
-In-Reply-To: <1422117876-20617-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1422117876-20617-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150124170442.GB4001@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 24 Jan 2015 18:42:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-addons: bump version
+Message-ID: <1422121350-976-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
 
-On 2015-01-24 17:44 +0100, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/intel-microcode/intel-microcode.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index 640d6fb..4e8ea90 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -INTEL_MICROCODE_VERSION = 20140913
-> +INTEL_MICROCODE_VERSION = 20150107
->  INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
-> -INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24290/eng
-> +INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
->  INTEL_MICROCODE_LICENSE = PROPRIETARY
->  INTEL_MICROCODE_LICENSE_FILES = license.txt
->  INTEL_MICROCODE_REDISTRIBUTE = NO
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-addons/kodi-pvr-addons.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The microcode is a sensitive piece of stuff, so having a hash file for
-it would be really nice. Here's the sah256 computed locally here:
-
-    sha256  f5e7fb58643b2bf327eedf7bd91780fd5dfe74397552977cc77194c165910255  microcode-20150107.tgz
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+index bb4dbf5..0ca0457 100644
+--- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
++++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'helix'
+ # When Kodi is updated, this should be updated to the corresponding branch
+-KODI_PVR_ADDONS_VERSION = 9f63d1bc39ffcb28f8aea580ea0669211e4d16e5
++KODI_PVR_ADDONS_VERSION = 7aec58f67c799e83e0c1c490ceda39dc119f2c7d
+ KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
+ KODI_PVR_ADDONS_LICENSE = GPLv3+
+ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
