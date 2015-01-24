@@ -1,34 +1,57 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 24 Jan 2015 10:46:01 +0100
-Subject: [Buildroot] Build results for 2015-01-23
-Message-ID: <trinity-db1473d9-a2cf-4dc7-ab3f-4a0c2cfb2df9-1422092761742@3capp-gmx-bs30>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 24 Jan 2015 11:52:42 +0100
+Subject: [Buildroot] [PATCH] mono: bump to version 3.12.0
+In-Reply-To: <87a918603a.fsf@dell.be.48ers.dk>
+References: <1421787624-6841-1-git-send-email-angelo.compagnucci@gmail.com>
+ <87a918603a.fsf@dell.be.48ers.dk>
+Message-ID: <CA+TH9VmJ5+87vjEKrbREArNy_9iC-kfAPLvi9SuGs4FDkkJUag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
->      powerpc |                lightning-2.0.5 | NOK | http://autobuild.buildroot.net/results/711bf35e9e15711efa798f13bc10de52a6009341/
+There is an error on mips architecture,
 
-../lib/.libs/liblightning.so: undefined reference to `disassemble_init_powerpc'
-collect2: error: ld returned 1 exit status
+In file included from ../../mono/utils/mono-stack-unwinding.h:10:0,
+                 from ../../mono/utils/mono-threads.h:14,
+                 from ../../mono/metadata/sgen-gc.h:39,
+                 from sgen-os-posix.c:33:
+sgen-os-posix.c: In function 'suspend_thread':
+../../mono/utils/mono-context.h:475:61: error: 'mips_sp' undeclared
+(first use in this function)
+ #define MONO_CONTEXT_GET_SP(ctx) ((gpointer)((ctx)->sc_regs[mips_sp]))
+                                                             ^
+sgen-os-posix.c:73:17: note: in expansion of macro 'MONO_CONTEXT_GET_SP'
+   stack_start = MONO_CONTEXT_GET_SP (&ctx) - REDZONE_SIZE;
+                 ^
+../../mono/utils/mono-context.h:475:61: note: each undeclared
+identifier is reported only once for each function it appears in
+ #define MONO_CONTEXT_GET_SP(ctx) ((gpointer)((ctx)->sc_regs[mips_sp]))
+                                                             ^
+sgen-os-posix.c:73:17: note: in expansion of macro 'MONO_CONTEXT_GET_SP'
+   stack_start = MONO_CONTEXT_GET_SP (&ctx) - REDZONE_SIZE;
 
-Could be fixed with (locally tested) binutils update to e.g. binutils-2.25:
+I'm investigating the root of the problem.
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index c3b3c18..6d34750 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -12,7 +12,7 @@ ifeq ($(BR2_avr32),y)
- # avr32 uses a special version
- BINUTILS_VERSION = 2.18-avr32-1.0.1
- else
--BINUTILS_VERSION = 2.22
-+BINUTILS_VERSION = 2.25
- endif
- endif
+Sincerely, Angelo
 
-Regards,
-Peter
+2015-01-24 9:42 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>
+>  > This patch bumos version of mono to the latest 3.12.0
+>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>
+> This causes a number of build issues. Care to take a look?
+>
+> http://autobuild.buildroot.net/?reason=mono-3.12.0
+>
+> --
+> Bye, Peter Korsgaard
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
