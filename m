@@ -1,80 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 Jan 2015 19:13:20 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/intel-microcode: bump
- version to 20150107, add hash
-In-Reply-To: <1422121699-1922-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1422121699-1922-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150124181320.GC4001@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 24 Jan 2015 21:28:58 +0100
+Subject: [Buildroot] [PATCH] python-zope-interface: new package
+Message-ID: <1422131338-4470-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                                        |  1 +
+ package/python-zope-interface/Config.in                  |  9 +++++++++
+ package/python-zope-interface/python-zope-interface.hash |  2 ++
+ package/python-zope-interface/python-zope-interface.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-zope-interface/Config.in
+ create mode 100644 package/python-zope-interface/python-zope-interface.hash
+ create mode 100644 package/python-zope-interface/python-zope-interface.mk
 
-On 2015-01-24 18:48 +0100, Bernd Kuhls spake thusly:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Manually downloaded and verified the hash.
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v2: added hash (Yann)
-> 
->  package/intel-microcode/intel-microcode.hash |    2 ++
->  package/intel-microcode/intel-microcode.mk   |    4 ++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
->  create mode 100644 package/intel-microcode/intel-microcode.hash
-> 
-> diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-> new file mode 100644
-> index 0000000..e46f7b0
-> --- /dev/null
-> +++ b/package/intel-microcode/intel-microcode.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed by Yann (http://lists.busybox.net/pipermail/buildroot/2015-January/117918.html) and me
-> +sha256	f5e7fb58643b2bf327eedf7bd91780fd5dfe74397552977cc77194c165910255	microcode-20150107.tgz
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index 640d6fb..4e8ea90 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -INTEL_MICROCODE_VERSION = 20140913
-> +INTEL_MICROCODE_VERSION = 20150107
->  INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
-> -INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24290/eng
-> +INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/24616/eng
->  INTEL_MICROCODE_LICENSE = PROPRIETARY
->  INTEL_MICROCODE_LICENSE_FILES = license.txt
->  INTEL_MICROCODE_REDISTRIBUTE = NO
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 5f6ebc2..9674d4a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -558,6 +558,7 @@ menu "external python modules"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
++	source "package/python-zope-interface/Config.in"
+ endmenu
+ endif
+ 	source "package/ruby/Config.in"
+diff --git a/package/python-zope-interface/Config.in b/package/python-zope-interface/Config.in
+new file mode 100644
+index 0000000..01f4a94
+--- /dev/null
++++ b/package/python-zope-interface/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
++	bool "python-zope-interface"
++	help
++	  This package provides an implementation of "object interfaces" for
++	  Python. Interfaces are a mechanism for labeling objects as conforming
++	  to a given API or contract. So, this package can be considered as
++	  implementation of the Design By Contract methodology support in Python.
++
++	  http://docs.zope.org/zope.interface/
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+new file mode 100644
+index 0000000..bdd05d7
+--- /dev/null
++++ b/package/python-zope-interface/python-zope-interface.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  441fefcac1fbac57c55239452557d3598571ab82395198b2565a29d45d1232f6  zope.interface-4.1.2.tar.gz
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+new file mode 100644
+index 0000000..a271f77
+--- /dev/null
++++ b/package/python-zope-interface/python-zope-interface.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-zope-interface
++#
++################################################################################
++
++PYTHON_ZOPE_INTERFACE_VERSION = 4.1.2
++PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
++PYTHON_ZOPE_INTERFACE_SITE = https://pypi.python.org/packages/source/z/zope.interface/
++PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
++PYTHON_ZOPE_INTERFACE_LICENSE = ZPLv2.1
++PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150124/78a3fa6e/attachment.asc>
+2.1.0
