@@ -1,32 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 18:17:44 +0100
-Subject: [Buildroot] [PATCH 2/2 v2] docs: really move the website
-In-Reply-To: <d6aafa8a13597213dceff4ba0da8e9f1194c317b.1422054324.git.yann.morin.1998@free.fr>
-References: <cover.1422054324.git.yann.morin.1998@free.fr>
- <d6aafa8a13597213dceff4ba0da8e9f1194c317b.1422054324.git.yann.morin.1998@free.fr>
-Message-ID: <20150125181744.7c81fb77@free-electrons.com>
+Date: Sun, 25 Jan 2015 18:22:34 +0100
+Subject: [Buildroot] [git commit] lightning: Add a patch to fix PPC build
+	when disassembler is enabled
+Message-ID: <20150125172258.AAF4C805E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=bf0777802a00fb893957537aa0205f1570bc2b8b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 24 Jan 2015 00:05:55 +0100, Yann E. MORIN wrote:
-> Now that the automated scripts that deply our website have been updated,
-> really move the website to its final location.
-> 
-> We still keep a symlink for the images, as they are used both for the
-> website, and for the manual.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
+This patch is backported from upstream.
 
-Applied, thanks!
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-ppc-disassembler-build-fix.patch          |   53 ++++++++++++++++++++
+ 1 files changed, 53 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lightning/0002-ppc-disassembler-build-fix.patch b/package/lightning/0002-ppc-disassembler-build-fix.patch
+new file mode 100644
+index 0000000..4c812b3
+--- /dev/null
++++ b/package/lightning/0002-ppc-disassembler-build-fix.patch
+@@ -0,0 +1,53 @@
++From 361caf28545aa0c2b2ab8d1cbd334fbdd952f373 Mon Sep 17 00:00:00 2001
++From: Paulo Andrade <pcpa@gnu.org>
++Date: Thu, 15 Jan 2015 14:56:38 -0200
++Subject: [PATCH 4/4] PPC: Only call binutils function if it is available
++
++	* configure.ac, lib/jit_disasm.c: Rewrite workaround
++	to apparent problem to initialize powerpc disassembler.
++---
++diff --git a/configure.ac b/configure.ac
++index 749659b..d26e777 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -230,6 +230,13 @@ elif test $cpu = arm; then
++ 	return 1;
++     }
++     ]])],[ac_cv_test_arm_swf=yes],[],[ac_cv_test_arm_swf=no])
+++elif test $cpu = ppc; then
+++    if test "x$DISASSEMBLER" != "xno"; then
+++	save_LIBS="$LIBS"
+++	LIBS="$LIBS $SHLIB"
+++	AC_CHECK_FUNCS(disassemble_init_for_target disassemble_init_powerpc)
+++	LIBS="$save_LIBS"
+++    fi
++ fi
++ CFLAGS=$save_CFLAGS
++ 
++diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
++index 01158de..86e5441 100644
++--- a/lib/jit_disasm.c
+++++ b/lib/jit_disasm.c
++@@ -91,11 +91,19 @@ jit_init_debug(const char *progname)
++ #  if defined(__powerpc__)
++     disasm_info.arch = bfd_arch_powerpc;
++     disasm_info.mach = bfd_mach_ppc64;
+++#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
+++    disassemble_init_for_target(&disasm_info);
+++#    elif HAVE_DISASSEMBLE_INIT_POWERPC
++     disassemble_init_powerpc(&disasm_info);
+++#    endif
++ #    if defined(__powerpc64__)
++     disasm_info.disassembler_options = "64";
++ #    endif
+++#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
+++    disassemble_init_for_target(&disasm_info);
+++#    elif HAVE_DISASSEMBLE_INIT_POWERPC
++     disassemble_init_powerpc(&disasm_info);
+++#    endif
++ #  endif
++ #  if defined(__sparc__)
++     disasm_info.endian = disasm_info.display_endian = BFD_ENDIAN_BIG;
++-- 
++2.1.4
++
