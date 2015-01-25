@@ -1,100 +1,120 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Jan 2015 15:39:32 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/mjpg-streamer: New package
-Message-ID: <1422196772-17463-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Jan 2015 15:52:27 +0100
+Subject: [Buildroot] [PATCH 1/3] benejson: new package
+In-Reply-To: <1421953807-8902-1-git-send-email-codehero@gmail.com>
+References: <20150117193703.GB2827@tarshish>
+ <1421953807-8902-1-git-send-email-codehero@gmail.com>
+Message-ID: <20150125145226.GA3937@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+David, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Removed superfluous MJPG_STREAMER_INSTALL_TARGET_OPTS
+On 2015-01-22 14:10 -0500, David Bender spake thusly:
+> From: David Bender <codehero@yahoo.com>
+> 
+> Added C/C++ JSON parsing package benejson.
 
- package/Config.in                      |    1 +
- package/mjpg-streamer/Config.in        |   16 ++++++++++++++
- package/mjpg-streamer/mjpg-streamer.mk |   36 ++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/mjpg-streamer/Config.in
- create mode 100644 package/mjpg-streamer/mjpg-streamer.mk
+As already suggested, the three patches adding benejson should be
+squashed into one.
 
-diff --git a/package/Config.in b/package/Config.in
-index 5f6ebc2..133361c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1096,6 +1096,7 @@ endif
- 	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
- 	source "package/minidlna/Config.in"
-+	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
- 	source "package/mongoose/Config.in"
- 	source "package/mongrel2/Config.in"
-diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
-new file mode 100644
-index 0000000..0c61d7f
---- /dev/null
-+++ b/package/mjpg-streamer/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_MJPG_STREAMER
-+	bool "mjpg-streamer"
-+	# linux/uvcvideo.h was added in kernel 2.6.40
-+	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  MJPG-streamer takes JPGs from Linux-UVC compatible webcams, filesystem
-+	  or other input plugins and streams them as M-JPEG via HTTP to
-+	  webbrowsers, VLC and other software.
-+
-+	  http://mjpg-streamer.sourceforge.net
-+
-+comment "mjpg-streamer needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-new file mode 100644
-index 0000000..0769a16
---- /dev/null
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# mjpg-streamer
-+#
-+################################################################################
-+
-+# Original source is located at
-+# http://sourceforge.net/p/mjpg-streamer/code/commit_browser
-+# oliv3r forked the repo to add support for 3.16 and 3.17 kernels:
-+# http://sourceforge.net/p/mjpg-streamer/patches/14/
-+MJPG_STREAMER_VERSION = 730b5bcdc378b6a201131c6c2620eedbe0f6eb30
-+MJPG_STREAMER_SITE = $(call github,oliv3r,mjpg-streamer,$(MJPG_STREAMER_VERSION))
-+MJPG_STREAMER_LICENSE = GPLv2+
-+MJPG_STREAMER_LICENSE_FILES = LICENSE
-+MJPG_STREAMER_DEPENDENCIES = jpeg
-+
-+define MJPG_STREAMER_FIX_MAKEFILE
-+	cd $(@D); \
-+	for i in `find -iname Makefile`; do \
-+		$(SED) "s/^CC = gcc/#CC = gcc/g" $$i; \
-+	done
-+endef
-+
-+MJPG_STREAMER_PRE_CONFIGURE_HOOKS = MJPG_STREAMER_FIX_MAKEFILE
-+
-+define MJPG_STREAMER_BUILD_CMDS
-+	CC=$(TARGET_CC) \
-+	CFLAGS="$(TARGET_CFLAGS)" \
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define MJPG_STREAMER_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
+There are also a few remaining cosmetic issues.
+
+I'll fix all of that locally and re-submit the patches.
+
+Thanks for contribution!
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Dave Bender <bender@benegon.com>
+> Signed-off-by: David Bender <codehero@gmail.com>
+> ---
+>  package/Config.in            |    1 +
+>  package/benejson/Config.in   |    6 ++++++
+>  package/benejson/benejson.mk |   37 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 44 insertions(+), 0 deletions(-)
+>  create mode 100644 package/benejson/Config.in
+>  create mode 100644 package/benejson/benejson.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 266de13..5a09608 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -761,6 +761,7 @@ menu "Javascript"
+>  endmenu
+>  
+>  menu "JSON/XML"
+> +	source "package/benejson/Config.in"
+>  	source "package/cjson/Config.in"
+>  	source "package/expat/Config.in"
+>  	source "package/ezxml/Config.in"
+> diff --git a/package/benejson/Config.in b/package/benejson/Config.in
+> new file mode 100644
+> index 0000000..6d8d2a3
+> --- /dev/null
+> +++ b/package/benejson/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_BENEJSON
+> +	bool "benejson"
+> +	help
+> +	  "streaming JSON parsing library with C and C++ APIs"
+> +
+> +		https://codehero.github.io/benejson/
+> diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
+> new file mode 100644
+> index 0000000..851b95e
+> --- /dev/null
+> +++ b/package/benejson/benejson.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# benejson
+> +#
+> +################################################################################
+> +
+> +BENEJSON_VERSION = 0.9.7
+> +BENEJSON_SITE =  $(call github,codehero,benejson,$(BENEJSON_VERSION))
+> +BENEJSON_LICENSE = BSD-3c
+> +BENEJSON_LICENSE_FILES = COPYING
+> +BENEJSON_INSTALL_STAGING = YES
+> +
+> +BENEJSON_DEPENDENCIES = host-scons
+> +
+> +BENEJSON_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS)
+> +
+> +define BENEJSON_BUILD_CMDS
+> +	(cd $(@D); \
+> +		$(BENEJSON_SCONS_ENV) \
+> +		$(SCONS) \
+> +		$(BENEJSON_SCONS_OPTS))
+> +endef
+> +
+> +define BENEJSON_INSTALL_STAGING_CMDS
+> +	(cd $(@D); \
+> +		cp -ra include/benejson $(STAGING_DIR)/usr/include; \
+> +		cp lib/libbenejson.{so,a} $(STAGING_DIR)/usr/lib \
+> +		)
+> +endef
+> +
+> +define BENEJSON_INSTALL_TARGET_CMDS
+> +	(cd $(@D); \
+> +		cp lib/libbenejson.{so,a} $(TARGET_DIR)/usr/lib \
+> +		)
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 1.7.8.6
+> 
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
