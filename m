@@ -1,42 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 18:46:47 +0100
-Subject: [Buildroot] [PATCH 1/1] gtest: install libgtest_main to staging
-In-Reply-To: <1421780073-16345-1-git-send-email-erico.nunes@datacom.ind.br>
-References: <1421780073-16345-1-git-send-email-erico.nunes@datacom.ind.br>
-Message-ID: <20150125184647.0fd291bc@free-electrons.com>
+Date: Sun, 25 Jan 2015 18:47:30 +0100
+Subject: [Buildroot] [git commit] pkg-cmake: fix host-cmake-package type
+Message-ID: <20150125174803.8820480468@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear erico.nunes,
+commit: http://git.buildroot.net/buildroot/commit/?id=3852a3e526b11fade9a9769712a439fb16e11c60
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Jan 2015 16:54:33 -0200, erico.nunes wrote:
-> gtest provides a separate libgtest_main library with a default main()
-> implementation for tests with basic needs.
-> This separate library isn't being installed by buildroot. This patch
-> adds the installation of this library to staging during the install of
-> gtest.
-> 
-> Signed-off-by: erico.nunes <erico.nunes@datacom.ind.br>
+When trying to compile a host-cmake-package type such as host-cdrkit,
+an error happens in regards to HOSTCC and HOSTCXX not being found.
 
-Thanks, applied. I only adjusted the Signed-off-by line and Author
-information to be a little bit nicer than "erico.nunes".
+  /bin/sh: HOSTCC: command not found
+  /bin/sh: HOSTCXX: command not found
 
-Can you fixup your Git configuration to have your name as "FirstName
-LastName" instead of "firstname.lastname".
+This due to the fact that the environment is incorrectly configured by
+having the following:
 
-I.e, your ~/.gitconfig should look like:
+  -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
 
-[user]
-	name = Erico Nunes
-	email = erico.nunes at datacom.ind.br
+This is due to having too many dollar signs. The fix is to remove the
+extra dollar sign.
 
-Thanks!
+Also removing the unncessary quotes since the HOSTCC/HOSTCXX will
+already contain quotes. This could cause an issue with make as double
+quotes are not interpreted by make.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Minor formatting fix too.
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-cmake.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 1037513..6c9955d 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -22,13 +22,13 @@
+ 
+ # Set compiler variables.
+ ifeq ($(BR2_CCACHE),y)
+-CMAKE_HOST_C_COMPILER="$(HOST_DIR)/usr/bin/ccache"
+-CMAKE_HOST_CXX_COMPILER="$(HOST_DIR)/usr/bin/ccache"
+-CMAKE_HOST_C_COMPILER_ARG1="$(HOSTCC_NOCCACHE)"
+-CMAKE_HOST_CXX_COMPILER_ARG1="$(HOSTCXX_NOCCACHE)"
++CMAKE_HOST_C_COMPILER = $(HOST_DIR)/usr/bin/ccache
++CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/usr/bin/ccache
++CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
++CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
+ else
+-CMAKE_HOST_C_COMPILER="$$(HOSTCC)"
+-CMAKE_HOST_CXX_COMPILER="$$(HOSTCXX)"
++CMAKE_HOST_C_COMPILER = $(HOSTCC)
++CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+ endif
+ 
+ ################################################################################
