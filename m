@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 15:13:23 +0100
-Subject: [Buildroot] buildroot + leon3 + gdb
-In-Reply-To: <1360834790.663881421942614585.JavaMail.defaultUser@defaultHost>
-References: <1360834790.663881421942614585.JavaMail.defaultUser@defaultHost>
-Message-ID: <20150125151323.7ad443fc@free-electrons.com>
+Date: Sun, 25 Jan 2015 15:15:49 +0100
+Subject: [Buildroot] Newbie: linux kernel config
+In-Reply-To: <2a448ad0e7234e3e9ffe7eda61b48b92@exch13-mail05.win.slac.stanford.edu>
+References: <2a448ad0e7234e3e9ffe7eda61b48b92@exch13-mail05.win.slac.stanford.edu>
+Message-ID: <20150125151549.798facc2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 22 Jan 2015 17:03:34 +0100 (CET), dosrulez at libero.it wrote:
+Your question is off-topic: it's not a Buildroot question, but a kernel
+question. I'll nonetheless try to give a hint, but please use the
+appropriate mailing list for questions.
 
-> I'm having a problem trying to build a specific linux kernel for leon3 &amp; spartan6 (Xilinx). 
-> What I want is build a customized linux kernel using Buildroot and the toolchain provided by Gaisler, including an instance of gdb server which is going to be executed on the target.
-> Whenever I try to include gdb into the build process I get the error "Could not find gdbserver in external toolchain" and I cannot find a way to fix this.
-> Could you help me?
+On Wed, 21 Jan 2015 17:26:00 +0000, Williams Jr., Ernest L. wrote:
 
-Sure, don't enable the BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option.
-You have this option enabled, but your toolchain does not have a
-gdbserver included, so trying to copy it to the target (which is the
-purpose of BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY) cannot work.
+> Symbol: X86_BIGSMP [=n]
+> Type : boolean
+> Prompt: Support for big SMP systems with more than 8 CPUs
+> Location:
+> -> Processor type and features
+> Defined at arch/x86/Kconfig:330
+> Depends on: X86_32 [=n] && SMP [=y]
+
+See this last line? This option only exists on x86 32 bits systems, and
+most likely you are building a x86 64 bits system.
 
 Best regards,
 
