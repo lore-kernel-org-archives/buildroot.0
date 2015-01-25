@@ -1,107 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 00:21:35 +0100
-Subject: [Buildroot] [git commit] flex: remove deprecated binary in target
-Message-ID: <20150125233550.A7AA17FF09@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 26 Jan 2015 00:47:30 +0100
+Subject: [Buildroot] [PATCH] python-twisted: new package
+Message-ID: <1422229650-30254-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa6ea7aba3a9a0edd5c8618a83240f4a66263286
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It's been deprecated for a year now so remove the option.
-
-Also rename patch to new naming convention.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- Config.in.legacy                                   |    8 +++++++
- .../{flex-prog-ar.patch => 0001-prog-ar.patch}     |    0
- package/flex/Config.in                             |   21 --------------------
- package/flex/flex.mk                               |   11 ----------
- 4 files changed, 8 insertions(+), 32 deletions(-)
+ package/Config.in                          |  1 +
+ package/python-twisted/Config.in           |  8 ++++++++
+ package/python-twisted/python-twisted.hash |  2 ++
+ package/python-twisted/python-twisted.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-twisted/Config.in
+ create mode 100644 package/python-twisted/python-twisted.hash
+ create mode 100644 package/python-twisted/python-twisted.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 243416e..d6f32a0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -102,6 +102,14 @@ endif
- 
- comment "Legacy options removed in 2015.02"
- 
-+config BR2_PACKAGE_FLEX_BINARY
-+	bool "flex binary in target option removed"
-+	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 127ced3..51d4c15 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -548,6 +548,7 @@ menu "external python modules"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
++	source "package/python-twisted/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-webpy/Config.in"
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+new file mode 100644
+index 0000000..b302101
+--- /dev/null
++++ b/package/python-twisted/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_TWISTED
++	bool "python-twisted"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
 +	help
-+	  The flex binary in the target option has been removed.
-+	  It's been deprecated for some time now and is essentially a
-+	  development tool which isn't very useful in the target.
++	  Twisted is an event-driven networking engine written in Python.
 +
- config BR2_PACKAGE_BISON
- 	bool "bison target package removed"
- 	select BR2_LEGACY
-diff --git a/package/flex/flex-prog-ar.patch b/package/flex/0001-prog-ar.patch
-similarity index 100%
-rename from package/flex/flex-prog-ar.patch
-rename to package/flex/0001-prog-ar.patch
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index 9ac600d..7199c6a 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -6,24 +6,3 @@ config BR2_PACKAGE_FLEX
- 	  programs that perform pattern-matching on text.
- 
- 	  http://flex.sourceforge.net/
--
--if BR2_PACKAGE_FLEX
--
--config BR2_PACKAGE_FLEX_BINARY
--	bool "Install flex binary on target"
--	# needs fork()
--	depends on BR2_USE_MMU
--	# runtime dependency
--	select BR2_PACKAGE_M4
--	# development tool, useless on the target
--	depends on BR2_DEPRECATED_SINCE_2014_02
--	depends on BR2_USE_WCHAR # m4
--	help
--	  Install the flex binary tool in the target filesystem.
--
--comment "flex binary needs a toolchain w/ wchar"
--	depends on BR2_DEPRECATED_SINCE_2014_02
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
--
--endif
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index cd92dd7..9a3f840 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -15,15 +15,6 @@ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
- # we don't have a host-gettext/libintl
- HOST_FLEX_DEPENDENCIES = host-m4
- 
--ifeq ($(BR2_PACKAGE_FLEX_BINARY),y)
--# lex -> flex
--define FLEX_INSTALL_LEX
--	cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
--endef
--FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
--
--else
--
- define FLEX_DISABLE_PROGRAM
- 	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
- endef
-@@ -35,7 +26,5 @@ define FLEX_REMOVE_BROKEN_SYMLINK
- endef
- FLEX_POST_INSTALL_TARGET_HOOKS += FLEX_REMOVE_BROKEN_SYMLINK
- 
--endif
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++	  https://twistedmatrix.com/trac/
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+new file mode 100644
+index 0000000..937cab3
+--- /dev/null
++++ b/package/python-twisted/python-twisted.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  038096be8723b678e2ead323b14d0d3e2db161e0c7ce3c98fdd18ca5869acb71  Twisted-14.0.2.tar.bz2
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+new file mode 100644
+index 0000000..792bb05
+--- /dev/null
++++ b/package/python-twisted/python-twisted.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-twisted
++#
++################################################################################
++
++PYTHON_TWISTED_VERSION = 14.0.2
++PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
++PYTHON_TWISTED_SITE = https://pypi.python.org/packages/source/T/Twisted/
++PYTHON_TWISTED_SETUP_TYPE = setuptools
++PYTHON_TWISTED_LICENSE = MIT
++PYTHON_TWISTED_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.1.0
