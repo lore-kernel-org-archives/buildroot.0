@@ -1,59 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 18:16:52 +0100
-Subject: [Buildroot] [PATCH] lightning: add -lintl only when needed
-In-Reply-To: <1421763861-38874-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1421763861-38874-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150125181652.133d32ae@free-electrons.com>
+Date: Sun, 25 Jan 2015 18:17:09 +0100
+Subject: [Buildroot] [git commit] docs: really move the website
+Message-ID: <20150125171725.C59C180463@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=2ee00d0964dddf364c195e656ab938c721b50569
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Jan 2015 14:24:21 +0000, Vicente Olivert Riera wrote:
-> Adding -lintl to LIBS causes a failure in the configure phase when using
-> a toolchain which already has locale support because the intl library is
-> not present in the staging area. We fix this by adding -lintl only when
-> is needed.
-> 
-> This is the configure error:
-> 
-> checking whether the C compiler works... no
-> configure: error: in
-> `/br/output/build/lightning-2.0.5':
-> configure: error: C compiler cannot create executables
-> See `config.log' for more details
-> 
-> This is the message in the config.log:
-> 
-> configure:3351: /br/output/host/usr/bin/mips-linux-gnu-gcc
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> conftest.c -lintl >&5
-> /br/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/4.9.1/../../../../mips-linux-gnu/bin/ld:
-> cannot find -lintl
-> collect2: error: ld returned 1 exit status
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/280/28006ab35379a9b7f380d40b99a760bec1b69e84/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Now that the automated scripts that deply our website have been updated,
+really move the website to its final location.
 
-I applied, but in a much more simplified form: only change the
-condition to pass LIBS=-lintl. It's not lightning itself that needs
-gettext, but only the fact that binutils uses it, and forgets to link
-with libintl. So I don't think we need/should express the dependency
-against gettext in lightning, only pass LIBS=-lintl when needed.
+We still keep a symlink for the images, as they are used both for the
+website, and for the manual.
 
-See
-http://git.buildroot.net/buildroot/commit/?id=b90fa707f3a3d43d54944e7b80ad6423f2f93667.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/images                                        |    1 +
+ docs/website                                       |    1 -
+ docs/{ => website}/about.html                      |    0
+ docs/{ => website}/contribute.html                 |    0
+ docs/{ => website}/copyright.txt                   |    0
+ docs/{ => website}/css/bootstrap.min.css           |    0
+ docs/{ => website}/css/bootswatch.less             |    0
+ docs/{ => website}/css/buildroot.css               |    0
+ docs/{ => website}/css/variables.less              |    0
+ docs/{ => website}/docs.html                       |    0
+ docs/{ => website}/download.html                   |    0
+ docs/{ => website}/favicon.ico                     |  Bin 2238 -> 2238 bytes
+ .../fonts/glyphicons-halflings-regular.woff        |  Bin 23320 -> 23320 bytes
+ docs/{ => website}/footer.html                     |    0
+ docs/{ => website}/git.html                        |    0
+ docs/{ => website}/header.html                     |    0
+ .../{ => website}/images/boundary-devices-logo.png |  Bin 13305 -> 13305 bytes
+ docs/{ => website}/images/calao-logo.png           |  Bin 15386 -> 15386 bytes
+ docs/{ => website}/images/circuitco-logo.png       |  Bin 10750 -> 10750 bytes
+ docs/{ => website}/images/fluendo-logo.png         |  Bin 9098 -> 9098 bytes
+ docs/{ => website}/images/free-electrons-logo.png  |  Bin 9968 -> 9968 bytes
+ .../images/glyphicons-halflings-white.png          |  Bin 8777 -> 8777 bytes
+ docs/{ => website}/images/glyphicons-halflings.png |  Bin 12799 -> 12799 bytes
+ docs/{ => website}/images/google-logo.png          |  Bin 12005 -> 12005 bytes
+ docs/{ => website}/images/gplus.png                |  Bin 4760 -> 4760 bytes
+ docs/{ => website}/images/imgtec-logo.png          |  Bin 5276 -> 5276 bytes
+ docs/{ => website}/images/logo.png                 |  Bin 117499 -> 117499 bytes
+ docs/{ => website}/images/logo.xcf                 |  Bin 356067 -> 356067 bytes
+ docs/{ => website}/images/logo_small.png           |  Bin 3624 -> 3624 bytes
+ docs/{ => website}/images/menuconfig.png           |  Bin 8604 -> 8604 bytes
+ docs/{ => website}/images/menuconfig_small.png     |  Bin 8604 -> 8604 bytes
+ docs/{ => website}/images/mind-logo.png            |  Bin 10214 -> 10214 bytes
+ docs/{ => website}/images/synopsys-logo.png        |  Bin 52426 -> 52426 bytes
+ docs/{ => website}/images/valid-html401.png        |  Bin 1950 -> 1950 bytes
+ docs/{ => website}/index.html                      |    0
+ docs/{ => website}/js/bootstrap.min.js             |    0
+ docs/{ => website}/js/buildroot.js                 |    0
+ docs/{ => website}/js/jquery-1.11.1.min.js         |    0
+ docs/{ => website}/news.html                       |    0
+ docs/{ => website}/robots.txt                      |    0
+ docs/{ => website}/sponsors.html                   |    0
+ docs/{ => website}/support.html                    |    0
+ 42 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patch is too large, so refusing to show it
