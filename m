@@ -1,41 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 20:32:18 +0100
-Subject: [Buildroot] [PATCH 3/4] toolchain: allow for stupid toolchains
-In-Reply-To: <1421951608-31233-4-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1421951608-31233-4-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20150125203218.1f5f504a@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 25 Jan 2015 21:40:34 +0200
+Subject: [Buildroot] [PATCH] rt-tests: fix build dependencies
+Message-ID: <917c1645d4d4c0d3729547bb34f06781c93af523.1422214834.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+Some tests didn't list librttest in their dependencies.
 
-On Thu, 22 Jan 2015 15:33:27 -0300, Ezequiel Garcia wrote:
-> From: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> 
-> check_arm_abi builds a test C file to check that the toolchain is
-> working correctly, with the output redirected to /dev/null.
-> 
-> However, some toolchains (OSELAS 2013.12.2, for instance) foolishly
-> append ".gdb" to the output filename for an intermediate file, causing
-> an attempt to write to /dev/null.gdb, which obviously fails.
-> 
-> Fix this by adding an option to skip this check, so it can be selected
-> in the OSELAS toolchain.
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/999/9998dcf8c82989d9eba772e16ce3905b24badbfc/
+http://autobuild.buildroot.net/results/b1e/b1e078591d65a3b5c9d638ad5bbb4ec8c28c38ef/
 
-Instead of skipping the check, can we fix the check instead? Like
-outputting to a temporary file, and removing it afterward, or something
-like that?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../04-Makefile-fix-tests-dependencies.patch       | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/rt-tests/04-Makefile-fix-tests-dependencies.patch
 
-Thanks,
-
-Thomas
+diff --git a/package/rt-tests/04-Makefile-fix-tests-dependencies.patch b/package/rt-tests/04-Makefile-fix-tests-dependencies.patch
+new file mode 100644
+index 000000000000..0b2feb16d569
+--- /dev/null
++++ b/package/rt-tests/04-Makefile-fix-tests-dependencies.patch
+@@ -0,0 +1,50 @@
++From e464368807211978fe2dfccf081fa8dc7a35b71b Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 23 Jan 2015 07:52:21 +0200
++Subject: [PATCH] Makefile: fix tests dependencies
++
++librttest is listed in $(LIBS) so all tests must depend on librttest.a.
++Fixes build failures like:
++
++.../armv7-ctng-linux-gnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os -g2  -o hackbench hackbench.o -lrt -lpthread -lrttest -L.
++.../armv7-ctng-linux-gnueabihf/bin/ld: cannot find -lrttest
++collect2: error: ld returned 1 exit status
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ Makefile | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index a3879cea8164..b9a1fed1b920 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -69,14 +69,14 @@ cyclictest: cyclictest.o librttest.a
++ signaltest: signaltest.o librttest.a
++ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++-pi_stress: pi_stress.o
+++pi_stress: pi_stress.o librttest.a
++ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ hwlatdetect:  src/hwlatdetect/hwlatdetect.py
++ 	chmod +x src/hwlatdetect/hwlatdetect.py
++ 	ln -s src/hwlatdetect/hwlatdetect.py hwlatdetect
++ 
++-rt-migrate-test: rt-migrate-test.o
+++rt-migrate-test: rt-migrate-test.o librttest.a
++ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ ptsematest: ptsematest.o librttest.a
++@@ -97,7 +97,7 @@ sendme: sendme.o librttest.a
++ pip_stress: pip_stress.o librttest.a
++ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++-hackbench: hackbench.o
+++hackbench: hackbench.o librttest.a
++ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
++ 
++ librttest.a: rt-utils.o error.o rt-get_cpu.o
++-- 
++2.1.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
