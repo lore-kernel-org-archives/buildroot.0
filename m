@@ -1,44 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 18:48:15 +0100
-Subject: [Buildroot] [PATCH v3 1/1] pkg-cmake: fix host-cmake-package
- type
-In-Reply-To: <1422044224-22598-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1422044224-22598-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <20150125184815.632977e4@free-electrons.com>
+Date: Sun, 25 Jan 2015 18:51:17 +0100
+Subject: [Buildroot] [PATCH 0/1] VIA VAB-820 board
+In-Reply-To: <1422000168-19305-1-git-send-email-imrehg@gmail.com>
+References: <1422000168-19305-1-git-send-email-imrehg@gmail.com>
+Message-ID: <20150125185117.7c5e6f77@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Hello Gergely,
 
-On Fri, 23 Jan 2015 14:17:04 -0600, Ryan Barnett wrote:
-> When trying to compile a host-cmake-package type such as host-cdrkit,
-> an error happens in regards to HOSTCC and HOSTCXX not being found.
-> 
->   /bin/sh: HOSTCC: command not found
->   /bin/sh: HOSTCXX: command not found
-> 
-> This due to the fact that the environment is incorrectly configured by
-> having the following:
-> 
->   -DCMAKE_C_COMPILER=""$(HOSTCC)"" -DCMAKE_CXX_COMPILER=""$(HOSTCXX)""
-> 
-> This is due to having too many dollar signs. The fix is to remove the
-> extra dollar sign.
-> 
-> Also removing the unncessary quotes since the HOSTCC/HOSTCXX will
-> already contain quotes. This could cause an issue with make as double
-> quotes are not interpreted by make.
-> 
-> Minor formatting fix too.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> Acked-by: Samuel Martin <s.martin49@gmail.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Fri, 23 Jan 2015 16:02:47 +0800, imrehg at gmail.com wrote:
 
-Applied, thanks!
+> I'm technical marketing at VIA Embedded, a Taiwan based board maker,
+> that makes a couple of ARM boards. One of them is a Freescale i.MX6Q
+> based board VAB-820 (and its system equivalent, called AMOS-820), inspired
+> by the SABRE Lite design.
+
+Thanks for this contribution! Nice to see the HW vendor being directly
+involved in contributing a defconfig for Buildroot!
+
+I'll reply with some specific comments on the patch itself.
+
+Thanks!
 
 Thomas
 -- 
