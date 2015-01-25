@@ -1,54 +1,60 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 25 Jan 2015 16:31:18 +0100
-Subject: [Buildroot] [PATCH 1/2] Config.in.legacy: add an option to get rid
-	of all legacy at once
-Message-ID: <1422199879-7825-1-git-send-email-arnout@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 25 Jan 2015 16:44:51 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-01-24
+In-Reply-To: <20150125073015.49B3C1013EF@stock.ovh.net>
+References: <20150125073015.49B3C1013EF@stock.ovh.net>
+Message-ID: <54C50F73.50702@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The new option BR2_SKIP_LEGACY completely disables the legacy handling,
-which effectively removes all the legacy options from the .config.
+Hi all,
 
-This option will become particularly useful for the next commit, which
-improves legacy handling for randconfig.
+Le 25/01/2015 08:30, Thomas Petazzoni a ?crit :
+> Build statistics for 2015-01-24
+>              libselinux-2.1.13 | 2 
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+> 
+> Detail of failures
+> ===================
+>         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/9e25e908d100886ad0c0a108000c7a283c2e350b/
+>         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/af38d7a4199372f49f1e22504fbbfc321d7234ed/
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 69608c7..fbe0b88 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -52,6 +52,9 @@
- #
- # [End of example]
- 
-+# BR2_SKIP_LEGACY is defined at the end of the file: it looks nicer in the menu
-+if !BR2_SKIP_LEGACY
-+
- config BR2_LEGACY
- 	bool
- 	help
-@@ -1186,3 +1189,15 @@ config BR2_BFIN_FLAT
- 	select BR2_LEGACY
- 
- endmenu
-+
-+endif # BR2_SKIP_LEGACY
-+
-+config BR2_SKIP_LEGACY
-+	bool "Forget all legacy options"
-+	help
-+	  Remove all the legacy options from this configuration.
-+
-+	  Warning: if you upgrade buildroot in the future, you will no
-+	  longer be warned of legacy options that have been removed. We
-+	  therefore advise to use this option only temporarily to
-+	  quickly get rid of all legacy options you still have.
--- 
-2.1.4
+For some reason, ld report some undefined symbols when building the shared library libselinux.so.1 on bfin.
+
+[...] -Wl,-soname,libselinux.so.1,-z,defs,-z,relro
+
+callbacks.c:(.text+0x82): undefined reference to `_security_check_context'
+callbacks.c:(.text+0x92): undefined reference to `_is_selinux_enabled'
+label.c:(.text+0x172): undefined reference to `_selinux_raw_to_trans_context'
+label_db.c:(.text+0xe4): undefined reference to `_selinux_sepgsql_context_path'
+label_file.c:(.text+0xa24): undefined reference to `_selinux_file_context_subs_dist_path'
+label_file.c:(.text+0xa38): undefined reference to `_selinux_file_context_subs_path'
+label_file.c:(.text+0xa4c): undefined reference to `_selinux_file_context_path'
+label_media.c:(.text+0xf2): undefined reference to `_selinux_media_context_path'
+label_x.c:(.text+0xee): undefined reference to `_selinux_x_context_path'
+mapping.c:(.text+0x25a): undefined reference to `_avc_reset'
+sestatus.c:(.text+0x17e): undefined reference to `_security_getenforce'
+sestatus.c:(.text+0x214): undefined reference to `_security_deny_unknown'
+collect2: ld returned 1 exit status
+
+All missing symbols are defined in selinux_internal.h or avc_internal.h
+by hidden_proto() which is defined in src/dso.h.
+
+hidden_proto() add some asm code which depends on architecture:
+# if defined(__alpha__) || defined(__mips__)
+#  define hidden_def(fct) \
+     asm (".globl " #fct "\n" #fct " = " #fct "_internal");
+# else
+#  define hidden_def(fct) \
+     asm (".globl " #fct "\n.set " #fct ", " #fct "_internal");
+#endif
+
+I suppose this asm code is not supported on bfin.
+Maybe disable libselinux on bfin ?
+
+Best regards,
+Romain Naour
