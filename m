@@ -1,95 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 00:21:49 +0100
-Subject: [Buildroot] [git commit] m4: remove deprecated target package
-Message-ID: <20150125233550.B03987FF09@busybox.osuosl.org>
+Date: Mon, 26 Jan 2015 00:16:03 +0100
+Subject: [Buildroot] [git commit] bison: bump to version 3.0.3
+Message-ID: <20150125233550.9ED977FF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6927bc9150a8304ce6c059ae904d9fa6a8fea4ca
+commit: http://git.buildroot.net/buildroot/commit/?id=3dafe024764a9e7b4a1c89a0ecc8047f6d4c2f2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's been deprecated for a year now so remove the target variant.
+Also add hash file and remove patch since it's no longer necessary.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy     |    7 +++++++
- package/Config.in    |    1 -
- package/m4/Config.in |   16 ----------------
- package/m4/m4.mk     |    7 -------
- 4 files changed, 7 insertions(+), 24 deletions(-)
+ package/bison/bison-01-no-docs-regen.patch |   53 ----------------------------
+ package/bison/bison.hash                   |    2 +
+ package/bison/bison.mk                     |    3 +-
+ 3 files changed, 3 insertions(+), 55 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d6f32a0..a8c5dab 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -102,6 +102,13 @@ endif
- 
- comment "Legacy options removed in 2015.02"
- 
-+config BR2_PACKAGE_M4
-+	bool "m4 target package removed"
-+	select BR2_LEGACY
-+	help
-+	  The m4 target package has been removed, it's been
-+	  deprecated for some time now.
-+
- config BR2_PACKAGE_FLEX_BINARY
- 	bool "flex binary in target option removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 2dc0ac6..127ced3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -123,7 +123,6 @@ endif
- 	source "package/intltool/Config.in"
- 	source "package/jq/Config.in"
- 	source "package/libtool/Config.in"
--	source "package/m4/Config.in"
- 	source "package/make/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/patch/Config.in"
-diff --git a/package/m4/Config.in b/package/m4/Config.in
+diff --git a/package/bison/bison-01-no-docs-regen.patch b/package/bison/bison-01-no-docs-regen.patch
 deleted file mode 100644
-index e2ce5b3..0000000
---- a/package/m4/Config.in
+index 7c375d6..0000000
+--- a/package/bison/bison-01-no-docs-regen.patch
 +++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_M4
--	bool "m4"
--	depends on BR2_USE_WCHAR
--	# uses fork()
--	depends on BR2_USE_MMU
--	# development tool, useless on the target
--	depends on BR2_DEPRECATED_SINCE_2014_02
--	help
--	  An implementation of the traditional Unix macro processor.
+@@ -1,53 +0,0 @@
+-bison regenerates the docs to see if they changed which requires running
+-the recently built bison. This obviously doesn't work for cross compiles
+-hence breaks for many target bison builds.
+-Just disable it.
 -
--	  http://www.gnu.org/software/m4/m4.html
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--comment "m4 needs a toolchain w/ wchar"
--	depends on BR2_DEPRECATED_SINCE_2014_02
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 32dfef4..9b5d2d1 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -9,13 +9,6 @@ M4_SOURCE = m4-$(M4_VERSION).tar.xz
- M4_SITE = $(BR2_GNU_MIRROR)/m4
- M4_LICENSE = GPLv3+
- M4_LICENSE_FILES = COPYING
--M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
--
--ifneq ($(BR2_USE_WCHAR),y)
--M4_CONF_ENV += gt_cv_c_wchar_t=no gl_cv_absolute_wchar_h=__fpending.h
--endif
--
- HOST_M4_CONF_OPTS = --disable-static
+-diff -Nura bison-3.0.orig/doc/local.mk bison-3.0/doc/local.mk
+---- bison-3.0.orig/doc/local.mk	2013-10-02 16:52:48.711890121 -0300
+-+++ bison-3.0/doc/local.mk	2013-10-02 17:14:59.329341143 -0300
+-@@ -37,15 +37,6 @@
+- CROSS_OPTIONS_PL = $(top_srcdir)/build-aux/cross-options.pl
+- CROSS_OPTIONS_TEXI = $(top_srcdir)/doc/cross-options.texi
+- $(CROSS_OPTIONS_TEXI): doc/bison.help $(CROSS_OPTIONS_PL)
+--# Create $@~ which is the previous contents.  Don't use 'mv' here so
+--# that even if we are interrupted, the file is still available for
+--# diff in the next run.  Note that $@ might not exist yet.
+--	$(AM_V_GEN){ test ! -f $@ || cat $@; } >$@~
+--	$(AM_V_at)test ! -f $@.tmp || rm -f $@.tmp
+--	$(AM_V_at)src/bison$(EXEEXT) --help |				 \
+--	  $(PERL) $(CROSS_OPTIONS_PL) $(top_srcdir)/src/scan-gram.l >$@.tmp
+--	$(AM_V_at)diff -u $@~ $@.tmp || true
+--	$(AM_V_at)mv $@.tmp $@
+- MAINTAINERCLEANFILES = $(CROSS_OPTIONS_TEXI)
+- 
+- ## ---------- ##
+-@@ -86,9 +77,6 @@
+- EXTRA_DIST += $(top_srcdir)/doc/bison.help
+- MAINTAINERCLEANFILES += $(top_srcdir)/doc/bison.help
+- $(top_srcdir)/doc/bison.help: src/bison$(EXEEXT)
+--	$(AM_V_GEN)src/bison$(EXEEXT) --version >doc/bison.help.tmp
+--	$(AM_V_at) src/bison$(EXEEXT) --help   >>doc/bison.help.tmp
+--	$(AM_V_at)$(top_srcdir)/build-aux/move-if-change doc/bison.help.tmp $@
+- 
+- 
+- ## ----------- ##
+-@@ -106,16 +94,6 @@
+- 
+- # Depend on configure to get version number changes.
+- $(top_srcdir)/doc/bison.1: doc/bison.help doc/bison.x $(top_srcdir)/configure
+--	$(AM_V_GEN)$(HELP2MAN)			\
+--	    --include=$(top_srcdir)/doc/bison.x	\
+--	    --output=$@.t src/bison$(EXEEXT)
+--	$(AM_V_at)if $(remove_time_stamp) $@ >$@a.t 2>/dev/null &&	 \
+--	   $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \
+--	  touch $@;							 \
+--	else								 \
+--	  mv $@.t $@;							 \
+--	fi
+--	$(AM_V_at)rm -f $@*.t
+- 
+- nodist_man_MANS = doc/yacc.1
+- 
+diff --git a/package/bison/bison.hash b/package/bison/bison.hash
+new file mode 100644
+index 0000000..dd10086
+--- /dev/null
++++ b/package/bison/bison.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	5940efbdd6b5d80e55ec16a01d2322e2892da21863391049b9b692570649177c	bison-3.0.3.tar.xz
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index c092b78..45f785e 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
--$(eval $(autotools-package))
+-BISON_VERSION = 3.0.2
++BISON_VERSION = 3.0.3
+ BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
+ BISON_SITE = $(BR2_GNU_MIRROR)/bison
+ BISON_LICENSE = GPLv3+
+ BISON_LICENSE_FILES = COPYING
+-BISON_AUTORECONF = YES
+ 
  $(eval $(host-autotools-package))
