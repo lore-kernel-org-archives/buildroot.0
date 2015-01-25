@@ -1,79 +1,66 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 25 Jan 2015 22:13:47 +0100
-Subject: [Buildroot] [PATCH 0/8] Misc. fixes around libftdi
-Message-ID: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
+Date: Sun, 25 Jan 2015 22:13:48 +0100
+Subject: [Buildroot] [PATCH 1/8 v2] package/libftdi: fix libftdi.pc
+In-Reply-To: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
+References: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1422220435-18689-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This patch fixes libftdi pkg-config module, so that packages linking
+against libftdi correctly have all needed CFLAGS and LIBS defined,
+especially when running a static build.
 
+Fixes:
+  http://autobuild.buildroot.org/results/e90/e90b4d5ad79d99487f21c9d18581e8eba7034501/
 
-The series includes a number of fixes/updates:
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Patch 1/8: 2nd version of pending fix for libftdi (which fixes openocd failures)
-
-Patch 2/8: a random libiio cmake fix
-
-Patches 3-4/8: bump libftdi and add libftdi1
-
-Patches 5-6/8: [RFC] use libftdi1 for the 2 packages explicitly dependending on
-libftdi (only build tests, runtime test feedback is welcome).
-It seems ola also depends on libftdi, but does not support libftdi1. Who knows
-how many other packages silently depend on libftdi depending on the buildroot
-configuration...
-
-Patch 7/8: bump CMake
-
-Patch 8/8: [RFC] add a patch to finely enable/disable CMake tools being built,
-allowing to cut down ~25% of the buildtime of the cmake package.
-
-
-Regards,
-
-
-Daniel Sangue (1):
-  package/libftdi1: new package
-
-Samuel Martin (7):
-  package/libftdi: fix libftdi.pc
-  package/libiio: update cmake code for libxml2 detection
-  package/libftdi: bump to version 0.20
-  package/avrdude: depends on libftdi1 instead of libftdi
-  package/openocd: depends on libftdi1 instead of libftdi
-  package/cmake: bump to version 3.1.1
-  package/cmake: only build what is necessary
-
- package/Config.in                                  |   1 +
- package/avrdude/avrdude.mk                         |   4 +-
- ...-allow-to-select-what-program-to-be-built.patch | 231 +++++++++++++++++++++
- package/cmake/cmake.hash                           |   2 +
- package/cmake/cmake.mk                             |   8 +-
- ...bftdi.pc-requires-libusb-fix-static-build.patch |  27 +++
- package/libftdi/libftdi.hash                       |   2 +
- package/libftdi/libftdi.mk                         |   2 +-
- ...he-standard-CMake-flag-to-drive-the-share.patch |  96 +++++++++
- .../libftdi1/0002-cmake-fix-FindUSB1.cmake.patch   |  34 +++
- ...o-not-check-for-g-when-FTDIPP-is-disabled.patch |  46 ++++
- package/libftdi1/Config.in                         |  37 ++++
- package/libftdi1/libftdi1.hash                     |   2 +
- package/libftdi1/libftdi1.mk                       |  38 ++++
- ...l2-detection-try-first-the-CMake-module-f.patch |  40 ++--
- package/openocd/Config.in                          |   8 +-
- package/openocd/openocd.mk                         |   2 +-
- 17 files changed, 553 insertions(+), 27 deletions(-)
- create mode 100644 package/cmake/0001-CMake-allow-to-select-what-program-to-be-built.patch
- create mode 100644 package/cmake/cmake.hash
+---
+change v1->v2:
+- libusb as "Require" (ThomasP)
+---
+ ...bftdi.pc-requires-libusb-fix-static-build.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
  create mode 100644 package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch
- create mode 100644 package/libftdi/libftdi.hash
- create mode 100644 package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
- create mode 100644 package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
- create mode 100644 package/libftdi1/0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch
- create mode 100644 package/libftdi1/Config.in
- create mode 100644 package/libftdi1/libftdi1.hash
- create mode 100644 package/libftdi1/libftdi1.mk
 
---
+diff --git a/package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch b/package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch
+new file mode 100644
+index 0000000..ee47af6
+--- /dev/null
++++ b/package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch
+@@ -0,0 +1,27 @@
++From d3d6ca63cb86727533d7d83c98e70002bb04f343 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Wed, 21 Jan 2015 11:18:59 +0100
++Subject: [PATCH] libftdi.pc: requires libusb (fix static build)
++
++---
++ libftdi.pc.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libftdi.pc.in b/libftdi.pc.in
++index 2061b91..57f0a09 100644
++--- a/libftdi.pc.in
+++++ b/libftdi.pc.in
++@@ -5,8 +5,8 @@ includedir=@includedir@
++ 
++ Name: libftdi
++ Description: Library to program and control the FTDI USB controller
++-Requires:
+++Requires: libusb
++ Version: @VERSION@
++-Libs: -L${libdir} -lftdi -lusb
+++Libs: -L${libdir} -lftdi
++ Cflags: -I${includedir}
++ 
++-- 
++2.1.0
++
+-- 
 2.2.2
