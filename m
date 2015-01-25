@@ -1,66 +1,96 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 25 Jan 2015 22:13:48 +0100
-Subject: [Buildroot] [PATCH 1/8 v2] package/libftdi: fix libftdi.pc
+Date: Sun, 25 Jan 2015 22:13:49 +0100
+Subject: [Buildroot] [PATCH 2/8] package/libiio: update cmake code for
+	libxml2 detection
 In-Reply-To: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
 References: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1422220435-18689-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1422220435-18689-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes libftdi pkg-config module, so that packages linking
-against libftdi correctly have all needed CFLAGS and LIBS defined,
-especially when running a static build.
+Only check for libxml2 when it is needed.
 
-Fixes:
-  http://autobuild.buildroot.org/results/e90/e90b4d5ad79d99487f21c9d18581e8eba7034501/
+This prevents CMake from falling back on the libxml2-config.cmake
+installed on the host system (i.e. when libxml2 >=2.9.2 is part of the
+host system), but not enabled as a target package (i.e. not existing in
+the staging tree).
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
-change v1->v2:
-- libusb as "Require" (ThomasP)
----
- ...bftdi.pc-requires-libusb-fix-static-build.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch
+ ...l2-detection-try-first-the-CMake-module-f.patch | 40 +++++++++++++---------
+ 1 file changed, 23 insertions(+), 17 deletions(-)
 
-diff --git a/package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch b/package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch
-new file mode 100644
-index 0000000..ee47af6
---- /dev/null
-+++ b/package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch
-@@ -0,0 +1,27 @@
-+From d3d6ca63cb86727533d7d83c98e70002bb04f343 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Wed, 21 Jan 2015 11:18:59 +0100
-+Subject: [PATCH] libftdi.pc: requires libusb (fix static build)
+diff --git a/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+index 9f44169..43dcf62 100644
+--- a/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
++++ b/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+@@ -1,4 +1,4 @@
+-From 4f849e1d2287206cfb7ff0fdeca96c22383b0d53 Mon Sep 17 00:00:00 2001
++From 238ce46fec88f5cba092ed4d8b52104eb2e31af2 Mon Sep 17 00:00:00 2001
+ From: Samuel Martin <s.martin49@gmail.com>
+ Date: Mon, 29 Dec 2014 19:05:13 +0100
+ Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
+@@ -7,36 +7,42 @@ Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
+ Libxml2 >=2.9.2 provides its own CMake module, so check for it before
+ falling back on the CMake's module FindLibXml2.cmake.
+ 
++Also, only check for libxml2 when needed (i.e. network backend is
++enabled). This prevents CMake from finding the libxml2-config.cmake
++when is installed on the host system, but not in the staging tree.
 +
-+---
-+ libftdi.pc.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libftdi.pc.in b/libftdi.pc.in
-+index 2061b91..57f0a09 100644
-+--- a/libftdi.pc.in
-++++ b/libftdi.pc.in
-+@@ -5,8 +5,8 @@ includedir=@includedir@
-+ 
-+ Name: libftdi
-+ Description: Library to program and control the FTDI USB controller
-+-Requires:
-++Requires: libusb
-+ Version: @VERSION@
-+-Libs: -L${libdir} -lftdi -lusb
-++Libs: -L${libdir} -lftdi
-+ Cflags: -I${includedir}
-+ 
-+-- 
-+2.1.0
-+
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ ---
+- CMakeLists.txt | 14 +++++++++++++-
+- 1 file changed, 13 insertions(+), 1 deletion(-)
++ CMakeLists.txt | 16 +++++++++++++++-
++ 1 file changed, 15 insertions(+), 1 deletion(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 393fee3..b4f1d26 100644
++index dcc6617..810b329 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -38,7 +38,19 @@ endif()
++@@ -53,7 +53,21 @@ endif()
+  find_library(AVAHI_CLIENT_LIBRARIES avahi-client)
+  find_library(AVAHI_COMMON_LIBRARIES avahi-common)
+  find_library(PTHREAD_LIBRARIES pthread)
+ -include(FindLibXml2)
+ +
+-+# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+-+# variables correctly set.
+-+# So, try first to find the CMake module provided by libxml2 package, then fallback
+-+# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+-+# in static build case).
+-+find_package(LibXml2 QUIET NO_MODULE)
+-+if(DEFINED LIBXML2_VERSION_STRING)
+-+  set(LIBXML2_FOUND ON)
+-+  set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+-+else()
+-+  include(FindLibXml2)
+++if(WITH_NETWORK_BACKEND)
+++    # Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+++    # variables correctly set.
+++    # So, try first to find the CMake module provided by libxml2 package, then fallback
+++    # on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+++    # in static build case).
+++    find_package(LibXml2 QUIET NO_MODULE)
+++    if(DEFINED LIBXML2_VERSION_STRING)
+++      set(LIBXML2_FOUND ON)
+++      set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+++    else()
+++      include(FindLibXml2)
+++    endif()
+ +endif()
+  
+  set(LIBIIO_CFILES channel.c device.c context.c buffer.c utilities.c)
+  set(LIBIIO_HEADERS iio.h)
+ -- 
+-2.2.1
++2.2.2
+ 
 -- 
 2.2.2
