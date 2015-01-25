@@ -1,44 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Jan 2015 15:29:23 +0100
-Subject: [Buildroot] Help on pending mesa related patches
-References: <20150114224246.5781508f@free-electrons.com>
- <20150125145939.45872ad7@free-electrons.com>
-Message-ID: <XnsA42D9D9188C48berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 25 Jan 2015 15:30:08 +0100
+Subject: [Buildroot] [git commit] docs: fixup the website symlink
+Message-ID: <20150125143044.48B90805A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+commit: http://git.buildroot.net/buildroot/commit/?id=c1f4413de6ec4f1484a5111b5c7aa98dd400d56e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+For some reason, after applying Yann's patch, the symlink pointed to
+'.?' instead of just '.'. This commit fixes this.
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150125145939.45872ad7 at free-electrons.com:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/website |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> Bernd,
-> 
-> Any input on the below e-mail?
-
-yes ;)
-
-> On Wed, 14 Jan 2015 22:42:46 +0100, Thomas Petazzoni wrote:
->> Hello Bernd,
->> 
->> Could you review/comment on the following mesa3d related patches?
->> 
->>   http://patchwork.ozlabs.org/patch/419054/
-
-I posted my comments to the follow-up patch
-http://patchwork.ozlabs.org/patch/430050/
-
->>   http://patchwork.ozlabs.org/patch/398857/
-
-http://patchwork.ozlabs.org/patch/430125/
-
->>   http://patchwork.ozlabs.org/patch/398858/
-
-http://patchwork.ozlabs.org/patch/430124/
-
-Regards, Bernd
+diff --git a/docs/website b/docs/website
+index 9c558e3..945c9b4 120000
+--- a/docs/website
++++ b/docs/website
+@@ -1 +1 @@
+-.
++.
+\ No newline at end of file
