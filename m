@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 15:06:52 +0100
-Subject: [Buildroot] [PATCH 1/3] python-jinja2: add python-markupsafe as
- dependency
-In-Reply-To: <54C431B0.4090304@mind.be>
-References: <1422046695-2354-1-git-send-email-erico.nunes@datacom.ind.br>
- <54C431B0.4090304@mind.be>
-Message-ID: <20150125150652.532fb6ba@free-electrons.com>
+Date: Sun, 25 Jan 2015 15:13:23 +0100
+Subject: [Buildroot] buildroot + leon3 + gdb
+In-Reply-To: <1360834790.663881421942614585.JavaMail.defaultUser@defaultHost>
+References: <1360834790.663881421942614585.JavaMail.defaultUser@defaultHost>
+Message-ID: <20150125151323.7ad443fc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hello,
 
-On Sun, 25 Jan 2015 00:58:40 +0100, Arnout Vandecappelle wrote:
-> On 01/23/15 21:58, Erico Nunes wrote:
-> > BR2_PACKAGE_PYTHON_JINJA2 selects the BR2_PACKAGE_PYTHON_MARKUPSAFE
-> > option but doesn't depend on it in python-jinja2.mk.
-> > 
-> > This turned in an error in an attempt to build python-jinja2 for host:
-> > "No local packages or download links found for markupsafe"
-> > 
-> > Adding the python-markupsafe fixes this error and also ensures that it
-> > builds before python-jinja2 in any case.
-> 
->  I've tested it and python-jinja2 builds fine without python-markupsafe.
-> 
->  It is true that host-python-jinja2 does depend on host-python-markupsafe
-> (otherwise it will try to download it and we want to avoid that). But then you
-> should add
+On Thu, 22 Jan 2015 17:03:34 +0100 (CET), dosrulez at libero.it wrote:
 
-It is quite weird that the target and host variants don't have the same
-dependencies. Do you have an explanation about this?
+> I'm having a problem trying to build a specific linux kernel for leon3 &amp; spartan6 (Xilinx). 
+> What I want is build a customized linux kernel using Buildroot and the toolchain provided by Gaisler, including an instance of gdb server which is going to be executed on the target.
+> Whenever I try to include gdb into the build process I get the error "Could not find gdbserver in external toolchain" and I cannot find a way to fix this.
+> Could you help me?
 
-Thanks,
+Sure, don't enable the BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option.
+You have this option enabled, but your toolchain does not have a
+gdbserver included, so trying to copy it to the target (which is the
+purpose of BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY) cannot work.
+
+Best regards,
 
 Thomas
 -- 
