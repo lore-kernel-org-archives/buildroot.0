@@ -1,19 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Jan 2015 23:54:33 +0100
-Subject: [Buildroot] [PATCH] python-zope-interface: new package
-In-Reply-To: <1422131338-4470-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Sat, 24 Jan 2015 21:28:58 +0100")
-References: <1422131338-4470-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87oapm4gk6.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jan 2015 00:02:10 +0100
+Subject: [Buildroot] [PATCH 1/7] haserl: remove deprecated 0.8.x version
+In-Reply-To: <1421332222-15098-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 15 Jan 2015 11:30:16 -0300")
+References: <1421332222-15098-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k30a4g7h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > It'll be a year for the 2015.02 release so remove the old/deprecated
+ > 0.8.x version for the release.
+
+ > Also update hash to match sourceforge (original) one.
+
+ > And rename patch to new naming convention.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
