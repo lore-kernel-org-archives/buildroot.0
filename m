@@ -1,80 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 25 Jan 2015 21:40:34 +0200
-Subject: [Buildroot] [PATCH] rt-tests: fix build dependencies
-Message-ID: <917c1645d4d4c0d3729547bb34f06781c93af523.1422214834.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Jan 2015 21:51:35 +0100
+Subject: [Buildroot] [PATCH 1/1] new package: openldap
+In-Reply-To: <1421954334-10021-1-git-send-email-codehero@gmail.com>
+References: <1421954334-10021-1-git-send-email-codehero@gmail.com>
+Message-ID: <20150125205135.GE3937@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some tests didn't list librttest in their dependencies.
+David, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/999/9998dcf8c82989d9eba772e16ce3905b24badbfc/
-http://autobuild.buildroot.net/results/b1e/b1e078591d65a3b5c9d638ad5bbb4ec8c28c38ef/
+On 2015-01-22 14:18 -0500, David Bender spake thusly:
+> 
+> Signed-off-by: David Bender <codehero@gmail.com>
+> ---
+>  package/Config.in                                  |    1 +
+>  package/openldap/Config.in                         |   17 +++++
+>  .../openldap/openldap-0000-fix_cross_strip.patch   |   67 ++++++++++++++++++++
+>  package/openldap/openldap.mk                       |   33 ++++++++++
+>  4 files changed, 118 insertions(+), 0 deletions(-)
+>  create mode 100644 package/openldap/Config.in
+>  create mode 100644 package/openldap/openldap-0000-fix_cross_strip.patch
+>  create mode 100644 package/openldap/openldap.mk
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../04-Makefile-fix-tests-dependencies.patch       | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/rt-tests/04-Makefile-fix-tests-dependencies.patch
+I've sent an updated version of that patch:
+    http://lists.busybox.net/pipermail/buildroot/2015-January/117984.html
 
-diff --git a/package/rt-tests/04-Makefile-fix-tests-dependencies.patch b/package/rt-tests/04-Makefile-fix-tests-dependencies.patch
-new file mode 100644
-index 000000000000..0b2feb16d569
---- /dev/null
-+++ b/package/rt-tests/04-Makefile-fix-tests-dependencies.patch
-@@ -0,0 +1,50 @@
-+From e464368807211978fe2dfccf081fa8dc7a35b71b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 23 Jan 2015 07:52:21 +0200
-+Subject: [PATCH] Makefile: fix tests dependencies
-+
-+librttest is listed in $(LIBS) so all tests must depend on librttest.a.
-+Fixes build failures like:
-+
-+.../armv7-ctng-linux-gnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os -g2  -o hackbench hackbench.o -lrt -lpthread -lrttest -L.
-+.../armv7-ctng-linux-gnueabihf/bin/ld: cannot find -lrttest
-+collect2: error: ld returned 1 exit status
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ Makefile | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index a3879cea8164..b9a1fed1b920 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -69,14 +69,14 @@ cyclictest: cyclictest.o librttest.a
-+ signaltest: signaltest.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+-pi_stress: pi_stress.o
-++pi_stress: pi_stress.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ hwlatdetect:  src/hwlatdetect/hwlatdetect.py
-+ 	chmod +x src/hwlatdetect/hwlatdetect.py
-+ 	ln -s src/hwlatdetect/hwlatdetect.py hwlatdetect
-+ 
-+-rt-migrate-test: rt-migrate-test.o
-++rt-migrate-test: rt-migrate-test.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ ptsematest: ptsematest.o librttest.a
-+@@ -97,7 +97,7 @@ sendme: sendme.o librttest.a
-+ pip_stress: pip_stress.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+-hackbench: hackbench.o
-++hackbench: hackbench.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ librttest.a: rt-utils.o error.o rt-get_cpu.o
-+-- 
-+2.1.4
-+
+Care to test I haven;t borked it for your use-case?
+
+I removed the --exec-prefix=/ because we usally do not set that, and use
+the default, i.e. the same value as --prefix which we set to /usr .
+Was there any reason to set --exec-prefix=/ ?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
