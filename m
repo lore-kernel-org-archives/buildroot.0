@@ -1,163 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Jan 2015 15:53:33 +0100
-Subject: [Buildroot] [PATCH 1/3] cgic: new package
-In-Reply-To: <1421953904-9156-1-git-send-email-codehero@gmail.com>
-References: <20150117192144.GA2827@tarshish>
- <1421953904-9156-1-git-send-email-codehero@gmail.com>
-Message-ID: <20150125145333.GB3937@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 25 Jan 2015 16:28:51 +0100
+Subject: [Buildroot] [PATCH 1/3] python-jinja2: add python-markupsafe as
+ dependency
+In-Reply-To: <20150125150652.532fb6ba@free-electrons.com>
+References: <1422046695-2354-1-git-send-email-erico.nunes@datacom.ind.br>	<54C431B0.4090304@mind.be>
+ <20150125150652.532fb6ba@free-electrons.com>
+Message-ID: <54C50BB3.6050709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David, All,
-
-On 2015-01-22 14:11 -0500, David Bender spake thusly:
-> Added cgic library.
-
-As for benejson, the three patches adding cgic should be squashed into a
-single patch.
-
-I'll handle that and resubmit it as well.
-
-Thanks for your contribution! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Dave Bender <bender@benegon.com>
-> Signed-off-by: David Bender <codehero@gmail.com>
-> ---
->  package/Config.in                             |    1 +
->  package/cgic/Config.in                        |    6 ++++
->  package/cgic/cgic-0000-prepare_makefile.patch |   40 +++++++++++++++++++++++++
->  package/cgic/cgic.mk                          |   36 ++++++++++++++++++++++
->  4 files changed, 83 insertions(+), 0 deletions(-)
->  create mode 100644 package/cgic/Config.in
->  create mode 100644 package/cgic/cgic-0000-prepare_makefile.patch
->  create mode 100644 package/cgic/cgic.mk
+On 01/25/15 15:06, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 266de13..a6fa27d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -816,6 +816,7 @@ menu "Networking"
->  	source "package/agentpp/Config.in"
->  	source "package/c-ares/Config.in"
->  	source "package/canfestival/Config.in"
-> +	source "package/cgic/Config.in"
->  	source "package/cppzmq/Config.in"
->  	source "package/czmq/Config.in"
->  	source "package/filemq/Config.in"
-> diff --git a/package/cgic/Config.in b/package/cgic/Config.in
-> new file mode 100644
-> index 0000000..402460d
-> --- /dev/null
-> +++ b/package/cgic/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_CGIC
-> +	bool "cgic"
-> +	help
-> +	  C CGI library
-> +
-> +	  http://www.boutell.com/cgic/
-> diff --git a/package/cgic/cgic-0000-prepare_makefile.patch b/package/cgic/cgic-0000-prepare_makefile.patch
-> new file mode 100644
-> index 0000000..46b7a81
-> --- /dev/null
-> +++ b/package/cgic/cgic-0000-prepare_makefile.patch
-> @@ -0,0 +1,40 @@
-> +Binary files cgic206/cgic.o and cgic206-br/cgic.o differ
-> +Binary files cgic206/libcgic.a and cgic206-br/libcgic.a differ
-> +diff -rupN cgic206/Makefile cgic206-br/Makefile
-> +--- cgic206/Makefile	2014-03-16 18:17:11.000000000 -0400
-> ++++ cgic206-br/Makefile	2015-01-16 11:18:03.714874000 -0500
-> +@@ -1,15 +1,14 @@
-> +-CFLAGS=-g -Wall
-> +-CC=gcc
-> +-AR=ar
-> +-RANLIB=ranlib
-> + LIBS=-L./ -lcgic
-> + 
-> + all: libcgic.a cgictest.cgi capture
-> + 
-> + install: libcgic.a
-> +-	cp libcgic.a /usr/local/lib
-> +-	cp cgic.h /usr/local/include
-> +-	@echo libcgic.a is in /usr/local/lib. cgic.h is in /usr/local/include.
-> ++	cp libcgic.a $(PREFIX)/usr/lib
-> ++	cp cgic.h $(PREFIX)/usr/include
-> ++	@echo libcgic.a is in $(PREFIX)/usr/lib. cgic.h is in $(PREFIX)/usr/include.
-> ++
-> ++cgi.o: cgic.c cgic.h
-> ++	$(CC) $(CFLAGS) cgic.c -o cgic.o
-> + 
-> + libcgic.a: cgic.o cgic.h
-> + 	rm -f libcgic.a
-> +@@ -19,10 +18,10 @@ libcgic.a: cgic.o cgic.h
-> + #mingw32 and cygwin users: replace .cgi with .exe
-> + 
-> + cgictest.cgi: cgictest.o libcgic.a
-> +-	gcc cgictest.o -o cgictest.cgi ${LIBS}
-> ++	$(CC) cgictest.o -o cgictest.cgi ${LIBS}
-> + 
-> + capture: capture.o libcgic.a
-> +-	gcc capture.o -o capture ${LIBS}
-> ++	$(CC) capture.o -o capture ${LIBS}
-> + 
-> + clean:
-> + 	rm -f *.o *.a cgictest.cgi capture
-> diff --git a/package/cgic/cgic.mk b/package/cgic/cgic.mk
-> new file mode 100644
-> index 0000000..378e1cd
-> --- /dev/null
-> +++ b/package/cgic/cgic.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# cgic
-> +#
-> +################################################################################
-> +
-> +CGIC_VERSION = 2.06
-> +CGIC_SOURCE = cgic206.tar.gz
-> +CGIC_SITE = http://boutell.com/cgic
-> +CGIC_LICENSE = Custom
-> +CGIC_LICENSE_FILES = license.txt
-> +
-> +CGIC_ENV = AR=$(TARGET_CROSS)ar \
-> +	CC=$(TARGET_CROSS)gcc \
-> +	RANLIB=$(TARGET_CROSS)ranlib
-> +
-> +define CGIC_BUILD_CMDS
-> +	(cd $(@D); \
-> +		$(CGIC_ENV) \
-> +		make libcgic.a \
-> +		)
-> +endef
-> +
-> +define CGIC_INSTALL_STAGING_CMDS
-> +	(cd $(@D); \
-> +		PREFIX=$(STAGING_DIR) make install \
-> +		)
-> +endef
-> +
-> +define CGIC_INSTALL_TARGET_CMDS
-> +	(cd $(@D); \
-> +		PREFIX=$(TARGET_DIR) make install \
-> +		)
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 1.7.8.6
+> On Sun, 25 Jan 2015 00:58:40 +0100, Arnout Vandecappelle wrote:
+>> On 01/23/15 21:58, Erico Nunes wrote:
+>>> BR2_PACKAGE_PYTHON_JINJA2 selects the BR2_PACKAGE_PYTHON_MARKUPSAFE
+>>> option but doesn't depend on it in python-jinja2.mk.
+>>>
+>>> This turned in an error in an attempt to build python-jinja2 for host:
+>>> "No local packages or download links found for markupsafe"
+>>>
+>>> Adding the python-markupsafe fixes this error and also ensures that it
+>>> builds before python-jinja2 in any case.
+>>
+>>  I've tested it and python-jinja2 builds fine without python-markupsafe.
+>>
+>>  It is true that host-python-jinja2 does depend on host-python-markupsafe
+>> (otherwise it will try to download it and we want to avoid that). But then you
+>> should add
 > 
+> It is quite weird that the target and host variants don't have the same
+> dependencies. Do you have an explanation about this?
 
+ The dependency is there also for the target variant, but it's a runtime
+dependency only.
+
+ The host variant first creates an egg, and then uses the egg install procedure
+to install it in the host python dir. The egg install procedure will also fetch
+any dependencies, so it will fetch python-markupsafe. If you have an internet
+connection, it will actually succeed to download and install python-markupsafe -
+but it's really not what we want to happen.
+
+ I guess the target variant doesn't use the normal egg install procedure because
+it "knows" it can't run natively.
+
+ Those script language package managers...
+
+ Regards,
+ Arnout
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
