@@ -1,102 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Jan 2015 23:57:14 +0100
-Subject: [Buildroot] [git commit] distcc: remove deprecated package
-Message-ID: <20150125233550.8561D7FF09@busybox.osuosl.org>
+Date: Mon, 26 Jan 2015 00:21:35 +0100
+Subject: [Buildroot] [git commit] flex: remove deprecated binary in target
+Message-ID: <20150125233550.A7AA17FF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2e3d0be90409ec53e2c02f8ece0d62d04999fb0
+commit: http://git.buildroot.net/buildroot/commit/?id=aa6ea7aba3a9a0edd5c8618a83240f4a66263286
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's been deprecated since feb 2014 and it'll be a year for the 2015.02
-release so remove it.
-And it's basically useless without a target toolchain.
+It's been deprecated for a year now so remove the option.
+
+Also rename patch to new naming convention.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy         |    8 ++++++++
- package/Config.in        |    3 ---
- package/distcc/Config.in |   11 -----------
- package/distcc/distcc.mk |   19 -------------------
- 4 files changed, 8 insertions(+), 33 deletions(-)
+ Config.in.legacy                                   |    8 +++++++
+ .../{flex-prog-ar.patch => 0001-prog-ar.patch}     |    0
+ package/flex/Config.in                             |   21 --------------------
+ package/flex/flex.mk                               |   11 ----------
+ 4 files changed, 8 insertions(+), 32 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index db8c3b1..9bd2fde 100644
+index 243416e..d6f32a0 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -102,6 +102,14 @@ endif
  
  comment "Legacy options removed in 2015.02"
  
-+config BR2_PACKAGE_DISTCC
-+	bool "distcc target package removed"
++config BR2_PACKAGE_FLEX_BINARY
++	bool "flex binary in target option removed"
 +	select BR2_LEGACY
 +	help
-+	  The distcc target package has been removed, it's been
-+	  deprecated for some time now and was essentially useless
-+	  without a target toolchain.
++	  The flex binary in the target option has been removed.
++	  It's been deprecated for some time now and is essentially a
++	  development tool which isn't very useful in the target.
 +
- config BR2_PACKAGE_HASERL_VERSION_0_8_X
- 	bool "haserl 0.8.x version removed"
+ config BR2_PACKAGE_BISON
+ 	bool "bison target package removed"
  	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 7e22e92..f04464e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -109,9 +109,6 @@ menu "Development tools"
- 	source "package/cvs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/diffutils/Config.in"
--endif
--	source "package/distcc/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/findutils/Config.in"
- endif
- 	source "package/flex/Config.in"
-diff --git a/package/distcc/Config.in b/package/distcc/Config.in
-deleted file mode 100644
-index 08e1ab3..0000000
---- a/package/distcc/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_DISTCC
--	bool "distcc"
+diff --git a/package/flex/flex-prog-ar.patch b/package/flex/0001-prog-ar.patch
+similarity index 100%
+rename from package/flex/flex-prog-ar.patch
+rename to package/flex/0001-prog-ar.patch
+diff --git a/package/flex/Config.in b/package/flex/Config.in
+index 9ac600d..7199c6a 100644
+--- a/package/flex/Config.in
++++ b/package/flex/Config.in
+@@ -6,24 +6,3 @@ config BR2_PACKAGE_FLEX
+ 	  programs that perform pattern-matching on text.
+ 
+ 	  http://flex.sourceforge.net/
+-
+-if BR2_PACKAGE_FLEX
+-
+-config BR2_PACKAGE_FLEX_BINARY
+-	bool "Install flex binary on target"
 -	# needs fork()
 -	depends on BR2_USE_MMU
+-	# runtime dependency
+-	select BR2_PACKAGE_M4
+-	# development tool, useless on the target
 -	depends on BR2_DEPRECATED_SINCE_2014_02
+-	depends on BR2_USE_WCHAR # m4
 -	help
--	  Distributed compiler client and server.  Allows you to
--	  distribute compilation of C code across several machines
--	  on a network.
+-	  Install the flex binary tool in the target filesystem.
 -
--	  http://distcc.samba.org/
-diff --git a/package/distcc/distcc.mk b/package/distcc/distcc.mk
-deleted file mode 100644
-index eae5fb8..0000000
---- a/package/distcc/distcc.mk
-+++ /dev/null
-@@ -1,19 +0,0 @@
--################################################################################
--#
--# distcc
--#
--################################################################################
+-comment "flex binary needs a toolchain w/ wchar"
+-	depends on BR2_DEPRECATED_SINCE_2014_02
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR
 -
--DISTCC_VERSION = 2.18.3
--DISTCC_SOURCE = distcc-$(DISTCC_VERSION).tar.bz2
--DISTCC_SITE = http://distcc.googlecode.com/files
--DISTCC_CONF_OPTS = --with-included-popt --without-gtk --without-gnome
--DISTCC_LICENSE = GPLv2+
--DISTCC_LICENSE_FILES = COPYING
--
--define DISTCC_INSTALL_TARGET_CMDS
--	$(INSTALL) -D $(@D)/distccd $(TARGET_DIR)/usr/bin/distccd
--	$(INSTALL) -D $(@D)/distcc $(TARGET_DIR)/usr/bin/distcc
+-endif
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index cd92dd7..9a3f840 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -15,15 +15,6 @@ FLEX_CONF_ENV = ac_cv_path_M4=/usr/bin/m4
+ # we don't have a host-gettext/libintl
+ HOST_FLEX_DEPENDENCIES = host-m4
+ 
+-ifeq ($(BR2_PACKAGE_FLEX_BINARY),y)
+-# lex -> flex
+-define FLEX_INSTALL_LEX
+-	cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
 -endef
+-FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
 -
--$(eval $(autotools-package))
+-else
+-
+ define FLEX_DISABLE_PROGRAM
+ 	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
+ endef
+@@ -35,7 +26,5 @@ define FLEX_REMOVE_BROKEN_SYMLINK
+ endef
+ FLEX_POST_INSTALL_TARGET_HOOKS += FLEX_REMOVE_BROKEN_SYMLINK
+ 
+-endif
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
