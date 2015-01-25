@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jan 2015 15:23:37 +0100
-Subject: [Buildroot] [PATCH 1/5] perl-io-socket-ssl: bump to version
- 2.010
-In-Reply-To: <1422031025-29533-1-git-send-email-francois.perrad@gadz.org>
-References: <1422031025-29533-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150125152337.5577407a@free-electrons.com>
+Date: Sun, 25 Jan 2015 15:25:12 +0100
+Subject: [Buildroot] [git commit] docs: prepare moving the website
+Message-ID: <20150125142540.8387D8042A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=7f0e0d5a8a13b7d6f83db9acd7efda4604c0e850
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 23 Jan 2015 17:37:01 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 3 +++
->  package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->  create mode 100644 package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+This commit just creates a symlink so the website is now accessible from
+both docs/ and docs/website/.
 
-All 5 patches applied.
+This allows us to have the website now officially in docs/website, while
+still keep backward compatibility with the current scripts that update
+the website. Once those scripts have been updated, we'll be able to truly
+move the website to docs/website/ for good.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+All without any perceived downtime or missed updated on the website! :-)
+
+After an idea from Peter.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/website |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/docs/website b/docs/website
+new file mode 120000
+index 0000000..9c558e3
+--- /dev/null
++++ b/docs/website
+@@ -0,0 +1 @@
++.
