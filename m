@@ -1,60 +1,152 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 25 Jan 2015 16:44:51 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-01-24
-In-Reply-To: <20150125073015.49B3C1013EF@stock.ovh.net>
-References: <20150125073015.49B3C1013EF@stock.ovh.net>
-Message-ID: <54C50F73.50702@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Jan 2015 16:53:27 +0100
+Subject: [Buildroot] [PATCH 2/3] Restore cgiFormFileGetTempfileName and
+ make creation permissions more secure
+In-Reply-To: <1421953904-9156-2-git-send-email-codehero@gmail.com>
+References: <20150117192144.GA2827@tarshish>
+ <1421953904-9156-1-git-send-email-codehero@gmail.com>
+ <1421953904-9156-2-git-send-email-codehero@gmail.com>
+Message-ID: <20150125155327.GC3937@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+David, All,
 
-Le 25/01/2015 08:30, Thomas Petazzoni a ?crit :
-> Build statistics for 2015-01-24
->              libselinux-2.1.13 | 2 
-
+On 2015-01-22 14:11 -0500, David Bender spake thusly:
 > 
-> Detail of failures
-> ===================
->         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/9e25e908d100886ad0c0a108000c7a283c2e350b/
->         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/af38d7a4199372f49f1e22504fbbfc321d7234ed/
+> Signed-off-by: David Bender <codehero@gmail.com>
+> ---
+>  package/cgic/cgic-0001-file_enhancements.patch |   81 ++++++++++++++++++++++++
+>  1 files changed, 81 insertions(+), 0 deletions(-)
+>  create mode 100644 package/cgic/cgic-0001-file_enhancements.patch
+> 
+> diff --git a/package/cgic/cgic-0001-file_enhancements.patch b/package/cgic/cgic-0001-file_enhancements.patch
 
-For some reason, ld report some undefined symbols when building the shared library libselinux.so.1 on bfin.
+While fixing the eye-candy in this new cgic package, I stumbled on this
+patch you are adding.
 
-[...] -Wl,-soname,libselinux.so.1,-z,defs,-z,relro
+First and foremost, you forgot to add a dewscription for this patch, and
+you SoB-line.
 
-callbacks.c:(.text+0x82): undefined reference to `_security_check_context'
-callbacks.c:(.text+0x92): undefined reference to `_is_selinux_enabled'
-label.c:(.text+0x172): undefined reference to `_selinux_raw_to_trans_context'
-label_db.c:(.text+0xe4): undefined reference to `_selinux_sepgsql_context_path'
-label_file.c:(.text+0xa24): undefined reference to `_selinux_file_context_subs_dist_path'
-label_file.c:(.text+0xa38): undefined reference to `_selinux_file_context_subs_path'
-label_file.c:(.text+0xa4c): undefined reference to `_selinux_file_context_path'
-label_media.c:(.text+0xf2): undefined reference to `_selinux_media_context_path'
-label_x.c:(.text+0xee): undefined reference to `_selinux_x_context_path'
-mapping.c:(.text+0x25a): undefined reference to `_avc_reset'
-sestatus.c:(.text+0x17e): undefined reference to `_security_getenforce'
-sestatus.c:(.text+0x214): undefined reference to `_security_deny_unknown'
-collect2: ld returned 1 exit status
+Without a description, it is not easy to see what this patch does. After
+some digging around, I realised it does two things:
+  - fix the creation of temporary files (good)
+  - adds a new feature (bad)
 
-All missing symbols are defined in selinux_internal.h or avc_internal.h
-by hidden_proto() which is defined in src/dso.h.
+Thus, it should have been two separate patches.
 
-hidden_proto() add some asm code which depends on architecture:
-# if defined(__alpha__) || defined(__mips__)
-#  define hidden_def(fct) \
-     asm (".globl " #fct "\n" #fct " = " #fct "_internal");
-# else
-#  define hidden_def(fct) \
-     asm (".globl " #fct "\n.set " #fct ", " #fct "_internal");
-#endif
+cgiFormFileGetTempfileName() is a function that is not called anywhere
+in the cgic code, and so I conclude it is only exported as an entrypoint
+in the generated library. This is thus a new feature.
 
-I suppose this asm code is not supported on bfin.
-Maybe disable libselinux on bfin ?
+We usually refuse to cary feature-patches in Buildroot, unles there is a
+very good reason to do so. Since you mention that this is "restoring"
+it, do you mean it was present in a previous version and got dropped,
+and legacy code might use that function? In this case, it might be OK to
+re-add it...
 
-Best regards,
-Romain Naour
+Anyway, I've split this in two.
+
+Regards,
+Yann E. MORIN.
+
+> new file mode 100644
+> index 0000000..f09a73f
+> --- /dev/null
+> +++ b/package/cgic/cgic-0001-file_enhancements.patch
+> @@ -0,0 +1,81 @@
+> +diff -rupN cgic206/cgic.c cgic206_tempfile/cgic.c
+> +--- cgic206/cgic.c	2014-03-16 18:17:11.000000000 -0400
+> ++++ cgic206_tempfile/cgic.c	2015-01-21 11:58:45.436384908 -0500
+> +@@ -22,6 +22,8 @@
+> + #define CGICDEBUGEND
+> + #endif /* CGICDEBUG */
+> + 
+> ++#define _GNU_SOURCE
+> ++
+> + #include <stdio.h>
+> + #include <string.h>
+> + #include <ctype.h>
+> +@@ -34,11 +36,11 @@
+> + #include <io.h>
+> + 
+> + /* cgic 2.01 */
+> +-#include <fcntl.h>
+> + 
+> + #else
+> + #include <unistd.h>
+> + #endif /* WIN32 */
+> ++#include <fcntl.h>
+> + #include "cgic.h"
+> + 
+> + #define cgiStrEq(a, b) (!strcmp((a), (b)))
+> +@@ -636,16 +638,17 @@ static cgiParseResultType getTempFileNam
+> + 		window between the file's creation and the
+> + 		chmod call (glibc 2.0.6 and lower might
+> + 		otherwise have allowed this). */
+> ++	mode_t umode;
+> + 	int outfd; 
+> ++	umode = umask(0600);
+> + 	strcpy(tfileName, cgicTempDir "/cgicXXXXXX");
+> +-	outfd = mkstemp(tfileName);
+> ++	outfd = mkostemp(tfileName, O_CLOEXEC | O_NOATIME);
+> ++	umask(umode);
+> + 	if (outfd == -1) {
+> + 		return cgiParseIO;
+> + 	}
+> +-	close(outfd);
+> +-	/* Fix the permissions */
+> +-	if (chmod(tfileName, 0600) != 0) {
+> +-		unlink(tfileName);
+> ++
+> ++	if (close(outfd)) {
+> + 		return cgiParseIO;
+> + 	}
+> + #else
+> +@@ -1275,6 +1278,20 @@ cgiFormResultType cgiFormFileContentType
+> + 	}
+> + }
+> + 
+> ++const char* cgiFormFileGetTempfileName(
+> ++	char* name)
+> ++{
+> ++	cgiFormEntry *e;
+> ++	e = cgiFormEntryFindFirst(name);
+> ++	if (!e) {
+> ++		return NULL;
+> ++	} else if (!strlen(e->tfileName)) {
+> ++		return NULL;
+> ++	} else {
+> ++		return e->tfileName;
+> ++	}
+> ++}
+> ++
+> + cgiFormResultType cgiFormFileSize(
+> + 	char *name, int *sizeP)
+> + {
+> +diff -rupN cgic206/cgic.h cgic206_tempfile/cgic.h
+> +--- cgic206/cgic.h	2014-03-16 18:17:11.000000000 -0400
+> ++++ cgic206_tempfile/cgic.h	2015-01-21 11:53:02.915148026 -0500
+> +@@ -141,6 +141,8 @@ extern cgiFormResultType cgiFormRadio(
+> + 	char *name, char **valuesText, int valuesTotal, 
+> + 	int *result, int defaultV);	
+> + 
+> ++extern const char* cgiFormFileGetTempfileName(char* name);
+> ++
+> + /* The paths returned by this function are the original names of files
+> + 	as reported by the uploading web browser and shoult NOT be
+> + 	blindly assumed to be "safe" names for server-side use! */
+> -- 
+> 1.7.8.6
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
