@@ -1,71 +1,206 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 Jan 2015 23:37:06 +0100
-Subject: [Buildroot] [PATCH 2/6 v4] package/freerdp: move
-	architecture-specific block
+Date: Sun, 25 Jan 2015 23:37:07 +0100
+Subject: [Buildroot] [PATCH 3/6 v4] package/freerdp: add options to
+	enable/disable server and/or client
 In-Reply-To: <cover.1422225347.git.yann.morin.1998@free.fr>
 References: <cover.1422225347.git.yann.morin.1998@free.fr>
-Message-ID: <ee869604a6b46c92e7757942d3b822ceb005a3eb.1422225347.git.yann.morin.1998@free.fr>
+Message-ID: <7184d9ae0f3be09bda1c35689a51ddb6d414e6e2.1422225347.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move the arch-spcific block up, so it does not interfere with followup
-patches (mostly to ease review).
+Building the client or the server requires an X.Org stack.
+
+Since freerdp can also be used for weston (wayland-based, hence no X.Org
+stack), we may want to disable the client and server.
+
+Conversely, even with an X.Org stack, we may want to enable either or
+none if we're just interested in the library.
+
+Add two options, one to enable the server, the other the client; the
+client option defaults to 'Y' so that a previous .config can be re-used
+as-is, and exhibit the same behaviour as before; the server option
+defaults to 'N' as we were not ever building the server so far.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/freerdp/freerdp.mk | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+Cc: Samuel Martin <s.martin49@gmail.com>
 
+---
+Changes v2 -> v3:
+  - use -fPIC only for that library that needs it, not the whole
+    package  (Samuel)
+  - fix X.Org dependencies  (Samuel)
+  - don't default server to 'Y'
+---
+ package/freerdp/Config.in                          | 25 ++++++++-
+ .../freerdp-0002-fix-building-shared-libs.patch    | 23 ++++++++
+ package/freerdp/freerdp.mk                         | 62 ++++++++++++++++++++--
+ 3 files changed, 105 insertions(+), 5 deletions(-)
+ create mode 100644 package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index 09efbc0..47fd8be 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -2,9 +2,32 @@ config BR2_PACKAGE_FREERDP
+ 	bool "freerdp"
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	help
+ 	  FreeRDP is a free implementation of the Remote Desktop
+ 	  Protocol (RDP), released under the Apache license
+ 
++	  This only installs the freerdp library.
++
+ 	  http://www.freerdp.com/
++
++if BR2_PACKAGE_FREERDP
++
++config BR2_PACKAGE_FREERDP_SERVER
++	bool "build server"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXFIXES
++
++config BR2_PACKAGE_FREERDP_CLIENT
++	bool "build client"
++	default y
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++
++comment "freerdp server and client need X.Org"
++	depends on !BR2_PACKAGE_XORG7
++
++endif
+diff --git a/package/freerdp/freerdp-0002-fix-building-shared-libs.patch b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+new file mode 100644
+index 0000000..420f3d3
+--- /dev/null
++++ b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+@@ -0,0 +1,23 @@
++winpr/tools: fix building shared libs
++
++libwinpr-makecert-tool.a is used to build libxfreerdp-server.so, so even
++if we are building a static libwinpr-makecert-tool.a library, we need to
++build it with -fPIC.
++
++Patch and commit log suggested by Samuel MARTIN.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Samuel Martin <s.martin49@gmail.com>
++
++diff -durN freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt
++--- freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt	2014-08-25 06:52:43.000000000 -0700
+++++ freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt	2014-10-24 15:39:39.600319523 -0700
++@@ -43,3 +43,8 @@
++ 
++ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "WinPR/Tools")
++ 
+++if(BUILD_SHARED_LIBS)
+++	# build libwinpr-makecert-tool.a with PIC because it is used to build
+++	# the shared library libxfreerdp-server.so.
+++	set_property(TARGET ${MODULE_NAME} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+++endif()
 diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index a373447..ff66676 100644
+index ff66676..742ced7 100644
 --- a/package/freerdp/freerdp.mk
 +++ b/package/freerdp/freerdp.mk
-@@ -41,6 +41,22 @@ else
- FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
+@@ -57,13 +57,33 @@ ifeq ($(BR2_arm)$(BR2_armeb),y)
+ FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
  endif
  
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+FREERDP_CONF_OPTS += -DWITH_NEON=ON
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
+-FREERDP_DEPENDENCIES += xlib_libXext
+-FREERDP_CONF_OPTS += -DWITH_X11=ON
++#---------------------------------------
++# Enabling server and/or client
++
++ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
++FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
+ else
+-FREERDP_CONF_OPTS += -DWITH_X11=OFF
++FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
++FREERDP_CONF_OPTS += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
 +else
-+FREERDP_CONF_OPTS += -DWITH_NEON=OFF
++FREERDP_CONF_OPTS += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
 +endif
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+FREERDP_CONF_OPTS += -DWITH_SSE2=ON
++#---------------------------------------
++# X.Org libs for client and/or server
++
++ifneq ($(BR2_PACKAGE_FREERDP_SERVER)$(BR2_PACKAGE_FREERDP_CLIENT),)
++
++# Those two are mandatory for both the server and the client
++FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXext
++FREERDP_CONF_OPTS += -DWITH_X11=ON
++
++# The following libs are either optional or mandatory only for either
++# the server or the client. A mandatory library for either one is
++# selected from Kconfig, so we can make it conditional here
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+ FREERDP_CONF_OPTS += -DWITH_XCURSOR=ON
+ FREERDP_DEPENDENCIES += xlib_libXcursor
+@@ -71,6 +91,27 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XCURSOR=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
++FREERDP_CONF_OPTS += -DWITH_XDAMAGE=ON
++FREERDP_DEPENDENCIES += xlib_libXdamage
 +else
-+FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
++FREERDP_CONF_OPTS += -DWITH_XDAMAGE=OFF
 +endif
 +
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++FREERDP_CONF_OPTS += -DWITH_XFIXES=ON
++FREERDP_DEPENDENCIES += xlib_libXfixes
++else
++FREERDP_CONF_OPTS += -DWITH_XFIXES=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
- FREERDP_DEPENDENCIES += xlib_libXext
- FREERDP_CONF_OPTS += -DWITH_X11=ON
-@@ -76,20 +92,4 @@ else
++ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
++FREERDP_CONF_OPTS += -DWITH_XI=ON
++FREERDP_DEPENDENCIES += xlib_libXi
++else
++FREERDP_CONF_OPTS += -DWITH_XI=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+ FREERDP_CONF_OPTS += -DWITH_XINERAMA=ON
+ FREERDP_DEPENDENCIES += xlib_libXinerama
+@@ -85,6 +126,13 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XKBFILE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
++FREERDP_DEPENDENCIES += xlib_libXrender
++FREERDP_CONF_OPTS += -DWITH_XRENDER=ON
++else
++FREERDP_CONF_OPTS += -DWITH_XRENDER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
+ FREERDP_CONF_OPTS += -DWITH_XV=ON
+ FREERDP_DEPENDENCIES += xlib_libXv
+@@ -92,4 +140,10 @@ else
  FREERDP_CONF_OPTS += -DWITH_XV=OFF
  endif
  
--ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
--FREERDP_CONF_OPTS += -DWITH_NEON=ON
--else
--FREERDP_CONF_OPTS += -DWITH_NEON=OFF
--endif
--
--ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
--FREERDP_CONF_OPTS += -DWITH_SSE2=ON
--else
--FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
--endif
--
--ifeq ($(BR2_arm)$(BR2_armeb),y)
--FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
--endif
--
++else # ! SERVER && ! CLIENT
++
++FREERDP_CONF_OPTS += -DWITH_X11=OFF
++
++endif # ! USES_XLIBS
++
  $(eval $(cmake-package))
 -- 
 1.9.1
