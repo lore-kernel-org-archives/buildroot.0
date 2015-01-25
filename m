@@ -1,108 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 00:16:03 +0100
-Subject: [Buildroot] [git commit] bison: bump to version 3.0.3
-Message-ID: <20150125233550.9ED977FF09@busybox.osuosl.org>
+Date: Mon, 26 Jan 2015 00:02:58 +0100
+Subject: [Buildroot] [git commit] gob2: remove deprecated target package
+Message-ID: <20150125233550.8DD967FF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3dafe024764a9e7b4a1c89a0ecc8047f6d4c2f2c
+commit: http://git.buildroot.net/buildroot/commit/?id=7f9d4441159836b1a3ba9b214f318943bbda4b44
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file and remove patch since it's no longer necessary.
+It's been deprecated for a year now so remove the target variant.
+
+Also rename patch to new naming convention.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bison/bison-01-no-docs-regen.patch |   53 ----------------------------
- package/bison/bison.hash                   |    2 +
- package/bison/bison.mk                     |    3 +-
- 3 files changed, 3 insertions(+), 55 deletions(-)
+ Config.in.legacy                                   |    8 ++++++++
+ package/Config.in                                  |    1 -
+ ...x.patch => 0001-dont-include-from-prefix.patch} |    0
+ package/gob2/Config.in                             |   20 --------------------
+ package/gob2/gob2.mk                               |    2 --
+ 5 files changed, 8 insertions(+), 23 deletions(-)
 
-diff --git a/package/bison/bison-01-no-docs-regen.patch b/package/bison/bison-01-no-docs-regen.patch
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9bd2fde..50591af 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -102,6 +102,14 @@ endif
+ 
+ comment "Legacy options removed in 2015.02"
+ 
++config BR2_PACKAGE_GOB2
++	bool "gob2 target package removed"
++	select BR2_LEGACY
++	help
++	  The gob2 target package has been removed, it's been
++	  deprecated for some time now and was essentially useless
++	  without a target toolchain.
++
+ config BR2_PACKAGE_DISTCC
+ 	bool "distcc target package removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index f04464e..d3d2f39 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -246,7 +246,6 @@ comment "X applications"
+ 	source "package/feh/Config.in"
+ 	source "package/freerdp/Config.in"
+ 	source "package/gmpc/Config.in"
+-	source "package/gob2/Config.in"
+ 	source "package/gqview/Config.in"
+ 	source "package/gtkperf/Config.in"
+ 	source "package/leafpad/Config.in"
+diff --git a/package/gob2/gob2-01-dont-include-from-prefix.patch b/package/gob2/0001-dont-include-from-prefix.patch
+similarity index 100%
+rename from package/gob2/gob2-01-dont-include-from-prefix.patch
+rename to package/gob2/0001-dont-include-from-prefix.patch
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
 deleted file mode 100644
-index 7c375d6..0000000
---- a/package/bison/bison-01-no-docs-regen.patch
+index bd9ba1f..0000000
+--- a/package/gob2/Config.in
 +++ /dev/null
-@@ -1,53 +0,0 @@
--bison regenerates the docs to see if they changed which requires running
--the recently built bison. This obviously doesn't work for cross compiles
--hence breaks for many target bison builds.
--Just disable it.
+@@ -1,20 +0,0 @@
+-config BR2_PACKAGE_GOB2
+-	bool "gob2"
+-	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-	depends on BR2_USE_MMU # bison, glib2
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_FLEX
+-	select BR2_PACKAGE_BISON
+-	# development tool, useless on the target
+-	depends on BR2_DEPRECATED_SINCE_2014_02
+-	help
+-	  GOB (GTK+ Object Builder) is a preprocessor which simplifies
+-	  the writing of GObjects in C.
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-	  http://www.jirka.org/gob.html
 -
--diff -Nura bison-3.0.orig/doc/local.mk bison-3.0/doc/local.mk
----- bison-3.0.orig/doc/local.mk	2013-10-02 16:52:48.711890121 -0300
--+++ bison-3.0/doc/local.mk	2013-10-02 17:14:59.329341143 -0300
--@@ -37,15 +37,6 @@
-- CROSS_OPTIONS_PL = $(top_srcdir)/build-aux/cross-options.pl
-- CROSS_OPTIONS_TEXI = $(top_srcdir)/doc/cross-options.texi
-- $(CROSS_OPTIONS_TEXI): doc/bison.help $(CROSS_OPTIONS_PL)
---# Create $@~ which is the previous contents.  Don't use 'mv' here so
---# that even if we are interrupted, the file is still available for
---# diff in the next run.  Note that $@ might not exist yet.
---	$(AM_V_GEN){ test ! -f $@ || cat $@; } >$@~
---	$(AM_V_at)test ! -f $@.tmp || rm -f $@.tmp
---	$(AM_V_at)src/bison$(EXEEXT) --help |				 \
---	  $(PERL) $(CROSS_OPTIONS_PL) $(top_srcdir)/src/scan-gram.l >$@.tmp
---	$(AM_V_at)diff -u $@~ $@.tmp || true
---	$(AM_V_at)mv $@.tmp $@
-- MAINTAINERCLEANFILES = $(CROSS_OPTIONS_TEXI)
-- 
-- ## ---------- ##
--@@ -86,9 +77,6 @@
-- EXTRA_DIST += $(top_srcdir)/doc/bison.help
-- MAINTAINERCLEANFILES += $(top_srcdir)/doc/bison.help
-- $(top_srcdir)/doc/bison.help: src/bison$(EXEEXT)
---	$(AM_V_GEN)src/bison$(EXEEXT) --version >doc/bison.help.tmp
---	$(AM_V_at) src/bison$(EXEEXT) --help   >>doc/bison.help.tmp
---	$(AM_V_at)$(top_srcdir)/build-aux/move-if-change doc/bison.help.tmp $@
-- 
-- 
-- ## ----------- ##
--@@ -106,16 +94,6 @@
-- 
-- # Depend on configure to get version number changes.
-- $(top_srcdir)/doc/bison.1: doc/bison.help doc/bison.x $(top_srcdir)/configure
---	$(AM_V_GEN)$(HELP2MAN)			\
---	    --include=$(top_srcdir)/doc/bison.x	\
---	    --output=$@.t src/bison$(EXEEXT)
---	$(AM_V_at)if $(remove_time_stamp) $@ >$@a.t 2>/dev/null &&	 \
---	   $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \
---	  touch $@;							 \
---	else								 \
---	  mv $@.t $@;							 \
---	fi
---	$(AM_V_at)rm -f $@*.t
-- 
-- nodist_man_MANS = doc/yacc.1
-- 
-diff --git a/package/bison/bison.hash b/package/bison/bison.hash
-new file mode 100644
-index 0000000..dd10086
---- /dev/null
-+++ b/package/bison/bison.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	5940efbdd6b5d80e55ec16a01d2322e2892da21863391049b9b692570649177c	bison-3.0.3.tar.xz
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index c092b78..45f785e 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
+-comment "gob2 needs a toolchain w/ wchar"
+-	depends on BR2_USE_MMU
+-	depends on BR2_DEPRECATED_SINCE_2014_02
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gob2/gob2.mk b/package/gob2/gob2.mk
+index e4f1396..04d02e1 100644
+--- a/package/gob2/gob2.mk
++++ b/package/gob2/gob2.mk
+@@ -7,10 +7,8 @@
+ GOB2_VERSION = 2.0.20
+ GOB2_SOURCE = gob2-$(GOB2_VERSION).tar.xz
+ GOB2_SITE = http://ftp.5z.com/pub/gob
+-GOB2_DEPENDENCIES = libglib2 flex bison host-pkgconf host-flex
+ HOST_GOB2_DEPENDENCIES = host-bison host-flex host-libglib2
  
--BISON_VERSION = 3.0.2
-+BISON_VERSION = 3.0.3
- BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPLv3+
- BISON_LICENSE_FILES = COPYING
--BISON_AUTORECONF = YES
- 
+-$(eval $(autotools-package))
  $(eval $(host-autotools-package))
+ 
+ # gob2 for the host
