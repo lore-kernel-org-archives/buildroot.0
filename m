@@ -1,45 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 Jan 2015 23:20:55 +0100
-Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
-	QT_SHARED is not selected
-In-Reply-To: <20150120174507.1d11ab61@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 20 Jan 2015 17:45:07 +0100")
-References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
- <20150120174507.1d11ab61@free-electrons.com>
-Message-ID: <87siey4i48.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 25 Jan 2015 23:37:06 +0100
+Subject: [Buildroot] [PATCH 0/6 v4] weston: new freerdp backend (branch
+	yem/freerdp)
+Message-ID: <cover.1422225347.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello All!
 
- > Dear Richard Genoud,
- > On Tue, 20 Jan 2015 11:17:28 +0100, Richard Genoud wrote:
- >> If Qt is compile as a static library, there's no point compiling qwt as
- >> a shared library, otherwise, we will have a huge qwt lib and a huge Qt
- >> application.
- >> 
- >> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
->> 
- >> +ifeq ($(BR2_PACKAGE_QT_SHARED),y)
- >> +	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/QWT_CONFIG += QwtDll/'
- >> +else
- >> +	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/\# QWT_CONFIG += QwtDll/'
- >> +endif
+This series adds the RDP backend to Weston. As a side effect, it cleans
+up and enhances FreeRDP.
 
- > I think we should get rid of BR2_PACKAGE_QT_SHARED completely, and use
- > BR2_STATIC_LIBS here instead.
 
-I agree that it would be cleaner, but the reason the explicit QT_SHARED
-stuff was added was afaik a lot of systems only needed Qt in a single
-application / that application only used a subset of the Qt
-functionality, so having a static libQt while everything else was shared
-was quite a big win in size / startup time.
+Changes v3 -> v4:
+  - re-order arch-specific options for ease of review
+  - rebase; drop applied patch about man pages  (Thomas)
 
-It does complicate LGPL compliance and I don't know if the disk space
-concerns are as big these days though.
+Changes v2 -> v3:
+  - rework completely the depednencies on X11 libraries  (Samuel)
+  - only install keys when the server is enabled  (Samuel)
+
+Changes v1 -> v2:
+  - new package python-lxml, needed for opengl-registry (Tomas P.)
+  - cleanup opengl-registry and nvidia-driver  (Thomas P.)
+  - drop applied patches  (Thomas P.)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 88f3034651364d2cd6066f2df339a32e8eef8fc6:
+
+  dmalloc: Force arm mode instead of Thumb1 mode (2015-01-25 20:30:18 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/freerdp
+
+for you to fetch changes up to afeaa5c1b90c41b25a3ace3c6d9a29f33d161aa3:
+
+  package/weston: add support for the RDP compositor (2015-01-25 23:31:57 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      package/freerdp: do not forcibly depend on X.Org
+      package/freerdp: move architecture-specific block
+      package/freerdp: add options to enable/disable server and/or client
+      package/freerdp: also install to staging
+      package/freerdp: install server key and certificate
+      package/weston: add support for the RDP compositor
+
+ package/Config.in                                  |   2 +-
+ package/freerdp/Config.in                          |  29 +++++-
+ .../freerdp-0002-fix-building-shared-libs.patch    |  23 +++++
+ package/freerdp/freerdp.mk                         | 108 ++++++++++++++++++---
+ package/weston/Config.in                           |  17 ++++
+ package/weston/weston.mk                           |   7 ++
+ 6 files changed, 165 insertions(+), 21 deletions(-)
+ create mode 100644 package/freerdp/freerdp-0002-fix-building-shared-libs.patch
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
