@@ -1,463 +1,77 @@
-From: Ben Ben <carmazen84@gmail.com>
-Date: Mon, 26 Jan 2015 14:31:58 +0100
-Subject: [Buildroot] [PATCH 12/14 v6] package/nvidia-tegra23-binaries:
-	new package
-In-Reply-To: <c51b22347b65d6afefcdd92b7cbc36b62b3e8c2e.1422055104.git.yann.morin.1998@free.fr>
-References: <cover.1422055104.git.yann.morin.1998@free.fr>
- <c51b22347b65d6afefcdd92b7cbc36b62b3e8c2e.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <CA+GxxTcP_PLsP67BaTzHJheDMMNpTeRQOkoDNXvizE92Y0DTbg@mail.gmail.com>
+From: Lee Essen <lee.essen@nowonline.co.uk>
+Date: Mon, 26 Jan 2015 17:27:54 +0400
+Subject: [Buildroot] pppd makefile moves /etc/PPP/resolv.conf
+In-Reply-To: <54C61802.4010602@zacarias.com.ar>
+References: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
+ <54C61802.4010602@zacarias.com.ar>
+Message-ID: <9F494D13-32F4-497C-A834-C60AA93406E9@nowonline.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
 
-They are no package khronos-registry-openmax.
-I replace it with  khronos-registry-openmaxil.
+> On 26 Jan 2015, at 14:33, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+> 
+> On 01/26/2015 03:49 AM, Lee Essen wrote:
+> 
+>> Hi,
+>> 
+>> The current pppd package makefile has a post extract hook that changes the ppp generated resolv.conf from /etc/ppp/resolv.conf to /etc/resolv.conf with a comment suggesting that this is done because /etc/ppp might not be writable (and this location isn't useful because of where the c library looks.)
+>> 
+>> My assumption is that the original location provided you with flexibility to do clever things in the ppp-up script (and that's certainly what I want to do)
+>> 
+>> If you don't set usepeerdns then it looks like the server names don't get requested, so the creation of this file seems to be all or nothing - there is no way to work with just the env vars.
+>> 
+>> With the current buildroot setup your resolv.conf is overwritten with no option to do anything clever.
+>> 
+>> Wouldn't it be better to use /var/run/ppp.resolv.conf (or something similar) or even leave it as it was and include a symlink in /etc/ppp ??
+>> 
+>> Thanks,
+>> 
+>> Lee.
+> 
+> Hi.
+> I did that modification, let's see.
+> Actually the original location didn't provide anything useful if your
+> root filesystem is read-only, like in squashfs, so it's just as bad, so
+> it makes no sense in making it a symlink from /etc/ppp -> /var/run in
+> the way you say, because, well, what if you got multiple ppp instances
+> running?
+> The other problem with writing it to some other temporary file different
+> than /etc(tmp)/resolv.conf is that out of the box it's useless.
+> What if i said "i've got an advanced scenario and dhcpcd/udhcpc/other
+> dhcp client writes to /etc/resolv.conf unfairly"?
+> What dhcp clients currently do is no different than what pppd does (with
+> usepeerdns), and it's basically out-of-the-box simplicity, it just
+> works, though granted that it doesn't cater for advanced uses.
+> That pppd doesn't give DNS information to ip-up scripts, at least for
+> me, a bug, the information should be available. It's likely upstream
+> won't fix/change this since it would alter established behaviour and
+> hence breaks scripts.
+> So what's the solution to the sucky /etc/resolv.conf mess?
+> Well, openresolv (http://roy.marples.name/projects/openresolv/index).
+> I've mentioned it in IRC before but didn't have time to create the
+> package and glue it together seamlessly with the other packages (mostly
+> ppp, dhcp clients and so on).
+> Regards.
+> 
 
-Works fine.
+Hi Gustavo,
 
-Regards,
-Beno?t
+OK, makes sense, however doesn?t make it easy to do anything clever with resolv.conf.
 
-2015-01-24 0:24 GMT+01:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+In the standard DHCP client it?s actually the script and not the binary that creates resolv.conf so it?s really easy to control behaviour.
 
-> From: Nicolas Serafini <nicolas.serafini@sensefly.com>
->
-> This patch adds a new package for all libraries and drivers
-> provided by Nvidia Linux4Tegra release 16.4.0.
->
-> We have intermediate .mk and Config.in, because those values will be
-> shared with the codecs package, to come in a follow-up patch, like we
-> have for the Freescale stuff.
->
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-> [yann.morin.1998 at free.fr:
->   - split jpeg into its own patch
->   - split codecs and gstreamer plugins out into their own packages
->   - do not patch for .pc files, just bundle them in $(@D)
-> ]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/Config.in                                  |   1 +
->  package/nvidia-tegra23/Config.in                   |  36 ++++++++
->  .../nvidia-tegra23-binaries/Config.in              |  95
-> ++++++++++++++++++++
->  .../nvidia-tegra23/nvidia-tegra23-binaries/egl.pc  |  10 +++
->  .../nvidia-tegra23/nvidia-tegra23-binaries/gles.pc |  10 +++
->  .../nvidia-tegra23-binaries/glesv2.pc              |  10 +++
->  .../nvidia-tegra23-binaries.hash                   |   3 +
->  .../nvidia-tegra23-binaries.mk                     | 100
-> +++++++++++++++++++++
->  package/nvidia-tegra23/nvidia-tegra23.mk           |  17 ++++
->  9 files changed, 282 insertions(+)
->  create mode 100644 package/nvidia-tegra23/Config.in
->  create mode 100644
-> package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
->  create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
->  create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
->  create mode 100644
-> package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
->  create mode 100644
-> package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
->  create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/
-> nvidia-tegra23-binaries.mk
->  create mode 100644 package/nvidia-tegra23/nvidia-tegra23.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d5382f6..89526f5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -353,6 +353,7 @@ endif
->         source "package/nanocom/Config.in"
->         source "package/neard/Config.in"
->         source "package/nvidia-driver/Config.in"
-> +       source "package/nvidia-tegra23/Config.in"
->         source "package/ofono/Config.in"
->         source "package/ola/Config.in"
->         source "package/on2-8170-modules/Config.in"
-> diff --git a/package/nvidia-tegra23/Config.in
-> b/package/nvidia-tegra23/Config.in
-> new file mode 100644
-> index 0000000..950f2f8
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/Config.in
-> @@ -0,0 +1,36 @@
-> +menuconfig BR2_PACKAGE_NVIDIA_TEGRA23
-> +       bool "nvidia-tegra23"
-> +       depends on BR2_cortex_a9
-> +       depends on BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
-> +       depends on BR2_PACKAGE_XORG7
-> +       help
-> +         Install NVidia proprietary blobs to drive Tegra2 or Tegra3
-> +         GPUs found in some mobile-targeted ARM SoCs.
-> +
-> +if BR2_PACKAGE_NVIDIA_TEGRA23
-> +
-> +choice
-> +       prompt "Tegra platform"
-> +       help
-> +         Select the SOC platform.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2
-> +       bool "Tegra 2"
-> +       help
-> +         NVIDIA Tegra 2 is a dual-core Cortex-A9 without NEON.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
-> +       bool "Tegra 3"
-> +       depends on BR2_ARM_CPU_HAS_NEON
-> +       help
-> +         NVIDIA Tegra 3 is a quad-core Cortex-A9 with NEON.
-> +
-> +endchoice
-> +
-> +source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
-> +endif
-> +
-> +comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
-> +       depends on BR2_cortex_a9
-> +       depends on !BR2_ARM_EABIHF || !BR2_TOOLCHAIN_USES_GLIBC \
-> +               || !BR2_PACKAGE_XORG7
-> diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-> new file mode 100644
-> index 0000000..66bb8c3
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-> @@ -0,0 +1,95 @@
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
-> +       bool "nvidia-tegra23 binaries"
-> +       select BR2_PACKAGE_KHRONOS_REGISTRY_KHRPLATFORM
-> +       select BR2_PACKAGE_KHRONOS_REGISTRY_OPENGL
-> +       select BR2_PACKAGE_KHRONOS_REGISTRY_OPENKODE
-> +       select BR2_PACKAGE_KHRONOS_REGISTRY_OPENMAXIL
-> +       select BR2_PACKAGE_XLIB_LIBXT
-> +       select BR2_PACKAGE_XLIB_LIBXEXT
-> +       select BR2_PACKAGE_XLIB_LIBXV
-> +       select BR2_PACKAGE_HAS_LIBEGL
-> +       select BR2_PACKAGE_HAS_LIBGLES
-> +       select BR2_PACKAGE_HAS_LIBOPENMAX
-> +       help
-> +         Those packages provide libraries, drivers and firmware that
-> comes from
-> +         NVIDIA Linux For Tegra.
-> +
-> +         https://developer.nvidia.com/linux-tegra
-> +
-> +if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
-> +
-> +config BR2_PACKAGE_PROVIDES_LIBEGL
-> +       default "nvidia-tegra23-binaries"
-> +
-> +config BR2_PACKAGE_PROVIDES_LIBGLES
-> +       default "nvidia-tegra23-binaries"
-> +
-> +config BR2_PACKAGE_PROVIDES_LIBOPENMAX
-> +       default "nvidia-tegra23-binaries"
-> +
-> +choice
-> +       prompt "X11 ABI version"
-> +       default BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
-> +       help
-> +         Select Tegra X11 ABI version.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V5
-> +       bool "X11 ABI 5"
-> +       help
-> +         Tegra X11 ABI 5.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V6
-> +       bool "X11 ABI 6"
-> +       help
-> +         Tegra X11 ABI 6.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V7
-> +       bool "X11 ABI 7"
-> +       help
-> +         Tegra X11 ABI 7.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V8
-> +       bool "X11 ABI 8"
-> +       help
-> +         Tegra X11 ABI 8.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V10
-> +       bool "X11 ABI 10"
-> +       help
-> +         Tegra X11 ABI 10.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
-> +       bool "X11 ABI 11"
-> +       help
-> +         Tegra X11 ABI 11.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V12
-> +       bool "X11 ABI 12"
-> +       help
-> +         Tegra X11 ABI 12.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
-> +       bool "X11 ABI 13"
-> +       help
-> +         Tegra X11 ABI 13.
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
-> +       bool "X11 ABI 14"
-> +       help
-> +         Tegra X11 ABI 14.
-> +
-> +endchoice
-> +
-> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI
-> +       int
-> +       default 5  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V5
-> +       default 6  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V6
-> +       default 7  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V7
-> +       default 8  if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V8
-> +       default 10 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V10
-> +       default 11 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
-> +       default 12 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V12
-> +       default 13 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
-> +       default 14 if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
-> +
-> +endif
-> diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
-> new file mode 100644
-> index 0000000..3af7eec
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
-> @@ -0,0 +1,10 @@
-> +prefix=/usr
-> +exec_prefix=${prefix}
-> +libdir=/usr/lib
-> +includedir=/usr/include
-> +
-> +Name: egl
-> +Description: EGL implementation
-> +Version: 1
-> +Cflags: -I${includedir}/EGL
-> +Libs: -L${libdir} -lEGL
-> diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
-> new file mode 100644
-> index 0000000..91387c9
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
-> @@ -0,0 +1,10 @@
-> +prefix=/usr
-> +exec_prefix=${prefix}
-> +libdir=/usr/lib
-> +includedir=/usr/include
-> +
-> +Name: glesv2
-> +Description: OpenGL ES 1.1 implementation
-> +Version: 1.1
-> +Cflags: -I${includedir}/GLES
-> +Libs: -L${libdir} -lGLESv1_CM
-> diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
-> new file mode 100644
-> index 0000000..356a1cb
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
-> @@ -0,0 +1,10 @@
-> +prefix=/usr
-> +exec_prefix=${prefix}
-> +libdir=/usr/lib
-> +includedir=/usr/include
-> +
-> +Name: glesv2
-> +Description: OpenGL ES 2 implementation
-> +Version: 2
-> +Cflags: -I${includedir}/GLESv2
-> +Libs: -L${libdir} -lGLESv2
-> diff --git
-> a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
-> new file mode 100644
-> index 0000000..8185593
-> --- /dev/null
-> +++
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
-> @@ -0,0 +1,3 @@
-> +# From https://developer.nvidia.com/linux-tegra-rel-16
-> +sha1 6b57b43f8f9c5b76fa3763144e57c0c16047b1a8
-> Tegra20_Linux_R16.4.0_armhf.tbz2
-> +sha1 44e7f84dd6e3b80d37ecddf9cc133031b2653004
-> Tegra30_Linux_R16.4.0_armhf.tbz2
-> diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/
-> nvidia-tegra23-binaries.mk
-> b/package/nvidia-tegra23/nvidia-tegra23-binaries/
-> nvidia-tegra23-binaries.mk
-> new file mode 100644
-> index 0000000..5998bbf
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/
-> nvidia-tegra23-binaries.mk
-> @@ -0,0 +1,100 @@
->
-> +################################################################################
-> +#
-> +# nvidia-tegra3-binaries
-> +#
->
-> +################################################################################
-> +
-> +NVIDIA_TEGRA23_BINARIES_VERSION        = $(NVIDIA_TEGRA23_VERSION)
-> +NVIDIA_TEGRA23_BINARIES_SITE = $(NVIDIA_TEGRA23_SITE)
-> +NVIDIA_TEGRA23_BINARIES_SOURCE =
-> $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARIES_VERSION)_armhf.tbz2
-> +
-> +NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA
-> Software
-> +NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
-> +
-> +NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
-> +NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES
-> +
-> +NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = \
-> +       khronos-registry-opengl khronos-registry-openkode \
-> +       khronos-registry-openmax khronos-registry-khrplatform \
-> +       xlib_libX11 xlib_libXext xlib_libXv
-> +
-> +NVIDIA_TEGRA23_BINARIES_PROVIDES = libegl libgles libopenmax
-> +
-> +ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_TEGRA2),y)
-> +NVIDIA_TEGRA23_BINARIES_FIRMWARE = \
-> +       nvrm_avp.bin nvavp_vid_ucode_alt.bin nvavp_os_0ff00000.bin \
-> +       nvavp_os_eff00000.bin
-> +endif
-> +ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_TEGRA3),y)
-> +NVIDIA_TEGRA23_BINARIES_FIRMWARE = \
-> +       nvrm_avp_0ff00000.bin nvrm_avp_8e000000.bin nvrm_avp_9e000000.bin \
-> +       nvrm_avp_be000000.bin nvrm_avp_eff00000.bin
-> nvavp_vid_ucode_alt.bin \
-> +       nvavp_os_0ff00000.bin nvavp_os_eff00000.bin
-> +endif
-> +
-> +NVIDIA_TEGRA23_BINARIES_LIBRARIES = \
-> +       libardrv_dynamic.so libcgdrv.so libEGL.so.1 libGLESv1_CM.so.1
-> libGLESv2.so.2 \
-> +       libKD.so libnvapputil.so libnvavp.so libnvcwm.so libnvdc.so \
-> +       libnvddk_2d.so libnvddk_2d_v2.so libnvddk_disp.so libnvddk_kbc.so \
-> +       libnvddk_mipihsi.so libnvddk_nand.so libnvddk_se.so
-> libnvddk_snor.so \
-> +       libnvddk_spif.so libnvddk_usbphy.so libnvdispatch_helper.so
-> libnvglsi.so \
-> +       libnvmedia_audio.so libnvmm_audio.so libnvmm_camera.so
-> libnvmm_contentpipe.so \
-> +       libnvmm_image.so libnvmmlite_audio.so libnvmmlite_image.so
-> libnvmmlite.so \
-> +       libnvmmlite_utils.so libnvmmlite_video.so libnvmm_manager.so
-> libnvmm_parser.so \
-> +       libnvmm_service.so libnvmm.so libnvmm_utils.so libnvmm_video.so
-> libnvmm_writer.so \
-> +       libnvodm_disp.so libnvodm_dtvtuner.so libnvodm_imager.so
-> libnvodm_misc.so \
-> +       libnvodm_query.so libnvomxilclient.so libnvomx.so libnvos.so
-> libnvparser.so \
-> +       libnvrm_graphics.so libnvrm.so libnvsm.so libnvtestio.so
-> libnvtestresults.so \
-> +       libnvtvmr.so libnvwinsys.so libnvwsi.so
-> +
-> +NVIDIA_TEGRA23_BINARIES_DRV = \
-> +
->  nv_tegra/nvidia_drivers/usr/lib/xorg/modules/drivers/tegra_drv.abi$(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI).so
-> +
-> +NVIDIA_TEGRA23_BINARIES_PKGCONFIG = egl.pc gles.pc glesv2.pc
-> +
-> +define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
-> +       $(INSTALL) -d $(@D)/nv_tegra/nvidia_drivers
-> +       $(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
-> +               $(@D)/nv_tegra/nvidia_drivers.tbz2 | \
-> +       $(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nvidia_drivers/
-> $(TAR_OPTIONS) -
-> +       $(INSTALL) -d $(@D)/nv_tegra/nv_sample_apps/nvgstapps
-> +       $(call
-> suitable-extractor,$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2) \
-> +               $(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2 | \
-> +       $(TAR) $(TAR_STRIP_COMPONENTS)=0 -C
-> $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
-> +endef
-> +NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS +=
-> NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
-> +
-> +define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
-> +       $(foreach lib,$(NVIDIA_TEGRA23_BINARIES_LIBRARIES),
-> +               $(INSTALL) -D -m 0644
-> $(@D)/nv_tegra/nvidia_drivers/usr/lib/$(lib) \
-> +                       $(1)/usr/lib/$(lib); \
-> +       )
-> +       (cd $(1)/usr/lib; \
-> +               ln -sf libGLESv2.so.2 libGLESv2.so; \
-> +               ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
-> +               ln -sf libEGL.so.1 libEGL.so \
-> +       )
-> +endef
-> +
-> +define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
-> +       $(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
-> +       $(foreach pkgconfig,$(NVIDIA_TEGRA23_BINARIES_PKGCONFIG),
-> +               $(INSTALL) -D -m 0644
-> package/nvidia-tegra23/nvidia-tegra23-binaries/$(pkgconfig) \
-> +                       $(STAGING_DIR)/usr/lib/pkgconfig/$(pkgconfig); \
-> +       )
-> +endef
-> +
-> +define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
-> +       $(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(TARGET_DIR))
-> +       $(foreach firmware,$(NVIDIA_TEGRA23_BINARIES_FIRMWARE),
-> +               $(INSTALL) -D -m 0644
-> $(@D)/nv_tegra/nvidia_drivers/lib/firmware/$(firmware) \
-> +                       $(TARGET_DIR)/lib/firmware/$(firmware); \
-> +       )
-> +       $(INSTALL) -D -m 0644
-> $(@D)/nv_tegra/nvidia_drivers/etc/nv_tegra_release \
-> +               $(TARGET_DIR)/etc/nv_tegra_release
-> +       $(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
-> +               $(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
-> +endef
-> +
-> +$(eval $(generic-package))
-> diff --git a/package/nvidia-tegra23/nvidia-tegra23.mk
-> b/package/nvidia-tegra23/nvidia-tegra23.mk
-> new file mode 100644
-> index 0000000..46a7e04
-> --- /dev/null
-> +++ b/package/nvidia-tegra23/nvidia-tegra23.mk
-> @@ -0,0 +1,17 @@
->
-> +################################################################################
-> +#
-> +# nvidia-tegra23
-> +#
->
-> +################################################################################
-> +
-> +NVIDIA_TEGRA23_SITE =
-> https://developer.nvidia.com/sites/default/files/akamai/mobile/files/L4T
-> +NVIDIA_TEGRA23_VERSION = 16.4.0
-> +
-> +ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2),y)
-> +NVIDIA_TEGRA23_BASE = Tegra20_Linux
-> +endif
-> +ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3),y)
-> +NVIDIA_TEGRA23_BASE = Tegra30_Linux
-> +endif
-> +
-> +include $(sort $(wildcard package/nvidia-tegra23/*/*.mk))
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150126/6c198446/attachment.html>
+The problem with pppd is that if you don?t specify usepeerdns then you don?t get any information (and no env vars for the script) and you if you specify usepeerdns then it writes /etc/resolv.conf without a care!
+
+The more I think about it, the more I think the problem is actually with pppd, and your ?multiple-pppd? example is another good use case that breaks, even with an unmodified pppd.
+
+The best solution I can come up with is the use of a ?noresolv? option for ppp that says ?don?t create a resolve.conf file? ? then I don?t care where it points, it doesn?t write anything at all, yet the DNS vars are available to ppp-up. The default case also doesn?t break existing behaviour.
+
+It?s a trivial patch that I?m happy to share if anyone is interested, otherwise I?ll just keep it in my tree.
+
+Thanks,
+
+Lee.
