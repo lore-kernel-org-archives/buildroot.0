@@ -1,88 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jan 2015 22:47:51 +0100
-Subject: [Buildroot] [git commit] package: install bash-completion files
-	only with bash
-Message-ID: <20150126215420.96621805EF@busybox.osuosl.org>
+Date: Mon, 26 Jan 2015 22:57:11 +0100
+Subject: [Buildroot] [PATCH] toolchain: get rid of -pipe from
+ optimisations
+In-Reply-To: <54C6B6D4.5060608@openwide.fr>
+References: <1419166825-25133-1-git-send-email-yann.morin.1998@free.fr>
+ <54C6B6D4.5060608@openwide.fr>
+Message-ID: <20150126225711.1573eb57@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10e6284b70b6246dcccf9bff756c5f2f934ec5ed
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-package/systemd, package/kmod, package/util-linux: don't install
-bash-completion files if bash is not selected to be installed.
-Otherwise, install bash-completion files.
+On Mon, 26 Jan 2015 22:51:16 +0100, Romain Naour wrote:
 
-package/systemd: don't install zsh-completion files is zsh is not
-selected to be installed. Otherwise, install zsh-completion files.
+> So I tried to compile the kernel by changing this line:
+> -CODE16GCC_CFLAGS := -m32 -Wa,$(srctree)/arch/x86/boot/code16gcc.h
+> +CODE16GCC_CFLAGS := -m32 -Wa,-,$(srctree)/arch/x86/boot/code16gcc.h
+> 
+> And success, it build !
 
-package/util-linux: don't install empty
-/usr/share/bash-completion/completions directory if bash is not going to
-be installed, and install bash-completion files if bash is selected to
-be installed.
+[...]
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kmod/kmod.mk             |    4 ++++
- package/systemd/systemd.mk       |    8 ++++++++
- package/util-linux/util-linux.mk |    7 ++++++-
- 3 files changed, 18 insertions(+), 1 deletions(-)
+Thanks for the feedback, definitely interesting!
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index cc185c8..ff07c78 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -64,6 +64,10 @@ else
- KMOD_CONF_OPTS += --disable-tools
- endif
- 
-+ifeq ($(BR2_PACKAGE_BASH),)
-+KMOD_CONF_OPTS += --with-bashcompletiondir=
-+endif
-+
- # We only install depmod, since that's the only tool used for the
- # host.
- define HOST_KMOD_INSTALL_TOOLS
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index dbfce71..92f99c2 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -133,6 +133,14 @@ else
- SYSTEMD_CONF_OPTS += --disable-smack
- endif
- 
-+ifeq ($(BR2_PACKAGE_BASH),)
-+SYSTEMD_CONF_OPTS += --with-bashcompletiondir=
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZSH),)
-+SYSTEMD_CONF_OPTS += --with-zshcompletiondir=
-+endif
-+
- # mq_getattr needs -lrt
- SYSTEMD_MAKE_OPTS += LIBS=-lrt
- SYSTEMD_MAKE_OPTS += LDFLAGS+=-ldl
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index a530596..c8fb77c 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -21,9 +21,14 @@ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no
- UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown \
--	--disable-bash-completion \
- 	--without-python
- 
-+ifeq ($(BR2_PACKAGE_BASH),)
-+UTIL_LINUX_CONF_OPTS += \
-+	--disable-bash-completion \
-+	--with-bashcompletiondir=
-+endif
-+
- # We don't want the host-busybox dependency to be added automatically
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- 
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
