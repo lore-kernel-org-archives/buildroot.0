@@ -1,34 +1,33 @@
-From: Erico Nunes <erico.nunes@datacom.ind.br>
-Date: Mon, 26 Jan 2015 15:25:57 -0200
-Subject: [Buildroot] [PATCH v2 1/2] python-markupsafe: allow build as host
-	package
-Message-ID: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Jan 2015 19:19:45 +0100
+Subject: [Buildroot] [PATCH 12/14 v6] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <CA+GxxTcP_PLsP67BaTzHJheDMMNpTeRQOkoDNXvizE92Y0DTbg@mail.gmail.com>
+References: <cover.1422055104.git.yann.morin.1998@free.fr>
+ <c51b22347b65d6afefcdd92b7cbc36b62b3e8c2e.1422055104.git.yann.morin.1998@free.fr>
+ <CA+GxxTcP_PLsP67BaTzHJheDMMNpTeRQOkoDNXvizE92Y0DTbg@mail.gmail.com>
+Message-ID: <20150126181944.GA4228@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-markupsafe is a dependency for python-jinja2, which can be used
-during build time as a host tool to generate code based on templates.
-This package is being added host package support mostly to allow
-host-python-jinja2 to build.
-This has been tested to build and work correctly as a host tool as well.
+Beno?t, All,
 
-Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/python-markupsafe/python-markupsafe.mk | 1 +
- 1 file changed, 1 insertion(+)
+On 2015-01-26 14:31 +0100, Ben Ben spake thusly:
+> They are no package khronos-registry-openmax.
+> I replace it with  khronos-registry-openmaxil.
 
-diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
-index 9c7eb14..c815728 100644
---- a/package/python-markupsafe/python-markupsafe.mk
-+++ b/package/python-markupsafe/python-markupsafe.mk
-@@ -12,3 +12,4 @@ PYTHON_MARKUPSAFE_LICENSE = BSD-3c
- PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
+Fixed, thanks for spotting.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
