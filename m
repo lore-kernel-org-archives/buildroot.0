@@ -1,71 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Jan 2015 19:26:21 +0100
-Subject: [Buildroot] [PATCH 05/14 v6] package/mesa3d-headers: new package
-In-Reply-To: <1491783.fYcJCMXy9W@aquila>
-References: <cover.1422055104.git.yann.morin.1998@free.fr>
- <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
- <1491783.fYcJCMXy9W@aquila>
-Message-ID: <20150126182621.GB4228@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 26 Jan 2015 20:24:18 +0100
+Subject: [Buildroot] [PATCH 3/5] package/imlib2: Switch to giflib
+In-Reply-To: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1422300260-5361-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
 
-On 2015-01-26 09:54 +0100, J?r?me Pouiller spake thusly:
-> On Saturday 24 January 2015 00:24:34 Yann E. MORIN wrote:
-> > Some headers required to build GL/EGL/GLES/... stuff are not provided by
-> > Khronos, so we must find an alternate source for those headers.
-> > Currently, we're missing:
-> >   - gl.h for full GL (gl.h for GLES is available from Khronos)
-> >   - dri_interface.h to be able to build GL-enabled Xorg
-> > 
-> > mesa3d provides all of them, and they are generic enough that they can
-> > be re-used even for other GL/EGL/GLES/... implementations.
-> > 
-> > Unfortunately, modifying mesa3d so that it only installs its headers is
-> > no trivial task, and would render the mesa3d package really ugly and
-> > unmaintainable in the long run.
-> Did you try "make install-data" in mesa3d tree? It should install all 
-> files but the libraries (in other terms, it install headers only).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/imlib2/0001-giflib51.patch |   71 ++++++++++++++++++++++++++++++++++++
+ package/imlib2/Config.in           |    2 +-
+ package/imlib2/imlib2.mk           |    2 +-
+ 3 files changed, 73 insertions(+), 2 deletions(-)
+ create mode 100644 package/imlib2/0001-giflib51.patch
 
-I thought of doing just that, indeed.
-
-But then, it is only possible to run 'make install-anything' if the
-package had previously been configured and built, i.e. './configure' and
-.make' were previously called.
-
-But then, what flags are we supposed to pass ./configure ? We surely do
-not want to enable everything, jsut what is needed to get the headers.
-
-And then, we would have to carefuly call 'make' so that it does not
-build everything, just the headers.
-
-> > Instead, we introduce a stripped-down mesa3d-headers package, which sole
-> > purpose is to install those missing headers.
-> hmmm... since mesa3d-headers provide all headers, do we really need 
-> khronos-registry-* packages? In add, all developers test their code 
-> using mesa3d headers. So, I would prefer to use headers provided by 
-> mesa3d than khronos.
-
-Well, I'm not really against droippign the Khronos registries, since it
-is not fun packaging those.
-
-However, as I said above, we'd have to carefuly craft mesa3d-headers to
-just configure and build the headers, and I'm afraid that's not so
-easy...
-
-But I can give it a shot to see how dirty/difficult it would be.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/imlib2/0001-giflib51.patch b/package/imlib2/0001-giflib51.patch
+new file mode 100644
+index 0000000..2b46329
+--- /dev/null
++++ b/package/imlib2/0001-giflib51.patch
+@@ -0,0 +1,71 @@
++Adjust source code to work with giflib 5.1x
++
++Downloaded from
++https://projects.archlinux.org/svntogit/packages.git/plain/trunk/imlib2-giflib51.patch?h=packages/imlib2
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -ruN imlib2-1.4.6.orig/src/modules/loaders/loader_gif.c imlib2-1.4.6/src/modules/loaders/loader_gif.c
++--- imlib2-1.4.6.orig/src/modules/loaders/loader_gif.c	2013-12-21 10:16:10.000000000 +0000
+++++ imlib2-1.4.6/src/modules/loaders/loader_gif.c	2014-05-27 09:52:35.857291512 +0000
++@@ -36,7 +36,7 @@
++ #endif
++    if (fd < 0)
++       return 0;
++-   gif = DGifOpenFileHandle(fd);
+++   gif = DGifOpenFileHandle(fd, NULL);
++    if (!gif)
++      {
++         close(fd);
++@@ -60,13 +60,13 @@
++              h = gif->Image.Height;
++              if (!IMAGE_DIMENSIONS_OK(w, h))
++                {
++-                  DGifCloseFile(gif);
+++                  DGifCloseFile(gif, NULL);
++                   return 0;
++                }
++              rows = malloc(h * sizeof(GifRowType *));
++              if (!rows)
++                {
++-                  DGifCloseFile(gif);
+++                  DGifCloseFile(gif, NULL);
++                   return 0;
++                }
++              for (i = 0; i < h; i++)
++@@ -78,7 +78,7 @@
++                   rows[i] = malloc(w * sizeof(GifPixelType));
++                   if (!rows[i])
++                     {
++-                       DGifCloseFile(gif);
+++                       DGifCloseFile(gif, NULL);
++                        for (i = 0; i < h; i++)
++                          {
++                             if (rows[i])
++@@ -150,7 +150,7 @@
++         im->data = (DATA32 *) malloc(sizeof(DATA32) * w * h);
++         if (!im->data)
++           {
++-             DGifCloseFile(gif);
+++             DGifCloseFile(gif, NULL);
++              free(rows);
++              return 0;
++           }
++@@ -181,7 +181,7 @@
++                        last_per = (int)per;
++                        if (!(progress(im, (int)per, 0, last_y, w, i)))
++                          {
++-                            DGifCloseFile(gif);
+++                            DGifCloseFile(gif, NULL);
++                             for (i = 0; i < h; i++)
++                               {
++                                  free(rows[i]);
++@@ -198,7 +198,7 @@
++      {
++         progress(im, 100, 0, last_y, w, h);
++      }
++-   DGifCloseFile(gif);
+++   DGifCloseFile(gif, NULL);
++    for (i = 0; i < h; i++)
++      {
++         free(rows[i]);
+diff --git a/package/imlib2/Config.in b/package/imlib2/Config.in
+index a323a8d..7aac074 100644
+--- a/package/imlib2/Config.in
++++ b/package/imlib2/Config.in
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_IMLIB2_PNG
+ 
+ config BR2_PACKAGE_IMLIB2_GIF
+ 	bool "GIF support"
+-	select BR2_PACKAGE_LIBUNGIF
++	select BR2_PACKAGE_GIFLIB
+ 
+ config BR2_PACKAGE_IMLIB2_TIFF
+ 	bool "TIFF support"
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+index 62f3989..d8feeb6 100644
+--- a/package/imlib2/imlib2.mk
++++ b/package/imlib2/imlib2.mk
+@@ -38,7 +38,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_IMLIB2_GIF),y)
+ 	IMLIB2_CONF_OPTS += --with-gif
+-	IMLIB2_DEPENDENCIES += libungif
++	IMLIB2_DEPENDENCIES += giflib
+ else
+ 	IMLIB2_CONF_OPTS += --without-gif
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
