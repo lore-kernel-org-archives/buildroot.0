@@ -1,35 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jan 2015 23:35:41 +0100
-Subject: [Buildroot] [PATCH] loosen threads dependency for nftables
-In-Reply-To: <20150118142320.GR27361@marmot>
-References: <20150118142320.GR27361@marmot>
-Message-ID: <20150126233541.3b7877af@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Jan 2015 00:30:24 +0100
+Subject: [Buildroot] [PATCH] pkg-autotools: fix patching libtool for version
+	2.4
+Message-ID: <1422315024-14602-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Clouter,
+If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
+end up with a confusing message:
 
-On Sun, 18 Jan 2015 14:23:20 +0000, Alexander Clouter wrote:
-> nftables works fine without threads, only the XML parsing support requires
-> -lpthreads so move the depends into BR2_PACKAGE_LIBNFTNL_XML.
-> 
-> Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
+    /bin/sh: line 0: test: -gt: unary operator expected
 
-Thanks, applied, after slightly tweaking the commit title/log. A commit
-title on a package should have the following form:
+That's because patchlevel is empty, and thus there is nothing to comapre
+to 2, and test complains.
 
-	<package>: <description>
+Fake a patchlevel of 0 (which is really what a missing patchlevel means
+anyway) in that case.
 
-And in your case, it's actually the libnftl package that gets its
-thread dependency changed. nftables is only affected as a side-effect.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+---
+ package/pkg-autotools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index b20e20e..b6b83f8 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -69,7 +69,7 @@ define LIBTOOL_PATCH_HOOK
+ 		elif test $${ltmain_version} = "2.2"; then\
+ 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+ 		elif test $${ltmain_version} = "2.4"; then\
+-			if test $${ltmain_patchlevel} -gt 2; then\
++			if test $${ltmain_patchlevel:-0} -gt 2; then\
+ 				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.4.patch; \
+ 			else \
+ 				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
