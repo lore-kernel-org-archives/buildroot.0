@@ -1,31 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Jan 2015 13:07:54 -0300
-Subject: [Buildroot] pppd makefile moves /etc/PPP/resolv.conf
-In-Reply-To: <229B9DED-2639-4EE5-91DC-242BA40B3239@nowonline.co.uk>
-References: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
- <54C61802.4010602@zacarias.com.ar>
- <9F494D13-32F4-497C-A834-C60AA93406E9@nowonline.co.uk>
- <54C64A9B.5050602@zacarias.com.ar>
- <229B9DED-2639-4EE5-91DC-242BA40B3239@nowonline.co.uk>
-Message-ID: <54C6665A.1020807@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Jan 2015 17:19:28 +0100
+Subject: [Buildroot] [PATCH 1/2] benejson: fix for non-wchar toolchains
+In-Reply-To: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 26 Jan 2015 11:17:38 -0300")
+References: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ppa11pm7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/26/2015 12:52 PM, Lee Essen wrote:
-> Yep, that would work ok, but the below feels nicer to me and doesn?t
-> require extra scripts, plus it?s something that could probably be
-> suggested upstream ? the default behaviour is entirely unchanged
-> (providing you keep the path change that?s there currently) so
-> everything should work as is unless you add the config option.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-If upstream is fine with that so are we.
-Normally we don't take feature patches, hence if upstream rejects it
-then it must be the other solution (script it).
-Bear in mind that when adding support for openresolv we must script it
-anyway since it's not supposed to get anything written into
-/etc/resolv.conf except for itself (via the resolvconf tool, which is
-also fed the DNS entries for each interface).
-Regards.
+ > wchar needs to be disabled in order for it to build on !wchar. Fixes:
+ > http://autobuild.buildroot.net/results/71f/71f19d5056b56d40463b9fef7fa859e0025c4991/
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
