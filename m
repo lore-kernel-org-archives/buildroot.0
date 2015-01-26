@@ -1,40 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Jan 2015 11:17:39 -0300
-Subject: [Buildroot] [PATCH 2/2] benejson: needs c++
-In-Reply-To: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1422281859-4003-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Jan 2015 15:57:26 +0100
+Subject: [Buildroot] webkit fix
+In-Reply-To: <54C646D5.9030305@skynet.be>
+References: <54C646D5.9030305@skynet.be>
+Message-ID: <20150126155726.39081e12@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pull.cpp doesn't look like vanilla C
-Fixes local tests (no autobuilder tests to show off atm).
+Dear Johan Sagaert,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/benejson/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+On Mon, 26 Jan 2015 14:53:25 +0100, Johan Sagaert wrote:
 
-diff --git a/package/benejson/Config.in b/package/benejson/Config.in
-index 4e8ee2c..cb86d67 100644
---- a/package/benejson/Config.in
-+++ b/package/benejson/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_BENEJSON
- 	bool "benejson"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  benejson is a buffering SAX-style JSON parser library.
- 	  The library package contains 3 major components:
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_BENEJSON
- 	  - Core: The parsing core with minimal dependencies
- 
- 	  https://codehero.github.io/benejson/
-+
-+comment "benejson needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+> Is there any chance for a near future fix for webkit ?
+> the target is running on an imx53 (NEON) .
+
+What do you mean by "future fix" ?
+
+Best regards,
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
