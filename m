@@ -1,134 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 26 Jan 2015 20:24:17 +0100
-Subject: [Buildroot] [PATCH 2/5] package/fbv: Switch to giflib
+Date: Mon, 26 Jan 2015 20:24:20 +0100
+Subject: [Buildroot] [PATCH 5/5] package/libungif: deprecate package
 In-Reply-To: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1422300260-5361-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+To be replaced with giflib.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fbv/Config.in             |    4 +--
- package/fbv/fbv-1.0b-giflib.patch |   69 +++++++++++++++++++++++++++++++++++++
- package/fbv/fbv.mk                |   10 +++++-
- 3 files changed, 80 insertions(+), 3 deletions(-)
- create mode 100644 package/fbv/fbv-1.0b-giflib.patch
+ package/libungif/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/fbv/Config.in b/package/fbv/Config.in
-index b8a9fe4..3160a85 100644
---- a/package/fbv/Config.in
-+++ b/package/fbv/Config.in
-@@ -26,8 +26,8 @@ config BR2_PACKAGE_FBV_JPEG
- config BR2_PACKAGE_FBV_GIF
- 	bool "GIF support"
- 	default y
--	select BR2_PACKAGE_LIBUNGIF
-+	select BR2_PACKAGE_GIFLIB
+diff --git a/package/libungif/Config.in b/package/libungif/Config.in
+index e8c301c..012ef76 100644
+--- a/package/libungif/Config.in
++++ b/package/libungif/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBUNGIF
+ 	bool "libungif"
++	depends on !BR2_PACKAGE_GIFLIB
++	depends on BR2_DEPRECATED_SINCE_2015_02 # giflib
  	help
--	  Enable support for GIF using libungif.
-+	  Enable support for GIF using giflib.
+ 	  libungif is a library for handling the uncompressed GIF image format.
  
- endif # BR2_PACKAGE_FBV
-diff --git a/package/fbv/fbv-1.0b-giflib.patch b/package/fbv/fbv-1.0b-giflib.patch
-new file mode 100644
-index 0000000..355a585
---- /dev/null
-+++ b/package/fbv/fbv-1.0b-giflib.patch
-@@ -0,0 +1,69 @@
-+Adjust source code to work with giflib 5.1x
-+
-+Downloaded from
-+https://projects.archlinux.org/svntogit/community.git/plain/trunk/giflib-5.1.patch?h=packages/fbv
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -wbBur fbv-1.0b/gif.c fbv-1.0b.my/gif.c
-+--- fbv-1.0b/gif.c	2003-08-25 00:23:02.000000000 +0400
-++++ fbv-1.0b.my/gif.c	2014-05-29 18:39:41.337332872 +0400
-+@@ -31,10 +31,10 @@
-+ #include <string.h>
-+ #define min(a,b) ((a) < (b) ? (a) : (b))
-+ #define gflush return(FH_ERROR_FILE);
-+-#define grflush { DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
-+-#define mgrflush { free(lb); free(slb); DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
-++#define grflush { DGifCloseFile(gft, NULL); return(FH_ERROR_FORMAT); }
-++#define mgrflush { free(lb); free(slb); DGifCloseFile(gft, NULL); return(FH_ERROR_FORMAT); }
-+ #define agflush return(FH_ERROR_FORMAT);
-+-#define agrflush { DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
-++#define agrflush { DGifCloseFile(gft, NULL); return(FH_ERROR_FORMAT); }
-+ 
-+ 
-+ int fh_gif_id(char *name)
-+@@ -81,7 +81,7 @@
-+     ColorMapObject *cmap;
-+     int cmaps;
-+ 
-+-    gft=DGifOpenFileName(name);
-++    gft=DGifOpenFileName(name, NULL);
-+     if(gft==NULL){printf("err5\n"); gflush;} //////////
-+     do
-+     {
-+@@ -170,7 +170,7 @@
-+ 	}
-+     }
-+     while( rt!= TERMINATE_RECORD_TYPE );
-+-    DGifCloseFile(gft);
-++    DGifCloseFile(gft, NULL);
-+     return(FH_ERROR_OK);
-+ }
-+ 
-+@@ -184,7 +184,7 @@
-+     int extcode;
-+     GifRecordType rt;
-+ 
-+-    gft=DGifOpenFileName(name);
-++    gft=DGifOpenFileName(name, NULL);
-+     if(gft==NULL) gflush;
-+     do
-+     {
-+@@ -197,7 +197,7 @@
-+ 		px=gft->Image.Width;
-+ 		py=gft->Image.Height;
-+ 		*x=px; *y=py;
-+-		DGifCloseFile(gft);
-++		DGifCloseFile(gft, NULL);
-+ 		return(FH_ERROR_OK);
-+ 		break;
-+ 	    case EXTENSION_RECORD_TYPE:
-+@@ -210,7 +210,7 @@
-+ 	}  
-+     }
-+     while( rt!= TERMINATE_RECORD_TYPE );
-+-    DGifCloseFile(gft);
-++    DGifCloseFile(gft, NULL);
-+     return(FH_ERROR_FORMAT);
-+ }
-+ #endif
-diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-index fe24a6f..81881ff 100644
---- a/package/fbv/fbv.mk
-+++ b/package/fbv/fbv.mk
-@@ -30,7 +30,15 @@ else
- FBV_CONFIGURE_OPTS += --without-libjpeg
- endif
- ifeq ($(BR2_PACKAGE_FBV_GIF),y)
--FBV_DEPENDENCIES += libungif
-+FBV_DEPENDENCIES += giflib
-+define FBV_CONFIGURE_LIBUNGIF_IS_NOW_GIFLIB
-+	$(SED) 's|-lungif|-lgif|' $(@D)/configure
-+endef
-+FBV_PRE_CONFIGURE_HOOKS += FBV_CONFIGURE_LIBUNGIF_IS_NOW_GIFLIB
-+define FBV_MAKE_LIBUNGIF_IS_NOW_GIFLIB
-+	$(SED) 's|-lungif|-lgif|' $(@D)/Make.conf
-+endef
-+FBV_POST_CONFIGURE_HOOKS += FBV_MAKE_LIBUNGIF_IS_NOW_GIFLIB
- else
- FBV_CONFIGURE_OPTS += --without-libungif
- endif
 -- 
 1.7.10.4
