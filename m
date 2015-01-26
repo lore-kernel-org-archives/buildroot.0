@@ -1,25 +1,26 @@
-From: Lee Essen <lee.essen@nowonline.co.uk>
-Date: Mon, 26 Jan 2015 10:49:57 +0400
-Subject: [Buildroot] pppd makefile moves /etc/PPP/resolv.conf
-Message-ID: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 26 Jan 2015 08:09:04 +0100
+Subject: [Buildroot] [PATCH 2/6 v4] package/freerdp: move
+ architecture-specific block
+In-Reply-To: <ee869604a6b46c92e7757942d3b822ceb005a3eb.1422225347.git.yann.morin.1998@free.fr>
+References: <cover.1422225347.git.yann.morin.1998@free.fr>
+ <ee869604a6b46c92e7757942d3b822ceb005a3eb.1422225347.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+3WeA3DOU4E4QcdDVcqN9+1VC51D251+JkBiYp=v8Z7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sun, Jan 25, 2015 at 11:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Move the arch-spcific block up, so it does not interfere with followup
+> patches (mostly to ease review).
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The current pppd package makefile has a post extract hook that changes the ppp generated resolv.conf from /etc/ppp/resolv.conf to /etc/resolv.conf with a comment suggesting that this is done because /etc/ppp might not be writable (and this location isn't useful because of where the c library looks.)
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-My assumption is that the original location provided you with flexibility to do clever things in the ppp-up script (and that's certainly what I want to do)
+Regards,
 
-If you don't set usepeerdns then it looks like the server names don't get requested, so the creation of this file seems to be all or nothing - there is no way to work with just the env vars.
-
-With the current buildroot setup your resolv.conf is overwritten with no option to do anything clever.
-
-Wouldn't it be better to use /var/run/ppp.resolv.conf (or something similar) or even leave it as it was and include a symlink in /etc/ppp ??
-
-Thanks,
-
-Lee.
+-- 
+Samuel
