@@ -1,40 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jan 2015 23:27:10 +0100
-Subject: [Buildroot] [PATCH 2/3] fs/iso9660: remove obsolete code
-In-Reply-To: <1421697177-12995-2-git-send-email-nrubinstein@aldebaran.com>
-References: <1421697177-12995-1-git-send-email-nrubinstein@aldebaran.com>
- <1421697177-12995-2-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <20150126232710.0586db05@free-electrons.com>
+Date: Mon, 26 Jan 2015 23:29:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tiff: Add utilities submenu and
+ more utility options
+In-Reply-To: <1421599012-21491-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1421599012-21491-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150126232904.398a485d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear No? Rubinstein,
+Dear Bernd Kuhls,
 
-On Mon, 19 Jan 2015 20:52:56 +0100, No? Rubinstein wrote:
-> This rule is superseded by a rule defined in fs/common.mk:
+On Sun, 18 Jan 2015 17:36:52 +0100, Bernd Kuhls wrote:
 > 
->     rootfs-$(1)-show-depends:
->             @echo $$(ROOTFS_$(2)_DEPENDENCIES)
-> 
-> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/tiff/Config.in |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  package/tiff/tiff.mk   |   36 +++++++++++++++++++++++++++---------
+>  2 files changed, 75 insertions(+), 9 deletions(-)
 
-No, this is not correct, because iso9660.mk unfortunately does not use
-the fs/common.mk code. See the comment at the top of the iso9660.mk
-file:
+My initial reaction is: woo, this is a lot of Config.in options for
+something such as the tiff library and utilities.
 
-################################################################################
-#
-# Build the iso96600 root filesystem image
-#
-# Cannot be converted to the ROOTFS_TARGET infrastructure, because of
-# the temporary construction in ISO9660_TARGET_DIR.
-#
-################################################################################
+Can we reduce this to just: BR2_PACKAGE_LIBTIFF that installs the
+library, and BR2_PACKAGE_LIBTIFF_UTILS as a sub-option that also
+installs all the utilities?
 
-Best regards,
+If someone wants something more fine-grained than that, they can always
+remove the unnecessary tools in a post-build script.
+
+Thanks,
 
 Thomas
 -- 
