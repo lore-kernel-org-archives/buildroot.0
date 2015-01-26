@@ -1,43 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Jan 2015 11:17:38 -0300
-Subject: [Buildroot] [PATCH 1/2] benejson: fix for non-wchar toolchains
-Message-ID: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 26 Jan 2015 11:17:39 -0300
+Subject: [Buildroot] [PATCH 2/2] benejson: needs c++
+In-Reply-To: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1422281859-4003-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1422281859-4003-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wchar needs to be disabled in order for it to build on !wchar. Fixes:
-http://autobuild.buildroot.net/results/71f/71f19d5056b56d40463b9fef7fa859e0025c4991/
+pull.cpp doesn't look like vanilla C
+Fixes local tests (no autobuilder tests to show off atm).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/benejson/benejson.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/benejson/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
-index 75753d2..2b8d09d 100644
---- a/package/benejson/benejson.mk
-+++ b/package/benejson/benejson.mk
-@@ -9,9 +9,17 @@ BENEJSON_SITE = $(call github,codehero,benejson,$(BENEJSON_VERSION))
- BENEJSON_LICENSE = MIT
- BENEJSON_LICENSE_FILES = LICENSE
- BENEJSON_INSTALL_STAGING = YES
--
- BENEJSON_DEPENDENCIES = host-scons
+diff --git a/package/benejson/Config.in b/package/benejson/Config.in
+index 4e8ee2c..cb86d67 100644
+--- a/package/benejson/Config.in
++++ b/package/benejson/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_BENEJSON
+ 	bool "benejson"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  benejson is a buffering SAX-style JSON parser library.
+ 	  The library package contains 3 major components:
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_BENEJSON
+ 	  - Core: The parsing core with minimal dependencies
  
-+# wchar support needs to be manually disabled
-+ifeq ($(BR2_USE_WCHAR),)
-+define BENEJSON_DISABLE_WCHAR
-+	$(SED) 's,^#define BNJ_WCHAR_SUPPORT,#undef BNJ_WCHAR_SUPPORT,' \
-+		$(@D)/benejson/benejson.h
-+endef
-+BENEJSON_POST_PATCH_HOOKS += BENEJSON_DISABLE_WCHAR
-+endif
+ 	  https://codehero.github.io/benejson/
 +
- define BENEJSON_BUILD_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
++comment "benejson needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
 2.0.5
