@@ -1,63 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 09:47:55 +0100
-Subject: [Buildroot] [git commit] xserver_xorg-server: Remove unused null
-	root cursor option
-Message-ID: <20150126085506.98EB3805D7@busybox.osuosl.org>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Mon, 26 Jan 2015 10:34:34 +0100
+Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
+ QT_SHARED is not selected
+In-Reply-To: <87siey4i48.fsf@dell.be.48ers.dk>
+References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>	<20150120174507.1d11ab61@free-electrons.com>
+ <87siey4i48.fsf@dell.be.48ers.dk>
+Message-ID: <54C60A2A.9090805@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c341192071b6940c5c168bdd95b1cd7600dc5f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/01/2015 23:20, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  > Dear Richard Genoud,
+>  > On Tue, 20 Jan 2015 11:17:28 +0100, Richard Genoud wrote:
+>  >> If Qt is compile as a static library, there's no point compiling qwt as
+>  >> a shared library, otherwise, we will have a huge qwt lib and a huge Qt
+>  >> application.
+>  >> 
+>  >> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
+>>>
+>  >> +ifeq ($(BR2_PACKAGE_QT_SHARED),y)
+>  >> +	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/QWT_CONFIG += QwtDll/'
+>  >> +else
+>  >> +	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDll.*$$/\# QWT_CONFIG += QwtDll/'
+>  >> +endif
+> 
+>  > I think we should get rid of BR2_PACKAGE_QT_SHARED completely, and use
+>  > BR2_STATIC_LIBS here instead.
+> 
+> I agree that it would be cleaner, but the reason the explicit QT_SHARED
+> stuff was added was afaik a lot of systems only needed Qt in a single
+> application / that application only used a subset of the Qt
+> functionality, so having a static libQt while everything else was shared
+> was quite a big win in size / startup time.
 
-Upstream removed this configure option back in 2010 (for server 1.8):
+yes, that's exactly my case. I've got one single Qt application, and Qt
+is quite huge, so making it static saves a lot of space.
+I didn't trying to compile with BR2_STATIC_LIBS=y, but I guess that my
+rootfs will be much bigger.
 
-http://cgit.freedesktop.org/xorg/xserver/commit/?id=60b6477f6dc005a1b052be8c5
 
-So this hasn't done anything since 759d548e3e5 (xserver_xorg-server: bump
-version).
+> It does complicate LGPL compliance and I don't know if the disk space
+> concerns are as big these days though.
+> 
+Hum... I didn't think about the static vs dynamic LGPL compliance. I'll
+have to check that.
+And for disk space concern, I must admit that I haven't got much space (
+60Mio for the rootfs, and the Qt application takes 10Mio
 
-Don't add any Config.in.legacy for this as it as been broken for so long any
-way.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xserver_xorg-server/Config.in        |    5 -----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    6 ------
- 2 files changed, 0 insertions(+), 11 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index bf9f820..40e3d84 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -90,11 +90,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
- 
- endchoice
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR
--	bool "Null root cursor"
--	help
--	  Don't display root cursor.
--
- config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
- 	bool "Enable AIGLX Extension"
- 	help
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 5baa515..a9b9921 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -112,12 +112,6 @@ else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
- endif
- 
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR),y)
--XSERVER_XORG_SERVER_CONF_OPTS += --enable-null-root-cursor
--else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-null-root-cursor
--endif
--
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-aiglx
- else
+regards,
+Richard
