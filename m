@@ -1,77 +1,58 @@
-From: Lee Essen <lee.essen@nowonline.co.uk>
-Date: Mon, 26 Jan 2015 17:27:54 +0400
-Subject: [Buildroot] pppd makefile moves /etc/PPP/resolv.conf
-In-Reply-To: <54C61802.4010602@zacarias.com.ar>
-References: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
- <54C61802.4010602@zacarias.com.ar>
-Message-ID: <9F494D13-32F4-497C-A834-C60AA93406E9@nowonline.co.uk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 26 Jan 2015 10:45:58 -0300
+Subject: [Buildroot] [PATCH] mpd: add patch to fix build failures
+Message-ID: <1422279958-1335-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+mpd is using snprintf without including stdio.h when pthread_setname_np
+isn't available leading to failure, hence patch it. Fixes:
+http://autobuild.buildroot.net/results/14c/14cf165e63fd7bb076d7c8f5aab92d24aa4622c4/
 
-> On 26 Jan 2015, at 14:33, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
-> 
-> On 01/26/2015 03:49 AM, Lee Essen wrote:
-> 
->> Hi,
->> 
->> The current pppd package makefile has a post extract hook that changes the ppp generated resolv.conf from /etc/ppp/resolv.conf to /etc/resolv.conf with a comment suggesting that this is done because /etc/ppp might not be writable (and this location isn't useful because of where the c library looks.)
->> 
->> My assumption is that the original location provided you with flexibility to do clever things in the ppp-up script (and that's certainly what I want to do)
->> 
->> If you don't set usepeerdns then it looks like the server names don't get requested, so the creation of this file seems to be all or nothing - there is no way to work with just the env vars.
->> 
->> With the current buildroot setup your resolv.conf is overwritten with no option to do anything clever.
->> 
->> Wouldn't it be better to use /var/run/ppp.resolv.conf (or something similar) or even leave it as it was and include a symlink in /etc/ppp ??
->> 
->> Thanks,
->> 
->> Lee.
-> 
-> Hi.
-> I did that modification, let's see.
-> Actually the original location didn't provide anything useful if your
-> root filesystem is read-only, like in squashfs, so it's just as bad, so
-> it makes no sense in making it a symlink from /etc/ppp -> /var/run in
-> the way you say, because, well, what if you got multiple ppp instances
-> running?
-> The other problem with writing it to some other temporary file different
-> than /etc(tmp)/resolv.conf is that out of the box it's useless.
-> What if i said "i've got an advanced scenario and dhcpcd/udhcpc/other
-> dhcp client writes to /etc/resolv.conf unfairly"?
-> What dhcp clients currently do is no different than what pppd does (with
-> usepeerdns), and it's basically out-of-the-box simplicity, it just
-> works, though granted that it doesn't cater for advanced uses.
-> That pppd doesn't give DNS information to ip-up scripts, at least for
-> me, a bug, the information should be available. It's likely upstream
-> won't fix/change this since it would alter established behaviour and
-> hence breaks scripts.
-> So what's the solution to the sucky /etc/resolv.conf mess?
-> Well, openresolv (http://roy.marples.name/projects/openresolv/index).
-> I've mentioned it in IRC before but didn't have time to create the
-> package and glue it together seamlessly with the other packages (mostly
-> ppp, dhcp clients and so on).
-> Regards.
-> 
+Patch status: sent upstream.
 
-Hi Gustavo,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ad-Name-include-stdio.h-for-prctl-as-well.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch
 
-OK, makes sense, however doesn?t make it easy to do anything clever with resolv.conf.
-
-In the standard DHCP client it?s actually the script and not the binary that creates resolv.conf so it?s really easy to control behaviour.
-
-The problem with pppd is that if you don?t specify usepeerdns then you don?t get any information (and no env vars for the script) and you if you specify usepeerdns then it writes /etc/resolv.conf without a care!
-
-The more I think about it, the more I think the problem is actually with pppd, and your ?multiple-pppd? example is another good use case that breaks, even with an unmodified pppd.
-
-The best solution I can come up with is the use of a ?noresolv? option for ppp that says ?don?t create a resolve.conf file? ? then I don?t care where it points, it doesn?t write anything at all, yet the DNS vars are available to ppp-up. The default case also doesn?t break existing behaviour.
-
-It?s a trivial patch that I?m happy to share if anyone is interested, otherwise I?ll just keep it in my tree.
-
-Thanks,
-
-Lee.
+diff --git a/package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch b/package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch
+new file mode 100644
+index 0000000..1711da3
+--- /dev/null
++++ b/package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch
+@@ -0,0 +1,28 @@
++From 36139b29cccae008c74924d81ea67d265327f7ac Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 26 Jan 2015 09:55:04 -0300
++Subject: [PATCH] thread/Name: include stdio.h for prctl as well
++
++We're still using snprintf so we need it, otherwise it leads to build
++failure.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/thread/Name.hxx | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/thread/Name.hxx b/src/thread/Name.hxx
++index 1576b3f..8d46d33 100644
++--- a/src/thread/Name.hxx
+++++ b/src/thread/Name.hxx
++@@ -26,6 +26,7 @@
++ #  include <stdio.h>
++ #elif defined(HAVE_PRCTL)
++ #  include <sys/prctl.h>
+++#  include <stdio.h>
++ #  ifdef PR_SET_NAME
++ #    define HAVE_THREAD_NAME
++ #  endif
++-- 
++2.0.5
++
+-- 
+2.0.5
