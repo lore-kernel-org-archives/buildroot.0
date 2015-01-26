@@ -1,45 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 17:16:03 +0100
-Subject: [Buildroot] [git commit] benejson: fix for non-wchar toolchains
-Message-ID: <20150126162902.9D3C080795@busybox.osuosl.org>
+Date: Mon, 26 Jan 2015 17:16:24 +0100
+Subject: [Buildroot] [git commit] benejson: needs c++
+Message-ID: <20150126162902.A529D7FE16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de5082fa21f4fcb28da0215d0f529b1165d73f9a
+commit: http://git.buildroot.net/buildroot/commit/?id=af503843f33f0f34e4325ba6d18d002667f94b7e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wchar needs to be disabled in order for it to build on !wchar. Fixes:
-http://autobuild.buildroot.net/results/71f/71f19d5056b56d40463b9fef7fa859e0025c4991/
+pull.cpp doesn't look like vanilla C
+Fixes local tests (no autobuilder tests to show off atm).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/benejson/benejson.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/benejson/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
-index 75753d2..2b8d09d 100644
---- a/package/benejson/benejson.mk
-+++ b/package/benejson/benejson.mk
-@@ -9,9 +9,17 @@ BENEJSON_SITE = $(call github,codehero,benejson,$(BENEJSON_VERSION))
- BENEJSON_LICENSE = MIT
- BENEJSON_LICENSE_FILES = LICENSE
- BENEJSON_INSTALL_STAGING = YES
--
- BENEJSON_DEPENDENCIES = host-scons
+diff --git a/package/benejson/Config.in b/package/benejson/Config.in
+index 4e8ee2c..cb86d67 100644
+--- a/package/benejson/Config.in
++++ b/package/benejson/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_BENEJSON
+ 	bool "benejson"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  benejson is a buffering SAX-style JSON parser library.
+ 	  The library package contains 3 major components:
+@@ -9,3 +10,6 @@ config BR2_PACKAGE_BENEJSON
+ 	  - Core: The parsing core with minimal dependencies
  
-+# wchar support needs to be manually disabled
-+ifeq ($(BR2_USE_WCHAR),)
-+define BENEJSON_DISABLE_WCHAR
-+	$(SED) 's,^#define BNJ_WCHAR_SUPPORT,#undef BNJ_WCHAR_SUPPORT,' \
-+		$(@D)/benejson/benejson.h
-+endef
-+BENEJSON_POST_PATCH_HOOKS += BENEJSON_DISABLE_WCHAR
-+endif
+ 	  https://codehero.github.io/benejson/
 +
- define BENEJSON_BUILD_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
++comment "benejson needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
