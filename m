@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jan 2015 23:24:20 +0100
-Subject: [Buildroot] [PATCH 4/4] boot/syslinux: add host-perl dependency
-In-Reply-To: <54BEBA2A.7050901@openwide.fr>
-References: <1421710198-20898-1-git-send-email-romain.naour@openwide.fr>
- <1421710198-20898-4-git-send-email-romain.naour@openwide.fr>
- <20150120085330.GA2146@tarshish> <54BEBA2A.7050901@openwide.fr>
-Message-ID: <20150126232420.0fc0cc92@free-electrons.com>
+Date: Mon, 26 Jan 2015 23:27:10 +0100
+Subject: [Buildroot] [PATCH 2/3] fs/iso9660: remove obsolete code
+In-Reply-To: <1421697177-12995-2-git-send-email-nrubinstein@aldebaran.com>
+References: <1421697177-12995-1-git-send-email-nrubinstein@aldebaran.com>
+ <1421697177-12995-2-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <20150126232710.0586db05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear No? Rubinstein,
 
-On Tue, 20 Jan 2015 21:27:22 +0100, Romain Naour wrote:
+On Mon, 19 Jan 2015 20:52:56 +0100, No? Rubinstein wrote:
+> This rule is superseded by a rule defined in fs/common.mk:
+> 
+>     rootfs-$(1)-show-depends:
+>             @echo $$(ROOTFS_$(2)_DEPENDENCIES)
+> 
+> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
 
-> > Buildroot expects perl to be installed on the host system already. See ?2.1 
-> > (Mandatory packages) in the manual. AFAIK host-perl is only used to build perl 
-> > itself for the target.
-> 
-> Thanks for the reminder, I haven't checked if perl was a mandatory packages
-> before sending the patch...
-> 
-> > Have you encountered any specific build failure?
-> 
-> Not at all.
+No, this is not correct, because iso9660.mk unfortunately does not use
+the fs/common.mk code. See the comment at the top of the iso9660.mk
+file:
 
-So I'll mark the patch as Rejected in patchwork. Thanks Romain and
-Baruch.
+################################################################################
+#
+# Build the iso96600 root filesystem image
+#
+# Cannot be converted to the ROOTFS_TARGET infrastructure, because of
+# the temporary construction in ISO9660_TARGET_DIR.
+#
+################################################################################
+
+Best regards,
 
 Thomas
 -- 
