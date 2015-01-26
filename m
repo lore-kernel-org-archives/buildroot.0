@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 14:23:41 +0100
-Subject: [Buildroot] [PATCH] agentpp: add .hash file
-In-Reply-To: <1422269925-28994-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Mon, 26 Jan 2015 11:58:45 +0100")
-References: <1422269925-28994-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87egqh3cbm.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jan 2015 14:28:36 +0100
+Subject: [Buildroot] [PATCH] python-twisted: new package
+In-Reply-To: <1422229650-30254-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Mon, 26 Jan 2015 00:47:30 +0100")
+References: <1422229650-30254-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <877fw93c3f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed, thanks.
 
