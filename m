@@ -1,57 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 26 Jan 2015 23:13:44 +0100
-Subject: [Buildroot] [git commit] polarssl: add fix for CVE-2015-1182
-Message-ID: <20150126221359.D21808044E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] grep: add patch to fix CVE-2015-1345
+Message-ID: <20150126221359.E61CD8044E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d663af559e3c66603fb8cb3a0b029c40d29bc57a
+commit: http://git.buildroot.net/buildroot/commit/?id=3ae2f86cf29c52ab086f4d380fdb41f9c1f599f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2015-1182 - Remote attack using crafted certificates.
-Also rename patches to new naming convention.
+Fixes CVE-2015-1345 - heap buffer overrun.
+See https://bugzilla.redhat.com/show_bug.cgi?id=1183651
+Patch upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...o-test-suite.patch => 0001-no-test-suite.patch} |    0
- ...e-standard-CMake-flag-to-drive-the-share.patch} |    0
- package/polarssl/0003-fix-CVE-2015-1182.patch      |   19 +++++++++++++++++++
- 3 files changed, 19 insertions(+), 0 deletions(-)
+ package/grep/0001-fix-CVE-2015-1345.patch |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/package/polarssl/polarssl-0001-no-test-suite.patch b/package/polarssl/0001-no-test-suite.patch
-similarity index 100%
-rename from package/polarssl/polarssl-0001-no-test-suite.patch
-rename to package/polarssl/0001-no-test-suite.patch
-diff --git a/package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/polarssl/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-similarity index 100%
-rename from package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-rename to package/polarssl/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-diff --git a/package/polarssl/0003-fix-CVE-2015-1182.patch b/package/polarssl/0003-fix-CVE-2015-1182.patch
+diff --git a/package/grep/0001-fix-CVE-2015-1345.patch b/package/grep/0001-fix-CVE-2015-1345.patch
 new file mode 100644
-index 0000000..9309c9d
+index 0000000..f7701aa
 --- /dev/null
-+++ b/package/polarssl/0003-fix-CVE-2015-1182.patch
-@@ -0,0 +1,19 @@
-+Fix CVE-2015-1182 - Remote attack using crafted certificates.
-+Patch status: from upstream see:
-+https://polarssl.org/tech-updates/security-advisories/polarssl-security-advisory-2014-04
++++ b/package/grep/0001-fix-CVE-2015-1345.patch
+@@ -0,0 +1,20 @@
++Simplified patch from upstream to avoid autoreconf. Source:
++http://git.savannah.gnu.org/cgit/grep.git/commit/?id=83a95bd8c8561875b948cadd417c653dbe7ef2e2
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff --git a/library/asn1parse.c b/library/asn1parse.c
-+index a3a2b56..e2117bf 100644
-+--- a/library/asn1parse.c
-++++ b/library/asn1parse.c
-+@@ -278,6 +278,8 @@ int asn1_get_sequence_of( unsigned char **p,
-+             if( cur->next == NULL )
-+                 return( POLARSSL_ERR_ASN1_MALLOC_FAILED );
-+
-++            memset( cur->next, 0, sizeof( asn1_sequence ) );
-++
-+             cur = cur->next;
-+         }
-+     }
++---
++diff --git a/src/kwset.c b/src/kwset.c
++index 4003c8d..376f7c3 100644
++--- a/src/kwset.c
+++++ b/src/kwset.c
++@@ -643,6 +643,8 @@ bmexec_trans (kwset_t kwset, char const *text, size_t size)
++                     if (! tp)
++                       return -1;
++                     tp++;
+++                    if (ep <= tp)
+++                      break;
++                   }
++               }
++           }
++--
++cgit v0.9.0.2
