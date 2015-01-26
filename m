@@ -1,48 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Jan 2015 17:58:14 -0300
-Subject: [Buildroot] [PATCH] grep: add patch to fix CVE-2015-1345
-Message-ID: <1422305894-6845-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Jan 2015 22:19:30 +0100
+Subject: [Buildroot] Buildroot meeting approaching: you can participate!
+In-Reply-To: <20150110211306.7c34717e@free-electrons.com>
+References: <20150110211306.7c34717e@free-electrons.com>
+Message-ID: <20150126221930.290aec62@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2015-1345 - heap buffer overrun.
-See https://bugzilla.redhat.com/show_bug.cgi?id=1183651
-Patch upstream.
+Hello all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/grep/0001-fix-CVE-2015-1345.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/grep/0001-fix-CVE-2015-1345.patch
+On Sat, 10 Jan 2015 21:13:06 +0100, Thomas Petazzoni wrote:
 
-diff --git a/package/grep/0001-fix-CVE-2015-1345.patch b/package/grep/0001-fix-CVE-2015-1345.patch
-new file mode 100644
-index 0000000..f7701aa
---- /dev/null
-+++ b/package/grep/0001-fix-CVE-2015-1345.patch
-@@ -0,0 +1,20 @@
-+Simplified patch from upstream to avoid autoreconf. Source:
-+http://git.savannah.gnu.org/cgit/grep.git/commit/?id=83a95bd8c8561875b948cadd417c653dbe7ef2e2
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+diff --git a/src/kwset.c b/src/kwset.c
-+index 4003c8d..376f7c3 100644
-+--- a/src/kwset.c
-++++ b/src/kwset.c
-+@@ -643,6 +643,8 @@ bmexec_trans (kwset_t kwset, char const *text, size_t size)
-+                     if (! tp)
-+                       return -1;
-+                     tp++;
-++                    if (ep <= tp)
-++                      break;
-+                   }
-+               }
-+           }
-+--
-+cgit v0.9.0.2
+> This is a kind reminder about the Buildroot Developers meeting we are
+> organizing right after FOSDEM. It will take place on February 2-3 in
+> Brussels, right after the great FOSDEM conference.
+
+Even if you're not planning to physically attend the upcoming Buildroot
+meeting, here are two things you may be interested in:
+
+ * Add topics to be discussed on the event page at
+   http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015.
+
+ * If you're interested in participating remotely, it is possible
+   through Google Hangout. Please send your Google address to me
+   (privately) and I'll invite you during the meeting.
+
+Thanks,
+
+Thomas Petazzoni
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
