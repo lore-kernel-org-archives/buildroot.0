@@ -1,70 +1,42 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 26 Jan 2015 07:55:04 -0600
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-01-24
-In-Reply-To: <54C50F73.50702@openwide.fr>
-References: <20150125073015.49B3C1013EF@stock.ovh.net>
- <54C50F73.50702@openwide.fr>
-Message-ID: <CANQCQpbWUB37D2jZrXt97MK3-ESBFb6KCTVmeSqJtFvK=2x=6g@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 26 Jan 2015 11:09:31 -0300
+Subject: [Buildroot] pppd makefile moves /etc/PPP/resolv.conf
+In-Reply-To: <9F494D13-32F4-497C-A834-C60AA93406E9@nowonline.co.uk>
+References: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
+ <54C61802.4010602@zacarias.com.ar>
+ <9F494D13-32F4-497C-A834-C60AA93406E9@nowonline.co.uk>
+Message-ID: <54C64A9B.5050602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+On 01/26/2015 10:27 AM, Lee Essen wrote:
 
-On Sun, Jan 25, 2015 at 9:44 AM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Hi all,
->
-> Le 25/01/2015 08:30, Thomas Petazzoni a ?crit :
->> Build statistics for 2015-01-24
->>              libselinux-2.1.13 | 2
->
->>
->> Detail of failures
->> ===================
->>         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/9e25e908d100886ad0c0a108000c7a283c2e350b/
->>         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/af38d7a4199372f49f1e22504fbbfc321d7234ed/
->
-> For some reason, ld report some undefined symbols when building the shared library libselinux.so.1 on bfin.
->
-> [...] -Wl,-soname,libselinux.so.1,-z,defs,-z,relro
->
-> callbacks.c:(.text+0x82): undefined reference to `_security_check_context'
-> callbacks.c:(.text+0x92): undefined reference to `_is_selinux_enabled'
-> label.c:(.text+0x172): undefined reference to `_selinux_raw_to_trans_context'
-> label_db.c:(.text+0xe4): undefined reference to `_selinux_sepgsql_context_path'
-> label_file.c:(.text+0xa24): undefined reference to `_selinux_file_context_subs_dist_path'
-> label_file.c:(.text+0xa38): undefined reference to `_selinux_file_context_subs_path'
-> label_file.c:(.text+0xa4c): undefined reference to `_selinux_file_context_path'
-> label_media.c:(.text+0xf2): undefined reference to `_selinux_media_context_path'
-> label_x.c:(.text+0xee): undefined reference to `_selinux_x_context_path'
-> mapping.c:(.text+0x25a): undefined reference to `_avc_reset'
-> sestatus.c:(.text+0x17e): undefined reference to `_security_getenforce'
-> sestatus.c:(.text+0x214): undefined reference to `_security_deny_unknown'
-> collect2: ld returned 1 exit status
->
-> All missing symbols are defined in selinux_internal.h or avc_internal.h
-> by hidden_proto() which is defined in src/dso.h.
->
-> hidden_proto() add some asm code which depends on architecture:
-> # if defined(__alpha__) || defined(__mips__)
-> #  define hidden_def(fct) \
->      asm (".globl " #fct "\n" #fct " = " #fct "_internal");
-> # else
-> #  define hidden_def(fct) \
->      asm (".globl " #fct "\n.set " #fct ", " #fct "_internal");
-> #endif
->
-> I suppose this asm code is not supported on bfin.
-> Maybe disable libselinux on bfin ?
+> Hi Gustavo,
+> 
+> OK, makes sense, however doesn?t make it easy to do anything clever with resolv.conf.
+> 
+> In the standard DHCP client it?s actually the script and not the binary that creates resolv.conf so it?s really easy to control behaviour.
+> 
+> The problem with pppd is that if you don?t specify usepeerdns then you don?t get any information (and no env vars for the script) and you if you specify usepeerdns then it writes /etc/resolv.conf without a care!
+> 
+> The more I think about it, the more I think the problem is actually with pppd, and your ?multiple-pppd? example is another good use case that breaks, even with an unmodified pppd.
+> 
+> The best solution I can come up with is the use of a ?noresolv? option for ppp that says ?don?t create a resolve.conf file? ? then I don?t care where it points, it doesn?t write anything at all, yet the DNS vars are available to ppp-up. The default case also doesn?t break existing behaviour.
+> 
+> It?s a trivial patch that I?m happy to share if anyone is interested, otherwise I?ll just keep it in my tree.
+> 
+> Thanks,
+> 
+> Lee.
 
-Some of the other packages that I'm working on upstreaming which
-depend on libselinux, also have bfin build issues.  I'd support
-disabling bfin for now.  Maybe when we bump the libselinux version,
-this maybe back up for debate (haven't looked to see if any of this
-asm changed).
-
-Thanks,
-Matt Weber
+Hi again.
+A quick fix might be to throw in an ip-up script that makes
+/etc/resolv.conf (using $DNS1, $DNS2 and $USEPEERDNS i think) in the
+pppd package, and make the binary write resolv.conf to some no-op like
+/dev/null.
+This way we still got the benefit of PnP-like dns configuration that can
+be easily disabled by removing said script.
+Regards.
