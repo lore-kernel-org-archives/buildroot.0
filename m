@@ -1,58 +1,388 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 Jan 2015 17:29:17 -0300
-Subject: [Buildroot] [PATCH] polarssl: add fix for CVE-2015-1182
-Message-ID: <1422304157-13447-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 26 Jan 2015 17:45:49 -0300
+Subject: [Buildroot] [PATCH] jasper: add security fixes for
+	CVE-2014-8157/8158
+Message-ID: <1422305149-21671-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2015-1182 - Remote attack using crafted certificates.
-Also rename patches to new naming convention.
+Fixes:
+CVE-2014-8157 - dec->numtiles off-by-one check in jpc_dec_process_sot()
+CVE-2014-8158 - unrestricted stack memory use in jpc_qmfb.c
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...1-no-test-suite.patch => 0001-no-test-suite.patch} |  0
- ...-the-standard-CMake-flag-to-drive-the-share.patch} |  0
- package/polarssl/0003-fix-CVE-2015-1182.patch         | 19 +++++++++++++++++++
- 3 files changed, 19 insertions(+)
- rename package/polarssl/{polarssl-0001-no-test-suite.patch => 0001-no-test-suite.patch} (100%)
- rename package/polarssl/{polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch => 0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch} (100%)
- create mode 100644 package/polarssl/0003-fix-CVE-2015-1182.patch
+ package/jasper/0005-fix-CVE-2014-8157.patch |  17 ++
+ package/jasper/0006-fix-CVE-2014-8158.patch | 334 ++++++++++++++++++++++++++++
+ 2 files changed, 351 insertions(+)
+ create mode 100644 package/jasper/0005-fix-CVE-2014-8157.patch
+ create mode 100644 package/jasper/0006-fix-CVE-2014-8158.patch
 
-diff --git a/package/polarssl/polarssl-0001-no-test-suite.patch b/package/polarssl/0001-no-test-suite.patch
-similarity index 100%
-rename from package/polarssl/polarssl-0001-no-test-suite.patch
-rename to package/polarssl/0001-no-test-suite.patch
-diff --git a/package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/polarssl/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-similarity index 100%
-rename from package/polarssl/polarssl-0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-rename to package/polarssl/0002-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-diff --git a/package/polarssl/0003-fix-CVE-2015-1182.patch b/package/polarssl/0003-fix-CVE-2015-1182.patch
+diff --git a/package/jasper/0005-fix-CVE-2014-8157.patch b/package/jasper/0005-fix-CVE-2014-8157.patch
 new file mode 100644
-index 0000000..9309c9d
+index 0000000..ab81674
 --- /dev/null
-+++ b/package/polarssl/0003-fix-CVE-2015-1182.patch
-@@ -0,0 +1,19 @@
-+Fix CVE-2015-1182 - Remote attack using crafted certificates.
-+Patch status: from upstream see:
-+https://polarssl.org/tech-updates/security-advisories/polarssl-security-advisory-2014-04
++++ b/package/jasper/0005-fix-CVE-2014-8157.patch
+@@ -0,0 +1,17 @@
++Fix CVE-2014-8157 - dec->numtiles off-by-one check in jpc_dec_process_sot()
++From https://bugzilla.redhat.com/show_bug.cgi?id=1179282
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+diff --git a/library/asn1parse.c b/library/asn1parse.c
-+index a3a2b56..e2117bf 100644
-+--- a/library/asn1parse.c
-++++ b/library/asn1parse.c
-+@@ -278,6 +278,8 @@ int asn1_get_sequence_of( unsigned char **p,
-+             if( cur->next == NULL )
-+                 return( POLARSSL_ERR_ASN1_MALLOC_FAILED );
++diff -up jasper-1.900.1/src/libjasper/jpc/jpc_dec.c.CVE-2014-8157 jasper-1.900.1/src/libjasper/jpc/jpc_dec.c
++--- jasper-1.900.1/src/libjasper/jpc/jpc_dec.c.CVE-2014-8157	2015-01-19 16:59:36.000000000 +0100
+++++ jasper-1.900.1/src/libjasper/jpc/jpc_dec.c	2015-01-19 17:07:41.609863268 +0100
++@@ -489,7 +489,7 @@ static int jpc_dec_process_sot(jpc_dec_t
++ 		dec->curtileendoff = 0;
++ 	}
++ 
++-	if (JAS_CAST(int, sot->tileno) > dec->numtiles) {
+++	if (JAS_CAST(int, sot->tileno) >= dec->numtiles) {
++ 		jas_eprintf("invalid tile number in SOT marker segment\n");
++ 		return -1;
++ 	}
+diff --git a/package/jasper/0006-fix-CVE-2014-8158.patch b/package/jasper/0006-fix-CVE-2014-8158.patch
+new file mode 100644
+index 0000000..8413d2e
+--- /dev/null
++++ b/package/jasper/0006-fix-CVE-2014-8158.patch
+@@ -0,0 +1,334 @@
++Fix CVE-2014-8158 - unrestricted stack memory use in jpc_qmfb.c
++From https://bugzilla.redhat.com/show_bug.cgi?id=1179298
 +
-++            memset( cur->next, 0, sizeof( asn1_sequence ) );
-++
-+             cur = cur->next;
-+         }
-+     }
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -up jasper-1.900.1/src/libjasper/jpc/jpc_qmfb.c.CVE-2014-8158 jasper-1.900.1/src/libjasper/jpc/jpc_qmfb.c
++--- jasper-1.900.1/src/libjasper/jpc/jpc_qmfb.c.CVE-2014-8158	2015-01-19 17:25:28.730195502 +0100
+++++ jasper-1.900.1/src/libjasper/jpc/jpc_qmfb.c	2015-01-19 17:27:20.214663127 +0100
++@@ -306,11 +306,7 @@ void jpc_qmfb_split_row(jpc_fix_t *a, in
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numcols, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE];
++-#else
++-	jpc_fix_t splitbuf[bufsize];
++-#endif
++ 	jpc_fix_t *buf = splitbuf;
++ 	register jpc_fix_t *srcptr;
++ 	register jpc_fix_t *dstptr;
++@@ -318,7 +314,6 @@ void jpc_qmfb_split_row(jpc_fix_t *a, in
++ 	register int m;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Get a buffer. */
++ 	if (bufsize > QMFB_SPLITBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, sizeof(jpc_fix_t)))) {
++@@ -326,7 +321,6 @@ void jpc_qmfb_split_row(jpc_fix_t *a, in
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	if (numcols >= 2) {
++ 		hstartcol = (numcols + 1 - parity) >> 1;
++@@ -360,12 +354,10 @@ void jpc_qmfb_split_row(jpc_fix_t *a, in
++ 		}
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the split buffer was allocated on the heap, free this memory. */
++ 	if (buf != splitbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -374,11 +366,7 @@ void jpc_qmfb_split_col(jpc_fix_t *a, in
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE];
++-#else
++-	jpc_fix_t splitbuf[bufsize];
++-#endif
++ 	jpc_fix_t *buf = splitbuf;
++ 	register jpc_fix_t *srcptr;
++ 	register jpc_fix_t *dstptr;
++@@ -386,7 +374,6 @@ void jpc_qmfb_split_col(jpc_fix_t *a, in
++ 	register int m;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Get a buffer. */
++ 	if (bufsize > QMFB_SPLITBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, sizeof(jpc_fix_t)))) {
++@@ -394,7 +381,6 @@ void jpc_qmfb_split_col(jpc_fix_t *a, in
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	if (numrows >= 2) {
++ 		hstartcol = (numrows + 1 - parity) >> 1;
++@@ -428,12 +414,10 @@ void jpc_qmfb_split_col(jpc_fix_t *a, in
++ 		}
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the split buffer was allocated on the heap, free this memory. */
++ 	if (buf != splitbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -442,11 +426,7 @@ void jpc_qmfb_split_colgrp(jpc_fix_t *a,
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE * JPC_QMFB_COLGRPSIZE];
++-#else
++-	jpc_fix_t splitbuf[bufsize * JPC_QMFB_COLGRPSIZE];
++-#endif
++ 	jpc_fix_t *buf = splitbuf;
++ 	jpc_fix_t *srcptr;
++ 	jpc_fix_t *dstptr;
++@@ -457,7 +437,6 @@ void jpc_qmfb_split_colgrp(jpc_fix_t *a,
++ 	int m;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Get a buffer. */
++ 	if (bufsize > QMFB_SPLITBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, sizeof(jpc_fix_t)))) {
++@@ -465,7 +444,6 @@ void jpc_qmfb_split_colgrp(jpc_fix_t *a,
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	if (numrows >= 2) {
++ 		hstartcol = (numrows + 1 - parity) >> 1;
++@@ -517,12 +495,10 @@ void jpc_qmfb_split_colgrp(jpc_fix_t *a,
++ 		}
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the split buffer was allocated on the heap, free this memory. */
++ 	if (buf != splitbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -531,11 +507,7 @@ void jpc_qmfb_split_colres(jpc_fix_t *a,
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t splitbuf[QMFB_SPLITBUFSIZE * JPC_QMFB_COLGRPSIZE];
++-#else
++-	jpc_fix_t splitbuf[bufsize * numcols];
++-#endif
++ 	jpc_fix_t *buf = splitbuf;
++ 	jpc_fix_t *srcptr;
++ 	jpc_fix_t *dstptr;
++@@ -546,7 +518,6 @@ void jpc_qmfb_split_colres(jpc_fix_t *a,
++ 	int m;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Get a buffer. */
++ 	if (bufsize > QMFB_SPLITBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, sizeof(jpc_fix_t)))) {
++@@ -554,7 +525,6 @@ void jpc_qmfb_split_colres(jpc_fix_t *a,
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	if (numrows >= 2) {
++ 		hstartcol = (numrows + 1 - parity) >> 1;
++@@ -606,12 +576,10 @@ void jpc_qmfb_split_colres(jpc_fix_t *a,
++ 		}
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the split buffer was allocated on the heap, free this memory. */
++ 	if (buf != splitbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -619,18 +587,13 @@ void jpc_qmfb_join_row(jpc_fix_t *a, int
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numcols, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE];
++-#else
++-	jpc_fix_t joinbuf[bufsize];
++-#endif
++ 	jpc_fix_t *buf = joinbuf;
++ 	register jpc_fix_t *srcptr;
++ 	register jpc_fix_t *dstptr;
++ 	register int n;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Allocate memory for the join buffer from the heap. */
++ 	if (bufsize > QMFB_JOINBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, sizeof(jpc_fix_t)))) {
++@@ -638,7 +601,6 @@ void jpc_qmfb_join_row(jpc_fix_t *a, int
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	hstartcol = (numcols + 1 - parity) >> 1;
++ 
++@@ -670,12 +632,10 @@ void jpc_qmfb_join_row(jpc_fix_t *a, int
++ 		++srcptr;
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the join buffer was allocated on the heap, free this memory. */
++ 	if (buf != joinbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -684,18 +644,13 @@ void jpc_qmfb_join_col(jpc_fix_t *a, int
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE];
++-#else
++-	jpc_fix_t joinbuf[bufsize];
++-#endif
++ 	jpc_fix_t *buf = joinbuf;
++ 	register jpc_fix_t *srcptr;
++ 	register jpc_fix_t *dstptr;
++ 	register int n;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Allocate memory for the join buffer from the heap. */
++ 	if (bufsize > QMFB_JOINBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, sizeof(jpc_fix_t)))) {
++@@ -703,7 +658,6 @@ void jpc_qmfb_join_col(jpc_fix_t *a, int
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	hstartcol = (numrows + 1 - parity) >> 1;
++ 
++@@ -735,12 +689,10 @@ void jpc_qmfb_join_col(jpc_fix_t *a, int
++ 		++srcptr;
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the join buffer was allocated on the heap, free this memory. */
++ 	if (buf != joinbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -749,11 +701,7 @@ void jpc_qmfb_join_colgrp(jpc_fix_t *a,
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE * JPC_QMFB_COLGRPSIZE];
++-#else
++-	jpc_fix_t joinbuf[bufsize * JPC_QMFB_COLGRPSIZE];
++-#endif
++ 	jpc_fix_t *buf = joinbuf;
++ 	jpc_fix_t *srcptr;
++ 	jpc_fix_t *dstptr;
++@@ -763,7 +711,6 @@ void jpc_qmfb_join_colgrp(jpc_fix_t *a,
++ 	register int i;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Allocate memory for the join buffer from the heap. */
++ 	if (bufsize > QMFB_JOINBUFSIZE) {
++ 		if (!(buf = jas_alloc2(bufsize, JPC_QMFB_COLGRPSIZE * sizeof(jpc_fix_t)))) {
++@@ -771,7 +718,6 @@ void jpc_qmfb_join_colgrp(jpc_fix_t *a,
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	hstartcol = (numrows + 1 - parity) >> 1;
++ 
++@@ -821,12 +767,10 @@ void jpc_qmfb_join_colgrp(jpc_fix_t *a,
++ 		srcptr += JPC_QMFB_COLGRPSIZE;
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the join buffer was allocated on the heap, free this memory. */
++ 	if (buf != joinbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
++@@ -835,11 +779,7 @@ void jpc_qmfb_join_colres(jpc_fix_t *a,
++ {
++ 
++ 	int bufsize = JPC_CEILDIVPOW2(numrows, 1);
++-#if !defined(HAVE_VLA)
++ 	jpc_fix_t joinbuf[QMFB_JOINBUFSIZE * JPC_QMFB_COLGRPSIZE];
++-#else
++-	jpc_fix_t joinbuf[bufsize * numcols];
++-#endif
++ 	jpc_fix_t *buf = joinbuf;
++ 	jpc_fix_t *srcptr;
++ 	jpc_fix_t *dstptr;
++@@ -849,7 +789,6 @@ void jpc_qmfb_join_colres(jpc_fix_t *a,
++ 	register int i;
++ 	int hstartcol;
++ 
++-#if !defined(HAVE_VLA)
++ 	/* Allocate memory for the join buffer from the heap. */
++ 	if (bufsize > QMFB_JOINBUFSIZE) {
++ 		if (!(buf = jas_alloc3(bufsize, numcols, sizeof(jpc_fix_t)))) {
++@@ -857,7 +796,6 @@ void jpc_qmfb_join_colres(jpc_fix_t *a,
++ 			abort();
++ 		}
++ 	}
++-#endif
++ 
++ 	hstartcol = (numrows + 1 - parity) >> 1;
++ 
++@@ -907,12 +845,10 @@ void jpc_qmfb_join_colres(jpc_fix_t *a,
++ 		srcptr += numcols;
++ 	}
++ 
++-#if !defined(HAVE_VLA)
++ 	/* If the join buffer was allocated on the heap, free this memory. */
++ 	if (buf != joinbuf) {
++ 		jas_free(buf);
++ 	}
++-#endif
++ 
++ }
++ 
 -- 
 2.0.5
