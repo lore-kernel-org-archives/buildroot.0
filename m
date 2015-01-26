@@ -1,45 +1,63 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Mon, 26 Jan 2015 09:54:11 +0100
-Subject: [Buildroot] [PATCH 05/14 v6] package/mesa3d-headers: new package
-In-Reply-To: <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
-References: <cover.1422055104.git.yann.morin.1998@free.fr>
- <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <1491783.fYcJCMXy9W@aquila>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 Jan 2015 09:47:55 +0100
+Subject: [Buildroot] [git commit] xserver_xorg-server: Remove unused null
+	root cursor option
+Message-ID: <20150126085506.98EB3805D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=1c341192071b6940c5c168bdd95b1cd7600dc5f7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Saturday 24 January 2015 00:24:34 Yann E. MORIN wrote:
-> Some headers required to build GL/EGL/GLES/... stuff are not provided by
-> Khronos, so we must find an alternate source for those headers.
-> Currently, we're missing:
->   - gl.h for full GL (gl.h for GLES is available from Khronos)
->   - dri_interface.h to be able to build GL-enabled Xorg
-> 
-> mesa3d provides all of them, and they are generic enough that they can
-> be re-used even for other GL/EGL/GLES/... implementations.
-> 
-> Unfortunately, modifying mesa3d so that it only installs its headers is
-> no trivial task, and would render the mesa3d package really ugly and
-> unmaintainable in the long run.
-Did you try "make install-data" in mesa3d tree? It should install all 
-files but the libraries (in other terms, it install headers only).
+Upstream removed this configure option back in 2010 (for server 1.8):
 
+http://cgit.freedesktop.org/xorg/xserver/commit/?id=60b6477f6dc005a1b052be8c5
 
-> Instead, we introduce a stripped-down mesa3d-headers package, which sole
-> purpose is to install those missing headers.
-hmmm... since mesa3d-headers provide all headers, do we really need 
-khronos-registry-* packages? In add, all developers test their code 
-using mesa3d headers. So, I would prefer to use headers provided by 
-mesa3d than khronos.
+So this hasn't done anything since 759d548e3e5 (xserver_xorg-server: bump
+version).
 
-[...]
+Don't add any Config.in.legacy for this as it as been broken for so long any
+way.
 
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xserver_xorg-server/Config.in        |    5 -----
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    6 ------
+ 2 files changed, 0 insertions(+), 11 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index bf9f820..40e3d84 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -90,11 +90,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR
+-	bool "Null root cursor"
+-	help
+-	  Don't display root cursor.
+-
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
+ 	bool "Enable AIGLX Extension"
+ 	help
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 5baa515..a9b9921 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -112,12 +112,6 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-null-root-cursor
+-else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-null-root-cursor
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-aiglx
+ else
