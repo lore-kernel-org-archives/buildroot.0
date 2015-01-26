@@ -1,41 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 08:40:17 +0100
-Subject: [Buildroot] [git commit] bison: bump to version 3.0.4
-Message-ID: <20150126074120.2CAD8805E5@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 26 Jan 2015 09:54:11 +0100
+Subject: [Buildroot] [PATCH 05/14 v6] package/mesa3d-headers: new package
+In-Reply-To: <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
+References: <cover.1422055104.git.yann.morin.1998@free.fr>
+ <a7d0443926fdc7741ab70b454d6c893f7c7a0b5f.1422055104.git.yann.morin.1998@free.fr>
+Message-ID: <1491783.fYcJCMXy9W@aquila>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0230c413b422dc1d351b3ef9881091634882e42a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yann,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bison/bison.hash |    2 +-
- package/bison/bison.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Saturday 24 January 2015 00:24:34 Yann E. MORIN wrote:
+> Some headers required to build GL/EGL/GLES/... stuff are not provided by
+> Khronos, so we must find an alternate source for those headers.
+> Currently, we're missing:
+>   - gl.h for full GL (gl.h for GLES is available from Khronos)
+>   - dri_interface.h to be able to build GL-enabled Xorg
+> 
+> mesa3d provides all of them, and they are generic enough that they can
+> be re-used even for other GL/EGL/GLES/... implementations.
+> 
+> Unfortunately, modifying mesa3d so that it only installs its headers is
+> no trivial task, and would render the mesa3d package really ugly and
+> unmaintainable in the long run.
+Did you try "make install-data" in mesa3d tree? It should install all 
+files but the libraries (in other terms, it install headers only).
 
-diff --git a/package/bison/bison.hash b/package/bison/bison.hash
-index dd10086..16913f2 100644
---- a/package/bison/bison.hash
-+++ b/package/bison/bison.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5940efbdd6b5d80e55ec16a01d2322e2892da21863391049b9b692570649177c	bison-3.0.3.tar.xz
-+sha256	a72428c7917bdf9fa93cb8181c971b6e22834125848cf1d03ce10b1bb0716fe1	bison-3.0.4.tar.xz
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index 45f785e..76ceb6e 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BISON_VERSION = 3.0.3
-+BISON_VERSION = 3.0.4
- BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPLv3+
+
+> Instead, we introduce a stripped-down mesa3d-headers package, which sole
+> purpose is to install those missing headers.
+hmmm... since mesa3d-headers provide all headers, do we really need 
+khronos-registry-* packages? In add, all developers test their code 
+using mesa3d headers. So, I would prefer to use headers provided by 
+mesa3d than khronos.
+
+[...]
+
+-- 
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
