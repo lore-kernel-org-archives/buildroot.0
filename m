@@ -1,40 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 17:16:24 +0100
-Subject: [Buildroot] [git commit] benejson: needs c++
-Message-ID: <20150126162902.A529D7FE16@busybox.osuosl.org>
+Date: Mon, 26 Jan 2015 17:19:58 +0100
+Subject: [Buildroot] [git commit] mpd: add patch to fix build failures
+Message-ID: <20150126162902.AF4457FE16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af503843f33f0f34e4325ba6d18d002667f94b7e
+commit: http://git.buildroot.net/buildroot/commit/?id=afac57162f638e2799953fd8041d64ad383f41b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pull.cpp doesn't look like vanilla C
-Fixes local tests (no autobuilder tests to show off atm).
+mpd is using snprintf without including stdio.h when pthread_setname_np
+isn't available leading to failure, hence patch it. Fixes:
+http://autobuild.buildroot.net/results/14c/14cf165e63fd7bb076d7c8f5aab92d24aa4622c4/
+
+Patch status: sent upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/benejson/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ ...ad-Name-include-stdio.h-for-prctl-as-well.patch |   28 ++++++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/benejson/Config.in b/package/benejson/Config.in
-index 4e8ee2c..cb86d67 100644
---- a/package/benejson/Config.in
-+++ b/package/benejson/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_BENEJSON
- 	bool "benejson"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  benejson is a buffering SAX-style JSON parser library.
- 	  The library package contains 3 major components:
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_BENEJSON
- 	  - Core: The parsing core with minimal dependencies
- 
- 	  https://codehero.github.io/benejson/
+diff --git a/package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch b/package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch
+new file mode 100644
+index 0000000..1711da3
+--- /dev/null
++++ b/package/mpd/0001-thread-Name-include-stdio.h-for-prctl-as-well.patch
+@@ -0,0 +1,28 @@
++From 36139b29cccae008c74924d81ea67d265327f7ac Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 26 Jan 2015 09:55:04 -0300
++Subject: [PATCH] thread/Name: include stdio.h for prctl as well
 +
-+comment "benejson needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
++We're still using snprintf so we need it, otherwise it leads to build
++failure.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/thread/Name.hxx | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/thread/Name.hxx b/src/thread/Name.hxx
++index 1576b3f..8d46d33 100644
++--- a/src/thread/Name.hxx
+++++ b/src/thread/Name.hxx
++@@ -26,6 +26,7 @@
++ #  include <stdio.h>
++ #elif defined(HAVE_PRCTL)
++ #  include <sys/prctl.h>
+++#  include <stdio.h>
++ #  ifdef PR_SET_NAME
++ #    define HAVE_THREAD_NAME
++ #  endif
++-- 
++2.0.5
++
