@@ -1,68 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jan 2015 18:11:05 +0100
-Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
- QT_SHARED is not selected
-In-Reply-To: <CACQ1gAiDQySdHAt3xy82+fwVmJLqfRrCbR=NHDR9roHbhdSFVw@mail.gmail.com>
-References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
- <20150120174507.1d11ab61@free-electrons.com>
- <87siey4i48.fsf@dell.be.48ers.dk> <54C60A2A.9090805@gmail.com>
- <20150126122141.437dd519@free-electrons.com>
- <CACQ1gAiDQySdHAt3xy82+fwVmJLqfRrCbR=NHDR9roHbhdSFVw@mail.gmail.com>
-Message-ID: <20150126181105.16dea123@free-electrons.com>
+From: Erico Nunes <erico.nunes@datacom.ind.br>
+Date: Mon, 26 Jan 2015 15:25:58 -0200
+Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
+	host-package
+In-Reply-To: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>
+References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>
+Message-ID: <1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Richard Genoud,
+Jinja2 is a general purpose templating language for python and can be
+required during build time for python scripts that generate code.
 
-On Mon, 26 Jan 2015 18:00:48 +0100, Richard Genoud wrote:
+While currently there are no in-tree Buildroot packages which depend on
+host-python-jinja2, I'm currently having to deal with a proprietary
+software build system that requires it.
 
-> > Probably. Unfortunately with kconfig, we cannot easily add one option
-> > for debug symbols, static/dynamic linking to each package. It would add
-> > gazillions of options.
-> >
-> > One possibility would be to have one global string option that you
-> > could fill in with a space-separated list of packages that you want to
-> > be built statically, even if the rest of the system is built
-> > dynamically.
-> Indeed, a generic solution like that would be great.
-> The solution is not straight-forward though. (but as I'm not a
-> buildroot-internals guru, I may be missing something)
-> What I see is that the option
-> BR2_LIST_OF_STATIC_PACKAGES="qwt qt busybox"
-> Will define :
-> QWT_FORCE_STATIC=y
-> QT_FORCE_STATIC=y
-> BUSYBOX_FORCE_STATIC=y
-> 
-> And the BR2_STATIC_LIB=y will define pkg-name_FORCE_STATIC=y for all packages
+I have tested that it builds and works correctly as a host python
+package for a Buildroot host-python and someone else might require it,
+so I'm proposing its inclusion.
 
-Yes, kind of. All this should be done in the generic-package
-infrastructure. Something like this in the inner-package function
+python-jinja2 for target builds fine without python-markupsafe as a
+build dependency, but when building host-python-jinja2 without
+host-python-markupsafe installed, the python package manager tries to
+download and install it.
+To avoid that and install host-python-markupsafe properly through
+Buildroot, the host build dependency is needed. Host support for
+python-markupsafe was submitted in a previous patch from this patchset.
 
-ifneq ($(filter $(1),$(call qstrip,$(BR2_LIST_OF_STATIC_PACKAGES))),)
-$(2)_FORCE_STATIC = YES
-endif
+Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
+---
+ package/python-jinja2/python-jinja2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-ifeq ($(BR2_STATIC_LIB),y)
-$(2)_FORCE_STATIC = YES
-endif
-
-> And then, in every single package file we'll have to change:
-> s/\<BR2_STATIC_LIB\>/pkg-name_FORCE_STATIC/g
-
-Indeed.
-
-> but I'm really not sure this is the best way.
-
-I don't really see a better way of doing this.
-
-Best regards,
-
-Thomas
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 49625e3..2105f3a 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -10,5 +10,7 @@ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3c
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE
++HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
