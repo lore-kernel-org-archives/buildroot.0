@@ -1,27 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 Jan 2015 17:20:13 +0100
-Subject: [Buildroot] [PATCH] mpd: add patch to fix build failures
-In-Reply-To: <1422279958-1335-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 26 Jan 2015 10:45:58 -0300")
-References: <1422279958-1335-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lhkp1pky.fsf@dell.be.48ers.dk>
+Date: Mon, 26 Jan 2015 17:16:03 +0100
+Subject: [Buildroot] [git commit] benejson: fix for non-wchar toolchains
+Message-ID: <20150126162902.9D3C080795@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=de5082fa21f4fcb28da0215d0f529b1165d73f9a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > mpd is using snprintf without including stdio.h when pthread_setname_np
- > isn't available leading to failure, hence patch it. Fixes:
- > http://autobuild.buildroot.net/results/14c/14cf165e63fd7bb076d7c8f5aab92d24aa4622c4/
+wchar needs to be disabled in order for it to build on !wchar. Fixes:
+http://autobuild.buildroot.net/results/71f/71f19d5056b56d40463b9fef7fa859e0025c4991/
 
- > Patch status: sent upstream.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/benejson/benejson.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/benejson/benejson.mk b/package/benejson/benejson.mk
+index 75753d2..2b8d09d 100644
+--- a/package/benejson/benejson.mk
++++ b/package/benejson/benejson.mk
+@@ -9,9 +9,17 @@ BENEJSON_SITE = $(call github,codehero,benejson,$(BENEJSON_VERSION))
+ BENEJSON_LICENSE = MIT
+ BENEJSON_LICENSE_FILES = LICENSE
+ BENEJSON_INSTALL_STAGING = YES
+-
+ BENEJSON_DEPENDENCIES = host-scons
+ 
++# wchar support needs to be manually disabled
++ifeq ($(BR2_USE_WCHAR),)
++define BENEJSON_DISABLE_WCHAR
++	$(SED) 's,^#define BNJ_WCHAR_SUPPORT,#undef BNJ_WCHAR_SUPPORT,' \
++		$(@D)/benejson/benejson.h
++endef
++BENEJSON_POST_PATCH_HOOKS += BENEJSON_DISABLE_WCHAR
++endif
++
+ define BENEJSON_BUILD_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
