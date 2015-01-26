@@ -1,51 +1,54 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Mon, 26 Jan 2015 11:16:04 +0100
-Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
-	QT_SHARED is not selected
-In-Reply-To: <87lhkp3m08.fsf@dell.be.48ers.dk>
-References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
- <20150120174507.1d11ab61@free-electrons.com> <87siey4i48.fsf@dell.be.48ers.dk>
- <54C60A2A.9090805@gmail.com> <87lhkp3m08.fsf@dell.be.48ers.dk>
-Message-ID: <CACQ1gAhTtckM=AZU4bVtTNAvAXxDFxBe6p5_wmd-_vgci59qRw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 26 Jan 2015 07:33:38 -0300
+Subject: [Buildroot] pppd makefile moves /etc/PPP/resolv.conf
+In-Reply-To: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
+References: <38D70EB2-AE5E-475D-865B-7225F7CD5E26@nowonline.co.uk>
+Message-ID: <54C61802.4010602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-01-26 10:54 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Richard" == Richard Genoud <richard.genoud@gmail.com> writes:
->
+On 01/26/2015 03:49 AM, Lee Essen wrote:
+
 > Hi,
->
->>> I agree that it would be cleaner, but the reason the explicit QT_SHARED
->  >> stuff was added was afaik a lot of systems only needed Qt in a single
->  >> application / that application only used a subset of the Qt
->  >> functionality, so having a static libQt while everything else was shared
->  >> was quite a big win in size / startup time.
->
->  > yes, that's exactly my case. I've got one single Qt application, and Qt
->  > is quite huge, so making it static saves a lot of space.
->  > I didn't trying to compile with BR2_STATIC_LIBS=y, but I guess that my
->  > rootfs will be much bigger.
->
-> Indeed. I guess this is (still) quite common.
->
->
->  >> It does complicate LGPL compliance and I don't know if the disk space
->  >> concerns are as big these days though.
->  >>
->  > Hum... I didn't think about the static vs dynamic LGPL compliance. I'll
->  > have to check that.
->
-> I'm not a lawyer, but as I understand it - Because of the LGPLs
-> relinking requirements you basically have to provide the object files of
-> your application.
-That's what I also understood. And it makes perfect sense !
+> 
+> The current pppd package makefile has a post extract hook that changes the ppp generated resolv.conf from /etc/ppp/resolv.conf to /etc/resolv.conf with a comment suggesting that this is done because /etc/ppp might not be writable (and this location isn't useful because of where the c library looks.)
+> 
+> My assumption is that the original location provided you with flexibility to do clever things in the ppp-up script (and that's certainly what I want to do)
+> 
+> If you don't set usepeerdns then it looks like the server names don't get requested, so the creation of this file seems to be all or nothing - there is no way to work with just the env vars.
+> 
+> With the current buildroot setup your resolv.conf is overwritten with no option to do anything clever.
+> 
+> Wouldn't it be better to use /var/run/ppp.resolv.conf (or something similar) or even leave it as it was and include a symlink in /etc/ppp ??
+> 
+> Thanks,
+> 
+> Lee.
 
->  > And for disk space concern, I must admit that I haven't got much space (
->  > 60Mio for the rootfs, and the Qt application takes 10Mio
->
-> Heh, I've been involved with projects using Qt in <10MB ;)
-
-:) Well, I guess that I may have some possible optimization to do !
+Hi.
+I did that modification, let's see.
+Actually the original location didn't provide anything useful if your
+root filesystem is read-only, like in squashfs, so it's just as bad, so
+it makes no sense in making it a symlink from /etc/ppp -> /var/run in
+the way you say, because, well, what if you got multiple ppp instances
+running?
+The other problem with writing it to some other temporary file different
+than /etc(tmp)/resolv.conf is that out of the box it's useless.
+What if i said "i've got an advanced scenario and dhcpcd/udhcpc/other
+dhcp client writes to /etc/resolv.conf unfairly"?
+What dhcp clients currently do is no different than what pppd does (with
+usepeerdns), and it's basically out-of-the-box simplicity, it just
+works, though granted that it doesn't cater for advanced uses.
+That pppd doesn't give DNS information to ip-up scripts, at least for
+me, a bug, the information should be available. It's likely upstream
+won't fix/change this since it would alter established behaviour and
+hence breaks scripts.
+So what's the solution to the sucky /etc/resolv.conf mess?
+Well, openresolv (http://roy.marples.name/projects/openresolv/index).
+I've mentioned it in IRC before but didn't have time to create the
+package and glue it together seamlessly with the other packages (mostly
+ppp, dhcp clients and so on).
+Regards.
