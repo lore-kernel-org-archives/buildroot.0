@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jan 2015 23:23:45 +0100
-Subject: [Buildroot] [PATCH 3/4] boot/syslinux: disable MinGW support
-In-Reply-To: <1421710198-20898-3-git-send-email-romain.naour@openwide.fr>
+Date: Mon, 26 Jan 2015 23:24:20 +0100
+Subject: [Buildroot] [PATCH 4/4] boot/syslinux: add host-perl dependency
+In-Reply-To: <54BEBA2A.7050901@openwide.fr>
 References: <1421710198-20898-1-git-send-email-romain.naour@openwide.fr>
- <1421710198-20898-3-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150126232345.4fa48205@free-electrons.com>
+ <1421710198-20898-4-git-send-email-romain.naour@openwide.fr>
+ <20150120085330.GA2146@tarshish> <54BEBA2A.7050901@openwide.fr>
+Message-ID: <20150126232420.0fc0cc92@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,21 @@ To: buildroot@busybox.net
 
 Dear Romain Naour,
 
-On Tue, 20 Jan 2015 00:29:57 +0100, Romain Naour wrote:
-> If MinGW is found on the host, syslinux.exe and syslinux64.exe
-> are build. Disable it since there are no MinGW support in
-> Buildroot.
+On Tue, 20 Jan 2015 21:27:22 +0100, Romain Naour wrote:
+
+> > Buildroot expects perl to be installed on the host system already. See ?2.1 
+> > (Mandatory packages) in the manual. AFAIK host-perl is only used to build perl 
+> > itself for the target.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  boot/syslinux/0001-disable-MinGW-support.patch | 29 ++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 boot/syslinux/0001-disable-MinGW-support.patch
+> Thanks for the reminder, I haven't checked if perl was a mandatory packages
+> before sending the patch...
+> 
+> > Have you encountered any specific build failure?
+> 
+> Not at all.
 
-Hum, why not, but your patch is clearly not upstreamable in Syslinux as
-is. Do you think you can instead propose a patch that could potentially
-be upstreamed (and submit it upstream) ?
-
-Thanks,
+So I'll mark the patch as Rejected in patchwork. Thanks Romain and
+Baruch.
 
 Thomas
 -- 
