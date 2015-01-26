@@ -1,126 +1,96 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 26 Jan 2015 20:24:18 +0100
-Subject: [Buildroot] [PATCH 3/5] package/imlib2: Switch to giflib
-In-Reply-To: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1422300260-5361-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 26 Jan 2015 20:24:16 +0100
+Subject: [Buildroot] [PATCH 1/5] package/giflib: New package
+Message-ID: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This package will replace libungif.
+
+Needed for Kodi 15.0, TexturePacker depends on giflib >= 5.0.5
+https://github.com/xbmc/xbmc/blob/master/tools/depends/native/TexturePacker/src/configure.ac#L29
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/imlib2/0001-giflib51.patch |   71 ++++++++++++++++++++++++++++++++++++
- package/imlib2/Config.in           |    2 +-
- package/imlib2/imlib2.mk           |    2 +-
- 3 files changed, 73 insertions(+), 2 deletions(-)
- create mode 100644 package/imlib2/0001-giflib51.patch
+ package/Config.in          |    1 +
+ package/giflib/Config.in   |    8 ++++++++
+ package/giflib/giflib.hash |    2 ++
+ package/giflib/giflib.mk   |   28 ++++++++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/giflib/Config.in
+ create mode 100644 package/giflib/giflib.hash
+ create mode 100644 package/giflib/giflib.mk
 
-diff --git a/package/imlib2/0001-giflib51.patch b/package/imlib2/0001-giflib51.patch
+diff --git a/package/Config.in b/package/Config.in
+index fbb1341..9bc8cdb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -664,6 +664,7 @@ menu "Graphics"
+ 	source "package/gd/Config.in"
+ 	source "package/gdk-pixbuf/Config.in"
+ 	source "package/giblib/Config.in"
++	source "package/giflib/Config.in"
+ 	source "package/gtk2-engines/Config.in"
+ 	source "package/gtk2-themes/Config.in"
+ 	source "package/harfbuzz/Config.in"
+diff --git a/package/giflib/Config.in b/package/giflib/Config.in
 new file mode 100644
-index 0000000..2b46329
+index 0000000..70368dc
 --- /dev/null
-+++ b/package/imlib2/0001-giflib51.patch
-@@ -0,0 +1,71 @@
-+Adjust source code to work with giflib 5.1x
++++ b/package/giflib/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_GIFLIB
++	bool "giflib"
++	help
++	  giflib is a library for reading and writing gif images. It is API and
++	  ABI compatible with libungif which was in wide use while the LZW
++	  compression algorithm was patented.
 +
-+Downloaded from
-+https://projects.archlinux.org/svntogit/packages.git/plain/trunk/imlib2-giflib51.patch?h=packages/imlib2
++	  http://sourceforge.net/projects/giflib
+diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
+new file mode 100644
+index 0000000..46ba7ca
+--- /dev/null
++++ b/package/giflib/giflib.hash
+@@ -0,0 +1,2 @@
++# From http://sourceforge.net/projects/giflib/files
++sha1	e5d716e0ccef671103c38c25693927e413fac639	giflib-5.1.1.tar.bz2
+diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
+new file mode 100644
+index 0000000..96a1dfd
+--- /dev/null
++++ b/package/giflib/giflib.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# giflib
++#
++################################################################################
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++GIFLIB_VERSION = 5.1.1
++GIFLIB_SOURCE = giflib-$(GIFLIB_VERSION).tar.bz2
++GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
++GIFLIB_INSTALL_STAGING = YES
++GIFLIB_LICENSE = MIT
++GIFLIB_LICENSE_FILES = COPYING
 +
-+diff -ruN imlib2-1.4.6.orig/src/modules/loaders/loader_gif.c imlib2-1.4.6/src/modules/loaders/loader_gif.c
-+--- imlib2-1.4.6.orig/src/modules/loaders/loader_gif.c	2013-12-21 10:16:10.000000000 +0000
-++++ imlib2-1.4.6/src/modules/loaders/loader_gif.c	2014-05-27 09:52:35.857291512 +0000
-+@@ -36,7 +36,7 @@
-+ #endif
-+    if (fd < 0)
-+       return 0;
-+-   gif = DGifOpenFileHandle(fd);
-++   gif = DGifOpenFileHandle(fd, NULL);
-+    if (!gif)
-+      {
-+         close(fd);
-+@@ -60,13 +60,13 @@
-+              h = gif->Image.Height;
-+              if (!IMAGE_DIMENSIONS_OK(w, h))
-+                {
-+-                  DGifCloseFile(gif);
-++                  DGifCloseFile(gif, NULL);
-+                   return 0;
-+                }
-+              rows = malloc(h * sizeof(GifRowType *));
-+              if (!rows)
-+                {
-+-                  DGifCloseFile(gif);
-++                  DGifCloseFile(gif, NULL);
-+                   return 0;
-+                }
-+              for (i = 0; i < h; i++)
-+@@ -78,7 +78,7 @@
-+                   rows[i] = malloc(w * sizeof(GifPixelType));
-+                   if (!rows[i])
-+                     {
-+-                       DGifCloseFile(gif);
-++                       DGifCloseFile(gif, NULL);
-+                        for (i = 0; i < h; i++)
-+                          {
-+                             if (rows[i])
-+@@ -150,7 +150,7 @@
-+         im->data = (DATA32 *) malloc(sizeof(DATA32) * w * h);
-+         if (!im->data)
-+           {
-+-             DGifCloseFile(gif);
-++             DGifCloseFile(gif, NULL);
-+              free(rows);
-+              return 0;
-+           }
-+@@ -181,7 +181,7 @@
-+                        last_per = (int)per;
-+                        if (!(progress(im, (int)per, 0, last_y, w, i)))
-+                          {
-+-                            DGifCloseFile(gif);
-++                            DGifCloseFile(gif, NULL);
-+                             for (i = 0; i < h; i++)
-+                               {
-+                                  free(rows[i]);
-+@@ -198,7 +198,7 @@
-+      {
-+         progress(im, 100, 0, last_y, w, h);
-+      }
-+-   DGifCloseFile(gif);
-++   DGifCloseFile(gif, NULL);
-+    for (i = 0; i < h; i++)
-+      {
-+         free(rows[i]);
-diff --git a/package/imlib2/Config.in b/package/imlib2/Config.in
-index a323a8d..7aac074 100644
---- a/package/imlib2/Config.in
-+++ b/package/imlib2/Config.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_IMLIB2_PNG
- 
- config BR2_PACKAGE_IMLIB2_GIF
- 	bool "GIF support"
--	select BR2_PACKAGE_LIBUNGIF
-+	select BR2_PACKAGE_GIFLIB
- 
- config BR2_PACKAGE_IMLIB2_TIFF
- 	bool "TIFF support"
-diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-index 62f3989..d8feeb6 100644
---- a/package/imlib2/imlib2.mk
-+++ b/package/imlib2/imlib2.mk
-@@ -38,7 +38,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_IMLIB2_GIF),y)
- 	IMLIB2_CONF_OPTS += --with-gif
--	IMLIB2_DEPENDENCIES += libungif
-+	IMLIB2_DEPENDENCIES += giflib
- else
- 	IMLIB2_CONF_OPTS += --without-gif
- endif
++GIFLIB_BINS = \
++	gif2epsn gif2ps gif2rgb gif2x11 gifasm gifbg gifbuild gifburst gifclip \
++	gifclrmp gifcolor gifcomb gifcompose gifecho giffiltr giffix gifflip  \
++	gifhisto gifinfo gifinter gifinto gifovly gifpos gifrotat     \
++	gifrsize gifspnge giftext giftool gifwedge icon2gif raw2gif rgb2gif \
++	text2gif
++
++define GIFLIB_BINS_CLEANUP
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GIFLIB_BINS))
++endef
++
++GIFLIB_POST_INSTALL_TARGET_HOOKS += GIFLIB_BINS_CLEANUP
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.7.10.4
