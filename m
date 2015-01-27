@@ -1,80 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 27 Jan 2015 12:21:31 +0100
-Subject: [Buildroot] [PATCH] openssl: bump version to 1.0.2
-In-Reply-To: <87r3uhyz00.fsf@dell.be.48ers.dk>
-References: <1422296409-48296-1-git-send-email-Vincent.Riera@imgtec.com>
- <87r3uhyz00.fsf@dell.be.48ers.dk>
-Message-ID: <54C774BB.7010207@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jan 2015 13:52:20 +0100
+Subject: [Buildroot] [PATCH] alsa-utils: needs dynamic library support
+In-Reply-To: <27b7692b7892024566e160a09c2d49df8cb3481c.1422354073.git.baruch@tkos.co.il>
+References: <27b7692b7892024566e160a09c2d49df8cb3481c.1422354073.git.baruch@tkos.co.il>
+Message-ID: <20150127135220.7832b906@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Dear Baruch Siach,
 
-yes, I have built some packages depending on openssl. See this 
-build-time.log list:
+On Tue, 27 Jan 2015 12:21:13 +0200, Baruch Siach wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/314/314dac9f5e62ae9beb598eb1b4cb35c0a7bfe792/
+> http://autobuild.buildroot.net/results/964/964e44f0c1653370600c7e8c647abda3f6380e34/
+> http://autobuild.buildroot.net/results/d72/d72f31bab907c7485d03db4597d01fd759277db4/
+> ...
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/alsa-utils/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-$ awk -F: '{print $4}' build-time.log | uniq
-  toolchain-external
-  toolchain
-  busybox
-  dtv-scan-tables
-  host-m4
-  host-libtool
-  host-autoconf
-  host-automake
-  host-pkgconf
-  zlib
-  openssl
-  host-ncurses
-  ncurses
-  readline
-  lftp
-  host-libcap
-  libcap
-  libcurl
-  libevent
-  libffi
-  libsigc
-  libtorrent
-  lzo
-  nut
-  openssh
-  host-expat
-  host-zlib
-  host-python
-  python
-  rtorrent
-  squid
-  stunnel
-  host-gettext
-  host-libxml-parser-perl
-  host-intltool
-  transmission
-  tvheadend
-  vsftpd
-  host-bison
-  host-flex
-  vtun
-  wget
-  wpa_supplicant
-  host-fakeroot
-  host-makedevs
-  host-mkpasswd
+I am not sure. alsa-utils hardcodes:
 
-Regards,
---
-Vincent
+ALSA_LIBS="$ALSA_LIBS -lasound -lm -ldl -lpthread"
 
-El 26/01/15 a las 23:10, Peter Korsgaard escribi?:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
->   > - Bump version to 1.0.2
->   > - Adapt patches to new version
->   > - Update hash value
->
-> 1.0.2 is listed as a new major version. Is it 100% compatible? Did you
-> test build some packages?
->
+but in practice, alsa-lib does not necessarily depends on -ldl.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
