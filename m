@@ -1,95 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Jan 2015 16:01:14 +0100
-Subject: [Buildroot] [git commit] package/giflib: New package
-Message-ID: <20150127162248.1B2AD80840@busybox.osuosl.org>
+Date: Tue, 27 Jan 2015 17:16:51 +0100
+Subject: [Buildroot] [git commit] whois: bump to version 5.2.4
+Message-ID: <20150127162248.32A2C7FE19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9384b87f2808a5c2d7344b06bd11b43ed992433c
+commit: http://git.buildroot.net/buildroot/commit/?id=3f1fc3f238dac4878361154a214a83f6adccf103
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package will replace libungif.
-
-Needed for Kodi 15.0, TexturePacker depends on giflib >= 5.0.5
-https://github.com/xbmc/xbmc/blob/master/tools/depends/native/TexturePacker/src/configure.ac#L29
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |    1 +
- package/giflib/Config.in   |    8 ++++++++
- package/giflib/giflib.hash |    2 ++
- package/giflib/giflib.mk   |   28 ++++++++++++++++++++++++++++
- 4 files changed, 39 insertions(+), 0 deletions(-)
+ package/whois/whois.hash |    4 ++--
+ package/whois/whois.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 51d4c15..352d73a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -664,6 +664,7 @@ menu "Graphics"
- 	source "package/gd/Config.in"
- 	source "package/gdk-pixbuf/Config.in"
- 	source "package/giblib/Config.in"
-+	source "package/giflib/Config.in"
- 	source "package/gtk2-engines/Config.in"
- 	source "package/gtk2-themes/Config.in"
- 	source "package/harfbuzz/Config.in"
-diff --git a/package/giflib/Config.in b/package/giflib/Config.in
-new file mode 100644
-index 0000000..70368dc
---- /dev/null
-+++ b/package/giflib/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GIFLIB
-+	bool "giflib"
-+	help
-+	  giflib is a library for reading and writing gif images. It is API and
-+	  ABI compatible with libungif which was in wide use while the LZW
-+	  compression algorithm was patented.
-+
-+	  http://sourceforge.net/projects/giflib
-diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
-new file mode 100644
-index 0000000..46ba7ca
---- /dev/null
-+++ b/package/giflib/giflib.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/giflib/files
-+sha1	e5d716e0ccef671103c38c25693927e413fac639	giflib-5.1.1.tar.bz2
-diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
-new file mode 100644
-index 0000000..96a1dfd
---- /dev/null
-+++ b/package/giflib/giflib.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# giflib
-+#
-+################################################################################
-+
-+GIFLIB_VERSION = 5.1.1
-+GIFLIB_SOURCE = giflib-$(GIFLIB_VERSION).tar.bz2
-+GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
-+GIFLIB_INSTALL_STAGING = YES
-+GIFLIB_LICENSE = MIT
-+GIFLIB_LICENSE_FILES = COPYING
-+
-+GIFLIB_BINS = \
-+	gif2epsn gif2ps gif2rgb gif2x11 gifasm gifbg gifbuild gifburst gifclip \
-+	gifclrmp gifcolor gifcomb gifcompose gifecho giffiltr giffix gifflip  \
-+	gifhisto gifinfo gifinter gifinto gifovly gifpos gifrotat     \
-+	gifrsize gifspnge giftext giftool gifwedge icon2gif raw2gif rgb2gif \
-+	text2gif
-+
-+define GIFLIB_BINS_CLEANUP
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GIFLIB_BINS))
-+endef
-+
-+GIFLIB_POST_INSTALL_TARGET_HOOKS += GIFLIB_BINS_CLEANUP
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index ec5dbcd..b52a8b9 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.3.dsc
+-sha256	b1c9a4005bd41036a9e82dd4830005f33ffa5255ab764f4dbe3300715c15e803	whois_5.2.3.tar.xz
++# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.4.dsc
++sha256	f1827e3b61e6f647b6093e6dcf52d3b44775fdbd6bf0cf7413aff26825f0bc43	whois_5.2.4.tar.xz
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 8b8a796..e4f8184 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WHOIS_VERSION = 5.2.3
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20141227T042107Z/pool/main/w/whois
++WHOIS_VERSION = 5.2.4
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150125T100758Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
