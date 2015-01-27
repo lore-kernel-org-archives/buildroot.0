@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jan 2015 22:41:49 +0100
-Subject: [Buildroot] [RFC 4/8] barebox: add custom help entries
+Date: Tue, 27 Jan 2015 22:41:51 +0100
+Subject: [Buildroot] [RFC 6/8] Makefile: remove uclibc, barebox, linux,
+	busybox specific help
 In-Reply-To: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1422394913-13257-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1422394913-13257-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the barebox package is not yet converted to kconfig-package,
-make it register its own BAREBOX_HELP_HOOKS so that its custom make
-targets are visible in 'barebox-help'.
+Now that each package has its own custom help text, there is no need
+to have those busybox, linux, uclibc and barebox specific targets
+mentionned in the main help text.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/barebox.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Makefile | 14 --------------
+ 1 file changed, 14 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 0fb7cec..4a89952 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -106,6 +106,16 @@ define BAREBOX_INSTALL_TARGET_CMDS
- endef
- endif
- 
-+define BAREBOX_PACKAGE_HELP
-+	@$(foreach editor,menuconfig xconfig gconfig nconfig,\
-+		@$(call pkg-print-help-opt,barebox-$(editor),"Run the $(editor) configuration tool")$(sep))
-+	@$(call pkg-print-help-opt,barebox-savedefconfig,"Generate a minimal defconfig")
-+	@$(call pkg-print-help-opt,barebox-update-config,"Update configuration as a full config file")
-+	@$(call pkg-print-help-opt,barefbox-update-defconfig,"Update configuration as a minimal defconfig")
-+endef
-+
-+BAREBOX_HELP_HOOKS += BAREBOX_PACKAGE_HELP
-+
- $(eval $(generic-package))
- 
- ifeq ($(BR2_TARGET_BAREBOX),y)
+diff --git a/Makefile b/Makefile
+index 6cee027..1e5390b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -868,20 +868,6 @@ help:
+ 	@echo '  randpackageconfig      - New config with random answer to package options'
+ 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
+ 	@echo '  allnopackageconfig     - New config where package options are answered with no'
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+-endif
+-ifeq ($(BR2_LINUX_KERNEL),y)
+-	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+-	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+-endif
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+-endif
+-ifeq ($(BR2_TARGET_BAREBOX),y)
+-	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+-	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+-endif
+ 	@echo
+ 	@echo 'Documentation:'
+ 	@echo '  manual                 - build manual in all formats'
 -- 
 2.1.0
