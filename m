@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Jan 2015 16:17:28 +0100
-Subject: [Buildroot] [PATCH 2/5] package/fbv: Switch to giflib
-In-Reply-To: <1422300260-5361-2-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Mon, 26 Jan 2015 20:24:17 +0100")
+Date: Tue, 27 Jan 2015 16:25:33 +0100
+Subject: [Buildroot] [PATCH 3/5] package/imlib2: Switch to giflib
+In-Reply-To: <1422300260-5361-3-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Mon, 26 Jan 2015 20:24:18 +0100")
 References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
- <1422300260-5361-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87a914z20n.fsf@dell.be.48ers.dk>
+ <1422300260-5361-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <8761bsz1n6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,35 +16,16 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  > ---
- >  package/fbv/Config.in             |    4 +--
- >  package/fbv/fbv-1.0b-giflib.patch |   69 +++++++++++++++++++++++++++++++++++++
- >  package/fbv/fbv.mk                |   10 +++++-
- >  3 files changed, 80 insertions(+), 3 deletions(-)
- >  create mode 100644 package/fbv/fbv-1.0b-giflib.patch
+ >  package/imlib2/0001-giflib51.patch |   71 ++++++++++++++++++++++++++++++++++++
+ >  package/imlib2/Config.in           |    2 +-
+ >  package/imlib2/imlib2.mk           |    2 +-
+ >  3 files changed, 73 insertions(+), 2 deletions(-)
+ >  create mode 100644 package/imlib2/0001-giflib51.patch
 
- > diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
- > index fe24a6f..81881ff 100644
- > --- a/package/fbv/fbv.mk
- > +++ b/package/fbv/fbv.mk
- > @@ -30,7 +30,15 @@ else
- >  FBV_CONFIGURE_OPTS += --without-libjpeg
- >  endif
- >  ifeq ($(BR2_PACKAGE_FBV_GIF),y)
- > -FBV_DEPENDENCIES += libungif
- > +FBV_DEPENDENCIES += giflib
- > +define FBV_CONFIGURE_LIBUNGIF_IS_NOW_GIFLIB
- > +	$(SED) 's|-lungif|-lgif|' $(@D)/configure
- > +endef
- > +FBV_PRE_CONFIGURE_HOOKS += FBV_CONFIGURE_LIBUNGIF_IS_NOW_GIFLIB
- > +define FBV_MAKE_LIBUNGIF_IS_NOW_GIFLIB
- > +	$(SED) 's|-lungif|-lgif|' $(@D)/Make.conf
- > +endef
+How about instead bumping our imlib2 version? I see there is some giflib
+support in upstream git:
 
-Why is it needed to patch Make.conf if you already patch configure
-(which generates it)?
-
-I would prefer to see the configure changes in the giflib patch
-instead. How do the archlinux guys handle it?
+https://git.enlightenment.org/legacy/imlib2.git/log/
 
 -- 
 Bye, Peter Korsgaard
