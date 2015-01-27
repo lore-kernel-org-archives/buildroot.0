@@ -1,37 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jan 2015 22:16:44 +0100
-Subject: [Buildroot] [PATCH 2/8] package/libiio: update cmake code for
- libxml2 detection
-In-Reply-To: <1422220435-18689-3-git-send-email-s.martin49@gmail.com>
-References: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
- <1422220435-18689-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <54C8003C.3000507@mind.be>
+Date: Tue, 27 Jan 2015 22:19:31 +0100
+Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
+	host-package
+In-Reply-To: <20150127221431.14835106@free-electrons.com>
+References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>	<1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>	<54C7FE07.4030206@mind.be>
+ <20150127221431.14835106@free-electrons.com>
+Message-ID: <54C800E3.8020907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/01/15 22:13, Samuel Martin wrote:
-> Only check for libxml2 when it is needed.
+On 27/01/15 22:14, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> This prevents CMake from falling back on the libxml2-config.cmake
-> installed on the host system (i.e. when libxml2 >=2.9.2 is part of the
-> host system), but not enabled as a target package (i.e. not existing in
-> the staging tree).
+> On Tue, 27 Jan 2015 22:07:19 +0100, Arnout Vandecappelle wrote:
+> 
+>>> While currently there are no in-tree Buildroot packages which depend on
+>>> host-python-jinja2, I'm currently having to deal with a proprietary
+>>> software build system that requires it.
+>>
+>>  Forgot to mention in my last review: in that case, you should also add a
+>> Config.in.host for it (and update package/Config.in.host).
+> 
+> Why ? If it's merely used as a build dependency of another package, I
+> don't see why we should have a menuconfig entry for it. Indeed, having
+> a host-python-ninja2 package with no users in-tree is weird, but I
+> don't think cluttering the "Host utilities" menu with such packages is
+> the appropriate solution here.
 
- This is worrisome... I would hope that our cmake could be convinced never to
-look in /usr/share/cmake when cross-compiling...
-
+ Hm I guess you're right. So Erico, forget I mentioned it.
 
  Regards,
  Arnout
-
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-[snip]
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
