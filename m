@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 27 Jan 2015 14:11:07 -0300
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{18, 14, 10}.x series
-Message-ID: <1422378668-7866-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 27 Jan 2015 14:11:08 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.18.4
+In-Reply-To: <1422378668-7866-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1422378668-7866-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1422378668-7866-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 33ab75f..ee51f82 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -174,13 +174,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.66"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.105"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.65"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.66"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.36"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.29"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.30"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.3"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.4"	if BR2_KERNEL_HEADERS_3_18
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 95eb87a..7b538c6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.18.3"
++	bool "3.18.4"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.18.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.18.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.0.5
