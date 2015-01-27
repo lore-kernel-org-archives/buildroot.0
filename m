@@ -1,72 +1,43 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Tue, 27 Jan 2015 16:31:39 +0800
-Subject: [Buildroot] [PATCH 1/1] board: add support for the VIA VAB-820
-	board
-In-Reply-To: <20150125190200.39f26831@free-electrons.com>
-References: <1422000168-19305-1-git-send-email-imrehg@gmail.com>
- <1422000168-19305-2-git-send-email-imrehg@gmail.com>
- <20150125190200.39f26831@free-electrons.com>
-Message-ID: <CAJ3iQcpmqYVuj3xg-yimp7ck98ritw0Ex71WhJf83_ZM8RPTYg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 27 Jan 2015 12:21:13 +0200
+Subject: [Buildroot] [PATCH] alsa-utils: needs dynamic library support
+Message-ID: <27b7692b7892024566e160a09c2d49df8cb3481c.1422354073.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/314/314dac9f5e62ae9beb598eb1b4cb35c0a7bfe792/
+http://autobuild.buildroot.net/results/964/964e44f0c1653370600c7e8c647abda3f6380e34/
+http://autobuild.buildroot.net/results/d72/d72f31bab907c7485d03db4597d01fd759277db4/
+...
 
-Thanks a lot for the overview, really sorry about the embarrassing
-number of typos, I'll fix them for v2!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/alsa-utils/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-On 26 January 2015 at 02:02, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
->> new file mode 100644
->> index 0000000..167a90a
->> --- /dev/null
->> +++ b/configs/via_imx6_vab820_defconfig
->> @@ -0,0 +1,38 @@
->> +# architecture
->> +BR2_arm=y
->> +BR2_cortex_a9=y
->> +
->> +# toolchain
->> +BR2_DEPRECATED=y
->
-> This is not needed.
->
->> +BR2_KERNEL_HEADERS_3_0=y
->> +BR2_DEFAULT_KERNEL_HEADERS="3.0.101"
->
-> Use instead:
->
-> BR2_KERNEL_HEADERS_VERSION=y
-> BR2_DEFAULT_KERNEL_VERSION="3.0.101"
-
-I was trying this setting, and run into the problem that `make
-defconfig` defaults to 2.6.x headers with
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD=y and then I run into
-a compile time error:
-
- if ! support/scripts/check-kernel-headers.sh
-/home/greg/Software/vab820-buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot
- 2.6; then exit 1; fi
- Incorrect selection of kernel headers: expected 2.6.x, got 3.0.x
-
-It is fixed with BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y in the
-defconfig, but I'm not sure if that is the correct way.
-
-
-Also, could I set BR2_DEFAULT_KERNEL_VERSION="3.0.35" for clarity, as
-that is the exact version?
-
-
-So after these two issues above, now I just tested a working version with:
-BR2_KERNEL_HEADERS_VERSION=y
-BR2_DEFAULT_KERNEL_VERSION="3.0.35"
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-
-What do you think?
-
-Cheers,
-  Greg
+diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
+index cc667115084b..d8418639e394 100644
+--- a/package/alsa-utils/Config.in
++++ b/package/alsa-utils/Config.in
+@@ -1,12 +1,13 @@
+-comment "alsa-utils needs a toolchain w/ largefile, threads"
++comment "alsa-utils needs a toolchain w/ largefile, threads, dynamic library"
+ 	depends on BR2_USE_MMU # fork
+-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_ALSA_UTILS
+ 	bool "alsa-utils"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+-- 
+2.1.4
