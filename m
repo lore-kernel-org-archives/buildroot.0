@@ -1,44 +1,56 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 27 Jan 2015 16:18:07 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.18.2
-Message-ID: <1422386287-15556-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 27 Jan 2015 17:30:54 -0300
+Subject: [Buildroot] [PATCH] squid: fix old distro gcc build failure
+Message-ID: <1422390654-8429-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Squid 3.5.x deprecated the use of HOSTCXX & friends in favour of
+BUILDCXX and BUILDCXXFLAGS.
+When they are not specified BUILDCXXFLAGS takes flags from target
+CXXFLAGS which specifies C11 standard and which older vesions of gcc
+don't understand, thus causing breakage.
+cf_gen hasn't got any C11 features so it's not required. Fixes:
+http://autobuild.buildroot.net/results/816/8162e4ec941e7642248373be47cca99113a648e8/
+
+Also drop ACLOCAL and AUTOMAKE trickery from e27ccbab since it's no
+longer required.
+
+And fix a typo in the hash file pointing to an improper hash file
+upstream.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 4 ++--
+ package/squid/squid.hash | 2 +-
+ package/squid/squid.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 2ee2463..655ef5f 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	55509a3fa8e57deb4f41bb8a25cad850235b1285892c179bfcc914fec4abdd09	btrfs-progs-v3.18.1.tar.xz
-+sha256	dd8ddb4d201e5ffd32a15ed0e1f33fbc2c8fb16383f1519a9fae136698c2dfec	btrfs-progs-v3.18.2.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index e8d3dcc..c6c36cf 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 3.18.1
-+BTRFS_PROGS_VERSION = 3.18.2
- BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
--BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1
-+BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1 DISABLE_BACKTRACE=1
- BTRFS_PROGS_LICENSE = GPLv2
- BTRFS_PROGS_LICENSE_FILES = COPYING
- 
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a067383..574d462 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.4/squid-3.5.1.tar.xz.asc
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.1.tar.xz.asc
+ md5	b3c9d9726314c1136b7a4c06447db24b	squid-3.5.1.tar.xz
+ sha1	a2b01afd33d1df3a234e1a5c3405d626f6cf0fb0	squid-3.5.1.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index deb9360..e385c37 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -21,8 +21,8 @@ SQUID_CONF_ENV = \
+ 	ac_cv_func___va_copy=yes \
+ 	ac_cv_func_strnstr=no \
+ 	ac_cv_have_squid=yes \
+-	ACLOCAL="$(ACLOCAL)" \
+-	AUTOMAKE="$(AUTOMAKE)"
++	BUILXCXX="$(HOSTCXX)" \
++	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
+ SQUID_CONF_OPTS = \
+ 	--enable-async-io=8 \
+ 	--enable-linux-netfilter \
 -- 
 2.0.5
