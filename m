@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Jan 2015 16:12:49 +0100
-Subject: [Buildroot] [PATCH 1/5] package/giflib: New package
-In-Reply-To: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Mon, 26 Jan 2015 20:24:16 +0100")
+Date: Tue, 27 Jan 2015 16:17:28 +0100
+Subject: [Buildroot] [PATCH 2/5] package/fbv: Switch to giflib
+In-Reply-To: <1422300260-5361-2-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Mon, 26 Jan 2015 20:24:17 +0100")
 References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87egqgz28e.fsf@dell.be.48ers.dk>
+ <1422300260-5361-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87a914z20n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,37 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > This package will replace libungif.
- > Needed for Kodi 15.0, TexturePacker depends on giflib >= 5.0.5
- > https://github.com/xbmc/xbmc/blob/master/tools/depends/native/TexturePacker/src/configure.ac#L29
-
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/fbv/Config.in             |    4 +--
+ >  package/fbv/fbv-1.0b-giflib.patch |   69 +++++++++++++++++++++++++++++++++++++
+ >  package/fbv/fbv.mk                |   10 +++++-
+ >  3 files changed, 80 insertions(+), 3 deletions(-)
+ >  create mode 100644 package/fbv/fbv-1.0b-giflib.patch
 
-Committed, thanks.
+ > diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
+ > index fe24a6f..81881ff 100644
+ > --- a/package/fbv/fbv.mk
+ > +++ b/package/fbv/fbv.mk
+ > @@ -30,7 +30,15 @@ else
+ >  FBV_CONFIGURE_OPTS += --without-libjpeg
+ >  endif
+ >  ifeq ($(BR2_PACKAGE_FBV_GIF),y)
+ > -FBV_DEPENDENCIES += libungif
+ > +FBV_DEPENDENCIES += giflib
+ > +define FBV_CONFIGURE_LIBUNGIF_IS_NOW_GIFLIB
+ > +	$(SED) 's|-lungif|-lgif|' $(@D)/configure
+ > +endef
+ > +FBV_PRE_CONFIGURE_HOOKS += FBV_CONFIGURE_LIBUNGIF_IS_NOW_GIFLIB
+ > +define FBV_MAKE_LIBUNGIF_IS_NOW_GIFLIB
+ > +	$(SED) 's|-lungif|-lgif|' $(@D)/Make.conf
+ > +endef
 
-I did a quick test and they are basically equivalent in file size:
+Why is it needed to patch Make.conf if you already patch configure
+(which generates it)?
 
-find output/staging/usr/lib/lib*gif.so* -type f | xargs ls -lah
--rwxr-xr-x 1 peko peko 31K Jan 27 16:04 output/staging/usr/lib/libgif.so.7.0.0
--rwxr-xr-x 1 peko peko 32K Jan 27 16:08 output/staging/usr/lib/libungif.so.4.1.4
+I would prefer to see the configure changes in the giflib patch
+instead. How do the archlinux guys handle it?
 
 -- 
 Bye, Peter Korsgaard
