@@ -1,48 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Jan 2015 23:09:25 +0100
-Subject: [Buildroot] [git commit] alsa-utils: remove -ldl in static builds
-Message-ID: <20150127221916.80A3C80E25@busybox.osuosl.org>
+Date: Tue, 27 Jan 2015 23:08:32 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{18, 14, 10}.x series
+Message-ID: <20150127221916.6C0A080E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e10cf295c900790d96d777cc7ff0aea287afd056
+commit: http://git.buildroot.net/buildroot/commit/?id=5971256809044bd93644a32f0de68234651a9bde
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit ffd7a00aef723 (alsa-lib: add patch to remove hardcoded -ldl) we
-patch alsa.m4 from alsa-lib to remove -ldl on static builds.  Autoreconf
-alsa-utils to regenerate aclocal.m4 using our alsa.m4 so we don't end up
-linking the utilities against -ldl if not needed/available.
-
-We also need to gettextize alsa-utils because we use a more recent gettext
-version.
-
-Fixes:
-http://autobuild.buildroot.net/results/314/314dac9f5e62ae9beb598eb1b4cb35c0a7bfe792/
-http://autobuild.buildroot.net/results/964/964e44f0c1653370600c7e8c647abda3f6380e34/
-http://autobuild.buildroot.net/results/d72/d72f31bab907c7485d03db4597d01fd759277db4/
-...
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-utils/alsa-utils.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index a599af8..f95e7a8 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -12,6 +12,10 @@ ALSA_UTILS_LICENSE_FILES = COPYING
- ALSA_UTILS_INSTALL_STAGING = YES
- ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
-+# Regenerate aclocal.m4 to pick the patched
-+# version of alsa.m4 from alsa-lib
-+ALSA_UTILS_AUTORECONF = YES
-+ALSA_UTILS_GETTEXTIZE = YES
- 
- ALSA_UTILS_CONF_ENV = \
- 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 33ab75f..ee51f82 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -174,13 +174,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.66"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.105"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.65"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.66"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.36"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.29"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.30"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.3"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.4"	if BR2_KERNEL_HEADERS_3_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
