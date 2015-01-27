@@ -1,44 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jan 2015 22:19:31 +0100
-Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
-	host-package
-In-Reply-To: <20150127221431.14835106@free-electrons.com>
-References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>	<1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>	<54C7FE07.4030206@mind.be>
- <20150127221431.14835106@free-electrons.com>
-Message-ID: <54C800E3.8020907@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Jan 2015 18:33:43 -0300
+Subject: [Buildroot] [PATCH] openssl: fix c_rehash dumbness
+Message-ID: <1422394423-27700-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/01/15 22:14, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Tue, 27 Jan 2015 22:07:19 +0100, Arnout Vandecappelle wrote:
-> 
->>> While currently there are no in-tree Buildroot packages which depend on
->>> host-python-jinja2, I'm currently having to deal with a proprietary
->>> software build system that requires it.
->>
->>  Forgot to mention in my last review: in that case, you should also add a
->> Config.in.host for it (and update package/Config.in.host).
-> 
-> Why ? If it's merely used as a build dependency of another package, I
-> don't see why we should have a menuconfig entry for it. Indeed, having
-> a host-python-ninja2 package with no users in-tree is weird, but I
-> don't think cluttering the "Host utilities" menu with such packages is
-> the appropriate solution here.
+The new c_rehash from openssl 1.0.2 can't take a minus in the directory
+string since the regex for matching commands checks for - in any
+position instead of just the beginning to trigger the command parser. Fixes:
+http://autobuild.buildroot.net/results/ee6/ee683569350d5deaf0ccc603ed7066bffb83cbe3/
 
- Hm I guess you're right. So Erico, forget I mentioned it.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-match-commands-starting-with-minus-inste.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
 
- Regards,
- Arnout
-
+diff --git a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
+new file mode 100644
+index 0000000..5db95d6
+--- /dev/null
++++ b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
+@@ -0,0 +1,27 @@
++From 079cae9d7628f16b9efdf5723d2bfae5bdc2ba4e Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 27 Jan 2015 18:27:32 -0300
++Subject: [PATCH] Make c_rehash match commands starting with - (minus) instead
++ of minus in any starting position, otherwise a directory named a-b breaks it
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ tools/c_rehash.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/c_rehash.in b/tools/c_rehash.in
++index 887e927..1df2fab 100644
++--- a/tools/c_rehash.in
+++++ b/tools/c_rehash.in
++@@ -15,7 +15,7 @@ my $symlink_exists=eval {symlink("",""); 1};
++ my $removelinks = 1;
++ 
++ ##  Parse flags.
++-while ( $ARGV[0] =~ '-.*' ) {
+++while ( $ARGV[0] =~ '^-.*' ) {
++     my $flag = shift @ARGV;
++     last if ( $flag eq '--');
++     if ( $flag =~ /-old/) {
++-- 
++2.0.5
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.5
