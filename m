@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jan 2015 22:41:48 +0100
-Subject: [Buildroot] [RFC 3/8] linux: add custom per-package help text
-	contents
+Date: Tue, 27 Jan 2015 22:41:50 +0100
+Subject: [Buildroot] [RFC 5/8] ccache: add custom help entries
 In-Reply-To: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1422394913-13257-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1422394913-13257-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the linux package is not yet converted to kconfig-package, make
-it register its own LINUX_HELP_HOOKS so that its custom make targets
-are visible in 'linux-help'.
+The host-ccache package has some custom targets to get statistics
+about ccache or change ccache options. This commit adds a
+HOST_CCACHE_HELP_HOOKS to ensure such targets are documented in 'make
+host-ccache-help'.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/ccache/ccache.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 29f59e8..c2b31e9 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -317,6 +317,16 @@ define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_HOST_TOOLS)
- endef
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 270ea4b..5f86125 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -58,6 +58,13 @@ endef
+ HOST_CCACHE_POST_INSTALL_HOOKS += HOST_CCACHE_DO_INITIAL_SETUP
+ endif
  
-+define LINUX_PACKAGE_HELP
-+	@$(foreach editor,menuconfig xconfig gconfig nconfig,\
-+		@$(call pkg-print-help-opt,linux-$(editor),"Run the $(editor) configuration tool")$(sep))
-+	@$(call pkg-print-help-opt,linux-savedefconfig,"Generate a minimal defconfig")
-+	@$(call pkg-print-help-opt,linux-update-config,"Update configuration as a full config file")
-+	@$(call pkg-print-help-opt,linux-update-defconfig,"Update configuration as a minimal defconfig")
++define HOST_CCACHE_PACKAGE_HELP
++	@$(call pkg-print-help-opt,ccache-stats,"Show ccache statistics")
++	@$(call pkg-print-help-opt,cache-options,"Update ccache options using CCACHE_OPTIONS variable")
 +endef
 +
-+LINUX_HELP_HOOKS += LINUX_PACKAGE_HELP
++HOST_CCACHE_HELP_HOOKS += HOST_CCACHE_PACKAGE_HELP
 +
- include $(sort $(wildcard linux/linux-ext-*.mk))
+ $(eval $(host-autotools-package))
  
- $(eval $(generic-package))
+ ifeq ($(BR2_CCACHE),y)
 -- 
 2.1.0
