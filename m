@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jan 2015 22:14:31 +0100
-Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
- host-package
-In-Reply-To: <54C7FE07.4030206@mind.be>
-References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>
- <1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>
- <54C7FE07.4030206@mind.be>
-Message-ID: <20150127221431.14835106@free-electrons.com>
+Date: Tue, 27 Jan 2015 22:16:04 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: do not accept
+ distro-class toolchains
+In-Reply-To: <54C7FF64.3030501@mind.be>
+References: <1422225691-15930-1-git-send-email-yann.morin.1998@free.fr>
+ <54C7FF64.3030501@mind.be>
+Message-ID: <20150127221604.134cffdb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +14,17 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle,
 
-On Tue, 27 Jan 2015 22:07:19 +0100, Arnout Vandecappelle wrote:
+On Tue, 27 Jan 2015 22:13:08 +0100, Arnout Vandecappelle wrote:
 
-> > While currently there are no in-tree Buildroot packages which depend on
-> > host-python-jinja2, I'm currently having to deal with a proprietary
-> > software build system that requires it.
+>  This sounds as if the problem is that the binary can't be moved to a different
+> place. But for pre-installed external toolchains, we don't do that.
 > 
->  Forgot to mention in my last review: in that case, you should also add a
-> Config.in.host for it (and update package/Config.in.host).
+>  But I guess the real problem is that we can't copy the libs to the staging dir,
+> right? So perhaps that should be written in this remark.
 
-Why ? If it's merely used as a build dependency of another package, I
-don't see why we should have a menuconfig entry for it. Indeed, having
-a host-python-ninja2 package with no users in-tree is weird, but I
-don't think cluttering the "Host utilities" menu with such packages is
-the appropriate solution here.
-
-Best regards,
+Yes the problem is more that such toolchains typically don't have a
+clean sysroot, with just the C library, C library headers and kernel
+headers.
 
 Thomas
 -- 
