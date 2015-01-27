@@ -1,44 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Jan 2015 00:30:24 +0100
-Subject: [Buildroot] [PATCH] pkg-autotools: fix patching libtool for version
-	2.4
-Message-ID: <1422315024-14602-1-git-send-email-yann.morin.1998@free.fr>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 26 Jan 2015 19:22:35 -0600
+Subject: [Buildroot] [PATCH V2] ffmpeg: enable use of freetype and fontconfig
+Message-ID: <54C6E85B.2010707@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
-end up with a confusing message:
+Configure ffmpeg to use freetype and fontconfig
+if those packages are selected.
 
-    /bin/sh: line 0: test: -gt: unary operator expected
+ffmpeg freetype support require fenv.h
+which is not available in uClibc
+except for uClibc on x86
 
-That's because patchlevel is empty, and thus there is nothing to comapre
-to 2, and test complains.
-
-Fake a patchlevel of 0 (which is really what a missing patchlevel means
-anyway) in that case.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 ---
- package/pkg-autotools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V2 Added fontconfig to make freetype support more robust
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index b20e20e..b6b83f8 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -69,7 +69,7 @@ define LIBTOOL_PATCH_HOOK
- 		elif test $${ltmain_version} = "2.2"; then\
- 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
- 		elif test $${ltmain_version} = "2.4"; then\
--			if test $${ltmain_patchlevel} -gt 2; then\
-+			if test $${ltmain_patchlevel:-0} -gt 2; then\
- 				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.4.patch; \
- 			else \
- 				$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
--- 
-1.9.1
+I could not find a good way to do "or" in the make file
+Is there something better than nesting and using two
+ffmpeg_environment_has_fenv ?= y
+statements? I'm not really happy about the temporary
+
+diff -pruN buildroot.ori/package/ffmpeg/ffmpeg.mk buildroot/package/ffmpeg/ffmpeg.mk
+--- buildroot.ori/package/ffmpeg/ffmpeg.mk	2015-01-25 17:21:49.000000000 -0600
++++ buildroot/package/ffmpeg/ffmpeg.mk	2015-01-26 18:44:50.971678526 -0600
+@@ -49,7 +49,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libopencv \
+ 	--disable-libdc1394 \
+ 	--disable-libfaac \
+-	--disable-libfreetype \
+ 	--disable-libgsm \
+ 	--disable-libmp3lame \
+ 	--disable-libnut \
+@@ -234,6 +233,28 @@ else
+ FFMPEG_CONF_OPTS += --disable-libvpx
+ endif
+
++# ffmpeg freetype support require fenv.h
++# which is not available in uClibc
++ifneq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++ffmpeg_environment_has_fenv ?= y
++endif
++# except for uClibc on x86
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++ffmpeg_environment_has_fenv ?= y
++endif
++ifeq ($(BR2_PACKAGE_FREETYPE)$(ffmpeg_environment_has_fenv),yy)
++FFMPEG_CONF_OPTS += --enable-libfreetype
++FFMPEG_DEPENDENCIES += freetype
++# fontconfig only makes sense if we also have freetype
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++FFMPEG_CONF_OPTS += --enable-fontconfig
++FFMPEG_DEPENDENCIES += fontconfig
++endif
++else
++FFMPEG_CONF_OPTS += --disable-libfreetype
++FFMPEG_CONF_OPTS += --disable-fontconfig
++endif
++
+ ifeq ($(BR2_PACKAGE_X264)$(BR2_PACKAGE_FFMPEG_GPL),yy)
+ FFMPEG_CONF_OPTS += --enable-libx264
+ FFMPEG_DEPENDENCIES += x264
