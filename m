@@ -1,57 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Jan 2015 23:13:07 +0100
-Subject: [Buildroot] [git commit] openssl: fix c_rehash dumbness
-Message-ID: <20150127221916.9A81F80E28@busybox.osuosl.org>
+Date: Tue, 27 Jan 2015 23:09:25 +0100
+Subject: [Buildroot] [git commit] alsa-utils: remove -ldl in static builds
+Message-ID: <20150127221916.80A3C80E25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c7e93a6ea30743162aeb634f1c6afa8cabca275
+commit: http://git.buildroot.net/buildroot/commit/?id=e10cf295c900790d96d777cc7ff0aea287afd056
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The new c_rehash from openssl 1.0.2 can't take a minus in the directory
-string since the regex for matching commands checks for - in any
-position instead of just the beginning to trigger the command parser. Fixes:
-http://autobuild.buildroot.net/results/ee6/ee683569350d5deaf0ccc603ed7066bffb83cbe3/
+Since commit ffd7a00aef723 (alsa-lib: add patch to remove hardcoded -ldl) we
+patch alsa.m4 from alsa-lib to remove -ldl on static builds.  Autoreconf
+alsa-utils to regenerate aclocal.m4 using our alsa.m4 so we don't end up
+linking the utilities against -ldl if not needed/available.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+We also need to gettextize alsa-utils because we use a more recent gettext
+version.
+
+Fixes:
+http://autobuild.buildroot.net/results/314/314dac9f5e62ae9beb598eb1b4cb35c0a7bfe792/
+http://autobuild.buildroot.net/results/964/964e44f0c1653370600c7e8c647abda3f6380e34/
+http://autobuild.buildroot.net/results/d72/d72f31bab907c7485d03db4597d01fd759277db4/
+...
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-match-commands-starting-with-minus-inste.patch |   27 ++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ package/alsa-utils/alsa-utils.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
-new file mode 100644
-index 0000000..5db95d6
---- /dev/null
-+++ b/package/openssl/005-Make-c_rehash-match-commands-starting-with-minus-inste.patch
-@@ -0,0 +1,27 @@
-+From 079cae9d7628f16b9efdf5723d2bfae5bdc2ba4e Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 27 Jan 2015 18:27:32 -0300
-+Subject: [PATCH] Make c_rehash match commands starting with - (minus) instead
-+ of minus in any starting position, otherwise a directory named a-b breaks it
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ tools/c_rehash.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/c_rehash.in b/tools/c_rehash.in
-+index 887e927..1df2fab 100644
-+--- a/tools/c_rehash.in
-++++ b/tools/c_rehash.in
-+@@ -15,7 +15,7 @@ my $symlink_exists=eval {symlink("",""); 1};
-+ my $removelinks = 1;
-+ 
-+ ##  Parse flags.
-+-while ( $ARGV[0] =~ '-.*' ) {
-++while ( $ARGV[0] =~ '^-.*' ) {
-+     my $flag = shift @ARGV;
-+     last if ( $flag eq '--');
-+     if ( $flag =~ /-old/) {
-+-- 
-+2.0.5
-+
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index a599af8..f95e7a8 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -12,6 +12,10 @@ ALSA_UTILS_LICENSE_FILES = COPYING
+ ALSA_UTILS_INSTALL_STAGING = YES
+ ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
++# Regenerate aclocal.m4 to pick the patched
++# version of alsa.m4 from alsa-lib
++ALSA_UTILS_AUTORECONF = YES
++ALSA_UTILS_GETTEXTIZE = YES
+ 
+ ALSA_UTILS_CONF_ENV = \
+ 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
