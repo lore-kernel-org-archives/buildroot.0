@@ -1,56 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 27 Jan 2015 17:30:54 -0300
-Subject: [Buildroot] [PATCH] squid: fix old distro gcc build failure
-Message-ID: <1422390654-8429-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Jan 2015 21:42:53 +0100
+Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
+ QT_SHARED is not selected
+In-Reply-To: <87siey4i48.fsf@dell.be.48ers.dk>
+References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
+ <20150120174507.1d11ab61@free-electrons.com>
+ <87siey4i48.fsf@dell.be.48ers.dk>
+Message-ID: <54C7F84D.7050006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Squid 3.5.x deprecated the use of HOSTCXX & friends in favour of
-BUILDCXX and BUILDCXXFLAGS.
-When they are not specified BUILDCXXFLAGS takes flags from target
-CXXFLAGS which specifies C11 standard and which older vesions of gcc
-don't understand, thus causing breakage.
-cf_gen hasn't got any C11 features so it's not required. Fixes:
-http://autobuild.buildroot.net/results/816/8162e4ec941e7642248373be47cca99113a648e8/
+On 25/01/15 23:20, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+[snip]
+>  > I think we should get rid of BR2_PACKAGE_QT_SHARED completely, and use
+>  > BR2_STATIC_LIBS here instead.
+> 
+> I agree that it would be cleaner, but the reason the explicit QT_SHARED
+> stuff was added was afaik a lot of systems only needed Qt in a single
+> application / that application only used a subset of the Qt
+> functionality, so having a static libQt while everything else was shared
+> was quite a big win in size / startup time.
 
-Also drop ACLOCAL and AUTOMAKE trickery from e27ccbab since it's no
-longer required.
+ But can't you just build with BR2_SHARED_STATIC_LIBS and link your application
+with --static? That's what BR2_SHARED_STATIC_LIBS was meant for, right?
 
-And fix a typo in the hash file pointing to an improper hash file
-upstream.
+ Regards,
+ Arnout
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.hash | 2 +-
- package/squid/squid.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index a067383..574d462 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.4/squid-3.5.1.tar.xz.asc
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.1.tar.xz.asc
- md5	b3c9d9726314c1136b7a4c06447db24b	squid-3.5.1.tar.xz
- sha1	a2b01afd33d1df3a234e1a5c3405d626f6cf0fb0	squid-3.5.1.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index deb9360..e385c37 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -21,8 +21,8 @@ SQUID_CONF_ENV = \
- 	ac_cv_func___va_copy=yes \
- 	ac_cv_func_strnstr=no \
- 	ac_cv_have_squid=yes \
--	ACLOCAL="$(ACLOCAL)" \
--	AUTOMAKE="$(AUTOMAKE)"
-+	BUILXCXX="$(HOSTCXX)" \
-+	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
- SQUID_CONF_OPTS = \
- 	--enable-async-io=8 \
- 	--enable-linux-netfilter \
+> 
+> It does complicate LGPL compliance and I don't know if the disk space
+> concerns are as big these days though.
+> 
+
+
 -- 
-2.0.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
