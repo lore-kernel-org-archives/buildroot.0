@@ -1,70 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jan 2015 22:07:19 +0100
-Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
-	host-package
-In-Reply-To: <1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>
-References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>
- <1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>
-Message-ID: <54C7FE07.4030206@mind.be>
+Date: Tue, 27 Jan 2015 22:13:08 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: do not accept
+ distro-class toolchains
+In-Reply-To: <1422225691-15930-1-git-send-email-yann.morin.1998@free.fr>
+References: <1422225691-15930-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <54C7FF64.3030501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/01/15 18:25, Erico Nunes wrote:
-> Jinja2 is a general purpose templating language for python and can be
-> required during build time for python scripts that generate code.
+On 25/01/15 23:41, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/helpers.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> While currently there are no in-tree Buildroot packages which depend on
-> host-python-jinja2, I'm currently having to deal with a proprietary
-> software build system that requires it.
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 3121da4..61a3639 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -347,6 +347,11 @@ check_unusable_toolchain = \
+>  		echo "them unsuitable as external toolchains for build systems" ; \
+>  		echo "such as Buildroot." ; \
+>  		exit 1 ; \
+> +	fi; \
+> +	with_sysroot=`$${__CROSS_CC} -v 2>&1 |sed -r -e '/.* --with-sysroot=([^[:space:]]+)[[:space:]].*/!d; s//\1/'`; \
+> +	if test "$${with_sysroot}"  = "/" ; then \
+> +		echo "Distribution toolchains are unsuitable for use by Buildroot," ; \
+> +		echo "as they were configured in a way that makes them non-relocatable."; \
 
- Forgot to mention in my last review: in that case, you should also add a
-Config.in.host for it (and update package/Config.in.host).
+ This sounds as if the problem is that the binary can't be moved to a different
+place. But for pre-installed external toolchains, we don't do that.
 
-
-> I have tested that it builds and works correctly as a host python
-> package for a Buildroot host-python and someone else might require it,
-> so I'm proposing its inclusion.
-> 
-> python-jinja2 for target builds fine without python-markupsafe as a
-> build dependency, but when building host-python-jinja2 without
-> host-python-markupsafe installed, the python package manager tries to
-> download and install it.
-
- Good explanation! :-)
-
- However, this should probably be added as a comment in the .mk file as well -
-perhaps a bit shorter, e.g.:
-
-# In host build, setup.py tries to download markupsafe if it is not installed
-
+ But I guess the real problem is that we can't copy the libs to the staging dir,
+right? So perhaps that should be written in this remark.
 
  Regards,
  Arnout
 
-> To avoid that and install host-python-markupsafe properly through
-> Buildroot, the host build dependency is needed. Host support for
-> python-markupsafe was submitted in a previous patch from this patchset.
-> 
-> Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
-> ---
->  package/python-jinja2/python-jinja2.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-> index 49625e3..2105f3a 100644
-> --- a/package/python-jinja2/python-jinja2.mk
-> +++ b/package/python-jinja2/python-jinja2.mk
-> @@ -10,5 +10,7 @@ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
->  PYTHON_JINJA2_SETUP_TYPE = setuptools
->  PYTHON_JINJA2_LICENSE = BSD-3c
->  PYTHON_JINJA2_LICENSE_FILES = LICENSE
-> +HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+>  	fi
 >  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
+>  #
 > 
 
 
