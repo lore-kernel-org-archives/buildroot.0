@@ -1,49 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jan 2015 22:41:51 +0100
-Subject: [Buildroot] [RFC 6/8] Makefile: remove uclibc, barebox, linux,
-	busybox specific help
+Date: Tue, 27 Jan 2015 22:41:52 +0100
+Subject: [Buildroot] [RFC 7/8] Makefile: point users to the per-package help
+	text
 In-Reply-To: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1422394913-13257-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1422394913-13257-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that each package has its own custom help text, there is no need
-to have those busybox, linux, uclibc and barebox specific targets
-mentionned in the main help text.
+Now that each package has its own help text, mention it in the main
+help text available from "make help".
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 14 --------------
- 1 file changed, 14 deletions(-)
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/Makefile b/Makefile
-index 6cee027..1e5390b 100644
+index 1e5390b..adf3558 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -868,20 +868,6 @@ help:
- 	@echo '  randpackageconfig      - New config with random answer to package options'
- 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
- 	@echo '  allnopackageconfig     - New config where package options are answered with no'
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
--endif
--ifeq ($(BR2_LINUX_KERNEL),y)
--	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
--	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
--endif
--ifeq ($(BR2_TARGET_BAREBOX),y)
--	@echo '  barebox-menuconfig     - Run barebox menuconfig'
--	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
--endif
+@@ -878,6 +878,7 @@ help:
+ 	@echo '  manual-epub            - build manual in ePub'
+ 	@echo '  graph-build            - generate graphs of the build times'
+ 	@echo '  graph-depends          - generate graph of the dependency tree'
++	@echo '  <pkg>-help		- get help about a specific package'
  	@echo
- 	@echo 'Documentation:'
- 	@echo '  manual                 - build manual in all formats'
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
 -- 
 2.1.0
