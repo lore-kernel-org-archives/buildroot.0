@@ -1,56 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Jan 2015 22:13:08 +0100
-Subject: [Buildroot] [PATCH] toolchain/external: do not accept
- distro-class toolchains
-In-Reply-To: <1422225691-15930-1-git-send-email-yann.morin.1998@free.fr>
-References: <1422225691-15930-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <54C7FF64.3030501@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jan 2015 22:14:31 +0100
+Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
+ host-package
+In-Reply-To: <54C7FE07.4030206@mind.be>
+References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>
+ <1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>
+ <54C7FE07.4030206@mind.be>
+Message-ID: <20150127221431.14835106@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/01/15 23:41, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/helpers.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+Dear Arnout Vandecappelle,
+
+On Tue, 27 Jan 2015 22:07:19 +0100, Arnout Vandecappelle wrote:
+
+> > While currently there are no in-tree Buildroot packages which depend on
+> > host-python-jinja2, I'm currently having to deal with a proprietary
+> > software build system that requires it.
 > 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 3121da4..61a3639 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -347,6 +347,11 @@ check_unusable_toolchain = \
->  		echo "them unsuitable as external toolchains for build systems" ; \
->  		echo "such as Buildroot." ; \
->  		exit 1 ; \
-> +	fi; \
-> +	with_sysroot=`$${__CROSS_CC} -v 2>&1 |sed -r -e '/.* --with-sysroot=([^[:space:]]+)[[:space:]].*/!d; s//\1/'`; \
-> +	if test "$${with_sysroot}"  = "/" ; then \
-> +		echo "Distribution toolchains are unsuitable for use by Buildroot," ; \
-> +		echo "as they were configured in a way that makes them non-relocatable."; \
+>  Forgot to mention in my last review: in that case, you should also add a
+> Config.in.host for it (and update package/Config.in.host).
 
- This sounds as if the problem is that the binary can't be moved to a different
-place. But for pre-installed external toolchains, we don't do that.
+Why ? If it's merely used as a build dependency of another package, I
+don't see why we should have a menuconfig entry for it. Indeed, having
+a host-python-ninja2 package with no users in-tree is weird, but I
+don't think cluttering the "Host utilities" menu with such packages is
+the appropriate solution here.
 
- But I guess the real problem is that we can't copy the libs to the staging dir,
-right? So perhaps that should be written in this remark.
+Best regards,
 
- Regards,
- Arnout
-
->  	fi
->  
->  #
-> 
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
