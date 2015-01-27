@@ -1,45 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 27 Jan 2015 19:51:39 +0200
-Subject: [Buildroot] [PATCH] alsa-utils: remove -ldl in static builds
-Message-ID: <fde55ad7b3840dad27b2669844c36d52a55ed79a.1422381099.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Jan 2015 16:18:07 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.18.2
+Message-ID: <1422386287-15556-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit ffd7a00aef723 (alsa-lib: add patch to remove hardcoded -ldl) we
-patch alsa.m4 from alsa-lib to remove -ldl on static builds. autoreconf
-alsa-utils to regenerate aclocal.m4 using our alsa.m4.
-
-We also need to gettextize alsa-utils because we use a more recent gettext
-version.
-
-Fixes:
-http://autobuild.buildroot.net/results/314/314dac9f5e62ae9beb598eb1b4cb35c0a7bfe792/
-http://autobuild.buildroot.net/results/964/964e44f0c1653370600c7e8c647abda3f6380e34/
-http://autobuild.buildroot.net/results/d72/d72f31bab907c7485d03db4597d01fd759277db4/
-...
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/alsa-utils/alsa-utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index a599af8f5e76..f95e7a8e3a65 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -12,6 +12,10 @@ ALSA_UTILS_LICENSE_FILES = COPYING
- ALSA_UTILS_INSTALL_STAGING = YES
- ALSA_UTILS_DEPENDENCIES = host-gettext host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_NCURSES),ncurses)
-+# Regenerate aclocal.m4 to pick the patched
-+# version of alsa.m4 from alsa-lib
-+ALSA_UTILS_AUTORECONF = YES
-+ALSA_UTILS_GETTEXTIZE = YES
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 2ee2463..655ef5f 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	55509a3fa8e57deb4f41bb8a25cad850235b1285892c179bfcc914fec4abdd09	btrfs-progs-v3.18.1.tar.xz
++sha256	dd8ddb4d201e5ffd32a15ed0e1f33fbc2c8fb16383f1519a9fae136698c2dfec	btrfs-progs-v3.18.2.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index e8d3dcc..c6c36cf 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
- ALSA_UTILS_CONF_ENV = \
- 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS)
+-BTRFS_PROGS_VERSION = 3.18.1
++BTRFS_PROGS_VERSION = 3.18.2
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
+-BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1
++BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1 DISABLE_BACKTRACE=1
+ BTRFS_PROGS_LICENSE = GPLv2
+ BTRFS_PROGS_LICENSE_FILES = COPYING
+ 
 -- 
-2.1.4
+2.0.5
