@@ -1,81 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 Jan 2015 23:58:14 +0100
-Subject: [Buildroot] [git commit] rt-tests: fix build dependencies
-Message-ID: <20150127225936.C10027FC85@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 28 Jan 2015 01:06:47 +0100
+Subject: [Buildroot] [PATCH 2/4] boot/syslinux: bump version to 6.03
+In-Reply-To: <20150126232217.04b2fec1@free-electrons.com>
+References: <1421710198-20898-1-git-send-email-romain.naour@openwide.fr>	<1421710198-20898-2-git-send-email-romain.naour@openwide.fr>
+ <20150126232217.04b2fec1@free-electrons.com>
+Message-ID: <54C82817.5060804@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f0ea0e75337bf81bbf075bc8f517b6d5b5962a11
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Some tests didn't list librttest in their dependencies.
+Le 26/01/2015 23:22, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Tue, 20 Jan 2015 00:29:56 +0100, Romain Naour wrote:
+>> Remove gnu-efi dependency since it's directly included in
+>> syslinux sources since 6.03 release. Also remove the patch
+>> for find-gnu-efi.sh script which was removed.
+> 
+> The script has been renamed to
+> output/build/syslinux-6.03/efi/check-gnu-efi.sh. And its contents seems
+> to hint that syslinux can use an external gnu-efi installation, which
+> would be the preferred solution in Buildroot. Can you investigate this?
+> Of course, if there is no upstream supported way of using an external
+> gnu-efi installation, then leave things as is in your current patch.
 
-Fixes:
-http://autobuild.buildroot.net/results/999/9998dcf8c82989d9eba772e16ce3905b24badbfc/
-http://autobuild.buildroot.net/results/b1e/b1e078591d65a3b5c9d638ad5bbb4ec8c28c38ef/
+I checked if an external gnu-efi can be used but it's hard coded in
+build-gnu-efi.sh.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../04-Makefile-fix-tests-dependencies.patch       |   50 ++++++++++++++++++++
- 1 files changed, 50 insertions(+), 0 deletions(-)
+The gnu-efi build start in mk/efi.mk line 51 by calling:
+$(topdir)/efi/check-gnu-efi.sh $(EFI_SUBARCH) $(objdir)
 
-diff --git a/package/rt-tests/04-Makefile-fix-tests-dependencies.patch b/package/rt-tests/04-Makefile-fix-tests-dependencies.patch
-new file mode 100644
-index 0000000..0b2feb1
---- /dev/null
-+++ b/package/rt-tests/04-Makefile-fix-tests-dependencies.patch
-@@ -0,0 +1,50 @@
-+From e464368807211978fe2dfccf081fa8dc7a35b71b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 23 Jan 2015 07:52:21 +0200
-+Subject: [PATCH] Makefile: fix tests dependencies
-+
-+librttest is listed in $(LIBS) so all tests must depend on librttest.a.
-+Fixes build failures like:
-+
-+.../armv7-ctng-linux-gnueabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os -g2  -o hackbench hackbench.o -lrt -lpthread -lrttest -L.
-+.../armv7-ctng-linux-gnueabihf/bin/ld: cannot find -lrttest
-+collect2: error: ld returned 1 exit status
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ Makefile | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index a3879cea8164..b9a1fed1b920 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -69,14 +69,14 @@ cyclictest: cyclictest.o librttest.a
-+ signaltest: signaltest.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+-pi_stress: pi_stress.o
-++pi_stress: pi_stress.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ hwlatdetect:  src/hwlatdetect/hwlatdetect.py
-+ 	chmod +x src/hwlatdetect/hwlatdetect.py
-+ 	ln -s src/hwlatdetect/hwlatdetect.py hwlatdetect
-+ 
-+-rt-migrate-test: rt-migrate-test.o
-++rt-migrate-test: rt-migrate-test.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ ptsematest: ptsematest.o librttest.a
-+@@ -97,7 +97,7 @@ sendme: sendme.o librttest.a
-+ pip_stress: pip_stress.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+-hackbench: hackbench.o
-++hackbench: hackbench.o librttest.a
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
-+ 
-+ librttest.a: rt-utils.o error.o rt-get_cpu.o
-+-- 
-+2.1.4
-+
+Where:
+topdir = output/build/syslinux-6.03
+EFI_SUBARCH = ia32
+objdir = output/build/syslinux-6.03/efi32 (build output directory)
+
+The script check-gnu-efi.sh test if gnu-efi needs to be build.
+If yes, it call build-gnu-efi.sh
+
+The path to gnu-efi is hard coded by EFIDIR:
+EFIDIR="$(readlink -f "$objdir/../gnu-efi/gnu-efi-3.0")"
+
+I tried to comment this line and define EFIDIR=$(GNU_EFI_DIR) in
+SYSLINUX_BUILD_CMDS.
+But there are some build issues to be investigated.
+
+But clearly, external gnu-efi is not supported anymore...
+
+> Also, if the gnu-efi dependency really needs to be removed, you also
+> need to remove the "select" in syslinux Config.in file.
+
+Indeed, I forgot to remove the "select", thanks.
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
