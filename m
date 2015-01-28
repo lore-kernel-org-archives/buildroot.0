@@ -1,47 +1,60 @@
-From: DATACOM - Erico Nunes <erico.nunes@datacom.ind.br>
-Date: Wed, 28 Jan 2015 12:56:54 -0200
-Subject: [Buildroot] [PATCH v2 2/2] python-jinja2: allow build as
+From: Erico Nunes <erico.nunes@datacom.ind.br>
+Date: Wed, 28 Jan 2015 13:14:23 -0200
+Subject: [Buildroot] [PATCH v3 2/2] python-jinja2: allow build as
 	host-package
-In-Reply-To: <54C800E3.8020907@mind.be>
-References: <1422293158-26124-1-git-send-email-erico.nunes@datacom.ind.br>	<1422293158-26124-2-git-send-email-erico.nunes@datacom.ind.br>	<54C7FE07.4030206@mind.be>
- <20150127221431.14835106@free-electrons.com> <54C800E3.8020907@mind.be>
-Message-ID: <54C8F8B6.5010109@datacom.ind.br>
+In-Reply-To: <1422458063-5725-1-git-send-email-erico.nunes@datacom.ind.br>
+References: <1422458063-5725-1-git-send-email-erico.nunes@datacom.ind.br>
+Message-ID: <1422458063-5725-2-git-send-email-erico.nunes@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas and Arnout,
+Jinja2 is a general purpose templating language for python and can be
+required during build time for python scripts that generate code.
 
-On 01/27/2015 07:19 PM, Arnout Vandecappelle wrote:
-> On 27/01/15 22:14, Thomas Petazzoni wrote:
->> Dear Arnout Vandecappelle,
->>
->> On Tue, 27 Jan 2015 22:07:19 +0100, Arnout Vandecappelle wrote:
->>
->>>> While currently there are no in-tree Buildroot packages which depend on
->>>> host-python-jinja2, I'm currently having to deal with a proprietary
->>>> software build system that requires it.
->>>
->>>  Forgot to mention in my last review: in that case, you should also add a
->>> Config.in.host for it (and update package/Config.in.host).
->>
->> Why ? If it's merely used as a build dependency of another package, I
->> don't see why we should have a menuconfig entry for it. Indeed, having
->> a host-python-ninja2 package with no users in-tree is weird, but I
->> don't think cluttering the "Host utilities" menu with such packages is
->> the appropriate solution here.
-> 
->  Hm I guess you're right. So Erico, forget I mentioned it.
-> 
->  Regards,
->  Arnout
-> 
+While currently there are no in-tree Buildroot packages which depend on
+host-python-jinja2, I'm currently having to deal with a proprietary
+software build system that requires it.
 
-I'll just add the comment in the .mk file as suggested by Arnout in the
-other reply and resubmit then.
+I have tested that it builds and works correctly as a host python
+package for a Buildroot host-python and someone else might require it,
+so I'm proposing its inclusion.
 
-Thank you for your replies.
+python-jinja2 for target builds fine without python-markupsafe as a
+build dependency, but when building host-python-jinja2 without
+host-python-markupsafe installed, the python package manager tries to
+download and install it.
+To avoid that and install host-python-markupsafe properly through
+Buildroot, the host build dependency is needed. Host support for
+python-markupsafe was submitted in a previous patch from this patchset.
 
-Erico
+Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
+
+---
+Changes v2 -> v3:
+  - Add comment to .mk file as suggested by Arnout Vandecappelle
+
+Changes v1 -> v2:
+  - Make markupsafe a dependency only for host-python-jinja2
+
+---
+ package/python-jinja2/python-jinja2.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 49625e3..8440b64 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -10,5 +10,8 @@ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3c
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+1.9.1
