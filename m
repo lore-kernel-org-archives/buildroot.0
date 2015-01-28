@@ -1,39 +1,34 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 28 Jan 2015 05:13:01 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2015.01.0
-Message-ID: <1422418381-5674-1-git-send-email-fabio.porcedda@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 28 Jan 2015 07:51:51 +0200
+Subject: [Buildroot] [RFC 5/8] ccache: add custom help entries
+In-Reply-To: <1422394913-13257-6-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1422394913-13257-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150128055151.GP2555@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 45970f2..b4439a7 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2014.12.0"
-+	bool "2015.01.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2014.12.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+On Tue, Jan 27, 2015 at 10:41:50PM +0100, Thomas Petazzoni wrote:
+[...]
+> +define HOST_CCACHE_PACKAGE_HELP
+> +	@$(call pkg-print-help-opt,ccache-stats,"Show ccache statistics")
+> +	@$(call pkg-print-help-opt,cache-options,"Update ccache options using CCACHE_OPTIONS variable")
+
+s/cache-options/ccache-options/
+
+> +endef
+> +
+> +HOST_CCACHE_HELP_HOOKS += HOST_CCACHE_PACKAGE_HELP
+> +
+
+baruch
+
 -- 
-2.1.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
