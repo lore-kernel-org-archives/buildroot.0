@@ -1,60 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 28 Jan 2015 13:43:50 -0300
-Subject: [Buildroot] [PATCH] dropbear: bump to version 2015.67
-Message-ID: <1422463430-25134-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 28 Jan 2015 19:34:10 +0100
+Subject: [Buildroot] [PATCH] toolchain/external: do not accept
+ distro-class toolchains
+In-Reply-To: <20150127221604.134cffdb@free-electrons.com>
+References: <1422225691-15930-1-git-send-email-yann.morin.1998@free.fr>
+ <54C7FF64.3030501@mind.be>
+ <20150127221604.134cffdb@free-electrons.com>
+Message-ID: <20150128183410.GA4231@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch sed options around since defaults have changed.
+Arnout, Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dropbear/dropbear.hash | 4 ++--
- package/dropbear/dropbear.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+On 2015-01-27 22:16 +0100, Thomas Petazzoni spake thusly:
+> On Tue, 27 Jan 2015 22:13:08 +0100, Arnout Vandecappelle wrote:
+> 
+> >  This sounds as if the problem is that the binary can't be moved to a different
+> > place. But for pre-installed external toolchains, we don't do that.
+> > 
+> >  But I guess the real problem is that we can't copy the libs to the staging dir,
+> > right? So perhaps that should be written in this remark.
+> 
+> Yes the problem is more that such toolchains typically don't have a
+> clean sysroot, with just the C library, C library headers and kernel
+> headers.
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index f7042c3..30856cc 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,2 +1,2 @@
--# From https://matt.ucc.asn.au/dropbear/releases/SHA1SUM.asc
--sha1	793f5f1bb465b3c55e795d607932e8b21c130e95	dropbear-2014.66.tar.bz2
-+# From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
-+sha256	7e690594645dfde5787065c78a5d2e4d15e288babfa06e140197ce05f698c8e5	dropbear-2015.67.tar.bz2
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 696095d..6e020c2 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2014.66
-+DROPBEAR_VERSION = 2015.67
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
-@@ -30,14 +30,14 @@ define DROPBEAR_ENABLE_REVERSE_DNS
- endef
- 
- define DROPBEAR_BUILD_SMALL
--	$(SED) 's:.*\(#define DROPBEAR_SMALL_CODE\).*:\1:' $(@D)/options.h
- 	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
- endef
- 
- define DROPBEAR_BUILD_FEATURED
-+	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
- 	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_SHA2_256_HMAC\).*:\1:' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
-+	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
-+	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
- endef
- 
- define DROPBEAR_DISABLE_STANDALONE
+Well, both.
+
+They are tainted with a lot of cruft we are not interested in, indeed.
+
+But since the sysroot is not a sub-directory of the --prefix, they are
+not relocatable either.
+
+I'll update the error message to take your comments into account.
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.0.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
