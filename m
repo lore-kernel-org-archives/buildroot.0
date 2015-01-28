@@ -1,85 +1,60 @@
-From: Antoine Tenart <antoine.tenart@free-electrons.com>
-Date: Wed, 28 Jan 2015 17:24:42 +0100
-Subject: [Buildroot] [PATCH] package: add support for the wf111 WiFi
- driver and its utilities
-In-Reply-To: <20150128161736.67c93ab7@free-electrons.com>
-References: <1422453245-11725-1-git-send-email-antoine.tenart@free-electrons.com>
- <20150128161736.67c93ab7@free-electrons.com>
-Message-ID: <20150128162442.GD11705@kwain>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 28 Jan 2015 13:43:50 -0300
+Subject: [Buildroot] [PATCH] dropbear: bump to version 2015.67
+Message-ID: <1422463430-25134-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Switch sed options around since defaults have changed.
 
-On Wed, Jan 28, 2015 at 04:17:36PM +0100, Thomas Petazzoni wrote:
-> > 
-> > Finally, two options must be selected in the Linux kernel configuration:
-> > CONFIG_WIRELESS_EXT and CONFIG_WEXT_PRIV.
-> 
-> Please explain that those options are blind options, so they cannot be
-> enabled by a change in linux/linux.mk. And maybe you should explain how
-> the user is supposed to enable such blind options: either patch the
-> kernel to make them non-blind, or enable some other random WiFi driver
-> that selects them.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dropbear/dropbear.hash | 4 ++--
+ package/dropbear/dropbear.mk   | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Will do.
-
-> 
-> Please add:
-> 
-> comment "wf111 needs an (e)glibc toolchain"
-> 	depends on BR2_LINUX_KERNEL
-> 	depends on BR2_ARM_CPU_ARMV5 || BR2_ARM_CPU_ARMV7A || BR2_i386
-> 	depends on !BR2_TOOLCHAIN_USES_GLIBC
-
-Sure.
-
-> 
-> > +		-C $(@D) PWD=$(@D) ARCH=arm \
-> 
-> ARCH=arm, really ? :-)
-
-Oops :)
-
-> 
-> Please use $(LINUX_MAKE_FLAGS) instead, which already contains ARCH=
-> correctly.
-> 
-> > +		CC=$(TARGET_CC) LD=$(TARGET_LD) \
-> 
-> With $(LINUX_MAKE_FLAGS) containing CROSS_COMPILE, this should probably
-> become unnecessary.
-
-I'll update in v2.
-
-> 
-> > +		KDIR=$(LINUX_DIR) \
-> > +		install_static
-> > +endef
-> > +
-> > +define WF111_INSTALL_TARGET_CMDS
-> > +	rsync -a $(@D)/output/ $(TARGET_DIR)
-> 
-> We typically don't use rsync for such things. What does $(@D)/output
-> contains exactly? We would more typically use:
-> 
-> 	cp -dpfr $(@D)/output/* $(TARGET_DIR)
-
-Utility binaries, the firmware and the kernel module, all in theirs
-respective directories. `cp -dpfr` should be fine, I'll update.
-
-
-I'll also fix all the typos, and I'll add a check to be sure
-BR2_PACKAGE_WF111_TARBALL_PATH is correctly filled.
-
-Thanks!
-
-Antoine
-
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index f7042c3..30856cc 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+-# From https://matt.ucc.asn.au/dropbear/releases/SHA1SUM.asc
+-sha1	793f5f1bb465b3c55e795d607932e8b21c130e95	dropbear-2014.66.tar.bz2
++# From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
++sha256	7e690594645dfde5787065c78a5d2e4d15e288babfa06e140197ce05f698c8e5	dropbear-2015.67.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 696095d..6e020c2 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2014.66
++DROPBEAR_VERSION = 2015.67
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+@@ -30,14 +30,14 @@ define DROPBEAR_ENABLE_REVERSE_DNS
+ endef
+ 
+ define DROPBEAR_BUILD_SMALL
+-	$(SED) 's:.*\(#define DROPBEAR_SMALL_CODE\).*:\1:' $(@D)/options.h
+ 	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
+ endef
+ 
+ define DROPBEAR_BUILD_FEATURED
++	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
+ 	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_SHA2_256_HMAC\).*:\1:' $(@D)/options.h
+-	$(SED) 's:.*\(#define DROPBEAR_SHA2_512_HMAC\).*:\1:' $(@D)/options.h
++	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
++	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
+ endef
+ 
+ define DROPBEAR_DISABLE_STANDALONE
 -- 
-Antoine T?nart, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
