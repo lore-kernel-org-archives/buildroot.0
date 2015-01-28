@@ -1,38 +1,85 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Wed, 28 Jan 2015 10:35:21 +0100
-Subject: [Buildroot] [PATCH 1/2] qwt: compile as a static lib if
- QT_SHARED is not selected
-In-Reply-To: <87oapkx7sz.fsf@dell.be.48ers.dk>
-References: <1421749049-1431-1-git-send-email-richard.genoud@gmail.com>
- <20150120174507.1d11ab61@free-electrons.com> <87siey4i48.fsf@dell.be.48ers.dk>
- <54C7F84D.7050006@mind.be> <87oapkx7sz.fsf@dell.be.48ers.dk>
-Message-ID: <CACQ1gAhgxDtnXCQQm71b+EDVS0ZYj9enM=5OYsN0WzCOKVeiVA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 28 Jan 2015 07:18:57 -0300
+Subject: [Buildroot] [PATCH] openntpd: bump to version 5.7p3
+Message-ID: <1422440337-26180-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-01-27 21:55 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
->  > On 25/01/15 23:20, Peter Korsgaard wrote:
->  >>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->  > [snip]
->  >> > I think we should get rid of BR2_PACKAGE_QT_SHARED completely, and use
->  >> > BR2_STATIC_LIBS here instead.
->  >>
->  >> I agree that it would be cleaner, but the reason the explicit QT_SHARED
->  >> stuff was added was afaik a lot of systems only needed Qt in a single
->  >> application / that application only used a subset of the Qt
->  >> functionality, so having a static libQt while everything else was shared
->  >> was quite a big win in size / startup time.
->
->  >  But can't you just build with BR2_SHARED_STATIC_LIBS and link your application
->  > with --static? That's what BR2_SHARED_STATIC_LIBS was meant for, right?
->
-> More or less, yes. It's not optimal if the application use other
-> libraries you want to link dynamically and you need a post-build script
-> to get rid of the .so files in the rootfs, but it is fairly close.
-Indeed.
-As you said, the rootfs has to be cleaned in postbuild, but that should work.
+Patch no longer necessary so drop it.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0001-switch-ntp_adjtime-to-adjtimex.patch      | 36 ----------------------
+ package/openntpd/openntpd.hash                     |  2 +-
+ package/openntpd/openntpd.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 38 deletions(-)
+ delete mode 100644 package/openntpd/0001-switch-ntp_adjtime-to-adjtimex.patch
+
+diff --git a/package/openntpd/0001-switch-ntp_adjtime-to-adjtimex.patch b/package/openntpd/0001-switch-ntp_adjtime-to-adjtimex.patch
+deleted file mode 100644
+index ac8f22a..0000000
+--- a/package/openntpd/0001-switch-ntp_adjtime-to-adjtimex.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-uClibc considers ntp_* functions deprecated and only enabled via
+-UCLIBC_NTP_LEGACY which isn't the default or in BR configs so switch
+-to adjtimex which is basically the same.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura openntpd-5.7p1.orig/compat/adjfreq_linux.c openntpd-5.7p1/compat/adjfreq_linux.c
+---- openntpd-5.7p1.orig/compat/adjfreq_linux.c	2015-01-08 19:45:15.482915628 -0300
+-+++ openntpd-5.7p1/compat/adjfreq_linux.c	2015-01-08 19:45:50.972864070 -0300
+-@@ -37,20 +37,20 @@
+- 		txc.modes = ADJ_FREQUENCY;
+- 		txc.freq = *freq / 1e3 / (1LL << 16);
+- 
+--		if ((ntp_adjtime(&txc)) == -1)
+--			log_warn("ntp_adjtime (2) failed");
+-+		if ((adjtimex(&txc)) == -1)
+-+			log_warn("adjtimex (2) failed");
+- 
+--		log_debug("ntp_adjtime adjusted frequency by %fppm",
+-+		log_debug("adjtimex adjusted frequency by %fppm",
+- 			  ((txc.freq * 1e3) *  (1LL<<16) / 1e3 / (1LL << 32)));
+- 	}
+- 	if (oldfreq != NULL) {
+- 		txc.modes = 0;
+--		if ((ntp_adjtime(&txc)) == -1) {
+--			log_warn("ntp_adjtime (1) failed");
+-+		if ((adjtimex(&txc)) == -1) {
+-+			log_warn("adjtimex (1) failed");
+- 			return -1;
+- 		}
+- 		newfreq = (txc.freq * 1e3) *  (1LL<<16);
+--		log_debug("ntp_adjtime returns frequency of %fppm",
+-+		log_debug("adjtimex returns frequency of %fppm",
+- 			  newfreq / 1e3 / (1LL << 32));
+- 		*oldfreq = newfreq;
+- 	}
+diff --git a/package/openntpd/openntpd.hash b/package/openntpd/openntpd.hash
+index f906dad..4889c5b 100644
+--- a/package/openntpd/openntpd.hash
++++ b/package/openntpd/openntpd.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.openbsd.org/pub/OpenBSD/OpenNTPD/SHA256
+-sha256	1640ad4a6e6475f6065d5f999b17b5dc6ab40dc17309b782b9ae390fe54bd6a5	openntpd-5.7p2.tar.gz
++sha256	4f417c8a4c21ed7ec3811107829f931404f9bf121855b8571a2ca3355695343a	openntpd-5.7p3.tar.gz
+diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+index a6460cb..60f025c 100644
+--- a/package/openntpd/openntpd.mk
++++ b/package/openntpd/openntpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENNTPD_VERSION = 5.7p2
++OPENNTPD_VERSION = 5.7p3
+ OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
+ OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
+ OPENNTPD_LICENSE_FILES = COPYING
+-- 
+2.0.5
