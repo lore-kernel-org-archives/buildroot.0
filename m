@@ -1,9 +1,9 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Thu, 29 Jan 2015 12:35:38 +0100
-Subject: [Buildroot] [PATCH v2 3/5] libsigrok: new package
+Date: Thu, 29 Jan 2015 12:35:40 +0100
+Subject: [Buildroot] [PATCH v2 5/5] libsigrokdecode: new package
 In-Reply-To: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1422531340-24883-4-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1422531340-24883-6-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,103 +12,102 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/Config.in              |  1 +
- package/libsigrok/Config.in    | 22 +++++++++++++++++++++
- package/libsigrok/libsigrok.mk | 45 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+)
- create mode 100644 package/libsigrok/Config.in
- create mode 100644 package/libsigrok/libsigrok.mk
+ package/Config.in                          |  1 +
+ package/libsigrokdecode/Config.in          | 20 ++++++++++++++++++++
+ package/libsigrokdecode/libsigrokdecode.mk | 26 ++++++++++++++++++++++++++
+ package/sigrok-cli/sigrok-cli.mk           |  8 +++++++-
+ 4 files changed, 54 insertions(+), 1 deletion(-)
+ create mode 100644 package/libsigrokdecode/Config.in
+ create mode 100644 package/libsigrokdecode/libsigrokdecode.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 32d8e8a..686f343 100644
+index 8742408..ae6a326 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -733,6 +733,7 @@ menu "Hardware handling"
- 	source "package/librtlsdr/Config.in"
+@@ -735,6 +735,7 @@ menu "Hardware handling"
  	source "package/libserial/Config.in"
  	source "package/libserialport/Config.in"
-+	source "package/libsigrok/Config.in"
+ 	source "package/libsigrok/Config.in"
++	source "package/libsigrokdecode/Config.in"
  	source "package/libsoc/Config.in"
  	source "package/libusb/Config.in"
  	source "package/libusb-compat/Config.in"
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+diff --git a/package/libsigrokdecode/Config.in b/package/libsigrokdecode/Config.in
 new file mode 100644
-index 0000000..09077fb
+index 0000000..d13d9be
 --- /dev/null
-+++ b/package/libsigrok/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LIBSIGROK
-+	bool "libsigrok"
-+	select BR2_PACKAGE_LIBSERIALPORT
-+	select BR2_PACKAGE_LIBZIP
-+	select BR2_PACKAGE_LIBGLIB2
-+	# libglib2
++++ b/package/libsigrokdecode/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_LIBSIGROKDECODE
++	bool "libsigrokdecode"
++	select BR2_PACKAGE_PYTHON3
++	# python3
 +	depends on BR2_USE_WCHAR
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	depends on BR2_USE_MMU
 +	help
-+	  Libsigrok is a shared library written in C, which provides
-+	  the basic hardware access drivers for logic analyzers and
-+	  other supported devices, as well as input/output file format
-+	  support.
++	  Libsigrokdecode is a shared library written in C, which
++	  provides (streaming) protocol decoding functionality. Say
++	  yes here if you want to add this functionality to your
++	  buildroot-generated sigrok suite.
 +
 +	  This library is a part of the sigrok software suite.
 +
-+	  http://sigrok.org/wiki/Libsigrok
++	  http://sigrok.org/wiki/Libsigrokdecode
 +
 +comment "libsigrok needs a toolchain w/ wchar, threads"
 +	depends on BR2_USE_MMU
 +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
 new file mode 100644
-index 0000000..f922ff9
+index 0000000..9d9fc11
 --- /dev/null
-+++ b/package/libsigrok/libsigrok.mk
-@@ -0,0 +1,45 @@
++++ b/package/libsigrokdecode/libsigrokdecode.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# libsigrok
++# libsigrokdecode
 +#
 +################################################################################
 +
-+LIBSIGROK_VERSION = 8656a71790133d4de42252a1e75b4209c03b4983
++LIBSIGROKDECODE_VERSION = 9177963de41c2d003d417049470eea3c98eeb2ef
 +# No https access on upstream git
-+LIBSIGROK_SITE = git://sigrok.org/libsigrok
-+LIBSIGROK_LICENSE = GPLv3+
-+LIBSIGROK_LICENSE_FILES = COPYING
++LIBSIGROKDECODE_SITE = git://sigrok.org/libsigrokdecode
++LIBSIGROKDECODE_LICENSE = GPLv3+
++LIBSIGROKDECODE_LICENSE_FILES = COPYING
 +# Git checkout has no configure script
-+LIBSIGROK_AUTORECONF = YES
-+LIBSIGROK_INSTALL_STAGING = YES
-+LIBSIGROK_DEPENDENCIES = libglib2 libzip
-+LIBSIGROK_CONF_OPTS = --disable-libudev --disable-bindings --disable-glibtest
++LIBSIGROKDECODE_AUTORECONF = YES
++LIBSIGROKDECODE_INSTALL_STAGING = YES
++LIBSIGROKDECODE_DEPENDENCIES = python3
 +
-+define LIBSIGROK_ADD_MISSING
++define LIBSIGROKDECODE_ADD_MISSING
 +	cd $(@D); \
 +	mkdir -p autostuff; \
 +	automake --add-missing; \
 +	cd -;
 +endef
 +
-+LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
-+
-+ifeq ($(BR2_PACKAGE_LIBFTDI),y)
-+LIBSIGROK_CONF_OPTS += --enable-libftdi
-+LIBSIGROK_DEPENDENCIES += libftdi
-+else
-+LIBSIGROK_CONF_OPTS += --disable-libftdi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+LIBSIGROK_CONF_OPTS += --enable-libusb
-+LIBSIGROK_DEPENDENCIES += libusb
-+else
-+LIBSIGROK_CONF_OPTS += --disable-libusb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GLIBMM),y)
-+LIBSIGROK_DEPENDENCIES += glibmm
-+endif
++LIBSIGROKDECODE_PRE_CONFIGURE_HOOKS += LIBSIGROKDECODE_ADD_MISSING
 +
 +$(eval $(autotools-package))
+diff --git a/package/sigrok-cli/sigrok-cli.mk b/package/sigrok-cli/sigrok-cli.mk
+index 71b33a4..97d95b5 100644
+--- a/package/sigrok-cli/sigrok-cli.mk
++++ b/package/sigrok-cli/sigrok-cli.mk
+@@ -12,7 +12,13 @@ SIGROK_CLI_LICENSE_FILES = COPYING
+ # Git checkout has no configure script
+ SIGROK_CLI_AUTORECONF = YES
+ SIGROK_CLI_DEPENDENCIES = libsigrok
+-SIGROK_CLI_CONF_OPTS = --with-libsigrokdecode=NO
++
++ifeq ($(BR2_PACKAGE_LIBSIGROKDECODE),y)
++SIGROK_CLI_CONF_OPTS += --with-libsigrokdecode
++SIGROK_CLI_DEPENDENCIES += libsigrokdecode
++else
++SIGROK_CLI_CONF_OPTS += --with-libsigrokdecode=NO
++endif
+ 
+ define SIGROK_CLI_ADD_MISSING
+ 	cd $(@D); \
 -- 
 2.1.4
