@@ -1,9 +1,9 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Thu, 29 Jan 2015 12:35:39 +0100
-Subject: [Buildroot] [PATCH v2 4/5] sigrok-cli: new package
+Date: Thu, 29 Jan 2015 12:35:38 +0100
+Subject: [Buildroot] [PATCH v2 3/5] libsigrok: new package
 In-Reply-To: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1422531340-24883-5-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1422531340-24883-4-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,78 +12,102 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/Config.in                |  1 +
- package/sigrok-cli/Config.in     | 17 +++++++++++++++++
- package/sigrok-cli/sigrok-cli.mk | 26 ++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
- create mode 100644 package/sigrok-cli/Config.in
- create mode 100644 package/sigrok-cli/sigrok-cli.mk
+ package/Config.in              |  1 +
+ package/libsigrok/Config.in    | 22 +++++++++++++++++++++
+ package/libsigrok/libsigrok.mk | 45 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+)
+ create mode 100644 package/libsigrok/Config.in
+ create mode 100644 package/libsigrok/libsigrok.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 686f343..8742408 100644
+index 32d8e8a..686f343 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -364,6 +364,7 @@ endif
- 	source "package/sdparm/Config.in"
- 	source "package/setserial/Config.in"
- 	source "package/sg3_utils/Config.in"
-+	source "package/sigrok-cli/Config.in"
- 	source "package/sispmctl/Config.in"
- 	source "package/smartmontools/Config.in"
- 	source "package/smstools3/Config.in"
-diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
+@@ -733,6 +733,7 @@ menu "Hardware handling"
+ 	source "package/librtlsdr/Config.in"
+ 	source "package/libserial/Config.in"
+ 	source "package/libserialport/Config.in"
++	source "package/libsigrok/Config.in"
+ 	source "package/libsoc/Config.in"
+ 	source "package/libusb/Config.in"
+ 	source "package/libusb-compat/Config.in"
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
 new file mode 100644
-index 0000000..e3e5420
+index 0000000..09077fb
 --- /dev/null
-+++ b/package/sigrok-cli/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_SIGROK_CLI
-+	bool "sigrok-cli"
++++ b/package/libsigrok/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_LIBSIGROK
++	bool "libsigrok"
 +	select BR2_PACKAGE_LIBSERIALPORT
-+	select BR2_PACKAGE_LIBSIGROK
-+	# libsigrok->libglib2:
++	select BR2_PACKAGE_LIBZIP
++	select BR2_PACKAGE_LIBGLIB2
++	# libglib2
 +	depends on BR2_USE_WCHAR
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	depends on BR2_USE_MMU
 +	help
-+	  Sigrok-cli is a command-line frontend for the sigrok
-+	  software suite.
++	  Libsigrok is a shared library written in C, which provides
++	  the basic hardware access drivers for logic analyzers and
++	  other supported devices, as well as input/output file format
++	  support.
 +
-+	  http://sigrok.org/wiki/Sigrok-cli
++	  This library is a part of the sigrok software suite.
 +
-+comment "sigrok-cli needs a toolchain w/ wchar, threads"
++	  http://sigrok.org/wiki/Libsigrok
++
++comment "libsigrok needs a toolchain w/ wchar, threads"
 +	depends on BR2_USE_MMU
 +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/sigrok-cli/sigrok-cli.mk b/package/sigrok-cli/sigrok-cli.mk
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
 new file mode 100644
-index 0000000..71b33a4
+index 0000000..f922ff9
 --- /dev/null
-+++ b/package/sigrok-cli/sigrok-cli.mk
-@@ -0,0 +1,26 @@
++++ b/package/libsigrok/libsigrok.mk
+@@ -0,0 +1,45 @@
 +################################################################################
 +#
-+# sigrok-cli
++# libsigrok
 +#
 +################################################################################
 +
-+SIGROK_CLI_VERSION = 198487f611d8a7be4fa15017c22fa01a56551ca6
++LIBSIGROK_VERSION = 8656a71790133d4de42252a1e75b4209c03b4983
 +# No https access on upstream git
-+SIGROK_CLI_SITE = git://sigrok.org/sigrok-cli
-+SIGROK_CLI_LICENSE = GPLv3+
-+SIGROK_CLI_LICENSE_FILES = COPYING
++LIBSIGROK_SITE = git://sigrok.org/libsigrok
++LIBSIGROK_LICENSE = GPLv3+
++LIBSIGROK_LICENSE_FILES = COPYING
 +# Git checkout has no configure script
-+SIGROK_CLI_AUTORECONF = YES
-+SIGROK_CLI_DEPENDENCIES = libsigrok
-+SIGROK_CLI_CONF_OPTS = --with-libsigrokdecode=NO
++LIBSIGROK_AUTORECONF = YES
++LIBSIGROK_INSTALL_STAGING = YES
++LIBSIGROK_DEPENDENCIES = libglib2 libzip
++LIBSIGROK_CONF_OPTS = --disable-libudev --disable-bindings --disable-glibtest
 +
-+define SIGROK_CLI_ADD_MISSING
++define LIBSIGROK_ADD_MISSING
 +	cd $(@D); \
 +	mkdir -p autostuff; \
 +	automake --add-missing; \
 +	cd -;
 +endef
 +
-+SIGROK_CLI_PRE_CONFIGURE_HOOKS += SIGROK_CLI_ADD_MISSING
++LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
++
++ifeq ($(BR2_PACKAGE_LIBFTDI),y)
++LIBSIGROK_CONF_OPTS += --enable-libftdi
++LIBSIGROK_DEPENDENCIES += libftdi
++else
++LIBSIGROK_CONF_OPTS += --disable-libftdi
++endif
++
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
++LIBSIGROK_CONF_OPTS += --enable-libusb
++LIBSIGROK_DEPENDENCIES += libusb
++else
++LIBSIGROK_CONF_OPTS += --disable-libusb
++endif
++
++ifeq ($(BR2_PACKAGE_GLIBMM),y)
++LIBSIGROK_DEPENDENCIES += glibmm
++endif
 +
 +$(eval $(autotools-package))
 -- 
