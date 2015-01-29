@@ -1,54 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jan 2015 16:50:54 +0100
-Subject: [Buildroot] Grub2 and Memtest86+
-In-Reply-To: <54CA4C59.3010107@ou.edu>
-References: <54CA4C59.3010107@ou.edu>
-Message-ID: <20150129165054.5b72b7fe@free-electrons.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Thu, 29 Jan 2015 11:33:56 -0600
+Subject: [Buildroot] [PATCH] memtest86+: new package
+Message-ID: <54CA6F04.7050406@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Memtest86+ is a bootable standalone memory test program.
 
-On Thu, 29 Jan 2015 09:06:01 -0600, Steve Kenton wrote:
-> I've been tinkering with adding memtest86+ V4.20 to the
-> grub2 menu for my x86 target. It's straight forward.
-> 
-> The questions, is there interest in this and how to
-> do this only for x86 targets. I've not dug into how
-> the boot loaders are handled, yet, but it's apparently
-> different from regular packages. Is there anyone
-> who keeps track on the grub2 boot loader in buildroot?
+Please note that this is the forked memtest86+ program and not
+the original memtest86 which has different licensing. The
+buildroot scripts do not seem to allow the "+" in the name.
 
-I'm not sure I can say I "keep track of grub2", but I did add the
-package last year.
+Memtest86+ is a utility designed to test whether your memory
+is in working order. It repeatedly writes an enormous amount
+of different patterns to all memory locations and reads them
+back again and verifies whether the result of the read is the
+same as what was written to memory.
 
-> Modify ~boot/grub2/grub.cfg to add the memtest entry
-> and download the memtest86+ source tarball and then
-> copy/rename the shipped precomp.bin file file to
-> /boot/memtest86+.bin (It's a bootable 486 binary)
-> 
-> set default="0"
-> set timeout="5"
-> 
-> menuentry "Buildroot" {
-> 	linux /boot/bzImage root=/dev/sda1 console=tty1 quiet splash=silent
-> }
-> 
-> menuentry "Memtest86+" {
-> 	linux16 /boot/memtest86+.bin
-> }
+Memtest86+ will only work on 32-bit or 64-bit x86 targets.
+It boots as an i486 program and autodetects hardware.
 
-What I would suggest is to add a package for memtest86 in Buildroot,
-have it install the appropriate binary in /boot, and in its Config.in
-help text, indicate how to add it to the Grub menu.
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+---
+against last night's snapshot.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-27 16:58:14.000000000 -0600
++++ buildroot/package/Config.in	2015-01-29 11:25:34.836735243 -0600
+@@ -341,6 +341,7 @@ endif
+ 	source "package/lvm2/Config.in"
+ 	source "package/mdadm/Config.in"
+ 	source "package/media-ctl/Config.in"
++	source "package/memtest86/Config.in"
+ 	source "package/memtester/Config.in"
+ 	source "package/minicom/Config.in"
+ 	source "package/nanocom/Config.in"
+diff -pruN buildroot.ori/package/memtest86/Config.in buildroot/package/memtest86/Config.in
+--- buildroot.ori/package/memtest86/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/memtest86/Config.in	2015-01-29 11:13:50.384721730 -0600
+@@ -0,0 +1,29 @@
++config BR2_PACKAGE_MEMTEST86
++	bool "memtest86"
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  Memtest86+ is a bootable standalone memory test program.
++
++	  Please note that this is the forked memtest86+ program and not
++	  the original memtest86 which has different licensing. The
++	  buildroot scripts do not seem to allow the "+" in the name.
++
++	  Memtest86+ is a utility designed to test whether your memory
++	  is in working order. It repeatedly writes an enormous amount
++	  of different patterns to all memory locations and reads them
++	  back again and verifies whether the result of the read is the
++	  same as what was written to memory.
++
++	  Memtest86+ will only work on 32-bit or 64-bit x86 targets.
++	  It boots as an i486 program and autodetects hardware. It can
++	  be added to the grub2 boot menu by adding the following lines
++	  to the bottom of /boot/grub/grub.cfg - note the use of linux16.
++
++	  menuentry "Memtest86+" {
++		 linux16 /boot/memtest86+.bin
++	  }
++
++	  Other boot loaders will have similar requirements.
++
++	  http://www.memtest.org
++
+diff -pruN buildroot.ori/package/memtest86/memtest86+.mk buildroot/package/memtest86/memtest86+.mk
+--- buildroot.ori/package/memtest86/memtest86+.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/memtest86/memtest86+.mk	2015-01-29 11:22:22.576731555 -0600
+@@ -0,0 +1,23 @@
++###############################################################################
++#
++# memtest86
++#
++###############################################################################
++
++MEMTEST86_VERSION = 4.20
++MEMTEST86_SOURCE = memtest86+-$(MEMTEST86_VERSION).tar.gz
++MEMTEST86_SITE = http://www.memtest.org/download/$(MEMTEST86_VERSION)
++MEMTEST86_LICENSE = GPLv2
++MEMTEST86_LICENSE_FILES = README, source code
++
++# memtest86+ is sensitive to toolchain changes, use the shipped binary version
++define MEMTEST86_BUILD_CMDS
++	true
++endef
++
++define MEMTEST86_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/precomp.bin $(TARGET_DIR)/boot/memtest86+.bin
++endef
++
++$(eval $(generic-package))
++
