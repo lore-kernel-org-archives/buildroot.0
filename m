@@ -1,20 +1,36 @@
-From: Marco Pastorelli <mpastorelli@gmail.com>
-Date: Thu, 29 Jan 2015 15:13:58 +0100
-Subject: [Buildroot] Command line tool to manage MBR partition
-Message-ID: <CAFRxoJncaGDrer4Aa-pbFY1_zsGCLpgxdGcJqvF_3sC9noFpSg@mail.gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Thu, 29 Jan 2015 09:06:01 -0600
+Subject: [Buildroot] Grub2 and Memtest86+
+Message-ID: <54CA4C59.3010107@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody,
+I've been tinkering with adding memtest86+ V4.20 to the
+grub2 menu for my x86 target. It's straight forward.
 
-I can't find sfdisk on buildroot-2014.08, has it been removed?
-Is there any other command line tool to manage MBR partition?
+The questions, is there interest in this and how to
+do this only for x86 targets. I've not dug into how
+the boot loaders are handled, yet, but it's apparently
+different from regular packages. Is there anyone
+who keeps track on the grub2 boot loader in buildroot?
 
-Thanks!
-Marco.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150129/d2674864/attachment.html>
+Modify ~boot/grub2/grub.cfg to add the memtest entry
+and download the memtest86+ source tarball and then
+copy/rename the shipped precomp.bin file file to
+/boot/memtest86+.bin (It's a bootable 486 binary)
+
+set default="0"
+set timeout="5"
+
+menuentry "Buildroot" {
+	linux /boot/bzImage root=/dev/sda1 console=tty1 quiet splash=silent
+}
+
+menuentry "Memtest86+" {
+	linux16 /boot/memtest86+.bin
+}
+
+Steve Kenton
