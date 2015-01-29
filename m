@@ -1,38 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 29 Jan 2015 20:13:10 +0100
-Subject: [Buildroot] [PATCH 3/5] package/imlib2: Switch to giflib
-References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
- <1422300260-5361-3-git-send-email-bernd.kuhls@t-online.de>
- <8761bsz1n6.fsf@dell.be.48ers.dk>
-Message-ID: <XnsA431CDAED142AberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 29 Jan 2015 21:48:50 +0200
+Subject: [Buildroot] Command line tool to manage MBR partition
+In-Reply-To: <CAFRxoJncaGDrer4Aa-pbFY1_zsGCLpgxdGcJqvF_3sC9noFpSg@mail.gmail.com>
+References: <CAFRxoJncaGDrer4Aa-pbFY1_zsGCLpgxdGcJqvF_3sC9noFpSg@mail.gmail.com>
+Message-ID: <20150129194850.GK19448@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Hi Marco,
 
-Peter Korsgaard <peter@korsgaard.com> wrote in 
-news:8761bsz1n6.fsf at dell.be.48ers.dk:
+On Thu, Jan 29, 2015 at 03:13:58PM +0100, Marco Pastorelli wrote:
+> I can't find sfdisk on buildroot-2014.08, has it been removed?
+> Is there any other command line tool to manage MBR partition?
 
-> How about instead bumping our imlib2 version? I see there is some giflib
-> support in upstream git:
-> 
-> https://git.enlightenment.org/legacy/imlib2.git/log/
+sfdisk and fdisk are provided by the util-linux package. Make sure to enable 
+the "install utilities" option if you need these utilities.
 
-Hi,
+Hope this helps,
+baruch
 
-bumping to 1.4.6 and backporting some giflib related patches or switching 
-directly to the upstream git HEAD is an option, but I am not in a position to 
-runtime test the packages depending on imlib2, therefore I chose a way to 
-support giflib with a minimum of code changes. I can provide v2 of my patch 
-with one of my suggestions but fixing build errors later on will be a 
-difficult task for me timewise. What do you suggest?
-
-Since imlib2 1.4.6 was released over a year ago I suppose that there is not a 
-big audience for this package in the buildroot community, the only reason I 
-touched imlib2 is my desire to get rid of libungif in favour of giflib 
-because Kodi 15.0 will depend on it ;)
-
-Regards, Bernd
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
