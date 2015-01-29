@@ -1,9 +1,9 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Thu, 29 Jan 2015 12:35:37 +0100
-Subject: [Buildroot] [PATCH v2 2/5] libserialport: new package
+Date: Thu, 29 Jan 2015 12:35:39 +0100
+Subject: [Buildroot] [PATCH v2 4/5] sigrok-cli: new package
 In-Reply-To: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1422531340-24883-3-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1422531340-24883-5-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,78 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/Config.in                      |  1 +
- package/libserialport/Config.in        |  8 ++++++++
- package/libserialport/libserialport.mk | 25 +++++++++++++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/libserialport/Config.in
- create mode 100644 package/libserialport/libserialport.mk
+ package/Config.in                |  1 +
+ package/sigrok-cli/Config.in     | 17 +++++++++++++++++
+ package/sigrok-cli/sigrok-cli.mk | 26 ++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+ create mode 100644 package/sigrok-cli/Config.in
+ create mode 100644 package/sigrok-cli/sigrok-cli.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7312255..32d8e8a 100644
+index 686f343..8742408 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -732,6 +732,7 @@ menu "Hardware handling"
- 	source "package/libraw1394/Config.in"
- 	source "package/librtlsdr/Config.in"
- 	source "package/libserial/Config.in"
-+	source "package/libserialport/Config.in"
- 	source "package/libsoc/Config.in"
- 	source "package/libusb/Config.in"
- 	source "package/libusb-compat/Config.in"
-diff --git a/package/libserialport/Config.in b/package/libserialport/Config.in
+@@ -364,6 +364,7 @@ endif
+ 	source "package/sdparm/Config.in"
+ 	source "package/setserial/Config.in"
+ 	source "package/sg3_utils/Config.in"
++	source "package/sigrok-cli/Config.in"
+ 	source "package/sispmctl/Config.in"
+ 	source "package/smartmontools/Config.in"
+ 	source "package/smstools3/Config.in"
+diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
 new file mode 100644
-index 0000000..1e2935f
+index 0000000..e3e5420
 --- /dev/null
-+++ b/package/libserialport/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBSERIALPORT
-+	bool "libserialport"
++++ b/package/sigrok-cli/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_SIGROK_CLI
++	bool "sigrok-cli"
++	select BR2_PACKAGE_LIBSERIALPORT
++	select BR2_PACKAGE_LIBSIGROK
++	# libsigrok->libglib2:
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
 +	help
-+	  Serial port access library.
++	  Sigrok-cli is a command-line frontend for the sigrok
++	  software suite.
 +
-+	  This library is a part of the sigrok software suite.
++	  http://sigrok.org/wiki/Sigrok-cli
 +
-+	  http://sigrok.org/wiki/Libserialport
-diff --git a/package/libserialport/libserialport.mk b/package/libserialport/libserialport.mk
++comment "sigrok-cli needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sigrok-cli/sigrok-cli.mk b/package/sigrok-cli/sigrok-cli.mk
 new file mode 100644
-index 0000000..9a14ba1
+index 0000000..71b33a4
 --- /dev/null
-+++ b/package/libserialport/libserialport.mk
-@@ -0,0 +1,25 @@
++++ b/package/sigrok-cli/sigrok-cli.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# libserialport
++# sigrok-cli
 +#
 +################################################################################
 +
-+LIBSERIALPORT_VERSION = e31f2c6b8b8f2b7e554df911cc9a3482b99632b4
++SIGROK_CLI_VERSION = 198487f611d8a7be4fa15017c22fa01a56551ca6
 +# No https access on upstream git
-+LIBSERIALPORT_SITE = git://sigrok.org/libserialport
-+LIBSERIALPORT_LICENSE = LGPLv3+
-+LIBSERIALPORT_LICENSE_FILES = COPYING
++SIGROK_CLI_SITE = git://sigrok.org/sigrok-cli
++SIGROK_CLI_LICENSE = GPLv3+
++SIGROK_CLI_LICENSE_FILES = COPYING
 +# Git checkout has no configure script
-+LIBSERIALPORT_AUTORECONF = YES
-+LIBSERIALPORT_INSTALL_STAGING = YES
++SIGROK_CLI_AUTORECONF = YES
++SIGROK_CLI_DEPENDENCIES = libsigrok
++SIGROK_CLI_CONF_OPTS = --with-libsigrokdecode=NO
 +
-+define LIBSERIALPORT_ADD_MISSING
++define SIGROK_CLI_ADD_MISSING
 +	cd $(@D); \
 +	mkdir -p autostuff; \
 +	automake --add-missing; \
 +	cd -;
 +endef
 +
-+LIBSERIALPORT_PRE_CONFIGURE_HOOKS += LIBSERIALPORT_ADD_MISSING
++SIGROK_CLI_PRE_CONFIGURE_HOOKS += SIGROK_CLI_ADD_MISSING
 +
 +$(eval $(autotools-package))
 -- 
