@@ -1,59 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 29 Jan 2015 11:17:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 7844] Lua with hard-float on MIPS by buildroot
-	doesn't work
-In-Reply-To: <bug-7844-163@https.bugs.busybox.net/>
-References: <bug-7844-163@https.bugs.busybox.net/>
-Message-ID: <20150129111743.5FB1280E4D@busybox.osuosl.org>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Thu, 29 Jan 2015 12:35:35 +0100
+Subject: [Buildroot] [PATCH v2 0/5] new packages: libzip and sigrok
+Message-ID: <1422531340-24883-1-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7844
+This series adds support for building a minimal subset of the sigrok
+software  suite. The motivation for merging these patches is making
+sigrok-cli available for users of ACME board (http://baylibre.com/acme/).
 
---- Comment #5 from Carlos Santos <unixmania@gmail.com> 2015-01-29 11:17:42 UTC ---
-This is the expected behavior, as documented on http://www.lua.org/pil/4.2.html
+v2:
+- Split sigrok package into separate packages for each library and sigrok-cli.
+- Properly handle conditional dependencies.
+- Don't require libsigrokdecode in order to build sigrok-cli.
+- Other minor fixes according to the code review.
 
-$ rpm -qi lua
-Name        : lua
-Version     : 5.2.2
-Release     : 8.fc21
-Architecture: x86_64
-Install Date: Wed 03 Dec 2014 06:33:31 PM BRST
-Group       : Development/Languages
-Size        : 602972
-License     : MIT
-Signature   : RSA/SHA256, Sun 17 Aug 2014 12:08:57 PM BRT, Key ID
-89ad4e8795a43f54
-Source RPM  : lua-5.2.2-8.fc21.src.rpm
-Build Date  : Sun 17 Aug 2014 11:59:50 AM BRT
-Build Host  : buildhw-02.phx2.fedoraproject.org
-Relocations : (not relocatable)
-Packager    : Fedora Project
-Vendor      : Fedora Project
-URL         : http://www.lua.org/
-Summary     : Powerful light-weight programming language
-[...]
-$ lua
-Lua 5.2.2  Copyright (C) 1994-2013 Lua.org, PUC-Rio
-> local var = 12345
-> print(var)
-nil
-> var = 12345
-> print(var)
-12345
-> if 6 > 4 then
->> local var = 12345
->> print(var)
->> end
-12345
-> 
+v1:
+http://lists.busybox.net/pipermail/buildroot/2015-January/118135.html
 
-I'd close this as "not a bug".
+Bartosz Golaszewski (5):
+  libzip: new package
+  libserialport: new package
+  libsigrok: new package
+  sigrok-cli: new package
+  libsigrokdecode: new package
+
+ package/Config.in                          |  5 ++++
+ package/libserialport/Config.in            |  8 ++++++
+ package/libserialport/libserialport.mk     | 25 +++++++++++++++++
+ package/libsigrok/Config.in                | 22 +++++++++++++++
+ package/libsigrok/libsigrok.mk             | 45 ++++++++++++++++++++++++++++++
+ package/libsigrokdecode/Config.in          | 20 +++++++++++++
+ package/libsigrokdecode/libsigrokdecode.mk | 26 +++++++++++++++++
+ package/libzip/Config.in                   |  8 ++++++
+ package/libzip/libzip.mk                   | 15 ++++++++++
+ package/sigrok-cli/Config.in               | 17 +++++++++++
+ package/sigrok-cli/sigrok-cli.mk           | 32 +++++++++++++++++++++
+ 11 files changed, 223 insertions(+)
+ create mode 100644 package/libserialport/Config.in
+ create mode 100644 package/libserialport/libserialport.mk
+ create mode 100644 package/libsigrok/Config.in
+ create mode 100644 package/libsigrok/libsigrok.mk
+ create mode 100644 package/libsigrokdecode/Config.in
+ create mode 100644 package/libsigrokdecode/libsigrokdecode.mk
+ create mode 100644 package/libzip/Config.in
+ create mode 100644 package/libzip/libzip.mk
+ create mode 100644 package/sigrok-cli/Config.in
+ create mode 100644 package/sigrok-cli/sigrok-cli.mk
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.1.4
