@@ -1,31 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jan 2015 09:31:09 +0100
-Subject: [Buildroot] libselinux on Blackfin
-In-Reply-To: <20150129073015.5E3AD101557@stock.ovh.net>
-References: <20150129073015.5E3AD101557@stock.ovh.net>
-Message-ID: <20150129093109.20f5274f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 29 Jan 2015 10:51:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 7844] Lua with hard-float on MIPS by buildroot
+	doesn't work
+In-Reply-To: <bug-7844-163@https.bugs.busybox.net/>
+References: <bug-7844-163@https.bugs.busybox.net/>
+Message-ID: <20150129105115.1883580E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=7844
 
-On Thu, 29 Jan 2015 08:30:14 +0100 (CET), Thomas Petazzoni wrote:
+--- Comment #3 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-01-29 10:51:14 UTC ---
+Hello.
 
->         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/2ed846b1574e5c436f8aa68fcaf613c3112e6c47/
->         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/e15c2e3c395318d02768c303447dc01b84d5c883/
->         bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/3a901420e3601021507729bb30dc47e4df9b2a6c/
+I have done a Buildroot build for x86_64 using the Sourcery CodeBench toolchain
+and then I chrooted into it to check if this problem is not present in other
+architectures.
 
-I've started having a look. I have a fix that consists in disabling the
-logic to hide symbols on Blackfin, but it's not the nicest fix. I've
-reported the bug upstream at
-https://github.com/SELinuxProject/selinux/issues/5, and I'll ping the
-Blackfin guys to see if they can help us.
+I have never used Lua so, please tell me if this is expected:
 
-Thomas
+# chroot images /bin/bash
+bash-4.3# lua  
+Lua 5.1.5  Copyright (C) 1994-2012 Lua.org, PUC-Rio
+> local var = 12345
+> print(var)
+nil
+> var = 12345
+> print(var)
+12345
+
+I see exactly the same behavior on MIPS big endian, tested in real hardware,
+for both soft and hard float. I will check it on little endian if you think
+that is necessary.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
