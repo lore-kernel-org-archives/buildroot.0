@@ -1,45 +1,89 @@
-From: Marco Pastorelli <mpastorelli@gmail.com>
-Date: Fri, 30 Jan 2015 16:37:27 +0100
-Subject: [Buildroot] Command line tool to manage MBR partition
-In-Reply-To: <20150129194850.GK19448@tarshish>
-References: <CAFRxoJncaGDrer4Aa-pbFY1_zsGCLpgxdGcJqvF_3sC9noFpSg@mail.gmail.com>
- <20150129194850.GK19448@tarshish>
-Message-ID: <CAFRxoJm=XPKRG=yuBQ+zpQfXdARpjTXb9dOffXSbj-aCX2Nw-A@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 30 Jan 2015 17:52:05 +0100
+Subject: [Buildroot] [PATCH] boot/at91bootstrap3: Add the option to download
+	via git
+Message-ID: <1422636725-25148-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Baruch!
+Adding support for git downloading of a custom repository.
 
-I have to set the flag "install utilities" to install fdisk and sfdisk into
-the rootfs image.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ boot/at91bootstrap3/Config.in         | 35 +++++++++++++++++++++++++++++++++++
+ boot/at91bootstrap3/at91bootstrap3.mk |  8 +++++++-
+ 2 files changed, 42 insertions(+), 1 deletion(-)
 
-Best regards,
-Marco.
-
-2015-01-29 20:48 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
-
-> Hi Marco,
->
-> On Thu, Jan 29, 2015 at 03:13:58PM +0100, Marco Pastorelli wrote:
-> > I can't find sfdisk on buildroot-2014.08, has it been removed?
-> > Is there any other command line tool to manage MBR partition?
->
-> sfdisk and fdisk are provided by the util-linux package. Make sure to
-> enable
-> the "install utilities" option if you need these utilities.
->
-> Hope this helps,
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150130/e69fde8f/attachment.html>
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 8ac40ed..6f2f7db 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -8,8 +8,43 @@ config BR2_TARGET_AT91BOOTSTRAP3
+ 	  - Peripheral drivers such as PIO, PMC or SDRAMC...
+ 	  - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
+ 
++
+ if BR2_TARGET_AT91BOOTSTRAP3
+ 
++choice
++
++	prompt "AT91 Bootstrap 3 version"
++
++config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	bool "3.7.1"
++
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  This option allows Buildroot to get the AT91 Bootstrap 3 source
++	  code from a Git repository.
++
++endchoice
++
++if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  E.G. a sha id, a tag, branch, ..
++
++endif
++
++config BR2_TARGET_AT91BOOTSTRAP3_VERSION
++	string
++	default "v3.7.1" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
++		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
+ 	string "custom patch dir"
+ 	help
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 098e7bf..39f2365 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -4,8 +4,14 @@
+ #
+ ################################################################################
+ 
+-AT91BOOTSTRAP3_VERSION = v3.7.1
++AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
++
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
++AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
++AT91BOOTSTRAP3_SITE_METHOD = git
++else
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
++endif
+ 
+ AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+ AT91BOOTSTRAP3_INSTALL_TARGET = NO
+-- 
+1.9.1
