@@ -1,33 +1,28 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 30 Jan 2015 20:09:24 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-addons: bump version
-In-Reply-To: <1422644964-18997-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1422644964-18997-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1422644964-18997-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 30 Jan 2015 20:20:47 +0100
+Subject: [Buildroot] [PATCH V2] ffmpeg: enable use of freetype and
+	fontconfig
+References: <54C6E85B.2010707@ou.edu> <87k307yj4g.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA432CEF8725BFberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-addons/kodi-pvr-addons.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Peter Korsgaard <peter@korsgaard.com> wrote in 
+news:87k307yj4g.fsf at dell.be.48ers.dk:
 
-diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-index 0ca0457..2db8d3a 100644
---- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
-+++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-@@ -6,7 +6,7 @@
- 
- # This cset is on the branch 'helix'
- # When Kodi is updated, this should be updated to the corresponding branch
--KODI_PVR_ADDONS_VERSION = 7aec58f67c799e83e0c1c490ceda39dc119f2c7d
-+KODI_PVR_ADDONS_VERSION = a0a437eac14c9532ea0c6d38f8f222a612aea147
- KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
- KODI_PVR_ADDONS_LICENSE = GPLv3+
- KODI_PVR_ADDONS_LICENSE_FILES = COPYING
--- 
-1.7.10.4
+> You also don't cover musl. While it does provide fenv.h, it is missing
+> functionality on atleast microblaze and soft float arm/mips, so I think
+> the sanest approach is just to only enable it for glibc.
+
+Hi Peter,
+
+it seems that glibc at microblazeel also lacks features in fenv.h:
+http://autobuild.buildroot.net/results/255/2551aae55620c6ba3da20b8be161dda302
+e057c3/
+
+Regards, Bernd
