@@ -1,41 +1,191 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Jan 2015 08:31:28 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.18.5
-In-Reply-To: <1422617488-14274-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1422617488-14274-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1422617488-14274-2-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 30 Jan 2015 14:33:52 +0000
+Subject: [Buildroot] [PATCH 1/2] uclibc/0.9.33.2: Rename MIPS' siginfo
+	_timer members
+Message-ID: <1422628433-39741-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Backport an upstream patch to fix a compilation problem of strace-4.9+
+on MIPS platforms with uClibc.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7b538c6..6dda18c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.18.4"
-+	bool "3.18.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.18.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.18.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Upstream commit:
+  http://git.uclibc.org/uClibc/commit/?id=a1b88fe87a9d2be5696247d266f5c4fd20f000bb
+
+Fixes:
+  http://autobuild.buildroot.net/results/e8f/e8f4965b27c9dcc58d6ec77cdc48b83c218c5bec/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ .../0066-mips-rename-siginfo-_timer-members.patch  |  157 ++++++++++++++++++++
+ 1 files changed, 157 insertions(+), 0 deletions(-)
+ create mode 100644 package/uclibc/0.9.33.2/0066-mips-rename-siginfo-_timer-members.patch
+
+diff --git a/package/uclibc/0.9.33.2/0066-mips-rename-siginfo-_timer-members.patch b/package/uclibc/0.9.33.2/0066-mips-rename-siginfo-_timer-members.patch
+new file mode 100644
+index 0000000..8ab7615
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/0066-mips-rename-siginfo-_timer-members.patch
+@@ -0,0 +1,157 @@
++mips: rename siginfo _timer members
++
++Backport an upstream patch to fix a compilation problem of strace-4.9+ 
++on MIPS platforms with uClibc.
++
++Upstream commit:
++  http://git.uclibc.org/uClibc/commit/?id=a1b88fe87a9d2be5696247d266f5c4fd20f000bb
++
++Fixes:
++  http://autobuild.buildroot.net/results/e8f/e8f4965b27c9dcc58d6ec77cdc48b83c218c5bec/
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From a1b88fe87a9d2be5696247d266f5c4fd20f000bb Mon Sep 17 00:00:00 2001
++From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++Date: Wed, 3 Dec 2014 17:43:25 +0100
++Subject: [PATCH] mips: rename siginfo _timer members
++
++Rename _timer[12] to si_tid and si_overrun to fix compilation of
++strace-4.9+
++
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ libc/sysdeps/linux/mips/bits/siginfo.h |   51 ++++++++++++++++++++-----------
++ 1 files changed, 33 insertions(+), 18 deletions(-)
++
++diff --git a/libc/sysdeps/linux/mips/bits/siginfo.h b/libc/sysdeps/linux/mips/bits/siginfo.h
++index a6e4135..5199d4d 100644
++--- a/libc/sysdeps/linux/mips/bits/siginfo.h
+++++ b/libc/sysdeps/linux/mips/bits/siginfo.h
++@@ -69,6 +69,22 @@ typedef struct siginfo
++ 	    __uid_t si_uid;	/* Real user ID of sending process.  */
++ 	  } _kill;
++ 
+++	/* POSIX.1b timers.  */
+++	struct
+++	  {
+++	    int si_tid;		/* Timer ID.  */
+++	    int si_overrun;	/* Overrun count.  */
+++	    sigval_t si_sigval;	/* Signal value.  */
+++	  } _timer;
+++
+++	/* POSIX.1b signals.  */
+++	struct
+++	  {
+++	    __pid_t si_pid;	/* Sending process ID.  */
+++	    __uid_t si_uid;	/* Real user ID of sending process.  */
+++	    sigval_t si_sigval;	/* Signal value.  */
+++	  } _rt;
+++
++ 	/* SIGCHLD.  */
++ 	struct
++ 	  {
++@@ -83,29 +99,15 @@ typedef struct siginfo
++ 	struct
++ 	  {
++ 	    void *si_addr;	/* Faulting insn/memory ref.  */
+++	    short int si_addr_lsb;	/* Valid LSB of the reported address.  */
++ 	  } _sigfault;
++ 
++ 	/* SIGPOLL.  */
++ 	struct
++ 	  {
++-	    int si_band;	/* Band event for SIGPOLL.  */
+++	    long int si_band;	/* Band event for SIGPOLL.  */
++ 	    int si_fd;
++ 	  } _sigpoll;
++-
++-	/* POSIX.1b timers.  */
++-	struct
++-	  {
++-	    unsigned int _timer1;
++-	    unsigned int _timer2;
++-	  } _timer;
++-
++-	/* POSIX.1b signals.  */
++-	struct
++-	  {
++-	    __pid_t si_pid;	/* Sending process ID.  */
++-	    __uid_t si_uid;	/* Real user ID of sending process.  */
++-	    sigval_t si_sigval;	/* Signal value.  */
++-	  } _rt;
++       } _sifields;
++   } siginfo_t;
++ 
++@@ -113,6 +115,8 @@ typedef struct siginfo
++ /* X/Open requires some more fields with fixed names.  */
++ # define si_pid		_sifields._kill.si_pid
++ # define si_uid		_sifields._kill.si_uid
+++# define si_timerid	_sifields._timer.si_tid
+++# define si_overrun	_sifields._timer.si_overrun
++ # define si_status	_sifields._sigchld.si_status
++ # define si_utime	_sifields._sigchld.si_utime
++ # define si_stime	_sifields._sigchld.si_stime
++@@ -120,6 +124,7 @@ typedef struct siginfo
++ # define si_int		_sifields._rt.si_sigval.sival_int
++ # define si_ptr		_sifields._rt.si_sigval.sival_ptr
++ # define si_addr	_sifields._sigfault.si_addr
+++# define si_addr_lsb	_sifields._sigfault.si_addr_lsb
++ # define si_band	_sifields._sigpoll.si_band
++ # define si_fd		_sifields._sigpoll.si_fd
++ 
++@@ -142,13 +147,14 @@ enum
++ # define SI_ASYNCIO	SI_ASYNCIO
++   SI_QUEUE,			/* Sent by sigqueue.  */
++ # define SI_QUEUE	SI_QUEUE
++-  SI_USER,			/* Sent by kill, sigsend, raise.  */
+++  SI_USER,			/* Sent by kill, sigsend.  */
++ # define SI_USER	SI_USER
++   SI_KERNEL = 0x80		/* Send by kernel.  */
++ #define SI_KERNEL	SI_KERNEL
++ };
++ 
++ 
+++# if defined __USE_XOPEN_EXTENDED || defined __USE_XOPEN2K8
++ /* `si_code' values for SIGILL signal.  */
++ enum
++ {
++@@ -207,10 +213,16 @@ enum
++ # define BUS_ADRALN	BUS_ADRALN
++   BUS_ADRERR,			/* Non-existant physical address.  */
++ # define BUS_ADRERR	BUS_ADRERR
++-  BUS_OBJERR			/* Object specific hardware error.  */
+++  BUS_OBJERR,			/* Object specific hardware error.  */
++ # define BUS_OBJERR	BUS_OBJERR
+++  BUS_MCEERR_AR,		/* Hardware memory error: action required.  */
+++#  define BUS_MCEERR_AR	BUS_MCEERR_AR
+++  BUS_MCEERR_AO			/* Hardware memory error: action optional.  */
+++#  define BUS_MCEERR_AO	BUS_MCEERR_AO
++ };
+++# endif
++ 
+++# ifdef __USE_XOPEN_EXTENDED
++ /* `si_code' values for SIGTRAP signal.  */
++ enum
++ {
++@@ -219,7 +231,9 @@ enum
++   TRAP_TRACE			/* Process trace trap.  */
++ # define TRAP_TRACE	TRAP_TRACE
++ };
+++# endif
++ 
+++# if defined __USE_XOPEN_EXTENDED || defined __USE_XOPEN2K8
++ /* `si_code' values for SIGCHLD signal.  */
++ enum
++ {
++@@ -253,6 +267,7 @@ enum
++   POLL_HUP			/* Device disconnected.  */
++ # define POLL_HUP	POLL_HUP
++ };
+++# endif
++ 
++ # undef __need_siginfo_t
++ #endif	/* !have siginfo_t && (have _SIGNAL_H || need siginfo_t).  */
++-- 
++1.7.1
++
 -- 
-2.0.5
+1.7.1
