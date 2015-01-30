@@ -1,49 +1,42 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 29 Jan 2015 18:42:08 -0600
-Subject: [Buildroot] Package python-pyxml missing?
-In-Reply-To: <54CAC560.5060407@ecoventsystems.com>
-References: <54CAC560.5060407@ecoventsystems.com>
-Message-ID: <CAMQcK5K3Ye22haHyNcpOtdv1z4EqmKptC_84re527fhSW+xjnQ@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 30 Jan 2015 01:53:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 0.10.36
+Message-ID: <1422579227-22170-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shawn,
+Bump to new version and update hash.
 
-On Thu, Jan 29, 2015 at 5:42 PM, Shawn Rose <sr@ecoventsystems.com> wrote:
-> Hi,
->
-> Is the python-pyxml package suppose to be included in the latest builds?
->  I just did a git clone git://git.busybox.net/buildroot and the package
-> buildroot/package/python-pyxml is missing.  I also do not see it on
-> http://git.buildroot.net/buildroot/ on the master branch.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-That package has been submitted for inclusion into buildroot with the
-following patch:
-
-http://patchwork.ozlabs.org/patch/427112/
-
-> Why I ask is my python-setuptools crashes on for me when I use any of
-> its functionality with the error ImportError: No module named
-> xml.dom.pulldom   I believe this is due to my python xml package being
-> missing.
-
-Please apply this patch to your clone of buildroot following these
-instructions (section 21.3.1):
-
-http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
-
-If this patch works for you, please add a "Tested by:" to the patch
-following instructions in the section linked above.
-
-Thanks,
--Ryan
-
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index a6f2698..5b868e9 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v0.10.35/SHASUMS256.txt
+-sha256	0043656bb1724cb09dbdc960a2fd6ee37d3badb2f9c75562b2d11235daa40a03  node-v0.10.35.tar.gz
++# From upstream URL: http://nodejs.org/dist/v0.10.36/SHASUMS256.txt
++sha256	b9d7d1d0294bce46686b13a05da6fc5b1e7743b597544aa888e8e64a9f178c81  node-v0.10.36.tar.gz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index c2cb05e..89faa6c 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 0.10.35
++NODEJS_VERSION = 0.10.36
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+2.2.2
