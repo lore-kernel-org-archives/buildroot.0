@@ -1,31 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Jan 2015 14:46:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 7844] Lua with hard-float on MIPS by buildroot
-	doesn't work
-In-Reply-To: <bug-7844-163@https.bugs.busybox.net/>
-References: <bug-7844-163@https.bugs.busybox.net/>
-Message-ID: <20150130144601.A7E1780E2F@busybox.osuosl.org>
+From: Marco Pastorelli <mpastorelli@gmail.com>
+Date: Fri, 30 Jan 2015 16:37:27 +0100
+Subject: [Buildroot] Command line tool to manage MBR partition
+In-Reply-To: <20150129194850.GK19448@tarshish>
+References: <CAFRxoJncaGDrer4Aa-pbFY1_zsGCLpgxdGcJqvF_3sC9noFpSg@mail.gmail.com>
+ <20150129194850.GK19448@tarshish>
+Message-ID: <CAFRxoJm=XPKRG=yuBQ+zpQfXdARpjTXb9dOffXSbj-aCX2Nw-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7844
+Thanks Baruch!
 
---- Comment #8 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-01-30 14:46:01 UTC ---
-(In reply to comment #7)
-> Created attachment 5834 [details]
-> Our linux build configuration
-> 
-> It's my linux build configuration.
+I have to set the flag "install utilities" to install fdisk and sfdisk into
+the rootfs image.
 
-Please, tell us:
-1. what target device are you using
-2. what kernel version are you using
-3. what defconfig are you using to generate the buildroot rootfs
+Best regards,
+Marco.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2015-01-29 20:48 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
+
+> Hi Marco,
+>
+> On Thu, Jan 29, 2015 at 03:13:58PM +0100, Marco Pastorelli wrote:
+> > I can't find sfdisk on buildroot-2014.08, has it been removed?
+> > Is there any other command line tool to manage MBR partition?
+>
+> sfdisk and fdisk are provided by the util-linux package. Make sure to
+> enable
+> the "install utilities" option if you need these utilities.
+>
+> Hope this helps,
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150130/e69fde8f/attachment.html>
