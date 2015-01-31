@@ -1,106 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 10:48:34 +0100
-Subject: [Buildroot] [git commit] package/freerdp: do not forcibly depend on
-	X.Org
-Message-ID: <20150302222722.1F3148177C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 1 Feb 2015 00:07:36 +0100
+Subject: [Buildroot] [git commit] python-six: new package
+Message-ID: <20150131230757.377CD804A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53ba93a473b77b208743446c0b85843ef10ef009
+commit: http://git.buildroot.net/buildroot/commit/?id=96bc60efa4e81bf552d88e215d7821129bba84b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It is possible to build the libfreerdp standalone, without X.Org.
-Having a libfreerdp will be usefull for the weston RDP compositor.
-
-So, only select the strictly required X.Org library if X.Org is enabled,
-and only build with Xcursor if it is enabled. Drop dependency on other
-X.Org libraries, as they are not strictly required (or get pulled as
-dependencies of the mandatory libXext).
-
-Re-order the menuconfig, as freerdp is no longer an X-only application.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |    2 +-
- package/freerdp/Config.in  |    6 +-----
- package/freerdp/freerdp.mk |   17 +++++++++++++++--
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ package/Config.in                  |    1 +
+ package/python-six/Config.in       |    9 +++++++++
+ package/python-six/python-six.hash |    2 ++
+ package/python-six/python-six.mk   |   14 ++++++++++++++
+ 4 files changed, 26 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 3b07ab5..222ea38 100644
+index d140721..095126d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -207,6 +207,7 @@ endif
- 	source "package/fb-test-app/Config.in"
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
-+	source "package/freerdp/Config.in"
- 	source "package/imagemagick/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-@@ -244,7 +245,6 @@ comment "X applications"
- 	source "package/dillo/Config.in"
- 	source "package/docker/Config.in"
- 	source "package/feh/Config.in"
--	source "package/freerdp/Config.in"
- 	source "package/gmpc/Config.in"
- 	source "package/gqview/Config.in"
- 	source "package/gtkperf/Config.in"
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index c5ff769..09efbc0 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_FREERDP
- 	bool "freerdp"
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXT
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_ZLIB
--	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	help
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 5bfdeec..0dbf8a4 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -7,8 +7,7 @@
- # Changeset on the stable-1.1 branch
- FREERDP_VERSION = b21ff842ef3de5837513042dc30488b12bd9cf9d
- FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
--FREERDP_DEPENDENCIES = openssl zlib \
--	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
-+FREERDP_DEPENDENCIES = openssl zlib
- FREERDP_LICENSE = Apache-2.0
- FREERDP_LICENSE_FILES = LICENSE
- 
-@@ -49,6 +48,20 @@ else
- FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
-+FREERDP_DEPENDENCIES += xlib_libXext
-+FREERDP_CONF_OPTS += -DWITH_X11=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_X11=OFF
-+endif
+@@ -547,6 +547,7 @@ menu "external python modules"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-simplejson/Config.in"
++	source "package/python-six/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-twisted/Config.in"
+diff --git a/package/python-six/Config.in b/package/python-six/Config.in
+new file mode 100644
+index 0000000..0a8b69a
+--- /dev/null
++++ b/package/python-six/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_SIX
++	bool "python-six"
++	help
++	  Six is a Python 2 and 3 compatibility library. It provides
++	  utility functions for smoothing over the differences between
++	  the Python versions with the goal of writing Python code that
++	  is compatible on both Python versions.
 +
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-+FREERDP_CONF_OPTS += -DWITH_XCURSOR=ON
-+FREERDP_DEPENDENCIES += xlib_libXcursor
-+else
-+FREERDP_CONF_OPTS += -DWITH_XCURSOR=OFF
-+endif
++	  http://pythonhosted.org/six
+diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
+new file mode 100644
+index 0000000..6121a08
+--- /dev/null
++++ b/package/python-six/python-six.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  e24052411fc4fbd1f672635537c3fc2330d9481b18c0317695b46259512c91d5  six-1.9.0.tar.gz
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+new file mode 100644
+index 0000000..08fe5de
+--- /dev/null
++++ b/package/python-six/python-six.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-six
++#
++################################################################################
 +
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
- FREERDP_CONF_OPTS += -DWITH_XI=ON
- FREERDP_DEPENDENCIES += xlib_libXi
++PYTHON_SIX_VERSION = 1.9.0
++PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
++PYTHON_SIX_SITE = https://pypi.python.org/packages/source/s/six/
++PYTHON_SIX_SETUP_TYPE = setuptools
++PYTHON_SIX_LICENSE = MIT
++PYTHON_SIX_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
