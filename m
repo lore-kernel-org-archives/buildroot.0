@@ -1,31 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 31 Jan 2015 21:43:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mcelog: bump version to v109
-Message-ID: <1422737039-1786-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 31 Jan 2015 23:02:00 +0100
+Subject: [Buildroot] [RFC] pkg-generic: add per-package staging directory
+In-Reply-To: <1422602264-4725-1-git-send-email-Fabio.Porcedda@gmail.com>
+References: <1422602264-4725-1-git-send-email-Fabio.Porcedda@gmail.com>
+Message-ID: <20150131230200.0490cafe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Fabio Porcedda,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mcelog/mcelog.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 30 Jan 2015 08:17:44 +0100, Fabio Porcedda wrote:
+> This commit add a per-package staging directory under output/stagingof/
+> to improve build reproducibility, because it prevents that a unspecified
+> dependency affects the build.
+> 
+> It also help to enable default top-level parallel make.
 
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index da338ba..5857403 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MCELOG_VERSION = v105
-+MCELOG_VERSION = v109
- MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
- MCELOG_SITE_METHOD = git
- MCELOG_LICENSE = GPLv2
+Thanks for attempting to look at this complicated problem. However,
+there is a fairly fundamental flaw in your proposal:
+
+> +$(2)_TARGET_CPPFLAGS += $(foreach dep,$($(2)_DEPENDENCIES),\
+> +	-I$(STAGINGOF_DIR)/$(dep)/usr/include)
+
+How is this going to account for headers installed in subdirs
+of /usr/include ? Those are normally discovered using pkg-config for
+example. But with your solution, pkg-config will continue to return
+paths in the "common" staging directory.
+
+My perception is that it's not really feasible to have one staging
+directory per-package, because it means that pkg-config would have to
+know, depending on which library it is asked to provide information
+for, should use a different sysroot dir.
+
+I believe the only solution is to create a temporary staging directory
+in which you copy/extract only the libraries that are explicitly listed
+as the dependency of the package being built.
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
