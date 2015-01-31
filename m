@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Jan 2015 22:45:13 +0100
-Subject: [Buildroot] [git commit] package/rtmpdump: bump version
-Message-ID: <20150131222039.927E1801C8@busybox.osuosl.org>
+Date: Sat, 31 Jan 2015 22:46:33 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-addons: bump version
+Message-ID: <20150131222039.A4DD18046F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa438b25e72710310733215ecef2ccc48815d9dc
+commit: http://git.buildroot.net/buildroot/commit/?id=f59b00c7ed3ac6895af0ef4b42e090e09d813005
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtmpdump/rtmpdump.mk |    2 +-
+ package/kodi-pvr-addons/kodi-pvr-addons.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 0e2eccc..14037fb 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+index 0ca0457..2db8d3a 100644
+--- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
++++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+@@ -6,7 +6,7 @@
  
--RTMPDUMP_VERSION = 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
-+RTMPDUMP_VERSION = a107cef9b392616dff54fabfd37f985ee2190a6f
- RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
- RTMPDUMP_INSTALL_STAGING = YES
- # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
+ # This cset is on the branch 'helix'
+ # When Kodi is updated, this should be updated to the corresponding branch
+-KODI_PVR_ADDONS_VERSION = 7aec58f67c799e83e0c1c490ceda39dc119f2c7d
++KODI_PVR_ADDONS_VERSION = a0a437eac14c9532ea0c6d38f8f222a612aea147
+ KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
+ KODI_PVR_ADDONS_LICENSE = GPLv3+
+ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
