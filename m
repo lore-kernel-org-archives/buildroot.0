@@ -1,31 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 31 Jan 2015 17:49:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rtmpdump: bump version
-Message-ID: <1422722945-31832-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 31 Jan 2015 19:59:35 +0100
+Subject: [Buildroot] [PATCH] python-cffi: bump to 0.8.6
+Message-ID: <1422730775-28205-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/rtmpdump/rtmpdump.mk |    2 +-
+ package/python-cffi/python-cffi.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 0e2eccc..14037fb 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 3d5c86f..17efbab 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTMPDUMP_VERSION = 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
-+RTMPDUMP_VERSION = a107cef9b392616dff54fabfd37f985ee2190a6f
- RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
- RTMPDUMP_INSTALL_STAGING = YES
- # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
+-PYTHON_CFFI_VERSION = 0.8.2
++PYTHON_CFFI_VERSION = 0.8.6
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+ PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
+ PYTHON_CFFI_SETUP_TYPE = setuptools
 -- 
-1.7.10.4
+2.1.0
