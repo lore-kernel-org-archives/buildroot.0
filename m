@@ -1,77 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Feb 2015 00:07:36 +0100
-Subject: [Buildroot] [git commit] python-six: new package
-Message-ID: <20150131230757.377CD804A2@busybox.osuosl.org>
+Date: Sun, 1 Feb 2015 00:21:10 +0100
+Subject: [Buildroot] [git commit] libzip: new package
+Message-ID: <20150131232144.0AE818046F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96bc60efa4e81bf552d88e215d7821129bba84b3
+commit: http://git.buildroot.net/buildroot/commit/?id=083f853801afab95aee8e4e9a30c57c69f7f379a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Peter: license is BSD-3c]
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                  |    1 +
- package/python-six/Config.in       |    9 +++++++++
- package/python-six/python-six.hash |    2 ++
- package/python-six/python-six.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+), 0 deletions(-)
+ package/Config.in        |    1 +
+ package/libzip/Config.in |    8 ++++++++
+ package/libzip/libzip.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index d140721..095126d 100644
+index 095126d..88a37d7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -547,6 +547,7 @@ menu "external python modules"
- 	source "package/python-serial/Config.in"
- 	source "package/python-setuptools/Config.in"
- 	source "package/python-simplejson/Config.in"
-+	source "package/python-six/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-twisted/Config.in"
-diff --git a/package/python-six/Config.in b/package/python-six/Config.in
+@@ -605,6 +605,7 @@ endmenu
+ 
+ menu "Compression and decompression"
+ 	source "package/libarchive/Config.in"
++	source "package/libzip/Config.in"
+ 	source "package/lzo/Config.in"
+ 	source "package/snappy/Config.in"
+ 	source "package/szip/Config.in"
+diff --git a/package/libzip/Config.in b/package/libzip/Config.in
 new file mode 100644
-index 0000000..0a8b69a
+index 0000000..54de9e5
 --- /dev/null
-+++ b/package/python-six/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_SIX
-+	bool "python-six"
++++ b/package/libzip/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBZIP
++	bool "libzip"
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Six is a Python 2 and 3 compatibility library. It provides
-+	  utility functions for smoothing over the differences between
-+	  the Python versions with the goal of writing Python code that
-+	  is compatible on both Python versions.
++	  C library for reading, creating, and modifying zip archives. This
++	  package also contains zipcmp, ziptorrent and zipmerge utilities.
 +
-+	  http://pythonhosted.org/six
-diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
++	  http://www.nih.at/libzip/
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
 new file mode 100644
-index 0000000..6121a08
+index 0000000..e5d8e26
 --- /dev/null
-+++ b/package/python-six/python-six.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  e24052411fc4fbd1f672635537c3fc2330d9481b18c0317695b46259512c91d5  six-1.9.0.tar.gz
-diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
-new file mode 100644
-index 0000000..08fe5de
---- /dev/null
-+++ b/package/python-six/python-six.mk
-@@ -0,0 +1,14 @@
++++ b/package/libzip/libzip.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-six
++# libzip
 +#
 +################################################################################
 +
-+PYTHON_SIX_VERSION = 1.9.0
-+PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
-+PYTHON_SIX_SITE = https://pypi.python.org/packages/source/s/six/
-+PYTHON_SIX_SETUP_TYPE = setuptools
-+PYTHON_SIX_LICENSE = MIT
-+PYTHON_SIX_LICENSE_FILES = LICENSE
++LIBZIP_VERSION = 0.11.2
++LIBZIP_SITE = http://www.nih.at/libzip/
++LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
++LIBZIP_LICENSE = BSD-3c
++LIBZIP_LICENSE_FILES = LICENSE
++LIBZIP_INSTALL_STAGING = YES
++LIBZIP_DEPENDENCIES = zlib
 +
-+$(eval $(python-package))
++$(eval $(autotools-package))
