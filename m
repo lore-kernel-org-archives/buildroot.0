@@ -1,30 +1,36 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 31 Jan 2015 19:59:35 +0100
-Subject: [Buildroot] [PATCH] python-cffi: bump to 0.8.6
-Message-ID: <1422730775-28205-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 31 Jan 2015 20:34:53 +0100
+Subject: [Buildroot] [PATCH v1] madplay: add explicitly link against
+	phthread library in case of alsasound support
+Message-ID: <1422732893-5156-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-cffi/python-cffi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes [1]: configure check for libasound failed because of missing
+pthread linkage.
 
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 3d5c86f..17efbab 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+[1] http://autobuild.buildroot.net/results/f3a/f3a0b3ff15e729d223c8c8ee6af75c425cd344b6/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/madplay/madplay.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index 1907eb5..49c3e5d 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -16,6 +16,8 @@ MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+ MADPLAY_CONF_OPTS += --with-alsa
+ MADPLAY_DEPENDENCIES += alsa-lib
++# explicitly link against pthread library, fixes libasound configure check
++MADPLAY_CONF_ENV = LIBS=-lpthread
+ endif
  
--PYTHON_CFFI_VERSION = 0.8.2
-+PYTHON_CFFI_VERSION = 0.8.6
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
- PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
- PYTHON_CFFI_SETUP_TYPE = setuptools
+ $(eval $(autotools-package))
 -- 
-2.1.0
+2.1.2
