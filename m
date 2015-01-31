@@ -1,43 +1,44 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 31 Jan 2015 14:13:11 +0100
-Subject: [Buildroot] [PATCH v2] imx6slevk: fix uImage load address
-Message-ID: <1422709991-28181-1-git-send-email-gilles.talis@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 31 Jan 2015 13:26:33 +0100
+Subject: [Buildroot] [git commit] package/nodejs: bump to version 0.10.36
+Message-ID: <20150131132552.3CECF80474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i.MX6 SoloLite SoC has a different external memory base address
-than the other i.MX6 family SoCs:
-- 0x80000000 for i.MX6 SoloLite (see i.MX6 SoloLite Reference Manual [1])
-- 0x10000000 for the others (see i.MX6Quad/Dual Reference Manual [2])
+commit: http://git.buildroot.net/buildroot/commit/?id=3bd712bb8284b966055645c529e7a92be218985a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] http://cache.freescale.com/files/32bit/doc/ref_manual/IMX6SLRM.pdf?fasp=1
-    Table 2-1 System Memory Map, MMDC - DDR Controller
-[2] http://cache.freescale.com/files/32bit/doc/ref_manual/IMX6DQRM.pdf?fasp=1
-    Table 2-1 System Memory Map, MMDC - DDR Controller
+Bump to new version and update hash.
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2: add references to i.MX6 SoCs Reference Manual
+ package/nodejs/nodejs.hash |    4 ++--
+ package/nodejs/nodejs.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- configs/freescale_imx6sololiteevk_defconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index f8ecc7b..2bb47af 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -11,7 +11,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index a6f2698..5b868e9 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,2 +1,2 @@
+-# From upstream URL: http://nodejs.org/dist/v0.10.35/SHASUMS256.txt
+-sha256	0043656bb1724cb09dbdc960a2fd6ee37d3badb2f9c75562b2d11235daa40a03  node-v0.10.35.tar.gz
++# From upstream URL: http://nodejs.org/dist/v0.10.36/SHASUMS256.txt
++sha256	b9d7d1d0294bce46686b13a05da6fc5b1e7743b597544aa888e8e64a9f178c81  node-v0.10.36.tar.gz
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index c2cb05e..89faa6c 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--- 
-1.7.10.4
+-NODEJS_VERSION = 0.10.35
++NODEJS_VERSION = 0.10.36
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
