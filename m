@@ -1,51 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Jan 2015 08:35:44 +0100
-Subject: [Buildroot] [git commit] benejson: use -std=c99
-Message-ID: <20150131074531.A60FD8045D@busybox.osuosl.org>
+Date: Sat, 31 Jan 2015 08:34:41 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{18, 14, 10}.x series
+Message-ID: <20150131074531.916AF80457@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=06d475e9aa7081562a36ffbb2e4387f36383b531
+commit: http://git.buildroot.net/buildroot/commit/?id=6a9bbbd55409cf2bd76361efff8839e29884df87
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/d6a3c21938dddde45a427b42a7e0e37aa2426306/
-http://autobuild.buildroot.net/results/bd138fc9cee13da850c81e8f9407f098a6a69c69/
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/benejson/0001-c-std.patch |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/benejson/0001-c-std.patch b/package/benejson/0001-c-std.patch
-new file mode 100644
-index 0000000..2330b79
---- /dev/null
-+++ b/package/benejson/0001-c-std.patch
-@@ -0,0 +1,22 @@
-+Some older toolchains do not recognize c11 as a valid standard.
-+Since the code actually builds well with c99, use that instead.
-+
-+The only two non-standard features used are // comments
-+and for(int i ...) declarations in C.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -9,9 +9,8 @@ mydir = os.getcwd()
-+ #Set default C++ building flags for both libraries and executables
-+ default_env = Environment(ENV = os.environ)
-+ default_env.Append(CPPPATH = [mydir + '/include'])
-+-default_env.Append(CCFLAGS = ' -Wall -pedantic')
-+-default_env.Append(CFLAGS = ' -std=c11')
-+-default_env.Append(CXXFLAGS = ' -std=c++11')
-++default_env.Append(CFLAGS = ' -Wall')
-++default_env.Append(CFLAGS = ' -std=c99')
-+ #default_env.Append(CCFLAGS = ' -O2 -fomit-frame-pointer')
-+ default_env.Append(CCFLAGS = ' -O0 -g')
-+ 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ee51f82..6be6b60 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -174,13 +174,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.66"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.105"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.66"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.67"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.36"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.30"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.31"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.4"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.5"	if BR2_KERNEL_HEADERS_3_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
