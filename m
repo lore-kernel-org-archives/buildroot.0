@@ -1,41 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 Jan 2015 08:34:44 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 3.18.5
-Message-ID: <20150131074531.9C25F7FF3E@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sat, 31 Jan 2015 12:22:14 +0100
+Subject: [Buildroot] [PATCH] perl: add hash for the perl-cross file
+Message-ID: <1422703334-22072-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e909e0b69d4196b3f4f6c086db4f57e3af056df
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix:
+  WARNING: No hash found for perl-5.20.1-cross-0.9.4.tar.gz
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl/perl.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7b538c6..6dda18c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.18.4"
-+	bool "3.18.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.18.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.18.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 57fefd7..f287eaa 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -2,3 +2,6 @@
+ md5    ede5166f949d9a07163bc5b086be9759                                 perl-5.20.1.tar.bz2
+ sha1   cd424d1520ba2686fe5d4422565aaf880e9467f6                         perl-5.20.1.tar.bz2
+ sha256 ede5ded37e7fb6139b04728cfca826f17076f9888dbfd100a56834dbeb04657c perl-5.20.1.tar.bz2
++
++# No upstream hashes for the following
++sha256 614f320d45042ca179a15ec88c6a15ff68e6f36fb004ee89efa71e42bda1dead perl-5.20.1-cross-0.9.4.tar.gz
+-- 
+2.1.0
