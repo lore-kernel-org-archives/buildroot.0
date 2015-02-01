@@ -1,85 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Feb 2015 23:25:46 +0100
-Subject: [Buildroot] [git commit] ipsec-tools: remove useless spaces in
-	conditions
-Message-ID: <20150201222634.222F8805F1@busybox.osuosl.org>
+Date: Sun, 1 Feb 2015 23:29:18 +0100
+Subject: [Buildroot] [PATCH] package/ipsec-tools: hybrid config support
+In-Reply-To: <1422768412-13155-1-git-send-email-rdkehn@yahoo.com>
+References: <1422768412-13155-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20150201232918.3e7db047@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c0c4ee62c0edad02d2e7d846d8489c625a76d774
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Doug Kehn,
 
-We typically use:
+On Sat, 31 Jan 2015 23:26:52 -0600, Doug Kehn wrote:
+> Add config option for enabling hybrid mode.  Hybrid mode is required for
+> successful interoperability.
+> 
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> ---
+>  package/ipsec-tools/Config.in      | 6 ++++++
+>  package/ipsec-tools/ipsec-tools.mk | 7 ++++++-
+>  2 files changed, 12 insertions(+), 1 deletion(-)
 
-ifeq ($(BR2_...),y)
+Applied, thanks. I originally wondered if we shouldn't simply enable
+this option by default, since it doesn't require any external
+dependency. However, there are already several ipsec-tools options that
+exist without having external dependencies, so the addition of this
+new option continues in the same logic.
 
-and not:
+> +ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_HYBRID), y)
 
-ifeq ($(BR2_...), y)
+I've committed a follow-up patch to replace ', y' by ',y' which is what
+we use everywhere in Buildroot.
 
-So this commit aligns the ipsec-tools package with this common
-practice.
+Thanks,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipsec-tools/ipsec-tools.mk |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index 56e2bed..9454c4e 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -25,43 +25,43 @@ IPSEC_TOOLS_CONF_OPTS = \
- 	  --disable-gssapi \
- 	  --with-kernel-headers=$(STAGING_DIR)/usr/include
- 
--ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT), y)
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-adminport
- else
- IPSEC_TOOLS_CONF_OPTS += --disable-adminport
- endif
- 
--ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_NATT), y)
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_NATT),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-natt
- else
- IPSEC_TOOLS_CONF_OPTS += --disable-natt
- endif
- 
--ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_FRAG), y)
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_FRAG),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-frag
- else
- IPSEC_TOOLS_CONF_OPTS += --disable-frag
- endif
- 
--ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_DPD), y)
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_DPD),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-dpd
- else
- IPSEC_TOOLS_CONF_OPTS += --disable-dpd
- endif
- 
--ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_STATS), y)
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_STATS),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-stats
- else
- IPSEC_TOOLS_CONF_OPTS += --disable-stats
- endif
- 
--ifneq ($(BR2_PACKAGE_IPSEC_TOOLS_READLINE), y)
-+ifneq ($(BR2_PACKAGE_IPSEC_TOOLS_READLINE),y)
- IPSEC_TOOLS_CONF_OPTS += --without-readline
- else
- IPSEC_DEPENDENCIES += readline
- endif
- 
--ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_HYBRID), y)
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_HYBRID),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-hybrid
- else
- IPSEC_TOOLS_CONF_OPTS += --disable-hybrid
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
