@@ -1,29 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Feb 2015 23:19:32 +0100
-Subject: [Buildroot] [PATCH] busybox: S01logging: implement restart
-In-Reply-To: <1421753915-4313-1-git-send-email-richard.genoud@gmail.com>
-References: <1421753915-4313-1-git-send-email-richard.genoud@gmail.com>
-Message-ID: <20150201231932.75808b15@free-electrons.com>
+Date: Sun, 1 Feb 2015 23:20:35 +0100
+Subject: [Buildroot] [git commit] strace: Enable for MIPS platforms with
+	uClibc
+Message-ID: <20150201222055.0C27880455@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Richard Genoud,
+commit: http://git.buildroot.net/buildroot/commit/?id=7b5ff1ab8ae6c9de6e8f6c0355d80255ae344efe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Jan 2015 12:38:35 +0100, Richard Genoud wrote:
-> restart wasn't doing anything, and the expected behaviour is stop/start.
-> 
-> Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
-> ---
->  package/busybox/S01logging | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
+Enable strace for MIPS platforms with uClibc again since this C library
+is now fixed.
 
-Applied, thanks!
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/strace/Config.in |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 07667ed..ad8d308 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+ 	depends on !BR2_nios2
+-	depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) \
+-		&& BR2_TOOLCHAIN_USES_UCLIBC)
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+@@ -13,7 +11,3 @@ config BR2_PACKAGE_STRACE
+ 
+ comment "strace needs a toolchain w/ largefile"
+ 	depends on !BR2_LARGEFILE
+-
+-comment "strace is not supported on MIPS using a uClibc toolchain"
+-	depends on (BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && \
+-		BR2_TOOLCHAIN_USES_UCLIBC
