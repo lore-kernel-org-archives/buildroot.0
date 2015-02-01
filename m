@@ -1,46 +1,35 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sun, 1 Feb 2015 19:56:01 +0200
-Subject: [Buildroot] [PATCH] package/benejson: disable for static-only
- builds
-In-Reply-To: <1422743798-18921-1-git-send-email-yann.morin.1998@free.fr>
-References: <1422743798-18921-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150201175601.GA28929@vostro>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun, 1 Feb 2015 20:51:48 +0100
+Subject: [Buildroot] target options for Cortex A8/A9
+Message-ID: <8F194C039449403C9E9AFFB360BCF394@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sat, Jan 31, 2015 at 11:36:38PM +0100, Yann E. MORIN wrote:
-
-> benejson does not know how to build static-only libraries. as well,
-> it is not able to build shared-only libs either.
-Well, actually scons allows specifying targets explicitly.
-
-Benejson is just a small library, so it should not cause much
-trouble later. And there's already a similar block with install
-commands anyway.
-
-
---- a/package/benejson/benejson.mk
-+++ b/package/benejson/benejson.mk
-@@ -20,10 +20,18 @@ endef
- BENEJSON_POST_PATCH_HOOKS += BENEJSON_DISABLE_WCHAR
- endif
  
-+BENEJSON_SCONS_TARGETS = include
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+BENEJSON_SCONS_TARGETS += lib/libbenejson.a
-+endif
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+BENEJSON_SCONS_TARGETS += lib/libbenejson.so
-+endif
-+
- define BENEJSON_BUILD_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
--		$(SCONS))
-+		$(SCONS) $(BENEJSON_SCONS_TARGETS))
- endef
- 
- ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+Hi
+
+I am using imx53, this cpu has according to the datasheet an NEON SIMD media accelerator
+and an VFPv3 co-processor.
+So I would assume the same selections options as for the A9.
+I was wondering what makes the target options different for A8 vs A9.
+
+I would think that for the imx53 it sould be the same as for the A9,
+That is an NEON SIMD extension and a vfpv3 floating point engine.
+Please clarify, it is a bit confusing to me.
+
+For the A8 I can select vfpv3 OR Neon, but not vfpv3 WITH NEON extension.
+
+Regards
+Sagaert Johan
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 6253 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150201/fbbe27a8/attachment.bin>
