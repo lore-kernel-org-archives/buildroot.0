@@ -1,110 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Dec 2014 00:18:46 +0100
-Subject: [Buildroot] [git commit] package/parted: fix static link
-Message-ID: <20141130232035.704CB7FB70@busybox.osuosl.org>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sat, 31 Jan 2015 18:00:01 -0600
+Subject: [Buildroot] [PATCH V3] memtest86+: new package
+Message-ID: <54CD6C81.1040808@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6ed317672c2f335985f3cd07c042842795406e09
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Memtest86+ is a bootable standalone memory test program.
 
-libuuid needs to be linked with -lintl when gettext is needed (with
-locales).
+Please note that this is the forked memtest86+ program and not
+the original memtest86 which has different licensing. Buildroot
+does not support packages with a '+' sign in their name.
 
-For a shared build, this is solved with the DT_NEEDED ELF tags, but for
-a static link, it is not pulled in automatically.
+Memtest86+ is a utility designed to test whether your memory
+is in working order. It repeatedly writes an enormous amount
+of different patterns to all memory locations and reads them
+back again and verifies whether the result of the read is the
+same as what was written to memory.
 
-Use pkg-config to find libuuid, instead of AC_CHECK_LIB().
+Memtest86+ will only work on 32-bit or 64-bit x86 targets.
+It boots as an i486 program and autodetects hardware.
 
-Second part at fixing:
-    http://autobuild.buildroot.net/results/c46/c467aeec258909bb82eda77123803944f97d8df8/
-
-[Peter: add host-pkgconf to _DEPENDENCIES]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
 ---
- .../parted/parted-003-fix-static-link-uuid.patch   |   48 ++++++++++++++++++++
- package/parted/parted.mk                           |    4 +-
- 2 files changed, 50 insertions(+), 2 deletions(-)
+I promise I'll try to have future patches use git, I just
+wanted to clear out the stuff I had laying around before
+possibly disappearing down a rabbit hole for a long time.
 
-diff --git a/package/parted/parted-003-fix-static-link-uuid.patch b/package/parted/parted-003-fix-static-link-uuid.patch
-new file mode 100644
-index 0000000..d6ec2cf
---- /dev/null
-+++ b/package/parted/parted-003-fix-static-link-uuid.patch
-@@ -0,0 +1,48 @@
-+configure: use pkg-config to find libuuid
+I'm using V4.20 which ships with Ubuntu 14.04 and has
+never give me trouble instead of V5.01 which hung twice
+during my testing - probably due to the new multi-core support
+
+V3 changed hash to sha256sum and cleaned up text a bit
+V2 added hash file
+
+diff -pruN buildroot.ori/package/Config.in buildroot/package/Config.in
+--- buildroot.ori/package/Config.in	2015-01-27 16:58:14.000000000 -0600
++++ buildroot/package/Config.in	2015-01-31 17:49:44.362634907 -0600
+@@ -341,6 +341,7 @@ endif
+ 	source "package/lvm2/Config.in"
+ 	source "package/mdadm/Config.in"
+ 	source "package/media-ctl/Config.in"
++	source "package/memtest86/Config.in"
+ 	source "package/memtester/Config.in"
+ 	source "package/minicom/Config.in"
+ 	source "package/nanocom/Config.in"
+diff -pruN buildroot.ori/package/memtest86/Config.in buildroot/package/memtest86/Config.in
+--- buildroot.ori/package/memtest86/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/memtest86/Config.in	2015-01-31 17:30:57.870613298 -0600
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_MEMTEST86
++	bool "memtest86"
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  Memtest86+ is a bootable standalone memory test program.
 +
-+In some conditions, libuuid may be linked with -lintl. This can be the
-+case on uClibc when locales are enabled.
++	  Please note that this is the forked memtest86+ program and not
++	  the original memtest86 which has different licensing. Buildroot
++	  does not support packages with a '+' sign in their name.
 +
-+When doing a shared link, this dependency is automatically pulled in via
-+a DT_NEEDED ELF tag
++	  Memtest86+ is a utility designed to test whether your memory
++	  is in working order. It repeatedly writes an enormous amount
++	  of different patterns to all memory locations and reads them
++	  back again and verifies whether the result of the read is the
++	  same as what was written to memory.
 +
-+For a static link, there is no such mechanism to pull in dependent
-+libraries.
++	  Memtest86+ will only work on 32-bit or 64-bit x86 targets.
++	  It boots as an i486 program and autodetects hardware. It can
++	  be added to the grub2 boot menu by adding the following lines
++	  to the bottom of /boot/grub/grub.cfg - note the use of linux16.
 +
-+Currently, the check for libuuid is done with AC_CHECK_LIB, but this
-+does not handle dependencies, and thus a stattic build fails.
++	  menuentry "Memtest86+" {
++		 linux16 /boot/memtest86+.bin
++	  }
 +
-+Use pkg-config to find libuuid, that automatically pulls in the
-+dependencies of libuuid, if any.
++	  Other boot loaders will have similar requirements.
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++	  http://www.memtest.org
+diff -pruN buildroot.ori/package/memtest86/memtest86.hash buildroot/package/memtest86/memtest86.hash
+--- buildroot.ori/package/memtest86/memtest86.hash	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/memtest86/memtest86.hash	2015-01-31 17:45:11.522629673 -0600
+@@ -0,0 +1,2 @@
++# locally computed using sha256sum
++sha256	5630ce978d0e6b671891df4253fc5c54659764d0cdfc7515ac0df3d8dd9e8737  memtest86+-4.20.tar.gz
+diff -pruN buildroot.ori/package/memtest86/memtest86.mk buildroot/package/memtest86/memtest86.mk
+--- buildroot.ori/package/memtest86/memtest86.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot/package/memtest86/memtest86.mk	2015-01-31 17:32:12.982614739 -0600
+@@ -0,0 +1,19 @@
++###############################################################################
++#
++# memtest86
++#
++###############################################################################
 +
-+---
-+Note: of course, that relies on the fact that libuuid installs a proper
-+.pc file; a patch will be submitted upstream shortly.
++MEMTEST86_VERSION = 4.20
++MEMTEST86_SOURCE = memtest86+-$(MEMTEST86_VERSION).tar.gz
++MEMTEST86_SITE = http://www.memtest.org/download/$(MEMTEST86_VERSION)
++MEMTEST86_LICENSE = GPLv2
++MEMTEST86_LICENSE_FILES = README
 +
-+But even considering the current situation, where libuuid does not
-+provide a proper .pc file (yet), this patch does not change the
-+behaviour we've had so far; it is a bet on the future! ;-)
++# memtest86+ is sensitive to toolchain changes, use the shipped binary version
++define MEMTEST86_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/precomp.bin $(TARGET_DIR)/boot/memtest86+.bin
++endef
 +
-+diff -durN parted-3.1.orig/configure.ac parted-3.1/configure.ac
-+--- parted-3.1.orig/configure.ac	2014-11-29 16:27:49.520560137 +0100
-++++ parted-3.1/configure.ac	2014-11-29 16:32:50.799702049 +0100
-+@@ -313,16 +313,7 @@
-+ AC_SUBST([DL_LIBS])
-+ 
-+ dnl Check for libuuid
-+-UUID_LIBS=""
-+-AC_CHECK_LIB([uuid], [uuid_generate], [UUID_LIBS="-luuid"],
-+-	[AC_MSG_ERROR(dnl
-+-[GNU Parted requires libuuid - a part of the util-linux-ng package (but
-+-usually distributed separately in libuuid-devel, uuid-dev or similar)
-+-This can probably be found on your distribution's CD or FTP site or at:
-+-    http://userweb.kernel.org/~kzak/util-linux-ng/
-+-Note: originally, libuuid was part of the e2fsprogs package.  Later, it
-+-moved to util-linux-ng-2.16, and that package is now the preferred source.])])
-+-AC_SUBST([UUID_LIBS])
-++PKG_CHECK_MODULES([UUID],[uuid])
-+ 
-+ dnl Check for libdevmapper
-+ DM_LIBS=
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index 85578d3..ab2c456 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -7,7 +7,7 @@
- PARTED_VERSION = 3.1
- PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
- PARTED_SITE = $(BR2_GNU_MIRROR)/parted
--PARTED_DEPENDENCIES = util-linux
-+PARTED_DEPENDENCIES = host-pkgconf util-linux
- PARTED_INSTALL_STAGING = YES
- # For uclinux patch
- PARTED_AUTORECONF = YES
-@@ -33,7 +33,7 @@ ifeq ($(BR2_PREFER_STATIC_LIB),y)
- PARTED_CONF_OPTS += --disable-dynamic-loading
- endif
- 
--HOST_PARTED_DEPENDENCIES = host-util-linux
-+HOST_PARTED_DEPENDENCIES = host-pkgconf host-util-linux
- HOST_PARTED_CONF_OPTS += \
- 	--without-readline \
- 	--disable-device-mapper \
++$(eval $(generic-package))
++
