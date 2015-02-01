@@ -1,65 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Feb 2015 23:24:55 +0100
-Subject: [Buildroot] [git commit] package/ipsec-tools: hybrid config support
-Message-ID: <20150201222503.82525805EF@busybox.osuosl.org>
+Date: Sun, 1 Feb 2015 23:25:46 +0100
+Subject: [Buildroot] [git commit] ipsec-tools: remove useless spaces in
+	conditions
+Message-ID: <20150201222634.222F8805F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9849366388f9695b2aa532302ab67dcc47c8924d
+commit: http://git.buildroot.net/buildroot/commit/?id=c0c4ee62c0edad02d2e7d846d8489c625a76d774
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add config option for enabling hybrid mode.  Hybrid mode is required for
-successful interoperability.
+We typically use:
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+ifeq ($(BR2_...),y)
+
+and not:
+
+ifeq ($(BR2_...), y)
+
+So this commit aligns the ipsec-tools package with this common
+practice.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ipsec-tools/Config.in      |    6 ++++++
- package/ipsec-tools/ipsec-tools.mk |    7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+ package/ipsec-tools/ipsec-tools.mk |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
-index a0d7600..4af4095 100644
---- a/package/ipsec-tools/Config.in
-+++ b/package/ipsec-tools/Config.in
-@@ -48,6 +48,12 @@ config BR2_PACKAGE_IPSEC_TOOLS_READLINE
- 	select BR2_PACKAGE_READLINE
- 	bool "Enable readline input support"
- 
-+config BR2_PACKAGE_IPSEC_TOOLS_HYBRID
-+	bool "Enable hybrid, both mode-cfg and xauth support"
-+	help
-+	  Hybrid mode is required for successful interoperability
-+	  (e.g. Cisco VPN Client).
-+
- choice
- 	prompt "Security context"
- 	default BR2_PACKAGE_IPSEC_SECCTX_DISABLE
 diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index d916027..56e2bed 100644
+index 56e2bed..9454c4e 100644
 --- a/package/ipsec-tools/ipsec-tools.mk
 +++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -21,7 +21,6 @@ IPSEC_TOOLS_CONF_ENV += LIBS=-lz
- endif
- 
- IPSEC_TOOLS_CONF_OPTS = \
--	  --disable-hybrid \
- 	  --without-libpam \
+@@ -25,43 +25,43 @@ IPSEC_TOOLS_CONF_OPTS = \
  	  --disable-gssapi \
  	  --with-kernel-headers=$(STAGING_DIR)/usr/include
-@@ -62,6 +61,12 @@ else
+ 
+-ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT), y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-adminport
+ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-adminport
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_NATT), y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_NATT),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-natt
+ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-natt
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_FRAG), y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_FRAG),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-frag
+ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-frag
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_DPD), y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_DPD),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-dpd
+ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-dpd
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_STATS), y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_STATS),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-stats
+ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-stats
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_IPSEC_TOOLS_READLINE), y)
++ifneq ($(BR2_PACKAGE_IPSEC_TOOLS_READLINE),y)
+ IPSEC_TOOLS_CONF_OPTS += --without-readline
+ else
  IPSEC_DEPENDENCIES += readline
  endif
  
-+ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_HYBRID), y)
-+IPSEC_TOOLS_CONF_OPTS += --enable-hybrid
-+else
-+IPSEC_TOOLS_CONF_OPTS += --disable-hybrid
-+endif
-+
- ifeq ($(BR2_PACKAGE_IPSEC_SECCTX_DISABLE),y)
- IPSEC_TOOLS_CONF_OPTS += --enable-security-context=no
- endif
+-ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_HYBRID), y)
++ifeq ($(BR2_PACKAGE_IPSEC_TOOLS_HYBRID),y)
+ IPSEC_TOOLS_CONF_OPTS += --enable-hybrid
+ else
+ IPSEC_TOOLS_CONF_OPTS += --disable-hybrid
