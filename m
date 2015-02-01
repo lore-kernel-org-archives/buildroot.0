@@ -1,38 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Feb 2015 22:55:18 +0100
-Subject: [Buildroot] [PATCH v2 2/5] package/rpm: add gettext dependency
-In-Reply-To: <1421610790-18508-2-git-send-email-romain.naour@openwide.fr>
-References: <1421610790-18508-1-git-send-email-romain.naour@openwide.fr>
- <1421610790-18508-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150201225518.30abf441@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 01 Feb 2015 22:51:17 +0100
+Subject: [Buildroot] [PATCH 1/2] automake: complete the removal of the
+ target package
+In-Reply-To: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <54CE9FD5.2070507@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hi Fabio,
 
-On Sun, 18 Jan 2015 20:53:07 +0100, Romain Naour wrote:
-> rpm check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
+Le 01/02/2015 17:51, Fabio Porcedda a ?crit :
+> The variable ACLOCAL_DIR points to the staging area but is not useful
+> anymore because the target package was removed.  Fix ACLOCAL_DIR by
+> pointing to $(HOST_DIR)/usr/share/aclocal and remove ACLOCAL_HOST_DIR
+> because ACLOCAL_DIR has the same value so it's not useful anymore.
 > 
-> checking for GNU gettext in libintl... yes
-> checking whether to use NLS... yes
-> checking where the gettext function comes from... external libintl
-> checking how to link with libintl... -lintl
+> Also remove the reference to ACLOCAL_HOST_DIR from the host-autoconf
+> package.
 > 
-> But the dependency on gettext package is missing to ensures
-> reproducible builds.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 > ---
-> v2: selected packages are already sorted by the first
->     patch. (Yann E. MORIN)
+>  package/autoconf/autoconf.mk | 2 +-
+>  package/automake/automake.mk | 3 +--
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+> index fd91961..2c0ff30 100644
+> --- a/package/autoconf/autoconf.mk
+> +++ b/package/autoconf/autoconf.mk
+> @@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
+>  # variables used by other packages
+>  AUTOCONF = $(HOST_DIR)/usr/bin/autoconf
+>  AUTOHEADER = $(HOST_DIR)/usr/bin/autoheader
+> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
+> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+> index a3fd18c..5021b49 100644
+> --- a/package/automake/automake.mk
+> +++ b/package/automake/automake.mk
+> @@ -28,6 +28,5 @@ $(eval $(host-autotools-package))
+>  
+>  # variables used by other packages
+>  AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+> -ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+> -ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+> +ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
+>  ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+> 
 
-Applied, thanks!
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain Naour
