@@ -1,110 +1,118 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Feb 2015 14:49:43 +0100
-Subject: [Buildroot] [git commit] libsigrok: new package
-Message-ID: <20150201135502.0A23980489@busybox.osuosl.org>
+Date: Sun, 1 Feb 2015 14:54:07 +0100
+Subject: [Buildroot] [git commit] memtest86+: new package
+Message-ID: <20150201135502.1445580722@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73789f14e49c91b7e423eacb6a119908caf01595
+commit: http://git.buildroot.net/buildroot/commit/?id=5007d478ed1284cd4006e13bf08400dda5857992
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: needs host-pkgconf, simplify pre configure hook]
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Memtest86+ is a bootable standalone memory test program.
+
+Please note that this is the forked memtest86+ program and not
+the original memtest86 which has different licensing. Buildroot
+does not support packages with a '+' sign in their name.
+
+Memtest86+ is a utility designed to test whether your memory
+is in working order. It repeatedly writes an enormous amount
+of different patterns to all memory locations and reads them
+back again and verifies whether the result of the read is the
+same as what was written to memory.
+
+Memtest86+ will only work on 32-bit or 64-bit x86 targets.
+It boots as an i486 program and autodetects hardware.
+
+[Peter: tweak help text as suggested by Thomas]
+Signed-off-by Stephen M. Kenton <skenton@ou.edu>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in              |    1 +
- package/libsigrok/Config.in    |   22 ++++++++++++++++++++
- package/libsigrok/libsigrok.mk |   42 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+), 0 deletions(-)
+ package/Config.in                |    1 +
+ package/memtest86/Config.in      |   28 ++++++++++++++++++++++++++++
+ package/memtest86/memtest86.hash |    2 ++
+ package/memtest86/memtest86.mk   |   19 +++++++++++++++++++
+ 4 files changed, 50 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index fe3966e..d3e5ac8 100644
+index d3e5ac8..1f37c7e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -735,6 +735,7 @@ menu "Hardware handling"
- 	source "package/librtlsdr/Config.in"
- 	source "package/libserial/Config.in"
- 	source "package/libserialport/Config.in"
-+	source "package/libsigrok/Config.in"
- 	source "package/libsoc/Config.in"
- 	source "package/libusb/Config.in"
- 	source "package/libusb-compat/Config.in"
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+@@ -341,6 +341,7 @@ endif
+ 	source "package/lvm2/Config.in"
+ 	source "package/mdadm/Config.in"
+ 	source "package/media-ctl/Config.in"
++	source "package/memtest86/Config.in"
+ 	source "package/memtester/Config.in"
+ 	source "package/minicom/Config.in"
+ 	source "package/nanocom/Config.in"
+diff --git a/package/memtest86/Config.in b/package/memtest86/Config.in
 new file mode 100644
-index 0000000..09077fb
+index 0000000..3a684b6
 --- /dev/null
-+++ b/package/libsigrok/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LIBSIGROK
-+	bool "libsigrok"
-+	select BR2_PACKAGE_LIBSERIALPORT
-+	select BR2_PACKAGE_LIBZIP
-+	select BR2_PACKAGE_LIBGLIB2
-+	# libglib2
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
++++ b/package/memtest86/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_MEMTEST86
++	bool "memtest86"
++	depends on BR2_i386 || BR2_x86_64
 +	help
-+	  Libsigrok is a shared library written in C, which provides
-+	  the basic hardware access drivers for logic analyzers and
-+	  other supported devices, as well as input/output file format
-+	  support.
++	  Memtest86+ is a bootable standalone memory test program.
 +
-+	  This library is a part of the sigrok software suite.
++	  Buildroot does not support packages with a '+' sign in their
++	  name, which explains why it is named memtest86 and not
++	  memtest86+.
 +
-+	  http://sigrok.org/wiki/Libsigrok
++	  Memtest86+ is a utility designed to test whether your memory
++	  is in working order. It repeatedly writes an enormous amount
++	  of different patterns to all memory locations and reads them
++	  back again and verifies whether the result of the read is the
++	  same as what was written to memory.
 +
-+comment "libsigrok needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
++	  Memtest86+ will only work on 32-bit or 64-bit x86 targets.
++	  It boots as an i486 program and autodetects hardware. It can
++	  be added to the grub2 boot menu by adding the following lines
++	  to the bottom of /boot/grub/grub.cfg - note the use of linux16.
++
++	  menuentry "Memtest86+" {
++		 linux16 /boot/memtest86+.bin
++	  }
++
++	  Other boot loaders will have similar requirements.
++
++	  http://www.memtest.org
+diff --git a/package/memtest86/memtest86.hash b/package/memtest86/memtest86.hash
 new file mode 100644
-index 0000000..f91b8cb
+index 0000000..cac0be7
 --- /dev/null
-+++ b/package/libsigrok/libsigrok.mk
-@@ -0,0 +1,42 @@
-+################################################################################
++++ b/package/memtest86/memtest86.hash
+@@ -0,0 +1,2 @@
++# locally computed using sha256sum
++sha256	5630ce978d0e6b671891df4253fc5c54659764d0cdfc7515ac0df3d8dd9e8737  memtest86+-4.20.tar.gz
+diff --git a/package/memtest86/memtest86.mk b/package/memtest86/memtest86.mk
+new file mode 100644
+index 0000000..eb01d96
+--- /dev/null
++++ b/package/memtest86/memtest86.mk
+@@ -0,0 +1,19 @@
++###############################################################################
 +#
-+# libsigrok
++# memtest86
 +#
-+################################################################################
++###############################################################################
 +
-+LIBSIGROK_VERSION = 8656a71790133d4de42252a1e75b4209c03b4983
-+# No https access on upstream git
-+LIBSIGROK_SITE = git://sigrok.org/libsigrok
-+LIBSIGROK_LICENSE = GPLv3+
-+LIBSIGROK_LICENSE_FILES = COPYING
-+# Git checkout has no configure script
-+LIBSIGROK_AUTORECONF = YES
-+LIBSIGROK_INSTALL_STAGING = YES
-+LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
-+LIBSIGROK_CONF_OPTS = --disable-libudev --disable-bindings --disable-glibtest
++MEMTEST86_VERSION = 4.20
++MEMTEST86_SOURCE = memtest86+-$(MEMTEST86_VERSION).tar.gz
++MEMTEST86_SITE = http://www.memtest.org/download/$(MEMTEST86_VERSION)
++MEMTEST86_LICENSE = GPLv2
++MEMTEST86_LICENSE_FILES = README
 +
-+define LIBSIGROK_ADD_MISSING
-+	mkdir -p $(@D)/autostuff
++# memtest86+ is sensitive to toolchain changes, use the shipped binary version
++define MEMTEST86_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/precomp.bin $(TARGET_DIR)/boot/memtest86+.bin
 +endef
 +
-+LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
++$(eval $(generic-package))
 +
-+ifeq ($(BR2_PACKAGE_LIBFTDI),y)
-+LIBSIGROK_CONF_OPTS += --enable-libftdi
-+LIBSIGROK_DEPENDENCIES += libftdi
-+else
-+LIBSIGROK_CONF_OPTS += --disable-libftdi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+LIBSIGROK_CONF_OPTS += --enable-libusb
-+LIBSIGROK_DEPENDENCIES += libusb
-+else
-+LIBSIGROK_CONF_OPTS += --disable-libusb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GLIBMM),y)
-+LIBSIGROK_DEPENDENCIES += glibmm
-+endif
-+
-+$(eval $(autotools-package))
