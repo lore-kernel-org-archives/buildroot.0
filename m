@@ -1,41 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Feb 2015 22:25:42 +0100
-Subject: [Buildroot] [PATCH] pkg-autotools: fix patching libtool for
- version 2.4
-In-Reply-To: <1422315024-14602-1-git-send-email-yann.morin.1998@free.fr>
-References: <1422315024-14602-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150201222542.72d67ff4@free-electrons.com>
+Date: Sun, 1 Feb 2015 22:26:59 +0100
+Subject: [Buildroot] [git commit] util-linux: disable more command host
+	build because of ncurses dependency
+Message-ID: <20150201212704.5C67B8014B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=4a5832fd4244d25505bf447776ce3f9832e3b599
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 27 Jan 2015 00:30:24 +0100, Yann E. MORIN wrote:
-> If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
-> end up with a confusing message:
-> 
->     /bin/sh: line 0: test: -gt: unary operator expected
-> 
-> That's because patchlevel is empty, and thus there is nothing to comapre
-> to 2, and test complains.
-> 
-> Fake a patchlevel of 0 (which is really what a missing patchlevel means
-> anyway) in that case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> ---
->  package/pkg-autotools.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Build on host without ncurses/curses development files and option
+HOST_UTIL_LINUX enabled (introduced by [1]) failes because of
+text-utils/more.c ncurses dependency (see old commit [2] for details).
 
-Applied, thanks.
+[1] http://git.buildroot.net/buildroot/commit/?id=2b18d093cd8a5baaf2e22ce13cc9e527c1937777
+[2] http://git.buildroot.net/buildroot/commit/?id=e55532fa08266be268fa35c32a5ee763329a9396
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/util-linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index a70363f..0b99618 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -120,6 +120,8 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UTIL_LINUX),y)
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-makeinstall-chown
++# disable more command because of ncurses dependency
++HOST_UTIL_LINUX_CONF_OPTS += --disable-more
+ else
+ HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
+ endif
