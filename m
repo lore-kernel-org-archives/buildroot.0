@@ -1,10 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 01 Feb 2015 22:51:17 +0100
-Subject: [Buildroot] [PATCH 1/2] automake: complete the removal of the
- target package
-In-Reply-To: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Sun, 01 Feb 2015 22:52:31 +0100
+Subject: [Buildroot] [PATCH 2/2] automake: use whenever possible the
+ ACLOCAL_DIR variable
+In-Reply-To: <1422809500-23948-2-git-send-email-fabio.porcedda@gmail.com>
 References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <54CE9FD5.2070507@openwide.fr>
+ <1422809500-23948-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <54CEA01F.5010500@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +15,38 @@ To: buildroot@busybox.net
 Hi Fabio,
 
 Le 01/02/2015 17:51, Fabio Porcedda a ?crit :
-> The variable ACLOCAL_DIR points to the staging area but is not useful
-> anymore because the target package was removed.  Fix ACLOCAL_DIR by
-> pointing to $(HOST_DIR)/usr/share/aclocal and remove ACLOCAL_HOST_DIR
-> because ACLOCAL_DIR has the same value so it's not useful anymore.
+> Use the ACLOCAL_DIR in the GTK_DOC_M4_INSTALL hook.
 > 
-> Also remove the reference to ACLOCAL_HOST_DIR from the host-autoconf
-> package.
+> Move the ACLOCAL_DIR definition at the beginning so the definition is
+> ahead the utilization.
 > 
 > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 > ---
->  package/autoconf/autoconf.mk | 2 +-
->  package/automake/automake.mk | 3 +--
->  2 files changed, 2 insertions(+), 3 deletions(-)
+>  package/automake/automake.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-> index fd91961..2c0ff30 100644
-> --- a/package/autoconf/autoconf.mk
-> +++ b/package/autoconf/autoconf.mk
-> @@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
->  # variables used by other packages
->  AUTOCONF = $(HOST_DIR)/usr/bin/autoconf
->  AUTOHEADER = $(HOST_DIR)/usr/bin/autoheader
-> -AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-> +AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
 > diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-> index a3fd18c..5021b49 100644
+> index 5021b49..264cbad 100644
 > --- a/package/automake/automake.mk
 > +++ b/package/automake/automake.mk
-> @@ -28,6 +28,5 @@ $(eval $(host-autotools-package))
+> @@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
+>  
+>  HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+>  
+> +ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
+> +
+>  define GTK_DOC_M4_INSTALL
+> -	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
+> +	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
+> +		$(ACLOCAL_DIR)/gtk-doc.m4
+>  endef
+>  
+>  # ensure staging aclocal dir exists
+> @@ -28,5 +31,4 @@ $(eval $(host-autotools-package))
 >  
 >  # variables used by other packages
 >  AUTOMAKE = $(HOST_DIR)/usr/bin/automake
-> -ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
-> -ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
-> +ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
+> -ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
 >  ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
 > 
 
