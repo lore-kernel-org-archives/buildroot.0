@@ -1,49 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun,  1 Feb 2015 17:51:39 +0100
-Subject: [Buildroot] [PATCH 1/2] automake: complete the removal of the
-	target package
-Message-ID: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sun, 1 Feb 2015 19:56:01 +0200
+Subject: [Buildroot] [PATCH] package/benejson: disable for static-only
+ builds
+In-Reply-To: <1422743798-18921-1-git-send-email-yann.morin.1998@free.fr>
+References: <1422743798-18921-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150201175601.GA28929@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The variable ACLOCAL_DIR points to the staging area but is not useful
-anymore because the target package was removed.  Fix ACLOCAL_DIR by
-pointing to $(HOST_DIR)/usr/share/aclocal and remove ACLOCAL_HOST_DIR
-because ACLOCAL_DIR has the same value so it's not useful anymore.
+Sat, Jan 31, 2015 at 11:36:38PM +0100, Yann E. MORIN wrote:
 
-Also remove the reference to ACLOCAL_HOST_DIR from the host-autoconf
-package.
+> benejson does not know how to build static-only libraries. as well,
+> it is not able to build shared-only libs either.
+Well, actually scons allows specifying targets explicitly.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/autoconf/autoconf.mk | 2 +-
- package/automake/automake.mk | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Benejson is just a small library, so it should not cause much
+trouble later. And there's already a similar block with install
+commands anyway.
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index fd91961..2c0ff30 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
- # variables used by other packages
- AUTOCONF = $(HOST_DIR)/usr/bin/autoconf
- AUTOHEADER = $(HOST_DIR)/usr/bin/autoheader
--AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-+AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index a3fd18c..5021b49 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -28,6 +28,5 @@ $(eval $(host-autotools-package))
+
+--- a/package/benejson/benejson.mk
++++ b/package/benejson/benejson.mk
+@@ -20,10 +20,18 @@ endef
+ BENEJSON_POST_PATCH_HOOKS += BENEJSON_DISABLE_WCHAR
+ endif
  
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/usr/bin/automake
--ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
--ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
-+ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
--- 
-2.1.0
++BENEJSON_SCONS_TARGETS = include
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++BENEJSON_SCONS_TARGETS += lib/libbenejson.a
++endif
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++BENEJSON_SCONS_TARGETS += lib/libbenejson.so
++endif
++
+ define BENEJSON_BUILD_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
+-		$(SCONS))
++		$(SCONS) $(BENEJSON_SCONS_TARGETS))
+ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
