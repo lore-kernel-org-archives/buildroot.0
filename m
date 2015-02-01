@@ -1,56 +1,99 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 01 Feb 2015 22:52:31 +0100
-Subject: [Buildroot] [PATCH 2/2] automake: use whenever possible the
- ACLOCAL_DIR variable
-In-Reply-To: <1422809500-23948-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
- <1422809500-23948-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <54CEA01F.5010500@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 Feb 2015 23:11:54 +0100
+Subject: [Buildroot] [git commit] package/rpm: don't use sub-options for
+	bzip2 and xz features
+Message-ID: <20150201221238.16B848046F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+commit: http://git.buildroot.net/buildroot/commit/?id=3c476540d17aaa629aa67bc754f1f67233d20aed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 01/02/2015 17:51, Fabio Porcedda a ?crit :
-> Use the ACLOCAL_DIR in the GTK_DOC_M4_INSTALL hook.
-> 
-> Move the ACLOCAL_DIR definition at the beginning so the definition is
-> ahead the utilization.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  package/automake/automake.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-> index 5021b49..264cbad 100644
-> --- a/package/automake/automake.mk
-> +++ b/package/automake/automake.mk
-> @@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
->  
->  HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
->  
-> +ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
-> +
->  define GTK_DOC_M4_INSTALL
-> -	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
-> +	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
-> +		$(ACLOCAL_DIR)/gtk-doc.m4
->  endef
->  
->  # ensure staging aclocal dir exists
-> @@ -28,5 +31,4 @@ $(eval $(host-autotools-package))
->  
->  # variables used by other packages
->  AUTOMAKE = $(HOST_DIR)/usr/bin/automake
-> -ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
->  ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
-> 
+Allow enabling features depends on the relying packages.
 
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Add the old sub-options to Config.in.legacy.
 
-Best regards,
-Romain Naour
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy      |   16 ++++++++++++++++
+ package/rpm/Config.in |   19 -------------------
+ package/rpm/rpm.mk    |    5 +++--
+ 3 files changed, 19 insertions(+), 21 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a8c5dab..0f1b202 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -102,6 +102,22 @@ endif
+ 
+ comment "Legacy options removed in 2015.02"
+ 
++config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
++	bool "rpm's bzip2 payloads option has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_BZIP2
++	help
++	  The bzip2 payloads option rely entirely on the dependant package bzip2.
++	  So, you need to select it to enable this feature.
++
++config BR2_PACKAGE_RPM_XZ_PAYLOADS
++	bool "rpm's xz payloads option has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_XZ
++	help
++	  The xz payloads option rely entirely on the dependant package xz.
++	  So, you need to select it to enable this feature.
++
+ config BR2_PACKAGE_M4
+ 	bool "m4 target package removed"
+ 	select BR2_LEGACY
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 5ec4167..c6fc3b7 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -19,22 +19,3 @@ config BR2_PACKAGE_RPM
+ 	  The RPM package management system.
+ 
+ 	  http://rpm5.org
+-
+-if BR2_PACKAGE_RPM
+-
+-config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
+-	bool "support for bzip2 payloads"
+-	select BR2_PACKAGE_BZIP2
+-	help
+-	  Support for bzip2 payloads in RPM.
+-
+-config BR2_PACKAGE_RPM_XZ_PAYLOADS
+-	bool "support for xz payloads"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	help
+-	  Support for xz payloads in RPM.
+-
+-comment "xz payload support needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-
+-endif
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 74f5b88..68d964a 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -44,11 +44,12 @@ else
+ RPM_CONF_OPTS += --with-file=no
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RPM_XZ_PAYLOADS),y)
++# xz payload support needs a toolchain w/ C++
++ifeq ($(BR2_PACKAGE_XZ)$(BR2_INSTALL_LIBSTDCPP),yy)
+ RPM_CONF_OPTS += --with-xz
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RPM_BZIP2_PAYLOADS),y)
++ifeq ($(BR2_PACKAGE_BZIP2),y)
+ RPM_CONF_OPTS += --with-bzip2
+ RPM_DEPENDENCIES += bzip2
+ endif
