@@ -1,33 +1,27 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon,  2 Feb 2015 18:05:16 +0100
-Subject: [Buildroot] [PATCH] bootstrap: use the UNZIP variable instead of
-	calling it directly
-Message-ID: <1422896716-23276-1-git-send-email-Fabio.Porcedda@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Feb 2015 18:08:50 +0100
+Subject: [Buildroot] [PATCH 1/4] matchbox-panel: specify optional
+	dependency on wireless_tools
+In-Reply-To: <1422887940-31198-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 2 Feb 2015 15:38:57 +0100")
+References: <1422887940-31198-1-git-send-email-arnout@mind.be>
+Message-ID: <87zj8wgs0t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/bootstrap/bootstrap.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Make sure build is reproducible and doesn't depend on the order.
+ > There is no corresponding configure option, but configure looks for
+ > iwlib.h
 
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 1a1c4f1..17752ce 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
-@@ -10,7 +10,7 @@ BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
- 
- define BOOTSTRAP_EXTRACT_CMDS
--	unzip $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
-+	$(UNZIP) $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
- endef
- 
- define BOOTSTRAP_INSTALL_TARGET_CMDS
+ > Cc: Jean-Paul Etienne <fractalclone@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed series, thanks.
+
 -- 
-2.1.0
+Bye, Peter Korsgaard
