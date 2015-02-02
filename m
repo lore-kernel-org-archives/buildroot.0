@@ -1,98 +1,89 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 2 Feb 2015 18:12:00 +0100
-Subject: [Buildroot] [PATCH 16/16] package/rng-tools: add systemd
- support for rngd
-In-Reply-To: <1421684056-5266-17-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-17-git-send-email-maxtram95@gmail.com>
-Message-ID: <CAHXCMM+5mTquKvfjwkfTiR_mBFpWKizTZMJJNxAcS7OxvwUnpw@mail.gmail.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Mon, 2 Feb 2015 18:19:00 +0100
+Subject: [Buildroot] board-specific autotools env customization
+In-Reply-To: <20150202175455.5dd5c2e3@free-electrons.com>
+References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>
+ <20150202175455.5dd5c2e3@free-electrons.com>
+Message-ID: <CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxim,
+Dear Thomas,
 
-On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
-> Add rngd.service for systemd. Also patch rngd with patch from Fedora to
-> ignore failure if no hwrng present:
-> https://bugzilla.redhat.com/show_bug.cgi?id=892178
+On Mon, Feb 2, 2015 at 5:54 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 >
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-> ---
->  package/rng-tools/rng-tools.mk         |  8 ++++++++
->  package/rng-tools/rngd-exit-code.patch | 11 +++++++++++
->  package/rng-tools/rngd.service         |  9 +++++++++
->  3 files changed, 28 insertions(+)
->  create mode 100644 package/rng-tools/rngd-exit-code.patch
->  create mode 100644 package/rng-tools/rngd.service
+> Dear Lionel Orry,
 >
-> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-> index 5b89656..13352cc 100644
-> --- a/package/rng-tools/rng-tools.mk
-> +++ b/package/rng-tools/rng-tools.mk
-> @@ -21,4 +21,12 @@ else
->  RNG_TOOLS_CONF_OPTS += --without-libgcrypt
->  endif
+> On Mon, 2 Feb 2015 15:05:06 +0100, Lionel Orry wrote:
 >
-> +define RNG_TOOLS_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/rng-tools/rngd.service \
-> +               $(TARGET_DIR)/lib/systemd/system/rngd.service
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -fs /lib/systemd/system/rngd.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rngd.service
-> +endef
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/rng-tools/rngd-exit-code.patch b/package/rng-tools/rngd-exit-code.patch
-> new file mode 100644
-> index 0000000..5f87161
-> --- /dev/null
-> +++ b/package/rng-tools/rngd-exit-code.patch
+> > I would like to use a specific XXX_CONF_ENV variable to send ac_cv_...
+> > variables to configure, but they are specific to my compiler. For my tests,
+> > I currently write the XXX_CONF_ENV directly into the package .mk file, but
+> > I would like to know if there is a better way. I already use the
+> > recommended board/<company>/<board>/patches/ infrastructure, but this is
+> > not a patch so I don't know where to put it...
+> >
+> > Any advice / best practice ?
+>
+> Well, only pass this <pkg>_CONF_ENV if you're using your specific
+> compiler?
 
-Few comments about the patch:
-- patch filename should follow what `git format-patch` generates, so
-something 0001-<some description>.patch;
-- patch should have a non-empty description and sob-line.
+Indeed, but I was expecting to achieve this without modifying the .mk
+file provided by buildroot.
 
-Check [1] for detailed package's patch requirements.
+>
+> Maybe if you could be more specific and tell us which compiler / which
+> environment variable you need to pass, we could give more hints.
 
-> @@ -0,0 +1,11 @@
-> +--- a/rngd.c
-> ++++ b/rngd.c
-> +@@ -319,7 +319,7 @@ int main(int argc, char **argv)
-> +                       message(LOG_DAEMON|LOG_ERR,
-> +                               "Maybe RNG device modules are not loaded\n");
-> +               }
-> +-              return 1;
-> ++              return 66;
-> +       }
-> +
-> +       if (arguments->verbose) {
-> diff --git a/package/rng-tools/rngd.service b/package/rng-tools/rngd.service
-> new file mode 100644
-> index 0000000..3bdc4c1
-> --- /dev/null
-> +++ b/package/rng-tools/rngd.service
-> @@ -0,0 +1,9 @@
-> +[Unit]
-> +Description=Hardware RNG Entropy Gatherer Daemon
-> +
-> +[Service]
-> +ExecStart=/usr/sbin/rngd -f
-> +SuccessExitStatus=66
-> +
-> +[Install]
-> +WantedBy=multi-user.target
+Of course.
+
+First, when I say it is specific to my compiler, I mean that it is
+specific because it assumes some cached results for some './configure'
+tests which are supposed to run on the target, and thus, when
+cross-compiling, the maintainers of some autotools-based packages take
+some assumptions which may not be right. I will precise my case below,
+but I first wanted to say that this kind of situation could happen in
+several packages present in buildroot, and for various
+cross-compilers. It is not specific to *me*, it is an issue for
+everyone using buildroot.
+
+My case :
+* I am cross-compiling the package zeromq (v4.0.4) on a Super-H target
+using a pre-built toolchain from STMicroelectronics (STLinux 2.4).
+* I noticed the configure script attempts to check for SO_KEEPALIVE
+and other similar options existence, and it does so by compiling a
+snippet, running it on the target and checking the output value,
+excepted when cross-compiling (of course), where it cannot
+automatically run the code. So the assumption taken by zeromq devs is
+that this flag is not supported. But it is in fact supported (I
+manually cross-compiled and ran the snippet on the target to be 100%
+sure) and I would like to pass the right assumption to the configure
+script, for example by setting "libzmq_so_keepalive=yes" in
+ZEROMQ_CONF_ENV.
+You will agree with me that the SO_KEEPALIVE flag availability is
+dependent on the compiler you use, right? I try to do as few
+modifications to the official buildroot as possible, but still I would
+like zeromq to make use of this flag on my platform.
+
+Aside note : in fact, in zeromq, the macros written for these flags
+detection are wrong because they don't check if the value is set in
+environment and always override them; so it is a bad example, but the
+general question still arises, that would be interesting to have a
+similar infrastructure like for patches, to pass user-specific
+environments without messing with the .mk files...
+
+I hope I was clear enough.
+
+>
+>
+> Best regards,
+>
+> Thomas
 > --
-> 2.2.1
->
-
-[1] http://nightly.buildroot.org/manual.html#patch-policy
-
-Regards,
-
-
--- 
-Samuel
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
