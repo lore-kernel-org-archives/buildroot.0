@@ -1,44 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 00:39:22 +0100
-Subject: [Buildroot] [git commit] Revert "automake: use whenever possible
-	the ACLOCAL_DIR variable"
-Message-ID: <20150202234151.BF944807AE@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 00:30:37 +0100
+Subject: [Buildroot] [git commit] mjpegtools: new package
+Message-ID: <20150202234151.B2E8B807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8404d8c295681207c306df0b264ddf9cefb0b219
+commit: http://git.buildroot.net/buildroot/commit/?id=0df309a3e805ec0f6ccd963ce0dbb0a2934acf44
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 65b3cda915f04d1c0a108c4163ea72e459f20652.
+The mjpegtools programs are a set of tools that can do recording of videos
+and playback, simple cut-and-paste editing and the MPEG compression of audio
+and video under Linux.
 
+[Peter: license is GPLv2+]
+Signed-off-by: Steve Kenton <skenton@ou.edu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/automake/automake.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ package/Config.in                  |    1 +
+ package/mjpegtools/Config.in       |   15 +++++++++++++++
+ package/mjpegtools/mjpegtools.hash |    3 +++
+ package/mjpegtools/mjpegtools.mk   |   13 +++++++++++++
+ 4 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 264cbad..5021b49 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -12,11 +12,8 @@ AUTOMAKE_LICENSE_FILES = COPYING
- 
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
- 
--ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
--
- define GTK_DOC_M4_INSTALL
--	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
--		$(ACLOCAL_DIR)/gtk-doc.m4
-+	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
- endef
- 
- # ensure staging aclocal dir exists
-@@ -31,4 +28,5 @@ $(eval $(host-autotools-package))
- 
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/usr/bin/automake
-+ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+diff --git a/package/Config.in b/package/Config.in
+index 6da5202..41544c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -19,6 +19,7 @@ menu "Audio and video applications"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
++	source "package/mjpegtools/Config.in"
+ 	source "package/modplugtools/Config.in"
+ 	source "package/mpd/Config.in"
+ 	source "package/mpd-mpc/Config.in"
+diff --git a/package/mjpegtools/Config.in b/package/mjpegtools/Config.in
+new file mode 100644
+index 0000000..f5d2208
+--- /dev/null
++++ b/package/mjpegtools/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MJPEGTOOLS
++	bool "mjpegtools"
++	select BR2_PACKAGE_JPEG
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  The mjpegtools programs are a set of tools
++	  that can do recording of videos and playback,
++	  simple cut-and-paste editing and the MPEG
++	  compression of audio and video under Linux.
++
++	  http://mjpeg.sourceforge.net
++
++comment "mjpegtools needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mjpegtools/mjpegtools.hash b/package/mjpegtools/mjpegtools.hash
+new file mode 100644
+index 0000000..db184f7
+--- /dev/null
++++ b/package/mjpegtools/mjpegtools.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/mjpeg/files/mjpegtools/2.1.0/
++md5	57bf5dd78976ca9bac972a6511b236f3	mjpegtools-2.1.0.tar.gz
++sha1	b9effa86280e23d67369e842e5cb645948583097	mjpegtools-2.1.0.tar.gz
+diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
+new file mode 100644
+index 0000000..b940e7e
+--- /dev/null
++++ b/package/mjpegtools/mjpegtools.mk
+@@ -0,0 +1,13 @@
++###############################################################################
++#
++# mjpegtools
++#
++###############################################################################
++
++MJPEGTOOLS_VERSION = 2.1.0
++MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
++MJPEGTOOLS_DEPENDENCIES = jpeg
++MJPEGTOOLS_LICENSE = GPLv2+
++MJPEGTOOLS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
