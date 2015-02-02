@@ -1,41 +1,88 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 Feb 2015 23:15:39 +0100
-Subject: [Buildroot] [PATCH v2] madplay: fix alsa detection/linking using
-	host-pkgconf
-Message-ID: <1422915339-4306-1-git-send-email-ps.report@gmx.net>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon,  2 Feb 2015 22:35:06 +0000
+Subject: [Buildroot] [PATCH 1/1] The mjpegtools programs are a set of tools
+	that can do recording of videos and playback,
+	simple cut-and-paste editing and the MPEG compression of audio and
+	video under Linux.
+Message-ID: <1422916506-3200-1-git-send-email-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]: configure check for libasound failed because of missing
-pthread linkage.
-
-[1] http://autobuild.buildroot.net/results/f3a/f3a0b3ff15e729d223c8c8ee6af75c425cd344b6/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+http://mjpeg.sourceforge.net
+Signed-off-by: Steve Kenton <skenton@ou.edu>
 ---
-Changes v1 -> v2:
-  - use host-pkgconf for alsa librarys (suggested by Peter Korsgaard)
-    instead adding only single library dependencys (e.g. -lpthread)
----
- package/madplay/madplay.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/Config.in                  |  1 +
+ package/mjpegtools/Config.in       | 15 +++++++++++++++
+ package/mjpegtools/mjpegtools.hash |  3 +++
+ package/mjpegtools/mjpegtools.mk   | 13 +++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/mjpegtools/Config.in
+ create mode 100644 package/mjpegtools/mjpegtools.hash
+ create mode 100644 package/mjpegtools/mjpegtools.mk
 
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index 1907eb5..ff12aa1 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -15,7 +15,8 @@ MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
- MADPLAY_CONF_OPTS += --with-alsa
--MADPLAY_DEPENDENCIES += alsa-lib
-+MADPLAY_DEPENDENCIES += host-pkgconf alsa-lib
-+MADPLAY_CONF_ENV += LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs alsa)"
- endif
- 
- $(eval $(autotools-package))
+diff --git a/package/Config.in b/package/Config.in
+index 0f5836b..8e586c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -19,6 +19,7 @@ menu "Audio and video applications"
+ 	source "package/lame/Config.in"
+ 	source "package/libvpx/Config.in"
+ 	source "package/madplay/Config.in"
++	source "package/mjpegtools/Config.in"
+ 	source "package/modplugtools/Config.in"
+ 	source "package/mpd/Config.in"
+ 	source "package/mpd-mpc/Config.in"
+diff --git a/package/mjpegtools/Config.in b/package/mjpegtools/Config.in
+new file mode 100644
+index 0000000..f5d2208
+--- /dev/null
++++ b/package/mjpegtools/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MJPEGTOOLS
++	bool "mjpegtools"
++	select BR2_PACKAGE_JPEG
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  The mjpegtools programs are a set of tools
++	  that can do recording of videos and playback,
++	  simple cut-and-paste editing and the MPEG
++	  compression of audio and video under Linux.
++
++	  http://mjpeg.sourceforge.net
++
++comment "mjpegtools needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mjpegtools/mjpegtools.hash b/package/mjpegtools/mjpegtools.hash
+new file mode 100644
+index 0000000..db184f7
+--- /dev/null
++++ b/package/mjpegtools/mjpegtools.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/mjpeg/files/mjpegtools/2.1.0/
++md5	57bf5dd78976ca9bac972a6511b236f3	mjpegtools-2.1.0.tar.gz
++sha1	b9effa86280e23d67369e842e5cb645948583097	mjpegtools-2.1.0.tar.gz
+diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
+new file mode 100644
+index 0000000..34959265
+--- /dev/null
++++ b/package/mjpegtools/mjpegtools.mk
+@@ -0,0 +1,13 @@
++###############################################################################
++#
++# mjpegtools
++#
++###############################################################################
++
++MJPEGTOOLS_VERSION = 2.1.0
++MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
++MJPEGTOOLS_DEPENDENCIES = jpeg
++MJPEGTOOLS_LICENSE = GPLv2
++MJPEGTOOLS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-2.1.4
+1.9.1
