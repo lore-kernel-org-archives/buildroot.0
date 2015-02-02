@@ -1,63 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Feb 2015 16:09:53 +0100
-Subject: [Buildroot] [git commit] luafilesystem: bump to version 1.6.3
-Message-ID: <20150202152924.33C0B800AC@busybox.osuosl.org>
+Date: Mon, 2 Feb 2015 16:09:46 +0100
+Subject: [Buildroot] [git commit] lua: add option 32bits
+Message-ID: <20150202152924.13EDA800AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5487b2630716ea146ada738ac875340f7f3ade29
+commit: http://git.buildroot.net/buildroot/commit/?id=984bd5a94d7cd519fe3b5c3ddc7810b18978d9bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: tweak config/help text]
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../luafilesystem/0001-without_large_file.patch    |   20 --------------------
- package/luafilesystem/luafilesystem.mk             |    6 +++++-
- 2 files changed, 5 insertions(+), 21 deletions(-)
+ package/lua/Config.in      |   11 +++++++++++
+ package/lua/lua.mk         |    8 ++++++++
+ package/luabitop/Config.in |    4 ++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/package/luafilesystem/0001-without_large_file.patch b/package/luafilesystem/0001-without_large_file.patch
-deleted file mode 100644
-index 5b24b99..0000000
---- a/package/luafilesystem/0001-without_large_file.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Index: b/luafilesystem-1.6.2/src/lfs.c
--===================================================================
----- a/luafilesystem-1.6.2/src/lfs.c
--+++ b/luafilesystem-1.6.2/src/lfs.c
--@@ -22,13 +22,13 @@
-- 
-- #ifndef _WIN32
-- #ifndef _AIX
---#define _FILE_OFFSET_BITS 64 /* Linux, Solaris and HP-UX */
--+//#define _FILE_OFFSET_BITS 64 /* Linux, Solaris and HP-UX */
-- #else
-- #define _LARGE_FILES 1 /* AIX */
-- #endif
-- #endif
-- 
---#define _LARGEFILE64_SOURCE
--+//#define _LARGEFILE64_SOURCE
-- 
-- #include <errno.h>
-- #include <stdio.h>
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index f466010..ea80753 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
-@@ -4,7 +4,11 @@
- #
- ################################################################################
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index dde999f..d9f85e2 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -33,6 +33,17 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ 	default "5.2"	if BR2_PACKAGE_LUA_5_2
+ 	default "5.3"	if BR2_PACKAGE_LUA_5_3
  
--LUAFILESYSTEM_VERSION = 1.6.2-2
-+LUAFILESYSTEM_VERSION = 1.6.3-1
- LUAFILESYSTEM_LICENSE = MIT
-+LUAFILESYSTEM_SUBDIR = luafilesystem
-+ifneq ($(BR2_LARGEFILE),y)
-+LUAFILESYSTEM_BUILD_OPTS += CFLAGS="$(LUAROCKS_CFLAGS) -DLFS_DO_NOT_USE_LARGE_FILE"
++if BR2_PACKAGE_LUA_5_3
++config BR2_PACKAGE_LUA_32BITS
++	bool "Use 32 bit numbers"
++	default y if !BR2_ARCH_IS_64
++	help
++	  Use a 32 bit data type for numbers / integers instead of the
++	  default 64 bit type.  This option is particularly attractive
++	  for small machines and embedded systems.
++
 +endif
++
+ choice
+ 	prompt "Lua command-line editing"
+ 	default BR2_PACKAGE_LUA_EDITING_NONE
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 0e30186..f008d34 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -58,6 +58,14 @@ ifneq ($(BR2_LARGEFILE),y)
+ 	LUA_CFLAGS += -D_FILE_OFFSET_BITS=32
+ endif
  
- $(eval $(luarocks-package))
++ifeq ($(BR2_PACKAGE_LUA_32BITS),y)
++define LUA_32BITS_LUACONF
++	$(SED) 's/\/\* #define LUA_32BITS \*\//#define LUA_32BITS/' $(@D)/src/luaconf.h
++endef
++
++LUA_POST_PATCH_HOOKS += LUA_32BITS_LUACONF
++endif
++
+ # We never want to have host-readline and host-ncurses as dependencies
+ # of host-lua.
+ HOST_LUA_DEPENDENCIES =
+diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
+index 83a85b1..c5b3f60 100644
+--- a/package/luabitop/Config.in
++++ b/package/luabitop/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_LUABITOP
+ 	bool "luabitop"
++	depends on !BR2_PACKAGE_LUA_32BITS
+ 	help
+ 	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds bitwise
+ 	  operations on numbers.
+ 
+ 	  http://bitop.luajit.org
++
++comment "luabitop needs a full Lua interpreter"
++	depends on BR2_PACKAGE_LUA_32BITS
