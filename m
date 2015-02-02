@@ -1,48 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Feb 2015 22:48:50 +0100
-Subject: [Buildroot] [git commit] legal-info: remove FOO_MANIFEST_TARBALL
-	and FOO_MANIFEST_SITE defaults
-Message-ID: <20150202214925.AE40C80817@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 02 Feb 2015 22:49:49 +0100
+Subject: [Buildroot] [RFC 2/4] legal-info: allow to declare the actual
+ sources for binary packages
+In-Reply-To: <54CFF057.2060000@mind.be>
+References: <1420199015-16907-1-git-send-email-luca@lucaceresoli.net>
+ <1420199015-16907-3-git-send-email-luca@lucaceresoli.net>
+ <54CFF057.2060000@mind.be>
+Message-ID: <54CFF0FD.7090700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5027ca582fe41d0c780e86218c8c0aedad6fb4db
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/02/15 22:47, Arnout Vandecappelle wrote:
+> On 02/01/15 12:43, Luca Ceresoli wrote:
+>> The FOO_SITE/FOO_SOURCE variables usually point to a tarball containing
+>> source code.
+>>
+>> For the downloaded external toolchains this is not true, the "source"
+>> tarball actually contains binaries. This is fine for making Buildroot
+>> work, but for legal-info we really want to ship real source code, not
+>> binaries.
+>>
+>> Luckily, some (hopefully all) toolchain vendors publish a downloadable
+>> tarball containing the source code counterpart for their binary
+>> packages.
+>>
+>> Here we allow the user to declare the URL of this other tarball in the
+>> pair of variables FOO_ACTUAL_SOURCE_TARBALL (by default equal to
+>> FOO_SOURCE) and FOO_ACTUAL_SOURCE_SITE (by default equal to FOO_SITE).
+>> If the "actual source" package can be downloaded from the same
+>> directory as the binary package, then only FOO_ACTUAL_SOURCE_TARBALL
+>> needs to be set.
+>>
+>> Note this change is not strictly toolchain-specific: it might be useful
+>> for other packages that happen to ship binaries in the same way.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  It is adding even more complexity to the already too complex legal-info target,
+> but it doesn't look too bad. Although I would indeed prefer a pre-legal-info
+> hook. But even that wouldn't be enough, because the source reference in the
+> manifest would still be wrong...
 
-When FOO_SOURCE is non-empty, FOO_MANIFEST_TARBALL is always set.
-When FOO_SOURCE is empty, FOO_MANIFEST_TARBALL is not set, but also
-never used, due to the if below which defuses the whole legal-info
-processing for packages that have FOO_SOURCE explicitly set to an
-empty string.
+ Since my comments aren't serious and the pre-legal-info-hook is probably not
+feasible after all, you can just repost (with my Reviewed-by tag) if you don't
+feel like changing anything.
 
-So get rid of the default assignment to "not saved".
 
-Do it for FOO_MANIFEST_SITE as well: it is pointless to have
-FOO_MANIFEST_SITE with an empty FOO_SOURCE in a package. A quick
-grep session in the sources confirmed this assumption is indeed
-true for the current code.
+ Regards,
+ Arnout
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+[snip]
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9643a30..38ef581 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -653,8 +653,6 @@ $(2)_MANIFEST_SITE = $$(call qstrip,$$($(2)_SITE))
- endif
- endif
- endif
--$(2)_MANIFEST_TARBALL ?= not saved
--$(2)_MANIFEST_SITE ?= not saved
- 
- # legal-info: produce legally relevant info.
- $(1)-legal-info:
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
