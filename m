@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Feb 2015 10:16:31 +0100
-Subject: [Buildroot] [RFC 3/8] linux: add custom per-package help text
- contents
-In-Reply-To: <1422394913-13257-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Feb 2015 10:20:25 +0100
+Subject: [Buildroot] [RFC 4/8] barebox: add custom help entries
+In-Reply-To: <1422394913-13257-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1422394913-13257-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150202091631.GC4918@free.fr>
+ <1422394913-13257-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150202092025.GD4918@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +14,9 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-01-27 22:41 +0100, Thomas Petazzoni spake thusly:
-> Since the linux package is not yet converted to kconfig-package, make
-> it register its own LINUX_HELP_HOOKS so that its custom make targets
-> are visible in 'linux-help'.
+> Since the barebox package is not yet converted to kconfig-package,
+> make it register its own BAREBOX_HELP_HOOKS so that its custom make
+> targets are visible in 'barebox-help'.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
@@ -27,30 +26,30 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  linux/linux.mk | 10 ++++++++++
+>  boot/barebox/barebox.mk | 10 ++++++++++
 >  1 file changed, 10 insertions(+)
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 29f59e8..c2b31e9 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -317,6 +317,16 @@ define LINUX_INSTALL_TARGET_CMDS
->  	$(LINUX_INSTALL_HOST_TOOLS)
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index 0fb7cec..4a89952 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -106,6 +106,16 @@ define BAREBOX_INSTALL_TARGET_CMDS
 >  endef
+>  endif
 >  
-> +define LINUX_PACKAGE_HELP
+> +define BAREBOX_PACKAGE_HELP
 > +	@$(foreach editor,menuconfig xconfig gconfig nconfig,\
-> +		@$(call pkg-print-help-opt,linux-$(editor),"Run the $(editor) configuration tool")$(sep))
-> +	@$(call pkg-print-help-opt,linux-savedefconfig,"Generate a minimal defconfig")
-> +	@$(call pkg-print-help-opt,linux-update-config,"Update configuration as a full config file")
-> +	@$(call pkg-print-help-opt,linux-update-defconfig,"Update configuration as a minimal defconfig")
+> +		@$(call pkg-print-help-opt,barebox-$(editor),"Run the $(editor) configuration tool")$(sep))
+> +	@$(call pkg-print-help-opt,barebox-savedefconfig,"Generate a minimal defconfig")
+> +	@$(call pkg-print-help-opt,barebox-update-config,"Update configuration as a full config file")
+> +	@$(call pkg-print-help-opt,barefbox-update-defconfig,"Update configuration as a minimal defconfig")
 > +endef
 > +
-> +LINUX_HELP_HOOKS += LINUX_PACKAGE_HELP
+> +BAREBOX_HELP_HOOKS += BAREBOX_PACKAGE_HELP
 > +
->  include $(sort $(wildcard linux/linux-ext-*.mk))
->  
 >  $(eval $(generic-package))
+>  
+>  ifeq ($(BR2_TARGET_BAREBOX),y)
 > -- 
 > 2.1.0
 > 
