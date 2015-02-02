@@ -1,35 +1,32 @@
-From: Alexander Clouter <alex+buildroot@digriz.org.uk>
-Date: Mon, 2 Feb 2015 17:01:23 +0000
-Subject: [Buildroot] [PATCH] odhcp6c: new package
-In-Reply-To: <1422891567-14861-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1422891567-14861-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150202170123.GF4329@marmot>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Feb 2015 18:04:30 +0100
+Subject: [Buildroot] [PATCH] %_defconfig: save the path to the defconfig
+In-Reply-To: <1422891286-521-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 2 Feb 2015 16:34:46 +0100")
+References: <1422891286-521-1-git-send-email-arnout@mind.be>
+Message-ID: <874mr4i6sh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks!  You can add to the list that I compile and use this on mipsel/uclibc.
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Kind Regards
+ > We have the BR2_DEFCONFIG feature that saves the path to the defconfig
+ > file that was specified on the command line, so that a later
+ > savedefconfig would immediately save to the right location. This wasn't
+ > done for the defconfigs in the configs/ directory, however, to avoid
+ > accidentally overwriting them.
 
-On Mon, Feb 02, 2015 at 04:39:27PM +0100, Thomas De Schampheleire wrote:
->From: Alexander Clouter <alex+buildroot@digriz.org.uk>
->
->Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
->[ThomasDS: needs ipv6; rewrap package/odhcp6c/Config.in]
->Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->(compile-tested on x86/glibc, armel/glibc, armel/uclibc)
->---
-> package/Config.in          |  1 +
-> package/odhcp6c/Config.in  | 11 +++++++++++
-> package/odhcp6c/odhcp6c.mk | 12 ++++++++++++
-> 3 files changed, 24 insertions(+)
-> create mode 100644 package/odhcp6c/Config.in
-> create mode 100644 package/odhcp6c/odhcp6c.mk
+ > Now we decided that it would be more useful to overwrite the defconfigs
+ > in the configs/ directory after all. To do this, we pass the path to
+ > that defconfig in the environment.
+
+ > Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
 
 -- 
-Alexander Clouter
-.sigmonster says: There are no games on this system.
+Bye, Peter Korsgaard
