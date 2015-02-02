@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 21:21:39 +0100
-Subject: [Buildroot] [git commit] ljlinenoise: bump to version 0.1.2
-Message-ID: <20150202202159.E2C0A805F1@busybox.osuosl.org>
+Date: Mon, 2 Feb 2015 21:22:03 +0100
+Subject: [Buildroot] [PATCH 2/3] lua-testmore: bump to version 0.3.2
+In-Reply-To: <1422906763-13919-2-git-send-email-francois.perrad@gadz.org>
+References: <1422906763-13919-1-git-send-email-francois.perrad@gadz.org>
+ <1422906763-13919-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150202212203.63a83116@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26b038714ed64762c540cb17bd773114e77a5ea3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ljlinenoise/ljlinenoise.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon,  2 Feb 2015 20:52:42 +0100, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua-testmore/lua-testmore.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ljlinenoise/ljlinenoise.mk b/package/ljlinenoise/ljlinenoise.mk
-index 868f319..aca6358 100644
---- a/package/ljlinenoise/ljlinenoise.mk
-+++ b/package/ljlinenoise/ljlinenoise.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LJLINENOISE_VERSION_UPSTREAM = 0.1.1
-+LJLINENOISE_VERSION_UPSTREAM = 0.1.2
- LJLINENOISE_VERSION = $(LJLINENOISE_VERSION_UPSTREAM)-1
- LJLINENOISE_SUBDIR = ljlinenoise-$(LJLINENOISE_VERSION_UPSTREAM)
- LJLINENOISE_LICENSE = MIT
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
