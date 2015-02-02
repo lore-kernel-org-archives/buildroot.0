@@ -1,44 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 09:40:08 +0100
-Subject: [Buildroot] [git commit] pps-tools: also pass TARGET_CONFIGURE_OPTS
-	to make install
-Message-ID: <20150202084350.4883F807F6@busybox.osuosl.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 2 Feb 2015 09:44:12 +0100 (CET)
+Subject: [Buildroot] Best-Practice Suggestions for developing package
+ patches in buildroot
+In-Reply-To: <20150131230620.2236108e@free-electrons.com>
+Message-ID: <1210001435.31028837.1422866651969.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=242f6720931d4f86fb6f8fc9742a29a297f878c4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Without these environment variables, pps-tools rebuilds for the host machine
-architecture and does not run on the target machine.
+> 
+> Either quilt or git, but more and more I use git. I generally clone
+> the
+> upstream repository somewhere completely separate from Buildroot,
+> then
+> create a branch called 'buildroot' with the starting point being the
+> tag indicating the release of the software currently in use by
+> Buildroot. Then, I import as separate Git commits each of the
+> individual patches that Buildroot has for this package (if any). I do
+> my work, and then use 'git format-patch' to format the patches and
+> copy
+> them back in Buildroot.
+> 
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pps-tools/pps-tools.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+That's a great way of handling buildroot-provided patches, I hadn't
+thought of that...
 
-diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
-index 7876403..48feea9 100644
---- a/package/pps-tools/pps-tools.mk
-+++ b/package/pps-tools/pps-tools.mk
-@@ -16,12 +16,14 @@ endef
- 
- define PPS_TOOLS_INSTALL_STAGING_CMDS
- 	mkdir -p $(STAGING_DIR)/usr/include/sys $(STAGING_DIR)/usr/bin
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		DESTDIR=$(STAGING_DIR) -C $(@D) install
- endef
- 
- define PPS_TOOLS_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/include/sys $(TARGET_DIR)/usr/bin
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+I'll add that to the buildroot-submodule documentation, that's a good 
+practice...
+
+> Quite ironically, I never use <pkg>_OVERRIDE_SRCDIR: I simply copy
+> the
+> patches back to the Buildroot package directory, and restart the
+> package build process from scratch. Yes, this is inefficient, but one
+> could pretend that it forces you to think twice before testing a
+> stupid
+> change :-)
+> 
+> Also, I tend to very often start by hacking directly in
+> output/build/<pkg>-<version>/, and once I have a good idea of the
+> change that needs to be done, I do the Git work flow described above.
+> 
+> Hope this helps,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
