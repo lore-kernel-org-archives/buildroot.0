@@ -1,89 +1,150 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Feb 2015 23:24:28 +0100
-Subject: [Buildroot] [git commit] package/mjpg-streamer: New package
-Message-ID: <20150202223712.ACD0B803DB@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 2 Feb 2015 23:38:53 +0100
+Subject: [Buildroot] [PATCH 12/16] package/samba: add systemd support
+In-Reply-To: <1421684056-5266-13-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-13-git-send-email-maxtram95@gmail.com>
+Message-ID: <CAHXCMMJkam4Rkonum9c5TkB8d8mpzKMhjGePPaGJhgakJMYK4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f0037fd9f52bfa26de5ed76c4fa7045fabb95d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Maxim,
 
---
-v2: various fixes (Thomas)
+On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
+> Add {smbd,nmbd,winbindd}.service files for systemd. Add tmpfiles.d
+> config file to create samba directories.
+>
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+> ---
+>  package/samba/nmbd.service        | 12 ++++++++++++
+>  package/samba/samba.mk            | 23 +++++++++++++++++++++++
+>  package/samba/samba_tmpfiles.conf |  4 ++++
+>  package/samba/smbd.service        | 12 ++++++++++++
+>  package/samba/winbindd.service    | 12 ++++++++++++
+>  5 files changed, 63 insertions(+)
+>  create mode 100644 package/samba/nmbd.service
+>  create mode 100644 package/samba/samba_tmpfiles.conf
+>  create mode 100644 package/samba/smbd.service
+>  create mode 100644 package/samba/winbindd.service
+>
+> diff --git a/package/samba/nmbd.service b/package/samba/nmbd.service
+> new file mode 100644
+> index 0000000..6e241ea
+> --- /dev/null
+> +++ b/package/samba/nmbd.service
+> @@ -0,0 +1,12 @@
+> +[Unit]
+> +Description=Samba NetBIOS name server
+> +After=network.target
+> +
+> +[Service]
+> +Type=forking
+> +PIDFile=/var/run/samba/nmbd.pid
+> +ExecStart=/usr/sbin/nmbd -D
+> +ExecReload=/bin/kill -HUP $MAINPID
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+> index 31ad644..5a11ebe 100644
+> --- a/package/samba/samba.mk
+> +++ b/package/samba/samba.mk
+> @@ -182,6 +182,29 @@ endef
+>
+>  SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
+>
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +define SAMBA_INSTALL_TMPFILES_HOOK
+> +       $(INSTALL) -D -m 644 package/samba/samba_tmpfiles.conf \
+> +               $(TARGET_DIR)/usr/lib/tmpfiles.d/samba.conf
+> +endef
+> +
+> +SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_TMPFILES_HOOK
+> +endif
+> +
+> +define SAMBA_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 644 package/samba/smbd.service \
+> +               $(TARGET_DIR)/lib/systemd/system/smbd.service
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                      |    1 +
- package/mjpg-streamer/Config.in        |   16 ++++++++++++++++
- package/mjpg-streamer/mjpg-streamer.mk |   25 +++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+smbd can be disabled, so its *.service installation should be optional
+WRT its option.
 
-diff --git a/package/Config.in b/package/Config.in
-index 0f5836b..6da5202 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1106,6 +1106,7 @@ endif
- 	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
- 	source "package/minidlna/Config.in"
-+	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
- 	source "package/mongoose/Config.in"
- 	source "package/mongrel2/Config.in"
-diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
-new file mode 100644
-index 0000000..7925d41
---- /dev/null
-+++ b/package/mjpg-streamer/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_MJPG_STREAMER
-+	bool "mjpg-streamer"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # linux/uvcvideo.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  MJPG-streamer takes JPGs from Linux-UVC compatible webcams, filesystem
-+	  or other input plugins and streams them as M-JPEG via HTTP to
-+	  webbrowsers, VLC and other software.
-+
-+	  http://mjpg-streamer.sourceforge.net
-+
-+comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.0"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-new file mode 100644
-index 0000000..2385429
---- /dev/null
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# mjpg-streamer
-+#
-+################################################################################
-+
-+# Original source is located at
-+# http://sourceforge.net/p/mjpg-streamer/code/commit_browser
-+# oliv3r forked the repo to add support for 3.16 and 3.17 kernels:
-+# http://sourceforge.net/p/mjpg-streamer/patches/14/
-+MJPG_STREAMER_VERSION = 730b5bcdc378b6a201131c6c2620eedbe0f6eb30
-+MJPG_STREAMER_SITE = $(call github,oliv3r,mjpg-streamer,$(MJPG_STREAMER_VERSION))
-+MJPG_STREAMER_LICENSE = GPLv2+
-+MJPG_STREAMER_LICENSE_FILES = LICENSE
-+MJPG_STREAMER_DEPENDENCIES = jpeg
-+
-+define MJPG_STREAMER_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-+endef
-+
-+define MJPG_STREAMER_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
+> +       $(INSTALL) -D -m 644 package/samba/nmbd.service \
+> +               $(TARGET_DIR)/lib/systemd/system/nmbd.service
+
+ditto for nmbd.
+
+> +       $(if $(BR2_PACKAGE_SAMBA_WINBINDD),$(INSTALL) -D -m 644 package/samba/winbindd.service $(TARGET_DIR)/lib/systemd/system/winbindd.service)
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -fs /lib/systemd/system/smbd.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smbd.service
+
+ditto
+
+> +       ln -fs /lib/systemd/system/nmbd.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmbd.service
+
+ditto
+
+> +       $(if $(BR2_PACKAGE_SAMBA_WINBINDD),ln -fs /lib/systemd/system/winbindd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbindd.service)
+> +endef
+> +
+>  define SAMBA_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
+>  endef
+> diff --git a/package/samba/samba_tmpfiles.conf b/package/samba/samba_tmpfiles.conf
+> new file mode 100644
+> index 0000000..e265f75
+> --- /dev/null
+> +++ b/package/samba/samba_tmpfiles.conf
+> @@ -0,0 +1,4 @@
+> +d /var/cache/samba 0755 root root -
+> +d /var/log/samba 0755 root root -
+> +d /var/lock/samba 0755 root root -
+> +d /var/run/samba 0755 root root -
+> diff --git a/package/samba/smbd.service b/package/samba/smbd.service
+> new file mode 100644
+> index 0000000..64abf56
+> --- /dev/null
+> +++ b/package/samba/smbd.service
+> @@ -0,0 +1,12 @@
+> +[Unit]
+> +Description=Samba SMB/CIFS server
+> +After=network.target nmbd.service winbindd.service
+> +
+> +[Service]
+> +Type=forking
+> +PIDFile=/var/run/samba/smbd.pid
+> +ExecStart=/usr/sbin/smbd -D
+> +ExecReload=/bin/kill -HUP $MAINPID
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> diff --git a/package/samba/winbindd.service b/package/samba/winbindd.service
+> new file mode 100644
+> index 0000000..214c17e
+> --- /dev/null
+> +++ b/package/samba/winbindd.service
+> @@ -0,0 +1,12 @@
+> +[Unit]
+> +Description=Samba Winbind daemon
+> +After=network.target nmbd.service
+> +
+> +[Service]
+> +Type=forking
+> +PIDFile=/var/run/samba/winbindd.pid
+> +ExecStart=/usr/sbin/winbindd -D
+> +ExecReload=/bin/kill -HUP $MAINPID
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> --
+> 2.2.1
+
+Regards,
+
+-- 
+Samuel
