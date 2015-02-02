@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  2 Feb 2015 20:52:41 +0100
-Subject: [Buildroot] [PATCH 1/3] lua: add missing hash for lua 5.3.0
-Message-ID: <1422906763-13919-1-git-send-email-francois.perrad@gadz.org>
+Date: Mon,  2 Feb 2015 20:52:42 +0100
+Subject: [Buildroot] [PATCH 2/3] lua-testmore: bump to version 0.3.2
+In-Reply-To: <1422906763-13919-1-git-send-email-francois.perrad@gadz.org>
+References: <1422906763-13919-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1422906763-13919-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua/lua.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/lua-testmore/lua-testmore.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index 3de90c2..b6ac026 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -1,4 +1,7 @@
- # Hashes from: http://www.lua.org/ftp/
-+md5 a1b0a7e92d0c85bbff7a8d27bf29f8af           lua-5.3.0.tar.gz
-+sha1 1c46d1c78c44039939e820126b86a6ae12dadfba  lua-5.3.0.tar.gz
-+
- md5 dc7f94ec6ff15c985d2d6ad0f1b35654           lua-5.2.3.tar.gz
- sha1 926b7907bc8d274e063d42804666b40a3f3c124c  lua-5.2.3.tar.gz
+diff --git a/package/lua-testmore/lua-testmore.mk b/package/lua-testmore/lua-testmore.mk
+index c8c8d1f..771b97f 100644
+--- a/package/lua-testmore/lua-testmore.mk
++++ b/package/lua-testmore/lua-testmore.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LUA_TESTMORE_VERSION_UPSTREAM = 0.3.1
++LUA_TESTMORE_VERSION_UPSTREAM = 0.3.2
+ LUA_TESTMORE_VERSION = $(LUA_TESTMORE_VERSION_UPSTREAM)-1
+ LUA_TESTMORE_SUBDIR = lua-TestMore-$(LUA_TESTMORE_VERSION_UPSTREAM)
+ LUA_TESTMORE_LICENSE = MIT
 -- 
 2.1.0
