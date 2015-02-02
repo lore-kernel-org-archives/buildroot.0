@@ -1,129 +1,179 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Feb 2015 10:05:51 +0100
-Subject: [Buildroot] [RFC 1/8] package: core support for per-package
- help text
-In-Reply-To: <1422394913-13257-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1422394913-13257-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150202090551.GA4918@free.fr>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Mon,  2 Feb 2015 10:05:42 +0100
+Subject: [Buildroot] [PATCH v2] libvips: new package
+Message-ID: <1422867942-9684-1-git-send-email-pieter.degendt@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
 
-On 2015-01-27 22:41 +0100, Thomas Petazzoni spake thusly:
-> This commit adds to the generic-package infrastructure a new
-> per-package $(1)-help target, which shows a help text containing
-> details about all available make targets for this package.
-> 
-> Each target is displayed using a small helper function called
-> pkg-print-help-opt, also added by this commit.
-> 
-> This basic generic-package help text can be extended by specialized
-> package infrastructure, or by individual packages, using the
-> $(2)_HELP_HOOKS variable.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 24 ++++++++++++++++++++++++
->  package/pkg-utils.mk   |  4 ++++
->  2 files changed, 28 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9643a30..cf7333d 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -594,6 +594,30 @@ $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
->  
->  $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
->  
-> +$(1)-help:
-> +	@$(call pkg-print-help-opt,$(1),"Build completely")
-> +	@$(call pkg-print-help-opt,$(1)-install,"Build up to the installation step")
-> +ifeq ($$($(2)_TYPE),host)
-> +	@$(call pkg-print-help-opt,$(1)-install-host,"Build up to the host installation step")
-> +else
-> +	@$(call pkg-print-help-opt,$(1)-install-target,"Build up to the target installation step")
-> +	@$(call pkg-print-help-opt,$(1)-install-staging,"Build up to the staging installation step")
-> +	@$(call pkg-print-help-opt,$(1)-install-images,"Build up to the images installation step")
-> +endif
-> +	@$(call pkg-print-help-opt,$(1)-build,"Build up to the compile step")
-> +	@$(call pkg-print-help-opt,$(1)-configure,"Build up to the configure step")
-> +	@$(call pkg-print-help-opt,$(1)-patch,"Build up to the patch step")
-> +	@$(call pkg-print-help-opt,$(1)-extract,"Build up to the extract step")
-> +	@$(call pkg-print-help-opt,$(1)-depends,"Build package dependencies")
-> +	@$(call pkg-print-help-opt,$(1)-source,"Only download the source files")
-> +	@$(call pkg-print-help-opt,$(1)-show-depends,"Display the list of dependencies")
-> +	@$(call pkg-print-help-opt,$(1)-graph-depends,"Generate a graph of the dependencies")
-> +	@$(call pkg-print-help-opt,$(1)-dirclean,"Remove the package build directory")
-> +	@$(call pkg-print-help-opt,$(1)-rebuild,"Restart the build from the compile step")
-> +	@$(call pkg-print-help-opt,$(1)-reconfigure,"Restart the build from the configure step")
-> +	@$(call pkg-print-help-opt,$(1)-legal-info,"Generate legal informations")
-> +	$(foreach hook,$$($(2)_HELP_HOOKS),$$(call $(hook))$(sep))
-> +
->  # define the PKG variable for all targets, containing the
->  # uppercase package variable prefix
->  $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 7eddc47..fbb94cf 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -37,6 +37,10 @@ endef
->  $(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
->  $(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
->  
-> +define pkg-print-help-opt
-> +	printf "%30s - %s\n" $(1) $(2)
-> +endef
+---
+Changes v1 -> v2 (suggested by Thomas Petazzoni)
+  - select glib2 dependency
+  - inherit glib2 dependencies (MMU, wchar, threads)
+  - Fixed comments
+  - Newline at end of files
+  - Changed <pkg>_CONF_OPT to <pkg>_CONF_OPTS
+  - Removed gtk-doc options
+  - Fixed autotools dependencies
+  - Check BR2_INSTALL_LIBSTDCPP fir c++ support
+  - Use automatic dependencies instead of separate options
 
-As discussed live, I'd rather we have the quotes here rather than in the
-make function call. But I agree with you that it is nicer to see syntax
-colouring on the strings...
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+---
+ package/Config.in                               |  1 +
+ package/libvips/Config.in                       | 17 +++++++
+ package/libvips/libvips-01-fix-no-gtk-doc.patch | 35 +++++++++++++++
+ package/libvips/libvips.mk                      | 60 +++++++++++++++++++++++++
+ 4 files changed, 113 insertions(+)
+ create mode 100644 package/libvips/Config.in
+ create mode 100644 package/libvips/libvips-01-fix-no-gtk-doc.patch
+ create mode 100644 package/libvips/libvips.mk
 
-So, what about:
-
-    printf "%30s - %s\n" $(1) "$(cal qstrip,$(2))"
-
-so that we ensure the parameter *is* quoted, but accept already quoted
-strings.
-
-Beside, the output is looking like:
-
-                       busybox - Build completely
-               busybox-install - Build up to the installation step
-        busybox-install-target - Build up to the target installation step
-       busybox-install-staging - Build up to the staging installation step
- 
-I'd rather we left-align, like so:
-
-       busybox                 - Build completely
-       busybox-install         - Build up to the installation step
-       busybox-install-target  - Build up to the target installation step
-       busybox-install-staging - Build up to the staging installation step
-
-(but that's just really very minor)
-
-Regards,
-Yann E. MORIN.
-
->  #
->  # Manipulation of .config files based on the Kconfig
->  # infrastructure. Used by the BusyBox package, the Linux kernel
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 3117474..34a061f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -695,6 +695,7 @@ menu "Graphics"
+ 	source "package/libungif/Config.in"
+ 	source "package/libva/Config.in"
+ 	source "package/libva-intel-driver/Config.in"
++	source "package/libvips/Config.in"
+ 	source "package/opencv/Config.in"
+ 	source "package/opengl/Config.in"
+ 	source "package/pango/Config.in"
+diff --git a/package/libvips/Config.in b/package/libvips/Config.in
+new file mode 100644
+index 0000000..cd8f1b8
+--- /dev/null
++++ b/package/libvips/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBVIPS
++	bool "libvips"
++	depends on BR2_USE_WCHAR # gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	help
++	  libvips is a 2D image processing library. Compared to similar 
++	  libraries, libvips runs quickly and uses little memory.
++
++	  http://www.vips.ecs.soton.ac.uk/
++
++comment "libvips needs a toolchain w/ wchar, threads"
++        depends on BR2_USE_MMU
++        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libvips/libvips-01-fix-no-gtk-doc.patch b/package/libvips/libvips-01-fix-no-gtk-doc.patch
+new file mode 100644
+index 0000000..bfaf7c3
+--- /dev/null
++++ b/package/libvips/libvips-01-fix-no-gtk-doc.patch
+@@ -0,0 +1,35 @@
++From a3d47be3b6bed845af5e1aa87ca2da2b1e840cbb Mon Sep 17 00:00:00 2001
++From: Pieter De Gendt <pieter.degendt@basalte.be>
++Date: Thu, 29 Jan 2015 12:25:35 +0100
++Subject: [PATCH] Same patch as for systemd in commit
++ http://git.buildroot.net/buildroot/commit/?id=7144f2f04b70553
++
++Fix deactivation of gtk-doc
++
++The tarball contains the Makefile for building documentation with gtk-doc,
++Unfortunately the AM_CONDITIONAL variable is not the correct one, which
++results in an error when running autoreconf.
++
++This patch fixes this issue.
++
++Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
++---
++ doc/reference/gtk-doc.make | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/doc/reference/gtk-doc.make b/doc/reference/gtk-doc.make
++index e791656..786803e 100644
++--- a/doc/reference/gtk-doc.make
+++++ b/doc/reference/gtk-doc.make
++@@ -267,7 +267,7 @@ uninstall-local:
++ #
++ # Require gtk-doc when making dist
++ #
++-if HAVE_GTK_DOC
+++if ENABLE_GTK_DOC
++ dist-check-gtkdoc: docs
++ else
++ dist-check-gtkdoc:
++-- 
++2.2.2
++
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+new file mode 100644
+index 0000000..6731f02
+--- /dev/null
++++ b/package/libvips/libvips.mk
+@@ -0,0 +1,60 @@
++################################################################################
++#
++# libvips
++#
++################################################################################
++
++LIBVIPS_VERSION_MAJOR = 7.42
++LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).1
++LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
++LIBVIPS_SITE = http://www.vips.ecs.soton.ac.uk/supported/$(LIBVIPS_VERSION_MAJOR)
++LIBVIPS_LICENSE = LGPLv2.1+
++LIBVIPS_LICENSE_FILES = COPYING
++# We're patching gtk-doc.make, so need to autoreconf
++LIBVIPS_AUTORECONF = YES
++LIBVIPS_CONF_OPTSS = --disable-introspection
++LIBVIPS_INSTALL_STAGING = YES
++LIBVIPS_DEPENDENCIES = host-pkgconf host-swig libglib2 libxml2 $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++LIBVIPS_CONF_OPTS += --enable-cxx
++else
++LIBVIPS_CONF_OPTS += --disable-cxx
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBVIPS_CONF_OPTS += --with-jpeg
++LIBVIPS_DEPENDENCIES += jpeg
++else
++LIBVIPS_CONF_OPTS += --without-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++LIBVIPS_CONF_OPTS += --with-png
++LIBVIPS_DEPENDENCIES += libpng
++else
++LIBVIPS_CONF_OPTS += --without-png
++endif
++
++ifeq ($(BR2_PACKAGE_TIFF),y)
++LIBVIPS_CONF_OPTS += --with-tiff
++LIBVIPS_DEPENDENCIES += tiff
++else
++LIBVIPS_CONF_OPTS += --without-tiff
++endif
++
++ifeq ($(BR2_PACKAGE_FFTW),y)
++LIBVIPS_CONF_OPTS += --with-fftw
++LIBVIPS_DEPENDENCIES += fftw
++else
++LIBVIPS_CONF_OPTS += --without-fftw
++endif
++
++ifeq ($(BR2_PACKAGE_LIBEXIF),y)
++LIBVIPS_CONF_OPTS += --with-libexif
++LIBVIPS_DEPENDENCIES += libexif
++else
++LIBVIPS_CONF_OPTS += --without-libexif
++endif
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.2.2
