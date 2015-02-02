@@ -1,49 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 09:25:22 +0100
-Subject: [Buildroot] [git commit] package/tar: add support for acl and xattr
-Message-ID: <20150202082525.CCD70807AE@busybox.osuosl.org>
+Date: Mon, 2 Feb 2015 09:26:37 +0100
+Subject: [Buildroot] [PATCH 13/16] package/tar: add support for acl and
+ xattr
+In-Reply-To: <1421684056-5266-14-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-14-git-send-email-maxtram95@gmail.com>
+Message-ID: <20150202092637.32a646ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f5fdb6b2ebab928816e5fcd69f288d4fce5b75b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxim Mikityanskiy,
 
-If acl or attr is going to be installed, add support for them to tar.
+On Mon, 19 Jan 2015 18:14:13 +0200, Maxim Mikityanskiy wrote:
+> If acl or attr is going to be installed, add support for them to tar.
+> 
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+> ---
+>  package/tar/tar.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-[Thomas: explicitly disable acl and attr support when the
-corresponding packages are not available.]
+Applied, thanks! I added a 'else' condition, which makes sure to
+explicitly disable the acl and attr support when the corresponding
+packages are not available.
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tar/tar.mk |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index caaa5ad..2b47e33 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -19,6 +19,20 @@ TAR_DEPENDENCIES += busybox
- HOST_TAR_DEPENDENCIES =
- endif
- 
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+TAR_DEPENDENCIES += acl
-+TAR_CONF_OPTS += --with-posix-acls
-+else
-+TAR_CONF_OPTS += --without-posix-acls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+TAR_DEPENDENCIES += attr
-+TAR_CONF_OPTS += --with-xattrs
-+else
-+TAR_CONF_OPTS += --without-xattrs
-+endif
-+
- $(eval $(autotools-package))
- 
- # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
