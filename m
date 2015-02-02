@@ -1,84 +1,103 @@
-From: Maxim Mikityanskiy <maxtram95@gmail.com>
-Date: Mon, 2 Feb 2015 17:18:46 +0200
-Subject: [Buildroot] [PATCH 03/16] package/dbus: fix machine-id when
-	using systemd
-In-Reply-To: <CAHXCMM+AKUj8ppQZLegOBvsgYNX+ntM5MtP2nxwC_rywh0c+Bw@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 2 Feb 2015 16:20:03 +0100
+Subject: [Buildroot] [PATCH 05/16] package/systemd: apply locale
+ settings in user shells
+In-Reply-To: <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
 References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-4-git-send-email-maxtram95@gmail.com>
- <CAHXCMM+AKUj8ppQZLegOBvsgYNX+ntM5MtP2nxwC_rywh0c+Bw@mail.gmail.com>
-Message-ID: <CAKErNvousuWMk87pVBftdettSfrjYvqfqNPJ+Ojiun5zt36EJQ@mail.gmail.com>
+ <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
+Message-ID: <CAHXCMML45DM8HK_q6jODbEPKZrbLEfzfUx684_r9Q2A7j9ZRag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, resending my last message, I've answered off-the-list. My fault :(
+Hi Maxim,
 
+On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
+> Add /etc/profile.d/locale.sh script from Arch Linux to apply systemd
+> locale settings in user shells.
 
-Hi Samuel,
+I don't really see the point of doing it especially when systemd is used.
+This configuration file is for shell, even busybox should support it...
 
-2015-02-02 16:50 GMT+02:00 Samuel Martin <s.martin49@gmail.com>:
-> Hi Maxim,
->
-> On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
->> When systemd is used, /var/lib/dbus becomes dangling symlink, because
->> nobody does mkdir /tmp/dbus, so /var/lib/dbus/machine-id could not be
->> written. On SysVinit systems there is init script that creates
->> /tmp/dbus.
->
-> Maybe we should add /tmp/dbus to a tmpfiles config file (see [1]).
->
->>
->> This patch preserves old behavior for SysVinit systems, and introduces
->> new one for systemd-booted systems: /var/lib/dbus is a persistent
->> directory, it holds symlink /var/lib/dbus/machine-id -> /etc/machine-id
->> as machine-id(5) suggests, and /etc/machine-id is managed by systemd.
->
-> This assumes that /etc is witable... which is not necessary the case :-/
+Why not putting it in the default skeleton?
+Any thought about this from other users/developpers?
 
-No, this doesn't assume that /etc is writable. Let me explain.
-
-When systemd is installed, it creates empty /etc/machine-id file (look
-at SYSTEMD_INSTALL_MACHINEID_HOOK in package/systemd/systemd.mk). If
-/etc is writable, /etc/machine-id is populated at first boot, and
-/var/lib/dbus/machine-id symlink just points at this file, as
-machine-id(5) man page suggests. If /etc is read-only, systemd does
-bind mount /run/machine-id to /etc/machine-id and populates temporary
-file. /var/lib/dbus/machine-id also just points at this file. So no
-problem with read-only /etc.
-I'm afraid it is wrong solution. At first, we can't just add
-/etc/machine-id -> /var/lib/dbus/machine-id symlink, because
-package/systemd/systemd.mk creates empty file /etc/machine-id ;)
-
-At second, if /etc/machine-id will always point to temporary location,
-it will be regenerated at every boot even if /etc is writable. It
-leads to wrong behavior of systemd-journald: it will create new 16 MiB
-journal file at every boot because of changing machine-id.
-
-> Then the last thing to check is that systemd-machine-id-setup
-> correctly generates the machine-id file even if /etc/machine-id is a
-> symlink pointing to a non-existing file.
 >
-> [1] http://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+> ---
+>  package/systemd/locale.sh  | 26 ++++++++++++++++++++++++++
+>  package/systemd/systemd.mk |  7 +++++++
+>  2 files changed, 33 insertions(+)
+>  create mode 100644 package/systemd/locale.sh
 >
-> Regards,
+> diff --git a/package/systemd/locale.sh b/package/systemd/locale.sh
+> new file mode 100644
+> index 0000000..b665872
+> --- /dev/null
+> +++ b/package/systemd/locale.sh
+> @@ -0,0 +1,26 @@
+> +#!/bin/sh
+> +
+> +if [ -z "$LANG" ]; then
+> +  if [ -n "$XDG_CONFIG_HOME" ] && [ -r "$XDG_CONFIG_HOME/locale.conf" ]; then
+> +    . "$XDG_CONFIG_HOME/locale.conf"
+> +  elif [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
+> +    . "$HOME/.config/locale.conf"
+> +  elif [ -r /etc/locale.conf ]; then
+> +    . /etc/locale.conf
+> +  fi
+> +fi
+> +
+> +LANG=${LANG:-C}
+> +export LANG
+> +[ -n "$LC_CTYPE" ]          && export LC_CTYPE
+> +[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
+> +[ -n "$LC_TIME" ]           && export LC_TIME
+> +[ -n "$LC_COLLATE" ]        && export LC_COLLATE
+> +[ -n "$LC_MONETARY" ]       && export LC_MONETARY
+> +[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
+> +[ -n "$LC_PAPER" ]          && export LC_PAPER
+> +[ -n "$LC_NAME" ]           && export LC_NAME
+> +[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
+> +[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
+> +[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
+> +[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 92f99c2..ef14c76 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -158,6 +158,12 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+>         touch $(TARGET_DIR)/etc/machine-id
+>  endef
 >
+> +define SYSTEMD_INSTALL_LOCALE_SH_HOOK
+> +       mkdir -p $(TARGET_DIR)/etc/profile.d
+> +       $(INSTALL) -D -m 644 package/systemd/locale.sh \
+> +               $(TARGET_DIR)/etc/profile.d/locale.sh
+> +endef
+> +
+>  define SYSTEMD_SANITIZE_PATH_IN_UNITS
+>         find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
+>                 -exec $(SED) 's,$(HOST_DIR),,g' {} \;
+> @@ -172,6 +178,7 @@ endef
+>  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>         SYSTEMD_INSTALL_INIT_HOOK \
+>         SYSTEMD_INSTALL_MACHINEID_HOOK \
+> +       SYSTEMD_INSTALL_LOCALE_SH_HOOK \
+>         SYSTEMD_INSTALL_RESOLVCONF_HOOK \
+>         SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK \
+>         SYSTEMD_SANITIZE_PATH_IN_UNITS
 > --
-> Samuel
+> 2.2.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-/etc/machine-id is such file that should be invariant from boot to
-boot, so placing it to temporary location is wrong (at least it causes
-problems with systemd-journald). But if /etc is read-only (and
-/etc/machine-id is not populated in post-build scripts), systemd will
-also handle this and bind mount temporary /run/machine-id to
-/etc/machine-id. /var/lib/dbus/machine-id just points to
-/etc/machine-id that is always populated on systemd systems.
+Regards,
 
-What about keeping similar filesystem layout on SysVinit and systemd
-systems, it would be nice if there was some simple way to support
-/etc/machine-id on SysVinit systems. But it is easier to preserve old
-behavior, because it works and causes no troubles on SysVinit systems.
-
-Cheers,
-Maxim
+-- 
+Samuel
