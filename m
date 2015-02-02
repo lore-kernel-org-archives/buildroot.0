@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Feb 2015 22:37:01 +0100
-Subject: [Buildroot] [PATCH v2 1/3] qt5: bump to version 5.4.0
-In-Reply-To: <1421930279-3694-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- \=\?utf-8\?B\?QcWfxLFjxLEiJ3M\=\?\= message of "Thu,
- 22 Jan 2015 14:37:57 +0200")
-References: <1421930279-3694-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <87iofkgflu.fsf@dell.be.48ers.dk>
+Date: Mon, 2 Feb 2015 22:22:09 +0100
+Subject: [Buildroot] [git commit] barebox: bump to version 2015.02.0
+Message-ID: <20150202214233.81AFB80812@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f76f9e07ac65b81d1ab7023563c9acf6e6bcb1e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > qt5base:
- >   - Add patches to fix uClibc build.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/barebox/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- > qt5connectivity:
- >   - Add patches to fix build with -no-c++11
-
- > qt5declarative:
- >   - Remove the line that installs accessible plugin. The functionality
- >     is moved into the qtquick library.
-
- > qt5webkit:
- >   - Remove egl patch. This should be fixed with CONFIG += egl option.
-
- > qt5websockets:
- >   - Remove upstreamed patch.
-
- > Changelogs: https://qt-project.org/wiki/Change-files-in-Qt-5.4.0
- > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
- > ---
- > Changes v1 -> v2:
- >   - Check uClibc backtrace support in uClibc build fix.
- >   - Fix qt5connectivity build when C++11 support is not available.
- >   - Move removal of -no-c++11 option into a separate patch.
-
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b4439a7..48431bd 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.01.0"
++	bool "2015.02.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
