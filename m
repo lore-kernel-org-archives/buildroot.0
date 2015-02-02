@@ -1,179 +1,67 @@
-From: Pieter De Gendt <pieter.degendt@gmail.com>
-Date: Mon,  2 Feb 2015 10:05:42 +0100
-Subject: [Buildroot] [PATCH v2] libvips: new package
-Message-ID: <1422867942-9684-1-git-send-email-pieter.degendt@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Feb 2015 10:11:29 +0100
+Subject: [Buildroot] [RFC 2/8] pkg-kconfig: extend per-package help text
+ with kconfig targets
+In-Reply-To: <1422394913-13257-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1422394913-13257-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150202091129.GB4918@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+Thomas, Al,,
 
----
-Changes v1 -> v2 (suggested by Thomas Petazzoni)
-  - select glib2 dependency
-  - inherit glib2 dependencies (MMU, wchar, threads)
-  - Fixed comments
-  - Newline at end of files
-  - Changed <pkg>_CONF_OPT to <pkg>_CONF_OPTS
-  - Removed gtk-doc options
-  - Fixed autotools dependencies
-  - Check BR2_INSTALL_LIBSTDCPP fir c++ support
-  - Use automatic dependencies instead of separate options
+On 2015-01-27 22:41 +0100, Thomas Petazzoni spake thusly:
+> This commit makes the kconfig-package infrastructure use the
+> $(2)_HELP_HOOKS mechanism to extend the per-package help text with the
+> specific kconfig targets. These targets allow to run *config editors,
+> and perform other configuration related actions.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
----
- package/Config.in                               |  1 +
- package/libvips/Config.in                       | 17 +++++++
- package/libvips/libvips-01-fix-no-gtk-doc.patch | 35 +++++++++++++++
- package/libvips/libvips.mk                      | 60 +++++++++++++++++++++++++
- 4 files changed, 113 insertions(+)
- create mode 100644 package/libvips/Config.in
- create mode 100644 package/libvips/libvips-01-fix-no-gtk-doc.patch
- create mode 100644 package/libvips/libvips.mk
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/Config.in b/package/Config.in
-index 3117474..34a061f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -695,6 +695,7 @@ menu "Graphics"
- 	source "package/libungif/Config.in"
- 	source "package/libva/Config.in"
- 	source "package/libva-intel-driver/Config.in"
-+	source "package/libvips/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opengl/Config.in"
- 	source "package/pango/Config.in"
-diff --git a/package/libvips/Config.in b/package/libvips/Config.in
-new file mode 100644
-index 0000000..cd8f1b8
---- /dev/null
-+++ b/package/libvips/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBVIPS
-+	bool "libvips"
-+	depends on BR2_USE_WCHAR # gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	help
-+	  libvips is a 2D image processing library. Compared to similar 
-+	  libraries, libvips runs quickly and uses little memory.
-+
-+	  http://www.vips.ecs.soton.ac.uk/
-+
-+comment "libvips needs a toolchain w/ wchar, threads"
-+        depends on BR2_USE_MMU
-+        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libvips/libvips-01-fix-no-gtk-doc.patch b/package/libvips/libvips-01-fix-no-gtk-doc.patch
-new file mode 100644
-index 0000000..bfaf7c3
---- /dev/null
-+++ b/package/libvips/libvips-01-fix-no-gtk-doc.patch
-@@ -0,0 +1,35 @@
-+From a3d47be3b6bed845af5e1aa87ca2da2b1e840cbb Mon Sep 17 00:00:00 2001
-+From: Pieter De Gendt <pieter.degendt@basalte.be>
-+Date: Thu, 29 Jan 2015 12:25:35 +0100
-+Subject: [PATCH] Same patch as for systemd in commit
-+ http://git.buildroot.net/buildroot/commit/?id=7144f2f04b70553
-+
-+Fix deactivation of gtk-doc
-+
-+The tarball contains the Makefile for building documentation with gtk-doc,
-+Unfortunately the AM_CONDITIONAL variable is not the correct one, which
-+results in an error when running autoreconf.
-+
-+This patch fixes this issue.
-+
-+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
-+---
-+ doc/reference/gtk-doc.make | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/doc/reference/gtk-doc.make b/doc/reference/gtk-doc.make
-+index e791656..786803e 100644
-+--- a/doc/reference/gtk-doc.make
-++++ b/doc/reference/gtk-doc.make
-+@@ -267,7 +267,7 @@ uninstall-local:
-+ #
-+ # Require gtk-doc when making dist
-+ #
-+-if HAVE_GTK_DOC
-++if ENABLE_GTK_DOC
-+ dist-check-gtkdoc: docs
-+ else
-+ dist-check-gtkdoc:
-+-- 
-+2.2.2
-+
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-new file mode 100644
-index 0000000..6731f02
---- /dev/null
-+++ b/package/libvips/libvips.mk
-@@ -0,0 +1,60 @@
-+################################################################################
-+#
-+# libvips
-+#
-+################################################################################
-+
-+LIBVIPS_VERSION_MAJOR = 7.42
-+LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).1
-+LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
-+LIBVIPS_SITE = http://www.vips.ecs.soton.ac.uk/supported/$(LIBVIPS_VERSION_MAJOR)
-+LIBVIPS_LICENSE = LGPLv2.1+
-+LIBVIPS_LICENSE_FILES = COPYING
-+# We're patching gtk-doc.make, so need to autoreconf
-+LIBVIPS_AUTORECONF = YES
-+LIBVIPS_CONF_OPTSS = --disable-introspection
-+LIBVIPS_INSTALL_STAGING = YES
-+LIBVIPS_DEPENDENCIES = host-pkgconf host-swig libglib2 libxml2 $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+LIBVIPS_CONF_OPTS += --enable-cxx
-+else
-+LIBVIPS_CONF_OPTS += --disable-cxx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LIBVIPS_CONF_OPTS += --with-jpeg
-+LIBVIPS_DEPENDENCIES += jpeg
-+else
-+LIBVIPS_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LIBVIPS_CONF_OPTS += --with-png
-+LIBVIPS_DEPENDENCIES += libpng
-+else
-+LIBVIPS_CONF_OPTS += --without-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+LIBVIPS_CONF_OPTS += --with-tiff
-+LIBVIPS_DEPENDENCIES += tiff
-+else
-+LIBVIPS_CONF_OPTS += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFTW),y)
-+LIBVIPS_CONF_OPTS += --with-fftw
-+LIBVIPS_DEPENDENCIES += fftw
-+else
-+LIBVIPS_CONF_OPTS += --without-fftw
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEXIF),y)
-+LIBVIPS_CONF_OPTS += --with-libexif
-+LIBVIPS_DEPENDENCIES += libexif
-+else
-+LIBVIPS_CONF_OPTS += --without-libexif
-+endif
-+
-+$(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-kconfig.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index ec58d69..7e7b776 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -36,6 +36,14 @@ $(2)_KCONFIG_EDITORS ?= menuconfig
+>  $(2)_KCONFIG_OPTS ?=
+>  $(2)_KCONFIG_FIXUP_CMDS ?=
+>  
+> +define $(2)_KCONFIG_PACKAGE_HELP
+> +	$$(foreach editor,$$($(2)_KCONFIG_EDITORS),\
+> +            @$(call pkg-print-help-opt,$(1)-$$(editor),"Run the $$(editor) configuration tool")$(sep))
+> +	@$(call pkg-print-help-opt,$(1)-update-config,"Update configuration")
+> +endef
+> +
+> +$(2)_HELP_HOOKS += $(2)_KCONFIG_PACKAGE_HELP
+> +
+>  # FOO_KCONFIG_FILE is required
+>  ifndef $(2)_KCONFIG_FILE
+>  $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.2.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
