@@ -1,41 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Feb 2015 22:22:09 +0100
-Subject: [Buildroot] [git commit] barebox: bump to version 2015.02.0
-Message-ID: <20150202214233.81AFB80812@busybox.osuosl.org>
+Date: Mon, 2 Feb 2015 22:03:24 +0100
+Subject: [Buildroot] [git commit] qt5base: enable C++11 if toolchain supports
+Message-ID: <20150202214233.797F680812@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f76f9e07ac65b81d1ab7023563c9acf6e6bcb1e9
+commit: http://git.buildroot.net/buildroot/commit/?id=fde2235efe3d5449d4f33e69490a85219455eae4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index b4439a7..48431bd 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.01.0"
-+	bool "2015.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 90b5a6f..aaf4da0 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -195,7 +195,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 		-device-option EGLFS_PLATFORM_HOOKS_SOURCES="$(QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES)" \
+-		-no-c++11 \
+ 		$(QT5BASE_CONFIGURE_OPTS) \
+ 	)
+ endef
