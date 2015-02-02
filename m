@@ -1,58 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 21:43:13 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: Enable support for Radeon
-	r600 gallium driver
-Message-ID: <20150202204317.8DAF88011C@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 2 Feb 2015 21:44:48 +0100
+Subject: [Buildroot] [PATCH 08/16] package/e2fsprogs: make /sbin/fsck
+	available
+In-Reply-To: <1421684056-5266-9-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-9-git-send-email-maxtram95@gmail.com>
+Message-ID: <CAHXCMM+8Z5KCDektWD01R1bysaAsU3QK-satuJta1QLWUKpP2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59a962af7a8ef15b97724c421b8658a030e308ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
+> systemd looks for fsck in /sbin, so make symlink:
+> /sbin/fsck -> /usr/sbin/fsck
+>
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
 
---
-v2: - rebased patch from micro1183: http://patchwork.ozlabs.org/patch/398858/
-    - removed support for r300 & radeonsi because they need llvm support
-      which is not provided by buildroot
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/Config.in |    9 +++++++++
- package/mesa3d/mesa3d.mk |    1 +
- 2 files changed, 10 insertions(+), 0 deletions(-)
+> ---
+>  package/e2fsprogs/e2fsprogs.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index b4f0950..9f0310d 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -117,5 +117,13 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_FINDFS),y)
+>  E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FINDFS_SYMLINK
+>  endif
+>
+> +define E2FSPROGS_TARGET_FSCK_SYMLINK
+> +       ln -sf ../usr/sbin/fsck $(TARGET_DIR)/sbin/fsck
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_E2FSPROGS_FSCK),y)
+> +E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FSCK_SYMLINK
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> --
+> 2.2.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index d8ee8c2..c407ece 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -50,6 +50,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	help
- 	  Supports all Nvidia GPUs.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	bool "Gallium Radeon R600 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
-+	help
-+	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	bool "Gallium vmware svga driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index de647a6..8a84de3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -56,6 +56,7 @@ endif
- 
- #Gallium Drivers
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
- # DRI Drivers
+Regards,
+
+-- 
+Samuel
