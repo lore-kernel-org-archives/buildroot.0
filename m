@@ -1,61 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 02 Feb 2015 22:49:49 +0100
-Subject: [Buildroot] [RFC 2/4] legal-info: allow to declare the actual
- sources for binary packages
-In-Reply-To: <54CFF057.2060000@mind.be>
+Date: Mon, 02 Feb 2015 22:57:27 +0100
+Subject: [Buildroot] [RFC 3/4] toolchain-externel: mass-define actual
+ source tarball for known patterns
+In-Reply-To: <1420199015-16907-4-git-send-email-luca@lucaceresoli.net>
 References: <1420199015-16907-1-git-send-email-luca@lucaceresoli.net>
- <1420199015-16907-3-git-send-email-luca@lucaceresoli.net>
- <54CFF057.2060000@mind.be>
-Message-ID: <54CFF0FD.7090700@mind.be>
+ <1420199015-16907-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <54CFF2C7.50706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/02/15 22:47, Arnout Vandecappelle wrote:
-> On 02/01/15 12:43, Luca Ceresoli wrote:
->> The FOO_SITE/FOO_SOURCE variables usually point to a tarball containing
->> source code.
->>
->> For the downloaded external toolchains this is not true, the "source"
->> tarball actually contains binaries. This is fine for making Buildroot
->> work, but for legal-info we really want to ship real source code, not
->> binaries.
->>
->> Luckily, some (hopefully all) toolchain vendors publish a downloadable
->> tarball containing the source code counterpart for their binary
->> packages.
->>
->> Here we allow the user to declare the URL of this other tarball in the
->> pair of variables FOO_ACTUAL_SOURCE_TARBALL (by default equal to
->> FOO_SOURCE) and FOO_ACTUAL_SOURCE_SITE (by default equal to FOO_SITE).
->> If the "actual source" package can be downloaded from the same
->> directory as the binary package, then only FOO_ACTUAL_SOURCE_TARBALL
->> needs to be set.
->>
->> Note this change is not strictly toolchain-specific: it might be useful
->> for other packages that happen to ship binaries in the same way.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+On 02/01/15 12:43, Luca Ceresoli wrote:
+> For some externel toolchain vendors the actual source code URL can be simply
+> derived from the binary file URL.
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Here we obtain TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL for all Mentor and
+> Linaro toolchains with a few $(subst) calls.
 > 
->  It is adding even more complexity to the already too complex legal-info target,
-> but it doesn't look too bad. Although I would indeed prefer a pre-legal-info
-> hook. But even that wouldn't be enough, because the source reference in the
-> manifest would still be wrong...
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index b07b16c..91edd4a 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -392,6 +392,14 @@ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+>  TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+>  endif
+>  
+> +# Some toolchain vendors have a regular file naming pattern.
+> +# For them, mass-define _ACTUAL_SOURCE_TARBALL based _SITE.
 
- Since my comments aren't serious and the pre-legal-info-hook is probably not
-feasible after all, you can just repost (with my Reviewed-by tag) if you don't
-feel like changing anything.
+ I actually think we should refactor the external toolchains to factor out these
+common parts of the SITE and SOURCE, but that's for another day :-)
+
+
+> +ifneq ($(findstring sourcery.mentor.com/public/gnu_toolchain,$(TOOLCHAIN_EXTERNAL_SITE)),)
+> +TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= $(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
+
+ More importantly: could you split this huge line? Make removes all whitespace
+at the beginning of the line after a backslash-newline, so there is no reason
+not to split it.
+
+
+> +else ifneq ($(findstring http://releases.linaro.org,$(TOOLCHAIN_EXTERNAL_SITE)),)
+> +TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= $(subst _linux.tar.xz,_src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE))
+
+ Same here.
 
 
  Regards,
  Arnout
 
-[snip]
+
+> +endif
+> +
+>  # In fact, we don't need to download the toolchain, since it is already
+>  # available on the system, so force the site and source to be empty so
+>  # that nothing will be downloaded/extracted.
+> 
 
 
 -- 
