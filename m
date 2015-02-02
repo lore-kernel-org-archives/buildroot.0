@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 21:32:23 +0100
-Subject: [Buildroot] [PATCH] configs/udoo_quad_defconfig: new defconfig
-In-Reply-To: <1422898611-30392-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1422898611-30392-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150202213223.79a4f96c@free-electrons.com>
+Date: Mon, 2 Feb 2015 21:33:24 +0100
+Subject: [Buildroot] [git commit] package/kodi-audioencoder-lame: bump
+	version
+Message-ID: <20150202203342.1362480793@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=fad5d9ccf4562623c10658d96e9e70a5a53fbfe6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  2 Feb 2015 18:36:51 +0100, Thomas De Schampheleire wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../kodi-audioencoder-lame.mk                      |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-
-These lines typically shouldn't be part of a minimal defconfig unless
-there are really good reasons. So I removed them.
-
-For beauty, I also added some silly comments in the defconfig, and
-applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+index a890f64..8a4a28c 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_LAME_VERSION = 6f8384f0d003faf7b91dcd38357ea0ecf9030cce
++KODI_AUDIOENCODER_LAME_VERSION = 3eb59de951996659c143faaabacc5f34ee9a0b81
+ KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
+ KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
