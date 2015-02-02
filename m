@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 21:31:08 +0100
-Subject: [Buildroot] [git commit] bootstrap: use the UNZIP variable instead
-	of calling it directly
-Message-ID: <20150202203117.E25A380796@busybox.osuosl.org>
+Date: Mon, 2 Feb 2015 21:31:34 +0100
+Subject: [Buildroot] [PATCH] bootstrap: use the UNZIP variable instead
+ of calling it directly
+In-Reply-To: <1422896716-23276-1-git-send-email-Fabio.Porcedda@gmail.com>
+References: <1422896716-23276-1-git-send-email-Fabio.Porcedda@gmail.com>
+Message-ID: <20150202213134.197c48a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb3eca8a728af981405135d3245717e553186141
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bootstrap/bootstrap.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon,  2 Feb 2015 18:05:16 +0100, Fabio Porcedda wrote:
+> From: Fabio Porcedda <fabio.porcedda@gmail.com>
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  package/bootstrap/bootstrap.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bootstrap/bootstrap.mk b/package/bootstrap/bootstrap.mk
-index 1a1c4f1..17752ce 100644
---- a/package/bootstrap/bootstrap.mk
-+++ b/package/bootstrap/bootstrap.mk
-@@ -10,7 +10,7 @@ BOOTSTRAP_SOURCE = bootstrap-$(BOOTSTRAP_VERSION)-dist.zip
- BOOTSTRAP_LICENSE = MIT
- 
- define BOOTSTRAP_EXTRACT_CMDS
--	unzip $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
-+	$(UNZIP) $(DL_DIR)/$(BOOTSTRAP_SOURCE) -d $(@D)
- endef
- 
- define BOOTSTRAP_INSTALL_TARGET_CMDS
+Applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
