@@ -1,103 +1,44 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 2 Feb 2015 16:20:03 +0100
-Subject: [Buildroot] [PATCH 05/16] package/systemd: apply locale
- settings in user shells
-In-Reply-To: <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-6-git-send-email-maxtram95@gmail.com>
-Message-ID: <CAHXCMML45DM8HK_q6jODbEPKZrbLEfzfUx684_r9Q2A7j9ZRag@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Feb 2015 16:25:06 +0100
+Subject: [Buildroot] [PATCH 3/6] lua: add option 32bits
+In-Reply-To: <1421442595-27575-3-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Fri, 16 Jan 2015 22:09:52 +0100")
+References: <1421442595-27575-1-git-send-email-francois.perrad@gadz.org>
+ <1421442595-27575-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87d25sibe5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxim,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
-> Add /etc/profile.d/locale.sh script from Arch Linux to apply systemd
-> locale settings in user shells.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > ---
+ >  package/lua/Config.in      | 9 +++++++++
+ >  package/lua/lua.mk         | 8 ++++++++
+ >  package/luabitop/Config.in | 4 ++++
+ >  3 files changed, 21 insertions(+)
 
-I don't really see the point of doing it especially when systemd is used.
-This configuration file is for shell, even busybox should support it...
+ > diff --git a/package/lua/Config.in b/package/lua/Config.in
+ > index dde999f..0f7b136 100644
+ > --- a/package/lua/Config.in
+ > +++ b/package/lua/Config.in
+ > @@ -33,6 +33,15 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+ >  	default "5.2"	if BR2_PACKAGE_LUA_5_2
+ >  	default "5.3"	if BR2_PACKAGE_LUA_5_3
+ 
+ > +if BR2_PACKAGE_LUA_5_3
+ > +config BR2_PACKAGE_LUA_32BITS
+ > +	bool "Lua 32bits"
+ > +	default y if !BR2_ARCH_IS_64
+ > +	help
+ > +	  The option with 32 bits for both integers and floats is particularly
+ > +	  attractive for small machines and embedded systems.
 
-Why not putting it in the default skeleton?
-Any thought about this from other users/developpers?
-
->
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-> ---
->  package/systemd/locale.sh  | 26 ++++++++++++++++++++++++++
->  package/systemd/systemd.mk |  7 +++++++
->  2 files changed, 33 insertions(+)
->  create mode 100644 package/systemd/locale.sh
->
-> diff --git a/package/systemd/locale.sh b/package/systemd/locale.sh
-> new file mode 100644
-> index 0000000..b665872
-> --- /dev/null
-> +++ b/package/systemd/locale.sh
-> @@ -0,0 +1,26 @@
-> +#!/bin/sh
-> +
-> +if [ -z "$LANG" ]; then
-> +  if [ -n "$XDG_CONFIG_HOME" ] && [ -r "$XDG_CONFIG_HOME/locale.conf" ]; then
-> +    . "$XDG_CONFIG_HOME/locale.conf"
-> +  elif [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
-> +    . "$HOME/.config/locale.conf"
-> +  elif [ -r /etc/locale.conf ]; then
-> +    . /etc/locale.conf
-> +  fi
-> +fi
-> +
-> +LANG=${LANG:-C}
-> +export LANG
-> +[ -n "$LC_CTYPE" ]          && export LC_CTYPE
-> +[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
-> +[ -n "$LC_TIME" ]           && export LC_TIME
-> +[ -n "$LC_COLLATE" ]        && export LC_COLLATE
-> +[ -n "$LC_MONETARY" ]       && export LC_MONETARY
-> +[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
-> +[ -n "$LC_PAPER" ]          && export LC_PAPER
-> +[ -n "$LC_NAME" ]           && export LC_NAME
-> +[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
-> +[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
-> +[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
-> +[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 92f99c2..ef14c76 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -158,6 +158,12 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
->         touch $(TARGET_DIR)/etc/machine-id
->  endef
->
-> +define SYSTEMD_INSTALL_LOCALE_SH_HOOK
-> +       mkdir -p $(TARGET_DIR)/etc/profile.d
-> +       $(INSTALL) -D -m 644 package/systemd/locale.sh \
-> +               $(TARGET_DIR)/etc/profile.d/locale.sh
-> +endef
-> +
->  define SYSTEMD_SANITIZE_PATH_IN_UNITS
->         find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
->                 -exec $(SED) 's,$(HOST_DIR),,g' {} \;
-> @@ -172,6 +178,7 @@ endef
->  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->         SYSTEMD_INSTALL_INIT_HOOK \
->         SYSTEMD_INSTALL_MACHINEID_HOOK \
-> +       SYSTEMD_INSTALL_LOCALE_SH_HOOK \
->         SYSTEMD_INSTALL_RESOLVCONF_HOOK \
->         SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK \
->         SYSTEMD_SANITIZE_PATH_IN_UNITS
-> --
-> 2.2.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Regards,
+I have extended this help text a bit to make it (imho) a bit more clear
+what this does and committed the series, thanks!
 
 -- 
-Samuel
+Bye, Peter Korsgaard
