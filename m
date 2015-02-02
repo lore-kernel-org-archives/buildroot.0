@@ -1,72 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Feb 2015 22:49:55 +0100
-Subject: [Buildroot] [git commit] odhcp6c: new package
-Message-ID: <20150202221044.834D080555@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  2 Feb 2015 23:15:39 +0100
+Subject: [Buildroot] [PATCH v2] madplay: fix alsa detection/linking using
+	host-pkgconf
+Message-ID: <1422915339-4306-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4656f570fcbbaf257d18833f8d9b481f6b7fcd64
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes [1]: configure check for libasound failed because of missing
+pthread linkage.
 
-Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
-[ThomasDS: needs ipv6; rewrap package/odhcp6c/Config.in]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-(compile-tested on x86/glibc, armel/glibc, armel/uclibc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] http://autobuild.buildroot.net/results/f3a/f3a0b3ff15e729d223c8c8ee6af75c425cd344b6/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/Config.in          |    1 +
- package/odhcp6c/Config.in  |   11 +++++++++++
- package/odhcp6c/odhcp6c.mk |   12 ++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
+Changes v1 -> v2:
+  - use host-pkgconf for alsa librarys (suggested by Peter Korsgaard)
+    instead adding only single library dependencys (e.g. -lpthread)
+---
+ package/madplay/madplay.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bcd1481..0f5836b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1135,6 +1135,7 @@ endif
- 	source "package/noip/Config.in"
- 	source "package/ntp/Config.in"
- 	source "package/nuttcp/Config.in"
-+	source "package/odhcp6c/Config.in"
- 	source "package/odhcploc/Config.in"
- 	source "package/olsr/Config.in"
- 	source "package/openntpd/Config.in"
-diff --git a/package/odhcp6c/Config.in b/package/odhcp6c/Config.in
-new file mode 100644
-index 0000000..92de0e5
---- /dev/null
-+++ b/package/odhcp6c/Config.in
-@@ -0,0 +1,11 @@
-+comment "odhcp6c needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+config BR2_PACKAGE_ODHCP6C
-+	bool "odhcp6c"
-+	depends on BR2_INET_IPV6
-+	help
-+	  odhcp6c is a minimal DHCPv6 and RA-client for use in embedded Linux
-+	  systems, especially routers.
-+
-+	  https://github.com/sbyx/odhcp6c
-diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-new file mode 100644
-index 0000000..db963e0
---- /dev/null
-+++ b/package/odhcp6c/odhcp6c.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# odhcp6c
-+#
-+################################################################################
-+
-+ODHCP6C_VERSION = c42e34111e19bd435dc4b5bb3ba81224ea214314
-+ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
-+ODHCP6C_LICENSE = GPLv2
-+ODHCP6C_LICENSE_FILES = COPYING
-+
-+$(eval $(cmake-package))
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index 1907eb5..ff12aa1 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -15,7 +15,8 @@ MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+ # ./configure can find alsa-lib.
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+ MADPLAY_CONF_OPTS += --with-alsa
+-MADPLAY_DEPENDENCIES += alsa-lib
++MADPLAY_DEPENDENCIES += host-pkgconf alsa-lib
++MADPLAY_CONF_ENV += LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs alsa)"
+ endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.1.4
