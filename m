@@ -1,54 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 2 Feb 2015 21:42:47 +0100
-Subject: [Buildroot] [git commit] %_defconfig: save the path to the defconfig
-Message-ID: <20150202204306.7C63E80800@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Allow a single DHCP configuration via the
+	system configuration submenu
+Message-ID: <20150202204306.7122F8011C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32babbf9744d09e3612150971b7121033b4b9925
+commit: http://git.buildroot.net/buildroot/commit/?id=f4f62a3c16f8591b14eedc3564599c6c807820b4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We have the BR2_DEFCONFIG feature that saves the path to the defconfig
-file that was specified on the command line, so that a later
-savedefconfig would immediately save to the right location. This wasn't
-done for the defconfigs in the configs/ directory, however, to avoid
-accidentally overwriting them.
+This patch allows the setup of simple a single interface to be
+automatically brought up and configured via DHCP on system startup.
 
-Now we decided that it would be more useful to overwrite the defconfigs
-in the configs/ directory after all. To do this, we pass the path to
-that defconfig in the environment.
+The interface name can be set via a configuration option. This patch
+does not support systemd-networkd, any complex network configuration should
+be done via overlay of /etc/network/interfaces or the relevant networkd
+configuration file
 
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+[Peter: rename to BR2_SYSTEM_DHCP, tweak help text & implementation]
+Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ system/Config.in                       |   20 ++++++++++++++++++++
+ system/skeleton/etc/network/interfaces |    4 ----
+ system/system.mk                       |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 6cee027..9c870d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -786,13 +786,16 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+diff --git a/system/Config.in b/system/Config.in
+index e9f2428..95e10ab 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -326,6 +326,26 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
  
-+# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
-+		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
  
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
-+		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
++
++config BR2_SYSTEM_DHCP
++	string "Network interface to configure through DHCP"
++	default ""
++	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && (BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
++	help
++	  Enter here the name of the network interface (E.G. eth0) to
++	  automatically configure through DHCP at bootup.
++
++	  If left empty, no automatic DHCP requests will take place.
++
++	  For more complicated network setups use an overlay to overwrite
++	  /etc/network/interfaces or add a networkd configuration file.
++
++comment "automatic network configuration via DHCP is not compatible with networkd"
++	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
++
++comment "automatic network configuration via DHCP needs ifupdown or busybox"
++	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
++
+ config BR2_TARGET_TZ_INFO
+ 	bool "Install timezone info"
+ 	# No timezone for musl; only for uClibc or (e)glibc.
+diff --git a/system/skeleton/etc/network/interfaces b/system/skeleton/etc/network/interfaces
+deleted file mode 100644
+index 218b82c..0000000
+--- a/system/skeleton/etc/network/interfaces
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Configure Loopback
+-auto lo
+-iface lo inet loopback
+-
+diff --git a/system/system.mk b/system/system.mk
+index e4a3160..4a1eb4a 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -38,6 +38,35 @@ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+ TARGETS += host-mkpasswd
+ endif
  
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
++define SET_NETWORK_LOCALHOST
++	( \
++		echo "# interface file auto-generated by buildroot"; \
++		echo ;                                               \
++		echo "auto lo";                                      \
++		echo "iface lo inet loopback";                       \
++	) > $(TARGET_DIR)/etc/network/interfaces
++endef
++
++NETWORK_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
++
++ifneq ($(NETWORK_DHCP_IFACE),)
++define SET_NETWORK_DHCP
++	( \
++		echo ;                                               \
++		echo "auto $(NETWORK_DHCP_IFACE)";                   \
++		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
++	) >> $(TARGET_DIR)/etc/network/interfaces
++endef
++endif
++
++define SET_NETWORK
++	mkdir -p $(TARGET_DIR)/etc/network/
++	$(SET_NETWORK_LOCALHOST)
++	$(SET_NETWORK_DHCP)
++endef
++
++TARGET_FINALIZE_HOOKS += SET_NETWORK
++
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
+ define SYSTEM_ROOT_PASSWD
