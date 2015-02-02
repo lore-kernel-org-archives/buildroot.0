@@ -1,126 +1,73 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 02 Feb 2015 17:29:37 +0100
-Subject: [Buildroot] [PATCH 4/4] toolchain-external: add OSELAS
- 2013.12.2 Cortex-M3 toolchain
-In-Reply-To: <1421951608-31233-5-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1421951608-31233-5-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <54CFA5F1.1020302@openwide.fr>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 2 Feb 2015 17:38:25 +0100 (CET)
+Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via
+ the system configuration submenu
+In-Reply-To: <878uggi834.fsf@dell.be.48ers.dk>
+Message-ID: <98184085.31058823.1422895105455.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ezequiel,
 
-Le 22/01/2015 19:33, Ezequiel Garcia a ?crit :
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Binary toolchain based on uClibc for Cortex-M3 processor based on GCC
-> 4.8.2.
+> Sorry for the slow response. We have discussed this during the dev
+> days
+> and agreed to include it. Committed with some changes, see below.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> ---
->  toolchain/toolchain-external/Config.in               | 12 ++++++++++++
->  toolchain/toolchain-external/toolchain-external.hash |  3 +++
->  toolchain/toolchain-external/toolchain-external.mk   | 11 +++++++++++
->  3 files changed, 26 insertions(+)
+> Thanks!
+
+
+Thanks a lot, really appreciated :)
+
 > 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 3b0f4cb..c9f2bfe 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -192,6 +192,17 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+> > +config BR2_SIMPLE_DHCP
+> 
+> We're not completely consist with this, but the new system options
+> are
+> called BR2_SYSTEM_*, so I've renamed to the option.
+> 
+> > +	string "Name of the physical network interface to run DHCP on"
+> 
+> This is quite long, so I reworded it to:
+> 
+> "Network interface to configure through DHCP"
+> 
+> > +	default ""
+>  > +	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && (BR2_PACKAGE_BUSYBOX
+>  > || BR2_PACKAGE_IFUPDOWN)
+>  > +	help
+>  > +	  The name of the network interface to configure automatically.
+>  > +	  A DHCP request will automatically happen on startup on the
+>  > selected
+>  > +	  interface.
+> 
+> And here I reworded it a bit and mentioned an example (eth0).
+> 
 >  
->  	  This toolchain uses software-floating point.
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3
-> +	bool "OSELAS ARM Cortex-M3"
-> +	depends on BR2_arm
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> +	select BR2_LARGEFILE
-> +	select BR2_INET_IPV6
-> +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> +	select BR2_ARM_TOOLCHAIN_SKIP_CHECK
-> +
->  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
->  	bool "Sourcery CodeBench MIPS 2014.11"
->  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> @@ -970,6 +981,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->  	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
->  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
->  	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-> +	default "arm-cortexm3-uclinuxeabi" if BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3
->  	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
->  	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
->  	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3
-> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-> index 7f211db..f00cce4 100644
-> --- a/toolchain/toolchain-external/toolchain-external.hash
-> +++ b/toolchain/toolchain-external/toolchain-external.hash
-> @@ -56,3 +56,6 @@ sha256 3e1c7c53fadfd3346ab60386c573f07f0617ab119546ec8cb93bc20c23cff2b3  lin32-m
->  sha256 b72f7be654a75bb643372f3909de7b8739f0f56bdf8bea98fea41dcecefe6b6b  microblazeel-unknown-linux-gnu.tgz
->  sha256 ed2fea022f2def257ca6db09911b73c7102aaa1792d2da2d81371a763e5c2eff  lin32-microblaze-unknown-linux-gnu_14.3_early.tar.xz
->  sha256 53ee0b1ad50e651eb14d0b53044b90e7bf7e3cb341ee57fe575bc4c4e142ea37  microblaze-unknown-linux-gnu.tgz
-> +
-> +# OSELAS Cortex-M3 toolchain
-> +sha1  b5a85b489e32c3730673b74e998e08444e36aab4  oselas.toolchain-2013.12.2-arm-cortexm3-uclinuxeabi-gcc-4.8.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.12-sanitized_2013.12.2_i386.deb
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 5a69eb8..718bedc 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -287,6 +287,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
->  TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3),y)
-> +TOOLCHAIN_EXTERNAL_SITE = http://debian.pengutronix.de/debian/pool/main/o/oselas.toolchain-2013.12.2-arm-cortexm3-uclinuxeabi-gcc-4.8.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.12-sanitized/
-> +TOOLCHAIN_EXTERNAL_SOURCE = oselas.toolchain-2013.12.2-arm-cortexm3-uclinuxeabi-gcc-4.8.2-uclibc-0.9.33.2-binutils-2.24-kernel-3.12-sanitized_2013.12.2_i386.deb
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
->  TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-> @@ -417,6 +420,14 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
->  	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
->  		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
->  endef
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_OSELAS_ARM_CORTEX_M3),y)
-> +# Special handling for OSELAS toolchains
-> +define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-> +	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
-> +	(cd $(@D); ar xvf $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE))
-> +	$(call suitable-extractor,data.tar.xz) $(@D)/data.tar.xz | \
-> +		$(TAR) $(TAR_STRIP_COMPONENTS)=5 -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-> +endef
->  else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
->  # Normal handling of toolchain tarball extraction.
->  define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+>  > +define SET_NETWORK_LOCALHOST
+>  > +        echo "# interface file auto-generated by buildroot" >
+>  >  $(TARGET_DIR)/etc/network/interfaces
+>  > +        echo                                                >>
+>  > $(TARGET_DIR)/etc/network/interfaces
+>  > +        echo "auto lo"                                      >>
+>  > $(TARGET_DIR)/etc/network/interfaces
+>  > +        echo "iface lo inet loopback"                       >>
+>  > $(TARGET_DIR)/etc/network/interfaces
+>  > +        echo                                                >>
+>  > $(TARGET_DIR)/etc/network/interfaces
+>  > +endef
 > 
-
-I tried to build some packages to test this toolchain and it fail with
-Busybox :-/
-
-/home/naourr/git/buildroot/test/cortexM/host/opt/ext-toolchain/arm-cortexm3-uclinuxeabi/bin/ld.real:
-warning: cannot find entry symbol lf2flt; defaulting to 00000000
-networking/lib.a(nslookup.o): In function `set_default_dns':
-nslookup.c:(.text.set_default_dns+0x12): undefined reference to `__res_state'
-nslookup.c:(.text.set_default_dns+0x2c): undefined reference to `__res_state'
-networking/lib.a(nslookup.o): In function `nslookup_main':
-nslookup.c:(.text.nslookup_main+0x16): undefined reference to `__res_init'
-nslookup.c:(.text.nslookup_main+0x20): undefined reference to `__res_state'
-collect2: error: ld returned 1 exit status
-make[1]: *** [busybox_unstripped] Erreur 1
-
-That's because __UCLIBC_HAS_RESOLVER_SUPPORT__ is not defined in the toolchain
-configuration:
-opt/sysroot-arm-cortexm3-uclinuxeabi/usr/include/bits/uClibc_config.h
-
-To support this toolchain, we need to have another toolchain option named
-BR2_TOOLCHAIN_HAS_RESOLVER_SUPPORT in order to be able to disable
-packages/options which needs resolver support.
-
-Best regards,
-Romain Naour
+> Elsewhere in BR we use syntax like:
+> 
+> ( \
+>   echo foo ; \
+>   echo bar ; \
+> ) > file
+> 
+> Which is a bit less verbose, so I've changed it to that.
+> 
+> --
+> Bye, Peter Korsgaard
+> 
