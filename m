@@ -1,50 +1,67 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Mon, 02 Feb 2015 16:04:59 -0600
-Subject: [Buildroot] [PATCH  V2] mjpegtools: new package
-In-Reply-To: <20150202205339.GA4270@free.fr>
-References: <54BBE13C.7000600@ou.edu> <20150202205339.GA4270@free.fr>
-Message-ID: <54CFF48B.1070506@ou.edu>
+From: Giovanni Balestrieri <balestrieri.gepp@gmail.com>
+Date: Mon, 2 Feb 2015 23:05:58 +0100
+Subject: [Buildroot] How to compile a kernel with Adeos and Xenomai patches
+	using Buildroot
+Message-ID: <CALRX=SGqgQ0A8SLecpTVj1budv3nuuhoSWdZXftQsK+AxNrKFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2/2/2015 2:53 PM, Yann E. MORIN wrote:
-> Steve, All,
->
-> On 2015-01-18 10:37 -0600, Steve Kenton spake thusly:
->> The mjpegtools programs are a set of tools
->> that can do recording of videos and playback,
->> simple cut-and-paste editing and the MPEG
->> compression of audio and video under Linux.
->>
->> http://mjpeg.sourceforge.net
->>
->> Signed-off-by Stephen M. Kenton<skenton@ou.edu>
-> [--SNIP--]
->> diff -pruN buildroot.ori/package/mjpegtools/Config.in buildroot/package/mjpegtools/Config.in
->> --- buildroot.ori/package/mjpegtools/Config.in	1969-12-31 18:00:00.000000000 -0600
->> +++ buildroot/package/mjpegtools/Config.in	2015-01-16 11:05:54.949872151 -0600
->> @@ -0,0 +1,14 @@
->> +config BR2_PACKAGE_MJPEGTOOLS
->> +	bool "mjpegtools"
->> +	select BR2_PACKAGE_JPEG
->> +	depends on BR2_INSTALL_LIBSTDCPP
-> I tried with this defconfig:
->      http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
->
-> and just enabled mjpegtools above that, and it failed with:
->
->      In file included from picture.hh:27:0,
->                       from motionest.cc:61:
->      synchrolib.h:32:21: fatal error: pthread.h: No such file or directory
->       #include<pthread.h>
->                           ^
->      compilation terminated.
->
-> So, it needs thread support.
->
-OK, I'll look into it
+Dear Buildroot mailing list,
 
-Steve
+I would like to build a Real Time system for the Raspberry Pi board with
+the Xenomai and Adeos patches. In this link
+https://code.google.com/p/picnc/wiki/RPiXenomaiKernel
+patches are applied in the following order:
+
+   1. ipipe-core-3.8.13-raspberry-pre-2.patch
+   2. ipipe-core-3.8.13-arm-3.patch
+   3. ipipe-core-3.8.13-raspberry-post-2.patch
+
+I've followed the instructions provided in /board/raspberrypi/readme.txt
+and I configured Buildroot using the raspberrypi_defconfig. Then I changed
+the linux kernel version (BR2_DEFAULT_KERNEL_VERSION) to match the one
+compatible with xenomai (3.8.13) and set these options.
+
+BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH: patch_to_adeos_patch
+
+BR2_LINUX_KERNEL_PATCH: path_PRE_patch path_POST_patch
+
+   - With *Buildroot 2013-11, *the compilation ends with 2 errors:
+
+   [...]
+   mv autoupdate.tmp autoupdate
+   autom4te: need GNU m4 1.4 or later:
+   /home/userk/Development/Linux/RaspberryPi/buildroot-2013.11/output/host/usr/bin/m4
+   make[3]: *** [autoconf.in] Error 1
+   make[3]: Leaving directory
+   `/home/userk/Development/Linux/RaspberryPi/buildroot-2013.11/output/build/host-autoconf-2.69/bin'
+   make[2]: *** [all-recursive] Error 1
+   make[2]: Leaving directory
+   `/home/userk/Development/Linux/RaspberryPi/buildroot-2013.11/output/build/host-autoconf-2.69'
+   make[1]: *** [all] Error 2
+   make[1]: Leaving directory
+   `/home/userk/Development/Linux/RaspberryPi/buildroot-2013.11/output/build/host-autoconf-2.69'
+   make: ***
+   [/home/userk/Development/Linux/RaspberryPi/buildroot-2013.11/output/build/host-autoconf-2.69/.stamp_built]
+   Error 2
+
+
+   - With *Buildroot 2014-11*, the compilation works but the system does
+   not
+   boot. The boot process stops at
+
+   Starting network...
+   usb 1-1 new high-speed USB device number 2 using dwc_otg
+   Indeed it is in host mode hprt0 = 00001101
+
+
+How can I correctly configure Buildroot with Xenomai?
+
+Thank you,
+Giovanni Balestrieri.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150202/33c62e12/attachment.html>
