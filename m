@@ -1,23 +1,218 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 2 Feb 2015 16:42:38 +0100
-Subject: [Buildroot] [PATCH] odhcp6c: new package
-In-Reply-To: <1422891567-14861-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1422891567-14861-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LWy-0FWN1eq+1kWPVP1n9GkhdN8xsp25k4dZZpEkDeryw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Feb 2015 17:14:08 +0100
+Subject: [Buildroot] [PATCH v6] leveldb: new package
+In-Reply-To: <1421146437-17829-1-git-send-email-ste@junkomatic.net>
+References: <1421146437-17829-1-git-send-email-ste@junkomatic.net>
+Message-ID: <20150202161408.GA17739@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 2, 2015 at 4:39 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Alexander Clouter <alex+buildroot@digriz.org.uk>
->
-> Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
-> [ThomasDS: needs ipv6; rewrap package/odhcp6c/Config.in]
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> (compile-tested on x86/glibc, armel/glibc, armel/uclibc)
+Steve, All,
 
-Sorry, I should have marked this as 'v2'.
+On 2015-01-13 10:53 +0000, Steve James spake thusly:
+> Signed-off-by: Steve James <ste@junkomatic.net>
+[--SNIP--]
+> diff --git a/package/leveldb/002-add-install-recipe.patch b/package/leveldb/002-add-install-recipe.patch
+> new file mode 100644
+> index 0000000..203f5bd
+> --- /dev/null
+> +++ b/package/leveldb/002-add-install-recipe.patch
+> @@ -0,0 +1,38 @@
+> +From 023bb673aad6b44f889ca9d96bc2eb32e4c6d6f8 Mon Sep 17 00:00:00 2001
+> +From: Steve James <ste@junkomatic.net>
+> +Date: Mon, 12 Jan 2015 13:32:24 +0000
+> +Subject: [PATCH 1/1] add install recipe
+> +
+> +Signed-off-by: Steve James <ste@junkomatic.net>
+> +Upstream-Status: Submitted [https://github.com/google/leveldb/pull/276]
+> +---
+> + Makefile | 16 ++++++++++++++++
+> + 1 file changed, 16 insertions(+)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 24f214a..8f68ca8 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -229,3 +229,19 @@ else
+> + .c.o:
+> + 	$(CC) $(CFLAGS) -c $< -o $@
+> + endif
+> ++
+> ++INSTALL_ROOT = /
+> ++INSTALL_PREFIX= usr/local
+> ++
+> ++install: $(SHARED) $(LIBRARY)
+> ++	install -d -m 0755 $(INSTALL_ROOT)$(INSTALL_PREFIX)/include/leveldb
+> ++	install -D -m 0644 include/leveldb/*.h $(INSTALL_ROOT)$(INSTALL_PREFIX)/include/leveldb
+> ++	install -d -m 0755 $(INSTALL_ROOT)$(INSTALL_PREFIX)/lib
+> ++  ifneq (,$(LIBRARY))
+> ++	install -m 0644 $(LIBRARY) $(INSTALL_ROOT)$(INSTALL_PREFIX)/lib
+> ++  endif
+> ++  ifneq (,$(SHARED))
+> ++	install -m 0755 $(SHARED3) $(INSTALL_ROOT)$(INSTALL_PREFIX)/lib
+> ++	ln -sf $(SHARED3) $(INSTALL_ROOT)$(INSTALL_PREFIX)/lib/$(SHARED1)
+> ++	ln -sf $(SHARED3) $(INSTALL_ROOT)$(INSTALL_PREFIX)/lib/$(SHARED2)
+> ++  endif
+
+Rather than adding this in the package's Makefile, can't we just do the
+installation manually in the .mk file, that is, something like:
+
+    ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+    define LEVELDB_INSTALL_STATIC
+        $(INSTALL) -D -m 0644 $(@D)/lib/libleveldb.a $(1)/usr/lib/libleveldb.a
+    endef
+    endif
+    ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+    define LEVELDB_INSTALL_SHARED
+        $(INSTALL) -D -m 0644 $(@D)/lib/libleveldb.so $(1)/usr/lib/libleveldb.so
+        ln -sf libleveldb.so $(1)/usr/lib/libleveldb.so.VERSION
+    endef
+    endif
+
+    define LEVELDB_INSTALL_STAGING_CMDS
+        $(call LEVELDB_INSTALL_STATIC,$(STAGING_DIR))
+        $(call LEVELDB_INSTALL_SHARED,$(STAGING_DIR))
+        install -D -m 0644 $(@D)/leveldb.h $(STAGING_DIR)/usr/include/leveldb.h
+    endef
+
+    define LEVELDB_INSTALL_TARGET_CMDS
+        $(call LEVELDB_INSTALL_SHARED,$(STAGING_DIR))
+    endef
+
+(to be adapted to the real file names, of course))
+
+> diff --git a/package/leveldb/003-allow-flags-from-environment.patch b/package/leveldb/003-allow-flags-from-environment.patch
+> new file mode 100644
+> index 0000000..d1914f0
+> --- /dev/null
+> +++ b/package/leveldb/003-allow-flags-from-environment.patch
+> @@ -0,0 +1,34 @@
+> +From bca474961da4f102ef1d8b817b856808c9453a9e Mon Sep 17 00:00:00 2001
+> +From: Steve James <ste@junkomatic.net>
+> +Date: Mon, 12 Jan 2015 14:04:44 +0000
+> +Subject: [PATCH 1/1] allow flags from environment
+> +
+> +Signed-off-by: Steve James <ste@junkomatic.net>
+> +Upstream-Status: Submitted [https://github.com/google/leveldb/pull/277]
+> +---
+> + Makefile | 8 ++++----
+> + 1 file changed, 4 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 24f214a..43ece67 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -20,11 +20,11 @@ $(shell CC="$(CC)" CXX="$(CXX)" TARGET_OS="$(TARGET_OS)" \
+> + # this file is generated by the previous line to set build flags and sources
+> + include build_config.mk
+> + 
+> +-CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
+> +-CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
+> ++override CFLAGS += -I. -I./include $(PLATFORM_CCFLAGS) $(OPT)
+> ++override CXXFLAGS += -I. -I./include $(PLATFORM_CXXFLAGS) $(OPT)
+> + 
+> +-LDFLAGS += $(PLATFORM_LDFLAGS)
+> +-LIBS += $(PLATFORM_LIBS)
+> ++override LDFLAGS += $(PLATFORM_LDFLAGS)
+> ++override LIBS += $(PLATFORM_LIBS)
+> + 
+> + LIBOBJECTS = $(SOURCES:.cc=.o)
+> + MEMENVOBJECTS = $(MEMENV_SOURCES:.cc=.o)
+
+I think this would not be needed if you do:
+
+    define LEVELDB_BUILD_CMDS
+        $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+            $(LEVELDB_MAKE_ARGS) -C $(@D)
+    endef
+
+i.e. pass the TARGET_CONFIGURE_OPTS in the environment, and not as make
+arguments.
+
+To be tested and confirmed, of course.
+
+> diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+> new file mode 100644
+> index 0000000..3c03515
+> --- /dev/null
+> +++ b/package/leveldb/leveldb.mk
+> @@ -0,0 +1,44 @@
+> +################################################################################
+> +#
+> +# leveldb
+> +#
+> +################################################################################
+> +
+> +LEVELDB_VERSION = 803d69203a62faf50f1b77897310a3a1fcae712b
+> +LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
+> +LEVELDB_LICENSE = BSD-3c
+> +LEVELDB_LICENSE_FILES = LICENSE
+> +LEVELDB_INSTALL_STAGING = YES
+> +LEVELDB_DEPENDENCIES = snappy
+> +
+> +# We will pass optimisation level via CFLAGS so remove leveldb default
+> +LEVELDB_MAKE_ARGS += OPTIM=
+> +
+> +# Disable the static library for shared only build
+> +ifeq ($(BR2_SHARED_LIBS),y)
+> +LEVELDB_MAKE_ARGS += LIBRARY=
+> +endif
+> +
+> +# Disable the shared library for static only build
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +LEVELDB_MAKE_ARGS += SHARED=
+> +endif
+
+I would prefer we actually we use direct logic, like:
+
+    ifeq ($(BR2_STATIC_LIBS),)
+    LEVELDB_MAKE_ARGS += SHARED=
+    endif
+
+    ifeq ($(BR2_SHARED_LIBS),)
+    LEVELDB_MAKE_ARGS += LIBRARY=
+    endif
+
+> +define LEVELDB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> +		$(LEVELDB_MAKE_ARGS) -C $(@D)
+> +endef
+
+Here switch the order of TARGET_CONFIGURE_OPTS, like explained above.
+
+> +define LEVELDB_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> +		INSTALL_ROOT=$(STAGING_DIR) INSTALL_PREFIX=/usr \
+> +		$(LEVELDB_MAKE_ARGS) -C $(@D) install
+> +endef
+> +
+> +define LEVELDB_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> +		INSTALL_ROOT=$(TARGET_DIR) INSTALL_PREFIX=/usr \
+> +		$(LEVELDB_MAKE_ARGS) -C $(@D) install
+> +endef
+
+And adapt the install commands as explained above.
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(generic-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
