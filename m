@@ -1,28 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 2 Feb 2015 17:22:41 +0100
-Subject: [Buildroot] [PATCH] %_defconfig: save the path to the defconfig
-In-Reply-To: <1422891286-521-1-git-send-email-arnout@mind.be>
-References: <1422891286-521-1-git-send-email-arnout@mind.be>
-Message-ID: <CAAXf6LV9rTWG=-gA6_z1XtxscoSL-JcGppf7aDPRcN58TbUcsg@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 2 Feb 2015 17:22:35 +0100
+Subject: [Buildroot] [PATCH 06/16] package/dosfstools: add missing
+	symlinks
+In-Reply-To: <1421684056-5266-7-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-7-git-send-email-maxtram95@gmail.com>
+Message-ID: <CAHXCMMJznL9yE8HLLszsj=GZLKWJ42Worgd1CeqpmeCUAqvDjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 2, 2015 at 4:34 PM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> We have the BR2_DEFCONFIG feature that saves the path to the defconfig
-> file that was specified on the command line, so that a later
-> savedefconfig would immediately save to the right location. This wasn't
-> done for the defconfigs in the configs/ directory, however, to avoid
-> accidentally overwriting them.
+On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
+> Install alternative symlinks for dosfstools mkfs.fat, fsck.fat and
+> fatlabel. Those symlinks are generally installed by make install, but
+> buildroot does not use make install for dosfstools, but symlinks should
+> be installed anyway.
 >
-> Now we decided that it would be more useful to overwrite the defconfigs
-> in the configs/ directory after all. To do this, we pass the path to
-> that defconfig in the environment.
->
-> Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
 
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
+Regards,
+
+
+-- 
+Samuel
