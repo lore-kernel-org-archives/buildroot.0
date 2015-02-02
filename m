@@ -1,51 +1,73 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon,  2 Feb 2015 16:34:46 +0100
-Subject: [Buildroot] [PATCH] %_defconfig: save the path to the defconfig
-Message-ID: <1422891286-521-1-git-send-email-arnout@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon,  2 Feb 2015 16:35:35 +0100
+Subject: [Buildroot] [PATCH v2 1/2] lua-periphery: new package
+Message-ID: <1422891336-14461-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have the BR2_DEFCONFIG feature that saves the path to the defconfig
-file that was specified on the command line, so that a later
-savedefconfig would immediately save to the right location. This wasn't
-done for the defconfigs in the configs/ directory, however, to avoid
-accidentally overwriting them.
+From: Vanya Sergeev <vsergeev@gmail.com>
 
-Now we decided that it would be more useful to overwrite the defconfigs
-in the configs/ directory after all. To do this, we pass the path to
-that defconfig in the environment.
+Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+[ThomasDS: rewrap package/lua-periphery/Config.in]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(compile-tested on x86/glibc armel/uclibc)
 
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/Config.in                      |  1 +
+ package/lua-periphery/Config.in        |  8 ++++++++
+ package/lua-periphery/lua-periphery.mk | 13 +++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/lua-periphery/Config.in
+ create mode 100644 package/lua-periphery/lua-periphery.mk
 
-diff --git a/Makefile b/Makefile
-index dd2b7b6..2192efd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -781,13 +781,16 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
-+# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
-+		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
-+		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
+diff --git a/package/Config.in b/package/Config.in
+index bcd1481..ed49da4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -425,6 +425,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-ev/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
++	source "package/lua-periphery/Config.in"
+ 	source "package/lua-testmore/Config.in"
+ 	source "package/luabitop/Config.in"
+ 	source "package/luacrypto/Config.in"
+diff --git a/package/lua-periphery/Config.in b/package/lua-periphery/Config.in
+new file mode 100644
+index 0000000..de5a716
+--- /dev/null
++++ b/package/lua-periphery/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUA_PERIPHERY
++	bool "lua-periphery"
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	help
++	  A library for GPIO, SPI, I2C, MMIO, and Serial peripheral I/O
++	  interface access in userspace Linux with Lua.
++
++	  https://github.com/vsergeev/lua-periphery
+diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
+new file mode 100644
+index 0000000..0717a27
+--- /dev/null
++++ b/package/lua-periphery/lua-periphery.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# lua-periphery
++#
++################################################################################
++
++LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.4
++LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
++LUA_PERIPHERY_SUBDIR = lua-periphery
++LUA_PERIPHERY_LICENSE = MIT
++LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
++
++$(eval $(luarocks-package))
 -- 
-2.1.4
+1.8.5.1
