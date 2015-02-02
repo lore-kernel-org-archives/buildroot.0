@@ -1,66 +1,81 @@
-From: Vanya Sergeev <vsergeev@gmail.com>
-Date: Sun,  1 Feb 2015 20:50:16 -0800
-Subject: [Buildroot] [PATCH 1/1] lua-periphery: new package
-Message-ID: <1422852616-32612-1-git-send-email-vsergeev@gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon,  2 Feb 2015 05:40:52 +0000
+Subject: [Buildroot] [PATCH 1/2] Cdrtools is a set of command line programs
+	that allows to record CD/DVD/BluRay media. This package
+	contains the cdrecord & mkisofs programs.
+Message-ID: <1422855653-6338-1-git-send-email-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+http://sourceforge.net/projects/cdrtools
+Signed-off-by: Steve Kenton <skenton@ou.edu>
 ---
- package/Config.in                      |  1 +
- package/lua-periphery/Config.in        |  8 ++++++++
- package/lua-periphery/lua-periphery.mk | 13 +++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/lua-periphery/Config.in
- create mode 100644 package/lua-periphery/lua-periphery.mk
+ package/Config.in            |  1 +
+ package/cdrtools/Config.in   | 12 ++++++++++++
+ package/cdrtools/cdrtools.mk | 21 +++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/cdrtools/Config.in
+ create mode 100644 package/cdrtools/cdrtools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index dd011be..ca63d4f 100644
+index dd011be..1748e88 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -425,6 +425,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-ev/Config.in"
- 	source "package/lua-messagepack/Config.in"
- 	source "package/lua-msgpack-native/Config.in"
-+	source "package/lua-periphery/Config.in"
- 	source "package/lua-testmore/Config.in"
- 	source "package/luabitop/Config.in"
- 	source "package/luacrypto/Config.in"
-diff --git a/package/lua-periphery/Config.in b/package/lua-periphery/Config.in
+@@ -6,6 +6,7 @@ menu "Audio and video applications"
+ 	source "package/alsa-utils/Config.in"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
++	source "package/cdrtools/Config.in"
+ 	source "package/dvdauthor/Config.in"
+ 	source "package/espeak/Config.in"
+ 	source "package/faad2/Config.in"
+diff --git a/package/cdrtools/Config.in b/package/cdrtools/Config.in
 new file mode 100644
-index 0000000..59cf17f
+index 0000000..8583cec
 --- /dev/null
-+++ b/package/lua-periphery/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LUA_PERIPHERY
-+	bool "lua-periphery"
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++++ b/package/cdrtools/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_CDRTOOLS
++	bool "cdrtools"
++	depends on BR2_USE_WCHAR && BR2_LARGEFILE
 +	help
-+	  A library for GPIO, SPI, I2C, MMIO, and Serial peripheral I/O interface
-+	  access in user space Linux with Lua.
++	  Cdrtools is a set of command line programs that
++	  allows to record CD/DVD/BluRay media. This
++	  package contains the cdrecord & mkisofs programs.
++	  
++	  http://sourceforge.net/projects/cdrtools
 +
-+	  https://github.com/vsergeev/lua-periphery
-diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
++comment "cdrtools needs a toolchain w/ wchar, largefile"
++	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
+diff --git a/package/cdrtools/cdrtools.mk b/package/cdrtools/cdrtools.mk
 new file mode 100644
-index 0000000..0717a27
+index 0000000..a732e69
 --- /dev/null
-+++ b/package/lua-periphery/lua-periphery.mk
-@@ -0,0 +1,13 @@
-+################################################################################
++++ b/package/cdrtools/cdrtools.mk
+@@ -0,0 +1,21 @@
++#############################################################
 +#
-+# lua-periphery
++# cdrtools
 +#
-+################################################################################
++#############################################################
++CDRTOOLS_VERSION = 3.00
++CDRTOOLS_SITE = http://sourceforge.net/projects/cdrtools/files
++CDRTOOLS_LICENSE = Various parts under GPLv2.0, LGPLv2.1, CDDL - see COPYING
++CDRTOOLS_LICENSE_FILES = COPYING
 +
-+LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.4
-+LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
-+LUA_PERIPHERY_SUBDIR = lua-periphery
-+LUA_PERIPHERY_LICENSE = MIT
-+LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
++define CDRTOOLS_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
 +
-+$(eval $(luarocks-package))
++define CDRTOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/cdrecord/OBJ/x86_64-linux-cc/cdrecord $(TARGET_DIR)/usr/bin/cdrecord
++	$(INSTALL) -m 0755 -D $(@D)/readcd/OBJ/x86_64-linux-cc/readcd $(TARGET_DIR)/usr/bin/readcd
++	$(INSTALL) -m 0755 -D $(@D)/mkisofs/OBJ/x86_64-linux-cc/mkisofs $(TARGET_DIR)/usr/bin/mkisofs
++endef
++
++$(eval $(generic-package))
 -- 
-2.2.2
+1.9.1
