@@ -1,148 +1,86 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 2 Feb 2015 23:38:53 +0100
-Subject: [Buildroot] [PATCH 12/16] package/samba: add systemd support
-In-Reply-To: <1421684056-5266-13-git-send-email-maxtram95@gmail.com>
+Date: Mon, 2 Feb 2015 23:49:25 +0100
+Subject: [Buildroot] [PATCH 11/16] package/samba: use FHS dirs
+In-Reply-To: <1421684056-5266-12-git-send-email-maxtram95@gmail.com>
 References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-13-git-send-email-maxtram95@gmail.com>
-Message-ID: <CAHXCMMJkam4Rkonum9c5TkB8d8mpzKMhjGePPaGJhgakJMYK4Q@mail.gmail.com>
+ <1421684056-5266-12-git-send-email-maxtram95@gmail.com>
+Message-ID: <CAHXCMM+OujX6w5F__HFKkozQBg4J0dmxcwkwK=j6ikiooP5g5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxim,
-
 On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
-> Add {smbd,nmbd,winbindd}.service files for systemd. Add tmpfiles.d
-> config file to create samba directories.
+> Clean up system directories by making samba conform to FHS and by using
+> subdirectories e.g. /var/log/samba and /var/run/samba instead of
+> /var/log and /var/run.
 >
 > Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+
 > ---
->  package/samba/nmbd.service        | 12 ++++++++++++
->  package/samba/samba.mk            | 23 +++++++++++++++++++++++
->  package/samba/samba_tmpfiles.conf |  4 ++++
->  package/samba/smbd.service        | 12 ++++++++++++
->  package/samba/winbindd.service    | 12 ++++++++++++
->  5 files changed, 63 insertions(+)
->  create mode 100644 package/samba/nmbd.service
->  create mode 100644 package/samba/samba_tmpfiles.conf
->  create mode 100644 package/samba/smbd.service
->  create mode 100644 package/samba/winbindd.service
+>  package/samba/S91smb   |  5 +++--
+>  package/samba/samba.mk | 10 +++++-----
+>  2 files changed, 8 insertions(+), 7 deletions(-)
 >
-> diff --git a/package/samba/nmbd.service b/package/samba/nmbd.service
-> new file mode 100644
-> index 0000000..6e241ea
-> --- /dev/null
-> +++ b/package/samba/nmbd.service
-> @@ -0,0 +1,12 @@
-> +[Unit]
-> +Description=Samba NetBIOS name server
-> +After=network.target
-> +
-> +[Service]
-> +Type=forking
-> +PIDFile=/var/run/samba/nmbd.pid
-> +ExecStart=/usr/sbin/nmbd -D
-> +ExecReload=/bin/kill -HUP $MAINPID
-> +
-> +[Install]
-> +WantedBy=multi-user.target
+> diff --git a/package/samba/S91smb b/package/samba/S91smb
+> index c190771..2e03e82 100755
+> --- a/package/samba/S91smb
+> +++ b/package/samba/S91smb
+> @@ -10,6 +10,7 @@
+>  mkdir -p /var/cache/samba
+>  mkdir -p /var/log/samba
+>  mkdir -p /var/lock/subsys
+> +mkdir -p /var/run/samba
+>
+>  RETVAL=0
+>
+> @@ -33,13 +34,13 @@ stop() {
+>         echo -n "Shutting down SMB services: "
+>         kill -9 `pidof smbd`
+>         RETVAL=$?
+> -       rm -f /var/run/smbd.pid
+> +       rm -f /var/run/samba/smbd.pid
+>         echo "done"
+>
+>         echo -n "Shutting down NMB services: "
+>         kill -9 `pidof nmbd`
+>         RETVAL2=$?
+> -       rm -f /var/run/nmbd.pid
+> +       rm -f /var/run/samba/nmbd.pid
+>
+>         [ $RETVAL -eq 0 -a $RETVAL2 -eq 0 ] && rm -f /var/lock/subsys/smb
+>         echo "done"
 > diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-> index 31ad644..5a11ebe 100644
+> index d25e94e..31ad644 100644
 > --- a/package/samba/samba.mk
 > +++ b/package/samba/samba.mk
-> @@ -182,6 +182,29 @@ endef
+> @@ -33,11 +33,11 @@ SAMBA_CONF_ENV = \
+>         $(if $(BR2_PACKAGE_SAMBA_AVAHI),AVAHI_LIBS=-pthread)
 >
->  SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
->
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +define SAMBA_INSTALL_TMPFILES_HOOK
-> +       $(INSTALL) -D -m 644 package/samba/samba_tmpfiles.conf \
-> +               $(TARGET_DIR)/usr/lib/tmpfiles.d/samba.conf
-> +endef
-> +
-> +SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_TMPFILES_HOOK
-> +endif
-> +
-> +define SAMBA_INSTALL_INIT_SYSTEMD
-> +       $(INSTALL) -D -m 644 package/samba/smbd.service \
-> +               $(TARGET_DIR)/lib/systemd/system/smbd.service
-
-smbd can be disabled, so its *.service installation should be optional
-WRT its option.
-
-> +       $(INSTALL) -D -m 644 package/samba/nmbd.service \
-> +               $(TARGET_DIR)/lib/systemd/system/nmbd.service
-
-ditto for nmbd.
-
-> +       $(if $(BR2_PACKAGE_SAMBA_WINBINDD),$(INSTALL) -D -m 644 package/samba/winbindd.service $(TARGET_DIR)/lib/systemd/system/winbindd.service)
-> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +       ln -fs /lib/systemd/system/smbd.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smbd.service
-
-ditto
-
-> +       ln -fs /lib/systemd/system/nmbd.service \
-> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmbd.service
-
-ditto
-
-> +       $(if $(BR2_PACKAGE_SAMBA_WINBINDD),ln -fs /lib/systemd/system/winbindd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbindd.service)
-> +endef
-> +
->  define SAMBA_INSTALL_INIT_SYSV
->         $(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
->  endef
-> diff --git a/package/samba/samba_tmpfiles.conf b/package/samba/samba_tmpfiles.conf
-> new file mode 100644
-> index 0000000..e265f75
-> --- /dev/null
-> +++ b/package/samba/samba_tmpfiles.conf
-> @@ -0,0 +1,4 @@
-> +d /var/cache/samba 0755 root root -
-> +d /var/log/samba 0755 root root -
-> +d /var/lock/samba 0755 root root -
-> +d /var/run/samba 0755 root root -
-> diff --git a/package/samba/smbd.service b/package/samba/smbd.service
-> new file mode 100644
-> index 0000000..64abf56
-> --- /dev/null
-> +++ b/package/samba/smbd.service
-> @@ -0,0 +1,12 @@
-> +[Unit]
-> +Description=Samba SMB/CIFS server
-> +After=network.target nmbd.service winbindd.service
-> +
-> +[Service]
-> +Type=forking
-> +PIDFile=/var/run/samba/smbd.pid
-> +ExecStart=/usr/sbin/smbd -D
-> +ExecReload=/bin/kill -HUP $MAINPID
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> diff --git a/package/samba/winbindd.service b/package/samba/winbindd.service
-> new file mode 100644
-> index 0000000..214c17e
-> --- /dev/null
-> +++ b/package/samba/winbindd.service
-> @@ -0,0 +1,12 @@
-> +[Unit]
-> +Description=Samba Winbind daemon
-> +After=network.target nmbd.service
-> +
-> +[Service]
-> +Type=forking
-> +PIDFile=/var/run/samba/winbindd.pid
-> +ExecStart=/usr/sbin/winbindd -D
-> +ExecReload=/bin/kill -HUP $MAINPID
-> +
-> +[Install]
-> +WantedBy=multi-user.target
+>  SAMBA_CONF_OPTS = \
+> -       --with-piddir=/var/run \
+> -       --with-lockdir=/var/lock \
+> -       --with-logfilebase=/var/log \
+> -       --with-configdir=/etc/samba \
+> -       --with-privatedir=/etc/samba \
+> +       --with-fhs \
+> +       --with-piddir=/var/run/samba \
+> +       --with-lockdir=/var/cache/samba \
+> +       --with-ncalrpcdir=/var/run/ncalrpc \
+> +       --with-nmbdsocketdir=/var/run/nmbd \
+>         \
+>         --disable-cups \
+>         --enable-shared-libs \
 > --
 > 2.2.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 Regards,
 
