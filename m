@@ -1,88 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 00:30:37 +0100
-Subject: [Buildroot] [git commit] mjpegtools: new package
-Message-ID: <20150202234151.B2E8B807AE@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 00:40:20 +0100
+Subject: [Buildroot] [git commit] Revert "automake: complete the removal of
+	the target package"
+Message-ID: <20150202234151.C864C807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0df309a3e805ec0f6ccd963ce0dbb0a2934acf44
+commit: http://git.buildroot.net/buildroot/commit/?id=a7ff733e83416bb2faa6cc4900e05f11d3ac490e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mjpegtools programs are a set of tools that can do recording of videos
-and playback, simple cut-and-paste editing and the MPEG compression of audio
-and video under Linux.
+This reverts commit 6c33512e01acfc576dc4e3ad28def8b29c0db822.
 
-[Peter: license is GPLv2+]
-Signed-off-by: Steve Kenton <skenton@ou.edu>
+We DO need to look in the staging directory for .m4 files installed by other
+target packages, otherwise we'll have breakage like:
+
+http://autobuild.buildroot.net/results/b20/b20e3efcb0be3032781d7b2f0ef4c351834da0ce/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                  |    1 +
- package/mjpegtools/Config.in       |   15 +++++++++++++++
- package/mjpegtools/mjpegtools.hash |    3 +++
- package/mjpegtools/mjpegtools.mk   |   13 +++++++++++++
- 4 files changed, 32 insertions(+), 0 deletions(-)
+ package/autoconf/autoconf.mk |    2 +-
+ package/automake/automake.mk |    3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6da5202..41544c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -19,6 +19,7 @@ menu "Audio and video applications"
- 	source "package/lame/Config.in"
- 	source "package/libvpx/Config.in"
- 	source "package/madplay/Config.in"
-+	source "package/mjpegtools/Config.in"
- 	source "package/modplugtools/Config.in"
- 	source "package/mpd/Config.in"
- 	source "package/mpd-mpc/Config.in"
-diff --git a/package/mjpegtools/Config.in b/package/mjpegtools/Config.in
-new file mode 100644
-index 0000000..f5d2208
---- /dev/null
-+++ b/package/mjpegtools/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_MJPEGTOOLS
-+	bool "mjpegtools"
-+	select BR2_PACKAGE_JPEG
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  The mjpegtools programs are a set of tools
-+	  that can do recording of videos and playback,
-+	  simple cut-and-paste editing and the MPEG
-+	  compression of audio and video under Linux.
-+
-+	  http://mjpeg.sourceforge.net
-+
-+comment "mjpegtools needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mjpegtools/mjpegtools.hash b/package/mjpegtools/mjpegtools.hash
-new file mode 100644
-index 0000000..db184f7
---- /dev/null
-+++ b/package/mjpegtools/mjpegtools.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/mjpeg/files/mjpegtools/2.1.0/
-+md5	57bf5dd78976ca9bac972a6511b236f3	mjpegtools-2.1.0.tar.gz
-+sha1	b9effa86280e23d67369e842e5cb645948583097	mjpegtools-2.1.0.tar.gz
-diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
-new file mode 100644
-index 0000000..b940e7e
---- /dev/null
-+++ b/package/mjpegtools/mjpegtools.mk
-@@ -0,0 +1,13 @@
-+###############################################################################
-+#
-+# mjpegtools
-+#
-+###############################################################################
-+
-+MJPEGTOOLS_VERSION = 2.1.0
-+MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
-+MJPEGTOOLS_DEPENDENCIES = jpeg
-+MJPEGTOOLS_LICENSE = GPLv2+
-+MJPEGTOOLS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 2c0ff30..fd91961 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
+ # variables used by other packages
+ AUTOCONF = $(HOST_DIR)/usr/bin/autoconf
+ AUTOHEADER = $(HOST_DIR)/usr/bin/autoheader
+-AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
++AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 5021b49..a3fd18c 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -28,5 +28,6 @@ $(eval $(host-autotools-package))
+ 
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+-ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
++ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
++ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+ ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
