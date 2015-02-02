@@ -1,67 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Feb 2015 10:20:25 +0100
-Subject: [Buildroot] [RFC 4/8] barebox: add custom help entries
-In-Reply-To: <1422394913-13257-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1422394913-13257-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150202092025.GD4918@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 2 Feb 2015 10:20:34 +0100
+Subject: [Buildroot] [RFC] pkg-generic: add per-package staging directory
+In-Reply-To: <20150131230200.0490cafe@free-electrons.com>
+References: <1422602264-4725-1-git-send-email-Fabio.Porcedda@gmail.com>
+ <20150131230200.0490cafe@free-electrons.com>
+Message-ID: <CAHkwnC-fd3jfMSrdatA9bf_HtL-oTXs7D3ep53A_804EVM4kww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sat, Jan 31, 2015 at 11:02 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Fri, 30 Jan 2015 08:17:44 +0100, Fabio Porcedda wrote:
+>> This commit add a per-package staging directory under output/stagingof/
+>> to improve build reproducibility, because it prevents that a unspecified
+>> dependency affects the build.
+>>
+>> It also help to enable default top-level parallel make.
+>
+> Thanks for attempting to look at this complicated problem. However,
+> there is a fairly fundamental flaw in your proposal:
+>
+>> +$(2)_TARGET_CPPFLAGS += $(foreach dep,$($(2)_DEPENDENCIES),\
+>> +     -I$(STAGINGOF_DIR)/$(dep)/usr/include)
+>
+> How is this going to account for headers installed in subdirs
+> of /usr/include ? Those are normally discovered using pkg-config for
+> example. But with your solution, pkg-config will continue to return
+> paths in the "common" staging directory.
+>
+> My perception is that it's not really feasible to have one staging
+> directory per-package, because it means that pkg-config would have to
+> know, depending on which library it is asked to provide information
+> for, should use a different sysroot dir.
+>
+> I believe the only solution is to create a temporary staging directory
+> in which you copy/extract only the libraries that are explicitly listed
+> as the dependency of the package being built.
 
-On 2015-01-27 22:41 +0100, Thomas Petazzoni spake thusly:
-> Since the barebox package is not yet converted to kconfig-package,
-> make it register its own BAREBOX_HELP_HOOKS so that its custom make
-> targets are visible in 'barebox-help'.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+It's just that if there is a way to don't copy files it will be faster.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Now I'm preparing a new version that do as you said.
+I will try to use hard links if possible.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  boot/barebox/barebox.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 0fb7cec..4a89952 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -106,6 +106,16 @@ define BAREBOX_INSTALL_TARGET_CMDS
->  endef
->  endif
->  
-> +define BAREBOX_PACKAGE_HELP
-> +	@$(foreach editor,menuconfig xconfig gconfig nconfig,\
-> +		@$(call pkg-print-help-opt,barebox-$(editor),"Run the $(editor) configuration tool")$(sep))
-> +	@$(call pkg-print-help-opt,barebox-savedefconfig,"Generate a minimal defconfig")
-> +	@$(call pkg-print-help-opt,barebox-update-config,"Update configuration as a full config file")
-> +	@$(call pkg-print-help-opt,barefbox-update-defconfig,"Update configuration as a minimal defconfig")
-> +endef
-> +
-> +BAREBOX_HELP_HOOKS += BAREBOX_PACKAGE_HELP
-> +
->  $(eval $(generic-package))
->  
->  ifeq ($(BR2_TARGET_BAREBOX),y)
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+BR
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fabio Porcedda
