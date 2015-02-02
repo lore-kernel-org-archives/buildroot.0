@@ -1,57 +1,38 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 2 Feb 2015 09:44:12 +0100 (CET)
-Subject: [Buildroot] Best-Practice Suggestions for developing package
- patches in buildroot
-In-Reply-To: <20150131230620.2236108e@free-electrons.com>
-Message-ID: <1210001435.31028837.1422866651969.JavaMail.root@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Feb 2015 09:45:06 +0100
+Subject: [Buildroot] [PATCH 1/1] pps-tools: also pass
+ TARGET_CONFIGURE_OPTS to make install
+In-Reply-To: <1422835088-11852-1-git-send-email-bluemrp9@gmail.com>
+References: <1422835088-11852-1-git-send-email-bluemrp9@gmail.com>
+Message-ID: <20150202094506.72669c5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Ryan Coe,
 
+On Sun,  1 Feb 2015 16:58:08 -0700, Ryan Coe wrote:
+> Without these environment variables, pps-tools rebuilds for the host machine
+> architecture and does not run on the target machine.
 > 
-> Either quilt or git, but more and more I use git. I generally clone
-> the
-> upstream repository somewhere completely separate from Buildroot,
-> then
-> create a branch called 'buildroot' with the starting point being the
-> tag indicating the release of the software currently in use by
-> Buildroot. Then, I import as separate Git commits each of the
-> individual patches that Buildroot has for this package (if any). I do
-> my work, and then use 'git format-patch' to format the patches and
-> copy
-> them back in Buildroot.
-> 
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/pps-tools/pps-tools.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-That's a great way of handling buildroot-provided patches, I hadn't
-thought of that...
+Applied, thanks.
 
-I'll add that to the buildroot-submodule documentation, that's a good 
-practice...
+We just discussed here at the Buildroot meeting that we should probably
+add a post-build check that verifies that all binaries that have been
+installed to the root filesystem are actually built for the correct
+architecture.
 
-> Quite ironically, I never use <pkg>_OVERRIDE_SRCDIR: I simply copy
-> the
-> patches back to the Buildroot package directory, and restart the
-> package build process from scratch. Yes, this is inefficient, but one
-> could pretend that it forces you to think twice before testing a
-> stupid
-> change :-)
-> 
-> Also, I tend to very often start by hacking directly in
-> output/build/<pkg>-<version>/, and once I have a good idea of the
-> change that needs to be done, I do the Git work flow described above.
-> 
-> Hope this helps,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thanks for the report and patch!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
