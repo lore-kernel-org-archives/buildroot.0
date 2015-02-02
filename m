@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 17:55:39 +0100
-Subject: [Buildroot] [PATCH 2/2] Add hash file
-In-Reply-To: <54CF91B7.3070308@ou.edu>
-References: <1422855653-6338-1-git-send-email-skenton@ou.edu>
- <1422855653-6338-2-git-send-email-skenton@ou.edu>
- <20150202105016.4b24eddf@free-electrons.com>
- <54CF91B7.3070308@ou.edu>
-Message-ID: <20150202175539.60b8a8e9@free-electrons.com>
+From: Alexander Clouter <alex+buildroot@digriz.org.uk>
+Date: Mon, 2 Feb 2015 17:01:23 +0000
+Subject: [Buildroot] [PATCH] odhcp6c: new package
+In-Reply-To: <1422891567-14861-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1422891567-14861-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150202170123.GF4329@marmot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Thanks!  You can add to the list that I compile and use this on mipsel/uclibc.
 
-On Mon, 02 Feb 2015 09:03:19 -0600, Steve Kenton wrote:
+Kind Regards
 
-> This was my first attempt at git. I tried to follow the directions in 
-> the buildroot manual but
-> since these were separate commits they generated separate emails using the
-> git format patch command example. What should it be to make it all one 
-> patch?
+On Mon, Feb 02, 2015 at 04:39:27PM +0100, Thomas De Schampheleire wrote:
+>From: Alexander Clouter <alex+buildroot@digriz.org.uk>
+>
+>Signed-off-by: Alexander Clouter <alex+buildroot@digriz.org.uk>
+>[ThomasDS: needs ipv6; rewrap package/odhcp6c/Config.in]
+>Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>(compile-tested on x86/glibc, armel/glibc, armel/uclibc)
+>---
+> package/Config.in          |  1 +
+> package/odhcp6c/Config.in  | 11 +++++++++++
+> package/odhcp6c/odhcp6c.mk | 12 ++++++++++++
+> 3 files changed, 24 insertions(+)
+> create mode 100644 package/odhcp6c/Config.in
+> create mode 100644 package/odhcp6c/odhcp6c.mk
 
-Look at "Interactive git rebasing", using 'git rebase -i'. It allows
-you to reorder patches, merge patches, edit patches, etc.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Alexander Clouter
+.sigmonster says: There are no games on this system.
