@@ -1,42 +1,74 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Sun,  1 Feb 2015 16:58:08 -0700
-Subject: [Buildroot] [PATCH 1/1] pps-tools: also pass TARGET_CONFIGURE_OPTS
-	to make install
-Message-ID: <1422835088-11852-1-git-send-email-bluemrp9@gmail.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon,  2 Feb 2015 05:16:20 +0100
+Subject: [Buildroot] [PATCH 1/1] python-smbus: new package
+Message-ID: <1422850580-523-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without these environment variables, pps-tools rebuilds for the host machine
-architecture and does not run on the target machine.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 ---
- package/pps-tools/pps-tools.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/Config.in                    |  1 +
+ package/python-smbus/Config.in       |  7 +++++++
+ package/python-smbus/python-smbus.mk | 22 ++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/python-smbus/Config.in
+ create mode 100644 package/python-smbus/python-smbus.mk
 
-diff --git a/package/pps-tools/pps-tools.mk b/package/pps-tools/pps-tools.mk
-index 7876403..48feea9 100644
---- a/package/pps-tools/pps-tools.mk
-+++ b/package/pps-tools/pps-tools.mk
-@@ -16,12 +16,14 @@ endef
- 
- define PPS_TOOLS_INSTALL_STAGING_CMDS
- 	mkdir -p $(STAGING_DIR)/usr/include/sys $(STAGING_DIR)/usr/bin
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		DESTDIR=$(STAGING_DIR) -C $(@D) install
- endef
- 
- define PPS_TOOLS_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/include/sys $(TARGET_DIR)/usr/bin
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		DESTDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/Config.in b/package/Config.in
+index dd011be..6fd6179 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -550,6 +550,7 @@ menu "external python modules"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-six/Config.in"
++	source "package/python-smbus/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-twisted/Config.in"
+diff --git a/package/python-smbus/Config.in b/package/python-smbus/Config.in
+new file mode 100644
+index 0000000..1edf299
+--- /dev/null
++++ b/package/python-smbus/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SMBUS
++	bool "python-smbus"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Python bindings for Linux SMBus access through i2c-dev.
++
++	  www.lm-sensors.org/wiki/I2CTools
+diff --git a/package/python-smbus/python-smbus.mk b/package/python-smbus/python-smbus.mk
+new file mode 100644
+index 0000000..bde7f79
+--- /dev/null
++++ b/package/python-smbus/python-smbus.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# python-smbus
++#
++################################################################################
++
++PYTHON_SMBUS_VERSION = $(I2C_TOOLS_VERSION)
++PYTHON_SMBUS_SOURCE = $(I2C_TOOLS_SOURCE)
++PYTHON_SMBUS_SITE = $(I2C_TOOLS_SITE)
++PYTHON_SMBUS_LICENSE = GPLv2
++PYTHON_SMBUS_LICENSE_FILES = $(I2C_TOOLS_LICENSE_FILES)
++PYTHON_SMBUS_SETUP_TYPE = distutils
++PYTHON_SMBUS_SUBDIR = py-smbus
++
++# the upstream setup.py doesn't set the needed in-tree include dir
++# so we add it in the setup configuration file
++define PYTHON_SMBUS_CONFIGURE_CMDS
++	echo "[build_ext]" > $(@D)/$(PYTHON_SMBUS_SUBDIR)/setup.cfg
++	echo "include_dirs = ../include" >> $(@D)/$(PYTHON_SMBUS_SUBDIR)/setup.cfg
++endef
++
++$(eval $(python-package))
 -- 
-2.2.2
+2.1.0
