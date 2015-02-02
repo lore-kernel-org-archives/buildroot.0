@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 02 Feb 2015 22:57:27 +0100
-Subject: [Buildroot] [RFC 3/4] toolchain-externel: mass-define actual
- source tarball for known patterns
-In-Reply-To: <1420199015-16907-4-git-send-email-luca@lucaceresoli.net>
+Date: Mon, 02 Feb 2015 22:58:13 +0100
+Subject: [Buildroot] [RFC 4/4] toolchain-external: define actual sources
+ for arago toolchains
+In-Reply-To: <1420199015-16907-5-git-send-email-luca@lucaceresoli.net>
 References: <1420199015-16907-1-git-send-email-luca@lucaceresoli.net>
- <1420199015-16907-4-git-send-email-luca@lucaceresoli.net>
-Message-ID: <54CFF2C7.50706@mind.be>
+ <1420199015-16907-5-git-send-email-luca@lucaceresoli.net>
+Message-ID: <54CFF2F5.2070301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 02/01/15 12:43, Luca Ceresoli wrote:
-> For some externel toolchain vendors the actual source code URL can be simply
-> derived from the binary file URL.
-> 
-> Here we obtain TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL for all Mentor and
-> Linaro toolchains with a few $(subst) calls.
-> 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index b07b16c..91edd4a 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -392,6 +392,14 @@ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->  TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->  endif
->  
-> +# Some toolchain vendors have a regular file naming pattern.
-> +# For them, mass-define _ACTUAL_SOURCE_TARBALL based _SITE.
 
- I actually think we should refactor the external toolchains to factor out these
-common parts of the SITE and SOURCE, but that's for another day :-)
+ You could actually do the same as for Linaro and Sourcery, but really I prefer
+if it is specified explicitly. So
 
-
-> +ifneq ($(findstring sourcery.mentor.com/public/gnu_toolchain,$(TOOLCHAIN_EXTERNAL_SITE)),)
-> +TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= $(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
-
- More importantly: could you split this huge line? Make removes all whitespace
-at the beginning of the line after a backslash-newline, so there is no reason
-not to split it.
-
-
-> +else ifneq ($(findstring http://releases.linaro.org,$(TOOLCHAIN_EXTERNAL_SITE)),)
-> +TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= $(subst _linux.tar.xz,_src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE))
-
- Same here.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
 
-> +endif
-> +
->  # In fact, we don't need to download the toolchain, since it is already
->  # available on the system, so force the site and source to be empty so
->  # that nothing will be downloaded/extracted.
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 91edd4a..ff79c3b 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -259,6 +259,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
+>  TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+> +TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
+>  define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+>  	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv7a/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
+>  	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
+> @@ -266,6 +267,7 @@ endef
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/
+>  TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
+> +TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = arago-toolchain-2011.09-sources.tar.bz2
+>  define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+>  	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
+>  	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
 > 
 
 
