@@ -1,42 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Feb 2015 00:38:56 +0100
-Subject: [Buildroot] [PATCH 1/2] automake: complete the removal of the
-	target package
-In-Reply-To: <87y4ofgbp9.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 03 Feb 2015 00:01:22 +0100")
-References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
- <87y4ofgbp9.fsf@dell.be.48ers.dk>
-Message-ID: <87h9v3g9yn.fsf@dell.be.48ers.dk>
+Date: Tue, 3 Feb 2015 00:39:22 +0100
+Subject: [Buildroot] [git commit] Revert "automake: use whenever possible
+	the ACLOCAL_DIR variable"
+Message-ID: <20150202234151.BF944807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8404d8c295681207c306df0b264ddf9cefb0b219
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
- >> The variable ACLOCAL_DIR points to the staging area but is not useful
- >> anymore because the target package was removed.  Fix ACLOCAL_DIR by
- >> pointing to $(HOST_DIR)/usr/share/aclocal and remove ACLOCAL_HOST_DIR
- >> because ACLOCAL_DIR has the same value so it's not useful anymore.
+This reverts commit 65b3cda915f04d1c0a108c4163ea72e459f20652.
 
- >> Also remove the reference to ACLOCAL_HOST_DIR from the host-autoconf
- >> package.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/automake/automake.mk |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
- >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-
- > Committed, thanks.
-
-Actually, this doesn't work as we still need to look for .m4 files
-installed by other target packages.
-
-E.G.
-http://autobuild.buildroot.net/results/b20/b20e3efcb0be3032781d7b2f0ef4c351834da0ce/
-
-target-alsa-utils cannot find alsa.m4 installed by target-alsa-lib.
-
-So I've reverted it again.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 264cbad..5021b49 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -12,11 +12,8 @@ AUTOMAKE_LICENSE_FILES = COPYING
+ 
+ HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ 
+-ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
+-
+ define GTK_DOC_M4_INSTALL
+-	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
+-		$(ACLOCAL_DIR)/gtk-doc.m4
++	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
+ endef
+ 
+ # ensure staging aclocal dir exists
+@@ -31,4 +28,5 @@ $(eval $(host-autotools-package))
+ 
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/usr/bin/automake
++ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
+ ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
