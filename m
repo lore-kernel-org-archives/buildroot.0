@@ -1,53 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Feb 2015 00:33:54 +0100
-Subject: [Buildroot] [PATCH 1/1] The mjpegtools programs are a set of
-	tools that can do recording of videos and playback,
-	simple cut-and-paste editing and the MPEG compression of audio and
-	video under Linux.
-In-Reply-To: <1422916506-3200-1-git-send-email-skenton@ou.edu> (Steve Kenton's
- message of "Mon, 2 Feb 2015 22:35:06 +0000")
-References: <1422916506-3200-1-git-send-email-skenton@ou.edu>
-Message-ID: <87lhkfga71.fsf@dell.be.48ers.dk>
+Date: Tue, 03 Feb 2015 00:38:56 +0100
+Subject: [Buildroot] [PATCH 1/2] automake: complete the removal of the
+	target package
+In-Reply-To: <87y4ofgbp9.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Tue, 03 Feb 2015 00:01:22 +0100")
+References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
+ <87y4ofgbp9.fsf@dell.be.48ers.dk>
+Message-ID: <87h9v3g9yn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steve" == Steve Kenton <skenton@ou.edu> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Hi,
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+ >> The variable ACLOCAL_DIR points to the staging area but is not useful
+ >> anymore because the target package was removed.  Fix ACLOCAL_DIR by
+ >> pointing to $(HOST_DIR)/usr/share/aclocal and remove ACLOCAL_HOST_DIR
+ >> because ACLOCAL_DIR has the same value so it's not useful anymore.
 
-Normally we use something like:
+ >> Also remove the reference to ACLOCAL_HOST_DIR from the host-autoconf
+ >> package.
 
-mjpegtools: new package
+ >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-As the first line of description for something like this.
+ > Committed, thanks.
 
- > http://mjpeg.sourceforge.net
- > Signed-off-by: Steve Kenton <skenton@ou.edu>
+Actually, this doesn't work as we still need to look for .m4 files
+installed by other target packages.
 
- > diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
- > new file mode 100644
- > index 0000000..34959265
- > --- /dev/null
- > +++ b/package/mjpegtools/mjpegtools.mk
- > @@ -0,0 +1,13 @@
- > +###############################################################################
- > +#
- > +# mjpegtools
- > +#
- > +###############################################################################
- > +
- > +MJPEGTOOLS_VERSION = 2.1.0
- > +MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
- > +MJPEGTOOLS_DEPENDENCIES = jpeg
- > +MJPEGTOOLS_LICENSE = GPLv2
+E.G.
+http://autobuild.buildroot.net/results/b20/b20e3efcb0be3032781d7b2f0ef4c351834da0ce/
 
-Most of the files contains the 'or (at your option) any later version',
-so I changed this to GPLv2+.
+target-alsa-utils cannot find alsa.m4 installed by target-alsa-lib.
 
-Committed with that fixed, thanks.
+So I've reverted it again.
 
 -- 
 Bye, Peter Korsgaard
