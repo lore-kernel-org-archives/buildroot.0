@@ -1,89 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Feb 2015 10:56:41 +0100
-Subject: [Buildroot] [RFC 8/8] docs/manual: update manual about
- <pkg>-help tagret
-In-Reply-To: <1422394913-13257-9-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1422394913-13257-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1422394913-13257-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150202095641.GB3501@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Feb 2015 11:23:54 +0100
+Subject: [Buildroot] LuaRocks package infrastructure oddities
+In-Reply-To: <CAAMhL_STu2FpiW86rn_Tzi1jkqrBVQL3qHOmtW+vtYWuU_HPtQ@mail.gmail.com>
+References: <CAAMhL_STu2FpiW86rn_Tzi1jkqrBVQL3qHOmtW+vtYWuU_HPtQ@mail.gmail.com>
+Message-ID: <20150202112354.3524ea47@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Ivan Sergeev,
 
-On 2015-01-27 22:41 +0100, Thomas Petazzoni spake thusly:
-> This commit updates the manual to:
+Thanks for your feedback.
+
+On Sun, 1 Feb 2015 20:44:34 -0800, Ivan Sergeev wrote:
+> It seems that the LuaRocks package infrastructure expects to find the
+> LUAFOO_ROCKSPEC file inside the LUAFOO_SUBDIR sources directory of the
+> package to build it. This is a bit odd, as the rockspec is already
+> downloaded or extracted from the source rock in the parent directory
+> containing LUAFOO_SUBDIR, but the infrastructure relies on packages
+> including that rockspec in their sources.
 > 
->  * Indicate the existence of the <pkg>-help target;
+> A condensed version of what the build appears to be doing is:
 > 
->  * Remove the explanation about certain targets in "make help" not
->    being always visible, since this is no longer true.
-
-That's unfortunate that we can see such help text even when the packag
-is not enabled. But OK...
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/make-tips.txt           | 11 -----------
->  docs/manual/package-make-target.txt |  2 ++
->  2 files changed, 2 insertions(+), 11 deletions(-)
+> wget http://rocks.moonscript.org/lua-periphery-1.0.4-1.src.rock -O
+> /path/to/buildroot/dl/ua-periphery-1.0.4-1.src.rock
 > 
-> diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-> index 027eddf..2ad4dbd 100644
-> --- a/docs/manual/make-tips.txt
-> +++ b/docs/manual/make-tips.txt
-> @@ -18,17 +18,6 @@ This is a collection of tips that help you make the most of Buildroot.
->   $ make help
->  --------------------
->  
-> -Not all targets are always available,
-> -some settings in the +.config+ file may hide some targets:
-> -
-> -* +busybox-menuconfig+ only works when +busybox+ is enabled;
-> -* +linux-menuconfig+ and +linux-savedefconfig+ only work when
-> -  +linux+ is enabled;
-> -* +uclibc-menuconfig+ is only available when the uClibc C library is
-> -  selected in the internal toolchain backend;
-> -* +barebox-menuconfig+ and +barebox-savedefconfig+ only work when the
-> -  +barebox+ bootloader is enabled.
-> -
->  .Cleaning:
->  
->  Explicit cleaning is required when any of the architecture or toolchain
-> diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
-> index 25d3f44..4426e5f 100644
-> --- a/docs/manual/package-make-target.txt
-> +++ b/docs/manual/package-make-target.txt
-> @@ -59,6 +59,8 @@ Additionally, there are some other useful make targets:
->  |===================================================
->  | command/target    | Description
->  
-> +| +help+            | Show the available targets for this package
-> +
->  | +show-depends+    | Displays the dependencies required to build the
->  package
->  
-> -- 
-> 2.1.0
+> cd /path/to/buildroot/output/build/ && luarocks unpack --force
+> /path/to/dl/lua-periphery-1.0.4-1.src.rock
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> at which point is has:
+>     output/build/lua-periphery-1.0.4-1/lua-periphery/  (the sources)
+>     output/build/lua-periphery-1.0.4-1/lua-periphery-1.0.4-1.rockspec (the
+> rockspec)
+> 
+> but then it descends into the sources and expects to find and build the
+> rockspec file there:
+> 
+> cd /path/to/buildroot/output/build/lua-periphery-1.0.4-1/lua-periphery &&
+> luarocks make --keep lua-periphery-1.0.4-1.rockspec
+> 
+> This works for me and the other LuaRocks packages currently in buildroot,
+> because they happen to version the rockspec with the rest of the sources,
+> but in general it seems unusual. I've attached a full log of the build.
 
+For this part, I'll let Fran?ois Perrad answer. He is the author of the
+Buildroot luarocks infrastructure.
+
+> I've also noticed that legal-info licenses are stored one extra
+> subdirectory deep, at output/legal-info/licenses/luafoo/$LUAFOO_SUBDIR/,
+> e.g. lua-periphery below:
+> 
+> $ make legal-info
+> $ tree output/legal-info/licenses
+> output/legal-info/licenses
+> ??? am33x-cm3
+> ?   ??? License.txt
+> ??? busybox
+> ?   ??? LICENSE
+> ??? linux
+> ?   ??? COPYING
+> ??? lua
+> ?   ??? COPYRIGHT
+> ??? lua-periphery
+> ?   ??? lua-periphery
+> ?       ??? LICENSE
+> ??? uboot
+> ?   ??? Licenses
+> ?       ??? gpl-2.0.txt
+> ??? uclibc
+>     ??? COPYING.LIB
+> $
+
+Yes, this is expected: we had some packages that were doing:
+
+<pkg>_LICENSE_FILES = foo/COPYING bar/COPYING
+
+I.e, they have two COPYING files, in two different sub-directories of
+the package sources. If we were to copy all license files directly in
+output/legal-info/licenses/<package-name>/, they would overwrite each
+other. So instead, we replicate the hierarchy of those files inside
+output/legal-info/licenses/<package-name>/.
+
+So indeed, the fact that luarocks packages are always in a subdir means
+that you have this situation for all lua packages, which gets back to
+your previous question.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
