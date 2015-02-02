@@ -1,86 +1,123 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 2 Feb 2015 15:50:10 +0100
-Subject: [Buildroot] [PATCH 03/16] package/dbus: fix machine-id when
-	using systemd
-In-Reply-To: <1421684056-5266-4-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-4-git-send-email-maxtram95@gmail.com>
-Message-ID: <CAHXCMM+AKUj8ppQZLegOBvsgYNX+ntM5MtP2nxwC_rywh0c+Bw@mail.gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 02 Feb 2015 08:59:43 -0600
+Subject: [Buildroot] [PATCH 1/2] Cdrtools is a set of command line
+ programs that allows to record CD/DVD/BluRay media. This package contains
+ the cdrecord & mkisofs programs.
+In-Reply-To: <20150202103558.6be64110@free-electrons.com>
+References: <1422855653-6338-1-git-send-email-skenton@ou.edu>
+ <20150202103558.6be64110@free-electrons.com>
+Message-ID: <54CF90DF.9020504@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxim,
-
-On Mon, Jan 19, 2015 at 5:14 PM, Maxim Mikityanskiy <maxtram95@gmail.com> wrote:
-> When systemd is used, /var/lib/dbus becomes dangling symlink, because
-> nobody does mkdir /tmp/dbus, so /var/lib/dbus/machine-id could not be
-> written. On SysVinit systems there is init script that creates
-> /tmp/dbus.
-
-Maybe we should add /tmp/dbus to a tmpfiles config file (see [1]).
-
+On 2/2/2015 3:35 AM, Thomas Petazzoni wrote:
+> Dear Steve Kenton,
 >
-> This patch preserves old behavior for SysVinit systems, and introduces
-> new one for systemd-booted systems: /var/lib/dbus is a persistent
-> directory, it holds symlink /var/lib/dbus/machine-id -> /etc/machine-id
-> as machine-id(5) suggests, and /etc/machine-id is managed by systemd.
-
-This assumes that /etc is witable... which is not necessary the case :-/
-
+> Have you looked at the 'cdrkit' package? I believe it bundles the same
+> tools as cdrtools, but with a sane build system and not this
+> brain-damaged build system that cdrtools uses
+Yes, I started with cdrkit, but genisofs and wodim did not do everything 
+we needed.
+We're needing UDF support and while I like xorriso it also does not do 
+everything we need.
+I don't remember right off what all went wrong but it was with some 
+reluctance that I returned to cdrtools
+for the reasons you mention.  Jorg Shilly does seem to do things his own 
+way....
 >
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-> ---
->  package/dbus/dbus.mk | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
+> That being said, here is a review of your patch below.
 >
-> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-> index faad2b5..266e27b 100644
-> --- a/package/dbus/dbus.mk
-> +++ b/package/dbus/dbus.mk
-> @@ -73,17 +73,18 @@ endef
+> First, the title should be simply:
 >
->  DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
+> 	cdrtools: new package
 >
-> -define DBUS_INSTALL_TARGET_FIXUP
-> +define DBUS_INSTALL_INIT_SYSV
-> +       $(INSTALL) -m 0755 -D package/dbus/S30dbus \
-> +               $(TARGET_DIR)/etc/init.d/S30dbus
-> +
->         mkdir -p $(TARGET_DIR)/var/lib
->         rm -rf $(TARGET_DIR)/var/lib/dbus
->         ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
->  endef
+> On Mon,  2 Feb 2015 05:40:52 +0000, Steve Kenton wrote:
 >
-> -DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
-> -
-> -define DBUS_INSTALL_INIT_SYSV
-> -       $(INSTALL) -m 0755 -D package/dbus/S30dbus \
-> -               $(TARGET_DIR)/etc/init.d/S30dbus
-> +define DBUS_INSTALL_INIT_SYSTEMD
-> +       mkdir -p $(TARGET_DIR)/var/lib/dbus
-> +       ln -sf /etc/machine-id $(TARGET_DIR)/var/lib/dbus/machine-id
->  endef
+>> diff --git a/package/Config.in b/package/Config.in
+>> index dd011be..1748e88 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -6,6 +6,7 @@ menu "Audio and video applications"
+>>   	source "package/alsa-utils/Config.in"
+>>   	source "package/aumix/Config.in"
+>>   	source "package/bellagio/Config.in"
+>> +	source "package/cdrtools/Config.in"
+> Since it's really the same sort of tools than cdrkit, I'd rather see
+> cdrtools next to cdrkit in the menus.
+OK
 >
->  HOST_DBUS_DEPENDENCIES = host-pkgconf host-expat
-> --
-> 2.2.1
+>> diff --git a/package/cdrtools/Config.in b/package/cdrtools/Config.in
+>> new file mode 100644
+>> index 0000000..8583cec
+>> --- /dev/null
+>> +++ b/package/cdrtools/Config.in
+>> @@ -0,0 +1,12 @@
+>> +config BR2_PACKAGE_CDRTOOLS
+>> +	bool "cdrtools"
+>> +	depends on BR2_USE_WCHAR&&  BR2_LARGEFILE
+> We generally put this on two separate lines.
+OK
+>
+>> +	help
+>> +	  Cdrtools is a set of command line programs that
+>> +	  allows to record CD/DVD/BluRay media. This
+>> +	  package contains the cdrecord&  mkisofs programs.
+>> +	
+>> +	  http://sourceforge.net/projects/cdrtools
+>> +
+>> +comment "cdrtools needs a toolchain w/ wchar, largefile"
+>> +	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
+>> diff --git a/package/cdrtools/cdrtools.mk b/package/cdrtools/cdrtools.mk
+>> new file mode 100644
+>> index 0000000..a732e69
+>> --- /dev/null
+>> +++ b/package/cdrtools/cdrtools.mk
+>> @@ -0,0 +1,21 @@
+>> +#############################################################
+>> +#
+>> +# cdrtools
+>> +#
+>> +#############################################################
+> You should have 80 # signs for the header. And one empty new line
+> between the header and the first variable.
+Oops
+>
+>> +CDRTOOLS_VERSION = 3.00
+>> +CDRTOOLS_SITE = http://sourceforge.net/projects/cdrtools/files
+>> +CDRTOOLS_LICENSE = Various parts under GPLv2.0, LGPLv2.1, CDDL - see COPYING
+> Don't use "see COPYING", this is already encoded by the
+> <pkg>_LICENSE_FILES variable below.
+OK, it was strange and I was not sure what the heck to do
+>
+>> +CDRTOOLS_LICENSE_FILES = COPYING
+>> +
+>> +define CDRTOOLS_BUILD_CMDS
+>> +	$(MAKE) -C $(@D)
+>> +endef
+> This unfortunately doesn't work at all: it builds the tools with the
+> host compiler, so always for x86 or x86-64. Is this your intention? If
+> it is your intention, then it should be a host package, and not a
+> target package.
+I'm using an x86 host and target so it's easy to get them confused.
+I'll look into this and the note below and try again
 
-I'd prefer keeping the filesystem layout as close as possible between
-sysVinit and systemd.
-So, adding a symlink /etc/machine-id pointing to
-/var/lib/dbus/machine-id (which will ends up in /tmp/dbus/machine-id
-thanks to the tmpfiles.d stuff) should be enough.
-
-Then the last thing to check is that systemd-machine-id-setup
-correctly generates the machine-id file even if /etc/machine-id is a
-symlink pointing to a non-existing file.
-
-[1] http://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
-
-Regards,
-
--- 
-Samuel
+Steve
+>> +
+>> +define CDRTOOLS_INSTALL_TARGET_CMDS
+>> +	$(INSTALL) -m 0755 -D $(@D)/cdrecord/OBJ/x86_64-linux-cc/cdrecord $(TARGET_DIR)/usr/bin/cdrecord
+>> +	$(INSTALL) -m 0755 -D $(@D)/readcd/OBJ/x86_64-linux-cc/readcd $(TARGET_DIR)/usr/bin/readcd
+>> +	$(INSTALL) -m 0755 -D $(@D)/mkisofs/OBJ/x86_64-linux-cc/mkisofs $(TARGET_DIR)/usr/bin/mkisofs
+>> +endef
+> This cannot work: you enforce "x86_64-linux-cc", but we might be
+> building for ARM, PowerPC, MIPS, etc. Also, isn't there a "make
+> install" rule to simplify the installation logic?
+>
+> So basically, try to do a build for ARM, and make sure 1/ it builds
+> fine and 2/ the installed binaries are actually built for ARM.
+>
+> Thanks!
+>
+> Thomas
