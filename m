@@ -1,48 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Feb 2015 11:38:59 +0100
-Subject: [Buildroot] [PATCH v2] libvips: new package
-In-Reply-To: <1422867942-9684-1-git-send-email-pieter.degendt@gmail.com>
-References: <1422867942-9684-1-git-send-email-pieter.degendt@gmail.com>
-Message-ID: <20150202113859.32070b72@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 2 Feb 2015 11:16:05 +0000
+Subject: [Buildroot] [PATCH] autobuild-run: Do not build strace with
+	outdated MIPS uClibc toolchains
+Message-ID: <1422875765-14884-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Pieter De Gendt,
+These two MIPS uClibc toolchains don't include an upstream patch to fix
+a compilation failure of strace-4.9+, so better to prevent the selection
+of the strace package when using these toolchains.
 
-On Mon,  2 Feb 2015 10:05:42 +0100, Pieter De Gendt wrote:
-> Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
-> 
-> ---
-> Changes v1 -> v2 (suggested by Thomas Petazzoni)
->   - select glib2 dependency
->   - inherit glib2 dependencies (MMU, wchar, threads)
->   - Fixed comments
->   - Newline at end of files
->   - Changed <pkg>_CONF_OPT to <pkg>_CONF_OPTS
->   - Removed gtk-doc options
->   - Fixed autotools dependencies
->   - Check BR2_INSTALL_LIBSTDCPP fir c++ support
->   - Use automatic dependencies instead of separate options
+Related:
+  http://git.uclibc.org/uClibc/commit/?id=a1b88fe87a9d2be5696247d266f5c4fd20f000bb
 
-Thanks, applied, after doing a number of changes:
+  http://git.buildroot.net/buildroot/commit/?id=8deb5725577a104f4c1e1a569af9675514e13772
+  http://git.buildroot.net/buildroot/commit/?id=7b5ff1ab8ae6c9de6e8f6c0355d80255ae344efe
 
-    [Thomas:
-     - Fix variable name: LIBVIPS_CONF_OPTSS -> LIBVIPS_CONF_OPTS
-     - Add a lot of --without-<foo> options to make sure we explicitly
-       disable optional features that are not handled by the .mk file.
-     - Remove the host-swig dependency, which was probably thought of
-       being needed by Pieter due to --without-python not being passed
-       explicitly.
-     - Remove trailing spaces in Config.in.
-     - Rename patch to the new naming convention.]
+  http://lists.busybox.net/pipermail/buildroot/2015-February/118362.html
 
-Best regards,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ scripts/autobuild-run |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Thomas
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index eb3be36..6ca1bf0 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -311,6 +311,14 @@ def fixup_config(instance, sysinfo):
+        'BR2_STATIC_LIBS=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
+         return False
++    # This MIPS uClibc toolchain fails to build the strace package
++    if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++        return False
++    # This MIPS uClibc toolchain fails to build the strace package
++    if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
++        return False
+ 
+     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+         configf.writelines(configlines)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
