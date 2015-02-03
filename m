@@ -1,97 +1,310 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 10:23:29 +0100
-Subject: [Buildroot] [git commit] erlang-p1-sip: new package.
-Message-ID: <20150203092417.EDA867FCCA@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 10:22:58 +0100
+Subject: [Buildroot] [git commit] package/pkg-rebar: new infrastructure
+Message-ID: <20150203092417.807F880E2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc41cb3fdf046286b71774928d48354e72b642ba
+commit: http://git.buildroot.net/buildroot/commit/?id=781b49465896e2f6b338de331b9f7be5045f5eeb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: adjust license to be 'GPLv2 with OpenSSL exception' instead
-of just 'GPLv2'.]
+Ease the development of packages that use the erlang rebar tool as
+their build system.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[yann.morin.1998 at free.fr: split the patch into semantically separated
+patches; large rewrites of the rest]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+[Thomas, with help from Yann and Arnout:
+ - Fix the comment about the symlink used to make sure rebar does not
+   download dependencies. The comment was not up-to-date with where
+   the symlink is actually created.
+ - Make <pkg>_USE_BUNDLED_REBAR and <pkg>_USE_AUTOCONF be inherited by
+   host packages from their corresponding target package.
+ - Make sure host dependencies are inherited from the corresponding
+   target packages dependencies. This requires copying some logic from
+   inner-autotools-package and inner-generic-package, just like
+   inner-autotools-package duplicates some logic from
+   inner-generic-package.
+ - Fix host variant of $(2)_BUILD_CMDS indentation, use double quotes
+   instead of simple quotes. So that it matches the target
+   $(2)_BUILD_CMDS, and what we do elsewhere in Buildroot.]
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/erlang-p1-sip/Config.in                    |    9 +++++++++
- .../erlang-p1-sip-01-fix-includes.patch            |   19 +++++++++++++++++++
- package/erlang-p1-sip/erlang-p1-sip.mk             |   14 ++++++++++++++
- 4 files changed, 43 insertions(+), 0 deletions(-)
+ package/Makefile.in  |    1 +
+ package/pkg-rebar.mk |  253 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 254 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f66e24e..bfe6aa7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -401,6 +401,7 @@ if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-sip/Config.in"
- 	source "package/erlang-p1-stringprep/Config.in"
- 	source "package/erlang-p1-stun/Config.in"
- 	source "package/erlang-p1-tls/Config.in"
-diff --git a/package/erlang-p1-sip/Config.in b/package/erlang-p1-sip/Config.in
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2055f00..70529f8 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -416,3 +416,4 @@ include package/pkg-python.mk
+ include package/pkg-virtual.mk
+ include package/pkg-generic.mk
+ include package/pkg-kconfig.mk
++include package/pkg-rebar.mk
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
 new file mode 100644
-index 0000000..70cf819
+index 0000000..620316d
 --- /dev/null
-+++ b/package/erlang-p1-sip/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ERLANG_P1_SIP
-+	bool "erlang-p1-sip"
-+	select BR2_PACKAGE_ERLANG_P1_STUN
-+	select BR2_PACKAGE_ERLANG_P1_TLS
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
-+	help
-+	  SIP library for Erlang
-+
-+	  https://github.com/processone/p1_sip
-diff --git a/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
-new file mode 100644
-index 0000000..80e2ab3
---- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip-01-fix-includes.patch
-@@ -0,0 +1,19 @@
-+Description: correct include
-+ This part of the code was moved into it's own project and was packaged
-+ separately by me. To make the build process work, this small fix is
-+ necessary.
-+Author: Philipp Huebner <debalance@debian.org>
-+
-+Index: erlang-p1-sip/src/esip_socket.erl
-+===================================================================
-+--- erlang-p1-sip.orig/src/esip_socket.erl
-++++ erlang-p1-sip/src/esip_socket.erl
-+@@ -22,7 +22,7 @@
-+ 
-+ -include("esip.hrl").
-+ -include("esip_lib.hrl").
-+--include("stun.hrl").
-++-include_lib("p1_stun/include/stun.hrl").
-+ 
-+ -define(TCP_SEND_TIMEOUT, 15000).
-+ -define(CONNECT_TIMEOUT, 20000).
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-new file mode 100644
-index 0000000..b895f59
---- /dev/null
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
-@@ -0,0 +1,14 @@
++++ b/package/pkg-rebar.mk
+@@ -0,0 +1,253 @@
 +################################################################################
++# rebar package infrastructure for Erlang packages
 +#
-+# erlang-p1-sip
++# This file implements an infrastructure that eases development of
++# package .mk files for rebar packages.  It should be used for all
++# packages that use rebar as their build system.
++#
++# In terms of implementation, this rebar infrastructure requires the
++# .mk file to only specify metadata information about the package:
++# name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default rebar behaviour. The
++# package can also define some post operation hooks.
 +#
 +################################################################################
 +
-+ERLANG_P1_SIP_VERSION = bba4459
-+ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
-+ERLANG_P1_SIP_LICENSE = GPLv2 with OpenSSL exception
-+ERLANG_P1_SIP_LICENSE_FILES = COPYING
-+ERLANG_P1_SIP_DEPENDENCIES = erlang-p1-stun erlang-p1-tls erlang-p1-utils
-+ERLANG_P1_SIP_INSTALL_STAGING = YES
++# Directories to store rebar dependencies in.
++#
++# These directories actually only contain symbolic links to Erlang
++# applications in either $(HOST_DIR) or $(STAGING_DIR).  One needs
++# them to avoid rebar complaining about missing dependencies, as this
++# infrastructure tells rebar to NOT download dependencies during
++# the build stage.
++#
++REBAR_HOST_DEPS_DIR = $(HOST_DIR)/usr/share/rebar/deps
++REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
 +
-+$(eval $(rebar-package))
++# Tell rebar where to find the dependencies
++#
++REBAR_HOST_DEPS_ENV = \
++	ERL_COMPILER_OPTIONS='{i, "$(REBAR_HOST_DEPS_DIR)"}' \
++	ERL_EI_LIBDIR=$(HOST_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
++REBAR_TARGET_DEPS_ENV = \
++	ERL_COMPILER_OPTIONS='{i, "$(REBAR_TARGET_DEPS_DIR)"}' \
++	ERL_EI_LIBDIR=$(STAGING_DIR)/usr/lib/erlang/lib/erl_interface-$(ERLANG_EI_VSN)/lib
++
++################################################################################
++# Helper functions
++################################################################################
++
++# Install an Erlang application from $(@D).
++#
++# i.e., define a recipe that installs the "ebin priv $(2)" directories
++# from $(@D) to $(1)$($(PKG)_ERLANG_LIBDIR).
++#
++#  argument 1 should typically be $(HOST_DIR), $(TARGET_DIR),
++#	      or $(STAGING_DIR).
++#  argument 2 is typically empty when installing in $(TARGET_DIR) and
++#             "include" when installing in $(HOST_DIR) or
++#             $(STAGING_DIR).
++#
++# Note: calling this function must be done with $$(call ...) because it
++# expands package-related variables.
++#
++define install-erlang-directories
++	$(INSTALL) -d $(1)/$($(PKG)_ERLANG_LIBDIR)
++	for dir in ebin priv $(2); do                                   \
++		if test -d $(@D)/$$dir; then                            \
++			cp -r $(@D)/$$dir $(1)$($(PKG)_ERLANG_LIBDIR);  \
++		fi;                                                     \
++	done
++endef
++
++# Setup a symbolic link in rebar's deps_dir to the actual location
++# where an Erlang application is installed.
++#
++# i.e., define a recipe that creates a symbolic link
++# from $($(PKG)_REBAR_DEPS_DIR)/$($(PKG)_ERLANG_APP)
++# to $(1)$($(PKG)_ERLANG_LIBDIR).
++#
++# For target packages for example, one uses this to setup symbolic
++# links from $(STAGING_DIR)/usr/share/rebar/deps/<erlang-app> to
++# $(STAGING_DIR)/usr/lib/erlang/lib/<erlang-app>-<version>. This
++# infrastructure points rebar at the former in order to tell rebar do
++# NOT download dependencies during the build stage, and instead use
++# the already available dependencies.
++#
++# Therefore,
++#  argument 1 is $(HOST_DIR) (for host packages) or
++#	      $(STAGING_DIR) (for target packages).
++#
++#  argument 2 is HOST (for host packages) or
++#	      TARGET (for target packages).
++#
++# Note: calling this function must be done with $$(call ...) because it
++# expands package-related variables.
++#
++define install-rebar-deps
++	$(INSTALL) -d $(REBAR_$(2)_DEPS_DIR)
++	ln -f -s $(1)/$($(PKG)_ERLANG_LIBDIR) \
++		$(REBAR_$(2)_DEPS_DIR)/$($(PKG)_ERLANG_APP)
++endef
++
++################################################################################
++# inner-rebar-package -- defines how the configuration, compilation
++# and installation of a rebar package should be done, implements a few
++# hooks to tune the build process according to rebar specifities, and
++# calls the generic package infrastructure to generate the necessary
++# make targets.
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++#
++################################################################################
++
++define inner-rebar-package
++
++# Extract just the raw package name, lowercase without the leading
++# erlang- or host- prefix, as this is used by rebar to find the
++# dependencies a package specifies.
++#
++$(2)_ERLANG_APP = $(subst -,_,$(patsubst erlang-%,%,$(patsubst host-%,%,$(1))))
++
++# Path where to store the package's libs, relative to either $(HOST_DIR)
++# for host packages, or $(STAGING_DIR) for target packages.
++#
++$(2)_ERLANG_LIBDIR = \
++	/usr/lib/erlang/lib/$$($$(PKG)_ERLANG_APP)-$$($$(PKG)_VERSION)
++
++# If a host package, inherit <pkg>_USE_BUNDLED_REBAR from the target
++# package, if not explicitly defined. Otherwise, default to NO.
++ifndef $(2)_USE_BUNDLED_REBAR
++ ifdef $(3)_USE_BUNDLED_REBAR
++  $(2)_USE_BUNDLED_REBAR = $$($(3)_USE_BUNDLED_REBAR)
++ else
++  $(2)_USE_BUNDLED_REBAR ?= NO
++ endif
++endif
++
++# If a host package, inherit <pkg>_USE_AUTOCONF from the target
++# package, if not explicitly defined. Otherwise, default to NO.
++ifndef $(2)_USE_AUTOCONF
++ ifdef $(3)_USE_AUTOCONF
++  $(2)_USE_AUTOCONF = $$($(3)_USE_AUTOCONF)
++ else
++  $(2)_USE_AUTOCONF ?= NO
++ endif
++endif
++
++# Define the build and install commands
++#
++ifeq ($(4),target)
++
++# Target packages need the erlang interpreter on the target
++$(2)_DEPENDENCIES += erlang
++
++# Used only if the package uses autotools underneath; otherwise, ignored
++$(2)_CONF_ENV += $$(REBAR_TARGET_DEPS_ENV)
++
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	(cd $$(@D); \
++		CC="$$(TARGET_CC)" \
++		CFLAGS="$$(TARGET_CFLAGS)" \
++		LDFLAGS="$$(TARGET_LDFLAGS)" \
++		$$(REBAR_TARGET_DEPS_ENV) \
++		$$(TARGET_MAKE_ENV) \
++		$$($$(PKG)_REBAR_ENV) $$($$(PKG)_REBAR) deps_dir=$$(REBAR_TARGET_DEPS_DIR) compile \
++	)
++endef
++endif
++
++# We need to double-$ the 'call' because it wants to expand
++# package-related variables
++ifndef $(2)_INSTALL_STAGING_CMDS
++define $(2)_INSTALL_STAGING_CMDS
++	$$(call install-erlang-directories,$$(STAGING_DIR),include)
++	$$(call install-rebar-deps,$$(STAGING_DIR),TARGET)
++endef
++endif
++
++# We need to double-$ the 'call' because it wants to expand
++# package-related variables
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$$(call install-erlang-directories,$$(TARGET_DIR))
++endef
++endif
++
++else # !target
++
++ifeq ($$($(2)_USE_AUTOCONF),YES)
++# This must be repeated from inner-autotools-package, otherwise we get
++# an empty _DEPENDENCIES if _AUTORECONF is YES or _USE_BUNDLED_REBAR
++# is NO.  Also filter the result of _AUTORECONF and _GETTEXTIZE away
++# from the non-host rule
++$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
++				host-gettext host-toolchain host-erlang-rebar $(1),\
++    $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
++else
++# Same deal, if _USE_BUNLDED_REBAR is NO.
++$(2)_DEPENDENCIES ?= $$(filter-out  host-toolchain host-erlang-rebar $(1),\
++	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
++endif
++
++# Host packages need the erlang interpreter on the host
++$(2)_DEPENDENCIES += host-erlang
++
++# Used only if the package uses autotools underneath; otherwise, ignored
++$(2)_CONF_ENV += $$(REBAR_HOST_DEPS_ENV)
++
++ifndef $(2)_BUILD_CMDS
++define $(2)_BUILD_CMDS
++	(cd $$(@D); \
++		CC="$$(HOST_CC)" \
++		CFLAGS="$$(HOST_CFLAGS)" \
++		LDFLAGS="$$(HOST_LDFLAGS)" \
++		$$(REBAR_HOST_DEPS_ENV) \
++		$$(HOST_MAKE_ENV) \
++		$$($$(PKG)_REBAR_ENV) $$($$(PKG)_REBAR) deps_dir=$$(REBAR_HOST_DEPS_DIR) compile \
++	)
++endef
++endif
++
++# We need to double-$ the 'call' because it wants to expand
++# package-related variables
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$$(call install-erlang-directories,$$(HOST_DIR),include)
++	$$(call install-rebar-deps,$$(HOST_DIR),HOST)
++endef
++endif
++
++endif # !target
++
++# Whether to use the generic rebar or the package's bundled rebar
++#
++ifeq ($$($(2)_USE_BUNDLED_REBAR),YES)
++$(2)_REBAR = ./rebar
++else
++$(2)_REBAR = rebar
++$(2)_DEPENDENCIES += host-erlang-rebar
++endif
++
++# The package sub-infra to use
++#
++ifeq ($$($(2)_USE_AUTOCONF),YES)
++$(call inner-autotools-package,$(1),$(2),$(3),$(4))
++else
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++endif
++
++endef # inner-rebar-package
++
++rebar-package = $(call inner-rebar-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-rebar-package = $(call inner-rebar-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
