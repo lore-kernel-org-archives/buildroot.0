@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Feb 2015 15:21:43 +0100
-Subject: [Buildroot] [PATCH 03/10] kconfig infra: make
-	update-config/defconfig handling symmetrical
+Date: Tue,  3 Feb 2015 15:21:44 +0100
+Subject: [Buildroot] [PATCH 04/10] kconfig infra: remove all install stamp
+	files
 In-Reply-To: <cover.1422972638.git.yann.morin.1998@free.fr>
 References: <cover.1422972638.git.yann.morin.1998@free.fr>
-Message-ID: <a853a72effde3f2934c2efdd34692a7b221011e2.1422972638.git.yann.morin.1998@free.fr>
+Message-ID: <d969027979b213270ff962a659a1d0ef0f3b40a7.1422972638.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,27 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Replace a 'cp --preserve' with a 'touch --reference' so that the code
-for foo-update-config and foo-update-defconfig is symmetrical to ease
-maintainability and increase clarity.
+Some packages (like linux) may install things inside images/ as well, so
+remove the associated stamp file after running the configuration editor.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 ---
- package/pkg-kconfig.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index db56b7a..f76c7a7 100644
+index f76c7a7..8e68315 100644
 --- a/package/pkg-kconfig.mk
 +++ b/package/pkg-kconfig.mk
-@@ -78,8 +78,11 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 		$$($(2)_KCONFIG_OPTS) savedefconfig
+@@ -71,7 +71,7 @@ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_
+ 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+-	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
++	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
  
- # Target to copy back the configuration to the source configuration file
-+# Even though we could use 'cp --preserve-timestamps' here, the separate
-+# cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
- $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
--	cp --preserve=timestamps -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
- 
- # Note: make sure the timestamp of the stored configuration is not newer than
- # the .config to avoid a useless rebuild. Note that, contrary to
+ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
 -- 
 1.9.1
