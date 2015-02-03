@@ -1,41 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Feb 2015 16:59:26 +0100
-Subject: [Buildroot] [PATCH] freetype: Add config option for bzip2
-	compressed font support
-In-Reply-To: <5444216A.3060103@mind.be> (Arnout Vandecappelle's message of
- "Sun, 19 Oct 2014 22:39:06 +0200")
-References: <1413599958-24524-1-git-send-email-maarten@treewalker.org>
- <5442672B.1000500@mind.be> <3620793.9UjUVpDraY@hyperion>
- <5444216A.3060103@mind.be>
-Message-ID: <87pp9rasv5.fsf@dell.be.48ers.dk>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 3 Feb 2015 11:04:13 -0500
+Subject: [Buildroot] [PATCH] skeleton: make /run a proper
+	directory/filesystem
+In-Reply-To: <20150203155831.469c64ed@free-electrons.com>
+References: <1417128109-25880-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150203155831.469c64ed@free-electrons.com>
+Message-ID: <CANxTyt7JN13g4d3LjiLehhoxjYgagPV_=kMwSQ6k1yPGy8sutQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Thomas,
 
-Hi,
+On Tue, Feb 3, 2015 at 9:58 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Gustavo Zacarias,
+>
+> On Thu, 27 Nov 2014 19:41:49 -0300, Gustavo Zacarias wrote:
+>> Making /var/run and /run symlinks to /tmp is bad since the underlying
+>> tmpfs filesystem is mode 1777 which leads to possible security attack
+>> vectors via badly owned/mask-mode pidfiles and state files residing there.
+>>
+>> So make /run a proper directory with /var/run symlinked to it.
+>> Eventually all startup scripts and state info should be pointed to /run
+>> directly as per the linux fhs and good practice.
+>>
+>> Add a tmpfs filesystem entry for /run so that busybox inittab, systemv
+>> inittab and systemd automount mounts it there to avoid breaking the
+>> system.
+>>
+>> While at it fix inconsistent spacing in /etc/fstab by using tabs and
+>> drop the "static file system information" header whatever that means.
+>>
+>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>
+> Applied, thanks!
 
->>> So unless you can show me a use case where it makes a real impact, it's a
- >>> NACK.
- >> 
- >> The menu we're using (GMenu2X) uses FreeType via SDL_ttf, not via a large 
- >> GUI toolkit. Dropping the libbzip2 dependency reduces the number of 
- >> libraries loaded from 12 to 11. I haven't benchmarked how many milliseconds 
- >> of a difference that makes in startup time.
- >> 
- >> Note that the only place where bzip2 compression is actually supported by 
- >> FreeType is when opening PCF files. Disabling the feature has no effect on 
- >> support for other font formats such as TTF.
+When I pulled, I got a broken symlink, to 'run?' instead of 'run'.  Is
+yours okay?
 
- >  Okay, let's leave it up to the Benevolent Dictator to make the call. If it's a
- > go, and the depends on is changed into a select like Maxime requested, it gets
- > my Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+$ ls -al system/skeleton/var/run
+lrwxrwxrwx 1 dano dano 7 Feb  3 11:00 system/skeleton/var/run -> ../run?
 
-Sorry - We discussed it at the Buildroot developer days, and agreed that
-it it isn't worth the trouble to have an explicit option for this.
+Danomi -
 
--- 
-Bye, Peter Korsgaard
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
