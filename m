@@ -1,31 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 18:12:11 +0100
-Subject: [Buildroot] [PATCH v3 3/3] manual: style update
-In-Reply-To: <1417188306-9035-4-git-send-email-rdkehn@yahoo.com>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Tue, 3 Feb 2015 11:49:56 -0600
+Subject: [Buildroot] [PATCH v3 2/3] manual: reinstall targets
+In-Reply-To: <20150203181147.52b7cee5@free-electrons.com>
 References: <1417188306-9035-1-git-send-email-rdkehn@yahoo.com>
- <1417188306-9035-4-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20150203181211.5e1a4499@free-electrons.com>
+ <1417188306-9035-3-git-send-email-rdkehn@yahoo.com>
+ <20150203181147.52b7cee5@free-electrons.com>
+Message-ID: <20150203174956.GA29499@dkarchlinux64.currentcomm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Doug Kehn,
+On Tue, Feb 03, 2015 at 06:11:47PM +0100, Thomas Petazzoni wrote:
+Hi Thomas,
 
-On Fri, 28 Nov 2014 09:25:06 -0600, Doug Kehn wrote:
-> Align column separators.
+> Dear Doug Kehn,
 > 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> ---
->  docs/manual/package-make-target.txt | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> On Fri, 28 Nov 2014 09:25:05 -0600, Doug Kehn wrote:
+> > Add reinstall target information to package-make-target.txt.
+> > 
+> > Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> > ---
+> >  docs/manual/package-make-target.txt | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> 
+> Thanks, applied, after adjusting to the fairly significant changes we
+> did on PATCH 1/3.
 
-This patch was no longer needed after our changes to PATCH 2/3, so we
-marked it as "Non Applicable" in our patch tracking system.
+Agree, simpler is always better.  Thank you for your consideration.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+...doug
