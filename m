@@ -1,51 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 10:22:51 +0100
-Subject: [Buildroot] [git commit] package/erlang: export EI_VSN so other
-	packages can use it
-Message-ID: <20150203092417.789FE80E25@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 10:23:27 +0100
+Subject: [Buildroot] [git commit] erlang-p1-stringprep: new package.
+Message-ID: <20150203092417.E1C527FCCA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c1d128844c5a853853049ede5961c6495618dde
+commit: http://git.buildroot.net/buildroot/commit/?id=6b41208c86cf764c040f961daddae1d77c913532
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Packages that depend on Erlang may need the Erlang Interface Version
-(aka EI_VSN), so just export it.
+[Thomas: fixup license, it uses the TCL license, and not GPLv2+.]
 
-We do export a static value instead of looking in the file, to avoid
-spawning a shell every time the variable is dereferenced.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[johan.oudinet at gmail.com: update EI_VSN since the erlang update]
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang/erlang.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/Config.in                                  |    1 +
+ package/erlang-p1-stringprep/Config.in             |    6 ++++++
+ .../erlang-p1-stringprep/erlang-p1-stringprep.mk   |   12 ++++++++++++
+ 3 files changed, 19 insertions(+), 0 deletions(-)
 
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 81ac436..0c76531 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# See note below when updating Erlang
- ERLANG_VERSION = 17.4
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
-@@ -16,6 +17,10 @@ ERLANG_INSTALL_STAGING = YES
- # Touching erts/configure.in
- ERLANG_AUTORECONF = YES
- 
-+# Whenever updating Erlang, this value should be updated as well, to the
-+# value of EI_VSN in the file lib/erl_interface/vsn.mk
-+ERLANG_EI_VSN = 3.7.20
+diff --git a/package/Config.in b/package/Config.in
+index 050b160..f66e24e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -401,6 +401,7 @@ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-lager/Config.in"
++	source "package/erlang-p1-stringprep/Config.in"
+ 	source "package/erlang-p1-stun/Config.in"
+ 	source "package/erlang-p1-tls/Config.in"
+ 	source "package/erlang-p1-utils/Config.in"
+diff --git a/package/erlang-p1-stringprep/Config.in b/package/erlang-p1-stringprep/Config.in
+new file mode 100644
+index 0000000..3ef77ed
+--- /dev/null
++++ b/package/erlang-p1-stringprep/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ERLANG_P1_STRINGPREP
++	bool "erlang-p1-stringprep"
++	help
++	  Erlang interface to stringprep
 +
- # The configure checks for these functions fail incorrectly
- ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
- 
++	  https://github.com/processone/stringprep
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+new file mode 100644
+index 0000000..29bbe26
+--- /dev/null
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# erlang-p1-stringprep
++#
++################################################################################
++
++ERLANG_P1_STRINGPREP_VERSION = 9e9e0f8
++ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
++ERLANG_P1_STRINGPREP_LICENSE = TCL
++ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.TCL
++
++$(eval $(rebar-package))
