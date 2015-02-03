@@ -1,43 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 22:11:55 +0100
-Subject: [Buildroot] [git commit] python-werkzeug: bump to 0.10
-Message-ID: <20150203211838.8DB1C8082B@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 3 Feb 2015 22:53:55 +0100
+Subject: [Buildroot] Driver for C-Media Electronics,
+ Inc. CM106 based usb audio device?
+Message-ID: <trinity-3d9e988c-a025-4f55-9551-a7087a8e5c6e-1423000435337@3capp-gmx-bs32>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=537b3c0ca95ea2dc9d8176e6bcd4a06e2e122c2b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Lou,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-werkzeug/python-werkzeug.hash |    4 ++--
- package/python-werkzeug/python-werkzeug.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Mon, Feb 02, 2015 at 08:18:02PM -0600, Lou Crittenden wrote:
+> Hello again all, does anyone know where I can get the driver/kernel modules
+> for the c-media electronics CM-106 usb sound card and how to set up fader,
+> , balance, and volume controls and whatnot on it in buildroot? I will be
+> running this card on a raspberry pi b+, which as we all know the built in
+> audio is just plain DREADFUL sounding with all those hisses and pops, and
+> this card sounds MUCH better (I'm listening to my tunes through it on my
+> main Ubuntu-based box as I type!), and is inexpensive.
+> 
+> the output of lsusb is here:
+> Bus 005 Device 002: ID 0d8c:0102 C-Media Electronics, Inc. CM106 Like Sound.
+> 
+> According to this link,
+> https://github.com/Pivosgroup/buildroot-linux-kernel-m3/blob/master/sound/usb/usbaudio.c
+> the device has four 16 bit registers or something like that.
+> 
+> Does this link btw contain the driver, and if yes, how is it compiled?
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 38f622a..3dcc5b4 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
--md5	f7afcadc03b0f2267bdc156c34586043  Werkzeug-0.9.6.tar.gz
--sha256	7f11e7e2e73eb22677cac1b11113eb6106f66cedef13d140e83cf6563c90b79c  Werkzeug-0.9.6.tar.gz
-+md5	42ebf43b19475bf856fde740050d7707  Werkzeug-0.10.tar.gz
-+sha256	9a97a6fcf87390172748da9e5250710b352dff18e979db925d276112cdcfa7ac  Werkzeug-0.10.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 8902d17..41ae430 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_WERKZEUG_VERSION = 0.9.6
-+PYTHON_WERKZEUG_VERSION = 0.10
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
- PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+Not much safe hints from my side, just guessing, but your android link related CM106
+is sound/usb/quirks.c in normal/rpi linux kernel and enabled by CONFIG_SND_USB in the
+linux kernel config (not enabled by the default buildroot rpi kernel config)...
+
+After enabling this option, take a look at dmesg output and search for USB Sound Device
+or try 'aplay -L' for listing all possible/found alsa sound devices...
+
+Regards,
+Peter
