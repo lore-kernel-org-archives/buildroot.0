@@ -1,72 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 10:23:09 +0100
-Subject: [Buildroot] [git commit] erlang-lager: new package.
-Message-ID: <20150203092417.9948380E25@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 10:23:05 +0100
+Subject: [Buildroot] [git commit] erlang-goldrush: new package.
+Message-ID: <20150203092417.9110680E25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a32f6bf2b3b7e3a426538226e4d19098328a7df
+commit: http://git.buildroot.net/buildroot/commit/?id=730a94203c5eae7dbafcecde22a12c94bb2a07aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Thomas: minor adjustement to Config.in help text]
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |    1 +
- package/erlang-lager/Config.in       |   11 +++++++++++
- package/erlang-lager/erlang-lager.mk |   14 ++++++++++++++
+ package/Config.in                          |    5 +++++
+ package/erlang-goldrush/Config.in          |    7 +++++++
+ package/erlang-goldrush/erlang-goldrush.mk |   14 ++++++++++++++
  3 files changed, 26 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index df09860..691af64 100644
+index 41544c7..df09860 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -400,6 +400,7 @@ menu "Interpreter languages and scripting"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
- 	source "package/erlang-goldrush/Config.in"
-+	source "package/erlang-lager/Config.in"
- endmenu
- endif
+@@ -397,6 +397,11 @@ endmenu
+ menu "Interpreter languages and scripting"
+ 	source "package/enscript/Config.in"
+ 	source "package/erlang/Config.in"
++if BR2_PACKAGE_ERLANG
++menu "Erlang libraries/modules"
++	source "package/erlang-goldrush/Config.in"
++endmenu
++endif
  	source "package/guile/Config.in"
-diff --git a/package/erlang-lager/Config.in b/package/erlang-lager/Config.in
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/erlang-goldrush/Config.in b/package/erlang-goldrush/Config.in
 new file mode 100644
-index 0000000..d088821
+index 0000000..2ee579a
 --- /dev/null
-+++ b/package/erlang-lager/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ERLANG_LAGER
-+	bool "erlang-lager"
-+	select BR2_PACKAGE_ERLANG_GOLDRUSH
++++ b/package/erlang-goldrush/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ERLANG_GOLDRUSH
++	bool "erlang-goldrush"
 +	help
-+	  Lager (as in the beer) is a logging framework for
-+	  Erlang. Its purpose is to provide a more traditional way to
-+	  perform logging in an erlang application that plays nicely
-+	  with traditional UNIX logging tools like logrotate and
-+	  syslog.
++	  Goldrush is a small Erlang app that provides fast event
++	  stream processing.
 +
-+	  https://github.com/basho/lager
-diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
++	  https://github.com/DeadZen/goldrush
+diff --git a/package/erlang-goldrush/erlang-goldrush.mk b/package/erlang-goldrush/erlang-goldrush.mk
 new file mode 100644
-index 0000000..b725bfd
+index 0000000..b18a8ec
 --- /dev/null
-+++ b/package/erlang-lager/erlang-lager.mk
++++ b/package/erlang-goldrush/erlang-goldrush.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# erlang-lager
++# erlang-goldrush
 +#
 +################################################################################
 +
-+ERLANG_LAGER_VERSION = 2.0.3
-+ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
-+ERLANG_LAGER_LICENSE = Apache-2.0
-+ERLANG_LAGER_LICENSE_FILES = LICENSE
-+ERLANG_LAGER_DEPENDENCIES = erlang-goldrush
++ERLANG_GOLDRUSH_VERSION = 0.1.6
++ERLANG_GOLDRUSH_SITE = $(call github,DeadZen,goldrush,$(ERLANG_GOLDRUSH_VERSION))
++ERLANG_GOLDRUSH_LICENSE = ISC
++ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
++ERLANG_GOLDRUSH_INSTALL_STAGING = YES
 +
 +$(eval $(rebar-package))
 +$(eval $(host-rebar-package))
