@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Feb 2015 15:21:50 +0100
-Subject: [Buildroot] [PATCH 10/10] barebox: migrate to the kconfig
-	infrastructure
+Date: Tue,  3 Feb 2015 15:21:48 +0100
+Subject: [Buildroot] [PATCH 08/10] linux: avoid unnecessary changes in
+	defconfig for INITRAMFS_SOURCE
 In-Reply-To: <cover.1422972638.git.yann.morin.1998@free.fr>
 References: <cover.1422972638.git.yann.morin.1998@free.fr>
-Message-ID: <ea421877479d951601ffcf49fd5bce2d9d4f96b5.1422972638.git.yann.morin.1998@free.fr>
+Message-ID: <d2981725a8a9bf2f5c557e769047ce6fa60cf5fe.1422972638.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,74 +13,61 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
+When Buildroot is configured to append the root filesystem to the Linux
+kernel as initramfs, Buildroot sets the path to the initramfs source
+dynamically in the Linux configuration file.
+
+As this path is specified as an absolute path, typically being different
+for different users of the same project (e.g. containing a username),
+saving the configuration to a version control system (for example using
+'make linux-update-defconfig') would result in a difference for this
+path at every invocation by a different user.
+Although this is technically not an issue, it is confusing that this
+generates a difference.
+
+Address this issue by using a not-yet-expanded make variable to specify
+the path to the initramfs source. That variable will be expanded by the
+Linux build system, which uses it both as a Makefile variable and a
+shell variable; thus, it needs to be specified in LINUX_MAKE_ENV (so
+it is exported and available in sub-processes of make).  Any saved
+configuration file would simply contain the reference to the
+not-yet-expanded variable.
+
+As in the Linux build system, the config variables are both read from
+make as from a shell script, we cannot use $() syntax as this would be
+interpreted as a command invocation by the shell. Instead, use ${}
+syntax which is interpreted as variable reference both by the shell as
+by make.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 ---
- boot/barebox/barebox.mk | 33 +++++----------------------------
- 1 file changed, 5 insertions(+), 28 deletions(-)
+ linux/linux.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index f26c151..56d545a 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -49,7 +49,7 @@ endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 86dd1ee..0e09269 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,7 +55,9 @@ LINUX_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
  
- BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
- 	$(TARGET_CROSS)"
--
-+BAREBOX_MAKE_ENV = $(TARGET_MAKE_ENV)
+-LINUX_MAKE_ENV = $(TARGET_MAKE_ENV)
++LINUX_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	BR_BINARIES_DIR=$(BINARIES_DIR)
  
- ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
- BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
-@@ -58,12 +58,9 @@ else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
- BAREBOX_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
- endif
- 
--define BAREBOX_CONFIGURE_CMDS
--	cp $(BAREBOX_SOURCE_CONFIG) \
--		$(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
--	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) \
--		buildroot_defconfig
--endef
-+BAREBOX_KCONFIG_FILE = $(BAREBOX_SOURCE_CONFIG)
-+BAREBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-+BAREBOX_KCONFIG_OPTS = $(BAREBOX_MAKE_FLAGS)
- 
- ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
- define BAREBOX_BUILD_BAREBOXENV_CMDS
-@@ -106,7 +103,7 @@ define BAREBOX_INSTALL_TARGET_CMDS
- endef
- endif
- 
--$(eval $(generic-package))
-+$(eval $(kconfig-package))
- 
- ifeq ($(BR2_TARGET_BAREBOX),y)
- # we NEED a board defconfig file unless we're at make source
-@@ -115,24 +112,4 @@ ifeq ($(BAREBOX_SOURCE_CONFIG),)
- $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
- endif
- endif
--
--barebox-menuconfig barebox-xconfig barebox-gconfig barebox-nconfig: barebox-configure
--	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) \
--		$(subst barebox-,,$@)
--	rm -f $(BAREBOX_DIR)/.stamp_{built,target_installed,images_installed}
--
--barebox-savedefconfig: barebox-configure
--	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) \
--		$(subst barebox-,,$@)
--
--ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
--barebox-update-config: barebox-configure $(BAREBOX_DIR)/.config
--	cp -f $(BAREBOX_DIR)/.config $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
--
--barebox-update-defconfig: barebox-savedefconfig
--	cp -f $(BAREBOX_DIR)/defconfig $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
--else
--barebox-update-config: ;
--barebox-update-defconfig: ;
--endif
- endif
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+@@ -191,7 +193,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	# rebuilt using the linux-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$(BINARIES_DIR)/rootfs.cpio",$(@D)/.config)
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
 -- 
 1.9.1
