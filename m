@@ -1,73 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Feb 2015 15:21:48 +0100
-Subject: [Buildroot] [PATCH 08/10] linux: avoid unnecessary changes in
-	defconfig for INITRAMFS_SOURCE
-In-Reply-To: <cover.1422972638.git.yann.morin.1998@free.fr>
-References: <cover.1422972638.git.yann.morin.1998@free.fr>
-Message-ID: <d2981725a8a9bf2f5c557e769047ce6fa60cf5fe.1422972638.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Feb 2015 15:25:21 +0100
+Subject: [Buildroot] [git commit] Apply --disable-gtk-doc-html to all
+	packages
+Message-ID: <20150203142533.F373580E09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=356584ca70f4eb1ed2b19fe6ed709b50653c8178
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When Buildroot is configured to append the root filesystem to the Linux
-kernel as initramfs, Buildroot sets the path to the initramfs source
-dynamically in the Linux configuration file.
+Move this option to package/pkg-autotools.mk so it applies to all packages.
 
-As this path is specified as an absolute path, typically being different
-for different users of the same project (e.g. containing a username),
-saving the configuration to a version control system (for example using
-'make linux-update-defconfig') would result in a difference for this
-path at every invocation by a different user.
-Although this is technically not an issue, it is confusing that this
-generates a difference.
-
-Address this issue by using a not-yet-expanded make variable to specify
-the path to the initramfs source. That variable will be expanded by the
-Linux build system, which uses it both as a Makefile variable and a
-shell variable; thus, it needs to be specified in LINUX_MAKE_ENV (so
-it is exported and available in sub-processes of make).  Any saved
-configuration file would simply contain the reference to the
-not-yet-expanded variable.
-
-As in the Linux build system, the config variables are both read from
-make as from a shell script, we cannot use $() syntax as this would be
-interpreted as a command invocation by the shell. Instead, use ${}
-syntax which is interpreted as variable reference both by the shell as
-by make.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/pango/pango.mk   |    2 +-
+ package/pkg-autotools.mk |    2 ++
+ package/webkit/webkit.mk |    1 -
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 86dd1ee..0e09269 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -55,7 +55,9 @@ LINUX_MAKE_FLAGS = \
- 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index f3e16ef..51bfbfa 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -66,7 +66,7 @@ PANGO_CONF_ENV = \
+ 	gl_cv_c_restrict=no \
+ 	ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
  
--LINUX_MAKE_ENV = $(TARGET_MAKE_ENV)
-+LINUX_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	BR_BINARIES_DIR=$(BINARIES_DIR)
+-PANGO_CONF_OPTS = --enable-explicit-deps=no --disable-gtk-doc-html
++PANGO_CONF_OPTS = --enable-explicit-deps=no
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
-@@ -191,7 +193,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	# rebuilt using the linux-rebuild-with-initramfs target.
- 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
- 		touch $(BINARIES_DIR)/rootfs.cpio
--		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$(BINARIES_DIR)/rootfs.cpio",$(@D)/.config)
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
--- 
-1.9.1
+ PANGO_DEPENDENCIES = \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index b6b83f8..d2f15fa 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -193,6 +193,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--localstatedir=/var \
+ 		--program-prefix="" \
+ 		--disable-gtk-doc \
++		--disable-gtk-doc-html \
+ 		--disable-doc \
+ 		--disable-docs \
+ 		--disable-documentation \
+@@ -226,6 +227,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--localstatedir="$$(HOST_DIR)/var" \
+ 		--enable-shared --disable-static \
+ 		--disable-gtk-doc \
++		--disable-gtk-doc-html \
+ 		--disable-doc \
+ 		--disable-docs \
+ 		--disable-documentation \
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 98da1d6..bbde7f4 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -46,7 +46,6 @@ WEBKIT_CONF_OPTS += \
+ 	--disable-webkit2 \
+ 	--disable-glibtest \
+ 	--disable-video \
+-	--disable-gtk-doc-html \
+ 	--disable-tests
+ 
+ # Xorg Dependencies
