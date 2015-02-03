@@ -1,78 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 15:58:03 +0100
-Subject: [Buildroot] [git commit] skeleton: make /run a proper
-	directory/filesystem
-Message-ID: <20150203145808.2F4D580E07@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 15:58:31 +0100
+Subject: [Buildroot] [PATCH] skeleton: make /run a proper
+ directory/filesystem
+In-Reply-To: <1417128109-25880-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1417128109-25880-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150203155831.469c64ed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d380dde1d2878bd8f09317081960bfc82b0f420b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Making /var/run and /run symlinks to /tmp is bad since the underlying
-tmpfs filesystem is mode 1777 which leads to possible security attack
-vectors via badly owned/mask-mode pidfiles and state files residing there.
+On Thu, 27 Nov 2014 19:41:49 -0300, Gustavo Zacarias wrote:
+> Making /var/run and /run symlinks to /tmp is bad since the underlying
+> tmpfs filesystem is mode 1777 which leads to possible security attack
+> vectors via badly owned/mask-mode pidfiles and state files residing there.
+> 
+> So make /run a proper directory with /var/run symlinked to it.
+> Eventually all startup scripts and state info should be pointed to /run
+> directly as per the linux fhs and good practice.
+> 
+> Add a tmpfs filesystem entry for /run so that busybox inittab, systemv
+> inittab and systemd automount mounts it there to avoid breaking the
+> system.
+> 
+> While at it fix inconsistent spacing in /etc/fstab by using tabs and
+> drop the "static file system information" header whatever that means.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-So make /run a proper directory with /var/run symlinked to it.
-Eventually all startup scripts and state info should be pointed to /run
-directly as per the linux fhs and good practice.
+Applied, thanks!
 
-Add a tmpfs filesystem entry for /run so that busybox inittab, systemv
-inittab and systemd automount mounts it there to avoid breaking the
-system.
-
-While at it fix inconsistent spacing in /etc/fstab by using tabs and
-drop the "static file system information" header whatever that means.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- system/skeleton/etc/fstab  |   17 ++++++++---------
- system/skeleton/run        |    1 -
- system/skeleton/var/run    |    2 +-
- 3 files changed, 9 insertions(+), 11 deletions(-)
-
-diff --git a/system/skeleton/etc/fstab b/system/skeleton/etc/fstab
-index e000aad..2b418a0 100644
---- a/system/skeleton/etc/fstab
-+++ b/system/skeleton/etc/fstab
-@@ -1,9 +1,8 @@
--# /etc/fstab: static file system information.
--#
--# <file system> <mount pt>     <type>	<options>         <dump> <pass>
--/dev/root       /              ext2	rw,noauto         0      1
--proc		/proc	       proc     defaults	  0	 0
--devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
--tmpfs           /dev/shm       tmpfs    mode=0777         0      0
--tmpfs           /tmp           tmpfs    mode=1777         0      0
--sysfs		/sys	       sysfs    defaults	  0	 0
-+# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
-+/dev/root	/		ext2	rw,noauto	0	1
-+proc		/proc		proc	defaults	0	0
-+devpts		/dev/pts	devpts	defaults,gid=5,mode=620	0	0
-+tmpfs		/dev/shm	tmpfs	mode=0777	0	0
-+tmpfs		/tmp		tmpfs	mode=1777	0	0
-+tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
-+sysfs		/sys		sysfs	defaults	0	0
-diff --git a/system/skeleton/run b/system/skeleton/run
-deleted file mode 120000
-index 1c2f433..0000000
---- a/system/skeleton/run
-+++ /dev/null
-@@ -1 +0,0 @@
--tmp
-\ No newline at end of file
-diff --git a/system/skeleton/run/.empty b/system/skeleton/run/.empty
-new file mode 100644
-index 0000000..e69de29
-diff --git a/system/skeleton/var/run b/system/skeleton/var/run
-index 1431b0e..9ab376e 120000
---- a/system/skeleton/var/run
-+++ b/system/skeleton/var/run
-@@ -1 +1 @@
--../tmp
-\ No newline at end of file
-+../run
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
