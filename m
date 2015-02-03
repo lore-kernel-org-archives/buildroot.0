@@ -1,273 +1,84 @@
-From: imrehg at gmail.com <imrehg@gmail.com>
-Date: Tue,  3 Feb 2015 15:17:25 +0800
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for VIA
-	VAB-820/AMOS-820
-Message-ID: <1422947845-3700-1-git-send-email-imrehg@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  3 Feb 2015 08:30:13 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-02-02
+Message-ID: <20150203073014.6A129101A87@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gergely Imreh <imrehg@gmail.com>
+Build statistics for 2015-02-02
+===============================
 
-The VIA VAB-820 board (and the AMOS-820 system built around it) is
-based on Freescale i.MX6 for embedded and industrial computing.
+        success : 252
+       failures : 37 
+       timeouts : 0  
+          TOTAL : 289
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
-Chages v1 -> v2:
-  - fixed typos on in readme.txt and clarified setup steps
-  - updated defconfig kernel headers and rootfs settings (suggested by Thomas)
----
- board/via/imx6_vab820/6x_bootscript.txt            |   5 +
- board/via/imx6_vab820/post-build.sh                |   7 ++
- board/via/imx6_vab820/readme.txt                   | 114 +++++++++++++++++++++
- .../imx6_vab820/uboot-0001-add-bootscript.patch    |  44 ++++++++
- configs/via_imx6_vab820_defconfig                  |  37 +++++++
- 5 files changed, 207 insertions(+)
- create mode 100644 board/via/imx6_vab820/6x_bootscript.txt
- create mode 100755 board/via/imx6_vab820/post-build.sh
- create mode 100644 board/via/imx6_vab820/readme.txt
- create mode 100644 board/via/imx6_vab820/uboot-0001-add-bootscript.patch
- create mode 100644 configs/via_imx6_vab820_defconfig
+Classification of failures by reason
+====================================
 
-diff --git a/board/via/imx6_vab820/6x_bootscript.txt b/board/via/imx6_vab820/6x_bootscript.txt
-new file mode 100644
-index 0000000..0cd6c52
---- /dev/null
-+++ b/board/via/imx6_vab820/6x_bootscript.txt
-@@ -0,0 +1,5 @@
-+set loadaddr 0x10800000
-+set kernel uImage
-+set hdmi video=mxcfb0:dev=hdmi,1920x1080M at 60,bpp=32
-+set bootargs console=ttymxc1,115200 console=tty1,115200 ${hdmi} root=/dev/mmcblk1p2 rootwait rw
-+mmc dev 0; ext2load mmc 0:1 ${loadaddr} ${kernel} && bootm ; echo "Error loading kernel image"
-diff --git a/board/via/imx6_vab820/post-build.sh b/board/via/imx6_vab820/post-build.sh
-new file mode 100755
-index 0000000..0d49680
---- /dev/null
-+++ b/board/via/imx6_vab820/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+
-+TARGET_DIR=$1
-+BOARD_DIR="$(dirname $0)"
-+
-+mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" \
-+    -d $BOARD_DIR/6x_bootscript.txt $TARGET_DIR/6x_bootscript
-diff --git a/board/via/imx6_vab820/readme.txt b/board/via/imx6_vab820/readme.txt
-new file mode 100644
-index 0000000..0f87e23
---- /dev/null
-+++ b/board/via/imx6_vab820/readme.txt
-@@ -0,0 +1,114 @@
-+VIA VAB-820/AMOS-820
-+====================
-+
-+This file documents the Buildroot support for the VIA VAB-820 board and
-+VIA AMOS-820 system, which are built around a Freescale i.MX6 Quad/Dual SoC.
-+The kernel and u-boot is based on the official VIA BSP, which is in turn
-+based on the Freescale Linux 3.0.35 / 4.1.0 BSP.
-+
-+
-+Configuring and building Buildroot
-+----------------------------------
-+
-+First apply the relevant defconfig
-+
-+  $ make via_imx6_vab820_defconfig
-+
-+Then you can edit build options by
-+
-+  $ make menuconfig
-+
-+When happy with the setup run
-+
-+  $ make
-+
-+The result of the build with the default settings should be these files:
-+
-+  output/images
-+  ??? 6x_bootscript
-+  ??? rootfs.tar
-+  ??? u-boot.bin
-+  ??? uImage
-+
-+
-+Set up your SD card
-+-------------------
-+
-+*Important*: pay attention which partition you are modifying so you don't
-+accidentally erase the wrong file system, e.g your host computer or your
-+external storage!
-+
-+In the default setup you need to create 2 partitions on your SD card:
-+a boot partition and a root partition. In this guide and in the default settings
-+the boot partition is ext2, while the root partition is ext4.
-+
-+You also need to leave space for u-boot at the beginning of the card, before
-+all the partitions.
-+
-+For example, if your SD card is at /dev/sdX, using fdisk, and starting from
-+an empty card, the steps are along these lines:
-+
-+  # fdisk /dev/sdX
-+  n  (new partition)
-+  p  (primary partition)
-+  <return>  (default first sector, should be at least 1MB from the beginning
-+             which is 2048 sectors if the sector size is 512KB)
-+  +50M  (50MB size, as an example)
-+  n  (the second partition)
-+  p  (primary partition type)
-+  <return>  (default first sector)
-+  <return>  (use all remaining space)
-+  p  (print so the partition looks something like this:)
-+    Device     Boot  Start      End  Sectors  Size Id Type
-+    /dev/sdX1         2048   104447   102400   50M 83 Linux
-+    /dev/sdX2       104448 15564799 15460352  7.4G 83 Linux
-+  w  (save changes)
-+
-+After this you need to format the newly created file system:
-+
-+  # mkfs.ext2 -L boot /dev/sdX1
-+  # mkfs.ext4 -L rootfs /dev/sdX2
-+
-+After this the system can be copied onto the card. First copy the u-boot
-+onto the region of the card before the first partition (starting from the
-+root directory of buildroot):
-+
-+  # dd if=output/images/u-boot.bin bs=512 seek=2 skip=2 of=/dev/sdX
-+
-+Mount the first partition /dev/sdX1, and copy the boot script and kernel:
-+
-+  # cp output/images/6x_bootscript /mnt/<BOOT-PARTITION>
-+  # cp output/images/uImage /mnt/<BOOT-PARTITION>
-+
-+Finally, copy the root file system onto the mounted (empty) /dev/sdX2
-+rootfs partition:
-+
-+  # tar xf output/images/rootfs.tar -C /mnt/<ROOTFS-PARTITION>
-+
-+
-+Booting
-+-------
-+
-+To use the on-card u-boot, you need adjust jumper J11 located just next to
-+the SD card slot on the VAB-820 board. The correct position for SD card
-+boot is jumping the two pins on the right, or toward the center of the board.
-+
-+If you have modified the u-boot variables stored in the SPI flash, you might
-+need to run a `destroyenv` in the u-boot console to clear all the settings,
-+and let the u-boot you just compiled, and the 6x_bootscript take care of
-+booting the board.
-+
-+In the future, add your modifications to the defaults in
-+`board/via/imx6_vab820/6x_bootscript.txt`, and see the `post-build.sh`
-+script in the same directory on how to generate a new `6x_bootscript`.
-+
-+Please note: in the default buildroot setup the login prompt only shows
-+over the serial debug line, and does not show on the video out.
-+
-+
-+eMMC boot
-+---------
-+
-+To run the system from the onboard eMMC storage, you can follow similar steps,
-+but replacing `mmcblk1` with `mmcblk0` in the instructions and scripts, and
-+working from a system already running on the SD card.
-diff --git a/board/via/imx6_vab820/uboot-0001-add-bootscript.patch b/board/via/imx6_vab820/uboot-0001-add-bootscript.patch
-new file mode 100644
-index 0000000..5054aad
---- /dev/null
-+++ b/board/via/imx6_vab820/uboot-0001-add-bootscript.patch
-@@ -0,0 +1,44 @@
-+From 029eae9870057300547e41bd3e289132a35d4467 Mon Sep 17 00:00:00 2001
-+From: Gergely Imreh <imrehg@gmail.com>
-+Date: Thu, 22 Jan 2015 14:19:53 +0800
-+Subject: [PATCH] vab820: modify default bootcmd to look for 6x_bootscript on
-+ the first partition
-+
-+Previously it is not possible to supply the relevant u-boot parameters on the
-+SD card or eMMC storage, but they are always either read from the compiled-in
-+parameters, or the SPI flash.
-+
-+This modification is based on the Boundary Devices Nitrogen6X board's parameters.
-+https://github.com/boundarydevices/u-boot-imx6/blob/77ab23a8670d5d05679a168f595ab11c3cea034b/include/configs/mx6_r.h#L175-L191
-+---
-+ include/configs/mx6q_sabrelite.h | 14 +++++++++++++-
-+ 1 file changed, 13 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/configs/mx6q_sabrelite.h b/include/configs/mx6q_sabrelite.h
-+index 987df11..73b762e 100644
-+--- a/include/configs/mx6q_sabrelite.h
-++++ b/include/configs/mx6q_sabrelite.h
-+@@ -170,7 +170,19 @@
-+ 		"bootcmd_mmc=run bootargs_base bootargs_mmc; mmc dev 1; ext2load mmc 1:1 $loadaddr $vkernel && bootm\0"   \
-+ 		"bootargs_sd=setenv bootargs ${bootargs} root=/dev/mmcblk1p1 rootwait rw\0"     \
-+ 		"bootcmd_sd=run bootargs_base bootargs_sd; mmc dev 0; ext2load mmc 0:1 $loadaddr $vkernel && bootm\0"   \
-+-		"bootcmd=run bootcmd_mmc\0"
-++		"bootcmd=for disk in 0 1 " \
-++		   "; do "\
-++                     " mmc dev ${disk} ;" \
-++		     "for fs in fat ext2 ; do " \
-++		       "${fs}load "  \
-++		         "mmc ${disk}:1 "  \
-++		         "10008000 " \
-++		         "/6x_bootscript" \
-++		         "&& source 10008000 ; " \
-++		     "done ; " \
-++		  "done ; " \
-++		"echo ; echo 6x_bootscript not found ;\0" \
-++
-+ #endif
-+ 
-+ #define CONFIG_ARP_TIMEOUT	200UL
-+-- 
-+2.2.2
-+
-diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
-new file mode 100644
-index 0000000..b14c711
---- /dev/null
-+++ b/configs/via_imx6_vab820_defconfig
-@@ -0,0 +1,37 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.0.35"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-+BR2_GCC_VERSION_4_7_X=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-kernel-bsp.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="via_3.0.35"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx6"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_UBOOT_IMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabrelite"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-uboot-bsp.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="via_3.0.35"
-+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/via/imx6_vab820"
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
-+
-+# rootfs
-+BR2_TARGET_ROOTFS_TAR=y
-+
-+# post-build
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/via/imx6_vab820/post-build.sh"
+                   mono-3.12.0 | 8 
+              host-erlang-17.4 | 7 
+               host-qemu-2.1.2 | 3 
+             libselinux-2.1.13 | 3 
+                    strace-4.9 | 2 
+make: *** [core-dependencie... | 2 
+          libmicrohttpd-0.9.38 | 1 
+       opentyrian-2.1.20130907 | 1 
+                  zeromq-4.0.5 | 1 
+zmqpp-36413487f05b165dfc82a... | 1 
+           libmemcached-1.0.18 | 1 
+                libvips-7.42.1 | 1 
+               dvdauthor-0.7.1 | 1 
+                    qemu-2.1.2 | 1 
+                     rpm-5.2.0 | 1 
+             util-linux-2.25.2 | 1 
+             armadillo-4.000.4 | 1 
+libwebsock-3c1615eeadb0b582... | 1 
+
+Detail of failures
+===================
+
+      x86_64 |              armadillo-4.000.4 | NOK | http://autobuild.buildroot.net/results/3cc1d483353f5399297f33b57a1a6f90ff5f2561/
+        bfin |                dvdauthor-0.7.1 | NOK | http://autobuild.buildroot.net/results/db81d0cbc5e3a53161a9290e719468f78b07d368/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/91e1e886518acea516217ba7e4bc967b08d80b92/
+         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/580d13eec9b8867514ba1ade5f1581040d072d46/
+      x86_64 |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/a76b2debbff3a63bc3c2f65bbfbed363a614383d/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/53e81fc6f0cce278fbf052c924b820a4bdb2bc9b/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/64300c031b9170ada192e96652e2e31c11339609/
+     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/f12ae18563ec9deac85e5309091ec38d00fb5fd6/
+         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/e3e99977acc4a4c84d0e86f9bdfa19be1f2e9e1d/
+        bfin |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/95c63f4a30b42fcaaa754222ea3764851a6bcfb2/
+        bfin |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/f83e056daf2cdbe8cf182214b5e8da6f6015d13b/
+        i686 |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/a3b2d9568d7027bd4163d2a91281b76197cf8a93/
+        bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/d9877276d7e9f82385a326ac03960ddeb9b3be9a/
+        bfin |           libmicrohttpd-0.9.38 | NOK | http://autobuild.buildroot.net/results/07dbdfcf0a7c3e7c05aa58eec1dcb5f9854fc7be/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/710188a977914a0d783077f27cef283246a8aa2d/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/a8e6bf8848c6e19edbc0a581c9a3f850809dc4a6/
+        bfin |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/1ad4a5a76c6faa7596c29575f3aae13046b7c7d9/
+microblazeel |                 libvips-7.42.1 | NOK | http://autobuild.buildroot.net/results/bf62c66aac469daf00c0a5c15b5f86803088e6f8/
+        bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/e0f33375fdb9a82b1e52d2c354973216b5b2197a/
+     powerpc | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/bb7e60d8c7e546f31f47458f4689515b010ce971/
+     powerpc | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/f586262b194fea866e0cebcea5a607aa9308fcf9/
+        mips |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/a9146b629b68be59abb503551a7f7041145b01ab/
+     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/3c34db30033ca37bafd7671d7d90aa18b3c95123/
+      mipsel |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/226f4cf2f6c03f6b51e06899c42442c483bbc6e9/
+     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/5f0ff8c3bbb4d0cd6488b31fb5faeaea24e19bea/
+     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/247a18af1508f1a6da17f9212da73776abb4a1d9/
+      mipsel |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/abc9a11bf8c40b8a8dec1222f61d87ef0009df4e/
+        mips |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/b1b0331379b097c0c1157606d167e146dbc07908/
+     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/671e27e6ac66395fac8977ee997c80468765e873/
+        bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/31ff28e6a6c91d39e66a849f47b2f2251374347a/
+        i686 |                     qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/7b771e684462ec8d3a57edf05b4e4697b3636d60/
+     powerpc |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/457d3d9231f1422b19ffbac6d4a6ab02c6d6c22f/
+      mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/c23dba1fd619154127b699fa86297f790eb19398/
+      mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/09fc853a989668e26d58a9a91eadcb06b65296c1/
+      x86_64 |              util-linux-2.25.2 | NOK | http://autobuild.buildroot.net/results/f3b318c904b6325fd143a55f2f9fd1c55bb9cfd5/
+        bfin |                   zeromq-4.0.5 | NOK | http://autobuild.buildroot.net/results/dab53e908b34dbbd3c53e6183c686d70d796cfb6/
+        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/cf968d12f2115efadd50fc49f69325dd24b13839/
+
+
 -- 
-2.2.2
+http://autobuild.buildroot.net
