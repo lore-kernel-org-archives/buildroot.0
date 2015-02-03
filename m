@@ -1,36 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 15:59:57 +0100
-Subject: [Buildroot] [git commit] iprutils: drop unneeded ncurses5-config
-	handling
-Message-ID: <20150203150007.C94568175D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Feb 2015 16:58:21 +0100
+Subject: [Buildroot] [RFC 0/3] samba4: allow build of libsmbclient only
+In-Reply-To: <1411823541-4953-1-git-send-email-zooey@hirschkaefer.de>
+References: <1411823541-4953-1-git-send-email-zooey@hirschkaefer.de>
+Message-ID: <20150203165821.4b4d5548@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6abdd97a1b6bd7e943e0ea04e99ad509abcbe1a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-ncurses nowadays installs the headers directly into $prefix/usr/include, so
-ncurses5-config doesn't return anything important and the logic wasn't
-taking the wchar variant into consideration - So just drop it.
+On Sat, 27 Sep 2014 15:12:18 +0200, zooey at hirschkaefer.de wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iprutils/iprutils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> this set of patches is a first draft of allowing a separate build
+> of samba4's libsmbclient. Most of our devices don't need all of the
+> other samba servers and tools, so it seems a bit of a waste having
+> to build them all.
+> 
+> The first patch contains the naive attempt at implementing the separation.
+> 
+> However, it seems that samba4's build system gets confused when not all 
+> targets have been built, as it tries to install manpages along with 
+> libsmbclient which haven't been generated during the build phase. Patch 2
+> works around the problem by deactivating installation of manpages in general,
+> but as that is hardly acceptable, I wonder if anyone here has a better idea?
+> 
+> Patch 3 appies --disable-rpath-private-install in order to work around
+> another build problem, which is apparently caused by libsmbclient.inst.so (and
+> additional install libraries) to not have been created during the build phase.
+> Again, the solution proposed in the patch isn't a good one, as it basically 
+> means that samba4's private libraries are not being built with RPATH set, 
+> which is bound to cause problems at runtime (they won't be found by the 
+> runtime loader). As with patch 2, I'd be grateful for any hints at better
+> solutions.
 
-diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-index e3f3a37..b2fe4cf 100644
---- a/package/iprutils/iprutils.mk
-+++ b/package/iprutils/iprutils.mk
-@@ -13,7 +13,7 @@ IPRUTILS_LICENSE_FILES = LICENSE
- 
- define IPRUTILS_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		INCLUDEDIR="-I. $(shell $(STAGING_DIR)/usr/bin/ncurses5-config --cflags)" all
-+		INCLUDEDIR="-I." all
- endef
- 
- define IPRUTILS_INSTALL_TARGET_CMDS
+Thanks for those patches. However, as you point out in your cover
+letter, those patches are not really acceptable as is. Moreover, those
+are really "feature patches", and we generally try to avoid them if
+possible. Could you instead work with the upstream Samba developers a
+solution to build only smbclient, and see where that goes?
+
+Thanks a lot,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
