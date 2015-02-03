@@ -1,41 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 21:50:41 +0100
-Subject: [Buildroot] [git commit] libqmi: bump to 1.12.2
-Message-ID: <20150203205150.A4A6F80E2B@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue,  3 Feb 2015 22:05:16 +0100
+Subject: [Buildroot] [PATCH] python-werkzeug: bump to 0.10
+Message-ID: <1422997516-22251-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=12c4db998db5e8192ebab04575e2addf49cb0efc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libqmi/libqmi.hash |    2 +-
- package/libqmi/libqmi.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-werkzeug/python-werkzeug.hash | 4 ++--
+ package/python-werkzeug/python-werkzeug.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index df592b1..f5f2578 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  7bf0a5b70a6e8214932ec32c264e59d5290c6bd181fa1341c028a063181f64ff  libqmi-1.12.0.tar.xz
-+sha256  d1661d73b510482b29b93b7e396756c433d35360b3d44c72afa7921339a98624  libqmi-1.12.2.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 7ef1dcf..9e5f9cb 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 38f622a..3dcc5b4 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
+-md5	f7afcadc03b0f2267bdc156c34586043  Werkzeug-0.9.6.tar.gz
+-sha256	7f11e7e2e73eb22677cac1b11113eb6106f66cedef13d140e83cf6563c90b79c  Werkzeug-0.9.6.tar.gz
++md5	42ebf43b19475bf856fde740050d7707  Werkzeug-0.10.tar.gz
++sha256	9a97a6fcf87390172748da9e5250710b352dff18e979db925d276112cdcfa7ac  Werkzeug-0.10.tar.gz
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index 8902d17..41ae430 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBQMI_VERSION = 1.12.0
-+LIBQMI_VERSION = 1.12.2
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+-PYTHON_WERKZEUG_VERSION = 0.9.6
++PYTHON_WERKZEUG_VERSION = 0.10
+ PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+ PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+-- 
+2.1.0
