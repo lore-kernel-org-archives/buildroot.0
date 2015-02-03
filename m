@@ -1,31 +1,29 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 03 Feb 2015 10:10:33 +0100
-Subject: [Buildroot] [PATCH 09/16] package/minidlna: improve systemd
-	support
-In-Reply-To: <CAKErNvpuMEN3jztGodJWJUzBTtc8uYKi6edwkWOhbW_MeWesQw@mail.gmail.com>
+Date: Tue, 03 Feb 2015 10:11:30 +0100
+Subject: [Buildroot] [PATCH 10/16] package/transmission: improve systemd
+ support
+In-Reply-To: <CAHXCMM+b4_JKc7+r-nxK+7zYn8qYw-Q7untphGrn8bM4Zn-qKg@mail.gmail.com>
 References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-10-git-send-email-maxtram95@gmail.com>
- <CAHXCMMK3JOMLvyp74gyG7W2GVDocBX8tG6q0Ny+cK-SeRXPxUA@mail.gmail.com>
- <CAKErNvpuMEN3jztGodJWJUzBTtc8uYKi6edwkWOhbW_MeWesQw@mail.gmail.com>
-Message-ID: <54D09089.4090104@mind.be>
+ <1421684056-5266-11-git-send-email-maxtram95@gmail.com>
+ <CAHXCMM+b4_JKc7+r-nxK+7zYn8qYw-Q7untphGrn8bM4Zn-qKg@mail.gmail.com>
+Message-ID: <54D090C2.1080601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/02/15 22:30, Maxim Mikityanskiy wrote:
->> To make minidlna compliant with non-systemd ssytem, you should add the
->> > user using _USERS infra [1].
-> There were two reasons I preferred sysusers over _USERS.
+On 02/02/15 23:09, Samuel Martin wrote:
+> We usually like when option are symetrical, so here, just add:
+> <snip>
+> else
+> TRANSMISSION_CONF_OPTS += --without-systemd-daemon
+> </snip>
+> 
+>  Note that, we usually don't indent variable assignation ;)
 
-
- I think that where possible, we should use sysusers on a systemd system and
-_USERS on a non-systemd system. Perhaps the _USERS infrastructure should be
-extended to do this automatically - AFAIK there is no advantage of using a
-static user when you use systemd, right? Except of course when the package
-requires one specific UID, but IIRC even that can be encoded in the sysusers
-configuration, no?
+ To be more accurate: we normally don't indent the bodies of make conditions.
+But the transmission.mk file already violates that principle.
 
  Regards,
  Arnout
