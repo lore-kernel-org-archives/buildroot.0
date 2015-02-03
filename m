@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 17:57:15 +0100
-Subject: [Buildroot] [git commit] xterm: add support for 256 colors
-Message-ID: <20150203165735.7067680E2B@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 17:58:12 +0100
+Subject: [Buildroot] [PATCH 1/1] xterm: add support for 256 colors
+In-Reply-To: <1418137759-12514-1-git-send-email-tbultel@free.fr>
+References: <1418137759-12514-1-git-send-email-tbultel@free.fr>
+Message-ID: <20150203175812.530256e1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2aaa5bd7b1fcd3c152cd138d7d68ac46a5188413
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thierry Bultel,
 
-[Thomas: make the 256 colors support unconditionally enabled.]
+On Tue,  9 Dec 2014 16:09:19 +0100, Thierry Bultel wrote:
+> Signed-off-by: Thierry Bultel <tbultel@free.fr>
+> ---
+>  package/xterm/Config.in | 9 +++++++++
+>  package/xterm/xterm.mk  | 4 ++++
+>  2 files changed, 13 insertions(+)
 
-Signed-off-by: Thierry Bultel <tbultel@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xterm/xterm.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Adding a condition for such a small feature in a package that anyway
+has a huge dependency such as X.org didn't seem really useful, so I've
+dropped the additional config option, and just enabled 256 colors
+support unconditionally.
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 9c6bd21..3f5b978 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -11,5 +11,6 @@ XTERM_DEPENDENCIES = ncurses xlib_libXaw
- XTERM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
- XTERM_LICENSE = MIT
- XTERM_LICENSE_FILES = version.c
-+XTERM_CONF_OPTS = --enable-256-color
- 
- $(eval $(autotools-package))
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
