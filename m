@@ -1,41 +1,36 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue,  3 Feb 2015 22:05:16 +0100
-Subject: [Buildroot] [PATCH] python-werkzeug: bump to 0.10
-Message-ID: <1422997516-22251-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  3 Feb 2015 22:13:21 +0100
+Subject: [Buildroot] [PATCH v1] util-linux: target command more needs ncurses
+Message-ID: <1422998001-9377-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-werkzeug/python-werkzeug.hash | 4 ++--
- package/python-werkzeug/python-werkzeug.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes [1]:
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 38f622a..3dcc5b4 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f7afcadc03b0f2267bdc156c34586043, sha256 locally computed
--md5	f7afcadc03b0f2267bdc156c34586043  Werkzeug-0.9.6.tar.gz
--sha256	7f11e7e2e73eb22677cac1b11113eb6106f66cedef13d140e83cf6563c90b79c  Werkzeug-0.9.6.tar.gz
-+md5	42ebf43b19475bf856fde740050d7707  Werkzeug-0.10.tar.gz
-+sha256	9a97a6fcf87390172748da9e5250710b352dff18e979db925d276112cdcfa7ac  Werkzeug-0.10.tar.gz
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 8902d17..41ae430 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+configure: error: more selected, but required ncurses, tinfo or termcap
+libraries not available
+
+[1] http://autobuild.buildroot.net/results/f3b/f3b318c904b6325fd143a55f2f9fd1c55bb9cfd5
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/util-linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 78648c1..55c10f2 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -160,6 +160,7 @@ comment "nsenter needs a toolchain w/ headers >= 3.0"
  
--PYTHON_WERKZEUG_VERSION = 0.9.6
-+PYTHON_WERKZEUG_VERSION = 0.10
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
- PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ config BR2_PACKAGE_UTIL_LINUX_MORE
+ 	bool "more"
++	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  File perusal filter for crt viewing
+ 
 -- 
-2.1.0
+2.1.4
