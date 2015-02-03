@@ -1,63 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 03 Feb 2015 21:19:13 +0100
-Subject: [Buildroot] [PATCH v2 1/2] qt5multimedia: fix compile without
- opengl
-In-Reply-To: <trinity-9cb7699f-7c2e-4558-b3cb-1dca2d23bb59-1422989545184@3capp-gmx-bs52>
-References: <trinity-9793f5a9-f1ef-4912-92e4-dc7acbb69ddc-1422481699290@3capp-gmx-bs31>,
- <54D0F5A1.8040004@mind.be>
- <trinity-9cb7699f-7c2e-4558-b3cb-1dca2d23bb59-1422989545184@3capp-gmx-bs52>
-Message-ID: <54D12D41.4080204@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue,  3 Feb 2015 21:27:06 +0100
+Subject: [Buildroot] [PATCH 1/2] libqmi: bump to 1.12.2
+Message-ID: <1422995227-9507-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/02/15 19:52, Peter Seiderer wrote:
-> Hello Arnout,
->
-> > Gesendet: Dienstag, 03. Februar 2015 um 17:21 Uhr
-> > Von: "Arnout Vandecappelle" <arnout@mind.be>
-> > An: "Peter Seiderer" <ps.report@gmx.net>, "Thomas Petazzoni"
-> <thomas.petazzoni@free-electrons.com>
-> > Cc: buildroot at busybox.net
-> > Betreff: Re: [Buildroot] [PATCH v2 1/2] qt5multimedia: fix compile without
-> opengl
-> >
-> > On 28/01/15 22:48, Peter Seiderer wrote:
-> >> But I searched upstream git, there is already a fix in 5.4.1/dev branch
-> >> fixing this problem ([1]), but as I think doing it the wrong way,
-> >> disabling Format_RGB24 for the non-OpenGL case ([2]), but a follow up
-> >> patch fixing the issue is on its way upstream ([3])...
-> >
-> >  Could you then submit those two upstream patches? Either separately or
-> > squashed, but with a reference to the upstream commit and your SoB.
-> >
->
-> Mhh, I understand the reasoning for grabbing upstream patches, but in this case
-> I am not sure its worth the work to possibly rebase the upstream version (in case
-> they do not apply cleanly, or to squash them), to get nearly the same result as
-> with the suggested patch, the fix for [2] with [3] is derived work of my suggested
-> buildroot patch ;-)
->
-> Less work would be to just add the upstream references to the commit message
-> and/or the patch...
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
- Ah OK, to me it looked as if the upstream patches were handling the situation
-differently, but I hadn't taken the time to look at them in detail.
-
- If you're doing basically the same thing, then your patch is OK as if of
-course. The upstream references are still useful but it could be applied without it.
-
- So basically:
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index df592b1..f5f2578 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  7bf0a5b70a6e8214932ec32c264e59d5290c6bd181fa1341c028a063181f64ff  libqmi-1.12.0.tar.xz
++sha256  d1661d73b510482b29b93b7e396756c433d35360b3d44c72afa7921339a98624  libqmi-1.12.2.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 7ef1dcf..9e5f9cb 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.12.0
++LIBQMI_VERSION = 1.12.2
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.1.0
