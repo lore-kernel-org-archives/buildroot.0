@@ -1,49 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 00:40:20 +0100
-Subject: [Buildroot] [git commit] Revert "automake: complete the removal of
-	the target package"
-Message-ID: <20150202234151.C864C807AE@busybox.osuosl.org>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Mon, 02 Feb 2015 22:05:30 -0300
+Subject: [Buildroot] [PATCH 0/4] ARM Cortex-M3 support
+In-Reply-To: <20150202211954.54557b27@free-electrons.com>
+References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20150202211954.54557b27@free-electrons.com>
+Message-ID: <54D01EDA.40400@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7ff733e83416bb2faa6cc4900e05f11d3ac490e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-This reverts commit 6c33512e01acfc576dc4e3ad28def8b29c0db822.
+On 02/02/2015 05:19 PM, Thomas Petazzoni wrote:
+> Dear Ezequiel Garcia,
+> 
+> On Thu, 22 Jan 2015 15:33:24 -0300, Ezequiel Garcia wrote:
+> 
+>> Guido Mart?nez (3):
+>>   arm: conditionally support regular ARM instructions
+>>   arm: update processor types
+>>   toolchain: allow for stupid toolchains
+>>
+>> Thomas Petazzoni (1):
+>>   toolchain-external: add OSELAS 2013.12.2 Cortex-M3 toolchain
+> 
+> So as I said, PATCH 1/4 applied. Several comments have been made on the
+> other patches. Can you respin a new iteration for these?
+> 
 
-We DO need to look in the staging directory for .m4 files installed by other
-target packages, otherwise we'll have breakage like:
+Sure, we are already looking at the comments.
 
-http://autobuild.buildroot.net/results/b20/b20e3efcb0be3032781d7b2f0ef4c351834da0ce/
+> In the mean time, I'll mark those three patches as 'Changes Requested'
+> in patchwork, so please remember to send a new version.
+> 
+> Also, if you could send at least one defconfig for a Cortex-M3 board,
+> it would be good.
+> 
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/autoconf/autoconf.mk |    2 +-
- package/automake/automake.mk |    3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index 2c0ff30..fd91961 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -23,4 +23,4 @@ $(eval $(host-autotools-package))
- # variables used by other packages
- AUTOCONF = $(HOST_DIR)/usr/bin/autoconf
- AUTOHEADER = $(HOST_DIR)/usr/bin/autoheader
--AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
-+AUTORECONF = $(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" AUTOPOINT=/bin/true $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 5021b49..a3fd18c 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -28,5 +28,6 @@ $(eval $(host-autotools-package))
- 
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/usr/bin/automake
--ACLOCAL_DIR = $(HOST_DIR)/usr/share/aclocal
-+ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
-+ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+Sure, no problem.
+-- 
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
