@@ -1,58 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 03 Feb 2015 15:15:45 +0100
-Subject: [Buildroot] [PATCH 1/3] fs/iso9660: allow building a hybrid ISO
- image
-In-Reply-To: <54CFE871.5090902@mind.be>
-References: <1421697177-12995-1-git-send-email-nrubinstein@aldebaran.com>
- <54CFE871.5090902@mind.be>
-Message-ID: <54D0D811.40303@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  3 Feb 2015 15:21:46 +0100
+Subject: [Buildroot] [PATCH 0/10] kconfig infra: enhancements,
+	and more packages migrated (branch yem/pdp/kconfig)
+Message-ID: <cover.1422972638.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/02/15 22:13, Arnout Vandecappelle wrote:
-> On 19/01/15 20:52, No? Rubinstein wrote:
->> This adds an option to build an ISO image using ISOLINUX as a
->> bootloader, as ISOLINUX provides "isohybrid", an utility that enables
->> using an ISO image as a bootable disk image.
->>
->> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
-> 
->  Hi No?,
-> 
->  While you're working on this, there is something else that you may be
-> interested in doing.
-> 
->  Currently, the iso image that is generated is not really the root filesystem,
-> but it contains a cpio image with the real root filesystem. But in fact, there
-> is no good reason to work that way, and it really complicates the build.
-> Instead, it would be a lot more logical to create a real iso9660 root filesystem
-> using the RockRidge extensions.
-> 
->  That would also allow the iso9660 fs to finally use the ROOTFS_TARGET
-> infrastructure, removing a lot of cruft.
-> 
-> 
->  If you're willing to work on this, you can add it as an additional patch to
-> your series. It's very likely that it will need a couple of review cycles, so be
-> prepared for that :-)
+Hello All!
+
+This series is a collaborative work of Thomas DS and I to improve the
+kconfig package infrastructure, so that it is able to handle both the
+Linux kernel and the Barebox bootloader.
+
+The first part of the series prepares the kconfig package infrastructure:
+  - support config files bundled in the package
+  - support defconfig files
+  - hide kconfig-related targets when the package is disabled
+
+Then it prepares the Linux package for being migrated to use the kconfig
+package infrastructure, plus a little extra to ease collaborative work:
+  - qstrip the path to the custom (def)config file
+  - do the actual migration
+  - do not store absolute path for the initramfs source tree
+
+Eventually, it switches Barebox to using the package infrastructure as
+well:
+  - qstrip the path to the custom (def)config file
+  - do the actual migration
 
 
- By the way, take a look at these two very old patches by Jerome Sagnole:
-http://patchwork.ozlabs.org/patch/328051/
-http://patchwork.ozlabs.org/patch/328052/
+Regards,
+Yann E. MORIN.
 
 
- Regards,
- Arnout
+The following changes since commit 088ca7f95988bc846f224e43b2a5e11fa6113334:
 
+  mjpegtools: add optional support for png/sdl/sdl_gfx/X11/gtk2 (2015-02-03 14:23:09 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/pdp/kconfig
+
+for you to fetch changes up to ea421877479d951601ffcf49fd5bce2d9d4f96b5:
+
+  barebox: migrate to the kconfig infrastructure (2015-02-03 15:05:05 +0100)
+
+----------------------------------------------------------------
+Thomas De Schampheleire (9):
+      kconfig infra: support built-in config files
+      kconfig infra: add support for defconfig files
+      kconfig infra: make update-config/defconfig handling symmetrical
+      kconfig infra: remove all install stamp files
+      linux: qstrip the path to the custom configuration file
+      linux: migrate to the kconfig infrastructure
+      linux: avoid unnecessary changes in defconfig for INITRAMFS_SOURCE
+      barebox: qstrip the path to the custom configuration file
+      barebox: migrate to the kconfig infrastructure
+
+Yann E. Morin (1):
+      kconfig infra: only provide foo-*config targets when the package is enabled
+
+ boot/barebox/barebox.mk | 35 ++++++-----------------------------
+ linux/linux.mk          | 42 ++++++++++++------------------------------
+ package/pkg-kconfig.mk  | 38 +++++++++++++++++++++++++++++++++++---
+ 3 files changed, 53 insertions(+), 62 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
