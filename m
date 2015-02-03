@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 15:58:31 +0100
-Subject: [Buildroot] [PATCH] skeleton: make /run a proper
- directory/filesystem
-In-Reply-To: <1417128109-25880-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1417128109-25880-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150203155831.469c64ed@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 3 Feb 2015 15:59:57 +0100
+Subject: [Buildroot] [git commit] iprutils: drop unneeded ncurses5-config
+	handling
+Message-ID: <20150203150007.C94568175D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=c6abdd97a1b6bd7e943e0ea04e99ad509abcbe1a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Nov 2014 19:41:49 -0300, Gustavo Zacarias wrote:
-> Making /var/run and /run symlinks to /tmp is bad since the underlying
-> tmpfs filesystem is mode 1777 which leads to possible security attack
-> vectors via badly owned/mask-mode pidfiles and state files residing there.
-> 
-> So make /run a proper directory with /var/run symlinked to it.
-> Eventually all startup scripts and state info should be pointed to /run
-> directly as per the linux fhs and good practice.
-> 
-> Add a tmpfs filesystem entry for /run so that busybox inittab, systemv
-> inittab and systemd automount mounts it there to avoid breaking the
-> system.
-> 
-> While at it fix inconsistent spacing in /etc/fstab by using tabs and
-> drop the "static file system information" header whatever that means.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ncurses nowadays installs the headers directly into $prefix/usr/include, so
+ncurses5-config doesn't return anything important and the logic wasn't
+taking the wchar variant into consideration - So just drop it.
 
-Applied, thanks!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iprutils/iprutils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
+index e3f3a37..b2fe4cf 100644
+--- a/package/iprutils/iprutils.mk
++++ b/package/iprutils/iprutils.mk
+@@ -13,7 +13,7 @@ IPRUTILS_LICENSE_FILES = LICENSE
+ 
+ define IPRUTILS_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		INCLUDEDIR="-I. $(shell $(STAGING_DIR)/usr/bin/ncurses5-config --cflags)" all
++		INCLUDEDIR="-I." all
+ endef
+ 
+ define IPRUTILS_INSTALL_TARGET_CMDS
