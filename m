@@ -1,91 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 03 Feb 2015 09:54:15 +0100
-Subject: [Buildroot] board-specific autotools env customization
-In-Reply-To: <CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>
-References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>
- <20150202175455.5dd5c2e3@free-electrons.com>
- <CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>
-Message-ID: <54D08CB7.7040801@mind.be>
+Date: Tue, 03 Feb 2015 10:10:33 +0100
+Subject: [Buildroot] [PATCH 09/16] package/minidlna: improve systemd
+	support
+In-Reply-To: <CAKErNvpuMEN3jztGodJWJUzBTtc8uYKi6edwkWOhbW_MeWesQw@mail.gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-10-git-send-email-maxtram95@gmail.com>
+ <CAHXCMMK3JOMLvyp74gyG7W2GVDocBX8tG6q0Ny+cK-SeRXPxUA@mail.gmail.com>
+ <CAKErNvpuMEN3jztGodJWJUzBTtc8uYKi6edwkWOhbW_MeWesQw@mail.gmail.com>
+Message-ID: <54D09089.4090104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Lionel,
-
-On 02/02/15 18:19, Lionel Orry wrote:
-[snip]
-> First, when I say it is specific to my compiler, I mean that it is
-> specific because it assumes some cached results for some './configure'
-> tests which are supposed to run on the target, and thus, when
-> cross-compiling, the maintainers of some autotools-based packages take
-> some assumptions which may not be right. I will precise my case below,
-> but I first wanted to say that this kind of situation could happen in
-> several packages present in buildroot, and for various
-> cross-compilers. It is not specific to *me*, it is an issue for
-> everyone using buildroot.
-
- It is indeed not specific to you, but applies to all cross-compiling users of
-zeromq.
-
-> 
-> My case :
-> * I am cross-compiling the package zeromq (v4.0.4) on a Super-H target
-> using a pre-built toolchain from STMicroelectronics (STLinux 2.4).
-> * I noticed the configure script attempts to check for SO_KEEPALIVE
-> and other similar options existence, and it does so by compiling a
-> snippet, running it on the target and checking the output value,
-> excepted when cross-compiling (of course), where it cannot
-> automatically run the code. So the assumption taken by zeromq devs is
-> that this flag is not supported. But it is in fact supported (I
-> manually cross-compiled and ran the snippet on the target to be 100%
-> sure) and I would like to pass the right assumption to the configure
-> script, for example by setting "libzmq_so_keepalive=yes" in
-> ZEROMQ_CONF_ENV.
-> You will agree with me that the SO_KEEPALIVE flag availability is
-> dependent on the compiler you use, right? I try to do as few
-> modifications to the official buildroot as possible, but still I would
-> like zeromq to make use of this flag on my platform.
-
- In fact, this flag is not dependent on the toolchain you use, but only on the
-kernel version (and of course your toolchain should also define the flag).
-That's why it runs the code, to find out if the kernel really supports it.
-SO_KEEPALIVE was introduced a really long time ago so you're safe to set
-libzmq_so_keepalive=yes unconditionally in ZEROMQ_CONF_ENV. And in fact, many of
-the other flags that zeromq checks for are also always available in Linux.
-
- So we would really appreciate if you could check the various flags that zeromq
-tries to run and set them to yes if they are available, and send a patch to the
-mailing list. I've already checked libzmq_cv_sock_cloexec: SOCK_CLOEXEC was
-introduced in 2.6.27 so we can also assume that it's always available. Which
-kernel version do you run?
+On 02/02/15 22:30, Maxim Mikityanskiy wrote:
+>> To make minidlna compliant with non-systemd ssytem, you should add the
+>> > user using _USERS infra [1].
+> There were two reasons I preferred sysusers over _USERS.
 
 
-
-> Aside note : in fact, in zeromq, the macros written for these flags
-> detection are wrong because they don't check if the value is set in
-> environment and always override them; so it is a bad example, but the
-
- Yeah, indeed, you should also patch acinclude.m4 to correctly use a cache
-variable with AC_CACHE_VAL and AC_CACHE_CHECK. And that patch should be sent
-upstream of course.
-
-
-> general question still arises, that would be interesting to have a
-> similar infrastructure like for patches, to pass user-specific
-> environments without messing with the .mk files...
-
- We will do that when there is a situation where this would be useful. But most
-of our bases are covered already. We can check on the kernel version, the type
-of C library, various components of the toolchain. We are indeed missing a check
-for e.g. C/C++11 availability, but that will come at some point.
-
+ I think that where possible, we should use sysusers on a systemd system and
+_USERS on a non-systemd system. Perhaps the _USERS infrastructure should be
+extended to do this automatically - AFAIK there is no advantage of using a
+static user when you use systemd, right? Except of course when the package
+requires one specific UID, but IIRC even that can be encoded in the sysusers
+configuration, no?
 
  Regards,
  Arnout
-
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
