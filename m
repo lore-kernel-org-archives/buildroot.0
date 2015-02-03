@@ -1,79 +1,74 @@
-From: will_wagner at carallon.com <will_wagner@carallon.com>
-Date: Tue,  3 Feb 2015 13:38:43 +0000
-Subject: [Buildroot] [PATCH 1/1] qt5base: add option for custom qconfig file
-Message-ID: <1422970723-31706-1-git-send-email-will_wagner@carallon.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Feb 2015 15:04:37 +0100
+Subject: [Buildroot] [PATCH 1/1] dropbear: add extra build customization
+ options
+In-Reply-To: <1410450212-30718-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1410450212-30718-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20150203150437.7d27225c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Will Wagner <will_wagner@carallon.com>
+Dear Floris Bos,
 
-Add in support for a custom qconfig file in the same way it is
-already present for the Qt4 package
+On Thu, 11 Sep 2014 17:43:31 +0200, Floris Bos wrote:
 
-Signed-off-by: Will Wagner <will_wagner@carallon.com>
----
- package/qt5/qt5base/Config.in  |   13 +++++++++++++
- package/qt5/qt5base/qt5base.mk |   13 +++++++++++++
- 2 files changed, 26 insertions(+)
+> - Option to disable password authentication,
+>   to only allow public key authentication instead
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index d57dd8e..9f1cf8a 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -28,6 +28,19 @@ config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
- 
- 	  See also http://doc.qt.io/qt-5/licensing.html
- 
-+config BR2_PACKAGE_QT5BASE_CONFIG_FILE
-+	string "Config file"
-+	help
-+	  Configure options allow to set which modules are being
-+	  compiled or not in Qt, but Qt also provide a more
-+	  fine-grained mechanism to configure which features should be
-+	  enabled or disabled, through a header file. Examples of such
-+	  header files can be found in src/corelib/global/qconfig-*.h
-+	  in the Qt sources.
-+
-+	  This option allows to set the path of such a configuration
-+	  file, which Buildroot will give to Qt at compile time.
-+
- config BR2_PACKAGE_QT5BASE_EXAMPLES
- 	bool "Compile and install examples (with code)"
- 	select BR2_PACKAGE_QT5BASE_NETWORK
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index aaf4da0..7872547 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -57,6 +57,12 @@ QT5BASE_LICENSE = Commercial license
- QT5BASE_REDISTRIBUTE = NO
- endif
- 
-+QT5BASE_CONFIG_FILE=$(call qstrip,$(BR2_PACKAGE_QT5BASE_CONFIG_FILE))
-+
-+ifneq ($(QT5BASE_CONFIG_FILE),)
-+QT5BASE_CONFIGURE_OPTS += -qconfig buildroot
-+endif
-+
- # Qt5 SQL Plugins
- ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
- ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
-@@ -172,7 +178,14 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
- 
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
- 
-+ifneq ($(QT5BASE_CONFIG_FILE),)
-+define QT5BASE_CONFIGURE_CONFIG_FILE
-+	cp $(QT5BASE_CONFIG_FILE) $(@D)/src/corelib/global/qconfig-buildroot.h
-+endef
-+endif
-+
- define QT5BASE_CONFIGURE_CMDS
-+	$(QT5BASE_CONFIGURE_CONFIG_FILE)
- 	(cd $(@D); \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+This can be done at runtime using the -s option, and presumably
+disabling it at build time doesn't give much space savings, so we'd
+rather not have a Config.in option for this.
+
+> - Option to disable TCP forwarding.
+>   Defaults to y, as most legitimate users are not using it,
+>   and the feature is very popular with spammers that scan
+>   for devices with weak passwords and use them to relay spam.
+
+This can be done at runtime using the -j and -k options, so same logic
+as for the password authentication disabling.
+
+We'd however be open to merge the option to install or not the clients,
+but we do have some comments/questions below.
+
+> +ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+>  DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+>  DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+>  		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
+> -
+> -DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+> -DROPBEAR_LICENSE_FILES = LICENSE
+> +else
+> +DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+> +DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+> +		PROGRAMS="dropbear dropbearkey dropbearconvert scp"
+> +endif
+
+Why is scp part of the server-only installation?
+
+Also, can you make this a bit smarter to avoid duplication. For example:
+
+DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+
+ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+DROPBEAR_TARGET_BINS += ssh dbclient
+endif
+
+And then use:
+
+	PROGRAMS="dropbear $(DROPBEAR_TARGET_BINS)"
+
+When doing the $(MAKE) call.
+
+We'll mark your patch as 'Changes Requested' in patchwork, so can you
+resend an updated version that takes into account those comments?
+
+Thanks!
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
