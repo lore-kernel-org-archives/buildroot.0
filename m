@@ -1,70 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 10:23:16 +0100
-Subject: [Buildroot] [git commit] erlang-p1-xml: new package.
-Message-ID: <20150203092417.B300D80E25@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 10:23:03 +0100
+Subject: [Buildroot] [git commit] docs/manual: add documentation for the
+	pkg-rebar infrastructure
+Message-ID: <20150203092417.8878B80E25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3adcfadd95a663462320ddb2cb9ca71210dfe08d
+commit: http://git.buildroot.net/buildroot/commit/?id=0fe05ff3e16113f2c558ba1f8a7bc2836842a08e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: fixup license, it is GPLv2+ and not GPLv2.]
-
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[yann.morin.1998 at free.fr: split the doc into its own patch]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |    1 +
- package/erlang-p1-xml/Config.in        |    7 +++++++
- package/erlang-p1-xml/erlang-p1-xml.mk |   16 ++++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-rebar.txt |  102 +++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt       |    2 +
+ 2 files changed, 104 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4344de8..9eb2087 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -401,6 +401,7 @@ if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-lager/Config.in"
-+	source "package/erlang-p1-xml/Config.in"
- 	source "package/erlang-p1-yaml/Config.in"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
-diff --git a/package/erlang-p1-xml/Config.in b/package/erlang-p1-xml/Config.in
+diff --git a/docs/manual/adding-packages-rebar.txt b/docs/manual/adding-packages-rebar.txt
 new file mode 100644
-index 0000000..a6f4bd7
+index 0000000..be9ede0
 --- /dev/null
-+++ b/package/erlang-p1-xml/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ERLANG_P1_XML
-+	bool "erlang-p1-xml"
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  XML utilities for Erlang
++++ b/docs/manual/adding-packages-rebar.txt
+@@ -0,0 +1,102 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+	  https://github.com/processone/xml
-diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
-new file mode 100644
-index 0000000..3bcac66
---- /dev/null
-+++ b/package/erlang-p1-xml/erlang-p1-xml.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# erlang-p1-xml
-+#
-+################################################################################
++=== Infrastructure for rebar-based packages
 +
-+ERLANG_P1_XML_VERSION = b530983
-+ERLANG_P1_XML_SITE = $(call github,processone,xml,$(ERLANG_P1_XML_VERSION))
-+ERLANG_P1_XML_LICENSE = GPLv2+
-+ERLANG_P1_XML_LICENSE_FILES = COPYING
-+ERLANG_P1_XML_DEPENDENCIES = expat
-+ERLANG_P1_XML_INSTALL_STAGING = YES
++[[rebar-package-tutorial]]
 +
-+ERLANG_P1_XML_USE_AUTOCONF = YES
++==== +rebar-package+ tutorial
 +
-+$(eval $(rebar-package))
++First, let's see how to write a +.mk+ file for a rebar-based package,
++with an example :
++
++------------------------------
++01: ################################################################################
++02: #
++03: # erlang-foobar
++04: #
++05: ################################################################################
++06:
++07: ERLANG_FOOBAR_VERSION = 1.0
++08: ERLANG_FOOBAR_SOURCE = erlang-foobar-$(ERLANG_FOOBAR_VERSION).tar.xz
++09: ERLANG_FOOBAR_SITE = http://www.foosoftware.org/download
++10: ERLANG_FOOBAR_DEPENDENCIES = host-libaaa libbbb
++11:
++12: $(eval $(rebar-package))
++--------------------------------
++
++On line 7, we declare the version of the package.
++
++On line 8 and 9, we declare the name of the tarball (xz-ed tarball
++recommended) and the location of the tarball on the Web. Buildroot
++will automatically download the tarball from this location.
++
++On line 10, we declare our dependencies, so that they are built
++before the build process of our package starts.
++
++Finally, on line 12, we invoke the +rebar-package+ macro that
++generates all the Makefile rules that actually allows the package to
++be built.
++
++[[rebar-package-reference]]
++
++==== +rebar-package+ reference
++
++The main macro of the +rebar+ package infrastructure is
+++rebar-package+. It is similar to the +generic-package+ macro. The
++ability to have host packages is also available, with the
+++host-rebar-package+ macro.
++
++Just like the generic infrastructure, the +rebar+ infrastructure works
++by defining a number of variables before calling the +rebar-package+
++macro.
++
++First, all the package metadata information variables that exist in
++the generic infrastructure also exist in the +rebar+ infrastructure:
+++ERLANG_FOOBAR_VERSION+, +ERLANG_FOOBAR_SOURCE+,
+++ERLANG_FOOBAR_PATCH+, +ERLANG_FOOBAR_SITE+,
+++ERLANG_FOOBAR_SUBDIR+, +ERLANG_FOOBAR_DEPENDENCIES+,
+++ERLANG_FOOBAR_INSTALL_STAGING+, +ERLANG_FOOBAR_INSTALL_TARGET+,
+++ERLANG_FOOBAR_LICENSE+ and +ERLANG_FOOBAR_LICENSE_FILES+.
++
++A few additional variables, specific to the +rebar+ infrastructure,
++can also be defined. Many of them are only useful in very specific
++cases, typical packages will therefore only use a few of them.
++
++* +ERLANG_FOOBAR_USE_AUTOCONF+, to specify that the package uses
++  _autoconf_ at the configuration step.  When a package sets this
++  variable to +YES+, the +autotools+ infrastructure is used.
+++
++.Note
++You can also use some of the variables from the +autotools+
++  infrastructure: +ERLANG_FOOBAR_CONF_ENV+, +ERLANG_FOOBAR_CONF_OPTS+,
++  +ERLANG_FOOBAR_AUTORECONF+, +ERLANG_FOOBAR_AUTORECONF_ENV+ and
++  +ERLANG_FOOBAR_AUTORECONF_OPTS+.
++
++* +ERLANG_FOOBAR_USE_BUNDLED_REBAR+, to specify that the package has
++  a bundled version of _rebar_ *and* that it shall be used. Valid
++  values are +YES+ or +NO+ (the default).
+++
++.Note
++If the package bundles a _rebar_ utility, but can use the generic
++  one that Buildroot provides, just say +NO+ (i.e., do not specify
++  this variable). Only set if it is mandatory to use the _rebar_
++  utility bundled in this package.
++
++* +ERLANG_FOOBAR_REBAR_ENV+, to specify additional environment
++  variables to pass to the _rebar_ utility.
++
++With the rebar infrastructure, all the steps required to build
++and install the packages are already defined, and they generally work
++well for most rebar-based packages. However, when required, it is
++still possible to customize what is done in any particular step:
++
++* By adding a post-operation hook (after extract, patch, configure,
++  build or install). See xref:hooks[] for details.
++
++* By overriding one of the steps. For example, even if the rebar
++  infrastructure is used, if the package +.mk+ file defines its
++  own +ERLANG_FOOBAR_BUILD_CMDS+ variable, it will be used instead
++  of the default rebar one. However, using this method should be
++  restricted to very specific cases. Do not use it in the general
++  case.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index feb0d13..b8674f8 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -27,6 +27,8 @@ include::adding-packages-virtual.txt[]
+ 
+ include::adding-packages-kconfig.txt[]
+ 
++include::adding-packages-rebar.txt[]
++
+ include::adding-packages-asciidoc.txt[]
+ 
+ include::adding-packages-hooks.txt[]
