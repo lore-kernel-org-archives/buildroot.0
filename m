@@ -1,26 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 15:14:00 +0100
-Subject: [Buildroot] Webkitgtk 2.x patches?
-Message-ID: <20150203151400.3ae27230@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Feb 2015 15:14:08 +0100
+Subject: [Buildroot] [PATCH 2/3] support/scripts: add rename-patch.py
+	script
+In-Reply-To: <1414369572-15695-3-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Mon, 27 Oct 2014 01:26:11 +0100")
+References: <1414369572-15695-1-git-send-email-s.martin49@gmail.com>
+ <1414369572-15695-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <87wq3zaxqn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-At some point, you took over the Webkitgtk 2.x patch from Hadrien, as
-well as the Midori bump. Have you been able to make some progress with
-this? The current webkit package in Buildroot is really old, and having
-a bump to 2.x would be very useful.
+ > This python script scans and rename the packages' patches in the
+ > buildroot tree.
+ > It supports dry run, show the change that would be done.
 
-Could you update us with the status of this effort?
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Thanks a lot!
+I've used this script to regenerate patch 3/3 and committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
