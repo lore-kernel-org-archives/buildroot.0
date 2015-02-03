@@ -1,51 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 11:32:58 +0100
-Subject: [Buildroot] [PATCH 1/5] initscripts: new package
-In-Reply-To: <1413643624-14757-2-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1413643624-14757-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150203113258.059896c2@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 3 Feb 2015 11:35:38 +0100
+Subject: [Buildroot] [PATCH v6 16/16] ejabberd: new package.
+In-Reply-To: <20150203105629.0abbbe46@free-electrons.com>
+References: <1421055140-5092-1-git-send-email-johan.oudinet@gmail.com>
+ <1421055140-5092-17-git-send-email-johan.oudinet@gmail.com>
+ <20150203105629.0abbbe46@free-electrons.com>
+Message-ID: <CAJtjsKaX3Uf=V8yKDaSDCJMNPTW2Fv=eesGyxhU=vqq-cM0Oiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Thomas, All,
 
-On Sat, 18 Oct 2014 16:47:00 +0200, Maxime Hadjinlian wrote:
-> The folder init.d is currently installed by default since it's part of
-> our skeleton.
-> This patch creates a package out of it and make busybox/sysvinit depends
-> on it.
-> 
-> This way, if you chose another init, you don't end up with a useless
-> init.d folder.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+On Tue, Feb 3, 2015 at 10:56 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>> +EJABBERD_DEPENDENCIES = openssl host-erlang-lager erlang-lager \
+>
+> I'm interested in hearing a bit more about the host-erlang-lager
+> dependency. Why would ejabberd need a logging framework built for the
+> host? This seems weird.
 
-We reviewed this and believe this is a good idea. However, we would
-like:
+I also think it's weird but otherwise ejabberd compilation failed at
+src/gen_mod.erl, which includes include/logger.hrl.
+At line 23 of this file there is such statement:
+-compile([{parse_transform, lager_transform}]).
+And lager_transform is provided by erlang-lager.
 
- 1/ To keep the sysvinit inittab in the sysvinit package.
+I'm not an erlang guru but from lager documentation, it says this line
+must be added to "the module you wish to compile with logging
+enabled".
+So, I guess it needs host-erlang-lager to add such capability to the
+erlang compiler.
+If an erlang expert reads this, it probably can provide a better explanation.
 
- 2/ Move the Busybox inittab in the busybox package, and install it
- when the Busybox init applet is enabled in the Busybox configuration
- file.
-
- 3/ Have a Config.in file for BR2_PACKAGE_INITSCRIPTS, which is
- selected by both BR2_INIT_BUSYBOX and BR2_INIT_SYSV. Then the busybox
- and sysvinit would no longer have initscripts in their _DEPENDENCIES,
- because initscripts is not a build-time dependency for those packages,
- but only a runtime dependency.
-
-Could you work on those 3 items, and resend an updated version of your
-series?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Johan
