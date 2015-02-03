@@ -1,44 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  3 Feb 2015 12:21:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 7844] Lua with hard-float on MIPS by buildroot
-	doesn't work
-In-Reply-To: <bug-7844-163@https.bugs.busybox.net/>
-References: <bug-7844-163@https.bugs.busybox.net/>
-Message-ID: <20150203122128.9D79C80817@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 3 Feb 2015 14:23:09 +0100
+Subject: [Buildroot] [git commit] mjpegtools: add optional support for
+	png/sdl/sdl_gfx/X11/gtk2
+Message-ID: <20150203132331.BDA1480E09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7844
+commit: http://git.buildroot.net/buildroot/commit/?id=088ca7f95988bc846f224e43b2a5e11fa6113334
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #10 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-02-03 12:21:27 UTC ---
-(In reply to comment #9)
-> >1. what target device are you using
-> It's MIPS Little endian device. We're developing our own embedded system by
-> collaborating other H/W company. 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mjpegtools/mjpegtools.mk |   43 ++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 43 insertions(+), 0 deletions(-)
 
-Ok, so it's not a common device but a custom one you are developing. Could you
-tell me at least which SoC are you using?
-
-> >2. what kernel version are you using
-> It's Linux kernel release 3.x. 
-
-3.x? Please, tell me the exact version you are using so I can try to reproduce
-your problem. If you tell me 3.x, what kernel should I try? 3.0, 3.0.1, 3.0.2,
-... 3.18.3, 3.19?
-
-> >3. what defconfig are you using to generate the buildroot rootfs
-> Please check the attached file.
-> (https://bugs.busybox.net/attachment.cgi?id=5834). We don't use buildroot to
-> build kernel. We're using buildroot to build 3rd parties. 
-
-I didn't say anything about the kernel here. I wanted to see the defconfig you
-are using to build the Buildroot rootfs. You have attached a binary file. The
-defconfig should be a text file.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
+index b5958c0..347fa68 100644
+--- a/package/mjpegtools/mjpegtools.mk
++++ b/package/mjpegtools/mjpegtools.mk
+@@ -10,4 +10,47 @@ MJPEGTOOLS_DEPENDENCIES = host-pkgconf jpeg
+ MJPEGTOOLS_LICENSE = GPLv2+
+ MJPEGTOOLS_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++MJPEGTOOLS_CONF_OPTS += --with-libpng
++MJPEGTOOLS_DEPENDENCIES += libpng
++else
++MJPEGTOOLS_CONF_OPTS += --without-libpng
++endif
++
++# expects X11 backend in sdl
++ifeq ($(BR2_PACKAGE_SDL_X11),y)
++MJPEGTOOLS_CONF_OPTS += --with-libsdl
++MJPEGTOOLS_DEPENDENCIES += sdl
++else
++MJPEGTOOLS_CONF_OPTS += --without-libsdl
++endif
++
++ifeq ($(BR2_PACKAGE_SDL_GFX),y)
++MJPEGTOOLS_CONF_OPTS += --with-sdlgfx
++MJPEGTOOLS_DEPENDENCIES += sdl_gfx
++else
++MJPEGTOOLS_CONF_OPTS += --without-sdlgfx
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++MJPEGTOOLS_CONF_OPTS += --with-x
++MJPEGTOOLS_DEPENDENCIES += xlib_libX11
++else
++MJPEGTOOLS_CONF_OPTS += --without-x
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86DGA),y)
++MJPEGTOOLS_CONF_OPTS += --with-dga
++MJPEGTOOLS_DEPENDENCIES += xlib_libXxf86dga
++else
++MJPEGTOOLS_CONF_OPTS += --without-dga
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++MJPEGTOOLS_CONF_OPTS += --with-gtk
++MJPEGTOOLS_DEPENDENCIES += libgtk2
++else
++MJPEGTOOLS_CONF_OPTS += --without-gtk
++endif
++
+ $(eval $(autotools-package))
