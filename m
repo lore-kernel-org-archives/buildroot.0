@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 11:07:21 +0100
-Subject: [Buildroot] [git commit] tslib: Use the release tarball
-Message-ID: <20150203100726.15A5780E09@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 11:29:52 +0100
+Subject: [Buildroot] [PATCH 0/5] Various init scripts modification
+In-Reply-To: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1413643624-14757-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150203112952.590b4ac4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6ae6417af349771b11c72a5bb68aa23409f352c4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-Add a hash file since the release tarball has been uploaded from the
-maintainer.
+On Sat, 18 Oct 2014 16:46:59 +0200, Maxime Hadjinlian wrote:
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tslib/tslib.hash |    2 ++
- package/tslib/tslib.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+>   infra: Add automatic install of init scripts
+>   acpid: Use new FOO_INIT_SYSV_FILES variable
+>   am33x-cm3: Use new FOO_INIT_SYSV_FILES variable
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-new file mode 100644
-index 0000000..e3ddce5
---- /dev/null
-+++ b/package/tslib/tslib.hash
-@@ -0,0 +1,2 @@
-+# Locally generated
-+sha256  121750e9ae0f05ce840ab8dbefdae1297258f0a69dd1967f55c40ac6e87d5ee9  tslib-1.1.tar.gz
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 51aaf23..3f93149 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- TSLIB_VERSION = 1.1
--TSLIB_SITE = $(call github,kergoth,tslib,$(TSLIB_VERSION))
-+TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)/
- TSLIB_LICENSE = GPL, LGPL
- TSLIB_LICENSE_FILES = COPYING
- 
+We discussed this at the Buildroot meeting, and decided to not go down
+this route. We believe the amount of redundancy with the existing
+_INSTALL_INIT_SYSV and _INSTALL_INIT_SYSTEMD variables is not that
+huge, and in many _INSTALL_INIT_SYSTEMD variable, a bit of custom stuff
+is anyway needed. So we believe the benefits are too small compared to
+the effort.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
