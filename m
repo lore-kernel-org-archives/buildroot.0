@@ -1,50 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 03 Feb 2015 17:21:53 +0100
-Subject: [Buildroot] [PATCH v2 1/2] qt5multimedia: fix compile without
- opengl
-In-Reply-To: <trinity-9793f5a9-f1ef-4912-92e4-dc7acbb69ddc-1422481699290@3capp-gmx-bs31>
-References: <trinity-9793f5a9-f1ef-4912-92e4-dc7acbb69ddc-1422481699290@3capp-gmx-bs31>
-Message-ID: <54D0F5A1.8040004@mind.be>
+Date: Tue, 03 Feb 2015 17:27:39 +0100
+Subject: [Buildroot] [PATCH v2 2/2] qt5multimedia: enable gstreamer-1.x
+ support
+In-Reply-To: <1422048008-13659-3-git-send-email-ps.report@gmx.net>
+References: <1422048008-13659-1-git-send-email-ps.report@gmx.net>
+ <1422048008-13659-3-git-send-email-ps.report@gmx.net>
+Message-ID: <54D0F6FB.6030703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/01/15 22:48, Peter Seiderer wrote:
-> But I searched upstream git, there is already a fix in 5.4.1/dev branch
-> fixing this problem ([1]), but as I think doing it the wrong way,
-> disabling Format_RGB24 for the non-OpenGL case ([2]), but a follow up
-> patch fixing the issue is on its way upstream ([3])...
+On 23/01/15 22:20, Peter Seiderer wrote:
+> Add 0002-GStreamer-port-to-1.0.patch [1] from upstream qtmultimedia dev branch
+> (will be in qt-5.5) and 0003-Fix-GStreamer-port-to-1.0-compile.patch to fix
+> resulting compile failures (private header related).
+> 
+> Fix qt5multimedia.mk for the gstreamer-1.x case (gst-plugins-base and
+> gst1-plugins-base).
+> 
+> [1] https://qt.gitorious.org/qt/qtmultimedia/commit/108dda7a90bd0f0337358b0db47ae55acd16dea6
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- Could you then submit those two upstream patches? Either separately or
-squashed, but with a reference to the upstream commit and your SoB.
+ Hi Peter,
+
+ Since this is a feature patch, and it will be included in an official qt
+release a couple of months from now, we're not going to take it.
+
+ It's good that you posted it on the list, however, so other people can use it.
+Also, it will be useful for updating the .mk file when qt-5.5 has been released.
+
 
  Regards,
  Arnout
-
-> 
-> Regards,
-> Peter
-> 
-> [1] https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
-> [2] https://codereview.qt-project.org/101817
-> [3] https://codereview.qt-project.org/104811
-> 
->>
->> Thanks,
->>
->> Thomas
->> -- 
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
 
 
 -- 
