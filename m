@@ -1,38 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Feb 2015 12:05:53 +0100
-Subject: [Buildroot] [git commit] bootlader/grub2: disable x86-64-efi choice
-	on !BR2_ARCH_IS_64
-Message-ID: <20150203110656.0628480E39@busybox.osuosl.org>
+Date: Tue, 3 Feb 2015 12:11:14 +0100
+Subject: [Buildroot] [PATCH] bootlader/grub2: disable x86-64-efi choice
+ on !BR2_ARCH_IS_64
+In-Reply-To: <1421431115-5202-1-git-send-email-s.martin49@gmail.com>
+References: <1421431115-5202-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150203121114.4a78bec2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fcc8d123ea18dfbe41800ffd84a864b9ce9ff10e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-When x86-64-efi platform is selected, grub2 automatically adds -m64 to the
-CFLAGS. This makes the configure script failed when the toolchain does not
-have multilib support (like the Buildroot ones).
+On Fri, 16 Jan 2015 18:58:35 +0100, Samuel Martin wrote:
+> When x86-64-efi platform is selected, grub2 automatically adds -m64 to the
+> CFLAGS. This makes the configure script failed when the toolchain does not
+> have multilib support (like the Buildroot ones).
+> 
+> Reported-by: Noe Rubinstein <nrubinstein@aldebaran-robotics.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Reported-by: Noe Rubinstein <nrubinstein@aldebaran-robotics.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/grub2/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Applied, thanks!
 
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index 626344a..c465a4d 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -132,6 +132,7 @@ config BR2_TARGET_GRUB2_I386_EFI
- 
- config BR2_TARGET_GRUB2_X86_64_EFI
- 	bool "x86-64-efi"
-+	depends on BR2_ARCH_IS_64
- 	help
- 	  Select this option if the platform you're targetting has a
- 	  64 bits EFI BIOS.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
