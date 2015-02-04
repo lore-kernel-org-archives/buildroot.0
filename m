@@ -1,34 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Feb 2015 20:56:43 +0100
-Subject: [Buildroot] [PATCH] cryptsetup: remove hard dependency on
- libgcrypt
-In-Reply-To: <1423074809-602-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1423074809-602-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150204205643.036b3e61@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 04 Feb 2015 21:21:26 +0100
+Subject: [Buildroot] board-specific autotools env customization
+In-Reply-To: <CAKAx1cg32iH0XEby8hPoQq1nm2DutdtDROE5nBWsXMi1mO93qg@mail.gmail.com>
+References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>	<20150202175455.5dd5c2e3@free-electrons.com>	<CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>	<54D08CB7.7040801@mind.be>
+ <CAKAx1cg32iH0XEby8hPoQq1nm2DutdtDROE5nBWsXMi1mO93qg@mail.gmail.com>
+Message-ID: <54D27F46.6030704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Floris Bos,
+On 04/02/15 08:52, Lionel Orry wrote:
+> Hi Arnout,
+> 
+> On Tue, Feb 3, 2015 at 9:54 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On Wed,  4 Feb 2015 19:33:28 +0100, Floris Bos wrote:
+[snip]
+>>  So we would really appreciate if you could check the various flags that zeromq
+>> tries to run and set them to yes if they are available, and send a patch to the
+>> mailing list. I've already checked libzmq_cv_sock_cloexec: SOCK_CLOEXEC was
+>> introduced in 2.6.27 so we can also assume that it's always available. Which
+>> kernel version do you run?
+>>
+> 
+> I have this list in here (there are 6 flags, 5 of them are available)
+> for my compiler, so I could make this patch. It won't do anything
+> useful until the acinclude.m4 is patched though, so I suppose the
+> first step is to fix acinclude.m4.
+> 
+> I use a 2.6.32 based kernel.
+> 
+> For reference, with my current compiler :
+> * compiler version : sh4-linux-gcc (GCC) 4.7.3 20130514
+> (STMicroelectronics/Linux Base 4.7.3-124)
+> * SOCK_CLOEXEC : available
+> * SO_KEEPALIVE : available
+> * TCP_KEEPCNT : available
+> * TCP_KEEPIDLE : available
+> * TCP_KEEPINTVL : available
+> * TCP_KEEPALIVE : not available
 
-> - Removes CRYPTSETUP_AUTORECONF as it is redundant, and reconf does
-> create a dependency on libgcrypt for the m4 macros used.
+ This indeed seems to correspond to the current situation (kernel > 2.6.30).
 
-This essentially reverts commit
-d66c981aaa2248b7e20a4f802f3643435a1761ca, which was made to fix
-http://autobuild.buildroot.net/results/9ca/9cad1cf49ee6b5c58d8260ee33beef2e6c1ada4d/.
 
-Can you rebuild the same configuration and see if with your patch it
-builds fine?
+>>> Aside note : in fact, in zeromq, the macros written for these flags
+>>> detection are wrong because they don't check if the value is set in
+>>> environment and always override them; so it is a bad example, but the
+>>
+>>  Yeah, indeed, you should also patch acinclude.m4 to correctly use a cache
+>> variable with AC_CACHE_VAL and AC_CACHE_CHECK. And that patch should be sent
+>> upstream of course.
+>>
+> 
+> I totally agree. But I'm still quite bad at autotools stuff and I
+> don't know how to use AC_CACHE_xxx macros
+> but I'll try to do it anyway. Any hints appreciated, the most clean
+> the patch is, the more chances it will have to hit upstream...
 
-Thanks,
+The basic pattern is:
 
-Thomas
+AC_CACHE_CHECK(whether SOCK_CLOEXEC is supported, libzmq_cv_sock_cloexec,
+[AC_TRY_RUN(...)])
+
+and then of course remove the AC_MSG_CHECKING that comes before it. The cache
+variable should be set in the body of the AC_CACHE_CHECK, like it currently is.
+
+
+ Regards,
+ Arnout
+
+
+[snip]
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
