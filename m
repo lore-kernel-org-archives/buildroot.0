@@ -1,49 +1,41 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  4 Feb 2015 01:34:03 +0100
-Subject: [Buildroot] [PATCH 05/21] gst1-plugins-base: add missing indirect
-	dependency on atomics for pango
+Date: Wed,  4 Feb 2015 01:34:09 +0100
+Subject: [Buildroot] [PATCH 11/21] oprofile: add missing indirect dependency
+	on NPTL for PPC
 In-Reply-To: <1423010059-23446-1-git-send-email-arnout@mind.be>
 References: <1423010059-23446-1-git-send-email-arnout@mind.be>
-Message-ID: <1423010059-23446-6-git-send-email-arnout@mind.be>
+Message-ID: <1423010059-23446-12-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also removed the redundant indirect dependencies on wchar, threads, mmu
-(gstreamer depends on libglib2 so this indirect dependency is obvious).
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/gstreamer1/gst1-plugins-base/Config.in | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ package/oprofile/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index 3b487c5..90c00b1 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -128,17 +128,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG
- 
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
- 	bool "pango font renderer"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # pango -> libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> libglib2
--	depends on BR2_USE_MMU # pango -> libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
-+	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
- 	select BR2_PACKAGE_PANGO
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 3ea07d9..8c9b39f 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_OPROFILE
+ 	depends on BR2_USE_WCHAR # binutils
+ 	depends on !BR2_xtensa
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+-	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
  	help
- 	  Pango-based text rendering and overlay
+ 	  OProfile is a system-wide profiler for Linux systems,
+ 	  capable of profiling all running code at low overhead.
+@@ -31,6 +31,6 @@ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
  
- comment "pango plugin needs a toolchain w/ C++, wchar, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_ARCH_HAS_ATOMICS
- 
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
- 	bool "theora (*.ogg video)"
+-comment "oprofile needs a toolchain w/ threads on PPC"
++comment "oprofile needs a toolchain w/ NPTL on PPC"
+ 	depends on BR2_USE_MMU && BR2_powerpc
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.1.4
