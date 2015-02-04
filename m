@@ -1,25 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Feb 2015 00:08:49 +0100
-Subject: [Buildroot] [PATCH v1 1/1] Prevent installing log4cxx
-	documentation.
-In-Reply-To: <1423079744-1471-1-git-send-email-johanderycke@gmail.com>
- (johanderycke@gmail.com's message of "Wed, 4 Feb 2015 20:55:44 +0100")
-References: <1423079744-1471-1-git-send-email-johanderycke@gmail.com>
-Message-ID: <87pp9p9svy.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Feb 2015 00:08:11 +0100
+Subject: [Buildroot] [git commit] log4cxx: disable unused documentation
+Message-ID: <20150204231034.F19E680819@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "johanderycke" == johanderycke  <johanderycke@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ac37db1ee96936e9aff45cf096581073a9984fd0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Pieter Ronsijn <pieter.ronsijn@barco.com>
- > Saves around 14 MiB of data in usr/share/log4cxx/html.
+Saves around 14 MiB of data in /usr/share/log4cxx/html.
 
- > Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/log4cxx/log4cxx.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+index 00d851e..7d7e2e9 100644
+--- a/package/log4cxx/log4cxx.mk
++++ b/package/log4cxx/log4cxx.mk
+@@ -13,7 +13,10 @@ LOG4CXX_LICENSE_FILES = LICENSE
+ 
+ LOG4CXX_CONF_OPTS = \
+ 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
+-	--with-apr-util=$(STAGING_DIR)/usr/bin/apu-1-config
++	--with-apr-util=$(STAGING_DIR)/usr/bin/apu-1-config \
++	--disable-dot \
++	--disable-doxygen \
++	--disable-html-docs
+ 
+ LOG4CXX_DEPENDENCIES = apr apr-util
+ 
