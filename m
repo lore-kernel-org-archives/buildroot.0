@@ -1,25 +1,41 @@
-From: hardik gohil <hardikmjobs@gmail.com>
-Date: Wed, 4 Feb 2015 16:33:10 +0800
-Subject: [Buildroot] Fwd: Problem with rcK script
-In-Reply-To: <CAJpGAeFjiFn9rw3uj9j1xbA4JqWr4PJ89X9A_7=VKjKYK6Yu8Q@mail.gmail.com>
-References: <CAJpGAeFjiFn9rw3uj9j1xbA4JqWr4PJ89X9A_7=VKjKYK6Yu8Q@mail.gmail.com>
-Message-ID: <CAJpGAeHWB=+AU9-ZCSpczqsy_06H2x8mp-b7=dvHSsiHZQU7sQ@mail.gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Wed, 04 Feb 2015 16:35:26 +0100
+Subject: [Buildroot] [PATCH 1/1] dropbear: add extra build customization
+ options
+In-Reply-To: <20150203150437.7d27225c@free-electrons.com>
+References: <1410450212-30718-1-git-send-email-bos@je-eigen-domein.nl>
+ <20150203150437.7d27225c@free-electrons.com>
+Message-ID: <54D23C3E.20300@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 02/03/2015 03:04 PM, Thomas Petazzoni wrote:
+> Also, can you make this a bit smarter to avoid duplication. For example:
+>
+> DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+>
+> ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+> DROPBEAR_TARGET_BINS += ssh dbclient
+> endif
+>
+> And then use:
+>
+> 	PROGRAMS="dropbear $(DROPBEAR_TARGET_BINS)"
+>
+> When doing the $(MAKE) call.
 
-I am working on Embedded Board and using buildroot-2013.02 and
-linux-2.6.35.9
+Just remembered what was up with that.
 
-problem i am facing is with rcK script which runs once system is rebooted
-as mentioned in /etc/inittab.
+Dropbear's SSH client is called dbclient.
+The extra "ssh" convenience symlink is something non-standard the 
+buildroot package made up.
+One cannot pass a $(DROPBEAR_TARGET_BINS) containing "ssh" to the 
+$(MAKE) call, as upstream dropbear has no clue how to make "ssh"
 
-As mentioned in rcK script to stop all the init scripts in /etc/init.d in
-reverse order i cannot see any such messages.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150204/3f590531/attachment.html>
+
+Yours sincerely,
+
+Floris Bos
