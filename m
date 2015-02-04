@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  4 Feb 2015 01:34:17 +0100
-Subject: [Buildroot] [PATCH 19/21] enlightenment: add missing indirect
-	dependency on atomics
+Date: Wed,  4 Feb 2015 01:34:04 +0100
+Subject: [Buildroot] [PATCH 06/21] qemu: add missing indirect dependency on
+	dynamic library for fdt
 In-Reply-To: <1423010059-23446-1-git-send-email-arnout@mind.be>
 References: <1423010059-23446-1-git-send-email-arnout@mind.be>
-Message-ID: <1423010059-23446-20-git-send-email-arnout@mind.be>
+Message-ID: <1423010059-23446-7-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/enlightenment/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/qemu/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index f34140b..37e9e75 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -27,6 +27,8 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_avr32 # libevas
-+	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
-+	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 5882571..65421c0 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -54,10 +54,14 @@ comment "... or you can select emulator families to enable, below:"
+ 
+ config BR2_PACKAGE_QEMU_SYSTEM
+ 	bool "Enable all systems emulation"
++	depends on !BR2_STATIC_LIBS # dtc
+ 	select BR2_PACKAGE_QEMU_FDT
  	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-@@ -39,4 +41,5 @@ config BR2_PACKAGE_ENLIGHTENMENT
- comment "enlightenment needs a toolchain w/ wchar, C++, threads"
- 	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_avr32
+ 	  Say 'y' to build all system emulators/virtualisers that QEMU supports.
+ 
++comment "systems emulation needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_QEMU_LINUX_USER
+ 	bool "Enable all Linux user-land emulation"
+ 	help
+@@ -86,11 +90,15 @@ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_FDT
+ 	bool "Enable FDT"
++	depends on !BR2_STATIC_LIBS # dtc
+ 	select BR2_PACKAGE_DTC
+ 	help
+ 	  Say 'y' here to have QEMU capable of constructing Device Trees,
+ 	  and passing them to the VMs.
+ 
++comment "FDT support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ endif # BR2_PACKAGE_QEMU_HAS_EMULS
+ 
+ endif # BR2_PACKAGE_QEMU
 -- 
 2.1.4
