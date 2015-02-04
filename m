@@ -1,36 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 04 Feb 2015 16:57:01 +0100
-Subject: [Buildroot] Fwd: Problem with rcK script
-In-Reply-To: <CAJpGAeHWB=+AU9-ZCSpczqsy_06H2x8mp-b7=dvHSsiHZQU7sQ@mail.gmail.com>
-References: <CAJpGAeFjiFn9rw3uj9j1xbA4JqWr4PJ89X9A_7=VKjKYK6Yu8Q@mail.gmail.com>
- <CAJpGAeHWB=+AU9-ZCSpczqsy_06H2x8mp-b7=dvHSsiHZQU7sQ@mail.gmail.com>
-Message-ID: <01A97699-6B5B-436F-907D-F9A1C8F05285@gmail.com>
+From: Julian Scheel <julian@jusst.de>
+Date: Wed,  4 Feb 2015 16:34:57 +0100
+Subject: [Buildroot] [PATCH] Export BR2_EXTERNAL for post-build/support
+	scripts
+Message-ID: <1423064097-1151-1-git-send-email-julian@jusst.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Especially post-build scripts might want to make use of BR2_EXTERNAL variable,
+so export it.
 
-On February 4, 2015 9:33:10 AM CET, hardik gohil <hardikmjobs@gmail.com> wrote:
->Hello,
->
->I am working on Embedded Board and using buildroot-2013.02 and
->linux-2.6.35.9
->
->problem i am facing is with rcK script which runs once system is
->rebooted
->as mentioned in /etc/inittab.
->
->As mentioned in rcK script to stop all the init scripts in /etc/init.d
->in
->reverse order i cannot see any such messages.
+Signed-off-by: Julian Scheel <julian@jusst.de>
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-The problem you describe has been fixed in later releases, with commit 
-http://git.buildroot.net/buildroot/commit/system/skeleton/etc/inittab?id=1dbb7e8a822416d502095ecb2c463a5179074555 .
-
-I suggest you either upgrade buildroot or apply this patch in your tree.
-
-Best regards,
-Thomas
+diff --git a/Makefile b/Makefile
+index e554a30..92ae3fa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -349,6 +349,7 @@ endif
+ # Scripts in support/ or post-build scripts may need to reference
+ # these locations, so export them so it is easier to use
+ export BR2_CONFIG
++export BR2_EXTERNAL
+ export TARGET_DIR
+ export STAGING_DIR
+ export HOST_DIR
+-- 
+2.2.1
