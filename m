@@ -1,75 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Feb 2015 17:21:17 +0100
-Subject: [Buildroot] [PATCH] Export BR2_EXTERNAL for post-build/support
- scripts
-In-Reply-To: <20150204161907.GB4586@free.fr>
-References: <1423064097-1151-1-git-send-email-julian@jusst.de>
- <20150204161907.GB4586@free.fr>
-Message-ID: <20150204162117.GC4586@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Wed,  4 Feb 2015 19:33:28 +0100
+Subject: [Buildroot] [PATCH] cryptsetup: remove hard dependency on libgcrypt
+Message-ID: <1423074809-602-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julian, All,
+- Add support for the alternative OpenSSL and Linux kernel crypto backends.
+The latter does require that additional kernel modules (like algif_hash)
+are present and loaded before invoking cryptsetup, so is used as last choice.
 
-On 2015-02-04 17:19 +0100, Yann E. MORIN spake thusly:
-> On 2015-02-04 16:34 +0100, Julian Scheel spake thusly:
-> > Especially post-build scripts might want to make use of BR2_EXTERNAL variable,
-> > so export it.
-> 
-> As discussed on IRC, there is another solution to export BR2_EXTERNAL,
-> which is to add it to EXTRA_ENV, like so:
-[--SNIP--]
+- Removes CRYPTSETUP_AUTORECONF as it is redundant, and reconf does
+create a dependency on libgcrypt for the m4 macros used.
 
-And to complete my previous reply: I don;t really mind which way we're
-doing it: your solution or mine are equaly acceptable to me.
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+---
+ package/cryptsetup/Config.in     |  1 -
+ package/cryptsetup/cryptsetup.mk | 17 +++++++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> > Signed-off-by: Julian Scheel <julian@jusst.de>
-> > ---
-> >  Makefile | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index e554a30..92ae3fa 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -349,6 +349,7 @@ endif
-> >  # Scripts in support/ or post-build scripts may need to reference
-> >  # these locations, so export them so it is easier to use
-> >  export BR2_CONFIG
-> > +export BR2_EXTERNAL
-> >  export TARGET_DIR
-> >  export STAGING_DIR
-> >  export HOST_DIR
-> > -- 
-> > 2.2.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 353420f..7f672f9 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_CRYPTSETUP
+ 	bool "cryptsetup"
+-	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_E2FSPROGS
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index f43bbca..0ececa9 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -8,16 +8,25 @@ CRYPTSETUP_VERSION_MAJOR = 1.6
+ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+-CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+-CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs libgcrypt host-pkgconf \
++CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs host-pkgconf \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+ 
+-CRYPTSETUP_AUTORECONF = YES
+-
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
+ endif
+ 
++# cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
++# or kernel crypto modules instead
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++CRYPTSETUP_DEPENDENCIES += libgcrypt
++CRYPTSETUP_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
++else ifeq ($(BR2_PACKAGE_OPENSSL),y)
++CRYPTSETUP_DEPENDENCIES += openssl
++CRYPTSETUP_CONF_OPTS += --with-crypto_backend=openssl
++else
++CRYPTSETUP_CONF_OPTS += --with-crypto_backend=kernel
++endif
++
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
