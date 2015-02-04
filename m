@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  4 Feb 2015 01:34:09 +0100
-Subject: [Buildroot] [PATCH 11/21] oprofile: add missing indirect dependency
-	on NPTL for PPC
+Date: Wed,  4 Feb 2015 01:34:10 +0100
+Subject: [Buildroot] [PATCH 12/21] util-linux: add missing indirect
+	dependency on !avr32 for setpriv
 In-Reply-To: <1423010059-23446-1-git-send-email-arnout@mind.be>
 References: <1423010059-23446-1-git-send-email-arnout@mind.be>
-Message-ID: <1423010059-23446-12-git-send-email-arnout@mind.be>
+Message-ID: <1423010059-23446-13-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/oprofile/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/util-linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 3ea07d9..8c9b39f 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_OPROFILE
- 	depends on BR2_USE_WCHAR # binutils
- 	depends on !BR2_xtensa
- 	# libpfm4 is needed on PowerPC, and requires thread support
--	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
- 	help
- 	  OProfile is a system-wide profiler for Linux systems,
- 	  capable of profiling all running code at low overhead.
-@@ -31,6 +31,6 @@ comment "oprofile needs a toolchain w/ C++, wchar"
- 	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 78648c1..a6719f3 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -215,6 +215,7 @@ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
  
--comment "oprofile needs a toolchain w/ threads on PPC"
-+comment "oprofile needs a toolchain w/ NPTL on PPC"
- 	depends on BR2_USE_MMU && BR2_powerpc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
+ 	bool "setpriv"
++	depends on !BR2_avr32 # libcap-ng
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	help
+ 	  Run a program with different Linux privilege settings
 -- 
 2.1.4
