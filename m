@@ -1,114 +1,79 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 4 Feb 2015 22:10:57 +0100
-Subject: [Buildroot] [PATCH v5] python-pyxml: new package
-In-Reply-To: <1423083501-3477-1-git-send-email-yegorslists@googlemail.com>
-References: <1423083501-3477-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_ks=rmy=ZH2_hafWtmB4iNY0tk8gu-tdHH8GRyxggtxN-w@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 4 Feb 2015 16:17:25 -0500
+Subject: [Buildroot] [PATCH v6 16/16] ejabberd: new package.
+In-Reply-To: <20150203123253.13838ada@free-electrons.com>
+References: <1421055140-5092-1-git-send-email-johan.oudinet@gmail.com>
+ <1421055140-5092-17-git-send-email-johan.oudinet@gmail.com>
+ <20150203105629.0abbbe46@free-electrons.com>
+ <CAJtjsKaX3Uf=V8yKDaSDCJMNPTW2Fv=eesGyxhU=vqq-cM0Oiw@mail.gmail.com>
+ <20150203123253.13838ada@free-electrons.com>
+Message-ID: <CA+-urNRJAyoan6BqSNs8TePfkxLqEeKES8iruX9UMK5eJwHS9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 4, 2015 at 9:58 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> From: Clayton Shotwell <clshotwe@rockwellcollins.com>
->
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Johan and Thomas,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Tue, Feb 3, 2015 at 6:32 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Johan Oudinet,
+>
+> On Tue, 3 Feb 2015 11:35:38 +0100, Johan Oudinet wrote:
+>
+>> > I'm interested in hearing a bit more about the host-erlang-lager
+>> > dependency. Why would ejabberd need a logging framework built for the
+>> > host? This seems weird.
+>>
+>> I also think it's weird but otherwise ejabberd compilation failed at
+>> src/gen_mod.erl, which includes include/logger.hrl.
+>> At line 23 of this file there is such statement:
+>> -compile([{parse_transform, lager_transform}]).
+>> And lager_transform is provided by erlang-lager.
+>>
+>> I'm not an erlang guru but from lager documentation, it says this line
+>> must be added to "the module you wish to compile with logging
+>> enabled".
+>> So, I guess it needs host-erlang-lager to add such capability to the
+>> erlang compiler.
+>> If an erlang expert reads this, it probably can provide a better explanation.
 
-> ---
-> Changes:
->         v5: refresh the patch, so it can applied without errors
->         v3: updated to use python package type (Matt W)
->             added hash file (Matt W)
+I'm not going to claim to be an Erlang expert, but I can add some
+information. Applications that use lager need to enable Lager's parse
+transform on the host Erlang compiler. The parse transform extracts
+things like module, function, and line number information whenever
+lager:warn, lager:info, etc. are called, so that it can be included in
+the log messages. The parse transform actually has to be compiled for
+the host. When you're not cross-compiling, it doesn't look as weird.
+
+Also, I should say that I've been quietly watching the various Erlang
+patches on the mailing list. What I've seen looks pretty good. I do
+use Erlang with Buildroot, but I use the Erlang Release tools to
+generate the final images. This makes for smaller root filesystems
+(Erlang's libraries are huge and largely irrelevant to most apps) and
+is more compatible with how Erlang people do things. However, it's
+definitely not how I think that things should be done in the Buildroot
+project. I think that you guys are doing it right, so if I work a
+project that just needs ejabberd or another Erlang app, then I'm going
+to switch over to this framework. Thanks for doing this!
+
+Frank
+
 >
->  package/Config.in                    |  1 +
->  package/python-pyxml/Config.in       | 11 +++++++++++
->  package/python-pyxml/python-xml.hash |  2 ++
->  package/python-pyxml/python-xml.mk   | 32 ++++++++++++++++++++++++++++++++
->  4 files changed, 46 insertions(+)
->  create mode 100644 package/python-pyxml/Config.in
->  create mode 100644 package/python-pyxml/python-xml.hash
->  create mode 100644 package/python-pyxml/python-xml.mk
+> Ok, thanks for the details. I clearly don't have any Erlang knowledge,
+> so I will not try to dive into this to understand what's going on.
+> Those dependencies are anyway fairly light, so it doesn't matter that
+> much.
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index fe3d3d0..581bc56 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -561,6 +561,7 @@ menu "external python modules"
->         source "package/python-pysnmp-mibs/Config.in"
->         source "package/python-pyusb/Config.in"
->         source "package/python-pyxb/Config.in"
-> ++      source "package/python-pyxml/Config.in"
->         source "package/python-pyzmq/Config.in"
->         source "package/python-requests/Config.in"
->         source "package/python-rtslib-fb/Config.in"
-> diff --git a/package/python-pyxml/Config.in b/package/python-pyxml/Config.in
-> new file mode 100644
-> index 0000000..420f3ad
-> --- /dev/null
-> +++ b/package/python-pyxml/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_PYXML
-> +       bool "python-pyxml"
-> +       depends on BR2_PACKAGE_PYTHON
-> +       help
-> +         This is the Python XML package.  The distribution contains a
-> +         validating XML parser, an implementation of the SAX and DOM
-> +         programming interfaces, an interface to the Expat parser (and the
-> +         Expat parser itself), and a C helper module that can speed up
-> +         xmllib.py by a factor of 5.  There's even documentation!
-> +
-> +         http://pyxml.sourceforge.net/topics/index.html
-> diff --git a/package/python-pyxml/python-xml.hash b/package/python-pyxml/python-xml.hash
-> new file mode 100644
-> index 0000000..47fa4c1
-> --- /dev/null
-> +++ b/package/python-pyxml/python-xml.hash
-> @@ -0,0 +1,2 @@
-> +#Locally computed
-> +sha256 9fab66f9584fb8e67aebd8745a5c97bf1c5a2e2e461adf68862bcec64e448c13  PyXML-0.8.4.tar.gz
-> diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-xml.mk
-> new file mode 100644
-> index 0000000..59bdc06
-> --- /dev/null
-> +++ b/package/python-pyxml/python-xml.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# python-pyxml
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYXML_VERSION = 0.8.4
-> +PYTHON_PYXML_SOURCE  = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
-> +PYTHON_PYXML_SITE    = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
-> +PYTHON_PYXML_LICENSE = BSD-3c
-> +PYTHON_PYXML_LICENSE_FILES = LICENSE
-> +PYTHON_PYXML_SETUP_TYPE = distutils
-> +PYTHON_PYXML_DEPENDENCIES = host-python python expat
-> +
-> +PYTHON_PYXML_INSTALL_STAGING = NO
-> +
-> +define PYTHON_PYXML_CONFIGURE_CMDS
-> +       (cd $(@D); \
-> +               $(HOST_DIR)/usr/bin/python setup.py \
-> +               config --with-libexpat=$(STAGING_DIR)/usr)
-> +endef
-> +
-> +HOST_PYTHON_PYXML_DEPENDENCIES = host-python host-expat
-> +
-> +define HOST_PYTHON_PYXML_CONFIGURE_CMDS
-> +       (cd $(@D); \
-> +               $(HOST_DIR)/usr/bin/python setup.py \
-> +               config --with-libexpat=$(HOST_DIR)/usr)
-> +endef
-> +
-> +$(eval $(python-package))
-> +$(eval $(host-python-package))
+> Thanks,
+>
+> Thomas
 > --
-> 2.1.0
->
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
