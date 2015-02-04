@@ -1,55 +1,78 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  4 Feb 2015 01:34:04 +0100
-Subject: [Buildroot] [PATCH 06/21] qemu: add missing indirect dependency on
-	dynamic library for fdt
-In-Reply-To: <1423010059-23446-1-git-send-email-arnout@mind.be>
-References: <1423010059-23446-1-git-send-email-arnout@mind.be>
-Message-ID: <1423010059-23446-7-git-send-email-arnout@mind.be>
+Date: Wed,  4 Feb 2015 01:33:58 +0100
+Subject: [Buildroot] [0/21] Add missing indirect dependencies
+Message-ID: <1423010059-23446-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/qemu/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ With the fix for randconfig that I made in
+http://patchwork.ozlabs.org/patch/432554/ it is now possible to run
+'make randconfig' and get usable results. So I ran the following loop
+to detect missing indirect dependencies:
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 5882571..65421c0 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -54,10 +54,14 @@ comment "... or you can select emulator families to enable, below:"
- 
- config BR2_PACKAGE_QEMU_SYSTEM
- 	bool "Enable all systems emulation"
-+	depends on !BR2_STATIC_LIBS # dtc
- 	select BR2_PACKAGE_QEMU_FDT
- 	help
- 	  Say 'y' to build all system emulators/virtualisers that QEMU supports.
- 
-+comment "systems emulation needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_QEMU_LINUX_USER
- 	bool "Enable all Linux user-land emulation"
- 	help
-@@ -86,11 +90,15 @@ comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_FDT
- 	bool "Enable FDT"
-+	depends on !BR2_STATIC_LIBS # dtc
- 	select BR2_PACKAGE_DTC
- 	help
- 	  Say 'y' here to have QEMU capable of constructing Device Trees,
- 	  and passing them to the VMs.
- 
-+comment "FDT support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- endif # BR2_PACKAGE_QEMU_HAS_EMULS
- 
- endif # BR2_PACKAGE_QEMU
--- 
-2.1.4
+while true; do make randconfig 2>&1 | grep warning; done
+
+If there is a missing indirect dependency, this will output a line like:
+
+warning: (BR2_PACKAGE_UTIL_LINUX_SETPRIV) selects BR2_PACKAGE_LIBCAP_NG which has unmet direct dependencies (!BR2_avr32)
+
+
+ After this series, I ran about 6000 randconfigs and didn't encounter any
+warning anymore.
+
+
+ It would be good to include such a test in a jenkins job to detect this
+type of error earlier.
+
+ Regards,
+ Arnout
+
+----------------------------------------------------------------
+Arnout Vandecappelle (Essensium/Mind) (21):
+      python-coherence: add missing indirect dependency on c++
+      gst-plugins-bad: add missing indirect dependency on atomics for rsvg
+      gst1-plugins-bad: add missing indirect dependency on atomics for rsvg
+      gst-plugins-base: add missing indirect dependency on atomics for pango
+      gst1-plugins-base: add missing indirect dependency on atomics for pango
+      qemu: add missing indirect dependency on dynamic library for fdt
+      grantlee: add missing indirect dependency on jscore available
+      libgail: add missing indirect dependency on C++ and atomics
+      espeak: add missing indirect dependency on atomics for pulseaudio
+      kodi: add missing indirect dependency on dynamic lib for shairport
+      oprofile: add missing indirect dependency on NPTL for PPC
+      util-linux: add missing indirect dependency on !avr32 for setpriv
+      dovecot: add missing indirect dependency on !avr32 for mysql
+      php: add missing indirect dependency on !avr32 for mysql extensions
+      cwiid: add missing indirect dependency on atomics for wmgui
+      opencv: add missing indirect dependency on atomics for gtk support
+      pinenty: add missing indirect dependency on atomics for gtk2 support
+      xscreensaver: add missing indirect dependency on atomics
+      enlightenment: add missing indirect dependency on atomics
+      qt5cinex: add missing indirect dependency on libegl
+      qt5webkit: add missing indirect dependency on atomics and !flat
+
+ package/cwiid/Config.in                        |  6 ++++++
+ package/dovecot/Config.in                      |  6 ++++--
+ package/enlightenment/Config.in                |  3 +++
+ package/espeak/Config.in                       |  4 +++-
+ package/grantlee/Config.in                     |  6 ++++--
+ package/gstreamer/gst-plugins-bad/Config.in    | 11 +++++------
+ package/gstreamer/gst-plugins-base/Config.in   | 10 ++++------
+ package/gstreamer1/gst1-plugins-bad/Config.in  | 11 +++++------
+ package/gstreamer1/gst1-plugins-base/Config.in | 10 ++++------
+ package/kodi/Config.in                         |  4 ++++
+ package/libgail/Config.in                      |  7 +++++--
+ package/opencv/Config.in                       |  1 +
+ package/oprofile/Config.in                     |  4 ++--
+ package/php/Config.ext                         |  8 ++++++--
+ package/pinentry/Config.in                     |  6 ++----
+ package/python-coherence/Config.in             |  5 +++++
+ package/qemu/Config.in                         |  8 ++++++++
+ package/qt5/qt5webkit/Config.in                |  2 ++
+ package/qt5cinex/Config.in                     |  5 +++--
+ package/util-linux/Config.in                   |  1 +
+ package/xscreensaver/Config.in                 | 13 ++++++++-----
+ 21 files changed, 85 insertions(+), 46 deletions(-)
