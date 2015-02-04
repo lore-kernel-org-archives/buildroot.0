@@ -1,43 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Feb 2015 23:44:05 +0100
-Subject: [Buildroot] [git commit] python-pyzmq: ensure correct path to zmq
-	is used
-Message-ID: <20150203224817.6DC2A80E25@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed,  4 Feb 2015 01:34:16 +0100
+Subject: [Buildroot] [PATCH 18/21] xscreensaver: add missing indirect
+	dependency on atomics
+In-Reply-To: <1423010059-23446-1-git-send-email-arnout@mind.be>
+References: <1423010059-23446-1-git-send-email-arnout@mind.be>
+Message-ID: <1423010059-23446-19-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=60dbd1da7886217a0cc4b4bcd62cf2c19fe62dd8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also reformat the comment lines and fix the comment.
 
-Fixes:
-http://autobuild.buildroot.net/results/6ae/6ae84c53985ab52ab1c64dd1e2a16d0bcf9eed1e/
-http://autobuild.buildroot.net/results/04d/04d5ceb5335912916f05596a285e84d38a7c7d31/
-http://autobuild.buildroot.net/results/77a/77ae85f24fabd00f2981f2dbddb52d8d5091b4a8/
-http://autobuild.buildroot.net/results/27a/27adf12cca4e0e998b64fda9bf4be67f6dbe1595/
-
-And many more.
-
-If --zmq isn't passed then python-pymq falls back to using 'pkg-config
---variable=prefix libzmq' which returns /usr, causing it to look in /usr/lib
-for libraries breaking the build.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/python-pyzmq/python-pyzmq.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/xscreensaver/Config.in | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index 82bf3d0..7f86b52 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -12,6 +12,7 @@ PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
- PYTHON_PYZMQ_DEPENDENCIES = zeromq
- PYTHON_PYZMQ_SETUP_TYPE = distutils
-+PYTHON_PYZMQ_BUILD_OPTS = --zmq=$(STAGING_DIR)/usr
- 
- # Due to issues with cross-compiling, hardcode to the zeromq in BR
- define PYTHON_PYZMQ_PATCH_ZEROMQ_VERSION
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index 6260040..59b19c5 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_XSCREENSAVER
+ 	bool "xscreensaver"
+ 	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_INSTALL_LIBSTDCPP # libgtk2->pango
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2->glib2
+-	depends on BR2_USE_WCHAR # libgtk2->glib2
+-	depends on BR2_USE_MMU # libgtk2->glib2
++	depends on BR2_INSTALL_LIBSTDCPP # libgtk2 -> pango
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> glib2
++	depends on BR2_USE_WCHAR # libgtk2 -> glib2
++	depends on BR2_USE_MMU # libgtk2 -> glib2
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+ 	select BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_LIBGLADE
+ 	select BR2_PACKAGE_JPEG
+@@ -24,4 +25,6 @@ config BR2_PACKAGE_XSCREENSAVER
+ comment "xscreensaver needs a toolchain w/ wchar, C++, threads"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on BR2_ARCH_HAS_ATOMICS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
+-- 
+2.1.4
