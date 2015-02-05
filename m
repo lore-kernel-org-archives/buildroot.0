@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Feb 2015 23:31:52 +0100
-Subject: [Buildroot] [PATCH v2 1/6] package/infozip: rework infozip
- patch.
-In-Reply-To: <1422113025-24848-1-git-send-email-romain.naour@openwide.fr>
-References: <1422113025-24848-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150205233152.1963aecb@free-electrons.com>
+Date: Thu, 5 Feb 2015 23:36:34 +0100
+Subject: [Buildroot] Buildroot developers/users at Embedded Linux Conference
+ in San Jose?
+Message-ID: <20150205233634.7b71ceae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hello,
 
-On Sat, 24 Jan 2015 16:23:40 +0100, Romain Naour wrote:
-> Split each cross-compilation fixes to differents
-> patches files.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+I am wondering if some Buildroot developers or users will be at the
+next Embedded Linux Conference in San Jose, California, on March 23-25.
+If so, I'd be interested in setting up a moment to gather and at least
+meet each other.
 
-Entire series applied, thanks!
+I proposed a talk about Buildroot at this ELC edition, but it got
+rejected. Instead, another talk about Buildroot has been accepted, it
+will be giving by Stephanie Lockwood-Childs from VCT Labs. See
+http://elcabs2015.sched.org/event/70ed9eef1b3ed5e50b43821dd899503d.
 
-Thomas
+Let me know if there is some interest to set up a meeting around
+Buildroot.
+
+Thanks,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
