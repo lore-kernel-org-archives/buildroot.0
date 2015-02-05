@@ -1,43 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Feb 2015 22:49:27 +0100
-Subject: [Buildroot] [git commit] package/infozip: silent LFS warning
-Message-ID: <20150205214959.A8AAC8013F@busybox.osuosl.org>
+Date: Thu, 5 Feb 2015 22:49:38 +0100
+Subject: [Buildroot] [git commit] package/infozip: add hash file
+Message-ID: <20150205214959.B1EBE8013F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a919e0a4328e3208aa3ef88a5b1ecc2257974bb
+commit: http://git.buildroot.net/buildroot/commit/?id=775e50cb5be41e41ccd0f040321183cc8ddce52a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-infozip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE in
-some sources files when LARGE_FILE_SUPPORT is set.
-Remove them from CFLAGS.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/infozip/infozip.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/infozip/infozip.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-index 3e8058f..e57f7e1 100644
---- a/package/infozip/infozip.mk
-+++ b/package/infozip/infozip.mk
-@@ -21,9 +21,14 @@ INFOZIP_CFLAGS = -I. -DUNIX
- # removed since it can't work for cross-compilation.
- INFOZIP_CFLAGS += -DUIDGID_NOT_16BIT
- 
-+# infozip already defines _LARGEFILE_SOURCE and _LARGEFILE64_SOURCE when
-+# necessary, redefining it on the command line causes some warnings.
-+INFOZIP_TARGET_CFLAGS = \
-+	$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
-+
- define INFOZIP_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		CFLAGS="$(TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
-+		CFLAGS="$(INFOZIP_TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
- 		AS="$(TARGET_CC) -c" \
- 		-f unix/Makefile generic
- endef
+diff --git a/package/infozip/infozip.hash b/package/infozip/infozip.hash
+new file mode 100644
+index 0000000..782ae5e
+--- /dev/null
++++ b/package/infozip/infozip.hash
+@@ -0,0 +1,2 @@
++# Locally calculated from download (no sig, hash)
++sha256	f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369	zip30.tgz
