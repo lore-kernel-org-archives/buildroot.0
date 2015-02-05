@@ -1,54 +1,50 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 05 Feb 2015 14:25:18 +0100
-Subject: [Buildroot] [RFC 0/4] legal-info: save the external-toolchain
- source archive
-In-Reply-To: <54CFEB27.7060404@mind.be>
-References: <1420199015-16907-1-git-send-email-luca@lucaceresoli.net>
- <54CFEB27.7060404@mind.be>
-Message-ID: <54D36F3E.2060706@lucaceresoli.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 5 Feb 2015 13:42:28 +0000
+Subject: [Buildroot] [PATCH] libvips: requires C++ support
+Message-ID: <1423143748-63093-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+libvips requires C++ support, otherwise it will fail with an error
+message like this one:
 
-thanks for the review.
-I guess it means there is some interest in having this feature.
+error: ../libvips/.libs/libvips.so: No such file or directory
 
-Arnout Vandecappelle wrote:
-> On 02/01/15 12:43, Luca Ceresoli wrote:
-> [snip]
->> The current solution works, but it shows some drawbacks.
->>
->> First, the "actual source" is downloaded by 'make legal-info', not 'make
->> source'. This might be good for most users: after all, you don't need the
->> toolchain source code for daily development, only when releasing. These files
->> are large, hundreds of MBs, so saving time and bandwidth seems nice. however,
->> this diverges from the well-defined feature of 'make source', which is
->> supposed to download everything needed to later work offline.
->
->   I think that 'make legal-info' is indeed sufficiently different from the
-> 'normal build' that it is OK for it to not be covered by 'make source'. So I
-> wouldn't worry about this drawback.
+Fixes:
 
-Good to see we are on the same page. Mentioning this behaviour in the
-docs should be enough.
+  http://autobuild.buildroot.net/results/cdc7cf5d3501f80c74b70aa09f93b2ad4e2f8602/
+  http://autobuild.buildroot.net/results/39173dbcbbd0a243900ea583cec024b51f8b803a/
+  http://autobuild.buildroot.net/results/6794705195bcdb636a8e6582ef5a1e153d4d66b3/
 
->> Additionally, there's no "actual" version of FOO_EXTRA_DOWNLOADS. Thus
->> Blackfin toolchains, which use that feature, cannot habdled in a complete way.
->> Of course adding TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_EXTRA_DOWNLOADS is possible,
->> but I wonder if we want to add so any variables to the package infra.
->
->   I think it would be pretty easy for FOO_ACTUAL_SOURCE to be a list of files
-> rather than a single file, and that would nicely work around this issue.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libvips/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-Good idea. It would work well provided that all files are hosted on the
-same directory. This seems to be the case for the Blackfin toolchains.
-
-After all, it is the same limitation we have for FOO_EXTRA_DOWNLOADS.
-
-Regards,
+diff --git a/package/libvips/Config.in b/package/libvips/Config.in
+index 1a0d35c..8395ffb 100644
+--- a/package/libvips/Config.in
++++ b/package/libvips/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBVIPS
+ 	depends on BR2_USE_WCHAR # gettext, libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_LIBVIPS
+ 
+ 	  http://www.vips.ecs.soton.ac.uk/
+ 
+-comment "libvips needs a toolchain w/ wchar, threads"
++comment "libvips needs a toolchain w/ wchar, threads, C++"
+         depends on BR2_USE_MMU
+-        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
 -- 
-Luca
+1.7.1
