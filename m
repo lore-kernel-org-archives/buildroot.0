@@ -1,50 +1,93 @@
-From: Thierry Bultel <tbultel@free.fr>
-Date: Thu, 05 Feb 2015 15:56:00 +0100
-Subject: [Buildroot] grub2 failure with gcc-4.9
-In-Reply-To: <54D37B54.7080700@free.fr>
-References: <54D367F9.4060108@free.fr>
- <20150205142015.4318baa2@free-electrons.com> <54D37B54.7080700@free.fr>
-Message-ID: <54D38480.3040101@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 5 Feb 2015 15:59:38 +0100
+Subject: [Buildroot] [PATCH v2] python-cherrypy: new package
+In-Reply-To: <1423146868-27214-1-git-send-email-fhunleth@troodon-software.com>
+References: <1423146868-27214-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <CAGm1_kvHOHPiXBeobKSfbN_8OW2RohVrVfNc06d-X9k8msS6EA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 05/02/2015 15:16, Thierry Bultel a ?crit :
-> Le 05/02/2015 14:20, Thomas Petazzoni a ?crit :
->> Dear Thierry Bultel,
->>
->> On Thu, 05 Feb 2015 13:54:17 +0100, Thierry Bultel wrote:
->>
->>> After some (printf) debugging, I found out that when 'loading' the
->>> builtin modules at startup, some modules names are corrupted.
->>> I am about to get into deeper investigation, but has anyone
->>> encountered it ?
->>
->> Interesting.
->>
->> First suggestions:
->>
->>   - try with another gcc 4.9 toolchain (distro toolchain or something)
->>
->>   - try with different optimization levels (default of Buildroot is -Os,
->>     try with -O0 and -O2)
->>
+On Thu, Feb 5, 2015 at 3:34 PM, Frank Hunleth
+<fhunleth@troodon-software.com> wrote:
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+> Changes v1 -> v2:
+>   - removed depends statement in Config.in per Yegor's comment
+>     that it wasn't needed if it runs on both Python 2 and 3.
 >
-> It seems that when building the target part, grub is using CXXFLAGS
-> (from $(HOST_CONFIGURE_OPTS)) in addition of TARGET_CFLAGS.
-> Thus we have both -0s and -O2 in command line.
+>  package/Config.in                          |  1 +
+>  package/python-cherrypy/Config.in          |  6 ++++++
+>  package/python-cherrypy/python-cherrypy.mk | 14 ++++++++++++++
+>  3 files changed, 21 insertions(+)
+>  create mode 100644 package/python-cherrypy/Config.in
+>  create mode 100644 package/python-cherrypy/python-cherrypy.mk
 >
-> Unfortunately that is not the cause of the bug, because -02 (twice)
-> makes it happen.
->
-> Trying another toolchain ...
+> diff --git a/package/Config.in b/package/Config.in
+> index fe3d3d0..a5d1be5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -510,6 +510,7 @@ menu "external python modules"
+>         source "package/python-certifi/Config.in"
+>         source "package/python-cffi/Config.in"
+>         source "package/python-cheetah/Config.in"
+> +       source "package/python-cherrypy/Config.in"
+>         source "package/python-coherence/Config.in"
+>         source "package/python-configobj/Config.in"
+>         source "package/python-configshell-fb/Config.in"
+> diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+> new file mode 100644
+> index 0000000..e48d601
+> --- /dev/null
+> +++ b/package/python-cherrypy/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_CHERRYPY
+> +       bool "python-cherrypy"
 
-FYI, loops rebooting with gcc-4.7 from 
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+cherrypy seems to use "import zlib", so following statements are required:
 
+select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+
+see cherrypy/lib/encoding.py
+
+Could you also create a python-cherrypy.hash file? See
+http://git.buildroot.net/buildroot/tree/package/python-werkzeug/python-werkzeug.hash
+
+I've also seen xmlrpc imports. IIRC it requires expat
+(BR2_PACKAGE_PYTHON_PYEXPAT) support in Python
+(cherrypy/lib/xmlrpcutil.py).
+
+> +       help
+> +         A minimalist web framework
+> +
+> +         http://www.cherrypy.org
+> diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+> new file mode 100644
+> index 0000000..a08b21a
+> --- /dev/null
+> +++ b/package/python-cherrypy/python-cherrypy.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-cherrypy
+> +#
+> +################################################################################
+> +
+> +PYTHON_CHERRYPY_VERSION = 3.6.0
+> +PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+> +PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
+> +PYTHON_CHERRYPY_LICENSE = BSD-3c
+> +PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
+> +PYTHON_CHERRYPY_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> --
+> 1.9.1
 >
->> Thomas
->>
->
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
