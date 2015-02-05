@@ -1,37 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Feb 2015 00:08:11 +0100
-Subject: [Buildroot] [git commit] log4cxx: disable unused documentation
-Message-ID: <20150204231034.F19E680819@busybox.osuosl.org>
+From: hardik gohil <hardikmjobs@gmail.com>
+Date: Thu, 5 Feb 2015 15:03:47 +0800
+Subject: [Buildroot] Fwd: Problem with rcK script
+In-Reply-To: <01A97699-6B5B-436F-907D-F9A1C8F05285@gmail.com>
+References: <CAJpGAeFjiFn9rw3uj9j1xbA4JqWr4PJ89X9A_7=VKjKYK6Yu8Q@mail.gmail.com>
+ <CAJpGAeHWB=+AU9-ZCSpczqsy_06H2x8mp-b7=dvHSsiHZQU7sQ@mail.gmail.com>
+ <01A97699-6B5B-436F-907D-F9A1C8F05285@gmail.com>
+Message-ID: <CAJpGAeEqvTi1EkbGLy-p4PnFwZWR7gZWKmij+fn-sHB8ZvHLpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac37db1ee96936e9aff45cf096581073a9984fd0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Saves around 14 MiB of data in /usr/share/log4cxx/html.
+Thank you for your exact solution.
 
-Signed-off-by: Johan Derycke <johan.derycke@barco.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/log4cxx/log4cxx.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+I am not using any swap memory,is it fine to remove "swapoff -a" from
+inittab ?
 
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index 00d851e..7d7e2e9 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -13,7 +13,10 @@ LOG4CXX_LICENSE_FILES = LICENSE
- 
- LOG4CXX_CONF_OPTS = \
- 	--with-apr=$(STAGING_DIR)/usr/bin/apr-1-config \
--	--with-apr-util=$(STAGING_DIR)/usr/bin/apu-1-config
-+	--with-apr-util=$(STAGING_DIR)/usr/bin/apu-1-config \
-+	--disable-dot \
-+	--disable-doxygen \
-+	--disable-html-docs
- 
- LOG4CXX_DEPENDENCIES = apr apr-util
- 
+I think it will be fine.
+
+On Wed, Feb 4, 2015 at 11:57 PM, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
+
+> Hi,
+>
+> On February 4, 2015 9:33:10 AM CET, hardik gohil <hardikmjobs@gmail.com>
+> wrote:
+> >Hello,
+> >
+> >I am working on Embedded Board and using buildroot-2013.02 and
+> >linux-2.6.35.9
+> >
+> >problem i am facing is with rcK script which runs once system is
+> >rebooted
+> >as mentioned in /etc/inittab.
+> >
+> >As mentioned in rcK script to stop all the init scripts in /etc/init.d
+> >in
+> >reverse order i cannot see any such messages.
+>
+> The problem you describe has been fixed in later releases, with commit
+>
+> http://git.buildroot.net/buildroot/commit/system/skeleton/etc/inittab?id=1dbb7e8a822416d502095ecb2c463a5179074555
+> .
+>
+> I suggest you either upgrade buildroot or apply this patch in your tree.
+>
+> Best regards,
+> Thomas
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150205/2feb1219/attachment.html>
