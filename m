@@ -1,49 +1,64 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Thu, 05 Feb 2015 12:44:22 -0600
-Subject: [Buildroot] Fwd: Re:  grub2 failure with gcc-4.9
-In-Reply-To: <54D39F5A.2010403@ou.edu>
-References: <54D39F5A.2010403@ou.edu>
-Message-ID: <54D3BA06.3050909@ou.edu>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  5 Feb 2015 22:19:56 +0100
+Subject: [Buildroot] [PATCHv3 1/5] Makefile: remove the graphs/ dir on 'make
+	clean'
+In-Reply-To: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1423171200-24583-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops, hit reply instead of reply-all
+Currently, a 'make clean' leaves the graphs/ subdirectory in the
+output directory. This commit defines a GRAPHS_DIR variable, used by
+the different graph-generating targets, and which gets cleaned up in
+the 'clean' target.
 
-On 02/05/2015 10:16 AM, Thomas Petazzoni wrote:
->  Dear Thierry Bultel,
->
->  On Thu, 05 Feb 2015 17:15:13 +0100, Thierry Bultel wrote:
->
->>  With gcc-4.9 from Ubuntu
->>
->>  (in grub2.mk, I set TARGET_CC="/usr/bin/gcc" \
->>  	TARGET_CFLAGS="-m32" \
->>  )
->>
->>  ... grub hangs.
-I'm not sure if it's related but I think we are mixing host and
-target grub2. When you run ~output/host/usr/sbin/grub-install
-any scripts it runs such as grub-mkimage are run from the
-build hosts /usr/... and not buildroot HOSTDIR or TARGETDIR
-I have been getting elf header mismatches which I think are
-differences between grub 2.00 and grub 2.01-beta
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Steve Kenton
-
-
->
->  Seems like you're good for a bug report to the upstream project. I
->  checked their Git repo, there is a gcc 4.9 fix but specific for ARM
->  issues. I haven't seen any other commit mentioning "4.9".
->
->  You may want to try with their latest Git version first, though, just
->  in case the problem was fixed but not mentioned explicitly in a commit
->  log.
->
->  Best regards,
->
->  Thomas
->
+diff --git a/Makefile b/Makefile
+index 9c870d9..6d4ae38 100644
+--- a/Makefile
++++ b/Makefile
+@@ -161,6 +161,7 @@ TARGET_DIR := $(BASE_DIR)/target
+ # initial definition so that 'make clean' works for most users, even without
+ # .config. HOST_DIR will be overwritten later when .config is included.
+ HOST_DIR := $(BASE_DIR)/host
++GRAPHS_DIR := $(BASE_DIR)/graphs
+ 
+ LEGAL_INFO_DIR = $(BASE_DIR)/legal-info
+ REDIST_SOURCES_DIR_TARGET = $(LEGAL_INFO_DIR)/sources
+@@ -658,7 +659,7 @@ show-targets:
+ 	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
+ 
+ graph-build: $(O)/build/build-time.log
+-	@install -d $(O)/graphs
++	@install -d $(GRAPHS_DIR)
+ 	$(foreach o,name build duration,./support/scripts/graph-build-time \
+ 					--type=histogram --order=$(o) --input=$(<) \
+ 					--output=$(O)/graphs/build.hist-$(o).$(BR_GRAPH_OUT) \
+@@ -673,7 +674,7 @@ graph-depends-requirements:
+ 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
+ 
+ graph-depends: graph-depends-requirements
+-	@$(INSTALL) -d $(O)/graphs
++	@$(INSTALL) -d $(GRAPHS_DIR)
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+ 	|tee $(BASE_DIR)/graphs/$(@).dot \
+@@ -834,7 +835,7 @@ printvars:
+ clean:
+ 	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+-		$(LEGAL_INFO_DIR)
++		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
+ 
+ distclean: clean
+ ifeq ($(DL_DIR),$(TOPDIR)/dl)
+-- 
+2.1.0
