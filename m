@@ -1,64 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  5 Feb 2015 22:19:56 +0100
-Subject: [Buildroot] [PATCHv3 1/5] Makefile: remove the graphs/ dir on 'make
-	clean'
-In-Reply-To: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1423171200-24583-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu,  5 Feb 2015 22:19:55 +0100
+Subject: [Buildroot] [PATCHv3 0/5] Graph about installed size per package
+Message-ID: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, a 'make clean' leaves the graphs/ subdirectory in the
-output directory. This commit defines a GRAPHS_DIR variable, used by
-the different graph-generating targets, and which gets cleaned up in
-the 'clean' target.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Here is the third iteration of the patches adding a 'size-stats'
+feature, which mainly allows to generate a pie chart of the size
+contribution of each package to the overall root filesystem size.
 
-diff --git a/Makefile b/Makefile
-index 9c870d9..6d4ae38 100644
---- a/Makefile
-+++ b/Makefile
-@@ -161,6 +161,7 @@ TARGET_DIR := $(BASE_DIR)/target
- # initial definition so that 'make clean' works for most users, even without
- # .config. HOST_DIR will be overwritten later when .config is included.
- HOST_DIR := $(BASE_DIR)/host
-+GRAPHS_DIR := $(BASE_DIR)/graphs
- 
- LEGAL_INFO_DIR = $(BASE_DIR)/legal-info
- REDIST_SOURCES_DIR_TARGET = $(LEGAL_INFO_DIR)/sources
-@@ -658,7 +659,7 @@ show-targets:
- 	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
- 
- graph-build: $(O)/build/build-time.log
--	@install -d $(O)/graphs
-+	@install -d $(GRAPHS_DIR)
- 	$(foreach o,name build duration,./support/scripts/graph-build-time \
- 					--type=histogram --order=$(o) --input=$(<) \
- 					--output=$(O)/graphs/build.hist-$(o).$(BR_GRAPH_OUT) \
-@@ -673,7 +674,7 @@ graph-depends-requirements:
- 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
- 
- graph-depends: graph-depends-requirements
--	@$(INSTALL) -d $(O)/graphs
-+	@$(INSTALL) -d $(GRAPHS_DIR)
- 	@cd "$(CONFIG_DIR)"; \
- 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
- 	|tee $(BASE_DIR)/graphs/$(@).dot \
-@@ -834,7 +835,7 @@ printvars:
- clean:
- 	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
- 		$(BUILD_DIR) $(BASE_DIR)/staging \
--		$(LEGAL_INFO_DIR)
-+		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
- 
- distclean: clean
- ifeq ($(DL_DIR),$(TOPDIR)/dl)
+Changes since v2:
+
+ - Use print0 in find and -0 in xargs to support spaces in filenames,
+   just in case. Suggested by J?r?me Pouiller.
+
+ - Support custom skeleton locations, instead of assuming the skeleton
+   comes from system/skeleton.
+
+ - Fix the size-stats target to actually call the size-stats script,
+   and not graph-size, which was the old name of the script in
+   previous versions of the series.
+
+ - Fix usage of the size-stats target in out of tree build
+   situations. For consistency reasons, we chose to mimic what
+   graph-depends already does, even if size-stats does not necessarily
+   need to be executed from within CONFIG_DIR.
+
+ - Add one patch to make sure that 'make clean' removes the graphs/
+   subdirectory in the output directory, which wasn't done today. This
+   issue isn't specific to size-stats, and already existed with
+   graph-build and graph-depends.
+
+Comments:
+
+ - J?r?me Puiller suggested to add a warning for removed
+   files. However, many files are removed in the target-finalize step
+   (man pages, etc.) and we don't want to have gazillions of warnings
+   about these completely normal file removals.
+
+Thomas Petazzoni (5):
+  Makefile: remove the graphs/ dir on 'make clean'
+  pkg-generic: add step_pkg_size global instrumentation hook
+  support/scripts: add size-stats script
+  Makefile: implement a size-stats target
+  Dummy testing packages
+
+ Config.in                  |   9 ++
+ Makefile                   |  19 +++-
+ package/Config.in          |   2 +
+ package/foo1/Config.in     |   2 +
+ package/foo1/file.img      | Bin 0 -> 2097152 bytes
+ package/foo1/foo1.mk       |   8 ++
+ package/foo2/Config.in     |   2 +
+ package/foo2/file.img      | Bin 0 -> 4194304 bytes
+ package/foo2/foo2.mk       |   8 ++
+ package/pkg-generic.mk     |  36 +++++++
+ support/scripts/size-stats | 231 +++++++++++++++++++++++++++++++++++++++++++++
+ 11 files changed, 314 insertions(+), 3 deletions(-)
+ create mode 100644 package/foo1/Config.in
+ create mode 100644 package/foo1/file.img
+ create mode 100644 package/foo1/foo1.mk
+ create mode 100644 package/foo2/Config.in
+ create mode 100644 package/foo2/file.img
+ create mode 100644 package/foo2/foo2.mk
+ create mode 100755 support/scripts/size-stats
+
 -- 
 2.1.0
