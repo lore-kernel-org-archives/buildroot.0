@@ -1,129 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Feb 2015 22:47:22 +0100
-Subject: [Buildroot] [git commit] package/infozip: disable GID/UID support
-Message-ID: <20150205214959.8EB0B8042F@busybox.osuosl.org>
+Date: Thu, 5 Feb 2015 23:31:52 +0100
+Subject: [Buildroot] [PATCH v2 1/6] package/infozip: rework infozip
+ patch.
+In-Reply-To: <1422113025-24848-1-git-send-email-romain.naour@openwide.fr>
+References: <1422113025-24848-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150205233152.1963aecb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a68dc36910eb7ca5c8f765195f170a462d73258
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-This check can't work for cross-compilation since it
-try to run a target's binary on the host system.
+On Sat, 24 Jan 2015 16:23:40 +0100, Romain Naour wrote:
+> Split each cross-compilation fixes to differents
+> patches files.
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-unix-configure-remove-GID-UID-size-check.patch |   85 ++++++++++++++++++++
- package/infozip/infozip.mk                         |    4 +
- 2 files changed, 89 insertions(+), 0 deletions(-)
+Entire series applied, thanks!
 
-diff --git a/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch b/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch
-new file mode 100644
-index 0000000..38d8d73
---- /dev/null
-+++ b/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch
-@@ -0,0 +1,85 @@
-+From d8da4e5f0ebed000f880e60b6cca7c575f7ed1c7 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Fri, 23 Jan 2015 22:13:14 +0100
-+Subject: [PATCH 5/6] unix/configure: remove GID/UID size check
-+
-+This check can't work for cross-compilation since it
-+try to run a target's binary on the host system.
-+
-+Reported-by: Richard Genoud <richard.genoud@gmail.com>
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ unix/configure | 57 ---------------------------------------------------------
-+ 1 file changed, 57 deletions(-)
-+
-+diff --git a/unix/configure b/unix/configure
-+index de9fd68..7bfc9eb 100644
-+--- a/unix/configure
-++++ b/unix/configure
-+@@ -237,63 +237,6 @@ _EOF_
-+ $CC $CFLAGS -c conftest.c >/dev/null 2>/dev/null
-+ [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_OFF_T"
-+ 
-+-
-+-echo Check size of UIDs and GIDs
-+-echo "(Now zip stores variable size UIDs/GIDs using a new extra field.  This"
-+-echo " tests if this OS uses 16-bit UIDs/GIDs and so if the old 16-bit storage"
-+-echo " should also be used for backward compatibility.)"
-+-# Added 2008-04-15 CS
-+-cat > conftest.c << _EOF_
-+-# define _LARGEFILE_SOURCE          /* some OSes need this for fseeko */
-+-# define _LARGEFILE64_SOURCE
-+-# define _FILE_OFFSET_BITS 64       /* select default interface as 64 bit */
-+-# define _LARGE_FILES               /* some OSes need this for 64-bit off_t */
-+-#include <sys/types.h>
-+-#include <sys/stat.h>
-+-#include <unistd.h>
-+-#include <stdio.h>
-+-int main()
-+-{
-+-  struct stat s;
-+-
-+-  printf("  s.st_uid is %u bytes\n", sizeof(s.st_uid));
-+-  printf("  s.st_gid is %u bytes\n", sizeof(s.st_gid));
-+-
-+-  /* see if have 16-bit UID */
-+-  if (sizeof(s.st_uid) != 2) {
-+-    return 1;
-+-  }
-+-  /* see if have 16-bit GID */
-+-  if (sizeof(s.st_gid) != 2) {
-+-    return 2;
-+-  }
-+-  return 3;
-+-}
-+-_EOF_
-+-# compile it
-+-$CC -o conftest conftest.c >/dev/null 2>/dev/null
-+-if [ $? -ne 0 ]; then
-+-  echo -- UID/GID test failed on compile - disabling old 16-bit UID/GID support
-+-  CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
-+-else
-+-# run it
-+-  ./conftest
-+-  r=$?
-+-  if [ $r -eq 1 ]; then
-+-    echo -- UID not 2 bytes - disabling old 16-bit UID/GID support
-+-    CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
-+-  elif [ $r -eq 2 ]; then
-+-    echo -- GID not 2 bytes - disabling old 16-bit UID/GID support
-+-    CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
-+-  elif [ $r -eq 3 ]; then
-+-    echo -- 16-bit UIDs and GIDs - keeping old 16-bit UID/GID support
-+-  else
-+-    echo -- test failed - conftest returned $r - disabling old 16-bit UID/GID support
-+-    CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
-+-  fi
-+-fi
-+-
-+-
-+ # Now we set the 64-bit file environment and check the size of off_t
-+ # Added 11/4/2003 EG
-+ # Revised 8/12/2004 EG
-+-- 
-+1.9.3
-+
-diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-index 3f53224..3e8058f 100644
---- a/package/infozip/infozip.mk
-+++ b/package/infozip/infozip.mk
-@@ -17,6 +17,10 @@ endif
- # Infozip's default CFLAGS.
- INFOZIP_CFLAGS = -I. -DUNIX
- 
-+# Disable the support of 16-bit UIDs/GIDs, the test in unix/configure was
-+# removed since it can't work for cross-compilation.
-+INFOZIP_CFLAGS += -DUIDGID_NOT_16BIT
-+
- define INFOZIP_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		CFLAGS="$(TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
