@@ -1,83 +1,375 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  5 Feb 2015 08:30:13 +0100 (CET)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-02-04
-Message-ID: <20150205073014.1131F101103@stock.ovh.net>
+From: Johan Derycke <johanderycke@gmail.com>
+Date: Thu, 5 Feb 2015 08:38:35 +0100
+Subject: [Buildroot] [PATCH v1 1/1] qt5webkit: Fix build without OpenGl
+In-Reply-To: <1423079762-1517-1-git-send-email-johanderycke@gmail.com>
+References: <1423079762-1517-1-git-send-email-johanderycke@gmail.com>
+Message-ID: <CAKHhJn2f2QjCRUBunpw_CkmruBuxNxCvCjH3_wUxGgrMPWuXNA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-02-04
-===============================
+Forgot to mention the source of this patch:
+https://qt.gitorious.org/qt/qtwebkit/commit/4ecb913768ff0806c6efd
 
-        success : 285
-       failures : 33 
-       timeouts : 1  
-          TOTAL : 319
+Best regards,
 
-Classification of failures by reason
-====================================
+Johan
 
-                   mono-3.12.0 | 4 
-                libvips-7.42.1 | 3 
-              host-erlang-17.4 | 3 
-zmqpp-36413487f05b165dfc82a... | 3 
-                    strace-4.9 | 3 
-              libarchive-3.1.2 | 2 
-               qt5webkit-5.4.0 | 2 
-               dvdauthor-0.7.1 | 2 
-                 qt5base-5.4.0 | 1 
-            host-openocd-0.8.0 | 1 
-                  ffmpeg-2.5.3 | 1 
-        gst1-plugins-bad-1.4.5 | 1 
-                  libnl-3.2.25 | 1 
-                 python3-3.4.2 | 1 
-                 lcdproc-0.5.7 | 1 
-       directfb-examples-1.6.0 | 1 
-                     rpm-5.2.0 | 1 
-               host-qemu-2.1.2 | 1 
-       opentyrian-2.1.20130907 | 1 
-                  thrift-0.9.2 | 1 
+2015-02-04 20:56 GMT+01:00 <johanderycke@gmail.com>:
 
-Detail of failures
-===================
-
-        bfin |        directfb-examples-1.6.0 | NOK | http://autobuild.buildroot.net/results/aaa3bd21ebff03ba3a64a00938bc872443b1bfc1/
-        bfin |                dvdauthor-0.7.1 | NOK | http://autobuild.buildroot.net/results/a600be963234ad044ae07b8099e3e0b4a786530b/
-        bfin |                dvdauthor-0.7.1 | NOK | http://autobuild.buildroot.net/results/72f0aaa586a92d7c40b63ff1e3359084f29f640b/
-       nios2 |                   ffmpeg-2.5.3 | NOK | http://autobuild.buildroot.net/results/8a6d24ecc6487fd20ba663f71996160124083a68/
-         arm |         gst1-plugins-bad-1.4.5 | NOK | http://autobuild.buildroot.net/results/e43152cbe2aa596055928efed48b76a76eda4c3f/
-     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/de29c8a7a83d2cc310e8c5a6dded4e5173b67399/
-         arm |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/50c587c6e00c0f85e785aeab20b55dde0fe044a3/
-     powerpc |               host-erlang-17.4 | NOK | http://autobuild.buildroot.net/results/490f23bb3f927ff4610629f4ad99c9fec0c934d4/
-         arm |             host-openocd-0.8.0 | TIM | http://autobuild.buildroot.net/results/6edd6317774ada64bc6de7c7eafa1f7a860457ff/
-         arm |                host-qemu-2.1.2 | NOK | http://autobuild.buildroot.net/results/d98cf003c66f3c7363228fdcfcc2ce5dd935ba32/
-         arm |                  lcdproc-0.5.7 | NOK | http://autobuild.buildroot.net/results/2c695e0b7093cbeb8eb7e3680eac3b858552daa8/
-        bfin |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/08499dbd9dfcaa76f5ed38b944148376ec57c141/
-        bfin |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/3dc91ec96ef2c9bece39e88df5150a14f61367b7/
-     powerpc |                   libnl-3.2.25 | NOK | http://autobuild.buildroot.net/results/e017f11df1f32edd3f9e85f25eb8e928f96ed56a/
-      mipsel |                 libvips-7.42.1 | NOK | http://autobuild.buildroot.net/results/cdc7cf5d3501f80c74b70aa09f93b2ad4e2f8602/
-     aarch64 |                 libvips-7.42.1 | NOK | http://autobuild.buildroot.net/results/39173dbcbbd0a243900ea583cec024b51f8b803a/
-microblazeel |                 libvips-7.42.1 | NOK | http://autobuild.buildroot.net/results/6794705195bcdb636a8e6582ef5a1e153d4d66b3/
-     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/56bd9543940458b850dcc0ef52f0396763b2c6ed/
-      mipsel |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/9b8d9092683ae6436ee9c782a76a48e8ff947013/
-     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/b4b379e931cafd2bb53447fe6616bfde07edf371/
-     powerpc |                    mono-3.12.0 | NOK | http://autobuild.buildroot.net/results/837d2767902368c5a2fd7131551f07287218d703/
-        bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/3938a0fe4791177bd990eceecb40f89725ae6662/
-     powerpc |                  python3-3.4.2 | NOK | http://autobuild.buildroot.net/results/dbe238c9a4a2f5cf86cc8fbe28ffa6bfa0493abf/
-     powerpc |                  qt5base-5.4.0 | NOK | http://autobuild.buildroot.net/results/b8676d102d23bb7707ef6ceccd2f137dec691dc6/
-         arm |                qt5webkit-5.4.0 | NOK | http://autobuild.buildroot.net/results/84d3285cc8e2669c4ff4c1be3a1e8ea9a6933779/
-        i686 |                qt5webkit-5.4.0 | NOK | http://autobuild.buildroot.net/results/914056cbd9787aeae4c8b42e8a37453b1a271a02/
-         arm |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/98b70ea09ecef214f13a622dcb926e01a6d6f7d9/
-      mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/9e415e7707658c22034aa7d9bcb26b4ee91c8708/
-      mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/4978808fdc2af9f6f786bd37b8fdf9d1ad27d813/
-      mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/951fe549e577b81e171d736d10c7ec8941b706f2/
-        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/cdb8142b984874f548a1a4fbd10f1e8c7603d1c6/
-        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/8c6a1a6855e6ce58f0071bec128135d76fa62c35/
-        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/e77d4d13c748c494bab8808b7aad0da798422658/
-        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/a1483d268e2ac287026f721978fd2d16464545c2/
-
-
--- 
-http://autobuild.buildroot.net
+> From: Johan Derycke <johan.derycke@barco.com>
+>
+> Signed-off-by: Johan Derycke <johan.derycke@barco.com>
+> ---
+>  .../qt5webkit/0003-Fix-build-without-OpenGL.patch  | 291
+> +++++++++++++++++++++
+>  1 file changed, 291 insertions(+)
+>  create mode 100644
+> package/qt5/qt5webkit/0003-Fix-build-without-OpenGL.patch
+>
+> diff --git a/package/qt5/qt5webkit/0003-Fix-build-without-OpenGL.patch
+> b/package/qt5/qt5webkit/0003-Fix-build-without-OpenGL.patch
+> new file mode 100644
+> index 0000000..cf6aeee
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/0003-Fix-build-without-OpenGL.patch
+> @@ -0,0 +1,291 @@
+> +From 4ecb913768ff0806c6efdff4567ef5907f597e4a Mon Sep 17 00:00:00 2001
+> +From: Allan Sandfeld Jensen <allan.jensen@digia.com>
+> +Date: Tue, 6 Jan 2015 16:31:27 +0100
+> +Subject: [PATCH] Fix build without OpenGL
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +The accelerated 2D canvas feature broke building without OpenGL due to
+> +missing feature checks.
+> +
+> +Task-number: QTBUG-43549
+> +Change-Id: I7e62751d5237e1c600bc784539c70db50bccfa22
+> +Reviewed-by: Ashish Kulkarni <kulkarni.ashish@gmail.com>
+> +Reviewed-by: Michael Br?ning <michael.bruning@theqtcompany.com>
+> +---
+> + Source/WebCore/Target.pri                          |    4 ++--
+> + Source/WebCore/html/HTMLCanvasElement.cpp          |    2 +-
+> + Source/WebCore/platform/graphics/ImageBuffer.h     |    4 ++--
+> + .../platform/graphics/qt/ImageBufferDataQt.cpp     |   11 +++++------
+> + .../platform/graphics/qt/ImageBufferDataQt.h       |    7 ++++++-
+> + .../WebCore/platform/graphics/qt/ImageBufferQt.cpp |    4 ++++
+> + Tools/QtTestBrowser/launcherwindow.cpp             |    8 ++++----
+> + Tools/QtTestBrowser/launcherwindow.h               |    2 +-
+> + 8 files changed, 25 insertions(+), 17 deletions(-)
+> +
+> +diff --git a/Source/WebCore/Target.pri b/Source/WebCore/Target.pri
+> +index b9167d1..d1aad9f 100644
+> +--- a/Source/WebCore/Target.pri
+> ++++ b/Source/WebCore/Target.pri
+> +@@ -2232,7 +2232,6 @@ HEADERS += \
+> +     platform/graphics/RoundedRect.h \
+> +     platform/graphics/qt/FontCustomPlatformData.h \
+> +     platform/graphics/qt/NativeImageQt.h \
+> +-    platform/graphics/qt/QFramebufferPaintDevice.h \
+> +     platform/graphics/qt/StillImageQt.h \
+> +     platform/graphics/qt/TransparencyLayer.h \
+> +     platform/graphics/SegmentedFontData.h \
+> +@@ -2886,7 +2885,6 @@ SOURCES += \
+> +     platform/graphics/qt/IntPointQt.cpp \
+> +     platform/graphics/qt/IntRectQt.cpp \
+> +     platform/graphics/qt/IntSizeQt.cpp \
+> +-    platform/graphics/qt/QFramebufferPaintDevice.cpp \
+> +     platform/graphics/qt/PathQt.cpp \
+> +     platform/graphics/qt/PatternQt.cpp \
+> +     platform/graphics/qt/StillImageQt.cpp \
+> +@@ -4146,6 +4144,7 @@ use?(3D_GRAPHICS) {
+> +         platform/graphics/gpu/Texture.h \
+> +         platform/graphics/gpu/TilingData.h \
+> +         platform/graphics/opengl/Extensions3DOpenGL.h \
+> ++        platform/graphics/qt/QFramebufferPaintDevice.h \
+> +         platform/graphics/texmap/TextureMapperGL.h \
+> +         platform/graphics/texmap/TextureMapperShaderProgram.h \
+> +         platform/graphics/texmap/coordinated/AreaAllocator.h \
+> +@@ -4182,6 +4181,7 @@ use?(3D_GRAPHICS) {
+> +         platform/graphics/opengl/GraphicsContext3DOpenGLCommon.cpp \
+> +         platform/graphics/opengl/Extensions3DOpenGLCommon.cpp \
+> +         platform/graphics/qt/GraphicsContext3DQt.cpp \
+> ++        platform/graphics/qt/QFramebufferPaintDevice.cpp \
+> +         platform/graphics/texmap/TextureMapperGL.cpp \
+> +         platform/graphics/texmap/TextureMapperShaderProgram.cpp \
+> +         platform/graphics/texmap/coordinated/AreaAllocator.cpp \
+> +diff --git a/Source/WebCore/html/HTMLCanvasElement.cpp
+> b/Source/WebCore/html/HTMLCanvasElement.cpp
+> +index b856234..ae39959 100644
+> +--- a/Source/WebCore/html/HTMLCanvasElement.cpp
+> ++++ b/Source/WebCore/html/HTMLCanvasElement.cpp
+> +@@ -586,7 +586,7 @@ void HTMLCanvasElement::createImageBuffer() const
+> +         return;
+> +
+> +     RenderingMode renderingMode = shouldAccelerate(bufferSize) ?
+> Accelerated : Unaccelerated;
+> +-#if PLATFORM(QT)
+> ++#if PLATFORM(QT) && ENABLE(ACCELERATED_2D_CANVAS)
+> +     if (renderingMode == Accelerated) {
+> +         QWebPageClient* client =
+> document()->page()->chrome().platformPageClient();
+> +         // The WebKit2 Chrome does not have a pageclient.
+> +diff --git a/Source/WebCore/platform/graphics/ImageBuffer.h
+> b/Source/WebCore/platform/graphics/ImageBuffer.h
+> +index 7addde9..a30d052 100644
+> +--- a/Source/WebCore/platform/graphics/ImageBuffer.h
+> ++++ b/Source/WebCore/platform/graphics/ImageBuffer.h
+> +@@ -95,7 +95,7 @@ namespace WebCore {
+> +         }
+> +
+> +         static PassOwnPtr<ImageBuffer> createCompatibleBuffer(const
+> IntSize&, float resolutionScale, ColorSpace, const GraphicsContext*, bool
+> hasAlpha);
+> +-#if PLATFORM(QT)
+> ++#if PLATFORM(QT) && ENABLE(ACCELERATED_2D_CANVAS)
+> +         static PassOwnPtr<ImageBuffer> createCompatibleBuffer(const
+> IntSize&, float resolutionScale, ColorSpace, QOpenGLContext*);
+> + #endif
+> +
+> +@@ -165,7 +165,7 @@ namespace WebCore {
+> +         // This constructor will place its success into the given
+> out-variable
+> +         // so that create() knows when it should return failure.
+> +         ImageBuffer(const IntSize&, float resolutionScale, ColorSpace,
+> RenderingMode, bool& success);
+> +-#if PLATFORM(QT)
+> ++#if PLATFORM(QT) && ENABLE(ACCELERATED_2D_CANVAS)
+> +         ImageBuffer(const IntSize&, float resolutionScale, ColorSpace,
+> QOpenGLContext*, bool& success);
+> + #endif
+> +     };
+> +diff --git a/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.cpp
+> b/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.cpp
+> +index 4a16515..1235ce6 100644
+> +--- a/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.cpp
+> ++++ b/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.cpp
+> +@@ -34,7 +34,6 @@
+> + #include "GraphicsSurface.h"
+> + #include "ImageData.h"
+> + #include "StillImageQt.h"
+> +-#include "QFramebufferPaintDevice.h"
+> +
+> + #include <QImage>
+> + #include <QPaintEngine>
+> +@@ -42,6 +41,7 @@
+> + #include <QPixmap>
+> +
+> + #if ENABLE(ACCELERATED_2D_CANVAS)
+> ++#include "QFramebufferPaintDevice.h"
+> + #include "TextureMapper.h"
+> + #include "TextureMapperPlatformLayer.h"
+> + #include "TextureMapperGL.h"
+> +@@ -483,16 +483,12 @@ ImageBufferData::ImageBufferData(const IntSize&
+> size)
+> +     initPainter();
+> + }
+> +
+> ++#if ENABLE(ACCELERATED_2D_CANVAS)
+> + ImageBufferData::ImageBufferData(const IntSize& size, QOpenGLContext*
+> compatibleContext)
+> + {
+> +     m_painter = new QPainter;
+> +
+> +-#if ENABLE(ACCELERATED_2D_CANVAS)
+> +     m_impl = new ImageBufferDataPrivateAccelerated(size,
+> compatibleContext);
+> +-#else
+> +-    Q_UNUSED(compatibleContext);
+> +-    m_impl = new ImageBufferDataPrivateUnaccelerated(size);
+> +-#endif
+> +
+> +     if (!m_impl->paintDevice())
+> +         return;
+> +@@ -501,11 +497,14 @@ ImageBufferData::ImageBufferData(const IntSize&
+> size, QOpenGLContext* compatible
+> +
+> +     initPainter();
+> + }
+> ++#endif
+> +
+> + ImageBufferData::~ImageBufferData()
+> + {
+> ++#if ENABLE(ACCELERATED_2D_CANVAS)
+> +     if (m_impl->isAccelerated())
+> +
+>  static_cast<QFramebufferPaintDevice*>(m_impl->paintDevice())->ensureActiveTarget();
+> ++#endif
+> +     m_painter->end();
+> +     delete m_painter;
+> +     delete m_impl;
+> +diff --git a/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.h
+> b/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.h
+> +index 486b0d5..fcad887 100644
+> +--- a/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.h
+> ++++ b/Source/WebCore/platform/graphics/qt/ImageBufferDataQt.h
+> +@@ -29,10 +29,13 @@
+> + #include "Image.h"
+> +
+> + #include <QImage>
+> +-#include <QOpenGLContext>
+> + #include <QPainter>
+> + #include <QPaintDevice>
+> +
+> ++#if ENABLE(ACCELERATED_2D_CANVAS)
+> ++#include <QOpenGLContext>
+> ++#endif
+> ++
+> + #include <wtf/RefPtr.h>
+> +
+> + namespace WebCore {
+> +@@ -61,7 +64,9 @@ class ImageBufferData
+> + {
+> + public:
+> +     ImageBufferData(const IntSize&);
+> ++#if ENABLE(ACCELERATED_2D_CANVAS)
+> +     ImageBufferData(const IntSize&, QOpenGLContext*);
+> ++#endif
+> +     ~ImageBufferData();
+> +     QPainter* m_painter;
+> +     ImageBufferDataPrivate* m_impl;
+> +diff --git a/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp
+> b/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp
+> +index 400743d..09c90a6 100644
+> +--- a/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp
+> ++++ b/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp
+> +@@ -47,6 +47,7 @@
+> +
+> + namespace WebCore {
+> +
+> ++#if ENABLE(ACCELERATED_2D_CANVAS)
+> + ImageBuffer::ImageBuffer(const IntSize& size, float /* resolutionScale
+> */, ColorSpace, QOpenGLContext* compatibleContext, bool& success)
+> +     : m_data(size, compatibleContext)
+> +     , m_size(size)
+> +@@ -58,6 +59,7 @@ ImageBuffer::ImageBuffer(const IntSize& size, float /*
+> resolutionScale */, Color
+> +
+> +     m_context = adoptPtr(new GraphicsContext(m_data.m_painter));
+> + }
+> ++#endif
+> +
+> + ImageBuffer::ImageBuffer(const IntSize& size, float /* resolutionScale
+> */, ColorSpace, RenderingMode /*renderingMode*/, bool& success)
+> +     : m_data(size)
+> +@@ -75,6 +77,7 @@ ImageBuffer::~ImageBuffer()
+> + {
+> + }
+> +
+> ++#if ENABLE(ACCELERATED_2D_CANVAS)
+> + PassOwnPtr<ImageBuffer> ImageBuffer::createCompatibleBuffer(const
+> IntSize& size, float resolutionScale, ColorSpace colorSpace,
+> QOpenGLContext* context)
+> + {
+> +     bool success = false;
+> +@@ -83,6 +86,7 @@ PassOwnPtr<ImageBuffer>
+> ImageBuffer::createCompatibleBuffer(const IntSize& size,
+> +         return nullptr;
+> +     return buf.release();
+> + }
+> ++#endif
+> +
+> + GraphicsContext* ImageBuffer::context() const
+> + {
+> +diff --git a/Tools/QtTestBrowser/launcherwindow.cpp
+> b/Tools/QtTestBrowser/launcherwindow.cpp
+> +index e2dcef3..d293397 100644
+> +--- a/Tools/QtTestBrowser/launcherwindow.cpp
+> ++++ b/Tools/QtTestBrowser/launcherwindow.cpp
+> +@@ -177,9 +177,9 @@ void LauncherWindow::initializeView()
+> + #ifndef QT_NO_OPENGL
+> +         if (!m_windowOptions.useQOpenGLWidgetViewport)
+> +
+>  toggleQGLWidgetViewport(m_windowOptions.useQGLWidgetViewport);
+> +-#endif
+> +         if (!m_windowOptions.useQGLWidgetViewport)
+> +
+>  toggleQOpenGLWidgetViewport(m_windowOptions.useQOpenGLWidgetViewport);
+> ++#endif
+> +         view->setPage(page());
+> +
+> +         connect(view, SIGNAL(currentFPSUpdated(int)), this,
+> SLOT(updateFPS(int)));
+> +@@ -407,7 +407,6 @@ void LauncherWindow::createChrome()
+> +
+>  toggleQGLWidgetViewport->setChecked(m_windowOptions.useQGLWidgetViewport);
+> +     toggleQGLWidgetViewport->setEnabled(isGraphicsBased());
+> +     toggleQGLWidgetViewport->connect(toggleGraphicsView,
+> SIGNAL(toggled(bool)), SLOT(setEnabled(bool)));
+> +-#endif
+> + #if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
+> +     QAction* toggleQOpenGLWidgetViewport =
+> graphicsViewMenu->addAction("Toggle use of QOpenGLWidget Viewport", this,
+> SLOT(toggleQOpenGLWidgetViewport(bool)));
+> +     toggleQOpenGLWidgetViewport->setCheckable(true);
+> +@@ -415,6 +414,7 @@ void LauncherWindow::createChrome()
+> +     toggleQOpenGLWidgetViewport->setEnabled(isGraphicsBased());
+> +     toggleQOpenGLWidgetViewport->connect(toggleGraphicsView,
+> SIGNAL(toggled(bool)), SLOT(setEnabled(bool)));
+> + #endif
+> ++#endif
+> +
+> +     QMenu* viewportUpdateMenu = graphicsViewMenu->addMenu("Change
+> Viewport Update Mode");
+> +     viewportUpdateMenu->setEnabled(isGraphicsBased());
+> +@@ -802,9 +802,9 @@ void LauncherWindow::screenshot()
+> + #ifndef QT_NO_OPENGL
+> +     if (!m_windowOptions.useQOpenGLWidgetViewport)
+> +         toggleQGLWidgetViewport(m_windowOptions.useQGLWidgetViewport);
+> +-#endif
+> +     if (!m_windowOptions.useQGLWidgetViewport)
+> +
+>  toggleQOpenGLWidgetViewport(m_windowOptions.useQOpenGLWidgetViewport);
+> ++#endif
+> + }
+> +
+> + void LauncherWindow::setEditable(bool on)
+> +@@ -997,7 +997,6 @@ void LauncherWindow::toggleQGLWidgetViewport(bool
+> enable)
+> +     WebViewGraphicsBased* view =
+> static_cast<WebViewGraphicsBased*>(m_view);
+> +     view->setViewport(enable ? new QGLWidget() : 0);
+> + }
+> +-#endif
+> +
+> + void LauncherWindow::toggleQOpenGLWidgetViewport(bool enable)
+> + {
+> +@@ -1013,6 +1012,7 @@ void
+> LauncherWindow::toggleQOpenGLWidgetViewport(bool enable)
+> +     view->setViewport(enable ? new QOpenGLWidget() : 0);
+> + #endif
+> + }
+> ++#endif
+> +
+> + void LauncherWindow::changeViewportUpdateMode(int mode)
+> + {
+> +diff --git a/Tools/QtTestBrowser/launcherwindow.h
+> b/Tools/QtTestBrowser/launcherwindow.h
+> +index c470a5a..5cee7e5 100644
+> +--- a/Tools/QtTestBrowser/launcherwindow.h
+> ++++ b/Tools/QtTestBrowser/launcherwindow.h
+> +@@ -180,8 +180,8 @@ protected Q_SLOTS:
+> + #endif
+> + #ifndef QT_NO_OPENGL
+> +     void toggleQGLWidgetViewport(bool enable);
+> +-#endif
+> +     void toggleQOpenGLWidgetViewport(bool enable);
+> ++#endif
+> +
+> +     void changeViewportUpdateMode(int mode);
+> +     void animatedFlip();
+> +--
+> +1.7.1
+> +
+> +
+> --
+> 2.1.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150205/fd31c1a9/attachment.html>
