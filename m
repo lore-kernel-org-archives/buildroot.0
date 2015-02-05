@@ -1,140 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Feb 2015 22:49:04 +0100
-Subject: [Buildroot] [git commit] package/infozip: fix LARGE_FILE_SUPPORT
-	check
-Message-ID: <20150205214959.98F508013F@busybox.osuosl.org>
+Date: Thu, 5 Feb 2015 22:47:22 +0100
+Subject: [Buildroot] [git commit] package/infozip: disable GID/UID support
+Message-ID: <20150205214959.8EB0B8042F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3046df45728e2f84adcc50e14469099d9e52ce64
+commit: http://git.buildroot.net/buildroot/commit/?id=8a68dc36910eb7ca5c8f765195f170a462d73258
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The LFS check was dropped in commit cc4dedd9.
+This check can't work for cross-compilation since it
+try to run a target's binary on the host system.
 
-Since then there is a runtime error:
-zip warning : Not supported (uzoff_t not same size as zoff_t)
-
-However LFS check can't readded as is because it can't work
-for cross-compilation since it try to run a target's binary on
-the host system.
-
-Replace infozip's LFS check with the one used by autoconf.
-This allows to readd LFS support for host-infozip.
-
-Reported-by: Richard Genoud <richard.genoud@gmail.com>
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...figure-borrow-the-LFS-test-from-autotools.patch |  101 ++++++++++++++++++++
- 1 files changed, 101 insertions(+), 0 deletions(-)
+ ...-unix-configure-remove-GID-UID-size-check.patch |   85 ++++++++++++++++++++
+ package/infozip/infozip.mk                         |    4 +
+ 2 files changed, 89 insertions(+), 0 deletions(-)
 
-diff --git a/package/infozip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch b/package/infozip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch
+diff --git a/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch b/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch
 new file mode 100644
-index 0000000..a4e99db
+index 0000000..38d8d73
 --- /dev/null
-+++ b/package/infozip/0006-unix-configure-borrow-the-LFS-test-from-autotools.patch
-@@ -0,0 +1,101 @@
-+From fc392c939b9a18959482f588aff0afc29dd6d30a Mon Sep 17 00:00:00 2001
++++ b/package/infozip/0005-unix-configure-remove-GID-UID-size-check.patch
+@@ -0,0 +1,85 @@
++From d8da4e5f0ebed000f880e60b6cca7c575f7ed1c7 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@openwide.fr>
-+Date: Fri, 23 Jan 2015 22:20:18 +0100
-+Subject: [PATCH 6/6] unix/configure: borrow the LFS test from autotools.
++Date: Fri, 23 Jan 2015 22:13:14 +0100
++Subject: [PATCH 5/6] unix/configure: remove GID/UID size check
 +
-+Infozip's LFS check can't work for cross-compilation
-+since it try to run a target's binary on the host system.
-+
-+Instead, use to LFS test used by autotools which is a
-+compilation test.
-+(see autotools/lib/autoconf/specific.m4)
++This check can't work for cross-compilation since it
++try to run a target's binary on the host system.
 +
 +Reported-by: Richard Genoud <richard.genoud@gmail.com>
 +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+ unix/configure | 51 ++++++++++++++++++---------------------------------
-+ 1 file changed, 18 insertions(+), 33 deletions(-)
++ unix/configure | 57 ---------------------------------------------------------
++ 1 file changed, 57 deletions(-)
 +
 +diff --git a/unix/configure b/unix/configure
-+index 7bfc9eb..588f269 100644
++index de9fd68..7bfc9eb 100644
 +--- a/unix/configure
 ++++ b/unix/configure
-+@@ -237,9 +237,8 @@ _EOF_
++@@ -237,63 +237,6 @@ _EOF_
 + $CC $CFLAGS -c conftest.c >/dev/null 2>/dev/null
 + [ $? -ne 0 ] && CFLAGS="${CFLAGS} -DNO_OFF_T"
 + 
-+-# Now we set the 64-bit file environment and check the size of off_t
-+-# Added 11/4/2003 EG
-+-# Revised 8/12/2004 EG
-++# LFS check borrowed from autotools sources
-++# lib/autoconf/specific.m4
-+ 
-+ echo Check for Large File Support
-+ cat > conftest.c << _EOF_
-+@@ -247,24 +246,22 @@ cat > conftest.c << _EOF_
-+ # define _LARGEFILE64_SOURCE
-+ # define _FILE_OFFSET_BITS 64       /* select default interface as 64 bit */
-+ # define _LARGE_FILES        /* some OSes need this for 64-bit off_t */
-++
-+ #include <sys/types.h>
++-
++-echo Check size of UIDs and GIDs
++-echo "(Now zip stores variable size UIDs/GIDs using a new extra field.  This"
++-echo " tests if this OS uses 16-bit UIDs/GIDs and so if the old 16-bit storage"
++-echo " should also be used for backward compatibility.)"
++-# Added 2008-04-15 CS
++-cat > conftest.c << _EOF_
++-# define _LARGEFILE_SOURCE          /* some OSes need this for fseeko */
++-# define _LARGEFILE64_SOURCE
++-# define _FILE_OFFSET_BITS 64       /* select default interface as 64 bit */
++-# define _LARGE_FILES               /* some OSes need this for 64-bit off_t */
++-#include <sys/types.h>
 +-#include <sys/stat.h>
 +-#include <unistd.h>
 +-#include <stdio.h>
 +-int main()
-++ /* Check that off_t can represent 2**63 - 1 correctly.
-++    We can't simply define LARGE_OFF_T to be 9223372036854775807,
-++    since some C++ compilers masquerading as C compilers
-++    incorrectly reject 9223372036854775807.  */
-++#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
-++  int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
-++		       && LARGE_OFF_T % 2147483647 == 1)
-++		      ? 1 : -1];
-++int
-++main ()
-+ {
-+-  off_t offset;
++-{
 +-  struct stat s;
-+-  /* see if have 64-bit off_t */
-+-  if (sizeof(offset) < 8)
++-
++-  printf("  s.st_uid is %u bytes\n", sizeof(s.st_uid));
++-  printf("  s.st_gid is %u bytes\n", sizeof(s.st_gid));
++-
++-  /* see if have 16-bit UID */
++-  if (sizeof(s.st_uid) != 2) {
 +-    return 1;
-+-  printf("  off_t is %d bytes\n", sizeof(off_t));
-+-  /* see if have 64-bit stat */
-+-  if (sizeof(s.st_size) < 8) {
-+-    printf("  s.st_size is %d bytes\n", sizeof(s.st_size));
++-  }
++-  /* see if have 16-bit GID */
++-  if (sizeof(s.st_gid) != 2) {
 +-    return 2;
 +-  }
 +-  return 3;
-++
-++  ;
-++  return 0;
-+ }
-+ _EOF_
-+ # compile it
-+@@ -272,22 +269,10 @@ $CC -o conftest conftest.c >/dev/null 2>/dev/null
-+ if [ $? -ne 0 ]; then
-+   echo -- no Large File Support
-+ else
++-}
++-_EOF_
++-# compile it
++-$CC -o conftest conftest.c >/dev/null 2>/dev/null
++-if [ $? -ne 0 ]; then
++-  echo -- UID/GID test failed on compile - disabling old 16-bit UID/GID support
++-  CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
++-else
 +-# run it
 +-  ./conftest
 +-  r=$?
 +-  if [ $r -eq 1 ]; then
-+-    echo -- no Large File Support - no 64-bit off_t
++-    echo -- UID not 2 bytes - disabling old 16-bit UID/GID support
++-    CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
 +-  elif [ $r -eq 2 ]; then
-+-    echo -- no Large File Support - no 64-bit stat
++-    echo -- GID not 2 bytes - disabling old 16-bit UID/GID support
++-    CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
 +-  elif [ $r -eq 3 ]; then
-+-    echo -- yes we have Large File Support!
-+-    CFLAGS="${CFLAGS} -DLARGE_FILE_SUPPORT"
++-    echo -- 16-bit UIDs and GIDs - keeping old 16-bit UID/GID support
 +-  else
-+-    echo -- no Large File Support - conftest returned $r
++-    echo -- test failed - conftest returned $r - disabling old 16-bit UID/GID support
++-    CFLAGS="${CFLAGS} -DUIDGID_NOT_16BIT"
 +-  fi
-++      echo -- yes we have Large File Support!
-++      CFLAGS="${CFLAGS} -DLARGE_FILE_SUPPORT"
-+ fi
-+ 
++-fi
 +-
-+ # Check for wide char for Unicode support
-+ # Added 11/24/2005 EG
-+ 
++-
++ # Now we set the 64-bit file environment and check the size of off_t
++ # Added 11/4/2003 EG
++ # Revised 8/12/2004 EG
 +-- 
 +1.9.3
 +
+diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
+index 3f53224..3e8058f 100644
+--- a/package/infozip/infozip.mk
++++ b/package/infozip/infozip.mk
+@@ -17,6 +17,10 @@ endif
+ # Infozip's default CFLAGS.
+ INFOZIP_CFLAGS = -I. -DUNIX
+ 
++# Disable the support of 16-bit UIDs/GIDs, the test in unix/configure was
++# removed since it can't work for cross-compilation.
++INFOZIP_CFLAGS += -DUIDGID_NOT_16BIT
++
+ define INFOZIP_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ 		CFLAGS="$(TARGET_CFLAGS) $(INFOZIP_CFLAGS)" \
