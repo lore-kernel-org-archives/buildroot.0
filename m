@@ -1,32 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Feb 2015 23:36:34 +0100
-Subject: [Buildroot] Buildroot developers/users at Embedded Linux Conference
- in San Jose?
-Message-ID: <20150205233634.7b71ceae@free-electrons.com>
+Date: Thu, 5 Feb 2015 23:52:13 +0100
+Subject: [Buildroot] [PATCH v5 02/11] autobuild-run: use docopt for
+ argument parsing
+In-Reply-To: <1418414696-32584-3-git-send-email-patrickdepinguin@gmail.com>
+References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
+ <1418414696-32584-3-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150205235213.7eb39123@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas De Schampheleire,
 
-I am wondering if some Buildroot developers or users will be at the
-next Embedded Linux Conference in San Jose, California, on March 23-25.
-If so, I'd be interested in setting up a moment to gather and at least
-meet each other.
+On Fri, 12 Dec 2014 21:04:47 +0100, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> Using docopt, argument parsing becomes trivial. Adding a new argument is
+> a matter of updating the usage text.
+> This commit removes the original cumbersome argument handling and uses
+> docopt instead. A method is added to import the settings from the
+> configuration file in a similar dictionary as the one created by docopt,
+> so that both can be merged (giving priority to the configuration file,
+> as before).
 
-I proposed a talk about Buildroot at this ELC edition, but it got
-rejected. Instead, another talk about Buildroot has been accepted, it
-will be giving by Stephanie Lockwood-Childs from VCT Labs. See
-http://elcabs2015.sched.org/event/70ed9eef1b3ed5e50b43821dd899503d.
+Actually, in the current implementation, priority is given to the
+command line option, and not the configuration file. Like most Unix
+tools, I believe.
 
-Let me know if there is some interest to set up a meeting around
-Buildroot.
+So to make your implementation behave like the existing one, I believe
+I just need to change:
 
-Thanks,
+> +    if args['--config']:
+> +        ini_config = load_ini_config(args['--config'])
+> +        # merge config/args, priority given to config
+> +        args = merge(ini_config, args)
 
-Thomas Petazzoni
+to:
+
+	   # merge config/args, priority given to args
+	   args = merge(args, ini_config)
+
+No need to resend just for this, I can fixup when applying.
+
+Thanks!
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
