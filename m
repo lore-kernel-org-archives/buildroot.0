@@ -1,79 +1,120 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 5 Feb 2015 15:06:56 +0000
-Subject: [Buildroot] [PATCH v2] libvips: requires C++ support
-Message-ID: <1423148816-9029-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 5 Feb 2015 10:58:07 -0500
+Subject: [Buildroot] [PATCH v2] python-cherrypy: new package
+In-Reply-To: <CAGm1_kvHOHPiXBeobKSfbN_8OW2RohVrVfNc06d-X9k8msS6EA@mail.gmail.com>
+References: <1423146868-27214-1-git-send-email-fhunleth@troodon-software.com>
+ <CAGm1_kvHOHPiXBeobKSfbN_8OW2RohVrVfNc06d-X9k8msS6EA@mail.gmail.com>
+Message-ID: <CA+-urNRpWbGQuzMXj8kyVHihfYb6bxfnmGXFYj6huCQkaD1CWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libvips requires C++ support, otherwise it will fail with an error
-message like this one:
+Hi Yegor,
 
-error: ../libvips/.libs/libvips.so: No such file or directory
+On Thu, Feb 5, 2015 at 9:59 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Thu, Feb 5, 2015 at 3:34 PM, Frank Hunleth
+> <fhunleth@troodon-software.com> wrote:
+>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>> ---
+>> Changes v1 -> v2:
+>>   - removed depends statement in Config.in per Yegor's comment
+>>     that it wasn't needed if it runs on both Python 2 and 3.
+>>
+>>  package/Config.in                          |  1 +
+>>  package/python-cherrypy/Config.in          |  6 ++++++
+>>  package/python-cherrypy/python-cherrypy.mk | 14 ++++++++++++++
+>>  3 files changed, 21 insertions(+)
+>>  create mode 100644 package/python-cherrypy/Config.in
+>>  create mode 100644 package/python-cherrypy/python-cherrypy.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index fe3d3d0..a5d1be5 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -510,6 +510,7 @@ menu "external python modules"
+>>         source "package/python-certifi/Config.in"
+>>         source "package/python-cffi/Config.in"
+>>         source "package/python-cheetah/Config.in"
+>> +       source "package/python-cherrypy/Config.in"
+>>         source "package/python-coherence/Config.in"
+>>         source "package/python-configobj/Config.in"
+>>         source "package/python-configshell-fb/Config.in"
+>> diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+>> new file mode 100644
+>> index 0000000..e48d601
+>> --- /dev/null
+>> +++ b/package/python-cherrypy/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_PYTHON_CHERRYPY
+>> +       bool "python-cherrypy"
+>
+> cherrypy seems to use "import zlib", so following statements are required:
+>
+> select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+> select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+>
+> see cherrypy/lib/encoding.py
 
-The '--disable-cxx' configure option seems to be broken, so in the
-meantime a compiler with C++ support is required in order to build
-libvips successfully.
+I'll add this. Thanks for looking deeper into the library.
 
-Reported upstream:
+>
+> Could you also create a python-cherrypy.hash file? See
+> http://git.buildroot.net/buildroot/tree/package/python-werkzeug/python-werkzeug.hash
+>
 
-  https://github.com/jcupitt/libvips/issues/231
+Will do.
 
-Fixes:
+> I've also seen xmlrpc imports. IIRC it requires expat
+> (BR2_PACKAGE_PYTHON_PYEXPAT) support in Python
+> (cherrypy/lib/xmlrpcutil.py).
 
-  http://autobuild.buildroot.net/results/cdc7cf5d3501f80c74b70aa09f93b2ad4e2f8602/
-  http://autobuild.buildroot.net/results/39173dbcbbd0a243900ea583cec024b51f8b803a/
-  http://autobuild.buildroot.net/results/6794705195bcdb636a8e6582ef5a1e153d4d66b3/
+I can report that the application that CherryPy is being used for
+seems to work fine. We must not be hitting these calls, since I don't
+think that xmlrpc is enabled. I'll check into this when I resubmit.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libvips/Config.in  |    8 ++++++--
- package/libvips/libvips.mk |    6 ++----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+Thanks,
+Frank
 
-diff --git a/package/libvips/Config.in b/package/libvips/Config.in
-index 1a0d35c..ad7a103 100644
---- a/package/libvips/Config.in
-+++ b/package/libvips/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_LIBVIPS
- 	depends on BR2_USE_WCHAR # gettext, libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # fork()
-+	# C++ support is required to build libvips
-+	# https://github.com/jcupitt/libvips/issues/231
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-@@ -13,6 +16,7 @@ config BR2_PACKAGE_LIBVIPS
- 
- 	  http://www.vips.ecs.soton.ac.uk/
- 
--comment "libvips needs a toolchain w/ wchar, threads"
-+comment "libvips needs a toolchain w/ wchar, threads, C++"
-         depends on BR2_USE_MMU
--        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+        depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 35e7684..1efe21a 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -33,11 +33,9 @@ LIBVIPS_DEPENDENCIES = \
- 	host-pkgconf libglib2 \
- 	libxml2 $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
--ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+# --disable-cxx is broken upstream
-+# https://github.com/jcupitt/libvips/issues/231
- LIBVIPS_CONF_OPTS += --enable-cxx
--else
--LIBVIPS_CONF_OPTS += --disable-cxx
--endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBVIPS_CONF_OPTS += --with-jpeg
+>
+>> +       help
+>> +         A minimalist web framework
+>> +
+>> +         http://www.cherrypy.org
+>> diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+>> new file mode 100644
+>> index 0000000..a08b21a
+>> --- /dev/null
+>> +++ b/package/python-cherrypy/python-cherrypy.mk
+>> @@ -0,0 +1,14 @@
+>> +################################################################################
+>> +#
+>> +# python-cherrypy
+>> +#
+>> +################################################################################
+>> +
+>> +PYTHON_CHERRYPY_VERSION = 3.6.0
+>> +PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
+>> +PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
+>> +PYTHON_CHERRYPY_LICENSE = BSD-3c
+>> +PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
+>> +PYTHON_CHERRYPY_SETUP_TYPE = distutils
+>> +
+>> +$(eval $(python-package))
+>> --
+>> 1.9.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-1.7.1
+Frank Hunleth
+Troodon Software LLC
+Embedded Software Development
+http://troodon-software.com/
