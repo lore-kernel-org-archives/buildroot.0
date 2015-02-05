@@ -1,81 +1,44 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 5 Feb 2015 15:07:14 +0100
-Subject: [Buildroot] [PATCH] python-cherrypy: new package
-In-Reply-To: <1423144225-26837-1-git-send-email-fhunleth@troodon-software.com>
-References: <1423144225-26837-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <CAGm1_ks1xu=pQDG7ZYbhSsv4ScU2UcSerZnr0b2Myn3Wb1xrhw@mail.gmail.com>
+From: Thierry Bultel <tbultel@free.fr>
+Date: Thu, 05 Feb 2015 15:16:52 +0100
+Subject: [Buildroot] grub2 failure with gcc-4.9
+In-Reply-To: <20150205142015.4318baa2@free-electrons.com>
+References: <54D367F9.4060108@free.fr>
+ <20150205142015.4318baa2@free-electrons.com>
+Message-ID: <54D37B54.7080700@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 5, 2015 at 2:50 PM, Frank Hunleth
-<fhunleth@troodon-software.com> wrote:
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/Config.in                          |  1 +
->  package/python-cherrypy/Config.in          |  7 +++++++
->  package/python-cherrypy/python-cherrypy.mk | 14 ++++++++++++++
->  3 files changed, 22 insertions(+)
->  create mode 100644 package/python-cherrypy/Config.in
->  create mode 100644 package/python-cherrypy/python-cherrypy.mk
+Le 05/02/2015 14:20, Thomas Petazzoni a ?crit :
+> Dear Thierry Bultel,
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index fe3d3d0..a5d1be5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -510,6 +510,7 @@ menu "external python modules"
->         source "package/python-certifi/Config.in"
->         source "package/python-cffi/Config.in"
->         source "package/python-cheetah/Config.in"
-> +       source "package/python-cherrypy/Config.in"
->         source "package/python-coherence/Config.in"
->         source "package/python-configobj/Config.in"
->         source "package/python-configshell-fb/Config.in"
-> diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-> new file mode 100644
-> index 0000000..d66dc16
-> --- /dev/null
-> +++ b/package/python-cherrypy/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_CHERRYPY
-> +       bool "python-cherrypy"
-> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-
-remove depends statement. You need this only, if your package can run
-either under Python 2.x or 3.x
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-> +       help
-> +         A minimalist web framework
-> +
-> +         http://www.cherrypy.org
-> diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-> new file mode 100644
-> index 0000000..a08b21a
-> --- /dev/null
-> +++ b/package/python-cherrypy/python-cherrypy.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-cherrypy
-> +#
-> +################################################################################
-> +
-> +PYTHON_CHERRYPY_VERSION = 3.6.0
-> +PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
-> +PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
-> +PYTHON_CHERRYPY_LICENSE = BSD-3c
-> +PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
-> +PYTHON_CHERRYPY_SETUP_TYPE = distutils
-> +
-> +$(eval $(python-package))
-> --
-> 1.9.1
+> On Thu, 05 Feb 2015 13:54:17 +0100, Thierry Bultel wrote:
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> After some (printf) debugging, I found out that when 'loading' the
+>> builtin modules at startup, some modules names are corrupted.
+>> I am about to get into deeper investigation, but has anyone
+>> encountered it ?
+>
+> Interesting.
+>
+> First suggestions:
+>
+>   - try with another gcc 4.9 toolchain (distro toolchain or something)
+>
+>   - try with different optimization levels (default of Buildroot is -Os,
+>     try with -O0 and -O2)
+>
+
+It seems that when building the target part, grub is using CXXFLAGS 
+(from $(HOST_CONFIGURE_OPTS)) in addition of TARGET_CFLAGS.
+Thus we have both -0s and -O2 in command line.
+
+Unfortunately that is not the cause of the bug, because -02 (twice) 
+makes it happen.
+
+Trying another toolchain ...
+
+> Thomas
+>
