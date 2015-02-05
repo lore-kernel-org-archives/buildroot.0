@@ -1,74 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  5 Feb 2015 22:19:55 +0100
-Subject: [Buildroot] [PATCHv3 0/5] Graph about installed size per package
-Message-ID: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu,  5 Feb 2015 22:19:57 +0100
+Subject: [Buildroot] [PATCHv3 2/5] pkg-generic: add step_pkg_size global
+	instrumentation hook
+In-Reply-To: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1423171200-24583-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch adds a global instrumentation hook that collects the list
+of files installed in $(TARGET_DIR) by each package, and stores this
+list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
+later be used to determine the size contribution of each package to
+the target root filesystem.
 
-Here is the third iteration of the patches adding a 'size-stats'
-feature, which mainly allows to generate a pie chart of the size
-contribution of each package to the overall root filesystem size.
+Note that in order to detect if a file installed by one package is
+later overriden by another package, we calculate the md5 of installed
+files and compare them at each installation of a new package.
 
-Changes since v2:
+This commit also adds a Config.in option to enable the collection of
+this data, as calculating the md5 of all installed files at the
+beginning and end of the installation of each package can be
+considered a time-consuming process which maybe some users will not be
+willing to suffer from.
 
- - Use print0 in find and -0 in xargs to support spaces in filenames,
-   just in case. Suggested by J?r?me Pouiller.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in              |  9 +++++++++
+ package/pkg-generic.mk | 36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
 
- - Support custom skeleton locations, instead of assuming the skeleton
-   comes from system/skeleton.
-
- - Fix the size-stats target to actually call the size-stats script,
-   and not graph-size, which was the old name of the script in
-   previous versions of the series.
-
- - Fix usage of the size-stats target in out of tree build
-   situations. For consistency reasons, we chose to mimic what
-   graph-depends already does, even if size-stats does not necessarily
-   need to be executed from within CONFIG_DIR.
-
- - Add one patch to make sure that 'make clean' removes the graphs/
-   subdirectory in the output directory, which wasn't done today. This
-   issue isn't specific to size-stats, and already existed with
-   graph-build and graph-depends.
-
-Comments:
-
- - J?r?me Puiller suggested to add a warning for removed
-   files. However, many files are removed in the target-finalize step
-   (man pages, etc.) and we don't want to have gazillions of warnings
-   about these completely normal file removals.
-
-Thomas Petazzoni (5):
-  Makefile: remove the graphs/ dir on 'make clean'
-  pkg-generic: add step_pkg_size global instrumentation hook
-  support/scripts: add size-stats script
-  Makefile: implement a size-stats target
-  Dummy testing packages
-
- Config.in                  |   9 ++
- Makefile                   |  19 +++-
- package/Config.in          |   2 +
- package/foo1/Config.in     |   2 +
- package/foo1/file.img      | Bin 0 -> 2097152 bytes
- package/foo1/foo1.mk       |   8 ++
- package/foo2/Config.in     |   2 +
- package/foo2/file.img      | Bin 0 -> 4194304 bytes
- package/foo2/foo2.mk       |   8 ++
- package/pkg-generic.mk     |  36 +++++++
- support/scripts/size-stats | 231 +++++++++++++++++++++++++++++++++++++++++++++
- 11 files changed, 314 insertions(+), 3 deletions(-)
- create mode 100644 package/foo1/Config.in
- create mode 100644 package/foo1/file.img
- create mode 100644 package/foo1/foo1.mk
- create mode 100644 package/foo2/Config.in
- create mode 100644 package/foo2/file.img
- create mode 100644 package/foo2/foo2.mk
- create mode 100755 support/scripts/size-stats
-
+diff --git a/Config.in b/Config.in
+index f5b6c73..58a5085 100644
+--- a/Config.in
++++ b/Config.in
+@@ -613,6 +613,15 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  toolchain (through gcc and binutils patches) and external
+ 	  toolchain backends (through the external toolchain wrapper).
+ 
++config BR2_COLLECT_FILE_SIZE_STATS
++	bool "collect statistics about installed file size"
++	help
++	  Enable this option to let Buildroot collect data about the
++	  installed files. When this option is enabled, you will be
++	  able to use the 'size-stats' make target, which will
++	  generate a graph and CSV files giving statistics about the
++	  installed size of each file and each package.
++
+ endmenu
+ 
+ endmenu
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1b09955..db35a87 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -55,6 +55,42 @@ define step_time
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ 
++# Hooks to collect statistics about installed files
++ifeq ($(BR2_COLLECT_FILE_SIZE_STATS),y)
++
++# This hook will be called before the target installation of a
++# package. We store in a file named $(1).filelist_before the list of
++# files currently installed in the target. Note that the MD5 is also
++# stored, in order to identify if the files are overwritten.
++define step_pkg_size_start
++	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$(BUILD_DIR)/$(1).filelist_before
++endef
++
++# This hook will be called after the target installation of a
++# package. We store in a file named $(1).filelist_after the list
++# of files (and their MD5) currently installed in the target. We then
++# do a diff with the $(1).filelist_before to compute the list of
++# files installed by this package.
++define step_pkg_size_end
++	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
++		$(BUILD_DIR)/$(1).filelist_after
++	comm -13 $(BUILD_DIR)/$(1).filelist_before $(BUILD_DIR)/$(1).filelist_after | \
++		while read hash file ; do \
++			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
++		done
++	$(RM) -f $(BUILD_DIR)/$(1).filelist_before \
++		$(BUILD_DIR)/$(1).filelist_after
++endef
++
++define step_pkg_size
++	$(if $(filter install-target,$(2)),\
++		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
++		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
++endif
++
+ # User-supplied script
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ define step_user
 -- 
 2.1.0
