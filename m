@@ -1,101 +1,55 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Fri, 6 Feb 2015 10:31:57 +0100
-Subject: [Buildroot] board-specific autotools env customization
-In-Reply-To: <54D27F46.6030704@mind.be>
-References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>
- <20150202175455.5dd5c2e3@free-electrons.com>
- <CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>
- <54D08CB7.7040801@mind.be>
- <CAKAx1cg32iH0XEby8hPoQq1nm2DutdtDROE5nBWsXMi1mO93qg@mail.gmail.com>
- <54D27F46.6030704@mind.be>
-Message-ID: <CAKAx1ci_E5=kba_kR8KLt==Q7b_8mKoTeeY=t_XtZ3_x0yh-_g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 06 Feb 2015 10:35:52 +0100
+Subject: [Buildroot] [PATCH] qemu: add architecture dependencies for
+	host qemu
+In-Reply-To: <1423210548-4891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 6 Feb 2015 09:15:48 +0100")
+References: <1423210548-4891-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d25n9ybr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, Feb 4, 2015 at 9:21 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 04/02/15 08:52, Lionel Orry wrote:
->> Hi Arnout,
->>
->> On Tue, Feb 3, 2015 at 9:54 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
-> [snip]
->>>  So we would really appreciate if you could check the various flags that zeromq
->>> tries to run and set them to yes if they are available, and send a patch to the
->>> mailing list. I've already checked libzmq_cv_sock_cloexec: SOCK_CLOEXEC was
->>> introduced in 2.6.27 so we can also assume that it's always available. Which
->>> kernel version do you run?
->>>
->>
->> I have this list in here (there are 6 flags, 5 of them are available)
->> for my compiler, so I could make this patch. It won't do anything
->> useful until the acinclude.m4 is patched though, so I suppose the
->> first step is to fix acinclude.m4.
->>
->> I use a 2.6.32 based kernel.
->>
->> For reference, with my current compiler :
->> * compiler version : sh4-linux-gcc (GCC) 4.7.3 20130514
->> (STMicroelectronics/Linux Base 4.7.3-124)
->> * SOCK_CLOEXEC : available
->> * SO_KEEPALIVE : available
->> * TCP_KEEPCNT : available
->> * TCP_KEEPIDLE : available
->> * TCP_KEEPINTVL : available
->> * TCP_KEEPALIVE : not available
->
->  This indeed seems to correspond to the current situation (kernel > 2.6.30).
->
->
->>>> Aside note : in fact, in zeromq, the macros written for these flags
->>>> detection are wrong because they don't check if the value is set in
->>>> environment and always override them; so it is a bad example, but the
->>>
->>>  Yeah, indeed, you should also patch acinclude.m4 to correctly use a cache
->>> variable with AC_CACHE_VAL and AC_CACHE_CHECK. And that patch should be sent
->>> upstream of course.
->>>
->>
->> I totally agree. But I'm still quite bad at autotools stuff and I
->> don't know how to use AC_CACHE_xxx macros
->> but I'll try to do it anyway. Any hints appreciated, the most clean
->> the patch is, the more chances it will have to hit upstream...
->
-> The basic pattern is:
->
-> AC_CACHE_CHECK(whether SOCK_CLOEXEC is supported, libzmq_cv_sock_cloexec,
-> [AC_TRY_RUN(...)])
->
-> and then of course remove the AC_MSG_CHECKING that comes before it. The cache
-> variable should be set in the body of the AC_CACHE_CHECK, like it currently is.
->
+ > The host-qemu package currently builds the user mode emulation, which
+ > isn't available on all architectures, so this commit adds the
+ > necessary architecture dependencies to the Config.in.host file.
 
-Thank you Arnout for your valuable help. I sent a patch to the
-mailing-list, and I am preparing the patch for upstream.
-I have to adapt it for the current upstream master version (v.4.2.x)
-because acinclude.m4 changed, so I can't send it as-is...
-Should I try to send the v4.0.x based patch to their maintenance
-branch ? They say it's for bugfixes only so I'm pretty sure it will be
-rejected.
+ > Fixes:
 
->
->  Regards,
->  Arnout
->
->
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ >   http://autobuild.buildroot.net/results/4298ce40cbe3db50ffe53ecf6856523157df591d/
 
-Kind regards,
-Lionel
+ > Reported-by: Max Filippov <jcmvbkbc@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+ >  package/qemu/Config.in.host | 9 +++++++++
+ >  1 file changed, 9 insertions(+)
+
+ > diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+ > index a1f0531..c5c3f05 100644
+ > --- a/package/qemu/Config.in.host
+ > +++ b/package/qemu/Config.in.host
+ > @@ -1,5 +1,14 @@
+ >  config BR2_PACKAGE_HOST_QEMU
+ >  	bool "host qemu"
+ > +	# So far, we only build the user mode emulation, so this list
+ > +	# of architecture dependencies only takes into account this
+ > +	# emulation mode.
+ > +	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
+ > +		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
+ > +		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
+ > +		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
+ > +		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
+ > +		BR2_sparc        || BR2_x86_64
+
+Committed, thanks.
+
+Are you use about BR2_sh? sh4a atleast doesn't look supported:
+
+http://autobuild.buildroot.net/results/4e5/4e530528c72f0c70f352f39ea09c686753757ecb/build-end.log
+
+-- 
+Bye, Peter Korsgaard
