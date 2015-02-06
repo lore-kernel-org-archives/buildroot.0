@@ -1,67 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  6 Feb 2015 15:45:44 +0100
-Subject: [Buildroot] [PATCH] mono: add patch to fix MIPS build issue
-Message-ID: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 Feb 2015 14:48:59 +0000
+Subject: [Buildroot] [PATCH v2] qt5/qt5base: Fix build on big endian systems
+Message-ID: <1423234139-33913-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to version 3.12 of Mono, it fails to build on MIPS. The
-patch added by this commit fixes this build failure, simply caused by
-a missing include.
+Backporting an upstream patch to fix a qt5base build failure on big
+endian systems. This is the error message:
 
-Fixes:
+image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric
+constant
 
-  http://autobuild.buildroot.org/results/6f5/6f5e20a4a99eb0db650430bf6285c844fd940711/
+Upstream commit:
 
-Submitted upstream at https://github.com/mono/mono/pull/1550.
+  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../0003-mono-context.h-fix-build-on-MIPS.patch    | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
+v1 -> v2: commit message amended
 
-diff --git a/package/mono/0003-mono-context.h-fix-build-on-MIPS.patch b/package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
+ ...ersions.cpp-Fix-build-on-big-endian-syste.patch |   51 ++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+
+diff --git a/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
 new file mode 100644
-index 0000000..dab22ce
+index 0000000..1e493ca
 --- /dev/null
-+++ b/package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
-@@ -0,0 +1,33 @@
-+From 8f489c24e1770c2852efcaff9419d54bfadf0854 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 6 Feb 2015 14:56:10 +0100
-+Subject: [PATCH] mono-context.h: fix build on MIPS
++++ b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+@@ -0,0 +1,51 @@
++qimage_conversions.cpp: Fix build on big endian systems
 +
-+The mono-context.h file uses definitions such as mips_fp and mips_sp,
-+which are defined in <mono/arch/mips/mips-codegen.h>, but this file is
-+not included, leading to build failures.
++Backporting an upstream patch to fix a qt5base build failure on big
++endian systems. This is the error message:
 +
-+This fix is similar to 4437ecea91bab3fe68ba1c30521acf75052662cd (for
-+ARM).
++image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric 
++constant
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Upstream commit:
++
++  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 404f4281fda764cafdaa5635db995dabc4f1de8c Mon Sep 17 00:00:00 2001
++From: Dmitry Shachnev <mitya57@gmail.com>
++Date: Tue, 9 Dec 2014 09:27:53 +0300
++Subject: [PATCH] qimage_conversions.cpp: Fix build on big endian systems
++
++Change-Id: I8149eb2deaa101daf85a957ff48c3a7140c43bbc
++Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
++Reviewed-by: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
 +---
-+ mono/utils/mono-context.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/gui/image/qimage_conversions.cpp |    4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/mono/utils/mono-context.h b/mono/utils/mono-context.h
-+index d96eb75..ad56e2c 100755
-+--- a/mono/utils/mono-context.h
-++++ b/mono/utils/mono-context.h
-+@@ -464,6 +464,8 @@ mono_ia64_context_get_fp (MonoContext *ctx)
-+ 
-+ #elif ((defined(__mips__) && !defined(MONO_CROSS_COMPILE)) || (defined(TARGET_MIPS))) && SIZEOF_REGISTER == 4 /* defined(__ia64__) */
-+ 
-++#include <mono/arch/mips/mips-codegen.h>
-++
-+ typedef struct {
-+ 	mgreg_t	    sc_pc;
-+ 	mgreg_t		sc_regs [32];
++diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
++index 17563b1..858a0d9 100644
++--- a/src/gui/image/qimage_conversions.cpp
+++++ b/src/gui/image/qimage_conversions.cpp
++@@ -2252,7 +2252,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
++         convert_ARGB_to_ARGB_PM,
++ #else
++         0,
++-        0
+++        0,
++ #endif
++         0, 0, 0, 0
++     }, // Format_RGBA8888
++@@ -2281,7 +2281,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
++ #else
++         0,
++         0,
++-        0
+++        0,
++ #endif
++         0, 0, 0, 0
++     }, // Format_RGBA8888_Premultiplied
 +-- 
-+2.1.0
++1.7.1
 +
 -- 
-2.1.0
+1.7.1
