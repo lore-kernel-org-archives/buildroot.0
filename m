@@ -1,28 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 6 Feb 2015 16:15:39 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Feb 2015 16:21:57 +0100
 Subject: [Buildroot] [PATCH] mono: add patch to fix MIPS build issue
 In-Reply-To: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54D4DA9B.60306@imgtec.com>
+Message-ID: <20150206162157.7041b7ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hello,
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Fri,  6 Feb 2015 15:45:44 +0100, Thomas Petazzoni wrote:
+> Since the bump to version 3.12 of Mono, it fails to build on MIPS. The
+> patch added by this commit fixes this build failure, simply caused by
+> a missing include.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/6f5/6f5e20a4a99eb0db650430bf6285c844fd940711/
+> 
+> Submitted upstream at https://github.com/mono/mono/pull/1550.
 
-I did a build test for MIPS and I confirm this patch fixes the problem.
+The patch has been merged upstream.
 
-$ file output/target/usr/bin/mono-sgen
-output/target/usr/bin/mono-sgen: ELF 32-bit MSB executable, MIPS, MIPS32
-rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
-GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
-unknown capability 0x10000 = 0x70403, stripped
-
-Thanks.
---
-Vincent
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
