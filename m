@@ -1,41 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Feb 2015 20:02:54 +0100
-Subject: [Buildroot] [PATCH] qt5/qt5base: Fix build on MIPS without DSP
-	support
-In-Reply-To: <1423239139-56155-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 6 Feb 2015 16:12:19 +0000")
-References: <1423239139-56155-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87zj8q982p.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Feb 2015 20:03:39 +0100
+Subject: [Buildroot] [PATCH] mono: add patch to fix MIPS build issue
+In-Reply-To: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 6 Feb 2015 15:45:44 +0100")
+References: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vbje981g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The qt_memfill32_asm_mips_dsp function is only declared if
- > QT_COMPILER_SUPPORTS_MIPS_DSP is defined, so we can't reference it
- > unless the same macro is defined.
-
- > Backporting an upstream patch to fix this issue.
-
- > This is the error message:
-
- > qt-everywhere-enterprise-src-5.4.0-alpha/qtbase/src/gui/painting/qdrawhelper.cpp:
- > In function 'void qInitDrawhelperAsm()':
- > qt-everywhere-enterprise-src-5.4.0-alpha/qtbase/src/gui/painting/qdrawhelper.cpp:6843:
- > error: 'qt_memfill32_asm_mips_dsp' was not declared in this scope
-
- > Upstream commit:
-
- >   https://qt.gitorious.org/qt/qtbase/commit/2ca323ccd4f25f409eff8fc0c9804099b78c2bde
+ > Since the bump to version 3.12 of Mono, it fails to build on MIPS. The
+ > patch added by this commit fixes this build failure, simply caused by
+ > a missing include.
 
  > Fixes:
 
- >   http://autobuild.buildroot.net/results/254/254cf62bef8bc5d5ffe345d817d16aa9983baa15/
+ >   http://autobuild.buildroot.org/results/6f5/6f5e20a4a99eb0db650430bf6285c844fd940711/
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Submitted upstream at https://github.com/mono/mono/pull/1550.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
