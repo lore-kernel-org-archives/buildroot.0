@@ -1,63 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 6 Feb 2015 12:15:42 +0100
-Subject: [Buildroot] [PATCH v5 04/11] autobuild-run: use **kwargs to
- avoid explicit parameter passthroughs
-In-Reply-To: <20150206085808.66acc651@free-electrons.com>
-References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
- <1418414696-32584-5-git-send-email-patrickdepinguin@gmail.com>
- <20150206085808.66acc651@free-electrons.com>
-Message-ID: <CAAXf6LXjM+cqj1=ctAkoxZmc1nZRu+HA01RV-GHVkxxYdOKn9A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 6 Feb 2015 13:30:21 +0100
+Subject: [Buildroot] [git commit] qemu: correct kernel headers check when
+	major numbers differ
+Message-ID: <20150206123124.79E8F81787@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=35bf4f3913fe21c5d47b982454b4487b8c71d816
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Feb 6, 2015 at 8:58 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Fri, 12 Dec 2014 21:04:49 +0100, Thomas De Schampheleire wrote:
->> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> The current version of autobuild-run has some extensive explicit
->> parameter passing, for example:
->>
->> - fixup_config needs sysinfo, passed via gen_config, in turn via
->>   run_instance, in turn via main.
->> - send_results needs username/password settings, passed via
->>   run_instance, in turn via main.
->>
->> Everytime a leaf function needs an extra parameter (for example coming
->> from the arguments or config file), the entire call chain needs to be
->> adapted to pass along that parameter.
->>
->> This patch introduces the **kwargs dictionary principle, that allows
->> implicit parameter passing. A function can accept this dictionary and
->> extract parameters from it by name. The dictionary can be passed as a
->> whole to a child function, without explicitly enumerating which entries
->> in the dictionary are needed in the child.
->
-> I must say I find this **kwargs thing a bit weird. Yes indeed, it
-> avoids passing several parameters to functions. But on the other hand,
-> it means that you're passing the *entire* context to *all* functions.
-> Which more or less boils down to using global variables. It means that
-> it isn't clear looking at the prototype of a function, which parameters
-> it is taking.
->
-> Maybe it's just that I'm not doing enough Python, and I'm thinking too
-> much C, but I find this **kwargs to not be such a great idea. But oh
-> well, since this is Python, I guess I should convince myself to use the
-> Python spirit :)
->
+commit f7add51c39 (qemu: add host/target Linux version check) added a
+version check between the host kernel version and the version of kernel
+headers used by the toolchain, but the logic would fail unless BOTH major
+and minor versions were >=, which isn't true for E.G. host kernel = 3.2 and
+toolchain 2.6.x.
 
-Maybe someone else with good Python knowledge can chime in and tell us
-if this is a good way or not of handling things.
-Even in C, a function that takes 4+ arguments is not a good idea.
-Passing such things in a struct (or a dict in python) is more
-appropriate, IMO.
+Instead calculate a single version number (as major << 8 + minor) and
+compare that.
 
-Best regards,
-Thomas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qemu/qemu.mk |   12 +++++-------
+ 1 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 259813c..581f4ee 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -65,12 +65,10 @@ ifneq ($(HOST_QEMU_HOST_SYSTEM_TYPE),Linux)
+ $(error "qemu-user can only be used on Linux hosts")
+ endif
+ 
+-HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR = $(shell uname -r | cut -f1 -d'.')
+-HOST_QEMU_HOST_SYSTEM_VERSION_MINOR = $(shell uname -r | cut -f2 -d'.')
+-HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f1 -d'.')
+-HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f2 -d'.')
+-HOST_QEMU_COMPARE_VERSION_MAJOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR) && echo OK)
+-HOST_QEMU_COMPARE_VERSION_MINOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MINOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR) && echo OK)
++# kernel version as major*256 + minor
++HOST_QEMU_HOST_SYSTEM_VERSION = $(shell uname -r | awk -F. '{ print $$1 * 256 + $$2 }')
++HOST_QEMU_TARGET_SYSTEM_VERSION = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | awk -F. '{ print $$1 * 256 + $$2 }')
++HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION) && echo OK)
+ 
+ #
+ # The principle of qemu-user is that it emulates the instructions of
+@@ -82,7 +80,7 @@ HOST_QEMU_COMPARE_VERSION_MINOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_M
+ # built with kernel headers that are older or the same as the kernel
+ # version running on the host machine.
+ #
+-ifneq ($(HOST_QEMU_COMPARE_VERSION_MAJOR)$(HOST_QEMU_COMPARE_VERSION_MINOR),OKOK)
++ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
+ $(error "Refusing to build qemu-user: target Linux version newer than host's.")
+ endif
+ endif
