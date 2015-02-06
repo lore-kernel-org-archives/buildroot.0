@@ -1,70 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Feb 2015 20:03:35 +0100
-Subject: [Buildroot] [git commit] mono: add patch to fix MIPS build issue
-Message-ID: <20150206190353.BE09B81798@busybox.osuosl.org>
+Date: Fri, 6 Feb 2015 20:03:00 +0100
+Subject: [Buildroot] [git commit] qt5/qt5base: Fix build on MIPS without DSP
+	support
+Message-ID: <20150206190353.B464581799@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3398f29da053a972b074c4e70a869853071dcca5
+commit: http://git.buildroot.net/buildroot/commit/?id=1f84fcdc056f9d194ba5c4c6c40ae4dec77e8fe2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump to version 3.12 of Mono, it fails to build on MIPS. The
-patch added by this commit fixes this build failure, simply caused by
-a missing include.
+The qt_memfill32_asm_mips_dsp function is only declared if
+QT_COMPILER_SUPPORTS_MIPS_DSP is defined, so we can't reference it
+unless the same macro is defined.
+
+Backporting an upstream patch to fix this issue.
+
+This is the error message:
+
+qt-everywhere-enterprise-src-5.4.0-alpha/qtbase/src/gui/painting/qdrawhelper.cpp:
+In function 'void qInitDrawhelperAsm()':
+qt-everywhere-enterprise-src-5.4.0-alpha/qtbase/src/gui/painting/qdrawhelper.cpp:6843:
+error: 'qt_memfill32_asm_mips_dsp' was not declared in this scope
+
+Upstream commit:
+
+  https://qt.gitorious.org/qt/qtbase/commit/2ca323ccd4f25f409eff8fc0c9804099b78c2bde
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/6f5/6f5e20a4a99eb0db650430bf6285c844fd940711/
+  http://autobuild.buildroot.net/results/254/254cf62bef8bc5d5ffe345d817d16aa9983baa15/
 
-Submitted upstream at https://github.com/mono/mono/pull/1550.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-mono-context.h-fix-build-on-MIPS.patch    |   33 ++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
+ ...cpp-Fix-build-on-mips-without-dsp-support.patch |   47 ++++++++++++++++++++
+ 1 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/mono/0003-mono-context.h-fix-build-on-MIPS.patch b/package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
+diff --git a/package/qt5/qt5base/0005-qdrawhelper.cpp-Fix-build-on-mips-without-dsp-support.patch b/package/qt5/qt5base/0005-qdrawhelper.cpp-Fix-build-on-mips-without-dsp-support.patch
 new file mode 100644
-index 0000000..dab22ce
+index 0000000..ede4d80
 --- /dev/null
-+++ b/package/mono/0003-mono-context.h-fix-build-on-MIPS.patch
-@@ -0,0 +1,33 @@
-+From 8f489c24e1770c2852efcaff9419d54bfadf0854 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 6 Feb 2015 14:56:10 +0100
-+Subject: [PATCH] mono-context.h: fix build on MIPS
++++ b/package/qt5/qt5base/0005-qdrawhelper.cpp-Fix-build-on-mips-without-dsp-support.patch
+@@ -0,0 +1,47 @@
++qdrawhelper.cpp: Fix build on MIPS without DSP support
 +
-+The mono-context.h file uses definitions such as mips_fp and mips_sp,
-+which are defined in <mono/arch/mips/mips-codegen.h>, but this file is
-+not included, leading to build failures.
++The qt_memfill32_asm_mips_dsp function is only declared if 
++QT_COMPILER_SUPPORTS_MIPS_DSP is defined, so we can't reference it 
++unless the same macro is defined.
 +
-+This fix is similar to 4437ecea91bab3fe68ba1c30521acf75052662cd (for
-+ARM).
++Backporting an upstream patch to fix this issue.
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Upstream commit:
++
++  https://qt.gitorious.org/qt/qtbase/commit/2ca323ccd4f25f409eff8fc0c9804099b78c2bde
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 2ca323ccd4f25f409eff8fc0c9804099b78c2bde Mon Sep 17 00:00:00 2001
++From: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@theqtcompany.com>
++Date: Tue, 11 Nov 2014 13:11:54 +0100
++Subject: [PATCH] Android: Compile for MIPS
++
++The qt_memfill32_asm_mips_dsp function is only declared if
++QT_COMPILER_SUPPORTS_MIPS_DSP is defined, so we can't reference it
++unless the same macro is defined.
++
++Change-Id: Ib959b4b969b699ca78804394206266469b4ebf64
++Task-number: QTBUG-36017
++Reviewed-by: Paul Olav Tvete <paul.tvete@theqtcompany.com>
++Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
 +---
-+ mono/utils/mono-context.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/gui/painting/qdrawhelper.cpp |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
 +
-+diff --git a/mono/utils/mono-context.h b/mono/utils/mono-context.h
-+index d96eb75..ad56e2c 100755
-+--- a/mono/utils/mono-context.h
-++++ b/mono/utils/mono-context.h
-+@@ -464,6 +464,8 @@ mono_ia64_context_get_fp (MonoContext *ctx)
++diff --git a/src/gui/painting/qdrawhelper.cpp b/src/gui/painting/qdrawhelper.cpp
++index f2d27a0..6482cc5 100644
++--- a/src/gui/painting/qdrawhelper.cpp
+++++ b/src/gui/painting/qdrawhelper.cpp
++@@ -6829,7 +6829,7 @@ void qInitDrawhelperAsm()
++     qt_fetch_radial_gradient = qt_fetch_radial_gradient_neon;
++ #endif
 + 
-+ #elif ((defined(__mips__) && !defined(MONO_CROSS_COMPILE)) || (defined(TARGET_MIPS))) && SIZEOF_REGISTER == 4 /* defined(__ia64__) */
++-#ifdef Q_PROCESSOR_MIPS_32
+++#if defined(Q_PROCESSOR_MIPS_32) && defined(QT_COMPILER_SUPPORTS_MIPS_DSP)
++     qt_memfill32 = qt_memfill32_asm_mips_dsp;
++ #endif // Q_PROCESSOR_MIPS_32
 + 
-++#include <mono/arch/mips/mips-codegen.h>
-++
-+ typedef struct {
-+ 	mgreg_t	    sc_pc;
-+ 	mgreg_t		sc_regs [32];
 +-- 
-+2.1.0
++1.7.1
 +
