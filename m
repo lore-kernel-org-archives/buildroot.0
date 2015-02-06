@@ -1,49 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Feb 2015 11:36:25 +0100
-Subject: [Buildroot] [git commit] host-qemu: needs host-python
-Message-ID: <20150206123124.6FAC781787@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 Feb 2015 14:40:17 +0000
+Subject: [Buildroot] [PATCH] qt5/qt5base: Fix build on big endian systems
+Message-ID: <1423233617-33387-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fe41593a97bc9d7baaed790aa91bbc7916d3a99
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Backporting an upstream patch to fix a qt5base build failure fails to on
+big endian systems. This is the error message:
 
-Fixes:
-http://autobuild.buildroot.net/results/e58/e58a0d7d5c084be000ae7d5b3821cd68d6639aab/
-http://autobuild.buildroot.net/results/624/62425cfdd4270bf1a9b15bd57490478b1c04c720/
-http://autobuild.buildroot.net/results/d18/d189d7f75ffbb3349b68a5c312b14ea5638bb903/
-http://autobuild.buildroot.net/results/7d3/7d386322cec452ee636adb20be0c1a31f38385fc/
+image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric
+constant
 
-And many more.
+Upstream commit:
 
-Just like qemu for the target, host-qemu needs python (2.x) on the host.
+  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/qemu/qemu.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ ...ersions.cpp-Fix-build-on-big-endian-syste.patch |   51 ++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 6c5ddf3..259813c 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #-------------------------------------------------------------
- # Host-qemu
- 
--HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
-+HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
- 
- #       BR ARCH         qemu
- #       -------         ----
-@@ -94,6 +94,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--interp-prefix=$(STAGING_DIR)          \
- 		--cc="$(HOSTCC)"                        \
- 		--host-cc="$(HOSTCC)"                   \
-+		--python=$(HOST_DIR)/usr/bin/python2    \
- 		--extra-cflags="$(HOST_CFLAGS)"         \
- 		--extra-ldflags="$(HOST_LDFLAGS)"
- endef
+diff --git a/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+new file mode 100644
+index 0000000..1e493ca
+--- /dev/null
++++ b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+@@ -0,0 +1,51 @@
++qimage_conversions.cpp: Fix build on big endian systems
++
++Backporting an upstream patch to fix a qt5base build failure fails to on
++big endian systems. This is the error message:
++
++image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric 
++constant
++
++Upstream commit:
++
++  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 404f4281fda764cafdaa5635db995dabc4f1de8c Mon Sep 17 00:00:00 2001
++From: Dmitry Shachnev <mitya57@gmail.com>
++Date: Tue, 9 Dec 2014 09:27:53 +0300
++Subject: [PATCH] qimage_conversions.cpp: Fix build on big endian systems
++
++Change-Id: I8149eb2deaa101daf85a957ff48c3a7140c43bbc
++Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
++Reviewed-by: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
++---
++ src/gui/image/qimage_conversions.cpp |    4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
++index 17563b1..858a0d9 100644
++--- a/src/gui/image/qimage_conversions.cpp
+++++ b/src/gui/image/qimage_conversions.cpp
++@@ -2252,7 +2252,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
++         convert_ARGB_to_ARGB_PM,
++ #else
++         0,
++-        0
+++        0,
++ #endif
++         0, 0, 0, 0
++     }, // Format_RGBA8888
++@@ -2281,7 +2281,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
++ #else
++         0,
++         0,
++-        0
+++        0,
++ #endif
++         0, 0, 0, 0
++     }, // Format_RGBA8888_Premultiplied
++-- 
++1.7.1
++
+-- 
+1.7.1
