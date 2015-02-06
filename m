@@ -1,70 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Feb 2015 11:03:00 +0100
-Subject: [Buildroot] [PATCH] qemu: add architecture dependencies for
-	host qemu
-In-Reply-To: <87d25n9ybr.fsf@dell.be.48ers.dk>
-References: <1423210548-4891-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87d25n9ybr.fsf@dell.be.48ers.dk>
-Message-ID: <20150206110300.5a62a636@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 06 Feb 2015 11:49:41 +0100
+Subject: [Buildroot] board-specific autotools env customization
+In-Reply-To: <CAKAx1ci_E5=kba_kR8KLt==Q7b_8mKoTeeY=t_XtZ3_x0yh-_g@mail.gmail.com>
+References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>	<20150202175455.5dd5c2e3@free-electrons.com>	<CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>	<54D08CB7.7040801@mind.be>	<CAKAx1cg32iH0XEby8hPoQq1nm2DutdtDROE5nBWsXMi1mO93qg@mail.gmail.com>	<54D27F46.6030704@mind.be>
+ <CAKAx1ci_E5=kba_kR8KLt==Q7b_8mKoTeeY=t_XtZ3_x0yh-_g@mail.gmail.com>
+Message-ID: <54D49C45.40206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+On 06/02/15 10:31, Lionel Orry wrote:
+[snip]
+> Thank you Arnout for your valuable help. I sent a patch to the
+> mailing-list, and I am preparing the patch for upstream.
+> I have to adapt it for the current upstream master version (v.4.2.x)
+> because acinclude.m4 changed, so I can't send it as-is...
+> Should I try to send the v4.0.x based patch to their maintenance
+> branch ? They say it's for bugfixes only so I'm pretty sure it will be
+> rejected.
 
-On Fri, 06 Feb 2015 10:35:52 +0100, Peter Korsgaard wrote:
+ Sending to the upstream maintenance branch isn't very useful.
 
-> Are you use about BR2_sh? sh4a atleast doesn't look supported:
-> 
-> http://autobuild.buildroot.net/results/4e5/4e530528c72f0c70f352f39ea09c686753757ecb/build-end.log
+ Sending an adapted patch to buildroot like you did is OK. But perhaps it's more
+useful to bump the buildroot version. Yes, we're trying to squeeze as much
+contribution out of you as we can :-)
 
-Interesting. Here I have:
+ Regards,
+ Arnout
 
-qemu (master)$ ls linux-user/
-aarch64       flatload.c    main.c         ppc       sparc64          uaccess.c
-alpha         i386          Makefile.objs  qemu.h    strace.c         uname.c
-arm           ioctls.h      microblaze     s390x     strace.list      uname.h
-cris          linuxload.c   mips           sh4       syscall.c        unicore32
-elfload.c     linux_loop.h  mips64         signal.c  syscall_defs.h   vm86.c
-errno_defs.h  m68k          mmap.c         socket.h  syscall_types.h  x86_64
-flat.h        m68k-sim.c    openrisc       sparc     target_flat.h
 
-So there is a sh4 directory, which lead me to think that there is user
-mode emulation support for SuperH. In fact, I should rather have
-used ./configure --help, which says:
-
-  --target-list=LIST       set target list (default: build everything)
-                           Available targets: aarch64-softmmu alpha-softmmu 
-                           arm-softmmu cris-softmmu i386-softmmu lm32-softmmu 
-                           m68k-softmmu microblazeel-softmmu microblaze-softmmu 
-                           mips64el-softmmu mips64-softmmu mipsel-softmmu 
-                           mips-softmmu moxie-softmmu or32-softmmu 
-                           ppc64-softmmu ppcemb-softmmu ppc-softmmu 
-                           s390x-softmmu sh4eb-softmmu sh4-softmmu 
-                           sparc64-softmmu sparc-softmmu unicore32-softmmu 
-                           x86_64-softmmu xtensaeb-softmmu xtensa-softmmu 
-                           aarch64-linux-user alpha-linux-user armeb-linux-user 
-                           arm-linux-user cris-linux-user i386-linux-user 
-                           m68k-linux-user microblazeel-linux-user 
-                           microblaze-linux-user mips64el-linux-user 
-                           mips64-linux-user mipsel-linux-user mips-linux-user 
-                           mipsn32el-linux-user mipsn32-linux-user 
-                           or32-linux-user ppc64abi32-linux-user 
-                           ppc64le-linux-user ppc64-linux-user ppc-linux-user 
-                           s390x-linux-user sh4eb-linux-user sh4-linux-user 
-                           sparc32plus-linux-user sparc64-linux-user 
-                           sparc-linux-user unicore32-linux-user 
-                           x86_64-linux-user
-
-So there is sh4 support, but it's named sh4-linux-user, not
-sh4a-linux-user, so we need another exception in qemu.mk.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
