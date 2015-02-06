@@ -1,37 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Feb 2015 15:59:25 +0100
-Subject: [Buildroot] board-specific autotools env customization
-In-Reply-To: <CAKAx1cidhE+VkH95QxO4e1rHagCx2KxMBa6FOUS_i-Hv=V36mQ@mail.gmail.com>
-References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>
- <20150202175455.5dd5c2e3@free-electrons.com>
- <CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>
- <54D08CB7.7040801@mind.be>
- <CAKAx1cg32iH0XEby8hPoQq1nm2DutdtDROE5nBWsXMi1mO93qg@mail.gmail.com>
- <54D27F46.6030704@mind.be>
- <CAKAx1ci_E5=kba_kR8KLt==Q7b_8mKoTeeY=t_XtZ3_x0yh-_g@mail.gmail.com>
- <54D49C45.40206@mind.be>
- <CAKAx1cidhE+VkH95QxO4e1rHagCx2KxMBa6FOUS_i-Hv=V36mQ@mail.gmail.com>
-Message-ID: <20150206155925.47e755c9@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 Feb 2015 16:15:39 +0100
+Subject: [Buildroot] [PATCH] mono: add patch to fix MIPS build issue
+In-Reply-To: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423233944-1722-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54D4DA9B.60306@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+Dear Thomas Petazzoni,
 
-On Fri, 6 Feb 2015 15:51:03 +0100, Lionel Orry wrote:
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-> But they are in the process of stabilizing zeromq v4.1.0 (they are in
-> RC currently) and I'm afraid this code won't be merged there, so we
-> will have to wait for another late release before dropping the patch
-> from buildroot...
+I did a build test for MIPS and I confirm this patch fixes the problem.
 
-That's fine: as long as a "fixes" patch is already merged upstream, but
-we don't really mind carrying it in Buildroot.
+$ file output/target/usr/bin/mono-sgen
+output/target/usr/bin/mono-sgen: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70403, stripped
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+--
+Vincent
