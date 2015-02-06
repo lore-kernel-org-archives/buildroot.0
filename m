@@ -1,58 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Feb 2015 13:30:21 +0100
-Subject: [Buildroot] [git commit] qemu: correct kernel headers check when
-	major numbers differ
-Message-ID: <20150206123124.79E8F81787@busybox.osuosl.org>
+Date: Fri, 6 Feb 2015 11:36:25 +0100
+Subject: [Buildroot] [git commit] host-qemu: needs host-python
+Message-ID: <20150206123124.6FAC781787@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=35bf4f3913fe21c5d47b982454b4487b8c71d816
+commit: http://git.buildroot.net/buildroot/commit/?id=1fe41593a97bc9d7baaed790aa91bbc7916d3a99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-commit f7add51c39 (qemu: add host/target Linux version check) added a
-version check between the host kernel version and the version of kernel
-headers used by the toolchain, but the logic would fail unless BOTH major
-and minor versions were >=, which isn't true for E.G. host kernel = 3.2 and
-toolchain 2.6.x.
+Fixes:
+http://autobuild.buildroot.net/results/e58/e58a0d7d5c084be000ae7d5b3821cd68d6639aab/
+http://autobuild.buildroot.net/results/624/62425cfdd4270bf1a9b15bd57490478b1c04c720/
+http://autobuild.buildroot.net/results/d18/d189d7f75ffbb3349b68a5c312b14ea5638bb903/
+http://autobuild.buildroot.net/results/7d3/7d386322cec452ee636adb20be0c1a31f38385fc/
 
-Instead calculate a single version number (as major << 8 + minor) and
-compare that.
+And many more.
+
+Just like qemu for the target, host-qemu needs python (2.x) on the host.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.mk |   12 +++++-------
- 1 files changed, 5 insertions(+), 7 deletions(-)
+ package/qemu/qemu.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 259813c..581f4ee 100644
+index 6c5ddf3..259813c 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -65,12 +65,10 @@ ifneq ($(HOST_QEMU_HOST_SYSTEM_TYPE),Linux)
- $(error "qemu-user can only be used on Linux hosts")
- endif
+@@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ #-------------------------------------------------------------
+ # Host-qemu
  
--HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR = $(shell uname -r | cut -f1 -d'.')
--HOST_QEMU_HOST_SYSTEM_VERSION_MINOR = $(shell uname -r | cut -f2 -d'.')
--HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f1 -d'.')
--HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | cut -f2 -d'.')
--HOST_QEMU_COMPARE_VERSION_MAJOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MAJOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MAJOR) && echo OK)
--HOST_QEMU_COMPARE_VERSION_MINOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_MINOR) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION_MINOR) && echo OK)
-+# kernel version as major*256 + minor
-+HOST_QEMU_HOST_SYSTEM_VERSION = $(shell uname -r | awk -F. '{ print $$1 * 256 + $$2 }')
-+HOST_QEMU_TARGET_SYSTEM_VERSION = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | awk -F. '{ print $$1 * 256 + $$2 }')
-+HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION) && echo OK)
+-HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
++HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
  
- #
- # The principle of qemu-user is that it emulates the instructions of
-@@ -82,7 +80,7 @@ HOST_QEMU_COMPARE_VERSION_MINOR = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION_M
- # built with kernel headers that are older or the same as the kernel
- # version running on the host machine.
- #
--ifneq ($(HOST_QEMU_COMPARE_VERSION_MAJOR)$(HOST_QEMU_COMPARE_VERSION_MINOR),OKOK)
-+ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
- $(error "Refusing to build qemu-user: target Linux version newer than host's.")
- endif
- endif
+ #       BR ARCH         qemu
+ #       -------         ----
+@@ -94,6 +94,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--interp-prefix=$(STAGING_DIR)          \
+ 		--cc="$(HOSTCC)"                        \
+ 		--host-cc="$(HOSTCC)"                   \
++		--python=$(HOST_DIR)/usr/bin/python2    \
+ 		--extra-cflags="$(HOST_CFLAGS)"         \
+ 		--extra-ldflags="$(HOST_LDFLAGS)"
+ endef
