@@ -1,55 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 06 Feb 2015 10:35:52 +0100
-Subject: [Buildroot] [PATCH] qemu: add architecture dependencies for
-	host qemu
-In-Reply-To: <1423210548-4891-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 6 Feb 2015 09:15:48 +0100")
-References: <1423210548-4891-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d25n9ybr.fsf@dell.be.48ers.dk>
+Date: Fri, 06 Feb 2015 10:40:38 +0100
+Subject: [Buildroot] [PATCH] sdparm: remove include of host headers
+In-Reply-To: <4fdbba5cd058d2c0618e5982f44e5aca9ee6b308.1423208714.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 6 Feb 2015 09:45:14 +0200")
+References: <4fdbba5cd058d2c0618e5982f44e5aca9ee6b308.1423208714.git.baruch@tkos.co.il>
+Message-ID: <878ugb9y3t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-
- > The host-qemu package currently builds the user mode emulation, which
- > isn't available on all architectures, so this commit adds the
- > necessary architecture dependencies to the Config.in.host file.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
  > Fixes:
+ > http://autobuild.buildroot.net/results/458/458b3da912b977335ac292fa7adddfb85961557a/
+ > http://autobuild.buildroot.net/results/ead/ead9c1d354e9beebdcb892ded2d63b8d3bc3eb51/
 
- >   http://autobuild.buildroot.net/results/4298ce40cbe3db50ffe53ecf6856523157df591d/
-
- > Reported-by: Max Filippov <jcmvbkbc@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
- >  package/qemu/Config.in.host | 9 +++++++++
- >  1 file changed, 9 insertions(+)
-
- > diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
- > index a1f0531..c5c3f05 100644
- > --- a/package/qemu/Config.in.host
- > +++ b/package/qemu/Config.in.host
- > @@ -1,5 +1,14 @@
- >  config BR2_PACKAGE_HOST_QEMU
- >  	bool "host qemu"
- > +	# So far, we only build the user mode emulation, so this list
- > +	# of architecture dependencies only takes into account this
- > +	# emulation mode.
- > +	depends on BR2_arm       || BR2_armeb       || BR2_aarch64      || \
- > +		BR2_i386         || BR2_m68k        || BR2_microblazeel || \
- > +		BR2_microblazebe || BR2_mips        || BR2_mipsel       || \
- > +		BR2_mips64       || BR2_mips64el    || BR2_powerpc      || \
- > +		BR2_powerpc64    || BR2_powerpc64le || BR2_sh           || \
- > +		BR2_sparc        || BR2_x86_64
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
-
-Are you use about BR2_sh? sh4a atleast doesn't look supported:
-
-http://autobuild.buildroot.net/results/4e5/4e530528c72f0c70f352f39ea09c686753757ecb/build-end.log
 
 -- 
 Bye, Peter Korsgaard
