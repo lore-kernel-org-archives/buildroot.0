@@ -1,87 +1,62 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 6 Feb 2015 14:48:59 +0000
-Subject: [Buildroot] [PATCH v2] qt5/qt5base: Fix build on big endian systems
-Message-ID: <1423234139-33913-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Fri, 6 Feb 2015 15:51:03 +0100
+Subject: [Buildroot] board-specific autotools env customization
+In-Reply-To: <54D49C45.40206@mind.be>
+References: <CAKAx1chT6Grx+oRMiQy5t29TUe=avo6v9CR2nP1GZ6Lf1-a-5A@mail.gmail.com>
+ <20150202175455.5dd5c2e3@free-electrons.com>
+ <CAKAx1ciLEADv9bnxzLh-2m9hvuaVUnvWZcKqyGMRwBOaQVhLWQ@mail.gmail.com>
+ <54D08CB7.7040801@mind.be>
+ <CAKAx1cg32iH0XEby8hPoQq1nm2DutdtDROE5nBWsXMi1mO93qg@mail.gmail.com>
+ <54D27F46.6030704@mind.be>
+ <CAKAx1ci_E5=kba_kR8KLt==Q7b_8mKoTeeY=t_XtZ3_x0yh-_g@mail.gmail.com>
+ <54D49C45.40206@mind.be>
+Message-ID: <CAKAx1cidhE+VkH95QxO4e1rHagCx2KxMBa6FOUS_i-Hv=V36mQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backporting an upstream patch to fix a qt5base build failure on big
-endian systems. This is the error message:
+Hi,
 
-image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric
-constant
+On Fri, Feb 6, 2015 at 11:49 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/02/15 10:31, Lionel Orry wrote:
+> [snip]
+>> Thank you Arnout for your valuable help. I sent a patch to the
+>> mailing-list, and I am preparing the patch for upstream.
+>> I have to adapt it for the current upstream master version (v.4.2.x)
+>> because acinclude.m4 changed, so I can't send it as-is...
+>> Should I try to send the v4.0.x based patch to their maintenance
+>> branch ? They say it's for bugfixes only so I'm pretty sure it will be
+>> rejected.
+>
+>  Sending to the upstream maintenance branch isn't very useful.
+>
+>  Sending an adapted patch to buildroot like you did is OK. But perhaps it's more
+> useful to bump the buildroot version. Yes, we're trying to squeeze as much
+> contribution out of you as we can :-)
 
-Upstream commit:
+Well I created a pull request on upstream dev branch which was
+accepted and merged a few minutes later. I'm glad they are so
+responsive.
 
-  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
+But they are in the process of stabilizing zeromq v4.1.0 (they are in
+RC currently) and I'm afraid this code won't be merged there, so we
+will have to wait for another late release before dropping the patch
+from buildroot...
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-v1 -> v2: commit message amended
+>
+>  Regards,
+>  Arnout
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 
- ...ersions.cpp-Fix-build-on-big-endian-syste.patch |   51 ++++++++++++++++++++
- 1 files changed, 51 insertions(+), 0 deletions(-)
- create mode 100644 package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
-
-diff --git a/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
-new file mode 100644
-index 0000000..1e493ca
---- /dev/null
-+++ b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
-@@ -0,0 +1,51 @@
-+qimage_conversions.cpp: Fix build on big endian systems
-+
-+Backporting an upstream patch to fix a qt5base build failure on big
-+endian systems. This is the error message:
-+
-+image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric 
-+constant
-+
-+Upstream commit:
-+
-+  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 404f4281fda764cafdaa5635db995dabc4f1de8c Mon Sep 17 00:00:00 2001
-+From: Dmitry Shachnev <mitya57@gmail.com>
-+Date: Tue, 9 Dec 2014 09:27:53 +0300
-+Subject: [PATCH] qimage_conversions.cpp: Fix build on big endian systems
-+
-+Change-Id: I8149eb2deaa101daf85a957ff48c3a7140c43bbc
-+Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
-+---
-+ src/gui/image/qimage_conversions.cpp |    4 ++--
-+ 1 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
-+index 17563b1..858a0d9 100644
-+--- a/src/gui/image/qimage_conversions.cpp
-++++ b/src/gui/image/qimage_conversions.cpp
-+@@ -2252,7 +2252,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
-+         convert_ARGB_to_ARGB_PM,
-+ #else
-+         0,
-+-        0
-++        0,
-+ #endif
-+         0, 0, 0, 0
-+     }, // Format_RGBA8888
-+@@ -2281,7 +2281,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
-+ #else
-+         0,
-+         0,
-+-        0
-++        0,
-+ #endif
-+         0, 0, 0, 0
-+     }, // Format_RGBA8888_Premultiplied
-+-- 
-+1.7.1
-+
--- 
-1.7.1
+Regards
+Lionel
