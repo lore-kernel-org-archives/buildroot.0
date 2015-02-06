@@ -1,62 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  6 Feb 2015 09:45:14 +0200
-Subject: [Buildroot] [PATCH] sdparm: remove include of host headers
-Message-ID: <4fdbba5cd058d2c0618e5982f44e5aca9ee6b308.1423208714.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Feb 2015 08:58:08 +0100
+Subject: [Buildroot] [PATCH v5 04/11] autobuild-run: use **kwargs to
+ avoid explicit parameter passthroughs
+In-Reply-To: <1418414696-32584-5-git-send-email-patrickdepinguin@gmail.com>
+References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
+ <1418414696-32584-5-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150206085808.66acc651@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/458/458b3da912b977335ac292fa7adddfb85961557a/
-http://autobuild.buildroot.net/results/ead/ead9c1d354e9beebdcb892ded2d63b8d3bc3eb51/
+Dear Thomas De Schampheleire,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0000-makefile-remove-host-headers-include.patch   | 19 +++++++++++++++++++
- package/sdparm/sdparm.mk                              |  3 +++
- 2 files changed, 22 insertions(+)
- create mode 100644 package/sdparm/0000-makefile-remove-host-headers-include.patch
+On Fri, 12 Dec 2014 21:04:49 +0100, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> The current version of autobuild-run has some extensive explicit
+> parameter passing, for example:
+> 
+> - fixup_config needs sysinfo, passed via gen_config, in turn via
+>   run_instance, in turn via main.
+> - send_results needs username/password settings, passed via
+>   run_instance, in turn via main.
+> 
+> Everytime a leaf function needs an extra parameter (for example coming
+> from the arguments or config file), the entire call chain needs to be
+> adapted to pass along that parameter.
+> 
+> This patch introduces the **kwargs dictionary principle, that allows
+> implicit parameter passing. A function can accept this dictionary and
+> extract parameters from it by name. The dictionary can be passed as a
+> whole to a child function, without explicitly enumerating which entries
+> in the dictionary are needed in the child.
 
-diff --git a/package/sdparm/0000-makefile-remove-host-headers-include.patch b/package/sdparm/0000-makefile-remove-host-headers-include.patch
-new file mode 100644
-index 000000000000..765a81d16bc1
---- /dev/null
-+++ b/package/sdparm/0000-makefile-remove-host-headers-include.patch
-@@ -0,0 +1,19 @@
-+src/Makefile.am: remove host headers incdlue
-+
-+Using host headers is bad for cross compilation. Instead, use the '=' prefix
-+which expands to the current sysroot.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+diff -Nuar sdparm-1.09-orig/src/Makefile.am sdparm-1.09/src/Makefile.am
-+--- sdparm-1.09-orig/src/Makefile.am	2014-09-23 18:48:44.000000000 +0300
-++++ sdparm-1.09/src/Makefile.am	2015-02-06 09:33:43.693477667 +0200
-+@@ -41,7 +41,7 @@
-+ 			../lib/sg_pt_common.c
-+ 
-+ if HAVE_SGUTILS
-+-INCLUDES = -I/usr/include/scsi
-++INCLUDES = -I=/scsi
-+ sdparm_LDADD = @GETOPT_O_FILES@ @os_libs@ @SGUTILS_LIBS@
-+ sdparm_DEPENDENCIES = @GETOPT_O_FILES@
-+ else
-diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
-index 4aff25db264c..9fc20674d09f 100644
---- a/package/sdparm/sdparm.mk
-+++ b/package/sdparm/sdparm.mk
-@@ -10,6 +10,9 @@ SDPARM_SITE = http://sg.danny.cz/sg/p
- SDPARM_LICENSE = BSD-3c
- SDPARM_LICENSE_FILES = COPYING
- 
-+# Patching src/Makefile.am
-+SDPARM_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_SG3_UTILS),y)
- SDPARM_DEPENDENCIES += sg3_utils
- else
+I must say I find this **kwargs thing a bit weird. Yes indeed, it
+avoids passing several parameters to functions. But on the other hand,
+it means that you're passing the *entire* context to *all* functions.
+Which more or less boils down to using global variables. It means that
+it isn't clear looking at the prototype of a function, which parameters
+it is taking.
+
+Maybe it's just that I'm not doing enough Python, and I'm thinking too
+much C, but I find this **kwargs to not be such a great idea. But oh
+well, since this is Python, I guess I should convince myself to use the
+Python spirit :)
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
