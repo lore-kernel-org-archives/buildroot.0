@@ -1,43 +1,54 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Feb 2015 16:10:37 +0000
-Subject: [Buildroot] [PATCH] libvips: bump version to 7.42.2
-Message-ID: <1423325437-32987-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Ben Widawsky <ben@bwidawsk.net>
+Date: Sat, 7 Feb 2015 08:02:21 -0800
+Subject: [Buildroot] [PATCH] sna/dri2: Protect compsiteext.h include
+ with build check
+In-Reply-To: <20150207111006.5cbc28c6@free-electrons.com>
+References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+ <1405665634-3299-1-git-send-email-chris@chris-wilson.co.uk>
+ <20140718232336.GA5940@bwidawsk.net>
+ <20140723234458.7399f7b6@free-electrons.com>
+ <20140723223626.GA759@bwidawsk.net>
+ <20150207111006.5cbc28c6@free-electrons.com>
+Message-ID: <20150207160220.GB13526@bwidawsk.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 7.42.2
-- Add a hash file
+On Sat, Feb 07, 2015 at 11:10:06AM +0100, Thomas Petazzoni wrote:
+> Dear Ben Widawsky,
+> 
+> On Wed, 23 Jul 2014 15:36:27 -0700, Ben Widawsky wrote:
+> 
+> > Hi. The second patch, .912 bump has been nak'd already by Bernd (I
+> > missed this before my ping). Coincidentally, Bernd also fixed the
+> > composite extension compilation error in buildroot (differently than I
+> > did). Chris Wilson, the Intel DDX maintainer has fixed the issue
+> > meanwhile.
+> > 
+> > I would recommend backporting the xf86-video-intel patch instead of the
+> > patch Bernd submitted. Wiggle handled all the conflicts. I am not sure
+> > if it will apply to .907 (the current version). The other option is to
+> > take Bernd's patch, and revert it when you finally get to the fixed
+> > upstream version.
+> > 
+> > In the most ideal case, we could just bump to the recently released .913 and
+> > have everything /just/ work. Chris has fixed 2 bugs that Bernd's series also
+> > attempted to fix. Of course that runs the risk of invoking the wrath that
+> > caused the original .912 revert.
+> > 
+> > That all came out more complicated than it should have. I apologize. I am
+> > pasting the patch I wiggled as an example. Hopefully that helps make sense.
+> 
+> Have all issues you had been resolved? I still have this old e-mail
+> "marked" as to be handled here, so I'm wondering what is the status of
+> this. Could you check if the latest Buildroot git master works for you?
+> 
+> Thanks!
+> 
+> Thomas
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/libvips/libvips.hash |    2 ++
- package/libvips/libvips.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
- create mode 100644 package/libvips/libvips.hash
-
-diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
-new file mode 100644
-index 0000000..18c1ae8
---- /dev/null
-+++ b/package/libvips/libvips.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  45961855e21c8d5f0983d05bb79a6f3c2427dc6eed8e3ac68c0f62759b8612c6  vips-7.42.2.tar.gz
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 1efe21a..d6dddc8 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBVIPS_VERSION_MAJOR = 7.42
--LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).1
-+LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).2
- LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
- LIBVIPS_SITE = http://www.vips.ecs.soton.ac.uk/supported/$(LIBVIPS_VERSION_MAJOR)
- LIBVIPS_LICENSE = LGPLv2.1+
--- 
-1.7.1
+Hi Thomas. I won't be able to check for a few days, but since you are currently
+at 2.99.917, I am confident this specific issue will go away. I keep putting off
+updating what I have since it works :P
