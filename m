@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Feb 2015 11:41:03 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Apache: New package
-Message-ID: <1423305664-29877-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  7 Feb 2015 11:41:04 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/php: Add Apache support
+In-Reply-To: <1423305664-29877-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1423305664-29877-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1423305664-29877-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,186 +14,146 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: - rebased
-    - bump version to 2.4.12
 
- package/Config.in                       |    1 +
- package/apache/0001-cross-compile.patch |   63 +++++++++++++++++++++++++++++++
- package/apache/Config.in                |   19 ++++++++++
- package/apache/apache.hash              |    2 +
- package/apache/apache.mk                |   48 +++++++++++++++++++++++
- 5 files changed, 133 insertions(+)
- create mode 100644 package/apache/0001-cross-compile.patch
- create mode 100644 package/apache/Config.in
- create mode 100644 package/apache/apache.hash
- create mode 100644 package/apache/apache.mk
+ package/php/Config.in           |   17 +++++++++++
+ package/php/php-04-apache.patch |   63 +++++++++++++++++++++++++++++++++++++++
+ package/php/php.mk              |   19 ++++++++++++
+ 3 files changed, 99 insertions(+)
+ create mode 100644 package/php/php-04-apache.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 7f2ac96..fa40fd1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1048,6 +1048,7 @@ endmenu
- menu "Networking applications"
- 	source "package/aiccu/Config.in"
- 	source "package/aircrack-ng/Config.in"
-+	source "package/apache/Config.in"
- 	source "package/argus/Config.in"
- 	source "package/arptables/Config.in"
- 	source "package/atftp/Config.in"
-diff --git a/package/apache/0001-cross-compile.patch b/package/apache/0001-cross-compile.patch
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 32faa32..f254213 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -11,6 +11,9 @@ if BR2_PACKAGE_PHP
+ 
+ source "package/php/Config.ext"
+ 
++config BR2_PACKAGE_PHP_APACHE
++	bool
++
+ config BR2_PACKAGE_PHP_CLI
+ 	bool
+ 
+@@ -26,6 +29,20 @@ choice
+ 	help
+ 	  Select the PHP interface(s).
+ 
++config BR2_PACKAGE_PHP_SAPI_APACHE
++	bool "Apache"
++	select BR2_PACKAGE_APACHE
++	select BR2_PACKAGE_PHP_APACHE
++	depends on !BR2_STATIC_LIBS # apache
++	depends on BR2_TOOLCHAIN_HAS_THREADS # apache
++	depends on BR2_USE_MMU # apr
++	help
++	  Apache module
++
++comment "apache module needs a toolchain w/ dynamic library, threads"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_PHP_SAPI_CGI
+ 	bool "CGI"
+ 	# CGI uses fork()
+diff --git a/package/php/php-04-apache.patch b/package/php/php-04-apache.patch
 new file mode 100644
-index 0000000..790b7a0
+index 0000000..aa0dc16
 --- /dev/null
-+++ b/package/apache/0001-cross-compile.patch
++++ b/package/php/php-04-apache.patch
 @@ -0,0 +1,63 @@
-+Fix cross-compilation
++Fix cross-compilation when used as Apache module.
 +
-+Fetched httpd-2.4.x-cross_compile.diff from upstream bugtracker:
-+https://issues.apache.org/bugzilla/show_bug.cgi?id=51257#c6
-+
-+which is a bundle of upstream revisions:
-+    http://svn.apache.org/viewvc?view=revision&revision=1327907
-+    http://svn.apache.org/viewvc?view=revision&revision=1328390
-+    http://svn.apache.org/viewvc?view=revision&revision=1328714
++Avoid calling the Apache httpd target binary to check for its presence.
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+Index: server/Makefile.in
-+===================================================================
-+--- a/server/Makefile.in	(revision 1328714)
-++++ b/server/Makefile.in	(working copy)
-+@@ -22,9 +22,14 @@
-+ include $(top_builddir)/build/rules.mk
-+ include $(top_srcdir)/build/library.mk
++diff -uNr php-5.5.17.org/configure php-5.5.17/configure
++--- php-5.5.17.org/configure	2014-09-16 14:53:57.000000000 +0200
+++++ php-5.5.17/configure	2014-10-05 15:06:12.162625672 +0200
++@@ -6342,7 +6342,7 @@
 + 
-++ifdef CC_FOR_BUILD
-++gen_test_char: gen_test_char.c
-++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -DCROSS_COMPILE -o $@ $<
-++else
-+ gen_test_char_OBJECTS = gen_test_char.lo
-+ gen_test_char: $(gen_test_char_OBJECTS)
-+ 	$(LINK) $(EXTRA_LDFLAGS) $(gen_test_char_OBJECTS) $(EXTRA_LIBS)
-++endif
++   # Test that we're trying to configure with apache 1.x
 + 
-+ test_char.h: gen_test_char
-+ 	./gen_test_char > test_char.h
-+Index: configure.in
-+===================================================================
-+--- a/configure.in	(revision 1328714)
-++++ b/configure.in	(working copy)
-+@@ -193,6 +193,14 @@
-+ dnl Try to get c99 support for variadic macros
-+ ifdef([AC_PROG_CC_C99], [AC_PROG_CC_C99])
++-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
+++  ac_output='Server version: Apache/2.4.10 (Unix)'
++   ac_IFS=$IFS
++ IFS="- /.
++ "
++@@ -7626,7 +7626,7 @@
 + 
-++dnl In case of cross compilation we set CC_FOR_BUILD to cc unless
-++dnl we got already CC_FOR_BUILD from environment.
-++if test "x${build_alias}" != "x${host_alias}"; then
-++  if test "x${CC_FOR_BUILD}" = "x"; then
-++    CC_FOR_BUILD=cc
-++  fi
-++fi
-++
-+ if test "x${cache_file}" = "x/dev/null"; then
-+   # Likewise, ensure that CC and CPP are passed through to the pcre
-+   # configure script iff caching is disabled (the autoconf 2.5x default).
-+Index: acinclude.m4
-+===================================================================
-+--- a/acinclude.m4	(revision 1328714)
-++++ ab/cinclude.m4	(working copy)
-+@@ -53,6 +53,8 @@
-+   APACHE_SUBST(CPPFLAGS)
-+   APACHE_SUBST(CFLAGS)
-+   APACHE_SUBST(CXXFLAGS)
-++  APACHE_SUBST(CC_FOR_BUILD)
-++  APACHE_SUBST(CFLAGS_FOR_BUILD)
-+   APACHE_SUBST(LTFLAGS)
-+   APACHE_SUBST(LDFLAGS)
-+   APACHE_SUBST(LT_LDFLAGS)
-diff --git a/package/apache/Config.in b/package/apache/Config.in
-new file mode 100644
-index 0000000..0814a17
---- /dev/null
-+++ b/package/apache/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_APACHE
-+	bool "apache"
-+	select BR2_PACKAGE_APR_UTIL
-+	select BR2_PACKAGE_PCRE
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # apr
-+	help
-+	  The Apache HTTP Server Project is an effort to develop and maintain an
-+	  open-source HTTP server for modern operating systems including UNIX
-+	  and Windows NT. The goal of this project is to provide a secure,
-+	  efficient and extensible server that provides HTTP services in sync
-+	  with the current HTTP standards.
-+
-+	  http://httpd.apache.org
-+
-+comment "apache needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-new file mode 100644
-index 0000000..51fd3ca
---- /dev/null
-+++ b/package/apache/apache.hash
-@@ -0,0 +1,2 @@
-+# From http://www.apache.org/dist/httpd/httpd-2.4.12.tar.bz2.sha1
-+sha1	bc4681bfd63accec8d82d3cc440fbc8264ce0f17	httpd-2.4.12.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-new file mode 100644
-index 0000000..026ef20
---- /dev/null
-+++ b/package/apache/apache.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# apache
-+#
-+################################################################################
-+
-+APACHE_VERSION = 2.4.12
-+APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
-+APACHE_SITE = http://archive.apache.org/dist/httpd
-+APACHE_LICENSE = Apache-2.0
-+APACHE_LICENSE_FILES = LICENSE
-+# Needed for mod_php
-+APACHE_INSTALL_STAGING = YES
-+# We have a patch touching configure.in and Makefile.in,
-+# so we need to autoreconf:
-+APACHE_AUTORECONF = YES
-+APACHE_DEPENDENCIES = apr apr-util pcre
-+
-+APACHE_CONF_ENV= \
-+	CC_FOR_BUILD="$(HOSTCC)" \
-+	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
-+	ap_cv_void_ptr_lt_long=no \
-+	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
-+
-+APACHE_CONF_OPTS = \
-+	--sysconfdir=/etc/apache2 \
-+	--with-apr=$(STAGING_DIR)/usr \
-+	--with-apr-util=$(STAGING_DIR)/usr \
-+	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
-+	--enable-http \
-+	--enable-dbd \
-+	--enable-proxy \
-+	--enable-mime-magic \
-+	--without-suexec-bin \
-+	--enable-mods-shared=all \
-+	--with-mpm=worker
-+
-+ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
-+APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
++   # Test that we're trying to configure with apache 2.x
++ 
++-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
+++  ac_output='Server version: Apache/2.4.10 (Unix)'
++   ac_IFS=$IFS
++ IFS="- /.
++ "
++@@ -8332,7 +8332,7 @@
++ 
++     fi
++   else
++-    APACHE_THREADED_MPM=`$APXS_HTTPD -V | grep 'threaded:.*yes'`
+++    APACHE_THREADED_MPM="threaded:     yes (fixed thread count)"
++     if test -n "$APACHE_THREADED_MPM"; then
++ 
++   enable_maintainer_zts=yes
++@@ -8450,7 +8450,7 @@
++ 
++   # Test that we're trying to configure with apache 2.x
++ 
++-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
+++  ac_output='Server version: Apache/2.4.10 (Unix)'
++   ac_IFS=$IFS
++ IFS="- /.
++ "
++@@ -9156,7 +9156,7 @@
++ 
++     fi
++   else
++-    APACHE_THREADED_MPM=`$APXS_HTTPD -V | grep 'threaded:.*yes'`
+++    APACHE_THREADED_MPM="threaded:     yes (fixed thread count)"
++     if test -n "$APACHE_THREADED_MPM"; then
++ 
++   enable_maintainer_zts=yes
++@@ -9255,7 +9255,7 @@
++ 
++   # Test that we're trying to configure with apache 1.x
++ 
++-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
+++  ac_output='Server version: Apache/2.4.10 (Unix)'
++   ac_IFS=$IFS
++ IFS="- /.
++ "
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4bcbe18..62c0af4 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -50,6 +50,25 @@ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
+ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
+ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable-fpm)
+ 
++ifeq ($(BR2_PACKAGE_PHP_APACHE),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++define PHP_FIX_THREADS_DETECTION
++	$(SED) 's/pthreads_working\=no/pthreads_working\=yes/' $(@D)/configure
++endef
++# PHP assumes pthreads are not working when cross-compiling,
++# needed for Apache-MPM worker
++PHP_POST_PATCH_HOOKS += PHP_FIX_THREADS_DETECTION
++endif
++PHP_CONF_OPTS += \
++	--with-apxs2=$(STAGING_DIR)/usr/bin/apxs \
++	--with-config-file-path=/etc/apache2 \
++	--with-config-file-scan-dir=/etc/apache2/php \
++	--oldincludedir=$(STAGING_DIR)/usr/include \
++	--enable-pthreads \
++	--localstatedir=/var
++PHP_DEPENDENCIES += apache
 +endif
 +
-+define APACHE_FIX_STAGING_APACHE_CONFIG
-+	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
-+	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
-+endef
-+APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
-+
-+$(eval $(autotools-package))
+ ### Extensions
+ PHP_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
 -- 
 1.7.10.4
