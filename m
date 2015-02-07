@@ -1,37 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Feb 2015 21:27:41 +0100
-Subject: [Buildroot] [0/21] Add missing indirect dependencies
-In-Reply-To: <1423010059-23446-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Wed, 4 Feb 2015 01:33:58 +0100")
-References: <1423010059-23446-1-git-send-email-arnout@mind.be>
-Message-ID: <87zj8p5uwy.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Feb 2015 20:46:05 +0100
+Subject: [Buildroot] [git commit] br2-external: make it available to
+	post-{build, image} scripts
+Message-ID: <20150207202909.DF0998046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e91dfc68d7e7957e37e8125bf1ee982d94f53c51
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >  With the fix for randconfig that I made in
- > http://patchwork.ozlabs.org/patch/432554/ it is now possible to run
- > 'make randconfig' and get usable results. So I ran the following loop
- > to detect missing indirect dependencies:
+Currently, BR2_EXTERNAL is not always exported to sub-processes that we
+spawn, like post-build or post-image scripts. This all depends on how
+the user passes BR2_EXTERNAL; consider the following:
 
- > while true; do make randconfig 2>&1 | grep warning; done
+  - make BR2_EXTERNAL=/path/to/br2-ext
+  - BR2_EXTERNAL=/path/to/br2-ext make
 
- > If there is a missing indirect dependency, this will output a line like:
+In the first case, it is just a make variable, not an environment
+variable, and thus not exported, while in the second case it is an
+environment variable and gets exported to all sub-processes make may
+spawn.
 
- > warning: (BR2_PACKAGE_UTIL_LINUX_SETPRIV) selects BR2_PACKAGE_LIBCAP_NG which has unmet direct dependencies (!BR2_avr32)
+Explicitly export it using EXTRA_ENV.
 
-Committed with the minor issues pointed out by Jerzy Grzegorek fixed,
-thanks.
+Reported-by: Julian Scheel <julian@jusst.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julian Scheel <julian@jusst.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Makefile.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-
->  It would be good to include such a test in a jenkins job to detect this
- > type of error earlier.
-
-Indeed. Maxime, is that something you can setup?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 70529f8..803b162 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -326,7 +326,8 @@ HOST_MAKE_ENV = \
+ EXTRA_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	BR2_DL_DIR=$(BR2_DL_DIR) \
+-	BUILD_DIR=$(BUILD_DIR)
++	BUILD_DIR=$(BUILD_DIR) \
++	BR2_EXTERNAL=$(BR2_EXTERNAL)
+ 
+ ################################################################################
+ # settings we need to pass to configure
