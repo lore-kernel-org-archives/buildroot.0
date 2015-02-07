@@ -1,203 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Feb 2015 19:25:01 +0100
-Subject: [Buildroot] [PATCH] glibc: bump version to 2.21
-In-Reply-To: <1423333238-47401-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1423333238-47401-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <54D6587D.4080306@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  7 Feb 2015 19:28:21 +0100
+Subject: [Buildroot] [PATCH] br2-external: make it available to post-{build,
+	image} scripts
+Message-ID: <1423333701-9949-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following packages have been built with glibc-2.21:
+Currently, BR2_EXTERNAL is not always exported to sub-processes that we
+spawn, like post-build or post-image scripts. This all depends on how
+the user passes BR2_EXTERNAL; consider the following:
 
-$ cat output/build/build-time.log | awk -F: '{print $4}' | uniq
- host-gawk
- host-binutils
- host-m4
- host-gmp
- host-mpfr
- host-mpc
- host-gcc-initial
- linux-headers
- glibc
- host-gcc-final
- toolchain-buildroot
- toolchain
- attr
- acl
- host-libtool
- host-autoconf
- host-automake
- apr
- host-pkgconf
- expat
- zlib
- openssl
- sqlite
- apr-util
- argp-standalone
- flex
- host-bison
- host-flex
- at
- busybox
- host-ncurses
- ncurses
- readline
- bash
- binutils
- bootutils
- bzip2
- bsdiff
- libcap-ng
- linux-pam
- util-linux
- e2fsprogs
- lzo
- btrfs-progs
- host-gettext
- host-libffi
- host-zlib
- host-libglib2
- libffi
- pcre
- libglib2
- host-gperf
- host-expat
- host-libxml-parser-perl
- host-intltool
- host-python
- python
- xz
- kmod
- host-libcap
- libcap
- systemd
- dbus
- libpcap
- bustle
- ccrypt
- cifs-utils
- gettext
- gmp
- coreutils
- cppunit
- cpuload
- cramfs
- libcurl
- libfuse
- curlftpfs
- cvs
- dash
- dcron
- debianutils
- dialog
- diffutils
- dosfstools
- dtach
- e2tools
- keyutils
- libnspr
- libnss
- ecryptfs-utils
- ed
- host-scons
- exfat-utils
- exfat
- f2fs-tools
- host-file
- file
- findutils
- flashbench
- ftop
- gawk
- genext2fs
- genpart
- genromfs
- getent
- perl
- tcl
- git
- libgpg-error
- libassuan
- libgcrypt
- libksba
- libpthsem
- gnupg2
- nettle
- gnutls
- gperf
- grep
- gzip
- htop
- infozip
- inotify-tools
- libsysfs
- pciutils
- libtool
- libxml2
- libxslt
- lockfile-progs
- popt
- logrotate
- logsurfer
- lua
- lxc
- lz4
- lzip
- lzop
- make
- makedevs
- mmc-utils
- monit
- mtd
- mtools
- nano
- ncdu
- neon
- nfs-utils
- ntfs-3g
- numactl
- nut
- openssh
- patch
- php
- pinentry
- pkgconf
- polkit
- procps-ng
- psmisc
- pwgen
- quota
- rsyslog
- host-ruby
- ruby
- screen
- sed
- smack
- squashfs
- sshfs
- sstrip
- start-stop-daemon
- subversion
- sudo
- sysklogd
- tar
- time
- tmux
- tree
- uemacs
- vim
- which
- xfsprogs
- xmlstarlet
- zsh
- host-fakeroot
- host-makedevs
- host-mkpasswd
+  - make BR2_EXTERNAL=/path/to/br2-ext
+  - BR2_EXTERNAL=/path/to/br2-ext make
 
+In the first case, it is just a make variable, not an environment
+variable, and thus not exported, while in the second case it is an
+environment variable and gets exported to all sub-processes make may
+spawn.
 
---
-Vincent
+Explicitly export it using EXTRA_ENV.
+
+Reported-by: Julian Scheel <julian@jusst.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julian Scheel <julian@jusst.de>
+---
+ package/Makefile.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 70529f8..803b162 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -326,7 +326,8 @@ HOST_MAKE_ENV = \
+ EXTRA_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	BR2_DL_DIR=$(BR2_DL_DIR) \
+-	BUILD_DIR=$(BUILD_DIR)
++	BUILD_DIR=$(BUILD_DIR) \
++	BR2_EXTERNAL=$(BR2_EXTERNAL)
+ 
+ ################################################################################
+ # settings we need to pass to configure
+-- 
+1.9.1
