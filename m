@@ -1,38 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Feb 2015 20:46:17 +0100
-Subject: [Buildroot] [PATCH] br2-external: make it available to
-	post-{build, image} scripts
-In-Reply-To: <1423333701-9949-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 7 Feb 2015 19:28:21 +0100")
-References: <1423333701-9949-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <878ug97bee.fsf@dell.be.48ers.dk>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sat, 07 Feb 2015 16:47:55 -0300
+Subject: [Buildroot] [PATCH 2/4] arm: update processor types
+In-Reply-To: <54CFA343.9090806@openwide.fr>
+References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1421951608-31233-3-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <54CFA343.9090806@openwide.fr>
+Message-ID: <54D66BEB.6030002@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Romain,
 
- > Currently, BR2_EXTERNAL is not always exported to sub-processes that we
- > spawn, like post-build or post-image scripts. This all depends on how
- > the user passes BR2_EXTERNAL; consider the following:
+First of all, thanks for the great feedback.
 
- >   - make BR2_EXTERNAL=/path/to/br2-ext
- >   - BR2_EXTERNAL=/path/to/br2-ext make
+On 02/02/2015 01:18 PM, Romain Naour wrote:
+[..]
+>> -	default BR2_BINFMT_FLAT if BR2_m68k
+>> +	default BR2_BINFMT_FLAT if BR2_m68k || BR2_cortex_m3
+> 
+> What do you think about adding BR2_ARCH_HAS_EFL_SUPPORT in each architecture
+> Config.in.x instead of black-listing them here ?
+> 
 
- > In the first case, it is just a make variable, not an environment
- > variable, and thus not exported, while in the second case it is an
- > environment variable and gets exported to all sub-processes make may
- > spawn.
+I've been thinking about this. At first it seemed like a good idea, but
+then I realised that Cortex-M3 is not really an architecture, but 
+a variant.
 
- > Explicitly export it using EXTRA_ENV.
+Introducing BR2_ARCH_HAS_ELF_SUPPORT would mean selecting it on almost each
+architecture and almost each of the ARM variants, except Cortex-M3.
 
- > Reported-by: Julian Scheel <julian@jusst.de>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Julian Scheel <julian@jusst.de>
-
-Committed, thanks.
-
+So, it seems like it would be an elegant way of doing this, but I'm not sure
+it's worth such an invasive change.
 -- 
-Bye, Peter Korsgaard
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
