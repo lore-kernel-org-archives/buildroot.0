@@ -1,52 +1,218 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Feb 2015 11:10:06 +0100
-Subject: [Buildroot] [PATCH] sna/dri2: Protect compsiteext.h include
- with build check
-In-Reply-To: <20140723223626.GA759@bwidawsk.net>
-References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
- <1405665634-3299-1-git-send-email-chris@chris-wilson.co.uk>
- <20140718232336.GA5940@bwidawsk.net>
- <20140723234458.7399f7b6@free-electrons.com>
- <20140723223626.GA759@bwidawsk.net>
-Message-ID: <20150207111006.5cbc28c6@free-electrons.com>
+Date: Sat,  7 Feb 2015 11:06:34 +0100
+Subject: [Buildroot] [PATCH 2/2] mono: backport patches to fix PowerPC build
+In-Reply-To: <1423303594-9864-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423303594-9864-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1423303594-9864-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ben Widawsky,
+Mono 3.12.0 doesn't build properly on PowerPC, but there are already
+patches upstream to fix those issues. This commit backports the two
+necessary patches to get the PowerPC build working.
 
-On Wed, 23 Jul 2014 15:36:27 -0700, Ben Widawsky wrote:
+Fixes:
 
-> Hi. The second patch, .912 bump has been nak'd already by Bernd (I
-> missed this before my ping). Coincidentally, Bernd also fixed the
-> composite extension compilation error in buildroot (differently than I
-> did). Chris Wilson, the Intel DDX maintainer has fixed the issue
-> meanwhile.
-> 
-> I would recommend backporting the xf86-video-intel patch instead of the
-> patch Bernd submitted. Wiggle handled all the conflicts. I am not sure
-> if it will apply to .907 (the current version). The other option is to
-> take Bernd's patch, and revert it when you finally get to the fixed
-> upstream version.
-> 
-> In the most ideal case, we could just bump to the recently released .913 and
-> have everything /just/ work. Chris has fixed 2 bugs that Bernd's series also
-> attempted to fix. Of course that runs the risk of invoking the wrath that
-> caused the original .912 revert.
-> 
-> That all came out more complicated than it should have. I apologize. I am
-> pasting the patch I wiggled as an example. Hopefully that helps make sense.
+  http://autobuild.buildroot.org/results/91d/91d4b9d3f2d3597b071a1bcec8339eaf2a9c7981/
 
-Have all issues you had been resolved? I still have this old e-mail
-"marked" as to be handled here, so I'm wondering what is the status of
-this. Could you check if the latest Buildroot git master works for you?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...e-ppc-sigctx-monoctx-conversion-code-to-m.patch | 92 ++++++++++++++++++++++
+ ...build-errors-in-mono-context.c-on-ppc64el.patch | 84 ++++++++++++++++++++
+ 2 files changed, 176 insertions(+)
+ create mode 100644 package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
+ create mode 100644 package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
 
-Thanks!
-
-Thomas
+diff --git a/package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch b/package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
+new file mode 100644
+index 0000000..c3ba00a
+--- /dev/null
++++ b/package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
+@@ -0,0 +1,92 @@
++From bf8e3967e4809923d99159ebfa294daf897b5c29 Mon Sep 17 00:00:00 2001
++From: Zoltan Varga <vargaz@gmail.com>
++Date: Mon, 10 Nov 2014 05:22:04 -0500
++Subject: [PATCH] [jit] Move the ppc sigctx<->monoctx conversion code to
++ mono-context.c.
++
++Backported from upstream commit
++7e056cd346ccab104715e19d51d0ceccd51b696d by Thomas Petazzoni
++<thomas.petazzoni@free-electrons.com>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ mono/mini/exceptions-ppc.c | 22 ++--------------------
++ mono/utils/mono-context.c  | 26 ++++++++++++++++++++++++++
++ 2 files changed, 28 insertions(+), 20 deletions(-)
++
++diff --git a/mono/mini/exceptions-ppc.c b/mono/mini/exceptions-ppc.c
++index 6c3878e..9b9dbef 100644
++--- a/mono/mini/exceptions-ppc.c
+++++ b/mono/mini/exceptions-ppc.c
++@@ -600,31 +600,13 @@ mono_arch_find_jit_info (MonoDomain *domain, MonoJitTlsData *jit_tls,
++ void
++ mono_arch_sigctx_to_monoctx (void *ctx, MonoContext *mctx)
++ {
++-#ifdef MONO_CROSS_COMPILE
++-	g_assert_not_reached ();
++-#else
++-	os_ucontext *uc = ctx;
++-
++-	mctx->sc_ir = UCONTEXT_REG_NIP(uc);
++-	mctx->sc_sp = UCONTEXT_REG_Rn(uc, 1);
++-	memcpy (&mctx->regs, &UCONTEXT_REG_Rn(uc, 13), sizeof (mgreg_t) * MONO_SAVED_GREGS);
++-	memcpy (&mctx->fregs, &UCONTEXT_REG_FPRn(uc, 14), sizeof (double) * MONO_SAVED_FREGS);
++-#endif
+++	return mono_sigctx_to_monoctx (ctx, mctx);
++ }
++ 
++ void
++ mono_arch_monoctx_to_sigctx (MonoContext *mctx, void *ctx)
++ {
++-#ifdef MONO_CROSS_COMPILE
++-	g_assert_not_reached ();
++-#else
++-	os_ucontext *uc = ctx;
++-
++-	UCONTEXT_REG_NIP(uc) = mctx->sc_ir;
++-	UCONTEXT_REG_Rn(uc, 1) = mctx->sc_sp;
++-	memcpy (&UCONTEXT_REG_Rn(uc, 13), &mctx->regs, sizeof (mgreg_t) * MONO_SAVED_GREGS);
++-	memcpy (&UCONTEXT_REG_FPRn(uc, 14), &mctx->fregs, sizeof (double) * MONO_SAVED_FREGS);
++-#endif
+++	return mono_monoctx_to_sigctx (mctx, ctx);
++ }
++ 
++ gpointer
++diff --git a/mono/utils/mono-context.c b/mono/utils/mono-context.c
++index c52d044..689bf86 100644
++--- a/mono/utils/mono-context.c
+++++ b/mono/utils/mono-context.c
++@@ -421,4 +421,30 @@ mono_monoctx_to_sigctx (MonoContext *mctx, void *sigctx)
++ 	}
++ }
++ 
+++#elif (((defined(__ppc__) || defined(__powerpc__) || defined(__ppc64__)) && !defined(MONO_CROSS_COMPILE))) || (defined(TARGET_POWERPC))
+++
+++#include <mono/utils/mono-context.h>
+++
+++void
+++mono_sigctx_to_monoctx (void *sigctx, MonoContext *mctx)
+++{
+++	os_ucontext *uc = sigctx;
+++
+++	mctx->sc_ir = UCONTEXT_REG_NIP(uc);
+++	mctx->sc_sp = UCONTEXT_REG_Rn(uc, 1);
+++	memcpy (&mctx->regs, &UCONTEXT_REG_Rn(uc, 13), sizeof (mgreg_t) * MONO_SAVED_GREGS);
+++	memcpy (&mctx->fregs, &UCONTEXT_REG_FPRn(uc, 14), sizeof (double) * MONO_SAVED_FREGS);
+++}
+++
+++void
+++mono_monoctx_to_sigctx (MonoContext *mctx, void *sigctx)
+++{
+++	os_ucontext *uc = sigctx;
+++
+++	UCONTEXT_REG_NIP(uc) = mctx->sc_ir;
+++	UCONTEXT_REG_Rn(uc, 1) = mctx->sc_sp;
+++	memcpy (&UCONTEXT_REG_Rn(uc, 13), &mctx->regs, sizeof (mgreg_t) * MONO_SAVED_GREGS);
+++	memcpy (&UCONTEXT_REG_FPRn(uc, 14), &mctx->fregs, sizeof (double) * MONO_SAVED_FREGS);
+++}
+++
++ #endif /* #if defined(__i386__) */
++-- 
++2.1.0
++
+diff --git a/package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch b/package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
+new file mode 100644
+index 0000000..423c14e
+--- /dev/null
++++ b/package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
+@@ -0,0 +1,84 @@
++From a41c322f4c6863ebfeba1740f6f3afbc0f8c71e9 Mon Sep 17 00:00:00 2001
++From: Mauricio Faria de Oliveira <mauricfo@linux.vnet.ibm.com>
++Date: Mon, 22 Dec 2014 22:08:33 -0200
++Subject: [PATCH] Fix build errors in mono-context.c on ppc64el
++
++Build error #1:
++
++	libtool: compile:  gcc <...> -c mono-context.c  -fPIC -DPIC -o .libs/mono-context.o
++	mono-context.c: In function 'mono_sigctx_to_monoctx':
++	mono-context.c:435:68: error: 'MONO_SAVED_GREGS' undeclared (first use in this function)
++	  memcpy (&mctx->regs, &UCONTEXT_REG_Rn(uc, 13), sizeof (mgreg_t) * MONO_SAVED_GREGS);
++		                                                            ^
++	mono-context.c:435:68: note: each undeclared identifier is reported only once for each function it appears in
++	mono-context.c:436:70: error: 'MONO_SAVED_FREGS' undeclared (first use in this function)
++	  memcpy (&mctx->fregs, &UCONTEXT_REG_FPRn(uc, 14), sizeof (double) * MONO_SAVED_FREGS);
++		                                                              ^
++The MONO_SAVED_GREGS and MONO_SAVED_FREGS macros are defined in mini-ppc.h.
++The problem happens because commit 7e056cd346ccab104715e19d51d0ceccd51b696d
++moved code using them from exceptions-ppc.h (which includes mini-ppc.h) to
++mono-context.c (which doesn't), where they're not #included.
++
++So, include mini-ppc.h in mono-context.c (in the existing powerpc ifdef block).
++
++Signed-off-by: Mauricio Faria de Oliveira <mauricfo@linux.vnet.ibm.com>
++
++Build error #2:
++
++Now, it turns out mini-ppc.h doesn't know MonoMethod, MonoMethodSignature, and MonoObject.
++So, include object.h (MonoObject), which includes metadata.h (MonoMethod and MonoMethodSignature),
++in mini-ppc.h.
++
++	libtool: compile: gcc <...>  -c mono-context.c  -fPIC -DPIC -o .libs/mono-context.o
++	In file included from mono-context.c:427:0:
++	../../mono/mini/mini-ppc.h:37:2: error: unknown type name 'MonoMethod'
++	  MonoMethod *method;
++	  ^
++	../../mono/mini/mini-ppc.h:306:31: error: unknown type name 'MonoMethodSignature'
++	 mono_ppc_tail_call_supported (MonoMethodSignature *caller_sig, MonoMethodSignature *callee_sig) MONO_INTERNAL;
++		                       ^
++	../../mono/mini/mini-ppc.h:306:64: error: unknown type name 'MonoMethodSignature'
++	 mono_ppc_tail_call_supported (MonoMethodSignature *caller_sig, MonoMethodSignature *callee_sig) MONO_INTERNAL;
++		                                                        ^
++	../../mono/mini/mini-ppc.h:312:27: error: unknown type name 'MonoObject'
++	 mono_ppc_throw_exception (MonoObject *exc, unsigned long eip, unsigned long esp, mgreg_t *int_regs, gdouble *fp_regs, gboolean rethrow) MONO_INTERNAL;
++		                   ^
++
++Backported from upstream commit
++55fa0a561acda220f1b363e4507cb1c3a62795a7 by Thomas Petazzoni
++<thomas.petazzoni@free-electrons.com>.
++
++Signed-off-by: Mauricio Faria de Oliveira <mauricfo@linux.vnet.ibm.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ mono/mini/mini-ppc.h      | 1 +
++ mono/utils/mono-context.c | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/mono/mini/mini-ppc.h b/mono/mini/mini-ppc.h
++index 4b39b7a..cbf73bb 100644
++--- a/mono/mini/mini-ppc.h
+++++ b/mono/mini/mini-ppc.h
++@@ -4,6 +4,7 @@
++ #include <mono/arch/ppc/ppc-codegen.h>
++ #include <mono/utils/mono-sigcontext.h>
++ #include <mono/utils/mono-context.h>
+++#include <mono/metadata/object.h>
++ #include <glib.h>
++ 
++ #ifdef __mono_ppc64__
++diff --git a/mono/utils/mono-context.c b/mono/utils/mono-context.c
++index 689bf86..0db9dce 100644
++--- a/mono/utils/mono-context.c
+++++ b/mono/utils/mono-context.c
++@@ -424,6 +424,7 @@ mono_monoctx_to_sigctx (MonoContext *mctx, void *sigctx)
++ #elif (((defined(__ppc__) || defined(__powerpc__) || defined(__ppc64__)) && !defined(MONO_CROSS_COMPILE))) || (defined(TARGET_POWERPC))
++ 
++ #include <mono/utils/mono-context.h>
+++#include <mono/mini/mini-ppc.h>
++ 
++ void
++ mono_sigctx_to_monoctx (void *sigctx, MonoContext *mctx)
++-- 
++2.1.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
