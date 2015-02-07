@@ -1,39 +1,34 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sat, 07 Feb 2015 16:47:55 -0300
-Subject: [Buildroot] [PATCH 2/4] arm: update processor types
-In-Reply-To: <54CFA343.9090806@openwide.fr>
-References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1421951608-31233-3-git-send-email-ezequiel@vanguardiasur.com.ar>
- <54CFA343.9090806@openwide.fr>
-Message-ID: <54D66BEB.6030002@vanguardiasur.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  7 Feb 2015 21:11:15 +0100
+Subject: [Buildroot] [PATCH 02/35] package/x11r7/xlib_libxshmfence: bump
+	version to 1.2
+In-Reply-To: <1423339908-2960-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1423339908-2960-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1423339908-2960-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
 
-First of all, thanks for the great feedback.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 02/02/2015 01:18 PM, Romain Naour wrote:
-[..]
->> -	default BR2_BINFMT_FLAT if BR2_m68k
->> +	default BR2_BINFMT_FLAT if BR2_m68k || BR2_cortex_m3
-> 
-> What do you think about adding BR2_ARCH_HAS_EFL_SUPPORT in each architecture
-> Config.in.x instead of black-listing them here ?
-> 
-
-I've been thinking about this. At first it seemed like a good idea, but
-then I realised that Cortex-M3 is not really an architecture, but 
-a variant.
-
-Introducing BR2_ARCH_HAS_ELF_SUPPORT would mean selecting it on almost each
-architecture and almost each of the ARM variants, except Cortex-M3.
-
-So, it seems like it would be an elegant way of doing this, but I'm not sure
-it's worth such an invasive change.
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index f0fb90f..3a2f326 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXSHMFENCE_VERSION = 1.1
++XLIB_LIBXSHMFENCE_VERSION = 1.2
+ XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.bz2
+ XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSHMFENCE_LICENSE = MIT
 -- 
-Ezequiel Garcia, VanguardiaSur
-www.vanguardiasur.com.ar
+1.7.10.4
