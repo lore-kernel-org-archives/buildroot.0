@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Feb 2015 11:24:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.8.8.2
-Message-ID: <1423304661-15972-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  7 Feb 2015 11:41:03 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Apache: New package
+Message-ID: <1423305664-29877-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +11,187 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: - rebased
+    - bump version to 2.4.12
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index f282da7..19cfb8f 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	a140e3ada8a91a7bacf7a58cfd8f5f0e76796258	sqlite-autoconf-3080801.tar.gz
-+sha1	1db237523419af7110e1d92c6b766e965f9322e4	sqlite-autoconf-3080802.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9207c5c..f5f063f 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3080801
-+SQLITE_VERSION = 3080802
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+ package/Config.in                       |    1 +
+ package/apache/0001-cross-compile.patch |   63 +++++++++++++++++++++++++++++++
+ package/apache/Config.in                |   19 ++++++++++
+ package/apache/apache.hash              |    2 +
+ package/apache/apache.mk                |   48 +++++++++++++++++++++++
+ 5 files changed, 133 insertions(+)
+ create mode 100644 package/apache/0001-cross-compile.patch
+ create mode 100644 package/apache/Config.in
+ create mode 100644 package/apache/apache.hash
+ create mode 100644 package/apache/apache.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 7f2ac96..fa40fd1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1048,6 +1048,7 @@ endmenu
+ menu "Networking applications"
+ 	source "package/aiccu/Config.in"
+ 	source "package/aircrack-ng/Config.in"
++	source "package/apache/Config.in"
+ 	source "package/argus/Config.in"
+ 	source "package/arptables/Config.in"
+ 	source "package/atftp/Config.in"
+diff --git a/package/apache/0001-cross-compile.patch b/package/apache/0001-cross-compile.patch
+new file mode 100644
+index 0000000..790b7a0
+--- /dev/null
++++ b/package/apache/0001-cross-compile.patch
+@@ -0,0 +1,63 @@
++Fix cross-compilation
++
++Fetched httpd-2.4.x-cross_compile.diff from upstream bugtracker:
++https://issues.apache.org/bugzilla/show_bug.cgi?id=51257#c6
++
++which is a bundle of upstream revisions:
++    http://svn.apache.org/viewvc?view=revision&revision=1327907
++    http://svn.apache.org/viewvc?view=revision&revision=1328390
++    http://svn.apache.org/viewvc?view=revision&revision=1328714
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Index: server/Makefile.in
++===================================================================
++--- a/server/Makefile.in	(revision 1328714)
+++++ b/server/Makefile.in	(working copy)
++@@ -22,9 +22,14 @@
++ include $(top_builddir)/build/rules.mk
++ include $(top_srcdir)/build/library.mk
++ 
+++ifdef CC_FOR_BUILD
+++gen_test_char: gen_test_char.c
+++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -DCROSS_COMPILE -o $@ $<
+++else
++ gen_test_char_OBJECTS = gen_test_char.lo
++ gen_test_char: $(gen_test_char_OBJECTS)
++ 	$(LINK) $(EXTRA_LDFLAGS) $(gen_test_char_OBJECTS) $(EXTRA_LIBS)
+++endif
++ 
++ test_char.h: gen_test_char
++ 	./gen_test_char > test_char.h
++Index: configure.in
++===================================================================
++--- a/configure.in	(revision 1328714)
+++++ b/configure.in	(working copy)
++@@ -193,6 +193,14 @@
++ dnl Try to get c99 support for variadic macros
++ ifdef([AC_PROG_CC_C99], [AC_PROG_CC_C99])
++ 
+++dnl In case of cross compilation we set CC_FOR_BUILD to cc unless
+++dnl we got already CC_FOR_BUILD from environment.
+++if test "x${build_alias}" != "x${host_alias}"; then
+++  if test "x${CC_FOR_BUILD}" = "x"; then
+++    CC_FOR_BUILD=cc
+++  fi
+++fi
+++
++ if test "x${cache_file}" = "x/dev/null"; then
++   # Likewise, ensure that CC and CPP are passed through to the pcre
++   # configure script iff caching is disabled (the autoconf 2.5x default).
++Index: acinclude.m4
++===================================================================
++--- a/acinclude.m4	(revision 1328714)
+++++ ab/cinclude.m4	(working copy)
++@@ -53,6 +53,8 @@
++   APACHE_SUBST(CPPFLAGS)
++   APACHE_SUBST(CFLAGS)
++   APACHE_SUBST(CXXFLAGS)
+++  APACHE_SUBST(CC_FOR_BUILD)
+++  APACHE_SUBST(CFLAGS_FOR_BUILD)
++   APACHE_SUBST(LTFLAGS)
++   APACHE_SUBST(LDFLAGS)
++   APACHE_SUBST(LT_LDFLAGS)
+diff --git a/package/apache/Config.in b/package/apache/Config.in
+new file mode 100644
+index 0000000..0814a17
+--- /dev/null
++++ b/package/apache/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_APACHE
++	bool "apache"
++	select BR2_PACKAGE_APR_UTIL
++	select BR2_PACKAGE_PCRE
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # apr
++	help
++	  The Apache HTTP Server Project is an effort to develop and maintain an
++	  open-source HTTP server for modern operating systems including UNIX
++	  and Windows NT. The goal of this project is to provide a secure,
++	  efficient and extensible server that provides HTTP services in sync
++	  with the current HTTP standards.
++
++	  http://httpd.apache.org
++
++comment "apache needs a toolchain w/ dynamic library, threads"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+new file mode 100644
+index 0000000..51fd3ca
+--- /dev/null
++++ b/package/apache/apache.hash
+@@ -0,0 +1,2 @@
++# From http://www.apache.org/dist/httpd/httpd-2.4.12.tar.bz2.sha1
++sha1	bc4681bfd63accec8d82d3cc440fbc8264ce0f17	httpd-2.4.12.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+new file mode 100644
+index 0000000..026ef20
+--- /dev/null
++++ b/package/apache/apache.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# apache
++#
++################################################################################
++
++APACHE_VERSION = 2.4.12
++APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
++APACHE_SITE = http://archive.apache.org/dist/httpd
++APACHE_LICENSE = Apache-2.0
++APACHE_LICENSE_FILES = LICENSE
++# Needed for mod_php
++APACHE_INSTALL_STAGING = YES
++# We have a patch touching configure.in and Makefile.in,
++# so we need to autoreconf:
++APACHE_AUTORECONF = YES
++APACHE_DEPENDENCIES = apr apr-util pcre
++
++APACHE_CONF_ENV= \
++	CC_FOR_BUILD="$(HOSTCC)" \
++	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
++	ap_cv_void_ptr_lt_long=no \
++	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
++
++APACHE_CONF_OPTS = \
++	--sysconfdir=/etc/apache2 \
++	--with-apr=$(STAGING_DIR)/usr \
++	--with-apr-util=$(STAGING_DIR)/usr \
++	--with-pcre=$(STAGING_DIR)/usr/bin/pcre-config \
++	--enable-http \
++	--enable-dbd \
++	--enable-proxy \
++	--enable-mime-magic \
++	--without-suexec-bin \
++	--enable-mods-shared=all \
++	--with-mpm=worker
++
++ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
++APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
++endif
++
++define APACHE_FIX_STAGING_APACHE_CONFIG
++	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
++	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
++endef
++APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
