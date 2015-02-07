@@ -1,53 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Feb 2015 22:48:38 +0100
-Subject: [Buildroot] [PATCH] Export BR2_EXTERNAL for post-build/support
- scripts
-In-Reply-To: <1423064097-1151-1-git-send-email-julian@jusst.de>
-References: <1423064097-1151-1-git-send-email-julian@jusst.de>
-Message-ID: <20150207214838.GA4080@free.fr>
+Date: Sat, 7 Feb 2015 23:00:11 +0100
+Subject: [Buildroot] [PATCH 14/16] package/util-linux: add more tool
+ select options
+In-Reply-To: <1421684056-5266-15-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-15-git-send-email-maxtram95@gmail.com>
+Message-ID: <20150207220011.GA32583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julian, All,
+Maxim, All,
 
-On 2015-02-04 16:34 +0100, Julian Scheel spake thusly:
-> Especially post-build scripts might want to make use of BR2_EXTERNAL variable,
-> so export it.
+On 2015-01-19 18:14 +0200, Maxim Mikityanskiy spake thusly:
+> Add more options to Config.in to allow optionally select or deselect
+> util-linux tools.
+> 
+> Also fix s/BR2_PACKAGE_WDCTL/BR2_PACKAGE_UTIL_LINUX_WDCTL/
+[--SNIP--]
+> -config BR2_PACKAGE_WDCTL
+> +config BR2_PACKAGE_UTIL_LINUX_WDCTL
 
-Peter has applied the alternative patch I submitted.
-
-Thanks for the report! :-)
+BR2_PACKAGE_WDCTL should have been added to config.in.legacy to provide
+backward compatibility with previos .config/defconfig files.
+ I'll submit a patch for that in a momemnt.
 
 Regards,
 Yann E. MORIN.
-
-> Signed-off-by: Julian Scheel <julian@jusst.de>
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index e554a30..92ae3fa 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -349,6 +349,7 @@ endif
->  # Scripts in support/ or post-build scripts may need to reference
->  # these locations, so export them so it is easier to use
->  export BR2_CONFIG
-> +export BR2_EXTERNAL
->  export TARGET_DIR
->  export STAGING_DIR
->  export HOST_DIR
-> -- 
-> 2.2.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
