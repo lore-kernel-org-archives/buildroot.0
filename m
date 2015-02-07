@@ -1,216 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Feb 2015 12:50:46 +0100
-Subject: [Buildroot] [git commit] mono: backport patches to fix PowerPC build
-Message-ID: <20150207120036.4FBE87FF25@busybox.osuosl.org>
+Date: Sat, 7 Feb 2015 12:51:20 +0100
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.8.8.2
+Message-ID: <20150207120036.5859780469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=786b32a2fbc2273b4a7cb103ef331098f74c4e08
+commit: http://git.buildroot.net/buildroot/commit/?id=b8388ef872a24ad5fc9d13e1d18e9ae03d3b9519
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mono 3.12.0 doesn't build properly on PowerPC, but there are already
-patches upstream to fix those issues. This commit backports the two
-necessary patches to get the PowerPC build working.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/91d/91d4b9d3f2d3597b071a1bcec8339eaf2a9c7981/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-ppc-sigctx-monoctx-conversion-code-to-m.patch |   92 ++++++++++++++++++++
- ...build-errors-in-mono-context.c-on-ppc64el.patch |   84 ++++++++++++++++++
- 2 files changed, 176 insertions(+), 0 deletions(-)
+ package/sqlite/sqlite.hash |    2 +-
+ package/sqlite/sqlite.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch b/package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
-new file mode 100644
-index 0000000..c3ba00a
---- /dev/null
-+++ b/package/mono/0004-jit-Move-the-ppc-sigctx-monoctx-conversion-code-to-m.patch
-@@ -0,0 +1,92 @@
-+From bf8e3967e4809923d99159ebfa294daf897b5c29 Mon Sep 17 00:00:00 2001
-+From: Zoltan Varga <vargaz@gmail.com>
-+Date: Mon, 10 Nov 2014 05:22:04 -0500
-+Subject: [PATCH] [jit] Move the ppc sigctx<->monoctx conversion code to
-+ mono-context.c.
-+
-+Backported from upstream commit
-+7e056cd346ccab104715e19d51d0ceccd51b696d by Thomas Petazzoni
-+<thomas.petazzoni@free-electrons.com>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ mono/mini/exceptions-ppc.c | 22 ++--------------------
-+ mono/utils/mono-context.c  | 26 ++++++++++++++++++++++++++
-+ 2 files changed, 28 insertions(+), 20 deletions(-)
-+
-+diff --git a/mono/mini/exceptions-ppc.c b/mono/mini/exceptions-ppc.c
-+index 6c3878e..9b9dbef 100644
-+--- a/mono/mini/exceptions-ppc.c
-++++ b/mono/mini/exceptions-ppc.c
-+@@ -600,31 +600,13 @@ mono_arch_find_jit_info (MonoDomain *domain, MonoJitTlsData *jit_tls,
-+ void
-+ mono_arch_sigctx_to_monoctx (void *ctx, MonoContext *mctx)
-+ {
-+-#ifdef MONO_CROSS_COMPILE
-+-	g_assert_not_reached ();
-+-#else
-+-	os_ucontext *uc = ctx;
-+-
-+-	mctx->sc_ir = UCONTEXT_REG_NIP(uc);
-+-	mctx->sc_sp = UCONTEXT_REG_Rn(uc, 1);
-+-	memcpy (&mctx->regs, &UCONTEXT_REG_Rn(uc, 13), sizeof (mgreg_t) * MONO_SAVED_GREGS);
-+-	memcpy (&mctx->fregs, &UCONTEXT_REG_FPRn(uc, 14), sizeof (double) * MONO_SAVED_FREGS);
-+-#endif
-++	return mono_sigctx_to_monoctx (ctx, mctx);
-+ }
-+ 
-+ void
-+ mono_arch_monoctx_to_sigctx (MonoContext *mctx, void *ctx)
-+ {
-+-#ifdef MONO_CROSS_COMPILE
-+-	g_assert_not_reached ();
-+-#else
-+-	os_ucontext *uc = ctx;
-+-
-+-	UCONTEXT_REG_NIP(uc) = mctx->sc_ir;
-+-	UCONTEXT_REG_Rn(uc, 1) = mctx->sc_sp;
-+-	memcpy (&UCONTEXT_REG_Rn(uc, 13), &mctx->regs, sizeof (mgreg_t) * MONO_SAVED_GREGS);
-+-	memcpy (&UCONTEXT_REG_FPRn(uc, 14), &mctx->fregs, sizeof (double) * MONO_SAVED_FREGS);
-+-#endif
-++	return mono_monoctx_to_sigctx (mctx, ctx);
-+ }
-+ 
-+ gpointer
-+diff --git a/mono/utils/mono-context.c b/mono/utils/mono-context.c
-+index c52d044..689bf86 100644
-+--- a/mono/utils/mono-context.c
-++++ b/mono/utils/mono-context.c
-+@@ -421,4 +421,30 @@ mono_monoctx_to_sigctx (MonoContext *mctx, void *sigctx)
-+ 	}
-+ }
-+ 
-++#elif (((defined(__ppc__) || defined(__powerpc__) || defined(__ppc64__)) && !defined(MONO_CROSS_COMPILE))) || (defined(TARGET_POWERPC))
-++
-++#include <mono/utils/mono-context.h>
-++
-++void
-++mono_sigctx_to_monoctx (void *sigctx, MonoContext *mctx)
-++{
-++	os_ucontext *uc = sigctx;
-++
-++	mctx->sc_ir = UCONTEXT_REG_NIP(uc);
-++	mctx->sc_sp = UCONTEXT_REG_Rn(uc, 1);
-++	memcpy (&mctx->regs, &UCONTEXT_REG_Rn(uc, 13), sizeof (mgreg_t) * MONO_SAVED_GREGS);
-++	memcpy (&mctx->fregs, &UCONTEXT_REG_FPRn(uc, 14), sizeof (double) * MONO_SAVED_FREGS);
-++}
-++
-++void
-++mono_monoctx_to_sigctx (MonoContext *mctx, void *sigctx)
-++{
-++	os_ucontext *uc = sigctx;
-++
-++	UCONTEXT_REG_NIP(uc) = mctx->sc_ir;
-++	UCONTEXT_REG_Rn(uc, 1) = mctx->sc_sp;
-++	memcpy (&UCONTEXT_REG_Rn(uc, 13), &mctx->regs, sizeof (mgreg_t) * MONO_SAVED_GREGS);
-++	memcpy (&UCONTEXT_REG_FPRn(uc, 14), &mctx->fregs, sizeof (double) * MONO_SAVED_FREGS);
-++}
-++
-+ #endif /* #if defined(__i386__) */
-+-- 
-+2.1.0
-+
-diff --git a/package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch b/package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
-new file mode 100644
-index 0000000..423c14e
---- /dev/null
-+++ b/package/mono/0005-Fix-build-errors-in-mono-context.c-on-ppc64el.patch
-@@ -0,0 +1,84 @@
-+From a41c322f4c6863ebfeba1740f6f3afbc0f8c71e9 Mon Sep 17 00:00:00 2001
-+From: Mauricio Faria de Oliveira <mauricfo@linux.vnet.ibm.com>
-+Date: Mon, 22 Dec 2014 22:08:33 -0200
-+Subject: [PATCH] Fix build errors in mono-context.c on ppc64el
-+
-+Build error #1:
-+
-+	libtool: compile:  gcc <...> -c mono-context.c  -fPIC -DPIC -o .libs/mono-context.o
-+	mono-context.c: In function 'mono_sigctx_to_monoctx':
-+	mono-context.c:435:68: error: 'MONO_SAVED_GREGS' undeclared (first use in this function)
-+	  memcpy (&mctx->regs, &UCONTEXT_REG_Rn(uc, 13), sizeof (mgreg_t) * MONO_SAVED_GREGS);
-+		                                                            ^
-+	mono-context.c:435:68: note: each undeclared identifier is reported only once for each function it appears in
-+	mono-context.c:436:70: error: 'MONO_SAVED_FREGS' undeclared (first use in this function)
-+	  memcpy (&mctx->fregs, &UCONTEXT_REG_FPRn(uc, 14), sizeof (double) * MONO_SAVED_FREGS);
-+		                                                              ^
-+The MONO_SAVED_GREGS and MONO_SAVED_FREGS macros are defined in mini-ppc.h.
-+The problem happens because commit 7e056cd346ccab104715e19d51d0ceccd51b696d
-+moved code using them from exceptions-ppc.h (which includes mini-ppc.h) to
-+mono-context.c (which doesn't), where they're not #included.
-+
-+So, include mini-ppc.h in mono-context.c (in the existing powerpc ifdef block).
-+
-+Signed-off-by: Mauricio Faria de Oliveira <mauricfo@linux.vnet.ibm.com>
-+
-+Build error #2:
-+
-+Now, it turns out mini-ppc.h doesn't know MonoMethod, MonoMethodSignature, and MonoObject.
-+So, include object.h (MonoObject), which includes metadata.h (MonoMethod and MonoMethodSignature),
-+in mini-ppc.h.
-+
-+	libtool: compile: gcc <...>  -c mono-context.c  -fPIC -DPIC -o .libs/mono-context.o
-+	In file included from mono-context.c:427:0:
-+	../../mono/mini/mini-ppc.h:37:2: error: unknown type name 'MonoMethod'
-+	  MonoMethod *method;
-+	  ^
-+	../../mono/mini/mini-ppc.h:306:31: error: unknown type name 'MonoMethodSignature'
-+	 mono_ppc_tail_call_supported (MonoMethodSignature *caller_sig, MonoMethodSignature *callee_sig) MONO_INTERNAL;
-+		                       ^
-+	../../mono/mini/mini-ppc.h:306:64: error: unknown type name 'MonoMethodSignature'
-+	 mono_ppc_tail_call_supported (MonoMethodSignature *caller_sig, MonoMethodSignature *callee_sig) MONO_INTERNAL;
-+		                                                        ^
-+	../../mono/mini/mini-ppc.h:312:27: error: unknown type name 'MonoObject'
-+	 mono_ppc_throw_exception (MonoObject *exc, unsigned long eip, unsigned long esp, mgreg_t *int_regs, gdouble *fp_regs, gboolean rethrow) MONO_INTERNAL;
-+		                   ^
-+
-+Backported from upstream commit
-+55fa0a561acda220f1b363e4507cb1c3a62795a7 by Thomas Petazzoni
-+<thomas.petazzoni@free-electrons.com>.
-+
-+Signed-off-by: Mauricio Faria de Oliveira <mauricfo@linux.vnet.ibm.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ mono/mini/mini-ppc.h      | 1 +
-+ mono/utils/mono-context.c | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/mono/mini/mini-ppc.h b/mono/mini/mini-ppc.h
-+index 4b39b7a..cbf73bb 100644
-+--- a/mono/mini/mini-ppc.h
-++++ b/mono/mini/mini-ppc.h
-+@@ -4,6 +4,7 @@
-+ #include <mono/arch/ppc/ppc-codegen.h>
-+ #include <mono/utils/mono-sigcontext.h>
-+ #include <mono/utils/mono-context.h>
-++#include <mono/metadata/object.h>
-+ #include <glib.h>
-+ 
-+ #ifdef __mono_ppc64__
-+diff --git a/mono/utils/mono-context.c b/mono/utils/mono-context.c
-+index 689bf86..0db9dce 100644
-+--- a/mono/utils/mono-context.c
-++++ b/mono/utils/mono-context.c
-+@@ -424,6 +424,7 @@ mono_monoctx_to_sigctx (MonoContext *mctx, void *sigctx)
-+ #elif (((defined(__ppc__) || defined(__powerpc__) || defined(__ppc64__)) && !defined(MONO_CROSS_COMPILE))) || (defined(TARGET_POWERPC))
-+ 
-+ #include <mono/utils/mono-context.h>
-++#include <mono/mini/mini-ppc.h>
-+ 
-+ void
-+ mono_sigctx_to_monoctx (void *sigctx, MonoContext *mctx)
-+-- 
-+2.1.0
-+
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index f282da7..19cfb8f 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,2 +1,2 @@
+ # From http://www.sqlite.org/download.html
+-sha1	a140e3ada8a91a7bacf7a58cfd8f5f0e76796258	sqlite-autoconf-3080801.tar.gz
++sha1	1db237523419af7110e1d92c6b766e965f9322e4	sqlite-autoconf-3080802.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 9207c5c..f5f063f 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3080801
++SQLITE_VERSION = 3080802
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
