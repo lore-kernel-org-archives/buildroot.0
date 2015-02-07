@@ -1,32 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Feb 2015 21:11:46 +0100
-Subject: [Buildroot] [PATCH 33/35] package/x11r7/xdriver_xf86-video-v4l:
-	mark as broken
+Date: Sat,  7 Feb 2015 21:11:43 +0100
+Subject: [Buildroot] [PATCH 30/35]
+	package/x11r7/xdriver_xf86-video-neomagic: bump version
 In-Reply-To: <1423339908-2960-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1423339908-2960-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1423339908-2960-33-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1423339908-2960-30-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use git snapshot for compatibility with xorg xserver 1.17.0.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-video-v4l/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ .../xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk   |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-v4l/Config.in b/package/x11r7/xdriver_xf86-video-v4l/Config.in
-index 6d85c17..27ffd87 100644
---- a/package/x11r7/xdriver_xf86-video-v4l/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-v4l/Config.in
-@@ -3,5 +3,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_V4L
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-+	depends on BROKEN # Fails to build with xorg xserver >= 1.17
- 	help
- 	  video4linux driver
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+index 884c249..85bcb2a 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.2.8
+-XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 6661bdd4551e4e63e983685464a277845aed3012
++XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-neomagic
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
++XDRIVER_XF86_VIDEO_NEOMAGIC_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
+ 
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
