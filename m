@@ -1,77 +1,43 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 07 Feb 2015 16:11:50 +0100
-Subject: [Buildroot] [PATCH] Export BR2_EXTERNAL for post-build/support
- scripts
-In-Reply-To: <20150204162117.GC4586@free.fr>
-References: <1423064097-1151-1-git-send-email-julian@jusst.de>
- <20150204161907.GB4586@free.fr> <20150204162117.GC4586@free.fr>
-Message-ID: <54D62B36.8070002@openwide.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 7 Feb 2015 16:10:37 +0000
+Subject: [Buildroot] [PATCH] libvips: bump version to 7.42.2
+Message-ID: <1423325437-32987-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Julian, All,
+- Bump version to 7.42.2
+- Add a hash file
 
-Le 04/02/2015 17:21, Yann E. MORIN a ?crit :
-> Julian, All,
-> 
-> On 2015-02-04 17:19 +0100, Yann E. MORIN spake thusly:
->> On 2015-02-04 16:34 +0100, Julian Scheel spake thusly:
->>> Especially post-build scripts might want to make use of BR2_EXTERNAL variable,
->>> so export it.
->>
->> As discussed on IRC, there is another solution to export BR2_EXTERNAL,
->> which is to add it to EXTRA_ENV, like so:
-> [--SNIP--]
-> 
-> And to complete my previous reply: I don;t really mind which way we're
-> doing it: your solution or mine are equaly acceptable to me.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>> Signed-off-by: Julian Scheel <julian@jusst.de>
->>> ---
->>>  Makefile | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index e554a30..92ae3fa 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -349,6 +349,7 @@ endif
->>>  # Scripts in support/ or post-build scripts may need to reference
->>>  # these locations, so export them so it is easier to use
->>>  export BR2_CONFIG
->>> +export BR2_EXTERNAL
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libvips/libvips.hash |    2 ++
+ package/libvips/libvips.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+ create mode 100644 package/libvips/libvips.hash
 
-I have applied the same patch to be able to use BR2_EXTERNAL in a post-image
-script. But I'm agree that adding BR2_EXTERNAL to EXTRA_ENV is enough.
-
-Best regards,
-Romain
->>>  export TARGET_DIR
->>>  export STAGING_DIR
->>>  export HOST_DIR
->>> -- 
->>> 2.2.1
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> -- 
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/libvips/libvips.hash b/package/libvips/libvips.hash
+new file mode 100644
+index 0000000..18c1ae8
+--- /dev/null
++++ b/package/libvips/libvips.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  45961855e21c8d5f0983d05bb79a6f3c2427dc6eed8e3ac68c0f62759b8612c6  vips-7.42.2.tar.gz
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 1efe21a..d6dddc8 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBVIPS_VERSION_MAJOR = 7.42
+-LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).1
++LIBVIPS_VERSION = $(LIBVIPS_VERSION_MAJOR).2
+ LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
+ LIBVIPS_SITE = http://www.vips.ecs.soton.ac.uk/supported/$(LIBVIPS_VERSION_MAJOR)
+ LIBVIPS_LICENSE = LGPLv2.1+
+-- 
+1.7.1
