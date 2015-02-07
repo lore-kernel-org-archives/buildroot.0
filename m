@@ -1,41 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Feb 2015 21:06:18 +0100
-Subject: [Buildroot] [git commit] grantlee: add missing indirect dependency
-	on jscore available
-Message-ID: <20150207202910.30A4D8046C@busybox.osuosl.org>
+Date: Sat, 7 Feb 2015 21:04:06 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-base: add missing indirect
+	dependency on atomics for pango
+Message-ID: <20150207202910.19E4B8046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63c20b1a9da12e3ea9896bb9f2f7480873ce3b1e
+commit: http://git.buildroot.net/buildroot/commit/?id=08c763b539dfb4bc19bfce102c38761cbe0a5d03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Also removed the redundant indirect dependencies on wchar, threads, mmu
+(gstreamer depends on libglib2 so this indirect dependency is obvious).
+
+[Peter: drop wchar+threads from comment as suggested by Jerzy Grzegorek]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grantlee/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-plugins-base/Config.in |   12 +++++-------
+ 1 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index 6227d7f..01ddacd 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # Qt Script
--	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || BR2_PACKAGE_QT5
-+	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
-+		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5)
- 	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-@@ -14,4 +15,5 @@ config BR2_PACKAGE_GRANTLEE
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index 3b487c5..44367eb 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -128,17 +128,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG
  
- comment "grantlee needs a toolchain with NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT || BR2_PACKAGE_QT5
-+	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
-+		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5)
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_WCHAR # pango -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> libglib2
+-	depends on BR2_USE_MMU # pango -> libglib2
++	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
++	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
+ 	select BR2_PACKAGE_PANGO
+ 	help
+ 	  Pango-based text rendering and overlay
+ 
+-comment "pango plugin needs a toolchain w/ C++, wchar, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++comment "pango plugin needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_ARCH_HAS_ATOMICS
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
+ 	bool "theora (*.ogg video)"
