@@ -1,54 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  7 Feb 2015 14:53:27 +0100
-Subject: [Buildroot] [PATCH 11/11 v7] package/xdriver_xf86-input-evdev:
-	needs libudev, not a udev daemon
-In-Reply-To: <cover.1423317174.git.yann.morin.1998@free.fr>
-References: <cover.1423317174.git.yann.morin.1998@free.fr>
-Message-ID: <a6926397cba17b322a97a6e5fbf44f7f164aa0db.1423317174.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 07 Feb 2015 15:37:22 +0100
+Subject: [Buildroot] [PATCHv3 0/5] Graph about installed size per package
+In-Reply-To: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54D62322.7070202@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do as the comment says: it's only libudev that is required.
+Hi Thomas,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/x11r7/xdriver_xf86-input-evdev/Config.in                   | 5 +----
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk | 3 ++-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+Le 05/02/2015 22:19, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> Here is the third iteration of the patches adding a 'size-stats'
+> feature, which mainly allows to generate a pie chart of the size
+> contribution of each package to the overall root filesystem size.
+> 
+> Changes since v2:
+> 
+>  - Use print0 in find and -0 in xargs to support spaces in filenames,
+>    just in case. Suggested by J?r?me Pouiller.
+> 
+>  - Support custom skeleton locations, instead of assuming the skeleton
+>    comes from system/skeleton.
+> 
+>  - Fix the size-stats target to actually call the size-stats script,
+>    and not graph-size, which was the old name of the script in
+>    previous versions of the series.
+> 
+>  - Fix usage of the size-stats target in out of tree build
+>    situations. For consistency reasons, we chose to mimic what
+>    graph-depends already does, even if size-stats does not necessarily
+>    need to be executed from within CONFIG_DIR.
+> 
+>  - Add one patch to make sure that 'make clean' removes the graphs/
+>    subdirectory in the output directory, which wasn't done today. This
+>    issue isn't specific to size-stats, and already existed with
+>    graph-build and graph-depends.
+> 
+> Comments:
+> 
+>  - J?r?me Puiller suggested to add a warning for removed
+>    files. However, many files are removed in the target-finalize step
+>    (man pages, etc.) and we don't want to have gazillions of warnings
+>    about these completely normal file removals.
+> 
+> Thomas Petazzoni (5):
+>   Makefile: remove the graphs/ dir on 'make clean'
+>   pkg-generic: add step_pkg_size global instrumentation hook
+>   support/scripts: add size-stats script
+>   Makefile: implement a size-stats target
+>   Dummy testing packages
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-index 6ec14bf..92f0324 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-@@ -1,11 +1,8 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
- 	bool "xf86-input-evdev"
--	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
- 	  Generic Linux input driver
--
--comment "xf86-input-evdev requires udev to be enabled"
--	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 46e62c7..f2d5aad 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -9,6 +9,7 @@ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VE
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
- XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server xproto_randrproto xproto_xproto udev
-+XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server \
-+					xproto_randrproto xproto_xproto libudev
- 
- $(eval $(autotools-package))
--- 
-1.9.1
+I reviewed and tested this series without encountering any particular problems.
+
+However, I noticed that the files coming from the BR2_ROOTFS_OVERLAY produce a
+warning. It is true that these files are not part of any package, but we can do
+something like for the rootfs skeleton.
+
+This requires to do something like that:
+
+	$(call step_pkg_size_start,rootfs-overlay)
+	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+		$(call MESSAGE,"Copying overlay $(d)"); \
+		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+			--chmod=Du+w --exclude .empty --exclude '*~' \
+			$(d)/ $(TARGET_DIR)$(sep))
+	$(call step_pkg_size_end,rootfs-overlay)
+
+Or call step_pkg_size-* for each overlay directories ?
+This will allow to show the size contribution for each rootfs overlay.
+
+What do you think ?
+
+Best regards,
+Romain
