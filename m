@@ -1,40 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Feb 2015 21:08:32 +0100
-Subject: [Buildroot] [git commit] kodi: add missing indirect dependency on
-	dynamic lib for shairport
-Message-ID: <20150207202910.52A3E8046C@busybox.osuosl.org>
+Date: Sat, 7 Feb 2015 21:14:15 +0100
+Subject: [Buildroot] [git commit] oprofile: add missing indirect dependency
+	on NPTL for PPC
+Message-ID: <20150207202910.5DDAC8046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ca1d299ae2d1b852088e266451a61977852ac15
+commit: http://git.buildroot.net/buildroot/commit/?id=bacdf4c8e9fc4003cfab052c5cab3e498c3ed85f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: also adjust comment dependencies]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/oprofile/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 5141629..1bc8b15 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -194,11 +194,15 @@ config BR2_PACKAGE_KODI_RTMPDUMP
- 
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
-+	depends on !BR2_STATIC_LIBS # libshairplay -> avahi
- 	select BR2_PACKAGE_LIBSHAIRPLAY
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 3ea07d9..9cf5693 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_OPROFILE
+ 	depends on BR2_USE_WCHAR # binutils
+ 	depends on !BR2_xtensa
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+-	depends on BR2_TOOLCHAIN_HAS_THREADS || !BR2_powerpc
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
  	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
+ 	  OProfile is a system-wide profiler for Linux systems,
+ 	  capable of profiling all running code at low overhead.
+@@ -31,6 +31,6 @@ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
  
-+comment "shairport support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_KODI_LIBSMBCLIENT
- 	bool "samba"
- 	select BR2_PACKAGE_SAMBA
+-comment "oprofile needs a toolchain w/ threads on PPC"
++comment "oprofile needs a toolchain w/ NPTL on PPC"
+ 	depends on BR2_USE_MMU && BR2_powerpc
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
