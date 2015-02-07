@@ -1,39 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Feb 2015 23:00:11 +0100
-Subject: [Buildroot] [PATCH 14/16] package/util-linux: add more tool
- select options
-In-Reply-To: <1421684056-5266-15-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-15-git-send-email-maxtram95@gmail.com>
-Message-ID: <20150207220011.GA32583@free.fr>
+Date: Sat,  7 Feb 2015 23:10:14 +0100
+Subject: [Buildroot] [PATCH] legacy: add missing option for util-linux' wdctl
+Message-ID: <1423347014-27774-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxim, All,
+In 349c9c7 (package/util-linux: add more tool select options), the
+util-linux' wdctl option was renamed, but a entry in the legacy menu was
+no added.
 
-On 2015-01-19 18:14 +0200, Maxim Mikityanskiy spake thusly:
-> Add more options to Config.in to allow optionally select or deselect
-> util-linux tools.
-> 
-> Also fix s/BR2_PACKAGE_WDCTL/BR2_PACKAGE_UTIL_LINUX_WDCTL/
-[--SNIP--]
-> -config BR2_PACKAGE_WDCTL
-> +config BR2_PACKAGE_UTIL_LINUX_WDCTL
+Add this now.
 
-BR2_PACKAGE_WDCTL should have been added to config.in.legacy to provide
-backward compatibility with previos .config/defconfig files.
- I'll submit a patch for that in a momemnt.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxim Mikityanskiy <maxtram95@gmail.com>
+---
+ Config.in.legacy | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0f1b202..8d99e24 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -102,6 +102,14 @@ endif
+ 
+ comment "Legacy options removed in 2015.02"
+ 
++config BR2_PACKAGE_WDCTL
++	bool "util-linux' wdctl option has been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_UTIL_LINUX_WDCTL
++	help
++	  util-linux' wdctl option has been renamed to BR2_PACKAGE_UTIL_LINUX_WDCTL
++	  to be aligned with how the other options are named.
++
+ config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
+ 	bool "rpm's bzip2 payloads option has been removed"
+ 	select BR2_LEGACY
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
