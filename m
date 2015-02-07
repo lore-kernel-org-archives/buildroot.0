@@ -1,80 +1,77 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 07 Feb 2015 15:37:22 +0100
-Subject: [Buildroot] [PATCHv3 0/5] Graph about installed size per package
-In-Reply-To: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1423171200-24583-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <54D62322.7070202@openwide.fr>
+Date: Sat, 07 Feb 2015 16:11:50 +0100
+Subject: [Buildroot] [PATCH] Export BR2_EXTERNAL for post-build/support
+ scripts
+In-Reply-To: <20150204162117.GC4586@free.fr>
+References: <1423064097-1151-1-git-send-email-julian@jusst.de>
+ <20150204161907.GB4586@free.fr> <20150204162117.GC4586@free.fr>
+Message-ID: <54D62B36.8070002@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Yann, Julian, All,
 
-Le 05/02/2015 22:19, Thomas Petazzoni a ?crit :
-> Hello,
+Le 04/02/2015 17:21, Yann E. MORIN a ?crit :
+> Julian, All,
 > 
-> Here is the third iteration of the patches adding a 'size-stats'
-> feature, which mainly allows to generate a pie chart of the size
-> contribution of each package to the overall root filesystem size.
+> On 2015-02-04 17:19 +0100, Yann E. MORIN spake thusly:
+>> On 2015-02-04 16:34 +0100, Julian Scheel spake thusly:
+>>> Especially post-build scripts might want to make use of BR2_EXTERNAL variable,
+>>> so export it.
+>>
+>> As discussed on IRC, there is another solution to export BR2_EXTERNAL,
+>> which is to add it to EXTRA_ENV, like so:
+> [--SNIP--]
 > 
-> Changes since v2:
+> And to complete my previous reply: I don;t really mind which way we're
+> doing it: your solution or mine are equaly acceptable to me.
 > 
->  - Use print0 in find and -0 in xargs to support spaces in filenames,
->    just in case. Suggested by J?r?me Pouiller.
+> Regards,
+> Yann E. MORIN.
 > 
->  - Support custom skeleton locations, instead of assuming the skeleton
->    comes from system/skeleton.
-> 
->  - Fix the size-stats target to actually call the size-stats script,
->    and not graph-size, which was the old name of the script in
->    previous versions of the series.
-> 
->  - Fix usage of the size-stats target in out of tree build
->    situations. For consistency reasons, we chose to mimic what
->    graph-depends already does, even if size-stats does not necessarily
->    need to be executed from within CONFIG_DIR.
-> 
->  - Add one patch to make sure that 'make clean' removes the graphs/
->    subdirectory in the output directory, which wasn't done today. This
->    issue isn't specific to size-stats, and already existed with
->    graph-build and graph-depends.
-> 
-> Comments:
-> 
->  - J?r?me Puiller suggested to add a warning for removed
->    files. However, many files are removed in the target-finalize step
->    (man pages, etc.) and we don't want to have gazillions of warnings
->    about these completely normal file removals.
-> 
-> Thomas Petazzoni (5):
->   Makefile: remove the graphs/ dir on 'make clean'
->   pkg-generic: add step_pkg_size global instrumentation hook
->   support/scripts: add size-stats script
->   Makefile: implement a size-stats target
->   Dummy testing packages
+>>> Signed-off-by: Julian Scheel <julian@jusst.de>
+>>> ---
+>>>  Makefile | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index e554a30..92ae3fa 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -349,6 +349,7 @@ endif
+>>>  # Scripts in support/ or post-build scripts may need to reference
+>>>  # these locations, so export them so it is easier to use
+>>>  export BR2_CONFIG
+>>> +export BR2_EXTERNAL
 
-I reviewed and tested this series without encountering any particular problems.
-
-However, I noticed that the files coming from the BR2_ROOTFS_OVERLAY produce a
-warning. It is true that these files are not part of any package, but we can do
-something like for the rootfs skeleton.
-
-This requires to do something like that:
-
-	$(call step_pkg_size_start,rootfs-overlay)
-	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-		$(call MESSAGE,"Copying overlay $(d)"); \
-		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-			--chmod=Du+w --exclude .empty --exclude '*~' \
-			$(d)/ $(TARGET_DIR)$(sep))
-	$(call step_pkg_size_end,rootfs-overlay)
-
-Or call step_pkg_size-* for each overlay directories ?
-This will allow to show the size contribution for each rootfs overlay.
-
-What do you think ?
+I have applied the same patch to be able to use BR2_EXTERNAL in a post-image
+script. But I'm agree that adding BR2_EXTERNAL to EXTRA_ENV is enough.
 
 Best regards,
 Romain
+>>>  export TARGET_DIR
+>>>  export STAGING_DIR
+>>>  export HOST_DIR
+>>> -- 
+>>> 2.2.1
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>> -- 
+>> .-----------------.--------------------.------------------.--------------------.
+>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>> '------------------------------^-------^------------------^--------------------'
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
