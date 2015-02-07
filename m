@@ -1,39 +1,117 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Feb 2015 19:03:56 +0100
-Subject: [Buildroot] [git commit] util-linux: target command more needs
-	ncurses
-Message-ID: <20150207180626.13EC78046A@busybox.osuosl.org>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sat, 07 Feb 2015 15:05:22 -0300
+Subject: [Buildroot] [PATCH 2/4] arm: update processor types
+In-Reply-To: <54CFA343.9090806@openwide.fr>
+References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1421951608-31233-3-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <54CFA343.9090806@openwide.fr>
+Message-ID: <54D653E2.2080305@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=636bf6bd687095007485b3c1abe5303e8150b3aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes [1]:
 
-configure: error: more selected, but required ncurses, tinfo or termcap
-libraries not available
+On 02/02/2015 01:18 PM, Romain Naour wrote:
+> Hi Ezequiel,
+> 
+> Le 22/01/2015 19:33, Ezequiel Garcia a ?crit :
+>> From: Guido Mart?nez <guido@vanguardiasur.com.ar>
+>>
+>> Add the Cortex M3 variant. These microcontrollers don't support regular
+>> ARM instructions and don't have an MMU.
+>>
+>> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+>> ---
+>>  arch/Config.in                | 8 ++++----
+>>  arch/Config.in.arm            | 5 +++++
+>>  toolchain/toolchain-common.in | 6 ++++--
+>>  3 files changed, 13 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/Config.in b/arch/Config.in
+>> index 890e7e2..6f7d608 100644
+>> --- a/arch/Config.in
+>> +++ b/arch/Config.in
+>> @@ -258,13 +258,13 @@ config BR2_BINFMT_SUPPORTS_SHARED
+>>  # Set up target binary format
+>>  choice
+>>  	prompt "Target Binary Format"
+>> -	default BR2_BINFMT_ELF if !(BR2_bfin || BR2_m68k)
+>> +	default BR2_BINFMT_ELF if !(BR2_bfin || BR2_m68k || BR2_cortex_m3)
+>>  	default BR2_BINFMT_FDPIC if BR2_bfin
+>> -	default BR2_BINFMT_FLAT if BR2_m68k
+>> +	default BR2_BINFMT_FLAT if BR2_m68k || BR2_cortex_m3
+> 
+> What do you think about adding BR2_ARCH_HAS_EFL_SUPPORT in each architecture
+> Config.in.x instead of black-listing them here ?
+> 
+>>  
+>>  config BR2_BINFMT_ELF
+>>  	bool "ELF"
+>> -	depends on !BR2_bfin && !BR2_m68k
+>> +	depends on !BR2_bfin && !BR2_m68k && !BR2_cortex_m3
+>>  	select BR2_BINFMT_SUPPORTS_SHARED
+>>  	help
+>>  	  ELF (Executable and Linkable Format) is a format for libraries and
+>> @@ -283,7 +283,7 @@ config BR2_BINFMT_FDPIC
+>>  
+>>  config BR2_BINFMT_FLAT
+>>  	bool "FLAT"
+>> -	depends on BR2_bfin || BR2_m68k
+>> +	depends on BR2_bfin || BR2_m68k || BR2_cortex_m3
+> 
+> Same here with BR2_ARCH_HAS_FLAT_SUPPORT.
+> 
+>>  	help
+>>  	  FLAT binary is a relatively simple and lightweight executable format
+>>  	  based on the original a.out format. It is widely used in environment
+>> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+>> index a2d113a..1e22ab8 100644
+>> --- a/arch/Config.in.arm
+>> +++ b/arch/Config.in.arm
+>> @@ -134,6 +134,10 @@ config BR2_cortex_a15
+>>  	select BR2_ARM_CPU_HAS_VFPV4
+>>  	select BR2_ARM_CPU_HAS_THUMB2
+>>  	select BR2_ARM_CPU_ARMV7A
+>> +config BR2_cortex_m3
+>> +	bool "cortex-M3"
+>> +	select BR2_ARM_CPU_HAS_THUMB
+>> +	select BR2_ARM_CPU_HAS_THUMB2
+>>  config BR2_fa526
+>>  	bool "fa526/626"
+>>  	select BR2_ARM_CPU_HAS_ARM
+>> @@ -396,6 +400,7 @@ config BR2_GCC_TARGET_CPU
+>>  	default "cortex-a9"	if BR2_cortex_a9
+>>  	default "cortex-a12"	if BR2_cortex_a12
+>>  	default "cortex-a15"	if BR2_cortex_a15
+>> +	default "cortex-m3"	if BR2_cortex_m3
+>>  	default "fa526"		if BR2_fa526
+>>  	default "marvell-pj4"	if BR2_pj4
+>>  	default "strongarm"	if BR2_strongarm
+>> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+>> index 2ee2019..fd6ef53 100644
+>> --- a/toolchain/toolchain-common.in
+>> +++ b/toolchain/toolchain-common.in
+>> @@ -114,8 +114,10 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+>>  	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+>>  
+>>  config BR2_USE_MMU
+>> -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+>> -	default y if !BR2_bfin
+>> +	bool "Enable MMU support"
+>> +	depends on BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+>> +	depends on !BR2_cortex_m3 && !BR2_bfin
+>> +	default y
+> 
+> And here with BR2_ARCH_HAS_MMU_SUPPORT ?
+> 
 
-[1] http://autobuild.buildroot.net/results/f3b/f3b318c904b6325fd143a55f2f9fd1c55bb9cfd5
+Hm.. shouldn't that be, BR2_ARCH_HAS_OPTIONAL_MMU or something ?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/util-linux/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 78648c1..55c10f2 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -160,6 +160,7 @@ comment "nsenter needs a toolchain w/ headers >= 3.0"
- 
- config BR2_PACKAGE_UTIL_LINUX_MORE
- 	bool "more"
-+	select BR2_PACKAGE_NCURSES
- 	help
- 	  File perusal filter for crt viewing
- 
+At least that's what it seems: only some architectures expose the build
+time config to disable MMU.
+-- 
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
