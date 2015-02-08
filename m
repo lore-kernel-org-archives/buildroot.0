@@ -1,87 +1,116 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun,  8 Feb 2015 10:59:19 -0500
-Subject: [Buildroot] [PATCH v3] python-cherrypy: new package
-Message-ID: <1423411159-4560-1-git-send-email-fhunleth@troodon-software.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Feb 2015 17:14:54 +0100
+Subject: [Buildroot] [PATCH] qt5multimedia: Make it compile with
+	no-opengl
+In-Reply-To: <1423411498-12674-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1423411498-12674-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150208161454.GK4028@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
-Changes v2 -> v3:
-  - Add runtime dependencies on zlib and expat
-  - Add hash file
-Changes v1 -> v2:
-  - removed depends statement in Config.in per Yegor's comment
-    that it wasn't needed if it runs on both Python 2 and 3.
+Vicente, All,
 
- package/Config.in                            |  1 +
- package/python-cherrypy/Config.in            | 10 ++++++++++
- package/python-cherrypy/python-cherrypy.hash |  3 +++
- package/python-cherrypy/python-cherrypy.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-cherrypy/Config.in
- create mode 100644 package/python-cherrypy/python-cherrypy.hash
- create mode 100644 package/python-cherrypy/python-cherrypy.mk
+On 2015-02-08 16:04 +0000, Vicente Olivert Riera spake thusly:
+> Backport an upstream patch to make it compile with no-opengl. Otherwise
+> it will fail showing an error message like this one:
+> 
+> qpaintervideosurface.cpp:99:47: error: 'QOpenGLContext' has not been
+> declared
+> 
+> Upstream commit:
+> 
+>   https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/b77/b77cdf9b1cf6cafd5afef7337553bb32489207e5/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..a5d1be5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -510,6 +510,7 @@ menu "external python modules"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-cheetah/Config.in"
-+	source "package/python-cherrypy/Config.in"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-new file mode 100644
-index 0000000..6e32ec2
---- /dev/null
-+++ b/package/python-cherrypy/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_CHERRYPY
-+	bool "python-cherrypy"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  A minimalist web framework
-+
-+	  http://www.cherrypy.org
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-new file mode 100644
-index 0000000..08fa075
---- /dev/null
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9772dbee426d656f01a13881e2b139d8, sha256 locally computed
-+md5	9772dbee426d656f01a13881e2b139d8  CherryPy-3.6.0.tar.gz
-+sha256	a149271819a15417104aa8f641ad5b96287070f0153e6ef2832a87e2c693d75d  CherryPy-3.6.0.tar.gz
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-new file mode 100644
-index 0000000..a08b21a
---- /dev/null
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-cherrypy
-+#
-+################################################################################
-+
-+PYTHON_CHERRYPY_VERSION = 3.6.0
-+PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
-+PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
-+PYTHON_CHERRYPY_LICENSE = BSD-3c
-+PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
-+PYTHON_CHERRYPY_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .../0001-Make-it-compile-with-no-opengl.patch      |   53 ++++++++++++++++++++
+>  1 files changed, 53 insertions(+), 0 deletions(-)
+>  create mode 100644 package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch
+> 
+> diff --git a/package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch b/package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch
+> new file mode 100644
+> index 0000000..58e53e4
+> --- /dev/null
+> +++ b/package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch
+> @@ -0,0 +1,53 @@
+> +qt5multimedia: Make it compile with no-opengl
+> +
+> +Backport an upstream patch to make it compile with no-opengl. Otherwise 
+> +it will fail showing an error message like this one:
+> +
+> +qpaintervideosurface.cpp:99:47: error: 'QOpenGLContext' has not been 
+> +declared
+> +
+> +Upstream commit:
+> +
+> +  https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
+> +
+> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.org>
+> +
+> +From 2b181d546970d18a48a0f36f5d1a22418b61cd4d Mon Sep 17 00:00:00 2001
+> +From: Laszlo Agocs <laszlo.agocs@theqtcompany.com>
+> +Date: Tue, 9 Dec 2014 15:34:10 +0100
+> +Subject: [PATCH] Make it compile with no-opengl
+> +
+> +Change-Id: I71358bb1268e5b28b66b1817a3ec0cd98459cfd2
+> +Reviewed-by: Friedemann Kleint <Friedemann.Kleint@theqtcompany.com>
+> +Reviewed-by: Yoann Lopes <yoann.lopes@theqtcompany.com>
+> +---
+> + src/multimediawidgets/qpaintervideosurface.cpp |    4 ++++
+> + 1 files changed, 4 insertions(+), 0 deletions(-)
+> +
+> +diff --git a/src/multimediawidgets/qpaintervideosurface.cpp b/src/multimediawidgets/qpaintervideosurface.cpp
+> +index 3a880de..2ab5dcb 100644
+> +--- a/src/multimediawidgets/qpaintervideosurface.cpp
+> ++++ b/src/multimediawidgets/qpaintervideosurface.cpp
+> +@@ -96,7 +96,9 @@ QVideoSurfaceGenericPainter::QVideoSurfaceGenericPainter()
+> +         << QVideoFrame::Format_ARGB32
+> +         << QVideoFrame::Format_RGB565;
+> +     // The raster formats should be a subset of the GL formats.
+> ++#ifndef QT_NO_OPENGL
+> +     if (QOpenGLContext::openGLModuleType() != QOpenGLContext::LibGLES)
+> ++#endif
+> +         m_imagePixelFormats << QVideoFrame::Format_RGB24;
+> + }
+> + 
+> +@@ -137,7 +139,9 @@ QAbstractVideoSurface::Error QVideoSurfaceGenericPainter::start(const QVideoSurf
+> +     const QAbstractVideoBuffer::HandleType t = format.handleType();
+> +     if (t == QAbstractVideoBuffer::NoHandle) {
+> +         bool ok = m_imageFormat != QImage::Format_Invalid && !m_imageSize.isEmpty();
+> ++#ifndef QT_NO_OPENGL
+> +         if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGLES)
+> ++#endif
+> +             ok &= format.pixelFormat() != QVideoFrame::Format_RGB24;
+> +         if (ok)
+> +             return QAbstractVideoSurface::NoError;
+> +-- 
+> +1.7.1
+> +
+> -- 
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
