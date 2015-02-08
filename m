@@ -1,102 +1,96 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 8 Feb 2015 17:16:29 +0100
-Subject: [Buildroot] [PATCH v3] python-cherrypy: new package
-In-Reply-To: <1423411159-4560-1-git-send-email-fhunleth@troodon-software.com>
-References: <1423411159-4560-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <CAGm1_ks58GE9qH4v52vrOMomRr5XFtoZu9jj474pdGB1O6mqZQ@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun, 8 Feb 2015 17:26:41 +0100
+Subject: [Buildroot] [PATCH 1/1] webkit : fix single line comments
+In-Reply-To: <20150208155730.2a1b569e@free-electrons.com>
+References: <1423402220-10090-1-git-send-email-sagaert.johan@skynet.be>
+ <20150208155730.2a1b569e@free-electrons.com>
+Message-ID: <D347304386AE432996658D49AB648DAE@JohanW7>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 8, 2015 at 4:59 PM, Frank Hunleth
-<fhunleth@troodon-software.com> wrote:
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+-----Oorspronkelijk bericht-----
+Van: buildroot [mailto:buildroot-bounces at busybox.net] Namens Thomas Petazzoni
+Verzonden: zondag 8 februari 2015 15:58
+Aan: Sagaert Johan
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] [PATCH 1/1] webkit : fix single line comments
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Sagaert Johan,
 
-Regards,
-Yegor
+On Sun,  8 Feb 2015 14:30:20 +0100, Sagaert Johan wrote:
+> 
+> Single line comments generate an error and break the build.
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-> ---
-> Changes v2 -> v3:
->   - Add runtime dependencies on zlib and expat
->   - Add hash file
-> Changes v1 -> v2:
->   - removed depends statement in Config.in per Yegor's comment
->     that it wasn't needed if it runs on both Python 2 and 3.
->
->  package/Config.in                            |  1 +
->  package/python-cherrypy/Config.in            | 10 ++++++++++
->  package/python-cherrypy/python-cherrypy.hash |  3 +++
->  package/python-cherrypy/python-cherrypy.mk   | 14 ++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-cherrypy/Config.in
->  create mode 100644 package/python-cherrypy/python-cherrypy.hash
->  create mode 100644 package/python-cherrypy/python-cherrypy.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index fe3d3d0..a5d1be5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -510,6 +510,7 @@ menu "external python modules"
->         source "package/python-certifi/Config.in"
->         source "package/python-cffi/Config.in"
->         source "package/python-cheetah/Config.in"
-> +       source "package/python-cherrypy/Config.in"
->         source "package/python-coherence/Config.in"
->         source "package/python-configobj/Config.in"
->         source "package/python-configshell-fb/Config.in"
-> diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-> new file mode 100644
-> index 0000000..6e32ec2
-> --- /dev/null
-> +++ b/package/python-cherrypy/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_CHERRYPY
-> +       bool "python-cherrypy"
-> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-> +       select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-> +       help
-> +         A minimalist web framework
-> +
-> +         http://www.cherrypy.org
-> diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-> new file mode 100644
-> index 0000000..08fa075
-> --- /dev/null
-> +++ b/package/python-cherrypy/python-cherrypy.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9772dbee426d656f01a13881e2b139d8, sha256 locally computed
-> +md5    9772dbee426d656f01a13881e2b139d8  CherryPy-3.6.0.tar.gz
-> +sha256 a149271819a15417104aa8f641ad5b96287070f0153e6ef2832a87e2c693d75d  CherryPy-3.6.0.tar.gz
-> diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-> new file mode 100644
-> index 0000000..a08b21a
-> --- /dev/null
-> +++ b/package/python-cherrypy/python-cherrypy.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-cherrypy
-> +#
-> +################################################################################
-> +
-> +PYTHON_CHERRYPY_VERSION = 3.6.0
-> +PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
-> +PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
-> +PYTHON_CHERRYPY_LICENSE = BSD-3c
-> +PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
-> +PYTHON_CHERRYPY_SETUP_TYPE = distutils
-> +
-> +$(eval $(python-package))
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This looks weird. Single line comments are perfectly acceptable in C++ and in C99. What error are you getting, and in which
+situation?
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com _______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+Hi 
+
+Found it strange too.
+Select target A8 and for fp option select NEON 
+I posted this already on 2 feb (subject [Buildroot] target options for Cortex A8/A9)
+
+See below
+
+[7m>>> webkit 1.11.5 Building[27m
+PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buil
+droot12git/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/build/host-
+cmake-3.0.2/bin"  /usr/bin/make -j5  -C /home/buildroot12git/output/build/webkit-1.11.5/
+make[1]: Entering directory `/home/buildroot12git/output/build/webkit-1.11.5'
+  GEN      generate-webkit2-forwarding-headers
+  GEN      DerivedSources/JavaScriptCore/LLIntAssembly.h
+offlineasm: Parsing ./Source/JavaScriptCore/llint/LowLevelInterpreter.asm and Programs/LLIntOffsetsExtractor and creating assembly
+file DerivedSources/JavaScriptCore/LLIntAssembly.h.
+offlineasm: No magic values found. Skipping assembly file generation.
+  GEN      generate-webkit2-forwarding-headers
+/usr/bin/make  all-am
+make[2]: Entering directory `/home/buildroot12git/output/build/webkit-1.11.5'
+/bin/mkdir -p ./.deps/DerivedSources
+  CXXLD    Programs/jsc-1
+  CC       Source/JavaScriptCore/API/tests/Programs_minidom-JSNodeList.o
+  CC       Source/JavaScriptCore/API/tests/Programs_minidom-JSNode.o
+  CC       Source/JavaScriptCore/API/tests/Programs_minidom-NodeList.o
+  CXXLD    libwebkitgtk-1.0.la
+In file included from ./Source/WTF/wtf/UnusedParam.h:24:0,
+                 from Source/JavaScriptCore/API/tests/JSNodeList.c:30:
+./Source/WTF/wtf/Platform.h:301:1: error: expected identifier or '(' before '/' token In file included from
+./Source/WTF/wtf/UnusedParam.h:24:0,
+                 from Source/JavaScriptCore/API/tests/JSNode.c:33:
+./Source/WTF/wtf/Platform.h:301:1: error: expected identifier or '(' before '/' token
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<--------------------------------
+make[2]: *** [Source/JavaScriptCore/API/tests/Programs_minidom-JSNodeList.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: *** [Source/JavaScriptCore/API/tests/Programs_minidom-JSNode.o] Error 1
+/home/buildroot12git/output/build/libglib2-2.42.0/glib/.libs/libglib-2.0.so: warning: the use of OBSOLESCENT `utime' is discouraged,
+use `utimes'
+/home/buildroot12git/output/build/libglib2-2.42.0/glib/.libs/libglib-2.0.so: warning: the use of OBSOLESCENT `utime' is discouraged,
+use `utimes'
+/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libICE.so: warning: gethostbyaddr is
+obsolescent, use getaddrinfo() instead.
+/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libxml2.so: warning: gethostbyname is
+obsolescent, use getnameinfo() instead.
+make[2]: Leaving directory `/home/buildroot12git/output/build/webkit-1.11.5'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/buildroot12git/output/build/webkit-1.11.5'
+make: *** [/home/buildroot12git/output/build/webkit-1.11.5/.stamp_built] Error 2
+
+Best regards Johan
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 6253 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150208/4b8d9a7b/attachment.bin>
