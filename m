@@ -1,79 +1,51 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  8 Feb 2015 17:57:20 +0100
-Subject: [Buildroot] [PATCH] package/erlang: fix build issue with pcre
-	package
-Message-ID: <1423414640-30254-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Feb 2015 18:10:51 +0100
+Subject: [Buildroot] [PATCH 1/1] webkit : fix single line comments
+In-Reply-To: <D347304386AE432996658D49AB648DAE@JohanW7>
+References: <1423402220-10090-1-git-send-email-sagaert.johan@skynet.be>
+ <20150208155730.2a1b569e@free-electrons.com>
+ <D347304386AE432996658D49AB648DAE@JohanW7>
+Message-ID: <20150208181051.51ff61b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the pcre package is build before erlang, the erlang's build
-system use pcre.h from pcre package instead of using pcre.h bundled
-by Erlang.
+Dear Sagaert Johan,
 
-Erlang use an old version of this file which is incompatible
-with the upstream one.
+On Sun, 8 Feb 2015 17:26:41 +0100, Sagaert Johan wrote:
 
-http://autobuild.buildroot.net/results/cbd/cbd8b54eef535f19d7d400fd269af1b3571d6143/build-end.log
+> [7m>>> webkit 1.11.5 Building[27m
+> PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buil
+> droot12git/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/build/host-
+> cmake-3.0.2/bin"  /usr/bin/make -j5  -C /home/buildroot12git/output/build/webkit-1.11.5/
+> make[1]: Entering directory `/home/buildroot12git/output/build/webkit-1.11.5'
+>   GEN      generate-webkit2-forwarding-headers
+>   GEN      DerivedSources/JavaScriptCore/LLIntAssembly.h
+> offlineasm: Parsing ./Source/JavaScriptCore/llint/LowLevelInterpreter.asm and Programs/LLIntOffsetsExtractor and creating assembly
+> file DerivedSources/JavaScriptCore/LLIntAssembly.h.
+> offlineasm: No magic values found. Skipping assembly file generation.
+>   GEN      generate-webkit2-forwarding-headers
+> /usr/bin/make  all-am
+> make[2]: Entering directory `/home/buildroot12git/output/build/webkit-1.11.5'
+> /bin/mkdir -p ./.deps/DerivedSources
+>   CXXLD    Programs/jsc-1
+>   CC       Source/JavaScriptCore/API/tests/Programs_minidom-JSNodeList.o
+>   CC       Source/JavaScriptCore/API/tests/Programs_minidom-JSNode.o
+>   CC       Source/JavaScriptCore/API/tests/Programs_minidom-NodeList.o
+>   CXXLD    libwebkitgtk-1.0.la
+> In file included from ./Source/WTF/wtf/UnusedParam.h:24:0,
+>                  from Source/JavaScriptCore/API/tests/JSNodeList.c:30:
+> ./Source/WTF/wtf/Platform.h:301:1: error: expected identifier or '(' before '/' token In file included from
+> ./Source/WTF/wtf/UnusedParam.h:24:0,
+>                  from Source/JavaScriptCore/API/tests/JSNode.c:33:
+> ./Source/WTF/wtf/Platform.h:301:1: error: expected identifier or '(' before '/' token
 
-And many more.
+Can you re-run the build with 'make V=1', so that we see the full
+command line that leads to this?
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...ts-emulator-reorder-inclued-headers-paths.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/erlang/0003-erts-emulator-reorder-inclued-headers-paths.patch
+Thanks,
 
-diff --git a/package/erlang/0003-erts-emulator-reorder-inclued-headers-paths.patch b/package/erlang/0003-erts-emulator-reorder-inclued-headers-paths.patch
-new file mode 100644
-index 0000000..c17eefc
---- /dev/null
-+++ b/package/erlang/0003-erts-emulator-reorder-inclued-headers-paths.patch
-@@ -0,0 +1,43 @@
-+From 85a3e5b4f65e5284e59dcdd90e92ea7d50ef6907 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 8 Feb 2015 17:23:13 +0100
-+Subject: [PATCH] erts/emulator: reorder inclued headers paths
-+
-+If the Perl Compatible Regular Expressions is installed on the
-+host and the path to the headers is added to the CFLAGS, the
-+pcre.h from the host is used instead of the one provided by
-+erlang.
-+
-+Erlang use an old version of this file which is incompatible
-+with the upstream one.
-+
-+Move INCLUDES before CFLAGS to use pcre.h from erlang.
-+
-+http://autobuild.buildroot.net/results/cbd/cbd8b54eef535f19d7d400fd269af1b3571d6143/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ erts/emulator/Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/erts/emulator/Makefile.in b/erts/emulator/Makefile.in
-+index 7145824..d079487 100644
-+--- a/erts/emulator/Makefile.in
-++++ b/erts/emulator/Makefile.in
-+@@ -678,11 +678,11 @@ else
-+ # Usually the same as the default rule, but certain platforms (e.g. win32) mix
-+ # different compilers
-+ $(OBJDIR)/beam_emu.o: beam/beam_emu.c
-+-	$(V_EMU_CC) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) $(INCLUDES) -c $< -o $@
-++	$(V_EMU_CC) $(INCLUDES) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) -c $< -o $@
-+ endif
-+ 
-+ $(OBJDIR)/%.o: beam/%.c
-+-	$(V_CC) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) $(INCLUDES) -c $< -o $@
-++	$(V_CC) $(INCLUDES) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) -c $< -o $@
-+ 
-+ $(OBJDIR)/%.o: $(TARGET)/%.c
-+ 	$(V_CC) $(CFLAGS) $(INCLUDES) -Idrivers/common -c $< -o $@
-+-- 
-+1.9.3
-+
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
