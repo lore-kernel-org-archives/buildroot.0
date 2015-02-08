@@ -1,40 +1,27 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  9 Feb 2015 00:22:10 +0100
-Subject: [Buildroot] [PATCH 3/3] package/openmvtools: don't use host library
-	path
-In-Reply-To: <1423437730-22997-1-git-send-email-romain.naour@openwide.fr>
-References: <1423437730-22997-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1423437730-22997-3-git-send-email-romain.naour@openwide.fr>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sun, 08 Feb 2015 17:44:56 -0600
+Subject: [Buildroot] glibc and locale
+Message-ID: <54D7F4F8.3040005@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set CUSTOM_PROCPS_LIBS to -L$(STAGING_DIR) otherwise -L/lib is
-used by default.
+I have a script that wants the locale program. I notice that is is already built
+as part of the glibc build process, but it is not installed. Would there be
+any objections to something along these lines to go ahead and install locale?
+I'm not sure if this is the best way since glibc build uses autotools.
 
-Fixes:
-http://autobuild.buildroot.net/results/bff/bff7d8f3ec19ce790f0c88a336d1007e1ff29836/build-end.log
+Steve
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/openvmtools/openvmtools.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 7aa04af..42cda82 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -22,7 +22,8 @@ OPENVMTOOLS_DEPENDENCIES += libfuse
+--- glibc.mk.ori	2015-02-08 17:38:16.824281939 -0600
++++ glibc.mk	2015-02-08 17:40:27.932284454 -0600
+@@ -115,6 +115,7 @@ GLIBC_LIBS_LIB += libthread_db.so.*
  endif
- 
- ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
--OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
-+OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps \
-+	CUSTOM_PROCPS_LIBS="-L$(STAGING_DIR)"
- OPENVMTOOLS_CONF_OPTS += --with-procps
- OPENVMTOOLS_DEPENDENCIES += procps-ng
- else
--- 
-1.9.3
+
+ define GLIBC_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/build/locale/locale $(TARGET_DIR)/usr/bin/locale
+ 	for libs in $(GLIBC_LIBS_LIB); do \
+ 		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
+ 	done
