@@ -1,75 +1,61 @@
-From: Jens Zettelmeyer <zettelmeyerj@gmail.com>
-Date: Sun, 8 Feb 2015 11:58:01 +0000
-Subject: [Buildroot] Batctl Package try 2
-Message-ID: <CAFNoKatfchjqJaQ11rgBWbh02jdiDnSUGU6=B-AMP6AaGbroww@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun,  8 Feb 2015 14:30:20 +0100
+Subject: [Buildroot] [PATCH 1/1] webkit : fix single line comments
+Message-ID: <1423402220-10090-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-after a review from Yann E. MORIN i made some adjustments to the package. I
-this version is ok i'll use git send mail to send in an propper patch.
+Single line comments generate an error and break the build.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/webkit/0009-fix-single-line-comments.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/webkit/0009-fix-single-line-comments.patch
 
-Thank you
-Jens
-
-diff --git a/package/batctl/Config.in b/package/batctl/Config.in
+diff --git a/package/webkit/0009-fix-single-line-comments.patch b/package/webkit/0009-fix-single-line-comments.patch
 new file mode 100644
-index 0000000..56badd3
+index 0000000..2bb0a13
 --- /dev/null
-+++ b/package/batctl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_BATCTL
-+ bool "batctl"
-+ depends on BR2_INET_IPV6
-+ depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+ select BR2_PACKAGE_LIBNL
-+ help
-+  Batctl is the configuration and debugging tool for batman-adv.
++++ b/package/webkit/0009-fix-single-line-comments.patch
+@@ -0,0 +1,35 @@
++From 2172217cfbdadab48602c35f5fd7eb24f8462408 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@skynet.be>
++Date: Fri, 6 Feb 2015 21:53:05 +0100
++Subject: [PATCH 1/1] fix single line comments
 +
-+  http://www.open-mesh.org/projects/batman-adv/wiki/Using-batctl
-diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
-new file mode 100644
-index 0000000..663e602
---- /dev/null
-+++ b/package/batctl/batctl.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 77509ed70232ebc0b73e2fa9471ae13b12d6547d167dda0a82f7a7fad7252c36
- batctl-2014.4.0.tar.gz
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-new file mode 100644
-index 0000000..a65a5cd
---- /dev/null
-+++ b/package/batctl/batctl.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# batman-adv control
-+#
-+################################################################################
++Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
++---
++ Source/WTF/wtf/Platform.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+BATCTL_VERSION = 2014.4.0
-+BATCTL_SOURCE = batctl-$(BATCTL_VERSION).tar.gz
-+BATCTL_SITE =
-http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
-+BATCTL_LICENSE = GPLv2
-+BATCTL_DEPENDENCIES += libnl
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index 0ced0b2..f654389 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -298,7 +298,7 @@
++ #endif
++ 
++ #if CPU(ARM_NEON) && (!COMPILER(GCC) || GCC_VERSION_AT_LEAST(4, 7, 0))
++-// All NEON intrinsics usage can be disabled by this macro.
+++/* All NEON intrinsics usage can be disabled by this macro. */
++ #define HAVE_ARM_NEON_INTRINSICS 1
++ #endif
++ 
++@@ -1155,7 +1154,7 @@
++ #if !defined(ENABLE_PARALLEL_GC) && !ENABLE(OBJECT_MARK_LOGGING) && (PLATFORM(MAC) || PLATFORM(IOS) || PLATFORM(BLACKBERRY) || PLATFORM(GTK)) && ENABLE(COMPARE_AND_SWAP)
++ #define ENABLE_PARALLEL_GC 1
++ #elif PLATFORM(QT)
++-// Parallel GC is temporarily disabled on Qt because of regular crashes, see https://bugs.webkit.org/show_bug.cgi?id=90957 for details
+++/* Parallel GC is temporarily disabled on Qt because of regular crashes, see https://bugs.webkit.org/show_bug.cgi?id=90957 for details */
++ #define ENABLE_PARALLEL_GC 0
++ #endif
 +
-+define BATCTL_BUILD_CMDS
-+ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
-+ CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3" \
-+ LDFLAGS="$(TARGET_LDFLAGS)"
-+endef
++-- 
++2.2.2
 +
-+define BATCTL_INSTALL_TARGET_CMDS
-+ $(INSTALL) -m 755 -D $(@D)/batctl $(TARGET_DIR)/usr/sbin/batctl
-+endef
-+
-+$(eval $(generic-package))
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150208/00c797ff/attachment.html>
+-- 
+2.2.2
