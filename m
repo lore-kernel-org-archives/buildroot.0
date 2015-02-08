@@ -1,105 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Feb 2015 22:19:45 +0100
-Subject: [Buildroot] [git commit] CHANGES: Update with recent changes
-Message-ID: <20150208212304.804E5805EE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  8 Feb 2015 22:23:24 +0100
+Subject: [Buildroot] [PATCH] python3: fix invalid ncursesw header path
+Message-ID: <1423430604-5896-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20138584143d1146077a1b8e319c58d6b12b71e8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This commit adds a patch to python3 that makes sure it does not use an
+invalid header path (pointing to host headers) when including ncursesw
+support.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+
+  http://autobuild.buildroot.org/results/9bd/9bdaa392e8dd00c6ebee156b758e3c0cac480237/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- CHANGES |   79 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 79 insertions(+), 0 deletions(-)
+ .../018-ncursesw-remove-wrong-includedir.patch      | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/python3/018-ncursesw-remove-wrong-includedir.patch
 
-diff --git a/CHANGES b/CHANGES
-index 22668dc..6077468 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,82 @@
-+2015.02, Not yet released
+diff --git a/package/python3/018-ncursesw-remove-wrong-includedir.patch b/package/python3/018-ncursesw-remove-wrong-includedir.patch
+new file mode 100644
+index 0000000..ae87bbf
+--- /dev/null
++++ b/package/python3/018-ncursesw-remove-wrong-includedir.patch
+@@ -0,0 +1,21 @@
++Do not harcode invalid path to ncursesw headers
 +
-+	Fixes all over the tree and new features.
++Adding /usr/include/ncursesw is obviously invalid when
++cross-compiling. Since the ncursesw headers are no longer installed in
++usr/include/ncursesw/, but directly in usr/include, there is anyway no
++need for a special header path.
 +
-+	Static/shared library handling reworked. This is now a
-+	tristate (shared only / shared and static / static
-+	only). Default is now shared only to speed up the
-+	build. BR2_PREFER_STATIC_LIB is now called BR2_STATIC_LIBS.
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+	The toolchain (internal and external) will now warn when an
-+	unsafe library or header path is used (such as /usr/include or
-+	/usr/lib). If BR2_COMPILER_PARANOID_UNSAFE_PATH is enabled
-+	under build options this instead becomes an error.
-+
-+	A installation path issue with the internal musl toolchain
-+	support has been fixed so it is now possible to reuse it as an
-+	external toolchain.
-+
-+	Architectures: Freescale E5500 and E6500 PowerPC support
-+	added, deprecated MIPS 1/2/3/4 support removed.
-+
-+	New defconfigs: Freescale p2020ds, MIPS creator CI20,
-+	Raspberrypi with DT, UDOO Quad.
-+
-+	'make <foo>_defconfig' now saves the path to the defconfig in
-+	the .config, so a 'make savedefconfig' automatically updates
-+	it.
-+
-+	Infrastructure for packages using the Erland rebar tool has
-+	been added.
-+
-+	Hashes for a large number of packages have been added. Hashes
-+	are now checked for both target and host packages.
-+
-+	The system menu now has an option to automatically configure a
-+	network interface through DHCP at bootup.
-+
-+	The default filesystem skeleton now uses a separate tmpfs for
-+	/run instead of a symlink to /tmp/ for security reasons / to
-+	protect against conflicts with user generated temporary files.
-+
-+	BR2_EXTERNAL is now exported to post-build and post-image
-+	scripts.
-+
-+	New packages: bdwgc, benejson, blktrace, bootstrap, cgic,
-+	ding-libs, dvdauthor, ejabberd, erlang-goldrush, erlang-lager,
-+	erlang-p1-cache-tab, erlang-p1-iconv, erlang-p1-sip,
-+	erlang-p1-stringprep, erlang-p1-stun, erlang-p1-tls,
-+	erlang-p1-utils, erlang-p1-xml, erlang-p1-yaml,
-+	erlang-p1-zlib, exiv2, freeradius-client, gengetopt, glmark2,
-+	gpu-amd-bin-mx51, guile, host-qemu, ifupdown, iperf3,
-+	janus-gateway, kodi, kodi-audioencoder-flac,
-+	kodi-audioencoder-lame, kodi-audioencoder-vorbis,
-+	kodi-audioencoder-wav, libcli, libiio, liblinear, libnice,
-+	libselinux, libsemanage, libserialport, libsigro,
-+	libsigrokdecode, libsrtp, liburiparser, libvips, libwebsock,
-+	libz160, libzip, lightning, mcelog, memtest86, mjpegtools,
-+	mjpg-streamer, mke2img, mpd-mpc, netsurf-buildsystem, odhcp6c,
-+	openldap, python-alsaaudio, python-certifi, python-cheetah,
-+	python-coherence, python-django, python-docopt, python-enum,
-+	python-enum34, python-flask, python-gobject, python-httplib2,
-+	python-ipaddr, python-itsdangerous, python-jinja,
-+	python-markdown, python-markupsafe, python-networkmanager,
-+	python-pam, python-psutil, python-pyftpdlib, python-pyinotify,
-+	python-pysendfile, python-pyxb, python-requests, python-six,
-+	python-twisted, python-webpy, python-werkzeug,
-+	python-zope-interface, qt5cinex, sigrok-cli, sofia-sip,
-+	start-stop-daemon, szip, triggerhappy, ustr, vnstat, xorriso,
-+	xtables-addons
-+
-+	Removed packages (target): bison, distcc, gob2, m4
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#7556: make interactive CLI optional for nftables
-+	#7730: Error while connecting Qt Cretaor to device
-+	#7766: logrotate default gzip path is usually wrong
-+	#7790: Invalid ext4 image generated by Buildroot
-+
- 2014.11, Released December 1st, 2014
- 
- 	Minor fixes.
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -1287,7 +1287,6 @@
++         panel_library = 'panel'
++         if curses_library == 'ncursesw':
++             curses_defines.append(('HAVE_NCURSESW', '1'))
++-            curses_includes.append('/usr/include/ncursesw')
++             # Bug 1464056: If _curses.so links with ncursesw,
++             # _curses_panel.so must link with panelw.
++             panel_library = 'panelw'
+-- 
+2.1.0
