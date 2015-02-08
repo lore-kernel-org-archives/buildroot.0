@@ -1,54 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 8 Feb 2015 22:19:45 +0100
-Subject: [Buildroot] [git commit] libselinux: add patch to fix Blackfin
-	build issue
-Message-ID: <20150208212304.75942805FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl: remove poisoned path from dynaloader
+	hints
+Message-ID: <20150208212304.6AAFD805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a9dcd09f6436af125277f57c6c55d9a63d2f35c
+commit: http://git.buildroot.net/buildroot/commit/?id=7d6790b66a0d914a9a4d910e1095cb3094ed3788
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Fixes
+http://autobuild.buildroot.net/results/323a82776cccf17afaa00ebe3483cfc06a06f264/
+http://autobuild.buildroot.net/results/7d4cf7b63fda1a062263b7a4e758c699049105af/
 
-  http://autobuild.buildroot.org/results/165/165a227a0a8ecd4cb3f96761aacdf90ae974fea7/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-workaround-blackfin-issue.patch           |   24 ++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ package/perl/0002-dynaloader-hints.patch |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-diff --git a/package/libselinux/0001-workaround-blackfin-issue.patch b/package/libselinux/0001-workaround-blackfin-issue.patch
+diff --git a/package/perl/0002-dynaloader-hints.patch b/package/perl/0002-dynaloader-hints.patch
 new file mode 100644
-index 0000000..5d00c69
+index 0000000..2653b78
 --- /dev/null
-+++ b/package/libselinux/0001-workaround-blackfin-issue.patch
-@@ -0,0 +1,24 @@
-+Do not make symbols hidden on Blackfin
++++ b/package/perl/0002-dynaloader-hints.patch
+@@ -0,0 +1,13 @@
++Buildroot puts nlist.h into sysroot/usr/include,
++which is in the default include path.
 +
-+The libselinux logic to hide internal symbols from the DSO doesn't
-+work properly on Blackfin due to the USER_LABEL_PREFIX not being
-+handled properly. A real fix is not that simple, so this patch simply
-+disables the internal symbol hiding mechanism. This means that those
-+symbols are visible in the final DSO, which is not a problem for
-+proper execution, it just isn't as clean.
++Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/dso.h
-+===================================================================
-+--- a/src/dso.h
-++++ b/src/dso.h
-+@@ -1,7 +1,7 @@
-+ #ifndef _SELINUX_DSO_H
-+ #define _SELINUX_DSO_H	1
-+ 
-+-#ifdef SHARED
-++#if defined(SHARED) && !defined(__bfin__)
-+ # define hidden __attribute__ ((visibility ("hidden")))
-+ # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
-+ # define __hidden_proto(fct, internal)	\
++--- a/ext/DynaLoader/hints/linux.pl
+++++ b/ext/DynaLoader/hints/linux.pl
++@@ -1,5 +1 @@
++-# XXX Configure test needed.
++-# Some Linux releases like to hide their <nlist.h>
++-$self->{CCFLAGS} = $Config{ccflags} . ' -I/usr/include/libelf'
++-	if -f "/usr/include/libelf/nlist.h";
++ 1;
