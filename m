@@ -1,34 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Feb 2015 21:39:13 +0100
-Subject: [Buildroot] [PATCH] qt5multimedia: Make it compile with
-	no-opengl
-In-Reply-To: <1423411498-12674-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Sun, 8 Feb 2015 16:04:58 +0000")
-References: <1423411498-12674-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87h9uw5ea6.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Feb 2015 21:45:40 +0100
+Subject: [Buildroot] [PATCH] package/erlang: fix build issue with pcre
+	package
+In-Reply-To: <1423414640-30254-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sun, 8 Feb 2015 17:57:20 +0100")
+References: <1423414640-30254-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87d25k5dzf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
- > Backport an upstream patch to make it compile with no-opengl. Otherwise
- > it will fail showing an error message like this one:
+ > If the pcre package is build before erlang, the erlang's build
+ > system use pcre.h from pcre package instead of using pcre.h bundled
+ > by Erlang.
 
- > qpaintervideosurface.cpp:99:47: error: 'QOpenGLContext' has not been
- > declared
+ > Erlang use an old version of this file which is incompatible
+ > with the upstream one.
 
- > Upstream commit:
+ > http://autobuild.buildroot.net/results/cbd/cbd8b54eef535f19d7d400fd269af1b3571d6143/build-end.log
 
- >   https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
+ > And many more.
 
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/b77/b77cdf9b1cf6cafd5afef7337553bb32489207e5/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
 Committed, thanks.
 
