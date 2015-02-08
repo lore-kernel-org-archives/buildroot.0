@@ -1,94 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Feb 2015 16:17:53 +0100
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 8 Feb 2015 16:25:38 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-02-07
-In-Reply-To: <20150208073017.35112101697@stock.ovh.net>
+	2015-02-07
+In-Reply-To: <20150208151753.GE4028@free.fr>
 References: <20150208073017.35112101697@stock.ovh.net>
-Message-ID: <20150208151753.GE4028@free.fr>
+ <20150208151753.GE4028@free.fr>
+Message-ID: <54D77FF2.6010705@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello Yann,
 
-On 2015-02-08 08:30 +0100, Thomas Petazzoni spake thusly:
-> Detail of failures
->          arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/d5d652a143ecf7c15197364739094a480142125b/
-
-I had a look at that one. That's strange...
-
-checking EGL/egl.h usability... no
-checking EGL/egl.h presence... no
-checking for EGL/egl.h... no
-checking whether to enable EGL support... no
-checking GLES2/gl2.h usability... yes
-checking GLES2/gl2.h presence... yes
-checking for GLES2/gl2.h... yes
-checking whether to use OpenGL ES 2 support... configure: error: Cannot
-enable OpenGL ES 2 support without EGL
-
-So I tried reproducing it here, and it fails all the same. SO I had a
-look at config.log, and saw this:
-
-    configure:20368: /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gcc
-    -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
-    -Wno-cast-align -Wno-sign-compare -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-    -D_FILE_OFFSET_BITS=64 conftest.c >&5
-    In file included from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vcos/vcos_assert.h:149:0,
-                     from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vcos/vcos.h:114,
-                     from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vmcs_host/vc_dispmanx.h:33,
-                     from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/eglplatform.h:110,
-                     from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/egl.h:36,
-                     from conftest.c:64:
-    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vcos/vcos_types.h:38:33:
-    fatal error: vcos_platform_types.h: No such file or directory
-     #include "vcos_platform_types.h"
-                                     ^
-    compilation terminated.
-
-So, whats weird is that vcos_platform_types.h is in:
-    staging/usr/include/interface/vcos/pthreads/vcos_platform_types.h
-
-which we correctly set in egl.pc:
-
-    prefix=/usr
-    exec_prefix=${prefix}
-    libdir=${exec_prefix}/lib
-    includedir=${prefix}/include
-
-    Name: egl
-    Description: RasberryPi implementation of EGL
-    Version: 10
-    Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host -lvchostif
-    Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
-            -I${includedir}/interface/vmcs_host/linux/
-
-But then, if one looks at the command line, the -I path to vcos_platform_types.h
-is not present, so it is not a wonder that it does not find it.
-
-However, there is no specific -I paths at all either, so it is in turn a
-wonder it finds the other vcos headers:
-    sysroot/usr/include/interface/vmcs_host/vc_dispmanx.h
-    sysroot/usr/include/interface/vcos/vcos.h
-    sysroot/usr/include/interface/vcos/vcos_assert.h
-
-And even for the EGL headers:
-    sysroot/usr/include/EGL/egl.h
-    sysroot/usr/include/EGL/eglplatform.h
-
-So, I'm not sure what happens here... :-(
-
-Investigation in progress...
+just in case..., could it be caused because those "not-found" files are
+generated during build time and they are required before being
+generated? (race-condition issue). Have you tried using -j1?
 
 Regards,
-Yann E. MORIN.
+--
+Vincent
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On 08/02/15 16:17, Yann E. MORIN wrote:
+> All,
+> 
+> On 2015-02-08 08:30 +0100, Thomas Petazzoni spake thusly:
+>> Detail of failures
+>>          arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/d5d652a143ecf7c15197364739094a480142125b/
+> 
+> I had a look at that one. That's strange...
+> 
+> checking EGL/egl.h usability... no
+> checking EGL/egl.h presence... no
+> checking for EGL/egl.h... no
+> checking whether to enable EGL support... no
+> checking GLES2/gl2.h usability... yes
+> checking GLES2/gl2.h presence... yes
+> checking for GLES2/gl2.h... yes
+> checking whether to use OpenGL ES 2 support... configure: error: Cannot
+> enable OpenGL ES 2 support without EGL
+> 
+> So I tried reproducing it here, and it fails all the same. SO I had a
+> look at config.log, and saw this:
+> 
+>     configure:20368: /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gcc
+>     -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+>     -Wno-cast-align -Wno-sign-compare -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>     -D_FILE_OFFSET_BITS=64 conftest.c >&5
+>     In file included from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vcos/vcos_assert.h:149:0,
+>                      from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vcos/vcos.h:114,
+>                      from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vmcs_host/vc_dispmanx.h:33,
+>                      from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/eglplatform.h:110,
+>                      from /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/EGL/egl.h:36,
+>                      from conftest.c:64:
+>     /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/interface/vcos/vcos_types.h:38:33:
+>     fatal error: vcos_platform_types.h: No such file or directory
+>      #include "vcos_platform_types.h"
+>                                      ^
+>     compilation terminated.
+> 
+> So, whats weird is that vcos_platform_types.h is in:
+>     staging/usr/include/interface/vcos/pthreads/vcos_platform_types.h
+> 
+> which we correctly set in egl.pc:
+> 
+>     prefix=/usr
+>     exec_prefix=${prefix}
+>     libdir=${exec_prefix}/lib
+>     includedir=${prefix}/include
+> 
+>     Name: egl
+>     Description: RasberryPi implementation of EGL
+>     Version: 10
+>     Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host -lvchostif
+>     Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
+>             -I${includedir}/interface/vmcs_host/linux/
+> 
+> But then, if one looks at the command line, the -I path to vcos_platform_types.h
+> is not present, so it is not a wonder that it does not find it.
+> 
+> However, there is no specific -I paths at all either, so it is in turn a
+> wonder it finds the other vcos headers:
+>     sysroot/usr/include/interface/vmcs_host/vc_dispmanx.h
+>     sysroot/usr/include/interface/vcos/vcos.h
+>     sysroot/usr/include/interface/vcos/vcos_assert.h
+> 
+> And even for the EGL headers:
+>     sysroot/usr/include/EGL/egl.h
+>     sysroot/usr/include/EGL/eglplatform.h
+> 
+> So, I'm not sure what happens here... :-(
+> 
+> Investigation in progress...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
