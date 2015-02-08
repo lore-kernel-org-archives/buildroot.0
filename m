@@ -1,38 +1,34 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sun, 8 Feb 2015 18:32:01 +0200
-Subject: [Buildroot] [PATCH] perl: remove poisoned path from dynaloader hints
-Message-ID: <20150208163201.GA9741@vostro>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun,  8 Feb 2015 17:55:32 +0100
+Subject: [Buildroot] [PATCH] lmbench: use pkg-config to find libtirpc
+Message-ID: <1423414532-31769-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/323a82776cccf17afaa00ebe3483cfc06a06f264/
-http://autobuild.buildroot.net/results/7d4cf7b63fda1a062263b7a4e758c699049105af/
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/perl/0002-dynaloader-hints.patch | 10 ++++++++++
- 1 file changed, 10 insertions(+)
- create mode 100644 package/perl/0002-dynaloader-hints.patch
+ package/lmbench/lmbench.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl/0002-dynaloader-hints.patch b/package/perl/0002-dynaloader-hints.patch
-new file mode 100644
-index 0000000..5ea11b1
---- /dev/null
-+++ b/package/perl/0002-dynaloader-hints.patch
-@@ -0,0 +1,10 @@
-+ Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/ext/DynaLoader/hints/linux.pl
-++++ b/ext/DynaLoader/hints/linux.pl
-+@@ -1,5 +1 @@
-+-# XXX Configure test needed.
-+-# Some Linux releases like to hide their <nlist.h>
-+-$self->{CCFLAGS} = $Config{ccflags} . ' -I/usr/include/libelf'
-+-	if -f "/usr/include/libelf/nlist.h";
-+ 1;
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 63a83fd..59e750c 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -14,9 +14,9 @@ LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+ LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-LMBENCH_DEPENDENCIES += libtirpc
+-LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+-LMBENCH_LDFLAGS += -ltirpc
++LMBENCH_DEPENDENCIES += host-pkgconf libtirpc
++LMBENCH_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libtirpc)
++LMBENCH_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
+ endif
+ 
+ define LMBENCH_CONFIGURE_CMDS
 -- 
-2.0.3
+2.1.0
