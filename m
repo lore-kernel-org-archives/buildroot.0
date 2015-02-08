@@ -1,46 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Feb 2015 09:20:29 +0100
-Subject: [Buildroot] [git commit] legacy: add missing option for util-linux'
-	wdctl
-Message-ID: <20150208204619.EC9BE805FE@busybox.osuosl.org>
+Date: Sun, 8 Feb 2015 21:38:59 +0100
+Subject: [Buildroot] [git commit] qt5multimedia: Make it compile with
+	no-opengl
+Message-ID: <20150208204620.038B08068B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d702aca30d4b0314bc503c9015becb132d380bc
+commit: http://git.buildroot.net/buildroot/commit/?id=921a92e0b837c11a77d177ae42a00f9952743509
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In 349c9c7 (package/util-linux: add more tool select options), the
-util-linux' wdctl option was renamed, but a entry in the legacy menu was
-no added.
+Backport an upstream patch to make it compile with no-opengl. Otherwise
+it will fail showing an error message like this one:
 
-Add this now.
+qpaintervideosurface.cpp:99:47: error: 'QOpenGLContext' has not been
+declared
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxim Mikityanskiy <maxtram95@gmail.com>
+Upstream commit:
+
+  https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b77/b77cdf9b1cf6cafd5afef7337553bb32489207e5/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ .../0001-Make-it-compile-with-no-opengl.patch      |   53 ++++++++++++++++++++
+ 1 files changed, 53 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 0f1b202..8d99e24 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -102,6 +102,14 @@ endif
- 
- comment "Legacy options removed in 2015.02"
- 
-+config BR2_PACKAGE_WDCTL
-+	bool "util-linux' wdctl option has been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_UTIL_LINUX_WDCTL
-+	help
-+	  util-linux' wdctl option has been renamed to BR2_PACKAGE_UTIL_LINUX_WDCTL
-+	  to be aligned with how the other options are named.
+diff --git a/package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch b/package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch
+new file mode 100644
+index 0000000..58e53e4
+--- /dev/null
++++ b/package/qt5/qt5multimedia/0001-Make-it-compile-with-no-opengl.patch
+@@ -0,0 +1,53 @@
++qt5multimedia: Make it compile with no-opengl
 +
- config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
- 	bool "rpm's bzip2 payloads option has been removed"
- 	select BR2_LEGACY
++Backport an upstream patch to make it compile with no-opengl. Otherwise 
++it will fail showing an error message like this one:
++
++qpaintervideosurface.cpp:99:47: error: 'QOpenGLContext' has not been 
++declared
++
++Upstream commit:
++
++  https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.org>
++
++From 2b181d546970d18a48a0f36f5d1a22418b61cd4d Mon Sep 17 00:00:00 2001
++From: Laszlo Agocs <laszlo.agocs@theqtcompany.com>
++Date: Tue, 9 Dec 2014 15:34:10 +0100
++Subject: [PATCH] Make it compile with no-opengl
++
++Change-Id: I71358bb1268e5b28b66b1817a3ec0cd98459cfd2
++Reviewed-by: Friedemann Kleint <Friedemann.Kleint@theqtcompany.com>
++Reviewed-by: Yoann Lopes <yoann.lopes@theqtcompany.com>
++---
++ src/multimediawidgets/qpaintervideosurface.cpp |    4 ++++
++ 1 files changed, 4 insertions(+), 0 deletions(-)
++
++diff --git a/src/multimediawidgets/qpaintervideosurface.cpp b/src/multimediawidgets/qpaintervideosurface.cpp
++index 3a880de..2ab5dcb 100644
++--- a/src/multimediawidgets/qpaintervideosurface.cpp
+++++ b/src/multimediawidgets/qpaintervideosurface.cpp
++@@ -96,7 +96,9 @@ QVideoSurfaceGenericPainter::QVideoSurfaceGenericPainter()
++         << QVideoFrame::Format_ARGB32
++         << QVideoFrame::Format_RGB565;
++     // The raster formats should be a subset of the GL formats.
+++#ifndef QT_NO_OPENGL
++     if (QOpenGLContext::openGLModuleType() != QOpenGLContext::LibGLES)
+++#endif
++         m_imagePixelFormats << QVideoFrame::Format_RGB24;
++ }
++ 
++@@ -137,7 +139,9 @@ QAbstractVideoSurface::Error QVideoSurfaceGenericPainter::start(const QVideoSurf
++     const QAbstractVideoBuffer::HandleType t = format.handleType();
++     if (t == QAbstractVideoBuffer::NoHandle) {
++         bool ok = m_imageFormat != QImage::Format_Invalid && !m_imageSize.isEmpty();
+++#ifndef QT_NO_OPENGL
++         if (QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGLES)
+++#endif
++             ok &= format.pixelFormat() != QVideoFrame::Format_RGB24;
++         if (ok)
++             return QAbstractVideoSurface::NoError;
++-- 
++1.7.1
++
