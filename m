@@ -1,46 +1,109 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 8 Feb 2015 11:51:46 +0100
-Subject: [Buildroot] [PATCH 1/2] automake: complete the removal of the
-	target package
-In-Reply-To: <87h9v3g9yn.fsf@dell.be.48ers.dk>
-References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
- <87y4ofgbp9.fsf@dell.be.48ers.dk> <87h9v3g9yn.fsf@dell.be.48ers.dk>
-Message-ID: <CAHkwnC-B85TNUgbe9ktH2=ytzqCtXLLgJVjP5X0NnjshE6+gnA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Feb 2015 12:00:54 +0100
+Subject: [Buildroot] [PATCH] qt5/qt5base: Fix build on big endian systems
+In-Reply-To: <1423233617-33387-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1423233617-33387-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150208110054.GC4028@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 3, 2015 at 12:38 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
->
->>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
->  >> The variable ACLOCAL_DIR points to the staging area but is not useful
->  >> anymore because the target package was removed.  Fix ACLOCAL_DIR by
->  >> pointing to $(HOST_DIR)/usr/share/aclocal and remove ACLOCAL_HOST_DIR
->  >> because ACLOCAL_DIR has the same value so it's not useful anymore.
->
->  >> Also remove the reference to ACLOCAL_HOST_DIR from the host-autoconf
->  >> package.
->
->  >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->
->  > Committed, thanks.
->
-> Actually, this doesn't work as we still need to look for .m4 files
-> installed by other target packages.
->
-> E.G.
-> http://autobuild.buildroot.net/results/b20/b20e3efcb0be3032781d7b2f0ef4c351834da0ce/
->
-> target-alsa-utils cannot find alsa.m4 installed by target-alsa-lib.
->
-> So I've reverted it again.
+Vicente, All,
 
-Sorry, I didn't know that this variable is still useful.
-I will try to test it more the next time.
+On 2015-02-06 14:40 +0000, Vicente Olivert Riera spake thusly:
+> Backporting an upstream patch to fix a qt5base build failure fails to on
+> big endian systems. This is the error message:
+> 
+> image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric
+> constant
+> 
+> Upstream commit:
+> 
+>   https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Thanks
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...ersions.cpp-Fix-build-on-big-endian-syste.patch |   51 ++++++++++++++++++++
+>  1 files changed, 51 insertions(+), 0 deletions(-)
+>  create mode 100644 package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+> 
+> diff --git a/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+> new file mode 100644
+> index 0000000..1e493ca
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0004-qimage_conversions.cpp-Fix-build-on-big-endian-syste.patch
+> @@ -0,0 +1,51 @@
+> +qimage_conversions.cpp: Fix build on big endian systems
+> +
+> +Backporting an upstream patch to fix a qt5base build failure fails to on
+> +big endian systems. This is the error message:
+> +
+> +image/qimage_conversions.cpp:2257:9: error: expected '}' before numeric 
+> +constant
+> +
+> +Upstream commit:
+> +
+> +  https://qt.gitorious.org/qt/qtbase/commit/404f4281fda764cafdaa5635db995dabc4f1de8c
+> +
+> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> +
+> +From 404f4281fda764cafdaa5635db995dabc4f1de8c Mon Sep 17 00:00:00 2001
+> +From: Dmitry Shachnev <mitya57@gmail.com>
+> +Date: Tue, 9 Dec 2014 09:27:53 +0300
+> +Subject: [PATCH] qimage_conversions.cpp: Fix build on big endian systems
+> +
+> +Change-Id: I8149eb2deaa101daf85a957ff48c3a7140c43bbc
+> +Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
+> +Reviewed-by: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
+> +---
+> + src/gui/image/qimage_conversions.cpp |    4 ++--
+> + 1 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
+> +index 17563b1..858a0d9 100644
+> +--- a/src/gui/image/qimage_conversions.cpp
+> ++++ b/src/gui/image/qimage_conversions.cpp
+> +@@ -2252,7 +2252,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
+> +         convert_ARGB_to_ARGB_PM,
+> + #else
+> +         0,
+> +-        0
+> ++        0,
+> + #endif
+> +         0, 0, 0, 0
+> +     }, // Format_RGBA8888
+> +@@ -2281,7 +2281,7 @@ Image_Converter qimage_converter_map[QImage::NImageFormats][QImage::NImageFormat
+> + #else
+> +         0,
+> +         0,
+> +-        0
+> ++        0,
+> + #endif
+> +         0, 0, 0, 0
+> +     }, // Format_RGBA8888_Premultiplied
+> +-- 
+> +1.7.1
+> +
+> -- 
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
