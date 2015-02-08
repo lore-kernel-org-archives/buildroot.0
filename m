@@ -1,28 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Feb 2015 16:41:43 +0100
-Subject: [Buildroot] [PATCH 3/3] glibc: remove version 2.19
-In-Reply-To: <1423408027-49694-4-git-send-email-Vincent.Riera@imgtec.com>
-References: <1423408027-49694-1-git-send-email-Vincent.Riera@imgtec.com>
- <1423408027-49694-4-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150208154143.GJ4028@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  8 Feb 2015 16:58:28 +0100
+Subject: [Buildroot] [PATCH v1] postgresql: bump version to 9.4.1
+Message-ID: <1423411108-21548-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-02-08 15:07 +0000, Vicente Olivert Riera spake thusly:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+See [1] for a detailed list of changes.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[1] http://www.postgresql.org/docs/9.4/static/release-9-4-1.html
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 834eb30..ea2be3e 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.4.0/postgresql-9.4.0.tar.bz2.sha256
+-sha256	7a35c3cb77532f7b15702e474d7ef02f0f419527ee80a4ca6036fffb551625a5	postgresql-9.4.0.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2.sha256
++sha256	29ddb77c820095b8f52e5455e9c6c6c20cf979b0834ed1986a8857b84888c3a6  postgresql-9.4.1.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 6fc9656..7dfef06 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.4.0
++POSTGRESQL_VERSION = 9.4.1
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
