@@ -1,48 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Feb 2015 22:49:10 +0100
-Subject: [Buildroot] [git commit] legacy: add missing option for
-	util-linux' wdctl
-In-Reply-To: <20150208221444.3ad4515f@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 8 Feb 2015 22:14:44 +0100")
-References: <20150208204619.EC9BE805FE@busybox.osuosl.org>
- <20150208221444.3ad4515f@free-electrons.com>
-Message-ID: <87vbjc3wh5.fsf@dell.be.48ers.dk>
+Date: Sun, 8 Feb 2015 23:50:14 +0100
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2015.02-rc1
+	announcement link
+Message-ID: <20150208225054.9B5FE800EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c41229af06d759081e56ce762b63436eac786cfa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Korsgaard,
- > On Sun, 8 Feb 2015 09:20:29 +0100, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=8d702aca30d4b0314bc503c9015becb132d380bc
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> In 349c9c7 (package/util-linux: add more tool select options), the
- >> util-linux' wdctl option was renamed, but a entry in the legacy menu was
- >> no added.
- >> 
- >> Add this now.
- >> 
- >> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> Cc: Maxim Mikityanskiy <maxtram95@gmail.com>
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/news.html |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
- > I believe this patch is not necessary. The BR2_PACKAGE_WDCTL option
- > indeed existed, but it had never done anything. So if someone had
- > BR2_PACKAGE_WDCTL enabled in his .config, nothing was happening prior
- > to 349c9c7fac4bf8cd7d781e8aab6edc47b7ceb7c2 (which renamed the option
- > to the proper name). And after 349c9c7fac4bf8cd7d781e8aab6edc47b7ceb7c2
- > has been applied, BR2_PACKAGE_WDCTL continues to do nothing.
-
- > Adding Config.in.legacy handling for this is therefore useless.
-
-Ok, but it doesn't really hurt either to inform users about the new
-option that does in fact do something - So I'll leave it in.
-
-Thanks.
-
--- 
-Bye, Peter Korsgaard 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 1b49ef2..31ddd57 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -13,7 +13,8 @@
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc1">CHANGES</a>
+-    file for details.</p>
++    file for details, and read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2015-February/118982.html">announcement</a>.</p>
+ 
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.02-rc1.tar.bz2">2015.02-rc1
