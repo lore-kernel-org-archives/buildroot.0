@@ -1,5 +1,5 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Feb 2015 22:24:49 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Feb 2015 22:25:57 +0100
 Subject: [Buildroot] [PATCH 1/1] webkit : fix single line comments
 In-Reply-To: <DCBE421ABABD4C348438B77A8C49F446@JohanW7>
 References: <1423402220-10090-1-git-send-email-sagaert.johan@skynet.be>
@@ -7,25 +7,31 @@ References: <1423402220-10090-1-git-send-email-sagaert.johan@skynet.be>
  <D347304386AE432996658D49AB648DAE@JohanW7>
  <20150208181051.51ff61b7@free-electrons.com>
  <DCBE421ABABD4C348438B77A8C49F446@JohanW7>
-Message-ID: <20150208222449.481735be@free-electrons.com>
+Message-ID: <20150208212557.GA19461@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Sagaert, All,
 
-On Sun, 8 Feb 2015 21:56:47 +0100, Sagaert Johan wrote:
-
+On 2015-02-08 21:56 +0100, Sagaert Johan spake thusly:
 > Here is the output with make V=1
+[--SNIP--]
+> [...]/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc [...] -ansi [...]
 
-Thanks, the problem is the -ansi flags passed to gcc, which puts gcc
-into ANSI compliant mode, which indeed rejects C++ style comments. I
-believe this option should probably be removed.
+Hmmm. That might be due to -ansi being passed on the command line...
 
-Thomas
+And I just tried it here: that indeed the culprit.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
