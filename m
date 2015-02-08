@@ -1,47 +1,32 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun,  8 Feb 2015 11:40:56 +0100
-Subject: [Buildroot] [PATCH v2] automake: use whenever possible the
-	ACLOCAL_HOST_DIR variable
-Message-ID: <1423392056-30339-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Sun, 8 Feb 2015 11:48:38 +0100
+Subject: [Buildroot] [PATCH 2/2] automake: use whenever possible the
+	ACLOCAL_DIR variable
+In-Reply-To: <87twz3gbn0.fsf@dell.be.48ers.dk>
+References: <1422809500-23948-1-git-send-email-fabio.porcedda@gmail.com>
+ <1422809500-23948-2-git-send-email-fabio.porcedda@gmail.com>
+ <87twz3gbn0.fsf@dell.be.48ers.dk>
+Message-ID: <CAHkwnC-B=zAzABoWX2sYjFnnX4nW+-8sGyjZFG+bmKnDPZMz3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the ACLOCAL_HOST_DIR in the GTK_DOC_M4_INSTALL hook.
+On Tue, Feb 3, 2015 at 12:02 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>
+>  > Use the ACLOCAL_DIR in the GTK_DOC_M4_INSTALL hook.
+>  > Move the ACLOCAL_DIR definition at the beginning so the definition is
+>  > ahead the utilization.
+>
+>  > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>
+> Committed, thanks.
 
-Move the ACLOCAL_HOST_DIR definition at the beginning so the definition
-is ahead the utilization.
+I've sent an updated version of this patch:
+http://patchwork.ozlabs.org/patch/437690/
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
----
- package/automake/automake.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index a3fd18c..84f05dc 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
- 
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
- 
-+ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
-+
- define GTK_DOC_M4_INSTALL
--	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
-+	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
-+		$(ACLOCAL_HOST_DIR)/gtk-doc.m4
- endef
- 
- # ensure staging aclocal dir exists
-@@ -29,5 +32,4 @@ $(eval $(host-autotools-package))
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/usr/bin/automake
- ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
--ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+BR
 -- 
-2.1.0
+Fabio Porcedda
