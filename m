@@ -1,34 +1,24 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun,  8 Feb 2015 21:36:40 +0100
-Subject: [Buildroot] [PATCH] prboom: remove uninstall command
-Message-ID: <1423427800-11915-1-git-send-email-fabio.porcedda@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 08 Feb 2015 21:38:37 +0100
+Subject: [Buildroot] [PATCH v1] postgresql: bump version to 9.4.1
+In-Reply-To: <1423411108-21548-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Sun, 8 Feb 2015 16:58:28 +0100")
+References: <1423411108-21548-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87lhk85eb6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Useless since the uninstall commands were removed in eb7bd9ef
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/prboom/prboom.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ > See [1] for a detailed list of changes.
+ > [1] http://www.postgresql.org/docs/9.4/static/release-9-4-1.html
 
-diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index 5612cc6..3d131cd 100644
---- a/package/prboom/prboom.mk
-+++ b/package/prboom/prboom.mk
-@@ -45,10 +45,4 @@ define PRBOOM_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/data/prboom.wad $(TARGET_DIR)/usr/share/games/doom/prboom.wad
- endef
- 
--define PRBOOM_UINSTALL_TARGET_CMDS
--	rm -rf $(TARGET_DIR)/usr/share/games/doom/prboom.wad \
--		$(TARGET_DIR)/usr/games/prboom-game-server \
--		$(TARGET_DIR)/usr/games/prboom
--endef
--
- $(eval $(autotools-package))
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
 -- 
-2.1.0
+Bye, Peter Korsgaard
