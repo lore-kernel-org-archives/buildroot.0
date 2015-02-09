@@ -1,200 +1,88 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 9 Feb 2015 20:59:42 +0100
-Subject: [Buildroot] Buildroot 2015.02-rc1 released
-In-Reply-To: <87zj8o3xi9.fsf@dell.be.48ers.dk>
-References: <87zj8o3xi9.fsf@dell.be.48ers.dk>
-Message-ID: <CAB0FRstnC8f2b9VqRbomGNPx_2LacDZDQvjveAR_MCkBT-=G8w@mail.gmail.com>
+From: Jens Zettelmeyer <zettelmeyerj@gmail.com>
+Date: Mon,  9 Feb 2015 20:22:18 +0000
+Subject: [Buildroot] [PATCH 1/1] batctl: new package
+Message-ID: <1423513338-3958-1-git-send-email-zettelmeyerj@goooglemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-02-08 22:26 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
-> Hi,
->
-> Buildroot 2015.02-rc1 is released - Go download it at:
->
-> http://buildroot.net/downloads/buildroot-2015.02-rc1.tar.gz
->
+Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
+---
+ package/Config.in          |  1 +
+ package/batctl/Config.in   | 12 ++++++++++++
+ package/batctl/batctl.hash |  2 ++
+ package/batctl/batctl.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/batctl/Config.in
+ create mode 100644 package/batctl/batctl.hash
+ create mode 100644 package/batctl/batctl.mk
 
-This tarball contains a symbolic link (docs/images -> docs/website/images).
-I don't know if it's useful, but it is unusual.
-
-Fran?ois
-
-> or
->
-> http://buildroot.net/downloads/buildroot-2015.02-rc1.tar.bz2
->
-> Or get it from Git:
->
-> git://git.buildroot.net/buildroot
->
-> Please give it a spin and report any problems to the mailing list or
-> bug tracker. Many thanks to the people contributing to this release:
->
-> git shortlog -s -n 2014.11..
->
->    232  Gustavo Zacarias
->    166  Thomas Petazzoni
->     94  Peter Korsgaard
->     83  Yann E. MORIN
->     75  Bernd Kuhls
->     56  Vicente Olivert Riera
->     41  Romain Naour
->     33  Baruch Siach
->     26  Yegor Yefremov
->     25  Arnout Vandecappelle
->     25  Francois Perrad
->     24  J?rg Krause
->     21  Peter Seiderer
->     20  Samuel Martin
->     17  Johan Oudinet
->     13  Fabio Porcedda
->     13  Jerzy Grzegorek
->     12  J?r?me Pouiller
->     11  Maxime Hadjinlian
->      7  Gregory Dymarek
->      6  Guido Mart?nez
->      6  Richard Genoud
->      6  Steve Kenton
->      5  Alex Suykov
->      5  Bartosz Golaszewski
->      5  Fatih A??c?
->      5  Nathaniel Roach
->      5  Paul Cercueil
->      5  Thierry Bultel
->      4  Angelo Compagnucci
->      4  Clayton Shotwell
->      4  David Bender
->      4  Floris Bos
->      4  Frank Hunleth
->      4  Pedro Aguilar
->      4  Ryan Coe
->      4  Simon Marchi
->      4  Zoltan Gyarmati
->      3  Alexander Clouter
->      3  Alexey Brodkin
->      3  Bj?rn Forsman
->      3  Doug Kehn
->      3  Ivo Slanina
->      3  Luca Ceresoli
->      3  Maxim Mikityanskiy
->      3  Vivien Didelot
->      2  Alan Ott
->      2  Andr? Hentschel
->      2  Beno?t Th?baudeau
->      2  Guillaume GARDET
->      2  Gwenhael Goavec-Merou
->      2  Jens Stimpfle
->      2  Nicolas Serafini
->      2  Philippe Proulx
->      2  Steve James
->      2  erico.nunes
->      1  Alvaro G. M
->      1  Danomi Manchego
->      1  Erico Nunes
->      1  Ernesto L. Williams Jr
->      1  Fabian Mewes
->      1  Hadrien Boutteville
->      1  Ilya Lipnitskiy
->      1  Ivan Sergeev
->      1  Jaap Crezee
->      1  Jean-Paul Etienne
->      1  Jeremy Kerr
->      1  Jeremy Rosen
->      1  Johan Derycke
->      1  Karoly Kasza
->      1  Nicolas Cavallari
->      1  Oli Vogt
->      1  Peter K?mmel
->      1  Pierre Le Magourou
->      1  Pieter De Gendt
->      1  Pieter Ronsijn
->      1  Ryan Barnett
->      1  Sagaert Johan
->      1  Spenser Gilliland
->      1  Thomas De Schampheleire
->      1  Vanya Sergeev
->      1  Vincent
->      1  Volker Krause
->      1  claurita
->      1  gilles.talis at gmail.com
->
-> And a special thanks to our patch reviewers:
->
-> git log 2014.11.. | grep -Ei '(reviewed|acked)-by:' | \
->     sed 's/.*by: //' | sort | uniq -c | sort -n -r
->
->     152 "Yann E. MORIN" <yann.morin.1998@free.fr>
->      13 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->      11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->       9 Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->       8 Romain Naour <romain.naour@openwide.fr>
->       7 Samuel Martin <s.martin49@gmail.com>
->       7 Karoly Kasza <kaszak@gmail.com>
->       4 Markos Chandras <Markos.Chandras@imgtec.com>
->       2 Matt Weber <matthew.weber@rockwellcollins.com>
->       1 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->       1 Ryan Barnett <ryan.barnett@rockwellcollins.com>
->       1 Peter Seiderer <ps.report@gmx.net>
->       1 Luca Ceresoli <luca@lucaceresoli.net>
->       1 Gustavo Zacarias <gustavo@zacarias.com.ar>
->       1 Fabio Porcedda <fabio.porcedda@gmail.com>
->       1 Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> This time again we had more than 80 unique contributors! I'm very happy
-> to see so many "new" people next to the "oldtimers". We once again had a
-> lot (1150) of changess all over the tree.
->
-> Of noteworthy new features/changes we have:
->
-> - Static/shared library handling reworked. This is now a tristate
->   (shared only / shared and static / static only). Default is now shared
->   only to speed up the build. BR2_PREFER_STATIC_LIB is now called
->   BR2_STATIC_LIBS.
->
-> - The toolchain (internal and external) will now warn when an unsafe
->   library or header path is used (such as /usr/include or /usr/lib). If
->   BR2_COMPILER_PARANOID_UNSAFE_PATH is enabled under build options this
->   instead becomes an error.
->
-> - Architectures: Freescale E5500 and E6500 PowerPC support added,
->   deprecated MIPS 1/2/3/4 support removed.
->
-> - New defconfigs: Freescale p2020ds, MIPS creator CI20, Raspberrypi with
->   DT, UDOO Quad.
->
-> - 'make <foo>_defconfig' now saves the path to the defconfig in the
->   .config, so a 'make savedefconfig' automatically updates it.
->
-> - Infrastructure for packages using the Erland rebar tool has been added.
->
-> - Hashes for a large number of packages have been added. Hashes are now
->   checked for both target and host packages.
->
-> - The system menu now has an option to automatically configure a network
->   interface through DHCP at bootup.
->
-> - The default filesystem skeleton now uses a separate tmpfs for /run
->   instead of a symlink to /tmp/ for security reasons / to protect
->   against conflicts with user generated temporary files.
->
->  - Large number of new packages (99): Erlang and Python modules, Kodi,
->    SELinux support packages, ..
->
-> And the usual package version updates and bug fixes. See the CHANGES
-> file for details:
->
-> http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc1
->
-> Like usual, I will now create a next branch and start merging in new
-> features, rather than wait until 2015.02 is released.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index fe3d3d0..b9d6753 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1055,6 +1055,7 @@ menu "Networking applications"
+ 	source "package/avahi/Config.in"
+ 	source "package/axel/Config.in"
+ 	source "package/bandwidthd/Config.in"
++	source "package/batctl/Config.in"
+ 	source "package/bcusdk/Config.in"
+ 	source "package/bind/Config.in"
+ 	source "package/bluez_utils/Config.in"
+diff --git a/package/batctl/Config.in b/package/batctl/Config.in
+new file mode 100644
+index 0000000..03ee991
+--- /dev/null
++++ b/package/batctl/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_BATCTL
++	bool "batctl"
++	depends on BR2_INET_IPV6 
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	select BR2_PACKAGE_LIBNL
++	help
++	  Batctl is the configuration and debugging tool for batman-adv.
++	  
++	  http://www.open-mesh.org/projects/batman-adv/wiki/Using-batctl
++
++comment "batctl needs a toolchain w/ IPv6, threads"
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS # libnl
+diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
+new file mode 100644
+index 0000000..663e602
+--- /dev/null
++++ b/package/batctl/batctl.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	77509ed70232ebc0b73e2fa9471ae13b12d6547d167dda0a82f7a7fad7252c36  batctl-2014.4.0.tar.gz
+diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
+new file mode 100644
+index 0000000..9974e29
+--- /dev/null
++++ b/package/batctl/batctl.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# batctl
++#
++################################################################################
++
++BATCTL_VERSION = 2014.4.0
++BATCTL_SOURCE = batctl-$(BATCTL_VERSION).tar.gz
++BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
++BATCTL_LICENSE = GPLv2
++BATCTL_DEPENDENCIES = libnl host-pkgconf
++
++define BATCTL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS)  -C $(@D) all 
++endef
++
++define BATCTL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
+-- 
+2.0.5
