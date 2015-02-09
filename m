@@ -1,46 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Feb 2015 22:48:11 +0100
-Subject: [Buildroot] [PATCH 1/1] batctl: new package
-In-Reply-To: <1423513338-3958-1-git-send-email-zettelmeyerj@goooglemail.com>
-References: <1423513338-3958-1-git-send-email-zettelmeyerj@goooglemail.com>
-Message-ID: <20150209224811.2919e067@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Feb 2015 23:59:40 +0100
+Subject: [Buildroot] [PATCH] armadeus apf27: update kernel to 3.18.6
+In-Reply-To: <1423504041-29750-1-git-send-email-tremyfr@gmail.com> (Philippe
+ Reynes's message of "Mon, 9 Feb 2015 18:47:21 +0100")
+References: <1423504041-29750-1-git-send-email-tremyfr@gmail.com>
+Message-ID: <87iofa3d43.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jens Zettelmeyer,
+>>>>> "Philippe" == Philippe Reynes <tremyfr@gmail.com> writes:
 
-On Mon,  9 Feb 2015 20:22:18 +0000, Jens Zettelmeyer wrote:
-> Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
-> ---
->  package/Config.in          |  1 +
->  package/batctl/Config.in   | 12 ++++++++++++
->  package/batctl/batctl.hash |  2 ++
->  package/batctl/batctl.mk   | 21 +++++++++++++++++++++
->  4 files changed, 36 insertions(+)
->  create mode 100644 package/batctl/Config.in
->  create mode 100644 package/batctl/batctl.hash
->  create mode 100644 package/batctl/batctl.mk
+ > Signed-off-by: Philippe Reynes <tremyfr@gmail.com>
 
-Thanks, I've applied your patch to the next branch, with a small number
-of modifications:
+Committed to next, thanks.
 
-    [Thomas:
-     - remove trailing whitespace
-     - remove "# libnl" comment in Config.in
-     - remove BATCTL_SOURCE, which is not needed, since the default value
-       is used
-     - pass $(TARGET_CONFIGURE_OPTS) in the make environment, not as a
-       make option, otherwise the CFLAGS += lines of batctl Makefile do
-       not have any effect, and lead to not have the proper include path
-       to the libnl header files.]
+Any specific reason to not use 3.19 instead?
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
