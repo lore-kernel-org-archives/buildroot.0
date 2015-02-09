@@ -1,35 +1,56 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Mon, 09 Feb 2015 08:37:45 -0600
-Subject: [Buildroot] glibc and locale
-In-Reply-To: <20150209080931.147fac1c@free-electrons.com>
-References: <54D7F4F8.3040005@ou.edu>
- <20150209080931.147fac1c@free-electrons.com>
-Message-ID: <54D8C639.8080208@ou.edu>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 9 Feb 2015 17:43:14 +0100
+Subject: [Buildroot] [0/21] Add missing indirect dependencies
+In-Reply-To: <87zj8p5uwy.fsf@dell.be.48ers.dk>
+References: <1423010059-23446-1-git-send-email-arnout@mind.be>
+ <87zj8p5uwy.fsf@dell.be.48ers.dk>
+Message-ID: <20150209164314.GB2079@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/09/2015 01:09 AM, Thomas Petazzoni wrote:
-> Dear Steve Kenton,
-> 
-> On Sun, 08 Feb 2015 17:44:56 -0600, Steve Kenton wrote:
->> I have a script that wants the locale program. I notice that is is already built
->> as part of the glibc build process, but it is not installed. Would there be
->> any objections to something along these lines to go ahead and install locale?
->> I'm not sure if this is the best way since glibc build uses autotools.
-> 
-> This looks ok, but I am wondering how that would be done with the
-> uClibc and musl C libraries. Remember that we support three different C
-> libraries, so when we're doing a change to one of them, we always need
-> to check what needs to be done for the two other ones.
-OK, I'll take a look at the other two.
+Hi Peter,
 
-Steve Kenton
+On Sat, Feb 07, 2015 at 09:27:41PM +0100, Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+> 
+>  >  With the fix for randconfig that I made in
+>  > http://patchwork.ozlabs.org/patch/432554/ it is now possible to run
+>  > 'make randconfig' and get usable results. So I ran the following loop
+>  > to detect missing indirect dependencies:
+> 
+>  > while true; do make randconfig 2>&1 | grep warning; done
+> 
+>  > If there is a missing indirect dependency, this will output a line like:
+> 
+>  > warning: (BR2_PACKAGE_UTIL_LINUX_SETPRIV) selects BR2_PACKAGE_LIBCAP_NG which has unmet direct dependencies (!BR2_avr32)
+> 
+> Committed with the minor issues pointed out by Jerzy Grzegorek fixed,
+> thanks.
+> 
+> 
+> >  It would be good to include such a test in a jenkins job to detect this
+>  > type of error earlier.
+> 
+> Indeed. Maxime, is that something you can setup?
 
-> 
-> Best regards,
-> 
-> Thomas Petazzoni
-> 
+Unfortunately, Jenkins has been down for quite some time now, and I
+still haven't got the time to fix it.
+
+What would be the test to setup?
+
+Maxime
+
+-- 
+Maxime Ripard, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150209/78ad1276/attachment.asc>
