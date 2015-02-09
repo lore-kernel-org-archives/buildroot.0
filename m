@@ -1,85 +1,200 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Feb 2015 20:53:38 +0100
-Subject: [Buildroot] [PATCH] add basic support for uClibc-ng
-In-Reply-To: <20150209181636.GA17451@waldemar-brodkorb.de>
-References: <20150209181636.GA17451@waldemar-brodkorb.de>
-Message-ID: <20150209205338.604f740e@free-electrons.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 9 Feb 2015 20:59:42 +0100
+Subject: [Buildroot] Buildroot 2015.02-rc1 released
+In-Reply-To: <87zj8o3xi9.fsf@dell.be.48ers.dk>
+References: <87zj8o3xi9.fsf@dell.be.48ers.dk>
+Message-ID: <CAB0FRstnC8f2b9VqRbomGNPx_2LacDZDQvjveAR_MCkBT-=G8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+2015-02-08 22:26 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+> Hi,
+>
+> Buildroot 2015.02-rc1 is released - Go download it at:
+>
+> http://buildroot.net/downloads/buildroot-2015.02-rc1.tar.gz
+>
 
-On Mon, 9 Feb 2015 19:16:37 +0100, Waldemar Brodkorb wrote:
+This tarball contains a symbolic link (docs/images -> docs/website/images).
+I don't know if it's useful, but it is unusual.
 
-> +config BR2_TOOLCHAIN_BUILDROOT_UCLIBC_NG
-> +	bool "uClibc-ng"
-> +	select BR2_TOOLCHAIN_USES_UCLIBC
-> +	depends on BR2_arcle   || BR2_arceb  || BR2_arm    || BR2_armeb    || \
-> +		   BR2_avr32   || BR2_bfin   || BR2_i386   || BR2_m68k     || \
-> +		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> +		   BR2_powerpc || BR2_sh     || BR2_sparc  || BR2_xtensa   || \
-> +		   BR2_x86_64
-> +	help
-> +	  This option selects uClibc-ng as the C library for the
-> +	  cross-compilation toolchain.
-> +
-> +	  http://uclibc-ng.org
-> +
+Fran?ois
 
-I don't think introducing this symbol is needed. Instead, we can just
-make uClibc-ng another version of uClibc. Like the following (untested) :
-
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 020c47c..6f96c15 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -21,6 +21,10 @@ choice
-                bool "uClibc 0.9.33.x"
-                depends on !(BR2_arc || BR2_avr32 || BR2_xtensa)
- 
-+       config BR2_UCLIBC_NG_VERSION_1_0_0
-+               bool "uClibc-ng 1.0.0"
-+               depends on !(BR2_arc || BR2_avr32 || BR2_xtensa)
-+
-        config BR2_UCLIBC_VERSION_XTENSA_GIT
-                bool "uClibc Git Xtensa"
-                depends on BR2_xtensa
-@@ -42,6 +46,7 @@ config BR2_UCLIBC_VERSION_STRING
-        string
-        default 0.9.31.1        if BR2_UCLIBC_VERSION_0_9_31
-        default 0.9.33.2        if BR2_UCLIBC_VERSION_0_9_33
-+       default 1.0.0           if BR2_UCLIBC_NG_VERSION_1_0_0
-        default "arc-2014.12" if BR2_arc
-        default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
-        default BR2_USE_UCLIBC_SNAPSHOT if BR2_UCLIBC_VERSION_SNAPSHOT
-@@ -50,6 +55,7 @@ config BR2_UCLIBC_CONFIG
-        string "uClibc configuration file to use?"
-        default "package/uclibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
-        default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
-+       default "package/uclibc/uClibc-ng-1.0.0.config" if BR2_UCLIBC_NG_VERSION_1_0_0
-        default "package/uclibc/uClibc-snapshot.config" if BR2_arc
-        default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
-        default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_XTENSA_GIT
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 8654926..aeffa18 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -17,6 +17,9 @@ UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
- else ifeq ($(BR2_UCLIBC_VERSION_XTENSA_GIT),y)
- UCLIBC_SITE = git://git.busybox.net/uClibc
- UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
-+else ifeq ($(BR2_UCLIBC_NG_VERSION_1_0_0),y)
-+UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/1.0.0/
-+UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- else
- UCLIBC_SITE = http://www.uclibc.org/downloads
- UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.xz
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> or
+>
+> http://buildroot.net/downloads/buildroot-2015.02-rc1.tar.bz2
+>
+> Or get it from Git:
+>
+> git://git.buildroot.net/buildroot
+>
+> Please give it a spin and report any problems to the mailing list or
+> bug tracker. Many thanks to the people contributing to this release:
+>
+> git shortlog -s -n 2014.11..
+>
+>    232  Gustavo Zacarias
+>    166  Thomas Petazzoni
+>     94  Peter Korsgaard
+>     83  Yann E. MORIN
+>     75  Bernd Kuhls
+>     56  Vicente Olivert Riera
+>     41  Romain Naour
+>     33  Baruch Siach
+>     26  Yegor Yefremov
+>     25  Arnout Vandecappelle
+>     25  Francois Perrad
+>     24  J?rg Krause
+>     21  Peter Seiderer
+>     20  Samuel Martin
+>     17  Johan Oudinet
+>     13  Fabio Porcedda
+>     13  Jerzy Grzegorek
+>     12  J?r?me Pouiller
+>     11  Maxime Hadjinlian
+>      7  Gregory Dymarek
+>      6  Guido Mart?nez
+>      6  Richard Genoud
+>      6  Steve Kenton
+>      5  Alex Suykov
+>      5  Bartosz Golaszewski
+>      5  Fatih A??c?
+>      5  Nathaniel Roach
+>      5  Paul Cercueil
+>      5  Thierry Bultel
+>      4  Angelo Compagnucci
+>      4  Clayton Shotwell
+>      4  David Bender
+>      4  Floris Bos
+>      4  Frank Hunleth
+>      4  Pedro Aguilar
+>      4  Ryan Coe
+>      4  Simon Marchi
+>      4  Zoltan Gyarmati
+>      3  Alexander Clouter
+>      3  Alexey Brodkin
+>      3  Bj?rn Forsman
+>      3  Doug Kehn
+>      3  Ivo Slanina
+>      3  Luca Ceresoli
+>      3  Maxim Mikityanskiy
+>      3  Vivien Didelot
+>      2  Alan Ott
+>      2  Andr? Hentschel
+>      2  Beno?t Th?baudeau
+>      2  Guillaume GARDET
+>      2  Gwenhael Goavec-Merou
+>      2  Jens Stimpfle
+>      2  Nicolas Serafini
+>      2  Philippe Proulx
+>      2  Steve James
+>      2  erico.nunes
+>      1  Alvaro G. M
+>      1  Danomi Manchego
+>      1  Erico Nunes
+>      1  Ernesto L. Williams Jr
+>      1  Fabian Mewes
+>      1  Hadrien Boutteville
+>      1  Ilya Lipnitskiy
+>      1  Ivan Sergeev
+>      1  Jaap Crezee
+>      1  Jean-Paul Etienne
+>      1  Jeremy Kerr
+>      1  Jeremy Rosen
+>      1  Johan Derycke
+>      1  Karoly Kasza
+>      1  Nicolas Cavallari
+>      1  Oli Vogt
+>      1  Peter K?mmel
+>      1  Pierre Le Magourou
+>      1  Pieter De Gendt
+>      1  Pieter Ronsijn
+>      1  Ryan Barnett
+>      1  Sagaert Johan
+>      1  Spenser Gilliland
+>      1  Thomas De Schampheleire
+>      1  Vanya Sergeev
+>      1  Vincent
+>      1  Volker Krause
+>      1  claurita
+>      1  gilles.talis at gmail.com
+>
+> And a special thanks to our patch reviewers:
+>
+> git log 2014.11.. | grep -Ei '(reviewed|acked)-by:' | \
+>     sed 's/.*by: //' | sort | uniq -c | sort -n -r
+>
+>     152 "Yann E. MORIN" <yann.morin.1998@free.fr>
+>      13 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>      11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>       9 Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>       8 Romain Naour <romain.naour@openwide.fr>
+>       7 Samuel Martin <s.martin49@gmail.com>
+>       7 Karoly Kasza <kaszak@gmail.com>
+>       4 Markos Chandras <Markos.Chandras@imgtec.com>
+>       2 Matt Weber <matthew.weber@rockwellcollins.com>
+>       1 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>       1 Ryan Barnett <ryan.barnett@rockwellcollins.com>
+>       1 Peter Seiderer <ps.report@gmx.net>
+>       1 Luca Ceresoli <luca@lucaceresoli.net>
+>       1 Gustavo Zacarias <gustavo@zacarias.com.ar>
+>       1 Fabio Porcedda <fabio.porcedda@gmail.com>
+>       1 Bernd Kuhls <bernd.kuhls@t-online.de>
+>
+> This time again we had more than 80 unique contributors! I'm very happy
+> to see so many "new" people next to the "oldtimers". We once again had a
+> lot (1150) of changess all over the tree.
+>
+> Of noteworthy new features/changes we have:
+>
+> - Static/shared library handling reworked. This is now a tristate
+>   (shared only / shared and static / static only). Default is now shared
+>   only to speed up the build. BR2_PREFER_STATIC_LIB is now called
+>   BR2_STATIC_LIBS.
+>
+> - The toolchain (internal and external) will now warn when an unsafe
+>   library or header path is used (such as /usr/include or /usr/lib). If
+>   BR2_COMPILER_PARANOID_UNSAFE_PATH is enabled under build options this
+>   instead becomes an error.
+>
+> - Architectures: Freescale E5500 and E6500 PowerPC support added,
+>   deprecated MIPS 1/2/3/4 support removed.
+>
+> - New defconfigs: Freescale p2020ds, MIPS creator CI20, Raspberrypi with
+>   DT, UDOO Quad.
+>
+> - 'make <foo>_defconfig' now saves the path to the defconfig in the
+>   .config, so a 'make savedefconfig' automatically updates it.
+>
+> - Infrastructure for packages using the Erland rebar tool has been added.
+>
+> - Hashes for a large number of packages have been added. Hashes are now
+>   checked for both target and host packages.
+>
+> - The system menu now has an option to automatically configure a network
+>   interface through DHCP at bootup.
+>
+> - The default filesystem skeleton now uses a separate tmpfs for /run
+>   instead of a symlink to /tmp/ for security reasons / to protect
+>   against conflicts with user generated temporary files.
+>
+>  - Large number of new packages (99): Erlang and Python modules, Kodi,
+>    SELinux support packages, ..
+>
+> And the usual package version updates and bug fixes. See the CHANGES
+> file for details:
+>
+> http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc1
+>
+> Like usual, I will now create a next branch and start merging in new
+> features, rather than wait until 2015.02 is released.
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
