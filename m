@@ -1,27 +1,32 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Sun, 08 Feb 2015 17:44:56 -0600
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Feb 2015 08:09:31 +0100
 Subject: [Buildroot] glibc and locale
-Message-ID: <54D7F4F8.3040005@ou.edu>
+In-Reply-To: <54D7F4F8.3040005@ou.edu>
+References: <54D7F4F8.3040005@ou.edu>
+Message-ID: <20150209080931.147fac1c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have a script that wants the locale program. I notice that is is already built
-as part of the glibc build process, but it is not installed. Would there be
-any objections to something along these lines to go ahead and install locale?
-I'm not sure if this is the best way since glibc build uses autotools.
+Dear Steve Kenton,
 
-Steve
+On Sun, 08 Feb 2015 17:44:56 -0600, Steve Kenton wrote:
+> I have a script that wants the locale program. I notice that is is already built
+> as part of the glibc build process, but it is not installed. Would there be
+> any objections to something along these lines to go ahead and install locale?
+> I'm not sure if this is the best way since glibc build uses autotools.
 
---- glibc.mk.ori	2015-02-08 17:38:16.824281939 -0600
-+++ glibc.mk	2015-02-08 17:40:27.932284454 -0600
-@@ -115,6 +115,7 @@ GLIBC_LIBS_LIB += libthread_db.so.*
- endif
+This looks ok, but I am wondering how that would be done with the
+uClibc and musl C libraries. Remember that we support three different C
+libraries, so when we're doing a change to one of them, we always need
+to check what needs to be done for the two other ones.
 
- define GLIBC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/build/locale/locale $(TARGET_DIR)/usr/bin/locale
- 	for libs in $(GLIBC_LIBS_LIB); do \
- 		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
- 	done
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
