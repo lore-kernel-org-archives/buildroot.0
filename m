@@ -1,52 +1,56 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 9 Feb 2015 08:34:52 +0100
-Subject: [Buildroot] [PATCH] qt5multimedia: Make it compile with
- no-opengl
-Message-ID: <trinity-91c97386-deea-4751-ba15-47a4842cbe82-1423467292576@3capp-gmx-bs56>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 9 Feb 2015 09:07:38 +0100
+Subject: [Buildroot] Buildroot 2015.02-rc1 released
+In-Reply-To: <87zj8o3xi9.fsf@dell.be.48ers.dk>
+References: <87zj8o3xi9.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LU9YB7fLihiWNw8MPMMbRQF1tzks3kFu6fqc1UtMHLH=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter, Vicente,
+On Sun, Feb 8, 2015 at 10:26 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> Hi,
+>
+> Buildroot 2015.02-rc1 is released - Go download it at:
+>
+> http://buildroot.net/downloads/buildroot-2015.02-rc1.tar.gz
+>
+> or
+>
+> http://buildroot.net/downloads/buildroot-2015.02-rc1.tar.bz2
+>
+> Or get it from Git:
+>
+> git://git.buildroot.net/buildroot
+>
+[..]
+>
+> Of noteworthy new features/changes we have:
+>
+> - Static/shared library handling reworked. This is now a tristate
+>   (shared only / shared and static / static only). Default is now shared
+>   only to speed up the build. BR2_PREFER_STATIC_LIB is now called
+>   BR2_STATIC_LIBS.
+>
+> - The toolchain (internal and external) will now warn when an unsafe
+>   library or header path is used (such as /usr/include or /usr/lib). If
+>   BR2_COMPILER_PARANOID_UNSAFE_PATH is enabled under build options this
+>   instead becomes an error.
+>
+> - Architectures: Freescale E5500 and E6500 PowerPC support added,
+>   deprecated MIPS 1/2/3/4 support removed.
+>
+> - New defconfigs: Freescale p2020ds, MIPS creator CI20, Raspberrypi with
+>   DT, UDOO Quad.
+>
+> - 'make <foo>_defconfig' now saves the path to the defconfig in the
+>   .config, so a 'make savedefconfig' automatically updates it.
+>
+> - Infrastructure for packages using the Erland rebar tool has been added.
 
-sorry for the double effort to try to compile qtmultimedia without opengl,
-there was already a patch doing this, with additional fixing a problem
-of the original upstream patch, see [1] for details.
+This should be 'Erlang' (just saying this for the final release notes).
 
-So this patch is missing the second part of the upstream fixes, see [2]...
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-January/118221.html
-[2] https://qt.gitorious.org/qt/qtmultimedia/commit/ea222e64b1c98fa767a6a683d66a85026ab30ff2
-
-
-On Sun, 08 Feb 2015 21:39:13 +0100, Peter Korsgaard  wrote:
->
-> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
->  > Backport an upstream patch to make it compile with no-opengl. Otherwise
->  > it will fail showing an error message like this one:
->
->  > qpaintervideosurface.cpp:99:47: error: 'QOpenGLContext' has not been
->  > declared
->
->  > Upstream commit:
->
->  >   https://qt.gitorious.org/qt/qtmultimedia/commit/2b181d546970d18a48a0f36f5d1a22418b61cd4d
->
->  > Fixes:
->
->  >   http://autobuild.buildroot.net/results/b77/b77cdf9b1cf6cafd5afef7337553bb32489207e5/
->
->  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->
-> Committed, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
+Best regards,
+Thomas
