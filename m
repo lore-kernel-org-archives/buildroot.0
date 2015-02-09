@@ -1,29 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Feb 2015 13:28:11 +0100
-Subject: [Buildroot] [PATCH] fluxbox: bump version to 1.3.7
-In-Reply-To: <87y4o72rss.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 09 Feb 2015 13:27:47 +0100")
-References: <1423479230-14283-1-git-send-email-Vincent.Riera@imgtec.com>
- <87y4o72rss.fsf@dell.be.48ers.dk>
-Message-ID: <87twyv2rs4.fsf@dell.be.48ers.dk>
+Date: Mon, 9 Feb 2015 13:31:23 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain: add 3.19 choice for
+	headers
+Message-ID: <20150209131223.7158D80429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=81366edd7c20f395a4269a243eca9cbbd995a48b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >> - Bump version to 1.3.7
- >> - Update the hash file
- >> - Use xz instead of bz2 to save disk space and bandwidth
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-common.in          |    5 +++++
+ toolchain/toolchain-external/Config.in |    4 ++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
- >> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
- > Committed, thanks.
-
-(to the next branch).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2ee2019..304afe4 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -221,10 +221,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "3.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+ 	default "3.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ 	default "3.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 	default "3.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 50daa66..6ab483a 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -1038,6 +1038,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
++	bool "3.19.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
+ 	bool "3.18.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
