@@ -1,56 +1,161 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 9 Feb 2015 17:43:14 +0100
-Subject: [Buildroot] [0/21] Add missing indirect dependencies
-In-Reply-To: <87zj8p5uwy.fsf@dell.be.48ers.dk>
-References: <1423010059-23446-1-git-send-email-arnout@mind.be>
- <87zj8p5uwy.fsf@dell.be.48ers.dk>
-Message-ID: <20150209164314.GB2079@lukather>
+From: Philippe Reynes <tremyfr@gmail.com>
+Date: Mon,  9 Feb 2015 18:47:21 +0100
+Subject: [Buildroot] [PATCH] armadeus apf27: update kernel to 3.18.6
+Message-ID: <1423504041-29750-1-git-send-email-tremyfr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
 
-On Sat, Feb 07, 2015 at 09:27:41PM +0100, Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
-> 
->  >  With the fix for randconfig that I made in
->  > http://patchwork.ozlabs.org/patch/432554/ it is now possible to run
->  > 'make randconfig' and get usable results. So I ran the following loop
->  > to detect missing indirect dependencies:
-> 
->  > while true; do make randconfig 2>&1 | grep warning; done
-> 
->  > If there is a missing indirect dependency, this will output a line like:
-> 
->  > warning: (BR2_PACKAGE_UTIL_LINUX_SETPRIV) selects BR2_PACKAGE_LIBCAP_NG which has unmet direct dependencies (!BR2_avr32)
-> 
-> Committed with the minor issues pointed out by Jerzy Grzegorek fixed,
-> thanks.
-> 
-> 
-> >  It would be good to include such a test in a jenkins job to detect this
->  > type of error earlier.
-> 
-> Indeed. Maxime, is that something you can setup?
+Signed-off-by: Philippe Reynes <tremyfr@gmail.com>
+---
+ .../apf27/{linux-3.13.config => linux-3.18.config} |   26 +++++++------------
+ configs/armadeus_apf27_defconfig                   |    8 +++---
+ 2 files changed, 14 insertions(+), 20 deletions(-)
+ rename board/armadeus/apf27/{linux-3.13.config => linux-3.18.config} (96%)
 
-Unfortunately, Jenkins has been down for quite some time now, and I
-still haven't got the time to fix it.
-
-What would be the test to setup?
-
-Maxime
-
+diff --git a/board/armadeus/apf27/linux-3.13.config b/board/armadeus/apf27/linux-3.18.config
+similarity index 96%
+rename from board/armadeus/apf27/linux-3.13.config
+rename to board/armadeus/apf27/linux-3.18.config
+index d2955cf..ed5a569 100644
+--- a/board/armadeus/apf27/linux-3.13.config
++++ b/board/armadeus/apf27/linux-3.18.config
+@@ -17,14 +17,11 @@ CONFIG_MODULE_UNLOAD=y
+ # CONFIG_IOSCHED_CFQ is not set
+ # CONFIG_ARCH_MULTI_V7 is not set
+ CONFIG_ARCH_MXC=y
+-CONFIG_MXC_IRQ_PRIOR=y
+ CONFIG_MACH_IMX27_DT=y
+ CONFIG_PREEMPT=y
+ CONFIG_AEABI=y
+ CONFIG_ZBOOT_ROM_TEXT=0x0
+ CONFIG_ZBOOT_ROM_BSS=0x0
+-CONFIG_FPE_NWFPE=y
+-CONFIG_FPE_NWFPE_XP=y
+ CONFIG_PM_DEBUG=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+@@ -40,8 +37,6 @@ CONFIG_IP_PNP_DHCP=y
+ # CONFIG_INET_DIAG is not set
+ CONFIG_IPV6=y
+ CONFIG_CAN=m
+-CONFIG_CAN_RAW=m
+-CONFIG_CAN_BCM=m
+ CONFIG_CAN_VCAN=m
+ CONFIG_CAN_MCP251X=m
+ CONFIG_BT=m
+@@ -60,7 +55,6 @@ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_CHAR=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_ADV_OPTIONS=y
+@@ -72,13 +66,11 @@ CONFIG_MTD_PHYSMAP=y
+ CONFIG_MTD_NAND=y
+ CONFIG_MTD_NAND_MXC=y
+ CONFIG_MTD_UBI=y
+-CONFIG_PROC_DEVICETREE=y
+ CONFIG_EEPROM_AT24=y
+ CONFIG_EEPROM_AT25=y
+ CONFIG_SCSI=y
+ CONFIG_BLK_DEV_SD=y
+ CONFIG_NETDEVICES=y
+-CONFIG_MII=y
+ # CONFIG_NET_VENDOR_BROADCOM is not set
+ # CONFIG_NET_VENDOR_CIRRUS is not set
+ # CONFIG_NET_VENDOR_FARADAY is not set
+@@ -144,8 +136,6 @@ CONFIG_BACKLIGHT_LCD_SUPPORT=y
+ # CONFIG_LCD_CLASS_DEVICE is not set
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_FONTS=y
+-CONFIG_FONT_8x8=y
+ CONFIG_LOGO=y
+ # CONFIG_LOGO_LINUX_MONO is not set
+ # CONFIG_LOGO_LINUX_VGA16 is not set
+@@ -162,21 +152,21 @@ CONFIG_SND_IMX_SOC=m
+ CONFIG_USB=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_MXC=y
+-CONFIG_USB_CHIPIDEA=y
+-CONFIG_USB_CHIPIDEA_HOST=y
+-CONFIG_USB_CHIPIDEA_DEBUG=y
+ CONFIG_USB_ACM=y
+ CONFIG_USB_PRINTER=y
+ CONFIG_USB_STORAGE=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_CHIPIDEA_DEBUG=y
+ CONFIG_USB_SERIAL=y
+ CONFIG_USB_SERIAL_FTDI_SIO=y
+ CONFIG_USB_SERIAL_PL2303=y
++CONFIG_USB_ULPI=y
+ CONFIG_USB_GADGET=y
+ CONFIG_USB_ETH=m
+ CONFIG_USB_GADGETFS=m
+ CONFIG_USB_MASS_STORAGE=m
+ CONFIG_USB_G_HID=m
+-CONFIG_USB_ULPI=y
+ CONFIG_MMC=y
+ CONFIG_MMC_MXC=y
+ CONFIG_NEW_LEDS=y
+@@ -198,7 +188,9 @@ CONFIG_DMADEVICES=y
+ CONFIG_IMX_SDMA=y
+ CONFIG_IMX_DMA=y
+ # CONFIG_IOMMU_SUPPORT is not set
+-CONFIG_IIO=m
++CONFIG_IIO=y
++CONFIG_MAX1027=y
++CONFIG_MAX5821=y
+ CONFIG_PWM=y
+ CONFIG_PWM_IMX=y
+ CONFIG_EXT2_FS=y
+@@ -220,11 +212,13 @@ CONFIG_NLS_CODEPAGE_850=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_NLS_ISO8859_15=m
+ CONFIG_PRINTK_TIME=y
++CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_FS=y
+ # CONFIG_SCHED_DEBUG is not set
+ # CONFIG_DEBUG_PREEMPT is not set
+-CONFIG_DEBUG_INFO=y
+ # CONFIG_FTRACE is not set
+ CONFIG_DEBUG_LL=y
+ CONFIG_EARLY_PRINTK=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_FONTS=y
++CONFIG_FONT_8x8=y
+diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
+index 7e33a41..b779e6b 100644
+--- a/configs/armadeus_apf27_defconfig
++++ b/configs/armadeus_apf27_defconfig
+@@ -4,8 +4,8 @@ BR2_arm926t=y
+ 
+ # Lock down headers to avoid breaking with new defaults
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.2"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.18.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="apf27"
+@@ -21,9 +21,9 @@ BR2_TARGET_ROOTFS_UBI=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.18.config"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27dev"
 -- 
-Maxime Ripard, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150209/78ad1276/attachment.asc>
+1.7.4.4
