@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Feb 2015 13:27:23 +0100
-Subject: [Buildroot] [git commit branch/next] fluxbox: bump version to 1.3.7
-Message-ID: <20150209131223.6715180429@busybox.osuosl.org>
+Date: Mon, 9 Feb 2015 13:37:44 +0100
+Subject: [Buildroot] [git commit branch/next] linux: bump default to version
+	3.19
+Message-ID: <20150209131223.8205980429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e741c161a49db2bc09c7ccd4fd1f1449a32fe294
+commit: http://git.buildroot.net/buildroot/commit/?id=e076d6a8d4e2130b749bbcaf2ae7ac3c40e5d526
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump version to 1.3.7
-- Update the hash file
-- Use xz instead of bz2 to save disk space and bandwidth
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluxbox/fluxbox.hash |    2 +-
- package/fluxbox/fluxbox.mk   |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.hash b/package/fluxbox/fluxbox.hash
-index bfbbd7f..b18582b 100644
---- a/package/fluxbox/fluxbox.hash
-+++ b/package/fluxbox/fluxbox.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  05cc2149b79155121cb0fff6d4fd0289e3edb669390714e0b54071bec987e686  fluxbox-1.3.6.tar.bz2
-+sha256  fc8c75fe94c54ed5a5dd3fd4a752109f8949d6df67a48e5b11a261403c382ec0  fluxbox-1.3.7.tar.xz
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 30255c4..c8e4289 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index c981493..28cb36e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--FLUXBOX_VERSION = 1.3.6
--FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.bz2
-+FLUXBOX_VERSION = 1.3.7
-+FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.xz
- FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBOX_VERSION)
- FLUXBOX_LICENSE = MIT
- FLUXBOX_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.18.6"
++	bool "3.19"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.18.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.19" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
