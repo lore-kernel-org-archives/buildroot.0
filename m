@@ -1,161 +1,59 @@
-From: Philippe Reynes <tremyfr@gmail.com>
-Date: Mon,  9 Feb 2015 18:47:21 +0100
-Subject: [Buildroot] [PATCH] armadeus apf27: update kernel to 3.18.6
-Message-ID: <1423504041-29750-1-git-send-email-tremyfr@gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 09 Feb 2015 11:50:40 -0600
+Subject: [Buildroot] glibc  (and uClibc) and locale
+In-Reply-To: <54D8C639.8080208@ou.edu>
+References: <54D7F4F8.3040005@ou.edu>
+ <20150209080931.147fac1c@free-electrons.com> <54D8C639.8080208@ou.edu>
+Message-ID: <54D8F370.20003@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 02/09/2015 08:37 AM, Steve Kenton wrote:
+>> This looks ok, but I am wondering how that would be done with the
+>> uClibc and musl C libraries. Remember that we support three different C
+>> libraries, so when we're doing a change to one of them, we always need
+>> to check what needs to be done for the two other ones.
+> OK, I'll take a look at the other two.
 
-Signed-off-by: Philippe Reynes <tremyfr@gmail.com>
----
- .../apf27/{linux-3.13.config => linux-3.18.config} |   26 +++++++------------
- configs/armadeus_apf27_defconfig                   |    8 +++---
- 2 files changed, 14 insertions(+), 20 deletions(-)
- rename board/armadeus/apf27/{linux-3.13.config => linux-3.18.config} (96%)
+The locale program source for uClibc is in extra/local/programs/locale.c
 
-diff --git a/board/armadeus/apf27/linux-3.13.config b/board/armadeus/apf27/linux-3.18.config
-similarity index 96%
-rename from board/armadeus/apf27/linux-3.13.config
-rename to board/armadeus/apf27/linux-3.18.config
-index d2955cf..ed5a569 100644
---- a/board/armadeus/apf27/linux-3.13.config
-+++ b/board/armadeus/apf27/linux-3.18.config
-@@ -17,14 +17,11 @@ CONFIG_MODULE_UNLOAD=y
- # CONFIG_IOSCHED_CFQ is not set
- # CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_MXC=y
--CONFIG_MXC_IRQ_PRIOR=y
- CONFIG_MACH_IMX27_DT=y
- CONFIG_PREEMPT=y
- CONFIG_AEABI=y
- CONFIG_ZBOOT_ROM_TEXT=0x0
- CONFIG_ZBOOT_ROM_BSS=0x0
--CONFIG_FPE_NWFPE=y
--CONFIG_FPE_NWFPE_XP=y
- CONFIG_PM_DEBUG=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -40,8 +37,6 @@ CONFIG_IP_PNP_DHCP=y
- # CONFIG_INET_DIAG is not set
- CONFIG_IPV6=y
- CONFIG_CAN=m
--CONFIG_CAN_RAW=m
--CONFIG_CAN_BCM=m
- CONFIG_CAN_VCAN=m
- CONFIG_CAN_MCP251X=m
- CONFIG_BT=m
-@@ -60,7 +55,6 @@ CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_CHAR=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_ADV_OPTIONS=y
-@@ -72,13 +66,11 @@ CONFIG_MTD_PHYSMAP=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_MXC=y
- CONFIG_MTD_UBI=y
--CONFIG_PROC_DEVICETREE=y
- CONFIG_EEPROM_AT24=y
- CONFIG_EEPROM_AT25=y
- CONFIG_SCSI=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_NETDEVICES=y
--CONFIG_MII=y
- # CONFIG_NET_VENDOR_BROADCOM is not set
- # CONFIG_NET_VENDOR_CIRRUS is not set
- # CONFIG_NET_VENDOR_FARADAY is not set
-@@ -144,8 +136,6 @@ CONFIG_BACKLIGHT_LCD_SUPPORT=y
- # CONFIG_LCD_CLASS_DEVICE is not set
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_FONTS=y
--CONFIG_FONT_8x8=y
- CONFIG_LOGO=y
- # CONFIG_LOGO_LINUX_MONO is not set
- # CONFIG_LOGO_LINUX_VGA16 is not set
-@@ -162,21 +152,21 @@ CONFIG_SND_IMX_SOC=m
- CONFIG_USB=y
- CONFIG_USB_EHCI_HCD=y
- CONFIG_USB_EHCI_MXC=y
--CONFIG_USB_CHIPIDEA=y
--CONFIG_USB_CHIPIDEA_HOST=y
--CONFIG_USB_CHIPIDEA_DEBUG=y
- CONFIG_USB_ACM=y
- CONFIG_USB_PRINTER=y
- CONFIG_USB_STORAGE=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_CHIPIDEA_DEBUG=y
- CONFIG_USB_SERIAL=y
- CONFIG_USB_SERIAL_FTDI_SIO=y
- CONFIG_USB_SERIAL_PL2303=y
-+CONFIG_USB_ULPI=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_ETH=m
- CONFIG_USB_GADGETFS=m
- CONFIG_USB_MASS_STORAGE=m
- CONFIG_USB_G_HID=m
--CONFIG_USB_ULPI=y
- CONFIG_MMC=y
- CONFIG_MMC_MXC=y
- CONFIG_NEW_LEDS=y
-@@ -198,7 +188,9 @@ CONFIG_DMADEVICES=y
- CONFIG_IMX_SDMA=y
- CONFIG_IMX_DMA=y
- # CONFIG_IOMMU_SUPPORT is not set
--CONFIG_IIO=m
-+CONFIG_IIO=y
-+CONFIG_MAX1027=y
-+CONFIG_MAX5821=y
- CONFIG_PWM=y
- CONFIG_PWM_IMX=y
- CONFIG_EXT2_FS=y
-@@ -220,11 +212,13 @@ CONFIG_NLS_CODEPAGE_850=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_ISO8859_15=m
- CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_INFO=y
- CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
- # CONFIG_DEBUG_PREEMPT is not set
--CONFIG_DEBUG_INFO=y
- # CONFIG_FTRACE is not set
- CONFIG_DEBUG_LL=y
- CONFIG_EARLY_PRINTK=y
- # CONFIG_CRYPTO_ANSI_CPRNG is not set
-+CONFIG_FONTS=y
-+CONFIG_FONT_8x8=y
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-index 7e33a41..b779e6b 100644
---- a/configs/armadeus_apf27_defconfig
-+++ b/configs/armadeus_apf27_defconfig
-@@ -4,8 +4,8 @@ BR2_arm926t=y
- 
- # Lock down headers to avoid breaking with new defaults
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.2"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18.6"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf27"
-@@ -21,9 +21,9 @@ BR2_TARGET_ROOTFS_UBI=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armadeus/apf27/linux-3.18.config"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0xA0008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx27-apf27dev"
--- 
-1.7.4.4
+However, attempting to build it the obvious way adding another line to the build
+commands in the .mk file does not work
+
+define UCLIBC_BUILD_CMDS
+	$(UCLIBC_MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS) headers
+	$(UCLIBC_MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS)
++	$(UCLIBC_MAKE) -C $(@D) $(UCLIBC_MAKE_FLAGS) extra/locale/programs/locale
+	$(MAKE) -C $(@D)/utils \
+		PREFIX=$(HOST_DIR) \
+		HOSTCC="$(HOSTCC)" hostutils
+endef
+
+It gets a build error because of the TARGET_ABI (i386 in this example) inserted by the UCLIBC_MAKE_FLAGS
+immediately before i386 extra/locale/programs/locale.c on the gcc command.
+
+Could someone familiar with the uClibc build process give me a pointer how to proceed?
+
+Thanks,
+
+Steve Kenton
+
+
+UCLIBC_MAKE_FLAGS = \
+	ARCH="$(UCLIBC_TARGET_ARCH)" \
+	CROSS_COMPILE="$(TARGET_CROSS)" \
+	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
+	HOSTCC="$(HOSTCC)"
+
+steve at Cube:/data/bcdist/test/buildroot-2015.02-rc1/output/build/uclibc-0.9.33.2$ make -n extra/locale/programs/locale
+/data/bcdist/test/buildroot-2015.02-rc1/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc -include ./include/libc-symbols.h -Wall -Wstrict-prototypes -Wstrict-aliasing -funsigned-char -fno-builtin -fno-asm -std=gnu99 -m32 -march=i586
+-fno-stack-protector -nostdinc -I./include -I./include -I. -I./libc/sysdeps/linux -I./libc/sysdeps/linux/i386  -Os -funit-at-a-time -fmerge-all-constants -fstrict-aliasing -fno-tree-loop-optimize -fno-tree-dominator-opts -fno-strength-reduce
+-fomit-frame-pointer -m32 -mpreferred-stack-boundary=2 -falign-functions=1 -falign-jumps=1 -falign-labels=1 -falign-loops=1 -DHAVE_FORCED_UNWIND -I./libpthread/nptl -I./libpthread/nptl -I./libpthread/nptl/sysdeps/unix/sysv/linux/i386/i586
+-I./libpthread/nptl/sysdeps/unix/sysv/linux/i386 -I./libpthread/nptl/sysdeps/i386 -I./libpthread/nptl/sysdeps/i386 -I./libpthread/nptl/sysdeps/unix/sysv/linux -I./libpthread/nptl/sysdeps/unix/sysv/linux -I./libpthread/nptl/sysdeps/pthread
+-I./libpthread/nptl/sysdeps/pthread/bits -I./libpthread/nptl/sysdeps/generic -I./ldso/ldso/i386 -I./ldso/include -I./libc/sysdeps/linux/common -I/data/bcdist/test/buildroot-2015.02-rc1/output/build/linux-headers-3.18.6/usr/include/ -isystem
+/data/bcdist/test/buildroot-2015.02-rc1/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.8.4/include-fixed -isystem /data/bcdist/test/buildroot-2015.02-rc1/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.8.4/include -DNDEBUG
+-D__USE_STDIO_FUTEXES__  -Wl,-EL -Wl,--sort-common -Wl,--sort-section=alignment -m32 -shared -Wl,--warn-common -Wl,--warn-once -Wl,-z,combreloc -Wl,-z,relro -Wl,-z,now -Wl,-z,defs  i386 extra/locale/programs/locale.c   -o extra/locale/programs/locale
+steve at Cube:/data/bcdist/test/buildroot-2015.02-rc1/output/build/uclibc-0.9.33.2$
