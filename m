@@ -1,60 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Feb 2015 13:33:46 +0100
-Subject: [Buildroot] [git commit branch/next] linux-headers: add 3.19.x
-	series
-Message-ID: <20150209131223.7925980429@busybox.osuosl.org>
+From: Steve Kenton <skenton@ou.edu>
+Date: Mon, 09 Feb 2015 08:37:45 -0600
+Subject: [Buildroot] glibc and locale
+In-Reply-To: <20150209080931.147fac1c@free-electrons.com>
+References: <54D7F4F8.3040005@ou.edu>
+ <20150209080931.147fac1c@free-electrons.com>
+Message-ID: <54D8C639.8080208@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a3e710a5e86836bdccd46bfb740b10e5d129242
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 02/09/2015 01:09 AM, Thomas Petazzoni wrote:
+> Dear Steve Kenton,
+> 
+> On Sun, 08 Feb 2015 17:44:56 -0600, Steve Kenton wrote:
+>> I have a script that wants the locale program. I notice that is is already built
+>> as part of the glibc build process, but it is not installed. Would there be
+>> any objections to something along these lines to go ahead and install locale?
+>> I'm not sure if this is the best way since glibc build uses autotools.
+> 
+> This looks ok, but I am wondering how that would be done with the
+> uClibc and musl C libraries. Remember that we support three different C
+> libraries, so when we're doing a change to one of them, we always need
+> to check what needs to be done for the two other ones.
+OK, I'll take a look at the other two.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host |   11 ++++++++++-
- 1 files changed, 10 insertions(+), 1 deletions(-)
+Steve Kenton
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2755f2f..4f0a211 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,7 +5,7 @@ comment "Kernel Header Options"
- 
- choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_3_18
-+	default BR2_KERNEL_HEADERS_3_19
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -67,6 +67,10 @@ choice
- 		bool "Linux 3.18.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 
-+	config BR2_KERNEL_HEADERS_3_19
-+		bool "Linux 3.19.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -88,6 +92,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19
-+	bool "3.19.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18
- 	bool "3.18.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-@@ -183,4 +191,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.6"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.19"		if BR2_KERNEL_HEADERS_3_19
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> 
+> Best regards,
+> 
+> Thomas Petazzoni
+> 
