@@ -1,71 +1,45 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 9 Feb 2015 10:39:31 +0000
-Subject: [Buildroot] [PATCH 1/3] glibc: add version 2.21
-In-Reply-To: <87fvag3tdv.fsf@dell.be.48ers.dk>
-References: <1423408027-49694-1-git-send-email-Vincent.Riera@imgtec.com>
- <1423408027-49694-2-git-send-email-Vincent.Riera@imgtec.com>
- <87fvag3tdv.fsf@dell.be.48ers.dk>
-Message-ID: <54D88E63.4050507@imgtec.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 9 Feb 2015 10:53:50 +0000
+Subject: [Buildroot] [PATCH] fluxbox: bump version to 1.3.7
+Message-ID: <1423479230-14283-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/08/2015 10:55 PM, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
-> 
->  > - Add version 2.21
->  > - Add a hash value for it
-> 
->  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->  > ---
->  >  package/glibc/Config.in  |    3 +++
->  >  package/glibc/glibc.hash |    1 +
->  >  2 files changed, 4 insertions(+), 0 deletions(-)
-> 
->  > diff --git a/package/glibc/Config.in b/package/glibc/Config.in
->  > index 8c033f2..37e108e 100644
->  > --- a/package/glibc/Config.in
->  > +++ b/package/glibc/Config.in
->  > @@ -38,6 +38,9 @@ config BR2_GLIBC_VERSION_2_19
->  >  config BR2_GLIBC_VERSION_2_20
->  >  	bool "2.20"
->  
->  > +config BR2_GLIBC_VERSION_2_21
->  > +	bool "2.21"
->  > +
-> 
-> I noticed a few things in the release notes that might be of interest:
-> 
-> * Port to Altera Nios II has been contributed by Mentor Graphics.
-> 
-> So we should be able to build an internal glibc toolchain for nios2 now.
-> 
-> * Support for MIPS o32 FPXX, FP64A and FP64 ABI Extensions.
->   The original MIPS o32 hard-float ABI requires an FPU where double-precision
->   registers overlay two consecutive single-precision registers.  MIPS32R2
->   introduced a new FPU mode (FR=1) where double-precision registers extend the
->   corresponding single-precision registers which is incompatible with the
->   o32 hard-float ABI.  The MIPS SIMD ASE and the MIPSR6 architecture both
->   require the use of FR=1 making a transition necessary.  New o32 ABI
->   extensions enable users to migrate over time from the original o32 ABI
->   through to the updated o32 FP64 ABI.  To achieve this the dynamic linker now
->   tracks the ABI of any loaded object and verifies that new objects are
->   compatible.  Mode transitions will also be requested as required and
->   unsupportable objects will be rejected.  The ABI checks include both soft and
->   hard float ABIs for o32, n32 and n64.
-> 
-> I'm not sure what the impact is of this exactly?
-> 
-Nothing you should be worried about. Just FPU ABI extensions for MIPS
-o32. This just makes it possible to link objects build for different FPU
-ABIs (assuming they are compatible).
+- Bump version to 1.3.7
+- Update the hash file
+- Use xz instead of bz2 to save disk space and bandwidth
 
-https://dmz-portal.mips.com/wiki/MIPS_O32_ABI_-_FR0_and_FR1_Interlinking
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/fluxbox/fluxbox.hash |    2 +-
+ package/fluxbox/fluxbox.mk   |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-ie everything works as expected with glibc-2.21
-
-
+diff --git a/package/fluxbox/fluxbox.hash b/package/fluxbox/fluxbox.hash
+index bfbbd7f..b18582b 100644
+--- a/package/fluxbox/fluxbox.hash
++++ b/package/fluxbox/fluxbox.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  05cc2149b79155121cb0fff6d4fd0289e3edb669390714e0b54071bec987e686  fluxbox-1.3.6.tar.bz2
++sha256  fc8c75fe94c54ed5a5dd3fd4a752109f8949d6df67a48e5b11a261403c382ec0  fluxbox-1.3.7.tar.xz
+diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
+index 30255c4..c8e4289 100644
+--- a/package/fluxbox/fluxbox.mk
++++ b/package/fluxbox/fluxbox.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-FLUXBOX_VERSION = 1.3.6
+-FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.bz2
++FLUXBOX_VERSION = 1.3.7
++FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.xz
+ FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBOX_VERSION)
+ FLUXBOX_LICENSE = MIT
+ FLUXBOX_LICENSE_FILES = COPYING
 -- 
-markos
+1.7.1
