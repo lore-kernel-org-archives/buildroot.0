@@ -1,46 +1,36 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 10 Feb 2015 18:25:55 +0100
-Subject: [Buildroot] [PATCH] add basic support for uClibc-ng
-In-Reply-To: <20150209205338.604f740e@free-electrons.com>
-References: <20150209181636.GA17451@waldemar-brodkorb.de>
- <20150209205338.604f740e@free-electrons.com>
-Message-ID: <20150210172555.GE22344@waldemar-brodkorb.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 10 Feb 2015 18:50:50 +0100
+Subject: [Buildroot] [PATCH] rtmpdump: use TARGET_LDFLAGS instead of
+	TARGET_CFLAGS for XLDFLAGS
+Message-ID: <1423590650-26562-1-git-send-email-user@ld2077>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+The XLDFLAGS is for ld related flags so use TARGET_LDFLAGS instead of
+TARGET_CFLAGS, also the TARGET_CFLAGS is already used for XCFLAGS.
 
-> Dear Waldemar Brodkorb,
-> 
-> On Mon, 9 Feb 2015 19:16:37 +0100, Waldemar Brodkorb wrote:
-> 
-> > +config BR2_TOOLCHAIN_BUILDROOT_UCLIBC_NG
-> > +	bool "uClibc-ng"
-> > +	select BR2_TOOLCHAIN_USES_UCLIBC
-> > +	depends on BR2_arcle   || BR2_arceb  || BR2_arm    || BR2_armeb    || \
-> > +		   BR2_avr32   || BR2_bfin   || BR2_i386   || BR2_m68k     || \
-> > +		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> > +		   BR2_powerpc || BR2_sh     || BR2_sparc  || BR2_xtensa   || \
-> > +		   BR2_x86_64
-> > +	help
-> > +	  This option selects uClibc-ng as the C library for the
-> > +	  cross-compilation toolchain.
-> > +
-> > +	  http://uclibc-ng.org
-> > +
-> 
-> I don't think introducing this symbol is needed. Instead, we can just
-> make uClibc-ng another version of uClibc. Like the following (untested) :
+This fix is also needed for supporting the per-package staging directory.
 
-I thought about this in my first try, but I have following problem:
-When you choose uClibc-ng 1.0.0 instead of uClibc, the default
-config string is _not_ automatically changed.
+Signed-off-by: Fabio Porcedda <fabiopo@ld2077.tmt.telital.com>
+---
+ package/rtmpdump/rtmpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-How could this be done?
-
-best regards
- Waldemar
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index 14037fb..613f1cd 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -39,7 +39,7 @@ define RTMPDUMP_BUILD_CMDS
+ 	$(MAKE) CRYPTO=$(RTMPDUMP_CRYPTO) \
+ 		prefix=/usr \
+ 		XCFLAGS="$(RTMPDUMP_CFLAGS)" \
+-		XLDFLAGS="$(TARGET_CFLAGS)" \
++		XLDFLAGS="$(TARGET_LDFLAGS)" \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		$(RTMPDUMP_SHARED) \
+ 		-C $(@D)/librtmp
+-- 
+2.1.0
