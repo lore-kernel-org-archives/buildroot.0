@@ -1,221 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Feb 2015 14:46:37 +0200
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p1
-Message-ID: <dcf52f41fdc85c275b1762dd1b1d45c52085cfb8.1423572397.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Feb 2015 14:29:38 +0100
+Subject: [Buildroot] getting X running
+In-Reply-To: <C860A811EEF34E4793E67D45FD390387@JohanW7>
+References: <C860A811EEF34E4793E67D45FD390387@JohanW7>
+Message-ID: <20150210142938.3d715c88@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Dear Sagaert Johan,
 
-CVE-2014-9297 - vallen is not validated in several places in ntp_crypto.c,
-leading to a potential information leak or possibly a crash
+On Tue, 10 Feb 2015 11:43:21 +0100, Sagaert Johan wrote:
 
-CVE-2014-9298 - ::1 can be spoofed on some OSes (including "some versions" of
-Linux), so ACLs based on IPv6 ::1 addresses can be bypassed
+> Not sure if X11 can run with uclibc, I enabled everything but when I try te run X and inspect the log.
+> I found : [2048840.110] (EE) systemd-logind: failed to get session: The name org.freedesktop.login1 was not provided by any .service
+> files
+> 
+> If systemd is required, then I am at a dead end with uclibc, since systemd requires (e)glibc.
 
-Drop a patch applied upstream, along with its accompanied AUTORECONF.
+I don't think systemd is required to run the X server. However, maybe
+some more --disable-<something> options are needed when building the X
+server, I don't know.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../ntp/0001-fix-ntp-keygen-without-openssl.patch  | 153 ---------------------
- package/ntp/{0002-nano.patch => 0001-nano.patch}   |   0
- package/ntp/ntp.hash                               |   4 +-
- package/ntp/ntp.mk                                 |   4 +-
- 4 files changed, 3 insertions(+), 158 deletions(-)
- delete mode 100644 package/ntp/0001-fix-ntp-keygen-without-openssl.patch
- rename package/ntp/{0002-nano.patch => 0001-nano.patch} (100%)
+But anyway, if you are using the X.org (which is a big thing), then
+moving from uClibc to eglibc should not be a problem, as the size
+difference between uClibc and eglibc is insignificant compared to the
+size of the X.org stack (and Webkit, that you mention below).
 
-diff --git a/package/ntp/0001-fix-ntp-keygen-without-openssl.patch b/package/ntp/0001-fix-ntp-keygen-without-openssl.patch
-deleted file mode 100644
-index b9883be1eec6..000000000000
---- a/package/ntp/0001-fix-ntp-keygen-without-openssl.patch
-+++ /dev/null
-@@ -1,153 +0,0 @@
--Fix build breakage without openssl.
--From upstream: http://bk1.ntp.org/ntp-stable/?PAGE=patch&REV=5497b345z5MNTuNvJWuqPSje25NQTg
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura ntp-4.2.8.orig/configure.ac ntp-4.2.8/configure.ac
----- ntp-4.2.8.orig/configure.ac	2014-12-22 10:16:10.449311393 -0300
--+++ ntp-4.2.8/configure.ac	2014-12-22 10:17:30.757215905 -0300
--@@ -102,7 +102,7 @@
-- enable_nls=no
-- LIBOPTS_CHECK_NOBUILD([sntp/libopts])
-- 
---NTP_ENABLE_LOCAL_LIBEVENT
--+NTP_LIBEVENT_CHECK_NOBUILD([2], [sntp/libevent])
-- 
-- NTP_LIBNTP
-- 
--@@ -771,6 +771,10 @@
-- 
-- #### 
-- 
--+AC_CHECK_FUNCS([arc4random_buf])
--+
--+####
--+
-- saved_LIBS="$LIBS"
-- LIBS="$LIBS $LDADD_LIBNTP"
-- AC_CHECK_FUNCS([daemon])
--diff -Nura ntp-4.2.8.orig/libntp/ntp_crypto_rnd.c ntp-4.2.8/libntp/ntp_crypto_rnd.c
----- ntp-4.2.8.orig/libntp/ntp_crypto_rnd.c	2014-12-22 10:16:10.430301237 -0300
--+++ ntp-4.2.8/libntp/ntp_crypto_rnd.c	2014-12-22 10:18:04.921468163 -0300
--@@ -24,6 +24,21 @@
-- int crypto_rand_init = 0;
-- #endif
-- 
--+#ifndef HAVE_ARC4RANDOM_BUF
--+static void
--+arc4random_buf(void *buf, size_t nbytes);
--+
--+void
--+evutil_secure_rng_get_bytes(void *buf, size_t nbytes);
--+
--+static void
--+arc4random_buf(void *buf, size_t nbytes)
--+{
--+	evutil_secure_rng_get_bytes(buf, nbytes);
--+	return;
--+}
--+#endif
--+
-- /*
--  * As of late 2014, here's how we plan to provide cryptographic-quality
--  * random numbers:
--diff -Nura ntp-4.2.8.orig/Makefile.am ntp-4.2.8/Makefile.am
----- ntp-4.2.8.orig/Makefile.am	2014-12-22 10:16:10.441307117 -0300
--+++ ntp-4.2.8/Makefile.am	2014-12-22 10:16:49.403122474 -0300
--@@ -3,6 +3,7 @@
-- NULL =
-- 
-- SUBDIRS =		\
--+	sntp		\
-- 	scripts		\
-- 	include		\
-- 	libntp		\
--@@ -17,7 +18,6 @@
-- 	clockstuff	\
-- 	kernel		\
-- 	util		\
---	sntp		\
-- 	tests		\
-- 	$(NULL)
-- 
--@@ -64,7 +64,6 @@
-- 	.gcc-warning			\
-- 	libtool				\
-- 	html/.datecheck			\
---	sntp/built-sources-only		\
-- 	$(srcdir)/COPYRIGHT		\
-- 	$(srcdir)/.checkChangeLog	\
-- 	$(NULL)
--diff -Nura ntp-4.2.8.orig/sntp/configure.ac ntp-4.2.8/sntp/configure.ac
----- ntp-4.2.8.orig/sntp/configure.ac	2014-12-22 10:16:10.428300168 -0300
--+++ ntp-4.2.8/sntp/configure.ac	2014-12-22 10:24:11.238172928 -0300
--@@ -97,11 +97,14 @@
-- enable_nls=no
-- LIBOPTS_CHECK
-- 
---AM_COND_IF(
---    [BUILD_SNTP],
---    [NTP_LIBEVENT_CHECK],
---    [NTP_LIBEVENT_CHECK_NOBUILD]
---)
--+# From when we only used libevent for sntp:
--+#AM_COND_IF(
--+#    [BUILD_SNTP],
--+#    [NTP_LIBEVENT_CHECK],
--+#    [NTP_LIBEVENT_CHECK_NOBUILD]
--+#)
--+
--+NTP_LIBEVENT_CHECK([2])
-- 
-- # Checks for libraries.
-- 
--diff -Nura ntp-4.2.8.orig/sntp/m4/ntp_libevent.m4 ntp-4.2.8/sntp/m4/ntp_libevent.m4
----- ntp-4.2.8.orig/sntp/m4/ntp_libevent.m4	2014-12-22 10:16:10.417294288 -0300
--+++ ntp-4.2.8/sntp/m4/ntp_libevent.m4	2014-12-22 10:20:31.757915561 -0300
--@@ -1,4 +1,25 @@
---dnl NTP_ENABLE_LOCAL_LIBEVENT				     -*- Autoconf -*-
--+# SYNOPSIS						-*- Autoconf -*-
--+#
--+#  NTP_ENABLE_LOCAL_LIBEVENT
--+#  NTP_LIBEVENT_CHECK([MINVERSION [, DIR]])
--+#  NTP_LIBEVENT_CHECK_NOBUILD([MINVERSION [, DIR]])
--+#
--+# DESCRIPTION
--+#
--+# AUTHOR
--+#
--+#  Harlan Stenn
--+#
--+# LICENSE
--+#
--+#  This file is Copyright (c) 2014 Network Time Foundation
--+# 
--+#  Copying and distribution of this file, with or without modification, are
--+#  permitted in any medium without royalty provided the copyright notice,
--+#  author attribution and this notice are preserved.  This file is offered
--+#  as-is, without any warranty.
--+
--+dnl NTP_ENABLE_LOCAL_LIBEVENT
-- dnl
-- dnl Provide only the --enable-local-libevent command-line option.
-- dnl
--@@ -29,7 +50,7 @@
-- dnl but DO NOT invoke DIR/configure if we are going to use our bundled
-- dnl version.  This may be the case for nested packages.
-- dnl
---dnl provide --enable-local-libevent .
--+dnl provides --enable-local-libevent .
-- dnl
-- dnl Examples:
-- dnl
--diff -Nura ntp-4.2.8.orig/util/Makefile.am ntp-4.2.8/util/Makefile.am
----- ntp-4.2.8.orig/util/Makefile.am	2014-12-22 10:16:10.435303910 -0300
--+++ ntp-4.2.8/util/Makefile.am	2014-12-22 10:21:02.500339706 -0300
--@@ -19,6 +19,7 @@
-- LDADD=		../libntp/libntp.a $(LDADD_LIBNTP) $(LIBM) $(PTHREAD_LIBS)
-- tg2_LDADD=	../libntp/libntp.a $(LDADD_LIBNTP) $(LIBM)
-- ntp_keygen_LDADD  = version.o $(LIBOPTS_LDADD) ../libntp/libntp.a
--+ntp_keygen_LDADD += $(LDADD_LIBEVENT)
-- ntp_keygen_LDADD += $(LDADD_LIBNTP) $(PTHREAD_LIBS) $(LDADD_NTP) $(LIBM)
-- ntp_keygen_SOURCES = ntp-keygen.c ntp-keygen-opts.c ntp-keygen-opts.h
-- 
-diff --git a/package/ntp/0002-nano.patch b/package/ntp/0001-nano.patch
-similarity index 100%
-rename from package/ntp/0002-nano.patch
-rename to package/ntp/0001-nano.patch
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 1d1b907adbc8..8336be8dc2e8 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,2 +1,2 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8.tar.gz.md5
--md5	6972a626be6150db8cfbd0b63d8719e7 ntp-4.2.8.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p1.tar.gz.md5
-+md5	65d8cdfae4722226fbe29863477641ed ntp-4.2.8p1.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 3a1a91757540..7d5644a90226 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,11 +5,9 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p1
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent
--# For 0001-fix-ntp-keygen-without-openssl.patch
--NTP_AUTORECONF = YES
- NTP_LICENSE = ntp license
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+> So if was wondering if I have to stop trying X running with uclibc, or if this indeed could work.
+> My final target is running a webkit based app. showing some html5 pages.
+
+What about giving up on X.org and instead use a Qt/Webkit application,
+using the framebuffer Qt implementation?
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
