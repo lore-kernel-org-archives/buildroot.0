@@ -1,187 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Feb 2015 21:01:10 +0100
-Subject: [Buildroot] [PATCH 03/10 v7] package/mesa3d-headers: new package
+Date: Tue, 10 Feb 2015 21:01:08 +0100
+Subject: [Buildroot] [PATCH 01/10 v7] package/python-lxml: new host package
 In-Reply-To: <cover.1423597914.git.yann.morin.1998@free.fr>
 References: <cover.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <f37c4782a8b2fb8e9e41b92bf1f321a9a154c843.1423597914.git.yann.morin.1998@free.fr>
+Message-ID: <aa80610ff6598a27c87a6058eb44fa827f467b29.1423597914.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some OpenGL/EGL/GLES/VG providers do not provide the corresponding
-headers, and rely on using "the headers provided by the distribution".
-
-In our case, we can not rely on such headers, because we are not a
-distribution, and we have no way to provide those headers (not even
-speaking about relying on the headers provided by hte host distribution,
-because they might well not be installed at all).
-
-Also, we can not rely on another package to provide those headers,
-because we can only have one provider enabled in any configuration.
-
-The Khronos group provides such headers, and they are the reference
-headers, but we can not realy use them:
-
-  - most of them are not packaged: they are not versioned and not
-    provided in a tarball, but as separately downloadable files;
-
-  - those headers are anyway incomplete: there are headers not provided
-    by Khronos, like GL.h
-
-Instead, we rely on mesa3d to provide those headers: mesa3d has all the
-headers we need.
-
-Modifying the existing mesa3d package would not be easy; we'd have to
-differentiate whther we need only the headers or the full package. The
-meas3d Config.in and .mk are already quite non-trivial that adding such
-a feature would render them even more illegible.
-
-So, we introduce mea3d-headers as a new package, that is in fact just
-mesa3d with a much simplified Config.in and .mk, that other OpenXXX
-providers may select if they do not provide the OpenXXX headers.
-
-Note: we're not installing GLES3 headers, because what Buildroot
-currently calls libgles is in fact libgles2; we have no way to specify
-that we have libgles3. So, we just install headers for GLES and GLES2.
+The lxml XML toolkit is a Pythonic binding for the C libraries libxml2
+and libxslt.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
-Notes:
-
-It should not be possible to select both mesa3d *and* mesa3d-headers at
-the same time, but it is difficult to foresee the multiple combinations
-we may have, due to poor understanding on how binary drivers may behave
-and what they may require, as well as my own poor understanding of the
-GL stack(s).
-
-So I decided to just print a warning in that case, and just depend on
-mesa3d, which would ultimately provide the headers we are interested in
-anyway. This can be turned into an error if preferred.
+This is a host-only package for now, because I only needed it to build
+opengl-registry.
 ---
- package/Config.in                          |  1 +
- package/mesa3d-headers/Config.in           |  8 ++++
- package/mesa3d-headers/mesa3d-headers.hash |  1 +
- package/mesa3d-headers/mesa3d-headers.mk   | 60 ++++++++++++++++++++++++++++++
- package/mesa3d/mesa3d.mk                   |  1 +
- 5 files changed, 71 insertions(+)
- create mode 100644 package/mesa3d-headers/Config.in
- create mode 120000 package/mesa3d-headers/mesa3d-headers.hash
- create mode 100644 package/mesa3d-headers/mesa3d-headers.mk
+ package/python-lxml/python-lxml.hash |  2 ++
+ package/python-lxml/python-lxml.mk   | 25 +++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/python-lxml/python-lxml.hash
+ create mode 100644 package/python-lxml/python-lxml.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 757237e..f25886a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -211,6 +211,7 @@ endif
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
- 	source "package/mesa3d/Config.in"
-+	source "package/mesa3d-headers/Config.in"
- 	source "package/ocrad/Config.in"
- 	source "package/psplash/Config.in"
- 	source "package/sawman/Config.in"
-diff --git a/package/mesa3d-headers/Config.in b/package/mesa3d-headers/Config.in
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
 new file mode 100644
-index 0000000..a64fc0c
+index 0000000..470a245
 --- /dev/null
-+++ b/package/mesa3d-headers/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MESA3D_HEADERS
-+	bool
-+	help
-+	  Mesa 3D, an open-source implementation of the OpenGL specification.
-+
-+	  This package only installs headers needed by other packages.
-+
-+	  http://mesa3d.org
-diff --git a/package/mesa3d-headers/mesa3d-headers.hash b/package/mesa3d-headers/mesa3d-headers.hash
-new file mode 120000
-index 0000000..137d0be
---- /dev/null
-+++ b/package/mesa3d-headers/mesa3d-headers.hash
-@@ -0,0 +1 @@
-+../mesa3d/mesa3d.hash
-\ No newline at end of file
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/python-lxml/python-lxml.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  069594837d0376a1bacf5cc42aa9a1be2e1c1396dc62f7d07f7358afecd34adf  lxml-3.4.1.tgz
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
 new file mode 100644
-index 0000000..acfc9a3
+index 0000000..758ce87
 --- /dev/null
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -0,0 +1,60 @@
++++ b/package/python-lxml/python-lxml.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# mesa3d-headers
++# python-lxml
 +#
 +################################################################################
 +
-+# mesa3d-headers is inherently incompatible with mesa3d, so if mesa3d
-+# is enabled, just rely on it.
++PYTHON_LXML_VERSION = 3.4.1
++PYTHON_LXML_SITE = http://lxml.de/files
++PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
 +
-+ifeq ($(BR2_PACKAGE_MESA3D),y)
++# Not including the GPL, because it is used only for the test scripts.
++PYTHON_LXML_LICENSE = BSD-3c, Others
++PYTHON_LXML_LICENSE_FILES = \
++	LICENSES.txt \
++	doc/licenses/BSD.txt \
++	doc/licenses/elementtree.txt \
++	src/lxml/isoschematron/resources/rng/iso-schematron.rng
 +
-+ifeq ($(BR2_PACKAGE_MESA3D_HEADERS),y)
-+$(warning mesa3d-headers enabled, but mesa3d enabled too)
-+endif
++# python-lxml can use either setuptools, or distutils as a fallback.
++# So, we use setuptools.
++PYTHON_LXML_SETUP_TYPE = setuptools
 +
-+MESA3D_HEADERS_SOURCE =
-+MESA3D_HEADERS_DEPENDENCIES = mesa3d
++PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
 +
-+else # mesa3d
-+
-+# Not possible to directly refer to mesa3d variables, because of first/second
-+# expansion trickery...
-+MESA3D_HEADERS_VERSION = 10.4.4
-+MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_HEADERS_VERSION).tar.bz2
-+MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
-+MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-+MESA3D_HEADERS_LICENSE_FILES = docs/license.html
-+
-+# Only installs header files
-+MESA3D_HEADERS_INSTALL_STAGING = YES
-+MESA3D_HEADERS_INSTALL_TARGET = NO
-+
-+MESA3D_HEADERS_DIRS = KHR
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+MESA3D_HEADERS_DIRS += GL
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-+MESA3D_HEADERS_DIRS += EGL
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-+MESA3D_HEADERS_DIRS += GLES GLES2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
-+MESA3D_HEADERS_DIRS += VG
-+endif
-+
-+define MESA3D_HEADERS_INSTALL_STAGING_CMDS
-+	$(foreach d,$(MESA3D_HEADERS_DIRS),\
-+		for h in $(@D)/include/$(d)/*.h; do \
-+			$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$(d)/$$(basename $${h}) || exit 1; \
-+		done$(sep))
-+endef
-+
-+endif # !mesa3d
-+
-+$(eval $(generic-package))
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index eb38a9a..ca98524 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# When updating the version, please also update mesa3d-headers
- MESA3D_VERSION = 10.4.4
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
++$(eval $(host-python-package))
 -- 
 1.9.1
