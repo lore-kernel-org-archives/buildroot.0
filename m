@@ -1,117 +1,187 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Feb 2015 21:01:17 +0100
-Subject: [Buildroot] [PATCH 10/10 v7] package/nvidia-tegra23-codecs: new
-	package
+Date: Tue, 10 Feb 2015 21:01:10 +0100
+Subject: [Buildroot] [PATCH 03/10 v7] package/mesa3d-headers: new package
 In-Reply-To: <cover.1423597914.git.yann.morin.1998@free.fr>
 References: <cover.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <c85883e41226c0c3458f34a39b31251f68dc4f2e.1423597914.git.yann.morin.1998@free.fr>
+Message-ID: <f37c4782a8b2fb8e9e41b92bf1f321a9a154c843.1423597914.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Some OpenGL/EGL/GLES/VG providers do not provide the corresponding
+headers, and rely on using "the headers provided by the distribution".
 
-nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
-as: AAC3, h264, jpeg, MP3...
+In our case, we can not rely on such headers, because we are not a
+distribution, and we have no way to provide those headers (not even
+speaking about relying on the headers provided by hte host distribution,
+because they might well not be installed at all).
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[me:
-  - split codecs from binaries into this patch
-  - use our extractor helpers
-]
+Also, we can not rely on another package to provide those headers,
+because we can only have one provider enabled in any configuration.
+
+The Khronos group provides such headers, and they are the reference
+headers, but we can not realy use them:
+
+  - most of them are not packaged: they are not versioned and not
+    provided in a tarball, but as separately downloadable files;
+
+  - those headers are anyway incomplete: there are headers not provided
+    by Khronos, like GL.h
+
+Instead, we rely on mesa3d to provide those headers: mesa3d has all the
+headers we need.
+
+Modifying the existing mesa3d package would not be easy; we'd have to
+differentiate whther we need only the headers or the full package. The
+meas3d Config.in and .mk are already quite non-trivial that adding such
+a feature would render them even more illegible.
+
+So, we introduce mea3d-headers as a new package, that is in fact just
+mesa3d with a much simplified Config.in and .mk, that other OpenXXX
+providers may select if they do not provide the OpenXXX headers.
+
+Note: we're not installing GLES3 headers, because what Buildroot
+currently calls libgles is in fact libgles2; we have no way to specify
+that we have libgles3. So, we just install headers for GLES and GLES2.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/nvidia-tegra23/Config.in                   |  1 +
- .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |  7 ++++
- .../nvidia-tegra23-codecs.hash                     |  3 ++
- .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk | 41 ++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
- create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
 
-diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
-index 950f2f8..89bdf83 100644
---- a/package/nvidia-tegra23/Config.in
-+++ b/package/nvidia-tegra23/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
- endchoice
- 
- source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
-+source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
- endif
- 
- comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+---
+Notes:
+
+It should not be possible to select both mesa3d *and* mesa3d-headers at
+the same time, but it is difficult to foresee the multiple combinations
+we may have, due to poor understanding on how binary drivers may behave
+and what they may require, as well as my own poor understanding of the
+GL stack(s).
+
+So I decided to just print a warning in that case, and just depend on
+mesa3d, which would ultimately provide the headers we are interested in
+anyway. This can be turned into an error if preferred.
+---
+ package/Config.in                          |  1 +
+ package/mesa3d-headers/Config.in           |  8 ++++
+ package/mesa3d-headers/mesa3d-headers.hash |  1 +
+ package/mesa3d-headers/mesa3d-headers.mk   | 60 ++++++++++++++++++++++++++++++
+ package/mesa3d/mesa3d.mk                   |  1 +
+ 5 files changed, 71 insertions(+)
+ create mode 100644 package/mesa3d-headers/Config.in
+ create mode 120000 package/mesa3d-headers/mesa3d-headers.hash
+ create mode 100644 package/mesa3d-headers/mesa3d-headers.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 757237e..f25886a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -211,6 +211,7 @@ endif
+ 	source "package/linux-fusion/Config.in"
+ 	source "package/lite/Config.in"
+ 	source "package/mesa3d/Config.in"
++	source "package/mesa3d-headers/Config.in"
+ 	source "package/ocrad/Config.in"
+ 	source "package/psplash/Config.in"
+ 	source "package/sawman/Config.in"
+diff --git a/package/mesa3d-headers/Config.in b/package/mesa3d-headers/Config.in
 new file mode 100644
-index 0000000..07a8e74
+index 0000000..a64fc0c
 --- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
-+	bool "nvidia-tegra23 codecs"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++++ b/package/mesa3d-headers/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MESA3D_HEADERS
++	bool
 +	help
-+	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.4.0
++	  Mesa 3D, an open-source implementation of the OpenGL specification.
 +
-+	  https://developer.nvidia.com/linux-tegra-rel-16
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-new file mode 100644
-index 0000000..de4a461
++	  This package only installs headers needed by other packages.
++
++	  http://mesa3d.org
+diff --git a/package/mesa3d-headers/mesa3d-headers.hash b/package/mesa3d-headers/mesa3d-headers.hash
+new file mode 120000
+index 0000000..137d0be
 --- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-@@ -0,0 +1,3 @@
-+# From https://developer.nvidia.com/linux-tegra-rel-16
-+sha1 d0889bf0ca408583a1e88657c6fd18f3659ef1bb Tegra20_Linux-codecs_R16.4.0_armhf.tbz2
-+sha1 a9f298222d3b6a618ef96a6bed9641929b152c8a Tegra30_Linux-codecs_R16.4.0_armhf.tbz2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
++++ b/package/mesa3d-headers/mesa3d-headers.hash
+@@ -0,0 +1 @@
++../mesa3d/mesa3d.hash
+\ No newline at end of file
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
 new file mode 100644
-index 0000000..d05dbb8
+index 0000000..acfc9a3
 --- /dev/null
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-@@ -0,0 +1,41 @@
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -0,0 +1,60 @@
 +################################################################################
 +#
-+# nvidia-tegra23-codecs
++# mesa3d-headers
 +#
 +################################################################################
 +
-+NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
-+NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
-+NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
-+NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
-+NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
-+NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
-+NVIDIA_TEGRA23_CODECS_DEPENDENCIES = nvidia-tegra23-binaries
-+NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO
-+NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES
++# mesa3d-headers is inherently incompatible with mesa3d, so if mesa3d
++# is enabled, just rely on it.
 +
-+NVIDIA_TEGRA23_CODECS_FIRMWARE = \
-+	nvmm_aacdec.axf nvmm_adtsdec.axf nvmm_h264dec.axf nvmm_h264dec2x.axf \
-+	nvmm_jpegdec.axf nvmm_jpegenc.axf nvmm_manager.axf nvmm_mp3dec.axf \
-+	nvmm_mpeg4dec.axf nvmm_service.axf
++ifeq ($(BR2_PACKAGE_MESA3D),y)
 +
-+# The archive contains an archive with the firmware codecs
-+define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
-+	$(INSTALL) -d $(@D)
-+	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
-+		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
-+	$(INSTALL) -d $(@D)/restricted_codecs
-+	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
-+		$(@D)/restricted_codecs.tbz2 | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
++ifeq ($(BR2_PACKAGE_MESA3D_HEADERS),y)
++$(warning mesa3d-headers enabled, but mesa3d enabled too)
++endif
++
++MESA3D_HEADERS_SOURCE =
++MESA3D_HEADERS_DEPENDENCIES = mesa3d
++
++else # mesa3d
++
++# Not possible to directly refer to mesa3d variables, because of first/second
++# expansion trickery...
++MESA3D_HEADERS_VERSION = 10.4.4
++MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_HEADERS_VERSION).tar.bz2
++MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
++MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
++MESA3D_HEADERS_LICENSE_FILES = docs/license.html
++
++# Only installs header files
++MESA3D_HEADERS_INSTALL_STAGING = YES
++MESA3D_HEADERS_INSTALL_TARGET = NO
++
++MESA3D_HEADERS_DIRS = KHR
++
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++MESA3D_HEADERS_DIRS += GL
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++MESA3D_HEADERS_DIRS += EGL
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
++MESA3D_HEADERS_DIRS += GLES GLES2
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
++MESA3D_HEADERS_DIRS += VG
++endif
++
++define MESA3D_HEADERS_INSTALL_STAGING_CMDS
++	$(foreach d,$(MESA3D_HEADERS_DIRS),\
++		for h in $(@D)/include/$(d)/*.h; do \
++			$(INSTALL) -D -m 0644 $${h} $(STAGING_DIR)/usr/include/$(d)/$$(basename $${h}) || exit 1; \
++		done$(sep))
 +endef
 +
-+define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
-+	$(foreach codec,$(NVIDIA_TEGRA23_CODECS_FIRMWARE),
-+		$(INSTALL) -D -m 0644 $(@D)/restricted_codecs/lib/firmware/$(codec) \
-+			$(TARGET_DIR)/lib/firmware/$(codec); \
-+	)
-+endef
++endif # !mesa3d
 +
 +$(eval $(generic-package))
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index eb38a9a..ca98524 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# When updating the version, please also update mesa3d-headers
+ MESA3D_VERSION = 10.4.4
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
 -- 
 1.9.1
