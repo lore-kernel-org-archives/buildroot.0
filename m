@@ -1,32 +1,44 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 10 Feb 2015 19:45:33 +0100
-Subject: [Buildroot] TZ_LOCALTIME cannot be empty for gtk#
-Message-ID: <CA+TH9VmdyyX+MLT56rcogu7tBqtg1rrru2hxyS+fQbO8hh8LMw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Feb 2015 21:19:53 +0200
+Subject: [Buildroot] [PATCH] Linux kernel: add support for config
+ fragment files
+In-Reply-To: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20150210191953.GA32404@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello list,
+Hi Floris,
 
-I'm building gtk# (new package) and encountered a little and annoying problem.
+On Tue, Feb 10, 2015 at 02:50:21PM +0100, Floris Bos wrote:
+> Adds configuration option to merge additional kernel configuration files
+> to the main kernel configuration using scripts/kconfig/merge_config.sh
+> 
+> For use-cases in which it is desired to build a custom Linux kernel based on
+> the defconfig of the target device, but with a couple extra options/modules
+> enabled.
+> 
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> ---
 
-If tz localtime is not setup (/etc/localtime and /etc/timezone), gtk#
-crashes bacause timezone cannot be null.
+[...]
 
-Having a timezone is a good practice, but I noticed that buildroot
-doesn't enforce that: when TZ_LOCALTIME is empty the timezone is
-simply not set up, thus relying on correct implementations in user
-code.
+> @@ -178,6 +179,8 @@ define LINUX_CONFIGURE_CMDS
+>  	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>  	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+>  	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+> +	$(if $(LINUX_KERNEL_CONFIG_FRAGMENTS),
+> +		$(@D)/scripts/kconfig/merge_config.sh -m -O $(@D) $(@D)/.config $(LINUX_KERNEL_CONFIG_FRAGMENTS))
 
-I wrote a dirty patch that sets TZ_LOCALTIME to Etc/UTC if empty, so
-the timezone is correctly configured making gtk# happy.
+The merge_config.sh script is in the kernel since version 3.3. The -O 
+parameter is only supported since v3.9. How do you handle older kernels?
 
-I ask an advice on how to solve this problem the right way to have the
-patches included.
-
-Sincerely, Angelo
+baruch
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
