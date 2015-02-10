@@ -1,49 +1,29 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 10 Feb 2015 06:19:08 -0300
-Subject: [Buildroot] [PATCH] linux-headers: add 3.19.x series
-Message-ID: <1423559948-18524-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 10 Feb 2015 11:02:55 +0100
+Subject: [Buildroot] [PATCH] git: fix static link with openssl
+In-Reply-To: <ed0c71f0657461f6b03b20ab4afbc4567d87d4fa.1423557599.git.baruch@tkos.co.il>
+References: <ed0c71f0657461f6b03b20ab4afbc4567d87d4fa.1423557599.git.baruch@tkos.co.il>
+Message-ID: <54D9D74F.6090604@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- package/linux-headers/Config.in.host | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Dear Baruch,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2755f2f..c07b7a4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -67,6 +67,10 @@ choice
- 		bool "Linux 3.18.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 
-+	config BR2_KERNEL_HEADERS_3_19
-+		bool "Linux 3.19.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -88,6 +92,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19
-+	bool "3.19.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18
- 	bool "3.18.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-@@ -183,4 +191,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.6"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.19"		if BR2_KERNEL_HEADERS_3_19
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.2.1
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+$ grep -E ^BR2_PACKAGE_OPENSSL .config
+BR2_PACKAGE_OPENSSL=y
+$ grep -E ^BR2_PACKAGE_GIT .config
+BR2_PACKAGE_GIT=y
+$ file output/build/git-2.3.0/git
+output/build/git-2.3.0/git: ELF 32-bit LSB executable, MIPS, MIPS32
+version 1 (SYSV), statically linked, with unknown capability 0xf41 =
+0x756e6700, with unknown capability 0x70100 = 0x3040000, not stripped
+
+Best regards,
+--
+Vincent
