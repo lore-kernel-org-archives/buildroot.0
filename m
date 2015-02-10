@@ -1,41 +1,32 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 10 Feb 2015 18:59:36 +0100
-Subject: [Buildroot] [PATCH v2] rtmpdump: use TARGET_LDFLAGS instead of
-	TARGET_CFLAGS for XLDFLAGS
-Message-ID: <1423591176-27243-1-git-send-email-fabio.porcedda@gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 10 Feb 2015 19:45:33 +0100
+Subject: [Buildroot] TZ_LOCALTIME cannot be empty for gtk#
+Message-ID: <CA+TH9VmdyyX+MLT56rcogu7tBqtg1rrru2hxyS+fQbO8hh8LMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The XLDFLAGS is for ld related flags so use TARGET_LDFLAGS instead of
-TARGET_CFLAGS, also the TARGET_CFLAGS is already used for XCFLAGS.
+Hello list,
 
-This fix is also needed for supporting the per-package staging directory.
+I'm building gtk# (new package) and encountered a little and annoying problem.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
+If tz localtime is not setup (/etc/localtime and /etc/timezone), gtk#
+crashes bacause timezone cannot be null.
 
-Notes:
-    v2:
-     - fixed my email address
+Having a timezone is a good practice, but I noticed that buildroot
+doesn't enforce that: when TZ_LOCALTIME is empty the timezone is
+simply not set up, thus relying on correct implementations in user
+code.
 
- package/rtmpdump/rtmpdump.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I wrote a dirty patch that sets TZ_LOCALTIME to Etc/UTC if empty, so
+the timezone is correctly configured making gtk# happy.
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 14037fb..613f1cd 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -39,7 +39,7 @@ define RTMPDUMP_BUILD_CMDS
- 	$(MAKE) CRYPTO=$(RTMPDUMP_CRYPTO) \
- 		prefix=/usr \
- 		XCFLAGS="$(RTMPDUMP_CFLAGS)" \
--		XLDFLAGS="$(TARGET_CFLAGS)" \
-+		XLDFLAGS="$(TARGET_LDFLAGS)" \
- 		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		$(RTMPDUMP_SHARED) \
- 		-C $(@D)/librtmp
+I ask an advice on how to solve this problem the right way to have the
+patches included.
+
+Sincerely, Angelo
+
 -- 
-2.1.0
+Profile: http://it.linkedin.com/in/compagnucciangelo
