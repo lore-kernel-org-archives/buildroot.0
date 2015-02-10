@@ -1,75 +1,234 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Feb 2015 21:01:09 +0100
-Subject: [Buildroot] [PATCH 02/10 v7] package/python-lxml: add target variant
+Date: Tue, 10 Feb 2015 21:01:12 +0100
+Subject: [Buildroot] [PATCH 05/10 v7] package/nvidia-driver: add NVidia's
+	OpenGL binary blob
 In-Reply-To: <cover.1423597914.git.yann.morin.1998@free.fr>
 References: <cover.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <6138910bb0d59673822124f4a24cf8a3fa68e02b.1423597914.git.yann.morin.1998@free.fr>
+Message-ID: <39396e420f3b6a2cabcc07b011f514b9545ff330.1423597914.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+This patch only adds the userland part. Unless other such other packages
+(which we named like: rpi-userland), we do not replicate this naming
+scheme with this package, as a future patch will also enable building
+the kernel part of the driver. So, it is better to just name that
+package with -driver, rather than with -userland and renaming it
+afterwards.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[yann.morin.1998 at free.fr: fix staging path; trim dependencies of
- the host variant]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
- package/Config.in                  |  1 +
- package/python-lxml/Config.in      | 10 ++++++++++
- package/python-lxml/python-lxml.mk | 10 +++++++++-
- 3 files changed, 20 insertions(+), 1 deletion(-)
- create mode 100644 package/python-lxml/Config.in
+Changes v6 -> v7:
+  - use mesa3d-headers instead of Khronos Registry
+
+Changes v4 -> v5:
+  - fix libGL.la for stupid libtool
+---
+ package/Config.in                        |   1 +
+ package/nvidia-driver/Config.in          |  51 ++++++++++++++
+ package/nvidia-driver/nvidia-driver.hash |   3 +
+ package/nvidia-driver/nvidia-driver.mk   | 110 +++++++++++++++++++++++++++++++
+ 4 files changed, 165 insertions(+)
+ create mode 100644 package/nvidia-driver/Config.in
+ create mode 100644 package/nvidia-driver/nvidia-driver.hash
+ create mode 100644 package/nvidia-driver/nvidia-driver.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..757237e 100644
+index f25886a..a80cec6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -534,6 +534,7 @@ menu "external python modules"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
-+	source "package/python-lxml/Config.in"
- 	source "package/python-mad/Config.in"
- 	source "package/python-markdown/Config.in"
- 	source "package/python-markupsafe/Config.in"
-diff --git a/package/python-lxml/Config.in b/package/python-lxml/Config.in
+@@ -349,6 +349,7 @@ endif
+ 	source "package/minicom/Config.in"
+ 	source "package/nanocom/Config.in"
+ 	source "package/neard/Config.in"
++	source "package/nvidia-driver/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
 new file mode 100644
-index 0000000..1ccaa5e
+index 0000000..9be6764
 --- /dev/null
-+++ b/package/python-lxml/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_LXML
-+	bool "python-lxml"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
-+	select BR2_PACKAGE_ZLIB
++++ b/package/nvidia-driver/Config.in
+@@ -0,0 +1,51 @@
++comment "nvidia-driver needs an (e)glibc toolchain and a modular Xorg server"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
++
++config BR2_PACKAGE_NVIDIA_DRIVER
++	bool "nvidia-driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
++	select BR2_PACKAGE_MESA3D_HEADERS
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
 +	help
-+	  The lxml XML toolkit is a Pythonic binding for the C libraries
-+	  libxml2 and libxslt.
++	  The binary-only driver blob for NVidia cards.
++	  This is the userland part only.
 +
-+	  http://lxml.de/
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 758ce87..7a94b09 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -20,6 +20,14 @@ PYTHON_LXML_LICENSE_FILES = \
- # So, we use setuptools.
- PYTHON_LXML_SETUP_TYPE = setuptools
- 
--PYTHON_LXML_DEPENDENCIES = libxml2 libxslt
-+PYTHON_LXML_DEPENDENCIES = libxml2 libxslt zlib
-+HOST_PYTHON_LXML_DEPENDENCIES = host-libxml2 host-libxslt
- 
-+# python-lxml needs these scripts in order to properly detect libxml2 and
-+# libxslt compiler and linker flags
-+PYTHON_LXML_BUILD_OPTS = \
-+	--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
-+	--with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config
++	  http://www.nvidia.com/
 +
-+$(eval $(python-package))
- $(eval $(host-python-package))
++if BR2_PACKAGE_NVIDIA_DRIVER
++
++config BR2_PACKAGE_PROVIDES_LIBGL
++	default "nvidia-driver"
++
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "nvidia-driver"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "nvidia-driver"
++
++config BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++	bool "CUDA support"
++
++config BR2_PACKAGE_NVIDIA_DRIVER_OPENCL
++	bool "OpenCL support"
++	depends on BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++
++config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
++	bool "Install private libraries"
++	help
++	  Two libraries require special agreement with NVidia to develop code
++	  linking to those libraries: libnvidia-ifr.so and libnvidia-fbc.so
++	  (to grab and encode an OpenGL buffer or an X framebuffer.)
++
++	  Say 'y' here if you plan on running a program that uses those
++	  private libraries.
++
++endif # BR2_PACKAGE_NVIDIA_DRIVER
+diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
+new file mode 100644
+index 0000000..137590f
+--- /dev/null
++++ b/package/nvidia-driver/nvidia-driver.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  bba63c30c730ad7b8500a77c81cae58562b9f9b57cd576b61f37a2d8bc45df25  NVIDIA-Linux-x86-346.35.run
++sha256  8625acbbc7a2abdda436a5cb9d06f2a7f5913b16e0a35ac4f9f106853a94d086  NVIDIA-Linux-x86_64-346.35.run
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+new file mode 100644
+index 0000000..30b2ab6
+--- /dev/null
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -0,0 +1,110 @@
++################################################################################
++#
++# nvidia-driver
++#
++################################################################################
++
++NVIDIA_DRIVER_VERSION = 346.35
++NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
++NVIDIA_DRIVER_SITE = ftp://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
++NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
++NVIDIA_DRIVER_LICENSE = NVIDIA Software License
++NVIDIA_DRIVER_LICENSE_FILES = LICENSE
++NVIDIA_DRIVER_REDISTRIBUTE = NO
++NVIDIA_DRIVER_INSTALL_STAGING = YES
++
++NVIDIA_DRIVER_DEPENDENCIES = mesa3d-headers xlib_libX11 xlib_libXext
++NVIDIA_DRIVER_PROVIDES = libgl libegl libgles
++
++# We have two variables that contains a list of libraries to install:
++#   NVIDIA_DRIVER_LIBS
++#       contains the libraries whose filename end up in .so.$(VERSION); rather
++#       than duplicate the version string for all of them, we just store their
++#       basename, and append the version string below.
++#   NVIDIA_DRIVER_LIBS_NO_VERSION
++#       contains all libraries the do not use the NVidia version; since there
++#       is currently only one such library, we store its full name.
++
++# Each line corresponds to a specific set of libraries
++NVIDIA_DRIVER_LIBS = \
++	libEGL libGLESv1_CM libGLESv2 libGL \
++	libnvidia-glcore libnvidia-eglcore libnvidia-glsi \
++	tls/libnvidia-tls \
++	libvdpau libvdpau_nvidia \
++	libnvidia-ml
++
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
++NVIDIA_DRIVER_LIBS += libcuda libnvidia-compiler libnvcuvid libnvidia-encode
++endif
++
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_OPENCL),y)
++NVIDIA_DRIVER_LIBS_NO_VERSION += libOpenCL.so.1.0.0
++NVIDIA_DRIVER_LIBS += libnvidia-opencl
++endif
++
++# Those libraries are 'private' libraries requiring an agreement with
++# NVidia to develop code for those libs. There seems to be no restriction
++# on using those libraries (e.g. if the user has such an agreement, or
++# wants to run a third-party program developped under such an agreement).
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
++NVIDIA_DRIVER_LIBS += libnvidia-ifr libnvidia-fbc
++endif
++
++# We refer to the destination path; the origin file has no directory component
++NVIDIA_DRIVER_X_MODS = drivers/nvidia_drv.so \
++	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
++	libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
++
++# The downloaded archive is in fact an auto-extract script. So, it can run
++# virtually everywhere, and it is fine enough to provide useful options.
++# Except it can't extract into an existing (even empty) directory.
++define NVIDIA_DRIVER_EXTRACT_CMDS
++	$(SHELL) $(DL_DIR)/$(NVIDIA_DRIVER_SOURCE) --extract-only --target \
++		$(@D)/tmp-extract
++	mv $(@D)/tmp-extract/* $(@D)/tmp-extract/.manifest $(@D)
++	rm -rf $(@D)/tmp-extract
++endef
++
++# Helper to install libraries
++# $1: destination directory (target or staging)
++#
++# For all libraries that need it, we append the NVidia version string.
++# The for all libraries, we install them and create a symlink using their
++# SONAME, so we can link to them at runtime; we also create the no-version
++# symlink, so we can link to them at build time.
++define NVIDIA_DRIVER_INSTALL_LIBS
++	for lib in $(patsubst %,%.so.$(NVIDIA_DRIVER_VERSION),$(NVIDIA_DRIVER_LIBS)) \
++	           $(NVIDIA_DRIVER_LIBS_NO_VERSION); \
++	do \
++		$(INSTALL) -D -m 0644 $(@D)/$${lib} $(1)/usr/lib/$${lib##*/}; \
++		n="$$( $(TARGET_READELF) -d "$(@D)/$${lib}" \
++		       |sed -r -e '/.*\(SONAME\).*\[(.*)\]$$/!d; s//\1/;' )"; \
++		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
++			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
++		fi; \
++		n="$${lib##*/}"; n="$${n/.so*}.so"; \
++		if [ -n "$${n}" -a "$${n}" != "$${lib##*/}" ]; then \
++			ln -sf $${lib##*/} $(1)/usr/lib/$${n}; \
++		fi; \
++	done
++endef
++
++# For staging, install libraries and development files
++define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
++	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(STAGING_DIR))
++	$(INSTALL) -D -m 0644 $(@D)/libGL.la $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
++	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
++endef
++
++# For target, install libraries and X.org modules
++define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
++	$(call NVIDIA_DRIVER_INSTALL_LIBS,$(TARGET_DIR))
++	for m in $(NVIDIA_DRIVER_X_MODS); do \
++		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
++			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
++	done
++endef
++
++$(eval $(generic-package))
 -- 
 1.9.1
