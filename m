@@ -1,55 +1,117 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Feb 2015 21:01:13 +0100
-Subject: [Buildroot] [PATCH 06/10 v7] package/nvidia-driver: Add gl.pc
+Date: Tue, 10 Feb 2015 21:01:17 +0100
+Subject: [Buildroot] [PATCH 10/10 v7] package/nvidia-tegra23-codecs: new
+	package
 In-Reply-To: <cover.1423597914.git.yann.morin.1998@free.fr>
 References: <cover.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <09718509727afa315acf9e7b999f71243f2a67c3.1423597914.git.yann.morin.1998@free.fr>
+Message-ID: <c85883e41226c0c3458f34a39b31251f68dc4f2e.1423597914.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: J?r?me Pouiller <jezz@sysmic.org>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
 
-In order to compile xserver, libgl provider have to provide gl.pc file.
+nvidia-tegra23-codecs provides various HW-accelerated media codecs, such
+as: AAC3, h264, jpeg, MP3...
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+[me:
+  - split codecs from binaries into this patch
+  - use our extractor helpers
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/nvidia-driver/gl.pc            | 11 +++++++++++
- package/nvidia-driver/nvidia-driver.mk |  1 +
- 2 files changed, 12 insertions(+)
- create mode 100644 package/nvidia-driver/gl.pc
+ package/nvidia-tegra23/Config.in                   |  1 +
+ .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |  7 ++++
+ .../nvidia-tegra23-codecs.hash                     |  3 ++
+ .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk | 41 ++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
 
-diff --git a/package/nvidia-driver/gl.pc b/package/nvidia-driver/gl.pc
-new file mode 100644
-index 0000000..d822763
---- /dev/null
-+++ b/package/nvidia-driver/gl.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: gl
-+Description: Nvidia OpenGL library
-+Version: 10.4.2
-+Libs: -L${libdir} -lGL -lm -lXext -lX11 -ldl
-+Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-+glx_tls: no
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 30b2ab6..807dd65 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -96,6 +96,7 @@ define NVIDIA_DRIVER_INSTALL_STAGING_CMDS
- 	$(SED) 's:__GENERATED_BY__:Buildroot:' $(STAGING_DIR)/usr/lib/libGL.la
- 	$(SED) 's:__LIBGL_PATH__:/usr/lib:' $(STAGING_DIR)/usr/lib/libGL.la
- 	$(SED) 's:-L[^[:space:]]\+::' $(STAGING_DIR)/usr/lib/libGL.la
-+	$(INSTALL) -D -m 0644 package/nvidia-driver/gl.pc $(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
- endef
+diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
+index 950f2f8..89bdf83 100644
+--- a/package/nvidia-tegra23/Config.in
++++ b/package/nvidia-tegra23/Config.in
+@@ -28,6 +28,7 @@ config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
+ endchoice
  
- # For target, install libraries and X.org modules
+ source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
++source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
+ endif
+ 
+ comment "nvidia-tegra23 needs Xorg and a (e)glibc toolchain w/ EABIhf"
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+new file mode 100644
+index 0000000..07a8e74
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
++	bool "nvidia-tegra23 codecs"
++	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
++	help
++	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.4.0
++
++	  https://developer.nvidia.com/linux-tegra-rel-16
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+new file mode 100644
+index 0000000..de4a461
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+@@ -0,0 +1,3 @@
++# From https://developer.nvidia.com/linux-tegra-rel-16
++sha1 d0889bf0ca408583a1e88657c6fd18f3659ef1bb Tegra20_Linux-codecs_R16.4.0_armhf.tbz2
++sha1 a9f298222d3b6a618ef96a6bed9641929b152c8a Tegra30_Linux-codecs_R16.4.0_armhf.tbz2
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+new file mode 100644
+index 0000000..d05dbb8
+--- /dev/null
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# nvidia-tegra23-codecs
++#
++################################################################################
++
++NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
++NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
++NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
++NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
++NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
++NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
++NVIDIA_TEGRA23_CODECS_DEPENDENCIES = nvidia-tegra23-binaries
++NVIDIA_TEGRA23_CODECS_INSTALL_STAGING = NO
++NVIDIA_TEGRA23_CODECS_INSTALL_TARGET = YES
++
++NVIDIA_TEGRA23_CODECS_FIRMWARE = \
++	nvmm_aacdec.axf nvmm_adtsdec.axf nvmm_h264dec.axf nvmm_h264dec2x.axf \
++	nvmm_jpegdec.axf nvmm_jpegenc.axf nvmm_manager.axf nvmm_mp3dec.axf \
++	nvmm_mpeg4dec.axf nvmm_service.axf
++
++# The archive contains an archive with the firmware codecs
++define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
++	$(INSTALL) -d $(@D)
++	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
++		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
++	$(INSTALL) -d $(@D)/restricted_codecs
++	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
++		$(@D)/restricted_codecs.tbz2 | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
++endef
++
++define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
++	$(foreach codec,$(NVIDIA_TEGRA23_CODECS_FIRMWARE),
++		$(INSTALL) -D -m 0644 $(@D)/restricted_codecs/lib/firmware/$(codec) \
++			$(TARGET_DIR)/lib/firmware/$(codec); \
++	)
++endef
++
++$(eval $(generic-package))
 -- 
 1.9.1
