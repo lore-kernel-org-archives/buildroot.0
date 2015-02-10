@@ -1,44 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Feb 2015 14:29:38 +0100
-Subject: [Buildroot] getting X running
-In-Reply-To: <C860A811EEF34E4793E67D45FD390387@JohanW7>
-References: <C860A811EEF34E4793E67D45FD390387@JohanW7>
-Message-ID: <20150210142938.3d715c88@free-electrons.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 10 Feb 2015 14:50:21 +0100
+Subject: [Buildroot] [PATCH] Linux kernel: add support for config fragment
+	files
+Message-ID: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Adds configuration option to merge additional kernel configuration files
+to the main kernel configuration using scripts/kconfig/merge_config.sh
 
-On Tue, 10 Feb 2015 11:43:21 +0100, Sagaert Johan wrote:
+For use-cases in which it is desired to build a custom Linux kernel based on
+the defconfig of the target device, but with a couple extra options/modules
+enabled.
 
-> Not sure if X11 can run with uclibc, I enabled everything but when I try te run X and inspect the log.
-> I found : [2048840.110] (EE) systemd-logind: failed to get session: The name org.freedesktop.login1 was not provided by any .service
-> files
-> 
-> If systemd is required, then I am at a dead end with uclibc, since systemd requires (e)glibc.
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+---
+ linux/Config.in | 6 ++++++
+ linux/linux.mk  | 3 +++
+ 2 files changed, 9 insertions(+)
 
-I don't think systemd is required to run the X server. However, maybe
-some more --disable-<something> options are needed when building the X
-server, I don't know.
-
-But anyway, if you are using the X.org (which is a big thing), then
-moving from uClibc to eglibc should not be a problem, as the size
-difference between uClibc and eglibc is insignificant compared to the
-size of the X.org stack (and Webkit, that you mention below).
-
-> So if was wondering if I have to stop trying X running with uclibc, or if this indeed could work.
-> My final target is running a webkit based app. showing some html5 pages.
-
-What about giving up on X.org and instead use a Qt/Webkit application,
-using the framebuffer Qt implementation?
-
-Best regards,
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index c981493..afa68b0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -161,6 +161,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the kernel configuration file
+ 
++config BR2_LINUX_KERNEL_CONFIG_FRAGMENTS
++	string "Additional configuration fragment files"
++	help
++	  A space-seperated list of kernel configuration fragment files,
++	  that will be merged to the main kernel configuration file.
++
+ #
+ # Binary format
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29f59e8..02c3f66 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -39,6 +39,7 @@ endif # -rc
+ endif
+ 
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
++LINUX_KERNEL_CONFIG_FRAGMENTS = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENTS))
+ 
+ LINUX_INSTALL_IMAGES = YES
+ LINUX_DEPENDENCIES += host-kmod host-lzop
+@@ -178,6 +179,8 @@ define LINUX_CONFIGURE_CMDS
+ 	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++	$(if $(LINUX_KERNEL_CONFIG_FRAGMENTS),
++		$(@D)/scripts/kconfig/merge_config.sh -m -O $(@D) $(@D)/.config $(LINUX_KERNEL_CONFIG_FRAGMENTS))
+ 	$(if $(BR2_arm)$(BR2_armeb),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+ 	$(if $(BR2_TARGET_ROOTFS_CPIO),
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
