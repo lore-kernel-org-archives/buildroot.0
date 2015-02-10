@@ -1,8 +1,8 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 10 Feb 2015 18:50:50 +0100
-Subject: [Buildroot] [PATCH] rtmpdump: use TARGET_LDFLAGS instead of
+Date: Tue, 10 Feb 2015 18:59:36 +0100
+Subject: [Buildroot] [PATCH v2] rtmpdump: use TARGET_LDFLAGS instead of
 	TARGET_CFLAGS for XLDFLAGS
-Message-ID: <1423590650-26562-1-git-send-email-user@ld2077>
+Message-ID: <1423591176-27243-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,13 @@ TARGET_CFLAGS, also the TARGET_CFLAGS is already used for XCFLAGS.
 
 This fix is also needed for supporting the per-package staging directory.
 
-Signed-off-by: Fabio Porcedda <fabiopo@ld2077.tmt.telital.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
+
+Notes:
+    v2:
+     - fixed my email address
+
  package/rtmpdump/rtmpdump.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
