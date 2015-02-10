@@ -1,47 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Feb 2015 21:10:13 +0100
-Subject: [Buildroot] [PATCH 0/10 v7] NVidia GPU binary blobs for x86 and
- ARM (branch yem/gfx2)
-In-Reply-To: <cover.1423597914.git.yann.morin.1998@free.fr>
-References: <cover.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <20150210201013.GA4497@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 10 Feb 2015 22:09:44 +0100
+Subject: [Buildroot] [PATCH] Linux kernel: add support for config
+ fragment files
+In-Reply-To: <20150210191953.GA32404@tarshish>
+References: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
+ <20150210191953.GA32404@tarshish>
+Message-ID: <54DA7398.9090707@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+On 02/10/2015 08:19 PM, Baruch Siach wrote:
+> On Tue, Feb 10, 2015 at 02:50:21PM +0100, Floris Bos wrote:
+>> Adds configuration option to merge additional kernel configuration files
+>> to the main kernel configuration using scripts/kconfig/merge_config.sh
+>>
+>> For use-cases in which it is desired to build a custom Linux kernel based on
+>> the defconfig of the target device, but with a couple extra options/modules
+>> enabled.
+>>
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>> ---
+> [...]
+>
+>> @@ -178,6 +179,8 @@ define LINUX_CONFIGURE_CMDS
+>>   	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>>   	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+>>   	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>> +	$(if $(LINUX_KERNEL_CONFIG_FRAGMENTS),
+>> +		$(@D)/scripts/kconfig/merge_config.sh -m -O $(@D) $(@D)/.config $(LINUX_KERNEL_CONFIG_FRAGMENTS))
+> The merge_config.sh script is in the kernel since version 3.3. The -O
+> parameter is only supported since v3.9. How do you handle older kernels?
 
-On 2015-02-10 21:01 +0100, Yann E. MORIN spake thusly:
-> This series adds support for NVidia's binary blob, the driver to its
-> family of GPUs, for x86 (by Yann) and Tegra2 and Tegra3 (by Nicolas).
-[--SNIP--]
-> Yann E. MORIN (5):
->       package/python-lxml: new host package
-[--SNIP--]
-> Yegor Yefremov (1):
->       package/python-lxml: add target variant
+Could make it use the merge_config.sh we have in buildroot (in 
+support/kconfig) instead, if support for old kernel versions is a 
+requirement.
 
-One thing I forgot to say in the cover letter: python-lxml is no longer
-required in this series, because we no longer install the Khronos
-Registries.
 
-However, since they were part of previous iterations of this series, and
-some users seem to be wanting them, I kept them in the series.
+Yours sincerely,
 
-What this means is: python-lxml (host and target variants) can be
-applies without applying the NVidia packages patches, and conversely,
-the NVidia patches can be applied without applying the python-lxml
-patches (of course, barring any comment on either).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Floris Bos
