@@ -1,77 +1,34 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 10 Feb 2015 22:59:35 +0100
-Subject: [Buildroot] getting X running
-In-Reply-To: <XnsA43DB7FEFEB42berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <C860A811EEF34E4793E67D45FD390387@JohanW7>
- <XnsA43DB7FEFEB42berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <455E5DD938E3483BB9C2E4DC9C85E122@JohanW7>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Feb 2015 09:21:50 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-02-09
+In-Reply-To: <20150210073014.E19721010F3@stock.ovh.net> (Thomas Petazzoni's
+ message of "Tue, 10 Feb 2015 08:30:14 +0100 (CET)")
+References: <20150210073014.E19721010F3@stock.ovh.net>
+Message-ID: <87siee18ip.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
------Oorspronkelijk bericht-----
-Van: buildroot [mailto:buildroot-bounces at busybox.net] Namens Bernd Kuhls
-Verzonden: dinsdag 10 februari 2015 18:05
-Aan: buildroot at uclibc.org
-Onderwerp: Re: [Buildroot] getting X running
+ > Build statistics for 2015-02-09
+ > ===============================
 
-Hi,
+ >         success : 350
+ >        failures : 15 
+ >        timeouts : 3  
+ >           TOTAL : 368
 
-"Sagaert Johan" <sagaert.johan@skynet.be> wrote in news:C860A811EEF34E4793E67D45FD390387 at JohanW7:
+Nice!
 
-> Not sure if X11 can run with uclibc,
+>       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/d3f123367559c758649c6da0ee4df528cb2d4682/
+ >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/cd713c2513cd1eb39b657504203338c4b7f5c887/
+ >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/0220ecb696a742641b83949f187d2d74e442f48a/
 
-yes, it is possible, I am using Kodi on an uClibc-based system.
+Didn't we already blacklist those uClibc/MIPS toolchains?
 
-> (EE) Server is already active for display 0
-
-Did you start Xorg twice?
-
-> [2048840.049] Current Operating System: Linux apex_systems 3.16.0 #1 
-> SMP
-PREEMPT Tue Feb 10 05:36:20 CET 2015 armv7l
-
-Please tell us a bit about the buildroot defconfig used and the machine you want to run Xorg on.
-
-Regards, Bernd
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
------------------------------------------------------------------------------------------------------------------------------------
-
-Dear Bernd
-
-Thanks for the reply,
-
-The target is an imx6dl, to be exact a karo tx6dl module  with kernel 3.16.0 from their git repo.
-
-I am not sore if I need to export anything else than DISPLAY=0.0
-(Or if I am missing some .conf files in the /etc directory )
-
-My framebuffer is ok (/dev/fb0), I can run the directfb demo's.
-
-Best Regards, Johan
-
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/xml
-Size: 77229 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150210/19a7b117/attachment.wsdl>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 6253 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150210/19a7b117/attachment.bin>
+-- 
+Bye, Peter Korsgaard
