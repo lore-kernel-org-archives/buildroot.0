@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Feb 2015 21:11:25 +0100
-Subject: [Buildroot] [PATCH 3/3 v2] package/gtksharp: new package
-In-Reply-To: <1423672716-23909-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1423672716-23909-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150211211125.4ea3ae88@free-electrons.com>
+Date: Wed, 11 Feb 2015 21:14:20 +0100
+Subject: [Buildroot] [PATCH] pkg-cmake: reduce output when being silent
+In-Reply-To: <1423677141-10912-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1423677141-10912-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150211211420.57208953@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Dear Fabio Porcedda,
 
-On Wed, 11 Feb 2015 17:38:36 +0100, Angelo Compagnucci wrote:
-> This patch adds gtksharp package for mono.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+On Wed, 11 Feb 2015 18:52:21 +0100, Fabio Porcedda wrote:
 
-I already told you for your previous patch series, but you are still
-not doing it. So here are the same recommendations:
+> +ifdef QUIET
+> +CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
+> +else
+> +CMAKE_QUIET =
+> +endif
 
- 1/ Please do *not* resend just one patch. Resend the all series. Every
-    time.
+Use:
 
- 2/ For *each* iteration, please include a changelog in the
-    introduction e-mail that describes the changes between each version.
+ifneq ($(QUIET),)
+CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
+endif
 
-If you don't do (1) and (2), it's impossible for us to follow your
-patch versions.
+We generally don't use ifdef to test the value of a variable in
+Buildroot.
+
+The else part is unnecessary.
 
 Thanks,
 
