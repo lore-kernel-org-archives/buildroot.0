@@ -1,75 +1,52 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 11 Feb 2015 13:21:25 +0100
-Subject: [Buildroot] [PATCH v2] package/gtksharp: new package
-Message-ID: <1423657285-14235-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Wed, 11 Feb 2015 09:51:48 -0300
+Subject: [Buildroot] [PATCH] gcc: 4.9.2: Add patch to remove a wrong header
+Message-ID: <1423659108-6073-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds gtksharp package for mono.
+This commit adds a patch to gcc removing a unistd.h header include
+in libgcc/config/nios2/linux-atomic.c
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+The file is built as part of GCC first stage (host-gcc-initial),
+and so the header is not accesible. Given the header is not needed
+it's fine to simply remove it.
+
+Chung-Lin Tang (GCC nios2 maintainer) confirmed patch is good:
+""
+Thanks for noticing, this part appears to be unneeded now that Nios II
+uses a kernel provided user function for Linux atomic operations. I'll
+remove the include, and the #define's as well in upstream GCC.
+""
+
+This commit is required to build a Nios-II internal toolchain.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- package/Config.in            |  5 +++++
- package/gtksharp/Config.in   |  9 +++++++++
- package/gtksharp/gtksharp.mk | 15 +++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/gtksharp/Config.in
- create mode 100644 package/gtksharp/gtksharp.mk
+ package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..27daf2a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -464,6 +464,11 @@ menu "Lua libraries/modules"
- endmenu
- endif
- 	source "package/mono/Config.in"
-+if BR2_PACKAGE_MONO
-+menu "Mono libraries/modules"
-+	source "package/gtksharp/Config.in"
-+endmenu
-+endif
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/gtksharp/Config.in b/package/gtksharp/Config.in
+diff --git a/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch b/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
 new file mode 100644
-index 0000000..8f3af2e
+index 0000000..df5372b
 --- /dev/null
-+++ b/package/gtksharp/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_GTKSHARP
-+	bool "gtk#"
-+	depends on BR2_PACKAGE_MONO
-+	select BR2_PACKAGE_LIBGTK3
-+	select BR2_TARGET_TZ_INFO
-+	help
-+	  Gtk# is a .NET language binding for the GTK+ toolkit.
++++ b/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
+@@ -0,0 +1,12 @@
++Upstream status: In progress
 +
-+	  http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
-diff --git a/package/gtksharp/gtksharp.mk b/package/gtksharp/gtksharp.mk
-new file mode 100644
-index 0000000..948db19
---- /dev/null
-+++ b/package/gtksharp/gtksharp.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# gtksharp
-+#
-+#############################################################
-+
-+GTKSHARP_VERSION = 2.99.3
-+GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
-+GTKSHARP_SOURCE = gtk-sharp-$(GTKSHARP_VERSION).tar.xz
-+GTKSHARP_LICENSE = LGPLv2
-+GTKSHARP_LICENSE_FILES = COPYING
-+GTKSHARP_INSTALL_STAGING = YES
-+GTKSHARP_DEPENDENCIES += mono libgtk3
-+
-+$(eval $(autotools-package))
++--- a/libgcc/config/nios2/linux-atomic.c
+++++ b/libgcc/config/nios2/linux-atomic.c
++@@ -20,7 +20,6 @@
++ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++ <http://www.gnu.org/licenses/>.  */
++ 
++-#include <asm/unistd.h>
++ #define EFAULT  14
++ #define EBUSY   16
++ #define ENOSYS  38
 -- 
-1.9.1
+2.2.1
