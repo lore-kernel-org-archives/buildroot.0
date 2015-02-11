@@ -1,52 +1,75 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Feb 2015 17:06:21 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: disable gold linker
-In-Reply-To: <20150211153232.2dcd2b32@free-electrons.com>
-References: <1423637231-4145-1-git-send-email-ps.report@gmx.net>,
- <20150211153232.2dcd2b32@free-electrons.com>
-Message-ID: <trinity-7770b020-1a93-417b-895b-9055bc4acab0-1423670781149@3capp-gmx-bs31>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 11 Feb 2015 17:38:36 +0100
+Subject: [Buildroot] [PATCH 3/3 v2] package/gtksharp: new package
+Message-ID: <1423672716-23909-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This patch adds gtksharp package for mono.
 
-> Gesendet: Mittwoch, 11. Februar 2015 um 15:32 Uhr
-> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net
-> Betreff: Re: [Buildroot] [PATCH v1] qt5base: disable gold linker
->
-> Dear Peter Seiderer,
-> 
-> On Wed, 11 Feb 2015 07:47:11 +0100, Peter Seiderer wrote:
-> > Fixes [1],[2]:
-> > powerpc-ctng_e500v2-linux-gnuspe-g++: error: unrecognized command line option '-fuse-ld=gold'
-> > Makefile:1192: recipe for target '../../lib/libQt5Core.so.5.4.0' failed
-> 
-> The Qt configure script has some logic to detect whether the compiler
-> supports -fuse-ld=gold or not. Do you know why this logic is not
-> properly working, and not detecting that this specific compiler doesn't
-> support this?
-> 
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/Config.in            |  5 +++++
+ package/gtksharp/Config.in   |  9 +++++++++
+ package/gtksharp/gtksharp.mk | 15 +++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/gtksharp/Config.in
+ create mode 100644 package/gtksharp/gtksharp.mk
 
-No (did not investigate further, disabling gold unconditionally worked for me
-for ptxdist/qt-5.4.0)...
-
-> Disabling unconditionally this feature is maybe OK, but I'd like to
-> understand why the configure script logic to auto-detect this is not
-> working.
-
-O.k, will try (but may last some time)...
-
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+diff --git a/package/Config.in b/package/Config.in
+index fe3d3d0..27daf2a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -464,6 +464,11 @@ menu "Lua libraries/modules"
+ endmenu
+ endif
+ 	source "package/mono/Config.in"
++if BR2_PACKAGE_MONO
++menu "Mono libraries/modules"
++	source "package/gtksharp/Config.in"
++endmenu
++endif
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/gtksharp/Config.in b/package/gtksharp/Config.in
+new file mode 100644
+index 0000000..8f3af2e
+--- /dev/null
++++ b/package/gtksharp/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_GTKSHARP
++	bool "gtk#"
++	depends on BR2_PACKAGE_MONO
++	select BR2_PACKAGE_LIBGTK3
++	select BR2_TARGET_TZ_INFO
++	help
++	  Gtk# is a .NET language binding for the GTK+ toolkit.
++
++	  http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
+diff --git a/package/gtksharp/gtksharp.mk b/package/gtksharp/gtksharp.mk
+new file mode 100644
+index 0000000..948db19
+--- /dev/null
++++ b/package/gtksharp/gtksharp.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# gtksharp
++#
++#############################################################
++
++GTKSHARP_VERSION = 2.99.3
++GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
++GTKSHARP_SOURCE = gtk-sharp-$(GTKSHARP_VERSION).tar.xz
++GTKSHARP_LICENSE = LGPLv2
++GTKSHARP_LICENSE_FILES = COPYING
++GTKSHARP_INSTALL_STAGING = YES
++GTKSHARP_DEPENDENCIES += mono libgtk3
++
++$(eval $(autotools-package))
+-- 
+1.9.1
