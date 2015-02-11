@@ -1,29 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 11 Feb 2015 10:01:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-02-10
-In-Reply-To: <20150211073015.D49F7101159@stock.ovh.net>
-References: <20150211073015.D49F7101159@stock.ovh.net>
-Message-ID: <20150211080111.GQ16955@sapphire.tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 11 Feb 2015 10:26:49 +0100
+Subject: [Buildroot] [PATCH] add basic support for uClibc-ng
+In-Reply-To: <20150211071005.4cbd071a@free-electrons.com>
+References: <20150209181636.GA17451@waldemar-brodkorb.de>
+ <20150209205338.604f740e@free-electrons.com>
+ <20150210172555.GE22344@waldemar-brodkorb.de>
+ <20150211071005.4cbd071a@free-electrons.com>
+Message-ID: <20150211092649.GL22344@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Richard,
+Hi,
+Thomas Petazzoni wrote,
 
-On Wed, Feb 11, 2015 at 08:30:15AM +0100, Thomas Petazzoni wrote:
->         i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/e3c42b2a8334d910f44f7a908371796a332f20e2/
->          arm |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/04940f2f0110bc3bb19cd96cc75a6d2d7e8affd5/
->         i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/e733fac165c7b90b529855b0e1ccf92ad4ac9eca/
+> Dear Waldemar Brodkorb,
+> 
+> On Tue, 10 Feb 2015 18:25:55 +0100, Waldemar Brodkorb wrote:
+> 
+> > > I don't think introducing this symbol is needed. Instead, we can just
+> > > make uClibc-ng another version of uClibc. Like the following (untested) :
+> > 
+> > I thought about this in my first try, but I have following problem:
+> > When you choose uClibc-ng 1.0.0 instead of uClibc, the default
+> > config string is _not_ automatically changed.
+> 
+> I'm not sure to understand: which "config string" are you talking about?
 
-Looks like a broken cached tar file with missing files, as it only happens on 
-your build server. Can you remove this file?
+Sorry, I meant the default string pointing to the uClibc
+configuration file. It is not switched, when choosing uClibc-ng.
 
-baruch
+Clearer now?
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+best regards
+ Waldemar
