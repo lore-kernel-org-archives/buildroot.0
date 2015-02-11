@@ -1,45 +1,55 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 11 Feb 2015 18:52:21 +0100
-Subject: [Buildroot] [PATCH] pkg-cmake: reduce output when being silent
-Message-ID: <1423677141-10912-1-git-send-email-fabio.porcedda@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Feb 2015 18:52:34 +0100
+Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
+	new package
+In-Reply-To: <20150211144230.4a750cde@nserafini-N550JK>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
+ <20150211144230.4a750cde@nserafini-N550JK>
+Message-ID: <20150211175234.GA4003@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use CMAKE_RULE_MESSAGES and CMAKE_INSTALL_MESSAGE variables to reduce
-cmake output when it is a silent build.
+Nicolas, All,
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- package/pkg-cmake.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 2015-02-11 14:42 +0100, Nicolas Serafini spake thusly:
+> Thanks for this new version of the patch. I was in holliday the two
+> previous week, so sorry I have not responded for the previous version
+> of the patch.
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6c9955d..de11134 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -31,6 +31,12 @@ CMAKE_HOST_C_COMPILER = $(HOSTCC)
- CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
- endif
- 
-+ifdef QUIET
-+CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
-+else
-+CMAKE_QUIET =
-+endif
-+
- ################################################################################
- # inner-cmake-package -- defines how the configuration, compilation and
- # installation of a CMake package should be done, implements a few hooks to
-@@ -86,6 +92,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DBUILD_TESTING=OFF \
- 		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
- 		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
-+		$$(CMAKE_QUIET) \
- 		$$($$(PKG)_CONF_OPTS) \
- 	)
- endef
+No problem! hope you enjoyed it! ;-)
+
+> I have done some tests and there is only one small bug into the
+> .mk file. The correction is below into the patch.
+[--SNIP--]
+> > +ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_TEGRA2),y)
+> must be replaced by
+> ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2),y)
+
+Dang... Nice catch!
+
+> > +NVIDIA_TEGRA23_BINARIES_FIRMWARE = \
+> > +	nvrm_avp.bin nvavp_vid_ucode_alt.bin nvavp_os_0ff00000.bin \
+> > +	nvavp_os_eff00000.bin
+> > +endif
+> > +ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_TEGRA3),y)
+> must be replaced by
+> ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3),y)
+
+Ditto.
+
+Thanks for the review!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
