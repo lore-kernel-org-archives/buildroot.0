@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Feb 2015 15:34:42 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-02-10
-In-Reply-To: <20150211080111.GQ16955@sapphire.tkos.co.il>
-References: <20150211073015.D49F7101159@stock.ovh.net>
- <20150211080111.GQ16955@sapphire.tkos.co.il>
-Message-ID: <20150211153442.5a122bc6@free-electrons.com>
+Date: Wed, 11 Feb 2015 15:32:32 +0100
+Subject: [Buildroot] [PATCH v1] qt5base: disable gold linker
+In-Reply-To: <1423637231-4145-1-git-send-email-ps.report@gmx.net>
+References: <1423637231-4145-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150211153232.2dcd2b32@free-electrons.com>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Peter Seiderer,
 
-On Wed, 11 Feb 2015 10:01:11 +0200, Baruch Siach wrote:
+On Wed, 11 Feb 2015 07:47:11 +0100, Peter Seiderer wrote:
+> Fixes [1],[2]:
+> powerpc-ctng_e500v2-linux-gnuspe-g++: error: unrecognized command line option '-fuse-ld=gold'
+> Makefile:1192: recipe for target '../../lib/libQt5Core.so.5.4.0' failed
 
-> On Wed, Feb 11, 2015 at 08:30:15AM +0100, Thomas Petazzoni wrote:
-> >         i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/e3c42b2a8334d910f44f7a908371796a332f20e2/
-> >          arm |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/04940f2f0110bc3bb19cd96cc75a6d2d7e8affd5/
-> >         i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/e733fac165c7b90b529855b0e1ccf92ad4ac9eca/
-> 
-> Looks like a broken cached tar file with missing files, as it only happens on 
-> your build server. Can you remove this file?
+The Qt configure script has some logic to detect whether the compiler
+supports -fuse-ld=gold or not. Do you know why this logic is not
+properly working, and not detecting that this specific compiler doesn't
+support this?
 
-I'm not sure about this explanation, since the extract of the tarball
-doesn't complain at all:
+Disabling unconditionally this feature is maybe OK, but I'd like to
+understand why the configure script logic to auto-detect this is not
+working.
 
-[3m>>> host-google-breakpad 1373 Extracting[23m
-gzip -d -c /home/buildroot/instance-1/dl/google-breakpad-1373.tar.gz | tar --strip-components=1 -C /home/buildroot/instance-1/output/build/host-google-breakpad-1373  -xf -
-[3m>>> host-google-breakpad 1373 Patching[23m
-
-If the tarball was somewhat partial or corrupted, I would expect to see
-at least some warnings here.
-
-Maybe in any case, we should add a hash file to the google-breakpad
-package, so that we're sure the tarball being built is the right one.
+Thanks,
 
 Thomas
 -- 
