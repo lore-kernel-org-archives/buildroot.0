@@ -1,53 +1,41 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 11 Feb 2015 09:00:10 -0500
-Subject: [Buildroot] [PATCH] ntp: rebase nano patch to apply cleanly
-Message-ID: <1423663210-4391-1-git-send-email-danomimanchego123@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Feb 2015 15:34:42 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-02-10
+In-Reply-To: <20150211080111.GQ16955@sapphire.tkos.co.il>
+References: <20150211073015.D49F7101159@stock.ovh.net>
+ <20150211080111.GQ16955@sapphire.tkos.co.il>
+Message-ID: <20150211153442.5a122bc6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Dear Baruch Siach,
 
----
+On Wed, 11 Feb 2015 10:01:11 +0200, Baruch Siach wrote:
 
-Note: Done to remove the fuzz that breaks git-apply operation.
----
- package/ntp/0001-nano.patch | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+> On Wed, Feb 11, 2015 at 08:30:15AM +0100, Thomas Petazzoni wrote:
+> >         i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/e3c42b2a8334d910f44f7a908371796a332f20e2/
+> >          arm |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/04940f2f0110bc3bb19cd96cc75a6d2d7e8affd5/
+> >         i686 |      host-google-breakpad-1373 | NOK | http://autobuild.buildroot.net/results/e733fac165c7b90b529855b0e1ccf92ad4ac9eca/
+> 
+> Looks like a broken cached tar file with missing files, as it only happens on 
+> your build server. Can you remove this file?
 
-diff --git a/package/ntp/0001-nano.patch b/package/ntp/0001-nano.patch
-index d16046c..bce3478 100644
---- a/package/ntp/0001-nano.patch
-+++ b/package/ntp/0001-nano.patch
-@@ -3,10 +3,15 @@ http://bugs.gentoo.org/show_bug.cgi?id=270483
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--diff -Nura ntp-4.2.6p2.orig/include/ntp_syscall.h ntp-4.2.6p2/include/ntp_syscall.h
----- ntp-4.2.6p2.orig/include/ntp_syscall.h	2009-12-09 04:36:37.000000000 -0300
--+++ ntp-4.2.6p2/include/ntp_syscall.h	2011-01-27 13:09:05.072336628 -0300
--@@ -14,6 +14,14 @@
-+Rebase to apply cleanly.
-+
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+
-+
-+diff -purN a/include/ntp_syscall.h b/include/ntp_syscall.h
-+--- a/include/ntp_syscall.h	2015-02-11 08:42:37.794576469 -0500
-++++ b/include/ntp_syscall.h	2015-02-11 08:43:03.216957279 -0500
-+@@ -10,6 +10,14 @@
-  # include <sys/timex.h>
-  #endif
-  
-@@ -19,5 +24,5 @@ diff -Nura ntp-4.2.6p2.orig/include/ntp_syscall.h ntp-4.2.6p2/include/ntp_syscal
- +#endif
- +
-  #ifndef NTP_SYSCALLS_LIBC
-- #ifdef NTP_SYSCALLS_STD
-- # define ntp_adjtime(t)		syscall(SYS_ntp_adjtime, (t))
-+ # ifdef NTP_SYSCALLS_STD
-+ #  define ntp_adjtime(t)	syscall(SYS_ntp_adjtime, (t))
+I'm not sure about this explanation, since the extract of the tarball
+doesn't complain at all:
+
+[3m>>> host-google-breakpad 1373 Extracting[23m
+gzip -d -c /home/buildroot/instance-1/dl/google-breakpad-1373.tar.gz | tar --strip-components=1 -C /home/buildroot/instance-1/output/build/host-google-breakpad-1373  -xf -
+[3m>>> host-google-breakpad 1373 Patching[23m
+
+If the tarball was somewhat partial or corrupted, I would expect to see
+at least some warnings here.
+
+Maybe in any case, we should add a hash file to the google-breakpad
+package, so that we're sure the tarball being built is the right one.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
