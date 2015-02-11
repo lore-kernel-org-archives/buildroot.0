@@ -1,51 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Feb 2015 08:50:32 +0100
-Subject: [Buildroot] [git commit] ntp: rebase nano patch to apply cleanly
-Message-ID: <20150212080451.1BDC78178D@busybox.osuosl.org>
+Date: Wed, 11 Feb 2015 12:26:41 +0100
+Subject: [Buildroot] [git commit] git: fix static link with openssl
+Message-ID: <20150212080451.12ECB8178D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfa6311d2a0c6dfa5e3041ef371d272a774b695f
+commit: http://git.buildroot.net/buildroot/commit/?id=f1cdd306e28cb543714cb392931618be38c43059
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+openssl needs -lz when building statically.
+
+Fixes:
+http://autobuild.buildroot.net/results/4b3/4b33f3f415776cf43be0910b583d222711a03cad/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntp/0001-nano.patch |   17 +++++++++++------
- 1 files changed, 11 insertions(+), 6 deletions(-)
+ package/git/git.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/ntp/0001-nano.patch b/package/ntp/0001-nano.patch
-index d16046c..bce3478 100644
---- a/package/ntp/0001-nano.patch
-+++ b/package/ntp/0001-nano.patch
-@@ -3,10 +3,15 @@ http://bugs.gentoo.org/show_bug.cgi?id=270483
+diff --git a/package/git/git.mk b/package/git/git.mk
+index b5244ac..674095d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -14,6 +14,7 @@ GIT_DEPENDENCIES = zlib host-gettext
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	GIT_DEPENDENCIES += openssl
+ 	GIT_CONF_OPTS += --with-openssl
++	GIT_CONF_ENV_LIBS += $(if $(BR2_STATIC_LIBS),-lz)
+ else
+ 	GIT_CONF_OPTS += --without-openssl
+ endif
+@@ -41,7 +42,7 @@ endif
  
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ 	GIT_DEPENDENCIES += libiconv
+-	GIT_CONF_ENV += LIBS=-liconv
++	GIT_CONF_ENV_LIBS += -liconv
+ 	GIT_CONF_OPTS += --with-iconv=/usr/lib
+ else
+ 	GIT_CONF_OPTS += --without-iconv
+@@ -56,7 +57,7 @@ endif
  
--diff -Nura ntp-4.2.6p2.orig/include/ntp_syscall.h ntp-4.2.6p2/include/ntp_syscall.h
----- ntp-4.2.6p2.orig/include/ntp_syscall.h	2009-12-09 04:36:37.000000000 -0300
--+++ ntp-4.2.6p2/include/ntp_syscall.h	2011-01-27 13:09:05.072336628 -0300
--@@ -14,6 +14,14 @@
-+Rebase to apply cleanly.
-+
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+
-+
-+diff -purN a/include/ntp_syscall.h b/include/ntp_syscall.h
-+--- a/include/ntp_syscall.h	2015-02-11 08:42:37.794576469 -0500
-++++ b/include/ntp_syscall.h	2015-02-11 08:43:03.216957279 -0500
-+@@ -10,6 +10,14 @@
-  # include <sys/timex.h>
-  #endif
-  
-@@ -19,5 +24,5 @@ diff -Nura ntp-4.2.6p2.orig/include/ntp_syscall.h ntp-4.2.6p2/include/ntp_syscal
- +#endif
- +
-  #ifndef NTP_SYSCALLS_LIBC
-- #ifdef NTP_SYSCALLS_STD
-- # define ntp_adjtime(t)		syscall(SYS_ntp_adjtime, (t))
-+ # ifdef NTP_SYSCALLS_STD
-+ #  define ntp_adjtime(t)	syscall(SYS_ntp_adjtime, (t))
+ # assume yes for these tests, configure will bail out otherwise
+ # saying error: cannot run test program while cross compiling
+-GIT_CONF_ENV += ac_cv_fread_reads_directories=yes \
+-	ac_cv_snprintf_returns_bogus=yes
++GIT_CONF_ENV = ac_cv_fread_reads_directories=yes \
++	ac_cv_snprintf_returns_bogus=yes LIBS='$(GIT_CONF_ENV_LIBS)'
+ 
+ $(eval $(autotools-package))
