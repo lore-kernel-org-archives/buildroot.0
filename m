@@ -1,46 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Feb 2015 16:22:38 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-02-10
-In-Reply-To: <20150211144814.GV16955@sapphire.tkos.co.il>
-References: <20150211073015.D49F7101159@stock.ovh.net>
- <20150211080111.GQ16955@sapphire.tkos.co.il>
- <20150211153442.5a122bc6@free-electrons.com>
- <20150211144814.GV16955@sapphire.tkos.co.il>
-Message-ID: <20150211162238.3470acdd@free-electrons.com>
+From: =?iso-8859-1?Q?C=E9dric?= HEYMAN <c.heyman@til-technologies.fr>
+Date: Wed, 11 Feb 2015 16:48:20 +0100
+Subject: [Buildroot] Need clarification about glib and dbus
+Message-ID: <WC20150211154820.183108@til-technologies.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi,
 
-On Wed, 11 Feb 2015 16:48:15 +0200, Baruch Siach wrote:
+I intend to use dbus and its C binding Glib on custom distribution built 
+with buildroot 2014.11 for sama5d3 target.
 
-> The tar file itself is not corrupted, but apparently the original svn checkout 
-> was partial. From the first failure log 
-> (http://autobuild.buildroot.net/results/98e/98e6a4a4046231598f5380e7ec5ac5a6833c5c41/build-end.log):
+When I take a look at 
+http://www.freedesktop.org/wiki/Software/DBusBindings/, I see that DBus-GLib 
+(obsolete) must not be used. It is recommended to use GDBus instead which is 
+the support of DBus in GLib since version 2.26 of GLib.
 
-[...]
+If I compare with package available in buildroot-2014.11, I read 
+"DBUS_GLIB_VERSION = 0.102" in dbus-glib/dbus-glib.mk. 
 
-Aah, indeed! Weird that svn returns with success if the download was
-partial. But who knows, maybe it's possible.
+I feel confused : 
+ - Does buildroot compiles dbus-glib (which is indicated deprecated on 
+freedesktop.org) ? what does 0.102 version correspond ?
+ - Does buildroot compiles glib upper than 2.26 which supports gdbus ?
 
-> > Maybe in any case, we should add a hash file to the google-breakpad
-> > package, so that we're sure the tarball being built is the right one.
-> 
-> I'm not sure the tar file generation is guaranteed to be deterministic.
+Regards,
+  	
+C?dric HEYMAN
+Ing?nieur en D?veloppement embarqu?
+T?l : 04.42.37.17.10| Fax : 04.42.24.28.98
+Si?ge social : 350 rue de la Lauzi?re - Parc du Golf B?t 43 - CS 60481 - 
+13592 AIX-EN-PROVENCE CEDEX 3
 
-I didn't realize that this package is getting its source code from SVN.
-Then indeed, using a hash is not possible.
 
-So, yes Richard should remove this tarball from his cache.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+<font face="Tahoma" size="1" color="#575F5E">
+<a href="http://www.til-technologies.fr/bandeau_signature/redirection.html" target="_blank">
+<img src="http://www.til-technologies.fr/bandeau_signature/bandeau.jpg" width="600" height="80" border="0" alt="Plus d'actualit?s sur www.til-technologies.fr" />
+</a>
+<br>
+Les informations pr?c?dentes peuvent ?tre confidentielles ou privil?gi?es. Si vous n'?tes pas le destinataire pr?vu de ce mail, veuillez en notifier l'exp?diteur en r?pondant ? ce message puis supprimez-en toute trace de vos syst?mes.
+</font>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150211/d9c1b943/attachment.html>
