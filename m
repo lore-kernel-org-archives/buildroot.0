@@ -1,44 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Feb 2015 07:04:07 +0100
-Subject: [Buildroot] getting X running
-In-Reply-To: <C38A85CB5FEC4109BAF0D0D300EEA72C@JohanW7>
-References: <C860A811EEF34E4793E67D45FD390387@JohanW7>
- <20150210142938.3d715c88@free-electrons.com>
- <C38A85CB5FEC4109BAF0D0D300EEA72C@JohanW7>
-Message-ID: <20150211070407.274bc162@free-electrons.com>
+Date: Wed, 11 Feb 2015 07:10:05 +0100
+Subject: [Buildroot] [PATCH] add basic support for uClibc-ng
+In-Reply-To: <20150210172555.GE22344@waldemar-brodkorb.de>
+References: <20150209181636.GA17451@waldemar-brodkorb.de>
+ <20150209205338.604f740e@free-electrons.com>
+ <20150210172555.GE22344@waldemar-brodkorb.de>
+Message-ID: <20150211071005.4cbd071a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Waldemar Brodkorb,
 
-On Tue, 10 Feb 2015 22:33:18 +0100, Sagaert Johan wrote:
+On Tue, 10 Feb 2015 18:25:55 +0100, Waldemar Brodkorb wrote:
 
-> I found no conf_opt to disable systemd.
-> (Did a build with eglibc, but systemd itself seems to be broken here,,so dead end here too.)
+> > I don't think introducing this symbol is needed. Instead, we can just
+> > make uClibc-ng another version of uClibc. Like the following (untested) :
+> 
+> I thought about this in my first try, but I have following problem:
+> When you choose uClibc-ng 1.0.0 instead of uClibc, the default
+> config string is _not_ automatically changed.
 
-Please make bug reports.
-
-> m /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtGui/5.4.0/QtGui -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5 -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtGui -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtNetwork -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtSql -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtCore/5.4.0 -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtCore/5.4.0/QtCore -isystem
-> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtCore -I.moc -o .obj/css/MediaAllInOne.o
-> css/MediaAllInOne.cpp
-> {standard input}: Assembler messages:
-> {standard input}:153012: Warning: end of file not at end of a line; newline inserted
-> arm-buildroot-linux-gnueabi-g++: internal compiler error: Killed (program cc1plus)
-
-Same thing, please make bug reports.
-
-Without bug reports, there is no way we can reproduce those problems
-and fix them. And there is no way for us to improve our autobuilder
-infrastructure to cover those cases.
+I'm not sure to understand: which "config string" are you talking about?
 
 Thanks,
 
