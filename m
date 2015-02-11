@@ -1,34 +1,41 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 10 Feb 2015 22:06:13 -0500
-Subject: [Buildroot] [PATCH] boards/raspberrypi: update dt kernel sha1
-Message-ID: <1423623973-19872-1-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Feb 2015 07:02:18 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-02-09
+In-Reply-To: <87siee18ip.fsf@dell.be.48ers.dk>
+References: <20150210073014.E19721010F3@stock.ovh.net>
+ <87siee18ip.fsf@dell.be.48ers.dk>
+Message-ID: <20150211070218.4f7ab59b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sha1 used for the DT enabled kernel is no longer available
-(presumably, the rpi-3.18.y branch was rebased recently.) This updates
-it to the lastest sha1 in the rpi-3.18.y branch.
+Dear Peter Korsgaard,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- configs/raspberrypi_dt_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 10 Feb 2015 09:21:50 +0100, Peter Korsgaard wrote:
 
-diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-index 956b215..d841a2b 100644
---- a/configs/raspberrypi_dt_defconfig
-+++ b/configs/raspberrypi_dt_defconfig
-@@ -4,7 +4,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="b9c9f8fc69aaba236169798c18dc1590fccf7acd"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03d0d9c73c17f74a7afa64ed9f022565e89b8dd5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
- BR2_LINUX_KERNEL_ZIMAGE=y
+> >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/d3f123367559c758649c6da0ee4df528cb2d4682/
+>  >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/cd713c2513cd1eb39b657504203338c4b7f5c887/
+>  >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/0220ecb696a742641b83949f187d2d74e442f48a/
+> 
+> Didn't we already blacklist those uClibc/MIPS toolchains?
+
+Yes, but the script isn't necessarily up-to-date on all the autobuilder
+instances. I updated it on my instance yesterday, I should probably
+send a notification to all people running autobuilder instances.
+
+It's an issue we discussed at the Buildroot meeting, but there's no
+simple way to handle this problem, without making the script update
+itself, which isn't that nice from a security PoV since it means I
+could be pushing whatever code I want to all the autobuilder instances,
+without the owner of those instances noticing.
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
