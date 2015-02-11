@@ -1,86 +1,93 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 11 Feb 2015 20:00:33 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: disable gold linker
-In-Reply-To: <20150211153232.2dcd2b32@free-electrons.com>
-References: <1423637231-4145-1-git-send-email-ps.report@gmx.net>
- <20150211153232.2dcd2b32@free-electrons.com>
-Message-ID: <ED36A5D7725743CF92375A6BCED9A0A7@JohanW7>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 11 Feb 2015 19:37:29 +0000
+Subject: [Buildroot] [PATCH] qt5connectivity: fix for big endian platforms
+Message-ID: <1423683449-50204-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add a patch to fix qt5connectivity for big endian platforms.
 
------Oorspronkelijk bericht-----
-Van: buildroot [mailto:buildroot-bounces at busybox.net] Namens Thomas Petazzoni
-Verzonden: woensdag 11 februari 2015 15:33
-Aan: Peter Seiderer
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH v1] qt5base: disable gold linker
+Building qtconnectivity fails for big endian platforms because the
+bswap_16 function is not declared. This is the error message:
 
-Dear Peter Seiderer,
+In file included from bluez/hcimanager_p.h:52:0,
+		 from bluez/hcimanager.cpp:35:
+./bluez/bluez_data_p.h: In function 'quint16 bt_get_le16(const void*)':
+./bluez/bluez_data_p.h:172:60: error: 'bswap_16' was not declared in
+this scope
+     return bswap_16(bt_get_unaligned((const quint16 *) ptr));
 
-On Wed, 11 Feb 2015 07:47:11 +0100, Peter Seiderer wrote:
-> Fixes [1],[2]:
-> powerpc-ctng_e500v2-linux-gnuspe-g++: error: unrecognized command line option '-fuse-ld=gold'
-> Makefile:1192: recipe for target '../../lib/libQt5Core.so.5.4.0' 
-> failed
+bswap_16 is defined in byteswap.h so we can include this file in order
+to fix this problem.
 
-The Qt configure script has some logic to detect whether the compiler supports -fuse-ld=gold or not. Do you know why this logic is
-not properly working, and not detecting that this specific compiler doesn't support this?
+This patch has been submitted upstream:
 
-Disabling unconditionally this feature is maybe OK, but I'd like to understand why the configure script logic to auto-detect this is
-not working.
+  https://bugreports.qt.io/browse/QTBUG-44421
 
-Thanks,
+Fixes:
 
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com _______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+  http://autobuild.buildroot.net/results/5b8/5b85c6819f94988abd8abfcdaad6226ceb2d790a/
 
-------------------------------------------------------------------------------------------------------------------------------------
-----
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...z_data_p.h-Add-missing-include-byteswap.h.patch |   46 ++++++++++++++++++++
+ 1 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt5/qt5connectivity/0002-bluez_data_p.h-Add-missing-include-byteswap.h.patch
 
-
-Dear Thomas
-
-There was something similar in qt 4.7
-Testing for /usr/ld.gold  ...
-
-From :
-https://lists.fedoraproject.org/pipermail/scm-commits/2012-January/725442.html
-
-
-snip
- contains(JAVASCRIPTCORE_JIT,no): DEFINES+=ENABLE_JIT=0
+diff --git a/package/qt5/qt5connectivity/0002-bluez_data_p.h-Add-missing-include-byteswap.h.patch b/package/qt5/qt5connectivity/0002-bluez_data_p.h-Add-missing-include-byteswap.h.patch
+new file mode 100644
+index 0000000..fc4be10
+--- /dev/null
++++ b/package/qt5/qt5connectivity/0002-bluez_data_p.h-Add-missing-include-byteswap.h.patch
+@@ -0,0 +1,46 @@
++bluez_data_p.h: Add missing "#include <byteswap.h>"
++
++This patch has been submitted upstream:
++
++  https://bugreports.qt.io/browse/QTBUG-44421
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 1e219701c61cdedf0e8cfda542ee2485f5fd059a Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Wed, 11 Feb 2015 18:11:05 +0000
++Subject: [PATCH] bluez_data_p.h: Add missing "#include <byteswap.h>"
++
++Building qtconnectivity fails for big endian platforms because the
++bswap_16 function is not declared. This is the error message:
++
++In file included from bluez/hcimanager_p.h:52:0,
++		 from bluez/hcimanager.cpp:35:
++./bluez/bluez_data_p.h: In function 'quint16 bt_get_le16(const void*)':
++./bluez/bluez_data_p.h:172:60: error: 'bswap_16' was not declared in
++this scope
++     return bswap_16(bt_get_unaligned((const quint16 *) ptr));
++
++bswap_16 is defined in byteswap.h so we can include this file in order
++to fix this problem.
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ src/bluetooth/bluez/bluez_data_p.h |    1 +
++ 1 files changed, 1 insertions(+), 0 deletions(-)
++
++diff --git a/src/bluetooth/bluez/bluez_data_p.h b/src/bluetooth/bluez/bluez_data_p.h
++index 9d2d96b..64c90dd 100644
++--- a/src/bluetooth/bluez/bluez_data_p.h
+++++ b/src/bluetooth/bluez/bluez_data_p.h
++@@ -48,6 +48,7 @@
++ #include <QtCore/qglobal.h>
++ #include <sys/socket.h>
++ #include <QtBluetooth/QBluetoothUuid>
+++#include <byteswap.h>
 + 
-+-linux-g++ {
-+-isEmpty($$(SBOX_DPKG_INST_ARCH)):exists(/usr/bin/ld.gold) {
-+-    message(Using gold linker)
-+-    QMAKE_LFLAGS+=-fuse-ld=gold
-+-}
-+-}
-++#linux-g++ {
-++#isEmpty($$(SBOX_DPKG_INST_ARCH)):exists(/usr/bin/ld.gold) {
-++#    message(Using gold linker)
-++#    QMAKE_LFLAGS+=-fuse-ld=gold
-++#}
-++#}
-snip
-
-
-
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 6253 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150211/c05c606c/attachment.bin>
++ #define BTPROTO_L2CAP   0
++ #define BTPROTO_HCI     1
++-- 
++1.7.1
++
+-- 
+1.7.1
