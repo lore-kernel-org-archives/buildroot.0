@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Feb 2015 07:02:18 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-02-09
-In-Reply-To: <87siee18ip.fsf@dell.be.48ers.dk>
-References: <20150210073014.E19721010F3@stock.ovh.net>
- <87siee18ip.fsf@dell.be.48ers.dk>
-Message-ID: <20150211070218.4f7ab59b@free-electrons.com>
+Date: Wed, 11 Feb 2015 07:04:07 +0100
+Subject: [Buildroot] getting X running
+In-Reply-To: <C38A85CB5FEC4109BAF0D0D300EEA72C@JohanW7>
+References: <C860A811EEF34E4793E67D45FD390387@JohanW7>
+ <20150210142938.3d715c88@free-electrons.com>
+ <C38A85CB5FEC4109BAF0D0D300EEA72C@JohanW7>
+Message-ID: <20150211070407.274bc162@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Sagaert Johan,
 
-On Tue, 10 Feb 2015 09:21:50 +0100, Peter Korsgaard wrote:
+On Tue, 10 Feb 2015 22:33:18 +0100, Sagaert Johan wrote:
 
-> >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/d3f123367559c758649c6da0ee4df528cb2d4682/
->  >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/cd713c2513cd1eb39b657504203338c4b7f5c887/
->  >       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/0220ecb696a742641b83949f187d2d74e442f48a/
-> 
-> Didn't we already blacklist those uClibc/MIPS toolchains?
+> I found no conf_opt to disable systemd.
+> (Did a build with eglibc, but systemd itself seems to be broken here,,so dead end here too.)
 
-Yes, but the script isn't necessarily up-to-date on all the autobuilder
-instances. I updated it on my instance yesterday, I should probably
-send a notification to all people running autobuilder instances.
+Please make bug reports.
 
-It's an issue we discussed at the Buildroot meeting, but there's no
-simple way to handle this problem, without making the script update
-itself, which isn't that nice from a security PoV since it means I
-could be pushing whatever code I want to all the autobuilder instances,
-without the owner of those instances noticing.
+> m /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtGui/5.4.0/QtGui -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5 -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtGui -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtNetwork -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtSql -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtCore/5.4.0 -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtCore/5.4.0/QtCore -isystem
+> /home/buildroot12git2/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/qt5/QtCore -I.moc -o .obj/css/MediaAllInOne.o
+> css/MediaAllInOne.cpp
+> {standard input}: Assembler messages:
+> {standard input}:153012: Warning: end of file not at end of a line; newline inserted
+> arm-buildroot-linux-gnueabi-g++: internal compiler error: Killed (program cc1plus)
 
-Best regards,
+Same thing, please make bug reports.
+
+Without bug reports, there is no way we can reproduce those problems
+and fix them. And there is no way for us to improve our autobuilder
+infrastructure to cover those cases.
+
+Thanks,
 
 Thomas
 -- 
