@@ -1,221 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Feb 2015 00:35:18 +0100
-Subject: [Buildroot] [git commit] ntp: security bump to version 4.2.8p1
-Message-ID: <20150210235807.3AA598080F@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 10 Feb 2015 22:06:13 -0500
+Subject: [Buildroot] [PATCH] boards/raspberrypi: update dt kernel sha1
+Message-ID: <1423623973-19872-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67b845fcc90ddb738ca3344c2777f4f15fbc366f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The sha1 used for the DT enabled kernel is no longer available
+(presumably, the rpi-3.18.y branch was rebased recently.) This updates
+it to the lastest sha1 in the rpi-3.18.y branch.
 
-Fixes:
-
-CVE-2014-9297 - vallen is not validated in several places in ntp_crypto.c,
-leading to a potential information leak or possibly a crash
-
-CVE-2014-9298 - ::1 can be spoofed on some OSes (including "some versions" of
-Linux), so ACLs based on IPv6 ::1 addresses can be bypassed
-
-Drop a patch applied upstream, along with its accompanied AUTORECONF.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- .../ntp/0001-fix-ntp-keygen-without-openssl.patch  |  153 --------------------
- package/ntp/{0002-nano.patch => 0001-nano.patch}   |    0
- package/ntp/ntp.hash                               |    4 +-
- package/ntp/ntp.mk                                 |    4 +-
- 4 files changed, 3 insertions(+), 158 deletions(-)
+ configs/raspberrypi_dt_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ntp/0001-fix-ntp-keygen-without-openssl.patch b/package/ntp/0001-fix-ntp-keygen-without-openssl.patch
-deleted file mode 100644
-index b9883be..0000000
---- a/package/ntp/0001-fix-ntp-keygen-without-openssl.patch
-+++ /dev/null
-@@ -1,153 +0,0 @@
--Fix build breakage without openssl.
--From upstream: http://bk1.ntp.org/ntp-stable/?PAGE=patch&REV=5497b345z5MNTuNvJWuqPSje25NQTg
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura ntp-4.2.8.orig/configure.ac ntp-4.2.8/configure.ac
----- ntp-4.2.8.orig/configure.ac	2014-12-22 10:16:10.449311393 -0300
--+++ ntp-4.2.8/configure.ac	2014-12-22 10:17:30.757215905 -0300
--@@ -102,7 +102,7 @@
-- enable_nls=no
-- LIBOPTS_CHECK_NOBUILD([sntp/libopts])
-- 
---NTP_ENABLE_LOCAL_LIBEVENT
--+NTP_LIBEVENT_CHECK_NOBUILD([2], [sntp/libevent])
-- 
-- NTP_LIBNTP
-- 
--@@ -771,6 +771,10 @@
-- 
-- #### 
-- 
--+AC_CHECK_FUNCS([arc4random_buf])
--+
--+####
--+
-- saved_LIBS="$LIBS"
-- LIBS="$LIBS $LDADD_LIBNTP"
-- AC_CHECK_FUNCS([daemon])
--diff -Nura ntp-4.2.8.orig/libntp/ntp_crypto_rnd.c ntp-4.2.8/libntp/ntp_crypto_rnd.c
----- ntp-4.2.8.orig/libntp/ntp_crypto_rnd.c	2014-12-22 10:16:10.430301237 -0300
--+++ ntp-4.2.8/libntp/ntp_crypto_rnd.c	2014-12-22 10:18:04.921468163 -0300
--@@ -24,6 +24,21 @@
-- int crypto_rand_init = 0;
-- #endif
-- 
--+#ifndef HAVE_ARC4RANDOM_BUF
--+static void
--+arc4random_buf(void *buf, size_t nbytes);
--+
--+void
--+evutil_secure_rng_get_bytes(void *buf, size_t nbytes);
--+
--+static void
--+arc4random_buf(void *buf, size_t nbytes)
--+{
--+	evutil_secure_rng_get_bytes(buf, nbytes);
--+	return;
--+}
--+#endif
--+
-- /*
--  * As of late 2014, here's how we plan to provide cryptographic-quality
--  * random numbers:
--diff -Nura ntp-4.2.8.orig/Makefile.am ntp-4.2.8/Makefile.am
----- ntp-4.2.8.orig/Makefile.am	2014-12-22 10:16:10.441307117 -0300
--+++ ntp-4.2.8/Makefile.am	2014-12-22 10:16:49.403122474 -0300
--@@ -3,6 +3,7 @@
-- NULL =
-- 
-- SUBDIRS =		\
--+	sntp		\
-- 	scripts		\
-- 	include		\
-- 	libntp		\
--@@ -17,7 +18,6 @@
-- 	clockstuff	\
-- 	kernel		\
-- 	util		\
---	sntp		\
-- 	tests		\
-- 	$(NULL)
-- 
--@@ -64,7 +64,6 @@
-- 	.gcc-warning			\
-- 	libtool				\
-- 	html/.datecheck			\
---	sntp/built-sources-only		\
-- 	$(srcdir)/COPYRIGHT		\
-- 	$(srcdir)/.checkChangeLog	\
-- 	$(NULL)
--diff -Nura ntp-4.2.8.orig/sntp/configure.ac ntp-4.2.8/sntp/configure.ac
----- ntp-4.2.8.orig/sntp/configure.ac	2014-12-22 10:16:10.428300168 -0300
--+++ ntp-4.2.8/sntp/configure.ac	2014-12-22 10:24:11.238172928 -0300
--@@ -97,11 +97,14 @@
-- enable_nls=no
-- LIBOPTS_CHECK
-- 
---AM_COND_IF(
---    [BUILD_SNTP],
---    [NTP_LIBEVENT_CHECK],
---    [NTP_LIBEVENT_CHECK_NOBUILD]
---)
--+# From when we only used libevent for sntp:
--+#AM_COND_IF(
--+#    [BUILD_SNTP],
--+#    [NTP_LIBEVENT_CHECK],
--+#    [NTP_LIBEVENT_CHECK_NOBUILD]
--+#)
--+
--+NTP_LIBEVENT_CHECK([2])
-- 
-- # Checks for libraries.
-- 
--diff -Nura ntp-4.2.8.orig/sntp/m4/ntp_libevent.m4 ntp-4.2.8/sntp/m4/ntp_libevent.m4
----- ntp-4.2.8.orig/sntp/m4/ntp_libevent.m4	2014-12-22 10:16:10.417294288 -0300
--+++ ntp-4.2.8/sntp/m4/ntp_libevent.m4	2014-12-22 10:20:31.757915561 -0300
--@@ -1,4 +1,25 @@
---dnl NTP_ENABLE_LOCAL_LIBEVENT				     -*- Autoconf -*-
--+# SYNOPSIS						-*- Autoconf -*-
--+#
--+#  NTP_ENABLE_LOCAL_LIBEVENT
--+#  NTP_LIBEVENT_CHECK([MINVERSION [, DIR]])
--+#  NTP_LIBEVENT_CHECK_NOBUILD([MINVERSION [, DIR]])
--+#
--+# DESCRIPTION
--+#
--+# AUTHOR
--+#
--+#  Harlan Stenn
--+#
--+# LICENSE
--+#
--+#  This file is Copyright (c) 2014 Network Time Foundation
--+# 
--+#  Copying and distribution of this file, with or without modification, are
--+#  permitted in any medium without royalty provided the copyright notice,
--+#  author attribution and this notice are preserved.  This file is offered
--+#  as-is, without any warranty.
--+
--+dnl NTP_ENABLE_LOCAL_LIBEVENT
-- dnl
-- dnl Provide only the --enable-local-libevent command-line option.
-- dnl
--@@ -29,7 +50,7 @@
-- dnl but DO NOT invoke DIR/configure if we are going to use our bundled
-- dnl version.  This may be the case for nested packages.
-- dnl
---dnl provide --enable-local-libevent .
--+dnl provides --enable-local-libevent .
-- dnl
-- dnl Examples:
-- dnl
--diff -Nura ntp-4.2.8.orig/util/Makefile.am ntp-4.2.8/util/Makefile.am
----- ntp-4.2.8.orig/util/Makefile.am	2014-12-22 10:16:10.435303910 -0300
--+++ ntp-4.2.8/util/Makefile.am	2014-12-22 10:21:02.500339706 -0300
--@@ -19,6 +19,7 @@
-- LDADD=		../libntp/libntp.a $(LDADD_LIBNTP) $(LIBM) $(PTHREAD_LIBS)
-- tg2_LDADD=	../libntp/libntp.a $(LDADD_LIBNTP) $(LIBM)
-- ntp_keygen_LDADD  = version.o $(LIBOPTS_LDADD) ../libntp/libntp.a
--+ntp_keygen_LDADD += $(LDADD_LIBEVENT)
-- ntp_keygen_LDADD += $(LDADD_LIBNTP) $(PTHREAD_LIBS) $(LDADD_NTP) $(LIBM)
-- ntp_keygen_SOURCES = ntp-keygen.c ntp-keygen-opts.c ntp-keygen-opts.h
-- 
-diff --git a/package/ntp/0002-nano.patch b/package/ntp/0001-nano.patch
-similarity index 100%
-rename from package/ntp/0002-nano.patch
-rename to package/ntp/0001-nano.patch
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 1d1b907..8336be8 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,2 +1,2 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8.tar.gz.md5
--md5	6972a626be6150db8cfbd0b63d8719e7 ntp-4.2.8.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p1.tar.gz.md5
-+md5	65d8cdfae4722226fbe29863477641ed ntp-4.2.8p1.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 3a1a917..7d5644a 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,11 +5,9 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p1
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent
--# For 0001-fix-ntp-keygen-without-openssl.patch
--NTP_AUTORECONF = YES
- NTP_LICENSE = ntp license
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
+index 956b215..d841a2b 100644
+--- a/configs/raspberrypi_dt_defconfig
++++ b/configs/raspberrypi_dt_defconfig
+@@ -4,7 +4,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="b9c9f8fc69aaba236169798c18dc1590fccf7acd"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03d0d9c73c17f74a7afa64ed9f022565e89b8dd5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+-- 
+1.9.1
