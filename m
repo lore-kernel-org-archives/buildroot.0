@@ -1,34 +1,67 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 11 Feb 2015 22:59:33 +0100
-Subject: [Buildroot] gold linker usage in Qt5
-Message-ID: <E2933C5B841843C6955365DBD20D5D5A@JohanW7>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 11 Feb 2015 23:09:00 +0100
+Subject: [Buildroot] [PATCH] python3: fix invalid ncursesw header path
+In-Reply-To: <1423430604-5896-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423430604-5896-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <54DBD2FC.30809@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Dear;
+Hi Thomas,
 
-Should the qt5base-5.4.0/mkspecs/common/gcc-base-unix.con be altered too ?
-I believe this is for compiling our qt projects ?
+Le 08/02/2015 22:23, Thomas Petazzoni a ?crit :
+> This commit adds a patch to python3 that makes sure it does not use an
+> invalid header path (pointing to host headers) when including ncursesw
+> support.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/9bd/9bdaa392e8dd00c6ebee156b758e3c0cac480237/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
 
-Grepping :
-....output/build# grep -R -H  'ld.gold' qt5*
+I reproduced the build issue which is indeed fixed by your patch.
+Just build tested though.
 
-qt5base-5.4.0/mkspecs/common/gcc-base-unix.conf:QMAKE_LFLAGS_USE_GOLD   = -fuse-ld=gold 
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Tested-by: Romain Naour <romain.naour@openwide.fr>
 
+Best regards,
+Romain
 
-Regards
-
-Sagaert Johan
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 6253 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150211/c868b75a/attachment.bin>
+>  .../018-ncursesw-remove-wrong-includedir.patch      | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>  create mode 100644 package/python3/018-ncursesw-remove-wrong-includedir.patch
+> 
+> diff --git a/package/python3/018-ncursesw-remove-wrong-includedir.patch b/package/python3/018-ncursesw-remove-wrong-includedir.patch
+> new file mode 100644
+> index 0000000..ae87bbf
+> --- /dev/null
+> +++ b/package/python3/018-ncursesw-remove-wrong-includedir.patch
+> @@ -0,0 +1,21 @@
+> +Do not harcode invalid path to ncursesw headers
+> +
+> +Adding /usr/include/ncursesw is obviously invalid when
+> +cross-compiling. Since the ncursesw headers are no longer installed in
+> +usr/include/ncursesw/, but directly in usr/include, there is anyway no
+> +need for a special header path.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/setup.py
+> +===================================================================
+> +--- a/setup.py
+> ++++ b/setup.py
+> +@@ -1287,7 +1287,6 @@
+> +         panel_library = 'panel'
+> +         if curses_library == 'ncursesw':
+> +             curses_defines.append(('HAVE_NCURSESW', '1'))
+> +-            curses_includes.append('/usr/include/ncursesw')
+> +             # Bug 1464056: If _curses.so links with ncursesw,
+> +             # _curses_panel.so must link with panelw.
+> +             panel_library = 'panelw'
+> 
