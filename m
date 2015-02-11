@@ -1,33 +1,35 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 11 Feb 2015 22:05:38 +0100
-Subject: [Buildroot] [PATCH v3 0/3] Adding GTK# package
-Message-ID: <1423688741-22856-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Wed, 11 Feb 2015 22:05:39 +0100
+Subject: [Buildroot] [PATCH v3 1/3] package/mono: enable mono library
+	compilation
+In-Reply-To: <1423688741-22856-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1423688741-22856-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1423688741-22856-2-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds GTK# gui librrary for mono and enables inclusion
-of future third party mono software libreries.
+This patch enables the compilation of mono library to be used
+in third party software.
 
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
-Changes v1 -> v3:
-  - General patch cleaning
+ package/mono/mono.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Angelo Compagnucci (3):
-  package/mono: enable mono library compilation
-  system: Defaulting TZ_LOCALTIME to UTC
-  package/gtksharp: new package
-
- package/Config.in            |  5 +++++
- package/gtksharp/Config.in   |  9 +++++++++
- package/gtksharp/gtksharp.mk | 13 +++++++++++++
- package/mono/mono.mk         |  1 -
- system/Config.in             |  1 +
- 5 files changed, 28 insertions(+), 1 deletion(-)
- create mode 100644 package/gtksharp/Config.in
- create mode 100644 package/gtksharp/gtksharp.mk
-
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 0bbf338..9ec3c24 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -21,7 +21,6 @@ MONO_AUTORECONF = YES
+ MONO_CONF_OPTS = --disable-gtk-doc \
+ 	--with-mcs-docs=no \
+ 	--with-moonlight=no \
+-	--disable-libraries \
+ 	--with-ikvm-native=no \
+ 	--enable-minimal=aot,profiler,debug \
+ 	--disable-mcs-build \
 -- 
 1.9.1
