@@ -1,33 +1,32 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 11 Feb 2015 08:14:49 -0500
-Subject: [Buildroot] [PATCH] Makefile: update help text for savedefconfig
-Message-ID: <1423660489-31375-1-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Feb 2015 14:17:29 +0100
+Subject: [Buildroot] [PATCH] add basic support for uClibc-ng
+In-Reply-To: <20150211092649.GL22344@waldemar-brodkorb.de>
+References: <20150209181636.GA17451@waldemar-brodkorb.de>
+ <20150209205338.604f740e@free-electrons.com>
+ <20150210172555.GE22344@waldemar-brodkorb.de>
+ <20150211071005.4cbd071a@free-electrons.com>
+ <20150211092649.GL22344@waldemar-brodkorb.de>
+Message-ID: <20150211141729.72df7fd0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated text to say that the defconfig is written to the BR2_DEFCONFIG
-location.
+Dear Waldemar Brodkorb,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 11 Feb 2015 10:26:49 +0100, Waldemar Brodkorb wrote:
 
-diff --git a/Makefile b/Makefile
-index 338c992..f21f924 100644
---- a/Makefile
-+++ b/Makefile
-@@ -865,7 +865,7 @@ help:
- 	@echo '  randconfig             - New config with random answer to all options'
- 	@echo '  defconfig              - New config with default answer to all options'
- 	@echo '                             BR2_DEFCONFIG, if set, is used as input'
--	@echo '  savedefconfig          - Save current config as ./defconfig (minimal config)'
-+	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
- 	@echo '  randpackageconfig      - New config with random answer to package options'
+> Sorry, I meant the default string pointing to the uClibc
+> configuration file. It is not switched, when choosing uClibc-ng.
+
+It is like this for all non-promptless string options: even if you
+switch between uClibc 0.9.31 and 0.9.33, the string option value will
+not be changed, unless it's the first time you run "make menuconfig".
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
