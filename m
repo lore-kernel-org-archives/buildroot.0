@@ -1,35 +1,35 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 12 Feb 2015 14:49:30 +0100
-Subject: [Buildroot] [PATCH v4 1/3] package/mono: enable mono library
-	compilation
+Date: Thu, 12 Feb 2015 14:49:31 +0100
+Subject: [Buildroot] [PATCH v4 2/3] system: Defaulting TZ_LOCALTIME to UTC
 In-Reply-To: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
 References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1423748972-17471-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1423748972-17471-3-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch enables the compilation of mono library to be used
-in third party software.
+This patch sets the default timezone to UTC if not overwritten.
+Some packages need a configured system timezone for properly
+operating like mono based software.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/mono/mono.mk | 1 -
- 1 file changed, 1 deletion(-)
+ system/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 0bbf338..9ec3c24 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -21,7 +21,6 @@ MONO_AUTORECONF = YES
- MONO_CONF_OPTS = --disable-gtk-doc \
- 	--with-mcs-docs=no \
- 	--with-moonlight=no \
--	--disable-libraries \
- 	--with-ikvm-native=no \
- 	--enable-minimal=aot,profiler,debug \
- 	--disable-mcs-build \
+diff --git a/system/Config.in b/system/Config.in
+index 95e10ab..d967002 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -371,6 +371,7 @@ config BR2_TARGET_TZ_ZONELIST
+ 
+ config BR2_TARGET_LOCALTIME
+ 	string "default local time"
++	default "Etc/UTC"
+ 	help
+ 	  The time zone to install as the default local time, expressed as a
+ 	  tzdata location, such as:
 -- 
 1.9.1
