@@ -1,43 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Feb 2015 21:45:29 +0100
-Subject: [Buildroot] [git commit branch/next] xdriver_xf86-input-evdev: bump
-	version
-Message-ID: <20150212205752.A5828805B2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 12 Feb 2015 22:03:30 +0100
+Subject: [Buildroot] [PATCH 1/1] Add default configuration for Raspberry
+ Pi 2 (ARMv7 & NEON)
+In-Reply-To: <CA+-urNQusdwq8S_UeMLttY22+v8mzUrFQy4cYyOtzs3q7TOKRA@mail.gmail.com>
+References: <20150211175219.22579465@hebden.net.au>
+ <20150212190940.GA4277@free.fr>
+ <CA+-urNQusdwq8S_UeMLttY22+v8mzUrFQy4cYyOtzs3q7TOKRA@mail.gmail.com>
+Message-ID: <20150212210330.GC4277@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29125e2556245aa6cc3543af4f44deeb9732778b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Frank, All,
 
-And add hash file.
+On 2015-02-12 15:51 -0500, Frank Hunleth spake thusly:
+> >> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rpi-3.18.y-rebase"
+> >
+> > We can not use a branch name here. We want either a tag or a sha1.
+> > Currently, this is 0be82f722c097340632a59b879fbfee9c6148f53.
+> 
+> Regarding the Raspberry Pi kernel version, what's the difference
+> between using the tip of the rpi-3.18.y branch and the tip of the
+> rpi-3.18.y-rebase branch? The kernel source code looks the same
+> between branches except for some trailing whitespace in files. Is the
+> rpi-3.18.y branch safe from rebases?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xdriver_xf86-input-evdev.hash                  |    2 ++
- .../xdriver_xf86-input-evdev.mk                    |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+No, the rpi-3.18.y is *not* safe from rebase; in fact, it is "constantly"
+rebased. That's a shame. :-(
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-new file mode 100644
-index 0000000..fb46aca
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.freedesktop.org/archives/xorg/2014-May/056599.html
-+sha256 85fade9f5e9cf70f02c877165e95b3df4cdb9e08282416122ca80218e254100c  xf86-input-evdev-2.8.4.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 46e62c7..a8a9adf 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.2
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.4
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+As for the rpi-3.18.y-rebase branch, I have absolutely no idea what it
+is meant for:
+  - is it a temporary branch that got pushed (it did not exist until a
+    few days ago)?
+  - is it the branch that will be rebased, leaving rpi-3.18.y alone?
+  - something else?
+
+So, I would prefer we stick to using the rpi-3.18.y (or even the
+rpi-3.19.y) branch, since we pretty much know how they handle it.
+
+/me should probably go and bug the RPi guys to put some tags on their
+    branches from time to time...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
