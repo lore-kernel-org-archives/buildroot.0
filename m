@@ -1,109 +1,113 @@
 From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Thu, 12 Feb 2015 17:33:46 -0500
-Subject: [Buildroot] [RFC 1/2] Makefile: add target-genimage
+Date: Thu, 12 Feb 2015 17:33:47 -0500
+Subject: [Buildroot] [RFC 2/2] boards/raspberrypi: add a sample genimage
+	config
 In-Reply-To: <1423780427-7493-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 References: <1423780427-7493-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <1423780427-7493-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <1423780427-7493-3-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-genimage is a convenient host tool which eases the generation of images
-and partition layout by providing simple configuration files.
+This patch adds a "persistent.cfg" genimage config file for the
+Raspberry Pi, to use with a persistent rootfs. The final generated
+"sdcard.img" image is ready to use and contains the setup explained in
+the board readme.txt file: a bootable vfat partition with the
+rpi-firmware files, and an ext4 rootfs partition.
 
-This patch adds a new BR2_ROOTFS_GENIMAGE_CFG menuconfig entry, which is
-a space-separated list of config files. Indeed, you may want to split
-images in different files, or put them all together in the same file.
-
-BR2_ROOTFS_GENIMAGE_HOST_DEPENDENCIES is meant to auto-select the
-packages that genimage may use, such as mkdosfs or mcopy (which copies
-files from/to unmounted vfat images).
-
-The rational behind adding this to Buildroot is that genimage requires
-an overhead configuration to use it, like temporary directories, host
-dependencies, and images path, that Buildroot is all aware of. This
-minimal addition is optional and allows the user not to write the same
-post-image script to wrap the genimage call.
-
-Finally, the new "target-genimage" make target is called before
-target-post-image so that the post-image script can still clean
-intermediate generated images and do whatever with the very final image.
+The defconfig and readme file have been slightly changed to add the
+generation of the rootfs.ext4 filesystem.
 
 Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 ---
- Makefile         | 17 +++++++++++++++--
- system/Config.in | 22 ++++++++++++++++++++++
- 2 files changed, 37 insertions(+), 2 deletions(-)
+ board/raspberrypi/genimage/persistent.cfg | 29 +++++++++++++++++++++++++++++
+ board/raspberrypi/readme.txt              |  9 +++++++--
+ configs/raspberrypi_defconfig             |  4 ++++
+ 3 files changed, 40 insertions(+), 2 deletions(-)
+ create mode 100644 board/raspberrypi/genimage/persistent.cfg
 
-diff --git a/Makefile b/Makefile
-index 338c992..1eb1619 100644
---- a/Makefile
-+++ b/Makefile
-@@ -434,7 +434,7 @@ world: target-post-image
+diff --git a/board/raspberrypi/genimage/persistent.cfg b/board/raspberrypi/genimage/persistent.cfg
+new file mode 100644
+index 0000000..9919cc5
+--- /dev/null
++++ b/board/raspberrypi/genimage/persistent.cfg
+@@ -0,0 +1,29 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "rpi-firmware/bootcode.bin",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
++      "zImage"
++    }
++  }
++  size = 10M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++    size = 512M
++  }
++}
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index ead9227..832c746 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -11,6 +11,9 @@ Buildroot, you have to choose whether you will use:
  
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean printvars \
--	target-finalize target-post-image \
-+	target-finalize target-genimage target-post-image \
- 	$(TARGETS) $(TARGETS_ROOTFS) \
- 	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
- 	$(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-@@ -621,7 +621,20 @@ endif
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ Also, a good source of information is http://elinux.org/R-Pi_Hub
  
--target-post-image: $(TARGETS_ROOTFS) target-finalize
-+target-genimage: $(TARGETS_ROOTFS) target-finalize
-+	@$(foreach cfg, $(call qstrip,$(BR2_ROOTFS_GENIMAGE_CFG)), \
-+	$(call MESSAGE,"Executing genimage with config $(cfg)"); \
-+	  T=$$(mktemp -d $(BUILD_DIR)/.genimage.XXXXXXXXXX); \
-+	  mkdir -p $$T/{root,tmp}; \
-+	  $(EXTRA_ENV) output/host/usr/bin/genimage \
-+	  --rootpath $$T/root \
-+	  --tmppath $$T/tmp \
-+	  --inputpath output/images/ \
-+	  --outputpath output/images/ \
-+	  --config $(cfg); \
-+	  rm -rf $$T$(sep))
++Note: Buildroot already prepared an "sdcard.img" image for a persistent
++rootfs, but this document explains how to do it manually.
 +
-+target-post-image: target-genimage
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-diff --git a/system/Config.in b/system/Config.in
-index 95e10ab..2596da8 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -421,6 +421,28 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	  argument. Make sure the exit code of those scripts are 0, otherwise
- 	  make will stop after calling them.
+ How to build it
+ ===============
  
-+config BR2_ROOTFS_GENIMAGE_CFG
-+	string "genimage config files to prepare custom images"
-+	default ""
-+	help
-+	  Specify a space-separated list of configuration files for genimage to be
-+	  run after the build has finished and after Buildroot has packed the files
-+	  into selected filesystem images.
+@@ -56,6 +59,7 @@ After building, you should obtain this tree:
+ 
+     output/images/
+     +-- rootfs.tar                              [0]
++    +-- rootfs.ext4                             [0]
+     +-- rpi-firmware/
+     |   +-- bcm2708-rpi-b.dtb                   [1]
+     |   +-- bcm2708-rpi-b-plus.dtb              [1]
+@@ -65,8 +69,9 @@ After building, you should obtain this tree:
+     |   `-- start.elf
+     `-- zImage
+ 
+-[0] Note for Volatile: rootfs.tar will only be there if you kept
+-    "tar the root filesystem" option selected in "Filesystem images".
++[0] Note for Volatile: rootfs.tar and rootfs.ext4 will only be there if
++    you kept "tar the root filesystem" and "ext2/3/4 root filesystem"
++    options selected in "Filesystem images".
+ 
+ [1] The DTBs (Device Tree Blobs) will only be present if you setup
+     Buildroot to install the DTBs from the rpi-firmware package, and
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 835657c..26ebfb4 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -20,3 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c256eb9968c8997dce47350d2075e42f1b3991d3"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 +
-+	  This can for example be used to generate a card image with an vfat
-+	  partition containing some boot files, and an ext4 rootfs.
-+
-+	  genimage is executed from the main Buildroot source directory, with input
-+	  and output paths configured to output/images.
-+
-+config BR2_ROOTFS_GENIMAGE_HOST_DEPENDENCIES
-+	bool "genimage host dependencies"
-+	default y
-+	depends on BR2_ROOTFS_GENIMAGE_CFG != ""
-+	select BR2_PACKAGE_HOST_GENIMAGE
-+	select BR2_PACKAGE_HOST_DOSFSTOOLS
-+	select BR2_PACKAGE_HOST_MTOOLS
-+
- config BR2_ROOTFS_POST_IMAGE_SCRIPT
- 	string "Custom scripts to run after creating filesystem images"
- 	default ""
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_GENIMAGE_CFG="board/raspberrypi/genimage/persistent.cfg"
 -- 
 2.3.0
