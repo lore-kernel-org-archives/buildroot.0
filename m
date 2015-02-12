@@ -1,35 +1,77 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 12 Feb 2015 14:49:31 +0100
-Subject: [Buildroot] [PATCH v4 2/3] system: Defaulting TZ_LOCALTIME to UTC
+Date: Thu, 12 Feb 2015 14:49:32 +0100
+Subject: [Buildroot] [PATCH v4 3/3] package/gtksharp: new package
 In-Reply-To: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
 References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1423748972-17471-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1423748972-17471-4-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch sets the default timezone to UTC if not overwritten.
-Some packages need a configured system timezone for properly
-operating like mono based software.
+This patch adds gtksharp package for mono.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- system/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in            |  5 +++++
+ package/gtksharp/Config.in   |  9 +++++++++
+ package/gtksharp/gtksharp.mk | 15 +++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/gtksharp/Config.in
+ create mode 100644 package/gtksharp/gtksharp.mk
 
-diff --git a/system/Config.in b/system/Config.in
-index 95e10ab..d967002 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -371,6 +371,7 @@ config BR2_TARGET_TZ_ZONELIST
- 
- config BR2_TARGET_LOCALTIME
- 	string "default local time"
-+	default "Etc/UTC"
- 	help
- 	  The time zone to install as the default local time, expressed as a
- 	  tzdata location, such as:
+diff --git a/package/Config.in b/package/Config.in
+index fe3d3d0..27daf2a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -464,6 +464,11 @@ menu "Lua libraries/modules"
+ endmenu
+ endif
+ 	source "package/mono/Config.in"
++if BR2_PACKAGE_MONO
++menu "Mono libraries/modules"
++	source "package/gtksharp/Config.in"
++endmenu
++endif
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/gtksharp/Config.in b/package/gtksharp/Config.in
+new file mode 100644
+index 0000000..8f3af2e
+--- /dev/null
++++ b/package/gtksharp/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_GTKSHARP
++	bool "gtk#"
++	depends on BR2_PACKAGE_MONO
++	select BR2_PACKAGE_LIBGTK3
++	select BR2_TARGET_TZ_INFO
++	help
++	  Gtk# is a .NET language binding for the GTK+ toolkit.
++
++	  http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
+diff --git a/package/gtksharp/gtksharp.mk b/package/gtksharp/gtksharp.mk
+new file mode 100644
+index 0000000..948db19
+--- /dev/null
++++ b/package/gtksharp/gtksharp.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# gtksharp
++#
++#############################################################
++
++GTKSHARP_VERSION = 2.99.3
++GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
++GTKSHARP_SOURCE = gtk-sharp-$(GTKSHARP_VERSION).tar.xz
++GTKSHARP_LICENSE = LGPLv2
++GTKSHARP_LICENSE_FILES = COPYING
++GTKSHARP_INSTALL_STAGING = YES
++GTKSHARP_DEPENDENCIES += mono libgtk3
++
++$(eval $(autotools-package))
 -- 
 1.9.1
