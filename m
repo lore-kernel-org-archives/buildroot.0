@@ -1,77 +1,98 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 12 Feb 2015 14:49:32 +0100
-Subject: [Buildroot] [PATCH v4 3/3] package/gtksharp: new package
-In-Reply-To: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1423748972-17471-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Thu, 12 Feb 2015 18:25:12 +0100
+Subject: [Buildroot] [PATCH 03/10 v7] package/mesa3d-headers: new package
+In-Reply-To: <20150211180201.GB4003@free.fr>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <f37c4782a8b2fb8e9e41b92bf1f321a9a154c843.1423597914.git.yann.morin.1998@free.fr>
+ <20150211150602.7fbe2f38@nserafini-N550JK>
+ <20150211180201.GB4003@free.fr>
+Message-ID: <20150212182512.4af760a7@nserafini-N550JK>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds gtksharp package for mono.
+Yann, All,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/Config.in            |  5 +++++
- package/gtksharp/Config.in   |  9 +++++++++
- package/gtksharp/gtksharp.mk | 15 +++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/gtksharp/Config.in
- create mode 100644 package/gtksharp/gtksharp.mk
+On Wed, 11 Feb 2015 19:02:01 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..27daf2a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -464,6 +464,11 @@ menu "Lua libraries/modules"
- endmenu
- endif
- 	source "package/mono/Config.in"
-+if BR2_PACKAGE_MONO
-+menu "Mono libraries/modules"
-+	source "package/gtksharp/Config.in"
-+endmenu
-+endif
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/gtksharp/Config.in b/package/gtksharp/Config.in
-new file mode 100644
-index 0000000..8f3af2e
---- /dev/null
-+++ b/package/gtksharp/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_GTKSHARP
-+	bool "gtk#"
-+	depends on BR2_PACKAGE_MONO
-+	select BR2_PACKAGE_LIBGTK3
-+	select BR2_TARGET_TZ_INFO
-+	help
-+	  Gtk# is a .NET language binding for the GTK+ toolkit.
-+
-+	  http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
-diff --git a/package/gtksharp/gtksharp.mk b/package/gtksharp/gtksharp.mk
-new file mode 100644
-index 0000000..948db19
---- /dev/null
-+++ b/package/gtksharp/gtksharp.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# gtksharp
-+#
-+#############################################################
-+
-+GTKSHARP_VERSION = 2.99.3
-+GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/2.99/
-+GTKSHARP_SOURCE = gtk-sharp-$(GTKSHARP_VERSION).tar.xz
-+GTKSHARP_LICENSE = LGPLv2
-+GTKSHARP_LICENSE_FILES = COPYING
-+GTKSHARP_INSTALL_STAGING = YES
-+GTKSHARP_DEPENDENCIES += mono libgtk3
-+
-+$(eval $(autotools-package))
+> Nicolas, All,
+> 
+> On 2015-02-11 15:06 +0100, Nicolas Serafini spake thusly:
+> > I have done some build tests with the nvidia-tegra packages and
+> > opengl support.
+> > 
+> > I was able to build QT5 with opengl without problem but I get errors
+> > with QT4.
+> > 
+> > This is a known problem of QT4 with the inclusion of eglplatform.h
+> > inside which there is an inclusion of X11 headers.
+> 
+> I'm not sure I understand. Is that an known issue because of
+> Buildroot, or is that a known issue that also happens outside
+> Buildroot?
+
+I do not know if it's an issue only due to buildroot.
+I have never built QT4 outside of Buildroot so I do not know if it's a
+QT4, khronos header or X11 issue.
+
+> 
+> I mean: is that problem caused by Buildroot?
+> 
+> > The result is that we have some conflicting #define. For me this
+> > can be resolved by adding several #undef at the end of
+> > eglplatform.h.
+> > 
+> > Here is the end of my eglplatform.h header
+> > 
+> >  typedef khronos_int32_t EGLint;
+> > 
+> >  #undef None
+> >  #undef KeyPress
+> >  #undef KeyRelease
+> >  #undef FocusIn
+> >  #undef FocusOut
+> >  #undef FontChange
+> >  #undef CursorShape
+> >  #undef Bool
+> >  #undef Status
+> >  #undef Unsorted
+> >  #undef GrayScale
+> >  #undef Expose
+> >  
+> >  #endif /* __eglplatform_h */
+> 
+> Well, I'm not too fond of patching those headers.
+> 
+> I do not completely grok all the inter-relations between X, egl and
+> all the other stuff, so I'd prefer we do not have such hack,
+> especially if the answer to my question aboce is that the issue is
+> not caused by Buildroot.
+
+
+I'm ok to change nothing on the headers.
+I have found this workaround on the web few years ago but I never take
+time to investigate where is really the bug. It could be useful if
+someone has the problem to find a workaround into the mailing list.
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+Regards,
+
+Nicolas
+
+
+
 -- 
-1.9.1
+Nicolas Serafini
+R&D Embedded Software Engineer
+
+www.sensefly.com
+Route de Gen?ve 38
+1033 Cheseaux-Lausanne
+Switzerland
