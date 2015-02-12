@@ -1,48 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Feb 2015 11:03:56 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: disable gold linker
-In-Reply-To: <20150211153232.2dcd2b32@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 11 Feb 2015 15:32:32 +0100")
-References: <1423637231-4145-1-git-send-email-ps.report@gmx.net>
- <20150211153232.2dcd2b32@free-electrons.com>
-Message-ID: <87oaozzbsj.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Feb 2015 11:24:54 +0100
+Subject: [Buildroot] [git commit] dbus: security bump
+Message-ID: <20150212102705.8597A80E35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0b173fd795036b61abf09b2f324347a94ba41ed2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Seiderer,
- > On Wed, 11 Feb 2015 07:47:11 +0100, Peter Seiderer wrote:
- >> Fixes [1],[2]:
- >> powerpc-ctng_e500v2-linux-gnuspe-g++: error: unrecognized command line option '-fuse-ld=gold'
- >> Makefile:1192: recipe for target '../../lib/libQt5Core.so.5.4.0' failed
+Fixes CVE-2015-0245. See announcement for details:
 
- > The Qt configure script has some logic to detect whether the compiler
- > supports -fuse-ld=gold or not. Do you know why this logic is not
- > properly working, and not detecting that this specific compiler doesn't
- > support this?
+http://lists.freedesktop.org/archives/dbus/2015-February/016554.html
 
- > Disabling unconditionally this feature is maybe OK, but I'd like to
- > understand why the configure script logic to auto-detect this is not
- > working.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.hash |    4 ++--
+ package/dbus/dbus.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-The problem is that the configure script is confused. While this is
-related to linking, -fuse-ld=gold is an argument to the compiler driver
-to tell it what linker to execute, NOT an option to tell the linker to
-behave differently. So it shouldn't get prefixed with -Wl when passed
-though the compiler driver.
-
-Qt does the right thing when it uses it, but the configure script does:
-
-    if linkerSupportsFlag $TEST_COMPILER -fuse-ld=gold; then
-       CFG_USE_GOLD_LINKER=yes
-
-This should be compilerSupportsFlag instead.
-
-I'll create a patch and apply / send upstream.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 2079929..19113a6 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	83425250a6a4c93b9ab4a349771a7700e8ddff2d73a5a088222ca47ae9ce1f1a  dbus-1.8.14.tar.gz
++# Locally calculated after checking pgp signature
++sha256	7f795268efd343ff0498786acb35097564390d40b1b6158daf1b4f742b522b07  dbus-1.8.16.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index faad2b5..200084f 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.8.14
++DBUS_VERSION = 1.8.16
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
