@@ -1,18 +1,28 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 13 Feb 2015 15:06:43 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/uboot-tools: bump to version
+Date: Fri, 13 Feb 2015 15:09:03 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/uboot-tools: bump to version
 	2015.01
-Message-ID: <1423836403-1288-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1423836543-1355-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump to version 2015.01:
+  * Enable optional support for FIT Signature Verification
+  * Remove patch 0002-nostrip, it's upstream
+
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
-Changes v1 -> v2:
+Changes v2 -> v3:
   - Fix whitespace errors in patch
+
+Changes v1 -> v2:
+  - Make FIT Signature Verification optional to avoid mandatory dependency
+    of openssl
+  - Add a patch from Debian to allow building without a target config file
+  - Drop patch renaming, it's upstream
 ---
  package/uboot-tools/0002-nostrip.patch             | 61 ----------------------
  .../0002-tools-only-in-no-dot-config-targets.patch | 39 ++++++++++++++
