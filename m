@@ -1,56 +1,47 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 13 Feb 2015 10:31:36 +0100
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 13 Feb 2015 10:39:50 +0100
 Subject: [Buildroot] [PATCH] package/python: enable xml libraries
-In-Reply-To: <1423818347-3390-1-git-send-email-angelo.compagnucci@gmail.com>
+In-Reply-To: <CAGm1_ktnh-NfHS4mXQuE6gk+thaAyT1MB6xE38Km+jqKgW0Jog@mail.gmail.com>
 References: <1423818347-3390-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <CAGm1_ktnh-NfHS4mXQuE6gk+thaAyT1MB6xE38Km+jqKgW0Jog@mail.gmail.com>
+ <CAGm1_ktnh-NfHS4mXQuE6gk+thaAyT1MB6xE38Km+jqKgW0Jog@mail.gmail.com>
+Message-ID: <CA+TH9V=uZtCW8add7x0cuy90U_NFVkQpDLuJ-HQrQP=uu8iHdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 13, 2015 at 10:05 AM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> This patch adds the option to include xml libraries in python.
+Hi Yegor,
+
+2015-02-13 10:31 GMT+01:00 Yegor Yefremov <yegorslists@googlemail.com>:
+
+>>
+>> +config BR2_PACKAGE_PYTHON_XML
+>> +       bool "xml module"
+>> +       select BR2_PACKAGE_PYTHON_PYEXPAT
+>> +       help
+>> +         Xml libraries for Python
+>> +
 >
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/python/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+> What about this existing option?
 >
-> diff --git a/package/python/Config.in b/package/python/Config.in
-> index 87defad..682a324 100644
-> --- a/package/python/Config.in
-> +++ b/package/python/Config.in
-> @@ -114,6 +114,12 @@ config BR2_PACKAGE_PYTHON_SQLITE
+> config BR2_PACKAGE_PYTHON_PYEXPAT
+>         select BR2_PACKAGE_EXPAT
+>         bool "pyexpat"
 >         help
->           SQLite database support
+>           pyexpat module for Python.
 >
-> +config BR2_PACKAGE_PYTHON_XML
-> +       bool "xml module"
-> +       select BR2_PACKAGE_PYTHON_PYEXPAT
-> +       help
-> +         Xml libraries for Python
-> +
+> Yegor
 
-What about this existing option?
+Whithout BR2_PACKAGE_PYTHON_XML there is no way you can know exactly
+when xml modules will be included or not without reading the configure
+script.
+Inedeed, python xml modules are included by the configure script only
+if pyexpat is enabled.
 
-config BR2_PACKAGE_PYTHON_PYEXPAT
-        select BR2_PACKAGE_EXPAT
-        bool "pyexpat"
-        help
-          pyexpat module for Python.
+BR2_PACKAGE_PYTHON_XML makes clear that if you want xml libraries, you
+should select pyexpat.
 
-Yegor
 
->  config BR2_PACKAGE_PYTHON_ZLIB
->         bool "zlib module"
->         select BR2_PACKAGE_ZLIB
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
