@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Feb 2015 17:53:30 +0100
-Subject: [Buildroot] Is there a package for Google Mock?
-In-Reply-To: <CAJ4jsafg_ai99RY0gjW-FMd+HTX2+7Wb73wzx6m0j8jsgBfsPw@mail.gmail.com>
-References: <CAJ4jsafg_ai99RY0gjW-FMd+HTX2+7Wb73wzx6m0j8jsgBfsPw@mail.gmail.com>
-Message-ID: <20150213175330.223064da@free-electrons.com>
+Date: Fri, 13 Feb 2015 17:55:10 +0100
+Subject: [Buildroot] [PATCH v2 1/1] Added defconfig for RPi2
+In-Reply-To: <54DDC2A6.8020309@hebden.net.au>
+References: <1423813491-19453-1-git-send-email-james@hebden.net.au>
+ <54DDC2A6.8020309@hebden.net.au>
+Message-ID: <20150213175510.03c8202e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlos A. M. dos Santos,
+Dear James Hebden,
 
-On Fri, 13 Feb 2015 10:33:10 -0200, Carlos A. M. dos Santos wrote:
-
-> If not, would it be useful for the buildroot user community?
+On Fri, 13 Feb 2015 20:23:50 +1100, James Hebden wrote:
+> From: James Hebden <james@hebden.net.au>
 > 
-> Context: my company is developing a product using buildroot and we use
-> GMock to test C++ code.
+> Signed-off-by: James Hebden <james@hebden.net.au>
+> ---
+> Changes v1 -> v2
+> 
+>   - Removed custom kernel configuration, used default kernel config for 
+> bcm2709
+>   - Removed changes to rpi-firmware package, separate patch coming
+>   - Enabled EABIhf
+> 
+> 
+>   configs/raspberrypi2_defconfig | 33 +++++++++++++++++++++++++++++++++
+>   1 file changed, 33 insertions(+)
+>   create mode 100644 configs/raspberrypi2_defconfig
 
-There is no package for Google Mock in Buildroot at the moment. Feel
-free to have a look, and submit a patch to add this package!
+Please use "make savedefconfig" to generate the defconfig. Seeing your
+defconfig that has lots of prompt-less option values defined, it
+clearly appears that you haven't used "make savedefconfig".
 
-From a quick look, it's an autotools-based package, which sounds great.
-However, they seem to be doing something a bit funky with the Python
-detection, not sure if this is going to cause problems or not.
+Thanks a lot!
 
-Best regards,
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
