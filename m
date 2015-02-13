@@ -1,36 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Feb 2015 09:30:25 +0100
-Subject: [Buildroot] [git commit branch/next] xdriver_xf86-input-evdev:
-	bump version
-In-Reply-To: <XnsA43FE50DD8333berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Thu, 12 Feb 2015 22:31:01 +0100")
-References: <20150212205752.A5828805B2@busybox.osuosl.org>
- <XnsA43FE50DD8333berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <87bnkyz00u.fsf@dell.be.48ers.dk>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 13 Feb 2015 10:05:47 +0100
+Subject: [Buildroot] [PATCH] package/python: enable xml libraries
+Message-ID: <1423818347-3390-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+This patch adds the option to include xml libraries in python.
 
- > Peter Korsgaard <peter@korsgaard.com> wrote in 
- > news:20150212205752.A5828805B2 at busybox.osuosl.org:
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/python/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- >> -XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.2
- >> +XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.4
-
- > Hi Peter,
-
- > what about bumping to 2.9.1?
- > http://patchwork.ozlabs.org/patch/437621/
-
-That is also an option, but would require a bit more testing/work. I
-know that the 2.9 series atleast needs libevdev.
-
-The bump of the minor version was a lot easier/safer as it contains a
-few bugfixes, so I did that while adding the mtdev support.
-
+diff --git a/package/python/Config.in b/package/python/Config.in
+index 87defad..682a324 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -114,6 +114,12 @@ config BR2_PACKAGE_PYTHON_SQLITE
+ 	help
+ 	  SQLite database support
+ 
++config BR2_PACKAGE_PYTHON_XML
++	bool "xml module"
++	select BR2_PACKAGE_PYTHON_PYEXPAT
++	help
++	  Xml libraries for Python
++
+ config BR2_PACKAGE_PYTHON_ZLIB
+ 	bool "zlib module"
+ 	select BR2_PACKAGE_ZLIB
 -- 
-Bye, Peter Korsgaard
+1.9.1
