@@ -1,58 +1,28 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 13 Feb 2015 20:58:45 +0100
-Subject: [Buildroot] [PATCH] package/python: change
- BR2_PACKAGE_PYTHON_PYEXPAT description
-In-Reply-To: <1423849041-7978-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1423849041-7978-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <CAGm1_kvxFeAErb6VYyFXbuhoYkUEg=3eACYqSQUzS7K-uTMxPg@mail.gmail.com>
+From: Gregory Dymarek <gregd72002@gmail.com>
+Date: Fri, 13 Feb 2015 21:09:45 +0000
+Subject: [Buildroot] Raspberry pi boot problem? 2015.02-rc1
+Message-ID: <CAEbDrgkj+uYjsm0z8-=oxRpQBam97Ewa8_3HoyZK=T-O1k=0CA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 13, 2015 at 6:37 PM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> This patch changes BR2_PACKAGE_PYTHON_PYEXPAT description and
-> help text to underline that all the xml libraries will be
-> included in python.
-> It also reorders alphabetically the affected option.
->
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/python/Config.in | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/package/python/Config.in b/package/python/Config.in
-> index 87defad..5a22833 100644
-> --- a/package/python/Config.in
-> +++ b/package/python/Config.in
-> @@ -65,12 +65,6 @@ config BR2_PACKAGE_PYTHON_OSSAUDIODEV
->         help
->           ossaudiodev module for Python.
->
-> -config BR2_PACKAGE_PYTHON_PYEXPAT
-> -       select BR2_PACKAGE_EXPAT
-> -       bool "pyexpat"
-> -       help
-> -         pyexpat module for Python.
-> -
->  config BR2_PACKAGE_PYTHON_READLINE
->         select BR2_PACKAGE_READLINE
->         bool "readline"
-> @@ -114,6 +108,12 @@ config BR2_PACKAGE_PYTHON_SQLITE
->         help
->           SQLite database support
->
-> +config BR2_PACKAGE_PYTHON_PYEXPAT
-> +       select BR2_PACKAGE_EXPAT
-> +       bool "xml module"
-> +       help
-> +         pyexpat and xml libraries for Python
-> +
->  config BR2_PACKAGE_PYTHON_ZLIB
->         bool "zlib module"
->         select BR2_PACKAGE_ZLIB
-> --
+Hi,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Is it just me or there is a problem with RPi packages? When booting it
+hangs on:
+
+Uncompressing Linux... done, booting the kernel.
+
+
+
+I've been using 2014.11 for last months without any issues. Compiled today
+2015.02-rc1 using the same buildroot config (no legacy options there) and
+the default bcmrpi_defconfig and the problem appeared.
+
+Thanks,
+Gregory
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150213/dc927f70/attachment.html>
