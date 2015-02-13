@@ -1,41 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Feb 2015 23:34:25 +0100
-Subject: [Buildroot] [PATCH 06/12] toolchain/extrnal: avr32 is no more
+Date: Fri, 13 Feb 2015 23:34:26 +0100
+Subject: [Buildroot] [PATCH 07/12] package/binutils: avr32 is gone
 In-Reply-To: <cover.1423866603.git.yann.morin.1998@free.fr>
 References: <cover.1423866603.git.yann.morin.1998@free.fr>
-Message-ID: <b0db83ec931f27b5c4e9d7852a0a705f6451a480.1423866603.git.yann.morin.1998@free.fr>
+Message-ID: <34031b9be246b480cebe607fff4ed4417a54664c.1423866603.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Slightly reword a comment to no longer mention avr32.
-
-This part dealing with sysroot detection will have to be reworked, now
-that we got rid of avr32: we can now require a fully sysroot-aware
-toolchain, i.e. at least gcc-4.4.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/binutils/Config.in.host | 13 ++++---------
+ package/binutils/binutils.mk    |  8 --------
+ 2 files changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 5a69eb8..999a354 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -97,8 +97,8 @@ LIB_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
- # mangling the path to find the base directory of the sysroot.
- #
- # Note that we do not use the -print-sysroot option, because it is
--# only available since gcc 4.4.x, and we still support 4.2.x (for
--# AVR32) and 4.3.x.
-+# only available since gcc 4.4.x, and we only recently dropped support
-+# for 4.2.x and 4.3.x.
- #
- # When doing this, we don't pass any option to gcc that could select a
- # multilib variant (such as -march) as we want the "main" sysroot,
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 0739467..504e9ca 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,33 +7,28 @@ choice
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+-	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+-		depends on BR2_avr32
+-		bool "binutils 2.18-avr32-1.0.1"
+-
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.22"
+ 
+ 	# bfin disabled for newer binutils due to
+ 	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+-		depends on !BR2_avr32 && !BR2_bfin
++		depends on !BR2_bfin
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25
+-		depends on !BR2_avr32 && !BR2_bfin
++		depends on !BR2_bfin
+ 		bool "binutils 2.25"
+ 
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+ 	string
+-	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+ 	default "arc-2014.12"	if BR2_arc
+ 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+ 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index c3b3c18..9e99253 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -8,17 +8,9 @@
+ # If not, we do like other packages
+ BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+ ifeq ($(BINUTILS_VERSION),)
+-ifeq ($(BR2_avr32),y)
+-# avr32 uses a special version
+-BINUTILS_VERSION = 2.18-avr32-1.0.1
+-else
+ BINUTILS_VERSION = 2.22
+ endif
+-endif
+ 
+-ifeq ($(ARCH),avr32)
+-BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
+-endif
+ ifeq ($(BR2_arc),y)
+ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+ BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
 -- 
 1.9.1
