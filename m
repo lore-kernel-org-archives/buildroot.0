@@ -1,25 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 22:12:37 +0100
-Subject: [Buildroot] [PATCH] lmbench: use pkg-config to find libtirpc
-In-Reply-To: <1423414532-31769-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1423414532-31769-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150214221237.15592cf5@free-electrons.com>
+Date: Sat, 14 Feb 2015 22:15:23 +0100
+Subject: [Buildroot] [PATCH 2/8] package/libiio: update cmake code for
+ libxml2 detection
+In-Reply-To: <1422220435-18689-3-git-send-email-s.martin49@gmail.com>
+References: <1422220435-18689-1-git-send-email-s.martin49@gmail.com>
+ <1422220435-18689-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150214221523.333c1fe4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Samuel Martin,
 
-On Sun,  8 Feb 2015 17:55:32 +0100, Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+On Sun, 25 Jan 2015 22:13:49 +0100, Samuel Martin wrote:
+> Only check for libxml2 when it is needed.
+> 
+> This prevents CMake from falling back on the libxml2-config.cmake
+> installed on the host system (i.e. when libxml2 >=2.9.2 is part of the
+> host system), but not enabled as a target package (i.e. not existing in
+> the staging tree).
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  package/lmbench/lmbench.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  ...l2-detection-try-first-the-CMake-module-f.patch | 40 +++++++++++++---------
+>  1 file changed, 23 insertions(+), 17 deletions(-)
 
-Applied to next, thanks. I applied to next, since there was no
-indication that this commit was fixing a particular bug.
+Is this fixing a bug happening in practice? I.e should it be applied to
+master or next?
 
 Thomas
 -- 
