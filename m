@@ -1,66 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 16:33:45 +0100
-Subject: [Buildroot] [git commit branch/next] kconfig infra: add support for
-	defconfig files
-Message-ID: <20150214163206.523F380408@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 17:31:03 +0100
+Subject: [Buildroot] [git commit branch/next] linux: avoid unnecessary
+	changes in defconfig for INITRAMFS_SOURCE
+Message-ID: <20150214163206.923AC80408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=39867f3c8cba642cb2dc98b165992a6cc2fa1cb5
+commit: http://git.buildroot.net/buildroot/commit/?id=00daf37c4f43630d92dd54c5e36005e00a9b25c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds support for using a defconfig file instead of a full
-.config. This is a precondition to migrate packages like linux and
-barebox to the kconfig infrastructure.
+When Buildroot is configured to append the root filesystem to the Linux
+kernel as initramfs, Buildroot sets the path to the initramfs source
+dynamically in the Linux configuration file.
+
+As this path is specified as an absolute path, typically being different
+for different users of the same project (e.g. containing a username),
+saving the configuration to a version control system (for example using
+'make linux-update-defconfig') would result in a difference for this
+path at every invocation by a different user.
+Although this is technically not an issue, it is confusing that this
+generates a difference.
+
+Address this issue by using a not-yet-expanded make variable to specify
+the path to the initramfs source. That variable will be expanded by the
+Linux build system, which uses it both as a Makefile variable and a
+shell variable; thus, it needs to be specified in LINUX_MAKE_ENV (so
+it is exported and available in sub-processes of make).  Any saved
+configuration file would simply contain the reference to the
+not-yet-expanded variable.
+
+As in the Linux build system, the config variables are both read from
+make as from a shell script, we cannot use $() syntax as this would be
+interpreted as a command invocation by the shell. Instead, use ${}
+syntax which is interpreted as variable reference both by the shell as
+by make.
+
+[Thomas:
+ - Really make the patch work by using $(LINUX_MAKE_ENV) instead of
+   $(TARGET_MAKE_ENV). Otherwise, the new BR2_BINARIES_DIR variable is
+   not passed at all stages of the build process, which makes the
+   build fail when an initramfs is used.]
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-kconfig.mk |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+ linux/linux.mk |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index ef724e5..db56b7a 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -47,8 +47,13 @@ $$($(2)_KCONFIG_FILE): | $(1)-patch
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 86dd1ee..accc42e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,7 +55,9 @@ LINUX_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
  
- # The .config file is obtained by copying it from the specified source
- # configuration file, after the package has been patched.
-+# Since the file could be a defconfig file it needs to be expanded to a
-+# full .config first. We use 'make oldconfig' because this can be safely
-+# done even when the package does not support defconfigs.
- $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
- 	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
-+	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+		$$($(2)_KCONFIG_OPTS) oldconfig
+-LINUX_MAKE_ENV = $(TARGET_MAKE_ENV)
++LINUX_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	BR_BINARIES_DIR=$(BINARIES_DIR)
  
- # In order to get a usable, consistent configuration, some fixup may be needed.
- # The exact rules are specified by the package .mk file.
-@@ -68,10 +73,22 @@ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_
- 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
- 	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
- 
-+$(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+		$$($(2)_KCONFIG_OPTS) savedefconfig
-+
- # Target to copy back the configuration to the source configuration file
- $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 	cp --preserve=timestamps -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
- 
-+# Note: make sure the timestamp of the stored configuration is not newer than
-+# the .config to avoid a useless rebuild. Note that, contrary to
-+# $(1)-update-config, the reference for 'touch' is _not_ the file from which
-+# we copy.
-+$(1)-update-defconfig: $(1)-savedefconfig
-+	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
-+	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+
- endef # inner-kconfig-package
- 
- ################################################################################
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+@@ -191,7 +193,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	# rebuilt using the linux-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$(BINARIES_DIR)/rootfs.cpio",$(@D)/.config)
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+@@ -230,7 +232,7 @@ endef
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
+ endef
+ define LINUX_INSTALL_DTB
+ 	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+@@ -277,9 +279,9 @@ endif
+ define LINUX_BUILD_CMDS
+ 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+ 		cp $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+-		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
++		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+@@ -312,7 +314,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+-		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
++		$(LINUX_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
+ 	fi
+@@ -328,7 +330,7 @@ $(eval $(kconfig-package))
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
