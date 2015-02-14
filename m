@@ -1,33 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 22:10:46 +0100
-Subject: [Buildroot] [PATCH 4/4] br-reproduce-build: quote all variables
-In-Reply-To: <0b43bc60a4856f45924e3814010dc49d0240b1a4.1423910953.git.yann.morin.1998@free.fr>
-References: <cover.1423910953.git.yann.morin.1998@free.fr>
- <0b43bc60a4856f45924e3814010dc49d0240b1a4.1423910953.git.yann.morin.1998@free.fr>
-Message-ID: <20150214221046.69bc7075@free-electrons.com>
+Date: Sat, 14 Feb 2015 22:04:54 +0100
+Subject: [Buildroot] [git commit] package/libsemanage: add patch to fix
+	Blackfin build issue
+Message-ID: <20150214211139.3405C8044E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=d45454dbe5abf593bf724a9f1c556421f4596305
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Feb 2015 11:52:06 +0100, Yann E. MORIN wrote:
+libsemanage use the same build system than libselinux,
+so it's affected by the same issue.
 
-> -wget -O ${BUILD_DIR}/config http://autobuild.buildroot.org/results/${BUILD_ID}/config
-> +wget -O "${BUILD_DIR}/config http://autobuild.buildroot.org/results/${BUILD_ID}/config"
+Fixes:
+http://autobuild.buildroot.net/results/39d/39d3460e88a1316ec7dbcd0d67b7fdb992c3fc77
 
-How can this work? You're putting both the -O argument and the URL
-within the same quotes.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-workaround-blackfin-issue.patch           |   24 ++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-> -wget -O ${BUILD_DIR}/gitid http://autobuild.buildroot.org/results/${BUILD_ID}/gitid
-> +wget -O "${BUILD_DIR}/gitid http://autobuild.buildroot.org/results/${BUILD_ID}/gitid"
-
-Ditto.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0002-workaround-blackfin-issue.patch
+new file mode 100644
+index 0000000..5d00c69
+--- /dev/null
++++ b/package/libsemanage/0002-workaround-blackfin-issue.patch
+@@ -0,0 +1,24 @@
++Do not make symbols hidden on Blackfin
++
++The libselinux logic to hide internal symbols from the DSO doesn't
++work properly on Blackfin due to the USER_LABEL_PREFIX not being
++handled properly. A real fix is not that simple, so this patch simply
++disables the internal symbol hiding mechanism. This means that those
++symbols are visible in the final DSO, which is not a problem for
++proper execution, it just isn't as clean.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/dso.h
++===================================================================
++--- a/src/dso.h
+++++ b/src/dso.h
++@@ -1,7 +1,7 @@
++ #ifndef _SELINUX_DSO_H
++ #define _SELINUX_DSO_H	1
++ 
++-#ifdef SHARED
+++#if defined(SHARED) && !defined(__bfin__)
++ # define hidden __attribute__ ((visibility ("hidden")))
++ # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
++ # define __hidden_proto(fct, internal)	\
