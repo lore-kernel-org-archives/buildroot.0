@@ -1,34 +1,43 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sat, 14 Feb 2015 10:35:18 -0300
-Subject: [Buildroot] [PATCH] gcc: 4.9.2: Add patch to remove a wrong
-	header
-In-Reply-To: <20150214091200.212ee522@free-electrons.com>
-References: <1423659108-6073-1-git-send-email-ezequiel@vanguardiasur.com.ar>	<87fvaazujk.fsf@dell.be.48ers.dk>
- <20150214091200.212ee522@free-electrons.com>
-Message-ID: <54DF4F16.1010706@vanguardiasur.com.ar>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 14 Feb 2015 14:47:23 +0100
+Subject: [Buildroot] [PATCH] Linux kernel: add support for config
+ fragment files
+In-Reply-To: <20150214100145.10d1d32b@free-electrons.com>
+References: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
+ <20150214100145.10d1d32b@free-electrons.com>
+Message-ID: <54DF51EB.40603@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
+On 02/14/2015 10:01 AM, Thomas Petazzoni wrote:
+> Dear Floris Bos,
+>
+> On Tue, 10 Feb 2015 14:50:21 +0100, Floris Bos wrote:
+>
+>> +config BR2_LINUX_KERNEL_CONFIG_FRAGMENTS
+>> +	string "Additional configuration fragment files"
+>> +	help
+>> +	  A space-seperated list of kernel configuration fragment files,
+>> +	  that will be merged to the main kernel configuration file.
+> Instead of introducing a new option for this, can't we make the
+> existing option that provides the kernel configuration file path a
+> space-separated option that allows you to pass multiple kernel config
+> file fragments?
+>
+> Or maybe you want to support the combination of a kernel defconfig +
+> some fragments?
 
-On 02/14/2015 05:12 AM, Thomas Petazzoni wrote:
-> Peter, Ezequiel,
-> 
-> On Thu, 12 Feb 2015 22:31:11 +0100, Peter Korsgaard wrote:
-> 
->> I'll wait with this until you post the patches to actually build an
->> internal nios2 toolchain, ok?
-> 
-> I have consequently marked this patch as Rejected in patchwork.
-> Ezequiel, please include it with the rest of the series adding NIOS II
-> support to the internal toolchain backend. Thanks!
-> 
-
-Sure, I will.
+As mentioned in the commit message my use-case indeed involves combining 
+a kernel defconfig with a fragment.
+To be more precise: I simply want to stay in sync with the Raspberry Pi 
+defconfig -which changes a lot-, with a few tiny modifications of my own.
 
 -- 
-Ezequiel Garcia, VanguardiaSur
-www.vanguardiasur.com.ar
+Yours sincerely,
+
+Floris Bos
