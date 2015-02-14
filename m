@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 16:37:20 +0100
-Subject: [Buildroot] [git commit branch/next] linux: qstrip the path to the
-	custom configuration file
-Message-ID: <20150214163206.72A2E80408@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 17:33:36 +0100
+Subject: [Buildroot] [PATCH 0/10] kconfig infra: enhancements,
+ and more packages migrated (branch yem/pdp/kconfig)
+In-Reply-To: <cover.1422972638.git.yann.morin.1998@free.fr>
+References: <cover.1422972638.git.yann.morin.1998@free.fr>
+Message-ID: <20150214173336.2d17acb3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89a47724e943fe449ce55b6341d64744fcb8e18a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Yann, Thomas,
 
-Even though this is not strictly necessary with the current version of
-linux.mk, it becomes necessary when migrating linux.mk to the kconfig
-infrastructure.
+On Tue,  3 Feb 2015 15:21:46 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Thomas De Schampheleire (9):
+>       kconfig infra: support built-in config files
+>       kconfig infra: add support for defconfig files
+>       kconfig infra: make update-config/defconfig handling symmetrical
+>       kconfig infra: remove all install stamp files
+>       linux: qstrip the path to the custom configuration file
+>       linux: migrate to the kconfig infrastructure
+>       linux: avoid unnecessary changes in defconfig for INITRAMFS_SOURCE
+>       barebox: qstrip the path to the custom configuration file
+>       barebox: migrate to the kconfig infrastructure
+> 
+> Yann E. Morin (1):
+>       kconfig infra: only provide foo-*config targets when the package is enabled
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 29f59e8..a321fa7 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -171,7 +171,7 @@ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
--KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
-+KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
- endif
- 
- define LINUX_CONFIGURE_CMDS
+Series applied to next. I've done some changes on two patches: I'll
+comment directly on the relevant patches.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
