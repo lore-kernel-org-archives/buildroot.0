@@ -1,47 +1,39 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Feb 2015 12:38:45 +0100
-Subject: [Buildroot] [PATCH 3/3] package/openmvtools: don't use host
- library path
-In-Reply-To: <20150214092334.6b8cc55c@free-electrons.com>
-References: <1423437730-22997-1-git-send-email-romain.naour@openwide.fr>	<1423437730-22997-3-git-send-email-romain.naour@openwide.fr>
- <20150214092334.6b8cc55c@free-electrons.com>
-Message-ID: <54DF33C5.1010900@openwide.fr>
+Date: Sat, 14 Feb 2015 12:42:50 +0100
+Subject: [Buildroot] [PATCH v2] package/openmvtools: don't use host library
+	path
+Message-ID: <1423914170-10299-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Set CUSTOM_PROCPS_LIBS to " " otherwise -L/lib is
+used by default.
 
-Le 14/02/2015 09:23, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Mon,  9 Feb 2015 00:22:10 +0100, Romain Naour wrote:
-> 
->> +OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps \
->> +	CUSTOM_PROCPS_LIBS="-L$(STAGING_DIR)"
-> 
-> Have you tried:
-> 
-> 	CUSTOM_PROCPS_LIBS=" "
-> 
->  ?
-> 
-> We're already using this trick in the openvmtools package for the
-> libdnet detection.
-> 
+Fixes:
+http://autobuild.buildroot.net/results/bff/bff7d8f3ec19ce790f0c88a336d1007e1ff29836/build-end.log
 
-My intention was to help the configure script to find libprocps.so in
-STAGING_DIR/lib. I forgot to add the "/lib"...
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/openvmtools/openvmtools.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-But, you're right.
-Using CUSTOM_PROCPS_LIBS=" " is enough.
-
-I'll respin shortly.
-
-Best regards,
-Romain
-
-> Thomas
-> 
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 7aa04af..e0ec6d6 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -22,7 +22,9 @@ OPENVMTOOLS_DEPENDENCIES += libfuse
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+-OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
++# Set CUSTOM_PROCPS_LIBS to " " otherwise -L/lib is used by default.
++OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps \
++	CUSTOM_PROCPS_LIBS=" "
+ OPENVMTOOLS_CONF_OPTS += --with-procps
+ OPENVMTOOLS_DEPENDENCIES += procps-ng
+ else
+-- 
+1.9.3
