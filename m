@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 15:35:03 +0100
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xkeyboard-config: bump version to 2.14
-Message-ID: <20150214143823.993F580172@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 15:32:24 +0100
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_xfsinfo:
+	bump version to 1.0.5
+Message-ID: <20150214143823.7E12C80172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca6c0b649d62ee44322f45e887168d8e5e40cd30
+commit: http://git.buildroot.net/buildroot/commit/?id=9b6aa62fe0a15cc3507e258b9b2f9aa66d1e379d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
+ package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 4e3ab92..96a769e 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+diff --git a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
+index 2019287..38d01e4 100644
+--- a/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
++++ b/package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.10.1
-+XKEYBOARD_CONFIG_VERSION = 2.14
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-XAPP_XFSINFO_VERSION = 1.0.4
++XAPP_XFSINFO_VERSION = 1.0.5
+ XAPP_XFSINFO_SOURCE = xfsinfo-$(XAPP_XFSINFO_VERSION).tar.bz2
+ XAPP_XFSINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFSINFO_LICENSE = MIT
