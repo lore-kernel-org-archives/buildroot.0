@@ -1,64 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 17:46:35 +0100
-Subject: [Buildroot] [git commit branch/next] package/eudev: we won't miss
-	you, avr32
-Message-ID: <20150214164752.5F0BC80458@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 17:39:50 +0100
+Subject: [Buildroot] [git commit branch/next] arch: kill avr32
+Message-ID: <20150214164751.E2D2080454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6f76ffea6bf379a23c08a13d96d9a84cc0c7756
+commit: http://git.buildroot.net/buildroot/commit/?id=a46007daa7128d316ab3f36da23828b8ab7aaf58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+avr32 was slated for removal in 2015.02. Make it so!
+
+This patch only definitively hides the symbol. When all references
+to it are eradicated (to come in followup patches), we'll eventually
+kill the symbol altogether.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/eudev/Config.in |    3 ---
- system/Config.in        |    2 --
- 2 files changed, 0 insertions(+), 5 deletions(-)
+ .defconfig     |    1 -
+ arch/Config.in |    2 +-
+ 2 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 7916fd0..7934cd7 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_EUDEV
- 	bool "eudev"
--	depends on !BR2_avr32 # no epoll_create1
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	depends on BR2_USE_MMU # uses fork()
- 	depends on BR2_LARGEFILE # util-linux
-@@ -32,11 +31,9 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
- endif
- 
- comment "eudev needs eudev /dev management"
--	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 
- comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
--	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/system/Config.in b/system/Config.in
-index 95e10ab..fb8b686 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -124,7 +124,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
- 
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	bool "Dynamic using eudev"
--	depends on !BR2_avr32 # eudev
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
-@@ -133,7 +132,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	select BR2_PACKAGE_EUDEV
- 
- comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
--	depends on !BR2_avr32 # eudev
- 	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+diff --git a/.defconfig b/.defconfig
+index 77ab11a..585be55 100644
+--- a/.defconfig
++++ b/.defconfig
+@@ -6,7 +6,6 @@ BR2_HAVE_DOT_CONFIG=y
+ # BR2_alpha is not set
+ # BR2_arm is not set
+ # BR2_armeb is not set
+-# BR2_avr32 is not set
+ # BR2_cris is not set
+ # BR2_ia64 is not set
+ BR2_i386=y
+diff --git a/arch/Config.in b/arch/Config.in
+index 890e7e2..1719fe6 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -61,7 +61,7 @@ config BR2_avr32
+ 	# components. If you're interested by AVR32, contact the
+ 	# Buildroot community. Otherwise, its support will be removed
+ 	# by the 2015.02 release.
+-	depends on BR2_DEPRECATED_SINCE_2014_08
++	depends on BR2_BROKEN
+ 	help
+ 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+ 	  Atmel.
