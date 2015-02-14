@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 15:31:51 +0100
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_sessreg:
-	bump version to 1.1.0
-Message-ID: <20150214143823.5E25980172@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 15:31:27 +0100
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_iceauth:
+	bump version to 1.0.7
+Message-ID: <20150214143823.3F82D80172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=747bf117b219a7a8dea44711cecfc5c71cbbbc6f
+commit: http://git.buildroot.net/buildroot/commit/?id=6016498bad3958f8b6f34dd2f5c91d0511907826
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_sessreg/xapp_sessreg.mk |    2 +-
+ package/x11r7/xapp_iceauth/xapp_iceauth.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-index 1b27a7b..08811c0 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.mk b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+index 0f6ef3e..d30ff6f 100644
+--- a/package/x11r7/xapp_iceauth/xapp_iceauth.mk
++++ b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_SESSREG_VERSION = 1.0.8
-+XAPP_SESSREG_VERSION = 1.1.0
- XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
- XAPP_SESSREG_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_SESSREG_LICENSE = MIT
+-XAPP_ICEAUTH_VERSION = 1.0.6
++XAPP_ICEAUTH_VERSION = 1.0.7
+ XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.bz2
+ XAPP_ICEAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_ICEAUTH_LICENSE = MIT
