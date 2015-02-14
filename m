@@ -1,154 +1,69 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 14 Feb 2015 13:18:04 +0100
-Subject: [Buildroot] [PATCH v2] package/python-web2py: new package
-Message-ID: <1423916284-16728-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 14 Feb 2015 13:19:27 +0100
+Subject: [Buildroot] [PATCH] package/python: change
+ BR2_PACKAGE_PYTHON_PYEXPAT description
+In-Reply-To: <CAGm1_kvxFeAErb6VYyFXbuhoYkUEg=3eACYqSQUzS7K-uTMxPg@mail.gmail.com>
+References: <1423849041-7978-1-git-send-email-angelo.compagnucci@gmail.com>
+ <CAGm1_kvxFeAErb6VYyFXbuhoYkUEg=3eACYqSQUzS7K-uTMxPg@mail.gmail.com>
+Message-ID: <CAGm1_ktYeM7cLNt8TxSE3esTwS=MvBydQ9g2dNtxX0J6Nutbgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds web2py package. web2py is a free open source
-full-stack framework for rapid development of fast, scalable,
-secure and portable database-driven web-based applications.
+On Fri, Feb 13, 2015 at 8:58 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Fri, Feb 13, 2015 at 6:37 PM, Angelo Compagnucci
+> <angelo.compagnucci@gmail.com> wrote:
+>> This patch changes BR2_PACKAGE_PYTHON_PYEXPAT description and
+>> help text to underline that all the xml libraries will be
+>> included in python.
+>> It also reorders alphabetically the affected option.
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>>  package/python/Config.in | 12 ++++++------
+>>  1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/package/python/Config.in b/package/python/Config.in
+>> index 87defad..5a22833 100644
+>> --- a/package/python/Config.in
+>> +++ b/package/python/Config.in
+>> @@ -65,12 +65,6 @@ config BR2_PACKAGE_PYTHON_OSSAUDIODEV
+>>         help
+>>           ossaudiodev module for Python.
+>>
+>> -config BR2_PACKAGE_PYTHON_PYEXPAT
+>> -       select BR2_PACKAGE_EXPAT
+>> -       bool "pyexpat"
+>> -       help
+>> -         pyexpat module for Python.
+>> -
+>>  config BR2_PACKAGE_PYTHON_READLINE
+>>         select BR2_PACKAGE_READLINE
+>>         bool "readline"
+>> @@ -114,6 +108,12 @@ config BR2_PACKAGE_PYTHON_SQLITE
+>>         help
+>>           SQLite database support
+>>
+>> +config BR2_PACKAGE_PYTHON_PYEXPAT
+>> +       select BR2_PACKAGE_EXPAT
+>> +       bool "xml module"
+>> +       help
+>> +         pyexpat and xml libraries for Python
+>> +
+>>  config BR2_PACKAGE_PYTHON_ZLIB
+>>         bool "zlib module"
+>>         select BR2_PACKAGE_ZLIB
+>> --
+>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/Config.in                      |  1 +
- package/python-web2py/Config.in        | 21 +++++++++++++++++++++
- package/python-web2py/S51web2py        | 24 ++++++++++++++++++++++++
- package/python-web2py/python-web2py.mk | 34 ++++++++++++++++++++++++++++++++++
- package/python-web2py/web2py.service   | 10 ++++++++++
- 5 files changed, 90 insertions(+)
- create mode 100644 package/python-web2py/Config.in
- create mode 100644 package/python-web2py/S51web2py
- create mode 100644 package/python-web2py/python-web2py.mk
- create mode 100644 package/python-web2py/web2py.service
+Hm. We forgot about Python3. Could you resend your patch , that would
+also take care of package/python3/Config.in. Or perhaps extra patch
+for Python3.
 
-diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..a874410 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -573,6 +573,7 @@ menu "external python modules"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-web2py/Config.in"
- 	source "package/python-webpy/Config.in"
- 	source "package/python-werkzeug/Config.in"
- 	source "package/python-zope-interface/Config.in"
-diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
-new file mode 100644
-index 0000000..6250396
---- /dev/null
-+++ b/package/python-web2py/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_PYTHON_WEB2PY
-+	bool "python-web2py"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on BR2_PACKAGE_PYTHON_ZLIB
-+	depends on BR2_PACKAGE_PYTHON_PYEXPAT
-+	help
-+	  web2py is a free open source full-stack framework for rapid
-+	  development of fast, scalable, secure and portable
-+	  database-driven web-based applications.
-+
-+	  http://web2py.com
-+
-+if BR2_PACKAGE_PYTHON_WEB2PY
-+
-+config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
-+	string "Administrative password"
-+	default web2py
-+	help
-+	  Set the Admin panel password.
-+
-+endif
-diff --git a/package/python-web2py/S51web2py b/package/python-web2py/S51web2py
-new file mode 100644
-index 0000000..e6e0cad
---- /dev/null
-+++ b/package/python-web2py/S51web2py
-@@ -0,0 +1,24 @@
-+#!/bin/sh
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting web2py: "
-+		start-stop-daemon -S -q -m -p /run/web2py.pid \
-+			-b -x /usr/share/web2py/web2py.py \
-+			-- --nogui -a '<recycle>' -i 0.0.0.0 -p 80
-+		[ $? = 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	stop)
-+		echo -n "Stopping web2py: "
-+		start-stop-daemon -K -q -p /run/web2py.pid
-+		[ $? = 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	restart)
-+		"$0" stop
-+		sleep 1
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		;;
-+esac
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-new file mode 100644
-index 0000000..6fcf0c1
---- /dev/null
-+++ b/package/python-web2py/python-web2py.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# web2py
-+#
-+################################################################################
-+
-+PYTHON_WEB2PY_VERSION = 2.9.12
-+PYTHON_WEB2PY_SITE = https://github.com/web2py/web2py/archive/
-+PYTHON_WEB2PY_SOURCE = R-$(PYTHON_WEB2PY_VERSION).tar.gz
-+PYTHON_WEB2PY_LICENSE = LGPLv3
-+PYTHON_WEB2PY_LICENSE_FILES = LICENSE
-+
-+define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
-+	python -c 'import os; \
-+		os.chdir("$(@D)"); \
-+		from gluon.main import save_password; \
-+		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),80)'
-+	rsync -a $(@D)/* $(TARGET_DIR)/usr/share/web2py
-+endef
-+
-+define PYTHON_WEB2PY_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/python-web2py/S51web2py \
-+		$(TARGET_DIR)/etc/init.d/S51web2py
-+endef
-+
-+define PYTHON_WEB2PY_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/python-web2py/web2py.service \
-+		$(TARGET_DIR)/etc/systemd/system/web2py.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../web2py.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/web2py.service
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/python-web2py/web2py.service b/package/python-web2py/web2py.service
-new file mode 100644
-index 0000000..3791d8d
---- /dev/null
-+++ b/package/python-web2py/web2py.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Web2py daemon
-+After=network.target
-+
-+[Service]
-+Type=simple
-+ExecStart=/usr/share/web2py/web2py.py --nogui -a '<recycle>' -i 0.0.0.0 -p 80
-+
-+[Install]
-+WantedBy=multi-user.target
--- 
-1.9.1
+Thanks.
+
+Yegor
