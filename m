@@ -1,52 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 07:37:07 +0100
-Subject: [Buildroot] [PATCH 01/12] arch: kill avr32
-In-Reply-To: <26bedb8c0497ac792a6bf89554e4178901d98d77.1423866603.git.yann.morin.1998@free.fr>
-References: <cover.1423866603.git.yann.morin.1998@free.fr>
- <26bedb8c0497ac792a6bf89554e4178901d98d77.1423866603.git.yann.morin.1998@free.fr>
-Message-ID: <20150214073707.12d1a361@free-electrons.com>
+Date: Sat, 14 Feb 2015 07:58:39 +0100
+Subject: [Buildroot] [PATCH v4 1/3] package/mono: enable mono library
+ compilation
+In-Reply-To: <1423748972-17471-2-git-send-email-angelo.compagnucci@gmail.com>
+References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1423748972-17471-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150214075839.5ee08252@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Angelo Compagnucci,
 
-On Fri, 13 Feb 2015 23:34:20 +0100, Yann E. MORIN wrote:
+On Thu, 12 Feb 2015 14:49:30 +0100, Angelo Compagnucci wrote:
 
-> diff --git a/.defconfig b/.defconfig
-> index 77ab11a..585be55 100644
-> --- a/.defconfig
-> +++ b/.defconfig
-> @@ -6,7 +6,6 @@ BR2_HAVE_DOT_CONFIG=y
->  # BR2_alpha is not set
->  # BR2_arm is not set
->  # BR2_armeb is not set
-> -# BR2_avr32 is not set
->  # BR2_cris is not set
->  # BR2_ia64 is not set
->  BR2_i386=y
-> diff --git a/arch/Config.in b/arch/Config.in
-> index 890e7e2..6c8f328 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -53,21 +53,6 @@ config BR2_aarch64
->  	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
->  	  http://en.wikipedia.org/wiki/ARM
->  
-> -config BR2_avr32
-> -	bool "AVR32"
-> -	select BR2_SOFT_FLOAT
-> -	# This architecture is obsolete and complicated to maintain to
-> -	# do the lack of upstream support in the major toolchain
-> -	# components. If you're interested by AVR32, contact the
-> -	# Buildroot community. Otherwise, its support will be removed
-> -	# by the 2015.02 release.
-> -	depends on BR2_DEPRECATED_SINCE_2014_08
+> diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+> index 0bbf338..9ec3c24 100644
+> --- a/package/mono/mono.mk
+> +++ b/package/mono/mono.mk
+> @@ -21,7 +21,6 @@ MONO_AUTORECONF = YES
+>  MONO_CONF_OPTS = --disable-gtk-doc \
+>  	--with-mcs-docs=no \
+>  	--with-moonlight=no \
+> -	--disable-libraries \
+>  	--with-ikvm-native=no \
+>  	--enable-minimal=aot,profiler,debug \
+>  	--disable-mcs-build \
 
-Instead of moving things around, why not simply just add "depends on
-BR2_BROKEN" ?
+Apparently, Mono was working fine with --disable-libraries, as long as
+no third party libraries are used. So should we make this optional
+instead? What is the size impact of this (i.e a Mono build with
+--disable-libraries, and a Mono build without --disable-libraries), in
+terms of installed size? If the size difference is small compared to
+the overall size of Mono, then I'm fine for doing it unconditionally.
+
+Could you comment on this?
+
+Thanks,
 
 Thomas
 -- 
