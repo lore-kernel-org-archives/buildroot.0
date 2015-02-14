@@ -1,53 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 22:04:48 +0100
-Subject: [Buildroot] [git commit] package/libsepol: add patch to fix
-	Blackfin build issue
-Message-ID: <20150214211139.2B11A8044E@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 22:11:45 +0100
+Subject: [Buildroot] [git commit branch/next] lmbench: use pkg-config to
+	find libtirpc
+Message-ID: <20150214211151.E162580450@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa476ab32cfb2dc0ba3621d78cdb6971a9f86753
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=5f1be2acf48d11d8bf234681986214d1ea126958
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libsepol use the same build system than libselinux,
-so it's affected by the same issue.
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../libsepol/0002-workaround-blackfin-issue.patch  |   24 ++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ package/lmbench/lmbench.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
-new file mode 100644
-index 0000000..5d00c69
---- /dev/null
-+++ b/package/libsepol/0002-workaround-blackfin-issue.patch
-@@ -0,0 +1,24 @@
-+Do not make symbols hidden on Blackfin
-+
-+The libselinux logic to hide internal symbols from the DSO doesn't
-+work properly on Blackfin due to the USER_LABEL_PREFIX not being
-+handled properly. A real fix is not that simple, so this patch simply
-+disables the internal symbol hiding mechanism. This means that those
-+symbols are visible in the final DSO, which is not a problem for
-+proper execution, it just isn't as clean.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/dso.h
-+===================================================================
-+--- a/src/dso.h
-++++ b/src/dso.h
-+@@ -1,7 +1,7 @@
-+ #ifndef _SELINUX_DSO_H
-+ #define _SELINUX_DSO_H	1
-+ 
-+-#ifdef SHARED
-++#if defined(SHARED) && !defined(__bfin__)
-+ # define hidden __attribute__ ((visibility ("hidden")))
-+ # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
-+ # define __hidden_proto(fct, internal)	\
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 63a83fd..59e750c 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -14,9 +14,9 @@ LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+ LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+-LMBENCH_DEPENDENCIES += libtirpc
+-LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+-LMBENCH_LDFLAGS += -ltirpc
++LMBENCH_DEPENDENCIES += host-pkgconf libtirpc
++LMBENCH_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libtirpc)
++LMBENCH_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
+ endif
+ 
+ define LMBENCH_CONFIGURE_CMDS
