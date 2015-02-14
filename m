@@ -1,63 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Feb 2015 10:23:14 +0100
-Subject: [Buildroot] [PATCH 11/12 v2] package/eudev: we won't miss you, avr32
+Date: Sat, 14 Feb 2015 10:23:15 +0100
+Subject: [Buildroot] [PATCH 12/12 v2] arch/avr32: decommission for real
 In-Reply-To: <cover.1423905753.git.yann.morin.1998@free.fr>
 References: <cover.1423905753.git.yann.morin.1998@free.fr>
-Message-ID: <f2259a2e5fa0e763c50a73b42c27e6ef79cd92ba.1423905753.git.yann.morin.1998@free.fr>
+Message-ID: <c49bccefb0cd1e0a365f4eb85587e3c78825b823.1423905753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now that we have absolutely zero reference to the avr32 architecture, we
+can now really decommission the symbol.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/eudev/Config.in | 3 ---
- system/Config.in        | 2 --
- 2 files changed, 5 deletions(-)
+ arch/Config.in       | 19 -------------------
+ arch/Config.in.avr32 | 11 -----------
+ 2 files changed, 30 deletions(-)
+ delete mode 100644 arch/Config.in.avr32
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 7916fd0..7934cd7 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_EUDEV
- 	bool "eudev"
--	depends on !BR2_avr32 # no epoll_create1
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	depends on BR2_USE_MMU # uses fork()
- 	depends on BR2_LARGEFILE # util-linux
-@@ -32,11 +31,9 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
+diff --git a/arch/Config.in b/arch/Config.in
+index 1719fe6..16ad8be 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -53,21 +53,6 @@ config BR2_aarch64
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+ 	  http://en.wikipedia.org/wiki/ARM
+ 
+-config BR2_avr32
+-	bool "AVR32"
+-	select BR2_SOFT_FLOAT
+-	# This architecture is obsolete and complicated to maintain to
+-	# do the lack of upstream support in the major toolchain
+-	# components. If you're interested by AVR32, contact the
+-	# Buildroot community. Otherwise, its support will be removed
+-	# by the 2015.02 release.
+-	depends on BR2_BROKEN
+-	help
+-	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+-	  Atmel.
+-	  http://www.atmel.com/
+-	  http://en.wikipedia.org/wiki/Avr32
+-
+ config BR2_bfin
+ 	bool "Blackfin"
+ 	help
+@@ -328,10 +313,6 @@ if BR2_aarch64
+ source "arch/Config.in.aarch64"
  endif
  
- comment "eudev needs eudev /dev management"
--	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 
- comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
--	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/system/Config.in b/system/Config.in
-index 95e10ab..fb8b686 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -124,7 +124,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
- 
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	bool "Dynamic using eudev"
--	depends on !BR2_avr32 # eudev
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
-@@ -133,7 +132,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	select BR2_PACKAGE_EUDEV
- 
- comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
--	depends on !BR2_avr32 # eudev
- 	depends on BR2_USE_MMU
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+-if BR2_avr32
+-source "arch/Config.in.avr32"
+-endif
+-
+ if BR2_bfin
+ source "arch/Config.in.bfin"
+ endif
+diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+deleted file mode 100644
+index fc1f4f6..0000000
+--- a/arch/Config.in.avr32
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_ARCH
+-	default "avr32"
+-
+-config BR2_ENDIAN
+-	default "BIG"
+-
+-config BR2_GCC_TARGET_ARCH
+-	default "ap"
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
 -- 
 1.9.1
