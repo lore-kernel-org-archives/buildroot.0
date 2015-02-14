@@ -1,26 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 09:59:42 +0100
-Subject: [Buildroot] [PATCH 0/10 v7] NVidia GPU binary blobs for x86 and
- ARM (branch yem/gfx2)
-In-Reply-To: <cover.1423597914.git.yann.morin.1998@free.fr>
-References: <cover.1423597914.git.yann.morin.1998@free.fr>
-Message-ID: <20150214095942.6ed310e3@free-electrons.com>
+Date: Sat, 14 Feb 2015 10:01:45 +0100
+Subject: [Buildroot] [PATCH] Linux kernel: add support for config
+ fragment files
+In-Reply-To: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
+References: <1423576221-24249-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20150214100145.10d1d32b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Floris Bos,
 
-On Tue, 10 Feb 2015 21:01:12 +0100, Yann E. MORIN wrote:
+On Tue, 10 Feb 2015 14:50:21 +0100, Floris Bos wrote:
 
->       package/python-lxml: new host package
->       package/python-lxml: add target variant
+> +config BR2_LINUX_KERNEL_CONFIG_FRAGMENTS
+> +	string "Additional configuration fragment files"
+> +	help
+> +	  A space-seperated list of kernel configuration fragment files,
+> +	  that will be merged to the main kernel configuration file.
 
-Since the host variant of python-lxml is no longer needed, I've
-squashed those two patches together, kept only the target variant
-code, and applied the result to the next branch.
+Instead of introducing a new option for this, can't we make the
+existing option that provides the kernel configuration file path a
+space-separated option that allows you to pass multiple kernel config
+file fragments?
+
+Or maybe you want to support the combination of a kernel defconfig +
+some fragments?
 
 Thanks,
 
