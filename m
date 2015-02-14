@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 22:08:44 +0100
-Subject: [Buildroot] [PATCH 2/4] br-reproduce-build: use current
- directory as the default for outputs
-In-Reply-To: <2f64e37394ac3c2806646babb32b498a2c598224.1423910953.git.yann.morin.1998@free.fr>
+Date: Sat, 14 Feb 2015 22:10:14 +0100
+Subject: [Buildroot] [PATCH 3/4] br-reproduce-build: fix URL of gitid
+In-Reply-To: <ca854982ed957dec6bdc523ae2974e0aa630ea75.1423910953.git.yann.morin.1998@free.fr>
 References: <cover.1423910953.git.yann.morin.1998@free.fr>
- <2f64e37394ac3c2806646babb32b498a2c598224.1423910953.git.yann.morin.1998@free.fr>
-Message-ID: <20150214220844.4321d466@free-electrons.com>
+ <ca854982ed957dec6bdc523ae2974e0aa630ea75.1423910953.git.yann.morin.1998@free.fr>
+Message-ID: <20150214221014.4643c5cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,39 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sat, 14 Feb 2015 11:52:04 +0100, Yann E. MORIN wrote:
-> This allows the user running something like:
-> 
->     cd /somewhere
->     /path/to/br-reproduce-build ID
-> 
-> Or even have br-reproduce-build in his PATH.
-> 
+On Sat, 14 Feb 2015 11:52:05 +0100, Yann E. MORIN wrote:
+> Reported-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  utils/br-reproduce-build | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  utils/br-reproduce-build | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/utils/br-reproduce-build b/utils/br-reproduce-build
+> index c0dc530..9987684 100755
+> --- a/utils/br-reproduce-build
+> +++ b/utils/br-reproduce-build
+> @@ -16,9 +16,11 @@ if [ $# -ne 1 ] ; then
+>      exit 1 ;
+>  fi
+>  
+> -BUILD_ID=$1
+> +# BUILD_ID must be in the form xxx/xxxyyyyyyyyyy (xxxyyyyy... being the sha1)
+> +BUILD_ID="${1#*/}"
+> +BUILD_ID="${BUILD_ID%${BUILD_ID#???}}/${BUILD_ID}"
+>  
+> -BUILD_DIR=${OUTPUT_DIR}/${BUILD_ID}
+> +BUILD_DIR="${OUTPUT_DIR}/${BUILD_ID#*/}"
 
-Applied, thanks.
+This shell stuff is so complicated that I don't even understand what is
+the behavior. When you say "BUILD_ID must be in the form
+xxx/xxxyyyyyyyyyy", does it mean that the user is supposed to pass as
+argument to the script a value in the form "xxx/xxxyyyyyyyyyyy" ? If
+so, then it's clearly not the intended behavior: the full hash should
+be sufficient.
+
+Maybe a few more comments would be useful to understand the magic.
+
+Thanks!
 
 Thomas
 -- 
