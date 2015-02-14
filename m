@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 22:04:54 +0100
-Subject: [Buildroot] [git commit] package/libsemanage: add patch to fix
+Date: Sat, 14 Feb 2015 22:04:48 +0100
+Subject: [Buildroot] [git commit] package/libsepol: add patch to fix
 	Blackfin build issue
-Message-ID: <20150214211139.3405C8044E@busybox.osuosl.org>
+Message-ID: <20150214211139.2B11A8044E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d45454dbe5abf593bf724a9f1c556421f4596305
+commit: http://git.buildroot.net/buildroot/commit/?id=aa476ab32cfb2dc0ba3621d78cdb6971a9f86753
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libsemanage use the same build system than libselinux,
+libsepol use the same build system than libselinux,
 so it's affected by the same issue.
-
-Fixes:
-http://autobuild.buildroot.net/results/39d/39d3460e88a1316ec7dbcd0d67b7fdb992c3fc77
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-workaround-blackfin-issue.patch           |   24 ++++++++++++++++++++
+ .../libsepol/0002-workaround-blackfin-issue.patch  |   24 ++++++++++++++++++++
  1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0002-workaround-blackfin-issue.patch
+diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
 new file mode 100644
 index 0000000..5d00c69
 --- /dev/null
-+++ b/package/libsemanage/0002-workaround-blackfin-issue.patch
++++ b/package/libsepol/0002-workaround-blackfin-issue.patch
 @@ -0,0 +1,24 @@
 +Do not make symbols hidden on Blackfin
 +
