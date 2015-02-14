@@ -1,73 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 10:26:03 +0100
-Subject: [Buildroot] [git commit branch/next] package/x11r7/libepoxy: New
-	package
-Message-ID: <20150214143823.02DFB8042B@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 15:31:43 +0100
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xapp_rgb: bump
+	version to 1.0.6
+Message-ID: <20150214143823.52ED480172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ac0250cc6f1522f7b8de65b538e3882b11c0a6f
+commit: http://git.buildroot.net/buildroot/commit/?id=9add3118c8da851ad204a3418d9e5cb90e8e0e76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-xdriver_xf86-video-ati needs glamor support from xserver_xorg-server,
-which in turn depends on libepoxy.
-
-[Thomas: add license information.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in            |    1 +
- package/x11r7/libepoxy/Config.in   |    7 +++++++
- package/x11r7/libepoxy/libepoxy.mk |   15 +++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+ package/x11r7/xapp_rgb/xapp_rgb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 2fd1ff0..f60c752 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
- 	endmenu
- 	menu "X11R7 Libraries"
- 		source package/x11r7/libxcb/Config.in
-+		source package/x11r7/libepoxy/Config.in
- 		source package/x11r7/xcb-util/Config.in
- 		source package/x11r7/xcb-util-image/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
-diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
-new file mode 100644
-index 0000000..c4f5794
---- /dev/null
-+++ b/package/x11r7/libepoxy/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBEPOXY
-+	bool "epoxy"
-+	depends on BR2_PACKAGE_MESA3D
-+	help
-+	  Epoxy is a library for handling OpenGL function pointer management for you.
-+
-+	  https://github.com/anholt/libepoxy
-diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
-new file mode 100644
-index 0000000..9858cfe
---- /dev/null
-+++ b/package/x11r7/libepoxy/libepoxy.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libepoxy
-+#
-+#################################################################################
-+
-+LIBEPOXY_VERSION = v1.2
-+LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
-+LIBEPOXY_INSTALL_STAGING = YES
-+LIBEPOXY_AUTORECONF = YES
-+LIBEPOXY_DEPENDENCIES = mesa3d
-+LIBEPOXY_LICENSE = MIT
-+LIBEPOXY_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_rgb/xapp_rgb.mk b/package/x11r7/xapp_rgb/xapp_rgb.mk
+index 7a07614..82878ab 100644
+--- a/package/x11r7/xapp_rgb/xapp_rgb.mk
++++ b/package/x11r7/xapp_rgb/xapp_rgb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_RGB_VERSION = 1.0.5
++XAPP_RGB_VERSION = 1.0.6
+ XAPP_RGB_SOURCE = rgb-$(XAPP_RGB_VERSION).tar.bz2
+ XAPP_RGB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_RGB_LICENSE = MIT
