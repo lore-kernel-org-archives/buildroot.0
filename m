@@ -1,350 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 15:35:41 +0100
+Date: Sat, 14 Feb 2015 15:35:46 +0100
 Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xdriver_xf86-video-sis: bump version
-Message-ID: <20150214143823.B1AD580172@busybox.osuosl.org>
+	package/x11r7/xdriver_xf86-video-ati: bump version to 7.5.0
+Message-ID: <20150214143823.BBF388044E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e5e33d608d93c82fb3339d390f7dd80af1bb368
+commit: http://git.buildroot.net/buildroot/commit/?id=3888e669081bf3403ae3aeed8b0bedbf0c04ba25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use git snapshot for compatibility with xorg xserver 1.17.0,
-remove patches applied upstream.
+Remove patches applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-sis/0002-mibstore.patch     |   34 --------
- .../0003-xf86UnMapVidMem.patch                     |   86 --------------------
- .../xdriver_xf86-video-sis/0004-xf86Priv.patch     |   43 ----------
- .../xdriver_xf86-video-sis/0005-hvdisplay.patch    |   46 -----------
- .../xdriver_xf86-video-sis/0006-fixwarnings.patch  |   67 ---------------
- .../xdriver_xf86-video-sis.mk                      |    5 +-
- 6 files changed, 2 insertions(+), 279 deletions(-)
+ .../x11r7/xdriver_xf86-video-ati/0001-noxaa.patch  |   17 ----------
+ .../xdriver_xf86-video-ati/0002-mibstore.patch     |   33 --------------------
+ .../0003-DamageUnregister.patch                    |   28 -----------------
+ .../xdriver_xf86-video-ati.mk                      |    2 +-
+ 4 files changed, 1 insertions(+), 79 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-mibstore.patch b/package/x11r7/xdriver_xf86-video-sis/0002-mibstore.patch
+diff --git a/package/x11r7/xdriver_xf86-video-ati/0001-noxaa.patch b/package/x11r7/xdriver_xf86-video-ati/0001-noxaa.patch
 deleted file mode 100644
-index 436e437..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0002-mibstore.patch
+index 4e53ea0..0000000
+--- a/package/x11r7/xdriver_xf86-video-ati/0001-noxaa.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 926d4f655c8491b68a338f50c810f6729686ec9f Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Tue, 25 Sep 2012 12:54:51 +0000
--Subject: Remove mibstore.h
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=926d4f655c8491b68a338f50c810f6729686ec9f
+@@ -1,17 +0,0 @@
+-XAA support was removed from xorg xserver
+-http://cgit.freedesktop.org/xorg/xserver/commit/?id=e191e296e6e7861978ea4a0ae9aa7b780e52732b
 -
 -Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 -
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 4c9b9cb..46cfefd 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -57,7 +57,6 @@
-- #include "fb.h"
-- #include "micmap.h"
-- #include "mipointer.h"
---#include "mibstore.h"
-- #include "edid.h"
+-diff -uNr xf86-video-ati-6.14.6.org/configure.ac xf86-video-ati-6.14.6/configure.ac
+---- xf86-video-ati-6.14.6.org/configure.ac	2012-06-29 15:46:11.000000000 +0200
+-+++ xf86-video-ati-6.14.6/configure.ac	2014-03-29 17:21:35.805208243 +0100
+-@@ -163,8 +163,6 @@
+- AM_CONDITIONAL(DRM_MODE, test x$DRM_MODE = xyes)
+- AM_CONDITIONAL(LIBUDEV, test x$LIBUDEV = xyes)
 - 
-- #define SIS_NEED_inSISREG
--@@ -8883,7 +8882,6 @@ SISScreenInit(SCREEN_INIT_ARGS_DECL)
--     }
--     pSiS->SiSFastVidCopyDone = TRUE;
+--AC_DEFINE(USE_XAA, 1, [Build support for XAA])
+--
+- # Properly handle EXA.
+- AC_MSG_CHECKING([whether to enable EXA support])
+- if test "x$EXA" = xyes; then
+diff --git a/package/x11r7/xdriver_xf86-video-ati/0002-mibstore.patch b/package/x11r7/xdriver_xf86-video-ati/0002-mibstore.patch
+deleted file mode 100644
+index 28c72aa..0000000
+--- a/package/x11r7/xdriver_xf86-video-ati/0002-mibstore.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-patch adapted from upstream:
+-http://cgit.freedesktop.org/xorg/driver/xf86-video-ati/commit/?id=e8cb0b721e6ea251f85c799ca0563bfa59a2d37c
+-
+-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-
+-diff -uNr xf86-video-ati-6.14.6.org/src/radeon_driver.c xf86-video-ati-6.14.6/src/radeon_driver.c
+---- xf86-video-ati-6.14.6.org/src/radeon_driver.c	2012-06-25 10:19:41.000000000 +0200
+-+++ xf86-video-ati-6.14.6/src/radeon_driver.c	2014-03-29 17:27:54.712440644 +0100
+-@@ -3753,10 +3753,6 @@
+-     RADEONInitMemMapRegisters(pScrn, info->ModeReg, info);
+-     RADEONRestoreMemMapRegisters(pScrn, info->ModeReg);
 - 
+--    /* Backing store setup */
+--    xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO, RADEON_LOGLEVEL_DEBUG,
+--		   "Initializing backing store\n");
 --    miInitializeBackingStore(pScreen);
 -     xf86SetBackingStore(pScreen);
--     xf86SetSilkenMouse(pScreen);
 - 
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0003-xf86UnMapVidMem.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xf86UnMapVidMem.patch
+-     /* DRI finalisation */
+-diff -uNr xf86-video-ati-6.14.6.org/src/radeon_kms.c xf86-video-ati-6.14.6/src/radeon_kms.c
+---- xf86-video-ati-6.14.6.org/src/radeon_kms.c	2012-06-29 15:45:35.000000000 +0200
+-+++ xf86-video-ati-6.14.6/src/radeon_kms.c	2014-03-29 17:28:02.328340925 +0100
+-@@ -1036,10 +1036,6 @@
+- #endif
+- 
+-     pScrn->vtSema = TRUE;
+--    /* Backing store setup */
+--    xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO, RADEON_LOGLEVEL_DEBUG,
+--		   "Initializing backing store\n");
+--    miInitializeBackingStore(pScreen);
+-     xf86SetBackingStore(pScreen);
+- 
+- 
+diff --git a/package/x11r7/xdriver_xf86-video-ati/0003-DamageUnregister.patch b/package/x11r7/xdriver_xf86-video-ati/0003-DamageUnregister.patch
 deleted file mode 100644
-index 6082fb9..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0003-xf86UnMapVidMem.patch
+index e866cfd..0000000
+--- a/package/x11r7/xdriver_xf86-video-ati/0003-DamageUnregister.patch
 +++ /dev/null
-@@ -1,86 +0,0 @@
--From 339fb3bc032b9f35b07b90480ae82a0fd352e078 Mon Sep 17 00:00:00 2001
--From: Jan Lindemann <jan@jannet.de>
--Date: Thu, 30 Aug 2012 18:09:10 +0000
--Subject: Replace xf86UnMapVidMem with pci_device_unmap_range
--
--Mixing pci_device_map_range with xf86UnMapVidMem doesn't work too well.
--
--X.Org bug#18028 <https://bugs.freedesktop.org/show_bug.cgi?id=18028>
--
--Bug found by Bryan Henderson <bryanh@giraffe-data.com>
--
--Signed-off-by: Julien Cristau <jcristau@debian.org>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=339fb3bc032b9f35b07b90480ae82a0fd352e078
+@@ -1,28 +0,0 @@
+-Fix compile error, inspired by
+-http://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/commit/?id=e26dec8f5278df74a102493bf6d2d8444dab5d6d
 -
 -Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
 -
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 61e8075..4c9b9cb 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -7344,7 +7344,11 @@ SISUnmapMem(ScrnInfoPtr pScrn)
--         if(pSiSEnt->MapCountIOBase) {
-- 	    pSiSEnt->MapCountIOBase--;
-- 	    if((pSiSEnt->MapCountIOBase == 0) || (pSiSEnt->forceUnmapIOBase)) {
--+#ifndef XSERVER_LIBPCIACCESS
-- 		xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiSEnt->IOBase, (pSiS->mmioSize * 1024));
--+#else
--+	        pci_device_unmap_range(pSiS->PciInfo, pSiSEnt->IOBase, (pSiS->mmioSize * 1024));
--+#endif
-- 		pSiSEnt->IOBase = NULL;
-- 		pSiSEnt->MapCountIOBase = 0;
-- 		pSiSEnt->forceUnmapIOBase = FALSE;
--@@ -7355,7 +7359,11 @@ SISUnmapMem(ScrnInfoPtr pScrn)
-- 	if(pSiSEnt->MapCountIOBaseDense) {
-- 	    pSiSEnt->MapCountIOBaseDense--;
-- 	    if((pSiSEnt->MapCountIOBaseDense == 0) || (pSiSEnt->forceUnmapIOBaseDense)) {
--+#ifndef XSERVER_LIBPCIACCESS
-- 		xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiSEnt->IOBaseDense, (pSiS->mmioSize * 1024));
--+#else
--+		pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiSEnt->IOBaseDense, (pSiS->mmioSize * 1024));
--+#endif
-- 		pSiSEnt->IOBaseDense = NULL;
-- 		pSiSEnt->MapCountIOBaseDense = 0;
-- 		pSiSEnt->forceUnmapIOBaseDense = FALSE;
--@@ -7366,7 +7374,11 @@ SISUnmapMem(ScrnInfoPtr pScrn)
-- 	if(pSiSEnt->MapCountFbBase) {
-- 	    pSiSEnt->MapCountFbBase--;
-- 	    if((pSiSEnt->MapCountFbBase == 0) || (pSiSEnt->forceUnmapFbBase)) {
--+#ifndef XSERVER_LIBPCIACCESS
-- 		xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiSEnt->RealFbBase, pSiS->FbMapSize);
--+#else
--+		pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiSEnt->RealFbBase, pSiS->FbMapSize);
--+#endif
-- 		pSiSEnt->FbBase = pSiSEnt->RealFbBase = NULL;
-- 		pSiSEnt->MapCountFbBase = 0;
-- 		pSiSEnt->forceUnmapFbBase = FALSE;
--@@ -7376,13 +7388,25 @@ SISUnmapMem(ScrnInfoPtr pScrn)
-- 	}
--     } else {
+-diff -uNr xf86-video-ati-6.14.6.org/src/radeon_driver.c xf86-video-ati-6.14.6/src/radeon_driver.c
+---- xf86-video-ati-6.14.6.org/src/radeon_driver.c	2012-06-25 10:19:41.000000000 +0200
+-+++ xf86-video-ati-6.14.6/src/radeon_driver.c	2014-03-29 18:03:47.401381113 +0100
+-@@ -99,6 +99,7 @@
 - #endif
--+#ifndef XSERVER_LIBPCIACCESS
-- 	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiS->IOBase, (pSiS->mmioSize * 1024));
+- #include "xf86cmap.h"
+- #include "vbe.h"
+-+#include <xorgVersion.h>
+- 
+- #include "shadow.h"
+- 				/* vgaHW definitions */
+-@@ -6440,7 +6437,11 @@
+-     if (info->dri && info->dri->pDamage) {
+- 	PixmapPtr pPix = pScreen->GetScreenPixmap(pScreen);
+- 
+-+#if XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,14,99,2,0)
+-+	DamageUnregister(info->dri->pDamage);
 -+#else
--+	pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiS->IOBase, (pSiS->mmioSize * 1024));
+- 	DamageUnregister(&pPix->drawable, info->dri->pDamage);
 -+#endif
-- 	pSiS->IOBase = NULL;
-- #ifdef __alpha__
--+#ifndef XSERVER_LIBPCIACCESS
-- 	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiS->IOBaseDense, (pSiS->mmioSize * 1024));
--+#else
--+	pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiS->IOBaseDense, (pSiS->mmioSize * 1024));
--+#endif
-- 	pSiS->IOBaseDense = NULL;
-- #endif
--+#ifndef XSERVER_LIBPCIACCESS
-- 	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiS->RealFbBase, pSiS->FbMapSize);
--+#else
--+	pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiS->RealFbBase, pSiS->FbMapSize);
--+#endif
-- 	pSiS->FbBase = pSiS->RealFbBase = NULL;
-- #ifdef SISDUALHEAD
+- 	DamageDestroy(info->dri->pDamage);
+- 	info->dri->pDamage = NULL;
 -     }
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0004-xf86Priv.patch b/package/x11r7/xdriver_xf86-video-sis/0004-xf86Priv.patch
-deleted file mode 100644
-index bf36b0d..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0004-xf86Priv.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 7d4402786b758de3e6ce2641e15a39d612d5c518 Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Mon, 15 Oct 2012 23:11:30 +0000
--Subject: Stop including xf86Priv.h
--
--As the name might suggest, it's server-private.
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=7d4402786b758de3e6ce2641e15a39d612d5c518
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis.h b/src/sis.h
--index 46fca2a..20e6134 100644
----- a/src/sis.h
--+++ b/src/sis.h
--@@ -75,7 +75,6 @@
-- 
-- #include "compiler.h"
-- #include "xf86Pci.h"
---#include "xf86Priv.h"
-- #include "xf86_OSproc.h"
-- #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 6
-- #include "xf86Resources.h"
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 46cfefd..cefe503 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -93,6 +93,10 @@
-- #include "dri.h"
-- #endif
-- 
--+#ifndef DEFAULT_DPI
--+#define DEFAULT_DPI 96
--+#endif
--+
-- /*
--  * LookupWindow was removed with video abi 11.
--  */
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0005-hvdisplay.patch b/package/x11r7/xdriver_xf86-video-sis/0005-hvdisplay.patch
-deleted file mode 100644
-index 584d3f4..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0005-hvdisplay.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 0a4336efaafac4c34d4287b5df586bbb418f7f76 Mon Sep 17 00:00:00 2001
--From: Alan Coopersmith <alan.coopersmith@oracle.com>
--Date: Sat, 26 Oct 2013 21:27:17 +0000
--Subject: Fix HDisplay/VDisplay typos
--
--Found by gcc -Wlogicalops:
--
--sis_driver.c: In function 'SiS_CheckModeCRT2':
--sis_driver.c:13754:5: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13755:6: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13756:6: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13758:5: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13759:6: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--
--Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
--Reviewed-by: Gaetan Nadon <memsize@videotron.ca>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=0a4336efaafac4c34d4287b5df586bbb418f7f76
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index cefe503..80b8d51 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -13751,12 +13751,12 @@ SiS_CheckModeCRT2(ScrnInfoPtr pScrn, DisplayModePtr mode, unsigned int VBFlags,
--       if( ((mode->HDisplay <= pSiS->LCDwidth) &&
--            (mode->VDisplay <= pSiS->LCDheight)) ||
-- 	  ((pSiS->SiS_Pr->SiS_CustomT == CUT_PANEL848) &&
---	   (((mode->HDisplay == 1360) && (mode->HDisplay == 768)) ||
---	    ((mode->HDisplay == 1024) && (mode->HDisplay == 768)) ||
---	    ((mode->HDisplay ==  800) && (mode->HDisplay == 600)))) ||
--+	   (((mode->HDisplay == 1360) && (mode->VDisplay == 768)) ||
--+	    ((mode->HDisplay == 1024) && (mode->VDisplay == 768)) ||
--+	    ((mode->HDisplay ==  800) && (mode->VDisplay == 600)))) ||
-- 	  ((pSiS->SiS_Pr->SiS_CustomT == CUT_PANEL856) &&
---	   (((mode->HDisplay == 1024) && (mode->HDisplay == 768)) ||
---	    ((mode->HDisplay ==  800) && (mode->HDisplay == 600)))) ) {
--+	   (((mode->HDisplay == 1024) && (mode->VDisplay == 768)) ||
--+	    ((mode->HDisplay ==  800) && (mode->VDisplay == 600)))) ) {
-- 
-- 	 ModeIndex = SiS_GetModeID_LCD(pSiS->VGAEngine, VBFlags, mode->HDisplay, mode->VDisplay, i,
-- 				pSiS->FSTN, pSiS->SiS_Pr->SiS_CustomT, pSiS->LCDwidth, pSiS->LCDheight,
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0006-fixwarnings.patch b/package/x11r7/xdriver_xf86-video-sis/0006-fixwarnings.patch
-deleted file mode 100644
-index 3598c9e..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0006-fixwarnings.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From 49796d6a3274adc0250ee07faa6bc63e41c98740 Mon Sep 17 00:00:00 2001
--From: Peter Hutterer <peter.hutterer@who-t.net>
--Date: Thu, 21 Nov 2013 22:21:18 +0000
--Subject: Fix format-security warnings
--
--sis_driver.c: In function 'SISErrorLog':
--sis_driver.c:432:5: error: format not a string literal and no format arguments [-Werror=format-security]
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--     ^
--sis_driver.c:439:5: error: format not a string literal and no format arguments [-Werror=format-security]
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--     ^
--sis_driver.c: In function 'SiSUpdateXineramaScreenInfo':
--sis_driver.c:1917:4: error: format not a string literal and no format arguments [-Werror=format-security]
--    xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--    ^
--sis_driver.c:1924:8: error: format not a string literal and no format arguments [-Werror=format-security]
--        xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Reviewed-by: Alan Coopersmith <alan.coopersmith@oracle.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=49796d6a3274adc0250ee07faa6bc63e41c98740
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 80b8d51..bd9c4e1 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -429,14 +429,14 @@ SISErrorLog(ScrnInfoPtr pScrn, const char *format, ...)
--     static const char *str = "**************************************************\n";
-- 
--     va_start(ap, format);
---    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--+    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "%s", str);
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-- 	"                      ERROR:\n");
--     xf86VDrvMsgVerb(pScrn->scrnIndex, X_ERROR, 1, format, ap);
--     va_end(ap);
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-- 	"                  END OF MESSAGE\n");
---    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--+    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "%s", str);
-- }
-- 
-- static void
--@@ -1914,14 +1914,14 @@ SiSUpdateXineramaScreenInfo(ScrnInfoPtr pScrn1)
--        if(infochanged && !usenonrect) {
-- 	  xf86DrvMsg(pScrn1->scrnIndex, X_INFO,
-- 			"Virtual screen size does not match maximum display modes...\n");
---	  xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--+	  xf86DrvMsg(pScrn1->scrnIndex, X_INFO, "%s", rectxine);
-- 
--        }
--     } else if(infochanged && usenonrect) {
--        usenonrect = FALSE;
--        xf86DrvMsg(pScrn1->scrnIndex, X_INFO,
-- 		"Only clone modes available for this virtual screen size...\n");
---       xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--+       xf86DrvMsg(pScrn1->scrnIndex, X_INFO, "%s", rectxine);
--     }
-- 
--     if(pSiS->maxCRT1_X1) {		/* Means we have at least one non-clone mode */
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index 1937c45..ee93526 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 6d4baa0..db420ea 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.7
--XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_SIS_VERSION = 0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
-+XDRIVER_XF86_VIDEO_SIS_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-sis
- XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
+-XDRIVER_XF86_VIDEO_ATI_VERSION = 6.14.6
++XDRIVER_XF86_VIDEO_ATI_VERSION = 7.5.0
+ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
