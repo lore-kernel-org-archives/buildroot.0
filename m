@@ -1,38 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Feb 2015 11:52:05 +0100
-Subject: [Buildroot] [PATCH 3/4] br-reproduce-build: fix URL of gitid
-In-Reply-To: <cover.1423910953.git.yann.morin.1998@free.fr>
-References: <cover.1423910953.git.yann.morin.1998@free.fr>
-Message-ID: <ca854982ed957dec6bdc523ae2974e0aa630ea75.1423910953.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 14 Feb 2015 12:38:34 +0100
+Subject: [Buildroot] [PATCH 2/3] package/openvmtools: fix syncDriverPosix
+In-Reply-To: <20150214092058.1269ba68@free-electrons.com>
+References: <1423437730-22997-1-git-send-email-romain.naour@openwide.fr>	<1423437730-22997-2-git-send-email-romain.naour@openwide.fr>
+ <20150214092058.1269ba68@free-electrons.com>
+Message-ID: <54DF33BA.3090008@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- utils/br-reproduce-build | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/utils/br-reproduce-build b/utils/br-reproduce-build
-index c0dc530..9987684 100755
---- a/utils/br-reproduce-build
-+++ b/utils/br-reproduce-build
-@@ -16,9 +16,11 @@ if [ $# -ne 1 ] ; then
-     exit 1 ;
- fi
- 
--BUILD_ID=$1
-+# BUILD_ID must be in the form xxx/xxxyyyyyyyyyy (xxxyyyyy... being the sha1)
-+BUILD_ID="${1#*/}"
-+BUILD_ID="${BUILD_ID%${BUILD_ID#???}}/${BUILD_ID}"
- 
--BUILD_DIR=${OUTPUT_DIR}/${BUILD_ID}
-+BUILD_DIR="${OUTPUT_DIR}/${BUILD_ID#*/}"
- 
- mkdir -p ${BUILD_DIR}
- if [ $? -ne 0 ] ; then
--- 
-1.9.1
+Le 14/02/2015 09:20, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Mon,  9 Feb 2015 00:22:09 +0100, Romain Naour wrote:
+>> Backport a patch from Fedora
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/openvmtools/0007-sizeof_argument.patch | 18 ++++++++++++++++++
+>>  1 file changed, 18 insertions(+)
+>>  create mode 100644 package/openvmtools/0007-sizeof_argument.patch
+> 
+> Applied to master, thanks.
+> 
+> Note that Debian also has a collection of patches on open-vm-tools, and
+> at least two of them seem to fix security related issues. Is this stuff
+> still maintained upstream? They have apparently moved their development
+> to github, at https://github.com/vmware/open-vm-tools.
+> 
+
+Indeed, I've cloned this repository to check if the Fedora patches were merged.
+It seems that it is still maintained, but not on regular basis.
+
+I think the two patches from Debian needs further testing...
+Karoly can you review those patches ?
+
+In the meantime, I'll try to have some time next week to test this package with
+our VWware image at work.
+
+> Can you check if those patches were merged here already?
+
+Not yet, the last commit has been merged the 28/10/2014.
+
+Best regards,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
