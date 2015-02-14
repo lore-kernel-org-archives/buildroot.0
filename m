@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 09:20:58 +0100
-Subject: [Buildroot] [PATCH 2/3] package/openvmtools: fix syncDriverPosix
-In-Reply-To: <1423437730-22997-2-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 14 Feb 2015 09:22:06 +0100
+Subject: [Buildroot] [PATCH 3/3] package/openmvtools: don't use host
+ library path
+In-Reply-To: <1423437730-22997-3-git-send-email-romain.naour@openwide.fr>
 References: <1423437730-22997-1-git-send-email-romain.naour@openwide.fr>
- <1423437730-22997-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150214092058.1269ba68@free-electrons.com>
+ <1423437730-22997-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150214092206.71b95d13@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,22 @@ To: buildroot@busybox.net
 
 Dear Romain Naour,
 
-On Mon,  9 Feb 2015 00:22:09 +0100, Romain Naour wrote:
-> Backport a patch from Fedora
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/openvmtools/0007-sizeof_argument.patch | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->  create mode 100644 package/openvmtools/0007-sizeof_argument.patch
+On Mon,  9 Feb 2015 00:22:10 +0100, Romain Naour wrote:
 
-Applied to master, thanks.
+>  ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+> -OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
+> +OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps \
+> +	CUSTOM_PROCPS_LIBS="-L$(STAGING_DIR)"
 
-Note that Debian also has a collection of patches on open-vm-tools, and
-at least two of them seem to fix security related issues. Is this stuff
-still maintained upstream? They have apparently moved their development
-to github, at https://github.com/vmware/open-vm-tools.
+This is wrong, because $(STAGING_DIR) does not contain libraries. It
+should either be -L$(STAGING_DIR)/usr/lib and/or
+-L$(STAGING_DIR)/usr/lib. And also, please add a comment above this to
+explain why we are passing this explicitly (it should normally not be
+needed).
 
-Can you check if those patches were merged here already?
+I've marked this patch as Changes Requested in patchwork.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
