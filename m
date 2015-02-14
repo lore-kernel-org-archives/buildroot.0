@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 10:17:12 +0100
-Subject: [Buildroot] [PATCH v4 1/3] package/mono: enable mono library
- compilation
-In-Reply-To: <CA+TH9Vnswp+zP1Han+xkLZxCQO+HPwNvTTMqKbWZ_5-Gbij4mQ@mail.gmail.com>
-References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
- <1423748972-17471-2-git-send-email-angelo.compagnucci@gmail.com>
- <20150214075839.5ee08252@free-electrons.com>
- <CA+TH9Vnswp+zP1Han+xkLZxCQO+HPwNvTTMqKbWZ_5-Gbij4mQ@mail.gmail.com>
-Message-ID: <20150214101712.2e14149e@free-electrons.com>
+Date: Sat, 14 Feb 2015 10:19:20 +0100
+Subject: [Buildroot] [git commit branch/next] package/mono: enable mono
+	library compilation
+Message-ID: <20150214091929.2641580416@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=fa053f0e4264ab49a5594e63aed2d2ea7ca7a240
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 14 Feb 2015 09:53:56 +0100, Angelo Compagnucci wrote:
+This patch enables the compilation of mono library to be used
+in third party software.
 
-> libmono* size is ~6mb and the overrall size of mono with only 4.5
-> libraries is ~60mb so it's a ~3.6%. If think it's too much, I'll add
-> an option to enable/disable compilation of it.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mono/mono.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-6 MB of 60 MB is 10%, not 3.6%. But ok, fair enough, I believe it's
-quite reasonable to have this by default: Mono is anyway a huge beast.
-I'll apply this patch.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 0bbf338..9ec3c24 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -21,7 +21,6 @@ MONO_AUTORECONF = YES
+ MONO_CONF_OPTS = --disable-gtk-doc \
+ 	--with-mcs-docs=no \
+ 	--with-moonlight=no \
+-	--disable-libraries \
+ 	--with-ikvm-native=no \
+ 	--enable-minimal=aot,profiler,debug \
+ 	--disable-mcs-build \
