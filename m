@@ -1,44 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Feb 2015 11:52:03 +0100
-Subject: [Buildroot] [PATCH 1/4] br-reproduce-build: accept BASE_GIT and
-	OUTPUT_DIR from the env
+Date: Sat, 14 Feb 2015 11:52:06 +0100
+Subject: [Buildroot] [PATCH 4/4] br-reproduce-build: quote all variables
 In-Reply-To: <cover.1423910953.git.yann.morin.1998@free.fr>
 References: <cover.1423910953.git.yann.morin.1998@free.fr>
-Message-ID: <ec8f06991d8b4badd77bccbfa4d5a62aec2d83bb.1423910953.git.yann.morin.1998@free.fr>
+Message-ID: <0b43bc60a4856f45924e3814010dc49d0240b1a4.1423910953.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when we want to set those variables, one has to edit the
-script, so would get a conflict on the next git-pull.
-
-Instead, allow the user to specify those variables in the environment.
+Even though we do not really support building in a path that contains
+spaces (or other weird characters), it's still better to quote
+variables.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- utils/br-reproduce-build | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ utils/br-reproduce-build | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/utils/br-reproduce-build b/utils/br-reproduce-build
-index 7b4961c..a84bd5a 100755
+index 9987684..0033102 100755
 --- a/utils/br-reproduce-build
 +++ b/utils/br-reproduce-build
-@@ -3,12 +3,12 @@
- # A directory that contains an existing Git repository of
- # Buildroot. The script will git clone from it instead of git cloning
- # from the official repo, in order to reduce the clone time.
--BASE_GIT=/home/test/buildroot/
-+BASE_GIT="${BASE_GIT:-/home/test/buildroot/}"
+@@ -22,26 +22,26 @@ BUILD_ID="${BUILD_ID%${BUILD_ID#???}}/${BUILD_ID}"
  
- # Location where the output directories will be created. One
- # subdirectory, named after the build ID will be created for each
- # build.
--OUTPUT_DIR=/home/test/outputs/
-+OUTPUT_DIR="${OUTPUT_DIR:-/home/test/outputs/}"
+ BUILD_DIR="${OUTPUT_DIR}/${BUILD_ID#*/}"
  
- if [ $# -ne 1 ] ; then
-     echo "Usage: $0 buildid" ;
+-mkdir -p ${BUILD_DIR}
++mkdir -p "${BUILD_DIR}"
+ if [ $? -ne 0 ] ; then
+     echo "Cannot create output directory"
+     exit 1
+ fi
+ 
+-wget -O ${BUILD_DIR}/config http://autobuild.buildroot.org/results/${BUILD_ID}/config
++wget -O "${BUILD_DIR}/config http://autobuild.buildroot.org/results/${BUILD_ID}/config"
+ if [ $? -ne 0 ] ; then
+     echo "Cannot get configuration for build ${BUILD_ID}"
+-    rm -f ${BUILD_DIR}
++    rm -f "${BUILD_DIR}"
+     exit 1
+ fi
+ 
+-wget -O ${BUILD_DIR}/gitid http://autobuild.buildroot.org/results/${BUILD_ID}/gitid
++wget -O "${BUILD_DIR}/gitid http://autobuild.buildroot.org/results/${BUILD_ID}/gitid"
+ 
+-cd ${BUILD_DIR}
+-git clone ${BASE_GIT}
++cd "${BUILD_DIR}"
++git clone "${BASE_GIT}"
+ if [ $? -ne 0 ] ; then
+     echo "Cannot clone Buildroot Git repository"
+-    rm -rf ${BUILD_DIR}
++    rm -rf "${BUILD_DIR}"
+     exit 1
+ fi
+ 
+@@ -52,17 +52,17 @@ git remote set-url origin git://git.busybox.net/buildroot
+ git pull
+ if [ $? -ne 0 ] ; then
+     echo "Cannot pull Buildroot Git repository"
+-    rm -rf ${BUILD_DIR}
++    rm -rf "${BUILD_DIR}"
+     exit 1
+ fi
+ 
+ git checkout $(cat ../gitid)
+ if [ $? -ne 0 ] ; then
+     echo "Cannot checkout commit " $(cat ../gitid)
+-    rm -rf ${BUILD_DIR}
++    rm -rf "${BUILD_DIR}"
+     exit 1
+ fi
+ 
+ mkdir ../output
+-cp ${BUILD_DIR}/config ../output/.config
++cp "${BUILD_DIR}/config" ../output/.config
+ make 2>&1 O=../output | tee logfile
 -- 
 1.9.1
