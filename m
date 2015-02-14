@@ -1,94 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 08:56:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: bump to version
- 2015.01
-In-Reply-To: <1423839579-10086-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1423839579-10086-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150214085640.7c622a16@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 14 Feb 2015 09:09:53 +0100
+Subject: [Buildroot] [PATCH v4 2/3] system: Defaulting TZ_LOCALTIME to
+	UTC
+In-Reply-To: <20150214083639.04c134f3@free-electrons.com>
+References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1423748972-17471-3-git-send-email-angelo.compagnucci@gmail.com>
+ <20150214083639.04c134f3@free-electrons.com>
+Message-ID: <CA+TH9VncYdU5-EJW8h7H81py7q6WzF1q0g9hpjG-1LqOpbZQow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Thomas Petazzoni,
 
-On Fri, 13 Feb 2015 15:59:39 +0100, J?rg Krause wrote:
-> Bump to version 2015.01:
->   * Enable optional support for FIT Signature Verification
->   * Remove patch 0002-nostrip, it's upstream
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+2015-02-14 8:36 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
+>
+> On Thu, 12 Feb 2015 14:49:31 +0100, Angelo Compagnucci wrote:
+>> This patch sets the default timezone to UTC if not overwritten.
+>> Some packages need a configured system timezone for properly
+>> operating like mono based software.
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>>  system/Config.in | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/system/Config.in b/system/Config.in
+>> index 95e10ab..d967002 100644
+>> --- a/system/Config.in
+>> +++ b/system/Config.in
+>> @@ -371,6 +371,7 @@ config BR2_TARGET_TZ_ZONELIST
+>>
+>>  config BR2_TARGET_LOCALTIME
+>>       string "default local time"
+>> +     default "Etc/UTC"
+>>       help
+>>         The time zone to install as the default local time, expressed as a
+>>         tzdata location, such as:
+>
+> Can you give more details as to what doesn't work with the current
+> default of an empty local time? An empty local time already means UTC,
+> so there should be no need to specify Etc/UTC as the local time.
+>
+> Improving the commit log to give more details about the exact failure
+> solved by this patch would be useful.
 
-Thanks, it looks better now that things are optional.
+I just discovered that problems is in the whole Mono libraries, not
+only in gtk#.
+Without /etc/timezone and /etc/localtime files this is the error:
+
+System.TimeZoneNotFoundException: Exception of type
+'System.TimeZoneNotFoundException' was thrown.
+  at System.TimeZoneInfo.get_Local () [0x00000] in <filename unknown>:0
+  at System.CurrentSystemTimeZone.GetUtcOffset (DateTime time)
+[0x00000] in <filename unknown>:0
+  at System.TimeZone.GetLocalTimeDiff (DateTime time) [0x00000] in
+<filename unknown>:0
+  at System.DateTime.get_Now () [0x00000] in <filename unknown>:0
+  at MainClass.Main (System.String[] args) [0x00000] in <filename unknown>:0
+[ERROR] FATAL UNHANDLED EXCEPTION: System.TimeZoneNotFoundException:
+Exception of type 'System.TimeZoneNotFoundException' was thrown.
+  at System.TimeZoneInfo.get_Local () [0x00000] in <filename unknown>:0
+  at System.CurrentSystemTimeZone.GetUtcOffset (DateTime time)
+[0x00000] in <filename unknown>:0
+  at System.TimeZone.GetLocalTimeDiff (DateTime time) [0x00000] in
+<filename unknown>:0
+  at System.DateTime.get_Now () [0x00000] in <filename unknown>:0
+  at MainClass.Main (System.String[] args) [0x00000] in <filename unknown>:0
+
+Mono libraries wants an explicit localtime to work, cannot be empty.
+
+I do you suggest to solve this problem? Obviously it belongs to the
+mono package, but how to solve it in a clean way?
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
 
-> +This indirectly pulls in a build-dependency on libssl-dev used for FIT
-> +image support, and possibly GPL/OpenSSL licensing incompatibility
-> +issues.
 
-Maybe this is worth mentioning in the Config.in help text, at least of
-the target u-boot tools option.
-
-> diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
-> index 7a844e9..7388332 100644
-> --- a/package/uboot-tools/Config.in.host
-> +++ b/package/uboot-tools/Config.in.host
-> @@ -4,3 +4,21 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS
->  	  Companion tools for Das U-Boot bootloader.
->  
->  	  http://www.denx.de/wiki/U-Boot/WebHome
-> +
-> +if BR2_PACKAGE_HOST_UBOOT_TOOLS
-> +config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
-> +	bool "FIT signature verification support"
-> +	select BR2_PACKAGE_OPENSSL
-
-No: doesn't make sense. Why would a host package select the target
-OpenSSL package?
-
-> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT),y)
-> +UBOOT_TOOLS_DEPENDENCIES = openssl
-> +FIT_SIGNATURE_SUPPORT=y
-
-This variable name is not good. Remember that the namespace of
-variables is global, so all variables in a package should be prefixed
-by the package name. I.e, please use:
-
-UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT=y. But one may wonder why this
-variable is necessary in the first place. What about simply doing:
-
-	CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT)
-
-in the BUILD_CMDS ?
-
-> +ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-> +HOST_UBOOT_TOOLS_DEPENDENCIES = openssl
-
-No. openssl is the target openssl. You need to build host-openssl here.
-
-> +FIT_SIGNATURE_SUPPORT=y
-
-Same comment as before.
-
-> +endif
-> +
-> +define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
-> +	mkdir -p $(@D)/include/config
-> +	touch $(@D)/include/config/auto.conf
-> +endef
-> +
->  define HOST_UBOOT_TOOLS_BUILD_CMDS
->  	$(MAKE1) -C $(@D) 			\
-> +		-e CONFIG_FIT_SIGNATURE=$(FIT_SIGNATURE_SUPPORT) \
-
-Why do you need -e here and not for the target variant? I believe this
-is probably not needed.
-
-Thanks for working on this!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Profile: http://it.linkedin.com/in/compagnucciangelo
