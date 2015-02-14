@@ -1,69 +1,96 @@
-From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Sat, 14 Feb 2015 22:01:44 +0000
-Subject: [Buildroot] Raspberry pi boot problem? 2015.02-rc1
-Message-ID: <CAEbDrgnp2_1rxaCF32BSugf8NzLs3Wi_4S2rgKWSwbsYSOYEMw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Feb 2015 23:04:58 +0100
+Subject: [Buildroot] [PATCH 1/3] uclibc: cleanup handling of ARC uClibc
+ version
+In-Reply-To: <1423947668-23312-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1423947668-23312-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1423947668-23312-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150214220458.GH3886@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Take it back. It all works fine. Just my math does not anymore ...
+Thomas, All,
 
+On 2015-02-14 22:01 +0100, Thomas Petazzoni spake thusly:
+> This commit makes the ARC uClibc version handling explicit by adding a
+> BR2_UCLIBC_VERSION_ARC_GIT option, rather than only relying on the
+> selected architecture. This is needed in preparation to the
+> introduction of uClibc-ng support, which also supports the ARC
+> architecture: so we will now have two uClibc versions capable of
+> handling ARC.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On 14 February 2015 at 20:59, Frank Hunleth <fhunleth@troodon-software.com>
-wrote:
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Hi Gregory,
->
-> On Sat, Feb 14, 2015 at 3:10 PM, Gregory Dymarek <gregd72002@gmail.com>
-> wrote:
-> > I just took a fresh copy of the repo from GIT and the same problem is in
-> > there - does not fully boot.
->
-> Are you using raspberrypi_defconfig or raspberrypi_dt_defconfig? I've
-> locally changed the configs to use the external toolchain (so that
-> they build faster), but they have booted for me.
->
-> Frank
->
-> >
-> > On 13 February 2015 at 21:09, Gregory Dymarek <gregd72002@gmail.com>
-> wrote:
-> >>
-> >> Hi,
-> >>
-> >> Is it just me or there is a problem with RPi packages? When booting it
-> >> hangs on:
-> >>
-> >> Uncompressing Linux... done, booting the kernel.
-> >>
-> >>
-> >>
-> >> I've been using 2014.11 for last months without any issues. Compiled
-> today
-> >> 2015.02-rc1 using the same buildroot config (no legacy options there)
-> and
-> >> the default bcmrpi_defconfig and the problem appeared.
-> >>
-> >> Thanks,
-> >> Gregory
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> --
-> Frank Hunleth
-> Troodon Software LLC
-> Embedded Software Development
-> http://troodon-software.com/
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150214/730796c0/attachment.html>
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/uclibc/Config.in | 8 ++++++--
+>  package/uclibc/uclibc.mk | 2 +-
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index aa99a6f..a20b002 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -17,6 +17,10 @@ choice
+>  		bool "uClibc 0.9.33.x"
+>  		depends on !(BR2_arc || BR2_xtensa)
+>  
+> +	config BR2_UCLIBC_VERSION_ARC_GIT
+> +		bool "uClibc Git ARC"
+> +		depends on BR2_arc
+> +
+>  	config BR2_UCLIBC_VERSION_XTENSA_GIT
+>  		bool "uClibc Git Xtensa"
+>  		depends on BR2_xtensa
+> @@ -37,14 +41,14 @@ config BR2_USE_UCLIBC_SNAPSHOT
+>  config BR2_UCLIBC_VERSION_STRING
+>  	string
+>  	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+> -	default "arc-2014.12" if BR2_arc
+> +	default "arc-2014.12" if BR2_UCLIBC_VERSION_ARC_GIT
+>  	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+>  	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+>  
+>  config BR2_UCLIBC_CONFIG
+>  	string "uClibc configuration file to use?"
+>  	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+> -	default "package/uclibc/uClibc-snapshot.config" if BR2_arc
+> +	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_ARC_GIT
+>  	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+>  	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_XTENSA_GIT
+>  	help
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 40e6c6c..b29cff4 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -11,7 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
+>  
+>  ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+>  UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
+> -else ifeq ($(BR2_arc),y)
+> +else ifeq ($(BR2_UCLIBC_VERSION_ARC_GIT),y)
+>  UCLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,uClibc,$(UCLIBC_VERSION))
+>  UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
+>  else ifeq ($(BR2_UCLIBC_VERSION_XTENSA_GIT),y)
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
