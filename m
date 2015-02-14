@@ -1,96 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 16:37:50 +0100
-Subject: [Buildroot] [git commit branch/next] linux: migrate to the kconfig
-	infrastructure
-Message-ID: <20150214163206.7B15280408@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 16:33:45 +0100
+Subject: [Buildroot] [git commit branch/next] kconfig infra: add support for
+	defconfig files
+Message-ID: <20150214163206.523F380408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dff25ea2b9902ac786f4dbfa13056b79b902a734
+commit: http://git.buildroot.net/buildroot/commit/?id=39867f3c8cba642cb2dc98b165992a6cc2fa1cb5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Migrate the linux package to the kconfig infrastructure.
-A notable change compared to the original behavior:
-
-- the targets linux-update-(def)config are now always saving the config
-  file, even for a defconfig bundled in the linux sources. This is done
-  to keep the kconfig infrastructure simple.
+This commit adds support for using a defconfig file instead of a full
+.config. This is a precondition to migrate packages like linux and
+barebox to the kconfig infrastructure.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |   36 ++++++++----------------------------
- 1 files changed, 8 insertions(+), 28 deletions(-)
+ package/pkg-kconfig.mk |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index a321fa7..86dd1ee 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -55,6 +55,8 @@ LINUX_MAKE_FLAGS = \
- 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index ef724e5..db56b7a 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -47,8 +47,13 @@ $$($(2)_KCONFIG_FILE): | $(1)-patch
  
-+LINUX_MAKE_ENV = $(TARGET_MAKE_ENV)
+ # The .config file is obtained by copying it from the specified source
+ # configuration file, after the package has been patched.
++# Since the file could be a defconfig file it needs to be expanded to a
++# full .config first. We use 'make oldconfig' because this can be safely
++# done even when the package does not support defconfigs.
+ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
+ 	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
++	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++		$$($(2)_KCONFIG_OPTS) oldconfig
+ 
+ # In order to get a usable, consistent configuration, some fixup may be needed.
+ # The exact rules are specified by the package .mk file.
+@@ -68,10 +73,22 @@ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
+ 
++$(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
++	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++		$$($(2)_KCONFIG_OPTS) savedefconfig
 +
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
-@@ -174,10 +176,11 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
- endif
+ # Target to copy back the configuration to the source configuration file
+ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 	cp --preserve=timestamps -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
  
--define LINUX_CONFIGURE_CMDS
--	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
--	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
--	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-+LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
-+LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-+LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
++# Note: make sure the timestamp of the stored configuration is not newer than
++# the .config to avoid a useless rebuild. Note that, contrary to
++# $(1)-update-config, the reference for 'touch' is _not_ the file from which
++# we copy.
++$(1)-update-defconfig: $(1)-savedefconfig
++	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
++	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
 +
-+define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
-@@ -222,7 +225,6 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
--	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
- endef
+ endef # inner-kconfig-package
  
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-@@ -319,29 +321,7 @@ endef
- 
- include $(sort $(wildcard linux/linux-ext-*.mk))
- 
--$(eval $(generic-package))
--
--ifeq ($(BR2_LINUX_KERNEL),y)
--linux-menuconfig linux-xconfig linux-gconfig linux-nconfig: linux-configure
--	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
--		$(subst linux-,,$@)
--	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
--
--linux-savedefconfig: linux-configure
--	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
--		$(subst linux-,,$@)
--
--ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
--linux-update-config: linux-configure $(LINUX_DIR)/.config
--	cp -f $(LINUX_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
--
--linux-update-defconfig: linux-savedefconfig
--	cp -f $(LINUX_DIR)/defconfig $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
--else
--linux-update-config: ;
--linux-update-defconfig: ;
--endif
--endif
-+$(eval $(kconfig-package))
- 
- # Support for rebuilding the kernel after the cpio archive has
- # been generated in $(BINARIES_DIR)/rootfs.cpio.
+ ################################################################################
