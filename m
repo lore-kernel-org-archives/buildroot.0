@@ -1,55 +1,44 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Feb 2015 15:43:32 +0100
-Subject: [Buildroot] [PATCH 2/4] arm: update processor types
-In-Reply-To: <54D66BEB.6030002@vanguardiasur.com.ar>
-References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1421951608-31233-3-git-send-email-ezequiel@vanguardiasur.com.ar>
- <54CFA343.9090806@openwide.fr> <54D66BEB.6030002@vanguardiasur.com.ar>
-Message-ID: <54DF5F14.2010900@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Feb 2015 15:46:07 +0100
+Subject: [Buildroot] [PATCH 01/35] package/x11r7/xlib_xtrans: bump to
+ version 1.3.5, add hash
+In-Reply-To: <1423339908-2960-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1423339908-2960-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150214154607.19ce0c91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ezequiel,
+Dear Bernd Kuhls,
 
-Le 07/02/2015 20:47, Ezequiel Garcia a ?crit :
-> Hi Romain,
+On Sat,  7 Feb 2015 21:11:14 +0100, Bernd Kuhls wrote:
+> xserver_xorg-server 1.17.0 depends on it.
 > 
-> First of all, thanks for the great feedback.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xlib_xtrans/xlib_xtrans.hash |    3 +++
+>  package/x11r7/xlib_xtrans/xlib_xtrans.mk   |    2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>  create mode 100644 package/x11r7/xlib_xtrans/xlib_xtrans.hash
 
-You're welcome :)
+For such series, it would be great to have a cover letter to which we
+could reply. I've applied the whole series. Regarding the various
+drivers that don't have a release that is compatible with X.org server
+1.17 and for which you had to use git snapshots, I hope they will do
+a release at some point.
 
-> 
-> On 02/02/2015 01:18 PM, Romain Naour wrote:
-> [..]
->>> -	default BR2_BINFMT_FLAT if BR2_m68k
->>> +	default BR2_BINFMT_FLAT if BR2_m68k || BR2_cortex_m3
->>
->> What do you think about adding BR2_ARCH_HAS_EFL_SUPPORT in each architecture
->> Config.in.x instead of black-listing them here ?
->>
-> 
-> I've been thinking about this. At first it seemed like a good idea, but
-> then I realised that Cortex-M3 is not really an architecture, but 
-> a variant.
-> 
-> Introducing BR2_ARCH_HAS_ELF_SUPPORT would mean selecting it on almost each
-> architecture and almost each of the ARM variants, except Cortex-M3.
-> 
-> So, it seems like it would be an elegant way of doing this, but I'm not sure
-> it's worth such an invasive change.
-> 
+For the V4L and Geode drivers, did you report the 1.17 compatibility
+issue upstream?
 
-We may introduce BR2_ARCH_HAS_ELF_SUPPORT as an hidden option which is set to y
-by default except for BR2_bfin, BR2_m68k and BR2_cortex_m3. (like for BR2_USE_MMU)
-
-config BR2_ARCH_HAS_ELF_SUPPORT
-	bool
-	default y if !(BR2_bfin || BR2_m68k || BR2_cortex_m3)
-
-What other developer think ?
+I also one question specifically about the X.org server update, I'll
+reply to that e-mail specifically.
 
 Best regards,
-Romain
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
