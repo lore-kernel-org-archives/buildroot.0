@@ -1,56 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Feb 2015 10:23:04 +0100
-Subject: [Buildroot] [PATCH 01/12 v2] arch: kill avr32
+Date: Sat, 14 Feb 2015 10:23:07 +0100
+Subject: [Buildroot] [PATCH 04/12 v2] linux: get rid of avr32 specifics
 In-Reply-To: <cover.1423905753.git.yann.morin.1998@free.fr>
 References: <cover.1423905753.git.yann.morin.1998@free.fr>
-Message-ID: <4ac969355610ac118df65e7873de2aafb480b1c0.1423905753.git.yann.morin.1998@free.fr>
+Message-ID: <5b9183e999b57762f1efb7f13eb4b603dc1c314a.1423905753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-avr32 was slated for removal in 2015.02. Make it so!
-
-This patch only definitively hides the symbol. When all references
-to it are eradicated (to come in followup patches), we'll eventually
-kill the symbol altogether.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
 ---
-Changes v1 -> v2:
-  - do nt move the symbol, hide with BR2_BROKEN  (Thomas)
----
- .defconfig     | 1 -
- arch/Config.in | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ linux/Config.in | 2 +-
+ linux/linux.mk  | 4 ----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/.defconfig b/.defconfig
-index 77ab11a..585be55 100644
---- a/.defconfig
-+++ b/.defconfig
-@@ -6,7 +6,6 @@ BR2_HAVE_DOT_CONFIG=y
- # BR2_alpha is not set
- # BR2_arm is not set
- # BR2_armeb is not set
--# BR2_avr32 is not set
- # BR2_cris is not set
- # BR2_ia64 is not set
- BR2_i386=y
-diff --git a/arch/Config.in b/arch/Config.in
-index 890e7e2..1719fe6 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -61,7 +61,7 @@ config BR2_avr32
- 	# components. If you're interested by AVR32, contact the
- 	# Buildroot community. Otherwise, its support will be removed
- 	# by the 2015.02 release.
--	depends on BR2_DEPRECATED_SINCE_2014_08
-+	depends on BR2_BROKEN
- 	help
- 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
- 	  Atmel.
+diff --git a/linux/Config.in b/linux/Config.in
+index c981493..9873ea0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -174,7 +174,7 @@ choice
+ config BR2_LINUX_KERNEL_UIMAGE
+ 	bool "uImage"
+ 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
+-		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
++		   BR2_powerpc || BR2_sh || BR2_sh64 || \
+ 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29f59e8..c9a7e9d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -137,11 +137,7 @@ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else
+-ifeq ($(KERNEL_ARCH),avr32)
+-LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+-else
+ LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+-endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
+ define LINUX_DOWNLOAD_PATCHES
 -- 
 1.9.1
