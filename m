@@ -1,39 +1,73 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Feb 2015 15:20:49 +0100
-Subject: [Buildroot] [PATCH 01/12 v2] arch: kill avr32
-In-Reply-To: <4ac969355610ac118df65e7873de2aafb480b1c0.1423905753.git.yann.morin.1998@free.fr>
-References: <cover.1423905753.git.yann.morin.1998@free.fr>
- <4ac969355610ac118df65e7873de2aafb480b1c0.1423905753.git.yann.morin.1998@free.fr>
-Message-ID: <54DF59C1.50802@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Feb 2015 10:26:03 +0100
+Subject: [Buildroot] [git commit branch/next] package/x11r7/libepoxy: New
+	package
+Message-ID: <20150214143823.02DFB8042B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+commit: http://git.buildroot.net/buildroot/commit/?id=2ac0250cc6f1522f7b8de65b538e3882b11c0a6f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le 14/02/2015 10:23, Yann E. MORIN a ?crit :
-> avr32 was slated for removal in 2015.02. Make it so!
-> 
-> This patch only definitively hides the symbol. When all references
-> to it are eradicated (to come in followup patches), we'll eventually
-> kill the symbol altogether.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - do nt move the symbol, hide with BR2_BROKEN  (Thomas)
-> ---
+xdriver_xf86-video-ati needs glamor support from xserver_xorg-server,
+which in turn depends on libepoxy.
 
-While at it, why not removing BR2_m68k ?
+[Thomas: add license information.]
 
-This architecture has been marked BROKEN since...
-2009-01-12 by Peter Korsgard.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/Config.in            |    1 +
+ package/x11r7/libepoxy/Config.in   |    7 +++++++
+ package/x11r7/libepoxy/libepoxy.mk |   15 +++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
 
-http://git.buildroot.net/buildroot/commit/?id=8161c45b891aca4c3184c320de81a44767c7cece
-
-Best regards,
-Romain
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 2fd1ff0..f60c752 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
+ 	endmenu
+ 	menu "X11R7 Libraries"
+ 		source package/x11r7/libxcb/Config.in
++		source package/x11r7/libepoxy/Config.in
+ 		source package/x11r7/xcb-util/Config.in
+ 		source package/x11r7/xcb-util-image/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
+diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
+new file mode 100644
+index 0000000..c4f5794
+--- /dev/null
++++ b/package/x11r7/libepoxy/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBEPOXY
++	bool "epoxy"
++	depends on BR2_PACKAGE_MESA3D
++	help
++	  Epoxy is a library for handling OpenGL function pointer management for you.
++
++	  https://github.com/anholt/libepoxy
+diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
+new file mode 100644
+index 0000000..9858cfe
+--- /dev/null
++++ b/package/x11r7/libepoxy/libepoxy.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libepoxy
++#
++#################################################################################
++
++LIBEPOXY_VERSION = v1.2
++LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
++LIBEPOXY_INSTALL_STAGING = YES
++LIBEPOXY_AUTORECONF = YES
++LIBEPOXY_DEPENDENCIES = mesa3d
++LIBEPOXY_LICENSE = MIT
++LIBEPOXY_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
