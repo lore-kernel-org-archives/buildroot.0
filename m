@@ -1,62 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 22:02:44 +0100
-Subject: [Buildroot] [PATCH] mplayer: fix compilation with new versions
- of libgif
-In-Reply-To: <1423933969-34169-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1423933969-34169-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150214220244.15cce061@free-electrons.com>
+Date: Sat, 14 Feb 2015 22:03:23 +0100
+Subject: [Buildroot] [git commit] package/openvmtools: don't use host
+	library path
+Message-ID: <20150214210355.D796B8045D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=a45838ab004843511b42006423a84c057f5d5a75
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Feb 2015 17:12:49 +0000, Vicente Olivert Riera wrote:
-> mplayer fails to compile with the following error message:
-> 
-> libmpdemux/demux_gif.c: In function 'demux_open_gif':
-> libmpdemux/demux_gif.c:260:3: error: too few arguments to function
-> 'DGifOpen'
->    gif = DGifOpen(demuxer->stream, my_read_gif);
-> 
-> Backport an upstream patch to support newer versions of libgif in
-> mplayer. Unfortunately this patch is incomplete and mplayer stills
-> failing to compile with a new error message:
-> 
-> libvo/vo_gif89a.c: In function 'uninit':
-> libvo/vo_gif89a.c:374:3: error: too few arguments to function
-> 'EGifCloseFile'
->    EGifCloseFile(new_gif); // also frees gif storage space.
-> 
-> So I have written a new patch and submitted it upstream to finally fix
-> the problem.
-> 
-> Upstream commit:
-> 
->   https://github.com/pigoz/mplayer-svn/commit/a0ddaef5457e222dade386901bf448c5e3ac7b89
-> 
-> New submitted patch:
-> 
->   https://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2015-February/072848.html
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/a51/a510a0ab2cb827bb91b4fdec43055f2bfda239b1/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../0005-Support-newer-GIFLIB-versions.patch       |  268 ++++++++++++++++++++
->  .../0006-Support-newer-GIFLIB-versions-part2.patch |   44 ++++
->  2 files changed, 312 insertions(+), 0 deletions(-)
->  create mode 100644 package/mplayer/0005-Support-newer-GIFLIB-versions.patch
->  create mode 100644 package/mplayer/0006-Support-newer-GIFLIB-versions-part2.patch
+Set CUSTOM_PROCPS_LIBS to " " otherwise -L/lib is used by default.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/bff/bff7d8f3ec19ce790f0c88a336d1007e1ff29836/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[Thomas: fix typo in commit log.]
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openvmtools/openvmtools.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 7aa04af..e0ec6d6 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -22,7 +22,9 @@ OPENVMTOOLS_DEPENDENCIES += libfuse
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+-OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
++# Set CUSTOM_PROCPS_LIBS to " " otherwise -L/lib is used by default.
++OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps \
++	CUSTOM_PROCPS_LIBS=" "
+ OPENVMTOOLS_CONF_OPTS += --with-procps
+ OPENVMTOOLS_DEPENDENCIES += procps-ng
+ else
