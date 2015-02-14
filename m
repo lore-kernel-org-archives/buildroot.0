@@ -1,39 +1,30 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Feb 2015 16:33:21 +0100
-Subject: [Buildroot] [PATCH 01/12 v2] arch: kill avr32
-In-Reply-To: <20150214162318.2c2d8912@free-electrons.com>
-References: <cover.1423905753.git.yann.morin.1998@free.fr>	<4ac969355610ac118df65e7873de2aafb480b1c0.1423905753.git.yann.morin.1998@free.fr>	<54DF59C1.50802@openwide.fr>
- <20150214162318.2c2d8912@free-electrons.com>
-Message-ID: <54DF6AC1.6080701@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Feb 2015 16:35:32 +0100
+Subject: [Buildroot] [PATCH 04/10] kconfig infra: remove all install
+ stamp files
+In-Reply-To: <d969027979b213270ff962a659a1d0ef0f3b40a7.1422972638.git.yann.morin.1998@free.fr>
+References: <cover.1422972638.git.yann.morin.1998@free.fr>
+ <d969027979b213270ff962a659a1d0ef0f3b40a7.1422972638.git.yann.morin.1998@free.fr>
+Message-ID: <20150214163532.73131887@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Yann E. MORIN,
 
-Le 14/02/2015 16:23, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Sat, 14 Feb 2015 15:20:49 +0100, Romain Naour wrote:
-> 
->> While at it, why not removing BR2_m68k ?
->>
->> This architecture has been marked BROKEN since...
->> 2009-01-12 by Peter Korsgard.
-> 
-> I got contacted by a person interested in bringing back to speed the
-> m68k support. And the m68k doesn't have as much impact as the avr32
-> support in terms of custom patches, specific handling and so on.
-> 
+On Tue,  3 Feb 2015 15:21:44 +0100, Yann E. MORIN wrote:
 
-Ok, good news :)
+>  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+> -	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
+> +	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
 
-Best regards,
-Romain
+Maybe this could reuse the $(1)-clean-for-reconfigure target in order
+to avoid duplicating this code removing the stamp files, no?
 
-> Best regards,
-> 
-> Thomas
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
