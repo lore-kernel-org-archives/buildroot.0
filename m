@@ -1,33 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 17:43:33 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain/buildroot: forget
-	about avr32
-Message-ID: <20150214164752.21FE680458@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 17:43:17 +0100
+Subject: [Buildroot] [git commit branch/next] linux: get rid of avr32
+	specifics
+Message-ID: <20150214164752.1A0CF7FC42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d3cc4b27f6a2ab9a83feda55d24c117b08d5643
+commit: http://git.buildroot.net/buildroot/commit/?id=67596b6b6e9cf0b94258f445cd71ae0944e451ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ linux/Config.in |    2 +-
+ linux/linux.mk  |    4 ----
+ 2 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 2955b2e..a69013f 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -29,7 +29,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	bool "uClibc"
- 	select BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_arcle   || BR2_arceb  || BR2_arm    || BR2_armeb    || \
--		   BR2_avr32   || BR2_bfin   || BR2_i386   || BR2_m68k     || \
-+		   BR2_bfin    || BR2_i386   || BR2_m68k   || \
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_powerpc || BR2_sh     || BR2_sparc  || BR2_xtensa   || \
- 		   BR2_x86_64
+diff --git a/linux/Config.in b/linux/Config.in
+index 28cb36e..95c847b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -174,7 +174,7 @@ choice
+ config BR2_LINUX_KERNEL_UIMAGE
+ 	bool "uImage"
+ 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
+-		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
++		   BR2_powerpc || BR2_sh || BR2_sh64 || \
+ 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index accc42e..fc90fc5 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -141,11 +141,7 @@ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else
+-ifeq ($(KERNEL_ARCH),avr32)
+-LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+-else
+ LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+-endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
+ define LINUX_DOWNLOAD_PATCHES
