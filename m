@@ -1,7 +1,11 @@
-From: Gregory Dymarek <gregd72002@gmail.com>
-Date: Sat, 14 Feb 2015 22:37:04 +0000
-Subject: [Buildroot] BR2_ROOTFS_POST_IMAGE_SCRIPT fdisk anomaly
-Message-ID: <CAEbDrgmWrn8Jf4VYgk0RtVBMgUf2DehNx3BS63Bqfte2+OhLrg@mail.gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sat, 14 Feb 2015 23:39:08 +0100
+Subject: [Buildroot] [PATCH v2] Linux kernel: add support for config
+ fragment files
+In-Reply-To: <20150214165911.GE3886@free.fr>
+References: <1423921601-20473-1-git-send-email-bos@je-eigen-domein.nl>
+ <20150214165911.GE3886@free.fr>
+Message-ID: <54DFCE8C.9060107@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +14,119 @@ To: buildroot@busybox.net
 
 Hi,
 
-I've seen this problem before in buildroot but now I have a reproducible
-example.
+On 02/14/2015 05:59 PM, Yann E. MORIN wrote:
+> On 2015-02-14 14:46 +0100, Floris Bos spake thusly:
+>> Adds configuration option to merge additional kernel configuration files
+>> to the main kernel configuration using support/kconfig/merge_config.sh
+>>
+>> For use-cases in which it is desired to build a custom Linux kernel based on
+>> the defconfig of the target device, but with a couple extra options/modules
+>> enabled.
+>>
+>> Changes v1 -> v2:
+>>
+>> Use the merge_config.sh bundled with buildroot, instead of the one
+>> bundled with the kernel, as older kernel versions do not have it.
+> This "Changes" blrub should after the '---' line, below.
+>
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>> ---
+>>   linux/Config.in | 6 ++++++
+>>   linux/linux.mk  | 3 +++
+>>   2 files changed, 9 insertions(+)
+>>
+>> diff --git a/linux/Config.in b/linux/Config.in
+>> index c981493..afa68b0 100644
+>> --- a/linux/Config.in
+>> +++ b/linux/Config.in
+>> @@ -161,6 +161,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+>>   	help
+>>   	  Path to the kernel configuration file
+>>   
+>> +config BR2_LINUX_KERNEL_CONFIG_FRAGMENTS
+>> +	string "Additional configuration fragment files"
+>> +	help
+>> +	  A space-seperated list of kernel configuration fragment files,
+>> +	  that will be merged to the main kernel configuration file.
+>> +
+>>   #
+>>   # Binary format
+>>   #
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index 29f59e8..665bc0b 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -39,6 +39,7 @@ endif # -rc
+>>   endif
+>>   
+>>   LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+>> +LINUX_KERNEL_CONFIG_FRAGMENTS = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENTS))
+>>   
+>>   LINUX_INSTALL_IMAGES = YES
+>>   LINUX_DEPENDENCIES += host-kmod host-lzop
+>> @@ -178,6 +179,8 @@ define LINUX_CONFIGURE_CMDS
+>>   	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>>   	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+>>   	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>> +	$(if $(LINUX_KERNEL_CONFIG_FRAGMENTS),
+>> +		$(TOPDIR)/support/kconfig/merge_config.sh -m -O $(@D) $(@D)/.config $(LINUX_KERNEL_CONFIG_FRAGMENTS))
+> As Baruch suggested earlier, this could be usefull to have such a
+> feature available to all our kconfig-packages: linux, busybox, uclibc
+> and barebox.
+>
+> Granted, when you did your patch, the kernel was not yet using the
+> kconfig-package infra. But it now does (since Thomas P. applied the
+> series a few minutes ago! ;-) )
+>
+> Could you rework your patch to integrate this feature in the
+> kconfig-package infra, please?
+>
+> Something like (shortlog-like):
+>
+>      kconfig-package: add support for config fragments
+>      linux: add option to specify config fragments
+>      busybox: add option to specify config fragments
+>      uclibc: add option to specify config fragments
+>      barebox: add option to specify config fragments
+>
+> As for how to pass the the config fragments: just pas them all in the
+> _KCONFIG_FILE variable, and in package/pkg-kconfig.mk, replace line 54
+> with something like (untested):
+>
+>      support/kconfig/merge_config.sh -m -O $(@D) $$($(2)_KCONFIG_FILE)
+>
+> Callers will have to pass the base config file first and any fragment
+> asfter that, like so:
+>
+>      LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG) $(call qstrip,$(LINUX_KERNEL_CONFIG_FRAGMENTS))
+>
+> (Of course, we are again hitting the singular option that accepts
+> multiple entries, and in retrospect, we should have called it just
+> FOO_KCONFIG_FILES. We can change that, but later (after we apply the
+> support for fragments).
 
-My BR2_ROOTFS_POST_IMAGE_SCRIPT looks like:
-
-#!/bin/sh
-
-dd if=/dev/zero of=image.img count=50000
-
-(echo n; echo p; echo 1; echo ; echo "+30000"; echo w;) | fdisk -u image.img
-
-
-
-The problem is it creates a very different image than when executing the
-above command manually from shell.
+Problem I see with passing multiple files in the LINUX_KCONFIG_FILE 
+variable -as opposed to using a separate variable- is that the variable 
+is currently also used as destination file.
+If you do "make linux-menuconfig", change some settings, do "make 
+linux-updateconfig", the kconfig infrastructure copies .config back to 
+LINUX_KCONFIG_FILE.
+So would require more extensive modification.
 
 
-When executed manually the created partition is:
-
-        Device Boot      Start         End      Blocks   Id  System
-
-image.img1            2048       32048       15000+  83  Linux
-
-
-
-When executed though the hook it reports:
-
-    Device Boot      Start         End      Blocks   Id  System
-
-image.img1            2048       32767       15360   83  Linux
+Talking about which.
+I am also not sure how updateconfig should behave in case there are 
+fragments.
+Should it compute the differences between the original configuration and 
+after the user edited it, and save the changes to the (last) fragment in 
+the list?
+Is there any good ready-made shell script for comparing .config files 
+that we could use for that?
+I know that there is diffconfig that comes with the kernel source, but 
+it requires python, and would need to be modified to output in the right 
+format.
 
 
-Where is the difference coming from?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150214/fd63c85d/attachment.html>
+Yours sincerely,
+
+Floris Bos
