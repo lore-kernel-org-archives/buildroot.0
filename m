@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 08:58:13 +0100
-Subject: [Buildroot] [PATCH v1] qt5base: disable gold linker
-In-Reply-To: <87oaozzbsj.fsf@dell.be.48ers.dk>
-References: <1423637231-4145-1-git-send-email-ps.report@gmx.net>
- <20150211153232.2dcd2b32@free-electrons.com>
- <87oaozzbsj.fsf@dell.be.48ers.dk>
-Message-ID: <20150214085813.341d2811@free-electrons.com>
+Date: Sat, 14 Feb 2015 08:59:50 +0100
+Subject: [Buildroot] [git commit branch/next] pkg-cmake: reduce output when
+	being silent
+Message-ID: <20150214080023.7CC968043D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+commit: http://git.buildroot.net/buildroot/commit/?id=96e7bca18bd55a70c7f837949c791af52ba91e7e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 12 Feb 2015 11:03:56 +0100, Peter Korsgaard wrote:
+Use CMAKE_RULE_MESSAGES and CMAKE_INSTALL_MESSAGE variables to reduce
+cmake output when it is a silent build.
 
-> The problem is that the configure script is confused. While this is
-> related to linking, -fuse-ld=gold is an argument to the compiler driver
-> to tell it what linker to execute, NOT an option to tell the linker to
-> behave differently. So it shouldn't get prefixed with -Wl when passed
-> though the compiler driver.
-> 
-> Qt does the right thing when it uses it, but the configure script does:
-> 
->     if linkerSupportsFlag $TEST_COMPILER -fuse-ld=gold; then
->        CFG_USE_GOLD_LINKER=yes
-> 
-> This should be compilerSupportsFlag instead.
-> 
-> I'll create a patch and apply / send upstream.
+[Thomas:
+ - use ifneq instead of ifdef
+ - remove unneeded else clause
+ - also add to the host variant of the configure commands]
 
-Thanks. In the mean time, I've marked the original patch from Peter
-Seiderer as Rejected in patchwork.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-cmake.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 6c9955d..958639f 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -31,6 +31,10 @@ CMAKE_HOST_C_COMPILER = $(HOSTCC)
+ CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+ endif
+ 
++ifneq ($(QUIET),)
++CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
++endif
++
+ ################################################################################
+ # inner-cmake-package -- defines how the configuration, compilation and
+ # installation of a CMake package should be done, implements a few hooks to
+@@ -86,6 +90,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DBUILD_TESTING=OFF \
+ 		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
+ 		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
++		$$(CMAKE_QUIET) \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 	)
+ endef
+@@ -121,6 +126,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DBUILD_TEST=OFF \
+ 		-DBUILD_TESTS=OFF \
+ 		-DBUILD_TESTING=OFF \
++		$$(CMAKE_QUIET) \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 	)
+ endef
