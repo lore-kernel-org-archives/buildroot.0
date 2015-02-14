@@ -1,28 +1,33 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Feb 2015 16:10:56 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libsepol: add patch to fix Blackfin
-	build issue
-Message-ID: <1423926657-12882-1-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 14 Feb 2015 16:10:57 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libsemanage: add patch to fix
+	Blackfin build issue
+In-Reply-To: <1423926657-12882-1-git-send-email-romain.naour@openwide.fr>
+References: <1423926657-12882-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1423926657-12882-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsepol use the same build system than libselinux,
+libsemanage use the same build system than libselinux,
 so it's affected by the same issue.
+
+Fixes:
+http://autobuild.buildroot.net/results/39d/39d3460e88a1316ec7dbcd0d67b7fdb992c3fc77
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- .../libsepol/0002-workaround-blackfin-issue.patch  | 24 ++++++++++++++++++++++
+ .../0002-workaround-blackfin-issue.patch           | 24 ++++++++++++++++++++++
  1 file changed, 24 insertions(+)
- create mode 100644 package/libsepol/0002-workaround-blackfin-issue.patch
+ create mode 100644 package/libsemanage/0002-workaround-blackfin-issue.patch
 
-diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
+diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0002-workaround-blackfin-issue.patch
 new file mode 100644
 index 0000000..5d00c69
 --- /dev/null
-+++ b/package/libsepol/0002-workaround-blackfin-issue.patch
++++ b/package/libsemanage/0002-workaround-blackfin-issue.patch
 @@ -0,0 +1,24 @@
 +Do not make symbols hidden on Blackfin
 +
