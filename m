@@ -1,69 +1,70 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sat, 14 Feb 2015 14:46:41 +0100
-Subject: [Buildroot] [PATCH v2] Linux kernel: add support for config
-	fragment files
-Message-ID: <1423921601-20473-1-git-send-email-bos@je-eigen-domein.nl>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 14 Feb 2015 14:51:58 +0100
+Subject: [Buildroot] [PATCH 2/4] arm: update processor types
+In-Reply-To: <54D653E2.2080305@vanguardiasur.com.ar>
+References: <1421951608-31233-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1421951608-31233-3-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <54CFA343.9090806@openwide.fr> <54D653E2.2080305@vanguardiasur.com.ar>
+Message-ID: <54DF52FE.2070603@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds configuration option to merge additional kernel configuration files
-to the main kernel configuration using support/kconfig/merge_config.sh
+Hi Ezequiel,
 
-For use-cases in which it is desired to build a custom Linux kernel based on
-the defconfig of the target device, but with a couple extra options/modules
-enabled.
+[snip]
+>>> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+>>> index 2ee2019..fd6ef53 100644
+>>> --- a/toolchain/toolchain-common.in
+>>> +++ b/toolchain/toolchain-common.in
+>>> @@ -114,8 +114,10 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+>>>  	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+>>>  
+>>>  config BR2_USE_MMU
+>>> -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+>>> -	default y if !BR2_bfin
+>>> +	bool "Enable MMU support"
+>>> +	depends on BR2_arm || BR2_armeb || BR2_sh || BR2_xtensa
+>>> +	depends on !BR2_cortex_m3 && !BR2_bfin
+>>> +	default y
+>>
+>> And here with BR2_ARCH_HAS_MMU_SUPPORT ?
+>>
 
-Changes v1 -> v2:
+Sorry for the delay...
 
-Use the merge_config.sh bundled with buildroot, instead of the one
-bundled with the kernel, as older kernel versions do not have it.
+> 
+> Hm.. shouldn't that be, BR2_ARCH_HAS_OPTIONAL_MMU or something ?
+> 
+> At least that's what it seems: only some architectures expose the build
+> time config to disable MMU.
+> 
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
----
- linux/Config.in | 6 ++++++
- linux/linux.mk  | 3 +++
- 2 files changed, 9 insertions(+)
+I think we need BR2_ARCH_HAS_MMU_SUPPORT if there is an MMU in the CPU and
+BR2_ARCH_HAS_OPTIONAL_MMU if the MMU can be disabled.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c981493..afa68b0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -161,6 +161,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
- 
-+config BR2_LINUX_KERNEL_CONFIG_FRAGMENTS
-+	string "Additional configuration fragment files"
-+	help
-+	  A space-seperated list of kernel configuration fragment files,
-+	  that will be merged to the main kernel configuration file.
-+
- #
- # Binary format
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 29f59e8..665bc0b 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -39,6 +39,7 @@ endif # -rc
- endif
- 
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-+LINUX_KERNEL_CONFIG_FRAGMENTS = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENTS))
- 
- LINUX_INSTALL_IMAGES = YES
- LINUX_DEPENDENCIES += host-kmod host-lzop
-@@ -178,6 +179,8 @@ define LINUX_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-+	$(if $(LINUX_KERNEL_CONFIG_FRAGMENTS),
-+		$(TOPDIR)/support/kconfig/merge_config.sh -m -O $(@D) $(@D)/.config $(LINUX_KERNEL_CONFIG_FRAGMENTS))
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
--- 
-1.9.1
+The BR2_ARCH_HAS_OPTIONAL_MMU should automatically select
+BR2_ARCH_HAS_MMU_SUPPORT when set to y.
+
+Then BR2_arm, BR2_armeb, BR2_sh and BR2_xtensa should select
+BR2_ARCH_HAS_OPTIONAL_MMU.
+
+And all other architecture should select BR2_ARCH_HAS_MMU_SUPPORT except
+BR2_bfin and BR2_cortex_m3.
+
+So BR2_USE_MMU look like this:
+
+config BR2_USE_MMU
+	boot "Enable MMU support" if BR2_ARCH_HAS_OPTIONAL_MMU
+	default y if BR2_ARCH_HAS_MMU_SUPPORT
+
+When looking again at your patch, there is an error when another architecture
+like i386 is selected.
+BR2_USE_MMU must be set to y in that case.
+
+What do you think ?
+
+Best regards,
+Romain
