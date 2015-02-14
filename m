@@ -1,7 +1,7 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 14 Feb 2015 13:47:00 +0100
-Subject: [Buildroot] [PATCH v2] package/python-web2py: new package
-Message-ID: <1423918020-5791-1-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sat, 14 Feb 2015 13:49:34 +0100
+Subject: [Buildroot] [PATCH v3] package/python-web2py: new package
+Message-ID: <1423918174-8149-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
