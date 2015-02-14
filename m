@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Feb 2015 10:23:07 +0100
-Subject: [Buildroot] [PATCH 04/12 v2] linux: get rid of avr32 specifics
+Date: Sat, 14 Feb 2015 10:23:05 +0100
+Subject: [Buildroot] [PATCH 02/12 v2] configs: get rid of avr32 defconfigs
 In-Reply-To: <cover.1423905753.git.yann.morin.1998@free.fr>
 References: <cover.1423905753.git.yann.morin.1998@free.fr>
-Message-ID: <5b9183e999b57762f1efb7f13eb4b603dc1c314a.1423905753.git.yann.morin.1998@free.fr>
+Message-ID: <ed2ac4b932a4cff59b0a924700502ba5210d92b9.1423905753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,84 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- linux/Config.in | 2 +-
- linux/linux.mk  | 4 ----
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ configs/atngw100_defconfig  | 35 -----------------------------------
+ configs/atstk100x_defconfig | 26 --------------------------
+ 2 files changed, 61 deletions(-)
+ delete mode 100644 configs/atngw100_defconfig
+ delete mode 100644 configs/atstk100x_defconfig
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c981493..9873ea0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -174,7 +174,7 @@ choice
- config BR2_LINUX_KERNEL_UIMAGE
- 	bool "uImage"
- 	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
--		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64 || \
-+		   BR2_powerpc || BR2_sh || BR2_sh64 || \
- 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
- 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 29f59e8..c9a7e9d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -137,11 +137,7 @@ LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_PATH = $(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else
--ifeq ($(KERNEL_ARCH),avr32)
--LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
--else
- LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
--endif
- endif # BR2_LINUX_KERNEL_VMLINUX
- 
- define LINUX_DOWNLOAD_PATCHES
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+deleted file mode 100644
+index d410f5b..0000000
+--- a/configs/atngw100_defconfig
++++ /dev/null
+@@ -1,35 +0,0 @@
+-# AVR32 is deprecated
+-BR2_DEPRECATED=y
+-
+-# Architecture
+-BR2_avr32=y
+-
+-# Lock down kernel headers version, to match the kernel version used
+-# below.
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.9.11"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
+-
+-# Filesystems
+-BR2_TARGET_ROOTFS_JFFS2=y
+-BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
+-BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x1000
+-BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
+-BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+-BR2_TARGET_ROOTFS_JFFS2_BE=y
+-BR2_TARGET_ROOTFS_TAR=y
+-BR2_TARGET_ROOTFS_TAR_NONE=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="atngw100"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
+-
+-# Kernel. Locked to 3.9.x, because 3.10.x fails to build with
+-# relocation truncated to fit: R_AVR32_16N_PCREL against symbol
+-# `_ctype'
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
+-BR2_LINUX_KERNEL_DEFCONFIG="atngw100"
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+deleted file mode 100644
+index 0e17e36..0000000
+--- a/configs/atstk100x_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-# AVR32 is deprecated
+-BR2_DEPRECATED=y
+-
+-# Architecture
+-BR2_avr32=y
+-
+-# Lock to same version as kernel
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.9.11"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
+-
+-# U-Boot
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="atstk1002"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="atstk1002"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_TAR=y
 -- 
 1.9.1
