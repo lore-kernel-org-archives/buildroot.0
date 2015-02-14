@@ -1,52 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Feb 2015 17:39:50 +0100
-Subject: [Buildroot] [git commit branch/next] arch: kill avr32
-Message-ID: <20150214164751.E2D2080454@busybox.osuosl.org>
+Date: Sat, 14 Feb 2015 17:44:12 +0100
+Subject: [Buildroot] [git commit branch/next] package/binutils: avr32 is gone
+Message-ID: <20150214164752.3590680454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a46007daa7128d316ab3f36da23828b8ab7aaf58
+commit: http://git.buildroot.net/buildroot/commit/?id=a645f61b0eb40423cee3ccf1bd1d5d61ac89be5e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-avr32 was slated for removal in 2015.02. Make it so!
-
-This patch only definitively hides the symbol. When all references
-to it are eradicated (to come in followup patches), we'll eventually
-kill the symbol altogether.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .defconfig     |    1 -
- arch/Config.in |    2 +-
- 2 files changed, 1 insertions(+), 2 deletions(-)
+ package/binutils/Config.in.host |   13 ++++---------
+ package/binutils/binutils.mk    |    8 --------
+ 2 files changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/.defconfig b/.defconfig
-index 77ab11a..585be55 100644
---- a/.defconfig
-+++ b/.defconfig
-@@ -6,7 +6,6 @@ BR2_HAVE_DOT_CONFIG=y
- # BR2_alpha is not set
- # BR2_arm is not set
- # BR2_armeb is not set
--# BR2_avr32 is not set
- # BR2_cris is not set
- # BR2_ia64 is not set
- BR2_i386=y
-diff --git a/arch/Config.in b/arch/Config.in
-index 890e7e2..1719fe6 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -61,7 +61,7 @@ config BR2_avr32
- 	# components. If you're interested by AVR32, contact the
- 	# Buildroot community. Otherwise, its support will be removed
- 	# by the 2015.02 release.
--	depends on BR2_DEPRECATED_SINCE_2014_08
-+	depends on BR2_BROKEN
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 0739467..504e9ca 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,33 +7,28 @@ choice
  	help
- 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
- 	  Atmel.
+ 	  Select the version of binutils you wish to use.
+ 
+-	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+-		depends on BR2_avr32
+-		bool "binutils 2.18-avr32-1.0.1"
+-
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.22"
+ 
+ 	# bfin disabled for newer binutils due to
+ 	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+-		depends on !BR2_avr32 && !BR2_bfin
++		depends on !BR2_bfin
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25
+-		depends on !BR2_avr32 && !BR2_bfin
++		depends on !BR2_bfin
+ 		bool "binutils 2.25"
+ 
+ endchoice
+ 
+ config BR2_BINUTILS_VERSION
+ 	string
+-	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+ 	default "arc-2014.12"	if BR2_arc
+ 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+ 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index c3b3c18..9e99253 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -8,17 +8,9 @@
+ # If not, we do like other packages
+ BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+ ifeq ($(BINUTILS_VERSION),)
+-ifeq ($(BR2_avr32),y)
+-# avr32 uses a special version
+-BINUTILS_VERSION = 2.18-avr32-1.0.1
+-else
+ BINUTILS_VERSION = 2.22
+ endif
+-endif
+ 
+-ifeq ($(ARCH),avr32)
+-BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
+-endif
+ ifeq ($(BR2_arc),y)
+ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+ BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
