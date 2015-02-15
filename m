@@ -1,42 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 15 Feb 2015 14:59:23 +0000
-Subject: [Buildroot] [PATCH] ffmpeg: bump version to 2.5.4
-Message-ID: <1424012363-24487-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 15 Feb 2015 12:01:40 -0300
+Subject: [Buildroot] [PATCH] autossh: bump to version 1.4e
+Message-ID: <1424012500-15196-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.5.4
-- Update the hash file
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ffmpeg/ffmpeg.hash |    2 +-
- package/ffmpeg/ffmpeg.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/autossh/autossh.hash | 6 ++----
+ package/autossh/autossh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index b1d8c95..c39174f 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	9d383d7ef9dffe6980849a93accfef848e197fdac9b1fbd02fca2798f863411a	ffmpeg-2.5.3.tar.bz2
-+sha256  cc91c166c2b0ad9aacc533e4d5637912df583b43834c68aeec12ded7e082a286  ffmpeg-2.5.4.tar.bz2
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f9c1d94..68a28a2 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/autossh/autossh.hash b/package/autossh/autossh.hash
+index e1e3b2c..4f3de13 100644
+--- a/package/autossh/autossh.hash
++++ b/package/autossh/autossh.hash
+@@ -1,4 +1,2 @@
+-# From http://www.harding.motd.ca/autossh/autossh-1.4d.cksums
+-md5	89c09b50aa2d57814f808d727e937d0f	autossh-1.4d.tgz
+-sha1	27da23c357f8d263aba6ecf3e8792a3552d90e50	autossh-1.4d.tgz
+-sha256	00008fe458bde4c94e98bfa96e1e6e18c4107a1f9fc8a538556b82e91ddedc16	autossh-1.4d.tgz
++# From http://www.harding.motd.ca/autossh/autossh-1.4e.cksums
++sha256	9e8e10a59d7619176f4b986e256f776097a364d1be012781ea52e08d04679156	autossh-1.4e.tgz
+diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
+index 51f9faf..01d3c65 100644
+--- a/package/autossh/autossh.mk
++++ b/package/autossh/autossh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 2.5.3
-+FFMPEG_VERSION = 2.5.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-AUTOSSH_VERSION = 1.4d
++AUTOSSH_VERSION = 1.4e
+ AUTOSSH_SITE = http://www.harding.motd.ca/autossh
+ AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
+ AUTOSSH_LICENSE = Modified BSD
 -- 
-1.7.1
+2.0.5
