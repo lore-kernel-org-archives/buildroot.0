@@ -1,63 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Feb 2015 00:43:18 +0100
-Subject: [Buildroot] [PATCH] rpi-firmware: keep fixup.dat and start.elf
- name
-In-Reply-To: <1423954153-22667-1-git-send-email-fhunleth@troodon-software.com>
-References: <1423954153-22667-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20150214234318.GA27082@free.fr>
+Date: Sun, 15 Feb 2015 01:30:05 +0100
+Subject: [Buildroot] [PATCH 1/4] br-reproduce-build: accept BASE_GIT and
+ OUTPUT_DIR from the env
+In-Reply-To: <20150214220833.1d7e06d8@free-electrons.com>
+References: <cover.1423910953.git.yann.morin.1998@free.fr>
+ <ec8f06991d8b4badd77bccbfa4d5a62aec2d83bb.1423910953.git.yann.morin.1998@free.fr>
+ <20150214220833.1d7e06d8@free-electrons.com>
+Message-ID: <20150215003005.GC27082@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Thomas, All,
 
-On 2015-02-14 17:49 -0500, Frank Hunleth spake thusly:
-> When enabling the RPi camera (start_x=1 in the config.txt), the start_x.elf
-> file needs to remain called start_x.elf. Installing it as start.elf
-> creates an image that won't boot. This change installs the files without
-> changing their names.
+On 2015-02-14 22:08 +0100, Thomas Petazzoni spake thusly:
+> Dear Yann E. MORIN,
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> On Sat, 14 Feb 2015 11:52:03 +0100, Yann E. MORIN wrote:
+> > Currently, when we want to set those variables, one has to edit the
+> > script, so would get a conflict on the next git-pull.
+> > 
+> > Instead, allow the user to specify those variables in the environment.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  utils/br-reproduce-build | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Applied, thanks. Though maybe the chosen environment variable names are
+> a bit too generic to be globally exported in the user's .bashrc file,
+> for example.
 
-NAK.
+Indeed not. However, I use it like:
 
-I just tried booting my RPi (model B, the original) with just start_x.elf
-and fixup_x.dat (instead of start.elf and fixup.dat), and it does not
-boot.
+    BASE_GIT=~/cache/upstream/buildroot OUTPUT_DIR=$(pwd) \
+    ./buildroot-test/utils/br-reproduce-build sha1
 
-So, clearly, that's not the proper fix.
+Which IMHO is good enough. :-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/rpi-firmware/rpi-firmware.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 03178d5..e526063 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -28,8 +28,8 @@ endif
->  
->  define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
->  	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat
->  	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
->  	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
->  	$(RPI_FIRMWARE_INSTALL_DTB)
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
