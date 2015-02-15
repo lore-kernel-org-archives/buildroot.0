@@ -1,36 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 23:11:47 +0100
-Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via
-	the system configuration submenu
-In-Reply-To: <54E11806.2060109@ou.edu> (Steve Kenton's message of "Sun, 15 Feb
- 2015 16:04:54 -0600")
-References: <98184085.31058823.1422895105455.JavaMail.root@openwide.fr>
- <54DF7567.7090308@ou.edu> <87y4nzx7bh.fsf@dell.be.48ers.dk>
- <54E11806.2060109@ou.edu>
-Message-ID: <87sie6x1ss.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Feb 2015 23:20:12 +0100
+Subject: [Buildroot] [git commit] qt5bse: configure: fix gold linker
+	detection
+Message-ID: <20150215222118.11DE98079A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steve" == Steve Kenton <skenton@ou.edu> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ea4501da20d7aaee1b955c84874168a953e3b637
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes http://autobuild.buildroot.net/results/92c/92c3fb4ddb934115b228652bb8c972bb7459bb40/
 
->> So those boards have network interfaces not using eth%d names? That
- >> sounds pretty uncommon to me. Another approach would simply be add an
- >> init script to rename those to eth0 with nameif.
+While the -fuse-ld=gold flag is related to linking, it is an argument to the
+compiler driver to tell it what linker to execute, NOT an option to tell the
+linker to behave differently.
 
-> Yes, two I have to test right now are an Asrock and an ECS mini-ITX
- > and on both
- > the kernel built with buildroot 2015.02-rc1 calls the network
- > interface "sit0"
+So it shouldn't get prefixed with -Wl when passed though the compiler driver.
 
-Really? sit%d is normally for point-to-point tunnels, not for real hw
-devices:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...nfigure-fix-gold-linker-support-detection.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
 
-http://www.deepspace6.net/docs/iproute2tunnel-en.html
-
--- 
-Bye, Peter Korsgaard 
+diff --git a/package/qt5/qt5base/0006-configure-fix-gold-linker-support-detection.patch b/package/qt5/qt5base/0006-configure-fix-gold-linker-support-detection.patch
+new file mode 100644
+index 0000000..053d429
+--- /dev/null
++++ b/package/qt5/qt5base/0006-configure-fix-gold-linker-support-detection.patch
+@@ -0,0 +1,36 @@
++From 6e750053cd6d183173a4c39f2b1080b3c9814d76 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sun, 15 Feb 2015 22:58:07 +0100
++Subject: [PATCH] configure: fix gold linker support detection
++
++Submitted upstream: https://bugreports.qt.io/browse/QTBUG-44487
++
++While the -fuse-ld=gold flag is related to linking, it is an argument to the
++compiler driver to tell it what linker to execute, NOT an option to tell the
++linker to behave differently.
++
++So it shouldn't get prefixed with -Wl when passed though the compiler driver.
++
++Fixes http://autobuild.buildroot.net/results/92c/92c3fb4ddb934115b228652bb8c972bb7459bb40/
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index 043d9fc..987d7f0 100755
++--- a/configure
+++++ b/configure
++@@ -3263,7 +3263,7 @@ fi
++ 
++ # auto-detect -fuse-ld=gold support
++ if [ "$CFG_USE_GOLD_LINKER" != "no" ]; then
++-    if linkerSupportsFlag $TEST_COMPILER -fuse-ld=gold; then
+++    if compilerSupportsFlag $TEST_COMPILER -fuse-ld=gold; then
++        CFG_USE_GOLD_LINKER=yes
++     else
++         if [ "$CFG_USE_GOLD_LINKER" = "yes" ]; then
++-- 
++2.1.3
++
