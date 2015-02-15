@@ -1,40 +1,25 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 15 Feb 2015 21:23:58 +0100
-Subject: [Buildroot] [PATCH for master 2/2] pkg-stats: ignore
-	linux-ext-fbtft.mk and doc-asciidoc.mk
-In-Reply-To: <1424031838-16804-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1424031838-16804-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1424031838-16804-2-git-send-email-fabio.porcedda@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Feb 2015 21:32:59 +0100
+Subject: [Buildroot] [PATCH] package/dvdauthor: fix static build
+In-Reply-To: <1423998648-23454-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sun, 15 Feb 2015 12:10:48 +0100")
+References: <1423998648-23454-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87pp9aykxw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- support/scripts/pkg-stats | 2 ++
- 1 file changed, 2 insertions(+)
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 9af974d..fad7ae9 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -94,6 +94,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 
-     if test \
- 	$i = "boot/common.mk" -o \
-+	$i = "linux/linux-ext-fbtft.mk" -o \
- 	$i = "linux/linux-ext-xenomai.mk" -o \
- 	$i = "linux/linux-ext-rtai.mk" -o \
- 	$i = "package/efl/efl.mk" -o \
-@@ -106,6 +107,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	$i = "package/opengl/opengl.mk" -o \
- 	$i = "package/qt5/qt5.mk" -o \
- 	$i = "package/x11r7/x11r7.mk" -o \
-+	$i = "package/doc-asciidoc.mk" -o \
- 	$i = "package/pkg-autotools.mk" -o \
- 	$i = "package/pkg-cmake.mk" -o \
- 	$i = "package/pkg-kconfig.mk" -o \
+ > Dvdauthor forget to link witk -lbz2 when linking with freetype2.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/1d8/1d83390a3dd9f6bb595e9fc7b321500b4dc533a8/
+
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+
+Committed, thanks. Don't forget to send the patch upstream.
+
 -- 
-2.3.0
+Bye, Peter Korsgaard
