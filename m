@@ -1,43 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 21:46:30 +0100
-Subject: [Buildroot] [git commit branch/next] mpd: bump to version 0.19.9
-Message-ID: <20150215204716.02E518011D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Feb 2015 21:50:01 +0100
+Subject: [Buildroot] [PATCH] autobuild-run: do not build cdrkit using an
+ incompatible toolchain
+In-Reply-To: <1424007332-29351-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1424007332-29351-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150215215001.29c1c587@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d158ede73390b16cdee6ff18e5c101ac78c0e69
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Vicente Olivert Riera,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpd/mpd.hash |    2 +-
- package/mpd/mpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 15 Feb 2015 13:35:32 +0000, Vicente Olivert Riera wrote:
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 5cb6102..9f26f61 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	d3c069d2867e362b343c5babea3e7fe9e6780d3dcb1be38808a8ea48911bae50	mpd-0.19.8.tar.xz
-+sha256	47851423053cd38cfad65be5985b41b7cd5bdbe8d0d13378e11748a28b19f26f	mpd-0.19.9.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7333164..41f3564 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).8
-+MPD_VERSION = $(MPD_VERSION_MAJOR).9
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+> +    # This MIPS uClibc toolchain fails to build the cdrkit package
+> +    if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
+> +       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+> +        return False
+
+So again this needs a test on BR2_STATIC_LIBS=y, otherwise you will
+never be building cdrkit anymore with this toolchain, even in shared
+library builds.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
