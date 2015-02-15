@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 21:45:29 +0100
-Subject: [Buildroot] [PATCH] autossh: bump to version 1.4e
-In-Reply-To: <1424012500-15196-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 15 Feb 2015 12:01:40 -0300")
-References: <1424012500-15196-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egpqykd2.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Feb 2015 21:45:57 +0100
+Subject: [Buildroot] [PATCH] iproute2: bump to version 3.19.0
+In-Reply-To: <1424012518-15239-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 15 Feb 2015 12:01:58 -0300")
+References: <1424012518-15239-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a90eykca.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
