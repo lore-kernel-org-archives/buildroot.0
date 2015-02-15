@@ -1,10 +1,10 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun, 15 Feb 2015 13:33:56 +0100
-Subject: [Buildroot] [PATCH 3/5] busybox: add option to specify config
+Date: Sun, 15 Feb 2015 13:33:57 +0100
+Subject: [Buildroot] [PATCH 4/5] uclibc: add option to specify config
 	fragments
 In-Reply-To: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
 References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <1424003638-21689-3-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <1424003638-21689-4-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 ---
- package/busybox/Config.in  | 6 ++++++
- package/busybox/busybox.mk | 1 +
+ package/uclibc/Config.in | 6 ++++++
+ package/uclibc/uclibc.mk | 1 +
  2 files changed, 7 insertions(+)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index f2f2990..5bc6f9d 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -20,6 +20,12 @@ config BR2_PACKAGE_BUSYBOX_CONFIG
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index aa99a6f..1be9195 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -53,6 +53,12 @@ config BR2_UCLIBC_CONFIG
+ 	  See also docs/README in this package.
+ 	  If unsure, use the default.
  
- 	  Most people will just use the default BusyBox configuration file.
- 
-+config BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES
-+	string "Additional BusyBox configuration fragment files"
++config BR2_UCLIBC_CONFIG_FRAGMENT_FILES
++	string "Additional uClibc configuration fragment files"
 +	help
 +	  A space-seperated list of configuration fragment files,
-+	  that will be merged to the main BusyBox configuration file.
++	  that will be merged to the main uClibc configuration file.
 +
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	bool "Show packages that are also provided by busybox"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 61f6a16..7d2fb79 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -46,6 +46,7 @@ ifndef BUSYBOX_CONFIG_FILE
+ config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
+ 	bool "Enable large file (files > 2 GB) support"
+ 	select BR2_LARGEFILE
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 40e6c6c..9d73b39 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -38,6 +38,7 @@ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
  endif
  
- BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-+BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES))
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
++UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
  
+ UCLIBC_KCONFIG_OPTS = \
+ 	$(UCLIBC_MAKE_FLAGS) \
 -- 
 1.9.1
