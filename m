@@ -1,40 +1,117 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 23:28:55 +0100
-Subject: [Buildroot] [git commit] pkg-stats: ignore linux-ext-fbtft.mk and
-	doc-asciidoc.mk
-Message-ID: <20150215222932.29B8A8079A@busybox.osuosl.org>
+Date: Sun, 15 Feb 2015 23:28:44 +0100
+Subject: [Buildroot] [git commit] pkg-stats: add kconfig and rebar
+	infrastructures
+Message-ID: <20150215222932.2050E805B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff82572a7f484b0f78168e9b506c0881408855e3
+commit: http://git.buildroot.net/buildroot/commit/?id=cd0c7c37c22b4d59d8258ec6a85613d680fca860
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ support/scripts/pkg-stats |   32 ++++++++++++++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 9af974d..fad7ae9 100755
+index 48a5536..9af974d 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -94,6 +94,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+@@ -73,9 +73,11 @@ td.lotsofpatches {
  
-     if test \
- 	$i = "boot/common.mk" -o \
-+	$i = "linux/linux-ext-fbtft.mk" -o \
- 	$i = "linux/linux-ext-xenomai.mk" -o \
- 	$i = "linux/linux-ext-rtai.mk" -o \
- 	$i = "package/efl/efl.mk" -o \
-@@ -106,6 +107,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	$i = "package/opengl/opengl.mk" -o \
- 	$i = "package/qt5/qt5.mk" -o \
+ autotools_packages=0
+ cmake_packages=0
++kconfig_packages=0
+ luarocks_package=0
+ perl_packages=0
+ python_packages=0
++rebar_packages=0
+ virtual_packages=0
+ generic_packages=0
+ manual_packages=0
+@@ -106,9 +108,11 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
  	$i = "package/x11r7/x11r7.mk" -o \
-+	$i = "package/doc-asciidoc.mk" -o \
  	$i = "package/pkg-autotools.mk" -o \
  	$i = "package/pkg-cmake.mk" -o \
- 	$i = "package/pkg-kconfig.mk" -o \
++	$i = "package/pkg-kconfig.mk" -o \
+ 	$i = "package/pkg-luarocks.mk" -o \
+ 	$i = "package/pkg-perl.mk" -o \
+ 	$i = "package/pkg-python.mk" -o \
++	$i = "package/pkg-rebar.mk" -o \
+ 	$i = "package/pkg-virtual.mk" -o \
+ 	$i = "package/pkg-download.mk" -o \
+ 	$i = "package/pkg-generic.mk" -o \
+@@ -134,6 +138,11 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 	hastarget=1
+     fi
+ 
++    if grep -E "\(kconfig-package\)" $i > /dev/null ; then
++	infratype="kconfig"
++	hastarget=1
++    fi
++
+     if grep -E "\(host-luarocks-package\)" $i > /dev/null ; then
+ 	infratype="luarocks"
+ 	hashost=1
+@@ -163,6 +172,17 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 	infratype="python"
+ 	hastarget=1
+     fi
++
++    if grep -E "\(host-rebar-package\)" $i > /dev/null ; then
++	infratype="rebar"
++	hashost=1
++    fi
++
++    if grep -E "\(rebar-package\)" $i > /dev/null ; then
++	infratype="rebar"
++	hastarget=1
++    fi
++
+     if grep -E "\(host-virtual-package\)" $i > /dev/null ; then
+ 	infratype="virtual"
+ 	hashost=1
+@@ -207,12 +227,16 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 	autotools_packages=$(($autotools_packages+1))
+     elif [ ${infratype} = "cmake" ]; then
+ 	cmake_packages=$(($cmake_packages+1))
++    elif [ ${infratype} = "kconfig" ]; then
++	kconfig_packages=$(($kconfig_packages+1))
+     elif [ ${infratype} = "luarocks" ]; then
+ 	luarocks_packages=$(($luarocks_packages+1))
+     elif [ ${infratype} = "perl" ]; then
+ 	perl_packages=$(($perl_packages+1))
+     elif [ ${infratype} = "python" ]; then
+ 	python_packages=$(($python_packages+1))
++    elif [ ${infratype} = "rebar" ]; then
++	rebar_packages=$(($rebar_packages+1))
+     elif [ ${infratype} = "virtual" ]; then
+ 	virtual_packages=$(($virtual_packages+1))
+     elif [ ${infratype} = "generic" ]; then
+@@ -321,6 +345,10 @@ echo "<td>Packages using the <i>luarocks</i> infrastructure</td>"
+ echo "<td>$luarocks_packages</td>"
+ echo "</tr>"
+ echo "<tr>"
++echo "<td>Packages using the <i>kconfig</i> infrastructure</td>"
++echo "<td>$kconfig_packages</td>"
++echo "</tr>"
++echo "<tr>"
+ echo "<td>Packages using the <i>perl</i> infrastructure</td>"
+ echo "<td>$perl_packages</td>"
+ echo "</tr>"
+@@ -329,6 +357,10 @@ echo "<td>Packages using the <i>python</i> infrastructure</td>"
+ echo "<td>$python_packages</td>"
+ echo "</tr>"
+ echo "<tr>"
++echo "<td>Packages using the <i>rebar</i> infrastructure</td>"
++echo "<td>$rebar_packages</td>"
++echo "</tr>"
++echo "<tr>"
+ echo "<td>Packages using the <i>virtual</i> infrastructure</td>"
+ echo "<td>$virtual_packages</td>"
+ echo "</tr>"
