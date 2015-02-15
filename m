@@ -1,34 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 15 Feb 2015 10:51:03 +0200
-Subject: [Buildroot] [PATCH] Config.in: remove text denoting central package
-	infra
-Message-ID: <25aff43a817e1156e747e778df58adf119fa367e.1423990263.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 15 Feb 2015 10:56:41 +0100
+Subject: [Buildroot] [PATCH 1/1] x11r7/xserver_xorg-server: security bump to
+	version 1.16.4
+Message-ID: <1423994201-25595-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The central package infrastructure handles all packages for quite some time
-now, so this note is no longer needed.
+Fixes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+CVE-2015-0255 - Information leak in the XkbSetGeometry request of X servers
+http://www.x.org/wiki/Development/Security/Advisory-2015-02-10/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash |    6 +++---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index f5b6c7346b6a..ce239d668206 100644
---- a/Config.in
-+++ b/Config.in
-@@ -167,8 +167,6 @@ config BR2_PRIMARY_SITE
- 	  default if the file is not found.
- 	  Valid URIs are URIs recognized by $(WGET) and scp URIs of the form
- 	  scp://[user@]host:path.
--	  NOTE: This works for all packages using the central package
--	  infrastructure (generic, autotools, cmake, ...)
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 974e59e..5a8f9c3 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,3 +1,3 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-December/002506.html
+-sha1	cf903e3b02cd4f4b075d139ee7d6b0a3741cd9cf				xorg-server-1.16.3.tar.bz2
+-sha256	5e0f443238af1078b48f6eea98a382861b59187da221c2cf714d31c1d560b0fb	xorg-server-1.16.3.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-February/002532.html
++sha1	b2ccace1316fb94a23514a760227c156bd6116cd  				xorg-server-1.16.4.tar.bz2
++sha256	abb6e1cc9213a9915a121f48576ff6739a0b8cdb3d32796f9a7743c9a6efc871	xorg-server-1.16.4.tar.bz2
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index a9b9921..bde2b95 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PRIMARY_SITE_ONLY
- 	bool "Only allow downloads from primary download site"
+-XSERVER_XORG_SERVER_VERSION = 1.16.3
++XSERVER_XORG_SERVER_VERSION = 1.16.4
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
 -- 
-2.1.4
+1.7.10.4
