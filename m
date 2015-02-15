@@ -1,10 +1,10 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun, 15 Feb 2015 13:33:58 +0100
-Subject: [Buildroot] [PATCH 5/5] barebox: add option to specify config
+Date: Sun, 15 Feb 2015 13:33:55 +0100
+Subject: [Buildroot] [PATCH 2/5] linux: add option to specify config
 	fragments
 In-Reply-To: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
 References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <1424003638-21689-5-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <1424003638-21689-2-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 ---
- boot/barebox/Config.in  | 6 ++++++
- boot/barebox/barebox.mk | 1 +
+ linux/Config.in | 6 ++++++
+ linux/linux.mk  | 1 +
  2 files changed, 7 insertions(+)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 48431bd..64e3196 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -91,6 +91,12 @@ config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
+diff --git a/linux/Config.in b/linux/Config.in
+index 95c847b..15dc3b4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -161,6 +161,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
  	help
- 	  Path to the barebox configuration file
+ 	  Path to the kernel configuration file
  
-+config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
++config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
 +	string "Additional configuration fragment files"
 +	help
-+	  A space-seperated list of configuration fragment files,
-+	  that will be merged to the main Barebox configuration file.
++	  A space-seperated list of kernel configuration fragment files,
++	  that will be merged to the main kernel configuration file.
 +
- config BR2_TARGET_BAREBOX_BAREBOXENV
- 	bool "bareboxenv tool in target"
- 	help
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index b829ae7..41f487b 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -59,6 +59,7 @@ BAREBOX_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
+ #
+ # Binary format
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fc90fc5..f564530 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -175,6 +175,7 @@ KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
  endif
  
- BAREBOX_KCONFIG_FILE = $(BAREBOX_SOURCE_CONFIG)
-+BAREBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES))
- BAREBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- BAREBOX_KCONFIG_OPTS = $(BAREBOX_MAKE_FLAGS)
+ LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
++LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
  
 -- 
 1.9.1
