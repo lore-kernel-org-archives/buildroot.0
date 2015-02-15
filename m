@@ -1,104 +1,42 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 14 Feb 2015 20:25:56 -0500
-Subject: [Buildroot] [PATCH] rpi-firmware: keep fixup.dat and start.elf
-	name
-In-Reply-To: <CA+-urNTMfyk9PRKXvRzmHiUcingkY2fi0vMrYR0RsWGB3XZ40g@mail.gmail.com>
-References: <1423954153-22667-1-git-send-email-fhunleth@troodon-software.com>
- <20150214234318.GA27082@free.fr>
- <CA+-urNTMfyk9PRKXvRzmHiUcingkY2fi0vMrYR0RsWGB3XZ40g@mail.gmail.com>
-Message-ID: <CA+-urNTpZqp1SSTzFkSLv-66ncOZgFBYiVUbwGDqDe9RNt_j9w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Feb 2015 07:14:59 +0100
+Subject: [Buildroot] [PATCH v2] Linux kernel: add support for config
+ fragment files
+In-Reply-To: <20150214232036.GI3886@free.fr>
+References: <1423921601-20473-1-git-send-email-bos@je-eigen-domein.nl>
+ <20150214165911.GE3886@free.fr>
+ <54DFCE8C.9060107@je-eigen-domein.nl>
+ <20150214232036.GI3886@free.fr>
+Message-ID: <20150215071459.09b593fb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Yann, Floris,
 
-On Sat, Feb 14, 2015 at 7:45 PM, Frank Hunleth
-<fhunleth@troodon-software.com> wrote:
-> Yann,
->
-> On Sat, Feb 14, 2015 at 6:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Frank, All,
->>
->> On 2015-02-14 17:49 -0500, Frank Hunleth spake thusly:
->>> When enabling the RPi camera (start_x=1 in the config.txt), the start_x.elf
->>> file needs to remain called start_x.elf. Installing it as start.elf
->>> creates an image that won't boot. This change installs the files without
->>> changing their names.
->>>
->>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->>
->> NAK.
->>
->> I just tried booting my RPi (model B, the original) with just start_x.elf
->> and fixup_x.dat (instead of start.elf and fixup.dat), and it does not
->> boot.
->
-> Did you put "start_x=1" in your config.txt?
->
->> So, clearly, that's not the proper fix.
->
-> Here's what I'm seeing:
->
-> no start_x=1, start_x.elf renamed as start.elf -> boots, but no camera
+On Sun, 15 Feb 2015 00:20:36 +0100, Yann E. MORIN wrote:
 
-I just retested this configuration, and the camera is working now.
-Sigh. That means that I don't need the patch that I just submitted. I
-have no clue how I was able to reproduce the issue a few times, but
-now I can't. Anyway, thanks for checking it out so quickly and sorry
-for the noise.
+> There are three options here:
+> 
+>  1- we just copy the .config back to FOO_KCONFIG_FILE, and leave to the
+>     user the duty to further strip it if need be;
+> 
+>  2- we try to be smart and deal with regenerating a config file that
+>     does not contain any of the fragments, and we fail (because that is
+>     really complex);
+> 
+>  3- we just error out in case fragments are being used, because we don't
+>     know how to save a (def)config file in this case (see above: it's
+>     really compex).
+> 
+> My opinion would be we go with 3 (my prefernce) or 1, not 2.
 
-Frank
+My preference would also be option (3).
 
-> no start_x=1, start_x.elf -> doesn't boot (your setup, I think)
-> start_x=1, start.elf -> doesn't boot
-> start_x=1, start_x.elf -> boots and camera works
->
-> I'm certainly open to other solutions. Well, I guess that I'd prefer
-> to not rename start.elf back to start_x.elf in a post build step, but
-> if there's another option, I'd take it. The Raspberry Pi docs that
-> I've found so far on this seem pretty light.
->
-> Thanks,
-> Frank
->
->>
->> Regards,
->> Yann E. MORIN.
->>
->>> ---
->>>  package/rpi-firmware/rpi-firmware.mk | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
->>> index 03178d5..e526063 100644
->>> --- a/package/rpi-firmware/rpi-firmware.mk
->>> +++ b/package/rpi-firmware/rpi-firmware.mk
->>> @@ -28,8 +28,8 @@ endif
->>>
->>>  define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
->>>       $(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
->>> -     $(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
->>> -     $(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
->>> +     $(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf
->>> +     $(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat
->>>       $(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
->>>       $(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
->>>       $(RPI_FIRMWARE_INSTALL_DTB)
->>> --
->>> 1.9.1
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> --
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
