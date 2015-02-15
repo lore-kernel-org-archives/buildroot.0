@@ -1,58 +1,134 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 15 Feb 2015 18:30:10 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-02-13
-In-Reply-To: <20150214224243.47b77b67@free-electrons.com>
-References: <20150214073013.E7748101008@stock.ovh.net>
- <20150214224243.47b77b67@free-electrons.com>
-Message-ID: <20150215173009.GK32479@waldemar-brodkorb.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 15 Feb 2015 18:10:58 +0000
+Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: fix libunwind on MIPS
+	with 32-bit pointers
+Message-ID: <1424023859-37365-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
+Adding a patch to fix a compilation problem of Xorg + libunwind support
+when building it on MIPS variants with 32-bit pointers.
 
-> Hello,
-> 
-> On Sat, 14 Feb 2015 08:30:13 +0100 (CET), Thomas Petazzoni wrote:
-> 
-> >          sh4 |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/7e3dc7d48d2c62867ea6f95615d583dee9b42e4b/
-> 
-> The infamous static linking problem with uClibc, which still exists on
-> SH4 because the toolchains have not been rebuilt since a long time.
-> Would anyone be willing to look at fixing the SH4 support in the
-> internal toolchain backend? It's broken due to SH4 requiring some form
-> of multilib support.
+Related:
 
-I just build a sh4 toolchain with uClibc 0.9.33.2. No issues.
-./output/host/usr/bin/sh4-buildroot-linux-uclibc-gcc -v
-Using built-in specs.
-COLLECT_GCC=./output/host/usr/bin/sh4-buildroot-linux-uclibc-gcc
-COLLECT_LTO_WRAPPER=/home/wbx/br/output/host/usr/libexec/gcc/sh4-buildroot-linux-uclibc/4.8.4/lto-wrapper
-Target: sh4-buildroot-linux-uclibc
-Configured with: ./configure --prefix=/home/wbx/br/output/host/usr
---sysconfdir=/home/wbx/br/output/host/etc --enable-static
---target=sh4-buildroot-linux-uclibc
---with-sysroot=/home/wbx/br/output/host/usr/sh4-buildroot-linux-uclibc/sysroot
---disable-__cxa_atexit --with-gnu-ld --disable-libssp
---disable-multilib --with-gmp=/home/wbx/br/output/host/usr
---with-mpfr=/home/wbx/br/output/host/usr --enable-target-optspace
---disable-libquadmath --disable-libsanitizer --enable-tls
---disable-libmudflap --enable-threads
---with-mpc=/home/wbx/br/output/host/usr --without-isl
---without-cloog --disable-decimal-float --with-pkgversion='Buildroot
-2015.02-rc1-00016-gd45454d' --with-bugurl=http://bugs.buildroot.net/
---enable-languages=c --disable-largefile
---enable-poison-system-directories
---with-build-time-tools=/home/wbx/br/output/host/usr/sh4-buildroot-linux-uclibc/bin
---enable-shared --disable-libgomp
-Thread model: posix
-gcc version 4.8.4 (Buildroot 2015.02-rc1-00016-gd45454d)
+  http://lists.busybox.net/pipermail/buildroot/2014-December/114404.html
 
-What is the exact problem?
+Patch submitted upstream:
 
-best regards
-        Waldemar
+  http://lists.x.org/archives/xorg-devel/2015-January/045226.html
+
+Patch reviewed by an Xorg developer:
+
+  http://lists.x.org/archives/xorg-devel/2015-January/045383.html
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/87b/87be2c95957f9925c1258812e536df72689fc5da/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ ...04-backtrace.c-Fix-word-cast-to-a-pointer.patch |   90 ++++++++++++++++++++
+ 1 files changed, 90 insertions(+), 0 deletions(-)
+ create mode 100644 package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch
+
+diff --git a/package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch b/package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch
+new file mode 100644
+index 0000000..08944d6
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch
+@@ -0,0 +1,90 @@
++backtrace.c: Fix word cast to a pointer
++
++This patch fixes a compilation problem of Xorg + libunwind support when
++building it on MIPS variants with 32-bit pointers.
++
++Related:
++
++  http://lists.busybox.net/pipermail/buildroot/2014-December/114404.html
++
++Patch submitted upstream:
++
++  http://lists.x.org/archives/xorg-devel/2015-January/045226.html
++
++Patch reviewed by an Xorg developer:
++
++  http://lists.x.org/archives/xorg-devel/2015-January/045383.html
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 84f04e0274661401a91efd4e9b21dccc1396e1d6 Mon Sep 17 00:00:00 2001
++From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Date: Wed, 3 Dec 2014 11:34:47 +0000
++Subject: [PATCH] backtrace.c: Fix word cast to a pointer
++
++backtrace.c uses a word size provided by libunwind. In some
++architectures like MIPS, libunwind makes that word size 64-bit for all
++variants of the architecture.
++
++In the lines #90 and #98, backtrace.c tries to do a cast to a pointer,
++which fails in all MIPS variants with 32-bit pointers, like MIPS32 or
++MIPS64 n32, because it's trying to do a cast from a 64-bit wide variable
++to a 32-bit pointer:
++
++Making all in os
++make[2]: Entering directory
++`/home/test/test/1/output/build/xserver_xorg-server-1.15.1/os'
++  CC     WaitFor.lo
++  CC     access.lo
++  CC     auth.lo
++  CC     backtrace.lo
++backtrace.c: In function 'xorg_backtrace':
++backtrace.c:90:20: error: cast to pointer from integer of different size
++[-Werror=int-to-pointer-cast]
++	 if (dladdr((void *)(pip.start_ip + off), &dlinfo) &&
++dlinfo.dli_fname &&
++		    ^
++backtrace.c:98:13: error: cast to pointer from integer of different size
++[-Werror=int-to-pointer-cast]
++	     (void *)(pip.start_ip + off));
++	     ^
++cc1: some warnings being treated as errors
++make[2]: *** [backtrace.lo] Error 1
++make[2]: *** Waiting for unfinished jobs....
++
++Making the cast to a pointer-sized integer, and then to a pointer fixes
++the problem.
++
++Related:
++  https://bugs.freedesktop.org/show_bug.cgi?id=79939
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++---
++ os/backtrace.c |    4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/os/backtrace.c b/os/backtrace.c
++index 3d1195b..fd129ef 100644
++--- a/os/backtrace.c
+++++ b/os/backtrace.c
++@@ -87,7 +87,7 @@ xorg_backtrace(void)
++             procname[1] = 0;
++         }
++ 
++-        if (dladdr((void *)(pip.start_ip + off), &dlinfo) && dlinfo.dli_fname &&
+++        if (dladdr((void *)(uintptr_t)(pip.start_ip + off), &dlinfo) && dlinfo.dli_fname &&
++                 *dlinfo.dli_fname)
++             filename = dlinfo.dli_fname;
++         else
++@@ -95,7 +95,7 @@ xorg_backtrace(void)
++ 
++         ErrorFSigSafe("%u: %s (%s%s+0x%x) [%p]\n", i++, filename, procname,
++             ret == -UNW_ENOMEM ? "..." : "", (int)off,
++-            (void *)(pip.start_ip + off));
+++            (void *)(uintptr_t)(pip.start_ip + off));
++ 
++         ret = unw_step(&cursor);
++         if (ret < 0)
++-- 
++1.7.1
++
+-- 
+1.7.1
