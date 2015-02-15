@@ -1,39 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 15 Feb 2015 12:16:28 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.9
-Message-ID: <1424013388-3489-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 15 Feb 2015 15:44:09 +0000
+Subject: [Buildroot] [PATCH 1/3] libinput: bump version to 0.10.0
+Message-ID: <1424015051-14779-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+- Bump version to 0.10.0
+- Update the hash file
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 5cb6102..9f26f61 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libinput/libinput.hash |    4 ++--
+ package/libinput/libinput.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index fa246d4..f2791e0 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	d3c069d2867e362b343c5babea3e7fe9e6780d3dcb1be38808a8ea48911bae50	mpd-0.19.8.tar.xz
-+sha256	47851423053cd38cfad65be5985b41b7cd5bdbe8d0d13378e11748a28b19f26f	mpd-0.19.9.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7333164..41f3564 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2014-December/018750.html
+-sha256 129f485afe5e4a9394641293991c97cb99f5f3338340d0d65b704ff463d1579e  libinput-0.7.0.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-February/019827.html
++sha256  4ce001f80ff1a6bf547784d02125648bf8abe60db7d3d5e0020294d5215c1441  libinput-0.10.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index bf4537b..5a793b0 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).8
-+MPD_VERSION = $(MPD_VERSION_MAJOR).9
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
+-LIBINPUT_VERSION = 0.7.0
++LIBINPUT_VERSION = 0.10.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
 -- 
-2.0.5
+1.7.1
