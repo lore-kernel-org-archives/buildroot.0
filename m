@@ -1,121 +1,84 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun, 15 Feb 2015 14:19:33 +0100
-Subject: [Buildroot] [PATCH] linux: add AUFS kernel extension
-Message-ID: <1424006373-1663-1-git-send-email-bos@je-eigen-domein.nl>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 15 Feb 2015 14:19:32 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/x11r7/xserver_xorg-server:
+	Relax dependency on libdrm
+Message-ID: <1424006372-4230-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
----
- linux/Config.ext.in     | 19 +++++++++++++++++++
- linux/linux-ext-aufs.mk | 24 ++++++++++++++++++++++++
- package/aufs/Config.in  | 11 +++++++++++
- package/aufs/aufs.mk    | 15 +++++++++++++++
- 4 files changed, 69 insertions(+)
- create mode 100644 linux/linux-ext-aufs.mk
- create mode 100644 package/aufs/Config.in
- create mode 100644 package/aufs/aufs.mk
+xserver_xorg-server needs libdrm only when DRI is enabled, see configure.ac,
+line 1280. But since version 1.16.99.901 configure searches for optional libdrm
+support in configure.ac, line 2041,
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 8f15687..04fe7a1 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -29,6 +29,25 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
- 	  Download it at http://download.gna.org/adeos/patches/v2.6/$(ARCH)/
- 	  and verify that your kernel version in buildroot matches.
+http://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?id=2feda3b6b58f46cef91ea41312aac9021a703777
+
+as well due to libdrm support being enabled by default, but the macro
+PKG_CHECK_EXISTS used in line 2041 does not add libdrm-specific CFLAGS to
+Makefile causing the build to fail:
+
+In file included from dumb_bo.c:36:0:
+/home/br/br7/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/xf86drm.h:40:17: fatal error: drm.h: No such file or directory
+ #include <drm.h>
+
+This patch enables libdrm support only when dri support is enabled, which in
+turn depends on mesa3d. Since mesa3d selects libdrm already remove that line
+from Config.in as well.
+
+Tested using this defconfig
+
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/Config.in              |    1 -
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    8 ++++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 7918495..db8a54d 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	bool "xorg-server"
+-	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	select BR2_PACKAGE_LIBPCIACCESS if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	# We need a SHA1 implementation. If either openssl or
+ 	# libgcrypt are already part of the build, we'll use one of
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index b5a0df0..472c0bc 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -66,7 +66,7 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
  
-+# AUFS
-+config BR2_LINUX_KERNEL_EXT_AUFS
-+	bool "AUFS patch"
-+	select BR2_PACKAGE_AUFS
-+	help
-+	  AUFS patch
-+
-+	  This option patches the kernel.
-+	  You need to enable CONFIG_AUFS_FS in kernel configuration seperately.
-+
-+	  http://aufs.sourceforge.net/
-+
-+config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
-+	depends on BR2_LINUX_KERNEL_EXT_AUFS
-+	string "AUFS version"
-+	help
-+	  AUFS git branch, e.g. aufs3.18.1+
-+	  Needs to match your kernel version.
-+
- # RTAI
- config BR2_LINUX_KERNEL_EXT_RTAI
- 	bool "RTAI Real-time patch"
-diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
-new file mode 100644
-index 0000000..c3ff2dc
---- /dev/null
-+++ b/linux/linux-ext-aufs.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+# Linux aufs extension
-+#
-+# Patch the linux kernel with aufs extension
-+################################################################################
-+
-+ifeq ($(BR2_LINUX_KERNEL_EXT_AUFS),y)
-+# Add dependency to aufs package (download helper for the aufs source)
-+LINUX_DEPENDENCIES += aufs
-+
-+AUFS_PATCHES = kbuild base mmap standalone
-+
-+define AUFS_PREPARE_KERNEL
-+	$(foreach p,$(AUFS_PATCHES),./support/scripts/apply-patches.sh $(LINUX_DIR) $(AUFS_DIR) *$(p).patch;)
-+	cp -af $(AUFS_DIR)/fs $(AUFS_DIR)/Documentation $(LINUX_DIR)
-+	cp -af $(AUFS_DIR)/include/uapi/linux/aufs_type.h \
-+		$(LINUX_DIR)/include/uapi/linux
-+	cp -af $(AUFS_DIR)/include/uapi/linux/aufs_type.h \
-+		$(STAGING_DIR)/usr/include/linux
-+endef
-+
-+LINUX_PRE_PATCH_HOOKS += AUFS_PREPARE_KERNEL
-+
-+endif #BR2_LINUX_KERNEL_EXT_AUFS
-diff --git a/package/aufs/Config.in b/package/aufs/Config.in
-new file mode 100644
-index 0000000..d924278
---- /dev/null
-+++ b/package/aufs/Config.in
-@@ -0,0 +1,11 @@
-+# Prompt-less option, because this package is not doing anything
-+# except downloading the AUFS sources. The real work is done by a
-+# Linux extension.
-+config BR2_PACKAGE_AUFS
-+	bool
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  AUFS
-+	  This is only the download helper for the kernel patch.
-+
-+	  http://aufs.sourceforge.net/
-diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-new file mode 100644
-index 0000000..fbee85c
---- /dev/null
-+++ b/package/aufs/aufs.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# AUFS download helper
-+#
-+################################################################################
-+
-+AUFS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_AUFS_VERSION))
-+AUFS_SITE = git://git.code.sf.net/p/aufs/aufs3-standalone
-+AUFS_LICENSE = GPLv2
-+
-+ifeq ($(AUFS_VERSION),)
-+$(error BR2_LINUX_KERNEL_EXT_AUFS_VERSION must be set to the AUFS branch matching your kernel, e.g. "aufs3.18.1+")
-+endif
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
+-XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess libdrm
++XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xorg
+ endif
+@@ -106,10 +106,10 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
+-XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
++XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
+ else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-libdrm --disable-glx
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
 -- 
-1.9.1
+1.7.10.4
