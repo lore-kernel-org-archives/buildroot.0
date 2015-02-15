@@ -1,45 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 21:44:59 +0100
-Subject: [Buildroot] [git commit branch/next] ffmpeg: bump version to 2.5.4
-Message-ID: <20150215204715.D1BCF8011D@busybox.osuosl.org>
+Date: Sun, 15 Feb 2015 21:46:09 +0100
+Subject: [Buildroot] [git commit branch/next] httping: bump to version 2.4
+Message-ID: <20150215204715.EBF5080797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b32eac742e426e2a8e3e2cb01a4b17491c2bdfef
+commit: http://git.buildroot.net/buildroot/commit/?id=0514d8f0426b0cc228e89cdf891532ba220faff2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump version to 2.5.4
-- Update the hash file
+Also add hash file.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.hash |    2 +-
- package/ffmpeg/ffmpeg.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/httping/httping.hash |    2 ++
+ package/httping/httping.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index b1d8c95..c39174f 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	9d383d7ef9dffe6980849a93accfef848e197fdac9b1fbd02fca2798f863411a	ffmpeg-2.5.3.tar.bz2
-+sha256  cc91c166c2b0ad9aacc533e4d5637912df583b43834c68aeec12ded7e082a286  ffmpeg-2.5.4.tar.bz2
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f9c1d94..68a28a2 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/httping/httping.hash b/package/httping/httping.hash
+new file mode 100644
+index 0000000..0368f75
+--- /dev/null
++++ b/package/httping/httping.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	dab59f02b08bfbbc978c005bb16d2db6fe21e1fc841fde96af3d497ddfc82084	httping-2.4.tgz
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index e868463..7e76090 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 2.5.3
-+FFMPEG_VERSION = 2.5.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-HTTPING_VERSION = 2.3.4
++HTTPING_VERSION = 2.4
+ HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
+ HTTPING_SITE = http://www.vanheusden.com/httping
+ HTTPING_LICENSE = GPLv2
