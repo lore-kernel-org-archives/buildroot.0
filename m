@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 21:46:09 +0100
-Subject: [Buildroot] [git commit branch/next] httping: bump to version 2.4
-Message-ID: <20150215204715.EBF5080797@busybox.osuosl.org>
+Date: Sun, 15 Feb 2015 21:45:41 +0100
+Subject: [Buildroot] [git commit branch/next] iproute2: bump to version
+	3.19.0
+Message-ID: <20150215204715.E3C967F900@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0514d8f0426b0cc228e89cdf891532ba220faff2
+commit: http://git.buildroot.net/buildroot/commit/?id=47ecd4a841c70148903bb3c534e589d8b6df4882
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/httping/httping.hash |    2 ++
- package/httping/httping.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/iproute2/iproute2.hash |    2 +-
+ package/iproute2/iproute2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/httping/httping.hash b/package/httping/httping.hash
-new file mode 100644
-index 0000000..0368f75
---- /dev/null
-+++ b/package/httping/httping.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	dab59f02b08bfbbc978c005bb16d2db6fe21e1fc841fde96af3d497ddfc82084	httping-2.4.tgz
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index e868463..7e76090 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 35dc554..40dd0a5 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,2 +1,2 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	d5a182154abd0749b1df7d1649115a32c65f559951477396203b1f514dbff1df	iproute2-3.18.0.tar.xz
++sha256	e2f9f8c36e166f2ba6c0e1e7a9ad84cdf7c1615b93df49dac44563d7b57fd7b0	iproute2-3.19.0.tar.xz
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 0838463..688ae97 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HTTPING_VERSION = 2.3.4
-+HTTPING_VERSION = 2.4
- HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
- HTTPING_SITE = http://www.vanheusden.com/httping
- HTTPING_LICENSE = GPLv2
+-IPROUTE2_VERSION = 3.18.0
++IPROUTE2_VERSION = 3.19.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex
