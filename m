@@ -1,48 +1,23 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Feb 2015 23:54:18 +0100
-Subject: [Buildroot] Buildroot 2015.02-rc2 released
-Message-ID: <87fva6wztx.fsf@dell.be.48ers.dk>
+From: Jordi Llonch <jordi.llonch@rochsystems.com>
+Date: Mon, 16 Feb 2015 10:12:09 +1100
+Subject: [Buildroot] python: host-python ssl support
+Message-ID: <etPan.54e127c9.6b8b4567.29a8@MacBook-Pro-de-Jordi.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Buildroot 2015.02-rc2 is released - Go download it at:
+SSL support is explicitly disabled for host-python and needed by the latest pip to install from https. As per today, all the downloads from Python Package Index are https.
 
-http://buildroot.net/downloads/buildroot-2015.02-rc2.tar.gz
+I saw in the list a patch from Rohan Fletcher implementing?BR2_HOST_PYTHON_SSL_SUPPORT and looks it was never merged.
 
-or
+Following the instructions in section 17.8 from Buildroot manual does not work for me. Am I doing something wrong? What is the correct strategy for building a python application with external dependencies?
 
-http://buildroot.net/downloads/buildroot-2015.02-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2015.02-rc1..
-     7  Romain Naour
-     4  Peter Korsgaard
-     2  Baruch Siach
-     2  Fabio Porcedda
-     2  Frank Hunleth
-     2  Vicente Olivert Riera
-     1  Bernd Kuhls
-     1  Danomi Manchego
-     1  Thomas Petazzoni
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc2
-
-Expect the final 2015.02 release by the end of the month.
-
--- 
-Bye, Peter Korsgaard
+Thanks in advance,
+Jordi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150216/8a4a258b/attachment.html>
