@@ -1,127 +1,42 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun, 15 Feb 2015 14:33:10 +0100
-Subject: [Buildroot] [PATCH v2] linux: add AUFS kernel extension
-Message-ID: <1424007190-5878-1-git-send-email-bos@je-eigen-domein.nl>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 15 Feb 2015 13:35:32 +0000
+Subject: [Buildroot] [PATCH] autobuild-run: do not build cdrkit using an
+	incompatible toolchain
+Message-ID: <1424007332-29351-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+This MIPS-uClibc-Static toolchain can't build cdrkit. The issue was
+reported upstream on October-2014:
 
----
-Changes v1 -> v2:
-- Fix AUFS version may not be empty check
----
- linux/Config.ext.in     | 19 +++++++++++++++++++
- linux/linux-ext-aufs.mk | 24 ++++++++++++++++++++++++
- package/aufs/Config.in  | 11 +++++++++++
- package/aufs/aufs.mk    | 17 +++++++++++++++++
- 4 files changed, 71 insertions(+)
- create mode 100644 linux/linux-ext-aufs.mk
- create mode 100644 package/aufs/Config.in
- create mode 100644 package/aufs/aufs.mk
+http://lists.busybox.net/pipermail/uclibc/2014-October/048699.html
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 8f15687..04fe7a1 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -29,6 +29,25 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
- 	  Download it at http://download.gna.org/adeos/patches/v2.6/$(ARCH)/
- 	  and verify that your kernel version in buildroot matches.
+Fixes:
+
+  http://autobuild.buildroot.net/results/b1ec2e994c9b1f2629f37f54e04b228ad13ce3ca/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ scripts/autobuild-run |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 6ca1bf0..db51c3f 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -319,6 +319,10 @@ def fixup_config(instance, sysinfo):
+     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
+         return False
++    # This MIPS uClibc toolchain fails to build the cdrkit package
++    if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++        return False
  
-+# AUFS
-+config BR2_LINUX_KERNEL_EXT_AUFS
-+	bool "AUFS patch"
-+	select BR2_PACKAGE_AUFS
-+	help
-+	  AUFS patch
-+
-+	  This option patches the kernel.
-+	  You need to enable CONFIG_AUFS_FS in kernel configuration seperately.
-+
-+	  http://aufs.sourceforge.net/
-+
-+config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
-+	depends on BR2_LINUX_KERNEL_EXT_AUFS
-+	string "AUFS version"
-+	help
-+	  AUFS git branch, e.g. aufs3.18.1+
-+	  Needs to match your kernel version.
-+
- # RTAI
- config BR2_LINUX_KERNEL_EXT_RTAI
- 	bool "RTAI Real-time patch"
-diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
-new file mode 100644
-index 0000000..c3ff2dc
---- /dev/null
-+++ b/linux/linux-ext-aufs.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+# Linux aufs extension
-+#
-+# Patch the linux kernel with aufs extension
-+################################################################################
-+
-+ifeq ($(BR2_LINUX_KERNEL_EXT_AUFS),y)
-+# Add dependency to aufs package (download helper for the aufs source)
-+LINUX_DEPENDENCIES += aufs
-+
-+AUFS_PATCHES = kbuild base mmap standalone
-+
-+define AUFS_PREPARE_KERNEL
-+	$(foreach p,$(AUFS_PATCHES),./support/scripts/apply-patches.sh $(LINUX_DIR) $(AUFS_DIR) *$(p).patch;)
-+	cp -af $(AUFS_DIR)/fs $(AUFS_DIR)/Documentation $(LINUX_DIR)
-+	cp -af $(AUFS_DIR)/include/uapi/linux/aufs_type.h \
-+		$(LINUX_DIR)/include/uapi/linux
-+	cp -af $(AUFS_DIR)/include/uapi/linux/aufs_type.h \
-+		$(STAGING_DIR)/usr/include/linux
-+endef
-+
-+LINUX_PRE_PATCH_HOOKS += AUFS_PREPARE_KERNEL
-+
-+endif #BR2_LINUX_KERNEL_EXT_AUFS
-diff --git a/package/aufs/Config.in b/package/aufs/Config.in
-new file mode 100644
-index 0000000..d924278
---- /dev/null
-+++ b/package/aufs/Config.in
-@@ -0,0 +1,11 @@
-+# Prompt-less option, because this package is not doing anything
-+# except downloading the AUFS sources. The real work is done by a
-+# Linux extension.
-+config BR2_PACKAGE_AUFS
-+	bool
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  AUFS
-+	  This is only the download helper for the kernel patch.
-+
-+	  http://aufs.sourceforge.net/
-diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-new file mode 100644
-index 0000000..83dd00f
---- /dev/null
-+++ b/package/aufs/aufs.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# AUFS download helper
-+#
-+################################################################################
-+
-+AUFS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_AUFS_VERSION))
-+AUFS_SITE = git://git.code.sf.net/p/aufs/aufs3-standalone
-+AUFS_LICENSE = GPLv2
-+
-+ifeq ($(BR2_LINUX_KERNEL_EXT_AUFS),y)
-+ifeq ($(AUFS_VERSION),)
-+$(error BR2_LINUX_KERNEL_EXT_AUFS_VERSION must be set to the AUFS branch matching your kernel, e.g. "aufs3.18.1+")
-+endif
-+endif
-+
-+$(eval $(generic-package))
+     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+         configf.writelines(configlines)
 -- 
-1.9.1
+1.7.1
