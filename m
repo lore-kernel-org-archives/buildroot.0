@@ -1,50 +1,78 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun, 15 Feb 2015 13:33:57 +0100
-Subject: [Buildroot] [PATCH 4/5] uclibc: add option to specify config
+Date: Sun, 15 Feb 2015 13:33:54 +0100
+Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
 	fragments
-In-Reply-To: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <1424003638-21689-4-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Adds functionality to the kconfig infrastructure to merge additional
+configuration fragment files to the main configuration file of
+kconfig packages, using support/kconfig/merge_config.sh
+
+Typical use-case is when you want your configuration to be
+kept in sync with an upstream (def)config file, but do require
+some minor local modifications.
+
+Disables -update-config and -update-defconfig targets when
+fragment files are set.
+
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 ---
- package/uclibc/Config.in | 6 ++++++
- package/uclibc/uclibc.mk | 1 +
- 2 files changed, 7 insertions(+)
+ package/pkg-kconfig.mk | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index aa99a6f..1be9195 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -53,6 +53,12 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 04ac37d..18eee76 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -35,6 +35,7 @@ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+ $(2)_KCONFIG_EDITORS ?= menuconfig
+ $(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
++$(2)_KCONFIG_FRAGMENT_FILES ?=
  
-+config BR2_UCLIBC_CONFIG_FRAGMENT_FILES
-+	string "Additional uClibc configuration fragment files"
-+	help
-+	  A space-seperated list of configuration fragment files,
-+	  that will be merged to the main uClibc configuration file.
-+
- config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
- 	bool "Enable large file (files > 2 GB) support"
- 	select BR2_LARGEFILE
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 40e6c6c..9d73b39 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -38,6 +38,7 @@ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
+ # FOO_KCONFIG_FILE is required
+ ifndef $(2)_KCONFIG_FILE
+@@ -45,13 +46,14 @@ endif
+ # be extracted (and patched) first
+ $$($(2)_KCONFIG_FILE): | $(1)-patch
  
- UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
-+UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
+-# The .config file is obtained by copying it from the specified source
+-# configuration file, after the package has been patched.
++# The specified source configuration file and any additional configuration file
++# fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
+ # full .config first. We use 'make oldconfig' because this can be safely
+ # done even when the package does not support defconfigs.
+-$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
+-	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
++$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
++	support/kconfig/merge_config.sh -m -O $$(@D) \
++		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) oldconfig
  
- UCLIBC_KCONFIG_OPTS = \
- 	$(UCLIBC_MAKE_FLAGS) \
+@@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ # Even though we could use 'cp --preserve-timestamps' here, the separate
+ # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
+ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
++	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
++		$$(error Unable to perform $(1)-update-config when fragment files are set))
+ 	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+ 	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+ 
+@@ -95,6 +99,8 @@ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ # $(1)-update-config, the reference for 'touch' is _not_ the file from which
+ # we copy.
+ $(1)-update-defconfig: $(1)-savedefconfig
++	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
++		$$(error Unable to perform $(1)-update-defconfig when fragment files are set))
+ 	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
+ 	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+ 
 -- 
 1.9.1
