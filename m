@@ -1,42 +1,63 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 15 Feb 2015 13:35:32 +0000
-Subject: [Buildroot] [PATCH] autobuild-run: do not build cdrkit using an
-	incompatible toolchain
-Message-ID: <1424007332-29351-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Feb 2015 15:13:13 +0100
+Subject: [Buildroot] [PATCH v4 2/3] system: Defaulting TZ_LOCALTIME to
+	UTC
+In-Reply-To: <1423748972-17471-3-git-send-email-angelo.compagnucci@gmail.com>
+References: <1423748972-17471-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1423748972-17471-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150215141313.GA4211@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This MIPS-uClibc-Static toolchain can't build cdrkit. The issue was
-reported upstream on October-2014:
+Angelo, All,
 
-http://lists.busybox.net/pipermail/uclibc/2014-October/048699.html
+On 2015-02-12 14:49 +0100, Angelo Compagnucci spake thusly:
+> This patch sets the default timezone to UTC if not overwritten.
+> Some packages need a configured system timezone for properly
+> operating like mono based software.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Fixes:
+I was at first a bit sceptic about the "Etc/" prefix, but indeed, UTC is
+not a "top-level" timezone; I was confusing it with GMT, which is a
+"top-level" timezone. So:
 
-  http://autobuild.buildroot.net/results/b1ec2e994c9b1f2629f37f54e04b228ad13ce3ca/
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- scripts/autobuild-run |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 6ca1bf0..db51c3f 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -319,6 +319,10 @@ def fixup_config(instance, sysinfo):
-     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
-         return False
-+    # This MIPS uClibc toolchain fails to build the cdrkit package
-+    if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+        return False
- 
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
+> ---
+>  system/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 95e10ab..d967002 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -371,6 +371,7 @@ config BR2_TARGET_TZ_ZONELIST
+>  
+>  config BR2_TARGET_LOCALTIME
+>  	string "default local time"
+> +	default "Etc/UTC"
+>  	help
+>  	  The time zone to install as the default local time, expressed as a
+>  	  tzdata location, such as:
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
