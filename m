@@ -1,31 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Feb 2015 21:55:29 +0100
-Subject: [Buildroot] [PATCH 1/1] make clean : also remove graphs.
-In-Reply-To: <1424016172-659-1-git-send-email-sagaert.johan@skynet.be>
-References: <1424016172-659-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20150215215529.077ac17c@free-electrons.com>
+From: Philippe Reynes <tremyfr@gmail.com>
+Date: Sun, 15 Feb 2015 22:16:42 +0100
+Subject: [Buildroot] [PATCH 1/3] [LINUX] 3.10: move to 3.10.69
+Message-ID: <1424035004-19461-1-git-send-email-tremyfr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+---
+ ...x-3.10.67.config => apf27-linux-3.10.69.config} |    0
+ ...x-3.10.67.config => apf28-linux-3.10.69.config} |    0
+ ...x-3.10.67.config => apf51-linux-3.10.69.config} |    0
+ patches/linux/{3.10.67 => 3.10.69}                 |    0
+ 4 files changed, 0 insertions(+), 0 deletions(-)
+ rename buildroot/target/device/armadeus/apf27/{apf27-linux-3.10.67.config => apf27-linux-3.10.69.config} (100%)
+ rename buildroot/target/device/armadeus/apf28/{apf28-linux-3.10.67.config => apf28-linux-3.10.69.config} (100%)
+ rename buildroot/target/device/armadeus/apf51/{apf51-linux-3.10.67.config => apf51-linux-3.10.69.config} (100%)
+ rename patches/linux/{3.10.67 => 3.10.69} (100%)
 
-On Sun, 15 Feb 2015 17:02:52 +0100, Sagaert Johan wrote:
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Thanks for the patch! I however already sent an earlier patch doing the
-same thing (though in a slightly different way). See
-http://patchwork.ozlabs.org/patch/436953/.
-
-Maybe it should be applied to the master branch. Peter?
-
-Thomas
+diff --git a/buildroot/target/device/armadeus/apf27/apf27-linux-3.10.67.config b/buildroot/target/device/armadeus/apf27/apf27-linux-3.10.69.config
+similarity index 100%
+rename from buildroot/target/device/armadeus/apf27/apf27-linux-3.10.67.config
+rename to buildroot/target/device/armadeus/apf27/apf27-linux-3.10.69.config
+diff --git a/buildroot/target/device/armadeus/apf28/apf28-linux-3.10.67.config b/buildroot/target/device/armadeus/apf28/apf28-linux-3.10.69.config
+similarity index 100%
+rename from buildroot/target/device/armadeus/apf28/apf28-linux-3.10.67.config
+rename to buildroot/target/device/armadeus/apf28/apf28-linux-3.10.69.config
+diff --git a/buildroot/target/device/armadeus/apf51/apf51-linux-3.10.67.config b/buildroot/target/device/armadeus/apf51/apf51-linux-3.10.69.config
+similarity index 100%
+rename from buildroot/target/device/armadeus/apf51/apf51-linux-3.10.67.config
+rename to buildroot/target/device/armadeus/apf51/apf51-linux-3.10.69.config
+diff --git a/patches/linux/3.10.67 b/patches/linux/3.10.69
+similarity index 100%
+rename from patches/linux/3.10.67
+rename to patches/linux/3.10.69
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.4.4
