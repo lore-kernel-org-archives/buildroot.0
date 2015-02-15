@@ -1,48 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 15 Feb 2015 13:13:56 +0100
-Subject: [Buildroot] [PATCH next 1/1] package/x11r7/xserver_xorg-server:
-	security bump to version 1.17.1
-Message-ID: <1424002436-30268-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 15 Feb 2015 13:32:23 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-02-13
+In-Reply-To: <20150214224243.47b77b67@free-electrons.com>
+References: <20150214073013.E7748101008@stock.ovh.net>
+ <20150214224243.47b77b67@free-electrons.com>
+Message-ID: <54E091D7.9000801@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hi Thomas, All,
 
-CVE-2015-0255 - Information leak in the XkbSetGeometry request of X servers
-http://www.x.org/wiki/Development/Security/Advisory-2015-02-10/
+Le 14/02/2015 22:42, Thomas Petazzoni a ?crit :
+> Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash |    6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+>>         bfin |                dvdauthor-0.7.1 | NOK | http://autobuild.buildroot.net/results/6f30e976f307e2eca68abf7e379506e2754891ae/
+>>         bfin |                dvdauthor-0.7.1 | NOK | http://autobuild.buildroot.net/results/73aa1c7a2946f878c246e4cfec64859e04aaced1/
+> 
+> I remember starting having a quick look, but I think I was not able to
+> reproduce on my machine, for some reason.
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 26c3558..2c3cc5b 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,3 +1,3 @@
--# From http://lists.x.org/archives/xorg-announce/2015-February/002529.html
--sha1	35d9fbc4665fd847f17f97666dd7ce28aa46c785				xorg-server-1.17.0.tar.bz2
--sha256	4e8548bae163129d2fc8f8e1f3b6071fe9d62821e3d5617507ccd2f589526166	xorg-server-1.17.0.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-February/002530.html
-+sha1	490118810a54e91c8814245c99d6285caf4985dd				xorg-server-1.17.1.tar.bz2
-+sha256	2bf8e9f6f0a710dec1d2472467bff1f4e247cb6dcd76eb469aafdc8a2d7db2ab	xorg-server-1.17.1.tar.bz2
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index bd36eb3..b5a0df0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.17.0
-+XSERVER_XORG_SERVER_VERSION = 1.17.1
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
--- 
-1.7.10.4
+Static build issue
+http://patchwork.ozlabs.org/patch/439830/
+
+> 
+>>          arc |                 libevas-1.7.10 | NOK | http://autobuild.buildroot.net/results/ee9ab4b54d6c1d2c774362d518c6c0055ec6e898/
+>>          arm |                 libevas-1.7.10 | NOK | http://autobuild.buildroot.net/results/d69a324434f370b490a53e6191d38a204ac28371/
+>>          arm |                 libevas-1.7.10 | NOK | http://autobuild.buildroot.net/results/79b004e42331c4b581f2d3ead7ebec0c316f29f8/
+> 
+> Romain Naour has said on IRC he was looking at these ones.
+> 
+
+Dependency/packaging build issue.
+Libevas package needs to be reviewed for GLES2/gl2.h provider (messa3d...)
+
+http://patchwork.ozlabs.org/patch/439806/
+http://patchwork.ozlabs.org/patch/439808/
+http://patchwork.ozlabs.org/patch/439807/
+
+> 
+>>         bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/71362af474461e99b7c188a316aa644a0faaad2e/
+>>         bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/469eadc6a7aa81c13643b5c249a63cf11d8c3fc9/
+>>         bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/1739ec14ce49a57d06a73d9164f42061ce80f203/
+> 
+> Not sure.
+> 
+Static build issue.
+libwebsock can't find libevent_openssl.pc because libevent package silently fail
+to enable openssl support although openssl support is explicitly requested.
+
+Libevent:
+checking for library containing SSL_new... no
+
+no patch yet... or disable openssl support in libwebsock for static build.
+
+Best regards,
+Romain Naour
