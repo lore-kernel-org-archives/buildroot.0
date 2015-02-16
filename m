@@ -1,89 +1,44 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Sun, 15 Feb 2015 21:06:33 -0600
-Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via
- the system configuration submenu
-In-Reply-To: <87sie6x1ss.fsf@dell.be.48ers.dk>
-References: <98184085.31058823.1422895105455.JavaMail.root@openwide.fr>	<54DF7567.7090308@ou.edu>
- <87y4nzx7bh.fsf@dell.be.48ers.dk>	<54E11806.2060109@ou.edu>
- <87sie6x1ss.fsf@dell.be.48ers.dk>
-Message-ID: <54E15EB9.4090703@ou.edu>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Feb 2015 07:24:48 +0100
+Subject: [Buildroot] python: host-python ssl support
+In-Reply-To: <etPan.54e127c9.6b8b4567.29a8@MacBook-Pro-de-Jordi.local>
+References: <etPan.54e127c9.6b8b4567.29a8@MacBook-Pro-de-Jordi.local>
+Message-ID: <20150216072448.05f1148e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/15/2015 04:11 PM, Peter Korsgaard wrote:
->>>>>> "Steve" == Steve Kenton <skenton@ou.edu> writes:
+Dear Jordi Llonch,
+
+On Mon, 16 Feb 2015 10:12:09 +1100, Jordi Llonch wrote:
+
+> SSL support is explicitly disabled for host-python and needed by the
+> latest pip to install from https. As per today, all the downloads
+> from Python Package Index are https.
 > 
-> Hi,
-> 
->>> So those boards have network interfaces not using eth%d names? That
->  >> sounds pretty uncommon to me. Another approach would simply be add an
->  >> init script to rename those to eth0 with nameif.
-> 
->> Yes, two I have to test right now are an Asrock and an ECS mini-ITX
->  > and on both
->  > the kernel built with buildroot 2015.02-rc1 calls the network
->  > interface "sit0"
-> 
-> Really? sit%d is normally for point-to-point tunnels, not for real hw
-> devices:
-> 
-> http://www.deepspace6.net/docs/iproute2tunnel-en.html
-> 
-I was not aware of that, but it certainly set off alarm bells in my mind.
-I'm just now getting to the networking and I thought my problem was the names
-being wrong. I guess I wrote a clever script to solve a problem that does not exist :-)
+> I saw in the list a patch from Rohan Fletcher
+> implementing?BR2_HOST_PYTHON_SSL_SUPPORT and looks it was never
+> merged.
 
-I don't know where "sit0" comes from but I see I'm missing a driver for my ethernet - oops!
-I didn't look closely enough and just assumed they were the same two devices.
+I gave some feedback at:
 
-Sorry for the noise.
+http://lists.busybox.net/pipermail/buildroot/2013-July/075194.html
 
-Steve
+> Following the instructions in section 17.8 from Buildroot manual does
+> not work for me. Am I doing something wrong? What is the correct
+> strategy for building a python application with external dependencies?
 
+Please tell us more about what's not working for you: post a patch
+adding the package you're trying to create, and the corresponding error
+messages you have, or issues you encounter. We can then try to help
+diagnose the problems.
 
-Here is what buildroot-2015.02-rc2 shows me with lspci -k and ifconfig -a:
+Best regards,
 
-03:00.0 Class 0200: 10ec:8168
-
-lo        Link encap:Local Loopback
-          inet addr:127.0.0.1  Mask:255.0.0.0
-          inet6 addr: ::1/128 Scope:Host
-          UP LOOPBACK RUNNING  MTU:65536  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-
-sit0      Link encap:IPv6-in-IPv4
-          NOARP  MTU:1480  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-
-And here is what Ubuntu 14.04 on the same hardware show me:
-
-03:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 06)
-	Subsystem: ASRock Incorporation Motherboard (one of many)
-	Kernel driver in use: r8169
-
-eth1      Link encap:Ethernet  HWaddr bc:5f:f4:cb:1e:f6
-          inet addr:192.168.1.2  Bcast:192.168.1.255  Mask:255.255.255.0
-          inet6 addr: fe80::be5f:f4ff:fecb:1ef6/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:1288 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:783 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000
-          RX bytes:1472508 (1.4 MB)  TX bytes:67242 (67.2 KB)
-
-lo        Link encap:Local Loopback
-          inet addr:127.0.0.1  Mask:255.0.0.0
-          inet6 addr: ::1/128 Scope:Host
-          UP LOOPBACK RUNNING  MTU:65536  Metric:1
-          RX packets:286 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:286 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:23049 (23.0 KB)  TX bytes:23049 (23.0 KB)
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
