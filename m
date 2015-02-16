@@ -1,55 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Feb 2015 16:12:17 +0000
-Subject: [Buildroot] [PATCH] make: disable the 'load' operation for static
-	builds
-Message-ID: <1424103137-425-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Feb 2015 13:24:19 -0300
+Subject: [Buildroot] [PATCH] libtool: bump to version 2.4.6
+Message-ID: <1424103859-12937-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable the 'load' operation for static builds since it needs dlopen and
-friends. Otherwise it will fail with an error message like this one:
-
-load.o: In function `load_file':
-load.c:(.text+0x2a8): undefined reference to `dlopen'
-load.c:(.text+0x2c4): undefined reference to `dlerror'
-load.c:(.text+0x308): undefined reference to `dlsym'
-load.c:(.text+0x33c): undefined reference to `dlopen'
-load.c:(.text+0x35c): undefined reference to `dlsym'
-load.c:(.text+0x380): undefined reference to `dlopen'
-load.c:(.text+0x39c): undefined reference to `dlopen'
-load.c:(.text+0x3a0): undefined reference to `dlerror'
-load.c:(.text+0x42c): undefined reference to `dlsym'
-load.c:(.text+0x470): undefined reference to `dlsym'
-load.c:(.text+0x48c): undefined reference to `dlerror'
-load.o: In function `unload_file':
-load.c:(.text+0x63c): undefined reference to `dlclose'
-collect2: error: ld returned 1 exit status
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/9e3/9e39039b6db79a46990cd9bdcb179289e38d9f31/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/make/make.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/libtool/libtool.hash | 2 +-
+ package/libtool/libtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 20469ba..d643fb0 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -11,4 +11,9 @@ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- MAKE_LICENSE = GPLv3+
- MAKE_LICENSE_FILES = COPYING
+diff --git a/package/libtool/libtool.hash b/package/libtool/libtool.hash
+index 06a562d..baaac61 100644
+--- a/package/libtool/libtool.hash
++++ b/package/libtool/libtool.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	84aac136513b009278896ffa255e4d685bcdb0cb0e5363be36adad64c986177e	libtool-2.4.5.tar.xz
++sha256	7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f	libtool-2.4.6.tar.xz
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 3332cfc..28786d2 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Disable the 'load' operation for static builds since it needs dlopen
-+ifeq ($(BR2_STATIC_LIBS),y)
-+	MAKE_CONF_OPTS += --disable-load
-+endif
-+
- $(eval $(autotools-package))
+-LIBTOOL_VERSION = 2.4.5
++LIBTOOL_VERSION = 2.4.6
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+ LIBTOOL_INSTALL_STAGING = YES
 -- 
-1.7.1
+2.0.5
