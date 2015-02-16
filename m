@@ -1,119 +1,89 @@
-From: Nikolay Dimitrov <picmaster@mail.bg>
-Date: Mon, 16 Feb 2015 02:28:26 +0200
-Subject: [Buildroot] [PATCH 1/1] board: add support for RIoTboard
-Message-ID: <1424046506-17740-1-git-send-email-picmaster@mail.bg>
+From: Steve Kenton <skenton@ou.edu>
+Date: Sun, 15 Feb 2015 21:06:33 -0600
+Subject: [Buildroot] [PATCH v4] Allow a single DHCP configuration via
+ the system configuration submenu
+In-Reply-To: <87sie6x1ss.fsf@dell.be.48ers.dk>
+References: <98184085.31058823.1422895105455.JavaMail.root@openwide.fr>	<54DF7567.7090308@ou.edu>
+ <87y4nzx7bh.fsf@dell.be.48ers.dk>	<54E11806.2060109@ou.edu>
+ <87sie6x1ss.fsf@dell.be.48ers.dk>
+Message-ID: <54E15EB9.4090703@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a small development board, based on Freescale IMX6 Solo SoC
-(single core ARM Cortex-A9). The board has excellent support in mainline
-U-Boot and Linux.
+On 02/15/2015 04:11 PM, Peter Korsgaard wrote:
+>>>>>> "Steve" == Steve Kenton <skenton@ou.edu> writes:
+> 
+> Hi,
+> 
+>>> So those boards have network interfaces not using eth%d names? That
+>  >> sounds pretty uncommon to me. Another approach would simply be add an
+>  >> init script to rename those to eth0 with nameif.
+> 
+>> Yes, two I have to test right now are an Asrock and an ECS mini-ITX
+>  > and on both
+>  > the kernel built with buildroot 2015.02-rc1 calls the network
+>  > interface "sit0"
+> 
+> Really? sit%d is normally for point-to-point tunnels, not for real hw
+> devices:
+> 
+> http://www.deepspace6.net/docs/iproute2tunnel-en.html
+> 
+I was not aware of that, but it certainly set off alarm bells in my mind.
+I'm just now getting to the networking and I thought my problem was the names
+being wrong. I guess I wrote a clever script to solve a problem that does not exist :-)
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
----
- board/embest/riotboard/readme.txt |   53 +++++++++++++++++++++++++++++++++++++
- configs/riotboard_defconfig       |   30 +++++++++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 board/embest/riotboard/readme.txt
- create mode 100644 configs/riotboard_defconfig
+I don't know where "sit0" comes from but I see I'm missing a driver for my ethernet - oops!
+I didn't look closely enough and just assumed they were the same two devices.
 
-diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
-new file mode 100644
-index 0000000..cde5469
---- /dev/null
-+++ b/board/embest/riotboard/readme.txt
-@@ -0,0 +1,53 @@
-+Buildroot for Embest RIoTboard
-+==============================
-+
-+1. Compiling buildroot
-+----------------------
-+make distclean
-+make riotboard_defconfig
-+make
-+
-+2. Installing buildroot
-+-----------------------
-+Prepare an SD-card and plug it into your card reader. Create 2 partitions on the
-+card using your favourite tool. Partition 1 should be around 32MiB, partition 2
-+should be big enough to hold your rootfs:
-+
-+   Device Boot      Start         End      Blocks   Id  System
-+/dev/sdX1            2048       67583       32768   83  Linux
-+/dev/sdX2           67584      329727      131072   83  Linux
-+
-+Format the partitions with your favourite filesystem:
-+
-+sudo mkfs.ext2 /dev/sdX1
-+sudo mkfs.ext2 /dev/sdX2
-+
-+Copy the kernel and device tree blob on partition 1:
-+
-+sudo mount /dev/sdX1 /mnt/sdcard/
-+sudo cp -v uImage /mnt/sdcard/
-+suco cp -v imx6dl-riotboard.dtb /mnt/sdcard/dtb
-+sudo umount /dev/sdX1
-+
-+Then deploy your rootfs on partition 2:
-+
-+sudo mount /dev/sdX2 /mnt/sdcard/
-+tar xf rootfs.tar -C /mnt/sdcard/
-+sudo umount /dev/sdX2
-+
-+3. Running buildroot
-+--------------------
-+Position the board so you can read the label "RIoTboard on the right side of
-+SW1 DIP switches. Now configure SW1 swiches from left to right like this:
-+
-+10100101 (1 means ON position, 0 means OFF position)
-+
-+Now plug your prepared SD card in J6 SDcard slot. Connect a serial console
-+(115200, 8, N, 1) to J18. Connect a 5V power supply to the board and break
-+the boot sequence. Change your root device in U-Boot:
-+
-+setenv mmcroot mmcroot=/dev/mmcblk0p2 rw
-+saveenv
-+reset
-+
-+Enjoy!
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-new file mode 100644
-index 0000000..ebcee69
---- /dev/null
-+++ b/configs/riotboard_defconfig
-@@ -0,0 +1,30 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+
-+# toolchain
-+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-+
-+# rootfs
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_2r1=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_VERSION="2015.01"
-+BR2_TARGET_UBOOT_BOARDNAME="riotboard"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+
-+# kernel headers
-+BR2_KERNEL_HEADERS_3_18=y
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
--- 
-1.7.10.4
+Sorry for the noise.
+
+Steve
+
+
+Here is what buildroot-2015.02-rc2 shows me with lspci -k and ifconfig -a:
+
+03:00.0 Class 0200: 10ec:8168
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+sit0      Link encap:IPv6-in-IPv4
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+And here is what Ubuntu 14.04 on the same hardware show me:
+
+03:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 06)
+	Subsystem: ASRock Incorporation Motherboard (one of many)
+	Kernel driver in use: r8169
+
+eth1      Link encap:Ethernet  HWaddr bc:5f:f4:cb:1e:f6
+          inet addr:192.168.1.2  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::be5f:f4ff:fecb:1ef6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:1288 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:783 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1472508 (1.4 MB)  TX bytes:67242 (67.2 KB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:286 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:286 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:23049 (23.0 KB)  TX bytes:23049 (23.0 KB)
