@@ -1,57 +1,43 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 16 Feb 2015 12:13:30 +0100
-Subject: [Buildroot] [PATCH 1/1] make clean : also remove graphs.
-In-Reply-To: <20150215215529.077ac17c@free-electrons.com>
-References: <1424016172-659-1-git-send-email-sagaert.johan@skynet.be>
- <20150215215529.077ac17c@free-electrons.com>
-Message-ID: <C6FAD3087A904266945B3CE0DDEC5D31@JohanW7>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 16 Feb 2015 11:48:40 +0000
+Subject: [Buildroot] [PATCH v2] autobuild-run: do not build cdrkit using an
+	incompatible toolchain
+Message-ID: <1424087320-26677-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This MIPS-uClibc-Static toolchain can't build cdrkit. The issue was
+reported upstream on October-2014:
+
+http://lists.busybox.net/pipermail/uclibc/2014-October/048699.html
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b1ec2e994c9b1f2629f37f54e04b228ad13ce3ca/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ scripts/autobuild-run |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 6ca1bf0..a75006f 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -319,6 +319,11 @@ def fixup_config(instance, sysinfo):
+     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
+         return False
++    # This MIPS uClibc toolchain fails to build the cdrkit package
++    if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
++       'BR2_STATIC_LIBS=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
++        return False
  
------Oorspronkelijk bericht-----
-Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Verzonden: zondag 15 februari 2015 21:55
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH 1/1] make clean : also remove graphs.
-
-Dear Sagaert Johan,
-
-On Sun, 15 Feb 2015 17:02:52 +0100, Sagaert Johan wrote:
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Thanks for the patch! I however already sent an earlier patch doing the same thing (though in a slightly different way). See
-http://patchwork.ozlabs.org/patch/436953/.
-
-Maybe it should be applied to the master branch. Peter?
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
-
-
-
-Dear Thomas,
-
-What a coincidence, it's no breaker anyway.
-
-Btm ,while you are digging in the makefile, does it make sense to add a make clean-ccache ?
-
-Thanks
-
-Johan
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 6253 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150216/d71d387c/attachment.bin>
+     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+         configf.writelines(configlines)
+-- 
+1.7.1
