@@ -1,115 +1,46 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 16 Feb 2015 10:12:21 +0100
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: Add the option to
-	download via git
-In-Reply-To: <1422636725-25148-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1422636725-25148-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <CA+TH9Vmg41ujOeGLgyBHVCaSe4oH+0xg3cv8Yej-o-ohJammiA@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 16 Feb 2015 10:17:47 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Fix ARM variant typo
+In-Reply-To: <1424075092-19231-1-git-send-email-shmuelzon@gmail.com>
+References: <1424075092-19231-1-git-send-email-shmuelzon@gmail.com>
+Message-ID: <CAHXCMMLFy8uJ=yQAN9rp9RndCv7BrgFKc4wxZq9Fw5J3LGBynw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+On Mon, Feb 16, 2015 at 9:24 AM, Assaf Inbal <shmuelzon@gmail.com> wrote:
+> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
 
-Any news on this one?
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-Staiyng to this comment on at91bootstrap git tree [1] there is no
-infrastructure in place to add third parties boards.
-
-Personally, I need this option cause I'm in the process to prepare a
-comprehensive board support for Acmesystems' products and ask for
-inclusion in the near future.
-
-Thanks!
-
-Sincerely, Angelo
-
-[1] https://github.com/linux4sam/at91bootstrap/pull/2#issuecomment-27954225
-
-2015-01-30 17:52 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Adding support for git downloading of a custom repository.
->
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > ---
->  boot/at91bootstrap3/Config.in         | 35 +++++++++++++++++++++++++++++++++++
->  boot/at91bootstrap3/at91bootstrap3.mk |  8 +++++++-
->  2 files changed, 42 insertions(+), 1 deletion(-)
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-> index 8ac40ed..6f2f7db 100644
-> --- a/boot/at91bootstrap3/Config.in
-> +++ b/boot/at91bootstrap3/Config.in
-> @@ -8,8 +8,43 @@ config BR2_TARGET_AT91BOOTSTRAP3
->           - Peripheral drivers such as PIO, PMC or SDRAMC...
->           - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
->
-> +
->  if BR2_TARGET_AT91BOOTSTRAP3
->
-> +choice
-> +
-> +       prompt "AT91 Bootstrap 3 version"
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-> +       bool "3.7.1"
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-> +       bool "Custom Git repository"
-> +       help
-> +         This option allows Buildroot to get the AT91 Bootstrap 3 source
-> +         code from a Git repository.
-> +
-> +endchoice
-> +
-> +if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
-> +       string "URL of custom repository"
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
-> +       string "Custom repository version"
-> +       help
-> +         Revision to use in the typical format used by Git
-> +         E.G. a sha id, a tag, branch, ..
-> +
-> +endif
-> +
-> +config BR2_TARGET_AT91BOOTSTRAP3_VERSION
-> +       string
-> +       default "v3.7.1" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-> +       default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
-> +               if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
-> +
->  config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
->         string "custom patch dir"
->         help
-> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-> index 098e7bf..39f2365 100644
-> --- a/boot/at91bootstrap3/at91bootstrap3.mk
-> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
-> @@ -4,8 +4,14 @@
->  #
->  ################################################################################
->
-> -AT91BOOTSTRAP3_VERSION = v3.7.1
-> +AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
-> +
-> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
-> +AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
-> +AT91BOOTSTRAP3_SITE_METHOD = git
-> +else
->  AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
-> +endif
->
->  AT91BOOTSTRAP3_INSTALL_IMAGES = YES
->  AT91BOOTSTRAP3_INSTALL_TARGET = NO
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 6c9955d..eacd641 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -212,7 +212,7 @@ endif
+>  ifeq ($(BR2_arm),y)
+>  CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)l
+>  else ifeq ($(BR2_armeb),y)
+> -CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSORARM_VARIANT)b
+> +CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)b
+>  else
+>  CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
+>  endif
 > --
 > 1.9.1
 >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-
+Regards,
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Samuel
