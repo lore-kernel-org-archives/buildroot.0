@@ -1,43 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 16 Feb 2015 11:48:40 +0000
-Subject: [Buildroot] [PATCH v2] autobuild-run: do not build cdrkit using an
-	incompatible toolchain
-Message-ID: <1424087320-26677-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 16 Feb 2015 15:52:57 +0100
+Subject: [Buildroot] [PATCH for next 0/2] Add support for Cavium Octeon III
+Message-ID: <1424098379-8320-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This MIPS-uClibc-Static toolchain can't build cdrkit. The issue was
-reported upstream on October-2014:
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-http://lists.busybox.net/pipermail/uclibc/2014-October/048699.html
+This series adds support for building for the Cavium Octeon III processor,
+using the Cavium Networks SDK. The specific thing about this toolchain is
+that the libraries for the hardware-floating point capable processors are in
+lib32-fp and lib64-fp, rather than lib32/lib64.
 
-Fixes:
+The first patch was submitted earlier, and is resent with updated commit
+message.
 
-  http://autobuild.buildroot.net/results/b1ec2e994c9b1f2629f37f54e04b228ad13ce3ca/
+Bai Yingjie (1):
+  toolchain-external: improve lib subdirectory matching
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- scripts/autobuild-run |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+Thomas De Schampheleire (1):
+  toolchain: create symlink to 'lib' from ARCH_LIB_DIR iso fixed
+    lib32/lib64
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 6ca1bf0..a75006f 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -319,6 +319,11 @@ def fixup_config(instance, sysinfo):
-     if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2014.11.tar.bz2"\n' in configlines:
-         return False
-+    # This MIPS uClibc toolchain fails to build the cdrkit package
-+    if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
-+       'BR2_STATIC_LIBS=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+        return False
- 
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
+ Makefile                                             | 14 +-------------
+ toolchain/helpers.mk                                 | 12 ++++++++++++
+ toolchain/toolchain-buildroot/toolchain-buildroot.mk | 11 +++++++++++
+ toolchain/toolchain-external/toolchain-external.mk   | 16 ++++++++++++++--
+ 4 files changed, 38 insertions(+), 15 deletions(-)
+
 -- 
-1.7.1
+1.8.5.1
