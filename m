@@ -1,161 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Feb 2015 09:50:51 -0300
-Subject: [Buildroot] [PATCH] sudo: security bump to version 1.8.12
-Message-ID: <1424177451-19059-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Feb 2015 13:58:22 +0100
+Subject: [Buildroot] [git commit] gnutls: make sure librt detection doesn't
+	poison the linker flags
+Message-ID: <20150217125839.8C9D08175E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-9680 - A user with sudo access may be able to exploit
-parsing bugs in the time zone parsing functions of the system's C
-library functions. The user may also be able to read arbitrary files,
-potentially causing changes in system behavior when reading certain
-device special files or simply causing the program run via sudo to
-block.
+commit: http://git.buildroot.net/buildroot/commit/?id=b34c63375a88999d232129428a2297f5ddb9c465
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Just like we're passing --with-libpthread-prefix, we also need to pass
+--with-librt-prefix in order to avoid having the gnutls build system
+detect the librt in /usr/lib, and pass -L/usr/lib to the linker flags.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/fa5/fa58602cb78ffe3ae4ee389ef5cf5a37b7657c4c/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../sudo/0001-make-signame-include-unistd_h.patch  | 20 +++++++++++++++
- package/sudo/0001-no-netgroup.patch                | 29 ----------------------
- .../0002-drop-sspcflags-piecflags-for-host.patch   | 21 ----------------
- package/sudo/sudo.hash                             |  5 ++--
- package/sudo/sudo.mk                               | 11 ++++----
- 5 files changed, 27 insertions(+), 59 deletions(-)
- create mode 100644 package/sudo/0001-make-signame-include-unistd_h.patch
- delete mode 100644 package/sudo/0001-no-netgroup.patch
- delete mode 100644 package/sudo/0002-drop-sspcflags-piecflags-for-host.patch
+ package/gnutls/gnutls.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/sudo/0001-make-signame-include-unistd_h.patch b/package/sudo/0001-make-signame-include-unistd_h.patch
-new file mode 100644
-index 0000000..234cd71
---- /dev/null
-+++ b/package/sudo/0001-make-signame-include-unistd_h.patch
-@@ -0,0 +1,20 @@
-+signame.c uses sudo_compat.h which in turn uses gid_t definitions
-+that are normally defined in unistd.h.
-+This doesn't seem to cause issues with (e)glibc systems, but it does break
-+uClibc-based builds.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura sudo-1.8.12.orig/lib/util/mksigname.c sudo-1.8.12/lib/util/mksigname.c
-+--- sudo-1.8.12.orig/lib/util/mksigname.c	2015-02-09 15:40:10.000000000 -0300
-++++ sudo-1.8.12/lib/util/mksigname.c	2015-02-17 09:20:05.126701093 -0300
-+@@ -44,6 +44,9 @@
-+ 
-+     printf("#include <config.h>\n");
-+     printf("#include <signal.h>\n");
-++    printf("#ifdef HAVE_UNISTD_H\n");
-++    printf("#include <unistd.h>\n");
-++    printf("#endif /* HAVE_UNISTD_H */\n");
-+     printf("#include \"sudo_compat.h\"\n\n");
-+     printf("const char *const sudo_sys_signame[NSIG] = {\n");
-+     for (i = 0; i < NSIG; i++) {
-diff --git a/package/sudo/0001-no-netgroup.patch b/package/sudo/0001-no-netgroup.patch
-deleted file mode 100644
-index 64b870c..0000000
---- a/package/sudo/0001-no-netgroup.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--# HG changeset patch
--# User Todd C. Miller <Todd.Miller@courtesan.com>
--# Date 1406550172 21600
--# Node ID 57deb66ef8ffc0f551d460e15a34f7df78f54d2a
--# Parent  f547bf80c436c07ddb1c7385d22db96862ae7e4f
--Fix compilation on systems w/o netgroups.
--
--Status: upstream
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -r f547bf80c436 -r 57deb66ef8ff plugins/sudoers/match.c
----- a/plugins/sudoers/match.c	Sat Jul 26 06:07:34 2014 -0600
--+++ b/plugins/sudoers/match.c	Mon Jul 28 06:22:52 2014 -0600
--@@ -972,12 +972,12 @@
-- 	rc = true;
--     else if (lhost != shost && innetgr(netgr, shost, user, domain))
-- 	rc = true;
---#endif /* HAVE_INNETGR */
-- 
--     sudo_debug_printf(SUDO_DEBUG_DEBUG|SUDO_DEBUG_LINENO,
-- 	"netgroup %s matches (%s|%s, %s, %s): %s", netgr, lhost ? lhost : "",
-- 	shost ? shost : "", user ? user : "", domain ? domain : "",
-- 	rc ? "true" : "false");
--+#endif /* HAVE_INNETGR */
-- 
--     debug_return_bool(rc);
-- }
--
-diff --git a/package/sudo/0002-drop-sspcflags-piecflags-for-host.patch b/package/sudo/0002-drop-sspcflags-piecflags-for-host.patch
-deleted file mode 100644
-index 9f09656..0000000
---- a/package/sudo/0002-drop-sspcflags-piecflags-for-host.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Don't use SSP_CFLAGS and PIE_CFLAGS for host tools.
--http://www.sudo.ws/bugs/show_bug.cgi?id=662
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura sudo-1.8.10p3.orig/compat/Makefile.in sudo-1.8.10p3/compat/Makefile.in
----- sudo-1.8.10p3.orig/compat/Makefile.in	2014-03-07 18:51:19.000000000 -0300
--+++ sudo-1.8.10p3/compat/Makefile.in	2014-09-20 07:29:30.913108029 -0300
--@@ -96,10 +96,10 @@
-- 	./mksigname > $@
-- 
-- mksiglist: $(srcdir)/mksiglist.c $(srcdir)/mksiglist.h $(incdir)/missing.h $(top_builddir)/config.h
---	$(CC) $(CPPFLAGS) $(CFLAGS) $(PIE_CFLAGS) $(SSP_CFLAGS) $(DEFS) $(srcdir)/mksiglist.c -o $@
--+	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEFS) $(srcdir)/mksiglist.c -o $@
-- 
-- mksigname: $(srcdir)/mksigname.c $(srcdir)/mksigname.h $(incdir)/missing.h $(top_builddir)/config.h
---	$(CC) $(CPPFLAGS) $(CFLAGS) $(PIE_CFLAGS) $(SSP_CFLAGS) $(DEFS) $(srcdir)/mksigname.c -o $@
--+	$(CC) $(CPPFLAGS) $(CFLAGS) $(DEFS) $(srcdir)/mksigname.c -o $@
-- 
-- fnm_test: fnm_test.o libreplace.la
-- 	$(LIBTOOL) --mode=link $(CC) -o $@ fnm_test.o libreplace.la $(PIE_LDFLAGS) $(SSP_LDFLAGS)
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index ba65773..4f4df16 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,3 +1,2 @@
--# From announcement http://www.sudo.ws/pipermail/sudo-announce/2014-May/000132.html
--md5	fcd8d0d9f9f0397d076ee901e242ed39	sudo-1.8.10p3.tar.gz
--sha256	6eda135fa68163108f1c24de6975de5ddb09d75730bb62d6390bda7b04345400	sudo-1.8.10p3.tar.gz
-+# From http://www.sudo.ws/pipermail/sudo-announce/2015-February/000136.html
-+sha256	163b51841de8ad19276581a6782d61f5948f1f72a0a843371a1c167d3dc4f3b0	sudo-1.8.12.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index dafd717..3048557 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--SUDO_VERSION = 1.8.10p3
-+SUDO_VERSION = 1.8.12
- SUDO_SITE = http://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC BSD-3c
- SUDO_LICENSE_FILES = doc/LICENSE
--# Ships a beta libtool version hence our patch doesn't apply.
--# Run autoreconf to regenerate ltmain.sh.
--SUDO_AUTORECONF = YES
-+# This is to avoid sudo's make install from chown()ing files which fails
-+SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
- SUDO_CONF_OPTS = \
- 	--without-lecture \
- 	--without-sendmail \
-@@ -23,8 +22,8 @@ SUDO_CONF_OPTS = \
- # mksigname/mksiglist needs to run on build host to generate source files
- define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
--		CPPFLAGS="$(HOST_CPPFLAGS) -I../include -I.." \
--		-C $(@D)/compat mksigname mksiglist
-+		CPPFLAGS="$(HOST_CPPFLAGS) -I../../include -I../.." \
-+		-C $(@D)/lib/util mksigname mksiglist
- endef
- 
- SUDO_POST_CONFIGURE_HOOKS += SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
--- 
-2.0.5
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index ab176a6..6c64b38 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -17,6 +17,7 @@ GNUTLS_DEPENDENCIES = host-pkgconf nettle pcre \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib)
+ GNUTLS_CONF_OPTS = \
+ 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
++	--with-librt-prefix=$(STAGING_DIR) \
+ 	--disable-rpath \
+ 	--disable-doc \
+ 	--disable-guile \
