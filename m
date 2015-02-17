@@ -1,97 +1,48 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 17 Feb 2015 13:26:57 -0300
-Subject: [Buildroot] [PATCH 5/6] linux-headers: nios2: Prevent selecting
-	unsupported versions
+Date: Tue, 17 Feb 2015 13:26:58 -0300
+Subject: [Buildroot] [PATCH 6/6] toolchain: Enable the internal toolchain
+	for nios2
 In-Reply-To: <1424190418-883-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 References: <1424190418-883-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1424190418-883-6-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1424190418-883-7-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Versions older than Linux v3.19 do not support the Nios-II architecture
-so disable them.
+For now we can only support glibc.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- package/linux-headers/Config.in.host | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ toolchain/Config.in                     | 1 -
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4f0a211..1e206ce 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -14,57 +14,66 @@ choice
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 54b5d17..b039ee2 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -43,7 +43,6 @@ choice
  
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+-	depends on !BR2_nios2
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 
- 	config BR2_KERNEL_HEADERS_3_10
- 		bool "Linux 3.10.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 
- 	config BR2_KERNEL_HEADERS_3_11
- 		bool "Linux 3.11.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 
- 	config BR2_KERNEL_HEADERS_3_12
- 		bool "Linux 3.12.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 
- 	config BR2_KERNEL_HEADERS_3_13
- 		bool "Linux 3.13.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 
- 	config BR2_KERNEL_HEADERS_3_14
- 		bool "Linux 3.14.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 
- 	config BR2_KERNEL_HEADERS_3_15
- 		bool "Linux 3.15.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
- 
- 	config BR2_KERNEL_HEADERS_3_16
- 		bool "Linux 3.16.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2015_02
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
- 
- 	config BR2_KERNEL_HEADERS_3_17
- 		bool "Linux 3.17.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 
- 	config BR2_KERNEL_HEADERS_3_18
- 		bool "Linux 3.18.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 
- 	config BR2_KERNEL_HEADERS_3_19
+ config BR2_TOOLCHAIN_EXTERNAL
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index a69013f..1b9f3a3 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -64,7 +64,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
+ 		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
+ 		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \
+-		   BR2_microblaze
++		   BR2_microblaze  || BR2_nios2
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_powerpc_SPE
 -- 
 2.3.0
