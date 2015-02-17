@@ -1,46 +1,37 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 17 Feb 2015 16:20:04 +0100
-Subject: [Buildroot] [PATCH for next 2/2] toolchain: create symlink to
- 'lib' from ARCH_LIB_DIR iso fixed lib32/lib64
-In-Reply-To: <20150217113303.GG2302@tarshish>
-References: <1424098379-8320-1-git-send-email-patrickdepinguin@gmail.com>
- <1424098379-8320-3-git-send-email-patrickdepinguin@gmail.com>
- <20150217113303.GG2302@tarshish>
-Message-ID: <CAAXf6LVA1CjfviPZDtP6FE2SNyxVit_NAyaLYEfwXe+JJSqh6A@mail.gmail.com>
+Date: Tue, 17 Feb 2015 16:29:31 +0100
+Subject: [Buildroot] [PATCHv2 for next 0/2] Add support for Cavium Octeon III
+Message-ID: <1424186973-7838-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 17, 2015 at 12:33 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Thomas,
->
-> On Mon, Feb 16, 2015 at 03:52:59PM +0100, Thomas De Schampheleire wrote:
->> -# We make a symlink lib32->lib or lib64->lib as appropriate
->> -# MIPS64/n32 requires lib32 even though it's a 64-bit arch.
->> -ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
->> -LIB_SYMLINK = lib64
->> -else
->> -LIB_SYMLINK = lib32
->> -endif
->
-> [...]
->
->> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->> index b30cc33..e1fe1f4 100644
->> --- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
->> @@ -12,6 +12,17 @@ BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
->>
->>  TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
->>
->> +ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
->> +LIB_SYMLINK = lib64
->> +else
->> +LIB_SYMLINK = lib32-fp
->
-> This changes the original logic. We currently have 'LIB_SYMLINK = lib32' here
-> (see above).
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-This is a leftover of my tests, this should clearly be 'lib32' indeed. Sorry.
+This series adds support for building for the Cavium Octeon III processor,
+using the Cavium Networks SDK. The specific thing about this toolchain is
+that the libraries for the hardware-floating point capable processors are in
+lib32-fp and lib64-fp, rather than lib32/lib64.
+
+The first patch was submitted earlier, and is resent with updated commit
+message.
+
+v2: fix some minor issues in the second patch (see patch description)
+
+Bai Yingjie (1):
+  toolchain-external: improve lib subdirectory matching
+
+Thomas De Schampheleire (1):
+  toolchain: create symlink to 'lib' from ARCH_LIB_DIR iso fixed
+    lib32/lib64
+
+ Makefile                                             | 14 +-------------
+ toolchain/helpers.mk                                 | 16 ++++++++++++++++
+ toolchain/toolchain-buildroot/toolchain-buildroot.mk | 11 +++++++++++
+ toolchain/toolchain-external/toolchain-external.mk   | 16 ++++++++++++++--
+ 4 files changed, 42 insertions(+), 15 deletions(-)
+
+-- 
+1.8.5.1
