@@ -1,65 +1,53 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Tue, 17 Feb 2015 16:43:58 +0100
-Subject: [Buildroot] [PATCH] openldap: Make client binary install
-	configurable
-Message-ID: <1424187838-739-1-git-send-email-stefan.sorensen@spectralink.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 17 Feb 2015 13:26:52 -0300
+Subject: [Buildroot] [PATCH 0/6] Build a Nios-II internal toolchain
+Message-ID: <1424190418-883-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some OpenLDAP deployment only need the client libraries and not the client
-tools, so make the tool installation optional.
+Now that Linux, GCC, glibc, and binutils have gained a Nios-II
+port we can build an internal toolchain.
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
----
- package/openldap/Config.in   | 12 ++++++++++++
- package/openldap/openldap.mk | 11 +++++++++++
- 2 files changed, 23 insertions(+)
+This series mostly makes sure only the right versions of the components
+are chosen when building a toolchain. The last patch merely enables
+the internal toolchain.
 
-diff --git a/package/openldap/Config.in b/package/openldap/Config.in
-index 1f0b1ea..3085a5c 100644
---- a/package/openldap/Config.in
-+++ b/package/openldap/Config.in
-@@ -10,6 +10,18 @@ config BR2_PACKAGE_OPENLDAP
- 
- 	  http://www.openldap.org/
- 
-+if BR2_PACKAGE_OPENLDAP
-+
-+config BR2_PACKAGE_OPENLDAP_CLIENTS
-+	bool "openldap client binaries"
-+	default y
-+	help
-+	  Install the OpenLDAP client tools (ldapadd, ldapcompare, ldapdelete,
-+	  ldapexop, ldapmodify, ldapmodrdn, ldappasswd, ldapsearch, ldapurl,
-+	  ldapwhoami)
-+
-+endif
-+
- comment "openldap needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU # needs fork()
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 332b2c4..3e90a87 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -55,4 +55,15 @@ OPENLDAP_CONF_OPTS += \
- # executable it is supposed to install, resulting in an error.
- OPENLDAP_MAKE_ENV = STRIP="$(TARGET_STRIP)"
- 
-+ifeq ($(BR2_PACKAGE_OPENLDAP_CLIENTS),)
-+define OPENLDAP_REMOVE_CLIENTS
-+	for f in ldapurl ldapexop ldapcompare ldapwhoami ldappasswd ldapmodrdn \
-+		ldapdelete ldapmodify ldapsearch; do \
-+		rm -rf $(TARGET_DIR)/usr/bin/$f; \
-+	done
-+	rm -rf $(TARGET_DIR)/etc/openldap
-+endef
-+OPENLDAP_POST_INSTALL_TARGET_HOOKS += OPENLDAP_REMOVE_CLIENTS
-+endif
-+
- $(eval $(autotools-package))
+I would like to prepare a defconfig, along with support for some real life
+board, but unfortunately I'm unable to do so.
+
+First, all the publicly available design examples for the boards I have
+are outdated and won't work with mainline kernel (unless we apply nasty
+patches).
+
+Second, when working on this, the board I was using died and I'm not sure
+when I'll be able to replace it.
+
+Still, before the board died, I managed to build a toolchain, and boot
+U-Boot, Linux (a patched v3.19) and get to userspace. Maybe someone
+can give this a shot and report how it goes.
+
+Or maybe we can just merge it :)
+
+Ezequiel Garcia (6):
+  gcc: 4.9.2: Add patch to remove a wrong header
+  binutils: nios2: Prevent selecting unsupported versions
+  gcc: nios2: Prevent selecting unsupported versions
+  glibc: nios2: Prevent selecting unsupported versions
+  linux-headers: nios2: Prevent selecting unsupported versions
+  toolchain: Enable the internal toolchain for nios2
+
+ package/binutils/Config.in.host                         |  7 +++++--
+ package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch | 12 ++++++++++++
+ package/gcc/Config.in.host                              |  6 +++---
+ package/glibc/Config.in                                 |  1 +
+ package/linux-headers/Config.in.host                    | 15 ++++++++++++---
+ toolchain/Config.in                                     |  1 -
+ toolchain/toolchain-buildroot/Config.in                 |  2 +-
+ 7 files changed, 34 insertions(+), 10 deletions(-)
+ create mode 100644 package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
+
 -- 
-1.9.3
+2.3.0
