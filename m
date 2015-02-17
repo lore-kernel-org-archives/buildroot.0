@@ -1,50 +1,39 @@
-From: Gary Partis <gary@partis.co.uk>
-Date: Tue, 17 Feb 2015 12:58:10 -0000
-Subject: [Buildroot] grub2 and 2015.02-rc2
-Message-ID: <01df01d04ab1$6283b550$278b1ff0$@partis.co.uk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Feb 2015 14:20:51 +0100
+Subject: [Buildroot] [git commit] imagemagick: use official download site
+Message-ID: <20150217132057.D008581773@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all
+commit: http://git.buildroot.net/buildroot/commit/?id=12a6c5b12cd102cb97096584cf5a56632b8ab927
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Don't use anymore the alternate download site beacause it does not
+conatins anymore older versions, instead use the official download site
+because now it contains even the older versions.
+
+Signed-off-by: Fabio Porcedda <Fabio.Porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.mk |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
+
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index f78fcd3..ab2b792 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -6,10 +6,7 @@
  
-
-I use BR2_ROOTFS_POST_IMAGE_SCRIPT to generate a disk image after completing
-a build, and most of the commands work great using the "hosted" versions
-within the build (ie. dd, parted, mkefs, e2cp etc).
-
+ IMAGEMAGICK_VERSION = 6.9.0-4
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+-# The official ImageMagick site only keeps the latest versions
+-# available, which is annoying. Use an alternate site that keeps all
+-# older versions.
+-IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick
++IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
  
-
-However, when calling "grub-install", it throws back the error 
-
- 
-
-/home/gary/buildroot/buildroot-2015.02-rc2/output/host/usr/sbin/grub-install
-: line 79: /usr/share/grub/grub-mkconfig_lib: No such file or directory
-
- 
-
-as it is attempting to access a file in the host's filesystem, and not the
-"hosted" version.
-
- 
-
-Is there a simple workaround for this, or am I missing something really
-obvious?
-
- 
-
-Thanks in advance,
-
- 
-
-Gary Partis
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150217/ef8681e3/attachment.html>
