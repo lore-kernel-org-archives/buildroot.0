@@ -1,29 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Feb 2015 14:06:08 +0100
-Subject: [Buildroot] [PATCH] busybox: add 1.23.1 patch to fix
- MODPROBE_SMALL
-In-Reply-To: <1424175824-2277-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424175824-2277-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150217140608.1b3f9d4f@free-electrons.com>
+From: Gary Partis <gary@partis.co.uk>
+Date: Tue, 17 Feb 2015 12:58:10 -0000
+Subject: [Buildroot] grub2 and 2015.02-rc2
+Message-ID: <01df01d04ab1$6283b550$278b1ff0$@partis.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi all
 
-On Tue, 17 Feb 2015 09:23:44 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/busybox/0002-modprobe-small.patch | 171 ++++++++++++++++++++++++++++++
->  1 file changed, 171 insertions(+)
->  create mode 100644 package/busybox/0002-modprobe-small.patch
+ 
 
-Applied to master, thanks.
+I use BR2_ROOTFS_POST_IMAGE_SCRIPT to generate a disk image after completing
+a build, and most of the commands work great using the "hosted" versions
+within the build (ie. dd, parted, mkefs, e2cp etc).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ 
+
+However, when calling "grub-install", it throws back the error 
+
+ 
+
+/home/gary/buildroot/buildroot-2015.02-rc2/output/host/usr/sbin/grub-install
+: line 79: /usr/share/grub/grub-mkconfig_lib: No such file or directory
+
+ 
+
+as it is attempting to access a file in the host's filesystem, and not the
+"hosted" version.
+
+ 
+
+Is there a simple workaround for this, or am I missing something really
+obvious?
+
+ 
+
+Thanks in advance,
+
+ 
+
+Gary Partis
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150217/ef8681e3/attachment.html>
