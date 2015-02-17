@@ -1,42 +1,53 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue, 17 Feb 2015 23:02:56 +0100
-Subject: [Buildroot] [PATCH 2/2] [RFC] mesa3d: Use LLVM as the shader
-	compiler when applicable
-In-Reply-To: <1424210576-18526-1-git-send-email-paul@crapouillou.net>
-References: <1424210576-18526-1-git-send-email-paul@crapouillou.net>
-Message-ID: <1424210576-18526-3-git-send-email-paul@crapouillou.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Feb 2015 23:38:10 +0100
+Subject: [Buildroot] setting up directfb for a raspberry pi +
+ waveshare32b display
+Message-ID: <trinity-6efddf4c-f989-4dcd-9386-73a7d9dcf612-1424212689909@3capp-gmx-bs50>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- package/mesa3d/mesa3d.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hello Lou,
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index eb38a9a..7a825f3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -24,6 +24,17 @@ MESA3D_DEPENDENCIES = \
- 	host-xutil_makedepend \
- 	libdrm
- 
-+ifeq ($(BR2_PACKAGE_HOST_LLVM),y)
-+MESA3D_DEPENDENCIES += elfutils host-llvm
-+MESA3D_CONF_OPTS += --enable-gallium-llvm=yes \
-+					--enable-r600-llvm-compiler=yes \
-+					--with-llvm-prefix=$(HOST_DIR)/usr
-+else
-+MESA3D_CONF_OPTS += --enable-llvm-shared-libs=no \
-+					--enable-r600-llvm-compiler=no \
-+					--enable-gallium-llvm=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_DEPENDENCIES += \
- 	xproto_xf86driproto \
--- 
-2.1.4
+On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
+> Hi all. I have a buildroot setup running on a raspberry pi model b+ and a
+> waveshare32b 3.2" display and was able to get the system to work with the
+> display thanks to peter seiderer's awesome patch that builds the fbtft
+> drivers for buildroot, but I now would like to set up directfb to work on
+> this setup. Directfb built nicely, along with sdl and qt5 (I'm setting up
+> the framework for a gui on a buildroot based media player), but I cannot
+> get anything to work on directfb. I run the command "df_drivertest" that
+> tests for the driver, and it gives a
+> 
+> (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
+> requested operation or an argument is (currently)Not
+> supported.
+> 
+> The same thing happens when I try to run any of their directfb demos.
+> I went on their site, directfb.org, and a lot of the links that would
+> help are dead
+> 
+
+Just a quick test:
+
+$ df_knuckles --dfb:help
+$ df_knuckles --dfb:fbdev=/dev/fb1
+$ df_dok --dfb:fbdev=/dev/fb1
+$ df_cpuload --dfb:fbdev=/dev/fb1
+
+work for me...
+
+$ df_drivertest  --dfb:fbdev=/dev/fb1
+df_drivertest.c <97>:
+        (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The requested operation or an argument is (currently) not supported
+
+failes..
+
+Regards,
+Peter
+
+> 
+> I want to use a setup lighter than xorg and supports touchscreen for a
+> gui on a multimedia player I am working on.
