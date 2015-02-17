@@ -1,35 +1,41 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 17 Feb 2015 18:55:12 +0100
-Subject: [Buildroot] [PATCH 2/4] python-cheetah: add host-package support
-In-Reply-To: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
-References: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1424195714-15903-2-git-send-email-gwenj@trabucayre.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 17 Feb 2015 19:19:03 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-02-16
+References: <20150217073016.9F5601017A8@stock.ovh.net>
+ <54E34E14.7000308@imgtec.com>
+Message-ID: <XnsA444C481BAFD4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Vicente Olivert Riera <Vincent.Riera@imgtec.com> 
+wrote in news:54E34E14.7000308 at imgtec.com:
 
-Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
+> Hello everyone,
+> 
+> On 17/02/15 08:30, Thomas Petazzoni wrote:
+>> Build statistics for 2015-02-16
+>> ===============================
+>>       mipsel | mjpg-streamer-730b5bcdc378b... | NOK | 
+http://autobuild.buildroot.net/results/cd52b739370d57b5ecbc6472b8c7f1126700e8
+5f/
+> 
+> this package is failing when building it statically because it tries to
+> build the plugins which are shared objects. The mjpg_streamer binary
+> loads those plugins using "dlopen". This application seems useless
+> without those plugins, so, do you agree to disable this package when
+> BR2_STATIC_LIBS == y?
+> 
+> Thanks.
+> --
+> Vincent
+> 
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/python-cheetah/python-cheetah.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Hi,
 
-diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-index 08076b5..faf2436 100644
---- a/package/python-cheetah/python-cheetah.mk
-+++ b/package/python-cheetah/python-cheetah.mk
-@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
- PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
- PYTHON_CHEETAH_LICENSE = MIT
- PYTHON_CHEETAH_SETUP_TYPE = setuptools
-+PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
--- 
-2.0.5
+yes.
+
+Regards, Bernd
