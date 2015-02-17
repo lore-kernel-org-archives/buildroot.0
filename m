@@ -1,77 +1,65 @@
 From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Tue, 17 Feb 2015 16:42:39 +0100
-Subject: [Buildroot] [PATCH] netsnmp: Make server and client installation
-	optional
-Message-ID: <1424187759-534-1-git-send-email-stefan.sorensen@spectralink.com>
+Date: Tue, 17 Feb 2015 16:43:58 +0100
+Subject: [Buildroot] [PATCH] openldap: Make client binary install
+	configurable
+Message-ID: <1424187838-739-1-git-send-email-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The netsnmp package consists of both a server and a number of client
-tools, this makes the installation of both parts optional.
+Some OpenLDAP deployment only need the client libraries and not the client
+tools, so make the tool installation optional.
 
 Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- package/netsnmp/Config.in  | 12 ++++++++++++
- package/netsnmp/netsnmp.mk | 10 ++++++++++
- 2 files changed, 22 insertions(+)
+ package/openldap/Config.in   | 12 ++++++++++++
+ package/openldap/openldap.mk | 11 +++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index 8edbd39..a93a7cc 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -9,6 +9,18 @@ config BR2_PACKAGE_NETSNMP
+diff --git a/package/openldap/Config.in b/package/openldap/Config.in
+index 1f0b1ea..3085a5c 100644
+--- a/package/openldap/Config.in
++++ b/package/openldap/Config.in
+@@ -10,6 +10,18 @@ config BR2_PACKAGE_OPENLDAP
  
- if BR2_PACKAGE_NETSNMP
+ 	  http://www.openldap.org/
  
-+config BR2_PACKAGE_NETSNMP_SERVER
-+	bool "net-snmp server"
++if BR2_PACKAGE_OPENLDAP
++
++config BR2_PACKAGE_OPENLDAP_CLIENTS
++	bool "openldap client binaries"
 +	default y
 +	help
-+	  The snmpd server
++	  Install the OpenLDAP client tools (ldapadd, ldapcompare, ldapdelete,
++	  ldapexop, ldapmodify, ldapmodrdn, ldappasswd, ldapsearch, ldapurl,
++	  ldapwhoami)
 +
-+config BR2_PACKAGE_NETSNMP_CLIENTS
-+	bool "net-snmp clients"
-+	default y
-+	help
-+	  The net-snmp clients (snmpget, snmpwalk, etc).
-+
- config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 	bool "Install MIB files on target and enable MIB loading code"
- 	default y
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index f1b103e..b272da2 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -67,6 +67,14 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
- 	NETSNMP_CONF_OPTS += --disable-debugging
- endif
- 
-+ifneq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
-+NETSNMP_CONF_OPTS += --disable-agent
 +endif
 +
-+ifneq ($(BR2_PACKAGE_NETSNMP_CLIENTS),y)
-+NETSNMP_CONF_OPTS += --disable-applications
+ comment "openldap needs a toolchain w/ wchar"
+ 	depends on BR2_USE_MMU # needs fork()
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 332b2c4..3e90a87 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -55,4 +55,15 @@ OPENLDAP_CONF_OPTS += \
+ # executable it is supposed to install, resulting in an error.
+ OPENLDAP_MAKE_ENV = STRIP="$(TARGET_STRIP)"
+ 
++ifeq ($(BR2_PACKAGE_OPENLDAP_CLIENTS),)
++define OPENLDAP_REMOVE_CLIENTS
++	for f in ldapurl ldapexop ldapcompare ldapwhoami ldappasswd ldapmodrdn \
++		ldapdelete ldapmodify ldapsearch; do \
++		rm -rf $(TARGET_DIR)/usr/bin/$f; \
++	done
++	rm -rf $(TARGET_DIR)/etc/openldap
++endef
++OPENLDAP_POST_INSTALL_TARGET_HOOKS += OPENLDAP_REMOVE_CLIENTS
 +endif
 +
- # Remove IPv6 MIBs if there's no IPv6
- ifneq ($(BR2_INET_IPV6),y)
- define NETSNMP_REMOVE_MIBS_IPV6
-@@ -84,10 +92,12 @@ endef
- 
- NETSNMP_POST_INSTALL_TARGET_HOOKS += NETSNMP_REMOVE_BLOAT_MIBS
- 
-+ifeq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
- define NETSNMP_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
- 		$(TARGET_DIR)/etc/init.d/S59snmpd
- endef
-+endif
- 
- define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
- 	$(SED) 	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
+ $(eval $(autotools-package))
 -- 
 1.9.3
