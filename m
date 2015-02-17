@@ -1,45 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Feb 2015 23:29:43 +0100
-Subject: [Buildroot] [git commit] libunistring: bump to version 0.9.5
-Message-ID: <20150302222719.0DBED807B5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Feb 2015 14:02:51 +0100
+Subject: [Buildroot] [git commit] libnspr: bump to version 4.10.8
+Message-ID: <20150302222718.E7F8A807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b265f0e0719f5e32d37d26870992de0e63997e9a
+commit: http://git.buildroot.net/buildroot/commit/?id=f828739a5b71cc837b1f49acbf82ceaa9b1cee53
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libunistring/libunistring.hash |    2 ++
- package/libunistring/libunistring.mk   |    3 ++-
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ package/libnspr/libnspr.hash |    2 ++
+ package/libnspr/libnspr.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
 new file mode 100644
-index 0000000..e272997
+index 0000000..632422f
 --- /dev/null
-+++ b/package/libunistring/libunistring.hash
++++ b/package/libnspr/libnspr.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index fd77d12..0060518 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,8 +4,9 @@
++# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.10.8/src/SHA256SUMS
++sha256	507ea57c525c0c524dae4857a642b4ef5c9d795518754c7f83422d22fe544a15	nspr-4.10.8.tar.gz
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index c4f86cc..91a740a 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUNISTRING_VERSION = 0.9.4
-+LIBUNISTRING_VERSION = 0.9.5
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
-+LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
- LIBUNISTRING_LICENSE = LGPLv3+
- LIBUNISTRING_LICENSE_FILES = COPYING.LIB
+-LIBNSPR_VERSION = 4.10.7
++LIBNSPR_VERSION = 4.10.8
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
