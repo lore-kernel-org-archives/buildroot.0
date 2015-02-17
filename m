@@ -1,23 +1,25 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Feb 2015 17:24:53 -0300
-Subject: [Buildroot] [PATCH] cryptodev-linux: bump to version 1.7
-Message-ID: <1424204693-25500-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Feb 2015 18:18:32 -0300
+Subject: [Buildroot] [PATCH v2] cryptodev-linux: bump to version 1.7
+Message-ID: <1424207912-4917-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash file.
-And drop upstream patch.
+Also add hash file and build fix patch (upstream) for kernels >=3.19.
+Drop old patches that were upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
  ...ce_INIT_COMPLETION_with_reinit_completion.patch | 83 ----------------------
+ .../0001-fix-compilation-against-linux-3.19.patch  | 37 ++++++++++
  package/cryptodev-linux/cryptodev-linux.hash       |  2 +
  package/cryptodev-linux/cryptodev-linux.mk         |  2 +-
- 3 files changed, 3 insertions(+), 84 deletions(-)
+ 4 files changed, 40 insertions(+), 84 deletions(-)
  delete mode 100644 package/cryptodev-linux/0001-Replace_INIT_COMPLETION_with_reinit_completion.patch
+ create mode 100644 package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
  create mode 100644 package/cryptodev-linux/cryptodev-linux.hash
 
 diff --git a/package/cryptodev-linux/0001-Replace_INIT_COMPLETION_with_reinit_completion.patch b/package/cryptodev-linux/0001-Replace_INIT_COMPLETION_with_reinit_completion.patch
@@ -109,6 +111,49 @@ index 3c1b580..0000000
 - #include <linux/fs.h>
 --- 
 -1.8.3.1
+diff --git a/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch b/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
+new file mode 100644
+index 0000000..aebbc9b
+--- /dev/null
++++ b/package/cryptodev-linux/0001-fix-compilation-against-linux-3.19.patch
+@@ -0,0 +1,37 @@
++From 5054d20d45571cc85339351fde52f872eeb82206 Mon Sep 17 00:00:00 2001
++From: Phil Sutter <phil@nwl.cc>
++Date: Tue, 10 Feb 2015 04:57:05 +0100
++Subject: [PATCH] fix compilation against linux-3.19
++
++Commit f938612dd97d481b8b5bf960c992ae577f081c17 in linux.git removes
++get_unused_fd() macro. This patch changes the calling code to use it's
++content 'get_unused_fd_flags(0)' instead. Checking for when
++get_unused_fd_flags was introduced shows it's been there since 2.6.23 at
++least, so probably no need to make this change conditional on the target
++kernel version.
++
++Original patch by Ricardo Ribalda Delgado for Open Embedded, reported by
++Oleg Rakhmanov.
++
++Signed-off-by: Phil Sutter <phil@nwl.cc>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ ioctl.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ioctl.c b/ioctl.c
++index 5a55a76..b23f5fd 100644
++--- a/ioctl.c
+++++ b/ioctl.c
++@@ -546,7 +546,7 @@ static int
++ clonefd(struct file *filp)
++ {
++ 	int ret;
++-	ret = get_unused_fd();
+++	ret = get_unused_fd_flags(0);
++ 	if (ret >= 0) {
++ 			get_file(filp);
++ 			fd_install(ret, filp);
++-- 
++2.0.5
++
 diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
 new file mode 100644
 index 0000000..d5e0bae
