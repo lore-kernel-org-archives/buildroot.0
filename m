@@ -1,8 +1,9 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 17 Feb 2015 18:55:11 +0100
-Subject: [Buildroot] [PATCH 1/4] pkg-cmake: allow to build package in a
-	subdirectory
-Message-ID: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+Date: Tue, 17 Feb 2015 18:55:12 +0100
+Subject: [Buildroot] [PATCH 2/4] python-cheetah: add host-package support
+In-Reply-To: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+References: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1424195714-15903-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +12,24 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-For some cmake based packages, like GNURadio, it's forbidden to do the
-compilation directly in the sources directory. This patch add a new 
-variable to specify, if needed, the name of a sub-directory used to compile.
+Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/pkg-cmake.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6c9955d..20243aa 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -57,7 +57,11 @@ $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
- $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 08076b5..faf2436 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
++PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
  
- $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
-+ifneq ($$($2)_BUILD_DIR,)
-+$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/$$($(2)_BUILD_DIR)
-+else
- $(2)_BUILDDIR			= $$($(2)_SRCDIR)
-+endif
- 
- #
- # Configure step. Only define it if not already defined by the package
-@@ -69,7 +73,8 @@ ifeq ($(4),target)
- 
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
--	(cd $$($$(PKG)_BUILDDIR) && \
-+	(mkdir -p $$($$(PKG)_BUILDDIR) && \
-+	cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-@@ -93,7 +98,8 @@ else
- 
- # Configure package for host
- define $(2)_CONFIGURE_CMDS
--	(cd $$($$(PKG)_BUILDDIR) && \
-+	(mkdir -p $$($$(PKG)_BUILDDIR) && \
-+	cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	PATH=$$(BR_PATH) \
- 	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.0.5
