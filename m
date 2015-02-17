@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:30:02 +0100
-Subject: [Buildroot] [git commit] squid: bump to version 3.5.2
-Message-ID: <20150302222719.259BD807B5@busybox.osuosl.org>
+Date: Tue, 17 Feb 2015 14:03:08 +0100
+Subject: [Buildroot] [git commit] libnss: bump to version 3.17.4
+Message-ID: <20150302222719.00D92807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2dd31aa01312e6ae5f604649c658b9cf21a3731
+commit: http://git.buildroot.net/buildroot/commit/?id=cc6be50e07b5e766173cef51ed544d77184c3c48
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnss/libnss.hash |    4 ++--
+ package/libnss/libnss.mk   |    3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 574d462..7d3e3f6 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.1.tar.xz.asc
--md5	b3c9d9726314c1136b7a4c06447db24b	squid-3.5.1.tar.xz
--sha1	a2b01afd33d1df3a234e1a5c3405d626f6cf0fb0	squid-3.5.1.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.2.tar.xz.asc
-+md5	0330ec9f69e333c2a81fa4502ba96a22	squid-3.5.2.tar.xz
-+sha1	9c546d72df741c9ddaa6da87baa2112503bcbb45	squid-3.5.2.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e385c37..874332f 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 5664e93..1f76f03 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_3_RTM/src/
+-sha256	f4d5e9035a2f84f25f35c283de3b0ff60d72e918748de25eaf017ed201fa21d5	nss-3.17.3.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_4_RTM/src/SHA256SUMS
++sha256	1d98ad1881a4237ec98cbe472fc851480f0b0e954dfe224d047811fb96ff9d79	nss-3.17.4.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index ea28e5c..db272b3 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).2
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-LIBNSS_VERSION = 3.17.3
++LIBNSS_VERSION = 3.17.4
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+@@ -37,7 +37,6 @@ LIBNSS_BUILD_VARS += USE_64=1
+ endif
+ endif
+ 
+-
+ define LIBNSS_BUILD_CMDS
+ 	$(MAKE1) -C $(@D)/nss coreconf \
+ 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
