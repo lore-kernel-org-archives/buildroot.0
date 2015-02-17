@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Feb 2015 14:42:48 +0100
-Subject: [Buildroot] grub2 and 2015.02-rc2
-In-Reply-To: <01df01d04ab1$6283b550$278b1ff0$@partis.co.uk>
-References: <01df01d04ab1$6283b550$278b1ff0$@partis.co.uk>
-Message-ID: <20150217144248.3996c923@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Feb 2015 10:43:54 -0300
+Subject: [Buildroot] [PATCH 1/2] xterm: remove superfluous
+	INSTALL_TARGET_OPTS
+Message-ID: <1424180635-10327-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Partis,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/xterm/xterm.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-On Tue, 17 Feb 2015 12:58:10 -0000, Gary Partis wrote:
-
-> Is there a simple workaround for this, or am I missing something really
-> obvious?
-
-Did you follow the grub2 installation procedure described at:
-
-  http://git.buildroot.net/buildroot/tree/boot/grub2/Config.in#n14
-
-This text is visible in the help text of the grub2 option in
-menuconfig/xconfig.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 3f5b978..7413875 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -8,7 +8,6 @@ XTERM_VERSION = 306
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = ftp://invisible-island.net/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw
+-XTERM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
+ XTERM_LICENSE = MIT
+ XTERM_LICENSE_FILES = version.c
+ XTERM_CONF_OPTS = --enable-256-color
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
