@@ -1,39 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Feb 2015 13:58:22 +0100
-Subject: [Buildroot] [git commit] gnutls: make sure librt detection doesn't
-	poison the linker flags
-Message-ID: <20150217125839.8C9D08175E@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Feb 2015 09:57:43 -0300
+Subject: [Buildroot] [PATCH 1/2] libnspr: bump to version 4.10.8
+Message-ID: <1424177864-24520-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b34c63375a88999d232129428a2297f5ddb9c465
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also add hash file.
 
-Just like we're passing --with-libpthread-prefix, we also need to pass
---with-librt-prefix in order to avoid having the gnutls build system
-detect the librt in /usr/lib, and pass -L/usr/lib to the linker flags.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/fa5/fa58602cb78ffe3ae4ee389ef5cf5a37b7657c4c/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gnutls/gnutls.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libnspr/libnspr.hash | 2 ++
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/libnspr/libnspr.hash
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index ab176a6..6c64b38 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -17,6 +17,7 @@ GNUTLS_DEPENDENCIES = host-pkgconf nettle pcre \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib)
- GNUTLS_CONF_OPTS = \
- 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
-+	--with-librt-prefix=$(STAGING_DIR) \
- 	--disable-rpath \
- 	--disable-doc \
- 	--disable-guile \
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+new file mode 100644
+index 0000000..632422f
+--- /dev/null
++++ b/package/libnspr/libnspr.hash
+@@ -0,0 +1,2 @@
++# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.10.8/src/SHA256SUMS
++sha256	507ea57c525c0c524dae4857a642b4ef5c9d795518754c7f83422d22fe544a15	nspr-4.10.8.tar.gz
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index c4f86cc..91a740a 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.10.7
++LIBNSPR_VERSION = 4.10.8
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
+-- 
+2.0.5
