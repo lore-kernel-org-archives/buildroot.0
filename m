@@ -1,144 +1,98 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Wed, 18 Feb 2015 10:02:20 -0800
-Subject: [Buildroot] [PATCH] Raspberry Pi 2 Support
-Message-ID: <1424282540-6127-1-git-send-email-g@maral.me>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 18 Feb 2015 12:15:04 -0600
+Subject: [Buildroot] Fwd: Re:  Grub2 and Splash
+In-Reply-To: <54E4CF63.20504@ou.edu>
+References: <54E4CF63.20504@ou.edu>
+Message-ID: <54E4D6A8.7020200@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added support for Raspberry Pi 2, tried to keep the configuration
-similar to the current RPi support.
+Forgot to copy the list
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
----
- configs/raspberrypi2_defconfig       | 26 ++++++++++++++++++++++++++
- package/rpi-firmware/cmdline7.txt    |  1 +
- package/rpi-firmware/config7.txt     |  7 +++++++
- package/rpi-firmware/rpi-firmware.mk | 18 +++++++++++++-----
- package/rpi-userland/rpi-userland.mk |  2 +-
- 5 files changed, 48 insertions(+), 6 deletions(-)
- create mode 100644 configs/raspberrypi2_defconfig
- create mode 100644 package/rpi-firmware/cmdline7.txt
- create mode 100644 package/rpi-firmware/config7.txt
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-new file mode 100644
-index 0000000..431bff9
---- /dev/null
-+++ b/configs/raspberrypi2_defconfig
-@@ -0,0 +1,26 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_CPU_ARMV7A=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-+
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+
-+# Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.12.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
-+
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d45454dbe5abf593bf724a9f1c556421f4596305"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/package/rpi-firmware/cmdline7.txt b/package/rpi-firmware/cmdline7.txt
-new file mode 100644
-index 0000000..192fb98
---- /dev/null
-+++ b/package/rpi-firmware/cmdline7.txt
-@@ -0,0 +1 @@
-+console=tty1 root=/dev/mmcblk0p2 rootwait
-diff --git a/package/rpi-firmware/config7.txt b/package/rpi-firmware/config7.txt
-new file mode 100644
-index 0000000..84f93c3
---- /dev/null
-+++ b/package/rpi-firmware/config7.txt
-@@ -0,0 +1,7 @@
-+# Please note that this is only a sample, we recommend you to change it to fit
-+# your needs.
-+# You should override this file using a post-build script.
-+# See http://buildroot.org/downloads/manual/manual.html#rootfs-custom
-+# and http://elinux.org/RPiconfig for a description of config.txt syntax
-+
-+kernel=zImage
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 03178d5..d663bf7 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
-+RPI_FIRMWARE_VERSION = 8aca5762f984f6decbeda294cee8418966c3d8d3
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-@@ -13,19 +13,26 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
- 
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
--# The Device Tree blobs are not yet in the master branch of the
--# raspberrypi firmware project, so we have to use a separate branch
--# for now.
--RPI_FIRMWARE_VERSION = 09627457b9e15bf4ea4e6751d3c173a3fb65df07
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
- 	for ovldtb in  $(@D)/boot/overlays/*.dtb; do \
- 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
- 	done
- endef
- endif
- 
-+ifeq ($(BR2_cortex_a7),y)
-+define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-+	$(INSTALL) -D -m 0644 package/rpi-firmware/config7.txt $(BINARIES_DIR)/rpi-firmware/config.txt
-+	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline7.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
-+	$(RPI_FIRMWARE_INSTALL_DTB)
-+endef
-+else
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
- 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-@@ -34,6 +41,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
- 	$(RPI_FIRMWARE_INSTALL_DTB)
- endef
-+endif
- 
- # We have no host sources to get, since we already
- # bundle the script we want to install.
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 3f92950..7a19184 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = ba753c1a7f68d7a2e00edaf03364eef001e233ef
-+RPI_USERLAND_VERSION = 8efa5baddf63166b9d114ce34e1da10685a11ad6
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
--- 
-2.0.5
+-------- Forwarded Message --------
+Subject: Re: [Buildroot] Grub2 and Splash
+Date: Wed, 18 Feb 2015 11:44:03 -0600
+From: Steve Kenton <skenton@ou.edu>
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+On 02/18/2015 10:38 AM, Thomas Petazzoni wrote:
+> Dear Steve Kenton,
+> 
+> On Wed, 18 Feb 2015 10:30:10 -0600, Steve Kenton wrote:
+> 
+>> Looking into adding a splash screen to my grub2 menu.
+>> Cobbled together the one below using font from my build host and it works.
+>> Trying to build unicode.pf2 with buildroot immediately ran into snag with freetype.
+> 
+> Could you please be more specific than "ran into snag" ? Which error
+> messages and issues, when trying what exactly ?
+Changed ~/buildroot-2015.02-rc2/boot/grub2/grub2.mk to enable grub-mkfont and added dependency
+on freetype after first failure for missing freetype include
+
+GRUB2_CONF_OPTS = \
+	--target=$(GRUB2_TARGET) \
+	--with-platform=$(GRUB2_PLATFORM) \
+	--enable-grub-mkfont \
+	--enable-efiemu=no \
+	--enable-liblzma=no \
+	--enable-device-mapper=no \
+	--enable-libzfs=no \
+	--disable-werror
+
+GRUB2_DEPENDENCIES += freetype
+
+Re-ran make grub2-reconfigure
+...
+./config.status --file=00_header:util/grub.d/00_header.in
+util/grub-mkfont.c:42:30: fatal error: freetype/ftsynth.h: No such file or directory
+ #include <freetype/ftsynth.h>
+                              ^
+compilation terminated.
+
+> 
+>>
+>> Finally RTFM and realized how special the grub2 build is.
+>> Is there a reason that grub2 is not just built as a regular host package?
+> 
+> Because grub2 is kind of special: it needs to build both some things
+> for the target, and some things for the host. And there are some
+> explanations about it in grub2.mk:
+Yes, looked at that and ./configure --help for grub2, saw that it clearly defined
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
+
+> 
+> ===
+> 
+> # Grub2 is kind of special: it considers CC, LD and so on to be the
+> # tools to build the native tools (i.e to be executed on the build
+> # machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
+> # build the bootloader itself.
+Understand, two tool chains required. Still trying to understand  their use in buildroot scripts
+> 
+> GRUB2_CONF_ENV = \
+>         $(HOST_CONFIGURE_OPTS) \
+>         CPP="$(HOSTCC) -E" \
+>         TARGET_CC="$(TARGET_CC)" \
+>         TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+>         TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
+> 
+> ===
+> 
+> And it is actually more logical for grub2 to be a target package: the
+> main purpose of grub2 is to have a bootloader on the target, much like
+> U-Boot or Barebox. The fact that in addition Grub2 provides a bunch of
+> host utilities is kind of a "detail".
+Hmm, not sure I agree about the "detail". As currently built some of the grub scripts
+such as grub-mkconfig would try to run other scripts residing in the
+build hosts /usr directory not the version in buildroot $HOST_DIR or $TARGET_DIR
+I am of the opinion that if we build it it should work :-) Currently the instructions
+to install grub2 are more complicated then "install-grub ..."
+
+Steve
