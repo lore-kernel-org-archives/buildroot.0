@@ -1,57 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Feb 2015 17:25:04 +0100
-Subject: [Buildroot] [git commit] make: disable the 'load' operation for
-	static builds
-Message-ID: <20150218222259.3C419803D2@busybox.osuosl.org>
+Date: Wed, 18 Feb 2015 23:21:01 +0100
+Subject: [Buildroot] [git commit] pkg-rebar: add bin to list of install
+	directories
+Message-ID: <20150218222259.4DB247FEAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13a98d3d560f07bc785c5234503fcd11c834a520
+commit: http://git.buildroot.net/buildroot/commit/?id=7af66e505359ce3b89f18d263c7e949522287816
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Disable the 'load' operation for static builds since it needs dlopen and
-friends. Otherwise it will fail with an error message like this one:
+Some Erlang packages provide a bin directory for programs that are to be
+invoked from the command line. An example of such a package is the Lisp
+Flavored Erlang compiler. The Erlang OTP library includes several more
+examples (it doesn't use rebar, though.) This change makes sure that the
+bin directory gets installed too.
 
-load.o: In function `load_file':
-load.c:(.text+0x2a8): undefined reference to `dlopen'
-load.c:(.text+0x2c4): undefined reference to `dlerror'
-load.c:(.text+0x308): undefined reference to `dlsym'
-load.c:(.text+0x33c): undefined reference to `dlopen'
-load.c:(.text+0x35c): undefined reference to `dlsym'
-load.c:(.text+0x380): undefined reference to `dlopen'
-load.c:(.text+0x39c): undefined reference to `dlopen'
-load.c:(.text+0x3a0): undefined reference to `dlerror'
-load.c:(.text+0x42c): undefined reference to `dlsym'
-load.c:(.text+0x470): undefined reference to `dlsym'
-load.c:(.text+0x48c): undefined reference to `dlerror'
-load.o: In function `unload_file':
-load.c:(.text+0x63c): undefined reference to `dlclose'
-collect2: error: ld returned 1 exit status
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/9e3/9e39039b6db79a46990cd9bdcb179289e38d9f31/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/make/make.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/pkg-rebar.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 20469ba..d643fb0 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -11,4 +11,9 @@ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- MAKE_LICENSE = GPLv3+
- MAKE_LICENSE_FILES = COPYING
+diff --git a/package/pkg-rebar.mk b/package/pkg-rebar.mk
+index 57fb2f4..45d1c7d 100644
+--- a/package/pkg-rebar.mk
++++ b/package/pkg-rebar.mk
+@@ -43,7 +43,7 @@ REBAR_TARGET_DEPS_ENV = \
  
-+# Disable the 'load' operation for static builds since it needs dlopen
-+ifeq ($(BR2_STATIC_LIBS),y)
-+	MAKE_CONF_OPTS += --disable-load
-+endif
-+
- $(eval $(autotools-package))
+ # Install an Erlang application from $(@D).
+ #
+-# i.e., define a recipe that installs the "ebin priv $(2)" directories
++# i.e., define a recipe that installs the "bin ebin priv $(2)" directories
+ # from $(@D) to $(1)$($(PKG)_ERLANG_LIBDIR).
+ #
+ #  argument 1 should typically be $(HOST_DIR), $(TARGET_DIR),
+@@ -57,7 +57,7 @@ REBAR_TARGET_DEPS_ENV = \
+ #
+ define install-erlang-directories
+ 	$(INSTALL) -d $(1)/$($(PKG)_ERLANG_LIBDIR)
+-	for dir in ebin priv $(2); do                                   \
++	for dir in bin ebin priv $(2); do                               \
+ 		if test -d $(@D)/$$dir; then                            \
+ 			cp -r $(@D)/$$dir $(1)$($(PKG)_ERLANG_LIBDIR);  \
+ 		fi;                                                     \
