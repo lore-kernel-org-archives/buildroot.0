@@ -1,35 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Feb 2015 09:20:50 +0100
-Subject: [Buildroot] [PATCHv2 for next 2/2] toolchain: create symlink to
- 'lib' from ARCH_LIB_DIR iso fixed lib32/lib64
-In-Reply-To: <1424186973-7838-3-git-send-email-patrickdepinguin@gmail.com>
-References: <1424186973-7838-1-git-send-email-patrickdepinguin@gmail.com>
- <1424186973-7838-3-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LXYqRLJU153ULJd_izzLuY0mC0LPOxEzN9QbeuDOEFC7w@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 18 Feb 2015 09:28:11 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-02-17
+In-Reply-To: <20150218073015.D72C71011D7@stock.ovh.net>
+References: <20150218073015.D72C71011D7@stock.ovh.net>
+Message-ID: <54E44D1B.6080802@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 17, 2015 at 4:29 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> Currently, following symbolic links are created in both target and
-> staging directories:
-> - lib(32|64) --> lib
-> - usr/lib(32|64) --> lib
->
-> The decision for lib32 or lib64 is based on the target architecture
-> configuration in buildroot (BR2_ARCH_IS_64).
->
-> In at least one case this is not correct: when building for a Cavium Octeon III
-> processor using the toolchain from the Cavium Networks SDK, and specifying
-> -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected in directory
-> 'lib32-fp' rather than 'lib32' (likewise for lib64-fp).
+Hello everyone,
 
-These lines are a bit too long, seems my git-based workflow is not yet
-100% ok :-o
+On 18/02/15 08:30, Thomas Petazzoni wrote:
+> Build statistics for 2015-02-17
+> ===============================
 
-I will resubmit later...
+>     mips64el |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/96c10335489fb27e15c493c6b148e4988bc89e63/
+
+This package fails for all architectures when building it with debug
+symbols. I reported this upstream long time ago:
+
+http://lists.libsdl.org/pipermail/sdl-libsdl.org/2014-November/096804.html
+
+We also had a little discussion in our mailing list:
+
+https://patchwork.ozlabs.org/patch/400969/
+
+Should we disable this package when BR2_ENABLE_DEBUG=y until upstream
+fixes the problem?
+
+Regards,
+--
+Vincent
