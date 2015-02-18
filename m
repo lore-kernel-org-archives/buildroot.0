@@ -1,59 +1,88 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Tue, 17 Feb 2015 17:02:55 -0600
-Subject: [Buildroot] How to avoid rebuilding host-cmake
-In-Reply-To: <BC1FDBEC-8B34-41CB-8335-9FC413467FAC@utexas.edu>
-References: <BC1FDBEC-8B34-41CB-8335-9FC413467FAC@utexas.edu>
-Message-ID: <CAMQcK5+EMynEMspbf6N8VAbHeJksnZg4fP5NSqRDz2smdTK4yA@mail.gmail.com>
+From: Lou Crittenden <loucrittenden63@gmail.com>
+Date: Tue, 17 Feb 2015 19:21:36 -0600
+Subject: [Buildroot] setting up directfb for a raspberry pi +
+	waveshare32b display
+In-Reply-To: <trinity-6efddf4c-f989-4dcd-9386-73a7d9dcf612-1424212689909@3capp-gmx-bs50>
+References: <trinity-6efddf4c-f989-4dcd-9386-73a7d9dcf612-1424212689909@3capp-gmx-bs50>
+Message-ID: <CAFGceHEYEe5u=Ojd08e9vXTZRgE=ML6fCe09LiAwrtQW3SS7DQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David,
+I tried running them and got an error stating it can't find /dev/fusion0 or
+/dev/fusion/0 after running any of the df_knuckles --dfb commands with the
+exception of the help command.
 
-On Tue, Feb 17, 2015 at 4:38 PM, David Kessler <djkessler@utexas.edu> wrote:
+Did you have to create new device nodes and directories? I had to using
+mkdir /dev/fusion
+mkdir /dev/fusion0
+
+then made the device nodes with these commands:
+
+mknod /dev/fusion/0 c 253 0
+mknod /dev/fusion/0 c 252 0
+mknod /dev/fusion0 c 252 0
+mknod /dev/fusion0 c 253 0
+
+I then ran
+$ df_knuckles --dfb:fbdev=/dev/fb1
+$ df_dok --dfb:fbdev=/dev/fb1
+$ df_cpuload --dfb:fbdev=/dev/fb1
+
+both as root and as another user and I get:
+(!) Fusion/Init: could not enter world 0! not a typewriter
+
+I have no idea what that means. Other people have gotten the error as well,
+but haven't had solutions, as per various searches.
+
+On Tue, Feb 17, 2015 at 4:38 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Lou,
 >
-> I am trying to reduce the amount of time it takes to rebuild the
-> linux kernel and its dependencies.  I am already using the external
-> toolchain option (toolchain was originally built using buildroot, but
-> in an external directory) so I?m not rebuilding the toolchain
-> unnecessarily. However, for some reason after doing ?make clean?,
-> host-cmake has to be rebuilt. For my configuration host-cmake is
-> the most time consuming part of the build.
-
-A 'make clean' in the concept of Buildroot delete all build products
-(including build directories, host, staging and target trees, the
-images and the toolchain). Therefore, an understanding of when a full
-rebuild is necessary. Please see the following section in the manual:
-
-http://nightly.buildroot.org/manual.html#full-rebuild
-
-A per package rebuild functionality is availalbe and is described here:
-
-http://nightly.buildroot.org/manual.html#rebuild-pkg
-
-Is it fair to assume that you are trying to do kernel development?
-
-If so, then you should have a look at utilizing the
-<pkg>_OVERRIDE_SRCDIR functionality that Buildroot has which allows
-you to development of a package outside of Buildroot. For more
-detailed information on how to use this feature see Section 8.11.6 in
-the manual:
-
-http://nightly.buildroot.org/manual.html#_advanced_usage
-
-Lastly, you should take a look at utilizing ccache to speed up your
-builds, see Section 8.11.3 in the manual:
-
-http://nightly.buildroot.org/manual.html#_advanced_usage
-
-Thanks,
--Ryan
-
--- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+> On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
+> > Hi all. I have a buildroot setup running on a raspberry pi model b+ and a
+> > waveshare32b 3.2" display and was able to get the system to work with the
+> > display thanks to peter seiderer's awesome patch that builds the fbtft
+> > drivers for buildroot, but I now would like to set up directfb to work on
+> > this setup. Directfb built nicely, along with sdl and qt5 (I'm setting up
+> > the framework for a gui on a buildroot based media player), but I cannot
+> > get anything to work on directfb. I run the command "df_drivertest" that
+> > tests for the driver, and it gives a
+> >
+> > (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
+> > requested operation or an argument is (currently)Not
+> > supported.
+> >
+> > The same thing happens when I try to run any of their directfb demos.
+> > I went on their site, directfb.org, and a lot of the links that would
+> > help are dead
+> >
+>
+> Just a quick test:
+>
+> $ df_knuckles --dfb:help
+> $ df_knuckles --dfb:fbdev=/dev/fb1
+> $ df_dok --dfb:fbdev=/dev/fb1
+> $ df_cpuload --dfb:fbdev=/dev/fb1
+>
+> work for me...
+>
+> $ df_drivertest  --dfb:fbdev=/dev/fb1
+> df_drivertest.c <97>:
+>         (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
+> requested operation or an argument is (currently) not supported
+>
+> failes..
+>
+> Regards,
+> Peter
+>
+> >
+> > I want to use a setup lighter than xorg and supports touchscreen for a
+> > gui on a multimedia player I am working on.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150217/a10441fb/attachment.html>
