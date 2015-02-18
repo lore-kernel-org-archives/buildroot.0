@@ -1,98 +1,71 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Wed, 18 Feb 2015 12:15:04 -0600
-Subject: [Buildroot] Fwd: Re:  Grub2 and Splash
-In-Reply-To: <54E4CF63.20504@ou.edu>
-References: <54E4CF63.20504@ou.edu>
-Message-ID: <54E4D6A8.7020200@ou.edu>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Feb 2015 15:16:09 -0300
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.13
+Message-ID: <1424283369-574-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forgot to copy the list
+Includes the previous CVE-2015-1182 fix (patch dropped) and other fixes
+(security and non) from the 1.3 branch (no CVEs yet), see release notes:
+https://polarssl.org/tech-updates/releases/polarssl-1.2.13-released
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/polarssl/0003-fix-CVE-2015-1182.patch | 19 -------------------
+ package/polarssl/polarssl.hash                |  4 ++--
+ package/polarssl/polarssl.mk                  |  2 +-
+ 3 files changed, 3 insertions(+), 22 deletions(-)
+ delete mode 100644 package/polarssl/0003-fix-CVE-2015-1182.patch
 
--------- Forwarded Message --------
-Subject: Re: [Buildroot] Grub2 and Splash
-Date: Wed, 18 Feb 2015 11:44:03 -0600
-From: Steve Kenton <skenton@ou.edu>
-To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-On 02/18/2015 10:38 AM, Thomas Petazzoni wrote:
-> Dear Steve Kenton,
-> 
-> On Wed, 18 Feb 2015 10:30:10 -0600, Steve Kenton wrote:
-> 
->> Looking into adding a splash screen to my grub2 menu.
->> Cobbled together the one below using font from my build host and it works.
->> Trying to build unicode.pf2 with buildroot immediately ran into snag with freetype.
-> 
-> Could you please be more specific than "ran into snag" ? Which error
-> messages and issues, when trying what exactly ?
-Changed ~/buildroot-2015.02-rc2/boot/grub2/grub2.mk to enable grub-mkfont and added dependency
-on freetype after first failure for missing freetype include
-
-GRUB2_CONF_OPTS = \
-	--target=$(GRUB2_TARGET) \
-	--with-platform=$(GRUB2_PLATFORM) \
-	--enable-grub-mkfont \
-	--enable-efiemu=no \
-	--enable-liblzma=no \
-	--enable-device-mapper=no \
-	--enable-libzfs=no \
-	--disable-werror
-
-GRUB2_DEPENDENCIES += freetype
-
-Re-ran make grub2-reconfigure
-...
-./config.status --file=00_header:util/grub.d/00_header.in
-util/grub-mkfont.c:42:30: fatal error: freetype/ftsynth.h: No such file or directory
- #include <freetype/ftsynth.h>
-                              ^
-compilation terminated.
-
-> 
->>
->> Finally RTFM and realized how special the grub2 build is.
->> Is there a reason that grub2 is not just built as a regular host package?
-> 
-> Because grub2 is kind of special: it needs to build both some things
-> for the target, and some things for the host. And there are some
-> explanations about it in grub2.mk:
-Yes, looked at that and ./configure --help for grub2, saw that it clearly defined
-System types:
-  --build=BUILD     configure for building on BUILD [guessed]
-  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
-  --target=TARGET   configure for building compilers for TARGET [HOST]
-
-> 
-> ===
-> 
-> # Grub2 is kind of special: it considers CC, LD and so on to be the
-> # tools to build the native tools (i.e to be executed on the build
-> # machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
-> # build the bootloader itself.
-Understand, two tool chains required. Still trying to understand  their use in buildroot scripts
-> 
-> GRUB2_CONF_ENV = \
->         $(HOST_CONFIGURE_OPTS) \
->         CPP="$(HOSTCC) -E" \
->         TARGET_CC="$(TARGET_CC)" \
->         TARGET_CFLAGS="$(TARGET_CFLAGS)" \
->         TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
-> 
-> ===
-> 
-> And it is actually more logical for grub2 to be a target package: the
-> main purpose of grub2 is to have a bootloader on the target, much like
-> U-Boot or Barebox. The fact that in addition Grub2 provides a bunch of
-> host utilities is kind of a "detail".
-Hmm, not sure I agree about the "detail". As currently built some of the grub scripts
-such as grub-mkconfig would try to run other scripts residing in the
-build hosts /usr directory not the version in buildroot $HOST_DIR or $TARGET_DIR
-I am of the opinion that if we build it it should work :-) Currently the instructions
-to install grub2 are more complicated then "install-grub ..."
-
-Steve
+diff --git a/package/polarssl/0003-fix-CVE-2015-1182.patch b/package/polarssl/0003-fix-CVE-2015-1182.patch
+deleted file mode 100644
+index 9309c9d..0000000
+--- a/package/polarssl/0003-fix-CVE-2015-1182.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Fix CVE-2015-1182 - Remote attack using crafted certificates.
+-Patch status: from upstream see:
+-https://polarssl.org/tech-updates/security-advisories/polarssl-security-advisory-2014-04
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff --git a/library/asn1parse.c b/library/asn1parse.c
+-index a3a2b56..e2117bf 100644
+---- a/library/asn1parse.c
+-+++ b/library/asn1parse.c
+-@@ -278,6 +278,8 @@ int asn1_get_sequence_of( unsigned char **p,
+-             if( cur->next == NULL )
+-                 return( POLARSSL_ERR_ASN1_MALLOC_FAILED );
+-
+-+            memset( cur->next, 0, sizeof( asn1_sequence ) );
+-+
+-             cur = cur->next;
+-         }
+-     }
+diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
+index 9769788..d68185b 100644
+--- a/package/polarssl/polarssl.hash
++++ b/package/polarssl/polarssl.hash
+@@ -1,2 +1,2 @@
+-# From https://polarssl.org/tech-updates/releases/polarssl-1.2.12-released
+-sha256	63dd60e78d25c438648607bb177b063dcf5fbf3ced9ee794fcb165d101940131	polarssl-1.2.12-gpl.tgz
++# From https://polarssl.org/tech-updates/releases/polarssl-1.2.13-released
++sha256	62f44f2a9f39b5cefb229e5dd2644ca20ead477cb1843d6ff30671624315b021	polarssl-1.2.13-gpl.tgz
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 046c6bf..83e1851 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ POLARSSL_SITE = https://polarssl.org/code/releases
+-POLARSSL_VERSION = 1.2.12
++POLARSSL_VERSION = 1.2.13
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+-- 
+2.0.5
