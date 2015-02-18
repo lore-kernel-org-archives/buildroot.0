@@ -1,39 +1,34 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 18 Feb 2015 21:37:49 +0100
-Subject: [Buildroot] [PATCH 3/4] br-reproduce-build: fix URL of gitid
-In-Reply-To: <20150218202651.GA3896@free.fr>
-References: <cover.1423910953.git.yann.morin.1998@free.fr>
- <ca854982ed957dec6bdc523ae2974e0aa630ea75.1423910953.git.yann.morin.1998@free.fr>
- <20150214221014.4643c5cd@free-electrons.com> <20150214215838.GF3886@free.fr>
- <CAHkwnC9TvNQCVK4nyvSvD-K2z688nNqWV-rbPrv9=osx=f13NA@mail.gmail.com>
- <20150218202651.GA3896@free.fr>
-Message-ID: <CAHkwnC90OxjpGFUUvdzXKF9x_aJzcqw49hEQpE-73VhejsXqCw@mail.gmail.com>
+Date: Wed, 18 Feb 2015 22:14:29 +0100
+Subject: [Buildroot] [PATCH for buildroot-test 1/2] br-reproduce-build:
+	support repository with non standard name
+Message-ID: <1424294070-21508-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 18, 2015 at 9:26 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Fabio, All,
->
-> On 2015-02-18 21:12 +0100, Fabio Porcedda spake thusly:
->> On Sat, Feb 14, 2015 at 10:58 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> > On 2015-02-14 22:10 +0100, Thomas Petazzoni spake thusly:
->> >> On Sat, 14 Feb 2015 11:52:05 +0100, Yann E. MORIN wrote:
-<snip>
->> >> Maybe a few more comments would be useful to understand the magic.
->> >
->> > Yes, obviously. Sorry, it seemed clear enough to me (but I'm very well
->> > used to using shell tricks that in retrospect are not so obvious).
->>
->> I think this patch is useful, are you going to send an updated version?
->
-> Yes, I will. Quoting Eric_L on IRC just now: "so many things to play
-> with, so little time to do..."
+Use "buildroot" as the name of the cloned repositoy so even if the
+existing repository name isn't "buildroot" the script will works fine.
 
-Great, I will wait patiently :)
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ utils/br-reproduce-build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks
+diff --git a/utils/br-reproduce-build b/utils/br-reproduce-build
+index c0dc530..10a2d13 100755
+--- a/utils/br-reproduce-build
++++ b/utils/br-reproduce-build
+@@ -36,7 +36,7 @@ fi
+ wget -O ${BUILD_DIR}/gitid http://autobuild.buildroot.org/results/${BUILD_ID}/gitid
+ 
+ cd ${BUILD_DIR}
+-git clone ${BASE_GIT}
++git clone ${BASE_GIT} buildroot
+ if [ $? -ne 0 ] ; then
+     echo "Cannot clone Buildroot Git repository"
+     rm -rf ${BUILD_DIR}
 -- 
-Fabio Porcedda
+2.3.0
