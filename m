@@ -1,36 +1,48 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 18 Feb 2015 09:28:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-02-17
-In-Reply-To: <20150218073015.D72C71011D7@stock.ovh.net>
-References: <20150218073015.D72C71011D7@stock.ovh.net>
-Message-ID: <54E44D1B.6080802@imgtec.com>
+Date: Wed, 18 Feb 2015 09:23:56 +0000
+Subject: [Buildroot] [PATCH 1/2] mjpg-streamer: disable for static builds
+Message-ID: <1424251437-8742-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+This package needs to load plugins to do its job. Those plugins are
+shared objects (.so) which are loaded using 'dlopen()', so it makes no
+sense to enable this package when doing static builds where 'dlopen()'
+is not available.
 
-On 18/02/15 08:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-02-17
-> ===============================
+Fixes:
 
->     mips64el |                sdl_sound-1.0.3 | NOK | http://autobuild.buildroot.net/results/96c10335489fb27e15c493c6b148e4988bc89e63/
+  http://autobuild.buildroot.net/results/cd5/cd52b739370d57b5ecbc6472b8c7f1126700e85f/
 
-This package fails for all architectures when building it with debug
-symbols. I reported this upstream long time ago:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/mjpg-streamer/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-http://lists.libsdl.org/pipermail/sdl-libsdl.org/2014-November/096804.html
-
-We also had a little discussion in our mailing list:
-
-https://patchwork.ozlabs.org/patch/400969/
-
-Should we disable this package when BR2_ENABLE_DEBUG=y until upstream
-fixes the problem?
-
-Regards,
---
-Vincent
+diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
+index 7925d41..db57bc0 100644
+--- a/package/mjpg-streamer/Config.in
++++ b/package/mjpg-streamer/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MJPG_STREAMER
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # linux/uvcvideo.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # plugins need dlopen()
+ 	select BR2_PACKAGE_JPEG
+ 	help
+ 	  MJPG-streamer takes JPGs from Linux-UVC compatible webcams, filesystem
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_MJPG_STREAMER
+ 
+ 	  http://mjpg-streamer.sourceforge.net
+ 
+-comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.0"
++comment "mjpg-streamer needs a toolchain w/ threads, headers >= 3.0, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS
+-- 
+1.7.1
