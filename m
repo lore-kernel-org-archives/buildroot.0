@@ -1,52 +1,101 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Feb 2015 14:22:37 -0300
-Subject: [Buildroot] [PATCH 2/2] wireless-regdb: bump to version 2015.01.30
-In-Reply-To: <1424280157-6849-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424280157-6849-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1424280157-6849-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 18 Feb 2015 18:30:10 +0100
+Subject: [Buildroot] setting up directfb for a raspberry pi +
+ waveshare32b display
+Message-ID: <trinity-ac932deb-2eb9-4d33-880e-519ff0babe58-1424280610421@3capp-gmx-bs25>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello Lou,
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index b9eabf1..c755efd 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	eab6b50f30748a8b0065ba38cf3df05aac161a5861ae0a6c3cfd01d38a71c9dd	wireless-regdb-2014.11.18.tar.xz
-+sha256	438d7f3d62686bc997098d17fe1aff95c6f6ec061aaab90ab7c2c17e8451ce85	wireless-regdb-2015.01.30.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 4322fb7..a4ca41b 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2014.11.18
-+WIRELESS_REGDB_VERSION = 2015.01.30
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
-@@ -13,8 +13,8 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
- define WIRELESS_REGDB_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
--	$(INSTALL) -m 644 -D -T $(@D)/linville.key.pub.pem \
--		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
-+	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
-+		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
- endef
- 
- $(eval $(generic-package))
--- 
-2.0.5
+On Tue, Feb 17, 2015 at 07:21:36PM -0600, Lou Crittenden wrote:
+> I tried running them and got an error stating it can't find /dev/fusion0 or
+> /dev/fusion/0 after running any of the df_knuckles --dfb commands with the
+> exception of the help command.
+> 
+> Did you have to create new device nodes and directories? I had to using
+> mkdir /dev/fusion
+> mkdir /dev/fusion0
+> 
+> then made the device nodes with these commands:
+> 
+> mknod /dev/fusion/0 c 253 0
+> mknod /dev/fusion/0 c 252 0
+> mknod /dev/fusion0 c 252 0
+> mknod /dev/fusion0 c 253 0
+> 
+> I then ran
+> $ df_knuckles --dfb:fbdev=/dev/fb1
+> $ df_dok --dfb:fbdev=/dev/fb1
+> $ df_cpuload --dfb:fbdev=/dev/fb1
+> 
+> both as root and as another user and I get:
+> (!) Fusion/Init: could not enter world 0! not a typewriter
+> 
+> I have no idea what that means. Other people have gotten the error as well,
+> but haven't had solutions, as per various searches.
+> 
+
+From package/directfb/directfb.mk:
+
+...
+ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
+DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+DIRECTFB_DEPENDENCIES += linux-fusion
+endif
+...
+
+Disable DIRECTFB_MULTI, rebuild directfb and try again (just a guess, not tested)...
+
+Regards,
+Peter
+
+> On Tue, Feb 17, 2015 at 4:38 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+> > Hello Lou,
+> >
+> > On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
+> > > Hi all. I have a buildroot setup running on a raspberry pi model b+ and a
+> > > waveshare32b 3.2" display and was able to get the system to work with the
+> > > display thanks to peter seiderer's awesome patch that builds the fbtft
+> > > drivers for buildroot, but I now would like to set up directfb to work on
+> > > this setup. Directfb built nicely, along with sdl and qt5 (I'm setting up
+> > > the framework for a gui on a buildroot based media player), but I cannot
+> > > get anything to work on directfb. I run the command "df_drivertest" that
+> > > tests for the driver, and it gives a
+> > >
+> > > (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
+> > > requested operation or an argument is (currently)Not
+> > > supported.
+> > >
+> > > The same thing happens when I try to run any of their directfb demos.
+> > > I went on their site, directfb.org, and a lot of the links that would
+> > > help are dead
+> > >
+> >
+> > Just a quick test:
+> >
+> > $ df_knuckles --dfb:help
+> > $ df_knuckles --dfb:fbdev=/dev/fb1
+> > $ df_dok --dfb:fbdev=/dev/fb1
+> > $ df_cpuload --dfb:fbdev=/dev/fb1
+> >
+> > work for me...
+> >
+> > $ df_drivertest  --dfb:fbdev=/dev/fb1
+> > df_drivertest.c <97>:
+> >         (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
+> > requested operation or an argument is (currently) not supported
+> >
+> > failes..
+> >
+> > Regards,
+> > Peter
+> >
+> > >
+> > > I want to use a setup lighter than xorg and supports touchscreen for a
+> > > gui on a multimedia player I am working on.
+> >
