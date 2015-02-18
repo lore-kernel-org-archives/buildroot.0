@@ -1,37 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 18 Feb 2015 09:23:57 +0000
-Subject: [Buildroot] [PATCH 2/2] mjpg-streamer: limit lines length to 72
-	characters
-In-Reply-To: <1424251437-8742-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1424251437-8742-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1424251437-8742-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Feb 2015 07:05:45 -0300
+Subject: [Buildroot] [PATCH] libunistring: bump to version 0.9.5
+Message-ID: <1424253945-20211-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/mjpg-streamer/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+Also add hash file.
 
-diff --git a/package/mjpg-streamer/Config.in b/package/mjpg-streamer/Config.in
-index db57bc0..f42c2a5 100644
---- a/package/mjpg-streamer/Config.in
-+++ b/package/mjpg-streamer/Config.in
-@@ -6,9 +6,9 @@ config BR2_PACKAGE_MJPG_STREAMER
- 	depends on !BR2_STATIC_LIBS # plugins need dlopen()
- 	select BR2_PACKAGE_JPEG
- 	help
--	  MJPG-streamer takes JPGs from Linux-UVC compatible webcams, filesystem
--	  or other input plugins and streams them as M-JPEG via HTTP to
--	  webbrowsers, VLC and other software.
-+	  MJPG-streamer takes JPGs from Linux-UVC compatible webcams,
-+	  filesystem or other input plugins and streams them as
-+	  M-JPEG via HTTP to webbrowsers, VLC and other software.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libunistring/libunistring.hash | 2 ++
+ package/libunistring/libunistring.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/libunistring/libunistring.hash
+
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+new file mode 100644
+index 0000000..e272997
+--- /dev/null
++++ b/package/libunistring/libunistring.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index fd77d12..0060518 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
- 	  http://mjpg-streamer.sourceforge.net
- 
+-LIBUNISTRING_VERSION = 0.9.4
++LIBUNISTRING_VERSION = 0.9.5
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
++LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
+ LIBUNISTRING_LICENSE = LGPLv3+
+ LIBUNISTRING_LICENSE_FILES = COPYING.LIB
 -- 
-1.7.1
+2.0.5
