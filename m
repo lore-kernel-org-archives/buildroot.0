@@ -1,62 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Feb 2015 17:38:57 +0100
-Subject: [Buildroot] Grub2 and Splash
-In-Reply-To: <54E4BE12.1090608@ou.edu>
-References: <54E4BE12.1090608@ou.edu>
-Message-ID: <20150218173857.786789d9@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Feb 2015 14:22:36 -0300
+Subject: [Buildroot] [PATCH 1/2] crda: bump to version 3.18
+Message-ID: <1424280157-6849-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...d-DESTDIR-support-in-install-libreg-rules.patch | 41 ----------------------
+ package/crda/0002-drop-ldconfig-call.patch         | 15 ++++++++
+ package/crda/crda.hash                             |  2 +-
+ package/crda/crda.mk                               |  2 +-
+ 4 files changed, 17 insertions(+), 43 deletions(-)
+ delete mode 100644 package/crda/0002-Add-DESTDIR-support-in-install-libreg-rules.patch
+ create mode 100644 package/crda/0002-drop-ldconfig-call.patch
 
-On Wed, 18 Feb 2015 10:30:10 -0600, Steve Kenton wrote:
-
-> Looking into adding a splash screen to my grub2 menu.
-> Cobbled together the one below using font from my build host and it works.
-> Trying to build unicode.pf2 with buildroot immediately ran into snag with freetype.
-
-Could you please be more specific than "ran into snag" ? Which error
-messages and issues, when trying what exactly ?
-
-> 
-> Finally RTFM and realized how special the grub2 build is.
-> Is there a reason that grub2 is not just built as a regular host package?
-
-Because grub2 is kind of special: it needs to build both some things
-for the target, and some things for the host. And there are some
-explanations about it in grub2.mk:
-
-===
-
-# Grub2 is kind of special: it considers CC, LD and so on to be the
-# tools to build the native tools (i.e to be executed on the build
-# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
-# build the bootloader itself.
-
-GRUB2_CONF_ENV = \
-        $(HOST_CONFIGURE_OPTS) \
-        CPP="$(HOSTCC) -E" \
-        TARGET_CC="$(TARGET_CC)" \
-        TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-        TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
-
-===
-
-And it is actually more logical for grub2 to be a target package: the
-main purpose of grub2 is to have a bootloader on the target, much like
-U-Boot or Barebox. The fact that in addition Grub2 provides a bunch of
-host utilities is kind of a "detail".
-
-Again, please be more specific about the issues you encounter. At least
-please give the detailed steps to reproduce them.
-
-Thanks,
-
-Thomas
+diff --git a/package/crda/0002-Add-DESTDIR-support-in-install-libreg-rules.patch b/package/crda/0002-Add-DESTDIR-support-in-install-libreg-rules.patch
+deleted file mode 100644
+index 617d05f..0000000
+--- a/package/crda/0002-Add-DESTDIR-support-in-install-libreg-rules.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 2cabb2588da56735369131b709f191453c080be0 Mon Sep 17 00:00:00 2001
+-From: "John W. Linville" <linville@tuxdriver.com>
+-Date: Fri, 14 Feb 2014 13:58:44 -0500
+-Subject: [PATCH 1/4] crda: Add DESTDIR support in install-libreg* rules in
+- Makefile
+-
+-Also drop ldconfig call, as that causes problems when cross compiling /
+-installing as non-root.
+-
+-Signed-off-by: John W. Linville <linville@tuxdriver.com>
+-Signed-off-by: Luis R. Rodriguez <mcgrof@do-not-panic.com>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Makefile | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 0b2f0d7..1f25509 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -120,13 +120,12 @@ $(LIBREG): regdb.h reglib.h reglib.c
+- 
+- install-libreg-headers:
+- 	$(NQ) '  INSTALL  libreg-headers'
+--	$(Q)mkdir -p $(INCLUDE_DIR)
+--	$(Q)cp *.h $(INCLUDE_DIR)/
+-+	$(Q)mkdir -p $(DESTDIR)/$(INCLUDE_DIR)
+-+	$(Q)cp *.h $(DESTDIR)/$(INCLUDE_DIR)/
+- 
+- install-libreg:
+- 	$(NQ) '  INSTALL  libreg'
+--	$(Q)mkdir -p $(LIBDIR)
+--	$(Q)cp $(LIBREG) $(LIBDIR)/
+--	$(Q)ldconfig
+-+	$(Q)mkdir -p $(DESTDIR)/$(LIBDIR)
+-+	$(Q)cp $(LIBREG) $(DESTDIR)/$(LIBDIR)/
+- 
+- %.o: %.c regdb.h $(LIBREG)
+--- 
+-1.8.5.5
+-
+diff --git a/package/crda/0002-drop-ldconfig-call.patch b/package/crda/0002-drop-ldconfig-call.patch
+new file mode 100644
+index 0000000..f09e258
+--- /dev/null
++++ b/package/crda/0002-drop-ldconfig-call.patch
+@@ -0,0 +1,15 @@
++Drop ldconfig call, it's useless for cross-compiling.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura crda-3.18.orig/Makefile crda-3.18/Makefile
++--- crda-3.18.orig/Makefile	2015-02-18 10:34:23.841259401 -0300
+++++ crda-3.18/Makefile	2015-02-18 10:35:10.524201452 -0300
++@@ -127,7 +127,6 @@
++ 	$(NQ) '  INSTALL  libreg'
++ 	$(Q)mkdir -p $(DESTDIR)/$(LIBDIR)
++ 	$(Q)cp $(LIBREG) $(DESTDIR)/$(LIBDIR)/
++-	$(Q)ldconfig
++ 
++ %.o: %.c regdb.h $(LIBREG)
++ 	$(NQ) '  CC  ' $@
+diff --git a/package/crda/crda.hash b/package/crda/crda.hash
+index 2fc04e6..45b9d20 100644
+--- a/package/crda/crda.hash
++++ b/package/crda/crda.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/crda/sha256sums.asc
+-sha256	2f85da7ab0170b140d6ed62596c8f268d4a7dedecf84cac7182ada979742ff59	crda-3.13.tar.xz
++sha256	43fcb9679f8b75ed87ad10944a506292def13e4afb194afa7aa921b01e8ecdbf	crda-3.18.tar.xz
+diff --git a/package/crda/crda.mk b/package/crda/crda.mk
+index 3c06e07..abfbb8e 100644
+--- a/package/crda/crda.mk
++++ b/package/crda/crda.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRDA_VERSION = 3.13
++CRDA_VERSION = 3.18
+ CRDA_SOURCE = crda-$(CRDA_VERSION).tar.xz
+ CRDA_SITE = $(BR2_KERNEL_MIRROR)/software/network/crda
+ CRDA_DEPENDENCIES = host-pkgconf host-python-m2crypto \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
