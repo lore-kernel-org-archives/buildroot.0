@@ -1,45 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Feb 2015 17:33:19 +0100
-Subject: [Buildroot] [PATCH] make: disable the 'load' operation for
-	static builds
-In-Reply-To: <1424103137-425-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 16 Feb 2015 16:12:17 +0000")
-References: <1424103137-425-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87bnkrw568.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Feb 2015 17:38:57 +0100
+Subject: [Buildroot] Grub2 and Splash
+In-Reply-To: <54E4BE12.1090608@ou.edu>
+References: <54E4BE12.1090608@ou.edu>
+Message-ID: <20150218173857.786789d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Dear Steve Kenton,
 
- > Disable the 'load' operation for static builds since it needs dlopen and
- > friends. Otherwise it will fail with an error message like this one:
+On Wed, 18 Feb 2015 10:30:10 -0600, Steve Kenton wrote:
 
- > load.o: In function `load_file':
- > load.c:(.text+0x2a8): undefined reference to `dlopen'
- > load.c:(.text+0x2c4): undefined reference to `dlerror'
- > load.c:(.text+0x308): undefined reference to `dlsym'
- > load.c:(.text+0x33c): undefined reference to `dlopen'
- > load.c:(.text+0x35c): undefined reference to `dlsym'
- > load.c:(.text+0x380): undefined reference to `dlopen'
- > load.c:(.text+0x39c): undefined reference to `dlopen'
- > load.c:(.text+0x3a0): undefined reference to `dlerror'
- > load.c:(.text+0x42c): undefined reference to `dlsym'
- > load.c:(.text+0x470): undefined reference to `dlsym'
- > load.c:(.text+0x48c): undefined reference to `dlerror'
- > load.o: In function `unload_file':
- > load.c:(.text+0x63c): undefined reference to `dlclose'
- > collect2: error: ld returned 1 exit status
+> Looking into adding a splash screen to my grub2 menu.
+> Cobbled together the one below using font from my build host and it works.
+> Trying to build unicode.pf2 with buildroot immediately ran into snag with freetype.
 
- > Fixes:
+Could you please be more specific than "ran into snag" ? Which error
+messages and issues, when trying what exactly ?
 
- >   http://autobuild.buildroot.net/results/9e3/9e39039b6db79a46990cd9bdcb179289e38d9f31/
+> 
+> Finally RTFM and realized how special the grub2 build is.
+> Is there a reason that grub2 is not just built as a regular host package?
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Because grub2 is kind of special: it needs to build both some things
+for the target, and some things for the host. And there are some
+explanations about it in grub2.mk:
 
-Committed, thanks.
+===
 
+# Grub2 is kind of special: it considers CC, LD and so on to be the
+# tools to build the native tools (i.e to be executed on the build
+# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
+# build the bootloader itself.
+
+GRUB2_CONF_ENV = \
+        $(HOST_CONFIGURE_OPTS) \
+        CPP="$(HOSTCC) -E" \
+        TARGET_CC="$(TARGET_CC)" \
+        TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+        TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
+
+===
+
+And it is actually more logical for grub2 to be a target package: the
+main purpose of grub2 is to have a bootloader on the target, much like
+U-Boot or Barebox. The fact that in addition Grub2 provides a bunch of
+host utilities is kind of a "detail".
+
+Again, please be more specific about the issues you encounter. At least
+please give the detailed steps to reproduce them.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
