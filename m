@@ -1,39 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:02:59 +0100
-Subject: [Buildroot] [git commit] fs/tar: only store numeric uid/gid
-Message-ID: <20150302222719.8E001807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:04:26 +0100
+Subject: [Buildroot] [git commit] glibc: nios2: Prevent selecting
+	unsupported versions
+Message-ID: <20150302222719.BBBD6807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66ee6dc8721ce8746a8352f02f52663b90887c63
+commit: http://git.buildroot.net/buildroot/commit/?id=ccd5519d1a13f6f2fe5d6accf31dbfa2802e1a0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If a target user is asigned a UID (e.g. 1000) that happens to also exist
-on the build machine, tar will happily store the username for that user.
+Versions previous to glibc v2.21 do not support the Nios-II architecture
+so disable them.
 
-This can be seen by some as potential information disclosure.
-
-Instruct tar to just store the numeric uid/gid.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/tar/tar.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/glibc/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-index 780827e..28219cf 100644
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -7,7 +7,7 @@
- TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 3038b27..8001491 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -33,6 +33,7 @@ choice
+ 	default BR2_GLIBC_VERSION_2_20
  
- define ROOTFS_TAR_CMD
--	tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
-+	tar -c$(TAR_OPTS)f $@ --numeric-owner -C $(TARGET_DIR) .
- endef
+ config BR2_GLIBC_VERSION_2_20
++	depends on !BR2_nios2
+ 	bool "2.20"
  
- $(eval $(call ROOTFS_TARGET,tar))
+ config BR2_GLIBC_VERSION_2_21
