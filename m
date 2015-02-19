@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:04:26 +0100
-Subject: [Buildroot] [git commit] toolchain: Enable the internal toolchain
-	for nios2
-Message-ID: <20150302222719.D00DB807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:31:29 +0100
+Subject: [Buildroot] [git commit] libinput: bump version to 0.10.0
+Message-ID: <20150302222719.DAF29807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee2ccf0d64ba2cf459ed4464826585b5dbdf0c24
+commit: http://git.buildroot.net/buildroot/commit/?id=d89c3abd5f40d61cfb0b4fa9aebea97dd01c68f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For now we can only support glibc.
+- Bump version to 0.10.0
+- Update the hash file
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in                     |    1 -
- toolchain/toolchain-buildroot/Config.in |    2 +-
- 2 files changed, 1 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash |    4 ++--
+ package/libinput/libinput.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 54b5d17..b039ee2 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -43,7 +43,6 @@ choice
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index fa246d4..f2791e0 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2014-December/018750.html
+-sha256 129f485afe5e4a9394641293991c97cb99f5f3338340d0d65b704ff463d1579e  libinput-0.7.0.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-February/019827.html
++sha256  4ce001f80ff1a6bf547784d02125648bf8abe60db7d3d5e0020294d5215c1441  libinput-0.10.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index bf4537b..5a793b0f 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
--	depends on !BR2_nios2
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index a69013f..1b9f3a3 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -64,7 +64,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
- 		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
- 		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \
--		   BR2_microblaze
-+		   BR2_microblaze  || BR2_nios2
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_powerpc_SPE
+-LIBINPUT_VERSION = 0.7.0
++LIBINPUT_VERSION = 0.10.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_LICENSE = MIT
