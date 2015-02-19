@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:16:46 +0100
-Subject: [Buildroot] [git commit] netsnmp: Set ac_cv_NETSNMP_CAN_USE_SYSCTL
-	to no
-Message-ID: <20150219212341.53F6E8178B@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:04:26 +0100
+Subject: [Buildroot] [git commit branch/next] binutils: nios2: Prevent
+	selecting unsupported versions
+Message-ID: <20150219212508.12894801C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6b614c9c6e3e1cf9d8a2ee04c471aff9fb7b2ef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=373705b98425d59392de18b67cc763e0784e91ac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-NETSNMP_CAN_USE_SYSCTL is for BSD systems, setting it to yes on
-Linux systems breaks compilation when the mibII mib is enabled.
+Versions previous to binutils v2.25 do not support the Nios-II architecture,
+so disable them.
 
-Prior to commit 30bb1bdca49a1dcb71d477e546a40840af865ce2 ("netsnmp:
-bump version") from November 2008, this variable was already set to
-no, and was changed to yes by the commit, with no explanation. And the
-previous code indeed had a comment saying:
-
-   # We set CAN_USE_SYSCTL to no and use /proc since the sysctl code
-   # in this thing is apparently intended for freebsd or some such
-   # thing...
-
-[Thomas: improved commit log.]
-
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsnmp/netsnmp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/binutils/Config.in.host |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index bfc2a74..f1b103e 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -10,7 +10,7 @@ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
- NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_INSTALL_STAGING = YES
--NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
-+NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=no
- NETSNMP_CONF_OPTS = \
- 	--with-persistent-directory=/var/lib/snmp \
- 	--with-defaults \
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 504e9ca..d0ed84e 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -8,17 +8,20 @@ choice
+ 	  Select the version of binutils you wish to use.
+ 
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_microblaze && \
++			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.22"
+ 
+ 	# bfin disabled for newer binutils due to
+ 	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && \
++			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+ 		depends on !BR2_bfin
++		depends on !BR2_nios2 # supported, but broken on Nios-II
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25
