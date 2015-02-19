@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:58:18 +0100
-Subject: [Buildroot] [PATCH] btrfs-progs: fix static build with gettext
-In-Reply-To: <be7f33ed40d541fb09ae8582b83f3b5c39d5dd27.1424175644.git.baruch@tkos.co.il>
-References: <be7f33ed40d541fb09ae8582b83f3b5c39d5dd27.1424175644.git.baruch@tkos.co.il>
-Message-ID: <20150219225818.63fccb6f@free-electrons.com>
+Date: Thu, 19 Feb 2015 23:02:54 +0100
+Subject: [Buildroot] [git commit branch/next] libmicrohttpd: bump to 0.9.39
+Message-ID: <20150219220336.448CF81799@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=a9bf9fb5a27e258506eb54497334c1e4d4a66a79
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 17 Feb 2015 14:20:44 +0200, Baruch Siach wrote:
-> gettext needs -pthread. Incidentally this change was also made in the package
-> Makefile itself for a different reason.
-> 
-> Also, drop -lm to match upstream change.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a53/a53f31355e955c734010922b47084605e13708ef/
-> http://autobuild.buildroot.net/results/43d/43deeeda31d9750b37e1f1058c3313a387843bee/
-> 
-> and more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/btrfs-progs/btrfs-progs.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Bump to new version, and disable building examples.
 
-Applied, thanks!
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmicrohttpd/libmicrohttpd.hash |    2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> -BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
-> +BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lz -llzo2 -L. -lintl -pthread"
-
-This is really ugly, because we have to duplicate the lib_LIBS value
-from the package Makefile, and whenever it gets changed in the package
-Makefile, we need to remember to also change it here. Not great :-/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 8cc7d59..2cf1a54 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721	libmicrohttpd-0.9.38.tar.gz
++sha256	4f937b6065c366d776be86b1d24b8fc400ebc7ea006a9d77c49a8f2f0cd7e373	libmicrohttpd-0.9.39.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 3c05b57..e1b5f8b 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.38
++LIBMICROHTTPD_VERSION = 0.9.39
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+-LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy
++LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy --disable-examples
+ 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPLv2.1+
