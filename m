@@ -1,34 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:03:38 +0100
-Subject: [Buildroot] [PATCH] fs/tar: only store numeric uid/gid
-In-Reply-To: <1424108956-18100-1-git-send-email-yann.morin.1998@free.fr>
-References: <1424108956-18100-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150219220338.7afba78d@free-electrons.com>
+Date: Thu, 19 Feb 2015 22:16:46 +0100
+Subject: [Buildroot] [git commit] netsnmp: Set ac_cv_NETSNMP_CAN_USE_SYSCTL
+	to no
+Message-ID: <20150219212341.53F6E8178B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=e6b614c9c6e3e1cf9d8a2ee04c471aff9fb7b2ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Feb 2015 18:49:16 +0100, Yann E. MORIN wrote:
-> If a target user is asigned a UID (e.g. 1000) that happens to also exist
-> on the build machine, tar will happily store the username for that user.
-> 
-> This can be seen by some as potential information disclosure.
-> 
-> Instruct tar to just store the numeric uid/gid.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+NETSNMP_CAN_USE_SYSCTL is for BSD systems, setting it to yes on
+Linux systems breaks compilation when the mibII mib is enabled.
 
-I hesitated a bit on this one, but I preferred to err on the safe side,
-and therefore applied this patch to the 'next' branch.
+Prior to commit 30bb1bdca49a1dcb71d477e546a40840af865ce2 ("netsnmp:
+bump version") from November 2008, this variable was already set to
+no, and was changed to yes by the commit, with no explanation. And the
+previous code indeed had a comment saying:
 
-Thanks!
+   # We set CAN_USE_SYSCTL to no and use /proc since the sysctl code
+   # in this thing is apparently intended for freebsd or some such
+   # thing...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[Thomas: improved commit log.]
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsnmp/netsnmp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index bfc2a74..f1b103e 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -10,7 +10,7 @@ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+ NETSNMP_LICENSE = Various BSD-like
+ NETSNMP_LICENSE_FILES = COPYING
+ NETSNMP_INSTALL_STAGING = YES
+-NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
++NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=no
+ NETSNMP_CONF_OPTS = \
+ 	--with-persistent-directory=/var/lib/snmp \
+ 	--with-defaults \
