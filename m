@@ -1,42 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Feb 2015 07:42:10 -0300
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 19 Feb 2015 12:26:31 +0100
 Subject: [Buildroot] [PATCH] squid: bump to version 3.5.2
-Message-ID: <1424342530-5827-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1424342530-5827-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424342530-5827-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <54E5C867.4010209@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Dear Gustavo Zacarias,
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 574d462..7d3e3f6 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.1.tar.xz.asc
--md5	b3c9d9726314c1136b7a4c06447db24b	squid-3.5.1.tar.xz
--sha1	a2b01afd33d1df3a234e1a5c3405d626f6cf0fb0	squid-3.5.1.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.2.tar.xz.asc
-+md5	0330ec9f69e333c2a81fa4502ba96a22	squid-3.5.2.tar.xz
-+sha1	9c546d72df741c9ddaa6da87baa2112503bcbb45	squid-3.5.2.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e385c37..874332f 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).2
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
--- 
-2.0.5
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Build test for MIPS architecture.
+
+$ file output/target/usr/sbin/squid
+output/target/usr/sbin/squid: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70403, stripped
+
+Best regards,
+--
+Vincent
