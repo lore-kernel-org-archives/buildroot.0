@@ -1,54 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 19 Feb 2015 22:04:26 +0100
-Subject: [Buildroot] [git commit branch/next] gcc: nios2: Prevent selecting
-	unsupported versions
-Message-ID: <20150219212508.1C2B4801C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain: Enable the internal
+	toolchain for nios2
+Message-ID: <20150219212508.36E0E7F988@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bc506a648542fc32b9e19bd2edbbc82a99643ac
+commit: http://git.buildroot.net/buildroot/commit/?id=ee2ccf0d64ba2cf459ed4464826585b5dbdf0c24
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Versions older than GCC v4.9 do not support the Nios-II architecture
-so disable them.
+For now we can only support glibc.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/Config.in                     |    1 -
+ toolchain/toolchain-buildroot/Config.in |    2 +-
+ 2 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 567f66a..dd61f51 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -19,7 +19,7 @@ choice
- 		bool "gcc 4.5.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
--			&& !BR2_powerpc64le
-+			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
- 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
-@@ -40,7 +40,7 @@ choice
- 		bool "gcc 4.7.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
--			&& !BR2_bfin && !BR2_powerpc64le
-+			&& !BR2_bfin && !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12 && !BR2_pj4
- 		# Broken or unsupported PPC cores
-@@ -56,7 +56,7 @@ choice
- 		bool "gcc 4.8.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_arc \
--			&& !BR2_bfin && !BR2_powerpc64le
-+			&& !BR2_bfin && !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12
- 		# Broken or unsupported PPC cores
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 54b5d17..b039ee2 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -43,7 +43,6 @@ choice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+-	depends on !BR2_nios2
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index a69013f..1b9f3a3 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -64,7 +64,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
+ 		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
+ 		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \
+-		   BR2_microblaze
++		   BR2_microblaze  || BR2_nios2
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_powerpc_SPE
