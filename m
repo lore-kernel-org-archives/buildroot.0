@@ -1,44 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:31:34 +0100
-Subject: [Buildroot] [git commit] wayland: bump version to 1.7.0
-Message-ID: <20150302222719.E7DBB807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:04:26 +0100
+Subject: [Buildroot] [git commit] binutils: nios2: Prevent selecting
+	unsupported versions
+Message-ID: <20150302222719.A63D9807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36b8b52598ee545587c5d2a4184b583ae28af7bf
+commit: http://git.buildroot.net/buildroot/commit/?id=373705b98425d59392de18b67cc763e0784e91ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 1.7.0
-- Add a hash file
+Versions previous to binutils v2.25 do not support the Nios-II architecture,
+so disable them.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wayland/wayland.hash |    2 ++
- package/wayland/wayland.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/binutils/Config.in.host |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-new file mode 100644
-index 0000000..aa9b15d
---- /dev/null
-+++ b/package/wayland/wayland.hash
-@@ -0,0 +1,2 @@
-+# From: http://lists.freedesktop.org/archives/wayland-devel/2015-February/019976.html
-+sha256  bdea47a2db96f7e53f1ce0351559c0af5b7f7aae7e95f0a884a78af9f1057c9c  wayland-1.7.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 740faed..32869d8 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 504e9ca..d0ed84e 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -8,17 +8,20 @@ choice
+ 	  Select the version of binutils you wish to use.
  
--WAYLAND_VERSION = 1.6.0
-+WAYLAND_VERSION = 1.7.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_microblaze && \
++			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.22"
+ 
+ 	# bfin disabled for newer binutils due to
+ 	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
++		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && \
++			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+ 		depends on !BR2_bfin
++		depends on !BR2_nios2 # supported, but broken on Nios-II
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25
