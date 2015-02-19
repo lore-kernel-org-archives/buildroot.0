@@ -1,135 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:29:48 +0100
-Subject: [Buildroot] [git commit] xserver_xorg-server: fix libunwind on MIPS
-	with 32-bit pointers
-Message-ID: <20150219213006.4A3C6817B6@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:29:59 +0100
+Subject: [Buildroot] [git commit] xserver_xorg-server: enable libunwind for
+	MIPS with 32-bit pointers
+Message-ID: <20150219213006.53068817B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=367a50d7c54635994f6fee65b0fb5f42621e40d5
+commit: http://git.buildroot.net/buildroot/commit/?id=b58d58c74aba142bc95049100633888e39cd74a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding a patch to fix a compilation problem of Xorg + libunwind support
-when building it on MIPS variants with 32-bit pointers.
-
-Related:
+libunwind support was broken for MIPS variants with 32-bit pointers so
+we disabled it:
 
   http://lists.busybox.net/pipermail/buildroot/2014-December/114404.html
 
-Patch submitted upstream:
-
-  http://lists.x.org/archives/xorg-devel/2015-January/045226.html
-
-Patch reviewed by an Xorg developer:
-
-  http://lists.x.org/archives/xorg-devel/2015-January/045383.html
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/87b/87be2c95957f9925c1258812e536df72689fc5da/
+But now we have a patch to fix that problem so we can enable it again.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...04-backtrace.c-Fix-word-cast-to-a-pointer.patch |   90 ++++++++++++++++++++
- 1 files changed, 90 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch b/package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch
-new file mode 100644
-index 0000000..08944d6
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-cast-to-a-pointer.patch
-@@ -0,0 +1,90 @@
-+backtrace.c: Fix word cast to a pointer
-+
-+This patch fixes a compilation problem of Xorg + libunwind support when
-+building it on MIPS variants with 32-bit pointers.
-+
-+Related:
-+
-+  http://lists.busybox.net/pipermail/buildroot/2014-December/114404.html
-+
-+Patch submitted upstream:
-+
-+  http://lists.x.org/archives/xorg-devel/2015-January/045226.html
-+
-+Patch reviewed by an Xorg developer:
-+
-+  http://lists.x.org/archives/xorg-devel/2015-January/045383.html
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 84f04e0274661401a91efd4e9b21dccc1396e1d6 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Wed, 3 Dec 2014 11:34:47 +0000
-+Subject: [PATCH] backtrace.c: Fix word cast to a pointer
-+
-+backtrace.c uses a word size provided by libunwind. In some
-+architectures like MIPS, libunwind makes that word size 64-bit for all
-+variants of the architecture.
-+
-+In the lines #90 and #98, backtrace.c tries to do a cast to a pointer,
-+which fails in all MIPS variants with 32-bit pointers, like MIPS32 or
-+MIPS64 n32, because it's trying to do a cast from a 64-bit wide variable
-+to a 32-bit pointer:
-+
-+Making all in os
-+make[2]: Entering directory
-+`/home/test/test/1/output/build/xserver_xorg-server-1.15.1/os'
-+  CC     WaitFor.lo
-+  CC     access.lo
-+  CC     auth.lo
-+  CC     backtrace.lo
-+backtrace.c: In function 'xorg_backtrace':
-+backtrace.c:90:20: error: cast to pointer from integer of different size
-+[-Werror=int-to-pointer-cast]
-+	 if (dladdr((void *)(pip.start_ip + off), &dlinfo) &&
-+dlinfo.dli_fname &&
-+		    ^
-+backtrace.c:98:13: error: cast to pointer from integer of different size
-+[-Werror=int-to-pointer-cast]
-+	     (void *)(pip.start_ip + off));
-+	     ^
-+cc1: some warnings being treated as errors
-+make[2]: *** [backtrace.lo] Error 1
-+make[2]: *** Waiting for unfinished jobs....
-+
-+Making the cast to a pointer-sized integer, and then to a pointer fixes
-+the problem.
-+
-+Related:
-+  https://bugs.freedesktop.org/show_bug.cgi?id=79939
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ os/backtrace.c |    4 ++--
-+ 1 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/os/backtrace.c b/os/backtrace.c
-+index 3d1195b..fd129ef 100644
-+--- a/os/backtrace.c
-++++ b/os/backtrace.c
-+@@ -87,7 +87,7 @@ xorg_backtrace(void)
-+             procname[1] = 0;
-+         }
-+ 
-+-        if (dladdr((void *)(pip.start_ip + off), &dlinfo) && dlinfo.dli_fname &&
-++        if (dladdr((void *)(uintptr_t)(pip.start_ip + off), &dlinfo) && dlinfo.dli_fname &&
-+                 *dlinfo.dli_fname)
-+             filename = dlinfo.dli_fname;
-+         else
-+@@ -95,7 +95,7 @@ xorg_backtrace(void)
-+ 
-+         ErrorFSigSafe("%u: %s (%s%s+0x%x) [%p]\n", i++, filename, procname,
-+             ret == -UNW_ENOMEM ? "..." : "", (int)off,
-+-            (void *)(pip.start_ip + off));
-++            (void *)(uintptr_t)(pip.start_ip + off));
-+ 
-+         ret = unw_step(&cursor);
-+         if (ret < 0)
-+-- 
-+1.7.1
-+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index bde2b95..35bdd44 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -145,9 +145,7 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += freetype
+ endif
+ 
+-# libunwind support is broken on all MIPS variants with 32-bit pointers
+-# https://bugs.freedesktop.org/show_bug.cgi?id=79939
+-ifeq ($(BR2_PACKAGE_LIBUNWIND)-$(BR2_MIPS_OABI32)-$(BR2_MIPS_NABI32),y--)
++ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libunwind
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-libunwind
+ else
