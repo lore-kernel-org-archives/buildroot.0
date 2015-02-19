@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 23:23:33 +0100
-Subject: [Buildroot] [PATCH] netsnmp: Add option for using minimal
- internal SSL code
-In-Reply-To: <1424187797-620-1-git-send-email-stefan.sorensen@spectralink.com>
-References: <1424187797-620-1-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <20150219232333.0d49a185@free-electrons.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Thu, 19 Feb 2015 16:55:45 -0600
+Subject: [Buildroot] How automate source download from a google drive?
+In-Reply-To: <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
+References: <54E54294.3030702@ou.edu>
+ <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
+Message-ID: <54E669F1.2090304@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan S?rensen,
-
-On Tue, 17 Feb 2015 16:43:17 +0100, Stefan S?rensen wrote:
-> Add option for enabling a minimal internal copy of OpenSSL usable for USM
-> security. It will not enable the usage of SNMP over (D)TLS.
+On 02/19/2015 04:12 PM, Bryce Schober wrote:
+> On Wed, Feb 18, 2015 at 5:55 PM, Steve Kenton <skenton@ou.edu> wrote:
 > 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
->  package/netsnmp/Config.in  | 7 +++++++
->  package/netsnmp/netsnmp.mk | 4 ++++
->  2 files changed, 11 insertions(+)
+>> This is a bit off the wall. I'm working with a package called tovid
+>> which you download from a google drive by clicking on a link on the wiki
+>> Darn if I can figure out how to put that into the .mk file to automate it.
+>> Look through packages directory and did not see anything obviously like it
+>>
+>> Any thoughts would be appreciated
+>>
+> 
+> 
+> This worked:
+> wget --no-check-certificate '
+> https://docs.google.com/uc?export=download&id=0B7aAfFRdwkUmeGZTT2pua0d1Z2c'
+> -O ~/Downloads/tovid.tar.gz
+> 
+> Based on this SO answer:
+> http://unix.stackexchange.com/a/148674/22389
+> 
+> You'll need to specify the full download name of the file because the wget
+> redirect apparently doesn't get it.
+> 
+> <><  <><  <><
+> Bryce Schober
+> 
+Wow, thank you very much. Your Google-fu is clearly superior to mine!
 
-Thanks, applied to next, after doing a minor change:
-
-    [Thomas: use 'else ifeq' to avoid having another nested ifeq ... endif
-    block.]
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Steve
