@@ -1,97 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:04:26 +0100
-Subject: [Buildroot] [git commit] linux-headers: nios2: Prevent selecting
-	unsupported versions
-Message-ID: <20150302222719.C69B4807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:41:46 +0100
+Subject: [Buildroot] [git commit] perl-module-build: downgrade to version
+	0.4208
+Message-ID: <20150302222720.2FDB9807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f50341edbbdd9f70a3c8905cc1e5be5a2647b49b
+commit: http://git.buildroot.net/buildroot/commit/?id=e9691848d06a69004321847c691292fef6f1d13f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Versions older than Linux v3.19 do not support the Nios-II architecture
-so disable them.
+fix prerequisites:
+    CPAN::Meta (2.140640) is installed, but we need version >= 2.142060
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |   15 ++++++++++++---
- 1 files changed, 12 insertions(+), 3 deletions(-)
+ package/perl-module-build/perl-module-build.hash |    3 +++
+ package/perl-module-build/perl-module-build.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4f0a211..1e206ce 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -14,57 +14,66 @@ choice
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
+new file mode 100644
+index 0000000..7da8793
+--- /dev/null
++++ b/package/perl-module-build/perl-module-build.hash
+@@ -0,0 +1,3 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    296e2ee8d7f7c6b4b178cda6919ba3c9 Module-Build-0.4208.tar.gz
++sha256 32eca47c494a5d2a826c30616270b0fc744315b7363223b54fdea2dcef635378 Module-Build-0.4208.tar.gz
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index 4fdb4c7..aa6259a 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 
- 	config BR2_KERNEL_HEADERS_3_4
- 		bool "Linux 3.4.x kernel headers"
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 
- 	config BR2_KERNEL_HEADERS_3_10
- 		bool "Linux 3.10.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 
- 	config BR2_KERNEL_HEADERS_3_11
- 		bool "Linux 3.11.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 
- 	config BR2_KERNEL_HEADERS_3_12
- 		bool "Linux 3.12.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 
- 	config BR2_KERNEL_HEADERS_3_13
- 		bool "Linux 3.13.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 
- 	config BR2_KERNEL_HEADERS_3_14
- 		bool "Linux 3.14.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 
- 	config BR2_KERNEL_HEADERS_3_15
- 		bool "Linux 3.15.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2014_08
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
- 
- 	config BR2_KERNEL_HEADERS_3_16
- 		bool "Linux 3.16.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2015_02
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
- 
- 	config BR2_KERNEL_HEADERS_3_17
- 		bool "Linux 3.17.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 
- 	config BR2_KERNEL_HEADERS_3_18
- 		bool "Linux 3.18.x kernel headers"
-+		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 
- 	config BR2_KERNEL_HEADERS_3_19
+-PERL_MODULE_BUILD_VERSION = 0.4210
++PERL_MODULE_BUILD_VERSION = 0.4208
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+ PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
