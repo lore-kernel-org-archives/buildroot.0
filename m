@@ -1,160 +1,38 @@
-From: Lou Crittenden <loucrittenden63@gmail.com>
-Date: Wed, 18 Feb 2015 19:10:51 -0600
-Subject: [Buildroot] setting up directfb for a raspberry pi +
-	waveshare32b display
-In-Reply-To: <CAFGceHGTN4WURAfPXZjDbQRvk8=n-fFUyUkhuhcfOPVefb7bFw@mail.gmail.com>
-References: <trinity-ac932deb-2eb9-4d33-880e-519ff0babe58-1424280610421@3capp-gmx-bs25>
- <CAFGceHEjnSkD3hLqUqtxmY9p2uu-zFV4_vG6pB_LfmoL4wFs9Q@mail.gmail.com>
- <CAFGceHGTN4WURAfPXZjDbQRvk8=n-fFUyUkhuhcfOPVefb7bFw@mail.gmail.com>
-Message-ID: <CAFGceHFoBdrQvvwks8729ZRb+nWus8FJVodGy-4qzuGUXnT9ig@mail.gmail.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 18 Feb 2015 19:55:32 -0600
+Subject: [Buildroot] How  automate source download from  a google drive?
+Message-ID: <54E54294.3030702@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I can also confirm that the axes are reversed on the df_bltload by running:
-df_bltload --dfb:fbdev=/dev/fb1.
+This is a bit off the wall. I'm working with a package called tovid
+which you download from a google drive by clicking on a link on the wiki
+Darn if I can figure out how to put that into the .mk file to automate it.
+Look through packages directory and did not see anything obviously like it
 
-I was thinking I could make an ads7846 configuration file at
-/etc/modprobe.d/00-ads7846.conf (like we did with the waveshare32b) to also
-include the ads7846 touchscreen device with reversed axes.
+Any thoughts would be appreciated
 
-For starters, the contents will be:
+Steve Kenton
 
-options ads7846_device debug=1 cs=1 speed=2000000 model=7846 x_min=230
-x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 pressure_max=255
-gpio_pendown=23 keep_vref_on=1
+################################################################################
+#
+# tovid
+#
+################################################################################
 
-I will see how this goes and edit accordingly.
+TOVID_VERSION = 0.35
+# I don't see how to automate downloads from a google drive http://goo.gl/o8IWR7
+# The file which is downloaded has the expected name tovid-0.35.tar.gz
+TOVID_SITE = http://tovid.wikia.com/wiki/Installing_tovid
+TOVID_LICENSE = GPLv2.0
+TOVID_LICENSE_FILES = COPYING
 
-On Wed, Feb 18, 2015 at 6:13 PM, Lou Crittenden <loucrittenden63@gmail.com>
-wrote:
+# Must be run in source directory to avoid "error: package directory 'libtovid' does not exist"
+define TOVID_INSTALL_TARGET_CMDS
+	bash -c "cd $(@D); ./setup.py install --root=$(TARGET_DIR) --prefix=/usr"
+endef
 
-> on the df_knuckles demo, the touch screen works, but it appears that I
-> have reverse the axes somehow, as it appears that if I move my finger left
-> to right, the skull moves up and down and vice versa.
->
-> On Wed, Feb 18, 2015 at 4:29 PM, Lou Crittenden <loucrittenden63@gmail.com
-> > wrote:
->
->> Got it to work after about a 2 hour rebuild with make clean all and
->> removing the said option. You guessed properly. I also had to use fb1
->> instead of fb0. I would love to use fb1 as the default framebuffer.
->>
->> On Wed, Feb 18, 2015 at 11:30 AM, Peter Seiderer <ps.report@gmx.net>
->> wrote:
->>
->>> Hello Lou,
->>>
->>> On Tue, Feb 17, 2015 at 07:21:36PM -0600, Lou Crittenden wrote:
->>> > I tried running them and got an error stating it can't find
->>> /dev/fusion0 or
->>> > /dev/fusion/0 after running any of the df_knuckles --dfb commands with
->>> the
->>> > exception of the help command.
->>> >
->>> > Did you have to create new device nodes and directories? I had to using
->>> > mkdir /dev/fusion
->>> > mkdir /dev/fusion0
->>> >
->>> > then made the device nodes with these commands:
->>> >
->>> > mknod /dev/fusion/0 c 253 0
->>> > mknod /dev/fusion/0 c 252 0
->>> > mknod /dev/fusion0 c 252 0
->>> > mknod /dev/fusion0 c 253 0
->>> >
->>> > I then ran
->>> > $ df_knuckles --dfb:fbdev=/dev/fb1
->>> > $ df_dok --dfb:fbdev=/dev/fb1
->>> > $ df_cpuload --dfb:fbdev=/dev/fb1
->>> >
->>> > both as root and as another user and I get:
->>> > (!) Fusion/Init: could not enter world 0! not a typewriter
->>> >
->>> > I have no idea what that means. Other people have gotten the error as
->>> well,
->>> > but haven't had solutions, as per various searches.
->>> >
->>>
->>> From package/directfb/directfb.mk:
->>>
->>> ...
->>> ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
->>> DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
->>> DIRECTFB_DEPENDENCIES += linux-fusion
->>> endif
->>> ...
->>>
->>> Disable DIRECTFB_MULTI, rebuild directfb and try again (just a guess,
->>> not tested)...
->>>
->>> Regards,
->>> Peter
->>>
->>> > On Tue, Feb 17, 2015 at 4:38 PM, Peter Seiderer <ps.report@gmx.net>
->>> wrote:
->>> >
->>> > > Hello Lou,
->>> > >
->>> > > On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
->>> > > > Hi all. I have a buildroot setup running on a raspberry pi model
->>> b+ and a
->>> > > > waveshare32b 3.2" display and was able to get the system to work
->>> with the
->>> > > > display thanks to peter seiderer's awesome patch that builds the
->>> fbtft
->>> > > > drivers for buildroot, but I now would like to set up directfb to
->>> work on
->>> > > > this setup. Directfb built nicely, along with sdl and qt5 (I'm
->>> setting up
->>> > > > the framework for a gui on a buildroot based media player), but I
->>> cannot
->>> > > > get anything to work on directfb. I run the command
->>> "df_drivertest" that
->>> > > > tests for the driver, and it gives a
->>> > > >
->>> > > > (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
->>> > > > requested operation or an argument is (currently)Not
->>> > > > supported.
->>> > > >
->>> > > > The same thing happens when I try to run any of their directfb
->>> demos.
->>> > > > I went on their site, directfb.org, and a lot of the links that
->>> would
->>> > > > help are dead
->>> > > >
->>> > >
->>> > > Just a quick test:
->>> > >
->>> > > $ df_knuckles --dfb:help
->>> > > $ df_knuckles --dfb:fbdev=/dev/fb1
->>> > > $ df_dok --dfb:fbdev=/dev/fb1
->>> > > $ df_cpuload --dfb:fbdev=/dev/fb1
->>> > >
->>> > > work for me...
->>> > >
->>> > > $ df_drivertest  --dfb:fbdev=/dev/fb1
->>> > > df_drivertest.c <97>:
->>> > >         (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary
->>> )]: The
->>> > > requested operation or an argument is (currently) not supported
->>> > >
->>> > > failes..
->>> > >
->>> > > Regards,
->>> > > Peter
->>> > >
->>> > > >
->>> > > > I want to use a setup lighter than xorg and supports touchscreen
->>> for a
->>> > > > gui on a multimedia player I am working on.
->>> > >
->>>
->>
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150218/28870282/attachment.html>
+$(eval $(generic-package))
