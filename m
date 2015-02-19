@@ -1,203 +1,45 @@
-From: Zygmunt Ptak <zygmuntptak@gmail.com>
-Date: Thu, 19 Feb 2015 14:27:19 +0100
-Subject: [Buildroot] setting up directfb for a raspberry pi +
-	waveshare32b display
-In-Reply-To: <CAFGceHHNY9+HKKisnOKfEY3uRUsbWCKS91vr=Yq+JiPFit5LRw@mail.gmail.com>
-References: <trinity-ac932deb-2eb9-4d33-880e-519ff0babe58-1424280610421@3capp-gmx-bs25>
- <CAFGceHEjnSkD3hLqUqtxmY9p2uu-zFV4_vG6pB_LfmoL4wFs9Q@mail.gmail.com>
- <CAFGceHGTN4WURAfPXZjDbQRvk8=n-fFUyUkhuhcfOPVefb7bFw@mail.gmail.com>
- <CAFGceHFoBdrQvvwks8729ZRb+nWus8FJVodGy-4qzuGUXnT9ig@mail.gmail.com>
- <CAFGceHHNY9+HKKisnOKfEY3uRUsbWCKS91vr=Yq+JiPFit5LRw@mail.gmail.com>
-Message-ID: <CAMkMO5kOsqwqYnhiWuh1gfJq2X6d52Yg_yuqkjcS=km2iJB_JA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 19 Feb 2015 11:59:56 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.5.22
+Message-ID: <1424357996-11729-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lou,
-Do you want to use qt quick with directfb?
-I have waveshare 4 inch (A), and for now without any success on this.
-Everything with OGL is rendered on HDMI output,
-so I think it's not possible to use fbdev with  qt quick. Code with widgets
-works good.
-I you will have any success on this, I would be greatful for any info.
-Regards
-Zygmunt
+Fixes:
+CVE-2015-0273 - Use after free vulnerability in unserialize() with
+DateTimeZone.
+CVE-2015-0235 - Mitigation for GHOST: glibc gethostbyname buffer
+overflow.
 
-2015-02-19 14:14 GMT+01:00 Lou Crittenden <loucrittenden63@gmail.com>:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> >I was thinking I could make an ads7846 configuration file at
-> >/etc/modprobe.d>>/00-ads7846.
-> >conf (like we did with the waveshare32b) to also include the ads7846
-> >touchscreen device with reversed axes.
->
-> >For starters, the contents will be:
->
-> >options ads7846_device debug=1 cs=1 speed=2000000 model=7846 >x_min=230
-> x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 >pressure_max=255
-> gpio_pendown=23 keep_vref_on=1
->
-> >I will see how this goes and edit accordingly.
->
-> Disregard that!! I remember now making the /etc/init.d/s30fbtft script and
-> I found the part that has the "swap_xy=0" and am changing it to
-> "swap_xy=1", and doing the tweaks from there.
->
-> On Wed, Feb 18, 2015 at 7:10 PM, Lou Crittenden <loucrittenden63@gmail.com
-> > wrote:
->
->> I can also confirm that the axes are reversed on the df_bltload by
->> running: df_bltload --dfb:fbdev=/dev/fb1.
->>
->> I was thinking I could make an ads7846 configuration file at
->> /etc/modprobe.d/00-ads7846.conf (like we did with the waveshare32b) to also
->> include the ads7846 touchscreen device with reversed axes.
->>
->> For starters, the contents will be:
->>
->> options ads7846_device debug=1 cs=1 speed=2000000 model=7846 x_min=230
->> x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 pressure_max=255
->> gpio_pendown=23 keep_vref_on=1
->>
->> I will see how this goes and edit accordingly.
->>
->> On Wed, Feb 18, 2015 at 6:13 PM, Lou Crittenden <
->> loucrittenden63 at gmail.com> wrote:
->>
->>> on the df_knuckles demo, the touch screen works, but it appears that I
->>> have reverse the axes somehow, as it appears that if I move my finger left
->>> to right, the skull moves up and down and vice versa.
->>>
->>> On Wed, Feb 18, 2015 at 4:29 PM, Lou Crittenden <
->>> loucrittenden63 at gmail.com> wrote:
->>>
->>>> Got it to work after about a 2 hour rebuild with make clean all and
->>>> removing the said option. You guessed properly. I also had to use fb1
->>>> instead of fb0. I would love to use fb1 as the default framebuffer.
->>>>
->>>> On Wed, Feb 18, 2015 at 11:30 AM, Peter Seiderer <ps.report@gmx.net>
->>>> wrote:
->>>>
->>>>> Hello Lou,
->>>>>
->>>>> On Tue, Feb 17, 2015 at 07:21:36PM -0600, Lou Crittenden wrote:
->>>>> > I tried running them and got an error stating it can't find
->>>>> /dev/fusion0 or
->>>>> > /dev/fusion/0 after running any of the df_knuckles --dfb commands
->>>>> with the
->>>>> > exception of the help command.
->>>>> >
->>>>> > Did you have to create new device nodes and directories? I had to
->>>>> using
->>>>> > mkdir /dev/fusion
->>>>> > mkdir /dev/fusion0
->>>>> >
->>>>> > then made the device nodes with these commands:
->>>>> >
->>>>> > mknod /dev/fusion/0 c 253 0
->>>>> > mknod /dev/fusion/0 c 252 0
->>>>> > mknod /dev/fusion0 c 252 0
->>>>> > mknod /dev/fusion0 c 253 0
->>>>> >
->>>>> > I then ran
->>>>> > $ df_knuckles --dfb:fbdev=/dev/fb1
->>>>> > $ df_dok --dfb:fbdev=/dev/fb1
->>>>> > $ df_cpuload --dfb:fbdev=/dev/fb1
->>>>> >
->>>>> > both as root and as another user and I get:
->>>>> > (!) Fusion/Init: could not enter world 0! not a typewriter
->>>>> >
->>>>> > I have no idea what that means. Other people have gotten the error
->>>>> as well,
->>>>> > but haven't had solutions, as per various searches.
->>>>> >
->>>>>
->>>>> From package/directfb/directfb.mk:
->>>>>
->>>>> ...
->>>>> ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
->>>>> DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
->>>>> DIRECTFB_DEPENDENCIES += linux-fusion
->>>>> endif
->>>>> ...
->>>>>
->>>>> Disable DIRECTFB_MULTI, rebuild directfb and try again (just a guess,
->>>>> not tested)...
->>>>>
->>>>> Regards,
->>>>> Peter
->>>>>
->>>>> > On Tue, Feb 17, 2015 at 4:38 PM, Peter Seiderer <ps.report@gmx.net>
->>>>> wrote:
->>>>> >
->>>>> > > Hello Lou,
->>>>> > >
->>>>> > > On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
->>>>> > > > Hi all. I have a buildroot setup running on a raspberry pi model
->>>>> b+ and a
->>>>> > > > waveshare32b 3.2" display and was able to get the system to work
->>>>> with the
->>>>> > > > display thanks to peter seiderer's awesome patch that builds the
->>>>> fbtft
->>>>> > > > drivers for buildroot, but I now would like to set up directfb
->>>>> to work on
->>>>> > > > this setup. Directfb built nicely, along with sdl and qt5 (I'm
->>>>> setting up
->>>>> > > > the framework for a gui on a buildroot based media player), but
->>>>> I cannot
->>>>> > > > get anything to work on directfb. I run the command
->>>>> "df_drivertest" that
->>>>> > > > tests for the driver, and it gives a
->>>>> > > >
->>>>> > > > (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]:
->>>>> The
->>>>> > > > requested operation or an argument is (currently)Not
->>>>> > > > supported.
->>>>> > > >
->>>>> > > > The same thing happens when I try to run any of their directfb
->>>>> demos.
->>>>> > > > I went on their site, directfb.org, and a lot of the links that
->>>>> would
->>>>> > > > help are dead
->>>>> > > >
->>>>> > >
->>>>> > > Just a quick test:
->>>>> > >
->>>>> > > $ df_knuckles --dfb:help
->>>>> > > $ df_knuckles --dfb:fbdev=/dev/fb1
->>>>> > > $ df_dok --dfb:fbdev=/dev/fb1
->>>>> > > $ df_cpuload --dfb:fbdev=/dev/fb1
->>>>> > >
->>>>> > > work for me...
->>>>> > >
->>>>> > > $ df_drivertest  --dfb:fbdev=/dev/fb1
->>>>> > > df_drivertest.c <97>:
->>>>> > >         (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary
->>>>> )]: The
->>>>> > > requested operation or an argument is (currently) not supported
->>>>> > >
->>>>> > > failes..
->>>>> > >
->>>>> > > Regards,
->>>>> > > Peter
->>>>> > >
->>>>> > > >
->>>>> > > > I want to use a setup lighter than xorg and supports touchscreen
->>>>> for a
->>>>> > > > gui on a multimedia player I am working on.
->>>>> > >
->>>>>
->>>>
->>>>
->>>
->>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150219/b5e864ca/attachment.html>
+diff --git a/package/php/php.hash b/package/php/php.hash
+index cd27b10..f8a1715 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-md5	79664ce44f7c93f355a25a3fe3dcc91b	php-5.5.21.tar.xz
++md5	fb1704131d495f5b3e6ab3b087a8dbe6	php-5.5.22.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4bcbe18..dd52508 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.5.21
++PHP_VERSION = 5.5.22
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.0.5
