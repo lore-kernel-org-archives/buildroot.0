@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:42:28 +0100
-Subject: [Buildroot] [git commit] perl-gdtextutil: add hash file
-Message-ID: <20150302222720.60F57807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 21:30:02 +0100
+Subject: [Buildroot] [git commit] squid: bump to version 3.5.2
+Message-ID: <20150302222719.259BD807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ac9d87a1846a54c2647956d13d1597053917057
+commit: http://git.buildroot.net/buildroot/commit/?id=d2dd31aa01312e6ae5f604649c658b9cf21a3731
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-gdtextutil/perl-gdtextutil.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/squid/squid.hash |    6 +++---
+ package/squid/squid.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-gdtextutil/perl-gdtextutil.hash b/package/perl-gdtextutil/perl-gdtextutil.hash
-new file mode 100644
-index 0000000..7996ed9
---- /dev/null
-+++ b/package/perl-gdtextutil/perl-gdtextutil.hash
-@@ -0,0 +1,3 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    941ad06eadc86b47f3a32da405665c41 GDTextUtil-0.86.tar.gz
-+sha256 886ecbf85cfe94f4135ee5689c4847a9ae783ecb99e6759e12c734f2dd6116bc GDTextUtil-0.86.tar.gz
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 574d462..7d3e3f6 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.1.tar.xz.asc
+-md5	b3c9d9726314c1136b7a4c06447db24b	squid-3.5.1.tar.xz
+-sha1	a2b01afd33d1df3a234e1a5c3405d626f6cf0fb0	squid-3.5.1.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.2.tar.xz.asc
++md5	0330ec9f69e333c2a81fa4502ba96a22	squid-3.5.2.tar.xz
++sha1	9c546d72df741c9ddaa6da87baa2112503bcbb45	squid-3.5.2.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e385c37..874332f 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).1
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).2
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
