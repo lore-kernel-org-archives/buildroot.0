@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 19 Feb 2015 22:04:26 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain: Enable the internal
-	toolchain for nios2
-Message-ID: <20150219212508.36E0E7F988@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gcc: 4.9.2: Add patch to
+	remove a wrong header
+Message-ID: <20150219212508.07B17801C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee2ccf0d64ba2cf459ed4464826585b5dbdf0c24
+commit: http://git.buildroot.net/buildroot/commit/?id=31b5509af5ab73189efa0561a387ed71e40cd176
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For now we can only support glibc.
+This commit adds a patch to gcc removing a unistd.h header include
+in libgcc/config/nios2/linux-atomic.c
+
+The file is built as part of GCC first stage (host-gcc-initial),
+and so the header is not accesible. Given the header is not needed
+it's fine to simply remove it.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/Config.in                     |    1 -
- toolchain/toolchain-buildroot/Config.in |    2 +-
- 2 files changed, 1 insertions(+), 2 deletions(-)
+ .../4.9.2/920-libgcc-remove-unistd-header.patch    |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 54b5d17..b039ee2 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -43,7 +43,6 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
--	depends on !BR2_nios2
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index a69013f..1b9f3a3 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -64,7 +64,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
- 		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
- 		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \
--		   BR2_microblaze
-+		   BR2_microblaze  || BR2_nios2
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_powerpc_SPE
+diff --git a/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch b/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
+new file mode 100644
+index 0000000..df5372b
+--- /dev/null
++++ b/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
+@@ -0,0 +1,12 @@
++Upstream status: In progress
++
++--- a/libgcc/config/nios2/linux-atomic.c
+++++ b/libgcc/config/nios2/linux-atomic.c
++@@ -20,7 +20,6 @@
++ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++ <http://www.gnu.org/licenses/>.  */
++ 
++-#include <asm/unistd.h>
++ #define EFAULT  14
++ #define EBUSY   16
++ #define ENOSYS  38
