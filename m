@@ -1,37 +1,46 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Thu, 19 Feb 2015 18:42:10 -0300
-Subject: [Buildroot] [PATCH 0/6] Build a Nios-II internal toolchain
-In-Reply-To: <20150219222608.0b7cc308@free-electrons.com>
-References: <1424190418-883-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20150219222608.0b7cc308@free-electrons.com>
-Message-ID: <54E658B2.9040605@vanguardiasur.com.ar>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Date: Thu, 19 Feb 2015 16:44:30 -0500
+Subject: [Buildroot] [PATCH] libmicrohttpd: bump to 0.9.39
+Message-ID: <1424382270-15888-1-git-send-email-simon.marchi@polymtl.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump to new version, and disable building examples.
 
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ package/libmicrohttpd/libmicrohttpd.hash | 2 +-
+ package/libmicrohttpd/libmicrohttpd.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 02/19/2015 06:26 PM, Thomas Petazzoni wrote:
-> Dear Ezequiel Garcia,
-> 
-> On Tue, 17 Feb 2015 13:26:52 -0300, Ezequiel Garcia wrote:
-> 
->> Ezequiel Garcia (6):
->>   gcc: 4.9.2: Add patch to remove a wrong header
->>   binutils: nios2: Prevent selecting unsupported versions
->>   gcc: nios2: Prevent selecting unsupported versions
->>   glibc: nios2: Prevent selecting unsupported versions
->>   linux-headers: nios2: Prevent selecting unsupported versions
->>   toolchain: Enable the internal toolchain for nios2
-> 
-> I did a test build, which went all fine and the patches look simple
-> enough. Applied to next, thanks!
-> 
-
-Hoorray!
-
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 8cc7d59..2cf1a54 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721	libmicrohttpd-0.9.38.tar.gz
++sha256	4f937b6065c366d776be86b1d24b8fc400ebc7ea006a9d77c49a8f2f0cd7e373	libmicrohttpd-0.9.39.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 0575b74..f90878d 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.38
++LIBMICROHTTPD_VERSION = 0.9.39
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+-LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy
++LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy --disable-examples
+ 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPLv2.1+
 -- 
-Ezequiel Garcia, VanguardiaSur
-www.vanguardiasur.com.ar
+2.3.0
