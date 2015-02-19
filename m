@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:04:26 +0100
-Subject: [Buildroot] [git commit] gcc: 4.9.2: Add patch to remove a wrong
-	header
-Message-ID: <20150302222719.9A098807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:31:34 +0100
+Subject: [Buildroot] [git commit] wayland: bump version to 1.7.0
+Message-ID: <20150302222719.E7DBB807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31b5509af5ab73189efa0561a387ed71e40cd176
+commit: http://git.buildroot.net/buildroot/commit/?id=36b8b52598ee545587c5d2a4184b583ae28af7bf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a patch to gcc removing a unistd.h header include
-in libgcc/config/nios2/linux-atomic.c
+- Bump version to 1.7.0
+- Add a hash file
 
-The file is built as part of GCC first stage (host-gcc-initial),
-and so the header is not accesible. Given the header is not needed
-it's fine to simply remove it.
-
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../4.9.2/920-libgcc-remove-unistd-header.patch    |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ package/wayland/wayland.hash |    2 ++
+ package/wayland/wayland.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch b/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
 new file mode 100644
-index 0000000..df5372b
+index 0000000..aa9b15d
 --- /dev/null
-+++ b/package/gcc/4.9.2/920-libgcc-remove-unistd-header.patch
-@@ -0,0 +1,12 @@
-+Upstream status: In progress
-+
-+--- a/libgcc/config/nios2/linux-atomic.c
-++++ b/libgcc/config/nios2/linux-atomic.c
-+@@ -20,7 +20,6 @@
-+ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ <http://www.gnu.org/licenses/>.  */
-+ 
-+-#include <asm/unistd.h>
-+ #define EFAULT  14
-+ #define EBUSY   16
-+ #define ENOSYS  38
++++ b/package/wayland/wayland.hash
+@@ -0,0 +1,2 @@
++# From: http://lists.freedesktop.org/archives/wayland-devel/2015-February/019976.html
++sha256  bdea47a2db96f7e53f1ce0351559c0af5b7f7aae7e95f0a884a78af9f1057c9c  wayland-1.7.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 740faed..32869d8 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_VERSION = 1.6.0
++WAYLAND_VERSION = 1.7.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
