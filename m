@@ -1,31 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 23:07:33 +0100
-Subject: [Buildroot] [PATCH] Config.in: remove text denoting central
- package infra
-In-Reply-To: <25aff43a817e1156e747e778df58adf119fa367e.1423990263.git.baruch@tkos.co.il>
-References: <25aff43a817e1156e747e778df58adf119fa367e.1423990263.git.baruch@tkos.co.il>
-Message-ID: <20150219230733.28f485ee@free-electrons.com>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Thu, 19 Feb 2015 14:12:58 -0800
+Subject: [Buildroot] How automate source download from a google drive?
+In-Reply-To: <54E54294.3030702@ou.edu>
+References: <54E54294.3030702@ou.edu>
+Message-ID: <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On Wed, Feb 18, 2015 at 5:55 PM, Steve Kenton <skenton@ou.edu> wrote:
 
-On Sun, 15 Feb 2015 10:51:03 +0200, Baruch Siach wrote:
-> The central package infrastructure handles all packages for quite some time
-> now, so this note is no longer needed.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  Config.in | 2 --
->  1 file changed, 2 deletions(-)
+> This is a bit off the wall. I'm working with a package called tovid
+> which you download from a google drive by clicking on a link on the wiki
+> Darn if I can figure out how to put that into the .mk file to automate it.
+> Look through packages directory and did not see anything obviously like it
+>
+> Any thoughts would be appreciated
+>
 
-Applied to master, thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This worked:
+wget --no-check-certificate '
+https://docs.google.com/uc?export=download&id=0B7aAfFRdwkUmeGZTT2pua0d1Z2c'
+-O ~/Downloads/tovid.tar.gz
+
+Based on this SO answer:
+http://unix.stackexchange.com/a/148674/22389
+
+You'll need to specify the full download name of the file because the wget
+redirect apparently doesn't get it.
+
+<><  <><  <><
+Bryce Schober
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150219/d5aae0d6/attachment.html>
