@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:28:03 +0100
-Subject: [Buildroot] [PATCH 0/3] Minor pkg-rebar updates
-In-Reply-To: <873862x3mm.fsf@dell.be.48ers.dk>
-References: <1424106030-16836-1-git-send-email-fhunleth@troodon-software.com>
- <873862x3mm.fsf@dell.be.48ers.dk>
-Message-ID: <20150219222803.4c124440@free-electrons.com>
+Date: Thu, 19 Feb 2015 22:28:32 +0100
+Subject: [Buildroot] [git commit] pkg-cmake.mk: Fix ARM variant typo
+Message-ID: <20150219212836.807C181794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+commit: http://git.buildroot.net/buildroot/commit/?id=0645153bb3b9a7f85eaae2c1ce8e98f545d6e8b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Feb 2015 23:21:21 +0100, Peter Korsgaard wrote:
-> >>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
-> 
->  > I've been trying out the new rebar infrastructure with a few Erlang
->  > packages. Those packages aren't ready to contribute, but I ran into
->  > a few minor issues with the infrastructure that hopefully can make
->  > it into 2015.02.
-> 
->  > Frank Hunleth (3):
->  >   pkg-rebar: HOST_CC -> HOSTCC
->  >   pkg-rebar: add bin to list of install directories
->  >   pkg-rebar: fix very minor typos in the comments
-> 
-> Committed series, thanks.
+Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-cmake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-It seems you only applied the first two patches: the last patch was
-neither pushed, and was still there in patchwork. So I applied it to
-master, and pushed.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 6c9955d..eacd641 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -212,7 +212,7 @@ endif
+ ifeq ($(BR2_arm),y)
+ CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)l
+ else ifeq ($(BR2_armeb),y)
+-CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSORARM_VARIANT)b
++CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)b
+ else
+ CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
+ endif
