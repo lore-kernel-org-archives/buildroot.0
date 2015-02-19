@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:40:31 +0100
-Subject: [Buildroot] [PATCH next 1/1] package/x11r7/xserver_xorg-server:
- Relax dependency on libdrm
-In-Reply-To: <1424006372-4230-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1424006372-4230-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150219224031.45cb0bb0@free-electrons.com>
+Date: Thu, 19 Feb 2015 22:41:46 +0100
+Subject: [Buildroot] [git commit branch/next] perl-module-build: downgrade
+	to version 0.4208
+Message-ID: <20150219214342.0EA2C7F8E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=e9691848d06a69004321847c691292fef6f1d13f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 15 Feb 2015 14:19:32 +0100, Bernd Kuhls wrote:
-> xserver_xorg-server needs libdrm only when DRI is enabled, see configure.ac,
-> line 1280. But since version 1.16.99.901 configure searches for optional libdrm
-> support in configure.ac, line 2041,
-> 
-> http://cgit.freedesktop.org/xorg/xserver/commit/configure.ac?id=2feda3b6b58f46cef91ea41312aac9021a703777
-> 
-> as well due to libdrm support being enabled by default, but the macro
-> PKG_CHECK_EXISTS used in line 2041 does not add libdrm-specific CFLAGS to
-> Makefile causing the build to fail:
-> 
-> In file included from dumb_bo.c:36:0:
-> /home/br/br7/output/host/usr/i586-buildroot-linux-uclibc/sysroot/usr/include/xf86drm.h:40:17: fatal error: drm.h: No such file or directory
->  #include <drm.h>
-> 
-> This patch enables libdrm support only when dri support is enabled, which in
-> turn depends on mesa3d. Since mesa3d selects libdrm already remove that line
-> from Config.in as well.
-> 
-> Tested using this defconfig
-> 
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XSERVER_XORG_SERVER=y
-> BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+fix prerequisites:
+    CPAN::Meta (2.140640) is installed, but we need version >= 2.142060
 
-Applied, thanks!
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl-module-build/perl-module-build.hash |    3 +++
+ package/perl-module-build/perl-module-build.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
+new file mode 100644
+index 0000000..7da8793
+--- /dev/null
++++ b/package/perl-module-build/perl-module-build.hash
+@@ -0,0 +1,3 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    296e2ee8d7f7c6b4b178cda6919ba3c9 Module-Build-0.4208.tar.gz
++sha256 32eca47c494a5d2a826c30616270b0fc744315b7363223b54fdea2dcef635378 Module-Build-0.4208.tar.gz
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index 4fdb4c7..aa6259a 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_MODULE_BUILD_VERSION = 0.4210
++PERL_MODULE_BUILD_VERSION = 0.4208
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+ PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
