@@ -1,41 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:36:37 +0100
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.0-6
-Message-ID: <20150302222719.79EF0807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:04:26 +0100
+Subject: [Buildroot] [git commit] gcc: nios2: Prevent selecting unsupported
+	versions
+Message-ID: <20150302222719.B0D4B807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=383fa78e3ceb6e0eb1fa789c9d94f1a234b67d33
+commit: http://git.buildroot.net/buildroot/commit/?id=8bc506a648542fc32b9e19bd2edbbc82a99643ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <Fabio.Porcedda@gmail.com>
+Versions older than GCC v4.9 do not support the Nios-II architecture
+so disable them.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 92d2239..09b6dcd 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 56e3ba52ef0a0c0bc25b34a435312d0ee2aa22f43ba74801ab3888b37b21871e  ImageMagick-6.9.0-5.tar.xz
-+sha256 a47f2731d453df502a93036ca1fea44c5852ed1b2c36af4343e6afb18652fefd ImageMagick-6.9.0-6.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 7ddde6e..a72778c 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.0-5
-+IMAGEMAGICK_VERSION = 6.9.0-6
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 567f66a..dd61f51 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -19,7 +19,7 @@ choice
+ 		bool "gcc 4.5.x"
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_powerpc64le
++			&& !BR2_powerpc64le && !BR2_nios2
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
+ 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
+@@ -40,7 +40,7 @@ choice
+ 		bool "gcc 4.7.x"
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_bfin && !BR2_powerpc64le
++			&& !BR2_bfin && !BR2_powerpc64le && !BR2_nios2
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_pj4
+ 		# Broken or unsupported PPC cores
+@@ -56,7 +56,7 @@ choice
+ 		bool "gcc 4.8.x"
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_arc \
+-			&& !BR2_bfin && !BR2_powerpc64le
++			&& !BR2_bfin && !BR2_powerpc64le && !BR2_nios2
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12
+ 		# Broken or unsupported PPC cores
