@@ -1,43 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Feb 2015 14:02:51 +0100
-Subject: [Buildroot] [git commit] libnspr: bump to version 4.10.8
-Message-ID: <20150302222718.E7F8A807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 21:31:48 +0100
+Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.01.30
+Message-ID: <20150302222719.48A85807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f828739a5b71cc837b1f49acbf82ceaa9b1cee53
+commit: http://git.buildroot.net/buildroot/commit/?id=1262989edbbd6e4b50d86208c2d0dc915056ba8a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnspr/libnspr.hash |    2 ++
- package/libnspr/libnspr.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-new file mode 100644
-index 0000000..632422f
---- /dev/null
-+++ b/package/libnspr/libnspr.hash
-@@ -0,0 +1,2 @@
-+# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.10.8/src/SHA256SUMS
-+sha256	507ea57c525c0c524dae4857a642b4ef5c9d795518754c7f83422d22fe544a15	nspr-4.10.8.tar.gz
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index c4f86cc..91a740a 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index b9eabf1..c755efd 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	eab6b50f30748a8b0065ba38cf3df05aac161a5861ae0a6c3cfd01d38a71c9dd	wireless-regdb-2014.11.18.tar.xz
++sha256	438d7f3d62686bc997098d17fe1aff95c6f6ec061aaab90ab7c2c17e8451ce85	wireless-regdb-2015.01.30.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 4322fb7..a4ca41b 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.10.7
-+LIBNSPR_VERSION = 4.10.8
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-WIRELESS_REGDB_VERSION = 2014.11.18
++WIRELESS_REGDB_VERSION = 2015.01.30
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
+@@ -13,8 +13,8 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
+ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+-	$(INSTALL) -m 644 -D -T $(@D)/linville.key.pub.pem \
+-		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
++	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
++		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+ endef
+ 
+ $(eval $(generic-package))
