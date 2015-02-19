@@ -1,22 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:36:58 +0100
-Subject: [Buildroot] [PATCH] imagemagick: bump to version 6.9.0-6
-In-Reply-To: <1424160778-25875-1-git-send-email-Fabio.Porcedda@gmail.com>
-References: <1424160778-25875-1-git-send-email-Fabio.Porcedda@gmail.com>
-Message-ID: <20150219213658.51e99e22@free-electrons.com>
+Date: Thu, 19 Feb 2015 21:37:34 +0100
+Subject: [Buildroot] [PATCH] libtool: bump to version 2.4.6
+In-Reply-To: <1424103859-12937-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424103859-12937-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150219213734.3be8250c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Gustavo Zacarias,
 
-On Tue, 17 Feb 2015 09:12:58 +0100, Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <Fabio.Porcedda@gmail.com>
+On Mon, 16 Feb 2015 13:24:19 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/imagemagick/imagemagick.hash | 2 +-
->  package/imagemagick/imagemagick.mk   | 2 +-
+>  package/libtool/libtool.hash | 2 +-
+>  package/libtool/libtool.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
