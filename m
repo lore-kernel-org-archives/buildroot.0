@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:02:59 +0100
-Subject: [Buildroot] [git commit branch/next] fs/tar: only store numeric
-	uid/gid
-Message-ID: <20150219210310.566E2817AC@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:03:38 +0100
+Subject: [Buildroot] [PATCH] fs/tar: only store numeric uid/gid
+In-Reply-To: <1424108956-18100-1-git-send-email-yann.morin.1998@free.fr>
+References: <1424108956-18100-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150219220338.7afba78d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66ee6dc8721ce8746a8352f02f52663b90887c63
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Yann E. MORIN,
 
-If a target user is asigned a UID (e.g. 1000) that happens to also exist
-on the build machine, tar will happily store the username for that user.
+On Mon, 16 Feb 2015 18:49:16 +0100, Yann E. MORIN wrote:
+> If a target user is asigned a UID (e.g. 1000) that happens to also exist
+> on the build machine, tar will happily store the username for that user.
+> 
+> This can be seen by some as potential information disclosure.
+> 
+> Instruct tar to just store the numeric uid/gid.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This can be seen by some as potential information disclosure.
+I hesitated a bit on this one, but I preferred to err on the safe side,
+and therefore applied this patch to the 'next' branch.
 
-Instruct tar to just store the numeric uid/gid.
+Thanks!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/tar/tar.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-index 780827e..28219cf 100644
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -7,7 +7,7 @@
- TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
- 
- define ROOTFS_TAR_CMD
--	tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
-+	tar -c$(TAR_OPTS)f $@ --numeric-owner -C $(TARGET_DIR) .
- endef
- 
- $(eval $(call ROOTFS_TARGET,tar))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
