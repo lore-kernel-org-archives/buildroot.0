@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:28:32 +0100
-Subject: [Buildroot] [git commit] pkg-cmake.mk: Fix ARM variant typo
-Message-ID: <20150219212836.807C181794@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:28:48 +0100
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: Fix ARM variant typo
+In-Reply-To: <1424075092-19231-1-git-send-email-shmuelzon@gmail.com>
+References: <1424075092-19231-1-git-send-email-shmuelzon@gmail.com>
+Message-ID: <20150219222848.77a7b953@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0645153bb3b9a7f85eaae2c1ce8e98f545d6e8b3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Assaf Inbal,
 
-Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-cmake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon, 16 Feb 2015 10:24:52 +0200, Assaf Inbal wrote:
+> Signed-off-by: Assaf Inbal <shmuelzon@gmail.com>
+> ---
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6c9955d..eacd641 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -212,7 +212,7 @@ endif
- ifeq ($(BR2_arm),y)
- CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)l
- else ifeq ($(BR2_armeb),y)
--CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSORARM_VARIANT)b
-+CMAKE_SYSTEM_PROCESSOR = $(CMAKE_SYSTEM_PROCESSOR_ARM_VARIANT)b
- else
- CMAKE_SYSTEM_PROCESSOR = $(BR2_ARCH)
- endif
+Applied to master, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
