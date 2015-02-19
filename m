@@ -1,72 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 11:31:08 +0100
-Subject: [Buildroot] [git commit] package/freerdp: move
-	architecture-specific block
-Message-ID: <20150302222722.2B1CA8177D@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 23:22:19 +0100
+Subject: [Buildroot] [git commit] netsnmp: Add option for using minimal
+	internal SSL code
+Message-ID: <20150302222720.BB0D9807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d081d51bf97f3ec303b039b779cee5aabb90f0ac
+commit: http://git.buildroot.net/buildroot/commit/?id=415d42e12f36d8b0ea48fcf415d80eca2a7a5cae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Move the arch-spcific block up, so it does not interfere with followup
-patches (mostly to ease review).
+Add option for enabling a minimal internal copy of OpenSSL usable for USM
+security. It will not enable the usage of SNMP over (D)TLS.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+[Thomas: use 'else ifeq' to avoid having another nested ifeq ... endif
+block.]
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freerdp/freerdp.mk |   32 ++++++++++++++++----------------
- 1 files changed, 16 insertions(+), 16 deletions(-)
+ package/netsnmp/Config.in  |    7 +++++++
+ package/netsnmp/netsnmp.mk |    2 ++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 0dbf8a4..cf96ff4 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -48,6 +48,22 @@ else
- FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
- endif
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 589f720..47a53d7 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -49,4 +49,11 @@ config BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING
+ 	  support, including the ability to log with DEBUGMSG(),
+ 	  DEBUGMSGTL() and companion macros.
  
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+FREERDP_CONF_OPTS += -DWITH_NEON=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_NEON=OFF
-+endif
++config BR2_PACKAGE_NETSNMP_OPENSSL_INTERNAL
++	bool "Enable minimal internal OpenSSL code"
++	depends on !BR2_PACKAGE_OPENSSL
++	help
++	  Enable a minimal internal copy of OpenSSL usable for USM
++	  security. It will not enable the usage of SNMP over (D)TLS.
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+FREERDP_CONF_OPTS += -DWITH_SSE2=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
-+endif
-+
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
- FREERDP_DEPENDENCIES += xlib_libXext
- FREERDP_CONF_OPTS += -DWITH_X11=ON
-@@ -97,20 +113,4 @@ else
- FREERDP_CONF_OPTS += -DWITH_XV=OFF
  endif
- 
--ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
--FREERDP_CONF_OPTS += -DWITH_NEON=ON
--else
--FREERDP_CONF_OPTS += -DWITH_NEON=OFF
--endif
--
--ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
--FREERDP_CONF_OPTS += -DWITH_SSE2=ON
--else
--FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
--endif
--
--ifeq ($(BR2_arm)$(BR2_armeb),y)
--FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
--endif
--
- $(eval $(cmake-package))
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 58b52ef..655552c 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -54,6 +54,8 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ 	# openssl uses zlib, so we need to explicitly link with it when static
+ 	NETSNMP_CONF_ENV += LIBS=-lz
+ endif
++else ifeq ($(BR2_PACKAGE_NETSNMP_OPENSSL_INTERNAL),y)
++	NETSNMP_CONF_OPTS += --with-openssl=internal
+ else
+ 	NETSNMP_CONF_OPTS += --without-openssl
+ endif
