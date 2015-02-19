@@ -1,124 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 23:28:51 +0100
-Subject: [Buildroot] [git commit] package/nvidia-driver: build the kernel
-	module
-Message-ID: <20150302222721.C694681764@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 23:17:14 +0100
+Subject: [Buildroot] [git commit] netsnmp: Make server and client
+	installation optional
+Message-ID: <20150302222720.B1A6B807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b9285a8748cb4bd6f301603ef688eb6be025a39
+commit: http://git.buildroot.net/buildroot/commit/?id=a387ff3837efca695c5449e0d0be1b9a7c9d7ee2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add option to build the nvidia.ko module. If CUDA is enabled on x86_64,
-also build the nvidia-uvm.ko kernel module (for Unified Memory access),
-which is required by the CUDA user-land library.
-
-Substancially inspired by the corresponding Gentoo ebuild:
-    http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/nvidia-drivers-340.32.ebuild?revision=1.2&view=markup
+The netsnmp package consists of both a server and a number of client
+tools, this makes the installation of both parts optional.
 
 [Thomas:
-  - add quotes when using $(TARGET_CC) and other variables, since they
-    can have spaces in their values
-  - remove space after opening parenthesis and before closing parenthesis.]
+  - Add explicit --enable-{agent,applications}, and use positive logic.
+  - Remove "net-snmp" from the new Config.in option prompts, since
+    they are already visible under the netsnmp package option.]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nvidia-driver/Config.in        |   14 +++++++++
- package/nvidia-driver/nvidia-driver.mk |   50 ++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+), 0 deletions(-)
+ package/netsnmp/Config.in  |   12 ++++++++++++
+ package/netsnmp/netsnmp.mk |   14 ++++++++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index 18453ab..cd7fc95 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -49,4 +49,18 @@ config BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS
- 	  Say 'y' here if you plan on running a program that uses
- 	  those private libraries.
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 8edbd39..589f720 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -9,6 +9,18 @@ config BR2_PACKAGE_NETSNMP
  
-+comment "nvidia kernel module needs a kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_NVIDIA_DRIVER_MODULE
-+	bool "nvidia kernel module"
-+	depends on BR2_LINUX_KERNEL
+ if BR2_PACKAGE_NETSNMP
+ 
++config BR2_PACKAGE_NETSNMP_SERVER
++	bool "server"
++	default y
 +	help
-+	  Build the nvidia.ko kernel module.
++	  The snmpd server.
 +
-+	  If CUDA support (above) is set, and the target is x86_64, then
-+	  this will also build the nvidia-uvm.ko kernel module, which
-+	  provides Unified Memory access to the GPU and CPU memories for
-+	  CUDA programs.
++config BR2_PACKAGE_NETSNMP_CLIENTS
++	bool "clients"
++	default y
++	help
++	  The net-snmp clients (snmpget, snmpwalk, etc).
 +
- endif # BR2_PACKAGE_NVIDIA_DRIVER
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 2a35f9b..4605d02 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -70,6 +70,55 @@ define NVIDIA_DRIVER_EXTRACT_CMDS
- 	rm -rf $(@D)/tmp-extract
- endef
+ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+ 	bool "Install MIB files on target and enable MIB loading code"
+ 	default y
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index bfc2a74..58b52ef 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -67,6 +67,18 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
+ 	NETSNMP_CONF_OPTS += --disable-debugging
+ endif
  
-+# Build and install the kernel modules if needed
-+ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_MODULE),y)
-+
-+NVIDIA_DRIVER_DEPENDENCIES += linux
-+
-+# NVidia uses the legacy naming scheme for the x86 architecture, when i386
-+# and x86_64 were still considered two separate architectures in the Linux
-+# kernel.
-+NVIDIA_DRIVER_ARCH = $(if $(BR2_i386),i386,$(BR2_ARCH))
-+
-+NVIDIA_DRIVER_MOD_DIRS = kernel
-+NVIDIA_DRIVER_MOD_FILES = kernel/nvidia.ko
-+# nvidia-uvm.ko only available for x86_64
-+ifeq ($(BR2_x86_64)$(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),yy)
-+NVIDIA_DRIVER_MOD_DIRS += kernel/uvm
-+NVIDIA_DRIVER_MOD_FILES += kernel/uvm/nvidia-uvm.ko
++ifeq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
++	NETSNMP_CONF_OPTS += --enable-agent
++else
++	NETSNMP_CONF_OPTS += --disable-agent
 +endif
 +
-+# We can not use '$(MAKE) -C $(@D)/$${dir}' because NVidia's uses its own
-+# Makefile to build a kernel module, which includes a lot of assumptions
-+# on where to find its own sub-Makefile fragments, and fails if make is
-+# not run from the directory where the module's source files are. Hence
-+# our little trick to cd in there first.
-+# That's also the reason why we do not use LINUX_MAKE_FLAGS or the other
-+# linux-specific variables, since NVidia's Makefile does not understand
-+# them.
-+define NVIDIA_DRIVER_BUILD_CMDS
-+	for dir in $(NVIDIA_DRIVER_MOD_DIRS); do \
-+		(cd $(@D)/$${dir} && \
-+		  $(MAKE) SYSSRC="$(LINUX_DIR)" SYSOUT="$(LINUX_DIR)" \
-+				CC="$(TARGET_CC)" LD="$(TARGET_LD)" HOSTCC="$(HOSTCC)" \
-+				ARCH=$(NVIDIA_DRIVER_ARCH) module) || exit 1; \
-+	done
-+endef
++ifeq ($(BR2_PACKAGE_NETSNMP_CLIENTS),y)
++	NETSNMP_CONF_OPTS += --enable-applications
++else
++	NETSNMP_CONF_OPTS += --disable-applications
++endif
 +
-+# We do not use module-install because NVidia's Makefile requires root.
-+# Also, we do not install it in the expected location (in nvidia/ rather
-+# than in kernel/drivers/video/)
-+define NVIDIA_DRIVER_INSTALL_KERNEL_MODULE
-+	for mod in $(NVIDIA_DRIVER_MOD_FILES); do \
-+		$(INSTALL) -D -m 0644 $(@D)/$${mod} \
-+			$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/nvidia/$${mod##*/} \
-+		|| exit 1; \
-+	done
-+	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
-+endef
-+
-+endif # BR2_PACKAGE_NVIDIA_DRIVER_MODULE == y
-+
- # Helper to install libraries
- # $1: destination directory (target or staging)
- #
-@@ -112,6 +161,7 @@ define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
- 		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
- 			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
- 	done
-+	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
- endef
+ # Remove IPv6 MIBs if there's no IPv6
+ ifneq ($(BR2_INET_IPV6),y)
+ define NETSNMP_REMOVE_MIBS_IPV6
+@@ -84,10 +96,12 @@ endef
  
- $(eval $(generic-package))
+ NETSNMP_POST_INSTALL_TARGET_HOOKS += NETSNMP_REMOVE_BLOAT_MIBS
+ 
++ifeq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
+ define NETSNMP_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
+ 		$(TARGET_DIR)/etc/init.d/S59snmpd
+ endef
++endif
+ 
+ define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
+ 	$(SED) 	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
