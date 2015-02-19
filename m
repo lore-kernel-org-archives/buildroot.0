@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:02:13 +0100
-Subject: [Buildroot] [PATCH] busybox: add 1.23.1 fixes for dc and wget
-In-Reply-To: <1424379115-23170-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424379115-23170-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150219220213.31f2ccf8@free-electrons.com>
+Date: Thu, 19 Feb 2015 22:02:59 +0100
+Subject: [Buildroot] [git commit branch/next] fs/tar: only store numeric
+	uid/gid
+Message-ID: <20150219210310.566E2817AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=66ee6dc8721ce8746a8352f02f52663b90887c63
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 19 Feb 2015 17:51:55 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/busybox/0003-dc.patch   | 163 +++++++++++++++++++++++++++++++++++
->  package/busybox/0004-wget.patch | 185 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 348 insertions(+)
->  create mode 100644 package/busybox/0003-dc.patch
->  create mode 100644 package/busybox/0004-wget.patch
+If a target user is asigned a UID (e.g. 1000) that happens to also exist
+on the build machine, tar will happily store the username for that user.
 
-Applied to master, thanks.
+This can be seen by some as potential information disclosure.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Instruct tar to just store the numeric uid/gid.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/tar/tar.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 780827e..28219cf 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -7,7 +7,7 @@
+ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+ 
+ define ROOTFS_TAR_CMD
+-	tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
++	tar -c$(TAR_OPTS)f $@ --numeric-owner -C $(TARGET_DIR) .
+ endef
+ 
+ $(eval $(call ROOTFS_TARGET,tar))
