@@ -1,33 +1,183 @@
-From: Steve James <ste@junkomatic.net>
-Date: Thu, 19 Feb 2015 13:02:17 +0000
-Subject: [Buildroot] Use case: legacy kernel with modern user-space?
-Message-ID: <201502191302.17430.ste@junkomatic.net>
+From: Lou Crittenden <loucrittenden63@gmail.com>
+Date: Thu, 19 Feb 2015 07:14:53 -0600
+Subject: [Buildroot] setting up directfb for a raspberry pi +
+	waveshare32b display
+In-Reply-To: <CAFGceHFoBdrQvvwks8729ZRb+nWus8FJVodGy-4qzuGUXnT9ig@mail.gmail.com>
+References: <trinity-ac932deb-2eb9-4d33-880e-519ff0babe58-1424280610421@3capp-gmx-bs25>
+ <CAFGceHEjnSkD3hLqUqtxmY9p2uu-zFV4_vG6pB_LfmoL4wFs9Q@mail.gmail.com>
+ <CAFGceHGTN4WURAfPXZjDbQRvk8=n-fFUyUkhuhcfOPVefb7bFw@mail.gmail.com>
+ <CAFGceHFoBdrQvvwks8729ZRb+nWus8FJVodGy-4qzuGUXnT9ig@mail.gmail.com>
+Message-ID: <CAFGceHHNY9+HKKisnOKfEY3uRUsbWCKS91vr=Yq+JiPFit5LRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+>I was thinking I could make an ads7846 configuration file at
+>/etc/modprobe.d>>/00-ads7846.
+>conf (like we did with the waveshare32b) to also include the ads7846
+>touchscreen device with reversed axes.
 
-We are using Buildroot with a vendor supplied 2.6 kernel and drivers, but I 
-wish to include some modern user-space tools. The problem is that these 
-require a newer GCC version that the one that was contemporary when the kernel 
-and drivers were written. The team is reluctant to move GCC forward (from 
-4.5.3 to 4.7.4) for fear that this may expose subtle bugs in the vendor's 
-drivers.
+>For starters, the contents will be:
 
-Can I invite your thought on how to resolve this?
+>options ads7846_device debug=1 cs=1 speed=2000000 model=7846 >x_min=230
+x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 >pressure_max=255
+gpio_pendown=23 keep_vref_on=1
 
-1. I have attempted to persuade the team that the risk to upgrading the 
-compiler is acceptably small, that this is a difficult argument to win.
+>I will see how this goes and edit accordingly.
 
-2. I have proposed that we build only the kernel space with the old GCC and 
-build user-space with the new GCC. I realise this is going off piste for 
-Buildroot. What are the obstacles to this approach? Is it worth a try?
+Disregard that!! I remember now making the /etc/init.d/s30fbtft script and
+I found the part that has the "swap_xy=0" and am changing it to
+"swap_xy=1", and doing the tweaks from there.
 
-If it matters, we are building stock GCC with crostool-NG but I'd be receptive 
-to alternative methods if it helped.
+On Wed, Feb 18, 2015 at 7:10 PM, Lou Crittenden <loucrittenden63@gmail.com>
+wrote:
 
-Thanks for your attention,
-Steve.
+> I can also confirm that the axes are reversed on the df_bltload by
+> running: df_bltload --dfb:fbdev=/dev/fb1.
+>
+> I was thinking I could make an ads7846 configuration file at
+> /etc/modprobe.d/00-ads7846.conf (like we did with the waveshare32b) to also
+> include the ads7846 touchscreen device with reversed axes.
+>
+> For starters, the contents will be:
+>
+> options ads7846_device debug=1 cs=1 speed=2000000 model=7846 x_min=230
+> x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 pressure_max=255
+> gpio_pendown=23 keep_vref_on=1
+>
+> I will see how this goes and edit accordingly.
+>
+> On Wed, Feb 18, 2015 at 6:13 PM, Lou Crittenden <loucrittenden63@gmail.com
+> > wrote:
+>
+>> on the df_knuckles demo, the touch screen works, but it appears that I
+>> have reverse the axes somehow, as it appears that if I move my finger left
+>> to right, the skull moves up and down and vice versa.
+>>
+>> On Wed, Feb 18, 2015 at 4:29 PM, Lou Crittenden <
+>> loucrittenden63 at gmail.com> wrote:
+>>
+>>> Got it to work after about a 2 hour rebuild with make clean all and
+>>> removing the said option. You guessed properly. I also had to use fb1
+>>> instead of fb0. I would love to use fb1 as the default framebuffer.
+>>>
+>>> On Wed, Feb 18, 2015 at 11:30 AM, Peter Seiderer <ps.report@gmx.net>
+>>> wrote:
+>>>
+>>>> Hello Lou,
+>>>>
+>>>> On Tue, Feb 17, 2015 at 07:21:36PM -0600, Lou Crittenden wrote:
+>>>> > I tried running them and got an error stating it can't find
+>>>> /dev/fusion0 or
+>>>> > /dev/fusion/0 after running any of the df_knuckles --dfb commands
+>>>> with the
+>>>> > exception of the help command.
+>>>> >
+>>>> > Did you have to create new device nodes and directories? I had to
+>>>> using
+>>>> > mkdir /dev/fusion
+>>>> > mkdir /dev/fusion0
+>>>> >
+>>>> > then made the device nodes with these commands:
+>>>> >
+>>>> > mknod /dev/fusion/0 c 253 0
+>>>> > mknod /dev/fusion/0 c 252 0
+>>>> > mknod /dev/fusion0 c 252 0
+>>>> > mknod /dev/fusion0 c 253 0
+>>>> >
+>>>> > I then ran
+>>>> > $ df_knuckles --dfb:fbdev=/dev/fb1
+>>>> > $ df_dok --dfb:fbdev=/dev/fb1
+>>>> > $ df_cpuload --dfb:fbdev=/dev/fb1
+>>>> >
+>>>> > both as root and as another user and I get:
+>>>> > (!) Fusion/Init: could not enter world 0! not a typewriter
+>>>> >
+>>>> > I have no idea what that means. Other people have gotten the error as
+>>>> well,
+>>>> > but haven't had solutions, as per various searches.
+>>>> >
+>>>>
+>>>> From package/directfb/directfb.mk:
+>>>>
+>>>> ...
+>>>> ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
+>>>> DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+>>>> DIRECTFB_DEPENDENCIES += linux-fusion
+>>>> endif
+>>>> ...
+>>>>
+>>>> Disable DIRECTFB_MULTI, rebuild directfb and try again (just a guess,
+>>>> not tested)...
+>>>>
+>>>> Regards,
+>>>> Peter
+>>>>
+>>>> > On Tue, Feb 17, 2015 at 4:38 PM, Peter Seiderer <ps.report@gmx.net>
+>>>> wrote:
+>>>> >
+>>>> > > Hello Lou,
+>>>> > >
+>>>> > > On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
+>>>> > > > Hi all. I have a buildroot setup running on a raspberry pi model
+>>>> b+ and a
+>>>> > > > waveshare32b 3.2" display and was able to get the system to work
+>>>> with the
+>>>> > > > display thanks to peter seiderer's awesome patch that builds the
+>>>> fbtft
+>>>> > > > drivers for buildroot, but I now would like to set up directfb to
+>>>> work on
+>>>> > > > this setup. Directfb built nicely, along with sdl and qt5 (I'm
+>>>> setting up
+>>>> > > > the framework for a gui on a buildroot based media player), but I
+>>>> cannot
+>>>> > > > get anything to work on directfb. I run the command
+>>>> "df_drivertest" that
+>>>> > > > tests for the driver, and it gives a
+>>>> > > >
+>>>> > > > (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]: The
+>>>> > > > requested operation or an argument is (currently)Not
+>>>> > > > supported.
+>>>> > > >
+>>>> > > > The same thing happens when I try to run any of their directfb
+>>>> demos.
+>>>> > > > I went on their site, directfb.org, and a lot of the links that
+>>>> would
+>>>> > > > help are dead
+>>>> > > >
+>>>> > >
+>>>> > > Just a quick test:
+>>>> > >
+>>>> > > $ df_knuckles --dfb:help
+>>>> > > $ df_knuckles --dfb:fbdev=/dev/fb1
+>>>> > > $ df_dok --dfb:fbdev=/dev/fb1
+>>>> > > $ df_cpuload --dfb:fbdev=/dev/fb1
+>>>> > >
+>>>> > > work for me...
+>>>> > >
+>>>> > > $ df_drivertest  --dfb:fbdev=/dev/fb1
+>>>> > > df_drivertest.c <97>:
+>>>> > >         (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary
+>>>> )]: The
+>>>> > > requested operation or an argument is (currently) not supported
+>>>> > >
+>>>> > > failes..
+>>>> > >
+>>>> > > Regards,
+>>>> > > Peter
+>>>> > >
+>>>> > > >
+>>>> > > > I want to use a setup lighter than xorg and supports touchscreen
+>>>> for a
+>>>> > > > gui on a multimedia player I am working on.
+>>>> > >
+>>>>
+>>>
+>>>
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150219/3ced7e54/attachment.html>
