@@ -1,46 +1,245 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Date: Thu, 19 Feb 2015 16:44:30 -0500
-Subject: [Buildroot] [PATCH] libmicrohttpd: bump to 0.9.39
-Message-ID: <1424382270-15888-1-git-send-email-simon.marchi@polymtl.ca>
+From: Lou Crittenden <loucrittenden63@gmail.com>
+Date: Thu, 19 Feb 2015 15:46:33 -0600
+Subject: [Buildroot] setting up directfb for a raspberry pi +
+	waveshare32b display
+In-Reply-To: <CAFGceHE17Q+R8ehx5FrOdAT_0+B8hD5gML9MLs3VKZY7q0-obA@mail.gmail.com>
+References: <trinity-ac932deb-2eb9-4d33-880e-519ff0babe58-1424280610421@3capp-gmx-bs25>
+ <CAFGceHEjnSkD3hLqUqtxmY9p2uu-zFV4_vG6pB_LfmoL4wFs9Q@mail.gmail.com>
+ <CAFGceHGTN4WURAfPXZjDbQRvk8=n-fFUyUkhuhcfOPVefb7bFw@mail.gmail.com>
+ <CAFGceHFoBdrQvvwks8729ZRb+nWus8FJVodGy-4qzuGUXnT9ig@mail.gmail.com>
+ <CAFGceHHNY9+HKKisnOKfEY3uRUsbWCKS91vr=Yq+JiPFit5LRw@mail.gmail.com>
+ <CAMkMO5kOsqwqYnhiWuh1gfJq2X6d52Yg_yuqkjcS=km2iJB_JA@mail.gmail.com>
+ <CAFGceHE17Q+R8ehx5FrOdAT_0+B8hD5gML9MLs3VKZY7q0-obA@mail.gmail.com>
+Message-ID: <CAFGceHHvKy66+TeYDZ6mw-npwHAu0jbsPGuVuCqawqrE9imK=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to new version, and disable building examples.
+>Disregard that!! I remember now making the /etc/init.d/s30fbtft script and
+I >found the part that has the "swap_xy=0" and am changing it to
+"swap_xy=1", >and doing the tweaks from there.
 
-Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
----
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Well, I swapped the axes by changing swap_xy=0 to swap_xy=1 and while it
+swapped the axes, I am having an issue where the y-axis is inverted, so
+when I move my finger up and down the screen (it is in landscape), the
+arrow moves the opposite. If I move the arrow left and right along the
+x-axis, it moves properly. How do I fix that y-axis?
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 8cc7d59..2cf1a54 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8df2b4dd863c98799a4775a530d905363fbc02fec850af9094da890b28b9e721	libmicrohttpd-0.9.38.tar.gz
-+sha256	4f937b6065c366d776be86b1d24b8fc400ebc7ea006a9d77c49a8f2f0cd7e373	libmicrohttpd-0.9.39.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 0575b74..f90878d 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--LIBMICROHTTPD_VERSION = 0.9.38
-+LIBMICROHTTPD_VERSION = 0.9.39
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
--LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy
-+LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-spdy --disable-examples
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- LIBMICROHTTPD_LICENSE = LGPLv2.1+
--- 
-2.3.0
+
+
+On Thu, Feb 19, 2015 at 2:02 PM, Lou Crittenden <loucrittenden63@gmail.com>
+wrote:
+
+> >Hi Lou,
+> >Do you want to use qt quick with directfb?
+> >I have waveshare 4 inch (A), and for now without any success on this.
+> >Everything with OGL is rendered on HDMI output,
+> >so I think it's not possible to use fbdev with qt quick. Code with
+> widgets works >good.
+> >I you will have any success on this, I would be greatful for any info.
+> >Regards
+> >Zygmunt
+>
+> Qt quick looks promising to use as an interface for directfb, although I
+> never have gotten into it. You mentioning it to me is the first time I have
+> heard of it. I watched a demo on how to create an interface here
+> https://www.youtube.com/watch?v=_6_F6Kpjd-Q. By the looks of what I saw
+> in the vid, it looks promising, but of course that guy made it look easy.
+>
+> Do you know what framebuffer you are outputting to? Mine is /dev/fb1.
+> /dev/fb0 is the hdmi/video out, assuming you are using a raspberry pi.
+>
+> On Thu, Feb 19, 2015 at 7:27 AM, Zygmunt Ptak <zygmuntptak@gmail.com>
+> wrote:
+>
+>> Hi Lou,
+>> Do you want to use qt quick with directfb?
+>> I have waveshare 4 inch (A), and for now without any success on this.
+>> Everything with OGL is rendered on HDMI output,
+>> so I think it's not possible to use fbdev with  qt quick. Code with
+>> widgets works good.
+>> I you will have any success on this, I would be greatful for any info.
+>> Regards
+>> Zygmunt
+>>
+>> 2015-02-19 14:14 GMT+01:00 Lou Crittenden <loucrittenden63@gmail.com>:
+>>
+>>> >I was thinking I could make an ads7846 configuration file at
+>>> >/etc/modprobe.d>>/00-ads7846.
+>>> >conf (like we did with the waveshare32b) to also include the ads7846
+>>> >touchscreen device with reversed axes.
+>>>
+>>> >For starters, the contents will be:
+>>>
+>>> >options ads7846_device debug=1 cs=1 speed=2000000 model=7846 >x_min=230
+>>> x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 >pressure_max=255
+>>> gpio_pendown=23 keep_vref_on=1
+>>>
+>>> >I will see how this goes and edit accordingly.
+>>>
+>>> Disregard that!! I remember now making the /etc/init.d/s30fbtft script
+>>> and I found the part that has the "swap_xy=0" and am changing it to
+>>> "swap_xy=1", and doing the tweaks from there.
+>>>
+>>> On Wed, Feb 18, 2015 at 7:10 PM, Lou Crittenden <
+>>> loucrittenden63 at gmail.com> wrote:
+>>>
+>>>> I can also confirm that the axes are reversed on the df_bltload by
+>>>> running: df_bltload --dfb:fbdev=/dev/fb1.
+>>>>
+>>>> I was thinking I could make an ads7846 configuration file at
+>>>> /etc/modprobe.d/00-ads7846.conf (like we did with the waveshare32b) to also
+>>>> include the ads7846 touchscreen device with reversed axes.
+>>>>
+>>>> For starters, the contents will be:
+>>>>
+>>>> options ads7846_device debug=1 cs=1 speed=2000000 model=7846 x_min=230
+>>>> x_max=3900 y_min=200 y_max=3700 x_plate_ohms=80 pressure_max=255
+>>>> gpio_pendown=23 keep_vref_on=1
+>>>>
+>>>> I will see how this goes and edit accordingly.
+>>>>
+>>>> On Wed, Feb 18, 2015 at 6:13 PM, Lou Crittenden <
+>>>> loucrittenden63 at gmail.com> wrote:
+>>>>
+>>>>> on the df_knuckles demo, the touch screen works, but it appears that I
+>>>>> have reverse the axes somehow, as it appears that if I move my finger left
+>>>>> to right, the skull moves up and down and vice versa.
+>>>>>
+>>>>> On Wed, Feb 18, 2015 at 4:29 PM, Lou Crittenden <
+>>>>> loucrittenden63 at gmail.com> wrote:
+>>>>>
+>>>>>> Got it to work after about a 2 hour rebuild with make clean all and
+>>>>>> removing the said option. You guessed properly. I also had to use fb1
+>>>>>> instead of fb0. I would love to use fb1 as the default framebuffer.
+>>>>>>
+>>>>>> On Wed, Feb 18, 2015 at 11:30 AM, Peter Seiderer <ps.report@gmx.net>
+>>>>>> wrote:
+>>>>>>
+>>>>>>> Hello Lou,
+>>>>>>>
+>>>>>>> On Tue, Feb 17, 2015 at 07:21:36PM -0600, Lou Crittenden wrote:
+>>>>>>> > I tried running them and got an error stating it can't find
+>>>>>>> /dev/fusion0 or
+>>>>>>> > /dev/fusion/0 after running any of the df_knuckles --dfb commands
+>>>>>>> with the
+>>>>>>> > exception of the help command.
+>>>>>>> >
+>>>>>>> > Did you have to create new device nodes and directories? I had to
+>>>>>>> using
+>>>>>>> > mkdir /dev/fusion
+>>>>>>> > mkdir /dev/fusion0
+>>>>>>> >
+>>>>>>> > then made the device nodes with these commands:
+>>>>>>> >
+>>>>>>> > mknod /dev/fusion/0 c 253 0
+>>>>>>> > mknod /dev/fusion/0 c 252 0
+>>>>>>> > mknod /dev/fusion0 c 252 0
+>>>>>>> > mknod /dev/fusion0 c 253 0
+>>>>>>> >
+>>>>>>> > I then ran
+>>>>>>> > $ df_knuckles --dfb:fbdev=/dev/fb1
+>>>>>>> > $ df_dok --dfb:fbdev=/dev/fb1
+>>>>>>> > $ df_cpuload --dfb:fbdev=/dev/fb1
+>>>>>>> >
+>>>>>>> > both as root and as another user and I get:
+>>>>>>> > (!) Fusion/Init: could not enter world 0! not a typewriter
+>>>>>>> >
+>>>>>>> > I have no idea what that means. Other people have gotten the error
+>>>>>>> as well,
+>>>>>>> > but haven't had solutions, as per various searches.
+>>>>>>> >
+>>>>>>>
+>>>>>>> From package/directfb/directfb.mk:
+>>>>>>>
+>>>>>>> ...
+>>>>>>> ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
+>>>>>>> DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+>>>>>>> DIRECTFB_DEPENDENCIES += linux-fusion
+>>>>>>> endif
+>>>>>>> ...
+>>>>>>>
+>>>>>>> Disable DIRECTFB_MULTI, rebuild directfb and try again (just a
+>>>>>>> guess, not tested)...
+>>>>>>>
+>>>>>>> Regards,
+>>>>>>> Peter
+>>>>>>>
+>>>>>>> > On Tue, Feb 17, 2015 at 4:38 PM, Peter Seiderer <ps.report@gmx.net>
+>>>>>>> wrote:
+>>>>>>> >
+>>>>>>> > > Hello Lou,
+>>>>>>> > >
+>>>>>>> > > On Thu, Feb 12, 2015 at 05:35:32PM -0600, Lou Crittenden wrote:
+>>>>>>> > > > Hi all. I have a buildroot setup running on a raspberry pi
+>>>>>>> model b+ and a
+>>>>>>> > > > waveshare32b 3.2" display and was able to get the system to
+>>>>>>> work with the
+>>>>>>> > > > display thanks to peter seiderer's awesome patch that builds
+>>>>>>> the fbtft
+>>>>>>> > > > drivers for buildroot, but I now would like to set up directfb
+>>>>>>> to work on
+>>>>>>> > > > this setup. Directfb built nicely, along with sdl and qt5 (I'm
+>>>>>>> setting up
+>>>>>>> > > > the framework for a gui on a buildroot based media player),
+>>>>>>> but I cannot
+>>>>>>> > > > get anything to work on directfb. I run the command
+>>>>>>> "df_drivertest" that
+>>>>>>> > > > tests for the driver, and it gives a
+>>>>>>> > > >
+>>>>>>> > > > (#) DirectFBError [dfb->CreateSurface( dfb, &dsc, &primary )]:
+>>>>>>> The
+>>>>>>> > > > requested operation or an argument is (currently)Not
+>>>>>>> > > > supported.
+>>>>>>> > > >
+>>>>>>> > > > The same thing happens when I try to run any of their directfb
+>>>>>>> demos.
+>>>>>>> > > > I went on their site, directfb.org, and a lot of the links
+>>>>>>> that would
+>>>>>>> > > > help are dead
+>>>>>>> > > >
+>>>>>>> > >
+>>>>>>> > > Just a quick test:
+>>>>>>> > >
+>>>>>>> > > $ df_knuckles --dfb:help
+>>>>>>> > > $ df_knuckles --dfb:fbdev=/dev/fb1
+>>>>>>> > > $ df_dok --dfb:fbdev=/dev/fb1
+>>>>>>> > > $ df_cpuload --dfb:fbdev=/dev/fb1
+>>>>>>> > >
+>>>>>>> > > work for me...
+>>>>>>> > >
+>>>>>>> > > $ df_drivertest  --dfb:fbdev=/dev/fb1
+>>>>>>> > > df_drivertest.c <97>:
+>>>>>>> > >         (#) DirectFBError [dfb->CreateSurface( dfb, &dsc,
+>>>>>>> &primary )]: The
+>>>>>>> > > requested operation or an argument is (currently) not supported
+>>>>>>> > >
+>>>>>>> > > failes..
+>>>>>>> > >
+>>>>>>> > > Regards,
+>>>>>>> > > Peter
+>>>>>>> > >
+>>>>>>> > > >
+>>>>>>> > > > I want to use a setup lighter than xorg and supports
+>>>>>>> touchscreen for a
+>>>>>>> > > > gui on a multimedia player I am working on.
+>>>>>>> > >
+>>>>>>>
+>>>>>>
+>>>>>>
+>>>>>
+>>>>
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150219/80d91f42/attachment.html>
