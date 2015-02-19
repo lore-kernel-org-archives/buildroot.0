@@ -1,52 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:31:48 +0100
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.01.30
-Message-ID: <20150302222719.48A85807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:02:59 +0100
+Subject: [Buildroot] [git commit] fs/tar: only store numeric uid/gid
+Message-ID: <20150302222719.8E001807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1262989edbbd6e4b50d86208c2d0dc915056ba8a
+commit: http://git.buildroot.net/buildroot/commit/?id=66ee6dc8721ce8746a8352f02f52663b90887c63
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+If a target user is asigned a UID (e.g. 1000) that happens to also exist
+on the build machine, tar will happily store the username for that user.
+
+This can be seen by some as potential information disclosure.
+
+Instruct tar to just store the numeric uid/gid.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireless-regdb/wireless-regdb.hash |    2 +-
- package/wireless-regdb/wireless-regdb.mk   |    6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ fs/tar/tar.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index b9eabf1..c755efd 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	eab6b50f30748a8b0065ba38cf3df05aac161a5861ae0a6c3cfd01d38a71c9dd	wireless-regdb-2014.11.18.tar.xz
-+sha256	438d7f3d62686bc997098d17fe1aff95c6f6ec061aaab90ab7c2c17e8451ce85	wireless-regdb-2015.01.30.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 4322fb7..a4ca41b 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 780827e..28219cf 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -7,7 +7,7 @@
+ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
  
--WIRELESS_REGDB_VERSION = 2014.11.18
-+WIRELESS_REGDB_VERSION = 2015.01.30
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
-@@ -13,8 +13,8 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
- define WIRELESS_REGDB_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
--	$(INSTALL) -m 644 -D -T $(@D)/linville.key.pub.pem \
--		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/linville.key.pub.pem
-+	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
-+		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+ define ROOTFS_TAR_CMD
+-	tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
++	tar -c$(TAR_OPTS)f $@ --numeric-owner -C $(TARGET_DIR) .
  endef
  
- $(eval $(generic-package))
+ $(eval $(call ROOTFS_TARGET,tar))
