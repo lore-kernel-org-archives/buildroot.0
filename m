@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:27:45 +0100
-Subject: [Buildroot] [PATCH] php: security bump to version 5.5.22
-In-Reply-To: <1424357996-11729-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424357996-11729-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150219212745.0fa17e38@free-electrons.com>
+Date: Thu, 19 Feb 2015 21:28:27 +0100
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.13
+In-Reply-To: <1424283369-574-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424283369-574-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150219212827.0fb18cef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,18 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Thu, 19 Feb 2015 11:59:56 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2015-0273 - Use after free vulnerability in unserialize() with
-> DateTimeZone.
-> CVE-2015-0235 - Mitigation for GHOST: glibc gethostbyname buffer
-> overflow.
+On Wed, 18 Feb 2015 15:16:09 -0300, Gustavo Zacarias wrote:
+> Includes the previous CVE-2015-1182 fix (patch dropped) and other fixes
+> (security and non) from the 1.3 branch (no CVEs yet), see release notes:
+> https://polarssl.org/tech-updates/releases/polarssl-1.2.13-released
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/polarssl/0003-fix-CVE-2015-1182.patch | 19 -------------------
+>  package/polarssl/polarssl.hash                |  4 ++--
+>  package/polarssl/polarssl.mk                  |  2 +-
+>  3 files changed, 3 insertions(+), 22 deletions(-)
+>  delete mode 100644 package/polarssl/0003-fix-CVE-2015-1182.patch
 
 Applied to master, thanks.
 
