@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:52:56 +0100
-Subject: [Buildroot] [git commit] btrfs-progs: fix static build with gettext
-Message-ID: <20150219215728.548FB8177D@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:58:18 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: fix static build with gettext
+In-Reply-To: <be7f33ed40d541fb09ae8582b83f3b5c39d5dd27.1424175644.git.baruch@tkos.co.il>
+References: <be7f33ed40d541fb09ae8582b83f3b5c39d5dd27.1424175644.git.baruch@tkos.co.il>
+Message-ID: <20150219225818.63fccb6f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f31b251e101fa4a23afdfb24040fac6c97b7dfdb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-gettext needs -pthread. Incidentally this change was also made in the package
-Makefile itself for a different reason.
+On Tue, 17 Feb 2015 14:20:44 +0200, Baruch Siach wrote:
+> gettext needs -pthread. Incidentally this change was also made in the package
+> Makefile itself for a different reason.
+> 
+> Also, drop -lm to match upstream change.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/a53/a53f31355e955c734010922b47084605e13708ef/
+> http://autobuild.buildroot.net/results/43d/43deeeda31d9750b37e1f1058c3313a387843bee/
+> 
+> and more.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/btrfs-progs/btrfs-progs.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, drop -lm to match upstream change.
+Applied, thanks!
 
-Fixes:
-http://autobuild.buildroot.net/results/a53/a53f31355e955c734010922b47084605e13708ef/
-http://autobuild.buildroot.net/results/43d/43deeeda31d9750b37e1f1058c3313a387843bee/
+> -BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
+> +BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lz -llzo2 -L. -lintl -pthread"
 
-and more.
+This is really ugly, because we have to duplicate the lib_LIBS value
+from the package Makefile, and whenever it gets changed in the package
+Makefile, we need to remember to also change it here. Not great :-/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/btrfs-progs/btrfs-progs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index c6c36cf..768660d 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -18,7 +18,7 @@ BTRFS_PROGS_MAKE_TARGET = static
- BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- # Add -lintl for libuuid
--BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lm -lz -llzo2 -L. -lintl"
-+BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lz -llzo2 -L. -lintl -pthread"
- endif
- else
- BTRFS_PROGS_MAKE_TARGET = all
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
