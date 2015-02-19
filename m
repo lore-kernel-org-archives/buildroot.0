@@ -1,28 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 22:43:56 +0100
-Subject: [Buildroot] [PATCH 01/12] perl: bump to version 5.20.2
-In-Reply-To: <1424032542-3981-1-git-send-email-francois.perrad@gadz.org>
-References: <1424032542-3981-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150219224356.419d0cbb@free-electrons.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Thu, 19 Feb 2015 18:42:10 -0300
+Subject: [Buildroot] [PATCH 0/6] Build a Nios-II internal toolchain
+In-Reply-To: <20150219222608.0b7cc308@free-electrons.com>
+References: <1424190418-883-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20150219222608.0b7cc308@free-electrons.com>
+Message-ID: <54E658B2.9040605@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
 
-On Sun, 15 Feb 2015 21:35:31 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl/perl.hash | 8 ++++----
->  package/perl/perl.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Entire series applied to the next branch, thanks!
+On 02/19/2015 06:26 PM, Thomas Petazzoni wrote:
+> Dear Ezequiel Garcia,
+> 
+> On Tue, 17 Feb 2015 13:26:52 -0300, Ezequiel Garcia wrote:
+> 
+>> Ezequiel Garcia (6):
+>>   gcc: 4.9.2: Add patch to remove a wrong header
+>>   binutils: nios2: Prevent selecting unsupported versions
+>>   gcc: nios2: Prevent selecting unsupported versions
+>>   glibc: nios2: Prevent selecting unsupported versions
+>>   linux-headers: nios2: Prevent selecting unsupported versions
+>>   toolchain: Enable the internal toolchain for nios2
+> 
+> I did a test build, which went all fine and the patches look simple
+> enough. Applied to next, thanks!
+> 
 
-Thomas
+Hoorray!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
