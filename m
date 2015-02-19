@@ -1,50 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Feb 2015 14:03:08 +0100
-Subject: [Buildroot] [git commit] libnss: bump to version 3.17.4
-Message-ID: <20150302222719.00D92807B5@busybox.osuosl.org>
+Date: Thu, 19 Feb 2015 22:42:57 +0100
+Subject: [Buildroot] [git commit] perl-xml-sax-base: add hash file
+Message-ID: <20150302222720.7F6F8807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc6be50e07b5e766173cef51ed544d77184c3c48
+commit: http://git.buildroot.net/buildroot/commit/?id=7323afdf2903d0ec0abc2550df83a5fdace3d416
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnss/libnss.hash |    4 ++--
- package/libnss/libnss.mk   |    3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/perl-xml-sax-base/perl-xml-sax-base.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 5664e93..1f76f03 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_3_RTM/src/
--sha256	f4d5e9035a2f84f25f35c283de3b0ff60d72e918748de25eaf017ed201fa21d5	nss-3.17.3.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_17_4_RTM/src/SHA256SUMS
-+sha256	1d98ad1881a4237ec98cbe472fc851480f0b0e954dfe224d047811fb96ff9d79	nss-3.17.4.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index ea28e5c..db272b3 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.17.3
-+LIBNSS_VERSION = 3.17.4
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
-@@ -37,7 +37,6 @@ LIBNSS_BUILD_VARS += USE_64=1
- endif
- endif
- 
--
- define LIBNSS_BUILD_CMDS
- 	$(MAKE1) -C $(@D)/nss coreconf \
- 		SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
+diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.hash b/package/perl-xml-sax-base/perl-xml-sax-base.hash
+new file mode 100644
+index 0000000..6822e18
+--- /dev/null
++++ b/package/perl-xml-sax-base/perl-xml-sax-base.hash
+@@ -0,0 +1,3 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    38c8c3247dfd080712596118d70dbe32 XML-SAX-Base-1.08.tar.gz
++sha256 666270318b15f88b8427e585198abbc19bc2e6ccb36dc4c0a4f2d9807330219e XML-SAX-Base-1.08.tar.gz
