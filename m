@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:32:59 +0100
-Subject: [Buildroot] [PATCH 1/2] xterm: remove superfluous
- INSTALL_TARGET_OPTS
-In-Reply-To: <1424180635-10327-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424180635-10327-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150219213259.036116ef@free-electrons.com>
+Date: Thu, 19 Feb 2015 21:33:16 +0100
+Subject: [Buildroot] [git commit branch/next] dmraid: remove superfluous
+	INSTALL_TARGET_OPTS
+Message-ID: <20150219203323.5357F8179B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=2058de2bbcd8fb36c16132596a4835800def4741
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 17 Feb 2015 10:43:54 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/xterm/xterm.mk | 1 -
->  1 file changed, 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dmraid/dmraid.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Both patches applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index a6ed57f..fbb2387 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -11,7 +11,6 @@ DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
+ # lib and tools race with parallel make
+ DMRAID_MAKE = $(MAKE1)
+ DMRAID_INSTALL_STAGING = YES
+-DMRAID_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install
+ DMRAID_LICENSE = GPLv2
+ DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
+ 
