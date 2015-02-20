@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 18:56:00 +0100
-Subject: [Buildroot] [git commit branch/next] libsigrok: remove
-	--disable-udev from CONF_OPTS
-Message-ID: <20150220175606.7778780400@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 20 Feb 2015 18:56:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: fix nios2 fenv build failure
+Message-ID: <1424454969-13751-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=733431b5f9bb29b9807b9094a6f7c4fd06312d5c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Fixes
+http://autobuild.buildroot.net/results/216/216fbc33c4838b1414cb25f823fd1db5c92e33c6/
+http://autobuild.buildroot.net/results/800/800fe1d79ef2e52b86a97feeba85b5c47aff8dcd/
+http://autobuild.buildroot.net/results/8a6/8a6d24ecc6487fd20ba663f71996160124083a68/
 
-This option is invalid and thus ignored by libsigrok configure.
-
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libsigrok/libsigrok.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ffmpeg/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index f91b8cb..109d4d3 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -13,7 +13,7 @@ LIBSIGROK_LICENSE_FILES = COPYING
- LIBSIGROK_AUTORECONF = YES
- LIBSIGROK_INSTALL_STAGING = YES
- LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
--LIBSIGROK_CONF_OPTS = --disable-libudev --disable-bindings --disable-glibtest
-+LIBSIGROK_CONF_OPTS = --disable-bindings --disable-glibtest
- 
- define LIBSIGROK_ADD_MISSING
- 	mkdir -p $(@D)/autostuff
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 5f86f52..7a3a3b9 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -5,6 +5,8 @@ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_INET_IPV6
++	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
++	depends on !BR2_nios2
+ 	help
+ 	  FFmpeg is a complete, cross-platform solution to record, convert
+ 	  and stream audio and video.
+-- 
+1.7.10.4
