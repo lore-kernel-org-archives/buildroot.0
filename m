@@ -1,29 +1,59 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Fri, 20 Feb 2015 16:58:27 +0100
-Subject: [Buildroot] [PATCH] package/openvmtools: enable openvmtools
- kernel modules
-In-Reply-To: <20150220092207.1ee858a9@free-electrons.com>
-References: <1424388046-30299-1-git-send-email-romain.naour@openwide.fr>
- <20150220092207.1ee858a9@free-electrons.com>
-Message-ID: <CABbD_XDv+4QbdY7-n5CDK3BuF7c3yQuA0c-2Ke2s3oG5VquMbQ@mail.gmail.com>
+From: Antoine Tenart <antoine.tenart@free-electrons.com>
+Date: Fri, 20 Feb 2015 17:25:30 +0100
+Subject: [Buildroot] [PATCH v2] wf111: new package
+In-Reply-To: <20150220100705.19371d65@free-electrons.com>
+References: <1422974005-21617-1-git-send-email-antoine.tenart@free-electrons.com>
+ <20150220100705.19371d65@free-electrons.com>
+Message-ID: <20150220162530.GD7759@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain, Thomas,
+Thomas,
 
-AFAIK all openvmtools kernel modules are upstreamed into recent vanilla
-Linux kernels (except HGFS, which shall come into fuse in the near future),
-so I think this patch should contain a warning, to only build the kernel
-modules if you are building an old kernel. This is the reason why I didn't
-bother with this when I first sent in the package.
-See a very recent conversation on
-http://sourceforge.net/p/open-vm-tools/mailman/message/33471984/
+On Fri, Feb 20, 2015 at 10:07:05AM +0100, Thomas Petazzoni wrote:
+> On Tue,  3 Feb 2015 15:33:25 +0100, Antoine Tenart wrote:
+> > Adds support for the BlueGiga WF111 WiFi driver and the binary utilities
+> > distributed alongside the driver. An account is required to download the
+> > sources from the BlueGiga website, which can be created freely. The
+> > driver is available for armv5, arm7a and i386.
+> > 
+> > Since it is not possible to automatically retrieve the sources, because
+> > of the required user account needed on the BlueGiga website, an option
+> > is added to let the Buildroot user specify the directory where the
+> > driver tarball was downloaded.
+> > 
+> > Finally, two options must be selected in the Linux kernel configuration:
+> > CONFIG_WIRELESS_EXT and CONFIG_WEXT_PRIV. These are blind options (i.e.
+> > not selectable directly) so they cannot be enabled by a change in
+> > linux/linux.mk. The user as two choices to enable these options:
+> > - By making them non blind, with a "WF111 support" configuration entry
+> >   for example.
+> > - By enabling another WiFi driver that select them.
+> > 
+> > The work behind this commit was funded by ECA Group
+> > <http://www.ecagroup.com>. ECA Group is the copyright owner of the
+> > contributed code.
+> > 
+> > Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+> 
+> Thanks, applied to next. It would be good however to send a followup
+> patch adding <pkg>_LICENSE and <pkg>_LICENSE_FILES.
 
-Kind regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150220/f25bf8cd/attachment.html>
+I'd like to be able to provide a license, but all I can find is a
+Copyright at the beginning of the source files, with the following
+statement:
+
+ * Refer to LICENSE.txt included with this source code for details on
+ * the license terms.
+
+And... the LICENSE.txt file can't be found :)
+
+Antoine
+
+-- 
+Antoine T?nart, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
