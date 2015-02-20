@@ -1,74 +1,44 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 20 Feb 2015 01:00:38 +0100
-Subject: [Buildroot] [PATCH] package/opentyrian: fix build on bfin
-Message-ID: <1424390438-2398-1-git-send-email-romain.naour@openwide.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 20 Feb 2015 08:33:32 +0200
+Subject: [Buildroot] How automate source download from a google drive?
+In-Reply-To: <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
+References: <54E54294.3030702@ou.edu>
+ <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
+Message-ID: <20150220063332.GQ2937@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a conflict with the _strchrnul symbole from mingw_fixes.c
-and the one from uClibc.
+Hi Bryce,
 
-Add a guard around strchrnul function for unix systems.
+On Thu, Feb 19, 2015 at 02:12:58PM -0800, Bryce Schober wrote:
+> On Wed, Feb 18, 2015 at 5:55 PM, Steve Kenton <skenton@ou.edu> wrote:
+> > This is a bit off the wall. I'm working with a package called tovid
+> > which you download from a google drive by clicking on a link on the wiki
+> > Darn if I can figure out how to put that into the .mk file to automate it.
+> > Look through packages directory and did not see anything obviously like it
+> >
+> > Any thoughts would be appreciated
+> 
+> This worked:
+> wget --no-check-certificate '
+> https://docs.google.com/uc?export=download&id=0B7aAfFRdwkUmeGZTT2pua0d1Z2c'
+> -O ~/Downloads/tovid.tar.gz
+> 
+> Based on this SO answer:
+> http://unix.stackexchange.com/a/148674/22389
+> 
+> You'll need to specify the full download name of the file because the wget
+> redirect apparently doesn't get it.
 
-Fixes:
-http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
+wget --content-disposition works for me, almost. I get 
+'tovid-0.35.tar.gztovid-0.35.tar.gz'.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...-don-t-redefine-strchrnul-for-unix-system.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
+baruch
 
-diff --git a/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
-new file mode 100644
-index 0000000..e20ab00
---- /dev/null
-+++ b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
-@@ -0,0 +1,42 @@
-+From 1c64c2d103c9356750a3d3b559068329bb0c7e3c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Fri, 20 Feb 2015 00:29:47 +0100
-+Subject: [PATCH] mingw_fixes: don't redefine strchrnul for unix system
-+
-+On bfin architecture all symbols are prefixed with a underscore '_', hence a
-+conflict with the _strchrnul symbole from mingw_fixes.c and the one from uClibc.
-+
-+Path/to/sysroot/usr/lib/libc.a(strchrnul.o): In function `*___GI_strchrnul':
-+Path/to/uClibc/libc/string/generic/strchrnul.c:33: multiple definition of `_strchrnul'
-+obj/mingw_fixes.o:src/mingw_fixes.c:(.text+0x0): first defined here
-+
-+Since mingw_fixes.c is intended for WIN32 system, add a guard around strchrnul function
-+and use the one defined from string.h.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/mingw_fixes.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/mingw_fixes.c b/src/mingw_fixes.c
-+index d734438..2f4069e 100644
-+--- a/src/mingw_fixes.c
-++++ b/src/mingw_fixes.c
-+@@ -18,9 +18,11 @@
-+  */
-+ #include "mingw_fixes.h"
-+ 
-++#ifndef TARGET_UNIX
-+ char *strchrnul( const char *s, int c )
-+ {
-+ 	for (; *s != c && *s != '\0'; ++s)
-+ 		;
-+ 	return (char *)s;
-+ }
-++#endif
-+-- 
-+1.9.3
-+
 -- 
-1.9.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
