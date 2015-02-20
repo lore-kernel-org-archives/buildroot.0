@@ -1,67 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 18:56:50 +0100
-Subject: [Buildroot] [git commit branch/next] libsigrok: don't select
-	libserialport in Config.in
-Message-ID: <20150220175654.524EA817CA@busybox.osuosl.org>
+Date: Fri, 20 Feb 2015 19:03:24 +0100
+Subject: [Buildroot] [git commit branch/next] autoconf-archive: new package
+Message-ID: <20150220180427.88AC7817E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8dee519750c3ee1a229033eec4cff2e2e80cb54c
+commit: http://git.buildroot.net/buildroot/commit/?id=f5f651d06df2a7dfba8822ec4579830e63262d09
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Libsigrok can be built without libserialport. Don't select it
-in Config.in from both libsigrok and sigrok-cli and add a check
-to libsigrok.mk to determine whether libserialport should be
-enabled.
+This package contains a collection of freely re-usable autoconf
+macros.
+
+[Thomas:
+ - change site to $(BR2_GNU_MIRROR), so that an official GNU site is
+   used.
+ - Change license to "GPLv3+ with exception", and add
+   COPYING.EXCEPTION to the list of license files.]
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigrok/Config.in    |    1 -
- package/libsigrok/libsigrok.mk |    7 +++++++
- package/sigrok-cli/Config.in   |    1 -
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ package/autoconf-archive/autoconf-archive.mk |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index 09077fb..47f812c 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBSIGROK
- 	bool "libsigrok"
--	select BR2_PACKAGE_LIBSERIALPORT
- 	select BR2_PACKAGE_LIBZIP
- 	select BR2_PACKAGE_LIBGLIB2
- 	# libglib2
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 109d4d3..d19c3c8 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -21,6 +21,13 @@ endef
- 
- LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
- 
-+ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
-+LIBSIGROK_CONF_OPTS += --enable-libserialport
-+LIBSIGROK_DEPENDENCIES += libserialport
-+else
-+LIBSIGROK_CONF_OPTS += --disable-libserialport
-+endif
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+new file mode 100644
+index 0000000..78cb6a8
+--- /dev/null
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# autoconf-archive
++#
++################################################################################
 +
- ifeq ($(BR2_PACKAGE_LIBFTDI),y)
- LIBSIGROK_CONF_OPTS += --enable-libftdi
- LIBSIGROK_DEPENDENCIES += libftdi
-diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
-index e3e5420..4e7f137 100644
---- a/package/sigrok-cli/Config.in
-+++ b/package/sigrok-cli/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_SIGROK_CLI
- 	bool "sigrok-cli"
--	select BR2_PACKAGE_LIBSERIALPORT
- 	select BR2_PACKAGE_LIBSIGROK
- 	# libsigrok->libglib2:
- 	depends on BR2_USE_WCHAR
++AUTOCONF_ARCHIVE_VERSION = 2015.02.04
++AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
++AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive/
++AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
++AUTOCONF_ARCHIVE_LICENSE_FILES = COPYING COPYING.EXCEPTION
++
++$(eval $(host-autotools-package))
