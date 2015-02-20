@@ -1,36 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Feb 2015 18:22:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xfs: Fix linking error
-Message-ID: <1424452969-6166-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 20 Feb 2015 14:24:01 -0300
+Subject: [Buildroot] [PATCH 1/2] exfat-utils: bump to version 1.1.1
+Message-ID: <1424453042-10412-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/a0b/a0bd6312d450fb78db7f57d3db9e01ba2b26687d//
-http://autobuild.buildroot.net/results/534/5347293cdcd7eb2e84b762ee9d073f3b937b5312//
-http://autobuild.buildroot.net/results/b5e/b5e7599ba33dc43a8f7e81bfa6d7ad9cb0ac68a1//
+Also add hash file.
 
-and many others (microblazeel only)
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/x11r7/xapp_xfs/xapp_xfs.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/exfat-utils/exfat-utils.hash | 2 ++
+ package/exfat-utils/exfat-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/exfat-utils/exfat-utils.hash
 
-diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
-index 3e70455..2284fba 100644
---- a/package/x11r7/xapp_xfs/xapp_xfs.mk
-+++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
-@@ -11,4 +11,7 @@ XAPP_XFS_LICENSE = MIT
- XAPP_XFS_LICENSE_FILES = COPYING
- XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
+diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
+new file mode 100644
+index 0000000..79ccf42
+--- /dev/null
++++ b/package/exfat-utils/exfat-utils.hash
+@@ -0,0 +1,2 @@
++# From https://code.google.com/p/exfat/wiki/Downloads?tm=2
++sha1	ddf0819c27aeb3eaae5aae0423d4dafc54d477da	exfat-utils-1.1.1.tar.gz
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index a7e90dd..4f43233 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# needed for linking against libXfont
-+XAPP_XFS_MAKE_OPTS += LIBS=-ldl
-+
- $(eval $(autotools-package))
+-EXFAT_UTILS_VERSION = 1.1.0
++EXFAT_UTILS_VERSION = 1.1.1
+ EXFAT_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+ EXFAT_UTILS_DEPENDENCIES = host-scons
+ EXFAT_UTILS_LICENSE = GPLv3+
 -- 
-1.7.10.4
+2.0.5
