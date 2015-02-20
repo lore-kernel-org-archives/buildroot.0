@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 19:34:04 +0100
-Subject: [Buildroot] [git commit] gnupg2: bump to version 2.0.27
-Message-ID: <20150302222721.330E8807B5@busybox.osuosl.org>
+Date: Fri, 20 Feb 2015 18:56:34 +0100
+Subject: [Buildroot] [git commit] libserialport: drop untrue statement from
+	Config.in help
+Message-ID: <20150302222720.F11FB807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=270c1cbb0fa36ffbf2645c117d0557ee3be11ae3
+commit: http://git.buildroot.net/buildroot/commit/?id=3fa9de28d4a8dd5c65ee1e54b88e2d53d4e01da1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+According to http://sigrok.org/wiki/Libserialport:
+
+  Note: While libserialport is hosted on sigrok.org (and sigrok
+  uses libserialport), this is a completely independent library
+  that can be used by other projects as well. The libserialport
+  library does not depend on any sigrok related libraries or
+  projects.
+
+Drop the fragment about being a part of the sigrok suite and
+extend the help text.
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnupg2/gnupg2.hash |    2 +-
- package/gnupg2/gnupg2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libserialport/Config.in |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 62fdaee..e1512c2 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7758e30dc382ae7a7167ed41b7f936aa50af5ea2d6fccdef663b5b750b65b8e0	gnupg-2.0.26.tar.bz2
-+sha256	57646d3e4b919fa1e5c8f1c0cf5fe1215333041c493a5ebc4b8f2978dbe930f2	gnupg-2.0.27.tar.bz2
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 2d133aa..aa35c36 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libserialport/Config.in b/package/libserialport/Config.in
+index 1e2935f..d821830 100644
+--- a/package/libserialport/Config.in
++++ b/package/libserialport/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_LIBSERIALPORT
+ 	bool "libserialport"
+ 	help
+-	  Serial port access library.
+-
+-	  This library is a part of the sigrok software suite.
++	  Libserialport is a minimal, cross-platform shared
++	  library written in C that is intended to take care
++	  of the OS-specific details when writing software
++	  that uses serial ports.
  
--GNUPG2_VERSION = 2.0.26
-+GNUPG2_VERSION = 2.0.27
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG2_LICENSE = GPLv3+
+ 	  http://sigrok.org/wiki/Libserialport
