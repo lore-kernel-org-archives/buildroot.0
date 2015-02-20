@@ -1,35 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Feb 2015 18:56:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: fix nios2 fenv build failure
-Message-ID: <1424454969-13751-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Feb 2015 18:56:22 +0100
+Subject: [Buildroot] [PATCH] util-linux: bump to version 2.26
+In-Reply-To: <1424434219-9898-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424434219-9898-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150220185622.1506bd89@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/216/216fbc33c4838b1414cb25f823fd1db5c92e33c6/
-http://autobuild.buildroot.net/results/800/800fe1d79ef2e52b86a97feeba85b5c47aff8dcd/
-http://autobuild.buildroot.net/results/8a6/8a6d24ecc6487fd20ba663f71996160124083a68/
+Dear Gustavo Zacarias,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/Config.in |    2 ++
- 1 file changed, 2 insertions(+)
+On Fri, 20 Feb 2015 09:10:19 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/util-linux/0001-sscanf-no-ms-as.patch   |  52 ++------
+>  package/util-linux/0004-fix-CVE-2014-9114.patch | 168 ------------------------
+>  package/util-linux/Config.in                    |   5 +
+>  package/util-linux/util-linux.hash              |   4 +-
+>  package/util-linux/util-linux.mk                |  12 +-
+>  5 files changed, 24 insertions(+), 217 deletions(-)
+>  delete mode 100644 package/util-linux/0004-fix-CVE-2014-9114.patch
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 5f86f52..7a3a3b9 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -5,6 +5,8 @@ menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_INET_IPV6
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
-+	depends on !BR2_nios2
- 	help
- 	  FFmpeg is a complete, cross-platform solution to record, convert
- 	  and stream audio and video.
+Applied, thanks!
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
