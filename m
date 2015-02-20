@@ -1,9 +1,9 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Fri, 20 Feb 2015 13:29:00 +0100
-Subject: [Buildroot] [PATCH 5/7] libsigrok: bump git commit tag
+Date: Fri, 20 Feb 2015 13:29:01 +0100
+Subject: [Buildroot] [PATCH 6/7] libsigrok: enable building C++ bindings
 In-Reply-To: <1424435342-2188-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1424435342-2188-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1424435342-2188-6-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1424435342-2188-7-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/libsigrok/libsigrok.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libsigrok/Config.in    | 15 +++++++++++++++
+ package/libsigrok/libsigrok.mk |  9 ++++++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index 47f812c..8f7e36f 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -16,6 +16,21 @@ config BR2_PACKAGE_LIBSIGROK
+ 
+ 	  http://sigrok.org/wiki/Libsigrok
+ 
++config BR2_PACKAGE_LIBSIGROKCXX
++	bool "build C++ bindings"
++	select BR2_PACKAGE_GLIBMM
++	depends on BR2_PACKAGE_LIBSIGROK
++	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
++	# C++11 support
++	depends on BR2_TOOLCHAIN_BUILDROOT_GLIBC || BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++	help
++	  Build libsigrok C++ bindings as well.
++
+ comment "libsigrok needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++comment "libsigrokcxx needs a toolchain w/ C++, (e)glibc"
++	depends on BR2_PACKAGE_LIBSIGROK
++	depends on !BR2_TOOLCHAIN_BUILDROOT_CXX
++	depends on !BR2_TOOLCHAIN_BUILDROOT_GLIBC && !BR2_TOOLCHAIN_BUILDROOT_EGLIBC
 diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index d19c3c8..6bc210e 100644
+index 6bc210e..1e6080d 100644
 --- a/package/libsigrok/libsigrok.mk
 +++ b/package/libsigrok/libsigrok.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -13,7 +13,7 @@ LIBSIGROK_LICENSE_FILES = COPYING
+ LIBSIGROK_AUTORECONF = YES
+ LIBSIGROK_INSTALL_STAGING = YES
+ LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
+-LIBSIGROK_CONF_OPTS = --disable-bindings --disable-glibtest
++LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
  
--LIBSIGROK_VERSION = 8656a71790133d4de42252a1e75b4209c03b4983
-+LIBSIGROK_VERSION = 380ee96fdfe0895ca0aa0b158d5c332ef08f8b3c
- # No https access on upstream git
- LIBSIGROK_SITE = git://sigrok.org/libsigrok
- LIBSIGROK_LICENSE = GPLv3+
+ define LIBSIGROK_ADD_MISSING
+ 	mkdir -p $(@D)/autostuff
+@@ -46,4 +46,11 @@ ifeq ($(BR2_PACKAGE_GLIBMM),y)
+ LIBSIGROK_DEPENDENCIES += glibmm
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
++LIBSIGROK_CONF_OPTS += --enable-cxx
++LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm
++else
++LIBSIGROK_CONF_OPTS += --disable-cxx
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.1.4
