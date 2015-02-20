@@ -1,77 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Feb 2015 20:20:31 +0100
-Subject: [Buildroot] [PATCH next v2 1/1] package/python-mako: New package
-Message-ID: <1424460031-10626-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Feb 2015 23:05:22 +0100
+Subject: [Buildroot] [PATCH] toolchain: fix installing gconv libs with
+	multi-arch toolchain
+Message-ID: <1424469922-6306-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upcoming mesa3d 10.5.x needs the host-version of this package:
-http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.5&id=2b37bea010a9c9333a813cc77d28629e1382c0be
+For a multi-arch toolchain, gconv modules are in a sub-directory named
+after the machine gcc targets. This is the case, for example, for the
+Linaro ARM 2014.09 toolchain, wihch has the gconv modules in (relative
+to the sysroot):
+    /usr/lib/arm-linux-gnueabihf/gconv
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
+    /usr/lib/gconv
+
+So, to catter for both cases, search both paths. We want to favour the
+machine-specific gconv modules over potentially existign "genereic"
+ones, so we first search that (if it exists) and fallback to looking in
+the generic location.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v2: fixed typo in package/Config.in
+ toolchain/toolchain.mk | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
- package/Config.in                  |    1 +
- package/python-mako/Config.in      |    8 ++++++++
- package/python-mako/python-mako.mk |   19 +++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/python-mako/Config.in
- create mode 100644 package/python-mako/python-mako.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index bad0f7b..bf2dc4b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -536,6 +536,7 @@ menu "external python modules"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
- 	source "package/python-lxml/Config.in"
-+	source "package/python-mako/Config.in"
- 	source "package/python-mad/Config.in"
- 	source "package/python-markdown/Config.in"
- 	source "package/python-markupsafe/Config.in"
-diff --git a/package/python-mako/Config.in b/package/python-mako/Config.in
-new file mode 100644
-index 0000000..442e290
---- /dev/null
-+++ b/package/python-mako/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_MAKO
-+	bool "python-mako"
-+	help
-+	  Mako is a template library written in Python. It provides a
-+	  familiar, non-XML syntax which compiles into Python modules
-+	  for maximum performance.
-+
-+	  https://pypi.python.org/pypi/Mako
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-new file mode 100644
-index 0000000..98311e3
---- /dev/null
-+++ b/package/python-mako/python-mako.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# python-mako
-+#
-+################################################################################
-+
-+PYTHON_MAKO_VERSION = 1.0.1
-+PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
-+PYTHON_MAKO_SITE = https://pypi.python.org/packages/source/M/Mako
-+PYTHON_MAKO_SETUP_TYPE = setuptools
-+PYTHON_MAKO_DEPENDENCIES = host-pkgconf
-+PYTHON_MAKO_LICENSE = MIT
-+PYTHON_MAKO_LICENSE_FILES = LICENSE
-+
-+# In host build, setup.py tries to download markupsafe if it is not installed
-+HOST_PYTHON_MAKO_DEPENDENCIES = host-python-markupsafe
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
+diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
+index 3f9900b..f43b8f9 100644
+--- a/toolchain/toolchain.mk
++++ b/toolchain/toolchain.mk
+@@ -18,11 +18,20 @@ ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
+ GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
+ define COPY_GCONV_LIBS
+ 	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
+-		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
+-				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+-		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
+-				   $(TARGET_DIR)/usr/lib/gconv \
+-		|| exit 1; \
++		found_gconv=no; \
++		machine=$$($(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -dumpmachine); \
++		for d in $${machine} ''; do \
++			[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
++			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
++					      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
++			$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
++					   $(TARGET_DIR)/usr/lib/gconv \
++			|| exit 1; \
++			[ -z "$${d}" ] || ln -sf . $(TARGET_DIR)/usr/lib/$${d}; \
++			found_gconv=yes; \
++		done; \
++		[ "$${found_gconv}" = "yes" ] \
++		|| { printf "Unable to find gconv modules\n" >&2; exit 1; } \
+ 	else \
+ 		for l in $(GCONV_LIBS); do \
+ 			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
 -- 
-1.7.10.4
+1.9.1
