@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 19:34:04 +0100
-Subject: [Buildroot] [git commit branch/next] gnupg2: bump to version 2.0.27
-Message-ID: <20150220183411.9489A817C4@busybox.osuosl.org>
+Date: Fri, 20 Feb 2015 19:34:21 +0100
+Subject: [Buildroot] [git commit branch/next] exfat-utils: bump to version
+	1.1.1
+Message-ID: <20150220183426.034DB817C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=270c1cbb0fa36ffbf2645c117d0557ee3be11ae3
+commit: http://git.buildroot.net/buildroot/commit/?id=68a329fabd382796065bd25b619fbb239e34cf98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnupg2/gnupg2.hash |    2 +-
- package/gnupg2/gnupg2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/exfat-utils/exfat-utils.hash |    2 ++
+ package/exfat-utils/exfat-utils.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 62fdaee..e1512c2 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7758e30dc382ae7a7167ed41b7f936aa50af5ea2d6fccdef663b5b750b65b8e0	gnupg-2.0.26.tar.bz2
-+sha256	57646d3e4b919fa1e5c8f1c0cf5fe1215333041c493a5ebc4b8f2978dbe930f2	gnupg-2.0.27.tar.bz2
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 2d133aa..aa35c36 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
+new file mode 100644
+index 0000000..79ccf42
+--- /dev/null
++++ b/package/exfat-utils/exfat-utils.hash
+@@ -0,0 +1,2 @@
++# From https://code.google.com/p/exfat/wiki/Downloads?tm=2
++sha1	ddf0819c27aeb3eaae5aae0423d4dafc54d477da	exfat-utils-1.1.1.tar.gz
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index a7e90dd..4f43233 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.0.26
-+GNUPG2_VERSION = 2.0.27
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG2_LICENSE = GPLv3+
+-EXFAT_UTILS_VERSION = 1.1.0
++EXFAT_UTILS_VERSION = 1.1.1
+ EXFAT_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+ EXFAT_UTILS_DEPENDENCIES = host-scons
+ EXFAT_UTILS_LICENSE = GPLv3+
