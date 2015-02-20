@@ -1,40 +1,43 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 20 Feb 2015 08:33:32 +0200
-Subject: [Buildroot] How automate source download from a google drive?
-In-Reply-To: <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
-References: <54E54294.3030702@ou.edu>
- <CAJpxd06ncFoxwLkeMyAuhPEXKNeH-Dh--Km=cvF0wN4e47xcVw@mail.gmail.com>
-Message-ID: <20150220063332.GQ2937@tarshish>
+Date: Fri, 20 Feb 2015 08:37:26 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: clarify external
+ toolchain description
+In-Reply-To: <20150219213618.7bb7a0b4@free-electrons.com>
+References: <13d64548b894fc1b351af2f9bbb861ce230144d0.1424173685.git.baruch@tkos.co.il>
+ <20150219213618.7bb7a0b4@free-electrons.com>
+Message-ID: <20150220063726.GR2937@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bryce,
+Hi Thomas,
 
-On Thu, Feb 19, 2015 at 02:12:58PM -0800, Bryce Schober wrote:
-> On Wed, Feb 18, 2015 at 5:55 PM, Steve Kenton <skenton@ou.edu> wrote:
-> > This is a bit off the wall. I'm working with a package called tovid
-> > which you download from a google drive by clicking on a link on the wiki
-> > Darn if I can figure out how to put that into the .mk file to automate it.
-> > Look through packages directory and did not see anything obviously like it
-> >
-> > Any thoughts would be appreciated
+On Thu, Feb 19, 2015 at 09:36:18PM +0100, Thomas Petazzoni wrote:
+> On Tue, 17 Feb 2015 13:48:05 +0200, Baruch Siach wrote:
+> >  # This package implements the support for external toolchains, i.e
+> > -# toolchains that have not been produced by Buildroot itself and that
+> > -# Buildroot can download from the Web or that are already available on
+> > -# the system on which Buildroot runs. So far, we have tested this
+> > +# toolchains that have not been produced locally by Buildroot itself and
 > 
-> This worked:
-> wget --no-check-certificate '
-> https://docs.google.com/uc?export=download&id=0B7aAfFRdwkUmeGZTT2pua0d1Z2c'
-> -O ~/Downloads/tovid.tar.gz
+> I am not sure adding "locally" makes the thing clearer: you can very
+> well produce a toolchain with Buildroot "locally", and then re-use it
+> in a later Buildroot build as an external toolchain on the same machine.
 > 
-> Based on this SO answer:
-> http://unix.stackexchange.com/a/148674/22389
+> Maybe we should simply rephrase this as:
 > 
-> You'll need to specify the full download name of the file because the wget
-> redirect apparently doesn't get it.
+>   This package implements the support for external toolchains, i.e
+>   toolchains that are available pre-built, ready to use. Such toolchain
+>   me either be readily available on the Web (Linaro, Sourcery
 
-wget --content-disposition works for me, almost. I get 
-'tovid-0.35.tar.gztovid-0.35.tar.gz'.
+s/me/may/
+
+>   CodeBench, from processor vendors) or may be built with tools like
+>   Crosstool-NG or Buildroot itself.
+
+Looks good to me. Would you like me to send a patch?
 
 baruch
 
