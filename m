@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 19:35:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xfs: Fix linking
- error
-In-Reply-To: <1424452969-6166-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1424452969-6166-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150220193524.72d2ff63@free-electrons.com>
+Date: Fri, 20 Feb 2015 19:34:35 +0100
+Subject: [Buildroot] [git commit branch/next] exfat: add hash
+Message-ID: <20150220183540.D06368018E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=6a906736e6de12fe8745b92985fa0600bd8956ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 20 Feb 2015 18:22:49 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/a0b/a0bd6312d450fb78db7f57d3db9e01ba2b26687d//
-> http://autobuild.buildroot.net/results/534/5347293cdcd7eb2e84b762ee9d073f3b937b5312//
-> http://autobuild.buildroot.net/results/b5e/b5e7599ba33dc43a8f7e81bfa6d7ad9cb0ac68a1//
-> 
-> and many others (microblazeel only)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/exfat/exfat.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Maybe this is a silly question, but do we know why this error is
-appearing on Microblaze only?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/exfat/exfat.hash b/package/exfat/exfat.hash
+new file mode 100644
+index 0000000..bfaca6e
+--- /dev/null
++++ b/package/exfat/exfat.hash
+@@ -0,0 +1,2 @@
++# From https://code.google.com/p/exfat/wiki/Downloads?tm=2
++sha1	060560f74dbce4dc947c7e658e75fdf339bc10ff	fuse-exfat-1.1.0.tar.gz
