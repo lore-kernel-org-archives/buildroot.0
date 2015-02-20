@@ -1,56 +1,75 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Feb 2015 20:10:52 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ffmpeg: fix nios2 fenv build
-	failure
-Message-ID: <1424459452-9485-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 20 Feb 2015 20:18:54 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/python-mako: New package
+Message-ID: <1424459934-9951-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/216/216fbc33c4838b1414cb25f823fd1db5c92e33c6/
-http://autobuild.buildroot.net/results/800/800fe1d79ef2e52b86a97feeba85b5c47aff8dcd/
-http://autobuild.buildroot.net/results/8a6/8a6d24ecc6487fd20ba663f71996160124083a68/
-
-Only the affected toolchains are disabled. When using branch next/ compilation
-works with a buildroot-compiled toolchain using this defconfig:
-
-BR2_nios2=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_NONFREE=y
-BR2_PACKAGE_FFMPEG_FFPLAY=y
-BR2_PACKAGE_FFMPEG_FFSERVER=y
-BR2_PACKAGE_FFMPEG_FFPROBE=y
-BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
+Upcoming mesa3d 10.5.x needs the host-version of this package:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.5&id=2b37bea010a9c9333a813cc77d28629e1382c0be
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/Config.in |    5 +++++
- 1 file changed, 5 insertions(+)
+ package/Config.in                  |    1 +
+ package/python-mako/Config.in      |    8 ++++++++
+ package/python-mako/python-mako.mk |   19 +++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/python-mako/Config.in
+ create mode 100644 package/python-mako/python-mako.mk
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 5f86f52..7ce0f3a 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,10 +1,15 @@
- comment "ffmpeg needs a toolchain w/ largefile, IPv6"
- 	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_INET_IPV6
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  FFmpeg is a complete, cross-platform solution to record, convert
- 	  and stream audio and video.
+diff --git a/package/Config.in b/package/Config.in
+index bad0f7b..bf2dc4b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -536,6 +536,7 @@ menu "external python modules"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-lxml/Config.in"
++	source "package/python-maco/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+diff --git a/package/python-mako/Config.in b/package/python-mako/Config.in
+new file mode 100644
+index 0000000..442e290
+--- /dev/null
++++ b/package/python-mako/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_MAKO
++	bool "python-mako"
++	help
++	  Mako is a template library written in Python. It provides a
++	  familiar, non-XML syntax which compiles into Python modules
++	  for maximum performance.
++
++	  https://pypi.python.org/pypi/Mako
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+new file mode 100644
+index 0000000..98311e3
+--- /dev/null
++++ b/package/python-mako/python-mako.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# python-mako
++#
++################################################################################
++
++PYTHON_MAKO_VERSION = 1.0.1
++PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
++PYTHON_MAKO_SITE = https://pypi.python.org/packages/source/M/Mako
++PYTHON_MAKO_SETUP_TYPE = setuptools
++PYTHON_MAKO_DEPENDENCIES = host-pkgconf
++PYTHON_MAKO_LICENSE = MIT
++PYTHON_MAKO_LICENSE_FILES = LICENSE
++
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON_MAKO_DEPENDENCIES = host-python-markupsafe
++
++$(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 1.7.10.4
