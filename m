@@ -1,39 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Feb 2015 14:03:46 -0300
-Subject: [Buildroot] [PATCH] gnupg2: bump to version 2.0.27
-Message-ID: <1424451826-13460-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 20 Feb 2015 18:22:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xfs: Fix linking error
+Message-ID: <1424452969-6166-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnupg2/gnupg2.hash | 2 +-
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes
+http://autobuild.buildroot.net/results/a0b/a0bd6312d450fb78db7f57d3db9e01ba2b26687d//
+http://autobuild.buildroot.net/results/534/5347293cdcd7eb2e84b762ee9d073f3b937b5312//
+http://autobuild.buildroot.net/results/b5e/b5e7599ba33dc43a8f7e81bfa6d7ad9cb0ac68a1//
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 62fdaee..e1512c2 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7758e30dc382ae7a7167ed41b7f936aa50af5ea2d6fccdef663b5b750b65b8e0	gnupg-2.0.26.tar.bz2
-+sha256	57646d3e4b919fa1e5c8f1c0cf5fe1215333041c493a5ebc4b8f2978dbe930f2	gnupg-2.0.27.tar.bz2
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 2d133aa..aa35c36 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+and many others (microblazeel only)
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_xfs/xapp_xfs.mk |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+index 3e70455..2284fba 100644
+--- a/package/x11r7/xapp_xfs/xapp_xfs.mk
++++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+@@ -11,4 +11,7 @@ XAPP_XFS_LICENSE = MIT
+ XAPP_XFS_LICENSE_FILES = COPYING
+ XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
  
--GNUPG2_VERSION = 2.0.26
-+GNUPG2_VERSION = 2.0.27
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG2_LICENSE = GPLv3+
++# needed for linking against libXfont
++XAPP_XFS_MAKE_OPTS += LIBS=-ldl
++
+ $(eval $(autotools-package))
 -- 
-2.0.5
+1.7.10.4
