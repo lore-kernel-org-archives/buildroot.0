@@ -1,67 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 18:56:50 +0100
-Subject: [Buildroot] [git commit] libsigrok: don't select libserialport in
-	Config.in
-Message-ID: <20150302222721.05677807B5@busybox.osuosl.org>
+Date: Fri, 20 Feb 2015 09:45:51 +0100
+Subject: [Buildroot] [git commit] uclibc: cleanup handling of ARC uClibc
+	version
+Message-ID: <20150302222720.C4FF6807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8dee519750c3ee1a229033eec4cff2e2e80cb54c
+commit: http://git.buildroot.net/buildroot/commit/?id=c39ba6af851c3ce66f2a2ef5d45f3e9d1306f5ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libsigrok can be built without libserialport. Don't select it
-in Config.in from both libsigrok and sigrok-cli and add a check
-to libsigrok.mk to determine whether libserialport should be
-enabled.
+This commit makes the ARC uClibc version handling explicit by adding a
+BR2_UCLIBC_VERSION_ARC_GIT option, rather than only relying on the
+selected architecture. This is needed in preparation to the
+introduction of uClibc-ng support, which also supports the ARC
+architecture: so we will now have two uClibc versions capable of
+handling ARC.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libsigrok/Config.in    |    1 -
- package/libsigrok/libsigrok.mk |    7 +++++++
- package/sigrok-cli/Config.in   |    1 -
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ package/uclibc/Config.in |    8 ++++++--
+ package/uclibc/uclibc.mk |    2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index 09077fb..47f812c 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBSIGROK
- 	bool "libsigrok"
--	select BR2_PACKAGE_LIBSERIALPORT
- 	select BR2_PACKAGE_LIBZIP
- 	select BR2_PACKAGE_LIBGLIB2
- 	# libglib2
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 109d4d3..d19c3c8 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -21,6 +21,13 @@ endef
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index aa99a6f..a20b002 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -17,6 +17,10 @@ choice
+ 		bool "uClibc 0.9.33.x"
+ 		depends on !(BR2_arc || BR2_xtensa)
  
- LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
- 
-+ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
-+LIBSIGROK_CONF_OPTS += --enable-libserialport
-+LIBSIGROK_DEPENDENCIES += libserialport
-+else
-+LIBSIGROK_CONF_OPTS += --disable-libserialport
-+endif
++	config BR2_UCLIBC_VERSION_ARC_GIT
++		bool "uClibc Git ARC"
++		depends on BR2_arc
 +
- ifeq ($(BR2_PACKAGE_LIBFTDI),y)
- LIBSIGROK_CONF_OPTS += --enable-libftdi
- LIBSIGROK_DEPENDENCIES += libftdi
-diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
-index e3e5420..4e7f137 100644
---- a/package/sigrok-cli/Config.in
-+++ b/package/sigrok-cli/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_SIGROK_CLI
- 	bool "sigrok-cli"
--	select BR2_PACKAGE_LIBSERIALPORT
- 	select BR2_PACKAGE_LIBSIGROK
- 	# libsigrok->libglib2:
- 	depends on BR2_USE_WCHAR
+ 	config BR2_UCLIBC_VERSION_XTENSA_GIT
+ 		bool "uClibc Git Xtensa"
+ 		depends on BR2_xtensa
+@@ -37,14 +41,14 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+-	default "arc-2014.12" if BR2_arc
++	default "arc-2014.12" if BR2_UCLIBC_VERSION_ARC_GIT
+ 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+ 	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+-	default "package/uclibc/uClibc-snapshot.config" if BR2_arc
++	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_ARC_GIT
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_XTENSA_GIT
+ 	help
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 40e6c6c..b29cff4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -11,7 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
+ 
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
+-else ifeq ($(BR2_arc),y)
++else ifeq ($(BR2_UCLIBC_VERSION_ARC_GIT),y)
+ UCLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,uClibc,$(UCLIBC_VERSION))
+ UCLIBC_SOURCE = uClibc-$(UCLIBC_VERSION).tar.gz
+ else ifeq ($(BR2_UCLIBC_VERSION_XTENSA_GIT),y)
