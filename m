@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 16:47:00 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: bump to version 10.4.5
-Message-ID: <20150302222721.81CD681764@busybox.osuosl.org>
+Date: Fri, 20 Feb 2015 19:34:21 +0100
+Subject: [Buildroot] [git commit] exfat-utils: bump to version 1.1.1
+Message-ID: <20150302222721.3EF08807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36644b02aa185d777b92c642207686fb83d918ed
+commit: http://git.buildroot.net/buildroot/commit/?id=68a329fabd382796065bd25b619fbb239e34cf98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also add hash file.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/mesa3d.hash |    4 ++--
- package/mesa3d/mesa3d.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/exfat-utils/exfat-utils.hash |    2 ++
+ package/exfat-utils/exfat-utils.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 6b00367..677781f 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-February/000139.html
--sha256	f18a967e9c4d80e054b2fdff8c130ce6e6d1f8eecfc42c9f354f8628d8b4df1c	MesaLib-10.4.4.tar.bz2
-+# From http://cgit.freedesktop.org/mesa/mesa/commit/?h=10.4&id=41bdeda10210b8f1d358c04b25af2fbfe3335531
-+sha256	bf60000700a9d58e3aca2bfeee7e781053b0d839e61a95b1883e05a2dee247a0	MesaLib-10.4.5.tar.bz2
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index eb38a9a..c2d9d54 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
+diff --git a/package/exfat-utils/exfat-utils.hash b/package/exfat-utils/exfat-utils.hash
+new file mode 100644
+index 0000000..79ccf42
+--- /dev/null
++++ b/package/exfat-utils/exfat-utils.hash
+@@ -0,0 +1,2 @@
++# From https://code.google.com/p/exfat/wiki/Downloads?tm=2
++sha1	ddf0819c27aeb3eaae5aae0423d4dafc54d477da	exfat-utils-1.1.1.tar.gz
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index a7e90dd..4f43233 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESA3D_VERSION = 10.4.4
-+MESA3D_VERSION = 10.4.5
- MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-EXFAT_UTILS_VERSION = 1.1.0
++EXFAT_UTILS_VERSION = 1.1.1
+ EXFAT_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+ EXFAT_UTILS_DEPENDENCIES = host-scons
+ EXFAT_UTILS_LICENSE = GPLv3+
