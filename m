@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 19:35:56 +0100
-Subject: [Buildroot] [PATCH] gnupg2: bump to version 2.0.27
-In-Reply-To: <1424451826-13460-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424451826-13460-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150220193556.5a5498c4@free-electrons.com>
+Date: Fri, 20 Feb 2015 19:36:11 +0100
+Subject: [Buildroot] [PATCH 1/2] exfat-utils: bump to version 1.1.1
+In-Reply-To: <1424453042-10412-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424453042-10412-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150220193611.45e324a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,17 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Fri, 20 Feb 2015 14:03:46 -0300, Gustavo Zacarias wrote:
+On Fri, 20 Feb 2015 14:24:01 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gnupg2/gnupg2.hash | 2 +-
->  package/gnupg2/gnupg2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/exfat-utils/exfat-utils.hash | 2 ++
+>  package/exfat-utils/exfat-utils.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 package/exfat-utils/exfat-utils.hash
 
-Applied to next, thanks.
+Both patches applied to next, thanks.
 
 Thomas
 -- 
