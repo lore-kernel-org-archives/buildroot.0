@@ -1,32 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 18:56:22 +0100
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.26
-In-Reply-To: <1424434219-9898-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424434219-9898-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150220185622.1506bd89@free-electrons.com>
+Date: Fri, 20 Feb 2015 18:56:34 +0100
+Subject: [Buildroot] [git commit branch/next] libserialport: drop untrue
+	statement from Config.in help
+Message-ID: <20150220175641.3A382817CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=3fa9de28d4a8dd5c65ee1e54b88e2d53d4e01da1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 20 Feb 2015 09:10:19 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/util-linux/0001-sscanf-no-ms-as.patch   |  52 ++------
->  package/util-linux/0004-fix-CVE-2014-9114.patch | 168 ------------------------
->  package/util-linux/Config.in                    |   5 +
->  package/util-linux/util-linux.hash              |   4 +-
->  package/util-linux/util-linux.mk                |  12 +-
->  5 files changed, 24 insertions(+), 217 deletions(-)
->  delete mode 100644 package/util-linux/0004-fix-CVE-2014-9114.patch
+According to http://sigrok.org/wiki/Libserialport:
 
-Applied, thanks!
+  Note: While libserialport is hosted on sigrok.org (and sigrok
+  uses libserialport), this is a completely independent library
+  that can be used by other projects as well. The libserialport
+  library does not depend on any sigrok related libraries or
+  projects.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Drop the fragment about being a part of the sigrok suite and
+extend the help text.
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libserialport/Config.in |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/libserialport/Config.in b/package/libserialport/Config.in
+index 1e2935f..d821830 100644
+--- a/package/libserialport/Config.in
++++ b/package/libserialport/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_LIBSERIALPORT
+ 	bool "libserialport"
+ 	help
+-	  Serial port access library.
+-
+-	  This library is a part of the sigrok software suite.
++	  Libserialport is a minimal, cross-platform shared
++	  library written in C that is intended to take care
++	  of the OS-specific details when writing software
++	  that uses serial ports.
+ 
+ 	  http://sigrok.org/wiki/Libserialport
