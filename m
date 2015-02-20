@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Feb 2015 20:18:54 +0100
-Subject: [Buildroot] [PATCH next 1/1] package/python-mako: New package
-Message-ID: <1424459934-9951-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 20 Feb 2015 20:20:31 +0100
+Subject: [Buildroot] [PATCH next v2 1/1] package/python-mako: New package
+Message-ID: <1424460031-10626-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,8 @@ http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.5&id=2b37bea010a9
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: fixed typo in package/Config.in
+
  package/Config.in                  |    1 +
  package/python-mako/Config.in      |    8 ++++++++
  package/python-mako/python-mako.mk |   19 +++++++++++++++++++
@@ -28,7 +30,7 @@ index bad0f7b..bf2dc4b 100644
  	source "package/python-keyring/Config.in"
  	source "package/python-libconfig/Config.in"
  	source "package/python-lxml/Config.in"
-+	source "package/python-maco/Config.in"
++	source "package/python-mako/Config.in"
  	source "package/python-mad/Config.in"
  	source "package/python-markdown/Config.in"
  	source "package/python-markupsafe/Config.in"
