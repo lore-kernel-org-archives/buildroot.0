@@ -1,150 +1,74 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 20 Feb 2015 00:20:46 +0100
-Subject: [Buildroot] [PATCH] package/openvmtools: enable openvmtools kernel
-	modules
-Message-ID: <1424388046-30299-1-git-send-email-romain.naour@openwide.fr>
+Date: Fri, 20 Feb 2015 01:00:38 +0100
+Subject: [Buildroot] [PATCH] package/opentyrian: fix build on bfin
+Message-ID: <1424390438-2398-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allow to build openvmtools's vmsync, vmci, vsock,
-vmxnet, vmblock and vmhgfs kernel modules.
+There is a conflict with the _strchrnul symbole from mingw_fixes.c
+and the one from uClibc.
 
-Tested with a 3.2.64 kernel but the build is broken for
-newer kernel (3.14+ at least).
+Add a guard around strchrnul function for unix systems.
+
+Fixes:
+http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: K?roly Kasza <kaszak@gmail.com>
 ---
- ...on-t-append-build-directory-to-LINUXINCLU.patch | 31 ++++++++++++++++++++++
- ...gure-fix-modules-install-to-target-rootfs.patch | 28 +++++++++++++++++++
- package/openvmtools/Config.in                      |  9 +++++++
- package/openvmtools/openvmtools.mk                 | 16 ++++++++++-
- 4 files changed, 83 insertions(+), 1 deletion(-)
- create mode 100644 package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch
- create mode 100644 package/openvmtools/0009-configure-fix-modules-install-to-target-rootfs.patch
+ ...-don-t-redefine-strchrnul-for-unix-system.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
 
-diff --git a/package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch b/package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch
+diff --git a/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
 new file mode 100644
-index 0000000..5d18d9f
+index 0000000..e20ab00
 --- /dev/null
-+++ b/package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch
-@@ -0,0 +1,31 @@
-+From 796296f35c6992b4c685b7926a2aff9cd3bcac81 Mon Sep 17 00:00:00 2001
++++ b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
+@@ -0,0 +1,42 @@
++From 1c64c2d103c9356750a3d3b559068329bb0c7e3c Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@openwide.fr>
-+Date: Mon, 16 Feb 2015 11:30:23 +0100
-+Subject: [PATCH 8/8] configure: don't append build directory to LINUXINCLUDE.
++Date: Fri, 20 Feb 2015 00:29:47 +0100
++Subject: [PATCH] mingw_fixes: don't redefine strchrnul for unix system
 +
-+This break the build when LINUXDIR point to the kernel linux sources
-+(ie not from /lib/module/uname -r/build/include)
++On bfin architecture all symbols are prefixed with a underscore '_', hence a
++conflict with the _strchrnul symbole from mingw_fixes.c and the one from uClibc.
 +
-+Use directly --with-linuxdir=$(LINUX_DIR)/build if necessary.
++Path/to/sysroot/usr/lib/libc.a(strchrnul.o): In function `*___GI_strchrnul':
++Path/to/uClibc/libc/string/generic/strchrnul.c:33: multiple definition of `_strchrnul'
++obj/mingw_fixes.o:src/mingw_fixes.c:(.text+0x0): first defined here
++
++Since mingw_fixes.c is intended for WIN32 system, add a guard around strchrnul function
++and use the one defined from string.h.
++
++Fixes:
++http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
 +
 +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+ configure.ac |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/mingw_fixes.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 549736f..6c97785 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -148,7 +148,7 @@ if test "$with_kernel_modules" = "yes"; then
-+          if test ! -d "$LINUXDIR/kernel/"; then
-+              AC_MSG_ERROR([$LINUXDIR/kernel does not exist])
-+          fi
-+-         LINUXINCLUDE="$LINUXDIR/build/include"
-++         LINUXINCLUDE="$LINUXDIR/include"
-+          if test ! -d "$LINUXINCLUDE"; then
-+             AC_MSG_ERROR([Can't find include dir under $LINUXDIR])
-+          fi
-+-- 
-+1.7.10.4
-+
-diff --git a/package/openvmtools/0009-configure-fix-modules-install-to-target-rootfs.patch b/package/openvmtools/0009-configure-fix-modules-install-to-target-rootfs.patch
-new file mode 100644
-index 0000000..b9cefb0
---- /dev/null
-+++ b/package/openvmtools/0009-configure-fix-modules-install-to-target-rootfs.patch
-@@ -0,0 +1,28 @@
-+From bfcf1483da376ff417473588eb35c66fd730f386 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Wed, 18 Feb 2015 23:26:10 +0100
-+Subject: [PATCH] configure: fix modules install to target rootfs
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ configure.ac | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 549736f..a03c662 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -932,7 +932,9 @@ if test "$have_glib_2_14" = "yes"; then
-+ fi
++diff --git a/src/mingw_fixes.c b/src/mingw_fixes.c
++index d734438..2f4069e 100644
++--- a/src/mingw_fixes.c
+++++ b/src/mingw_fixes.c
++@@ -18,9 +18,11 @@
++  */
++ #include "mingw_fixes.h"
 + 
-+ if test "$os" = "linux"; then
-+-   MODULES_DIR="$LINUXDIR/kernel/"
-++   # MODULES_DIR is used to install vmware modules to the target
-++   # Use DESTDIR to define the target rootfs when installing
-++   MODULES_DIR="/lib/modules/$KERNEL_RELEASE/kernel/"
-+ 
-+    CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=64"
-+    CPPFLAGS="$CPPFLAGS -D_LARGEFILE64_SOURCE"
+++#ifndef TARGET_UNIX
++ char *strchrnul( const char *s, int c )
++ {
++ 	for (; *s != c && *s != '\0'; ++s)
++ 		;
++ 	return (char *)s;
++ }
+++#endif
 +-- 
 +1.9.3
 +
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 5fc6977..0c2cfda 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -52,6 +52,15 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
- comment "PAM support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
-+config BR2_PACKAGE_OPENVMTOOLS_KERNEL_MODULES
-+	bool "Openvmtools Linux Kernel Modules"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Build openvmtools's Linux kernel modules.
-+
-+comment "Openvmtools's Linux kernel modules needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
- endif
- 
- comment "openvmtools needs a toolchain w/ wchar, threads, RPC, largefile, locale"
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index e0ec6d6..853d21f 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -12,9 +12,23 @@ OPENVMTOOLS_LICENSE_FILES = COPYING
- # Autoreconf needed because package is distributed without a configure script
- # See http://sourceforge.net/p/open-vm-tools/mailman/message/32550385/
- OPENVMTOOLS_AUTORECONF = YES
--OPENVMTOOLS_CONF_OPTS = --without-icu --without-x --without-gtk2 --without-gtkmm --without-kernel-modules
-+# Add --without-root-privileges in order to not run depmod -a on the host.
-+OPENVMTOOLS_CONF_OPTS = --without-icu --without-x --without-gtk2 --without-gtkmm --without-root-privileges
- OPENVMTOOLS_DEPENDENCIES = libglib2
- 
-+ifeq ($(BR2_PACKAGE_OPENVMTOOLS_KERNEL_MODULES),y)
-+# Specify the Linux version from the kernel build by Buildroot otherwise the
-+# the host Linux version will be used.
-+# Use LINUX_VERSION_PROBED (aka the real Linux version), which tells us where
-+# kernel modules are going to be installed in the target filesystem.
-+OPENVMTOOLS_CONF_OPTS += --with-kernel-modules \
-+	--with-kernel-release=$(LINUX_VERSION_PROBED) \
-+	--with-linuxdir=$(LINUX_DIR)
-+OPENVMTOOLS_DEPENDENCIES += linux
-+else
-+OPENVMTOOLS_CONF_OPTS += --without-kernel-modules
-+endif
-+
- # When libfuse is available, openvmtools can build vmblock-fuse, so
- # make sure that libfuse gets built first
- ifeq ($(BR2_PACKAGE_LIBFUSE),y)
 -- 
 1.9.3
