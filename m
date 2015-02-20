@@ -1,99 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 09:22:07 +0100
-Subject: [Buildroot] [PATCH] package/openvmtools: enable openvmtools
- kernel modules
-In-Reply-To: <1424388046-30299-1-git-send-email-romain.naour@openwide.fr>
-References: <1424388046-30299-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150220092207.1ee858a9@free-electrons.com>
+Date: Fri, 20 Feb 2015 09:23:16 +0100
+Subject: [Buildroot] [git commit] package/opentyrian: fix build on bfin
+Message-ID: <20150220082322.B57DD817BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=120a3efeec66dbbade3d8213682c0a8940c906eb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Feb 2015 00:20:46 +0100, Romain Naour wrote:
+There is a conflict with the _strchrnul symbole from mingw_fixes.c
+and the one from uClibc.
 
-> diff --git a/package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch b/package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch
-> new file mode 100644
-> index 0000000..5d18d9f
-> --- /dev/null
-> +++ b/package/openvmtools/0008-configure-don-t-append-build-directory-to-LINUXINCLU.patch
-> @@ -0,0 +1,31 @@
-> +From 796296f35c6992b4c685b7926a2aff9cd3bcac81 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Mon, 16 Feb 2015 11:30:23 +0100
-> +Subject: [PATCH 8/8] configure: don't append build directory to LINUXINCLUDE.
-> +
-> +This break the build when LINUXDIR point to the kernel linux sources
-> +(ie not from /lib/module/uname -r/build/include)
-> +
-> +Use directly --with-linuxdir=$(LINUX_DIR)/build if necessary.
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> +---
-> + configure.ac |    2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 549736f..6c97785 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -148,7 +148,7 @@ if test "$with_kernel_modules" = "yes"; then
-> +          if test ! -d "$LINUXDIR/kernel/"; then
-> +              AC_MSG_ERROR([$LINUXDIR/kernel does not exist])
-> +          fi
-> +-         LINUXINCLUDE="$LINUXDIR/build/include"
-> ++         LINUXINCLUDE="$LINUXDIR/include"
+Add a guard around strchrnul function for unix systems.
 
-I believe this patch may not be needed. The idea of the original code
-is that $LINUXDIR should be set to /lib/modules/<kernelversion>/. In a
-normal system, this directory contains a "build" symbolic link, which
-points back to the kernel source directory, or the kernel headers
-directory.
+Fixes:
+http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
 
-thomas at skate:/lib/modules/3.16.0-31-generic$ ls -l
-total 4052
-lrwxrwxrwx  1 root root     40 f?vr. 10 17:36 build -> /usr/src/linux-headers-3.16.0-31-generic
-[...]
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-don-t-redefine-strchrnul-for-unix-system.patch |   42 ++++++++++++++++++++
+ 1 files changed, 42 insertions(+), 0 deletions(-)
 
-
-> + if test "$os" = "linux"; then
-> +-   MODULES_DIR="$LINUXDIR/kernel/"
-> ++   # MODULES_DIR is used to install vmware modules to the target
-> ++   # Use DESTDIR to define the target rootfs when installing
-> ++   MODULES_DIR="/lib/modules/$KERNEL_RELEASE/kernel/"
-
-Same here: LINUXDIR is expected to point
-at /lib/modules/<kernelversion>/, and the "kernel" subdirectory in here
-is where kernel modules are installed. So if you point LINUXDIR
-to /lib/modules/<kernelversion>/, this patch should not be needed.
-
-Now, there is one trick: in the current Buildroot, the kernel modules
-are only installed to $(TARGET_DIR), and when installed, the 'build'
-symbolic link is removed, because it points to a non-nonsensical
-location since the kernel sources (or kernel headers) are not installed
-in $(TARGET_DIR).
-
-So either we need to keep your patches (but they have no chance of
-being upstreamed), or we install kernel modules to $(STAGING_DIR). I'm
-not sure if we want to do that just for the sake of openvmtools, though.
-
-So in the end, maybe what you did is the best approach.
-
-> +config BR2_PACKAGE_OPENVMTOOLS_KERNEL_MODULES
-> +	bool "Openvmtools Linux Kernel Modules"
-> +	depends on BR2_LINUX_KERNEL
-> +	help
-> +	  Build openvmtools's Linux kernel modules.
-> +
-> +comment "Openvmtools's Linux kernel modules needs a Linux kernel to be built"
-
-needs -> need
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
+new file mode 100644
+index 0000000..e20ab00
+--- /dev/null
++++ b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
+@@ -0,0 +1,42 @@
++From 1c64c2d103c9356750a3d3b559068329bb0c7e3c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Fri, 20 Feb 2015 00:29:47 +0100
++Subject: [PATCH] mingw_fixes: don't redefine strchrnul for unix system
++
++On bfin architecture all symbols are prefixed with a underscore '_', hence a
++conflict with the _strchrnul symbole from mingw_fixes.c and the one from uClibc.
++
++Path/to/sysroot/usr/lib/libc.a(strchrnul.o): In function `*___GI_strchrnul':
++Path/to/uClibc/libc/string/generic/strchrnul.c:33: multiple definition of `_strchrnul'
++obj/mingw_fixes.o:src/mingw_fixes.c:(.text+0x0): first defined here
++
++Since mingw_fixes.c is intended for WIN32 system, add a guard around strchrnul function
++and use the one defined from string.h.
++
++Fixes:
++http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/mingw_fixes.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/mingw_fixes.c b/src/mingw_fixes.c
++index d734438..2f4069e 100644
++--- a/src/mingw_fixes.c
+++++ b/src/mingw_fixes.c
++@@ -18,9 +18,11 @@
++  */
++ #include "mingw_fixes.h"
++ 
+++#ifndef TARGET_UNIX
++ char *strchrnul( const char *s, int c )
++ {
++ 	for (; *s != c && *s != '\0'; ++s)
++ 		;
++ 	return (char *)s;
++ }
+++#endif
++-- 
++1.9.3
++
