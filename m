@@ -1,214 +1,151 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Feb 2015 23:36:21 +0100
-Subject: [Buildroot] [PATCH 08/11 v5] package/freerdp: add options to
-	enable/disable server and/or client
-In-Reply-To: <cover.1424558036.git.yann.morin.1998@free.fr>
-References: <cover.1424558036.git.yann.morin.1998@free.fr>
-Message-ID: <44fb109d81db4309f73d7f85fcd533c3f1dee6cb.1424558036.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Feb 2015 23:46:36 +0100
+Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
+Message-ID: <20150221234636.50616706@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the client or the server requires an X.Org stack.
+Yann, Nicolas,
 
-Since freerdp can also be used for weston (wayland-based, hence no X.Org
-stack), we may want to disable the client and server.
+On Tue, 10 Feb 2015 21:01:15 +0100, Yann E. MORIN wrote:
 
-Conversely, even with an X.Org stack, we may want to enable either or
-none if we're just interested in the library.
+> diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
+> new file mode 100644
+> index 0000000..950f2f8
+> --- /dev/null
+> +++ b/package/nvidia-tegra23/Config.in
+> @@ -0,0 +1,36 @@
+> +menuconfig BR2_PACKAGE_NVIDIA_TEGRA23
+> +	bool "nvidia-tegra23"
+> +	depends on BR2_cortex_a9
+> +	depends on BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_PACKAGE_XORG7
 
-Add two options, one to enable the server, the other the client; the
-client option defaults to 'Y' so that a previous .config can be re-used
-as-is, and exhibit the same behaviour as before; the server option
-defaults to 'N' as we were not ever building the server so far.
+Why is X.org required? Those NVidia drivers provide an EGL
+implementation, so I would expect them to be usable without X.org, for
+example if you want to do Qt5 over eglfs. Isn't it the case?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> +choice
+> +	prompt "X11 ABI version"
+> +	default BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
+> +	help
+> +	  Select Tegra X11 ABI version.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V5
+> +	bool "X11 ABI 5"
+> +	help
+> +	  Tegra X11 ABI 5.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V6
+> +	bool "X11 ABI 6"
+> +	help
+> +	  Tegra X11 ABI 6.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V7
+> +	bool "X11 ABI 7"
+> +	help
+> +	  Tegra X11 ABI 7.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V8
+> +	bool "X11 ABI 8"
+> +	help
+> +	  Tegra X11 ABI 8.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V10
+> +	bool "X11 ABI 10"
+> +	help
+> +	  Tegra X11 ABI 10.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V11
+> +	bool "X11 ABI 11"
+> +	help
+> +	  Tegra X11 ABI 11.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V12
+> +	bool "X11 ABI 12"
+> +	help
+> +	  Tegra X11 ABI 12.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V13
+> +	bool "X11 ABI 13"
+> +	help
+> +	  Tegra X11 ABI 13.
+> +
+> +config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_X11ABI_V14
+> +	bool "X11 ABI 14"
+> +	help
+> +	  Tegra X11 ABI 14.
 
----
-Changes v2 -> v3:
-  - use -fPIC only for that library that needs it, not the whole
-    package  (Samuel)
-  - fix X.Org dependencies  (Samuel)
-  - don't default server to 'Y'
----
- package/freerdp/Config.in                          | 25 ++++++++-
- .../freerdp-0002-fix-building-shared-libs.patch    | 23 ++++++++
- package/freerdp/freerdp.mk                         | 62 ++++++++++++++++++++--
- 3 files changed, 105 insertions(+), 5 deletions(-)
- create mode 100644 package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+Is this choice really useful? In Buildroot, we only support one version
+of the X.org server at a time, so only one ABI version.
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 09efbc0..47fd8be 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -2,9 +2,32 @@ config BR2_PACKAGE_FREERDP
- 	bool "freerdp"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	help
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
- 
-+	  This only installs the freerdp library.
-+
- 	  http://www.freerdp.com/
-+
-+if BR2_PACKAGE_FREERDP
-+
-+config BR2_PACKAGE_FREERDP_SERVER
-+	bool "build server"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+
-+config BR2_PACKAGE_FREERDP_CLIENT
-+	bool "build client"
-+	default y
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+
-+comment "freerdp server and client need X.Org"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+endif
-diff --git a/package/freerdp/freerdp-0002-fix-building-shared-libs.patch b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
-new file mode 100644
-index 0000000..420f3d3
---- /dev/null
-+++ b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
-@@ -0,0 +1,23 @@
-+winpr/tools: fix building shared libs
-+
-+libwinpr-makecert-tool.a is used to build libxfreerdp-server.so, so even
-+if we are building a static libwinpr-makecert-tool.a library, we need to
-+build it with -fPIC.
-+
-+Patch and commit log suggested by Samuel MARTIN.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Samuel Martin <s.martin49@gmail.com>
-+
-+diff -durN freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt
-+--- freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt	2014-08-25 06:52:43.000000000 -0700
-++++ freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt	2014-10-24 15:39:39.600319523 -0700
-+@@ -43,3 +43,8 @@
-+ 
-+ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "WinPR/Tools")
-+ 
-++if(BUILD_SHARED_LIBS)
-++	# build libwinpr-makecert-tool.a with PIC because it is used to build
-++	# the shared library libxfreerdp-server.so.
-++	set_property(TARGET ${MODULE_NAME} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
-++endif()
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index cf96ff4..33eacc2 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -64,13 +64,33 @@ ifeq ($(BR2_arm)$(BR2_armeb),y)
- FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
--FREERDP_DEPENDENCIES += xlib_libXext
--FREERDP_CONF_OPTS += -DWITH_X11=ON
-+#---------------------------------------
-+# Enabling server and/or client
-+
-+ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
-+FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
- else
--FREERDP_CONF_OPTS += -DWITH_X11=OFF
-+FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
-+FREERDP_CONF_OPTS += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
-+endif
-+
-+#---------------------------------------
-+# X.Org libs for client and/or server
-+
-+ifneq ($(BR2_PACKAGE_FREERDP_SERVER)$(BR2_PACKAGE_FREERDP_CLIENT),)
-+
-+# Those two are mandatory for both the server and the client
-+FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXext
-+FREERDP_CONF_OPTS += -DWITH_X11=ON
-+
-+# The following libs are either optional or mandatory only for either
-+# the server or the client. A mandatory library for either one is
-+# selected from Kconfig, so we can make it conditional here
- ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
- FREERDP_CONF_OPTS += -DWITH_XCURSOR=ON
- FREERDP_DEPENDENCIES += xlib_libXcursor
-@@ -78,6 +98,20 @@ else
- FREERDP_CONF_OPTS += -DWITH_XCURSOR=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
-+FREERDP_CONF_OPTS += -DWITH_XDAMAGE=ON
-+FREERDP_DEPENDENCIES += xlib_libXdamage
-+else
-+FREERDP_CONF_OPTS += -DWITH_XDAMAGE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
-+FREERDP_CONF_OPTS += -DWITH_XFIXES=ON
-+FREERDP_DEPENDENCIES += xlib_libXfixes
-+else
-+FREERDP_CONF_OPTS += -DWITH_XFIXES=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
- FREERDP_CONF_OPTS += -DWITH_XI=ON
- FREERDP_DEPENDENCIES += xlib_libXi
-@@ -99,6 +133,13 @@ else
- FREERDP_CONF_OPTS += -DWITH_XKBFILE=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+FREERDP_CONF_OPTS += -DWITH_XRANDR=ON
-+FREERDP_DEPENDENCIES += xlib_libXrandr
-+else
-+FREERDP_CONF_OPTS += -DWITH_XRANDR=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
- FREERDP_CONF_OPTS += -DWITH_XRENDER=ON
- FREERDP_DEPENDENCIES += xlib_libXrender
-@@ -106,6 +147,13 @@ else
- FREERDP_CONF_OPTS += -DWITH_XRENDER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXTST),y)
-+FREERDP_CONF_OPTS += -DWITH_XTEST=ON
-+FREERDP_DEPENDENCIES += xlib_libXtst
-+else
-+FREERDP_CONF_OPTS += -DWITH_XTEST=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
- FREERDP_CONF_OPTS += -DWITH_XV=ON
- FREERDP_DEPENDENCIES += xlib_libXv
-@@ -113,4 +161,10 @@ else
- FREERDP_CONF_OPTS += -DWITH_XV=OFF
- endif
- 
-+else # ! SERVER && ! CLIENT
-+
-+FREERDP_CONF_OPTS += -DWITH_X11=OFF
-+
-+endif # ! USES_XLIBS
-+
- $(eval $(cmake-package))
+And currently, we have X.org server 1.17.1, which implementation the
+video driver ABI version 19. How can this work with the Tegra drivers
+if they only support up to ABI version 14 ?
+
+> +NVIDIA_TEGRA23_BINARIES_VERSION	= $(NVIDIA_TEGRA23_VERSION)
+
+Spacing issue here.
+
+> +NVIDIA_TEGRA23_BINARIES_SITE = $(NVIDIA_TEGRA23_SITE)
+> +NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARIES_VERSION)_armhf.tbz2
+> +
+> +NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
+> +NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
+> +
+> +NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
+> +NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES
+
+Last line not needed, it's the default.
+
+> +NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = mesa3d-headers \
+> +	xlib_libX11 xlib_libXext xlib_libXv
+
+A comment above this explaining why even though those are not build
+dependencies of nvidia-tegra23-binaries they should still be listed in
+the DEPENDENCIES would be useful.
+
+> +define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
+> +	$(foreach lib,$(NVIDIA_TEGRA23_BINARIES_LIBRARIES),
+> +		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nvidia_drivers/usr/lib/$(lib) \
+> +			$(1)/usr/lib/$(lib); \
+> +	)
+> +	(cd $(1)/usr/lib; \
+> +		ln -sf libGLESv2.so.2 libGLESv2.so; \
+> +		ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
+> +		ln -sf libEGL.so.1 libEGL.so \
+> +	)
+> +endef
+> +
+> +define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
+> +	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
+> +	$(foreach pkgconfig,$(NVIDIA_TEGRA23_BINARIES_PKGCONFIG),
+> +		$(INSTALL) -D -m 0644 package/nvidia-tegra23/nvidia-tegra23-binaries/$(pkgconfig) \
+> +			$(STAGING_DIR)/usr/lib/pkgconfig/$(pkgconfig); \
+> +	)
+
+Don't we need a $(sep) here in the foreach loop?
+
+> +endef
+> +
+> +define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
+> +	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(TARGET_DIR))
+> +	$(foreach firmware,$(NVIDIA_TEGRA23_BINARIES_FIRMWARE),
+> +		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nvidia_drivers/lib/firmware/$(firmware) \
+> +			$(TARGET_DIR)/lib/firmware/$(firmware); \
+> +	)
+
+Ditto.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
