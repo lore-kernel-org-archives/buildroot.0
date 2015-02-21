@@ -1,83 +1,82 @@
-From: William Welch <bvwelch@gmail.com>
-Date: Sat, 21 Feb 2015 16:31:21 -0600
-Subject: [Buildroot] trouble configuring for beaglebone black and
- external Linaro toolchain, 2015.02-rc2
-In-Reply-To: <20150221232708.19c7f576@free-electrons.com>
-References: <CAPALihNuWHDrxf=RcinmAGcx-zchGh=--L209e__O7e+BRpT2w@mail.gmail.com>
- <20150221232708.19c7f576@free-electrons.com>
-Message-ID: <CAPALihMRa3w2S6t_xtq=0LwtPk4wn-GUVLGSUADz-n7kn3Ja1g@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 21 Feb 2015 23:36:19 +0100
+Subject: [Buildroot] [PATCH 0/11 v5] weston: new freerdp backend (branch
+	yem/freerdp)
+Message-ID: <cover.1424558036.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK,
+Hello All!
 
-thank you,
-
-William
-
-(many lines downloading the toolchain deleted...)
-
-2015-02-21 13:11:49 (1.50 MB/s) -
-?/home/bwelch/svn/nm-plus/unfuddle/pluslocation_res/trunk/productionfs/buildroot/buildroot/output/build/.gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz.yCmDiD/output?
-saved [51278488/51278488]
-
-gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz: OK (sha256:
-0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891)
-[7m>>> toolchain-external undefined Extracting[27m
-mkdir -p
-/home/bwelch/svn/nm-plus/unfuddle/pluslocation_res/trunk/productionfs/buildroot/buildroot/output/host/opt/ext-toolchain
-xzcat
-/home/bwelch/svn/nm-plus/unfuddle/pluslocation_res/trunk/productionfs/buildroot/buildroot/dl/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-| tar --strip-components=1 --exclude='usr/lib/locale/*' -C
-/home/bwelch/svn/nm-plus/unfuddle/pluslocation_res/trunk/productionfs/buildroot/buildroot/output/host/opt/ext-toolchain
- -xf -
-[7m>>> toolchain-external undefined Patching[27m
-[7m>>> toolchain-external undefined Configuring[27m
-/home/bwelch/svn/nm-plus/unfuddle/pluslocation_res/trunk/productionfs/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../libexec/gcc/arm-linux-gnueabihf/4.9.2/cc1:
-error while loading shared libraries: libz.so.1: cannot open shared object
-file: No such file or directory
-Incorrect ABI setting: EABIhf selected, but toolchain is incompatible
-make: ***
-[/home/bwelch/svn/nm-plus/unfuddle/pluslocation_res/trunk/productionfs/buildroot/buildroot/output/build/toolchain-external-undefined/.stamp_configured]
-Error 1
+This series adds the RDP backend to Weston. As a side effect, it cleans
+up and enhances FreeRDP.
 
 
-On Sat, Feb 21, 2015 at 4:27 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Changes v4 -> v5:
+  - bump version to fix builds against newer cmake  (Thomas)
+  - add more conditional options  (parts from Thomas)
+  - get rid of a developer-related comment  (Thomas)
 
-> Dear William Welch,
->
-> On Sat, 21 Feb 2015 13:23:09 -0600, William Welch wrote:
->
-> > Thank you for all the great work you are doing in buildroot.
-> >
-> > I first built a system using the beaglebone_defconfig, and the make went
-> > fine.  But when I try to select the external linaro toolchain, the make
-> > fails-- EABIhf selected, but toolchain is incompatible...
-> >
-> > Steps to repeat:
-> >
-> > make beaglebone_defconfig
-> > make menuconfig
-> >    choose external, and it will automatically choose Linraro ARM 2014.09
-> > make
-> > It will download the toolchain
-> > -- gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> > but then fail while configuring the toolchain.
-> >
-> > What am I missing here?
->
-> Please post the latest ~200 lines of the build output. Otherwise, we
-> have no idea what your failure is.
->
-> Best regards,
->
-> Thomas Petazzoni
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150221/2fa5c187/attachment.html>
+Changes v3 -> v4:
+  - re-order arch-specific options for ease of review
+  - rebase; drop applied patch about man pages  (Thomas)
+
+Changes v2 -> v3:
+  - rework completely the depednencies on X11 libraries  (Samuel)
+  - only install keys when the server is enabled  (Samuel)
+
+Changes v1 -> v2:
+  - new package python-lxml, needed for opengl-registry (Tomas P.)
+  - cleanup opengl-registry and nvidia-driver  (Thomas P.)
+  - drop applied patches  (Thomas P.)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 7b9285a8748cb4bd6f301603ef688eb6be025a39:
+
+  package/nvidia-driver: build the kernel module (2015-02-21 23:28:51 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/freerdp
+
+for you to fetch changes up to 3c9c14cd7d1baa7a1fbe865c0df0a8a7e2541b4b:
+
+  package/weston: add support for the RDP compositor (2015-02-21 23:31:43 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (11):
+      package/freerdp: bump version
+      package/freerdp: conditionally build gstreamer support
+      package/freerdp: conditionally build support for libXi
+      package/freerdp: conditionally build support for libXrender
+      package/freerdp: avoid development warning
+      package/freerdp: do not forcibly depend on X.Org
+      package/freerdp: move architecture-specific block
+      package/freerdp: add options to enable/disable server and/or client
+      package/freerdp: also install to staging
+      package/freerdp: install server key and certificate
+      package/weston: add support for the RDP compositor
+
+ package/Config.in                                  |   2 +-
+ package/freerdp/Config.in                          |  29 ++++-
+ .../freerdp-0002-fix-building-shared-libs.patch    |  23 ++++
+ package/freerdp/freerdp.mk                         | 131 ++++++++++++++++++---
+ package/weston/Config.in                           |  17 +++
+ package/weston/weston.mk                           |   7 ++
+ 6 files changed, 187 insertions(+), 22 deletions(-)
+ create mode 100644 package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
