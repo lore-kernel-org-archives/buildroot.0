@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 16:56:17 +0100
-Subject: [Buildroot] [RFC 1/3] package/efl/libevas: add missing
- dependency on fontconfig
-In-Reply-To: <1423952924-6322-1-git-send-email-romain.naour@openwide.fr>
-References: <1423952924-6322-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150221165617.07331eb0@free-electrons.com>
+Date: Sat, 21 Feb 2015 17:09:52 +0100
+Subject: [Buildroot] [PATCH] package/python: change
+ BR2_PACKAGE_PYTHON_PYEXPAT description
+In-Reply-To: <1423849041-7978-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1423849041-7978-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150221170952.1a80a63e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Angelo Compagnucci,
 
-On Sat, 14 Feb 2015 23:28:42 +0100, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/efl/libevas/libevas.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+On Fri, 13 Feb 2015 18:37:21 +0100, Angelo Compagnucci wrote:
+> This patch changes BR2_PACKAGE_PYTHON_PYEXPAT description and
+> help text to underline that all the xml libraries will be
+> included in python.
+> It also reorders alphabetically the affected option.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-All three patches applied to master, since they fix some real or
-potential build issues. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
