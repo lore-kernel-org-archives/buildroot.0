@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 21 Feb 2015 09:45:12 -0300
-Subject: [Buildroot] [PATCH] hans: new package
-Message-ID: <1424522712-22649-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 21 Feb 2015 09:45:29 -0300
+Subject: [Buildroot] [PATCH] iodine: new package
+Message-ID: <1424522729-22692-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,78 +10,111 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in      |  1 +
- package/hans/Config.in | 13 +++++++++++++
- package/hans/hans.hash |  3 +++
- package/hans/hans.mk   | 20 ++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/hans/Config.in
- create mode 100644 package/hans/hans.hash
- create mode 100644 package/hans/hans.mk
+ package/Config.in                                  |  1 +
+ .../iodine/0001-disable-systemd-and-selinux.patch  | 29 ++++++++++++++++++++++
+ package/iodine/Config.in                           |  9 +++++++
+ package/iodine/iodine.hash                         |  2 ++
+ package/iodine/iodine.mk                           | 21 ++++++++++++++++
+ 5 files changed, 62 insertions(+)
+ create mode 100644 package/iodine/0001-disable-systemd-and-selinux.patch
+ create mode 100644 package/iodine/Config.in
+ create mode 100644 package/iodine/iodine.hash
+ create mode 100644 package/iodine/iodine.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 20f0a9a..a93faab 100644
+index a93faab..2894379 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1087,6 +1087,7 @@ endif
- 	source "package/fping/Config.in"
- 	source "package/gesftpserver/Config.in"
- 	source "package/gutenprint/Config.in"
-+	source "package/hans/Config.in"
- 	source "package/hiawatha/Config.in"
- 	source "package/hostapd/Config.in"
- 	source "package/hplip/Config.in"
-diff --git a/package/hans/Config.in b/package/hans/Config.in
+@@ -1102,6 +1102,7 @@ endif
+ 	source "package/igh-ethercat/Config.in"
+ 	source "package/igmpproxy/Config.in"
+ 	source "package/inadyn/Config.in"
++	source "package/iodine/Config.in"
+ 	source "package/iperf/Config.in"
+ 	source "package/iperf3/Config.in"
+ 	source "package/iproute2/Config.in"
+diff --git a/package/iodine/0001-disable-systemd-and-selinux.patch b/package/iodine/0001-disable-systemd-and-selinux.patch
 new file mode 100644
-index 0000000..7b60090
+index 0000000..965abb7
 --- /dev/null
-+++ b/package/hans/Config.in
-@@ -0,0 +1,13 @@
-+comment "hans needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
++++ b/package/iodine/0001-disable-systemd-and-selinux.patch
+@@ -0,0 +1,29 @@
++Disable selinux and systemd support since they check for host headers.
 +
-+config BR2_PACKAGE_HANS
-+	bool "hans"
-+	depends on BR2_INSTALL_LIBSTDCPP
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura iodine-0.7.0.orig/src/osflags iodine-0.7.0/src/osflags
++--- iodine-0.7.0.orig/src/osflags	2015-02-20 14:59:00.799958145 -0300
+++++ iodine-0.7.0/src/osflags	2015-02-20 15:05:54.791135141 -0300
++@@ -18,8 +18,8 @@
++ 		;;
++ 		Linux)
++ 			FLAGS="";
++-			[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -lselinux";
++-			[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -lsystemd-daemon";
+++			#[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -lselinux";
+++			#[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -lsystemd-daemon";
++ 			echo $FLAGS;
++ 		;;
++ 	esac
++@@ -34,8 +34,8 @@
++ 		;;
++ 		Linux)
++ 			FLAGS="-D_GNU_SOURCE"
++-			[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -DHAVE_SETCON";
++-			[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -DHAVE_SYSTEMD";
+++			#[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -DHAVE_SETCON";
+++			#[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -DHAVE_SYSTEMD";
++ 			echo $FLAGS;
++ 		;;
++ 	esac
+diff --git a/package/iodine/Config.in b/package/iodine/Config.in
+new file mode 100644
+index 0000000..6962cb8
+--- /dev/null
++++ b/package/iodine/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_IODINE
++	bool "iodine"
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Hans makes it possible to tunnel IPv4 through ICMP echo packets,
-+	  so you could call it a ping tunnel.
-+	  This can be useful when you find yourself in the situation
-+	  that your Internet access is firewalled, but pings are allowed.
++	  iodine lets you tunnel IPv4 data through a DNS server.
++	  This can be usable in different situations where
++	  internet access is firewalled, but DNS queries are allowed.
 +
-+	  http://code.gerade.org/hans/
-diff --git a/package/hans/hans.hash b/package/hans/hans.hash
++	  http://code.kryo.se/iodine/
+diff --git a/package/iodine/iodine.hash b/package/iodine/iodine.hash
 new file mode 100644
-index 0000000..c1a28df
+index 0000000..94eb5aa
 --- /dev/null
-+++ b/package/hans/hans.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/hanstunnel/files/source/
-+md5	97a93a886bc766212257198fd99d1061	hans-0.4.4.tar.gz
-+sha1	8a21a9acc6d52cf7d2a5049523469e2609716ab3	hans-0.4.4.tar.gz
-diff --git a/package/hans/hans.mk b/package/hans/hans.mk
++++ b/package/iodine/iodine.hash
+@@ -0,0 +1,2 @@
++# From http://code.kryo.se/iodine/
++md5	fdbf3b81cd69caf5230d76a8b039fd99	iodine-0.7.0.tar.gz
+diff --git a/package/iodine/iodine.mk b/package/iodine/iodine.mk
 new file mode 100644
-index 0000000..bda091f
+index 0000000..57deb9e
 --- /dev/null
-+++ b/package/hans/hans.mk
-@@ -0,0 +1,20 @@
++++ b/package/iodine/iodine.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# hans
++# iodine
 +#
 +################################################################################
 +
-+HANS_VERSION = 0.4.4
-+HANS_SITE = http://downloads.sourceforge.net/project/hanstunnel/source
-+HANS_LICENSE = GPLv3+
-+HANS_LICENSE_FILES = LICENSE
++IODINE_VERSION = 0.7.0
++IODINE_SITE = http://code.kryo.se/iodine
++IODINE_DEPENDENCIES = zlib
++IODINE_LICENSE = MIT
++IODINE_LICENSE_FILES = README
 +
-+define HANS_BUILD_CMDS
-+	$(MAKE) GCC="$(TARGET_CC)" GPP="$(TARGET_CXX)" -C $(@D)
++define IODINE_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" ARCH=$(BR2_ARCH) -C $(@D)
 +endef
 +
-+define HANS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -D $(@D)/hans $(TARGET_DIR)/usr/sbin/hans
++define IODINE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)" prefix=/usr
 +endef
 +
 +$(eval $(generic-package))
