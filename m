@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 15:23:22 +0100
-Subject: [Buildroot] [git commit] util-linux: ul also requires ncurses
-Message-ID: <20150221142328.49B2F80448@busybox.osuosl.org>
+Date: Sat, 21 Feb 2015 15:23:37 +0100
+Subject: [Buildroot] [PATCH] util-linux: setterm requires ncurses
+In-Reply-To: <1424525853-29212-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424525853-29212-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150221152337.24b2347a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59abbae847f2caddc00e9f7d4c97a8fe184035a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Found via auditing.
+On Sat, 21 Feb 2015 10:37:33 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/7c0/7c02c0de18059bd1a633267b43a8a5e9ee2fdfdc/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/util-linux/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/util-linux/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index a138a37..bc6c791 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -234,6 +234,7 @@ config BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT
- 
- config BR2_PACKAGE_UTIL_LINUX_UL
- 	bool "ul"
-+	select BR2_PACKAGE_NCURSES
- 	help
- 	  Do underlining
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
