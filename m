@@ -1,52 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Feb 2015 23:36:23 +0100
-Subject: [Buildroot] [PATCH 10/11 v5] package/freerdp: install server key
-	and certificate
+Date: Sat, 21 Feb 2015 23:36:24 +0100
+Subject: [Buildroot] [PATCH 11/11 v5] package/weston: add support for the
+	RDP compositor
 In-Reply-To: <cover.1424558036.git.yann.morin.1998@free.fr>
 References: <cover.1424558036.git.yann.morin.1998@free.fr>
-Message-ID: <4bfcb4d735dcded5ba4328260a13970af1023c0b.1424558036.git.yann.morin.1998@free.fr>
+Message-ID: <3c9c14cd7d1baa7a1fbe865c0df0a8a7e2541b4b.1424558036.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is mandatory for an RDP server to have a key and a certificate,
-otherwise clients will refuse to connect to that server.
+Using the RDP compositor, one can run a headless machine to serve remote
+clients, using the RDP protocol.
 
-We install the key and certificate bundled in FreeRDP. The user can
-install its own set using a post-build script if needed.
+Add an option to enable the rdp-backend.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Changes v2 -> v3:
-  - only install the keys when the server is enabled  (Samuel)
----
- package/freerdp/freerdp.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/weston/Config.in | 17 +++++++++++++++++
+ package/weston/weston.mk |  7 +++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index e680e39..37568c0 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -71,6 +71,15 @@ endif
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index b7f4f27..8983460 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -39,6 +39,23 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+ config BR2_PACKAGE_WESTON_FBDEV
+ 	bool "fbdev compositor"
  
- ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
- FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
-+# Install the server key and certificate, so that a client can connect.
-+# A user can override them with its own in a post-build script, if needed.
-+define FREERDP_INSTALL_KEYS
-+	$(INSTALL) -D $(@D)/server/X11/server.key \
-+		      $(TARGET_DIR)/etc/freerdp/keys/server.key
-+	$(INSTALL) -D $(@D)/server/X11/server.crt \
-+		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
-+endef
-+FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
- else
- FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
++config BR2_PACKAGE_WESTON_RDP
++	bool "RDP compositor"
++	select BR2_PACKAGE_FREERDP
++	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
++	help
++	  This enables the RDP backend, which allows accessing weston
++	  through the network with any RDP-compliant client.
++
++	  Please note that one must pass those options to weston for RDP
++	  to be functional:
++	    --rdp-tls-cert=/path/to/server.crt
++	    --rdp-tls-key=/path/to/server.key
++
++	  By default, Buildroot installs such files in /etc/freerdp/server/
++	  so you may want to change them in a post-build script or a rootfs
++	  overlay.
++
+ # rpi-userland is an EGL/GLES provider, so we can't select it
+ config BR2_PACKAGE_WESTON_RPI
+ 	bool "RPi compositor"
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 8a5a891..bf49436 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -31,6 +31,13 @@ else
+ WESTON_CONF_OPTS += --disable-libunwind
  endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
++WESTON_DEPENDENCIES += freerdp
++WESTON_CONF_OPTS += --enable-rdp-compositor
++else
++WESTON_CONF_OPTS += --disable-rdp-compositor
++endif
++
+ ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
+ WESTON_CONF_OPTS += --enable-fbdev-compositor
+ else
 -- 
 1.9.1
