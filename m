@@ -1,34 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 16:07:54 +0100
-Subject: [Buildroot] Buildroot and the Google Summer of Code 2015
-Message-ID: <20150221160754.38e7b712@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Feb 2015 16:24:18 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/mesa3d: bump to version 10.4.5
+Message-ID: <1424532258-13339-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Like the last two years, we have registered Buildroot as a potential
-organization for the Google Summer of Code 2015. Of course, we don't
-know if Google will accept our application.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.hash |    4 ++--
+ package/mesa3d/mesa3d.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-That being said, while this process is going on, we have started a Wiki
-page to collect ideas of projects:
-
-  http://elinux.org/Buildroot:GSoC_2015_Ideas
-
-We are interested in getting more ideas, and also to hear about
-interested students, who would be willing to work this summer on
-Buildroot, and get paid for it!
-
-Do not hesitate to contact me if you are interested.
-
-Thanks,
-
-Thomas
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 6b00367..677781f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-February/000139.html
+-sha256	f18a967e9c4d80e054b2fdff8c130ce6e6d1f8eecfc42c9f354f8628d8b4df1c	MesaLib-10.4.4.tar.bz2
++# From http://cgit.freedesktop.org/mesa/mesa/commit/?h=10.4&id=41bdeda10210b8f1d358c04b25af2fbfe3335531
++sha256	bf60000700a9d58e3aca2bfeee7e781053b0d839e61a95b1883e05a2dee247a0	MesaLib-10.4.5.tar.bz2
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index eb38a9a..c2d9d54 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.4.4
++MESA3D_VERSION = 10.4.5
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
