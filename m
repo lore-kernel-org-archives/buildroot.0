@@ -1,56 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 17:09:04 +0100
-Subject: [Buildroot] [git commit] package/python: change
-	BR2_PACKAGE_PYTHON_PYEXPAT description
-Message-ID: <20150302222721.8AADF81764@busybox.osuosl.org>
+Date: Sat, 21 Feb 2015 10:11:43 +0100
+Subject: [Buildroot] [git commit] mpc: bump to version 1.0.3
+Message-ID: <20150302222721.4E19881764@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c22da1a2da42793364eb96bd80b8e10c4013ff02
+commit: http://git.buildroot.net/buildroot/commit/?id=af7d74a9b10991f05cc7e90907c991af11855d22
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch changes BR2_PACKAGE_PYTHON_PYEXPAT description and
-help text to underline that all the xml libraries will be
-included in python.
-It also reorders alphabetically the affected option.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/Config.in |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ package/mpc/mpc.hash |    2 +-
+ package/mpc/mpc.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 87defad..8d71dc9 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -65,12 +65,6 @@ config BR2_PACKAGE_PYTHON_OSSAUDIODEV
- 	help
- 	  ossaudiodev module for Python.
+diff --git a/package/mpc/mpc.hash b/package/mpc/mpc.hash
+index bee59fe..98f1447 100644
+--- a/package/mpc/mpc.hash
++++ b/package/mpc/mpc.hash
+@@ -1,2 +1,2 @@
+ # From http://www.multiprecision.org/index.php?prog=mpc&page=download
+-sha1	5072d82ab50ec36cc8c0e320b5c377adb48abe70	mpc-1.0.2.tar.gz
++sha1	b8be66396c726fdc36ebb0f692ed8a8cca3bcc66	mpc-1.0.3.tar.gz
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index 81ee5f0..bc26599 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--config BR2_PACKAGE_PYTHON_PYEXPAT
--	select BR2_PACKAGE_EXPAT
--	bool "pyexpat"
--	help
--	  pyexpat module for Python.
--
- config BR2_PACKAGE_PYTHON_READLINE
- 	select BR2_PACKAGE_READLINE
- 	bool "readline"
-@@ -114,6 +108,12 @@ config BR2_PACKAGE_PYTHON_SQLITE
- 	help
- 	  SQLite database support
- 
-+config BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_EXPAT
-+	bool "xml module"
-+	help
-+	  pyexpat and xml libraries for Python
-+
- config BR2_PACKAGE_PYTHON_ZLIB
- 	bool "zlib module"
- 	select BR2_PACKAGE_ZLIB
+-MPC_VERSION = 1.0.2
++MPC_VERSION = 1.0.3
+ MPC_SITE = $(BR2_GNU_MIRROR)/mpc
+ MPC_LICENSE = LGPLv3+
+ MPC_LICENSE_FILES = COPYING.LESSER
