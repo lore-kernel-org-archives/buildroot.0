@@ -1,94 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 16:46:26 +0100
-Subject: [Buildroot] [PATCH 1/6 v4] package/freerdp: do not forcibly
- depend on X.Org
-In-Reply-To: <30fc930ab51895bd3a7e94baba5d7f6a3735ea5c.1422225347.git.yann.morin.1998@free.fr>
-References: <cover.1422225347.git.yann.morin.1998@free.fr>
- <30fc930ab51895bd3a7e94baba5d7f6a3735ea5c.1422225347.git.yann.morin.1998@free.fr>
-Message-ID: <20150221164626.6a2cc450@free-electrons.com>
+Date: Sat, 21 Feb 2015 16:47:00 +0100
+Subject: [Buildroot] [git commit branch/next] package/mesa3d: bump to
+	version 10.4.5
+Message-ID: <20150221154705.D2DB180417@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=36644b02aa185d777b92c642207686fb83d918ed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 25 Jan 2015 23:37:05 +0100, Yann E. MORIN wrote:
-> It is possible to build the libfreerdp standalone, without X.Org.
-> Having a libfreerdp will be usefull for the weston RDP compositor.
-> 
-> So, only select the strictly required X.Org library if X.Org is enabled,
-> and only build with Xcursor if it is enabled. Drop dependency on other
-> X.Org libraries, as they are not strictly required (or get pulled as
-> dependencies of the mandatory libXext).
-> 
-> Re-order the menuconfig, as freerdp is no longer an X-only application.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/Config.in          |  2 +-
->  package/freerdp/Config.in  |  6 +-----
->  package/freerdp/freerdp.mk | 17 +++++++++++++++--
->  3 files changed, 17 insertions(+), 8 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d/mesa3d.hash |    4 ++--
+ package/mesa3d/mesa3d.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Unfortunately, it doesn't build here :-/
-
-Here is the defconfig I'm using:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.11.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_17=y
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_FREERDP=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-The error I'm getting are:
-
--- checking for module 'gstreamer-plugins-base-0.10'
---   package 'gstreamer-plugins-base-0.10' not found
--- Could NOT find GSTREAMER (missing:  GSTREAMER_LIBRARIES GSTREAMER_INCLUDE_DIRS) 
-CMake Warning at cmake/FindFeature.cmake:46 (message):
-      feature Gstreamer was requested but could not be found! ON / FALSE
-Call Stack (most recent call first):
-  CMakeLists.txt:377 (find_feature)
-
-The GStreamer part of it I've fixed by adding:
-
-+ifeq ($(BR2_PACKAGE_GSTREAMER),y)
-+FREERDP_CONF_OPTS += -DWITH_GSTREAMER=ON
-+FREERDP_DEPENDENCIES += gstreamer
-+else
-+FREERDP_CONF_OPTS += -DWITH_GSTREAMER=OFF
-+endif
-
-(untested with GStreamer enabled). Once this is added, the remaining
-error is:
-
-CMake Error at channels/client/CMakeLists.txt:33 (list):
-  list sub-command REMOVE_DUPLICATES requires list to be present.
-
-My understanding is that the CHANNEL_STATIC_CLIENT_ENTRIES list is
-empty.
-
-Can you have a look into this?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 6b00367..677781f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-February/000139.html
+-sha256	f18a967e9c4d80e054b2fdff8c130ce6e6d1f8eecfc42c9f354f8628d8b4df1c	MesaLib-10.4.4.tar.bz2
++# From http://cgit.freedesktop.org/mesa/mesa/commit/?h=10.4&id=41bdeda10210b8f1d358c04b25af2fbfe3335531
++sha256	bf60000700a9d58e3aca2bfeee7e781053b0d839e61a95b1883e05a2dee247a0	MesaLib-10.4.5.tar.bz2
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index eb38a9a..c2d9d54 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.4.4
++MESA3D_VERSION = 10.4.5
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
