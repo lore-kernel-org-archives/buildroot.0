@@ -1,30 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Feb 2015 18:40:10 +0100
-Subject: [Buildroot] [PATCH 10/14 v6] package/nvidia-driver: Add gl.pc
-In-Reply-To: <f86baec76e7a2f004cc033818a3ce305cced7385.1422055104.git.yann.morin.1998@free.fr>
-References: <cover.1422055104.git.yann.morin.1998@free.fr>
- <f86baec76e7a2f004cc033818a3ce305cced7385.1422055104.git.yann.morin.1998@free.fr>
-Message-ID: <20150221184010.495bc09a@free-electrons.com>
+From: William Welch <bvwelch@gmail.com>
+Date: Sat, 21 Feb 2015 13:23:09 -0600
+Subject: [Buildroot] trouble configuring for beaglebone black and external
+ Linaro toolchain, 2015.02-rc2
+Message-ID: <CAPALihNuWHDrxf=RcinmAGcx-zchGh=--L209e__O7e+BRpT2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Greetings,
 
-On Sat, 24 Jan 2015 00:24:39 +0100, Yann E. MORIN wrote:
-> From: J?r?me Pouiller <jezz@sysmic.org>
-> 
-> In order to compile xserver, libgl provider have to provide gl.pc file.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Thank you for all the great work you are doing in buildroot.
 
-Applied to next, thanks!
+I first built a system using the beaglebone_defconfig, and the make went
+fine.  But when I try to select the external linaro toolchain, the make
+fails-- EABIhf selected, but toolchain is incompatible...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Steps to repeat:
+
+make beaglebone_defconfig
+make menuconfig
+   choose external, and it will automatically choose Linraro ARM 2014.09
+make
+It will download the toolchain
+-- gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+but then fail while configuring the toolchain.
+
+What am I missing here?
+
+thank you,
+
+William
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150221/3c8ba0fb/attachment.html>
