@@ -1,122 +1,77 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 21 Feb 2015 09:45:29 -0300
-Subject: [Buildroot] [PATCH] iodine: new package
-Message-ID: <1424522729-22692-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Feb 2015 14:00:39 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-mako: New
+	package
+Message-ID: <20150221130123.4453C80506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+commit: http://git.buildroot.net/buildroot/commit/?id=3a15524b67f91c96378a9c83248c18f0655d8f71
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Upcoming mesa3d 10.5.x needs the host-version of this package:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.5&id=2b37bea010a9c9333a813cc77d28629e1382c0be
+
+[Thomas: remove dependency on host-pkgconf, apparently not needed.]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |  1 +
- .../iodine/0001-disable-systemd-and-selinux.patch  | 29 ++++++++++++++++++++++
- package/iodine/Config.in                           |  9 +++++++
- package/iodine/iodine.hash                         |  2 ++
- package/iodine/iodine.mk                           | 21 ++++++++++++++++
- 5 files changed, 62 insertions(+)
- create mode 100644 package/iodine/0001-disable-systemd-and-selinux.patch
- create mode 100644 package/iodine/Config.in
- create mode 100644 package/iodine/iodine.hash
- create mode 100644 package/iodine/iodine.mk
+ package/Config.in                  |    1 +
+ package/python-mako/Config.in      |    8 ++++++++
+ package/python-mako/python-mako.mk |   18 ++++++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index a93faab..2894379 100644
+index bad0f7b..a45b0f9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1102,6 +1102,7 @@ endif
- 	source "package/igh-ethercat/Config.in"
- 	source "package/igmpproxy/Config.in"
- 	source "package/inadyn/Config.in"
-+	source "package/iodine/Config.in"
- 	source "package/iperf/Config.in"
- 	source "package/iperf3/Config.in"
- 	source "package/iproute2/Config.in"
-diff --git a/package/iodine/0001-disable-systemd-and-selinux.patch b/package/iodine/0001-disable-systemd-and-selinux.patch
+@@ -536,6 +536,7 @@ menu "external python modules"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-lxml/Config.in"
++	source "package/python-mako/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+diff --git a/package/python-mako/Config.in b/package/python-mako/Config.in
 new file mode 100644
-index 0000000..965abb7
+index 0000000..442e290
 --- /dev/null
-+++ b/package/iodine/0001-disable-systemd-and-selinux.patch
-@@ -0,0 +1,29 @@
-+Disable selinux and systemd support since they check for host headers.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura iodine-0.7.0.orig/src/osflags iodine-0.7.0/src/osflags
-+--- iodine-0.7.0.orig/src/osflags	2015-02-20 14:59:00.799958145 -0300
-++++ iodine-0.7.0/src/osflags	2015-02-20 15:05:54.791135141 -0300
-+@@ -18,8 +18,8 @@
-+ 		;;
-+ 		Linux)
-+ 			FLAGS="";
-+-			[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -lselinux";
-+-			[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -lsystemd-daemon";
-++			#[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -lselinux";
-++			#[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -lsystemd-daemon";
-+ 			echo $FLAGS;
-+ 		;;
-+ 	esac
-+@@ -34,8 +34,8 @@
-+ 		;;
-+ 		Linux)
-+ 			FLAGS="-D_GNU_SOURCE"
-+-			[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -DHAVE_SETCON";
-+-			[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -DHAVE_SYSTEMD";
-++			#[ -e /usr/include/selinux/selinux.h ] && FLAGS="$FLAGS -DHAVE_SETCON";
-++			#[ -e /usr/include/systemd/sd-daemon.h ] && FLAGS="$FLAGS -DHAVE_SYSTEMD";
-+ 			echo $FLAGS;
-+ 		;;
-+ 	esac
-diff --git a/package/iodine/Config.in b/package/iodine/Config.in
-new file mode 100644
-index 0000000..6962cb8
---- /dev/null
-+++ b/package/iodine/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_IODINE
-+	bool "iodine"
-+	select BR2_PACKAGE_ZLIB
++++ b/package/python-mako/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_MAKO
++	bool "python-mako"
 +	help
-+	  iodine lets you tunnel IPv4 data through a DNS server.
-+	  This can be usable in different situations where
-+	  internet access is firewalled, but DNS queries are allowed.
++	  Mako is a template library written in Python. It provides a
++	  familiar, non-XML syntax which compiles into Python modules
++	  for maximum performance.
 +
-+	  http://code.kryo.se/iodine/
-diff --git a/package/iodine/iodine.hash b/package/iodine/iodine.hash
++	  https://pypi.python.org/pypi/Mako
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
 new file mode 100644
-index 0000000..94eb5aa
+index 0000000..398b8d2
 --- /dev/null
-+++ b/package/iodine/iodine.hash
-@@ -0,0 +1,2 @@
-+# From http://code.kryo.se/iodine/
-+md5	fdbf3b81cd69caf5230d76a8b039fd99	iodine-0.7.0.tar.gz
-diff --git a/package/iodine/iodine.mk b/package/iodine/iodine.mk
-new file mode 100644
-index 0000000..57deb9e
---- /dev/null
-+++ b/package/iodine/iodine.mk
-@@ -0,0 +1,21 @@
++++ b/package/python-mako/python-mako.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# iodine
++# python-mako
 +#
 +################################################################################
 +
-+IODINE_VERSION = 0.7.0
-+IODINE_SITE = http://code.kryo.se/iodine
-+IODINE_DEPENDENCIES = zlib
-+IODINE_LICENSE = MIT
-+IODINE_LICENSE_FILES = README
++PYTHON_MAKO_VERSION = 1.0.1
++PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
++PYTHON_MAKO_SITE = https://pypi.python.org/packages/source/M/Mako
++PYTHON_MAKO_SETUP_TYPE = setuptools
++PYTHON_MAKO_LICENSE = MIT
++PYTHON_MAKO_LICENSE_FILES = LICENSE
 +
-+define IODINE_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" ARCH=$(BR2_ARCH) -C $(@D)
-+endef
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON_MAKO_DEPENDENCIES = host-python-markupsafe
 +
-+define IODINE_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)" prefix=/usr
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.0.5
++$(eval $(python-package))
++$(eval $(host-python-package))
