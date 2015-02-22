@@ -1,51 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 22:11:17 +0100
-Subject: [Buildroot] [PATCH v7] wine: New package
-In-Reply-To: <54EA42C0.9010608@dawncrow.de>
-References: <54E63769.1050208@dawncrow.de> <20150222204207.GG4016@free.fr>
- <54EA42C0.9010608@dawncrow.de>
-Message-ID: <20150222211117.GH4016@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 22 Feb 2015 22:25:06 +0100
+Subject: [Buildroot] [PATCH 1/2] package/thrift: fix build failure on bfin
+Message-ID: <1424640307-26144-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andre, All,
+Libtool append the sysroot path (lt_sysroot) with the libdir value found in
+the libstdc++.la file only with bfin toolchain.
 
-On 2015-02-22 21:57 +0100, Andr? Hentschel spake thusly:
-> >> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> >> +	WINE_CONF_OPTS += TARGETFLAGS="-b $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))"
-> > 
-> > We usually do not indent the variable assignements in conditional
-> > blocks.
-> 
-> I've seen it that way (same goes for the dependencies checking) and i think it's much nicer that way...
-> Is this minor enough to keep it that way?
+Path/to/sysroot/opt/uClinux/bfin-linux-uclibc/lib/gcc/bfin-linux-uclibc/4.3.5/libstdc++.so
 
-Well, I'd prefer we don't indent, since we don't do that anywhere else
-(well, there are a very few packages that do, but they are old, very
-old; the rule is not to indent).
+Set lt_cv_aix_libpath__CXX to /usr/lib allow to overwrite the libdir value
+from libstdc++.la.
 
-> > I'm doing a few test builds, and will respin an amended version of this
-> > patch.
-> 
-> no need for a respin, your comments will simply end up in v8
+Fixes:
+http://autobuild.buildroot.net/results/ae2/ae274693b953dd569c3ff63c532e2fc9553b5002/
 
-OK, great!
+And many more
 
-Just respin it tonight if you don't have more comments shortly.
-I know Thomas wanted to look at it and apply it soonish. :-)
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/thrift/thrift.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 559bd28..1215aed 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -26,6 +26,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ THRIFT_CONF_ENV += LIBS=-lz
+ endif
+ 
++# Libtool append the sysroot path (lt_sysroot) with the libdir value found in
++# the libstdc++.la file only on certain toolchain.
++THRIFT_CONF_OPTS = lt_cv_aix_libpath__CXX="/usr/lib"
++
+ # Language selection
+ # The generator (host tool) works with all of them regardless
+ # This is just for the libraries / bindings
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
