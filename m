@@ -1,66 +1,398 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 21:10:12 +0100
-Subject: [Buildroot] [PATCH 2/3] package/rpi-firmware: bump version
+Date: Sun, 22 Feb 2015 21:10:11 +0100
+Subject: [Buildroot] [PATCH 1/3] package/rpi-userland: bump version
 In-Reply-To: <cover.1424635766.git.yann.morin.1998@free.fr>
 References: <cover.1424635766.git.yann.morin.1998@free.fr>
-Message-ID: <852fc99d65f5055e0b04ec84925bc1559fb0bfff.1424635766.git.yann.morin.1998@free.fr>
+Message-ID: <43679ef7d674cee91adb1497de15b9428e65a9f4.1424635766.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hebden <james@hebden.net.au>
+Misc fixes and enhancements for: vsync; building with musl; clocks;
+memory compaction...
 
-Misc fixes and improvements for: DT; hdmi and EDID; video decoding,
-latency and cropping; voltage calculations...
+Drop musl patches: applied upstream, yeah! :-)
 
-Also: support for RPi-2. :-)
+Rename remaining patches, refresh on top latest master, and use
+git-format to re-generate the patches.
 
-Also remove the workaround previously required when installing DTBs, ad
-they are now in the same branch as the latest firmware.
-
-Signed-off-by: James Hebden <james@hebden.net.au>
-Signed-off-by: "Guillermo A. Amaral" <g@maral.me>
-[yann.morin.1998 at free.fr: further bump, fix and trim commit log]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/rpi-firmware/rpi-firmware.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ ...s-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch} | 108 ++++++++++++--------
+ ...make-vmcs.cmake-allow-to-override-VMCS_IN.patch |   7 +-
+ ...emove-faulty-assert-to-make-weston-happy-.patch |  33 ++++++
+ .../rpi-userland/0003-remove-faulty-assert.patch   |  21 ----
+ package/rpi-userland/0004-fix-musl-compile.patch   | 113 ---------------------
+ package/rpi-userland/rpi-userland.mk               |   2 +-
+ 6 files changed, 102 insertions(+), 182 deletions(-)
+ rename package/rpi-userland/{0001-add-pkgconfig-files.patch => 0001-Add-.pc-files-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch} (60%)
+ create mode 100644 package/rpi-userland/0003-interface-remove-faulty-assert-to-make-weston-happy-.patch
+ delete mode 100644 package/rpi-userland/0003-remove-faulty-assert.patch
+ delete mode 100644 package/rpi-userland/0004-fix-musl-compile.patch
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 03178d5..1db1f0e 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,27 +4,22 @@
+diff --git a/package/rpi-userland/0001-add-pkgconfig-files.patch b/package/rpi-userland/0001-Add-.pc-files-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch
+similarity index 60%
+rename from package/rpi-userland/0001-add-pkgconfig-files.patch
+rename to package/rpi-userland/0001-Add-.pc-files-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch
+index e88f810..352f95d 100644
+--- a/package/rpi-userland/0001-add-pkgconfig-files.patch
++++ b/package/rpi-userland/0001-Add-.pc-files-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch
+@@ -1,32 +1,58 @@
+-Add .pc files for the OpenGLESv2, EGL and bcm_host libraries
++From 853d7486a98e38eb78d48b2dcb1dda36610575b4 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sat, 24 Jan 2015 19:44:14 +0100
++Subject: [PATCH] Add .pc files for the OpenGLESv2, EGL and bcm_host
++ libraries
+ 
+ Those pkg-config files make it easier for Qt5 to find those libraries
+ and the appropriate link flags.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ host_applications/linux/libs/bcm_host/CMakeLists.txt |  4 ++++
++ host_applications/linux/libs/bcm_host/bcm_host.pc.in | 10 ++++++++++
++ interface/khronos/CMakeLists.txt                     |  8 ++++++++
++ interface/khronos/egl/egl.pc.in                      | 11 +++++++++++
++ interface/khronos/glxx/glesv2.pc.in                  | 10 ++++++++++
++ 5 files changed, 43 insertions(+)
++ create mode 100644 host_applications/linux/libs/bcm_host/bcm_host.pc.in
++ create mode 100644 interface/khronos/egl/egl.pc.in
++ create mode 100644 interface/khronos/glxx/glesv2.pc.in
+ 
+-Index: b/interface/khronos/egl/egl.pc.in
+-===================================================================
++diff --git a/host_applications/linux/libs/bcm_host/CMakeLists.txt b/host_applications/linux/libs/bcm_host/CMakeLists.txt
++index 1edf50a..1f29ead 100644
++--- a/host_applications/linux/libs/bcm_host/CMakeLists.txt
+++++ b/host_applications/linux/libs/bcm_host/CMakeLists.txt
++@@ -20,3 +20,7 @@ target_link_libraries(bcm_host vcos vchostif)
++ 
++ install(TARGETS bcm_host DESTINATION lib)
++ 
+++configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bcm_host.pc.in"
+++  "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc" @ONLY)
+++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc"
+++  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
++diff --git a/host_applications/linux/libs/bcm_host/bcm_host.pc.in b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
++new file mode 100644
++index 0000000..d40d350
+ --- /dev/null
+-+++ b/interface/khronos/egl/egl.pc.in
+-@@ -0,0 +1,11 @@
+-+prefix=@CMAKE_INSTALL_PREFIX@
+++++ b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
++@@ -0,0 +1,10 @@
+++prefix=/usr
+ +exec_prefix=${prefix}
+ +libdir=${exec_prefix}/lib
+ +includedir=${prefix}/include
+ +
+-+Name: egl
+-+Description: RasberryPi implementation of EGL
+-+Version: 10
+-+Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host -lvchostif
+-+Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
+-+        -I${includedir}/interface/vmcs_host/linux/
+-Index: b/interface/khronos/CMakeLists.txt
+-===================================================================
+++Name: bcm_host
+++Description: Broadcom VideoCore host API library
+++Version: 1
+++Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+++Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
++diff --git a/interface/khronos/CMakeLists.txt b/interface/khronos/CMakeLists.txt
++index c437291..ec5a605 100644
+ --- a/interface/khronos/CMakeLists.txt
+ +++ b/interface/khronos/CMakeLists.txt
+-@@ -74,3 +74,11 @@
++@@ -74,3 +74,11 @@ target_link_libraries(OpenVG EGL)
+  
+  install(TARGETS EGL GLESv2 OpenVG WFC khrn_client DESTINATION lib)
+  install(TARGETS EGL_static GLESv2_static khrn_static DESTINATION lib)
+@@ -38,8 +64,26 @@ Index: b/interface/khronos/CMakeLists.txt
+ +  "${CMAKE_CURRENT_BINARY_DIR}/glxx/glesv2.pc" @ONLY)
+ +install(FILES "${CMAKE_CURRENT_BINARY_DIR}/glxx/glesv2.pc"
+ +  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+-Index: b/interface/khronos/glxx/glesv2.pc.in
+-===================================================================
++diff --git a/interface/khronos/egl/egl.pc.in b/interface/khronos/egl/egl.pc.in
++new file mode 100644
++index 0000000..5868706
++--- /dev/null
+++++ b/interface/khronos/egl/egl.pc.in
++@@ -0,0 +1,11 @@
+++prefix=@CMAKE_INSTALL_PREFIX@
+++exec_prefix=${prefix}
+++libdir=${exec_prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: egl
+++Description: RasberryPi implementation of EGL
+++Version: 10
+++Libs: -L${libdir} -lEGL -lGLESv2 -lbcm_host -lvchostif
+++Cflags: -I${includedir}/ -I${includedir}/interface/vcos/pthreads/ \
+++        -I${includedir}/interface/vmcs_host/linux/
++diff --git a/interface/khronos/glxx/glesv2.pc.in b/interface/khronos/glxx/glesv2.pc.in
++new file mode 100644
++index 0000000..2f58eed
+ --- /dev/null
+ +++ b/interface/khronos/glxx/glesv2.pc.in
+ @@ -0,0 +1,10 @@
+@@ -53,30 +97,6 @@ Index: b/interface/khronos/glxx/glesv2.pc.in
+ +Version: 2.0
+ +Libs: -L${libdir} -lGLESv2
+ +Cflags: -I${includedir}/
+-Index: b/host_applications/linux/libs/bcm_host/CMakeLists.txt
+-===================================================================
+---- a/host_applications/linux/libs/bcm_host/CMakeLists.txt
+-+++ b/host_applications/linux/libs/bcm_host/CMakeLists.txt
+-@@ -20,3 +20,7 @@
+- 
+- install(TARGETS bcm_host DESTINATION lib)
+- 
+-+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bcm_host.pc.in"
+-+  "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc" @ONLY)
+-+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/bcm_host.pc"
+-+  DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+-Index: b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
+-===================================================================
+---- /dev/null
+-+++ b/host_applications/linux/libs/bcm_host/bcm_host.pc.in
+-@@ -0,0 +1,10 @@
+-+prefix=/usr
+-+exec_prefix=${prefix}
+-+libdir=${exec_prefix}/lib
+-+includedir=${prefix}/include
+-+
+-+Name: bcm_host
+-+Description: Broadcom VideoCore host API library
+-+Version: 1
+-+Libs: -L${libdir} -lbcm_host -lvcos -lvchiq_arm
+-+Cflags: -I${includedir} -I${includedir}/interface/vmcs_host/linux -I${includedir}/interface/vcos/pthreads -DUSE_VCHIQ_ARM
++-- 
++1.9.1
++
+diff --git a/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch b/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
+index e54d29e..c218898 100644
+--- a/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
++++ b/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
+@@ -1,6 +1,6 @@
+-From fec2560cfcb8d3398e4f1ccc3de7923365873676 Mon Sep 17 00:00:00 2001
++From 8894136ff80a8c6eeadf1799af59aa3aa7b87827 Mon Sep 17 00:00:00 2001
+ From: Samuel Martin <s.martin49@gmail.com>
+-Date: Sat, 5 Jan 2013 16:04:55 +0100
++Date: Sat, 24 Jan 2015 19:44:50 +0100
+ Subject: [PATCH] makefiles/cmake/vmcs.cmake: allow to override
+  VMCS_INSTALL_PREFIX
+ 
+@@ -23,4 +23,5 @@ index 0f8641b..cc70cca 100644
+  endif()
+  
+ -- 
+-1.8.1
++1.9.1
++
+diff --git a/package/rpi-userland/0003-interface-remove-faulty-assert-to-make-weston-happy-.patch b/package/rpi-userland/0003-interface-remove-faulty-assert-to-make-weston-happy-.patch
+new file mode 100644
+index 0000000..16a5f52
+--- /dev/null
++++ b/package/rpi-userland/0003-interface-remove-faulty-assert-to-make-weston-happy-.patch
+@@ -0,0 +1,33 @@
++From e0df1a4f1d9737935165f420d0d0f685efc63f49 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sat, 24 Jan 2015 22:07:19 +0100
++Subject: [PATCH] interface: remove faulty assert() to make weston happy at
++ runtime
++
++This was removed after a discussion on IRC with the weston guys
++('daniels' on irc.freenode.net/#wayland).
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: no, will be pushed by weston guys later.
++If not, I'll do it.
++---
++ interface/vmcs_host/vc_vchi_dispmanx.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/interface/vmcs_host/vc_vchi_dispmanx.c b/interface/vmcs_host/vc_vchi_dispmanx.c
++index 85b373c..59a01f8 100755
++--- a/interface/vmcs_host/vc_vchi_dispmanx.c
+++++ b/interface/vmcs_host/vc_vchi_dispmanx.c
++@@ -1296,7 +1296,6 @@ static void *dispmanx_notify_func( void *arg ) {
++          // Decrement the use count - the corresponding "use" is in vc_dispmanx_update_submit.
++          vchi_service_release(dispmanx_client.notify_handle[0]);
++          if (dispmanx_client.update_callback ) {
++-            vcos_assert( dispmanx_client.pending_update_handle == handle);
++             dispmanx_client.update_callback(handle, dispmanx_client.update_callback_param);
++          }
++       } else {
++-- 
++1.9.1
++
+diff --git a/package/rpi-userland/0003-remove-faulty-assert.patch b/package/rpi-userland/0003-remove-faulty-assert.patch
+deleted file mode 100644
+index c23c43a..0000000
+--- a/package/rpi-userland/0003-remove-faulty-assert.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-interface: remove faulty assert() to make weston happy at runtime
+-
+-This was removed after a discussion on IRC with the weston guys
+-('daniels' on irc.freenode.net/#wayland).
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+-Upstream status: no, will be pushed by weston guys later.
+-If not, I'll do it.
+-
+-diff -durN rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c
+---- rpi-userland-77d32cd.orig/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-04 17:43:44.000000000 +0200
+-+++ rpi-userland-77d32cd/interface/vmcs_host/vc_vchi_dispmanx.c	2013-10-08 22:28:51.611433539 +0200
+-@@ -1187,7 +1187,6 @@
+-          continue;
+-    
+-       if(dispmanx_client.update_callback ) {
+--         vcos_assert( dispmanx_client.pending_update_handle == (DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1]);
+-          dispmanx_client.update_callback((DISPMANX_UPDATE_HANDLE_T) dispmanx_client.notify_buffer[1], dispmanx_client.update_callback_param);
+-       }
+-    }
+diff --git a/package/rpi-userland/0004-fix-musl-compile.patch b/package/rpi-userland/0004-fix-musl-compile.patch
+deleted file mode 100644
+index f960482..0000000
+--- a/package/rpi-userland/0004-fix-musl-compile.patch
++++ /dev/null
+@@ -1,113 +0,0 @@
+-From 198d93fab0659f7a548329d742de8b3e27cfd977 Mon Sep 17 00:00:00 2001
+-From: Maarten ter Huurne <maarten@treewalker.org>
+-Date: Fri, 12 Sep 2014 18:28:51 +0200
+-Subject: [PATCH] Combined musl compile fixes
+-
+-The individual patches and their descriptions can be found here:
+-https://github.com/raspberrypi/userland/pull/201
+-
+-Upstream status: accepted (4333d6d)
+-However, bumping to that revision is currently not an option since that
+-also pulls in 66338d3 which breaks Weston:
+-http://lists.busybox.net/pipermail/buildroot/2014-October/109309.html
+-
+-Signed-off-by: Maarten ter Huurne <maarten@treewalker.org>
+----
+- containers/CMakeLists.txt                                  | 2 +-
+- host_applications/linux/apps/hello_pi/CMakeLists.txt       | 2 +-
+- host_applications/linux/apps/hello_pi/libs/vgfont/Makefile | 1 -
+- interface/vcos/pthreads/vcos_platform.h                    | 3 ---
+- interface/vcos/pthreads/vcos_pthreads.c                    | 2 +-
+- interface/vmcs_host/linux/vcfilesys.c                      | 4 ++--
+- 6 files changed, 5 insertions(+), 9 deletions(-)
+-
+-diff --git a/containers/CMakeLists.txt b/containers/CMakeLists.txt
+-index 721f74f..a29a885 100644
+---- a/containers/CMakeLists.txt
+-+++ b/containers/CMakeLists.txt
+-@@ -13,7 +13,7 @@ add_definitions(-DDL_PATH_PREFIX="${VMCS_PLUGIN_DIR}/")
+- 
+- SET( GCC_COMPILER_FLAGS -Wall -g -O2 -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wcast-qual -Wwrite-strings -Wundef )
+- SET( GCC_COMPILER_FLAGS ${GCC_COMPILER_FLAGS} -Wextra )#-Wno-missing-field-initializers )
+--SET( GCC_COMPILER_FLAGS ${GCC_COMPILER_FLAGS} -D__STDC_VERSION__=199901L )
+-+SET( GCC_COMPILER_FLAGS ${GCC_COMPILER_FLAGS} -std=c99 -D_POSIX_C_SOURCE=199309L )
+- SET( GCC_COMPILER_FLAGS ${GCC_COMPILER_FLAGS} -Wno-missing-field-initializers )
+- SET( GCC_COMPILER_FLAGS ${GCC_COMPILER_FLAGS} -Wno-unused-value )
+- 
+-diff --git a/host_applications/linux/apps/hello_pi/CMakeLists.txt b/host_applications/linux/apps/hello_pi/CMakeLists.txt
+-index ab4dae3..f2c6aef 100644
+---- a/host_applications/linux/apps/hello_pi/CMakeLists.txt
+-+++ b/host_applications/linux/apps/hello_pi/CMakeLists.txt
+-@@ -24,7 +24,7 @@ add_subdirectory(hello_teapot)
+- 
+- if(BUILD_FONT)
+- set(VGFONT_SRCS libs/vgfont/font.c libs/vgfont/vgft.c libs/vgfont/graphics.c)
+--set_source_files_properties(${VGFONT_SRCS} PROPERTIES COMPILE_DEFINITIONS "_HAVE_TIMER_T")
+-+set_source_files_properties(${VGFONT_SRCS} PROPERTIES COMPILE_DEFINITIONS)
+- add_library(vgfont ${VGFONT_SRCS})
+- 
+- add_subdirectory(hello_font)
+-diff --git a/host_applications/linux/apps/hello_pi/libs/vgfont/Makefile b/host_applications/linux/apps/hello_pi/libs/vgfont/Makefile
+-index d04fb08..1e2a22b 100755
+---- a/host_applications/linux/apps/hello_pi/libs/vgfont/Makefile
+-+++ b/host_applications/linux/apps/hello_pi/libs/vgfont/Makefile
+-@@ -2,7 +2,6 @@ OBJS=font.o vgft.o graphics.o
+- LIB=libvgfont.a
+- 
+- INCLUDES+=-I$(SDKSTAGE)/usr/include/freetype2 -I$(SDKSTAGE)/usr/include -I$(SDKSTAGE)/usr/include/arm-linux-gnueabi
+--CFLAGS+=-D_HAVE_TIMER_T
+- 
+- include ../../Makefile.include
+- 
+-diff --git a/interface/vcos/pthreads/vcos_platform.h b/interface/vcos/pthreads/vcos_platform.h
+-index 468098b..2095e25 100755
+---- a/interface/vcos/pthreads/vcos_platform.h
+-+++ b/interface/vcos/pthreads/vcos_platform.h
+-@@ -120,9 +120,6 @@ typedef struct
+- 
+- #define VCOS_ONCE_INIT        PTHREAD_ONCE_INIT
+- 
+--#if defined(__arm__) && !defined(_HAVE_TIMER_T) && !defined(ANDROID)
+--typedef __timer_t timer_t;
+--#endif
+- typedef struct VCOS_TIMER_T
+- {
+-    pthread_t thread;                      /**< id of the timer thread */
+-diff --git a/interface/vcos/pthreads/vcos_pthreads.c b/interface/vcos/pthreads/vcos_pthreads.c
+-index 668f647..fdc8bc4 100644
+---- a/interface/vcos/pthreads/vcos_pthreads.c
+-+++ b/interface/vcos/pthreads/vcos_pthreads.c
+-@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #include <stdlib.h>
+- #include <stdio.h>
+- #include <sys/time.h>
+--#include <sys/param.h>
+-+#include <linux/param.h>
+- 
+- /* Cygwin doesn't always have prctl.h and it doesn't have PR_SET_NAME */
+- #if defined( __linux__ )
+-diff --git a/interface/vmcs_host/linux/vcfilesys.c b/interface/vmcs_host/linux/vcfilesys.c
+-index ab65e3e..53c7486 100644
+---- a/interface/vmcs_host/linux/vcfilesys.c
+-+++ b/interface/vmcs_host/linux/vcfilesys.c
+-@@ -49,7 +49,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- #include <ctype.h>
+- #include <limits.h>
+- 
+--#if !defined(ANDROID) && !defined( __USE_FILE_OFFSET64 )
+-+#if defined(__GLIBC__) && !defined( __USE_FILE_OFFSET64 )
+- #error   "__USE_FILE_OFFSET64 isn't defined"
+- #endif
+- 
+-@@ -916,7 +916,7 @@ int vc_hostfs_set_attr(const char *path, fattributes_t attr)
+- 
+-    if (pathbuf)
+-    {
+--      __mode_t mode = 0;
+-+      mode_t mode = 0;
+-       struct stat sb;
+- 
+-       backslash_to_slash(pathbuf);
+--- 
+-1.8.4.5
+-
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 3f92950..20a6af0 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
-+RPI_FIRMWARE_VERSION = 69b787b2cf9d1ba19bb018d74549699aeae075fb
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
- RPI_FIRMWARE_INSTALL_TARGET = NO
- RPI_FIRMWARE_INSTALL_IMAGES = YES
- 
--ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
--# The Device Tree blobs are not yet in the master branch of the
--# raspberrypi firmware project, so we have to use a separate branch
--# for now.
--RPI_FIRMWARE_VERSION = 09627457b9e15bf4ea4e6751d3c173a3fb65df07
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
- 	for ovldtb in  $(@D)/boot/overlays/*.dtb; do \
- 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
- 	done
- endef
--endif
- 
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+-RPI_USERLAND_VERSION = ba753c1a7f68d7a2e00edaf03364eef001e233ef
++RPI_USERLAND_VERSION = 8f542a1647e6f88f254eadd9ad6929301c81913b
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
 1.9.1
