@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 21:32:45 +0100
-Subject: [Buildroot] [git commit] xterm: bump to version 314
-Message-ID: <20150302222719.6185F807B5@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 22:23:29 +0100
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.0-7
+Message-ID: <20150302222722.A755B8177D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25c2107435415300a69dc4070d0bae362dfeb40a
+commit: http://git.buildroot.net/buildroot/commit/?id=d3a4f9c6c387f65260555a2e0b12565f84687c6b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xterm/xterm.hash |    2 ++
- package/xterm/xterm.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/imagemagick/imagemagick.hash |    2 +-
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-new file mode 100644
-index 0000000..d36d1c4
---- /dev/null
-+++ b/package/xterm/xterm.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	1dbf1e93796c1b71b22b84e82eb58bcf20a14a7f365158819f3b4dbb29fe93f0	xterm-314.tgz
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 7413875..56f692d 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 09b6dcd..9d331f5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256 a47f2731d453df502a93036ca1fea44c5852ed1b2c36af4343e6afb18652fefd ImageMagick-6.9.0-6.tar.xz
++sha256 90c90397ccf74200cd0e3931d3b26e6722665db235a66a5af392ac25d133d8c2 ImageMagick-6.9.0-7.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a72778c..3a12a9c 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 306
-+XTERM_VERSION = 314
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = ftp://invisible-island.net/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw
+-IMAGEMAGICK_VERSION = 6.9.0-6
++IMAGEMAGICK_VERSION = 6.9.0-7
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
