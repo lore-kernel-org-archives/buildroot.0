@@ -1,47 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Feb 2015 19:03:24 +0100
-Subject: [Buildroot] [git commit] autoconf-archive: new package
-Message-ID: <20150302222721.0E26F807B5@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 11:31:08 +0100
+Subject: [Buildroot] [git commit] package/freerdp: move
+	architecture-specific block
+Message-ID: <20150302222722.2B1CA8177D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5f651d06df2a7dfba8822ec4579830e63262d09
+commit: http://git.buildroot.net/buildroot/commit/?id=d081d51bf97f3ec303b039b779cee5aabb90f0ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package contains a collection of freely re-usable autoconf
-macros.
+Move the arch-spcific block up, so it does not interfere with followup
+patches (mostly to ease review).
 
-[Thomas:
- - change site to $(BR2_GNU_MIRROR), so that an official GNU site is
-   used.
- - Change license to "GPLv3+ with exception", and add
-   COPYING.EXCEPTION to the list of license files.]
-
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/autoconf-archive/autoconf-archive.mk |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
+ package/freerdp/freerdp.mk |   32 ++++++++++++++++----------------
+ 1 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-new file mode 100644
-index 0000000..78cb6a8
---- /dev/null
-+++ b/package/autoconf-archive/autoconf-archive.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# autoconf-archive
-+#
-+################################################################################
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 0dbf8a4..cf96ff4 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -48,6 +48,22 @@ else
+ FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
+ endif
+ 
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++FREERDP_CONF_OPTS += -DWITH_NEON=ON
++else
++FREERDP_CONF_OPTS += -DWITH_NEON=OFF
++endif
 +
-+AUTOCONF_ARCHIVE_VERSION = 2015.02.04
-+AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
-+AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive/
-+AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
-+AUTOCONF_ARCHIVE_LICENSE_FILES = COPYING COPYING.EXCEPTION
++ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
++FREERDP_CONF_OPTS += -DWITH_SSE2=ON
++else
++FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
++endif
 +
-+$(eval $(host-autotools-package))
++ifeq ($(BR2_arm)$(BR2_armeb),y)
++FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
+ FREERDP_DEPENDENCIES += xlib_libXext
+ FREERDP_CONF_OPTS += -DWITH_X11=ON
+@@ -97,20 +113,4 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XV=OFF
+ endif
+ 
+-ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+-FREERDP_CONF_OPTS += -DWITH_NEON=ON
+-else
+-FREERDP_CONF_OPTS += -DWITH_NEON=OFF
+-endif
+-
+-ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
+-FREERDP_CONF_OPTS += -DWITH_SSE2=ON
+-else
+-FREERDP_CONF_OPTS += -DWITH_SSE2=OFF
+-endif
+-
+-ifeq ($(BR2_arm)$(BR2_armeb),y)
+-FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+-endif
+-
+ $(eval $(cmake-package))
