@@ -1,89 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 18:45:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/freerdp: Always install key and
-	certificate
-In-Reply-To: <1424627150-2594-1-git-send-email-yann.morin.1998@free.fr>
-References: <1424627150-2594-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1424627150-2594-2-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 22 Feb 2015 19:31:06 +0100
+Subject: [Buildroot] [PATCH] Raspberry Pi 2 Support
+In-Reply-To: <1424322894-27643-1-git-send-email-g@maral.me>
+References: <1424282540-6127-1-git-send-email-g@maral.me>
+ <1424322894-27643-1-git-send-email-g@maral.me>
+Message-ID: <20150222183106.GD4016@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the keys are only installed if the server is enabled.
+Guillermo, All,
 
-However, other packages (e.g. weston) may implement an RDP server,
-using the FreeRDP library.
+On 2015-02-18 21:14 -0800, Guillermo A. Amaral spake thusly:
+> Added support for Raspberry Pi 2, tried to keep the configuration
+> similar to the current RPi support.
 
-So, we must always install the key and certificate.
+We already have pending patches to add support for the RPi-2:
+    http://patchwork.ozlabs.org/patch/439448/
+    http://patchwork.ozlabs.org/patch/439668/
 
-Install them world-readable so non-root users may start an RDP server
-without requiring to generate their own keys.
+I think those are better than yours, because they properly split bumping
+the rpi-firmware version from adding a RPi-2 defconfig.
 
-Add a comment in the help text about key and certificate management.
+So, I've marked yours as "Not Applicable" in our patchwork.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/freerdp/Config.in  |  6 ++++++
- package/freerdp/freerdp.mk | 23 ++++++++++++++---------
- 2 files changed, 20 insertions(+), 9 deletions(-)
+Thank you! :-)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 47fd8be..1c203c7 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -10,6 +10,12 @@ config BR2_PACKAGE_FREERDP
- 
- 	  http://www.freerdp.com/
- 
-+	  Note: this also installs a key and certificate in
-+	  /etc/freerdp/keys/ . These are publicly-known, as they
-+	  are present in FreeRDP's source tree. It is strongly
-+	  suggested that you overwrite them with your own set,
-+	  either in an overlay rootfs or in a post-build script.
-+
- if BR2_PACKAGE_FREERDP
- 
- config BR2_PACKAGE_FREERDP_SERVER
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 50b8f18..f73bdd7 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -71,15 +71,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
- FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
--# Install the server key and certificate, so that a client can connect.
--# A user can override them with its own in a post-build script, if needed.
--define FREERDP_INSTALL_KEYS
--	$(INSTALL) -D $(@D)/server/X11/server.key \
--		      $(TARGET_DIR)/etc/freerdp/keys/server.key
--	$(INSTALL) -D $(@D)/server/X11/server.crt \
--		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
--endef
--FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
- else
- FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
- endif
-@@ -178,4 +169,18 @@ FREERDP_CONF_OPTS += -DWITH_X11=OFF
- 
- endif # ! SERVER && ! CLIENT
- 
-+# Install the server key and certificate, so that a client can connect.
-+# A user can override them with its own in a post-build script, if needed.
-+# We install them even if the server is not enabled, since another server
-+# can be built and linked with libfreerdp (e.g. weston with the  RDP
-+# backend). Key and cert are installed world-readable, so non-root users
-+# can start a server.
-+define FREERDP_INSTALL_KEYS
-+	$(INSTALL) -m 0644 -D $(@D)/server/X11/server.key \
-+		      $(TARGET_DIR)/etc/freerdp/keys/server.key
-+	$(INSTALL) -m 0644 -D $(@D)/server/X11/server.crt \
-+		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
-+endef
-+FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
-+
- $(eval $(cmake-package))
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
