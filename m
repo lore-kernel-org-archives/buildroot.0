@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 15:31:31 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Apache: New package
-In-Reply-To: <1423305664-29877-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 22 Feb 2015 15:39:42 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/php: Add Apache support
+In-Reply-To: <1423305664-29877-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1423305664-29877-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150222153131.41d91e8b@free-electrons.com>
+ <1423305664-29877-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150222153942.586eb56e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,106 +13,62 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat,  7 Feb 2015 11:41:03 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: - rebased
->     - bump version to 2.4.12
+On Sat,  7 Feb 2015 11:41:04 +0100, Bernd Kuhls wrote:
 
-Applied to next. There were however a number of issues: it simply
-wasn't building here due to the absence of explicit libxml2 handling.
-So it was trying to use my host libxml2 library, and failing. So I've
-done the following changes:
+> +-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
+> ++  ac_output='Server version: Apache/2.4.10 (Unix)'
+> +   ac_IFS=$IFS
+> + IFS="- /.
+> + "
+> +@@ -7626,7 +7626,7 @@
+> + 
+> +   # Test that we're trying to configure with apache 2.x
+> + 
+> +-  ac_output=`$APXS_HTTPD -v 2>&1 | grep version | $SED -e 's/Oracle-HTTP-//'`
+> ++  ac_output='Server version: Apache/2.4.10 (Unix)'
 
-[Thomas:
- - Don't explicitly pass CC_FOR_BUILD and CFLAGS_FOR_BUILD, those are
-   already part of the default environment passed by the
-   autotools-package infrastructure.
- - Explicitly disable Lua and LuaJIT support to avoid mis-detection of
-   host installation.
- - Explicitly handle the optional support of libxml2, OpenSSL and
-   zlib. Especially, the absence of explicit handling for libxml2 was
-   causing a build failure due to the host libxml2 being detected.
- - Remove /usr/manual and /usr/build from the target. This saves 20+
-   MB of target space.]
+What is this used for? What is the impact if the real version of Apache
+doesn't match?
 
-See also the full diff of my changes below. I believe there is more
-room to clean up useless stuff from the target. Feel free to have a
-look and send follow-up patches. Thanks!
+> +-    APACHE_THREADED_MPM=`$APXS_HTTPD -V | grep 'threaded:.*yes'`
+> ++    APACHE_THREADED_MPM="threaded:     yes (fixed thread count)"
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 026ef20..296e27e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -17,8 +17,6 @@ APACHE_AUTORECONF = YES
- APACHE_DEPENDENCIES = apr apr-util pcre
- 
- APACHE_CONF_ENV= \
--	CC_FOR_BUILD="$(HOSTCC)" \
--	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
- 	ap_cv_void_ptr_lt_long=no \
- 	PCRE_CONFIG=$(STAGING_DIR)/usr/bin/pcre-config
- 
-@@ -33,16 +31,55 @@ APACHE_CONF_OPTS = \
- 	--enable-mime-magic \
- 	--without-suexec-bin \
- 	--enable-mods-shared=all \
--	--with-mpm=worker
-+	--with-mpm=worker \
-+	--disable-lua \
-+	--disable-luajit
- 
- ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
- APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+APACHE_DEPENDENCIES += libxml2
-+# Apache wants the path to the header file, where it can find
-+# <libxml/parser.h>.
-+APACHE_CONF_OPTS += \
-+	--enable-xml2enc \
-+	--enable-proxy-html \
-+	--with-libxml2=$(STAGING_DIR)/usr/include/libxml2
-+else
-+APACHE_CONF_OPTS += \
-+	--disable-xml2enc \
-+	--disable-proxy-html
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+APACHE_DEPENDENCIES += openssl
-+APACHE_CONF_OPTS += \
-+	--enable-ssl \
-+	--with-ssl=$(STAGING_DIR)/usr
-+else
-+APACHE_CONF_OPTS += --disable-ssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+APACHE_DEPENDENCIES += zlib
-+APACHE_CONF_OPTS += \
-+	--enable-deflate \
-+	--with-z=$(STAGING_DIR)/usr
-+else
-+APACHE_CONF_OPTS += --disable-deflate
-+endif
-+
- define APACHE_FIX_STAGING_APACHE_CONFIG
- 	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
- 	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
- endef
- APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
- 
-+define APACHE_CLEANUP_TARGET
-+	$(RM) -rf $(TARGET_DIR)/usr/manual $(TARGET_DIR)/usr/build
-+endef
-+APACHE_POST_INSTALL_TARGET_HOOKS += APACHE_CLEANUP_TARGET
-+
- $(eval $(autotools-package))
+I am not really happy with this because it makes the PHP package assume
+that the selected MPM model in apache is "worker". Even though that is
+true today, it could be changed later on to also support the prefork
+MPM, which I believe doesn't require thread support.
 
+Maybe we could have one BR2_PACKAGE_APACHE_MPM_WORKER option, which the
+PHP Apache support could depend on. For now, this option could be
+blind and always on, and later on changed to something allowing to also
+build support for the prefork MPM.
 
+> +ifeq ($(BR2_PACKAGE_PHP_APACHE),y)
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +define PHP_FIX_THREADS_DETECTION
+> +	$(SED) 's/pthreads_working\=no/pthreads_working\=yes/' $(@D)/configure
+> +endef
+> +# PHP assumes pthreads are not working when cross-compiling,
+> +# needed for Apache-MPM worker
+
+Even with --enable-pthreads ?
+
+> +PHP_POST_PATCH_HOOKS += PHP_FIX_THREADS_DETECTION
+> +endif
+> +PHP_CONF_OPTS += \
+> +	--with-apxs2=$(STAGING_DIR)/usr/bin/apxs \
+> +	--with-config-file-path=/etc/apache2 \
+> +	--with-config-file-scan-dir=/etc/apache2/php \
+> +	--oldincludedir=$(STAGING_DIR)/usr/include \
+
+Why is passing --oldincludedir necessary? An additional comment in
+the code could be useful here.
+
+Could you look into those issues and resend an updated version?
+
+Thanks a lot!
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
