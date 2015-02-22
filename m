@@ -1,77 +1,206 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 22:22:25 +0100
-Subject: [Buildroot] [git commit] bmon: bump version to 3.6
-Message-ID: <20150302222722.8632E8177D@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 11:32:55 +0100
+Subject: [Buildroot] [git commit] package/freerdp: add options to
+	enable/disable server and/or client
+Message-ID: <20150302222722.381F58177D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7525923c2f1851be2d29c88edd3a8d43b185f852
+commit: http://git.buildroot.net/buildroot/commit/?id=85f997bfa2a973b3cad462e5fecff3607d5ce3df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 3.6
-- Update the hash file
-- Remove upstreamed patch
+Building the client or the server requires an X.Org stack.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Since freerdp can also be used for weston (wayland-based, hence no X.Org
+stack), we may want to disable the client and server.
+
+Conversely, even with an X.Org stack, we may want to enable either or
+none if we're just interested in the library.
+
+Add two options, one to enable the server, the other the client; the
+client option defaults to 'Y' so that a previous .config can be re-used
+as-is, and exhibit the same behaviour as before; the server option
+defaults to 'N' as we were not ever building the server so far.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../bmon/0001-build-uclinux-is-also-linux.patch    |   25 --------------------
- package/bmon/bmon.hash                             |    2 +-
- package/bmon/bmon.mk                               |    2 +-
- 3 files changed, 2 insertions(+), 27 deletions(-)
+ package/freerdp/Config.in                          |   25 ++++++++-
+ .../freerdp-0002-fix-building-shared-libs.patch    |   23 +++++++
+ package/freerdp/freerdp.mk                         |   62 ++++++++++++++++++-
+ 3 files changed, 105 insertions(+), 5 deletions(-)
 
-diff --git a/package/bmon/0001-build-uclinux-is-also-linux.patch b/package/bmon/0001-build-uclinux-is-also-linux.patch
-deleted file mode 100644
-index 18f517e..0000000
---- a/package/bmon/0001-build-uclinux-is-also-linux.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From adcf320db5cc2844209d001f9484b0ff0cab4e0b Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 11 Nov 2014 20:22:37 -0300
--Subject: [PATCH] build: uclinux is also linux
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: pull request in github
--
--diff --git a/configure.ac b/configure.ac
--index 3059e52..10388fd 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -70,7 +70,7 @@ fi
-- PKG_CHECK_MODULES([CONFUSE], [libconfuse], [], AC_MSG_ERROR([requires libconfuse]))
-- 
-- case ${target_os} in
---    linux*)
--+    linux*|uclinux*)
--         PKG_CHECK_MODULES([LIBNL], [libnl-3.0], [], AC_MSG_ERROR([requires libnl3-dev]))
--         PKG_CHECK_MODULES([LIBNL_ROUTE], [libnl-route-3.0], [], AC_MSG_ERROR([requires libnl3-route]))
--     ;;
---- 
--2.0.4
--
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index dbe2e68..65747b4 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  78ab9e46840178fbc874cdbc94fde34e72e41a18a27383660b50b4c3cd0d1f9c  bmon-3.5.tar.gz
-+sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index c89de17..95168f6 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index 09efbc0..47fd8be 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -2,9 +2,32 @@ config BR2_PACKAGE_FREERDP
+ 	bool "freerdp"
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	help
+ 	  FreeRDP is a free implementation of the Remote Desktop
+ 	  Protocol (RDP), released under the Apache license
  
--BMON_VERSION = 3.5
-+BMON_VERSION = 3.6
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)/
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
- BMON_LICENSE = BSD-2c
++	  This only installs the freerdp library.
++
+ 	  http://www.freerdp.com/
++
++if BR2_PACKAGE_FREERDP
++
++config BR2_PACKAGE_FREERDP_SERVER
++	bool "build server"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXFIXES
++
++config BR2_PACKAGE_FREERDP_CLIENT
++	bool "build client"
++	default y
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++
++comment "freerdp server and client need X.Org"
++	depends on !BR2_PACKAGE_XORG7
++
++endif
+diff --git a/package/freerdp/freerdp-0002-fix-building-shared-libs.patch b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+new file mode 100644
+index 0000000..420f3d3
+--- /dev/null
++++ b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
+@@ -0,0 +1,23 @@
++winpr/tools: fix building shared libs
++
++libwinpr-makecert-tool.a is used to build libxfreerdp-server.so, so even
++if we are building a static libwinpr-makecert-tool.a library, we need to
++build it with -fPIC.
++
++Patch and commit log suggested by Samuel MARTIN.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Samuel Martin <s.martin49@gmail.com>
++
++diff -durN freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt
++--- freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt	2014-08-25 06:52:43.000000000 -0700
+++++ freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt	2014-10-24 15:39:39.600319523 -0700
++@@ -43,3 +43,8 @@
++ 
++ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "WinPR/Tools")
++ 
+++if(BUILD_SHARED_LIBS)
+++	# build libwinpr-makecert-tool.a with PIC because it is used to build
+++	# the shared library libxfreerdp-server.so.
+++	set_property(TARGET ${MODULE_NAME} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+++endif()
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index cf96ff4..33eacc2 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -64,13 +64,33 @@ ifeq ($(BR2_arm)$(BR2_armeb),y)
+ FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
+-FREERDP_DEPENDENCIES += xlib_libXext
+-FREERDP_CONF_OPTS += -DWITH_X11=ON
++#---------------------------------------
++# Enabling server and/or client
++
++ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
++FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
+ else
+-FREERDP_CONF_OPTS += -DWITH_X11=OFF
++FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
++FREERDP_CONF_OPTS += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
++else
++FREERDP_CONF_OPTS += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
++endif
++
++#---------------------------------------
++# X.Org libs for client and/or server
++
++ifneq ($(BR2_PACKAGE_FREERDP_SERVER)$(BR2_PACKAGE_FREERDP_CLIENT),)
++
++# Those two are mandatory for both the server and the client
++FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXext
++FREERDP_CONF_OPTS += -DWITH_X11=ON
++
++# The following libs are either optional or mandatory only for either
++# the server or the client. A mandatory library for either one is
++# selected from Kconfig, so we can make it conditional here
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+ FREERDP_CONF_OPTS += -DWITH_XCURSOR=ON
+ FREERDP_DEPENDENCIES += xlib_libXcursor
+@@ -78,6 +98,20 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XCURSOR=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
++FREERDP_CONF_OPTS += -DWITH_XDAMAGE=ON
++FREERDP_DEPENDENCIES += xlib_libXdamage
++else
++FREERDP_CONF_OPTS += -DWITH_XDAMAGE=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++FREERDP_CONF_OPTS += -DWITH_XFIXES=ON
++FREERDP_DEPENDENCIES += xlib_libXfixes
++else
++FREERDP_CONF_OPTS += -DWITH_XFIXES=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
+ FREERDP_CONF_OPTS += -DWITH_XI=ON
+ FREERDP_DEPENDENCIES += xlib_libXi
+@@ -99,6 +133,13 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XKBFILE=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
++FREERDP_CONF_OPTS += -DWITH_XRANDR=ON
++FREERDP_DEPENDENCIES += xlib_libXrandr
++else
++FREERDP_CONF_OPTS += -DWITH_XRANDR=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
+ FREERDP_CONF_OPTS += -DWITH_XRENDER=ON
+ FREERDP_DEPENDENCIES += xlib_libXrender
+@@ -106,6 +147,13 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XRENDER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXTST),y)
++FREERDP_CONF_OPTS += -DWITH_XTEST=ON
++FREERDP_DEPENDENCIES += xlib_libXtst
++else
++FREERDP_CONF_OPTS += -DWITH_XTEST=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
+ FREERDP_CONF_OPTS += -DWITH_XV=ON
+ FREERDP_DEPENDENCIES += xlib_libXv
+@@ -113,4 +161,10 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XV=OFF
+ endif
+ 
++else # ! SERVER && ! CLIENT
++
++FREERDP_CONF_OPTS += -DWITH_X11=OFF
++
++endif # ! USES_XLIBS
++
+ $(eval $(cmake-package))
