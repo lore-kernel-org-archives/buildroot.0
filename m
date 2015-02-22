@@ -1,77 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 22:22:25 +0100
-Subject: [Buildroot] [git commit branch/next] bmon: bump version to 3.6
-Message-ID: <20150222212523.36650807B7@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 22:23:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/freerdp: Always
+	install key and certificate
+Message-ID: <20150222212523.48BC4807C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7525923c2f1851be2d29c88edd3a8d43b185f852
+commit: http://git.buildroot.net/buildroot/commit/?id=6ab4692407710dbf382dd643513ddef5a61338b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump version to 3.6
-- Update the hash file
-- Remove upstreamed patch
+Currently, the keys are only installed if the server is enabled.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+However, other packages (e.g. weston) may implement an RDP server,
+using the FreeRDP library.
+
+So, we must always install the key and certificate.
+
+Install them world-readable so non-root users may start an RDP server
+without requiring to generate their own keys.
+
+Add a comment in the help text about key and certificate management.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../bmon/0001-build-uclinux-is-also-linux.patch    |   25 --------------------
- package/bmon/bmon.hash                             |    2 +-
- package/bmon/bmon.mk                               |    2 +-
- 3 files changed, 2 insertions(+), 27 deletions(-)
+ package/freerdp/Config.in  |    6 ++++++
+ package/freerdp/freerdp.mk |   23 ++++++++++++++---------
+ 2 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/package/bmon/0001-build-uclinux-is-also-linux.patch b/package/bmon/0001-build-uclinux-is-also-linux.patch
-deleted file mode 100644
-index 18f517e..0000000
---- a/package/bmon/0001-build-uclinux-is-also-linux.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From adcf320db5cc2844209d001f9484b0ff0cab4e0b Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 11 Nov 2014 20:22:37 -0300
--Subject: [PATCH] build: uclinux is also linux
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: pull request in github
--
--diff --git a/configure.ac b/configure.ac
--index 3059e52..10388fd 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -70,7 +70,7 @@ fi
-- PKG_CHECK_MODULES([CONFUSE], [libconfuse], [], AC_MSG_ERROR([requires libconfuse]))
-- 
-- case ${target_os} in
---    linux*)
--+    linux*|uclinux*)
--         PKG_CHECK_MODULES([LIBNL], [libnl-3.0], [], AC_MSG_ERROR([requires libnl3-dev]))
--         PKG_CHECK_MODULES([LIBNL_ROUTE], [libnl-route-3.0], [], AC_MSG_ERROR([requires libnl3-route]))
--     ;;
---- 
--2.0.4
--
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index dbe2e68..65747b4 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  78ab9e46840178fbc874cdbc94fde34e72e41a18a27383660b50b4c3cd0d1f9c  bmon-3.5.tar.gz
-+sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index c89de17..95168f6 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index 47fd8be..1c203c7 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -10,6 +10,12 @@ config BR2_PACKAGE_FREERDP
  
--BMON_VERSION = 3.5
-+BMON_VERSION = 3.6
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)/
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
- BMON_LICENSE = BSD-2c
+ 	  http://www.freerdp.com/
+ 
++	  Note: this also installs a key and certificate in
++	  /etc/freerdp/keys/ . These are publicly-known, as they
++	  are present in FreeRDP's source tree. It is strongly
++	  suggested that you overwrite them with your own set,
++	  either in an overlay rootfs or in a post-build script.
++
+ if BR2_PACKAGE_FREERDP
+ 
+ config BR2_PACKAGE_FREERDP_SERVER
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 50b8f18..f73bdd7 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -71,15 +71,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
+ FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
+-# Install the server key and certificate, so that a client can connect.
+-# A user can override them with its own in a post-build script, if needed.
+-define FREERDP_INSTALL_KEYS
+-	$(INSTALL) -D $(@D)/server/X11/server.key \
+-		      $(TARGET_DIR)/etc/freerdp/keys/server.key
+-	$(INSTALL) -D $(@D)/server/X11/server.crt \
+-		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
+-endef
+-FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
+ else
+ FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
+ endif
+@@ -178,4 +169,18 @@ FREERDP_CONF_OPTS += -DWITH_X11=OFF
+ 
+ endif # ! SERVER && ! CLIENT
+ 
++# Install the server key and certificate, so that a client can connect.
++# A user can override them with its own in a post-build script, if needed.
++# We install them even if the server is not enabled, since another server
++# can be built and linked with libfreerdp (e.g. weston with the  RDP
++# backend). Key and cert are installed world-readable, so non-root users
++# can start a server.
++define FREERDP_INSTALL_KEYS
++	$(INSTALL) -m 0644 -D $(@D)/server/X11/server.key \
++		      $(TARGET_DIR)/etc/freerdp/keys/server.key
++	$(INSTALL) -m 0644 -D $(@D)/server/X11/server.crt \
++		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
++endef
++FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
++
+ $(eval $(cmake-package))
