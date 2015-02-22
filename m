@@ -1,71 +1,40 @@
 From: Guillermo Amaral <g@maral.me>
-Date: Sun, 22 Feb 2015 12:42:45 -0800
-Subject: [Buildroot] [PATCH 0/3] rpi: bumps,
-	and support for rpi2 (branch yem/rpi-bumps)
-In-Reply-To: <cover.1424635766.git.yann.morin.1998@free.fr>
-References: <cover.1424635766.git.yann.morin.1998@free.fr>
-Message-ID: <CAPeEpDo+Y+18OuP50gxwB4zYKbp4Z=XwvfeDkJ5OmiYedAQLLA@mail.gmail.com>
+Date: Sun, 22 Feb 2015 12:45:33 -0800
+Subject: [Buildroot] [PATCH] Raspberry Pi 2 Support
+In-Reply-To: <20150222183106.GD4016@free.fr>
+References: <1424282540-6127-1-git-send-email-g@maral.me>
+ <1424322894-27643-1-git-send-email-g@maral.me>
+ <20150222183106.GD4016@free.fr>
+Message-ID: <CAPeEpDrWey4D90JLWqTDoLeH6bpLaJgUxaq4gPnagvGy+wtPSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oh great! I'm just happy it's getting supported. :)
-On Feb 22, 2015 12:10 PM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Yeah, no problem. I noticed I forgot to split them up after the submitting
+them. I didn't get a chance to rectify it. :3
+On Feb 22, 2015 10:31 AM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Hello All!
+> Guillermo, All,
 >
-> This series bumps the RPi packages, and adds support for the Raspberry Pi
-> 2.
+> On 2015-02-18 21:14 -0800, Guillermo A. Amaral spake thusly:
+> > Added support for Raspberry Pi 2, tried to keep the configuration
+> > similar to the current RPi support.
 >
-> Thanks to James and Guillermo for independently providing similar patchsets
-> to add support for the RPi-2. :-)
+> We already have pending patches to add support for the RPi-2:
+>     http://patchwork.ozlabs.org/patch/439448/
+>     http://patchwork.ozlabs.org/patch/439668/
+>
+> I think those are better than yours, because they properly split bumping
+> the rpi-firmware version from adding a RPi-2 defconfig.
+>
+> So, I've marked yours as "Not Applicable" in our patchwork.
+>
+> Thank you! :-)
 >
 > Regards,
 > Yann E. MORIN.
->
->
-> The following changes since commit
-> 7b46d551e6b7f62f1cd0483357a68b90107c509a:
->
->   weston: add patch to fix uClibc build caused CLOCK_BOOTTIME (2015-02-22
-> 12:45:26 +0100)
->
-> are available in the git repository at:
->
->   git://git.busybox.net/~ymorin/git/buildroot yem/rpi-bumps
->
-> for you to fetch changes up to ce51aa53f9f02f95284eb78edef084896dbc94bb:
->
->   configs: add Raspberry Pi 2 defconfig (2015-02-22 21:08:40 +0100)
->
-> ----------------------------------------------------------------
-> James Hebden (2):
->       package/rpi-firmware: bump version
->       configs: add Raspberry Pi 2 defconfig
->
-> Yann E. MORIN (1):
->       package/rpi-userland: bump version
->
->  configs/raspberrypi2_defconfig                     |  15 +++
->  package/rpi-firmware/rpi-firmware.mk               |   9 +-
->  ...s-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch} | 108
-> ++++++++++++--------
->  ...make-vmcs.cmake-allow-to-override-VMCS_IN.patch |   7 +-
->  ...emove-faulty-assert-to-make-weston-happy-.patch |  33 ++++++
->  .../rpi-userland/0003-remove-faulty-assert.patch   |  21 ----
->  package/rpi-userland/0004-fix-musl-compile.patch   | 113
-> ---------------------
->  package/rpi-userland/rpi-userland.mk               |   2 +-
->  8 files changed, 119 insertions(+), 189 deletions(-)
->  create mode 100644 configs/raspberrypi2_defconfig
->  rename package/rpi-userland/{0001-add-pkgconfig-files.patch =>
-> 0001-Add-.pc-files-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch} (60%)
->  create mode 100644
-> package/rpi-userland/0003-interface-remove-faulty-assert-to-make-weston-happy-.patch
->  delete mode 100644 package/rpi-userland/0003-remove-faulty-assert.patch
->  delete mode 100644 package/rpi-userland/0004-fix-musl-compile.patch
 >
 > --
 >
@@ -83,4 +52,4 @@ On Feb 22, 2015 12:10 PM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150222/2107dabf/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150222/3ad7c504/attachment.html>
