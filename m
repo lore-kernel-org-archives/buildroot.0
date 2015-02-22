@@ -1,76 +1,44 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 22 Feb 2015 15:11:32 +0000
-Subject: [Buildroot] [PATCH] bmon: bump version to 3.6
-Message-ID: <1424617892-45380-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Sun, 22 Feb 2015 16:07:52 +0000
+Subject: [Buildroot] [PATCH] evtest: disable documentation
+Message-ID: <1424621272-13706-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 3.6
-- Update the hash file
-- Remove upstreamed patch
+evtest uses asciidoc to but /usr/bin/asciidoc will try to use
+buildroot's host-python which doesn't have the required unicodedata. To
+avoid that, define ASCIIDOC as an empty string so the Makefile can't
+find the executable and skips the documentation generation.  This is the
+same solution used in the evemu package. Otherwise it will fail with
+this message:
+
+make[1]: Entering directory `/br/output/build/evtest-1.32'
+/usr/bin/make  all-am
+make[2]: Entering directory `/br/output/build/evtest-1.32'
+  File "/usr/bin/asciidoc", line 95
+    except KeyError, k: return None
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../bmon/0001-build-uclinux-is-also-linux.patch    |   25 --------------------
- package/bmon/bmon.hash                             |    2 +-
- package/bmon/bmon.mk                               |    2 +-
- 3 files changed, 2 insertions(+), 27 deletions(-)
- delete mode 100644 package/bmon/0001-build-uclinux-is-also-linux.patch
+ package/evtest/evtest.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/bmon/0001-build-uclinux-is-also-linux.patch b/package/bmon/0001-build-uclinux-is-also-linux.patch
-deleted file mode 100644
-index 18f517e..0000000
---- a/package/bmon/0001-build-uclinux-is-also-linux.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From adcf320db5cc2844209d001f9484b0ff0cab4e0b Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 11 Nov 2014 20:22:37 -0300
--Subject: [PATCH] build: uclinux is also linux
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: pull request in github
--
--diff --git a/configure.ac b/configure.ac
--index 3059e52..10388fd 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -70,7 +70,7 @@ fi
-- PKG_CHECK_MODULES([CONFUSE], [libconfuse], [], AC_MSG_ERROR([requires libconfuse]))
-- 
-- case ${target_os} in
---    linux*)
--+    linux*|uclinux*)
--         PKG_CHECK_MODULES([LIBNL], [libnl-3.0], [], AC_MSG_ERROR([requires libnl3-dev]))
--         PKG_CHECK_MODULES([LIBNL_ROUTE], [libnl-route-3.0], [], AC_MSG_ERROR([requires libnl3-route]))
--     ;;
---- 
--2.0.4
--
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index dbe2e68..65747b4 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  78ab9e46840178fbc874cdbc94fde34e72e41a18a27383660b50b4c3cd0d1f9c  bmon-3.5.tar.gz
-+sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index c89de17..95168f6 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/evtest/evtest.mk b/package/evtest/evtest.mk
+index 42a7999..1573f52 100644
+--- a/package/evtest/evtest.mk
++++ b/package/evtest/evtest.mk
+@@ -13,4 +13,9 @@ EVTEST_DEPENDENCIES = host-pkgconf
+ # needed because source package contains no generated files
+ EVTEST_AUTORECONF = YES
  
--BMON_VERSION = 3.5
-+BMON_VERSION = 3.6
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)/
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
- BMON_LICENSE = BSD-2c
++# asciidoc used to generate manpages, which we don't need, and if it's
++# present on the build host, it ends getting called with our host-python
++# which doesn't have all the needed modules enabled, breaking the build
++EVTEST_CONF_ENV = ac_cv_path_ASCIIDOC=""
++
+ $(eval $(autotools-package))
 -- 
 1.7.1
