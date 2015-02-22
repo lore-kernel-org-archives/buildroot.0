@@ -1,31 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Feb 2015 15:27:32 +0100
-Subject: [Buildroot] [git commit] odhcp6c: bump version for IA_NA/IA_PD fix
-Message-ID: <20150302222723.32C688057D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Feb 2015 10:48:25 +0100
+Subject: [Buildroot] [git commit] package/freerdp: conditionally build
+	support for libXrender
+Message-ID: <20150302222722.000E78177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f05e1a302af8a0e9708aa1d4415349986f44995c
+commit: http://git.buildroot.net/buildroot/commit/?id=777a252805b0317f0dd3e796d4a2b4429d936f01
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/odhcp6c/odhcp6c.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freerdp/freerdp.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-index db963e0..520eaf2 100644
---- a/package/odhcp6c/odhcp6c.mk
-+++ b/package/odhcp6c/odhcp6c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 084b9b8..e873d33 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -70,6 +70,13 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XKBFILE=OFF
+ endif
  
--ODHCP6C_VERSION = c42e34111e19bd435dc4b5bb3ba81224ea214314
-+ODHCP6C_VERSION = 8d9b60fb496000988f3633951f2e30380fc2de50
- ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
- ODHCP6C_LICENSE = GPLv2
- ODHCP6C_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
++FREERDP_CONF_OPTS += -DWITH_XRENDER=ON
++FREERDP_DEPENDENCIES += xlib_libXrender
++else
++FREERDP_CONF_OPTS += -DWITH_XRENDER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
+ FREERDP_CONF_OPTS += -DWITH_XV=ON
+ FREERDP_DEPENDENCIES += xlib_libXv
