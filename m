@@ -1,94 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 23:23:04 +0100
-Subject: [Buildroot] [PATCHv2] toolchain: fix installing gconv libs with
-	multi-arch toolchain
-Message-ID: <1424643784-23210-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 22 Feb 2015 23:48:42 +0100
+Subject: [Buildroot] [PATCH 1/2] [RFC] LLVM: Added package
+In-Reply-To: <1424210576-18526-2-git-send-email-paul@crapouillou.net>
+References: <1424210576-18526-1-git-send-email-paul@crapouillou.net>
+ <1424210576-18526-2-git-send-email-paul@crapouillou.net>
+Message-ID: <20150222224842.GJ4016@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For a multi-arch toolchain, gconv modules are in a sub-directory named
-after the machine gcc targets. This is the case, for example, for the
-Linaro ARM 2014.09 toolchain, which has the gconv modules in (relative
-to the sysroot):
-    /usr/lib/arm-linux-gnueabihf/gconv
+Paul, All,
 
-while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
-    /usr/lib/gconv
+On 2015-02-17 23:02 +0100, Paul Cercueil spake thusly:
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> diff --git a/package/llvm/Config.in.host b/package/llvm/Config.in.host
+> new file mode 100644
+> index 0000000..df0e582
+> --- /dev/null
+> +++ b/package/llvm/Config.in.host
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_HOST_LLVM
+> +	bool "host llvm"
+> +	depends on BR2_arm || BR2_armeb || BR2_aarch64 || \
+> +		BR2_i386 || BR2_x86_64 || \
+> +		BR2_mips || BR2_mipsel || \
+> +		BR2_mips64 || BR2_mips64el || \
+> +		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+> +		BR2_sparc
 
-So, to catter for both cases, search both paths. We want to favour the
-machine-specific gconv modules over potentially existing "generic" ones,
-so we first search that (if it exists) and fallback to looking in the
-generic location.
+It would be nice to move all those dependency to their own symbol, like
+so:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    config BR2_PACKAGE_HOST_LLVM_ARCH_SUPPORT
+        bool
+        default y
+        depends on ....
 
----
-Changes v1 -> v2:
-  - also handle the case where the gconv modules list is specified
+and then have the main symbol simply depend on that.
 
----
-Notes: I'm not too happy about the use of "gcc -dumpmachine", but
-that's the only solution I found that worked on my use-case. I tried
-duplicating the ARCH_SUBDIR trick from toolchain-external, but that
-did not work...
----
- toolchain/toolchain.mk | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+This will be usefull in case other packages want to select host llvm;
+they'd simply have to depend on BR2_PACKAGE_HOST_LLVM_ARCH_SUPPORT.
 
-diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-index 3f9900b..51294c3 100644
---- a/toolchain/toolchain.mk
-+++ b/toolchain/toolchain.mk
-@@ -17,28 +17,39 @@ endif
- ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
- GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
- define COPY_GCONV_LIBS
--	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
--		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
--				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
--		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
-+	$(Q)machine=$$($(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -dumpmachine); \
-+	found_gconv=no; \
-+	for d in $${machine} ''; do \
-+		[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
-+		found_gconv=yes; \
-+		break; \
-+	done; \
-+	if [ "$${found_gconv}" = "no" ]; then \
-+		printf "Unable to find gconv modules\n" >&2; \
-+		exit 1; \
-+	fi; \
-+	if [ -z "$(GCONV_LIBS)" ]; then \
-+		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
-+				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
-+		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
- 				   $(TARGET_DIR)/usr/lib/gconv \
- 		|| exit 1; \
- 	else \
- 		for l in $(GCONV_LIBS); do \
--			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
-+			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
- 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
- 			|| exit 1; \
--			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/gconv/$${l}.so |\
-+			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so |\
- 			sort -u |\
- 			sed -e '/.*(NEEDED).*\[\(.*\.so\)\]$$/!d; s//\1/;' |\
- 			while read lib; do \
--				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${lib} \
-+				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${lib} \
- 						       $(TARGET_DIR)/usr/lib/gconv/$${lib} \
- 				 || exit 1; \
- 			done; \
- 		done; \
- 		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
--			<$(STAGING_DIR)/usr/lib/gconv/gconv-modules \
-+			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
- 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
- 	fi
- endef
+> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+> new file mode 100644
+> index 0000000..f641fc9
+> --- /dev/null
+> +++ b/package/llvm/llvm.hash
+> @@ -0,0 +1 @@
+> +sha256	bf3275d2d7890015c8d8f5e6f4f882f8cf3bf51967297ebe74111d6d8b53be15	llvm-3.5.1.src.tar.xz
+
+Where did you get that sha1 from? If you computed it locally, say so. If
+you grabbed it from upstream, say so an point to it.
+
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> new file mode 100644
+> index 0000000..e0a7ec2
+> --- /dev/null
+> +++ b/package/llvm/llvm.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# llvm
+> +#
+> +################################################################################
+> +
+> +LLVM_VERSION = 3.5.1
+> +LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+> +LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+> +LLVM_LICENSE = University of Illinois/NCSA Open Source License
+> +LLVM_LICENSE_FILES = LICENSE.TXT
+> +
+> +HOST_LLVM_DEPENDENCIES = host-libxml2 host-zlib host-python
+> +
+> +ENABLED_TARGETS := $(ARCH),$(if $(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600),r600)
+
+Variables have only global scope, so they need to be prefixed with the
+package name:
+
+    HOST_LLVM_ENABLED_TARGETS = ...
+
+> +HOST_LLVM_CONF_OPTS = --with-default-sysroot=$(STAGING_DIR) \
+> +					  --enable-bindings=none \
+> +					  --enable-targets=$(ENABLED_TARGETS) \
+> +					  --target=$(GNU_TARGET_NAME)
+
+It seems that, like me, you're using a 4-space tabs. In Buildroot, we
+use an 8-char tab, so the above get mis-aligned.
+
+I was confused as to why you needed to pass --target, as the
+pkg-autotools infra already does it. But then I relaised you are
+building a host package, and building a compiler, thus the need for
+--target. I wonder if a comment about that would not be needed...
+
+> +$(eval $(host-autotools-package))
+
+I thought you were adding a target package, i.e. building libllvm (and
+libclang) for the target. Is that what this is supposed to do?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
