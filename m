@@ -1,37 +1,41 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 22 Feb 2015 22:25:07 +0100
-Subject: [Buildroot] [PATCH 2/2] package/thrift: remove tests
-In-Reply-To: <1424640307-26144-1-git-send-email-romain.naour@openwide.fr>
-References: <1424640307-26144-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1424640307-26144-2-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Feb 2015 22:23:41 +0100
+Subject: [Buildroot] [git commit branch/next] cmake: bump version to 3.1.3
+Message-ID: <20150222212523.69C63807A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/thrift/thrift.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=65f442a6495b2ade4f5ca753607b6c54fa63d51a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 1215aed..eb1af7e 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -55,7 +55,12 @@ define THRIFT_TOOL_NO_HARDCODE
- 	$(SED) "s:top_builddir)/compiler/cpp/thrift:THRIFT):" $(@D)/tutorial/Makefile.am
- endef
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cmake/cmake.hash |    2 +-
+ package/cmake/cmake.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 1b6b658..76e03d3 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2b210f7d867a1e716c1895357ebe63c7b9ae61fdb5f2d300ab2f01795f085b35  cmake-3.1.2.tar.gz
++sha256 45f4d3fa8a2f61cc092ae461aac4cac1bab4ac6706f98274ea7f314dd315c6d0 cmake-3.1.3.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index f283a09..8c64b58 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--THRIFT_POST_PATCH_HOOKS += THRIFT_TOOL_NO_HARDCODE
-+# Tests in lib/cpp/test are not disabled by --disabe-tests
-+define THRIFT_REMOVE_CPP_TEST
-+	$(SED) "s:test::" $(@D)/lib/cpp/Makefile.am
-+endef
-+
-+THRIFT_POST_PATCH_HOOKS += THRIFT_TOOL_NO_HARDCODE THRIFT_REMOVE_CPP_TEST
- 
- define THRIFT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) THRIFT=$(HOST_DIR)/usr/bin/thrift -C $(@D)
--- 
-1.9.3
+ CMAKE_VERSION_MAJOR = 3.1
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
