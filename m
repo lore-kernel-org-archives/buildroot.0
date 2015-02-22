@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 19:32:46 +0100
-Subject: [Buildroot] [PATCH 1/1] Bump rpi-firmware version for RPi2
-In-Reply-To: <54DDCA01.7050709@hebden.net.au>
-References: <1423820943-32256-1-git-send-email-james@hebden.net.au>
- <54DDCA01.7050709@hebden.net.au>
-Message-ID: <20150222183246.GE4016@free.fr>
+Date: Sun, 22 Feb 2015 19:35:31 +0100
+Subject: [Buildroot] [PATCH 1/1] Added Raspberry Pi 2 defconfig
+In-Reply-To: <1423866150-23697-1-git-send-email-james@hebden.net.au>
+References: <1423866150-23697-1-git-send-email-james@hebden.net.au>
+Message-ID: <20150222183531.GF4016@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +12,62 @@ To: buildroot@busybox.net
 
 James, All,
 
-On 2015-02-13 20:55 +1100, James Hebden spake thusly:
+On 2015-02-14 09:22 +1100, James Hebden spake thusly:
+> Changes v2 -> v3
+>   - Reformatted defonfig using make savedefconfig
 > 
-> From: James Hebden <james@hebden.net.au>
+> Changes v1 -> v2
 > 
+>   - Removed custom kernel configuration, used default kernel config for 
+> bcm2709
+>   - Removed changes to rpi-firmware package, separate patch coming
+>   - Enabled EABIhf
+
+The changelog above should have been below the '---' line (below).
+
 > Signed-off-by: James Hebden <james@hebden.net.au>
+> ---
+>  configs/raspberrypi2_defconfig | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>  create mode 100644 configs/raspberrypi2_defconfig
 > 
-> This patch bumps the rpi-firmware package to include RPi2 support. It also removes the workaround previously required when installing DTBs for the pi, as they are now in the same branch as the latest firmware.
-> It also adds the install commands to install the DTB for BCM2709 (RPi2 B)
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> new file mode 100644
+> index 0000000..571b026
+> --- /dev/null
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -0,0 +1,14 @@
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +BR2_ARM_EABIHF=y
+> +BR2_ARM_FPU_NEON_VFPV4=y
+> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="087966e5e3bafdeb9f9ac7578f4995c7cc7ecf1d"
 
-The commit log should be wrapped at ~75 chars. Also, it should be above
-your Signed-off-by line.
+There's now a newer changeset with some fixes (one by me, yeah!).
 
-I'll fix and resubmit (with a further bump to latest as of today), so
-I've marked yours as "Changes Requested" in our patchwork.
+> +BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+
+The bcm2709_defconfig enables support for Device Tree, so I believe we
+should also install the DTBs from rpi-firmware.
+
+I'll fix and bump, then resubmit. So, I've marked your patch as
+"Changes Requested" on our Patchwork.
 
 Thank you! :-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/rpi-firmware/rpi-firmware.mk | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 03178d5..a343cbe 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
-> 
-> -RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
-> +RPI_FIRMWARE_VERSION = 47bd0f0f46bc053d8e21655e3a69c4a73ae19b41
->  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->  RPI_FIRMWARE_LICENSE = BSD-3c
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-> @@ -13,13 +13,10 @@ RPI_FIRMWARE_INSTALL_IMAGES = YES
-> 
->  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
->  RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
-> -# The Device Tree blobs are not yet in the master branch of the
-> -# raspberrypi firmware project, so we have to use a separate branch
-> -# for now.
-> -RPI_FIRMWARE_VERSION = 09627457b9e15bf4ea4e6751d3c173a3fb65df07
->  define RPI_FIRMWARE_INSTALL_DTB
->  	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
->  	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
->  	for ovldtb in  $(@D)/boot/overlays/*.dtb; do \
->  		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
->  	done
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+> +BR2_PACKAGE_RPI_FIRMWARE=y
 > -- 
 > 2.1.4
-> 
-> 
-> 
 > 
 > _______________________________________________
 > buildroot mailing list
