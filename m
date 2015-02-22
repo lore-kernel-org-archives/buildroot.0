@@ -1,65 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 22:24:52 +0100
-Subject: [Buildroot] [git commit branch/next] package/rpi-firmware: bump
-	version
-Message-ID: <20150222212523.83A74807A3@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 22:22:25 +0100
+Subject: [Buildroot] [git commit branch/next] bmon: bump version to 3.6
+Message-ID: <20150222212523.36650807B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5ce7590c4bddfd9ccab5edd07951809da88d4c7
+commit: http://git.buildroot.net/buildroot/commit/?id=7525923c2f1851be2d29c88edd3a8d43b185f852
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Misc fixes and improvements for: DT; hdmi and EDID; video decoding,
-latency and cropping; voltage calculations...
+- Bump version to 3.6
+- Update the hash file
+- Remove upstreamed patch
 
-Also: support for RPi-2. :-)
-
-Also remove the workaround previously required when installing DTBs, ad
-they are now in the same branch as the latest firmware.
-
-Signed-off-by: James Hebden <james@hebden.net.au>
-Signed-off-by: "Guillermo A. Amaral" <g@maral.me>
-[yann.morin.1998 at free.fr: further bump, fix and trim commit log]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-firmware/rpi-firmware.mk |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ .../bmon/0001-build-uclinux-is-also-linux.patch    |   25 --------------------
+ package/bmon/bmon.hash                             |    2 +-
+ package/bmon/bmon.mk                               |    2 +-
+ 3 files changed, 2 insertions(+), 27 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 03178d5..1db1f0e 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,27 +4,22 @@
+diff --git a/package/bmon/0001-build-uclinux-is-also-linux.patch b/package/bmon/0001-build-uclinux-is-also-linux.patch
+deleted file mode 100644
+index 18f517e..0000000
+--- a/package/bmon/0001-build-uclinux-is-also-linux.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From adcf320db5cc2844209d001f9484b0ff0cab4e0b Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 11 Nov 2014 20:22:37 -0300
+-Subject: [PATCH] build: uclinux is also linux
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: pull request in github
+-
+-diff --git a/configure.ac b/configure.ac
+-index 3059e52..10388fd 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -70,7 +70,7 @@ fi
+- PKG_CHECK_MODULES([CONFUSE], [libconfuse], [], AC_MSG_ERROR([requires libconfuse]))
+- 
+- case ${target_os} in
+--    linux*)
+-+    linux*|uclinux*)
+-         PKG_CHECK_MODULES([LIBNL], [libnl-3.0], [], AC_MSG_ERROR([requires libnl3-dev]))
+-         PKG_CHECK_MODULES([LIBNL_ROUTE], [libnl-route-3.0], [], AC_MSG_ERROR([requires libnl3-route]))
+-     ;;
+--- 
+-2.0.4
+-
+diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
+index dbe2e68..65747b4 100644
+--- a/package/bmon/bmon.hash
++++ b/package/bmon/bmon.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  78ab9e46840178fbc874cdbc94fde34e72e41a18a27383660b50b4c3cd0d1f9c  bmon-3.5.tar.gz
++sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
+diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
+index c89de17..95168f6 100644
+--- a/package/bmon/bmon.mk
++++ b/package/bmon/bmon.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
-+RPI_FIRMWARE_VERSION = 69b787b2cf9d1ba19bb018d74549699aeae075fb
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
- RPI_FIRMWARE_INSTALL_TARGET = NO
- RPI_FIRMWARE_INSTALL_IMAGES = YES
- 
--ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
--# The Device Tree blobs are not yet in the master branch of the
--# raspberrypi firmware project, so we have to use a separate branch
--# for now.
--RPI_FIRMWARE_VERSION = 09627457b9e15bf4ea4e6751d3c173a3fb65df07
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
- 	for ovldtb in  $(@D)/boot/overlays/*.dtb; do \
- 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
- 	done
- endef
--endif
- 
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+-BMON_VERSION = 3.5
++BMON_VERSION = 3.6
+ BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)/
+ BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
+ BMON_LICENSE = BSD-2c
