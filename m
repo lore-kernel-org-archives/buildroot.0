@@ -1,34 +1,30 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 22 Feb 2015 18:16:44 +0100
-Subject: [Buildroot] [PATCH] package/efl/libevas: explicitly disable X11
-	support
-Message-ID: <1424625404-29836-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Feb 2015 18:45:49 +0100
+Subject: [Buildroot] [PATCH 1/2] package/freerdp: fix a comment
+Message-ID: <1424627150-2594-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/bfc/bfc52a6f12789055ad376b40a00bc94847760469/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/efl/libevas/libevas.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-index f327c02..40a01e7 100644
---- a/package/efl/libevas/libevas.mk
-+++ b/package/efl/libevas/libevas.mk
-@@ -65,6 +65,8 @@ endif
- ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
- LIBEVAS_CONF_OPTS += --enable-software-xlib
- LIBEVAS_DEPENDENCIES += xlib_libX11 xlib_libXext
-+else
-+LIBEVAS_CONF_OPTS += --disable-software-xlib
- endif
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 37568c0..50b8f18 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -176,6 +176,6 @@ else # ! SERVER && ! CLIENT
  
- ifeq ($(BR2_PACKAGE_LIBEVAS_X11_GLX),y)
+ FREERDP_CONF_OPTS += -DWITH_X11=OFF
+ 
+-endif # ! USES_XLIBS
++endif # ! SERVER && ! CLIENT
+ 
+ $(eval $(cmake-package))
 -- 
-1.9.3
+1.9.1
