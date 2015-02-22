@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 10:37:02 +0100
-Subject: [Buildroot] [git commit branch/next] package/freerdp: bump version
-Message-ID: <20150222103030.9074580125@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 10:48:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/freerdp: conditionally
+	build gstreamer support
+Message-ID: <20150222103030.9B66D80125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=361f528aea3682929990e53d38f72f30ab86ba3a
+commit: http://git.buildroot.net/buildroot/commit/?id=4da7b87f7d69be3bdbad1f4e79843cbcf6d542b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since we bumped to CMake-3.1, the build of FreeRDP is broken:
-
-    CMake Error at channels/client/CMakeLists.txt:33 (list):
-      list sub-command REMOVE_DUPLICATES requires list to be present.
-
-This has been fixed upstream, so just bump the version to get that fix.
+Avoid a warning at configure time when gstreamer is missing.
 
 Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freerdp/freerdp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freerdp/freerdp.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
 diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 57cd7a8..ffe014c 100644
+index ffe014c..32b4714 100644
 --- a/package/freerdp/freerdp.mk
 +++ b/package/freerdp/freerdp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -14,6 +14,13 @@ FREERDP_LICENSE_FILES = LICENSE
  
- # Changeset on the stable-1.1 branch
--FREERDP_VERSION = 440916eae2e07463912d5fe507677e67096eb083
-+FREERDP_VERSION = b21ff842ef3de5837513042dc30488b12bd9cf9d
- FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = openssl zlib \
- 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
+ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF
+ 
++ifeq ($(BR2_PACKAGE_GSTREAMER),y)
++FREERDP_CONF_OPTS += -DWITH_GSTREAMER=ON
++FREERDP_DEPENDENCIES += gstreamer
++else
++FREERDP_CONF_OPTS += -DWITH_GSTREAMER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ FREERDP_CONF_OPTS += -DWITH_CUPS=ON
+ FREERDP_DEPENDENCIES += cups
