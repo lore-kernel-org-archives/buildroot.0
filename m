@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 10:26:11 +0100
-Subject: [Buildroot] [PATCH] i2c-tools: link to i2c-tools specific wiki
- page
-In-Reply-To: <0b7a7b4ce052481042ceb1cd960dc07d020ac21b.1424595572.git.baruch@tkos.co.il>
-References: <0b7a7b4ce052481042ceb1cd960dc07d020ac21b.1424595572.git.baruch@tkos.co.il>
-Message-ID: <20150222102611.746566a2@free-electrons.com>
+Date: Sun, 22 Feb 2015 10:48:21 +0100
+Subject: [Buildroot] [git commit branch/next] package/freerdp: conditionally
+	build support for libXi
+Message-ID: <20150222103030.A317F80125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=48bf1a45f5fd28aac0d92852270a2c913d41b28c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 22 Feb 2015 10:59:32 +0200, Baruch Siach wrote:
-> Although there is a link to that page from the main lm-sensors page, it is
-> quite hard to find.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/i2c-tools/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freerdp/freerdp.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-Applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 32b4714..084b9b8 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -49,6 +49,13 @@ else
+ FREERDP_CONF_OPTS += -DWITH_PULSEAUDIO=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
++FREERDP_CONF_OPTS += -DWITH_XI=ON
++FREERDP_DEPENDENCIES += xlib_libXi
++else
++FREERDP_CONF_OPTS += -DWITH_XI=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+ FREERDP_CONF_OPTS += -DWITH_XINERAMA=ON
+ FREERDP_DEPENDENCIES += xlib_libXinerama
