@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 10:25:46 +0100
-Subject: [Buildroot] [git commit] i2c-tools: link to i2c-tools specific wiki
-	page
-Message-ID: <20150222092553.2CCC8805F6@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 10:26:11 +0100
+Subject: [Buildroot] [PATCH] i2c-tools: link to i2c-tools specific wiki
+ page
+In-Reply-To: <0b7a7b4ce052481042ceb1cd960dc07d020ac21b.1424595572.git.baruch@tkos.co.il>
+References: <0b7a7b4ce052481042ceb1cd960dc07d020ac21b.1424595572.git.baruch@tkos.co.il>
+Message-ID: <20150222102611.746566a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3c08a79aad60cce37c04f724f776e7c7de7df91
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Although there is a link to that page from the main lm-sensors page, it is
-quite hard to find.
+On Sun, 22 Feb 2015 10:59:32 +0200, Baruch Siach wrote:
+> Although there is a link to that page from the main lm-sensors page, it is
+> quite hard to find.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/i2c-tools/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/i2c-tools/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied to master, thanks!
 
-diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
-index 43f5e05..e83dbd6 100644
---- a/package/i2c-tools/Config.in
-+++ b/package/i2c-tools/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_I2C_TOOLS
- 	  a bus probing tool, a chip dumper, register-level access helpers,
- 	  EEPROM decoding scripts, and more.
- 
--	  http://www.lm-sensors.org
-+	  http://www.lm-sensors.org/wiki/I2CTools
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
