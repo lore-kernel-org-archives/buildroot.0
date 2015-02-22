@@ -1,58 +1,104 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 21:10:13 +0100
-Subject: [Buildroot] [PATCH 3/3] configs: add Raspberry Pi 2 defconfig
-In-Reply-To: <cover.1424635766.git.yann.morin.1998@free.fr>
-References: <cover.1424635766.git.yann.morin.1998@free.fr>
-Message-ID: <ce51aa53f9f02f95284eb78edef084896dbc94bb.1424635766.git.yann.morin.1998@free.fr>
+Date: Sun, 22 Feb 2015 21:42:07 +0100
+Subject: [Buildroot] [PATCH v7] wine: New package
+In-Reply-To: <54E63769.1050208@dawncrow.de>
+References: <54E63769.1050208@dawncrow.de>
+Message-ID: <20150222204207.GG4016@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Hebden <james@hebden.net.au>
+Andr?, All,
 
-Signed-off-by: James Hebden <james@hebden.net.au>
-[yann.morin.1998 at free.fr: fix commit log; further bump]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: "Guillermo A. Amaral" <g@maral.me>
+On 2015-02-19 20:20 +0100, Andr? Hentschel spake thusly:
+> Adds new package: wine
+[--SNIP--]
+> diff --git a/package/wine/Config.in b/package/wine/Config.in
+> new file mode 100644
+> index 0000000..9ac0a83
+> --- /dev/null
+> +++ b/package/wine/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_WINE
+> +	bool "wine"
+> +	depends on BR2_INET_IPV6
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 
----
-Changes v3 -> v4:
-  - Further bumped, fix commit log  (Yann)
+Glibc implies IPv6 and threads, so depending on glibc is enough.
 
-Changes v2 -> v3
-  - Reformatted defonfig using make savedefconfig
+[--SNIP--]
+> diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+> new file mode 100644
+> index 0000000..2c1ab61
+> --- /dev/null
+> +++ b/package/wine/wine.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 f0ab9eede5a0ccacbf6e50682649f9377b9199e49cf55641f1787cf72405acbe wine-1.6.2.tar.bz2
 
-Changes v1 -> v2
-  - Removed custom kernel configuration, used default kernel config for bcm2709
-  - Removed changes to rpi-firmware package, separate patch coming
-  - Enabled EABIhf
----
- configs/raspberrypi2_defconfig | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 configs/raspberrypi2_defconfig
+Weird... I had a local copy of wine-1.6.2 and it had a different sha256:
+    0f46dd29b278a3352206b49680f0ac3bfa107e65cb40cb4af51c137f0ebeb271
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-new file mode 100644
-index 0000000..d2f97fb
---- /dev/null
-+++ b/configs/raspberrypi2_defconfig
-@@ -0,0 +1,15 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+So Buildroot re-downloaded it, and now tthe sha256 you provides is OK.
+
+Also, SF provides a sha1:
+    574b9ccedbf213622b7ee55f715764673fc27692
+
+> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> new file mode 100644
+> index 0000000..0f72be5
+> --- /dev/null
+> +++ b/package/wine/wine.mk
+> @@ -0,0 +1,293 @@
+> +################################################################################
+> +#
+> +# wine
+> +#
+> +################################################################################
+> +
+> +WINE_VERSION = 1.6.2
+> +WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+> +WINE_SITE = http://downloads.sourceforge.net/project/wine/Source/
+> +WINE_LICENSE = LGPLv2.1+
+> +WINE_LICENSE_FILES = COPYING.LIB LICENSE
+> +WINE_DEPENDENCIES = host-bison host-flex host-wine
+> +
+> +# Wine needs its own directory structure and tools for cross compiling
+> +WINE_CONF_OPTS = \
+> +	--with-wine-tools=../host-wine-$(WINE_VERSION) \
+> +	--disable-tests \
+> +	--disable-win64 \
+> +	--without-opengl
+> +
+> +# Wine uses a wrapper around gcc, and uses the value of --host to
+> +# construct the filename of the gcc to call.
+> +# But for external toolchains, we may have a discrepancy between the
+> +# tuple, GNU_TARGET_NAME, that we construct from our internal
+> +# variables, and the gcc prefix for the external toolchain.
+> +# So, we have to iverride whatever the gcc wrapper believes what the
+> +# reall gcc is named, and force the tuple of the external toolchain,
+> +# not the one we compute in GNU_TARGET_NAME.
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+> +	WINE_CONF_OPTS += TARGETFLAGS="-b $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))"
+
+We usually do not indent the variable assignements in conditional
+blocks.
+
+I'm doing a few test builds, and will respin an amended version of this
+patch.
+
+Thanks very much for the hard initial work! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
