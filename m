@@ -1,25 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 22:27:48 +0100
-Subject: [Buildroot] [PATCH 1/2] package/thrift: fix build failure on
- bfin
-In-Reply-To: <1424640307-26144-1-git-send-email-romain.naour@openwide.fr>
-References: <1424640307-26144-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150222222748.64849cf0@free-electrons.com>
+Date: Sun, 22 Feb 2015 22:28:32 +0100
+Subject: [Buildroot] [PATCH v2] evtest: disable documentation
+In-Reply-To: <1424621697-22309-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1424621697-22309-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150222222832.46d350ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Vicente Olivert Riera,
 
-On Sun, 22 Feb 2015 22:25:06 +0100, Romain Naour wrote:
-> Libtool append the sysroot path (lt_sysroot) with the libdir value found in
-> the libstdc++.la file only with bfin toolchain.
+On Sun, 22 Feb 2015 16:14:57 +0000, Vicente Olivert Riera wrote:
+> evtest uses asciidoc to generate documentation, but /usr/bin/asciidoc
+> will try to use buildroot's host-python which doesn't have the required
+> unicodedata. To avoid that, define ASCIIDOC as an empty string so the
+> Makefile can't find the executable and skips the documentation
+> generation.  This is the same solution used in the evemu package.
+> Otherwise it will fail with this message:
+> 
+> make[1]: Entering directory `/br/output/build/evtest-1.32'
+> /usr/bin/make  all-am
+> make[2]: Entering directory `/br/output/build/evtest-1.32'
+>   File "/usr/bin/asciidoc", line 95
+>     except KeyError, k: return None
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-And to you know why ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
