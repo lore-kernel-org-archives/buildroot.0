@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 14:14:24 +0100
-Subject: [Buildroot] [PATCH 08/11 v5] package/freerdp: add options to
- enable/disable server and/or client
-In-Reply-To: <20150222124815.0b4d9ba4@free-electrons.com>
+Date: Sun, 22 Feb 2015 14:16:23 +0100
+Subject: [Buildroot] [PATCH 10/11 v5] package/freerdp: install server
+ key and certificate
+In-Reply-To: <20150222124741.2743fb7c@free-electrons.com>
 References: <cover.1424558036.git.yann.morin.1998@free.fr>
- <44fb109d81db4309f73d7f85fcd533c3f1dee6cb.1424558036.git.yann.morin.1998@free.fr>
- <20150222124815.0b4d9ba4@free-electrons.com>
-Message-ID: <20150222131424.GA4016@free.fr>
+ <4bfcb4d735dcded5ba4328260a13970af1023c0b.1424558036.git.yann.morin.1998@free.fr>
+ <20150222124741.2743fb7c@free-electrons.com>
+Message-ID: <20150222131623.GB4016@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,23 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-02-22 12:48 +0100, Thomas Petazzoni spake thusly:
-> One question, see below.
+On 2015-02-22 12:47 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 21 Feb 2015 23:36:23 +0100, Yann E. MORIN wrote:
 > 
-> On Sat, 21 Feb 2015 23:36:21 +0100, Yann E. MORIN wrote:
-> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-> > index cf96ff4..33eacc2 100644
-> > --- a/package/freerdp/freerdp.mk
-> > +++ b/package/freerdp/freerdp.mk
-[--SNIP--]
-> > @@ -113,4 +161,10 @@ else
-> >  FREERDP_CONF_OPTS += -DWITH_XV=OFF
-> >  endif
-> >  
-> > +else # ! SERVER && ! CLIENT
-> > +
-> > +FREERDP_CONF_OPTS += -DWITH_X11=OFF
-> > +
-> > +endif # ! USES_XLIBS
+> > +define FREERDP_INSTALL_KEYS
+> > +	$(INSTALL) -D $(@D)/server/X11/server.key \
+> > +		      $(TARGET_DIR)/etc/freerdp/keys/server.key
+> > +	$(INSTALL) -D $(@D)/server/X11/server.crt \
+> > +		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
 > 
-> Is this really ! USES_XLIBS ?
+> No explicit '-m' ?
 
-Indeed no, it's a leftover from a previous attempt. It should have been:
+Yup, I forgot it.
 
-    # ! SERVER && ! CLIENT
+But now I wonder what those should be: 0644 or 0600 ?
 
-I'll send a fix-up patch. Sorry for the mess...
+I am leaning more toward 0644 so non-root can start a FreeRDP server
+(e.g. with weston). Thoughts?
 
 Regards,
 Yann E. MORIN.
