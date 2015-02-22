@@ -1,66 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 12:45:26 +0100
-Subject: [Buildroot] [git commit branch/next] weston: add patch to fix
-	uClibc build caused CLOCK_BOOTTIME
-Message-ID: <20150222114547.D6728807C2@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 12:47:25 +0100
+Subject: [Buildroot] [PATCH 0/11 v5] weston: new freerdp backend (branch
+ yem/freerdp)
+In-Reply-To: <20150222121305.6ca281ab@free-electrons.com>
+References: <cover.1424558036.git.yann.morin.1998@free.fr>
+ <20150222121305.6ca281ab@free-electrons.com>
+Message-ID: <20150222124725.68cdc4f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b46d551e6b7f62f1cd0483357a68b90107c509a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...ility-define-CLOCK_BOOTTIME-when-not-avai.patch |   41 ++++++++++++++++++++
- 1 files changed, 41 insertions(+), 0 deletions(-)
+On Sun, 22 Feb 2015 12:13:05 +0100, Thomas Petazzoni wrote:
 
-diff --git a/package/weston/0001-os-compatibility-define-CLOCK_BOOTTIME-when-not-avai.patch b/package/weston/0001-os-compatibility-define-CLOCK_BOOTTIME-when-not-avai.patch
-new file mode 100644
-index 0000000..a7f2a34
---- /dev/null
-+++ b/package/weston/0001-os-compatibility-define-CLOCK_BOOTTIME-when-not-avai.patch
-@@ -0,0 +1,41 @@
-+From 66b71951f8ce66f02040f8814e1d89db34c34a87 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 22 Feb 2015 12:36:00 +0100
-+Subject: [PATCH] os-compatibility: define CLOCK_BOOTTIME when not available
-+
-+CLOCK_BOOTTIME is supposed to be provided by the C library headers,
-+but uClibc 0.9.33.2 does not provide it. Instead of depending on an
-+uClibc patch, let's make Weston define it to the right value when not
-+already defined by the C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ shared/os-compatibility.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/shared/os-compatibility.h b/shared/os-compatibility.h
-+index 172bb7e..e369899 100644
-+--- a/shared/os-compatibility.h
-++++ b/shared/os-compatibility.h
-+@@ -26,6 +26,7 @@
-+ #include "config.h"
-+ 
-+ #include <sys/types.h>
-++#include <time.h>
-+ 
-+ #ifdef HAVE_EXECINFO_H
-+ #include <execinfo.h>
-+@@ -37,6 +38,10 @@ backtrace(void **buffer, int size)
-+ }
-+ #endif
-+ 
-++#ifndef CLOCK_BOOTTIME
-++#define CLOCK_BOOTTIME 7
-++#endif
-++
-+ int
-+ os_socketpair_cloexec(int domain, int type, int protocol, int *sv);
-+ 
-+-- 
-+2.1.0
-+
+> >       package/weston: add support for the RDP compositor
+> 
+> This one I believe has a real issue, I'll reply to it specifically.
+
+In fact no, I misread the patch, it is all fine, so I applied it.
+
+However, I encountered one build issue caused by CLOCK_BOOTTIME not
+being defined by uClibc. There's a patch in uClibc master of course,
+but it's not in 0.9.33.2. So I added a patch to Weston to make it build
+by defining CLOCK_BOOTTIME to the right value when not already defined
+by the C library headers.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
