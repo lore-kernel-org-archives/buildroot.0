@@ -1,206 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 11:32:55 +0100
-Subject: [Buildroot] [git commit] package/freerdp: add options to
-	enable/disable server and/or client
-Message-ID: <20150302222722.381F58177D@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 22:23:41 +0100
+Subject: [Buildroot] [git commit] cmake: bump version to 3.1.3
+Message-ID: <20150302222722.B0FE98057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85f997bfa2a973b3cad462e5fecff3607d5ce3df
+commit: http://git.buildroot.net/buildroot/commit/?id=65f442a6495b2ade4f5ca753607b6c54fa63d51a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building the client or the server requires an X.Org stack.
-
-Since freerdp can also be used for weston (wayland-based, hence no X.Org
-stack), we may want to disable the client and server.
-
-Conversely, even with an X.Org stack, we may want to enable either or
-none if we're just interested in the library.
-
-Add two options, one to enable the server, the other the client; the
-client option defaults to 'Y' so that a previous .config can be re-used
-as-is, and exhibit the same behaviour as before; the server option
-defaults to 'N' as we were not ever building the server so far.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freerdp/Config.in                          |   25 ++++++++-
- .../freerdp-0002-fix-building-shared-libs.patch    |   23 +++++++
- package/freerdp/freerdp.mk                         |   62 ++++++++++++++++++-
- 3 files changed, 105 insertions(+), 5 deletions(-)
+ package/cmake/cmake.hash |    2 +-
+ package/cmake/cmake.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 09efbc0..47fd8be 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -2,9 +2,32 @@ config BR2_PACKAGE_FREERDP
- 	bool "freerdp"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	help
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 1b6b658..76e03d3 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2b210f7d867a1e716c1895357ebe63c7b9ae61fdb5f2d300ab2f01795f085b35  cmake-3.1.2.tar.gz
++sha256 45f4d3fa8a2f61cc092ae461aac4cac1bab4ac6706f98274ea7f314dd315c6d0 cmake-3.1.3.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index f283a09..8c64b58 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+	  This only installs the freerdp library.
-+
- 	  http://www.freerdp.com/
-+
-+if BR2_PACKAGE_FREERDP
-+
-+config BR2_PACKAGE_FREERDP_SERVER
-+	bool "build server"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+
-+config BR2_PACKAGE_FREERDP_CLIENT
-+	bool "build client"
-+	default y
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+
-+comment "freerdp server and client need X.Org"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+endif
-diff --git a/package/freerdp/freerdp-0002-fix-building-shared-libs.patch b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
-new file mode 100644
-index 0000000..420f3d3
---- /dev/null
-+++ b/package/freerdp/freerdp-0002-fix-building-shared-libs.patch
-@@ -0,0 +1,23 @@
-+winpr/tools: fix building shared libs
-+
-+libwinpr-makecert-tool.a is used to build libxfreerdp-server.so, so even
-+if we are building a static libwinpr-makecert-tool.a library, we need to
-+build it with -fPIC.
-+
-+Patch and commit log suggested by Samuel MARTIN.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Samuel Martin <s.martin49@gmail.com>
-+
-+diff -durN freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt
-+--- freerdp-440916eae2e07463912d5fe507677e67096eb083.orig/winpr/tools/makecert/CMakeLists.txt	2014-08-25 06:52:43.000000000 -0700
-++++ freerdp-440916eae2e07463912d5fe507677e67096eb083/winpr/tools/makecert/CMakeLists.txt	2014-10-24 15:39:39.600319523 -0700
-+@@ -43,3 +43,8 @@
-+ 
-+ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "WinPR/Tools")
-+ 
-++if(BUILD_SHARED_LIBS)
-++	# build libwinpr-makecert-tool.a with PIC because it is used to build
-++	# the shared library libxfreerdp-server.so.
-++	set_property(TARGET ${MODULE_NAME} PROPERTY POSITION_INDEPENDENT_CODE TRUE)
-++endif()
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index cf96ff4..33eacc2 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -64,13 +64,33 @@ ifeq ($(BR2_arm)$(BR2_armeb),y)
- FREERDP_CONF_OPTS += -DARM_FP_ABI=$(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
--FREERDP_DEPENDENCIES += xlib_libXext
--FREERDP_CONF_OPTS += -DWITH_X11=ON
-+#---------------------------------------
-+# Enabling server and/or client
-+
-+ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
-+FREERDP_CONF_OPTS += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
- else
--FREERDP_CONF_OPTS += -DWITH_X11=OFF
-+FREERDP_CONF_OPTS += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
-+FREERDP_CONF_OPTS += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
-+endif
-+
-+#---------------------------------------
-+# X.Org libs for client and/or server
-+
-+ifneq ($(BR2_PACKAGE_FREERDP_SERVER)$(BR2_PACKAGE_FREERDP_CLIENT),)
-+
-+# Those two are mandatory for both the server and the client
-+FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXext
-+FREERDP_CONF_OPTS += -DWITH_X11=ON
-+
-+# The following libs are either optional or mandatory only for either
-+# the server or the client. A mandatory library for either one is
-+# selected from Kconfig, so we can make it conditional here
- ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
- FREERDP_CONF_OPTS += -DWITH_XCURSOR=ON
- FREERDP_DEPENDENCIES += xlib_libXcursor
-@@ -78,6 +98,20 @@ else
- FREERDP_CONF_OPTS += -DWITH_XCURSOR=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
-+FREERDP_CONF_OPTS += -DWITH_XDAMAGE=ON
-+FREERDP_DEPENDENCIES += xlib_libXdamage
-+else
-+FREERDP_CONF_OPTS += -DWITH_XDAMAGE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
-+FREERDP_CONF_OPTS += -DWITH_XFIXES=ON
-+FREERDP_DEPENDENCIES += xlib_libXfixes
-+else
-+FREERDP_CONF_OPTS += -DWITH_XFIXES=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
- FREERDP_CONF_OPTS += -DWITH_XI=ON
- FREERDP_DEPENDENCIES += xlib_libXi
-@@ -99,6 +133,13 @@ else
- FREERDP_CONF_OPTS += -DWITH_XKBFILE=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+FREERDP_CONF_OPTS += -DWITH_XRANDR=ON
-+FREERDP_DEPENDENCIES += xlib_libXrandr
-+else
-+FREERDP_CONF_OPTS += -DWITH_XRANDR=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
- FREERDP_CONF_OPTS += -DWITH_XRENDER=ON
- FREERDP_DEPENDENCIES += xlib_libXrender
-@@ -106,6 +147,13 @@ else
- FREERDP_CONF_OPTS += -DWITH_XRENDER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXTST),y)
-+FREERDP_CONF_OPTS += -DWITH_XTEST=ON
-+FREERDP_DEPENDENCIES += xlib_libXtst
-+else
-+FREERDP_CONF_OPTS += -DWITH_XTEST=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
- FREERDP_CONF_OPTS += -DWITH_XV=ON
- FREERDP_DEPENDENCIES += xlib_libXv
-@@ -113,4 +161,10 @@ else
- FREERDP_CONF_OPTS += -DWITH_XV=OFF
- endif
- 
-+else # ! SERVER && ! CLIENT
-+
-+FREERDP_CONF_OPTS += -DWITH_X11=OFF
-+
-+endif # ! USES_XLIBS
-+
- $(eval $(cmake-package))
+ CMAKE_VERSION_MAJOR = 3.1
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
