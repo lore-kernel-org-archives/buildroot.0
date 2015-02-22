@@ -1,45 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 14:16:23 +0100
-Subject: [Buildroot] [PATCH 10/11 v5] package/freerdp: install server
- key and certificate
-In-Reply-To: <20150222124741.2743fb7c@free-electrons.com>
-References: <cover.1424558036.git.yann.morin.1998@free.fr>
- <4bfcb4d735dcded5ba4328260a13970af1023c0b.1424558036.git.yann.morin.1998@free.fr>
- <20150222124741.2743fb7c@free-electrons.com>
-Message-ID: <20150222131623.GB4016@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Feb 2015 14:39:00 +0100
+Subject: [Buildroot] [PATCH] linux: adjust fixup logic for ktap
+Message-ID: <1424612340-2332-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The ktap package requires some parts of the kernel tracing
+infrastructure to be enabled, especially
+CONFIG_EVENT_TRACING. However, this option is a blind option in the
+kernel, so enabling it in linux.mk has no effect: we need to enable a
+non-blind option that selects CONFIG_EVENT_TRACING. We've chosen to
+select CONFIG_FTRACE.
 
-On 2015-02-22 12:47 +0100, Thomas Petazzoni spake thusly:
-> On Sat, 21 Feb 2015 23:36:23 +0100, Yann E. MORIN wrote:
-> 
-> > +define FREERDP_INSTALL_KEYS
-> > +	$(INSTALL) -D $(@D)/server/X11/server.key \
-> > +		      $(TARGET_DIR)/etc/freerdp/keys/server.key
-> > +	$(INSTALL) -D $(@D)/server/X11/server.crt \
-> > +		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
-> 
-> No explicit '-m' ?
+This fixes the build of ktap.
 
-Yup, I forgot it.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But now I wonder what those should be: 0644 or 0600 ?
-
-I am leaning more toward 0644 so non-root can start a FreeRDP server
-(e.g. with weston). Thoughts?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29f59e8..75f4936 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -198,7 +198,7 @@ define LINUX_CONFIGURE_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KTAP),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_SYSTEMD),
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.0
