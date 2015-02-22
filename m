@@ -1,86 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 12:55:05 +0100
-Subject: [Buildroot] [git commit branch/next] ktap: bump version
-Message-ID: <20150222133920.005AF80506@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 14:45:02 +0100
+Subject: [Buildroot] [PATCH 10/11 v5] package/freerdp: install server
+ key and certificate
+In-Reply-To: <20150222131623.GB4016@free.fr>
+References: <cover.1424558036.git.yann.morin.1998@free.fr>
+ <4bfcb4d735dcded5ba4328260a13970af1023c0b.1424558036.git.yann.morin.1998@free.fr>
+ <20150222124741.2743fb7c@free-electrons.com>
+ <20150222131623.GB4016@free.fr>
+Message-ID: <20150222144502.0c6b4ddf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f22c2d32a9935bc64eb60c04bae2fb1d246685c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Yann E. MORIN,
 
-Signed-off-by: Dale Ghent <daleg@omniti.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../ktap/0001-Add-missing-stdarg.h-include.patch   |   47 --------------------
- package/ktap/ktap.mk                               |    2 +-
- 2 files changed, 1 insertions(+), 48 deletions(-)
+On Sun, 22 Feb 2015 14:16:23 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/ktap/0001-Add-missing-stdarg.h-include.patch b/package/ktap/0001-Add-missing-stdarg.h-include.patch
-deleted file mode 100644
-index 9c4566f..0000000
---- a/package/ktap/0001-Add-missing-stdarg.h-include.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From dc135d8f1f2a843cebd4da0d4b17828911e162a6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 1 Nov 2014 18:53:47 +0100
--Subject: [PATCH] Add missing <stdarg.h> include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes:
--
--In file included from userspace/kp_bcwrite.c:32:0:
--userspace/kp_util.h:74:14: error: unknown type name ???va_list???
--   ErrMsg em, va_list argp);
--              ^
--userspace/kp_util.h:76:42: error: unknown type name ???va_list???
-- const char *kp_sprintfv(const char *fmt, va_list argp);
--                                          ^
--In file included from userspace/kp_lex.c:28:0:
--userspace/kp_util.h:74:14: error: unknown type name ???va_list???
--   ErrMsg em, va_list argp);
--              ^
--userspace/kp_util.h:76:42: error: unknown type name ???va_list???
-- const char *kp_sprintfv(const char *fmt, va_list argp);
--
--Submitted upstream: https://github.com/ktap/ktap/pull/77
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- userspace/kp_util.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/userspace/kp_util.h b/userspace/kp_util.h
--index af0b221..5778dc4 100644
----- a/userspace/kp_util.h
--+++ b/userspace/kp_util.h
--@@ -1,6 +1,8 @@
-- #ifndef __KTAP_UTIL_H__
-- #define __KTAP_UTIL_H__
-- 
--+#include <stdarg.h>
--+
-- #include "../include/ktap_bc.h"
-- #include "../include/ktap_err.h"
-- 
---- 
--2.0.0
--
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-index 50ad222..4a0e51c 100644
---- a/package/ktap/ktap.mk
-+++ b/package/ktap/ktap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KTAP_VERSION = 5b16b61deb6c8a99d71e5167706a5f5566135828
-+KTAP_VERSION = eb66d40310c93dc82bc8eac889744c1ed1f01f7b
- KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
- KTAP_LICENSE = GPLv2
- KTAP_LICENSE_FILES = LICENSE-GPL
+> Yup, I forgot it.
+> 
+> But now I wonder what those should be: 0644 or 0600 ?
+
+I was also unsure, and that's why I decided to not add the '-m' myself,
+and open up the discussion. Is it problematic if a non-root user has
+access to this key and certificate?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
