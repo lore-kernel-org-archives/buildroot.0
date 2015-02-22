@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 22:23:29 +0100
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.0-7
-Message-ID: <20150302222722.A755B8177D@busybox.osuosl.org>
+Date: Sun, 22 Feb 2015 22:25:12 +0100
+Subject: [Buildroot] [git commit] configs: add Raspberry Pi 2 defconfig
+Message-ID: <20150302222722.CBC0E81787@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3a4f9c6c387f65260555a2e0b12565f84687c6b
+commit: http://git.buildroot.net/buildroot/commit/?id=7f6a9f6e89acb63aaed636e3d8a23e33692b2c08
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: James Hebden <james@hebden.net.au>
+[yann.morin.1998 at free.fr: fix commit log; further bump]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: "Guillermo A. Amaral" <g@maral.me>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/raspberrypi2_defconfig |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 09b6dcd..9d331f5 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 a47f2731d453df502a93036ca1fea44c5852ed1b2c36af4343e6afb18652fefd ImageMagick-6.9.0-6.tar.xz
-+sha256 90c90397ccf74200cd0e3931d3b26e6722665db235a66a5af392ac25d133d8c2 ImageMagick-6.9.0-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index a72778c..3a12a9c 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.0-6
-+IMAGEMAGICK_VERSION = 6.9.0-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+new file mode 100644
+index 0000000..d2f97fb
+--- /dev/null
++++ b/configs/raspberrypi2_defconfig
+@@ -0,0 +1,15 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_NEON_VFPV4=y
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
