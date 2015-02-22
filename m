@@ -1,41 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Feb 2015 22:26:07 +0100
-Subject: [Buildroot] [PATCH v7] wine: New package
-In-Reply-To: <54EA42C0.9010608@dawncrow.de>
-References: <54E63769.1050208@dawncrow.de> <20150222204207.GG4016@free.fr>
- <54EA42C0.9010608@dawncrow.de>
-Message-ID: <20150222212607.GI4016@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Feb 2015 22:26:19 +0100
+Subject: [Buildroot] [PATCH 1/2] package/freerdp: fix a comment
+In-Reply-To: <1424627150-2594-1-git-send-email-yann.morin.1998@free.fr>
+References: <1424627150-2594-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150222222619.063f3349@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andre, All,
+Dear Yann E. MORIN,
 
-On 2015-02-22 21:57 +0100, Andr? Hentschel spake thusly:
-> Am 22.02.2015 um 21:42 schrieb Yann E. MORIN:
-> > On 2015-02-19 20:20 +0100, Andr? Hentschel spake thusly:
-> >> Adds new package: wine
+On Sun, 22 Feb 2015 18:45:49 +0100, Yann E. MORIN wrote:
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/freerdp/freerdp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Another thing I noticed during the build of host-wine:
+Both applied to next, thanks!
 
-    configure: WARNING: prelink not found, base address of core dlls won't
-    be set correctly.
-
-I am not sure if that will be a problem.
-
-My system lacks prelink installed. Does yours have it?
-  - if not, I guess you get a working Wine, even without prelink, right?
-  - if you do, can you check that Wine still works fine without it?
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
