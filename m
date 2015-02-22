@@ -1,55 +1,39 @@
-From: Guillermo Amaral <g@maral.me>
-Date: Sun, 22 Feb 2015 12:45:33 -0800
-Subject: [Buildroot] [PATCH] Raspberry Pi 2 Support
-In-Reply-To: <20150222183106.GD4016@free.fr>
-References: <1424282540-6127-1-git-send-email-g@maral.me>
- <1424322894-27643-1-git-send-email-g@maral.me>
- <20150222183106.GD4016@free.fr>
-Message-ID: <CAPeEpDrWey4D90JLWqTDoLeH6bpLaJgUxaq4gPnagvGy+wtPSA@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 22 Feb 2015 21:56:44 +0100
+Subject: [Buildroot] [PATCH next] cmake: bump version to 3.1.3
+Message-ID: <1424638604-8244-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yeah, no problem. I noticed I forgot to split them up after the submitting
-them. I didn't get a chance to rectify it. :3
-On Feb 22, 2015 10:31 AM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/cmake/cmake.hash | 2 +-
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Guillermo, All,
->
-> On 2015-02-18 21:14 -0800, Guillermo A. Amaral spake thusly:
-> > Added support for Raspberry Pi 2, tried to keep the configuration
-> > similar to the current RPi support.
->
-> We already have pending patches to add support for the RPi-2:
->     http://patchwork.ozlabs.org/patch/439448/
->     http://patchwork.ozlabs.org/patch/439668/
->
-> I think those are better than yours, because they properly split bumping
-> the rpi-firmware version from adding a RPi-2 defconfig.
->
-> So, I've marked yours as "Not Applicable" in our patchwork.
->
-> Thank you! :-)
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150222/3ad7c504/attachment.html>
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 1b6b658..76e03d3 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2b210f7d867a1e716c1895357ebe63c7b9ae61fdb5f2d300ab2f01795f085b35  cmake-3.1.2.tar.gz
++sha256 45f4d3fa8a2f61cc092ae461aac4cac1bab4ac6706f98274ea7f314dd315c6d0 cmake-3.1.3.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index f283a09..8c64b58 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CMAKE_VERSION_MAJOR = 3.1
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+-- 
+2.3.0
