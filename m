@@ -1,70 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:26:11 +0100
-Subject: [Buildroot] [git commit branch/next] package/freerdp: needs wchar
-Message-ID: <20150223112616.DD68B803FD@busybox.osuosl.org>
+Date: Mon, 23 Feb 2015 12:26:37 +0100
+Subject: [Buildroot] [git commit branch/next] libsigsegv: fix patch failure
+	of 0004-Add-stack...
+Message-ID: <20150223112700.E6F9D8042A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6caeaf029142c4eed313e0f507eecaa17b29dafd
+commit: http://git.buildroot.net/buildroot/commit/?id=1f522c1e04720d5da3702232a6863d2ccd0e770c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also add reverse dependency for Weston.
-
-Fix build error:
-make[3]: Entering directory '/home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d'
-In file included from /home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d/winpr/include/winpr/winsock.h:24:0,
-                 from /home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d/winpr/libwinpr/winsock/winsock.c:24:
-/home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d/winpr/include/winpr/wtypes.h:132:1: error: unknown type name ???wchar_t???
- typedef wchar_t UNICODE;
+After removing the patch 0001-Add-stack... in commit
+9863553fe8fa16a4d19f652b409a44bb58ef5567 "packages: all salute the
+passing of avr32" the patch 004-Add-stack... does not apply anymore, so
+fix it.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freerdp/Config.in |    4 ++++
- package/weston/Config.in  |    4 ++++
- 2 files changed, 8 insertions(+), 0 deletions(-)
+ ...k-direction-for-the-Blackfin-architecture.patch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 1c203c7..ea36e0e 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_FREERDP
- 	bool "freerdp"
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -37,3 +38,6 @@ comment "freerdp server and client need X.Org"
- 	depends on !BR2_PACKAGE_XORG7
- 
- endif
-+
-+comment "freerdp needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 8983460..dec3583 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -41,6 +41,7 @@ config BR2_PACKAGE_WESTON_FBDEV
- 
- config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
-+	depends on BR2_USE_WCHAR # freerdp
- 	select BR2_PACKAGE_FREERDP
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	help
-@@ -56,6 +57,9 @@ config BR2_PACKAGE_WESTON_RDP
- 	  so you may want to change them in a post-build script or a rootfs
- 	  overlay.
- 
-+comment "RDP compositor needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-+
- # rpi-userland is an EGL/GLES provider, so we can't select it
- config BR2_PACKAGE_WESTON_RPI
- 	bool "RPi compositor"
+diff --git a/package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch b/package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch
+index e5f3c49..5d8232a 100644
+--- a/package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch
++++ b/package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch
+@@ -19,7 +19,7 @@ index 53f4216..1a97d5a 100644
+ @@ -18,6 +18,7 @@ AC_DEFUN([SV_STACK_DIRECTION],
+        arc | \
+        arm* | strongarm* | xscale* | \
+-       avr | avr32 | \
++       avr | \
+ +      bfin | \
+        c1 | c2 | c32 | c34 | c38 | \
+        clipper | \
