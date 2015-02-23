@@ -1,34 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Feb 2015 17:29:08 +0100
-Subject: [Buildroot] [git commit] odhcp6c: install default state script
-Message-ID: <20150302222723.446C18057D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Feb 2015 12:38:12 +0100
+Subject: [Buildroot] [git commit] package/dropbear: install dropbear.service
+	to correct dir
+Message-ID: <20150302222723.1348B8177D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=899935b3e29a5aee3b6b26fb0ccfe78a921cfc13
+commit: http://git.buildroot.net/buildroot/commit/?id=a5a705d2c99c2a3e15bd8d7480baf439ef886e5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/odhcp6c/odhcp6c.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+The place for package-provided systemd units is /lib/systemd/system.
+/etc/systemd/system is for custom units.
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-index 520eaf2..8102c26 100644
---- a/package/odhcp6c/odhcp6c.mk
-+++ b/package/odhcp6c/odhcp6c.mk
-@@ -9,4 +9,11 @@ ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
- ODHCP6C_LICENSE = GPLv2
- ODHCP6C_LICENSE_FILES = COPYING
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dropbear/dropbear.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index e063b10..f2ae403 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -53,9 +53,9 @@ endef
  
-+define ODHCP6C_INSTALL_SCRIPT
-+        $(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
-+		$(TARGET_DIR)/usr/sbin/odhcp6c-update
-+endef
-+
-+ODHCP6C_POST_INSTALL_TARGET_HOOKS += ODHCP6C_INSTALL_SCRIPT
-+
- $(eval $(cmake-package))
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
+-		$(TARGET_DIR)/etc/systemd/system/dropbear.service
++		$(TARGET_DIR)/lib/systemd/system/dropbear.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../dropbear.service \
++	ln -fs /lib/systemd/system/dropbear.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dropbear.service
+ endef
+ 
