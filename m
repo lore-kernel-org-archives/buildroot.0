@@ -1,32 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:28:30 +0100
-Subject: [Buildroot] [PATCH next 1/2] libsigsegv: fix patch failure of
- 0004-Add-stack...
-In-Reply-To: <1424684247-3644-1-git-send-email-user@ld2077>
-References: <1424684247-3644-1-git-send-email-user@ld2077>
-Message-ID: <20150223122830.7e0bdd6c@free-electrons.com>
+Date: Mon, 23 Feb 2015 12:31:19 +0100
+Subject: [Buildroot] [PATCH] busybox: add 1.23.1 patch to fix modinfo
+In-Reply-To: <1424690358-26541-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424690358-26541-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150223123119.0011822f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Gustavo Zacarias,
 
-On Mon, 23 Feb 2015 10:37:26 +0100, Fabio Porcedda wrote:
-> From: Fabio Porcedda <fabio.porcedda@gmail.com>
-> 
-> After removing the patch 0001-Add-stack... in commit
-> 9863553fe8fa16a4d19f652b409a44bb58ef5567 "packages: all salute the
-> passing of avr32" the patch 004-Add-stack... does not apply anymore, so
-> fix it.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+On Mon, 23 Feb 2015 08:19:18 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  .../0004-Add-stack-direction-for-the-Blackfin-architecture.patch        | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/busybox/0005-modinfo.patch | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100644 package/busybox/0005-modinfo.patch
 
-Both applied to next, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
