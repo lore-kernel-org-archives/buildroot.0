@@ -1,72 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Feb 2015 23:56:29 +0100
-Subject: [Buildroot] [PATCH 3/3] configs: add Raspberry Pi 2 defconfig
-In-Reply-To: <ce51aa53f9f02f95284eb78edef084896dbc94bb.1424635766.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 22 Feb 2015 21:10:13 +0100")
-References: <cover.1424635766.git.yann.morin.1998@free.fr>
- <ce51aa53f9f02f95284eb78edef084896dbc94bb.1424635766.git.yann.morin.1998@free.fr>
-Message-ID: <871tlg9qzm.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Feb 2015 00:00:23 +0100
+Subject: [Buildroot] [PATCH v8] wine: New package
+In-Reply-To: <54EB7E36.6060303@dawncrow.de>
+References: <54EB7E36.6060303@dawncrow.de>
+Message-ID: <20150223230023.GB3950@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Andre, All,
 
- > From: James Hebden <james@hebden.net.au>
- > Signed-off-by: James Hebden <james@hebden.net.au>
- > [yann.morin.1998 at free.fr: fix commit log; further bump]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: "Guillermo A. Amaral" <g@maral.me>
+On 2015-02-23 20:23 +0100, Andr? Hentschel spake thusly:
+> Adds new package: wine
 
- > ---
- > Changes v3 -> v4:
- >   - Further bumped, fix commit log  (Yann)
+I have a very minor comment that can be fixed when the patch is applied,
+no need to resend it...
 
- > Changes v2 -> v3
- >   - Reformatted defonfig using make savedefconfig
+[--SNIP--]
+> diff --git a/package/wine/Config.in b/package/wine/Config.in
+> new file mode 100644
+> index 0000000..9a3b87f
+> --- /dev/null
+> +++ b/package/wine/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_WINE
+> +	bool "wine"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	# Wine only builds on certain architectures
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	# Wine has much CPU specific code and mostly makes sense on x86
+> +	depends on BR2_i386
+> +	help
+> +	  Wine is a compatibility layer capable of running Windows
+> +	  applications on Linux. Instead of simulating internal
+> +	  Windows logic like a virtual machine or emulator, Wine
+> +	  translates Windows API calls into POSIX calls on-the-fly,
+> +	  eliminating the performance and memory penalties of other
+> +	  methods.
+> +
+> +	  http://www.winehq.org
+> +
+> +comment "wine needs a (e)glibc toolchain w/ IPv6, threads"
 
- > Changes v1 -> v2
- >   - Removed custom kernel configuration, used default kernel config for bcm2709
- >   - Removed changes to rpi-firmware package, separate patch coming
- >   - Enabled EABIhf
- > ---
- >  configs/raspberrypi2_defconfig | 15 +++++++++++++++
+You indeed removed the dependency on threads and IPv6, but forgot to
+update the comment; stating "wine needs an (e)glibc toolchain" is
+enough.
 
-It would be good to have a readme. If the boot sequence is the same as
-for rpi1 then a simple oneliner explaining to look at that readme would
-be enough.
+That's about all I have to say about this version. With the above fixed
+before commiting:
 
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Only build-tested, not run-time tested y lack of Windows apps]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
->  1 file changed, 15 insertions(+)
- >  create mode 100644 configs/raspberrypi2_defconfig
+Thank you for your persistence in this adventure! :-)
 
- > diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
- > new file mode 100644
- > index 0000000..d2f97fb
- > --- /dev/null
- > +++ b/configs/raspberrypi2_defconfig
- > @@ -0,0 +1,15 @@
- > +BR2_arm=y
- > +BR2_cortex_a7=y
- > +BR2_ARM_EABIHF=y
- > +BR2_ARM_FPU_NEON_VFPV4=y
- > +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
- > +BR2_TOOLCHAIN_BUILDROOT_CXX=y
- > +BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- > +BR2_LINUX_KERNEL=y
- > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
- > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
- > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
-
-This is based on 3.19, so the kernel headers should be locked to that as
-well.
-
-While we're at it, I see that the raspberrypi_dt defconfig also forgets
-to lock it.
-
-Care to send a patch to fixup those issues?
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
