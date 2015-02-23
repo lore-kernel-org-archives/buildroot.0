@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:28:18 +0100
-Subject: [Buildroot] [PATCH v2 next] package/freerdp: needs wchar
-In-Reply-To: <1424672272-17853-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1424672272-17853-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150223122818.03f090ef@free-electrons.com>
+Date: Mon, 23 Feb 2015 12:28:30 +0100
+Subject: [Buildroot] [PATCH next 1/2] libsigsegv: fix patch failure of
+ 0004-Add-stack...
+In-Reply-To: <1424684247-3644-1-git-send-email-user@ld2077>
+References: <1424684247-3644-1-git-send-email-user@ld2077>
+Message-ID: <20150223122830.7e0bdd6c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,20 @@ To: buildroot@busybox.net
 
 Dear Fabio Porcedda,
 
-On Mon, 23 Feb 2015 07:17:52 +0100, Fabio Porcedda wrote:
-> Also add reverse dependency for Weston.
+On Mon, 23 Feb 2015 10:37:26 +0100, Fabio Porcedda wrote:
+> From: Fabio Porcedda <fabio.porcedda@gmail.com>
 > 
-> Fix build error:
-> make[3]: Entering directory '/home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d'
-> In file included from /home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d/winpr/include/winpr/winsock.h:24:0,
->                  from /home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d/winpr/libwinpr/winsock/winsock.c:24:
-> /home/tetsuya/buildroot/br/output/build/freerdp-b21ff842ef3de5837513042dc30488b12bd9cf9d/winpr/include/winpr/wtypes.h:132:1: error: unknown type name ?wchar_t?
->  typedef wchar_t UNICODE;
+> After removing the patch 0001-Add-stack... in commit
+> 9863553fe8fa16a4d19f652b409a44bb58ef5567 "packages: all salute the
+> passing of avr32" the patch 004-Add-stack... does not apply anymore, so
+> fix it.
 > 
 > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  .../0004-Add-stack-direction-for-the-Blackfin-architecture.patch        | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to next, thanks.
+Both applied to next, thanks!
 
 Thomas
 -- 
