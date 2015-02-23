@@ -1,9 +1,9 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Mon, 23 Feb 2015 12:32:48 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libsigrok: enable building C++ bindings
+Date: Mon, 23 Feb 2015 12:32:49 +0100
+Subject: [Buildroot] [PATCH v2 2/2] pulseview: new package
 In-Reply-To: <1424691169-14397-1-git-send-email-bgolaszewski@baylibre.com>
 References: <1424691169-14397-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1424691169-14397-2-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <1424691169-14397-3-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +12,88 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/libsigrok/Config.in    | 12 ++++++++++++
- package/libsigrok/libsigrok.mk |  9 ++++++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ package/Config.in              |  1 +
+ package/pulseview/Config.in    | 28 ++++++++++++++++++++++++++++
+ package/pulseview/pulseview.mk | 24 ++++++++++++++++++++++++
+ 3 files changed, 53 insertions(+)
+ create mode 100644 package/pulseview/Config.in
+ create mode 100644 package/pulseview/pulseview.mk
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index 47f812c..468c8bc 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -16,6 +16,18 @@ config BR2_PACKAGE_LIBSIGROK
- 
- 	  http://sigrok.org/wiki/Libsigrok
- 
-+config BR2_PACKAGE_LIBSIGROKCXX
-+	bool "build C++ bindings"
-+	select BR2_PACKAGE_GLIBMM
-+	depends on BR2_PACKAGE_LIBSIGROK
+diff --git a/package/Config.in b/package/Config.in
+index 09d49d9..7b118ec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -362,6 +362,7 @@ endif
+ 	source "package/picocom/Config.in"
+ 	source "package/pifmrds/Config.in"
+ 	source "package/pps-tools/Config.in"
++	source "package/pulseview/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+new file mode 100644
+index 0000000..4428db7
+--- /dev/null
++++ b/package/pulseview/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_PULSEVIEW
++	bool "pulseview"
++	select BR2_PACKAGE_LIBSERIALPORT
++	select BR2_PACKAGE_LIBSIGROK
++	select BR2_PACKAGE_LIBSIGROKCXX
++	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	select BR2_PACKAGE_QT5SVG
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	# libsigrok->libglib2:
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
 +	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
 +	help
-+	  Build libsigrok C++ bindings as well.
++	  PulseView is a Qt based logic analyzer, oscilloscope
++	  and MSO GUI for sigrok.
 +
- comment "libsigrok needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	  http://sigrok.org/wiki/PulseView
 +
-+comment "libsigrokcxx needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_LIBSIGROK
++comment "pulseview needs a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_QT5
 +	depends on !BR2_TOOLCHAIN_BUILDROOT_CXX
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 6bc210e..1e6080d 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -13,7 +13,7 @@ LIBSIGROK_LICENSE_FILES = COPYING
- LIBSIGROK_AUTORECONF = YES
- LIBSIGROK_INSTALL_STAGING = YES
- LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
--LIBSIGROK_CONF_OPTS = --disable-bindings --disable-glibtest
-+LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
- 
- define LIBSIGROK_ADD_MISSING
- 	mkdir -p $(@D)/autostuff
-@@ -46,4 +46,11 @@ ifeq ($(BR2_PACKAGE_GLIBMM),y)
- LIBSIGROK_DEPENDENCIES += glibmm
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
-+LIBSIGROK_CONF_OPTS += --enable-cxx
-+LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm
+diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
+new file mode 100644
+index 0000000..923459d
+--- /dev/null
++++ b/package/pulseview/pulseview.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# pulseview
++#
++################################################################################
++
++# TODO Pulseview can be built and linked against Qt4 as well.
++
++# No https access on upstream git
++PULSEVIEW_SITE = git://sigrok.org/pulseview
++PULSEVIEW_VERSION = 19be0af16af83ca10f7ce69cb64f0b0c6f6a0d81
++PULSEVIEW_LICENSE = GPLv3+
++PULSEVIEW_LICENSE_FILES = COPYING
++PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
++PULSEVIEW_CONF_OPTS = -DDISABLE_WERROR=y
++
++ifeq ($(BR2_PACKAGE_LIBSIGROKDECODE),y)
++PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=TRUE
++PULSEVIEW_DEPENDENCIES += libsigrokdecode
 +else
-+LIBSIGROK_CONF_OPTS += --disable-cxx
++PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=FALSE
 +endif
 +
- $(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
 2.1.4
