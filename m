@@ -1,69 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Feb 2015 00:00:23 +0100
-Subject: [Buildroot] [PATCH v8] wine: New package
-In-Reply-To: <54EB7E36.6060303@dawncrow.de>
-References: <54EB7E36.6060303@dawncrow.de>
-Message-ID: <20150223230023.GB3950@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 Feb 2015 00:24:19 +0100
+Subject: [Buildroot] [git commit] Update for 2015.02-rc3
+Message-ID: <20150223232717.B9FCE8178B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andre, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=345f32e67d44368c031777d694c4c75823b41bfd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-02-23 20:23 +0100, Andr? Hentschel spake thusly:
-> Adds new package: wine
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    |   11 +++++++++++
+ Makefile                   |    2 +-
+ docs/website/download.html |   10 +++++-----
+ docs/website/news.html     |   12 ++++++++++++
+ 4 files changed, 29 insertions(+), 6 deletions(-)
 
-I have a very minor comment that can be fixed when the patch is applied,
-no need to resend it...
-
-[--SNIP--]
-> diff --git a/package/wine/Config.in b/package/wine/Config.in
-> new file mode 100644
-> index 0000000..9a3b87f
-> --- /dev/null
-> +++ b/package/wine/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_WINE
-> +	bool "wine"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	# Wine only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	# Wine has much CPU specific code and mostly makes sense on x86
-> +	depends on BR2_i386
-> +	help
-> +	  Wine is a compatibility layer capable of running Windows
-> +	  applications on Linux. Instead of simulating internal
-> +	  Windows logic like a virtual machine or emulator, Wine
-> +	  translates Windows API calls into POSIX calls on-the-fly,
-> +	  eliminating the performance and memory penalties of other
-> +	  methods.
-> +
-> +	  http://www.winehq.org
-> +
-> +comment "wine needs a (e)glibc toolchain w/ IPv6, threads"
-
-You indeed removed the dependency on threads and IPv6, but forgot to
-update the comment; stating "wine needs an (e)glibc toolchain" is
-enough.
-
-That's about all I have to say about this version. With the above fixed
-before commiting:
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Only build-tested, not run-time tested y lack of Windows apps]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Thank you for your persistence in this adventure! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/CHANGES b/CHANGES
+index b3cfee7..401b2e4 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,14 @@
++2015.02-rc3, Released February 24th, 2015
++
++	Minor fixes.
++
++	Cmake and rebar (erlang) infrastructure fixes.
++
++	Updated/fixed packages: bind, btrfs-progs, busybox, e2fsprogs,
++	evtest, ffmpeg, fltk, gnutls, i2c-tools, imagemagick, libxcb,
++	make, mjpg-streamer, netsnmp, opentyrian, php, polarssl,
++	qt5base, samba, samba4, sudo, util-linux, xserver_xorg-server
++
+ 2015.02-rc2, Released February 15th, 2015
+ 
+ 	Minor fixes.
+diff --git a/Makefile b/Makefile
+index 19c3997..8a01f42 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2015.02-rc2
++export BR2_VERSION := 2015.02-rc3
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 1f13fcd..a9b5586 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -18,14 +18,14 @@ or
+ 
+ <p>
+ 
+-The latest release candidate is <b>2015.02-rc2</b>, which can be
++The latest release candidate is <b>2015.02-rc3</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2015.02-rc2.tar.gz">buildroot-2015.02-rc2.tar.gz</a>
+-(<a href="/downloads/buildroot-2015.02-rc2.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2015.02-rc3.tar.gz">buildroot-2015.02-rc3.tar.gz</a>
++(<a href="/downloads/buildroot-2015.02-rc3.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2015.02-rc2.tar.bz2">buildroot-2015.02-rc2.tar.bz2</a>
+-(<a href="/downloads/buildroot-2015.02-rc2.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2015.02-rc3.tar.bz2">buildroot-2015.02-rc3.tar.bz2</a>
++(<a href="/downloads/buildroot-2015.02-rc3.tar.bz2.sign">PGP signature</a>).
+ <p>
+ 
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 5d8e1b1..cc970d7 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -8,6 +8,18 @@
+ <p>
+ 
+ <ul>
++  <li><b>24 February 2015 -- 2015.02-rc3 released</b>
++
++    <p>Release candidate 3 is out with more cleanups and security / build fixes. See the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc3">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2015.02-rc3.tar.bz2">2015.02-rc3
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>15 February 2015 -- 2015.02-rc2 released</b>
+ 
+     <p>Another week, another release candidate with more cleanups and
