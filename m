@@ -1,51 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Feb 2015 00:30:24 +0100
-Subject: [Buildroot] Buildroot 2015.02-rc3 released
-Message-ID: <87wq388aun.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue, 24 Feb 2015 00:39:22 +0100
+Subject: [Buildroot] [PATCH 1/2] package/thrift: fix build failure on
+ bfin
+In-Reply-To: <54EA4E53.6050401@openwide.fr>
+References: <1424640307-26144-1-git-send-email-romain.naour@openwide.fr>
+ <20150222222748.64849cf0@free-electrons.com> <54EA4E53.6050401@openwide.fr>
+Message-ID: <54EBBA2A.4090407@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas, All,
 
-Buildroot 2015.02-rc3 is released - Go download it at:
+This patch is wrong since THRIFT_CONF_OPTS is overwritten here (missing +)
+THRIFT_CONF_OPTS = lt_cv_aix_libpath__CXX="/usr/lib"
 
-http://buildroot.net/downloads/buildroot-2015.02-rc3.tar.gz
+So previous THRIFT_CONF_OPTS were discarded:
+THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
+	--with-boost=$(STAGING_DIR) \
+	--disable-tests \
+	--disable-tutorial
 
-or
+That why the tests were build...
 
-http://buildroot.net/downloads/buildroot-2015.02-rc3.tar.bz2
+But the issue seems to be related to --with-boost=$(STAGING_DIR) option.
+There is no error if you remove this option.
 
-Or get it from Git:
+So I used --with-boost-libdir=$(STAGING_DIR)/usr/lib to override boost libraries
+path detection.
 
-git://git.buildroot.net/buildroot
+Please give a try to the new patch:
+http://patchwork.ozlabs.org/patch/442702/
 
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2015.02-rc2..
-    11  Gustavo Zacarias
-     6  Romain Naour
-     6  Vicente Olivert Riera
-     5  Baruch Siach
-     3  Frank Hunleth
-     2  Thomas Petazzoni
-     1  Assaf Inbal
-     1  Bernd Kuhls
-     1  Fabio Porcedda
-     1  Peter Korsgaard
-     1  Peter Seiderer
-     1  Stefan S?rensen
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc3
-
-Expect the final 2015.02 release by the end of the month.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
