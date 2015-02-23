@@ -1,50 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 19:02:52 +0100
-Subject: [Buildroot] [PATCH] qt5base: fix postgresql plugin compile
-In-Reply-To: <1424383481-8061-1-git-send-email-ps.report@gmx.net>
-References: <1424383481-8061-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150223190252.22af8a55@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 23 Feb 2015 19:11:53 +0100 (CET)
+Subject: [Buildroot] [PATCH] package/libevent: fix static build
+In-Reply-To: <20150223190040.70f41d55@free-electrons.com>
+Message-ID: <2008003175.212046.1424715113306.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Hi Thomas,
 
-On Thu, 19 Feb 2015 23:04:41 +0100, Peter Seiderer wrote:
-> Add qt5base '-psql_config' configure option and use it to set
-> pg_config path in configure step instead of legacy PSQL_LIBS
-> enviornment variable.
-> 
-> Fixes [1]:
-> 
-> PostgreSQL auto-detection... ()
-> make[1]: Entering directory `/home/peko/autobuild/instance-0/output/build/qt5base-5.4.0/config.tests/unix/psql'
-> /home/peko/autobuild/instance-0/output/host/usr/bin/sh-linux-gnu-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/home/peko/autobuild/instance-0/output/host/usr/sh4a-buildroot-linux-gnu/sysroot -O2 -O3 -Wall -W -fPIE  -I../../../mkspecs/devices/linux-buildroot-g++ -I. -I/usr/include/postgresql -o psql.o psql.cpp
-> sh-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '/usr/include/postgresql'
-> make[1]: *** [psql.o] Error 1
-> make[1]: Leaving directory `/home/peko/autobuild/instance-0/output/build/qt5base-5.4.0/config.tests/unix/psql'
-> PostgreSQL disabled.
-> PostgreSQL support cannot be enabled due to functionality tests!
->  Turn on verbose messaging (-v) to ./configure to see the final report.
->  If you believe this message is in error you may use the continue
->  switch (-continue) to ./configure to continue.
-> make: *** [/home/peko/autobuild/instance-0/output/build/qt5base-5.4.0/.stamp_configured] Error 101
-> make: Leaving directory `/home/peko/autobuild/instance-0/buildroot'
-> 
-> [1] http://autobuild.buildroot.net/results/354/354bae2337703ad8bfb9d33c79538df3017b7fe9/
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----- Mail original -----
+| De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+| ?: "Romain Naour" <romain.naour@openwide.fr>
+| Cc: buildroot at buildroot.org
+| Envoy?: Lundi 23 F?vrier 2015 19:00:40
+| Objet: Re: [Buildroot] [PATCH] package/libevent: fix static build
+| 
+| Dear Romain Naour,
+| 
+| On Sun, 15 Feb 2015 22:33:00 +0100, Romain Naour wrote:
+| > For some reason, libevent silently fail to enable openssl support
+| > even when it's explicitly requested.
+| > 
+| > Somes flags are missing when checking for zlib and openssl.
+| > 
+| > Fixes:
+| > http://autobuild.buildroot.net/results/713/71362af474461e99b7c188a316aa644a0faaad2e
+| > 
+| > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+| 
+| Do you have a defconfig that exhibits the build failure? I've tried
+| the
+| following minimal defconfig, and it builds fine here:
+| 
 
-Applied to master, thanks.
+Can you try to build libwebsock with your config ?
 
-Can you please submit this patch upstream to the Qt developers?
+Sorry, I meant libwebsock fix static build.
 
-Thanks,
+libevent break libwebsock's build because libevent_openssl.pc is not
+installed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
+
+| BR2_bfin=y
+| BR2_BINFMT_FLAT=y
+| BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+| BR2_TOOLCHAIN_EXTERNAL=y
+| BR2_INIT_NONE=y
+| # BR2_PACKAGE_BUSYBOX is not set
+| BR2_PACKAGE_OPENSSL=y
+| BR2_PACKAGE_LIBEVENT=y
+| # BR2_TARGET_ROOTFS_TAR is not set
+| 
+| Thanks,
+| 
+| Thomas
+| --
+| Thomas Petazzoni, CTO, Free Electrons
+| Embedded Linux, Kernel and Android engineering
+| http://free-electrons.com
+| 
