@@ -1,60 +1,127 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Feb 2015 21:48:48 +0100
-Subject: [Buildroot] [PATCH] qt5base: fix postgresql plugin compile
-Message-ID: <trinity-029e1f11-1c38-45fc-978c-a13e07ec471f-1424724528830@3capp-gmx-bs21>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 23 Feb 2015 22:55:01 +0100
+Subject: [Buildroot] [PATCH] package/libevent: fix static build
+In-Reply-To: <20150223200748.46ce9690@free-electrons.com>
+References: <20150223190040.70f41d55@free-electrons.com>	<2008003175.212046.1424715113306.JavaMail.root@openwide.fr>
+ <20150223200748.46ce9690@free-electrons.com>
+Message-ID: <54EBA1B5.7000402@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi Thomas,
 
-On Mon, Feb 23, 2015 at 07:02:52PM +0100, Thomas Petazzoni wrote:
-> Dear Peter Seiderer,
+Le 23/02/2015 20:07, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> On Thu, 19 Feb 2015 23:04:41 +0100, Peter Seiderer wrote:
-> > Add qt5base '-psql_config' configure option and use it to set
-> > pg_config path in configure step instead of legacy PSQL_LIBS
-> > enviornment variable.
-> > 
-> > Fixes [1]:
-> > 
-> > PostgreSQL auto-detection... ()
-> > make[1]: Entering directory `/home/peko/autobuild/instance-0/output/build/qt5base-5.4.0/config.tests/unix/psql'
-> > /home/peko/autobuild/instance-0/output/host/usr/bin/sh-linux-gnu-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/home/peko/autobuild/instance-0/output/host/usr/sh4a-buildroot-linux-gnu/sysroot -O2 -O3 -Wall -W -fPIE  -I../../../mkspecs/devices/linux-buildroot-g++ -I. -I/usr/include/postgresql -o psql.o psql.cpp
-> > sh-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '/usr/include/postgresql'
-> > make[1]: *** [psql.o] Error 1
-> > make[1]: Leaving directory `/home/peko/autobuild/instance-0/output/build/qt5base-5.4.0/config.tests/unix/psql'
-> > PostgreSQL disabled.
-> > PostgreSQL support cannot be enabled due to functionality tests!
-> >  Turn on verbose messaging (-v) to ./configure to see the final report.
-> >  If you believe this message is in error you may use the continue
-> >  switch (-continue) to ./configure to continue.
-> > make: *** [/home/peko/autobuild/instance-0/output/build/qt5base-5.4.0/.stamp_configured] Error 101
-> > make: Leaving directory `/home/peko/autobuild/instance-0/buildroot'
-> > 
-> > [1] http://autobuild.buildroot.net/results/354/354bae2337703ad8bfb9d33c79538df3017b7fe9/
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> On Mon, 23 Feb 2015 19:11:53 +0100 (CET), Romain Naour wrote:
 > 
-> Applied to master, thanks.
->
-
-Thanks from my side ;-)
- 
-> Can you please submit this patch upstream to the Qt developers?
+>> Can you try to build libwebsock with your config ?
+>>
+>> Sorry, I meant libwebsock fix static build.
+>>
+>> libevent break libwebsock's build because libevent_openssl.pc is not
+>> installed.
 > 
-
-Done, see https://codereview.qt-project.org/107027
-
-Regards,
-Peter
-
-> Thanks,
+> Ah, right, now I can reproduce the problem. Instead of trying to get
+> AC_SEARCH_LIB to work properly with static libraries, how about using
+> PKG_CHECK_MODULES() instead to rely on pkg-config? Something like:
 > 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> From c603940f3d54189a3ef4a430580166cfdda468d0 Mon Sep 17 00:00:00 2001
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Date: Mon, 23 Feb 2015 19:58:21 +0100
+> Subject: [PATCH 2/2] Use pkg-config to discover openssl and zlib
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+It's much better, thanks.
+I was not really happy with my patch, but at least it fixed the build.
+
+Build tested from scratch with your patch and the same config.
+Can you add my:
+Tested-by: Romain Naour <romain.naour@openwide.fr>
+
+Best regards,
+Romain
+> ---
+>  configure.ac       | 25 ++-----------------------
+>  sample/Makefile.am |  2 +-
+>  test/Makefile.am   |  2 +-
+>  3 files changed, 4 insertions(+), 25 deletions(-)
+> 
+> diff --git a/configure.ac b/configure.ac
+> index d42edd8..da5bc49 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -146,16 +146,7 @@ AC_CHECK_HEADERS([zlib.h])
+>  if test "x$ac_cv_header_zlib_h" = "xyes"; then
+>  dnl Determine if we have zlib for regression tests
+>  dnl Don't put this one in LIBS
+> -save_LIBS="$LIBS"
+> -LIBS=""
+> -ZLIB_LIBS=""
+> -have_zlib=no
+> -AC_SEARCH_LIBS([inflateEnd], [z],
+> -	[have_zlib=yes
+> -	ZLIB_LIBS="$LIBS"
+> -	AC_DEFINE(HAVE_LIBZ, 1, [Define if the system has zlib])])
+> -LIBS="$save_LIBS"
+> -AC_SUBST(ZLIB_LIBS)
+> +    PKG_CHECK_MODULES([ZLIB], [zlib], [have_zlib=yes])
+>  fi
+>  AM_CONDITIONAL(ZLIB_REGRESS, [test "$have_zlib" = "yes"])
+>  
+> @@ -169,23 +160,11 @@ else
+>  fi
+>  AC_SUBST(EV_LIB_WS32)
+>  AC_SUBST(EV_LIB_GDI)
+> -AC_SUBST(OPENSSL_LIBADD)
+>  
+>  AC_CHECK_HEADERS([openssl/bio.h])
+>  
+>  if test "$enable_openssl" = "yes"; then
+> -save_LIBS="$LIBS"
+> -LIBS=""
+> -OPENSSL_LIBS=""
+> -have_openssl=no
+> -AC_SEARCH_LIBS([SSL_new], [ssl],
+> -	[have_openssl=yes
+> -	OPENSSL_LIBS="$LIBS -lcrypto $EV_LIB_GDI $EV_LIB_WS32 $OPENSSL_LIBADD"
+> -	AC_DEFINE(HAVE_OPENSSL, 1, [Define if the system has openssl])],
+> -	[have_openssl=no],
+> -	[-lcrypto $EV_LIB_GDI $EV_LIB_WS32 $OPENSSL_LIBADD])
+> -LIBS="$save_LIBS"
+> -AC_SUBST(OPENSSL_LIBS)
+> +   PKG_CHECK_MODULES([OPENSSL], [openssl], [have_openssl=yes], [have_openssl=no])
+>  fi
+>  
+>  dnl Checks for header files.
+> diff --git a/sample/Makefile.am b/sample/Makefile.am
+> index c926f4e..a986b18 100644
+> --- a/sample/Makefile.am
+> +++ b/sample/Makefile.am
+> @@ -21,7 +21,7 @@ http_server_SOURCES = http-server.c
+>  if OPENSSL
+>  noinst_PROGRAMS += le-proxy
+>  le_proxy_SOURCES = le-proxy.c
+> -le_proxy_LDADD = $(LDADD) ../libevent_openssl.la -lssl -lcrypto ${OPENSSL_LIBADD}
+> +le_proxy_LDADD = $(LDADD) ../libevent_openssl.la -lssl -lcrypto $(OPENSSL_LIBS)
+>  endif
+>  
+>  verify:
+> diff --git a/test/Makefile.am b/test/Makefile.am
+> index 0253a49..4ab6ae5 100644
+> --- a/test/Makefile.am
+> +++ b/test/Makefile.am
+> @@ -72,7 +72,7 @@ regress_LDFLAGS = $(PTHREAD_CFLAGS)
+>  
+>  if OPENSSL
+>  regress_SOURCES += regress_ssl.c
+> -regress_LDADD += ../libevent_openssl.la -lssl -lcrypto ${OPENSSL_LIBADD}
+> +regress_LDADD += ../libevent_openssl.la -lssl -lcrypto $(OPENSSL_LIBS)
+>  endif
+>  
+>  bench_SOURCES = bench.c
+> 
