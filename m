@@ -1,39 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:26:53 +0100
-Subject: [Buildroot] [git commit branch/next] libsigsegv: rename patches
-	because the first one is gone
-Message-ID: <20150223112700.F10D68042A@busybox.osuosl.org>
+Date: Mon, 23 Feb 2015 12:27:09 +0100
+Subject: [Buildroot] [git commit branch/next] trinity: bump version to fix a
+	build failure using Linux 3.19 headers
+Message-ID: <20150223112715.90BF381780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7434b01e241be780bdd6ce3e3664d155c4ac825d
+commit: http://git.buildroot.net/buildroot/commit/?id=19068bdd50acf5d7688810a294ac896a91db7541
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+bump to the following trinity repository commit:
+
+kvm: Add ifdef around IA64 ioctls.
+Fix build error.
+
+  CC	ioctls/kvm.o
+In file included from ioctls/kvm.c:8:0:
+ioctls/kvm.c:115:8: error: ???KVM_IA64_VCPU_GET_STACK??? undeclared here (not in a function)
+  IOCTL(KVM_IA64_VCPU_GET_STACK),
+        ^
+include/ioctls.h:53:15: note: in definition of macro ???IOCTL???
+  { .request = _request, .name = #_request, }
+               ^
+ioctls/kvm.c:116:8: error: ???KVM_IA64_VCPU_SET_STACK??? undeclared here (not in a function)
+  IOCTL(KVM_IA64_VCPU_SET_STACK),
+        ^
+include/ioctls.h:53:15: note: in definition of macro ???IOCTL???
+  { .request = _request, .name = #_request, }
+
+IA64 ioctls were removed in Linux 3.19.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...k-direction-for-the-AArch64-architecture.patch} |    0
- ...irection-for-the-Microblaze-architecture.patch} |    0
- ...-direction-for-the-Blackfin-architecture.patch} |    0
- ...k-direction-for-the-Nios-II-architecture.patch} |    0
- 4 files changed, 0 insertions(+), 0 deletions(-)
+ package/trinity/trinity.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libsigsegv/0002-Add-stack-direction-for-the-AArch64-architecture.patch b/package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0002-Add-stack-direction-for-the-AArch64-architecture.patch
-rename to package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
-diff --git a/package/libsigsegv/0003-Add-stack-direction-for-the-Microblaze-architecture.patch b/package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0003-Add-stack-direction-for-the-Microblaze-architecture.patch
-rename to package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
-diff --git a/package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch b/package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch
-rename to package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
-diff --git a/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch b/package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
-rename to package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index 52805e0..5f8a707 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRINITY_VERSION = 5d2dfe9727eb9c8dc44c31e95968e8d85284ffcc
++TRINITY_VERSION = c8c41f99500b5854c2061a08962b8908c872d852
+ TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
+ TRINITY_LICENSE = GPLv2
+ TRINITY_LICENSE_FILES = COPYING
