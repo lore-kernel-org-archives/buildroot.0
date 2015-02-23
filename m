@@ -1,81 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 19:17:21 +0100
-Subject: [Buildroot] [PATCH] gettext: add dependency on host-libxml2 for
- host-gettext.
-In-Reply-To: <1424696593-21361-1-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <20150220222933.5B92D817C4@busybox.osuosl.org>
- <1424696593-21361-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <20150223191721.573fdb19@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 23 Feb 2015 20:54:07 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: add security bug fix
+Message-ID: <f8d75a3978baed74ba272faafc60b23db8fabbcb.1424717647.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Cavallari,
+Add upstream patch fixing CVE-2015-1572: incomplete fix for CVE-2015-0247.
 
-On Mon, 23 Feb 2015 14:03:13 +0100, Nicolas Cavallari wrote:
-> From: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
-> 
-> Otherwise, the locally-installed libxml2 will be used, which may
-> depend on a locally-installed liblzma which may create conflict
-> if host-liblzma is compiled.
-> 
-> Fixes https://bugs.busybox.net/show_bug.cgi?id=7886
-> 
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
-> [nicolas: added extended commit message]
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
-> Ignacy is unavailable this week, but he commited this change to our
-> local tree before leaving.
-> 
-> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-> index c2419c1..a554517 100644
-> --- a/package/gettext/gettext.mk
-> +++ b/package/gettext/gettext.mk
-> @@ -12,7 +12,7 @@ GETTEXT_LICENSE = GPLv2+
->  GETTEXT_LICENSE_FILES = COPYING
->  
->  GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> -HOST_GETTEXT_DEPENDENCIES = # we don't want the libiconv dependency
-> +HOST_GETTEXT_DEPENDENCIES = host-libxml2 # we don't want the libiconv dependency
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...-fix-potential-buffer-overflow-in-closefs.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
 
-I agree that we normally prefer to rely on external libraries, rather
-than built-in copies. However, in this case, I am wondering if we
-shouldn't rather rely on the built-in copy, which is more lightweight
-that building host-libxml2.
-
-From the DEPENDENCIES file of gettext:
-
-* libxml2
-  + Optional.
-    Needed for the --color option of the various programs.
-    If not present, a subset of libxml2 (included in this package) will be
-    compiled into libgettextlib.
-  + Homepage:
-    http://xmlsoft.org/
-  + Download:
-    ftp://xmlsoft.org/libxml2/
-  + If it is installed in a nonstandard directory, pass the option
-    --with-libxml2-prefix=DIR to 'configure'.
-
-So instead of building an external libxml2, we can pass
---with-included-libxml to the gettext-tools configure script to force
-it to use the built-in libxml2 subset.
-
-Note that there are several other libraries in the same situation:
-glib2, libcroco and libunistring.
-
-What is the opinion of other BR developers about this?
-
-And all that just for a --color command line option that we really
-don't care about. Why the heck isn't this thing optional in the first place?
-
-Best regards,
-
-Thomas
+diff --git a/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch b/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
+new file mode 100644
+index 000000000000..bcf3083e718d
+--- /dev/null
++++ b/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
+@@ -0,0 +1,59 @@
++From 49d0fe2a14f2a23da2fe299643379b8c1d37df73 Mon Sep 17 00:00:00 2001
++From: Theodore Ts'o <tytso@mit.edu>
++Date: Fri, 6 Feb 2015 12:46:39 -0500
++Subject: [PATCH] libext2fs: fix potential buffer overflow in closefs()
++
++Upstream commit 49d0fe2a14f2.
++
++The bug fix in f66e6ce4446: "libext2fs: avoid buffer overflow if
++s_first_meta_bg is too big" had a typo in the fix for
++ext2fs_closefs().  In practice most of the security exposure was from
++the openfs path, since this meant if there was a carefully crafted
++file system, buffer overrun would be triggered when the file system was
++opened.
++
++However, if corrupted file system didn't trip over some corruption
++check, and then the file system was modified via tune2fs or debugfs,
++such that the superblock was marked dirty and then written out via the
++closefs() path, it's possible that the buffer overrun could be
++triggered when the file system is closed.
++
++Also clear up a signed vs unsigned warning while we're at it.
++
++Thanks to Nick Kralevich <nnk@google.com> for asking me to look at
++compiler warning in the code in question, which led me to notice the
++bug in f66e6ce4446.
++
++Addresses: CVE-2015-1572
++
++Signed-off-by: Theodore Ts'o <tytso@mit.edu>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ lib/ext2fs/closefs.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/lib/ext2fs/closefs.c b/lib/ext2fs/closefs.c
++index 1f9911311a1a..ab5b2fb2365e 100644
++--- a/lib/ext2fs/closefs.c
+++++ b/lib/ext2fs/closefs.c
++@@ -287,7 +287,7 @@ errcode_t ext2fs_flush2(ext2_filsys fs, int flags)
++ 	dgrp_t		j;
++ #endif
++ 	char	*group_ptr;
++-	int	old_desc_blocks;
+++	blk64_t	old_desc_blocks;
++ 	struct ext2fs_numeric_progress_struct progress;
++ 
++ 	EXT2_CHECK_MAGIC(fs, EXT2_ET_MAGIC_EXT2FS_FILSYS);
++@@ -346,7 +346,7 @@ errcode_t ext2fs_flush2(ext2_filsys fs, int flags)
++ 	group_ptr = (char *) group_shadow;
++ 	if (fs->super->s_feature_incompat & EXT2_FEATURE_INCOMPAT_META_BG) {
++ 		old_desc_blocks = fs->super->s_first_meta_bg;
++-		if (old_desc_blocks > fs->super->s_first_meta_bg)
+++		if (old_desc_blocks > fs->desc_blocks)
++ 			old_desc_blocks = fs->desc_blocks;
++ 	} else
++ 		old_desc_blocks = fs->desc_blocks;
++-- 
++2.1.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
