@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:34:55 +0100
-Subject: [Buildroot] [git commit branch/next] luacrypto: remove duplicate
-	dependency on luainterpreter
-Message-ID: <20150223113459.980A081780@busybox.osuosl.org>
+Date: Mon, 23 Feb 2015 12:36:26 +0100
+Subject: [Buildroot] [PATCH v2 1/2] lua-periphery: new package
+In-Reply-To: <1422891336-14461-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1422891336-14461-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150223123626.3efa7f85@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9beb4aea56a605490a7fb01d1c38867d20f4ac9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Thomas De Schampheleire,
 
-The luarocks package infrastructure already adds a dependency on
-luainterpreter, so it is not necessary to add it in luacrypto.
+On Mon,  2 Feb 2015 16:35:35 +0100, Thomas De Schampheleire wrote:
+> From: Vanya Sergeev <vsergeev@gmail.com>
+> 
+> Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+> [ThomasDS: rewrap package/lua-periphery/Config.in]
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> (compile-tested on x86/glibc armel/uclibc)
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luacrypto/luacrypto.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thanks, both patches applied to next.
 
-diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/luacrypto.mk
-index 42e20af..b0e972c 100644
---- a/package/luacrypto/luacrypto.mk
-+++ b/package/luacrypto/luacrypto.mk
-@@ -9,6 +9,6 @@ LUACRYPTO_VERSION = $(LUACRYPTO_VERSION_UPSTREAM)-1
- LUACRYPTO_SUBDIR = luacrypto-$(LUACRYPTO_VERSION_UPSTREAM)
- LUACRYPTO_LICENSE = MIT
- LUACRYPTO_LICENSE_FILES = $(LUACRYPTO_SUBDIR)/COPYING
--LUACRYPTO_DEPENDENCIES = luainterpreter openssl
-+LUACRYPTO_DEPENDENCIES = openssl
- 
- $(eval $(luarocks-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
