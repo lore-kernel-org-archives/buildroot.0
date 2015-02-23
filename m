@@ -1,54 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 22:46:26 +0100
-Subject: [Buildroot] [git commit] configs/raspberrypi2: update and fix our
-	defconfig
-Message-ID: <20150302222723.ADB72807B5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Feb 2015 12:33:09 +0100
+Subject: [Buildroot] [git commit] lua-periphery: new package
+Message-ID: <20150302222723.024468177D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79e8d730ad6d414f6a67724a68057e2025d3dda6
+commit: http://git.buildroot.net/buildroot/commit/?id=c50b3ea11d572895abf42efee79e8647cd3c42b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Lock to 3.19 kernel headers; and comment about installing DTBs; bump
-kernel sha1.
-
-Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+[ThomasDS: rewrap package/lua-periphery/Config.in]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(compile-tested on x86/glibc armel/uclibc)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/raspberrypi2_defconfig |   12 +++++++++++-
- 1 files changed, 11 insertions(+), 1 deletions(-)
+ package/Config.in                      |    1 +
+ package/lua-periphery/Config.in        |    8 ++++++++
+ package/lua-periphery/lua-periphery.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index d2f97fb..b523a4a 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -2,14 +2,24 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/Config.in b/package/Config.in
+index 09d49d9..2f90830 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -446,6 +446,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-ev/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
++	source "package/lua-periphery/Config.in"
+ 	source "package/lua-testmore/Config.in"
+ 	source "package/luabitop/Config.in"
+ 	source "package/luacrypto/Config.in"
+diff --git a/package/lua-periphery/Config.in b/package/lua-periphery/Config.in
+new file mode 100644
+index 0000000..de5a716
+--- /dev/null
++++ b/package/lua-periphery/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUA_PERIPHERY
++	bool "lua-periphery"
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	help
++	  A library for GPIO, SPI, I2C, MMIO, and Serial peripheral I/O
++	  interface access in userspace Linux with Lua.
 +
- BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
++	  https://github.com/vsergeev/lua-periphery
+diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
+new file mode 100644
+index 0000000..0717a27
+--- /dev/null
++++ b/package/lua-periphery/lua-periphery.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# lua-periphery
++#
++################################################################################
 +
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.4
++LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
++LUA_PERIPHERY_SUBDIR = lua-periphery
++LUA_PERIPHERY_LICENSE = MIT
++LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
 +
-+# Lock to 3.19 headers as the RPi2 kernel is based off the 3.19 branch
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.19"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-+
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_ZIMAGE=y
-+
-+# Install the DTB files, as the RPi2 uses the Device Tree
- BR2_PACKAGE_RPI_FIRMWARE=y
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
++$(eval $(luarocks-package))
