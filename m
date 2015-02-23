@@ -1,44 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Feb 2015 17:15:34 +0100
-Subject: [Buildroot] [git commit] mpg123: bump to version 1.22.0
-Message-ID: <20150302222723.4CFAE8057D@busybox.osuosl.org>
+Date: Mon, 23 Feb 2015 23:14:05 +0100
+Subject: [Buildroot] [git commit] python-cherrypy: new package
+Message-ID: <20150302222723.29B898057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcd353d690ee5cee84a67b620a2b6fdc25c0e2c8
+commit: http://git.buildroot.net/buildroot/commit/?id=1f81429f825e8ab1c4d739638d2b913f98e78612
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash |    6 +++---
- package/mpg123/mpg123.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                            |    1 +
+ package/python-cherrypy/Config.in            |   10 ++++++++++
+ package/python-cherrypy/python-cherrypy.hash |    3 +++
+ package/python-cherrypy/python-cherrypy.mk   |   14 ++++++++++++++
+ 4 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 22d16a7..383dae5 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/mpg123/files/mpg123/1.21.0/
--md5	13a9df5d4e7aa110e4ae27cf30128ce9	mpg123-1.21.0.tar.bz2
--sha1	a2fd84078632b7ab73ae4cd64c3f941d140167a8	mpg123-1.21.0.tar.bz2
-+# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.0/
-+md5	33069bff83413824669c8ecb37e706d5	mpg123-1.22.0.tar.bz2
-+sha1	0375e2aa11800d7d4d869ec84b93611e90583206	mpg123-1.22.0.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 0341ed9..bbad0b6 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.21.0
-+MPG123_VERSION = 1.22.0
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+diff --git a/package/Config.in b/package/Config.in
+index 2f90830..ceabce1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -514,6 +514,7 @@ menu "external python modules"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+ 	source "package/python-cheetah/Config.in"
++	source "package/python-cherrypy/Config.in"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+new file mode 100644
+index 0000000..6e32ec2
+--- /dev/null
++++ b/package/python-cherrypy/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_CHERRYPY
++	bool "python-cherrypy"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  A minimalist web framework
++
++	  http://www.cherrypy.org
+diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
+new file mode 100644
+index 0000000..08fa075
+--- /dev/null
++++ b/package/python-cherrypy/python-cherrypy.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9772dbee426d656f01a13881e2b139d8, sha256 locally computed
++md5	9772dbee426d656f01a13881e2b139d8  CherryPy-3.6.0.tar.gz
++sha256	a149271819a15417104aa8f641ad5b96287070f0153e6ef2832a87e2c693d75d  CherryPy-3.6.0.tar.gz
+diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
+new file mode 100644
+index 0000000..a08b21a
+--- /dev/null
++++ b/package/python-cherrypy/python-cherrypy.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cherrypy
++#
++################################################################################
++
++PYTHON_CHERRYPY_VERSION = 3.6.0
++PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
++PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
++PYTHON_CHERRYPY_LICENSE = BSD-3c
++PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
++PYTHON_CHERRYPY_SETUP_TYPE = distutils
++
++$(eval $(python-package))
