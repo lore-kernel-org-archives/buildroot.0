@@ -1,54 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:27:09 +0100
-Subject: [Buildroot] [git commit] trinity: bump version to fix a build
-	failure using Linux 3.19 headers
-Message-ID: <20150302222722.EDC858177D@busybox.osuosl.org>
+Date: Mon, 23 Feb 2015 18:01:07 +0100
+Subject: [Buildroot] [git commit] libsigrok: enable building C++ bindings
+Message-ID: <20150302222723.1FD878177D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19068bdd50acf5d7688810a294ac896a91db7541
+commit: http://git.buildroot.net/buildroot/commit/?id=cd3c6e26c5c368ee76ab2a42c1c76994f93a4c9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bump to the following trinity repository commit:
+[Thomas:
+ - Use BR2_INSTALL_LIBSTDCPP instead of BR2_TOOLCHAIN_BUILDROOT_CXX,
+   so that the condition also works with external toolchains.
+ - Use a 'if BR2_PACKAGE_LIBSIGROK' instead of duplicating the
+   dependency.]
 
-kvm: Add ifdef around IA64 ioctls.
-Fix build error.
-
-  CC	ioctls/kvm.o
-In file included from ioctls/kvm.c:8:0:
-ioctls/kvm.c:115:8: error: ???KVM_IA64_VCPU_GET_STACK??? undeclared here (not in a function)
-  IOCTL(KVM_IA64_VCPU_GET_STACK),
-        ^
-include/ioctls.h:53:15: note: in definition of macro ???IOCTL???
-  { .request = _request, .name = #_request, }
-               ^
-ioctls/kvm.c:116:8: error: ???KVM_IA64_VCPU_SET_STACK??? undeclared here (not in a function)
-  IOCTL(KVM_IA64_VCPU_SET_STACK),
-        ^
-include/ioctls.h:53:15: note: in definition of macro ???IOCTL???
-  { .request = _request, .name = #_request, }
-
-IA64 ioctls were removed in Linux 3.19.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/trinity/trinity.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libsigrok/Config.in    |   15 +++++++++++++++
+ package/libsigrok/libsigrok.mk |    9 ++++++++-
+ 2 files changed, 23 insertions(+), 1 deletions(-)
 
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index 52805e0..5f8a707 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index 47f812c..93bd06f 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -16,6 +16,21 @@ config BR2_PACKAGE_LIBSIGROK
  
--TRINITY_VERSION = 5d2dfe9727eb9c8dc44c31e95968e8d85284ffcc
-+TRINITY_VERSION = c8c41f99500b5854c2061a08962b8908c872d852
- TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
- TRINITY_LICENSE = GPLv2
- TRINITY_LICENSE_FILES = COPYING
+ 	  http://sigrok.org/wiki/Libsigrok
+ 
++if BR2_PACKAGE_LIBSIGROK
++
++config BR2_PACKAGE_LIBSIGROKCXX
++	bool "build C++ bindings"
++	select BR2_PACKAGE_GLIBMM
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Build libsigrok C++ bindings as well.
++
++comment "C++ bindings need a toolchain w/ C++"
++	depends on BR2_PACKAGE_LIBSIGROK
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++endif
++
+ comment "libsigrok needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 6bc210e..1e6080d 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -13,7 +13,7 @@ LIBSIGROK_LICENSE_FILES = COPYING
+ LIBSIGROK_AUTORECONF = YES
+ LIBSIGROK_INSTALL_STAGING = YES
+ LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
+-LIBSIGROK_CONF_OPTS = --disable-bindings --disable-glibtest
++LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
+ 
+ define LIBSIGROK_ADD_MISSING
+ 	mkdir -p $(@D)/autostuff
+@@ -46,4 +46,11 @@ ifeq ($(BR2_PACKAGE_GLIBMM),y)
+ LIBSIGROK_DEPENDENCIES += glibmm
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
++LIBSIGROK_CONF_OPTS += --enable-cxx
++LIBSIGROK_DEPENDENCIES += host-autoconf-archive glibmm
++else
++LIBSIGROK_CONF_OPTS += --disable-cxx
++endif
++
+ $(eval $(autotools-package))
