@@ -1,85 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 23 Feb 2015 20:54:07 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: add security bug fix
-Message-ID: <f8d75a3978baed74ba272faafc60b23db8fabbcb.1424717647.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Feb 2015 20:07:48 +0100
+Subject: [Buildroot] [PATCH] package/libevent: fix static build
+In-Reply-To: <2008003175.212046.1424715113306.JavaMail.root@openwide.fr>
+References: <20150223190040.70f41d55@free-electrons.com>
+ <2008003175.212046.1424715113306.JavaMail.root@openwide.fr>
+Message-ID: <20150223200748.46ce9690@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch fixing CVE-2015-1572: incomplete fix for CVE-2015-0247.
+Dear Romain Naour,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...-fix-potential-buffer-overflow-in-closefs.patch | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
+On Mon, 23 Feb 2015 19:11:53 +0100 (CET), Romain Naour wrote:
 
-diff --git a/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch b/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
-new file mode 100644
-index 000000000000..bcf3083e718d
---- /dev/null
-+++ b/package/e2fsprogs/0001-libext2fs-fix-potential-buffer-overflow-in-closefs.patch
-@@ -0,0 +1,59 @@
-+From 49d0fe2a14f2a23da2fe299643379b8c1d37df73 Mon Sep 17 00:00:00 2001
-+From: Theodore Ts'o <tytso@mit.edu>
-+Date: Fri, 6 Feb 2015 12:46:39 -0500
-+Subject: [PATCH] libext2fs: fix potential buffer overflow in closefs()
-+
-+Upstream commit 49d0fe2a14f2.
-+
-+The bug fix in f66e6ce4446: "libext2fs: avoid buffer overflow if
-+s_first_meta_bg is too big" had a typo in the fix for
-+ext2fs_closefs().  In practice most of the security exposure was from
-+the openfs path, since this meant if there was a carefully crafted
-+file system, buffer overrun would be triggered when the file system was
-+opened.
-+
-+However, if corrupted file system didn't trip over some corruption
-+check, and then the file system was modified via tune2fs or debugfs,
-+such that the superblock was marked dirty and then written out via the
-+closefs() path, it's possible that the buffer overrun could be
-+triggered when the file system is closed.
-+
-+Also clear up a signed vs unsigned warning while we're at it.
-+
-+Thanks to Nick Kralevich <nnk@google.com> for asking me to look at
-+compiler warning in the code in question, which led me to notice the
-+bug in f66e6ce4446.
-+
-+Addresses: CVE-2015-1572
-+
-+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ lib/ext2fs/closefs.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/ext2fs/closefs.c b/lib/ext2fs/closefs.c
-+index 1f9911311a1a..ab5b2fb2365e 100644
-+--- a/lib/ext2fs/closefs.c
-++++ b/lib/ext2fs/closefs.c
-+@@ -287,7 +287,7 @@ errcode_t ext2fs_flush2(ext2_filsys fs, int flags)
-+ 	dgrp_t		j;
-+ #endif
-+ 	char	*group_ptr;
-+-	int	old_desc_blocks;
-++	blk64_t	old_desc_blocks;
-+ 	struct ext2fs_numeric_progress_struct progress;
-+ 
-+ 	EXT2_CHECK_MAGIC(fs, EXT2_ET_MAGIC_EXT2FS_FILSYS);
-+@@ -346,7 +346,7 @@ errcode_t ext2fs_flush2(ext2_filsys fs, int flags)
-+ 	group_ptr = (char *) group_shadow;
-+ 	if (fs->super->s_feature_incompat & EXT2_FEATURE_INCOMPAT_META_BG) {
-+ 		old_desc_blocks = fs->super->s_first_meta_bg;
-+-		if (old_desc_blocks > fs->super->s_first_meta_bg)
-++		if (old_desc_blocks > fs->desc_blocks)
-+ 			old_desc_blocks = fs->desc_blocks;
-+ 	} else
-+ 		old_desc_blocks = fs->desc_blocks;
-+-- 
-+2.1.4
-+
--- 
-2.1.4
+> Can you try to build libwebsock with your config ?
+> 
+> Sorry, I meant libwebsock fix static build.
+> 
+> libevent break libwebsock's build because libevent_openssl.pc is not
+> installed.
+
+Ah, right, now I can reproduce the problem. Instead of trying to get
+AC_SEARCH_LIB to work properly with static libraries, how about using
+PKG_CHECK_MODULES() instead to rely on pkg-config? Something like:
