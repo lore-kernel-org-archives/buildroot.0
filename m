@@ -1,54 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:27:09 +0100
-Subject: [Buildroot] [git commit branch/next] trinity: bump version to fix a
-	build failure using Linux 3.19 headers
-Message-ID: <20150223112715.90BF381780@busybox.osuosl.org>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Mon, 23 Feb 2015 12:23:17 +0100
+Subject: [Buildroot] [PATCH 6/7] libsigrok: enable building C++ bindings
+In-Reply-To: <20150220193035.7f90d46f@free-electrons.com>
+References: <1424435342-2188-1-git-send-email-bgolaszewski@baylibre.com>
+ <1424435342-2188-7-git-send-email-bgolaszewski@baylibre.com>
+ <20150220193035.7f90d46f@free-electrons.com>
+Message-ID: <54EB0DA5.1040406@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19068bdd50acf5d7688810a294ac896a91db7541
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 20/02/2015 19:30, Thomas Petazzoni wrote:
+> Moreover, you make this apparently depend on the selected C library.
+> But isn't C++11 support purely a gcc problem ?
 
-bump to the following trinity repository commit:
+This software uses std::stod, which suffers from the same problem as
+std::to_string with uclibc : GCC currently requires a lot more than
+necessary to enable it.
 
-kvm: Add ifdef around IA64 ioctls.
-Fix build error.
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58393
 
-  CC	ioctls/kvm.o
-In file included from ioctls/kvm.c:8:0:
-ioctls/kvm.c:115:8: error: ???KVM_IA64_VCPU_GET_STACK??? undeclared here (not in a function)
-  IOCTL(KVM_IA64_VCPU_GET_STACK),
-        ^
-include/ioctls.h:53:15: note: in definition of macro ???IOCTL???
-  { .request = _request, .name = #_request, }
-               ^
-ioctls/kvm.c:116:8: error: ???KVM_IA64_VCPU_SET_STACK??? undeclared here (not in a function)
-  IOCTL(KVM_IA64_VCPU_SET_STACK),
-        ^
-include/ioctls.h:53:15: note: in definition of macro ???IOCTL???
-  { .request = _request, .name = #_request, }
-
-IA64 ioctls were removed in Linux 3.19.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/trinity/trinity.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
-index 52805e0..5f8a707 100644
---- a/package/trinity/trinity.mk
-+++ b/package/trinity/trinity.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TRINITY_VERSION = 5d2dfe9727eb9c8dc44c31e95968e8d85284ffcc
-+TRINITY_VERSION = c8c41f99500b5854c2061a08962b8908c872d852
- TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
- TRINITY_LICENSE = GPLv2
- TRINITY_LICENSE_FILES = COPYING
+So it's just a matter of updating buildroot's
+850-libstdcxx-uclibc-c99.patch. Again.
