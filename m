@@ -1,61 +1,42 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Tue, 24 Feb 2015 14:48:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer[0/1]: rename
-	BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX config option.
-Message-ID: <1424785716-23841-1-git-send-email-julien.boibessot@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Feb 2015 10:51:40 -0300
+Subject: [Buildroot] [PATCH] mpg123: bump to version 1.22.0
+Message-ID: <1424785900-912-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
-
- 1] BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX is not defined anywhere
- 2] qtdemux is not a plugin by itself but belongs to isomp4
-
-
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gstreamer/gst-plugins-good/Config.in   |    4 ++--
- package/gstreamer1/gst1-plugins-good/Config.in |    4 ++--
+ package/mpg123/mpg123.hash | 6 +++---
+ package/mpg123/mpg123.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index 3e25820..35bb692 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -27,11 +27,11 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_BZ2
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index 22d16a7..383dae5 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/mpg123/files/mpg123/1.21.0/
+-md5	13a9df5d4e7aa110e4ae27cf30128ce9	mpg123-1.21.0.tar.bz2
+-sha1	a2fd84078632b7ab73ae4cd64c3f941d140167a8	mpg123-1.21.0.tar.bz2
++# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.0/
++md5	33069bff83413824669c8ecb37e706d5	mpg123-1.22.0.tar.bz2
++sha1	0375e2aa11800d7d4d869ec84b93611e90583206	mpg123-1.22.0.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 0341ed9..bbad0b6 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_GST_PLUGINS_GOOD_ZLIB
- 	bool "zlib support"
--	depends on BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	depends on BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ISOMP4 || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Enable zlib support for the following plugins:
--	  id3demux, qtdemux, matroska
-+	  id3demux, isomp4, matroska
- 
- comment "dependency-less plugins"
- 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 73c633f..9d15cbf 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -34,11 +34,11 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
- 	bool "zlib support"
--	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
-+	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4 || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Enable zlib support for the following plugins:
--	  id3demux, qtdemux, matroska
-+	  id3demux, isomp4, matroska
- 
- comment "dependency-less plugins"
- 
+-MPG123_VERSION = 1.21.0
++MPG123_VERSION = 1.22.0
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
 -- 
-1.7.9.5
+2.0.5
