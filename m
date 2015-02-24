@@ -1,94 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Feb 2015 22:56:33 +0100
-Subject: [Buildroot] [PATCH 1/1] libgtk2: skip tutorial and faq build
-In-Reply-To: <20150224181601.A8FBBE0447@smtp.hushmail.com>
-References: <20150224181601.A8FBBE0447@smtp.hushmail.com>
-Message-ID: <20150224215633.GC4783@free.fr>
+Date: Tue, 24 Feb 2015 23:24:02 +0100
+Subject: [Buildroot] [PATCH] gettext: add dependency on host-libxml2 for
+ host-gettext.
+In-Reply-To: <20150223191721.573fdb19@free-electrons.com>
+References: <20150220222933.5B92D817C4@busybox.osuosl.org>
+ <1424696593-21361-1-git-send-email-nicolas.cavallari@green-communications.fr>
+ <20150223191721.573fdb19@free-electrons.com>
+Message-ID: <20150224222402.GD4783@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Justin, All,
+Thomas, Nicolas, All,
 
-On 2015-02-24 20:16 +0200, justin.swartz at nym.hush.com spake thusly:
-> Fixes: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/65165
+On 2015-02-23 19:17 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 23 Feb 2015 14:03:13 +0100, Nicolas Cavallari wrote:
+> > From: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> > 
+> > Otherwise, the locally-installed libxml2 will be used, which may
+> > depend on a locally-installed liblzma which may create conflict
+> > if host-liblzma is compiled.
+> > 
+> > Fixes https://bugs.busybox.net/show_bug.cgi?id=7886
+> > 
+> > Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> > [nicolas: added extended commit message]
+> > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> > ---
+> > Ignacy is unavailable this week, but he commited this change to our
+> > local tree before leaving.
+> > 
+> > diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+> > index c2419c1..a554517 100644
+> > --- a/package/gettext/gettext.mk
+> > +++ b/package/gettext/gettext.mk
+> > @@ -12,7 +12,7 @@ GETTEXT_LICENSE = GPLv2+
+> >  GETTEXT_LICENSE_FILES = COPYING
+> >  
+> >  GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> > -HOST_GETTEXT_DEPENDENCIES = # we don't want the libiconv dependency
+> > +HOST_GETTEXT_DEPENDENCIES = host-libxml2 # we don't want the libiconv dependency
 > 
-> Credit to Yann E. MORIN for discovering and describing a fix for the
-> HAVE_DOCBOOK bug in "configure.ac", as well as the "--disable-gtk-doc-pdf"
-> and "--disable-gtk-doc-html" additions to LIBGTK2_CONF_OPTS.
+> I agree that we normally prefer to rely on external libraries, rather
+> than built-in copies. However, in this case, I am wondering if we
+> shouldn't rather rely on the built-in copy, which is more lightweight
+> that building host-libxml2.
 > 
-> Signed-off-by: Justin Swartz <justin.swartz@nym.hush.com>
-
-Thanks for getting all the pieces together! :-)
-
-Some comments...
-
-> ---
->  package/libgtk2/0002-configure-have_docbook.patch | 11 +++++++++++
->  package/libgtk2/libgtk2.mk                        |  5 +++--
->  2 files changed, 14 insertions(+), 2 deletions(-)
->  create mode 100644 package/libgtk2/0002-configure-have_docbook.patch
+> From the DEPENDENCIES file of gettext:
 > 
-> diff --git a/package/libgtk2/0002-configure-have_docbook.patch b/package/libgtk2/0002-configure-have_docbook.patch
-> new file mode 100644
-> index 0000000..f5a9a9d
-> --- /dev/null
-> +++ b/package/libgtk2/0002-configure-have_docbook.patch
+> * libxml2
+>   + Optional.
+>     Needed for the --color option of the various programs.
+>     If not present, a subset of libxml2 (included in this package) will be
+>     compiled into libgettextlib.
+>   + Homepage:
+>     http://xmlsoft.org/
+>   + Download:
+>     ftp://xmlsoft.org/libxml2/
+>   + If it is installed in a nonstandard directory, pass the option
+>     --with-libxml2-prefix=DIR to 'configure'.
+> 
+> So instead of building an external libxml2, we can pass
+> --with-included-libxml to the gettext-tools configure script to force
+> it to use the built-in libxml2 subset.
+> 
+> Note that there are several other libraries in the same situation:
+> glib2, libcroco and libunistring.
+> 
+> What is the opinion of other BR developers about this?
 
-Patches should have a proper commit log of their own, and be
-Signed-off-by too.
+On my machine, host-libxml2 takes about 0m53.693s while host-gettext
+takes about 2m34.112s. So the overhead (~20%-pf-gettext)) is not
+negligible...
 
-> @@ -0,0 +1,11 @@
-> +--- libgtk2-2.24.18/configure.ac.orig	2015-02-24 00:28:18.128745222 +0200
-> ++++ libgtk2-2.24.18/configure.ac	2015-02-24 00:29:10.739087501 +0200
-> +@@ -1612,7 +1612,7 @@
-> + GTK_DOC_CHECK([1.11])
-> + 
-> + AC_CHECK_PROG(DB2HTML, db2html, true, false)
-> +-AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
-> ++AM_CONDITIONAL([HAVE_DOCBOOK], [test ! "$DB2HTML" = "no"])
-> + 
-> + AC_ARG_ENABLE(man,
-> +               [AC_HELP_STRING([--enable-man],
-> diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-> index dfc1f5b..032e84b 100644
-> --- a/package/libgtk2/libgtk2.mk
-> +++ b/package/libgtk2/libgtk2.mk
-> @@ -69,9 +69,10 @@ LIBGTK2_CONF_ENV = \
->  	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
->  	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
->  	ac_cv_prog_F77=no \
-> -	ac_cv_path_CUPS_CONFIG=no
-> +	ac_cv_path_CUPS_CONFIG=no \
-> +	ac_cv_prog_DB2HTML=no
->  
-> -LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
-> +LIBGTK2_CONF_OPTS = --disable-gtk-doc-pdf --disable-gtk-doc-html --disable-glibtest --enable-explicit-deps=no
+I am compeltely undecided on that... Do we consider a ~20%-of-gettext
+overhead for a full build to be important or not?
 
-Line is too long, it should have been split; new options should have
-been added after existing ones; like so:
+> And all that just for a --color command line option that we really
+> don't care about. Why the heck isn't this thing optional in the first place?
 
-    LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no \
-        --disable-gtk-doc-pdf --disable-gtk-doc-html
-
-(using a leading TAB, not spaces).
-
-Care to fix and resubmit, please? Thanks!
+Eh... Upstream... ;-)
 
 Regards,
 Yann E. MORIN.
-
->  LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk gdk-pixbuf
->  
-> -- 
-> 1.7.12.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
