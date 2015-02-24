@@ -1,54 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Feb 2015 23:42:23 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/raspberrypi2: update and fix our
-	defconfig
-In-Reply-To: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
-References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1424817743-3627-2-git-send-email-yann.morin.1998@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 24 Feb 2015 23:47:49 +0100
+Subject: [Buildroot] [PATCH] qt5base: update for postgresql plugin compile
+	fix
+Message-ID: <1424818069-11681-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lock to 3.19 kernel headers; and comment about installing DTBs; bump
-kernel sha1.
-
-Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- configs/raspberrypi2_defconfig | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ .../qt5/qt5base/0007-configure-add-psql_config-option.patch   | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index d2f97fb..b523a4a 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -2,14 +2,24 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
-+
- BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-+
-+# Lock to 3.19 headers as the RPi2 kernel is based off the 3.19 branch
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.19"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-+
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_ZIMAGE=y
-+
-+# Install the DTB files, as the RPi2 uses the Device Tree
- BR2_PACKAGE_RPI_FIRMWARE=y
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+diff --git a/package/qt5/qt5base/0007-configure-add-psql_config-option.patch b/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
+index 7561314..8075fe4 100644
+--- a/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
++++ b/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
+@@ -1,4 +1,4 @@
+-From 95f2e4001f9c1721cbdb26d3f9c38511adae9c4b Mon Sep 17 00:00:00 2001
++From f23a18de3c398c908c92b8cf8f20edc12435b9d1 Mon Sep 17 00:00:00 2001
+ From: Peter Seiderer <ps.report@gmx.net>
+ Date: Thu, 19 Feb 2015 22:41:02 +0100
+ Subject: [PATCH] configure: add '-psql_config' option
+@@ -8,11 +8,11 @@ the same as for mysql_config).
+ 
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- configure | 10 ++++++++--
+- 1 file changed, 8 insertions(+), 2 deletions(-)
++ configure | 12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
+ 
+ diff --git a/configure b/configure
+-index 0c66ecf..a832ae3 100755
++index 0c66ecf..491486a 100755
+ --- a/configure
+ +++ b/configure
+ @@ -578,6 +578,7 @@ CFG_WIDGETS=yes
+@@ -47,9 +47,10 @@ index 0c66ecf..a832ae3 100755
+              if [ "$CFG_SQL_psql" != "no" ]; then
+ +		[ -z "$CFG_PSQL_CONFIG" ] && CFG_PSQL_CONFIG=`"$WHICH" pg_config`
+                  # Be careful not to use native pg_config when cross building.
+-                 if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
++-                if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
+ -                    QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null | filterIncludePath`
+ -                    QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null | filterLibraryPath`
+++                if [ "$XPLATFORM_MINGW" != "yes" ] && [ -x "$CFG_PSQL_CONFIG" ]; then
+ +                    QT_CFLAGS_PSQL=`$CFG_PSQL_CONFIG --includedir 2>/dev/null | filterIncludePath`
+ +                    QT_LFLAGS_PSQL=`$CFG_PSQL_CONFIG --libdir 2>/dev/null | filterLibraryPath`
+                  fi
 -- 
-1.9.1
+2.1.4
