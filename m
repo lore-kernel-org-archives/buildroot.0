@@ -1,109 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Feb 2015 22:39:41 +0100
-Subject: [Buildroot] [PATCH 2/2] fs: add custom fakeroot script support
-In-Reply-To: <1424792855-14278-2-git-send-email-stefan.sorensen@spectralink.com>
-References: <1424792855-14278-1-git-send-email-stefan.sorensen@spectralink.com>
- <1424792855-14278-2-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <20150224213941.GB4783@free.fr>
+Date: Tue, 24 Feb 2015 22:56:33 +0100
+Subject: [Buildroot] [PATCH 1/1] libgtk2: skip tutorial and faq build
+In-Reply-To: <20150224181601.A8FBBE0447@smtp.hushmail.com>
+References: <20150224181601.A8FBBE0447@smtp.hushmail.com>
+Message-ID: <20150224215633.GC4783@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+Justin, All,
 
-On 2015-02-24 16:47 +0100, Stefan S?rensen spake thusly:
-> This patch add a new config option, BR2_ROOTFS_FAKEROOT_SCRIPT, a list of
-> scripts that are executed in the fakeroot environment as the last step
-> before creating the filesystem image.
+On 2015-02-24 20:16 +0200, justin.swartz at nym.hush.com spake thusly:
+> Fixes: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/65165
+> 
+> Credit to Yann E. MORIN for discovering and describing a fix for the
+> HAVE_DOCBOOK bug in "configure.ac", as well as the "--disable-gtk-doc-pdf"
+> and "--disable-gtk-doc-html" additions to LIBGTK2_CONF_OPTS.
+> 
+> Signed-off-by: Justin Swartz <justin.swartz@nym.hush.com>
 
-I'm not specially opposed to that feature (and in fact I think this
-would be nice to have!), but parts of the justification are not
-completely right, see below...
+Thanks for getting all the pieces together! :-)
 
-> The scripts can for example be used to invoke a tool that operates on
-> file ownerships,
+Some comments...
 
-For file ownership, we already have BR2_ROOTFS_DEVICE_TABLE: "Path to
-the permission tables". The naming of the option may be a bit
-misleading, indeed, but that's historical...
+> ---
+>  package/libgtk2/0002-configure-have_docbook.patch | 11 +++++++++++
+>  package/libgtk2/libgtk2.mk                        |  5 +++--
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+>  create mode 100644 package/libgtk2/0002-configure-have_docbook.patch
+> 
+> diff --git a/package/libgtk2/0002-configure-have_docbook.patch b/package/libgtk2/0002-configure-have_docbook.patch
+> new file mode 100644
+> index 0000000..f5a9a9d
+> --- /dev/null
+> +++ b/package/libgtk2/0002-configure-have_docbook.patch
 
-> device nodes
+Patches should have a proper commit log of their own, and be
+Signed-off-by too.
 
-Ditto, we also already have BR2_ROOTFS_STATIC_DEVICE_TABLE: "Path to the
-device tables". That can indeed only be used when using static /dev
-management, but when /dev is managed dynamically (devtmpfs, eudev, mdev
-or systemd), having custom device tables is completely useless (as /dev
-is a mountpoint, and existing /dev entries would become invisible).
-
-> or any other custom action that requires
-> root privileges.
-
-What would be those kind of "custom actions" that are not covered by the
-above?
-
-One thing I can see as problematic is assigning ownership to a whole
-directory tree, of which the content might be unpredictable at configure
-time (e.g. so that it is not possible to provide a permission table for
-all the entries); something one might trivially do (with your solution):
-
-    #!/bin/sh
-    TARGET_DIR="${1}"
-    chown -R uid:gid ${TARGET_DIR}/foo/bar/
-
-But even with what we currently have, this is already doable (albeit
-this is a bit of a hack). One would set:
-
-    BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt $(BUILD_DIR)/tmp-perms"
-    BR2_ROOTFS_POST_BUILD_SCRIPT="/path/to/post-build.script"
-    BR2_ROOTFS_POST_SCRIPT_ARGS"$(BUILD_DIR)"
-
-and then have /path/to/post-build.script contain something like:
-
-    #!/bin/sh
-    TARGET_DIR="${1}"
-    BUILD_DIR="${2}"
-    uid=42
-    gid=31415
-    find ${TARGET_DIR}/foo/bar/ \( -type f -o -type d \) \
-    |while read entry; do
-        [ -f "${entry}" ] && t=f
-        [ -d "${entry}" ] && t=d
-        m="$( stat -c '%a' "${entry}" )"
-        m=$((m&0760)) # Whatever...
-        printf "%s %s %s %s %s - - - - -\n" \
-              "${entry#${TARGET_DIR}}" ${t} ${m} ${uid} ${gid}
-    done >"${BUILD_DIR}/tmp-perms"
-
-Granted, that's neither trivial nor elegant, but that's doable.
-
-[--SNIP--]
-> diff --git a/system/Config.in b/system/Config.in
-> index 95e10ab..b416377 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -421,6 +421,22 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
->  	  argument. Make sure the exit code of those scripts are 0, otherwise
->  	  make will stop after calling them.
+> @@ -0,0 +1,11 @@
+> +--- libgtk2-2.24.18/configure.ac.orig	2015-02-24 00:28:18.128745222 +0200
+> ++++ libgtk2-2.24.18/configure.ac	2015-02-24 00:29:10.739087501 +0200
+> +@@ -1612,7 +1612,7 @@
+> + GTK_DOC_CHECK([1.11])
+> + 
+> + AC_CHECK_PROG(DB2HTML, db2html, true, false)
+> +-AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
+> ++AM_CONDITIONAL([HAVE_DOCBOOK], [test ! "$DB2HTML" = "no"])
+> + 
+> + AC_ARG_ENABLE(man,
+> +               [AC_HELP_STRING([--enable-man],
+> diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+> index dfc1f5b..032e84b 100644
+> --- a/package/libgtk2/libgtk2.mk
+> +++ b/package/libgtk2/libgtk2.mk
+> @@ -69,9 +69,10 @@ LIBGTK2_CONF_ENV = \
+>  	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
+>  	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
+>  	ac_cv_prog_F77=no \
+> -	ac_cv_path_CUPS_CONFIG=no
+> +	ac_cv_path_CUPS_CONFIG=no \
+> +	ac_cv_prog_DB2HTML=no
 >  
-> +config BR2_ROOTFS_FAKEROOT_SCRIPT
-> +	string "Custom scripts to run as fake root"
+> -LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
+> +LIBGTK2_CONF_OPTS = --disable-gtk-doc-pdf --disable-gtk-doc-html --disable-glibtest --enable-explicit-deps=no
 
-I'm not very happy with talking about 'fake root' (which is really
-'fakeroot'). I'd prefer we avoid mentionning fakeroot, which is
-internal implementation details.
+Line is too long, it should have been split; new options should have
+been added after existing ones; like so:
 
-Note also that those scripts would be run once for each filesystem type
-the user has enabled; if tar, squashfs, cramfs and ext2/3/4 are enabled,
-the scripts would be run four times. Thus, those scripts must be
-idempotent (like for the post-build scripts, mind you).
+    LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no \
+        --disable-gtk-doc-pdf --disable-gtk-doc-html
 
-In the end (and after quite some thinking!), I stil fail to see a
-compelling reason. Do you have an example?
+(using a leading TAB, not spaces).
+
+Care to fix and resubmit, please? Thanks!
 
 Regards,
 Yann E. MORIN.
+
+>  LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk gdk-pixbuf
+>  
+> -- 
+> 1.7.12.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
