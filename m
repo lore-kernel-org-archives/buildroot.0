@@ -1,49 +1,38 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 24 Feb 2015 18:07:10 +0100
-Subject: [Buildroot] [PATCH v6 02/16] package/pkg-rebar: new
-	infrastructure
-In-Reply-To: <20150203102832.51cb4f7d@free-electrons.com>
-References: <1421055140-5092-1-git-send-email-johan.oudinet@gmail.com>
- <1421055140-5092-3-git-send-email-johan.oudinet@gmail.com>
- <20150203102832.51cb4f7d@free-electrons.com>
-Message-ID: <CAJtjsKaOudkqdAPoxC3=8WRdw33WB4eViAVNBTt=Cn_BAE8Nyg@mail.gmail.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue, 24 Feb 2015 14:18:57 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: add support for 4.x versions.
+Message-ID: <1424783937-19212-1-git-send-email-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+---
+ linux/linux.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Sorry for the long delay before replying to this email. I forgot it in
-my list and went to holidays in the meantime.
-
-On Tue, Feb 3, 2015 at 10:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> +# Directories to store rebar dependencies in.
->> +#
->> +# These directories actually only contain symbolic links to Erlang
->> +# applications in either $(HOST_DIR) or $(STAGING_DIR).  One needs
->> +# them to avoid rebar complaining about missing dependencies, as this
->> +# infrastructure tells rebar to NOT download dependencies during
->> +# the build stage.
->> +#
->> +REBAR_HOST_DEPS_DIR = $(HOST_DIR)/usr/share/rebar/deps
->> +REBAR_TARGET_DEPS_DIR = $(STAGING_DIR)/usr/share/rebar/deps
->
-> Rather than having those paths, why don't we point directly rebar at
-> $(STAGING_DIR)/usr/lib/erlang/lib/ ? This directory already contains
-> <erlang-app>-<version> directory for each package, and we would only
-> have to create a symlink <erlang-app> --> <erlang-app>-<version>.
->
-> But maybe it's cleaner to have something completely separate, I don't know.
->
-
-Indeed, this is to keep $(TARGET_DIR)/usr/lib/erlang/lib directory
-clean from unnecessary symlinks.
-I'm not even sure it won't break some erlang programs if we add
-symlinks there. At least, there is none in my Erlang installation.
-Maybe some Erlang guru can give its opinion on this?
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29f59e8..0b8c912 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -25,12 +25,14 @@ LINUX_SITE_METHOD = hg
+ else
+ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+-# to use the $(word) function. We support versions such as 3.1,
++# to use the $(word) function. We support versions such as 4.0, 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+ ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
+ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+-else
++else ifeq ($(findstring x3.,x$(LINUX_VERSION)),x3.)
+ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
++else ifeq ($(findstring x4.,x$(LINUX_VERSION)),x4.)
++LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+ endif
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_VERSION)),)
 -- 
-Johan
+2.0.5
