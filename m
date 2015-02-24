@@ -1,58 +1,61 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 24 Feb 2015 11:59:24 +0100
-Subject: [Buildroot] [PATCH v2] automake: use whenever possible the
-	ACLOCAL_HOST_DIR variable
-In-Reply-To: <1423392056-30339-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1423392056-30339-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC9Za1MtJGv7iqZop=a3Gw+GaHvod1hrY_RJPmB+SaJpvA@mail.gmail.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Tue, 24 Feb 2015 14:48:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer[0/1]: rename
+	BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX config option.
+Message-ID: <1424785716-23841-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 8, 2015 at 11:40 AM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> Use the ACLOCAL_HOST_DIR in the GTK_DOC_M4_INSTALL hook.
->
-> Move the ACLOCAL_HOST_DIR definition at the beginning so the definition
-> is ahead the utilization.
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/automake/automake.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-> index a3fd18c..84f05dc 100644
-> --- a/package/automake/automake.mk
-> +++ b/package/automake/automake.mk
-> @@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
->
->  HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
->
-> +ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
-> +
->  define GTK_DOC_M4_INSTALL
-> -       $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
-> +       $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
-> +               $(ACLOCAL_HOST_DIR)/gtk-doc.m4
->  endef
->
->  # ensure staging aclocal dir exists
-> @@ -29,5 +32,4 @@ $(eval $(host-autotools-package))
->  # variables used by other packages
->  AUTOMAKE = $(HOST_DIR)/usr/bin/automake
->  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
-> -ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
->  ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
-> --
-> 2.1.0
->
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Ping for next?
+ 1] BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX is not defined anywhere
+ 2] qtdemux is not a plugin by itself but belongs to isomp4
 
-BR
+
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/gstreamer/gst-plugins-good/Config.in   |    4 ++--
+ package/gstreamer1/gst1-plugins-good/Config.in |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
+index 3e25820..35bb692 100644
+--- a/package/gstreamer/gst-plugins-good/Config.in
++++ b/package/gstreamer/gst-plugins-good/Config.in
+@@ -27,11 +27,11 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_BZ2
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_ZLIB
+ 	bool "zlib support"
+-	depends on BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
++	depends on BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ISOMP4 || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_MATROSKA
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Enable zlib support for the following plugins:
+-	  id3demux, qtdemux, matroska
++	  id3demux, isomp4, matroska
+ 
+ comment "dependency-less plugins"
+ 
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 73c633f..9d15cbf 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -34,11 +34,11 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB
+ 	bool "zlib support"
+-	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QTDEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
++	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4 || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ID3DEMUX || BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MATROSKA
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Enable zlib support for the following plugins:
+-	  id3demux, qtdemux, matroska
++	  id3demux, isomp4, matroska
+ 
+ comment "dependency-less plugins"
+ 
 -- 
-Fabio Porcedda
+1.7.9.5
