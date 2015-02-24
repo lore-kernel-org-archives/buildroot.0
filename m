@@ -1,33 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Feb 2015 15:28:43 +0100
-Subject: [Buildroot] [git commit branch/next] busybox: enable flock applet
-Message-ID: <20150225161643.10D0D817A8@busybox.osuosl.org>
+Date: Tue, 24 Feb 2015 17:29:08 +0100
+Subject: [Buildroot] [git commit branch/next] odhcp6c: install default state
+	script
+Message-ID: <20150225161643.1BB96817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=91374388d0ca560532578b1db951a7c34f292c4e
+commit: http://git.buildroot.net/buildroot/commit/?id=899935b3e29a5aee3b6b26fb0ccfe78a921cfc13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Needed by E.G. the default odhcp6c state script.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.config |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/odhcp6c/odhcp6c.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 7af7eca..20b8c1d 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -575,7 +575,7 @@ CONFIG_FEATURE_FDISK_WRITABLE=y
- CONFIG_FEATURE_GPT_LABEL=y
- CONFIG_FEATURE_FDISK_ADVANCED=y
- # CONFIG_FINDFS is not set
--# CONFIG_FLOCK is not set
-+CONFIG_FLOCK=y
- CONFIG_FREERAMDISK=y
- # CONFIG_FSCK_MINIX is not set
- # CONFIG_MKFS_EXT2 is not set
+diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
+index 520eaf2..8102c26 100644
+--- a/package/odhcp6c/odhcp6c.mk
++++ b/package/odhcp6c/odhcp6c.mk
+@@ -9,4 +9,11 @@ ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
+ ODHCP6C_LICENSE = GPLv2
+ ODHCP6C_LICENSE_FILES = COPYING
+ 
++define ODHCP6C_INSTALL_SCRIPT
++        $(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
++		$(TARGET_DIR)/usr/sbin/odhcp6c-update
++endef
++
++ODHCP6C_POST_INSTALL_TARGET_HOOKS += ODHCP6C_INSTALL_SCRIPT
++
+ $(eval $(cmake-package))
