@@ -1,90 +1,84 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Tue, 24 Feb 2015 09:24:41 +0100
-Subject: [Buildroot] [PATCH] package/opentyrian: bump to latest revision.
-Message-ID: <1424766281-8272-1-git-send-email-julien.boibessot@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 24 Feb 2015 10:27:03 +0200
+Subject: [Buildroot] [PATCH] lmbench: fix build with libtirpc
+Message-ID: <f0fb27c9ad91fe83813103a3d6035930fb63636e.1424766423.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+When linking with an external libtirpc, -ltirpc must come after lmbench.a in
+the linker command line. Use LDLIBS for that.
 
-Since commit 120a3efeec66dbbade3d8213682c0a8940c906eb from Romain, Opentyrian
-upstream has fixed the build problem on Blackfin (in a slightly different way).
-So bump to latest revision to not keep the fix in BR.
+Fixes:
+http://autobuild.buildroot.net/results/89e/89ee35561d3a49f38e9a747ed78a5846be4764c8/
+http://autobuild.buildroot.net/results/409/4097b1c2585db2de517a8741174c02177aabee00/
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+and more.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...-don-t-redefine-strchrnul-for-unix-system.patch |   42 --------------------
- package/opentyrian/opentyrian.mk                   |    6 +--
- 2 files changed, 3 insertions(+), 45 deletions(-)
- delete mode 100644 package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
+ package/lmbench/0001-allow-ldlibs-override.patch | 19 +++++++++++++++++++
+ package/lmbench/lmbench.mk                       |  8 +++++---
+ 2 files changed, 24 insertions(+), 3 deletions(-)
+ create mode 100644 package/lmbench/0001-allow-ldlibs-override.patch
 
-diff --git a/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch b/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
-deleted file mode 100644
-index e20ab00..0000000
---- a/package/opentyrian/0001-mingw_fixes-don-t-redefine-strchrnul-for-unix-system.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 1c64c2d103c9356750a3d3b559068329bb0c7e3c Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Fri, 20 Feb 2015 00:29:47 +0100
--Subject: [PATCH] mingw_fixes: don't redefine strchrnul for unix system
--
--On bfin architecture all symbols are prefixed with a underscore '_', hence a
--conflict with the _strchrnul symbole from mingw_fixes.c and the one from uClibc.
--
--Path/to/sysroot/usr/lib/libc.a(strchrnul.o): In function `*___GI_strchrnul':
--Path/to/uClibc/libc/string/generic/strchrnul.c:33: multiple definition of `_strchrnul'
--obj/mingw_fixes.o:src/mingw_fixes.c:(.text+0x0): first defined here
--
--Since mingw_fixes.c is intended for WIN32 system, add a guard around strchrnul function
--and use the one defined from string.h.
--
--Fixes:
--http://autobuild.buildroot.net/results/a08/a085fb55269971e3c7b8ae8c167e7330c3c042a5/
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- src/mingw_fixes.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/mingw_fixes.c b/src/mingw_fixes.c
--index d734438..2f4069e 100644
----- a/src/mingw_fixes.c
--+++ b/src/mingw_fixes.c
--@@ -18,9 +18,11 @@
--  */
-- #include "mingw_fixes.h"
-- 
--+#ifndef TARGET_UNIX
-- char *strchrnul( const char *s, int c )
-- {
-- 	for (; *s != c && *s != '\0'; ++s)
-- 		;
-- 	return (char *)s;
-- }
--+#endif
---- 
--1.9.3
--
-diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
-index f00a52b..3dc5af5 100644
---- a/package/opentyrian/opentyrian.mk
-+++ b/package/opentyrian/opentyrian.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/lmbench/0001-allow-ldlibs-override.patch b/package/lmbench/0001-allow-ldlibs-override.patch
+new file mode 100644
+index 000000000000..8085e7e90a4c
+--- /dev/null
++++ b/package/lmbench/0001-allow-ldlibs-override.patch
+@@ -0,0 +1,19 @@
++Allow LDLIBS override
++
++The real make runs from the scripts/build script. Teach this script accept
++override value set in an environment variable.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -Nuar lmbench-3.0-a9.orig/scripts/build lmbench-3.0-a9/scripts/build
++--- lmbench-3.0-a9.orig/scripts/build	2006-06-27 19:25:18.000000000 +0300
+++++ lmbench-3.0-a9/scripts/build	2015-02-24 09:59:30.302654994 +0200
++@@ -18,7 +18,7 @@
++ 
++ trap 'rm -f ${BASE}$$.s ${BASE}$$.c ${BASE}$$.o ${BASE}$$; exit 1' 1 2 15
++ 
++-LDLIBS=-lm
+++LDLIBS="${LDLIBS} -lm"
++ 
++ # check for HP-UX's ANSI compiler
++ echo "main(int ac, char *av[]) { int i; }" > ${BASE}$$.c
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 63a83fd2e7c0..5dc4ceabc9f5 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -11,12 +11,11 @@ LMBENCH_LICENSE = lmbench license (based on GPLv2)
+ LMBENCH_LICENSE_FILES = COPYING COPYING-2
  
--OPENTYRIAN_VERSION = 2.1.20130907
--OPENTYRIAN_SITE = http://www.camanis.net/opentyrian/releases
--OPENTYRIAN_SOURCE = opentyrian-$(OPENTYRIAN_VERSION)-src.tar.gz
-+OPENTYRIAN_VERSION = 9c9f0ec3532b
-+OPENTYRIAN_SITE = https://code.google.com/p/opentyrian/
-+OPENTYRIAN_SITE_METHOD = hg
- OPENTYRIAN_LICENSE = GPLv2+
- OPENTYRIAN_LICENSE_FILES = COPYING
+ LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+-LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
  
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LMBENCH_DEPENDENCIES += libtirpc
+ LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+-LMBENCH_LDFLAGS += -ltirpc
++LMBENCH_LDLIBS = -ltirpc -pthread
+ endif
+ 
+ define LMBENCH_CONFIGURE_CMDS
+@@ -27,8 +26,11 @@ define LMBENCH_CONFIGURE_CMDS
+ 	touch $@
+ endef
+ 
++# Note: there is a second stage 'make' invocation from the 'scripts/build'
++# script. So the variables override below don't take direct effect in
++# src/Makefile.
+ define LMBENCH_BUILD_CMDS
+-	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
++	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDLIBS="$(LMBENCH_LDLIBS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
+ endef
+ 
+ define LMBENCH_INSTALL_TARGET_CMDS
 -- 
-1.7.9.5
+2.1.4
