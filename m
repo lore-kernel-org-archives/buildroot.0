@@ -1,29 +1,57 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 24 Feb 2015 11:57:49 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-02-23
-In-Reply-To: <CAHkwnC_xZFKnWvT7MePx_asx1hGqkf9uHz7Y9Qwnp+q3Y_bdAA@mail.gmail.com>
-References: <20150224073017.32CEA101A06@stock.ovh.net>
- <CAHkwnC_xZFKnWvT7MePx_asx1hGqkf9uHz7Y9Qwnp+q3Y_bdAA@mail.gmail.com>
-Message-ID: <CAHkwnC98V1myn6BLbxirbt+BLDA-D6ZTLyoefW84jWPHROvxmA@mail.gmail.com>
+Date: Tue, 24 Feb 2015 11:59:24 +0100
+Subject: [Buildroot] [PATCH v2] automake: use whenever possible the
+	ACLOCAL_HOST_DIR variable
+In-Reply-To: <1423392056-30339-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1423392056-30339-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC9Za1MtJGv7iqZop=a3Gw+GaHvod1hrY_RJPmB+SaJpvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 24, 2015 at 10:08 AM, Fabio Porcedda
+On Sun, Feb 8, 2015 at 11:40 AM, Fabio Porcedda
 <fabio.porcedda@gmail.com> wrote:
-> On Tue, Feb 24, 2015 at 8:30 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> <snip>
->>          arm |                logrotate-3.8.7 | NOK | http://autobuild.buildroot.net/results/159bf5730414ca7f73dcdae95090177355193636/
+> Use the ACLOCAL_HOST_DIR in the GTK_DOC_M4_INSTALL hook.
 >
-> I'm preparing a patch for this.
+> Move the ACLOCAL_HOST_DIR definition at the beginning so the definition
+> is ahead the utilization.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/automake/automake.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+> index a3fd18c..84f05dc 100644
+> --- a/package/automake/automake.mk
+> +++ b/package/automake/automake.mk
+> @@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
+>
+>  HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+>
+> +ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+> +
+>  define GTK_DOC_M4_INSTALL
+> -       $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
+> +       $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
+> +               $(ACLOCAL_HOST_DIR)/gtk-doc.m4
+>  endef
+>
+>  # ensure staging aclocal dir exists
+> @@ -29,5 +32,4 @@ $(eval $(host-autotools-package))
+>  # variables used by other packages
+>  AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+>  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+> -ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+>  ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+> --
+> 2.1.0
+>
 
-Patch set sent:
-http://patchwork.ozlabs.org/patch/442912/
-http://patchwork.ozlabs.org/patch/442913/
+Ping for next?
 
 BR
 -- 
