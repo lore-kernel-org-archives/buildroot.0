@@ -1,67 +1,38 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Tue, 24 Feb 2015 16:47:35 +0100
-Subject: [Buildroot] [PATCH 2/2] fs: add custom fakeroot script support
-In-Reply-To: <1424792855-14278-1-git-send-email-stefan.sorensen@spectralink.com>
-References: <1424792855-14278-1-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <1424792855-14278-2-git-send-email-stefan.sorensen@spectralink.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue, 24 Feb 2015 14:40:46 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: add support for 4.x versions.
+Message-ID: <1424785246-21219-1-git-send-email-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch add a new config option, BR2_ROOTFS_FAKEROOT_SCRIPT, a list of
-scripts that are executed in the fakeroot environment as the last step
-before creating the filesystem image.
-
-The scripts can for example be used to invoke a tool that operates on
-file ownerships, device nodes or any other custom action that requires
-root privileges.
-
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
- fs/common.mk     |  1 +
- system/Config.in | 16 ++++++++++++++++
- 2 files changed, 17 insertions(+)
+ linux/linux.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 1d3926f..5c4cd6a 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -87,6 +87,7 @@ ifneq ($$(ROOTFS_USERS_TABLES),)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29f59e8..0b8c912 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -25,12 +25,14 @@ LINUX_SITE_METHOD = hg
+ else
+ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+-# to use the $(word) function. We support versions such as 3.1,
++# to use the $(word) function. We support versions such as 4.0, 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+ ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
+ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+-else
++else ifeq ($(findstring x3.,x$(LINUX_VERSION)),x3.)
+ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
++else ifeq ($(findstring x4.,x$(LINUX_VERSION)),x4.)
++LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
  endif
- 	printf '$$(subst $$(sep),\n,$$(PACKAGES_USERS))' >> $$(USERS_TABLE)
- 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_FAKEROOT_SCRIPT)),echo $$(s) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
-diff --git a/system/Config.in b/system/Config.in
-index 95e10ab..b416377 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -421,6 +421,22 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	  argument. Make sure the exit code of those scripts are 0, otherwise
- 	  make will stop after calling them.
- 
-+config BR2_ROOTFS_FAKEROOT_SCRIPT
-+	string "Custom scripts to run as fake root"
-+	default ""
-+	help
-+	  Specify a space-separated list of scripts to be run as part
-+	  of the fakeroot script, just before Buildroot packs the
-+	  files into selected filesystem images.
-+
-+	  This can for example be used to invoke a tool that operates on
-+	  file ownerships, device nodes or any other custom action that
-+	  requires root privileges.
-+
-+	  These scripts are called with the target directory name as
-+	  first argument. The script is executed from the main Buildroot
-+	  source directory as the current directory.
-+
- config BR2_ROOTFS_POST_IMAGE_SCRIPT
- 	string "Custom scripts to run after creating filesystem images"
- 	default ""
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_VERSION)),)
 -- 
-1.9.3
+2.0.5
