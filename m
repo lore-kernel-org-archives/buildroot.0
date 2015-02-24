@@ -1,42 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Feb 2015 10:51:40 -0300
-Subject: [Buildroot] [PATCH] mpg123: bump to version 1.22.0
-Message-ID: <1424785900-912-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 24 Feb 2015 15:11:29 +0100
+Subject: [Buildroot] [PATCH v2] automake: use whenever possible the
+	ACLOCAL_HOST_DIR variable
+In-Reply-To: <CAHkwnC9Za1MtJGv7iqZop=a3Gw+GaHvod1hrY_RJPmB+SaJpvA@mail.gmail.com>
+References: <1423392056-30339-1-git-send-email-fabio.porcedda@gmail.com>
+ <CAHkwnC9Za1MtJGv7iqZop=a3Gw+GaHvod1hrY_RJPmB+SaJpvA@mail.gmail.com>
+Message-ID: <CAAXf6LXR8G9UnwLoTbcUHDLypi7J-2-78EeZ8WQ3Wzk3jAsw2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpg123/mpg123.hash | 6 +++---
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue, Feb 24, 2015 at 11:59 AM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> On Sun, Feb 8, 2015 at 11:40 AM, Fabio Porcedda
+> <fabio.porcedda@gmail.com> wrote:
+>> Use the ACLOCAL_HOST_DIR in the GTK_DOC_M4_INSTALL hook.
+>>
+>> Move the ACLOCAL_HOST_DIR definition at the beginning so the definition
+>> is ahead the utilization.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> Cc: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/automake/automake.mk | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+>> index a3fd18c..84f05dc 100644
+>> --- a/package/automake/automake.mk
+>> +++ b/package/automake/automake.mk
+>> @@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
+>>
+>>  HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+>>
+>> +ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+>> +
+>>  define GTK_DOC_M4_INSTALL
+>> -       $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
+>> +       $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
+>> +               $(ACLOCAL_HOST_DIR)/gtk-doc.m4
+>>  endef
+>>
+>>  # ensure staging aclocal dir exists
+>> @@ -29,5 +32,4 @@ $(eval $(host-autotools-package))
+>>  # variables used by other packages
+>>  AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+>>  ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+>> -ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+>>  ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+>> --
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 22d16a7..383dae5 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/mpg123/files/mpg123/1.21.0/
--md5	13a9df5d4e7aa110e4ae27cf30128ce9	mpg123-1.21.0.tar.bz2
--sha1	a2fd84078632b7ab73ae4cd64c3f941d140167a8	mpg123-1.21.0.tar.bz2
-+# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.0/
-+md5	33069bff83413824669c8ecb37e706d5	mpg123-1.22.0.tar.bz2
-+sha1	0375e2aa11800d7d4d869ec84b93611e90583206	mpg123-1.22.0.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 0341ed9..bbad0b6 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.21.0
-+MPG123_VERSION = 1.22.0
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
--- 
-2.0.5
+Can you clarify why this is necessary?
+Do you have a specific case where this is wrong?
