@@ -1,54 +1,67 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 24 Feb 2015 16:02:20 +0100
-Subject: [Buildroot] [PATCH v2 master 2/2] logrotate: use pkg-config for the
-	opt library
-In-Reply-To: <1424790140-21157-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1424790140-21157-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1424790140-21157-2-git-send-email-fabio.porcedda@gmail.com>
+From: Matthew Bastian <Matthew.Bastian@nrc-cnrc.gc.ca>
+Date: Tue, 24 Feb 2015 10:13:14 -0500
+Subject: [Buildroot] [PATCH 1/1] RTAI updated to version 4.0.1 and bug fix
+	so kernel gets patched cleanly
+Message-ID: <1424790794-5707-1-git-send-email-Matthew.Bastian@nrc-cnrc.gc.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without using the pkg-config the dependencies are not included for a
-static linking so it fails to build.
-These failures are fixed by linking the libintl library that is a
-dependency of the opt library.
+From: Matthew Bastian <mbastian@zaphod.ds.nrc.ca>
 
-Fixes:
-http://autobuild.buildroot.net/results/159bf5730414ca7f73dcdae95090177355193636
-http://autobuild.buildroot.net/results/ebe6ab7fc0f2cff98de06b3dc374730da9e9e4f2
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Matthew Bastian <Matthew.Bastian@nrc-cnrc.gc.ca>
 ---
+ linux/linux-ext-rtai.mk | 9 +++++----
+ package/rtai/rtai.mk    | 4 +++-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-Notes:
-    v2:
-     - instead of adding a patch just overwrite from the command line the
-       LOADLIBES variable
-
- package/logrotate/logrotate.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index dc26d85..c1bca48 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -9,10 +9,12 @@ LOGROTATE_SITE = https://www.fedorahosted.org/releases/l/o/logrotate
- LOGROTATE_LICENSE = GPLv2+
- LOGROTATE_LICENSE_FILES = COPYING
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index bf998d5..2631535 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -20,14 +20,15 @@ else
+ RTAI_ARCH = $(KERNEL_ARCH)
+ endif
  
--LOGROTATE_DEPENDENCIES = popt
-+LOGROTATE_DEPENDENCIES = popt host-pkgconf
++kver = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion`
++
+ # Prepare kernel patch
+ ifeq ($(RTAI_PATCH),)
+ define RTAI_PREPARE_KERNEL
+-	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
+-	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
++	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$(kver)-*patch ; then \
+ 		$(APPLY_PATCHES) $(LINUX_DIR)		 		\
+-			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
+-			hal-linux-$${kver}-*patch ; \
++			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches \
++				hal-linux-$(kver)-*patch ; \
+ 	else \
+ 		echo "No RTAI patch for your kernel version" ; \
+ 		exit 1 ; \
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+index 6f94121..dfd8e0c 100644
+--- a/package/rtai/rtai.mk
++++ b/package/rtai/rtai.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define LOGROTATE_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" -C $(@D)
-+	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" \
-+		LOADLIBES="$(shell $(PKG_CONFIG_HOST_BINARY) --libs popt)" \
-+		-C $(@D)
- endef
+-RTAI_VERSION = 3.8.1
++RTAI_VERSION = 4.0.1
+ RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
+ RTAI_SITE = https://www.rtai.org/userfiles/downloads/RTAI
+ RTAI_INSTALL_STAGING = YES
+@@ -22,6 +22,8 @@ RTAI_CONF_OPTS = \
+ 	--includedir=/usr/include/rtai \
+ 	--with-linux-dir=$(LINUX_DIR) 	\
+ 	--disable-leds		      	\
++	--enable-usi			\
++	--enable-align-priority		\
+ 	--disable-rtailab		\
+ 	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/rtai
  
- define LOGROTATE_INSTALL_TARGET_CMDS
 -- 
-2.3.0
+1.9.1
