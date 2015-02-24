@@ -1,55 +1,42 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 24 Feb 2015 23:47:49 +0100
-Subject: [Buildroot] [PATCH] qt5base: update for postgresql plugin compile
-	fix
-Message-ID: <1424818069-11681-1-git-send-email-ps.report@gmx.net>
+Date: Tue, 24 Feb 2015 23:57:40 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-02-22
+Message-ID: <trinity-e7e491e6-c92c-495c-8fc1-998233c277a3-1424818660234@3capp-gmx-bs26>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- .../qt5/qt5base/0007-configure-add-psql_config-option.patch   | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Hello Vincent,
 
-diff --git a/package/qt5/qt5base/0007-configure-add-psql_config-option.patch b/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
-index 7561314..8075fe4 100644
---- a/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
-+++ b/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
-@@ -1,4 +1,4 @@
--From 95f2e4001f9c1721cbdb26d3f9c38511adae9c4b Mon Sep 17 00:00:00 2001
-+From f23a18de3c398c908c92b8cf8f20edc12435b9d1 Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Thu, 19 Feb 2015 22:41:02 +0100
- Subject: [PATCH] configure: add '-psql_config' option
-@@ -8,11 +8,11 @@ the same as for mysql_config).
- 
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-- configure | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
-+ configure | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
- 
- diff --git a/configure b/configure
--index 0c66ecf..a832ae3 100755
-+index 0c66ecf..491486a 100755
- --- a/configure
- +++ b/configure
- @@ -578,6 +578,7 @@ CFG_WIDGETS=yes
-@@ -47,9 +47,10 @@ index 0c66ecf..a832ae3 100755
-              if [ "$CFG_SQL_psql" != "no" ]; then
- +		[ -z "$CFG_PSQL_CONFIG" ] && CFG_PSQL_CONFIG=`"$WHICH" pg_config`
-                  # Be careful not to use native pg_config when cross building.
--                 if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
-+-                if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
- -                    QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null | filterIncludePath`
- -                    QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null | filterLibraryPath`
-++                if [ "$XPLATFORM_MINGW" != "yes" ] && [ -x "$CFG_PSQL_CONFIG" ]; then
- +                    QT_CFLAGS_PSQL=`$CFG_PSQL_CONFIG --includedir 2>/dev/null | filterIncludePath`
- +                    QT_LFLAGS_PSQL=`$CFG_PSQL_CONFIG --libdir 2>/dev/null | filterLibraryPath`
-                  fi
--- 
-2.1.4
+On Mon, Feb 23, 2015 at 01:14:26PM +0100, Vicente Olivert Riera wrote:
+> Hello everyone,
+> 
+> On 23/02/15 08:30, Thomas Petazzoni wrote:
+> > Build statistics for 2015-02-22
+> > ===============================
+> >     mips64el |                  qt5base-5.4.0 | NOK | http://autobuild.buildroot.net/results/2aa65614d97d1c301c775239e5f0055c14de2925/
+> 
+> I can't reproduce this issue but apparently there is a patch to fix it:
+> 
+> https://patchwork.ozlabs.org/patch/441768/
+> 
+> I'm sorry but I can't add my Reviewed-by or Tested-by to that patch
+> because I can't reproduce the failure :-(
+> 
+
+I had to install the postgresql-devel package on my host (OpenSUSE-13.2) and enable
+BR2_COMPILER_PARANOID_UNSAFE_PATH to reproduce the failure...
+
+The postgresql-devel package installs pg_config on the host, which is evaluated for the
+postgresql header search path, giving the wrong/host include path...
+
+Regards,
+Peter
+
+> Cheers,
+> --
+> Vincent
+> 
