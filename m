@@ -1,78 +1,65 @@
 From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Wed, 25 Feb 2015 22:17:19 +0100
-Subject: [Buildroot] [PATCH 02/13] autobuild-run,
-	python3: urllib.request<>urllib2
-In-Reply-To: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
-References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
-Message-ID: <1424899050-24932-3-git-send-email-dywi@mailerd.de>
+Date: Wed, 25 Feb 2015 22:17:17 +0100
+Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and misc
+	improvements
+Message-ID: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-urllib2 has been split into several modules,
-urlopen() is now part of urllib.request.
+Patches 1-4 make autobuild-run compatible with both python >=2.6 and 3.
 
-Py2k compatibility: import urllib2 if python version < 3
+Patches 5-9 are minor enhancements (mostly cleanup).
 
-Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
----
- scripts/autobuild-run | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Patches 10- are more invasive:
+* move the check_requirements() logic to the SystemInfo class
+* control environment(->locale), std{in,out,err} of all called commands
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 2354893..be2f482 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -59,7 +59,6 @@
- 
- from __future__ import print_function
- 
--import urllib2
- import csv
- from random import randint
- import subprocess
-@@ -73,6 +72,13 @@ import hashlib
- import argparse
- import ConfigParser
- 
-+if sys.hexversion >= 0x3000000:
-+    import urllib.request as _urllib
-+else:
-+    import urllib2 as _urllib
-+
-+urlopen = _urllib.urlopen
-+
- MAX_DURATION = 60 * 60 * 4
- VERSION = 1
- 
-@@ -81,7 +87,7 @@ def log_write(logf, msg):
-     logf.flush()
- 
- def check_version():
--    r = urllib2.urlopen('http://autobuild.buildroot.org/version')
-+    r = urlopen('http://autobuild.buildroot.org/version')
-     version = int(r.readline().strip())
-     if version > VERSION:
-         print("ERROR: script version too old, please upgrade.")
-@@ -136,7 +142,7 @@ def get_toolchain_configs():
-         - contents: an array of lines of the defconfig
-     """
- 
--    r = urllib2.urlopen('http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv')
-+    r = urlopen('http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv')
-     l = r.readlines()
-     configs = []
-     for row in csv.reader(l):
-@@ -151,7 +157,7 @@ def get_toolchain_configs():
-         if hostarch != config["hostarch"]:
-             continue
-         config["libc"] = row[2]
--        r = urllib2.urlopen(config["url"])
-+        r = urlopen(config["url"])
-         config["contents"] = r.readlines()
-         configs.append(config)
-     return configs
+Tested w/ python2.7 and python3.4, but not python2.6 (it should work, though).
+
+
+This changeset should be mostly compatible with the
+"autobuild-run improvements" patchset from Thomas De Schampheleire, except for:
+
+* autobuild-run: extend TODO list
+
+  * implements "Integrate method check-requirements with the SysInfo class,
+    distinghuishing  between required and optional dependencies.",
+    so this item can be removed from the TODO list
+
+* autobuild-run: check-requirements does not need to know the login details
+
+  * dep on "curl" gets set in main()
+
+* autobuild-run: set LC_ALL=C to not use locale settings of host machine
+
+  * SystemInfo maintains its own env dict and passes it to subprocess.call()
+  * ^ tries to find a "comparable" locale: either en_US[.UTF-8] or C
+    (My experience is that some python (build) scripts fail if the locale
+    is not *.utf-8.)
+  * remove all LANG, LC_* vars from the env if a "comparable" locale is found
+    and set LANG=<locale>
+
+
+Andr? Erdmann (13):
+  autobuild-run, python3: print is a function
+  autobuild-run, python3: urllib.request<>urllib2
+  autobuild-run, python3: bytes<>str, decode()
+  autobuild-run, python3: configparser<>ConfigParser
+  autobuild-run: remove unneeded vars
+  autobuild-run: explicitly close web file handles
+  autobuild-run: get host arch once
+  autobuild-run: sort imports alphabetically
+  autobuild-run: unify "which <prog>" code
+  autobuild-run: use a built-in has_prog() implementation
+  autobuild-run: move check_requirements() to SystemInfo
+  autobuild-run: encapsulate subprocess calls
+  autobuild-run: set locale to en_US or C
+
+ scripts/autobuild-run | 321 ++++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 218 insertions(+), 103 deletions(-)
+
 -- 
 2.3.0
