@@ -1,125 +1,58 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 25 Feb 2015 11:48:22 +0100
-Subject: [Buildroot] [RFC 1/2] Makefile: add target-genimage
-In-Reply-To: <CANxTyt6R72Yi_e15rHX4=vY9vwL2Yd+LEoUeB8C9BY7gbKkSXg@mail.gmail.com>
-References: <1423780427-7493-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1423780427-7493-2-git-send-email-vivien.didelot@savoirfairelinux.com>
- <CANxTyt4ojT7Y+mG9+Je_gY0dD2Ub3nxfcuoXtD1F-sPcbcmY6g@mail.gmail.com>
- <2004056362.2924318.1424104885214.JavaMail.root@savoirfairelinux.com>
- <CANxTyt6R72Yi_e15rHX4=vY9vwL2Yd+LEoUeB8C9BY7gbKkSXg@mail.gmail.com>
-Message-ID: <54EDA876.9010200@gmail.com>
+From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
+Date: Wed, 25 Feb 2015 12:02:41 +0000
+Subject: [Buildroot] [PATCH 2/2] fs: add custom fakeroot script support
+In-Reply-To: <20150224213941.GB4783@free.fr>
+References: <1424792855-14278-1-git-send-email-stefan.sorensen@spectralink.com>
+ <1424792855-14278-2-git-send-email-stefan.sorensen@spectralink.com>
+ <20150224213941.GB4783@free.fr>
+Message-ID: <1424865760.2629.14.camel@e37108.spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+On Tue, 2015-02-24 at 22:39 +0100, Yann E. MORIN wrote:
 
-Dear Vivien,
-
-
-looks good so far, and it fits well into my workflow, thanks for your
-contribution.
-Unfortunately the out-of tree build is broken with this version,
-please see inline in your patch my comment.
-I would propose to resend this patch with the fixed typos and the fix
-for the out-of-tree build.
-
-
-On 17.02.2015 03:37, Danomi Manchego wrote:
-> Vivien,
+> > The scripts can for example be used to invoke a tool that operates on
+> > file ownerships,
 > 
-> On Mon, Feb 16, 2015 at 11:41 AM, Vivien Didelot 
-> <vivien.didelot@savoirfairelinux.com> wrote:
->> Hi Danomi,
->> 
->>> A couple nitpicks ...
->> 
->> [...]
->> 
->>>> The rational behind adding this to Buildroot is that
->>>> genimage requires
->>> 
->>> spelling: "rationale".
->> 
->> Thanks.
->> 
->> [...]
->> 
->>>> --- a/Makefile +++ b/Makefile @@ -434,7 +434,7 @@ world:
->>>> target-post-image
->>>> 
->>>> .PHONY: all world toolchain dirs clean distclean source 
->>>> outputmakefile \ legal-info legal-info-prepare
->>>> legal-info-clean printvars \ -       target-finalize
->>>> target-post-image \ +       target-finalize target-genimage
->>>> target-post-image \ $(TARGETS) $(TARGETS_ROOTFS) \ 
->>>> $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) 
->>>> \ $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \ @@ -621,7
->>>> +621,20 @@ endif $(call MESSAGE,"Executing post-build script
->>>> $(s)"); \ $(EXTRA_ENV) $(s) $(TARGET_DIR) $(call 
->>>> qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
->>>> 
->>>> -target-post-image: $(TARGETS_ROOTFS) target-finalize 
->>>> +target-genimage: $(TARGETS_ROOTFS) target-finalize +
->>>> @$(foreach cfg, $(call qstrip,$(BR2_ROOTFS_GENIMAGE_CFG)), \ 
->>>> +       $(call MESSAGE,"Executing genimage with config
->>>> $(cfg)"); \ +         T=$$(mktemp -d
->>>> $(BUILD_DIR)/.genimage.XXXXXXXXXX); \ +         mkdir -p
->>>> $$T/{root,tmp}; \ +         $(EXTRA_ENV)
->>>> output/host/usr/bin/genimage \
-should be $(HOST_DIR)/output/host/
+> For file ownership, we already have BR2_ROOTFS_DEVICE_TABLE: "Path to
+> the permission tables". The naming of the option may be a bit
+> misleading, indeed, but that's historical...
 
+As you mention yourself, bulk ownership changes are problematic with
+device tables. Generating the device table in the post-build script
+doesn't seem very elegant to me.
 
-
->>>> +         --rootpath $$T/root \ +         --tmppath $$T/tmp
->>>> \ +         --inputpath output/images/ \ +
->>>> --outputpath output/images/ \
-both of the paths should be $(BINARIES_DIR)
-
-
->>>> +         --config $(cfg); \ +         rm -rf $$T$(sep))
->>> 
->>> I don't think the final $(sep) is needed, since this the last
->>> line of a makefile target, as opposed to, say. a template.
->> 
->> Are you sure? I'm not sure either but I tried to follow the other
->> foreach statements.
+> > or any other custom action that requires
+> > root privileges.
 > 
-> Ah, so sorry, I missed the fact that it was a foreach.  Comment
-> retracted!
-> 
-> 
->> Thanks for the nitpicks. Other than that, an feedback on the
->> overall RFC?
-> 
-> Sorry, I haven't actually tried it.
-> 
-> Danomi -
-> 
-> 
->> Regards, Vivien
-> _______________________________________________ buildroot mailing
-> list buildroot at busybox.net 
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> What would be those kind of "custom actions" that are not covered by the
+> above?
 
+An example could be changes to files/device nodes that are created
+earlier in the script. We use it to remove /dev/console created
+by /fs/cpio.mk (our image format doesn't support device nodes).
 
+Creating a manifest file of the whole filesystem, including stuff added
+by the fakeroot script, would also need to be done just before image
+creation (although here there is no need for being root). 
 
-- -- 
-Bests,
-Zoltan Gyarmati
-IRC freenode: zgyarmati
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+> > +config BR2_ROOTFS_FAKEROOT_SCRIPT
+> > +	string "Custom scripts to run as fake root"
+> 
+> I'm not very happy with talking about 'fake root' (which is really
+> 'fakeroot'). I'd prefer we avoid mentionning fakeroot, which is
+> internal implementation details.
 
-iQEcBAEBAgAGBQJU7ah2AAoJEAGmEeeR8iVhZ38H/0ZX29k/tKM3zjy05jwAGEcE
-OM0ySLjhIH+8843/CaNBszDXhG7kIxvfpFfX6ugGnmPJ2NAWu3ajnqk9oYHYkDyN
-gJJ7cN7aKo1RzVz64idZNY4ZyOxWyJVAK8vuLroQMOZO2h3Ztepf577UsfayfE82
-ThIY4tmAgwbIrdoWeC6R6YGtlMgIMpyzEtQe4FGqNYhMT29XMhyvAJfGt0Ep+EMR
-o7FKZrBWMr+G+mX2M6QuFTPcAcY5hffqRUccOOp1pS5ciVSeOVkr2yUnlMpS5CNQ
-8gCBAXjd2k/bWBpkdnn09xltVZQlOg1NysC4f7S1vqqFRrF9dfGv22Viz/I7yqA=
-=kvfn
------END PGP SIGNATURE-----
+I will rewrite it to not mention fakeroot.
+
+> Note also that those scripts would be run once for each filesystem type
+> the user has enabled; if tar, squashfs, cramfs and ext2/3/4 are enabled,
+> the scripts would be run four times. Thus, those scripts must be
+> idempotent (like for the post-build scripts, mind you).
+
+I will add a comment to the help text.
+
+Stefan
