@@ -1,27 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Feb 2015 19:50:02 +0100
-Subject: [Buildroot] [git commit] vorbis-tools: add hash
-Message-ID: <20150225185524.171D6805B2@busybox.osuosl.org>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed, 25 Feb 2015 20:18:32 +0100
+Subject: [Buildroot] [PATCH v2 2/4] python-cheetah: add host-package support
+In-Reply-To: <1424891914-27748-1-git-send-email-gwenj@trabucayre.com>
+References: <1424891914-27748-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1424891914-27748-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f90ce88d5a39d1411b3165a8af99689dadc9cce
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/vorbis-tools/vorbis-tools.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/vorbis-tools/vorbis-tools.hash b/package/vorbis-tools/vorbis-tools.hash
-new file mode 100644
-index 0000000..8f40eda
---- /dev/null
-+++ b/package/vorbis-tools/vorbis-tools.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/vorbis/SHA256SUMS
-+sha256	a389395baa43f8e5a796c99daf62397e435a7e73531c9f44d9084055a05d22bc	vorbis-tools-1.4.0.tar.gz
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 08076b5..faf2436 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
++PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+2.0.5
