@@ -1,50 +1,48 @@
 From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Wed, 25 Feb 2015 22:17:27 +0100
-Subject: [Buildroot] [PATCH 10/13] autobuild-run: use a built-in has_prog()
-	implementation
+Date: Wed, 25 Feb 2015 22:17:25 +0100
+Subject: [Buildroot] [PATCH 08/13] autobuild-run: sort imports alphabetically
 In-Reply-To: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
 References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
-Message-ID: <1424899050-24932-11-git-send-email-dywi@mailerd.de>
+Message-ID: <1424899050-24932-9-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No need to call subprocess.call(["which",name]).
-
 Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
- scripts/autobuild-run | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ scripts/autobuild-run | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 9c3e36c..29d1bbb 100755
+index e0971cb..52577e7 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -109,9 +109,20 @@ def check_version():
-         print("ERROR: script version too old, please upgrade.")
-         sys.exit(1)
+@@ -59,18 +59,18 @@
  
--def has_prog(name):
--    with open(os.devnull, "w") as devnull:
--        return subprocess.call(["which", name], stdout=devnull, stderr=devnull) == os.EX_OK
-+def has_prog(name, flags=os.X_OK, env=os.environ):
-+    if not name or name[0] == os.sep: raise ValueError(name)
-+
-+    prog_path = env.get("PATH", None)
-+    # for windows compatibility, we'd need to take PATHEXT into account
-+
-+    if prog_path:
-+        for prog_dir in filter(None, prog_path.split(os.pathsep)):
-+            # os.join() not necessary: non-empty prog_dir and name[0] != os.sep
-+            prog = prog_dir + os.sep + name
-+            if os.access(prog, flags):
-+                return True
-+    # --
-+    return False
+ from __future__ import print_function
  
- def check_requirements(http_login, http_password):
-     needed_progs = ["make", "git", "gcc", "timeout"]
++import argparse
+ import contextlib
+ import csv
+-from random import randint
+-import subprocess
++import hashlib
+ from multiprocessing import Process
+-import signal
+ import os
++from random import randint
+ import shutil
+-from time import localtime, strftime
++import signal
++import subprocess
+ import sys
+-import hashlib
+-import argparse
++from time import localtime, strftime
+ 
+ if sys.hexversion >= 0x3000000:
+     import configparser
 -- 
 2.3.0
