@@ -1,136 +1,103 @@
 From: Karoly Kasza <kaszak@gmail.com>
-Date: Wed, 25 Feb 2015 23:14:36 +0100
-Subject: [Buildroot] [PATCH 2/2] openvmtools: add patch to defend from lsb
-	path walking attack
-In-Reply-To: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
-References: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
-Message-ID: <1424902476-24448-2-git-send-email-kaszak@gmail.com>
+Date: Wed, 25 Feb 2015 23:14:35 +0100
+Subject: [Buildroot] [PATCH 1/2] openvmtools: add patch to use KVERS instead
+	of shell exec.
+Message-ID: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to defend lsb from path walking attack.
+Add patch to use $(KVERS) instead of shell exec uname.
 Originally from Debian.
 
 Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/openvmtools/0009-lsb.patch |  106 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 package/openvmtools/0009-lsb.patch
+ package/openvmtools/0008-kvers.patch |   75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+ create mode 100644 package/openvmtools/0008-kvers.patch
 
-diff --git a/package/openvmtools/0009-lsb.patch b/package/openvmtools/0009-lsb.patch
+diff --git a/package/openvmtools/0008-kvers.patch b/package/openvmtools/0008-kvers.patch
 new file mode 100644
-index 0000000..54c3232
+index 0000000..f432dbb
 --- /dev/null
-+++ b/package/openvmtools/0009-lsb.patch
-@@ -0,0 +1,106 @@
-+Upsteam Debian patch to defend openvmtools against path walking.
++++ b/package/openvmtools/0008-kvers.patch
+@@ -0,0 +1,75 @@
++Use KVERS instead of shell exec uname.
 +
-+Original description:
++Patch from Debian.
 +
-+From 3a9f2297a82b9c109e894b5f8ea17753e68830ac Mon Sep 17 00:00:00 2001
-+From: "VMware, Inc" <>
-+Date: Tue, 17 Sep 2013 20:39:34 -0700
-+Subject: [PATCH] Harden HostinfoOSData against $PATH attacks.
-+
-+We are doing a popen("lsb_release... ") when attempting to
-+determine host details in hostinfoPosix.c. Using popen means that
-+$PATH is walked when looking for the lsb_release binary, and that
-+may give an attacker the ability to run a malicious version of
-+lsb_release.
-+
-+This change does two things,
-+
-+a) Hard code the path to lsb_release. I've searched around
-+   the web and I believe the path is always "/usr/bin/lsb_release"
-+   so let's not leave this up to chance.
-+
-+b) Stop running HostinfoGetCmdOutput with elevated privileges. Drop
-+   to non-root when possible. If someone sneaks in a new call to
-+   HostinfoGetCmdOutput and doesn't use a full path, then we will
-+   hopefully avoid a firedrill. I'm only applying this to Linux
-+   because the Fusion build barfed when I tried to compile with
-+   without the vmx86_linux.
-+
-+I think either (a) or (b) would be enough but I'm doing both,
-+because each individually is correct. Also note that in the blog
-+post by Tavis Ormandy calls out doing (a) as not enough,
-+   http://blog.cmpxchg8b.com/2013/08/security-debianisms.html
-+His example uses a bash feature that allows functions to be
-+exported. I haven't been able to get that to work on my Ubuntu
-+machine.
-+
-+To test I'm manually run Linux WS and Fusion and verified that
-+the logs look correct.
-+
-+Signed-off-by: Dmitry Torokhov <dtor@vmware.com>
++Original author: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
++Original description: Replacing uname call with KVERS, overwriting seemed not to work.
 +
 +Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 +
-+---
-+ open-vm-tools/lib/misc/hostinfoPosix.c | 23 +++++++++++++++++++----
-+ 1 file changed, 19 insertions(+), 4 deletions(-)
-+
-+--- a/lib/misc/hostinfoPosix.c
-++++ b/lib/misc/hostinfoPosix.c
-+@@ -800,17 +800,27 @@ out:
-+ static char *
-+ HostinfoGetCmdOutput(const char *cmd)  // IN:
-+ {
-++   Bool isSuperUser = FALSE;
-+    DynBuf db;
-+    FILE *stream;
-+    char *out = NULL;
++--- a/modules/linux/vmblock/Makefile
+++++ b/modules/linux/vmblock/Makefile
++@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
++ endif
 + 
-++   /*
-++    * Attempt to lower privs, because we use popen and an attacker
-++    * may control $PATH.
-++    */
-++   if (vmx86_linux && Id_IsSuperUser()) {
-++      Id_EndSuperUser(getuid());
-++      isSuperUser = TRUE;
-++   }
-++
-+    DynBuf_Init(&db);
 + 
-+    stream = Posix_Popen(cmd, "r");
-+    if (stream == NULL) {
-+       Warning("Unable to get output of command \"%s\"\n", cmd);
++-VM_UNAME = $(shell uname -r)
+++VM_UNAME = $(KVERS)
 + 
-+-      return NULL;
-++      goto exit;
-+    }
++ # Header directory for the running kernel
++ ifdef LINUXINCLUDE
++--- a/modules/linux/vmci/Makefile
+++++ b/modules/linux/vmci/Makefile
++@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
++ endif
 + 
-+    for (;;) {
-+@@ -844,11 +854,16 @@ HostinfoGetCmdOutput(const char *cmd)  /
-+    if (DynBuf_Get(&db)) {
-+       out = (char *) DynBuf_AllocGet(&db);
-+    }
-+- closeIt:
-+-   DynBuf_Destroy(&db);
 + 
-++ closeIt:
-+    pclose(stream);
++-VM_UNAME = $(shell uname -r)
+++VM_UNAME = $(KVERS)
 + 
-++ exit:
-++   DynBuf_Destroy(&db);
-++
-++   if (isSuperUser) {
-++      Id_BeginSuperUser();
-++   }
-+    return out;
-+ }
++ # Header directory for the running kernel
++ ifdef LINUXINCLUDE
++--- a/modules/linux/vmhgfs/Makefile
+++++ b/modules/linux/vmhgfs/Makefile
++@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
++ endif
 + 
-+@@ -967,7 +982,7 @@ HostinfoOSData(void)
-+        * Try to get OS detailed information from the lsb_release command.
-+        */
 + 
-+-      lsbOutput = HostinfoGetCmdOutput("lsb_release -sd 2>/dev/null");
-++      lsbOutput = HostinfoGetCmdOutput("/usr/bin/lsb_release -sd 2>/dev/null");
-+       if (!lsbOutput) {
-+          int i;
++-VM_UNAME = $(shell uname -r)
+++VM_UNAME = $(KVERS)
 + 
++ # Header directory for the running kernel
++ ifdef LINUXINCLUDE
++--- a/modules/linux/vmsync/Makefile
+++++ b/modules/linux/vmsync/Makefile
++@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
++ endif
++ 
++ 
++-VM_UNAME = $(shell uname -r)
+++VM_UNAME = $(KVERS)
++ 
++ # Header directory for the running kernel
++ ifdef LINUXINCLUDE
++--- a/modules/linux/vmxnet/Makefile
+++++ b/modules/linux/vmxnet/Makefile
++@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
++ endif
++ 
++ 
++-VM_UNAME = $(shell uname -r)
+++VM_UNAME = $(KVERS)
++ 
++ # Header directory for the running kernel
++ ifdef LINUXINCLUDE
++--- a/modules/linux/vsock/Makefile
+++++ b/modules/linux/vsock/Makefile
++@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
++ endif
++ 
++ 
++-VM_UNAME = $(shell uname -r)
+++VM_UNAME = $(KVERS)
++ 
++ # Header directory for the running kernel
++ ifdef LINUXINCLUDE
 -- 
 1.7.10.4
