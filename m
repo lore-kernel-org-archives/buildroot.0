@@ -1,103 +1,39 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Wed, 25 Feb 2015 23:14:35 +0100
-Subject: [Buildroot] [PATCH 1/2] openvmtools: add patch to use KVERS instead
-	of shell exec.
-Message-ID: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 25 Feb 2015 19:51:02 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.13
+Message-ID: <1424904662-2020-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to use $(KVERS) instead of shell exec uname.
-Originally from Debian.
-
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openvmtools/0008-kvers.patch |   75 ++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 package/openvmtools/0008-kvers.patch
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvmtools/0008-kvers.patch b/package/openvmtools/0008-kvers.patch
-new file mode 100644
-index 0000000..f432dbb
---- /dev/null
-+++ b/package/openvmtools/0008-kvers.patch
-@@ -0,0 +1,75 @@
-+Use KVERS instead of shell exec uname.
-+
-+Patch from Debian.
-+
-+Original author: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
-+Original description: Replacing uname call with KVERS, overwriting seemed not to work.
-+
-+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-+
-+--- a/modules/linux/vmblock/Makefile
-++++ b/modules/linux/vmblock/Makefile
-+@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
-+ endif
-+ 
-+ 
-+-VM_UNAME = $(shell uname -r)
-++VM_UNAME = $(KVERS)
-+ 
-+ # Header directory for the running kernel
-+ ifdef LINUXINCLUDE
-+--- a/modules/linux/vmci/Makefile
-++++ b/modules/linux/vmci/Makefile
-+@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
-+ endif
-+ 
-+ 
-+-VM_UNAME = $(shell uname -r)
-++VM_UNAME = $(KVERS)
-+ 
-+ # Header directory for the running kernel
-+ ifdef LINUXINCLUDE
-+--- a/modules/linux/vmhgfs/Makefile
-++++ b/modules/linux/vmhgfs/Makefile
-+@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
-+ endif
-+ 
-+ 
-+-VM_UNAME = $(shell uname -r)
-++VM_UNAME = $(KVERS)
-+ 
-+ # Header directory for the running kernel
-+ ifdef LINUXINCLUDE
-+--- a/modules/linux/vmsync/Makefile
-++++ b/modules/linux/vmsync/Makefile
-+@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
-+ endif
-+ 
-+ 
-+-VM_UNAME = $(shell uname -r)
-++VM_UNAME = $(KVERS)
-+ 
-+ # Header directory for the running kernel
-+ ifdef LINUXINCLUDE
-+--- a/modules/linux/vmxnet/Makefile
-++++ b/modules/linux/vmxnet/Makefile
-+@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
-+ endif
-+ 
-+ 
-+-VM_UNAME = $(shell uname -r)
-++VM_UNAME = $(KVERS)
-+ 
-+ # Header directory for the running kernel
-+ ifdef LINUXINCLUDE
-+--- a/modules/linux/vsock/Makefile
-++++ b/modules/linux/vsock/Makefile
-+@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
-+ endif
-+ 
-+ 
-+-VM_UNAME = $(shell uname -r)
-++VM_UNAME = $(KVERS)
-+ 
-+ # Header directory for the running kernel
-+ ifdef LINUXINCLUDE
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 16a6fcb..24da09d 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	67ab3e92c5d48f3323b897d7c1aa0bb2af6f3a84f5bd9931cda163a7ff32299b	gnutls-3.3.12.tar.xz
++sha256	91bf1ef5c159b7f2176f972184545b287af6507ab55a543f6007d31406b97a99	gnutls-3.3.13.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 6c64b38..0154b4d 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.3
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
 -- 
-1.7.10.4
+2.0.5
