@@ -1,39 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Feb 2015 19:51:02 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.13
-Message-ID: <1424904662-2020-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 26 Feb 2015 00:05:08 +0100
+Subject: [Buildroot] [PATCH v1 4/4] directfb-examples: add hash
+In-Reply-To: <1424905508-30186-1-git-send-email-ps.report@gmx.net>
+References: <1424905508-30186-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1424905508-30186-4-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/directfb-examples/directfb-examples.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/directfb-examples/directfb-examples.hash
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 16a6fcb..24da09d 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	67ab3e92c5d48f3323b897d7c1aa0bb2af6f3a84f5bd9931cda163a7ff32299b	gnutls-3.3.12.tar.xz
-+sha256	91bf1ef5c159b7f2176f972184545b287af6507ab55a543f6007d31406b97a99	gnutls-3.3.13.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 6c64b38..0154b4d 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+diff --git a/package/directfb-examples/directfb-examples.hash b/package/directfb-examples/directfb-examples.hash
+new file mode 100644
+index 0000000..a4314ee
+--- /dev/null
++++ b/package/directfb-examples/directfb-examples.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  9a2104cc4da8123c8371813551b66b943198979f745cbebc034bb5e10844122a  DirectFB-examples-1.7.0.tar.gz
 -- 
-2.0.5
+2.1.4
