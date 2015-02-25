@@ -1,81 +1,72 @@
-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-Date: Wed, 25 Feb 2015 09:10:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: update to 2.10
-Message-ID: <1424851803-17375-1-git-send-email-syntheticpp@gmx.net>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Wed, 25 Feb 2015 10:40:19 +0100
+Subject: [Buildroot] [PATCH 1/4] pkg-cmake: allow to build package in a
+ subdirectory
+In-Reply-To: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+References: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20150225104019.48948b35@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch is upstream.
+up
 
-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
----
- package/libmpdclient/0001-musl-fixes.patch | 41 ------------------------------
- package/libmpdclient/libmpdclient.mk       |  2 +-
- 2 files changed, 1 insertion(+), 42 deletions(-)
- delete mode 100644 package/libmpdclient/0001-musl-fixes.patch
+On Tue, 17 Feb 2015 18:55:11 +0100
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-diff --git a/package/libmpdclient/0001-musl-fixes.patch b/package/libmpdclient/0001-musl-fixes.patch
-deleted file mode 100644
-index 60df540..0000000
---- a/package/libmpdclient/0001-musl-fixes.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From cc2ffe943dd36a4c95ec34b2f2bf413de15b7974 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Fran=C3=A7ois=20Revol?= <revol@free.fr>
--Date: Fri, 11 Jul 2014 08:56:49 +0200
--Subject: POSIX says fd_set is defined by <sys/select.h>
--
--Haiku requires this.
--
--cf.
--http://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/select.h.html
--
--Also guard sys/select.h by ifndef WIN32 as Mingw32 doesn't provide it.
--We'll avoid a configure check just for this.
--
--diff --git a/src/socket.c b/src/socket.c
--index f76510c..2aa5f7f 100644
----- a/src/socket.c
--+++ b/src/socket.c
--@@ -43,6 +43,7 @@
-- #else
-- #  include <netinet/in.h>
-- #  include <arpa/inet.h>
--+#  include <sys/select.h>
-- #  include <sys/socket.h>
-- #  include <netdb.h>
-- #  include <sys/un.h>
--diff --git a/src/sync.c b/src/sync.c
--index 43cfe50..0a6c9d3 100644
----- a/src/sync.c
--+++ b/src/sync.c
--@@ -33,6 +33,9 @@
-- #include <assert.h>
-- #include <stdlib.h>
-- #include <stdio.h>
--+#ifndef WIN32
--+#include <sys/select.h>
--+#endif
-- #include <fcntl.h>
-- #include <unistd.h>
-- 
---- 
--cgit v0.10-2-gd358
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 530e4fc..db3ae05 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMPDCLIENT_VERSION_MAJOR = 2
--LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).9
-+LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
- LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
- LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
- LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--- 
-2.3.0
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> For some cmake based packages, like GNURadio, it's forbidden to do the
+> compilation directly in the sources directory. This patch add a new 
+> variable to specify, if needed, the name of a sub-directory used to compile.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/pkg-cmake.mk | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 6c9955d..20243aa 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -57,7 +57,11 @@ $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+>  $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+>  
+>  $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+> +ifneq ($$($2)_BUILD_DIR,)
+> +$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/$$($(2)_BUILD_DIR)
+> +else
+>  $(2)_BUILDDIR			= $$($(2)_SRCDIR)
+> +endif
+>  
+>  #
+>  # Configure step. Only define it if not already defined by the package
+> @@ -69,7 +73,8 @@ ifeq ($(4),target)
+>  
+>  # Configure package for target
+>  define $(2)_CONFIGURE_CMDS
+> -	(cd $$($$(PKG)_BUILDDIR) && \
+> +	(mkdir -p $$($$(PKG)_BUILDDIR) && \
+> +	cd $$($$(PKG)_BUILDDIR) && \
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> @@ -93,7 +98,8 @@ else
+>  
+>  # Configure package for host
+>  define $(2)_CONFIGURE_CMDS
+> -	(cd $$($$(PKG)_BUILDDIR) && \
+> +	(mkdir -p $$($$(PKG)_BUILDDIR) && \
+> +	cd $$($$(PKG)_BUILDDIR) && \
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+>  	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
