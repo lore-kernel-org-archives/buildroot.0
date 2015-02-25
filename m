@@ -1,72 +1,46 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Wed, 25 Feb 2015 10:40:19 +0100
-Subject: [Buildroot] [PATCH 1/4] pkg-cmake: allow to build package in a
- subdirectory
-In-Reply-To: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
-References: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150225104019.48948b35@x230.trabucayre.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 25 Feb 2015 10:57:34 +0100
+Subject: [Buildroot] eth0 missing ?
+Message-ID: <974034368E9D498B93AD300538173FB3@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-up
+ 
+Hi
 
-On Tue, 17 Feb 2015 18:55:11 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+Where could the reason be for this, I did not have this a while ago.
+I am not in position to investigate right now, but some hints are welcome.
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> For some cmake based packages, like GNURadio, it's forbidden to do the
-> compilation directly in the sources directory. This patch add a new 
-> variable to specify, if needed, the name of a sub-directory used to compile.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/pkg-cmake.mk | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 6c9955d..20243aa 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -57,7 +57,11 @@ $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
->  $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
->  
->  $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
-> +ifneq ($$($2)_BUILD_DIR,)
-> +$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/$$($(2)_BUILD_DIR)
-> +else
->  $(2)_BUILDDIR			= $$($(2)_SRCDIR)
-> +endif
->  
->  #
->  # Configure step. Only define it if not already defined by the package
-> @@ -69,7 +73,8 @@ ifeq ($(4),target)
->  
->  # Configure package for target
->  define $(2)_CONFIGURE_CMDS
-> -	(cd $$($$(PKG)_BUILDDIR) && \
-> +	(mkdir -p $$($$(PKG)_BUILDDIR) && \
-> +	cd $$($$(PKG)_BUILDDIR) && \
->  	rm -f CMakeCache.txt && \
->  	PATH=$$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> @@ -93,7 +98,8 @@ else
->  
->  # Configure package for host
->  define $(2)_CONFIGURE_CMDS
-> -	(cd $$($$(PKG)_BUILDDIR) && \
-> +	(mkdir -p $$($$(PKG)_BUILDDIR) && \
-> +	cd $$($$(PKG)_BUILDDIR) && \
->  	rm -f CMakeCache.txt && \
->  	PATH=$$(BR_PATH) \
->  	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Partial bootlog: 
+
+...snip...
+flexcan 80034000.can: device registered (reg_base=c8a90000, irq=213)
+fec 800f0000.ethernet eth126: renamed from eth0
+input: gpio-keys as /devices/soc0/gpio-keys/input/input0
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+udevd[71]: renamed network interface eth0 to eth126                          <---------------------???
+fec 800f0000.ethernet eth1: renamed from eth126
+udevd[71]: renamed network interface eth126 to eth1                          <---------------------???
+ci_hdrc ci_hdrc.0: doesn't support gadget
+ci_hdrc ci_hdrc.0: no supported roles
+ci_hdrc ci_hdrc.1: EHCI Host Controller
+ci_hdrc ci_hdrc.1: new USB bus registered, assigned bus number 1
+ci_hdrc ci_hdrc.1: USB 2.0 started, EHCI 1.00
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb1: Product: EHCI Host Controller
+usb usb1: Manufacturer: Linux 3.18.5-apex ehci_hcd
+usb usb1: SerialNumber: ci_hdrc.1
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+done
+Initializing random number generator... done.
+Starting rpcbind: OK
+
+..snip..
+ 
+Regards
+Sagaert Johan
