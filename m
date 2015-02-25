@@ -1,420 +1,52 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Wed, 25 Feb 2015 21:52:18 +0100
-Subject: [Buildroot] [PATCH v3] inetutils: new package
-Message-ID: <1424897538-64363-1-git-send-email-kaszak@gmail.com>
+From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
+Date: Wed, 25 Feb 2015 22:17:22 +0100
+Subject: [Buildroot] [PATCH 05/13] autobuild-run: remove unneeded vars
+In-Reply-To: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+Message-ID: <1424899050-24932-6-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GNU Inetutils is a collection of common network programs.
-Clients included:
-dnsdomainname, ftp, hostname, ifconfig, logger, ping, ping6, rcp,
-rexec, rlogin, rsh, talk, telnet, tftp, traceroute, whois
-Servers included:
-ftpd, inetd, rexecd, rlogind, rshd, syslogd, talkd, telnetd, tftpd,
-uucpd
+And use cwd=abssrcdir (instead of srcdir) in the "Update the Buildroot sources"
+git pull command as that seems the intended purpose of $abssrcdir.
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
+ scripts/autobuild-run | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Changes v2 -> v3:
-  - IPv6 for ping and NATIVE_RPC for rsh etc. still needed. Explanations added.
-  - Dependencies seprarated by type
-  - Installation permissions fixed
-  - USR_BINS_MOVE, USR_SBINS_MOVE & DEL_OTHER variables and respective function
-    changes (for loops) added
-  - Minor comment changes like libexecdir
-
- package/Config.in                             |    3 +
- package/inetutils/0001-PATH_PROCNET_DEV.patch |   20 +++
- package/inetutils/Config.in                   |  172 +++++++++++++++++++++++++
- package/inetutils/inetutils.hash              |    2 +
- package/inetutils/inetutils.mk                |  146 +++++++++++++++++++++
- 5 files changed, 343 insertions(+)
- create mode 100644 package/inetutils/0001-PATH_PROCNET_DEV.patch
- create mode 100644 package/inetutils/Config.in
- create mode 100644 package/inetutils/inetutils.hash
- create mode 100644 package/inetutils/inetutils.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..7628389 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1101,6 +1101,9 @@ endif
- 	source "package/igh-ethercat/Config.in"
- 	source "package/igmpproxy/Config.in"
- 	source "package/inadyn/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	source "package/inetutils/Config.in"
-+endif
- 	source "package/iperf/Config.in"
- 	source "package/iperf3/Config.in"
- 	source "package/iproute2/Config.in"
-diff --git a/package/inetutils/0001-PATH_PROCNET_DEV.patch b/package/inetutils/0001-PATH_PROCNET_DEV.patch
-new file mode 100644
-index 0000000..e987253
---- /dev/null
-+++ b/package/inetutils/0001-PATH_PROCNET_DEV.patch
-@@ -0,0 +1,20 @@
-+Fix missing #define
-+
-+Original patch from:
-+http://repository.timesys.com/buildsources/i/inetutils/inetutils-1.9.1/inetutils-1.9.1-PATH_PROCNET_DEV.patch
-+
-+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-+
-+--- inetutils-1.9.2.orig/ifconfig/system/linux.c	2014-11-01 18:18:20.279765742 +0100
-++++ inetutils-1.9.2/ifconfig/system/linux.c	2014-11-01 18:18:28.000000000 +0100
-+@@ -50,6 +50,10 @@
-+ #include "../ifconfig.h"
-+ 
-+ 
-++#ifndef PATH_PROCNET_DEV
-++  #define PATH_PROCNET_DEV "/proc/net/dev"
-++#endif
-++
-+ /* ARPHRD stuff.  */
-+ 
-+ static void
-diff --git a/package/inetutils/Config.in b/package/inetutils/Config.in
-new file mode 100644
-index 0000000..8f57320
---- /dev/null
-+++ b/package/inetutils/Config.in
-@@ -0,0 +1,172 @@
-+menuconfig BR2_PACKAGE_INETUTILS
-+	bool "inetutils"
-+	depends on BR2_USE_WCHAR
-+	help
-+	  GNU Inetutils is a collection of common network programs.
-+	  Clients included:
-+	  dnsdomainname, ftp, hostname, ifconfig, logger, ping, ping6, rcp,
-+	  rexec, rlogin, rsh, talk, telnet, tftp, traceroute, whois
-+	  Servers included:
-+	  ftpd, inetd, rexecd, rlogind, rshd, syslogd, talkd, telnetd, tftpd,
-+	  uucpd
-+
-+if BR2_PACKAGE_INETUTILS
-+
-+config BR2_PACKAGE_INETUTILS_DNSDOMAINNAME
-+	bool "dnsdomainname"
-+
-+comment "dnsdomainname overwrites the net-tools package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_DNSDOMAINNAME && BR2_PACKAGE_NET_TOOLS
-+
-+config BR2_PACKAGE_INETUTILS_FTP
-+	bool "ftp"
-+	default y
-+
-+config BR2_PACKAGE_INETUTILS_HOSTNAME
-+	bool "hostname"
-+
-+comment "hostname overwrites the net-tools package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_HOSTNAME && BR2_PACKAGE_NET_TOOLS
-+
-+config BR2_PACKAGE_INETUTILS_IFCONFIG
-+	bool "ifconfig"
-+
-+comment "ifconfig overwrites the net-tools package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_IFCONFIG && BR2_PACKAGE_NET_TOOLS
-+
-+config BR2_PACKAGE_INETUTILS_LOGGER
-+	bool "logger"
-+
-+config BR2_PACKAGE_INETUTILS_PING
-+	bool "ping"
-+	depends on BR2_INET_IPV6
-+
-+comment "ping needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+comment "ping overwrites the iputils package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_PING && BR2_PACKAGE_IPUTILS
-+
-+config BR2_PACKAGE_INETUTILS_PING6
-+	bool "ping6"
-+	depends on BR2_INET_IPV6
-+
-+comment "ping6 needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+comment "ping6 overwrites the iputils package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_PING6 && BR2_PACKAGE_IPUTILS
-+
-+config BR2_PACKAGE_INETUTILS_RCP
-+	bool "rcp"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rcp needs a toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+config BR2_PACKAGE_INETUTILS_REXEC
-+	bool "rexec"
-+
-+config BR2_PACKAGE_INETUTILS_RLOGIN
-+	bool "rlogin"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rlogin needs a toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rlogin overwrites the rsh-redone package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_RLOGIN && BR2_PACKAGE_RSH_REDONE_RLOGIN
-+
-+config BR2_PACKAGE_INETUTILS_RSH
-+	bool "rsh"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rsh needs a toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rsh overwrites the rsh-redone package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_RSH && BR2_PACKAGE_RSH_REDONE_RSH
-+
-+config BR2_PACKAGE_INETUTILS_TALK
-+	bool "talk"
-+	select BR2_PACKAGE_NCURSES
-+
-+config BR2_PACKAGE_INETUTILS_TELNET
-+	bool "telnet"
-+	default y
-+
-+config BR2_PACKAGE_INETUTILS_TFTP
-+	bool "tftp"
-+	default y
-+
-+config BR2_PACKAGE_INETUTILS_TRACEROUTE
-+	bool "traceroute"
-+
-+config BR2_PACKAGE_INETUTILS_WHOIS
-+	bool "whois"
-+
-+comment "whois overwrites the whois package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_WHOIS && BR2_PACKAGE_WHOIS
-+
-+config BR2_PACKAGE_INETUTILS_FTPD
-+	bool "ftpd"
-+	depends on BR2_INET_IPV6
-+
-+comment "ftpd needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+config BR2_PACKAGE_INETUTILS_INETD
-+	bool "inetd"
-+
-+config BR2_PACKAGE_INETUTILS_REXECD
-+	bool "rexecd"
-+
-+config BR2_PACKAGE_INETUTILS_RLOGIND
-+	bool "rlogind"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rlogind needs a toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rlogind overwrites the rsh-redone package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_RLOGIND && BR2_PACKAGE_RSH_REDONE_RLOGIND
-+
-+config BR2_PACKAGE_INETUTILS_RSHD
-+	bool "rshd"
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rshd needs a toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+
-+comment "rshd overwrites the rsh-redone package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_RSHD && BR2_PACKAGE_RSH_REDONE_RSHD
-+
-+config BR2_PACKAGE_INETUTILS_SYSLOGD
-+	bool "syslogd"
-+	depends on BR2_INET_IPV6
-+
-+comment "syslogd needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+comment "syslogd overwrites the sysklogd package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_SYSLOGD && BR2_PACKAGE_SYSKLOGD
-+
-+config BR2_PACKAGE_INETUTILS_TALKD
-+	bool "talkd"
-+
-+config BR2_PACKAGE_INETUTILS_TELNETD
-+	bool "telnetd"
-+
-+config BR2_PACKAGE_INETUTILS_TFTPD
-+	bool "tftpd"
-+
-+comment "tftpd overwrites the iputils package's version if selected!"
-+	depends on BR2_PACKAGE_INETUTILS_TFTPD && BR2_PACKAGE_IPUTILS
-+
-+config BR2_PACKAGE_INETUTILS_UUCPD
-+	bool "uucpd"
-+
-+endif
-+
-+comment "inetutils needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/inetutils/inetutils.hash b/package/inetutils/inetutils.hash
-new file mode 100644
-index 0000000..6c1205e
---- /dev/null
-+++ b/package/inetutils/inetutils.hash
-@@ -0,0 +1,2 @@
-+# calculated after checking PGP signature (signed by ams at gnu.org)
-+sha256	e3783372540772bbadd6aa2c90f8a75511db4e7d40bbfa37ffdb1bc7a9697f3e	inetutils-1.9.2.tar.xz
-diff --git a/package/inetutils/inetutils.mk b/package/inetutils/inetutils.mk
-new file mode 100644
-index 0000000..b18149d
---- /dev/null
-+++ b/package/inetutils/inetutils.mk
-@@ -0,0 +1,146 @@
-+################################################################################
-+#
-+# inetutils
-+#
-+################################################################################
-+
-+INETUTILS_VERSION = 1.9.2
-+INETUTILS_SITE = $(BR2_GNU_MIRROR)/inetutils
-+INETUTILS_SOURCE = inetutils-$(INETUTILS_VERSION).tar.xz
-+INETUTILS_LICENSE = GPLv3
-+INETUTILS_LICENSE_FILES = COPYING
-+
-+# libexecdir is defined to have the daemons installed in /usr/sbin instead of /usr/libexec
-+INETUTILS_CONF_OPTS += --libexecdir=/usr/sbin --disable-clients --disable-servers
-+
-+# inetutils' own dependency
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_NCURSES),ncurses)
-+
-+# inetutils provides these tools, it should win over them
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_NET_TOOLS),net-tools)
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_IPUTILS),iputils)
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_RSH_REDONE),rsh-redone)
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_SYSKLOGD),sysklogd)
-+INETUTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_WHOIS),whois)
-+
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+INETUTILS_CONF_OPTS += --with-pam
-+INETUTILS_DEPENDENCIES += linux-pam
-+else
-+INETUTILS_CONF_OPTS += --without-pam
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_DNSDOMAINNAME),y)
-+INETUTILS_CONF_OPTS += --enable-dnsdomainname
-+INETUTILS_USR_BINS_MOVE += dnsdomainname
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_FTP),--enable-ftp)
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_HOSTNAME),y)
-+INETUTILS_CONF_OPTS += --enable-hostname
-+INETUTILS_USR_BINS_MOVE += hostname
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_IFCONFIG),y)
-+INETUTILS_CONF_OPTS += --enable-ifconfig
-+INETUTILS_USR_BINS_MOVE += ifconfig
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_LOGGER),--enable-logger)
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_PING),y)
-+INETUTILS_PERMISSIONS += /bin/ping f 4755 0 0 - - - - -$(sep)
-+INETUTILS_CONF_OPTS += --enable-ping
-+INETUTILS_USR_BINS_MOVE += ping
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_PING6),y)
-+INETUTILS_PERMISSIONS += /bin/ping6 f 4755 0 0 - - - - -$(sep)
-+INETUTILS_CONF_OPTS += --enable-ping6
-+INETUTILS_USR_BINS_MOVE += ping6
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_RCP),y)
-+INETUTILS_PERMISSIONS += /usr/bin/rcp f 4755 0 0 - - - - -$(sep)
-+INETUTILS_CONF_OPTS += --enable-rcp
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_REXEC),--enable-rexec)
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_RLOGIN),y)
-+INETUTILS_PERMISSIONS += /usr/bin/rlogin f 4755 0 0 - - - - -$(sep)
-+INETUTILS_CONF_OPTS += --enable-rlogin
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_RSH),y)
-+INETUTILS_PERMISSIONS += /usr/bin/rsh f 4755 0 0 - - - - -$(sep)
-+INETUTILS_CONF_OPTS += --enable-rsh
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_TALK),--enable-talk)
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_TELNET),--enable-telnet)
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_TFTP),--enable-tftp)
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_TRACEROUTE),y)
-+INETUTILS_PERMISSIONS += /usr/bin/traceroute f 4755 0 0 - - - - -$(sep)
-+INETUTILS_CONF_OPTS += --enable-traceroute
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_WHOIS),--enable-whois)
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_FTPD),--enable-ftpd)
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_INETD),--enable-inetd)
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_REXECD),--enable-rexecd)
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_RLOGIND),y)
-+INETUTILS_CONF_OPTS += --enable-rlogind
-+INETUTILS_DEL_OTHER += rlogind
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_RSHD),y)
-+INETUTILS_CONF_OPTS += --enable-rshd
-+INETUTILS_DEL_OTHER += rshd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_SYSLOGD),y)
-+INETUTILS_CONF_OPTS += --enable-syslogd
-+INETUTILS_USR_SBINS_MOVE += syslogd
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_TALKD),--enable-talkd)
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_TELNETD),--enable-telnetd)
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_TFTPD),y)
-+INETUTILS_CONF_OPTS += --enable-tftpd
-+INETUTILS_DEL_OTHER += tftpd
-+endif
-+
-+INETUTILS_CONF_OPTS += $(if $(BR2_PACKAGE_INETUTILS_UUCPD),--enable-uucpd)
-+
-+# Move binaries to proper path (possibly overwriting other utility versions)
-+define INETUTILS_MOVE_PROPER_PATH
-+	for fname in $(INETUTILS_USR_BINS_MOVE); do                                       \
-+		if [ -e $(TARGET_DIR)/usr/bin/$$fname ]; then                           \
-+			mv -f $(TARGET_DIR)/usr/bin/$$fname $(TARGET_DIR)/bin/$$fname;  \
-+		fi;                                                                     \
-+	done
-+	for fname in $(INETUTILS_USR_SBINS_MOVE); do                                         \
-+		if [ -e $(TARGET_DIR)/usr/sbin/$$fname ]; then                             \
-+			mv -f $(TARGET_DIR)/usr/sbin/$$fname $(TARGET_DIR)/sbin/$$fname;  \
-+		fi;                                                                       \
-+	done
-+endef
-+
-+# Remove iputils and rsd-redone utilities to avoid multiply installed tools
-+define INETUTILS_REMOVE_REDUNDANT_TOOLS
-+	for fname in $(INETUTILS_DEL_OTHER); do                                                             \
-+		if [ -e $(TARGET_DIR)/usr/sbin/in.$$fname ] && [ -e $(TARGET_DIR)/usr/sbin/$$fname ]; then  \
-+			rm $(TARGET_DIR)/usr/sbin/in.$$fname;                                               \
-+		fi;                                                                                         \
-+	done
-+endef
-+
-+INETUTILS_POST_INSTALL_TARGET_HOOKS += INETUTILS_MOVE_PROPER_PATH INETUTILS_REMOVE_REDUNDANT_TOOLS
-+
-+$(eval $(autotools-package))
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 236597d..5db21b1 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -205,8 +205,6 @@ def prepare_build(instance, log):
+         log_write(log, "INFO: removing %s from downloads" % f)
+         os.remove(os.path.join(dldir, f))
+ 
+-    devnull = open(os.devnull, "w")
+-
+     # Clone Buildroot. This only happens if the source directory
+     # didn't exist already.
+     srcdir = os.path.join(idir, "buildroot")
+@@ -219,7 +217,7 @@ def prepare_build(instance, log):
+ 
+     # Update the Buildroot sources.
+     abssrcdir = os.path.abspath(srcdir)
+-    ret = subprocess.call(["git", "pull"], cwd=srcdir, stdout=log, stderr=log)
++    ret = subprocess.call(["git", "pull"], cwd=abssrcdir, stdout=log, stderr=log)
+     if ret != 0:
+         log_write(log, "ERROR: could not pull Buildroot sources")
+         return -1
+@@ -361,7 +359,6 @@ def gen_config(instance, log, sysinfo):
+     """
+ 
+     idir = "instance-%d" % instance
+-    dldir = os.path.join(idir, "dl")
+     # We need the absolute path to use with O=, because the relative
+     # path to the output directory here is not relative to the
+     # Buildroot sources, but to the location of the autobuilder
 -- 
-1.7.10.4
+2.3.0
