@@ -1,82 +1,124 @@
 From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Wed, 25 Feb 2015 22:17:20 +0100
-Subject: [Buildroot] [PATCH 03/13] autobuild-run, python3: bytes<>str,
-	decode()
+Date: Wed, 25 Feb 2015 22:17:30 +0100
+Subject: [Buildroot] [PATCH 13/13] autobuild-run: set locale to en_US or C
 In-Reply-To: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
 References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
-Message-ID: <1424899050-24932-4-git-send-email-dywi@mailerd.de>
+Message-ID: <1424899050-24932-14-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-urlopen.read[lines]() returns bytes in py3 and text in py2.
-Decode the bytes if necessary.
-
-Py2k compatibility: no-op decode_bytes(), decode_byte_list() functions
-
-Note: The Py2k variant of the decode_byte_list() function returns the
-      input list, whereas the python3 variant creates a new list.
-
-Note2: This commit does not add encode() functions, which could be necessary
-       when writing non-ascii chars to files -- in Python3 only.
+some python scripts break if the locale is set to C, try en_US first
 
 Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
- scripts/autobuild-run | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ scripts/autobuild-run | 59 +++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 57 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index be2f482..3a3b8de 100755
+index 7980879..b9440b6 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -79,6 +79,19 @@ else:
+@@ -95,6 +95,20 @@ else:
+     decode_bytes = _identity
+     decode_byte_list = _identity
  
- urlopen = _urllib.urlopen
- 
-+if sys.hexversion >= 0x3000000:
-+    def decode_bytes(b):
-+        return b.decode()
-+
-+    def decode_byte_list(bl):
-+        return [b.decode() for b in bl]
++if sys.hexversion >= 0x2700000:
++    _run_proc_check_output = subprocess.check_output
 +else:
-+    def _identity(e):
-+        return e
-+
-+    decode_bytes = _identity
-+    decode_byte_list = _identity
++    # python 2.7 lacks subprocess.check_output(), need to define it here.
++    # It _has_ to raise CalledProcessError if the exitcode is not 0
++    def _run_proc_check_output(args, **kwargs):
++        assert 'stdout' not in kwargs
++        proc = subprocess.Popen(args, stdout=subprocess.PIPE, **kwargs)
++        stdout_data, _ = proc.communicate()
++        ret = proc.poll()
++        if ret != os.EX_OK:
++            raise subprocess.CalledProcessError(ret, args)
++        return stdout_data
 +
  MAX_DURATION = 60 * 60 * 4
  VERSION = 1
  
-@@ -88,7 +101,7 @@ def log_write(logf, msg):
+@@ -113,16 +127,23 @@ class SystemInfo:
+     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc", "timeout"]
+     DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
  
- def check_version():
-     r = urlopen('http://autobuild.buildroot.org/version')
--    version = int(r.readline().strip())
-+    version = int(decode_bytes(r.readline()).strip())
-     if version > VERSION:
-         print("ERROR: script version too old, please upgrade.")
-         sys.exit(1)
-@@ -143,7 +156,7 @@ def get_toolchain_configs():
-     """
++    # list of default locales (in lowercase, without "-", descending order)
++    #  some python scripts break if the locale is set to C, try en_US first
++    TRY_LOCALES = ['en_us.utf8', 'en_us', 'c']
++    # list of locale environment variables that should be (re-)set by set_locale()
++    LOCALE_KEYS = ['LANG']
++
+     def __init__(self):
+         self.needed_progs = list(self.__class__.DEFAULT_NEEDED_PROGS)
+         self.optional_progs = list(self.__class__.DEFAULT_OPTIONAL_PROGS)
+         self.progs = {}
+         self.devnull = open(os.devnull, "w")
++        self.env = os.environ.copy()
  
-     r = urlopen('http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv')
--    l = r.readlines()
-+    l = decode_byte_list(r.readlines())
-     configs = []
-     for row in csv.reader(l):
-         config = {}
-@@ -158,7 +171,7 @@ def get_toolchain_configs():
-             continue
-         config["libc"] = row[2]
-         r = urlopen(config["url"])
--        config["contents"] = r.readlines()
-+        config["contents"] = decode_byte_list(r.readlines())
-         configs.append(config)
-     return configs
+-    def find_prog(self, name, flags=os.X_OK, env=os.environ):
++    def find_prog(self, name, flags=os.X_OK):
+         if not name or name[0] == os.sep: raise ValueError(name)
  
+-        prog_path = env.get("PATH", None)
++        prog_path = self.env.get("PATH", None)
+         # for windows compatibility, we'd need to take PATHEXT into account
+ 
+         if prog_path:
+@@ -171,10 +192,43 @@ class SystemInfo:
+ 
+         return not missing_requirements
+ 
++    def set_locale(self):
++        try:
++            locales_str = _run_proc_check_output(
++                ["locale", "-a"], env=self.env,
++                stdin=self.devnull, stderr=self.devnull)
++        except subprocess.CalledProcessError:
++            return False
++
++        locales = dict((
++            (k.lower().replace("-", ""), k)
++            for k in decode_bytes(locales_str).split(None)
++        ))
++
++        for loc_key in filter(lambda x: x in locales, self.TRY_LOCALES):
++            # cannot modify self.env while iterating over it,
++            #  create intermediate list
++            env_old_locale_keys = [
++                k for k in self.env.keys() if (k == 'LANG' or k[:3] == 'LC_')
++            ]
++            for k in env_old_locale_keys:
++                del self.env[k]
++
++            # set new locale once
++            for vname in self.LOCALE_KEYS:
++                self.env[vname] = locales[loc_key]
++            return True
++        # -- end for
++        return None
++
++    def sanitize_env(self):
++        self.set_locale()
++
+     def run_cmd(self, cmdv, **kwargs):
+         kwargs.setdefault('stdin', self.devnull)
+         kwargs.setdefault('stdout', self.devnull)
+         kwargs.setdefault('stderr', self.devnull)
++        kwargs['env'] = self.env
+         return subprocess.call(cmdv, **kwargs)
+ 
+     def run_cmd_write_to(self, outstream, cmdv, **kwargs):
+@@ -659,6 +713,7 @@ Format of the configuration file:
+ def main():
+     check_version()
+     sysinfo = SystemInfo()
++    sysinfo.sanitize_env()
+     (ninstances, njobs, http_login, http_password, submitter) = config_get()
+ 
+     if http_login and http_password:
 -- 
 2.3.0
