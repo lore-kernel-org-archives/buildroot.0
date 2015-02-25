@@ -1,82 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 00:17:12 +0100
-Subject: [Buildroot] [PATCH v2] libgtk2: skip tutorial and faq build
-In-Reply-To: <20150224235024.844FBE0447@smtp.hushmail.com> (justin swartz's
- message of "Wed, 25 Feb 2015 01:50:24 +0200")
-References: <20150224235024.844FBE0447@smtp.hushmail.com>
-Message-ID: <877fv57f9j.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 26 Feb 2015 00:17:05 +0100
+Subject: [Buildroot] [PATCH] package/libsrtp: fix static build only
+Message-ID: <1424906225-11543-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "justin" == justin swartz <justin.swartz@nym.hush.com> writes:
+Use PKG_CHECK_MODULES to check openssl, otherwise the check fail
+to detect it due to a link issue with zlib.
 
- > Fixes: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/65165
- > Credit to Yann E. MORIN for discovering and describing a fix for the
- > HAVE_DOCBOOK bug in "configure.ac", as well as the
- > "--disable-gtk-doc-pdf" and "--disable-gtk-doc-html" additions to
- > LIBGTK2_CONF_OPTS.
+Fixes:
+http://autobuild.buildroot.net/results/a71/a71d85a5bb9af2ee82a8e61054025bceb03dbdeb/
 
- > Signed-off-by: Justin Swartz <justin.swartz@nym.hush.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ .../0002-configure-fix-static-build-only.patch     | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/libsrtp/0002-configure-fix-static-build-only.patch
 
- > ---
- > Changes v1 -> v2:
- >   - Commit log added to the head of "0002-configure-have_docbook.patch"
- >   - Moved "--disable-gtk-doc-pdf" and "--disable-gtk-doc-html" to the
- >     end of LIBGTK2_CONF_OPTS
- > ---
- >  package/libgtk2/0002-configure-have_docbook.patch | 15 +++++++++++++++
- >  package/libgtk2/libgtk2.mk                        |  9 +++++++--
- >  2 files changed, 22 insertions(+), 2 deletions(-)
- >  create mode 100644 package/libgtk2/0002-configure-have_docbook.patch
-
- > diff --git a/package/libgtk2/0002-configure-have_docbook.patch b/package/libgtk2/0002-configure-have_docbook.patch
- > new file mode 100644
- > index 0000000..aece8f1
- > --- /dev/null
- > +++ b/package/libgtk2/0002-configure-have_docbook.patch
- > @@ -0,0 +1,15 @@
- > +Improvement of the HAVE_DOCBOOK test criteria.
- > +
- > +Signed-off-by: Justin Swartz <justin.swartz@nym.hush.com>
- > +
- > +--- libgtk2-2.24.18/configure.ac.orig	2015-02-24 00:28:18.128745222 +0200
- > ++++ libgtk2-2.24.18/configure.ac	2015-02-24 00:29:10.739087501 +0200
- > +@@ -1612,7 +1612,7 @@
- > + GTK_DOC_CHECK([1.11])
- > + 
- > + AC_CHECK_PROG(DB2HTML, db2html, true, false)
- > +-AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
- > ++AM_CONDITIONAL([HAVE_DOCBOOK], [test ! "$DB2HTML" = "no"])
-
-Why not just pass DB2HTML=false in LIBGTK2_CONF_ENV?
-
-> + 
- > + AC_ARG_ENABLE(man,
- > +               [AC_HELP_STRING([--enable-man],
- > diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
- > index dfc1f5b..d468117 100644
- > --- a/package/libgtk2/libgtk2.mk
- > +++ b/package/libgtk2/libgtk2.mk
- > @@ -69,9 +69,14 @@ LIBGTK2_CONF_ENV = \
- >  	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
- >  	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
- >  	ac_cv_prog_F77=no \
- > -	ac_cv_path_CUPS_CONFIG=no
- > +	ac_cv_path_CUPS_CONFIG=no \
- > +	ac_cv_prog_DB2HTML=no
- 
- > -LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
- > +LIBGTK2_CONF_OPTS = \
- > +	--disable-glibtest \
- > +	--enable-explicit-deps=no \
- > +	--disable-gtk-doc-pdf \
- > +	--disable-gtk-doc-html
-
-What does that buy us? gtk-doc is disabled unless --enable-gtk-doc is
-passed (which we don't), so these shouldn't change anything.
-
+diff --git a/package/libsrtp/0002-configure-fix-static-build-only.patch b/package/libsrtp/0002-configure-fix-static-build-only.patch
+new file mode 100644
+index 0000000..49b608f
+--- /dev/null
++++ b/package/libsrtp/0002-configure-fix-static-build-only.patch
+@@ -0,0 +1,45 @@
++From 1296962830e8c7469f1b5a58dac982dc9a66c69c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Wed, 25 Feb 2015 22:30:41 +0100
++Subject: [PATCH] configure: fix static build only
++
++Use PKG_CHECK_MODULES to check openssl, otherwise the check fail
++to detect it due to a link issue with zlib.
++
++config.log:
++arm-linux-gcc -o conftest -Os  -static -I/usr/include -static -L/usr/lib -lz -lcrypto -lssl
++conftest.c -lcrypto /usr/lib/libcrypto.a(c_zlib.o): In function `zlib_stateful_expand_block':
++c_zlib.c:(.text+0x54): undefined reference to `inflate'
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ configure.in | 13 +++----------
++ 1 file changed, 3 insertions(+), 10 deletions(-)
++
++diff --git a/configure.in b/configure.in
++index ee30daf..101a58a 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -144,16 +144,9 @@ AC_ARG_ENABLE(openssl,
++   [], enable_openssl=no)
++ AC_MSG_RESULT($enable_openssl)
++ if test "$enable_openssl" = "yes"; then
++-   LDFLAGS="$LDFLAGS $(pkg-config --libs openssl)";
++-   CFLAGS="$CFLAGS $(pkg-config --cflags openssl)";
++-
++-   AC_CHECK_LIB([crypto], [EVP_EncryptInit], [],
++-             [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
++-   AC_CHECK_LIB([crypto], [EVP_aes_128_ctr], [],
++-             [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
++-   AC_CHECK_LIB([crypto], [EVP_aes_128_gcm], [],
++-             [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
++-   AC_DEFINE(OPENSSL, 1, [Define this to use OpenSSL crypto.])
+++   PKG_CHECK_MODULES([OPENSSL], [openssl],
+++		[AC_DEFINE(OPENSSL, 1, [Define this to use OpenSSL crypto.])],
+++		[AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
++    AES_ICM_OBJS="crypto/cipher/aes_icm_ossl.o crypto/cipher/aes_gcm_ossl.o"
++    RNG_OBJS=rand_source_ossl.o
++    HMAC_OBJS=crypto/hash/hmac_ossl.o
++-- 
++1.9.3
++
 -- 
-Bye, Peter Korsgaard
+1.9.3
