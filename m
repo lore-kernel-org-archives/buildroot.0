@@ -1,23 +1,401 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Feb 2015 17:19:19 +0100
-Subject: [Buildroot] [PATCH] glibc: add security patches for
+Date: Wed, 25 Feb 2015 17:17:09 +0100
+Subject: [Buildroot] [git commit] glibc: add security patches for
 	CVE-2015-1472
-In-Reply-To: <1424791764-31627-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Feb 2015 12:29:24 -0300")
-References: <1424791764-31627-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877fv67ym0.fsf@dell.be.48ers.dk>
+Message-ID: <20150225162212.0EBDE817C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=489af594738397b3decb53ea27d08b66390da865
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes CVE-2015-1472 - heap buffer overflow in wscanf.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes CVE-2015-1472 - heap buffer overflow in wscanf.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../glibc/2.18-svnr23787/0005-CVE-2015-1472.patch  |   88 ++++++++++++++++++++
+ .../glibc/2.19-svnr25243/0004-CVE-2015-1472.patch  |   88 ++++++++++++++++++++
+ package/glibc/2.19/0004-CVE-2015-1472.patch        |   88 ++++++++++++++++++++
+ package/glibc/2.20/0003-CVE-2015-1472.patch        |   88 ++++++++++++++++++++
+ 4 files changed, 352 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/2.18-svnr23787/0005-CVE-2015-1472.patch b/package/glibc/2.18-svnr23787/0005-CVE-2015-1472.patch
+new file mode 100644
+index 0000000..a0da626
+--- /dev/null
++++ b/package/glibc/2.18-svnr23787/0005-CVE-2015-1472.patch
+@@ -0,0 +1,88 @@
++Fix CVE-2015-1472 - heap buffer overflow in wscanf
++Backport from upstream:
++https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5bd80bfe9ca0d955bfbbc002781bc7b01b6bcb06
++See: https://bugzilla.redhat.com/show_bug.cgi?id=1188235
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff --git a/stdio-common/tst-sscanf.c b/stdio-common/tst-sscanf.c
++index aece3f2..8a2eb9e 100644
++--- a/libc/stdio-common/tst-sscanf.c
+++++ b/libc/stdio-common/tst-sscanf.c
++@@ -233,5 +233,38 @@ main (void)
++ 	}
++     }
++ 
+++  /* BZ #16618
+++     The test will segfault during SSCANF if the buffer overflow
+++     is not fixed.  The size of `s` is such that it forces the use
+++     of malloc internally and this triggers the incorrect computation.
+++     Thus the value for SIZE is arbitrariy high enough that malloc
+++     is used.  */
+++  {
+++#define SIZE 131072
+++    CHAR *s = malloc ((SIZE + 1) * sizeof (*s));
+++    if (s == NULL)
+++      abort ();
+++    for (size_t i = 0; i < SIZE; i++)
+++      s[i] = L('0');
+++    s[SIZE] = L('\0');
+++    int i = 42;
+++    /* Scan multi-digit zero into `i`.  */
+++    if (SSCANF (s, L("%d"), &i) != 1)
+++      {
+++	printf ("FAIL: bug16618: SSCANF did not read one input item.\n");
+++	result = 1;
+++      }
+++    if (i != 0)
+++      {
+++	printf ("FAIL: bug16618: Value of `i` was not zero as expected.\n");
+++	result = 1;
+++      }
+++    free (s);
+++    if (result != 1)
+++      printf ("PASS: bug16618: Did not crash.\n");
+++#undef SIZE
+++  }
+++
+++
++   return result;
++ }
++diff --git a/stdio-common/vfscanf.c b/stdio-common/vfscanf.c
++index cd129a8..0e204e7 100644
++--- a/libc/stdio-common/vfscanf.c
+++++ b/libc/stdio-common/vfscanf.c
++@@ -272,9 +272,10 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++       if (__glibc_unlikely (wpsize == wpmax))				      \
++ 	{								    \
++ 	  CHAR_T *old = wp;						    \
++-	  size_t newsize = (UCHAR_MAX + 1 > 2 * wpmax			    \
++-			    ? UCHAR_MAX + 1 : 2 * wpmax);		    \
++-	  if (use_malloc || !__libc_use_alloca (newsize))		    \
+++	  bool fits = __glibc_likely (wpmax <= SIZE_MAX / sizeof (CHAR_T) / 2); \
+++	  size_t wpneed = MAX (UCHAR_MAX + 1, 2 * wpmax);		    \
+++	  size_t newsize = fits ? wpneed * sizeof (CHAR_T) : SIZE_MAX;	    \
+++	  if (!__libc_use_alloca (newsize))				    \
++ 	    {								    \
++ 	      wp = realloc (use_malloc ? wp : NULL, newsize);		    \
++ 	      if (wp == NULL)						    \
++@@ -286,14 +287,13 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++ 		}							    \
++ 	      if (! use_malloc)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-	      wpmax = newsize;						    \
+++	      wpmax = wpneed;						    \
++ 	      use_malloc = true;					    \
++ 	    }								    \
++ 	  else								    \
++ 	    {								    \
++ 	      size_t s = wpmax * sizeof (CHAR_T);			    \
++-	      wp = (CHAR_T *) extend_alloca (wp, s,			    \
++-					     newsize * sizeof (CHAR_T));    \
+++	      wp = (CHAR_T *) extend_alloca (wp, s, newsize);		    \
++ 	      wpmax = s / sizeof (CHAR_T);				    \
++ 	      if (old != NULL)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-- 
++1.9.4
++
+diff --git a/package/glibc/2.19-svnr25243/0004-CVE-2015-1472.patch b/package/glibc/2.19-svnr25243/0004-CVE-2015-1472.patch
+new file mode 100644
+index 0000000..a0da626
+--- /dev/null
++++ b/package/glibc/2.19-svnr25243/0004-CVE-2015-1472.patch
+@@ -0,0 +1,88 @@
++Fix CVE-2015-1472 - heap buffer overflow in wscanf
++Backport from upstream:
++https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5bd80bfe9ca0d955bfbbc002781bc7b01b6bcb06
++See: https://bugzilla.redhat.com/show_bug.cgi?id=1188235
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff --git a/stdio-common/tst-sscanf.c b/stdio-common/tst-sscanf.c
++index aece3f2..8a2eb9e 100644
++--- a/libc/stdio-common/tst-sscanf.c
+++++ b/libc/stdio-common/tst-sscanf.c
++@@ -233,5 +233,38 @@ main (void)
++ 	}
++     }
++ 
+++  /* BZ #16618
+++     The test will segfault during SSCANF if the buffer overflow
+++     is not fixed.  The size of `s` is such that it forces the use
+++     of malloc internally and this triggers the incorrect computation.
+++     Thus the value for SIZE is arbitrariy high enough that malloc
+++     is used.  */
+++  {
+++#define SIZE 131072
+++    CHAR *s = malloc ((SIZE + 1) * sizeof (*s));
+++    if (s == NULL)
+++      abort ();
+++    for (size_t i = 0; i < SIZE; i++)
+++      s[i] = L('0');
+++    s[SIZE] = L('\0');
+++    int i = 42;
+++    /* Scan multi-digit zero into `i`.  */
+++    if (SSCANF (s, L("%d"), &i) != 1)
+++      {
+++	printf ("FAIL: bug16618: SSCANF did not read one input item.\n");
+++	result = 1;
+++      }
+++    if (i != 0)
+++      {
+++	printf ("FAIL: bug16618: Value of `i` was not zero as expected.\n");
+++	result = 1;
+++      }
+++    free (s);
+++    if (result != 1)
+++      printf ("PASS: bug16618: Did not crash.\n");
+++#undef SIZE
+++  }
+++
+++
++   return result;
++ }
++diff --git a/stdio-common/vfscanf.c b/stdio-common/vfscanf.c
++index cd129a8..0e204e7 100644
++--- a/libc/stdio-common/vfscanf.c
+++++ b/libc/stdio-common/vfscanf.c
++@@ -272,9 +272,10 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++       if (__glibc_unlikely (wpsize == wpmax))				      \
++ 	{								    \
++ 	  CHAR_T *old = wp;						    \
++-	  size_t newsize = (UCHAR_MAX + 1 > 2 * wpmax			    \
++-			    ? UCHAR_MAX + 1 : 2 * wpmax);		    \
++-	  if (use_malloc || !__libc_use_alloca (newsize))		    \
+++	  bool fits = __glibc_likely (wpmax <= SIZE_MAX / sizeof (CHAR_T) / 2); \
+++	  size_t wpneed = MAX (UCHAR_MAX + 1, 2 * wpmax);		    \
+++	  size_t newsize = fits ? wpneed * sizeof (CHAR_T) : SIZE_MAX;	    \
+++	  if (!__libc_use_alloca (newsize))				    \
++ 	    {								    \
++ 	      wp = realloc (use_malloc ? wp : NULL, newsize);		    \
++ 	      if (wp == NULL)						    \
++@@ -286,14 +287,13 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++ 		}							    \
++ 	      if (! use_malloc)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-	      wpmax = newsize;						    \
+++	      wpmax = wpneed;						    \
++ 	      use_malloc = true;					    \
++ 	    }								    \
++ 	  else								    \
++ 	    {								    \
++ 	      size_t s = wpmax * sizeof (CHAR_T);			    \
++-	      wp = (CHAR_T *) extend_alloca (wp, s,			    \
++-					     newsize * sizeof (CHAR_T));    \
+++	      wp = (CHAR_T *) extend_alloca (wp, s, newsize);		    \
++ 	      wpmax = s / sizeof (CHAR_T);				    \
++ 	      if (old != NULL)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-- 
++1.9.4
++
+diff --git a/package/glibc/2.19/0004-CVE-2015-1472.patch b/package/glibc/2.19/0004-CVE-2015-1472.patch
+new file mode 100644
+index 0000000..b2f8e49
+--- /dev/null
++++ b/package/glibc/2.19/0004-CVE-2015-1472.patch
+@@ -0,0 +1,88 @@
++Fix CVE-2015-1472 - heap buffer overflow in wscanf
++Backport from upstream:
++https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5bd80bfe9ca0d955bfbbc002781bc7b01b6bcb06
++See: https://bugzilla.redhat.com/show_bug.cgi?id=1188235
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff --git a/stdio-common/tst-sscanf.c b/stdio-common/tst-sscanf.c
++index aece3f2..8a2eb9e 100644
++--- a/stdio-common/tst-sscanf.c
+++++ b/stdio-common/tst-sscanf.c
++@@ -233,5 +233,38 @@ main (void)
++ 	}
++     }
++ 
+++  /* BZ #16618
+++     The test will segfault during SSCANF if the buffer overflow
+++     is not fixed.  The size of `s` is such that it forces the use
+++     of malloc internally and this triggers the incorrect computation.
+++     Thus the value for SIZE is arbitrariy high enough that malloc
+++     is used.  */
+++  {
+++#define SIZE 131072
+++    CHAR *s = malloc ((SIZE + 1) * sizeof (*s));
+++    if (s == NULL)
+++      abort ();
+++    for (size_t i = 0; i < SIZE; i++)
+++      s[i] = L('0');
+++    s[SIZE] = L('\0');
+++    int i = 42;
+++    /* Scan multi-digit zero into `i`.  */
+++    if (SSCANF (s, L("%d"), &i) != 1)
+++      {
+++	printf ("FAIL: bug16618: SSCANF did not read one input item.\n");
+++	result = 1;
+++      }
+++    if (i != 0)
+++      {
+++	printf ("FAIL: bug16618: Value of `i` was not zero as expected.\n");
+++	result = 1;
+++      }
+++    free (s);
+++    if (result != 1)
+++      printf ("PASS: bug16618: Did not crash.\n");
+++#undef SIZE
+++  }
+++
+++
++   return result;
++ }
++diff --git a/stdio-common/vfscanf.c b/stdio-common/vfscanf.c
++index cd129a8..0e204e7 100644
++--- a/stdio-common/vfscanf.c
+++++ b/stdio-common/vfscanf.c
++@@ -272,9 +272,10 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++       if (__glibc_unlikely (wpsize == wpmax))				      \
++ 	{								    \
++ 	  CHAR_T *old = wp;						    \
++-	  size_t newsize = (UCHAR_MAX + 1 > 2 * wpmax			    \
++-			    ? UCHAR_MAX + 1 : 2 * wpmax);		    \
++-	  if (use_malloc || !__libc_use_alloca (newsize))		    \
+++	  bool fits = __glibc_likely (wpmax <= SIZE_MAX / sizeof (CHAR_T) / 2); \
+++	  size_t wpneed = MAX (UCHAR_MAX + 1, 2 * wpmax);		    \
+++	  size_t newsize = fits ? wpneed * sizeof (CHAR_T) : SIZE_MAX;	    \
+++	  if (!__libc_use_alloca (newsize))				    \
++ 	    {								    \
++ 	      wp = realloc (use_malloc ? wp : NULL, newsize);		    \
++ 	      if (wp == NULL)						    \
++@@ -286,14 +287,13 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++ 		}							    \
++ 	      if (! use_malloc)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-	      wpmax = newsize;						    \
+++	      wpmax = wpneed;						    \
++ 	      use_malloc = true;					    \
++ 	    }								    \
++ 	  else								    \
++ 	    {								    \
++ 	      size_t s = wpmax * sizeof (CHAR_T);			    \
++-	      wp = (CHAR_T *) extend_alloca (wp, s,			    \
++-					     newsize * sizeof (CHAR_T));    \
+++	      wp = (CHAR_T *) extend_alloca (wp, s, newsize);		    \
++ 	      wpmax = s / sizeof (CHAR_T);				    \
++ 	      if (old != NULL)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-- 
++1.9.4
++
+diff --git a/package/glibc/2.20/0003-CVE-2015-1472.patch b/package/glibc/2.20/0003-CVE-2015-1472.patch
+new file mode 100644
+index 0000000..b2f8e49
+--- /dev/null
++++ b/package/glibc/2.20/0003-CVE-2015-1472.patch
+@@ -0,0 +1,88 @@
++Fix CVE-2015-1472 - heap buffer overflow in wscanf
++Backport from upstream:
++https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5bd80bfe9ca0d955bfbbc002781bc7b01b6bcb06
++See: https://bugzilla.redhat.com/show_bug.cgi?id=1188235
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff --git a/stdio-common/tst-sscanf.c b/stdio-common/tst-sscanf.c
++index aece3f2..8a2eb9e 100644
++--- a/stdio-common/tst-sscanf.c
+++++ b/stdio-common/tst-sscanf.c
++@@ -233,5 +233,38 @@ main (void)
++ 	}
++     }
++ 
+++  /* BZ #16618
+++     The test will segfault during SSCANF if the buffer overflow
+++     is not fixed.  The size of `s` is such that it forces the use
+++     of malloc internally and this triggers the incorrect computation.
+++     Thus the value for SIZE is arbitrariy high enough that malloc
+++     is used.  */
+++  {
+++#define SIZE 131072
+++    CHAR *s = malloc ((SIZE + 1) * sizeof (*s));
+++    if (s == NULL)
+++      abort ();
+++    for (size_t i = 0; i < SIZE; i++)
+++      s[i] = L('0');
+++    s[SIZE] = L('\0');
+++    int i = 42;
+++    /* Scan multi-digit zero into `i`.  */
+++    if (SSCANF (s, L("%d"), &i) != 1)
+++      {
+++	printf ("FAIL: bug16618: SSCANF did not read one input item.\n");
+++	result = 1;
+++      }
+++    if (i != 0)
+++      {
+++	printf ("FAIL: bug16618: Value of `i` was not zero as expected.\n");
+++	result = 1;
+++      }
+++    free (s);
+++    if (result != 1)
+++      printf ("PASS: bug16618: Did not crash.\n");
+++#undef SIZE
+++  }
+++
+++
++   return result;
++ }
++diff --git a/stdio-common/vfscanf.c b/stdio-common/vfscanf.c
++index cd129a8..0e204e7 100644
++--- a/stdio-common/vfscanf.c
+++++ b/stdio-common/vfscanf.c
++@@ -272,9 +272,10 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++       if (__glibc_unlikely (wpsize == wpmax))				      \
++ 	{								    \
++ 	  CHAR_T *old = wp;						    \
++-	  size_t newsize = (UCHAR_MAX + 1 > 2 * wpmax			    \
++-			    ? UCHAR_MAX + 1 : 2 * wpmax);		    \
++-	  if (use_malloc || !__libc_use_alloca (newsize))		    \
+++	  bool fits = __glibc_likely (wpmax <= SIZE_MAX / sizeof (CHAR_T) / 2); \
+++	  size_t wpneed = MAX (UCHAR_MAX + 1, 2 * wpmax);		    \
+++	  size_t newsize = fits ? wpneed * sizeof (CHAR_T) : SIZE_MAX;	    \
+++	  if (!__libc_use_alloca (newsize))				    \
++ 	    {								    \
++ 	      wp = realloc (use_malloc ? wp : NULL, newsize);		    \
++ 	      if (wp == NULL)						    \
++@@ -286,14 +287,13 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
++ 		}							    \
++ 	      if (! use_malloc)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-	      wpmax = newsize;						    \
+++	      wpmax = wpneed;						    \
++ 	      use_malloc = true;					    \
++ 	    }								    \
++ 	  else								    \
++ 	    {								    \
++ 	      size_t s = wpmax * sizeof (CHAR_T);			    \
++-	      wp = (CHAR_T *) extend_alloca (wp, s,			    \
++-					     newsize * sizeof (CHAR_T));    \
+++	      wp = (CHAR_T *) extend_alloca (wp, s, newsize);		    \
++ 	      wpmax = s / sizeof (CHAR_T);				    \
++ 	      if (old != NULL)						    \
++ 		MEMCPY (wp, old, wpsize);				    \
++-- 
++1.9.4
++
