@@ -1,64 +1,35 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 25 Feb 2015 15:31:35 +0100
-Subject: [Buildroot] eth0 missing ?
-In-Reply-To: <54EDD64B.2000808@zacarias.com.ar>
-References: <974034368E9D498B93AD300538173FB3@JohanW7>
- <54EDD64B.2000808@zacarias.com.ar>
-Message-ID: <8FBEA6BD424F412DA822868DF95B07F2@JohanW7>
+From: Rainer Berns <rainer.berns@berns-online.de>
+Date: Wed, 25 Feb 2015 16:31:41 +0100 (CET)
+Subject: [Buildroot] host-libgtk3 fails with buildroot-2015.02-rc3
+In-Reply-To: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <895368986.18672.1424878301938.JavaMail.open-xchange@oxbsltgw02.schlund.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
  
------Oorspronkelijk bericht-----
-Van: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
-Verzonden: woensdag 25 februari 2015 15:04
-Aan: Sagaert Johan; buildroot at busybox.net
-Onderwerp: Re: [Buildroot] eth0 missing ?
-
-On 02/25/2015 06:57 AM, Sagaert Johan wrote:
-
-> Hi
-> 
-> Where could the reason be for this, I did not have this a while ago.
-> I am not in position to investigate right now, but some hints are welcome.
-> 
-> Partial bootlog: 
-> 
-> ...snip...
-> flexcan 80034000.can: device registered (reg_base=c8a90000, irq=213) 
-> fec 800f0000.ethernet eth126: renamed from eth0
-> input: gpio-keys as /devices/soc0/gpio-keys/input/input0
-> ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-> udevd[71]: renamed network interface eth0 to eth126                          <---------------------???
-> fec 800f0000.ethernet eth1: renamed from eth126
-> udevd[71]: renamed network interface eth126 to eth1                          <---------------------???
-> ci_hdrc ci_hdrc.0: doesn't support gadget ci_hdrc ci_hdrc.0: no 
-> supported roles ci_hdrc ci_hdrc.1: EHCI Host Controller ci_hdrc 
-> ci_hdrc.1: new USB bus registered, assigned bus number 1 ci_hdrc 
-> ci_hdrc.1: USB 2.0 started, EHCI 1.00 usb usb1: New USB device found, 
-> idVendor=1d6b, idProduct=0002 usb usb1: New USB device strings: Mfr=3, 
-> Product=2, SerialNumber=1 usb usb1: Product: EHCI Host Controller usb 
-> usb1: Manufacturer: Linux 3.18.5-apex ehci_hcd usb usb1: SerialNumber: 
-> ci_hdrc.1 hub 1-0:1.0: USB hub found hub 1-0:1.0: 1 port detected done 
-> Initializing random number generator... done.
-> Starting rpcbind: OK
-> 
-> ..snip..
-
-Hi.
-That's udev/systemd to blame normally, see:
-http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
-
-Regards.
-
-
-Hi
-
-That's strange since I am using busybox as the init system.
-
-Will need to check the list of recent commits.
-
-Regards , Johan
+I tesed buildroot-2015.02-rc3 with my configuration (Cortex A9) from
+buildroot-2014.11 and it fails. (Error does occured with rc1)
+ 
+ 
+>>> host-libgtk3 3.14.5 Building
+....
+/usr/bin/ld: skipping incompatible
+/home/berns/Entwicklung/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libintl.so
+when searching for -lintl
+/usr/bin/ld: skipping incompatible
+/home/berns/Entwicklung/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libintl.a
+when searching for -lintl/usr/bin/ld: cannot find -lintl
+/usr/bin/ld: cannot find /lib/libpthread.so.0 inside
+/usr/bin/ld: cannot find /usr/lib/libpthread_nonshared.a inside
+collect2: ld returned 1 exit status
+make: ***
+[/home/berns/Entwicklung/buildroot-2015.02-rc3/output/build/host-libgtk3-3.14.5/.stamp_built]
+Error 1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150225/45136f10/attachment.html>
