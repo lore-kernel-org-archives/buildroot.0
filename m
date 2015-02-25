@@ -1,39 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Feb 2015 12:26:53 +0100
-Subject: [Buildroot] [git commit] libsigsegv: rename patches because the
-	first one is gone
-Message-ID: <20150302222722.E60C98177D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 Feb 2015 17:30:07 +0100
+Subject: [Buildroot] [git commit] sox: add optional opus file support
+Message-ID: <20150302222723.89BE18057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7434b01e241be780bdd6ce3e3664d155c4ac825d
+commit: http://git.buildroot.net/buildroot/commit/?id=34efcd0db73e32b8ab25f7cbd67ac35e5ffcdff2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...k-direction-for-the-AArch64-architecture.patch} |    0
- ...irection-for-the-Microblaze-architecture.patch} |    0
- ...-direction-for-the-Blackfin-architecture.patch} |    0
- ...k-direction-for-the-Nios-II-architecture.patch} |    0
- 4 files changed, 0 insertions(+), 0 deletions(-)
+ package/sox/sox.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsigsegv/0002-Add-stack-direction-for-the-AArch64-architecture.patch b/package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0002-Add-stack-direction-for-the-AArch64-architecture.patch
-rename to package/libsigsegv/0001-Add-stack-direction-for-the-AArch64-architecture.patch
-diff --git a/package/libsigsegv/0003-Add-stack-direction-for-the-Microblaze-architecture.patch b/package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0003-Add-stack-direction-for-the-Microblaze-architecture.patch
-rename to package/libsigsegv/0002-Add-stack-direction-for-the-Microblaze-architecture.patch
-diff --git a/package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch b/package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0004-Add-stack-direction-for-the-Blackfin-architecture.patch
-rename to package/libsigsegv/0003-Add-stack-direction-for-the-Blackfin-architecture.patch
-diff --git a/package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch b/package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
-similarity index 100%
-rename from package/libsigsegv/0005-Add-stack-direction-for-the-Nios-II-architecture.patch
-rename to package/libsigsegv/0004-Add-stack-direction-for-the-Nios-II-architecture.patch
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index ac89691..cd5fbb6 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -78,6 +78,12 @@ else
+ SOX_CONF_OPTS += --without-amrwb --without-amrnb
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPUSFILE),y)
++SOX_DEPENDENCIES += opusfile
++else
++SOX_CONF_OPTS += --without-opus
++endif
++
+ ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
+ SOX_DEPENDENCIES += pulseaudio
+ else
