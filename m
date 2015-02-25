@@ -1,92 +1,123 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Feb 2015 17:27:03 +0100
-Subject: [Buildroot] [git commit branch/next] opusfile: new package
-Message-ID: <20150225163036.879018177D@busybox.osuosl.org>
+From: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+Date: Wed, 25 Feb 2015 11:53:16 -0500
+Subject: [Buildroot] [PATCH v3] qt-webkit-kiosk: new package
+In-Reply-To: <1424578920-21071-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+References: <1424578920-21071-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+Message-ID: <1424883196-13697-1-git-send-email-jerome.oufella@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b579027ef36735374967c056dbb384c233ae0ae6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Qt-webkit-kiosk is a simple browser working in kiosk-mode, powered by
+QtWebkit. It provides a convenient way to deploy a full-screen browser
+on embedded system platforms.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This commit adds the appropriate packaging to Buildroot, including an
+option to deploy the provided sound files.
+
+Signed-off-by: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
 ---
- package/Config.in              |    1 +
- package/opusfile/Config.in     |   13 +++++++++++++
- package/opusfile/opusfile.hash |    2 ++
- package/opusfile/opusfile.mk   |   25 +++++++++++++++++++++++++
- 4 files changed, 41 insertions(+), 0 deletions(-)
+Changes v2 -> v3: (Thanks again, Thomas!)
+* Add missing config dependencies (QT5BASE_GUI, QT5BASE_WIDGETS,
+  OPENSSL)
+* Update commit message
+
+Changes v1 -> v2:
+* Update commit message
+* Rework config dependencies formulation
+* Reword help strings
+* Remove config file customization options
+* Add missing Makefile comment header
+* Use $(QT5_QMAKE) macro instead of qmake
+* Simplify the target installation process
+---
+ package/Config.in                          |  1 +
+ package/qt-webkit-kiosk/Config.in          | 23 +++++++++++++++++++++
+ package/qt-webkit-kiosk/qt-webkit-kiosk.mk | 32 ++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/qt-webkit-kiosk/Config.in
+ create mode 100644 package/qt-webkit-kiosk/qt-webkit-kiosk.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ceabce1..1d8ec1a 100644
+index fe3d3d0..90be326 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -621,6 +621,7 @@ menu "Audio/Sound"
- 	source "package/mp4v2/Config.in"
- 	source "package/opencore-amr/Config.in"
- 	source "package/opus/Config.in"
-+	source "package/opusfile/Config.in"
- 	source "package/portaudio/Config.in"
- 	source "package/speex/Config.in"
- 	source "package/taglib/Config.in"
-diff --git a/package/opusfile/Config.in b/package/opusfile/Config.in
+@@ -250,6 +250,7 @@ comment "X applications"
+ 	source "package/leafpad/Config.in"
+ 	source "package/midori/Config.in"
+ 	source "package/pcmanfm/Config.in"
++	source "package/qt-webkit-kiosk/Config.in"
+ 	source "package/rdesktop/Config.in"
+ 	source "package/synergy/Config.in"
+ 	source "package/torsmo/Config.in"
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
 new file mode 100644
-index 0000000..f9271c4
+index 0000000..075258e
 --- /dev/null
-+++ b/package/opusfile/Config.in
-@@ -0,0 +1,13 @@
-+comment "opusfile needs a toolchain w/ largefile"
-+	depends on !BR2_LARGEFILE
-+
-+config BR2_PACKAGE_OPUSFILE
-+	bool "opusfile"
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_OPUS
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_QT_WEBKIT_KIOSK
++	bool "qt-webkit-kiosk"
++	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	select BR2_PACKAGE_QT5WEBKIT
++	select BR2_PACKAGE_QT5MULTIMEDIA
++	depends on !BR2_STATIC_LIBS # qt5webkit
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
++	depends on BR2_ARCH_HAS_ATOMICS # qt5webkit
++	depends on !BR2_BINFMT_FLAT # qt5webkit
 +	help
-+	  A convenient high-level API for decoding and basic manipulation
-+	  of all Ogg Opus audio streams.
++	  Simple kiosk-mode browser powered by Qt5Webkit
 +
-+	  http://opus-codec.org
-diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
++if BR2_PACKAGE_QT_WEBKIT_KIOSK
++
++config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
++        bool "Install browser sound files"
++        help
++          Deploy browser sound files on target
++
++endif
+diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
 new file mode 100644
-index 0000000..1833950
+index 0000000..d54c8d5
 --- /dev/null
-+++ b/package/opusfile/opusfile.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
-+sha256	2428717b356e139f18ed2fdb5ad990b5654a238907a0058200b39c46a7d03ea6	opusfile-0.6.tar.gz
-diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
-new file mode 100644
-index 0000000..918041d
---- /dev/null
-+++ b/package/opusfile/opusfile.mk
-@@ -0,0 +1,25 @@
++++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# opusfile
++# qt-webkit-kiosk
 +#
 +################################################################################
 +
-+OPUSFILE_VERSION = 0.6
-+OPUSFILE_SITE = http://downloads.xiph.org/releases/opus
-+OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
-+OPUSFILE_LICENSE = BSD-3c
-+OPUSFILE_LICENSE_FILES = COPYING
-+OPUSFILE_INSTALL_STAGING = YES
++QT_WEBKIT_KIOSK_VERSION = 7fe40a350abfbe5ec194e7c6c740f7099e8704cd
++QT_WEBKIT_KIOSK_SITE = https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk.git
++QT_WEBKIT_KIOSK_SITE_METHOD = git
++QT_WEBKIT_KIOSK_DEPENDENCIES = qt5webkit qt5multimedia
++QT_WEBKIT_KIOSK_LICENSE = LGPLv3
++QT_WEBKIT_KIOSK_LICENSE_FILES = doc/lgpl.html
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPUSFILE_DEPENDENCIES += openssl
-+else
-+OPUSFILE_CONF_OPTS += --disable-http
-+endif
++define QT_WEBKIT_KIOSK_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
++endef
 +
-+# Use the same as opus package since it's a dep and we can't mix
-+ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
-+OPUSFILE_CONF_OPTS += --enable-fixed-point
-+endif
++define QT_WEBKIT_KIOSK_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
 +
-+$(eval $(autotools-package))
++define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src -f Makefile.qt-webkit-kiosk \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		install_target
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		install_config \
++		$(if $(BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS),install_sound)
++endef
++
++$(eval $(generic-package))
+-- 
+2.1.0
