@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Feb 2015 10:07:21 -0300
-Subject: [Buildroot] [PATCH 4/5] vorbis-tools: add hash
+Date: Wed, 25 Feb 2015 10:07:22 -0300
+Subject: [Buildroot] [PATCH 5/5] libshout: add hash
 In-Reply-To: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1424869642-9080-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1424869642-9080-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vorbis-tools/vorbis-tools.hash | 2 ++
+ package/libshout/libshout.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/vorbis-tools/vorbis-tools.hash
+ create mode 100644 package/libshout/libshout.hash
 
-diff --git a/package/vorbis-tools/vorbis-tools.hash b/package/vorbis-tools/vorbis-tools.hash
+diff --git a/package/libshout/libshout.hash b/package/libshout/libshout.hash
 new file mode 100644
-index 0000000..8f40eda
+index 0000000..908bd99
 --- /dev/null
-+++ b/package/vorbis-tools/vorbis-tools.hash
++++ b/package/libshout/libshout.hash
 @@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/vorbis/SHA256SUMS
-+sha256	a389395baa43f8e5a796c99daf62397e435a7e73531c9f44d9084055a05d22bc	vorbis-tools-1.4.0.tar.gz
++# From http://downloads.xiph.org/releases/libshout/SHA256SUMS
++sha256	cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e	libshout-2.3.1.tar.gz
 -- 
 2.0.5
