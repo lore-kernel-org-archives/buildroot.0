@@ -1,46 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 26 Feb 2015 23:19:09 +0200
-Subject: [Buildroot] [PATCH] package/libsrtp: fix static build with
- openssl
-In-Reply-To: <1424985067-6640-1-git-send-email-romain.naour@openwide.fr>
-References: <1424985067-6640-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150226211909.GM2402@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Feb 2015 00:19:02 +0100
+Subject: [Buildroot] [git commit] libgtk2: ensure faq/tutorial isn't
+	regenerated
+Message-ID: <20150226212251.8316F8046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+commit: http://git.buildroot.net/buildroot/commit/?id=db2cbeee44867d6abe2349dad4be4c89b5af910f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Feb 26, 2015 at 10:11:07PM +0100, Romain Naour wrote:
-> diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
-> new file mode 100644
-> index 0000000..5075762
-> --- /dev/null
-> +++ b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
-> @@ -0,0 +1,140 @@
-> +From cfbf3609d62201c6de9b1a075a2ce6f1edd580b6 Mon Sep 17 00:00:00 2001
-> +From: jfigus <foleyj@cisco.com>
-> +Date: Thu, 26 Feb 2015 12:25:08 -0500
-> +Subject: [PATCH] A autoconf checks for libz and libdl when OpenSSL is enabled
-> + to allow for static linking of OpenSSL (via CFLAGS=-static).
-> +
+As we don't need them, the tarball already contains generated documentation
+and it fails to build with certain versions of db2html:
 
-Please add your SoB here.
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/65165
 
-> +---
-> + configure    | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Reported-by: Justin Swartz <justin.swartz@nym.hush.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgtk2/libgtk2.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Since we do AUTORECONF for this package anyway, please drop the configure part
-from this patch, and keep only the configure.in patch.
-
-> + configure.in |   4 +++
-> + 2 files changed, 104 insertions(+)
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index dfc1f5b..f52dfaf 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -69,7 +69,8 @@ LIBGTK2_CONF_ENV = \
+ 	ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
+ 	ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource \
+ 	ac_cv_prog_F77=no \
+-	ac_cv_path_CUPS_CONFIG=no
++	ac_cv_path_CUPS_CONFIG=no \
++	DB2HTML=false
+ 
+ LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
+ 
