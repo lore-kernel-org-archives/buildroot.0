@@ -1,42 +1,136 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 25 Feb 2015 22:35:45 +0100
-Subject: [Buildroot] [PATCH v1] directfb-examples: explicitly add -lstdc++
-	for static build
-In-Reply-To: <1424900145-26962-1-git-send-email-ps.report@gmx.net>
-References: <1424900145-26962-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1424900145-26962-2-git-send-email-ps.report@gmx.net>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Wed, 25 Feb 2015 23:14:36 +0100
+Subject: [Buildroot] [PATCH 2/2] openvmtools: add patch to defend from lsb
+	path walking attack
+In-Reply-To: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
+References: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
+Message-ID: <1424902476-24448-2-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1] and [2]:
-undefined reference to `___cxa_pure_virtual'
-undefined reference to `___gxx_personality_v0'
+Add patch to defend lsb from path walking attack.
+Originally from Debian.
 
-[1] http://autobuild.buildroot.net/results/bd0/bd0f4b3e41bf6330f83e3d9b58d985cc63506a3b/
-[2] http://autobuild.buildroot.net/results/584/584ace383204d97fcaad37742e2e035ca78a3d10/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/directfb-examples/directfb-examples.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/openvmtools/0009-lsb.patch |  106 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
+ create mode 100644 package/openvmtools/0009-lsb.patch
 
-diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
-index 16d2a86..40afd81 100644
---- a/package/directfb-examples/directfb-examples.mk
-+++ b/package/directfb-examples/directfb-examples.mk
-@@ -12,6 +12,10 @@ DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
- DIRECTFB_EXAMPLES_INSTALL_STAGING = YES
- DIRECTFB_EXAMPLES_DEPENDENCIES = directfb
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+        DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
-+endif
+diff --git a/package/openvmtools/0009-lsb.patch b/package/openvmtools/0009-lsb.patch
+new file mode 100644
+index 0000000..54c3232
+--- /dev/null
++++ b/package/openvmtools/0009-lsb.patch
+@@ -0,0 +1,106 @@
++Upsteam Debian patch to defend openvmtools against path walking.
 +
- DIRECTFB_EXAMPLES_TARGETS_ =
- DIRECTFB_EXAMPLES_TARGETS_y =
- 
++Original description:
++
++From 3a9f2297a82b9c109e894b5f8ea17753e68830ac Mon Sep 17 00:00:00 2001
++From: "VMware, Inc" <>
++Date: Tue, 17 Sep 2013 20:39:34 -0700
++Subject: [PATCH] Harden HostinfoOSData against $PATH attacks.
++
++We are doing a popen("lsb_release... ") when attempting to
++determine host details in hostinfoPosix.c. Using popen means that
++$PATH is walked when looking for the lsb_release binary, and that
++may give an attacker the ability to run a malicious version of
++lsb_release.
++
++This change does two things,
++
++a) Hard code the path to lsb_release. I've searched around
++   the web and I believe the path is always "/usr/bin/lsb_release"
++   so let's not leave this up to chance.
++
++b) Stop running HostinfoGetCmdOutput with elevated privileges. Drop
++   to non-root when possible. If someone sneaks in a new call to
++   HostinfoGetCmdOutput and doesn't use a full path, then we will
++   hopefully avoid a firedrill. I'm only applying this to Linux
++   because the Fusion build barfed when I tried to compile with
++   without the vmx86_linux.
++
++I think either (a) or (b) would be enough but I'm doing both,
++because each individually is correct. Also note that in the blog
++post by Tavis Ormandy calls out doing (a) as not enough,
++   http://blog.cmpxchg8b.com/2013/08/security-debianisms.html
++His example uses a bash feature that allows functions to be
++exported. I haven't been able to get that to work on my Ubuntu
++machine.
++
++To test I'm manually run Linux WS and Fusion and verified that
++the logs look correct.
++
++Signed-off-by: Dmitry Torokhov <dtor@vmware.com>
++
++Signed-off-by: Karoly Kasza <kaszak@gmail.com>
++
++---
++ open-vm-tools/lib/misc/hostinfoPosix.c | 23 +++++++++++++++++++----
++ 1 file changed, 19 insertions(+), 4 deletions(-)
++
++--- a/lib/misc/hostinfoPosix.c
+++++ b/lib/misc/hostinfoPosix.c
++@@ -800,17 +800,27 @@ out:
++ static char *
++ HostinfoGetCmdOutput(const char *cmd)  // IN:
++ {
+++   Bool isSuperUser = FALSE;
++    DynBuf db;
++    FILE *stream;
++    char *out = NULL;
++ 
+++   /*
+++    * Attempt to lower privs, because we use popen and an attacker
+++    * may control $PATH.
+++    */
+++   if (vmx86_linux && Id_IsSuperUser()) {
+++      Id_EndSuperUser(getuid());
+++      isSuperUser = TRUE;
+++   }
+++
++    DynBuf_Init(&db);
++ 
++    stream = Posix_Popen(cmd, "r");
++    if (stream == NULL) {
++       Warning("Unable to get output of command \"%s\"\n", cmd);
++ 
++-      return NULL;
+++      goto exit;
++    }
++ 
++    for (;;) {
++@@ -844,11 +854,16 @@ HostinfoGetCmdOutput(const char *cmd)  /
++    if (DynBuf_Get(&db)) {
++       out = (char *) DynBuf_AllocGet(&db);
++    }
++- closeIt:
++-   DynBuf_Destroy(&db);
++ 
+++ closeIt:
++    pclose(stream);
++ 
+++ exit:
+++   DynBuf_Destroy(&db);
+++
+++   if (isSuperUser) {
+++      Id_BeginSuperUser();
+++   }
++    return out;
++ }
++ 
++@@ -967,7 +982,7 @@ HostinfoOSData(void)
++        * Try to get OS detailed information from the lsb_release command.
++        */
++ 
++-      lsbOutput = HostinfoGetCmdOutput("lsb_release -sd 2>/dev/null");
+++      lsbOutput = HostinfoGetCmdOutput("/usr/bin/lsb_release -sd 2>/dev/null");
++       if (!lsbOutput) {
++          int i;
++ 
 -- 
-2.1.4
+1.7.10.4
