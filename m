@@ -1,28 +1,78 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Feb 2015 10:07:22 -0300
-Subject: [Buildroot] [PATCH 5/5] libshout: add hash
-In-Reply-To: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1424869642-9080-5-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 25 Feb 2015 14:43:57 +0100
+Subject: [Buildroot] [PATCH 1/4] pkg-cmake: allow to build package in a
+	subdirectory
+In-Reply-To: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+References: <1424195714-15903-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <CAHXCMMLcfvNBw0K85cu2XqTyp_hFAVcMfjTsYNaiDivk4ZaEjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libshout/libshout.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/libshout/libshout.hash
+Hi Gwenhael,
 
-diff --git a/package/libshout/libshout.hash b/package/libshout/libshout.hash
-new file mode 100644
-index 0000000..908bd99
---- /dev/null
-+++ b/package/libshout/libshout.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/libshout/SHA256SUMS
-+sha256	cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e	libshout-2.3.1.tar.gz
+On Tue, Feb 17, 2015 at 6:55 PM, Gwenhael Goavec-Merou
+<gwenj@trabucayre.com> wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>
+> For some cmake based packages, like GNURadio, it's forbidden to do the
+> compilation directly in the sources directory. This patch add a new
+> variable to specify, if needed, the name of a sub-directory used to compile.
+>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/pkg-cmake.mk | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 6c9955d..20243aa 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -57,7 +57,11 @@ $(2)_INSTALL_STAGING_OPTS    ?= DESTDIR=$$(STAGING_DIR) install
+>  $(2)_INSTALL_TARGET_OPTS               ?= DESTDIR=$$(TARGET_DIR) install
+>
+>  $(2)_SRCDIR                    = $$($(2)_DIR)/$$($(2)_SUBDIR)
+> +ifneq ($$($2)_BUILD_DIR,)
+> +$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/$$($(2)_BUILD_DIR)
+> +else
+>  $(2)_BUILDDIR                  = $$($(2)_SRCDIR)
+
+I suggest you just do something similar to what is done in the generic
+infra [1].
+
+> +endif
+>
+>  #
+>  # Configure step. Only define it if not already defined by the package
+> @@ -69,7 +73,8 @@ ifeq ($(4),target)
+>
+>  # Configure package for target
+>  define $(2)_CONFIGURE_CMDS
+> -       (cd $$($$(PKG)_BUILDDIR) && \
+> +       (mkdir -p $$($$(PKG)_BUILDDIR) && \
+> +       cd $$($$(PKG)_BUILDDIR) && \
+>         rm -f CMakeCache.txt && \
+>         PATH=$$(BR_PATH) \
+>         $$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> @@ -93,7 +98,8 @@ else
+>
+>  # Configure package for host
+>  define $(2)_CONFIGURE_CMDS
+> -       (cd $$($$(PKG)_BUILDDIR) && \
+> +       (mkdir -p $$($$(PKG)_BUILDDIR) && \
+> +       cd $$($$(PKG)_BUILDDIR) && \
+>         rm -f CMakeCache.txt && \
+>         PATH=$$(BR_PATH) \
+>         $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> --
+> 2.0.5
+>
+
+Regards,
+
+[1] http://git.buildroot.org/buildroot/tree/package/pkg-generic.mk#n350
+
 -- 
-2.0.5
+Samuel
