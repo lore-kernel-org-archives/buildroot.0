@@ -1,40 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 10:37:02 +0100
-Subject: [Buildroot] [git commit] package/freerdp: bump version
-Message-ID: <20150302222721.D6F8481773@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Feb 2015 00:18:41 +0100
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.8.8.3
+Message-ID: <20150302222723.BF1D98057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=361f528aea3682929990e53d38f72f30ab86ba3a
+commit: http://git.buildroot.net/buildroot/commit/?id=63d13842c9cf223158ad9f03a094f445ec0d0351
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we bumped to CMake-3.1, the build of FreeRDP is broken:
-
-    CMake Error at channels/client/CMakeLists.txt:33 (list):
-      list sub-command REMOVE_DUPLICATES requires list to be present.
-
-This has been fixed upstream, so just bump the version to get that fix.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freerdp/freerdp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sqlite/sqlite.hash |    2 +-
+ package/sqlite/sqlite.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 57cd7a8..ffe014c 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 19cfb8f..3dfbd5c 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,2 +1,2 @@
+ # From http://www.sqlite.org/download.html
+-sha1	1db237523419af7110e1d92c6b766e965f9322e4	sqlite-autoconf-3080802.tar.gz
++sha1	2fe3f6226a2a08a2e814b97cd53e36bb3c597112	sqlite-autoconf-3080803.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index f5f063f..23dfd75 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Changeset on the stable-1.1 branch
--FREERDP_VERSION = 440916eae2e07463912d5fe507677e67096eb083
-+FREERDP_VERSION = b21ff842ef3de5837513042dc30488b12bd9cf9d
- FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = openssl zlib \
- 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
+-SQLITE_VERSION = 3080802
++SQLITE_VERSION = 3080803
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
