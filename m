@@ -1,59 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 22:16:13 +0100
-Subject: [Buildroot] [PATCH v2] libgtk2: skip tutorial and faq build
-In-Reply-To: <20150226163433.340EDE044A@smtp.hushmail.com> (justin swartz's
- message of "Thu, 26 Feb 2015 18:34:33 +0200")
-References: <20150224235024.844FBE0447@smtp.hushmail.com>
- <877fv57f9j.fsf@dell.be.48ers.dk>
- <20150226163433.340EDE044A@smtp.hushmail.com>
-Message-ID: <87385s74rm.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 26 Feb 2015 23:19:09 +0200
+Subject: [Buildroot] [PATCH] package/libsrtp: fix static build with
+ openssl
+In-Reply-To: <1424985067-6640-1-git-send-email-romain.naour@openwide.fr>
+References: <1424985067-6640-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150226211909.GM2402@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "justin" == justin swartz <justin.swartz@nym.hush.com> writes:
+Hi Romain,
 
-Hi,
+On Thu, Feb 26, 2015 at 10:11:07PM +0100, Romain Naour wrote:
+> diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
+> new file mode 100644
+> index 0000000..5075762
+> --- /dev/null
+> +++ b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
+> @@ -0,0 +1,140 @@
+> +From cfbf3609d62201c6de9b1a075a2ce6f1edd580b6 Mon Sep 17 00:00:00 2001
+> +From: jfigus <foleyj@cisco.com>
+> +Date: Thu, 26 Feb 2015 12:25:08 -0500
+> +Subject: [PATCH] A autoconf checks for libz and libdl when OpenSSL is enabled
+> + to allow for static linking of OpenSSL (via CFLAGS=-static).
+> +
 
- > This should have been addressed to "peter at korsgaard.com", but my
- > provider claims that the address is invalid.
+Please add your SoB here.
 
-Really? What error message do you get exactly (perhaps privately to
-jacmet at sunsite.dk).
+> +---
+> + configure    | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+Since we do AUTORECONF for this package anyway, please drop the configure part
+from this patch, and keep only the configure.in patch.
 
- > On 02/26/2015 at 1:17 AM, "Peter Korsgaard" <peter@korsgaard.com> wrote:
- >> Why not just pass DB2HTML=false in LIBGTK2_CONF_ENV?
- >> 
- > DB2HTML=false works perfectly, thanks for pointing that out!
+> + configure.in |   4 +++
+> + 2 files changed, 104 insertions(+)
 
-Great. I've committed a fix to pass it.
-
-
- >> > +LIBGTK2_CONF_OPTS = \
- >> > +	--disable-glibtest \
- >> > +	--enable-explicit-deps=no \
- >> > +	--disable-gtk-doc-pdf \
- >> > +	--disable-gtk-doc-html
- >> 
- >> What does that buy us? gtk-doc is disabled unless --enable-gtk-doc 
- >> is passed (which we don't), so these shouldn't change anything.
- >> 
- > I hadn't noticed that --disable-gtk-doc was implicitly passed in *_CONF_OPTS.
-
-That and the fact that it defaults to disabled:
-
-./configure --help|grep gtk-doc
-  --enable-gtk-doc        use gtk-doc to build documentation [[default=no]]
-  --enable-gtk-doc-html   build documentation in html format [[default=yes]]
-  --enable-gtk-doc-pdf    build documentation in pdf format [[default=no]]
-
- > Unfortunately there is still documention installed in to /usr/share/gtk-doc/html/,
- > but it's eventually removed by target-finalize anyway.
-
-Yes, but the patch you sent didn't change anything about that, right?
+baruch
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
