@@ -1,82 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Feb 2015 17:23:09 +0100
-Subject: [Buildroot] [git commit] package/libmpdclient: update to 2.10
-Message-ID: <20150302222723.56F278057D@busybox.osuosl.org>
+Date: Thu, 26 Feb 2015 22:46:26 +0100
+Subject: [Buildroot] [git commit] configs/raspberrypi2: update and fix our
+	defconfig
+Message-ID: <20150302222723.ADB72807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a680da2834efbb15b706b7f69a7bf568e16596a
+commit: http://git.buildroot.net/buildroot/commit/?id=79e8d730ad6d414f6a67724a68057e2025d3dda6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch is upstream.
+Lock to 3.19 kernel headers; and comment about installing DTBs; bump
+kernel sha1.
 
-Signed-off-by: Peter K??mmel <syntheticpp@gmx.net>
+Reported-by: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmpdclient/0001-musl-fixes.patch |   41 ----------------------------
- package/libmpdclient/libmpdclient.mk       |    2 +-
- 2 files changed, 1 insertions(+), 42 deletions(-)
+ configs/raspberrypi2_defconfig |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmpdclient/0001-musl-fixes.patch b/package/libmpdclient/0001-musl-fixes.patch
-deleted file mode 100644
-index 60df540..0000000
---- a/package/libmpdclient/0001-musl-fixes.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From cc2ffe943dd36a4c95ec34b2f2bf413de15b7974 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Fran=C3=A7ois=20Revol?= <revol@free.fr>
--Date: Fri, 11 Jul 2014 08:56:49 +0200
--Subject: POSIX says fd_set is defined by <sys/select.h>
--
--Haiku requires this.
--
--cf.
--http://pubs.opengroup.org/onlinepubs/009695399/basedefs/sys/select.h.html
--
--Also guard sys/select.h by ifndef WIN32 as Mingw32 doesn't provide it.
--We'll avoid a configure check just for this.
--
--diff --git a/src/socket.c b/src/socket.c
--index f76510c..2aa5f7f 100644
----- a/src/socket.c
--+++ b/src/socket.c
--@@ -43,6 +43,7 @@
-- #else
-- #  include <netinet/in.h>
-- #  include <arpa/inet.h>
--+#  include <sys/select.h>
-- #  include <sys/socket.h>
-- #  include <netdb.h>
-- #  include <sys/un.h>
--diff --git a/src/sync.c b/src/sync.c
--index 43cfe50..0a6c9d3 100644
----- a/src/sync.c
--+++ b/src/sync.c
--@@ -33,6 +33,9 @@
-- #include <assert.h>
-- #include <stdlib.h>
-- #include <stdio.h>
--+#ifndef WIN32
--+#include <sys/select.h>
--+#endif
-- #include <fcntl.h>
-- #include <unistd.h>
-- 
---- 
--cgit v0.10-2-gd358
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index 530e4fc..db3ae05 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMPDCLIENT_VERSION_MAJOR = 2
--LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).9
-+LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).10
- LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
- LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
- LIBMPDCLIENT_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index d2f97fb..b523a4a 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -2,14 +2,24 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
++
+ BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++
++# Lock to 3.19 headers as the RPi2 kernel is based off the 3.19 branch
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
++
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ BR2_LINUX_KERNEL_ZIMAGE=y
++
++# Install the DTB files, as the RPi2 uses the Device Tree
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
