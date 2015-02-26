@@ -1,140 +1,70 @@
-From: Lou Crittenden <loucrittenden63@gmail.com>
-Date: Wed, 25 Feb 2015 20:09:39 -0600
-Subject: [Buildroot] Driver for C-Media Electronics,
- Inc. CM106 based usb audio device?
-In-Reply-To: <CAFGceHGbRQ7Rk-OJ-8F04AVOt5mnrbJ2Z3v3AiYbkYTPYXtegg@mail.gmail.com>
-References: <trinity-9a0e3213-0146-4b49-b930-a78ba9819e21-1424893333834@3capp-gmx-bs41>
- <CAFGceHEEh=LW4oMFYvdYqDLc88mNyoHGN28DDymWoTTWrzXQkA@mail.gmail.com>
- <CAFGceHGbRQ7Rk-OJ-8F04AVOt5mnrbJ2Z3v3AiYbkYTPYXtegg@mail.gmail.com>
-Message-ID: <CAFGceHF7GSJuv87uB6YY=4xbwJz0yxHOdRaNsu7akOfTzXggTw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Feb 2015 08:30:13 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-02-25
+Message-ID: <20150226073014.150E51017F6@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On the raspbian image, I am able to run yes > /dev/null multiple times in
-multiple terminals to max out the processor while mplayer was playing in
-another tty and it doesn't skip a beat. I again wonder if it's the kernel
-configuration in buildroot?
+Build statistics for 2015-02-25
+===============================
 
-On Wed, Feb 25, 2015 at 7:55 PM, Lou Crittenden <loucrittenden63@gmail.com>
-wrote:
+        success : 290
+       failures : 18 
+       timeouts : 5  
+          TOTAL : 313
 
-> Oh, I also forgot to mention I am playing mplayer in the buildroot setup
-> in the console, as I still don't have a gui yet.
->
-> On Wed, Feb 25, 2015 at 7:53 PM, Lou Crittenden <loucrittenden63@gmail.com
-> > wrote:
->
->> >I was able to compile and run a rockbox version on RPi/buildroot, but
->> still
->> > without audio file playing...
->>
->> Awesome! Can I see it?
->>
->> I was able to run mplayer with no options in a terminal within the
->> raspbian image that came with my waveshare device and it didn't have a bit
->> of problems with the audio. It sounded great actually.
->>
->> You're probably right on the resource part, and I believe the buildroot
->> kernel has a lot to do with it, but the raspbian kernel didn't have that
->> issue at all, but of course it just takes a long time to boot compared to
->> buildroot. I want to use the isolator to isolate the usb sound device from
->> the background zipper noises, pops, buzzes, whining, and other garbage from
->> the main computer board that happens when for example you are scrolling a
->> page or leds on the board blink.
->>
->> I have included a sample of what I am running into as far as the audio.
->> This was with the commands:
->>
->> # cd /media/usb0 (this thumbdrive is where my music is located)
->> # mplayer *
->>
->> and with my usb sound device plugged in. It doesn't do that with the
->> onboard card, though (even though it sounds like poo, as I have heard it
->> was only 11-bit audio). When I'm running:
->>
->> # mplayer -quiet *
->>
->> it plays normally through the usb card even with other processes running,
->> but still doesn't sound near as good as either my ubuntu system or the
->> raspbian image.
->>
->> I also found out that the snd-usb-audio driver indeed does work with all
->> of the channels when I input the command
->>
->> # speaker-test -Dplug:surround51 -c6
->>
->> to test all of the speaker channels. The woman's voice came through on
->> all the appropriate channels, plus they are adjustable in alsamixer. I just
->> can't get mplayer to use them all when using alsa as the backend (I haven't
->> gotten pulseaudio to work in buildroot) and it outputs through the front
->> only. I have the same issue when using alsa as the backend on this card in
->> the raspbian image as well (but good sound) yet it uses the same
->> snd-usb-audio driver, same with my ubuntu system.
->>
->> Would you recommend pulseaudio in my situation?
->>
->>
->> On Wed, Feb 25, 2015 at 1:42 PM, Peter Seiderer <ps.report@gmx.net>
->> wrote:
->>
->>> Hello Lou,
->>>
->>> On Tue, Feb 24, 2015 at 05:58:45PM -0600, Lou Crittenden wrote:
->>> > Good news, I found a workaround to the garbled audio issue on use of
->>> > mplayer when using my USB card. What I have to do is pass the -quiet
->>> option
->>> > when running mplayer. For example: mplayer -quiet test.mp3. It turns
->>> out
->>> > that activity on the lcd screen was the culprit, and it interferes
->>> with the
->>> > audio and it ONLY does that when using the usb audio card. When no
->>> options
->>> > are passed, the display continually scrolls the time and whatnot of the
->>> > audio playback every millisecond.
->>> >
->>> > mpg123 has much less terminal activity, and thus doesn't have the
->>> issue.
->>> >
->>> > I was wondering if this is a power issue and if it would work if I
->>> used an
->>> > isolator that allowed the device to receive its own power independent
->>> of
->>> > the Raspberry Pi board? Something like this:
->>> >
->>> >
->>> http://www.ebay.com/itm/ADUM4160-USB-Isolator-Board-ADI-USB-Port-Isolator-Protection-/191303685123?pt=LH_DefaultDomain_0&hash=item2c8a969403
->>> >
->>> > that electronically isolates the usb audio and power from the pi, but
->>> > allows the pi to talk to the device so the sound improves and improves
->>> > power stability.
->>> >
->>>
->>> Hard to tell without hearing a sample of what you describe as 'garbled
->>> audio',
->>> but I would less suspect a electrical/decouple problem, more suspect a
->>> pure
->>> resource problem of the mplayer aplication doing audio and display
->>> updates...
->>>
->>> Maybe you can stress mplayer -quiet and/or mpg123 doing some concurrent
->>> work/
->>> testbench running (e.g. untar a huge file (kernel source)), etc. and get
->>> the
->>> same audio defects?
->>>
->>> I was able to compile and run a rockbox version on RPi/buildroot, but
->>> still
->>> without audio file playing...
->>>
->>> Regards,
->>> Peter
->>>
->>
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150225/0cac2b80/attachment.html>
+Classification of failures by reason
+====================================
+
+                  thrift-0.9.2 | 5 
+libwebsock-3c1615eeadb0b582... | 2 
+                      make-4.1 | 1 
+                libsrtp-v1.5.0 | 1 
+                       unknown | 1 
+                    bdwgc-7.2f | 1 
+         protobuf-c-v1.0.0-rc1 | 1 
+               qt5webkit-5.4.0 | 1 
+                 webkit-1.11.5 | 1 
+               openswan-2.6.42 | 1 
+freerdp-440916eae2e07463912... | 1 
+zmqpp-36413487f05b165dfc82a... | 1 
+              libarchive-3.1.2 | 1 
+yavta-82ff2efdb9787737b9f21... | 1 
+make: *** [target-finalize]... | 1 
+          sane-backends-1.0.22 | 1 
+                pinentry-0.9.0 | 1 
+           libvncserver-0.9.10 | 1 
+
+Detail of failures
+===================
+
+     powerpc |                     bdwgc-7.2f | NOK | http://autobuild.buildroot.net/results/a54cc1bdc5dcb4c459cfbcae3368811e2170d100/
+         arc | freerdp-440916eae2e07463912... | NOK | http://autobuild.buildroot.net/results/38dffb3c3dc7db4dc41aa6e35c8721ee09ade6da/
+        bfin |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/825295154569e0749f9f5849200d0963dac225c7/
+        bfin |                 libsrtp-v1.5.0 | NOK | http://autobuild.buildroot.net/results/4df8a9d7d6f9cf96e9150509d99ad024c2522e9e/
+       nios2 |            libvncserver-0.9.10 | NOK | http://autobuild.buildroot.net/results/886195784f7b6ff4b5971eb00070d019bfbf2773/
+        bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/6a89183e558e4ff27841c3e544687ad4a04fb036/
+        bfin | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/dbf2d348de3831a86728f9d72cb56b9f2ddbf554/
+      x86_64 |                       make-4.1 | NOK | http://autobuild.buildroot.net/results/b80a34a602b1241bc03cd43df1a269389d50e75c/
+     powerpc | make: *** [target-finalize]... | TIM | http://autobuild.buildroot.net/results/ce13880aed2afd79838eaf1ef5a80ccb811784dd/
+         arc |                openswan-2.6.42 | NOK | http://autobuild.buildroot.net/results/09fe475cbee020a574aafe8261142d715159ac2d/
+      x86_64 |                 pinentry-0.9.0 | NOK | http://autobuild.buildroot.net/results/0698b9de273d7c5e5982830c1515cdd030bcba29/
+         arm |          protobuf-c-v1.0.0-rc1 | TIM | http://autobuild.buildroot.net/results/39b5a52f3e0be06a5992e192a64dc352c87d234b/
+         arm |                qt5webkit-5.4.0 | NOK | http://autobuild.buildroot.net/results/72293e06683c6465d5f2ec831c5896dc11991431/
+         arm |           sane-backends-1.0.22 | TIM | http://autobuild.buildroot.net/results/67049211d35829f3300e8ee222f8d2317a8752a6/
+        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/1eacc80af30acb94486f9377044f756efe4caca4/
+        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/03f4601f63d5230bcfe721d6e91e5274de09a49a/
+        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/484fdb92286fa95e4da98bfaddd398a77bf0675f/
+        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/bfed0eae7927a8bdb1b9e809f47f2e95f0d8466a/
+        bfin |                   thrift-0.9.2 | NOK | http://autobuild.buildroot.net/results/72f3fc5a042ef0a3e9bfc53bfd59dbbdbc5170fa/
+        i686 |                        unknown | TIM | http://autobuild.buildroot.net/results/ca8a3564cfd2bb806e8351591b6fbe6e0decec87/
+         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/5b322c6f01f63a0b33a287a04d130fa70b0846cc/
+         arm | yavta-82ff2efdb9787737b9f21... | TIM | http://autobuild.buildroot.net/results/102d775987d7461390890ada08aa8210880e5aab/
+        bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/f6deab776977c9ea94f6d279227e2f40223306f6/
+
+
+-- 
+http://autobuild.buildroot.net
