@@ -1,25 +1,20 @@
-From: Rainer Berns <rainer.berns@berns-online.de>
-Date: Thu, 26 Feb 2015 09:50:16 +0100 (CET)
-Subject: [Buildroot] host-libgtk3 fails with buildroot-2015.02-rc3
-In-Reply-To: <895368986.18672.1424878301938.JavaMail.open-xchange@oxbsltgw02.schlund.de>
-References: <1424869642-9080-1-git-send-email-gustavo@zacarias.com.ar>
- <895368986.18672.1424878301938.JavaMail.open-xchange@oxbsltgw02.schlund.de>
-Message-ID: <616753226.39921.1424940618093.JavaMail.open-xchange@oxbsltgw08.schlund.de>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Thu, 26 Feb 2015 11:30:51 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-02-25
+In-Reply-To: <20150226073014.150E51017F6@stock.ovh.net>
+References: <20150226073014.150E51017F6@stock.ovh.net>
+Message-ID: <20150226093051.GA2562@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI ,
- 
-I tried the confirguration with buildroot-2015.02-rc2 and it works. Another try
-with rc3 now works.
-Strange
- 
-Regards
-Rainer
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150226/bf4b90c1/attachment.html>
+Thu, Feb 26, 2015 at 08:30:13AM +0100, Thomas Petazzoni wrote:
+
+>       x86_64 |                 pinentry-0.9.0 | NOK | http://autobuild.buildroot.net/results/0698b9de273d7c5e5982830c1515cdd030bcba29/
+Builds fine for me with current master branch.
+
+Commit hash there is 345f32e67d44368c031777d694c4c75823b41bfd, that's yesterday
+and it doesn't look like anything relevant has changed since then.
