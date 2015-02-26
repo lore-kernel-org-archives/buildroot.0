@@ -1,21 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 22:59:29 +0100
-Subject: [Buildroot] [PATCH] xz: bump to version 5.2.1
-In-Reply-To: <1424984292-7861-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 26 Feb 2015 17:58:12 -0300")
-References: <1424984292-7861-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878ufk5o72.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Feb 2015 23:00:56 +0100
+Subject: [Buildroot] [PATCH v3] libgtk2: skip tutorial and faq build
+In-Reply-To: <20150226165558.0A80BE0447@smtp.hushmail.com> (justin swartz's
+ message of "Thu, 26 Feb 2015 18:55:57 +0200")
+References: <20150224235024.844FBE0447@smtp.hushmail.com>
+ <877fv57f9j.fsf@dell.be.48ers.dk>
+ <20150226165558.0A80BE0447@smtp.hushmail.com>
+Message-ID: <874mq85o4n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "justin" == justin swartz <justin.swartz@nym.hush.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Fixes: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/65165
+ > Pass "DB2HTML=false" in LIBGTK2_CONF_ENV to disable the building of the
+ > Tutorial and the FAQ.
 
-Committed to next, thanks.
+ > Signed-off-by: Justin Swartz <justin.swartz@nym.hush.com>
+
+Sorry, I had some email issues and ended up making a similar commit
+locally before noticing your patch.
 
 -- 
 Bye, Peter Korsgaard
