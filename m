@@ -1,35 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 00:13:44 +0100
-Subject: [Buildroot] [git commit] directfb-examples: drop explicit stripping
-	when installing into target
-Message-ID: <20150226231816.13473817C4@busybox.osuosl.org>
+Date: Fri, 27 Feb 2015 00:11:32 +0100
+Subject: [Buildroot] [git commit] directfb-examples: explicitly add -lstdc++
+	for static build
+Message-ID: <20150226231816.098BB817C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b1f83fefcb7fcc072e689d4f5c8a70a22e8410a2
+commit: http://git.buildroot.net/buildroot/commit/?id=b3d1a543f7338e0622c7ac7b45e7c96d39a9387b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Stripping is globally handled by target-finalize (if enabled), so drop it
-from here.
+Fixes [1] and [2]:
+undefined reference to `___cxa_pure_virtual'
+undefined reference to `___gxx_personality_v0'
 
-Reported-by: Peter Seiderer <ps.report@gmx.net>
+[1] http://autobuild.buildroot.net/results/bd0/bd0f4b3e41bf6330f83e3d9b58d985cc63506a3b/
+[2] http://autobuild.buildroot.net/results/584/584ace383204d97fcaad37742e2e035ca78a3d10/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/directfb-examples/directfb-examples.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/directfb-examples/directfb-examples.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/package/directfb-examples/directfb-examples.mk b/package/directfb-examples/directfb-examples.mk
-index 40afd81..3ba33b4 100644
+index 16d2a86..40afd81 100644
 --- a/package/directfb-examples/directfb-examples.mk
 +++ b/package/directfb-examples/directfb-examples.mk
-@@ -98,7 +98,6 @@ define DIRECTFB_EXAMPLES_INSTALL_TARGET_CMDS
- 	$(Q)mkdir -p $(TARGET_DIR)/usr/share/directfb-examples/fonts/
- 	$(Q)for file in $(DIRECTFB_EXAMPLES_TARGETS_y); do \
- 	        cp -dpf $(STAGING_DIR)/$$file $(TARGET_DIR)/$$file; \
--		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$$file; \
- 	done
- 	$(Q)cp -rdpf $(STAGING_DIR)/usr/share/directfb-examples/fonts/decker.ttf $(TARGET_DIR)/usr/share/directfb-examples/fonts/
- 	$(Q)for file in $(DIRECTFB_EXAMPLES_FONT_y); do \
+@@ -12,6 +12,10 @@ DIRECTFB_EXAMPLES_LICENSE_FILES = COPYING
+ DIRECTFB_EXAMPLES_INSTALL_STAGING = YES
+ DIRECTFB_EXAMPLES_DEPENDENCIES = directfb
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++        DIRECTFB_EXAMPLES_CONF_OPTS += LIBS=-lstdc++
++endif
++
+ DIRECTFB_EXAMPLES_TARGETS_ =
+ DIRECTFB_EXAMPLES_TARGETS_y =
+ 
