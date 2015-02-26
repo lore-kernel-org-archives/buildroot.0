@@ -1,58 +1,47 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 26 Feb 2015 22:34:04 +0100
-Subject: [Buildroot] [PATCH] package/libsrtp: fix static build with
-	openssl
-In-Reply-To: <20150226211909.GM2402@tarshish>
-References: <1424985067-6640-1-git-send-email-romain.naour@openwide.fr>
- <20150226211909.GM2402@tarshish>
-Message-ID: <54EF914C.4070502@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Feb 2015 22:35:32 +0100
+Subject: [Buildroot] [PATCH v1 1/4] directfb: bump version to 1.7.7
+In-Reply-To: <1424905508-30186-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Thu, 26 Feb 2015 00:05:05 +0100")
+References: <1424905508-30186-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87twy85paz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Le 26/02/2015 22:19, Baruch Siach a ?crit :
-> Hi Romain,
-> 
-> On Thu, Feb 26, 2015 at 10:11:07PM +0100, Romain Naour wrote:
->> diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
->> new file mode 100644
->> index 0000000..5075762
->> --- /dev/null
->> +++ b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
->> @@ -0,0 +1,140 @@
->> +From cfbf3609d62201c6de9b1a075a2ce6f1edd580b6 Mon Sep 17 00:00:00 2001
->> +From: jfigus <foleyj@cisco.com>
->> +Date: Thu, 26 Feb 2015 12:25:08 -0500
->> +Subject: [PATCH] A autoconf checks for libz and libdl when OpenSSL is enabled
->> + to allow for static linking of OpenSSL (via CFLAGS=-static).
->> +
-> 
-> Please add your SoB here.
+ > Remove 0003-remove-redefinition-of-__typeof__.patch (the only upstream
+ > committed patch).
 
-Ok
+Thanks, but please merge the patch bumping the version with the one
+adding the hash file as well.
 
-> 
->> +---
->> + configure    | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> 
-> Since we do AUTORECONF for this package anyway, please drop the configure part
-> from this patch, and keep only the configure.in patch.
+Are you sure no other changes are needed? From the NEWS file I see:
 
-I just cherry-picked and extracted the patch with git format-patch without
-further modifications...
+1.7.0
+-----
+Major new feature:
 
-Thanks for the review.
+- task-manager (must be enabled explicitly)
 
-Best regards,
-Romain
+  The task manager allows to automatically distribute rendering tasks over
+  multiple cpu and/or gpu cores. There is an implementation for the generic
+  (software) driver which can be configured with by setting software-cores=<n>
+  and task-manager options in the directfbrc.
 
-> 
->> + configure.in |   4 +++
->> + 2 files changed, 104 insertions(+)
-> 
-> baruch
-> 
+Merged Projects:
+- DirectFB-extra (missing bits)
+- SaWMan
+- FusionDale
+- FusionSound
+- DiVine
+- ++dfb
+
+So I was expecting to see an option to enable the task manager support
+and dropping of the sawman package?
+
+-- 
+Bye, Peter Korsgaard
