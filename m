@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Feb 2015 22:50:00 +0100
-Subject: [Buildroot] [PATCH v2] libgtk2: skip tutorial and faq build
-In-Reply-To: <87385s74rm.fsf@dell.be.48ers.dk>
-References: <20150224235024.844FBE0447@smtp.hushmail.com>
- <877fv57f9j.fsf@dell.be.48ers.dk>
- <20150226163433.340EDE044A@smtp.hushmail.com>
- <87385s74rm.fsf@dell.be.48ers.dk>
-Message-ID: <20150226214959.GC3914@free.fr>
+Date: Thu, 26 Feb 2015 22:51:36 +0100
+Subject: [Buildroot] [PATCH 1/2] boards/raspberrypi: update instructions
+ for Raspberry Pi 2
+In-Reply-To: <87lhjk5ot9.fsf@dell.be.48ers.dk>
+References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
+ <87lhjk5ot9.fsf@dell.be.48ers.dk>
+Message-ID: <20150226215136.GD3914@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +14,25 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2015-02-26 22:16 +0100, Peter Korsgaard spake thusly:
-> >>>>> "justin" == justin swartz <justin.swartz@nym.hush.com> writes:
->  > On 02/26/2015 at 1:17 AM, "Peter Korsgaard" <peter@korsgaard.com> wrote:
->  >> Why not just pass DB2HTML=false in LIBGTK2_CONF_ENV?
->  >> 
->  > DB2HTML=false works perfectly, thanks for pointing that out!
+On 2015-02-26 22:46 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> > diff --git a/board/raspberrypi2 b/board/raspberrypi2
+>  > new file mode 120000
+>  > index 0000000..fcdafc8
+>  > --- /dev/null
+>  > +++ b/board/raspberrypi2
+>  > @@ -0,0 +1 @@
+>  > +raspberrypi
+>  > \ No newline at end of file
 > 
-> Great. I've committed a fix to pass it.
+> I don't know if it is patchwork, but this ended up as a symlink to 'raspberrypi?'
 
-Hmm... Didn't you see his v2?
+Yes, Patchwork is picky with symlinks. This already hapenned quite a few
+times recently. Remember the website move?
+
+> Committed to next with those issues fixed, thanks.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
