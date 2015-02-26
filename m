@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 22:24:24 +0100
-Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.3.13
-Message-ID: <20150226213723.033278177C@busybox.osuosl.org>
+Date: Thu, 26 Feb 2015 22:36:25 +0100
+Subject: [Buildroot] [git commit branch/next] git: bump version to 2.3.1
+Message-ID: <20150226213723.0A6927FBE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=681a90f746e1dfd5c8abde9a9ec6ac31e5bc76cd
+commit: http://git.buildroot.net/buildroot/commit/?id=9085505c029f8fee8aa80cbb56991088d9ad2784
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+- Bump version to 2.3.1
+- Update the hash file
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash |    2 +-
- package/gnutls/gnutls.mk   |    2 +-
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 16a6fcb..24da09d 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
+diff --git a/package/git/git.hash b/package/git/git.hash
+index ba3a3ea..aa81df5 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	67ab3e92c5d48f3323b897d7c1aa0bb2af6f3a84f5bd9931cda163a7ff32299b	gnutls-3.3.12.tar.xz
-+sha256	91bf1ef5c159b7f2176f972184545b287af6507ab55a543f6007d31406b97a99	gnutls-3.3.13.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index ab176a6..6a6199e 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  94b23a14d66df536cfe7de37551f55acf908f8bddf30a0f5325a255bb57b0aca  git-2.3.0.tar.xz
++sha256  1acc4b051576143eb41d80f5675476629588c7c5fb4e6a1dc2c4590f47c498b7  git-2.3.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index b5244ac..30b5b7d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+-GIT_VERSION = 2.3.0
++GIT_VERSION = 2.3.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
