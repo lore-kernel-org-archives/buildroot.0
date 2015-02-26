@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Feb 2015 22:51:36 +0100
-Subject: [Buildroot] [PATCH 1/2] boards/raspberrypi: update instructions
- for Raspberry Pi 2
-In-Reply-To: <87lhjk5ot9.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Feb 2015 22:52:07 +0100
+Subject: [Buildroot] [PATCH 2/2] configs/raspberrypi2: update and fix
+	our defconfig
+In-Reply-To: <87h9u85oqf.fsf@dell.be.48ers.dk>
 References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
- <87lhjk5ot9.fsf@dell.be.48ers.dk>
-Message-ID: <20150226215136.GD3914@free.fr>
+ <1424817743-3627-2-git-send-email-yann.morin.1998@free.fr>
+ <87h9u85oqf.fsf@dell.be.48ers.dk>
+Message-ID: <20150226215207.GE3914@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +15,21 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2015-02-26 22:46 +0100, Peter Korsgaard spake thusly:
+On 2015-02-26 22:47 +0100, Peter Korsgaard spake thusly:
 > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> > diff --git a/board/raspberrypi2 b/board/raspberrypi2
->  > new file mode 120000
->  > index 0000000..fcdafc8
->  > --- /dev/null
->  > +++ b/board/raspberrypi2
->  > @@ -0,0 +1 @@
->  > +raspberrypi
->  > \ No newline at end of file
 > 
-> I don't know if it is patchwork, but this ended up as a symlink to 'raspberrypi?'
+>  > Lock to 3.19 kernel headers; and comment about installing DTBs; bump
+>  > kernel sha1.
+> 
+>  > Reported-by: Peter Korsgaard <jacmet@uclibc.org>
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Committed to next, thanks.
+> 
+> Will you also send a patch (for master) doing the same for
+> raspberrypi_dt_defconfig?
 
-Yes, Patchwork is picky with symlinks. This already hapenned quite a few
-times recently. Remember the website move?
-
-> Committed to next with those issues fixed, thanks.
-
-Thanks! :-)
+I can do so, yes... ;-)
 
 Regards,
 Yann E. MORIN.
