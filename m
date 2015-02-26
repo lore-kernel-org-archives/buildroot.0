@@ -1,88 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Feb 2015 23:17:14 +0100
-Subject: [Buildroot] [git commit] netsnmp: Make server and client
-	installation optional
-Message-ID: <20150302222720.B1A6B807B5@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Feb 2015 22:36:25 +0100
+Subject: [Buildroot] [git commit] git: bump version to 2.3.1
+Message-ID: <20150302222723.9BE688057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a387ff3837efca695c5449e0d0be1b9a7c9d7ee2
+commit: http://git.buildroot.net/buildroot/commit/?id=9085505c029f8fee8aa80cbb56991088d9ad2784
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The netsnmp package consists of both a server and a number of client
-tools, this makes the installation of both parts optional.
+- Bump version to 2.3.1
+- Update the hash file
 
-[Thomas:
-  - Add explicit --enable-{agent,applications}, and use positive logic.
-  - Remove "net-snmp" from the new Config.in option prompts, since
-    they are already visible under the netsnmp package option.]
-
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netsnmp/Config.in  |   12 ++++++++++++
- package/netsnmp/netsnmp.mk |   14 ++++++++++++++
- 2 files changed, 26 insertions(+), 0 deletions(-)
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index 8edbd39..589f720 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -9,6 +9,18 @@ config BR2_PACKAGE_NETSNMP
+diff --git a/package/git/git.hash b/package/git/git.hash
+index ba3a3ea..aa81df5 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  94b23a14d66df536cfe7de37551f55acf908f8bddf30a0f5325a255bb57b0aca  git-2.3.0.tar.xz
++sha256  1acc4b051576143eb41d80f5675476629588c7c5fb4e6a1dc2c4590f47c498b7  git-2.3.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index b5244ac..30b5b7d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_NETSNMP
- 
-+config BR2_PACKAGE_NETSNMP_SERVER
-+	bool "server"
-+	default y
-+	help
-+	  The snmpd server.
-+
-+config BR2_PACKAGE_NETSNMP_CLIENTS
-+	bool "clients"
-+	default y
-+	help
-+	  The net-snmp clients (snmpget, snmpwalk, etc).
-+
- config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 	bool "Install MIB files on target and enable MIB loading code"
- 	default y
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index bfc2a74..58b52ef 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -67,6 +67,18 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
- 	NETSNMP_CONF_OPTS += --disable-debugging
- endif
- 
-+ifeq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
-+	NETSNMP_CONF_OPTS += --enable-agent
-+else
-+	NETSNMP_CONF_OPTS += --disable-agent
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NETSNMP_CLIENTS),y)
-+	NETSNMP_CONF_OPTS += --enable-applications
-+else
-+	NETSNMP_CONF_OPTS += --disable-applications
-+endif
-+
- # Remove IPv6 MIBs if there's no IPv6
- ifneq ($(BR2_INET_IPV6),y)
- define NETSNMP_REMOVE_MIBS_IPV6
-@@ -84,10 +96,12 @@ endef
- 
- NETSNMP_POST_INSTALL_TARGET_HOOKS += NETSNMP_REMOVE_BLOAT_MIBS
- 
-+ifeq ($(BR2_PACKAGE_NETSNMP_SERVER),y)
- define NETSNMP_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
- 		$(TARGET_DIR)/etc/init.d/S59snmpd
- endef
-+endif
- 
- define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
- 	$(SED) 	"s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
+-GIT_VERSION = 2.3.0
++GIT_VERSION = 2.3.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
