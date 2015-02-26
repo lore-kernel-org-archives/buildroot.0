@@ -1,176 +1,59 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 26 Feb 2015 22:11:07 +0100
-Subject: [Buildroot] [PATCH] package/libsrtp: fix static build with openssl
-Message-ID: <1424985067-6640-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Feb 2015 22:16:13 +0100
+Subject: [Buildroot] [PATCH v2] libgtk2: skip tutorial and faq build
+In-Reply-To: <20150226163433.340EDE044A@smtp.hushmail.com> (justin swartz's
+ message of "Thu, 26 Feb 2015 18:34:33 +0200")
+References: <20150224235024.844FBE0447@smtp.hushmail.com>
+ <877fv57f9j.fsf@dell.be.48ers.dk>
+ <20150226163433.340EDE044A@smtp.hushmail.com>
+Message-ID: <87385s74rm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsrp forget to link with zlib for static build when openssl
-support is requested.
+>>>>> "justin" == justin swartz <justin.swartz@nym.hush.com> writes:
 
-The issue was reported upstream by Vicente Olivert Riera:
-https://github.com/cisco/libsrtp/issues/97
+Hi,
 
-Backport upstream patch for the upcoming libsrtp 1.5.2.
+ > This should have been addressed to "peter at korsgaard.com", but my
+ > provider claims that the address is invalid.
 
-Fixes:
-http://autobuild.buildroot.net/results/a71/a71d85a5bb9af2ee82a8e61054025bceb03dbdeb/
+Really? What error message do you get exactly (perhaps privately to
+jacmet at sunsite.dk).
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...checks-for-libz-and-libdl-when-OpenSSL-is.patch | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100644 package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
 
-diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
-new file mode 100644
-index 0000000..5075762
---- /dev/null
-+++ b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
-@@ -0,0 +1,140 @@
-+From cfbf3609d62201c6de9b1a075a2ce6f1edd580b6 Mon Sep 17 00:00:00 2001
-+From: jfigus <foleyj@cisco.com>
-+Date: Thu, 26 Feb 2015 12:25:08 -0500
-+Subject: [PATCH] A autoconf checks for libz and libdl when OpenSSL is enabled
-+ to allow for static linking of OpenSSL (via CFLAGS=-static).
-+
-+---
-+ configure    | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ configure.in |   4 +++
-+ 2 files changed, 104 insertions(+)
-+
-+diff --git a/configure b/configure
-+index fdef142..0870dff 100755
-+--- a/configure
-++++ b/configure
-+@@ -4843,6 +4843,106 @@ if test "$enable_openssl" = "yes"; then
-+    LDFLAGS="$LDFLAGS $(pkg-config --libs openssl)";
-+    CFLAGS="$CFLAGS $(pkg-config --cflags openssl)";
-+ 
-++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen in -ldl" >&5
-++$as_echo_n "checking for dlopen in -ldl... " >&6; }
-++if ${ac_cv_lib_dl_dlopen+:} false; then :
-++  $as_echo_n "(cached) " >&6
-++else
-++  ac_check_lib_save_LIBS=$LIBS
-++LIBS="-ldl  $LIBS"
-++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-++/* end confdefs.h.  */
-++
-++/* Override any GCC internal prototype to avoid an error.
-++   Use char because int might match the return type of a GCC
-++   builtin and then its argument prototype would still apply.  */
-++#ifdef __cplusplus
-++extern "C"
-++#endif
-++char dlopen ();
-++int
-++main ()
-++{
-++return dlopen ();
-++  ;
-++  return 0;
-++}
-++_ACEOF
-++if ac_fn_c_try_link "$LINENO"; then :
-++  ac_cv_lib_dl_dlopen=yes
-++else
-++  ac_cv_lib_dl_dlopen=no
-++fi
-++rm -f core conftest.err conftest.$ac_objext \
-++    conftest$ac_exeext conftest.$ac_ext
-++LIBS=$ac_check_lib_save_LIBS
-++fi
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dl_dlopen" >&5
-++$as_echo "$ac_cv_lib_dl_dlopen" >&6; }
-++if test "x$ac_cv_lib_dl_dlopen" = xyes; then :
-++  cat >>confdefs.h <<_ACEOF
-++#define HAVE_LIBDL 1
-++_ACEOF
-++
-++  LIBS="-ldl $LIBS"
-++
-++else
-++  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-++as_fn_error $? "can't find libdl
-++See \`config.log' for more details" "$LINENO" 5; }
-++fi
-++
-++   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflate in -lz" >&5
-++$as_echo_n "checking for inflate in -lz... " >&6; }
-++if ${ac_cv_lib_z_inflate+:} false; then :
-++  $as_echo_n "(cached) " >&6
-++else
-++  ac_check_lib_save_LIBS=$LIBS
-++LIBS="-lz  $LIBS"
-++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-++/* end confdefs.h.  */
-++
-++/* Override any GCC internal prototype to avoid an error.
-++   Use char because int might match the return type of a GCC
-++   builtin and then its argument prototype would still apply.  */
-++#ifdef __cplusplus
-++extern "C"
-++#endif
-++char inflate ();
-++int
-++main ()
-++{
-++return inflate ();
-++  ;
-++  return 0;
-++}
-++_ACEOF
-++if ac_fn_c_try_link "$LINENO"; then :
-++  ac_cv_lib_z_inflate=yes
-++else
-++  ac_cv_lib_z_inflate=no
-++fi
-++rm -f core conftest.err conftest.$ac_objext \
-++    conftest$ac_exeext conftest.$ac_ext
-++LIBS=$ac_check_lib_save_LIBS
-++fi
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_inflate" >&5
-++$as_echo "$ac_cv_lib_z_inflate" >&6; }
-++if test "x$ac_cv_lib_z_inflate" = xyes; then :
-++  cat >>confdefs.h <<_ACEOF
-++#define HAVE_LIBZ 1
-++_ACEOF
-++
-++  LIBS="-lz $LIBS"
-++
-++else
-++  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-++as_fn_error $? "can't find libz
-++See \`config.log' for more details" "$LINENO" 5; }
-++fi
-++
-+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for EVP_EncryptInit in -lcrypto" >&5
-+ $as_echo_n "checking for EVP_EncryptInit in -lcrypto... " >&6; }
-+ if ${ac_cv_lib_crypto_EVP_EncryptInit+:} false; then :
-+diff --git a/configure.in b/configure.in
-+index ee30daf..71df46b 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -147,6 +147,10 @@ if test "$enable_openssl" = "yes"; then
-+    LDFLAGS="$LDFLAGS $(pkg-config --libs openssl)";
-+    CFLAGS="$CFLAGS $(pkg-config --cflags openssl)";
-+ 
-++   AC_CHECK_LIB([dl], [dlopen], [],
-++             [AC_MSG_FAILURE([can't find libdl])])
-++   AC_CHECK_LIB([z], [inflate], [],
-++             [AC_MSG_FAILURE([can't find libz])])
-+    AC_CHECK_LIB([crypto], [EVP_EncryptInit], [],
-+              [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
-+    AC_CHECK_LIB([crypto], [EVP_aes_128_ctr], [],
-+-- 
-+1.9.3
-+
+ > On 02/26/2015 at 1:17 AM, "Peter Korsgaard" <peter@korsgaard.com> wrote:
+ >> Why not just pass DB2HTML=false in LIBGTK2_CONF_ENV?
+ >> 
+ > DB2HTML=false works perfectly, thanks for pointing that out!
+
+Great. I've committed a fix to pass it.
+
+
+ >> > +LIBGTK2_CONF_OPTS = \
+ >> > +	--disable-glibtest \
+ >> > +	--enable-explicit-deps=no \
+ >> > +	--disable-gtk-doc-pdf \
+ >> > +	--disable-gtk-doc-html
+ >> 
+ >> What does that buy us? gtk-doc is disabled unless --enable-gtk-doc 
+ >> is passed (which we don't), so these shouldn't change anything.
+ >> 
+ > I hadn't noticed that --disable-gtk-doc was implicitly passed in *_CONF_OPTS.
+
+That and the fact that it defaults to disabled:
+
+./configure --help|grep gtk-doc
+  --enable-gtk-doc        use gtk-doc to build documentation [[default=no]]
+  --enable-gtk-doc-html   build documentation in html format [[default=yes]]
+  --enable-gtk-doc-pdf    build documentation in pdf format [[default=no]]
+
+ > Unfortunately there is still documention installed in to /usr/share/gtk-doc/html/,
+ > but it's eventually removed by target-finalize anyway.
+
+Yes, but the patch you sent didn't change anything about that, right?
+
 -- 
-1.9.3
+Bye, Peter Korsgaard
