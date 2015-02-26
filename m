@@ -1,80 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Feb 2015 23:14:05 +0100
-Subject: [Buildroot] [git commit] python-cherrypy: new package
-Message-ID: <20150302222723.29B898057D@busybox.osuosl.org>
+Date: Fri, 27 Feb 2015 00:19:51 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2,12}.x series
+Message-ID: <20150302222723.C83C8807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f81429f825e8ab1c4d739638d2b913f98e78612
+commit: http://git.buildroot.net/buildroot/commit/?id=b527e3b449006aa3660a76020f6d67c87c2a6849
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                            |    1 +
- package/python-cherrypy/Config.in            |   10 ++++++++++
- package/python-cherrypy/python-cherrypy.hash |    3 +++
- package/python-cherrypy/python-cherrypy.mk   |   14 ++++++++++++++
- 4 files changed, 28 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2f90830..ceabce1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -514,6 +514,7 @@ menu "external python modules"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-cheetah/Config.in"
-+	source "package/python-cherrypy/Config.in"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-new file mode 100644
-index 0000000..6e32ec2
---- /dev/null
-+++ b/package/python-cherrypy/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_CHERRYPY
-+	bool "python-cherrypy"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  A minimalist web framework
-+
-+	  http://www.cherrypy.org
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-new file mode 100644
-index 0000000..08fa075
---- /dev/null
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9772dbee426d656f01a13881e2b139d8, sha256 locally computed
-+md5	9772dbee426d656f01a13881e2b139d8  CherryPy-3.6.0.tar.gz
-+sha256	a149271819a15417104aa8f641ad5b96287070f0153e6ef2832a87e2c693d75d  CherryPy-3.6.0.tar.gz
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-new file mode 100644
-index 0000000..a08b21a
---- /dev/null
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-cherrypy
-+#
-+################################################################################
-+
-+PYTHON_CHERRYPY_VERSION = 3.6.0
-+PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
-+PYTHON_CHERRYPY_SITE = http://pypi.python.org/packages/source/C/CherryPy
-+PYTHON_CHERRYPY_LICENSE = BSD-3c
-+PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.txt
-+PYTHON_CHERRYPY_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1e206ce..e50f60c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -189,11 +189,11 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.2.66"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.67"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.68"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.37"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.38"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.32"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
