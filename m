@@ -1,35 +1,47 @@
-From: Guillaume William Bres-Saix <guillaume.bressaix@gmail.com>
-Date: Thu, 26 Feb 2015 11:56:03 -0700
-Subject: [Buildroot] zc706 (zynq) default config
-Message-ID: <CAJe0E3dORoHuKtOi5x4-yhJRrrQKoCg6osFfMVAbnMT+gMOsRw@mail.gmail.com>
+From: Crast, Nicholas <Nicholas.Crast@saabsensis.com>
+Date: Thu, 26 Feb 2015 18:29:54 +0000
+Subject: [Buildroot] Kernel Patches Not Applied
+Message-ID: <36A43B0E1E88D84791516F9D44BC48331B4A722A@corpmail01.corp.sensis.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi all,
 
-this is the file I use as a default config for the zc706 board (zynq SoC).
-It's basically based on the zedboard_defconfig but looks for the right
-devicetree. This builds a working uramdisk image and a rootfs.
+I am currently using buildroot-2014.11, and I am having issues patching my kernel. My kernel is a custom (untarred) source, so the build output is in output/build/linux-custom.
 
-You still have to follow buildroot/board/avnet/zedboard/readme.txt to
-build uboot.
+My patch is in the following folder:
+board/sensis/patches/linux-custom-0001-spi.patch
+
+I have tried the filename linux-0001-spi.patch as well.
+
+Here is the relevant section of my .config file:
+BR2_GLOBAL_PATCH_DIR=""
+BR2_LINUX_KERNEL_PATCH="board/sensis/patches"
+
+When I run make linux-dirclean linux-patch, I get the following output:
+rm -Rf /home/nick/buildroot-2014.11/output/build/linux-custom
+>>> linux custom Syncing from source dir linux/linux-socfpga-socfpga-3.16-94ca8d7
+rsync -au --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS linux/linux-socfpga-socfpga-3.16-94ca8d7/ /home/nick/buildroot-2014.11/output/build/linux-custom
+touch /home/nick/buildroot-2014.11/output/build/linux-custom/.stamp_rsynced
 
 
-Guillaume William Bres-Saix
-Software engineer - NIST
-325 Broadway, Boulder, CO 80305
-303-497-4939
-<guillaume.bressaix@gmail.com>
+I see nothing about it even attempting to patch. Any ideas what I am doing wrong?
+
+Thanks,
+Nick
+
+---------------------------------------
+Nick Crast
+Software Engineer
+Saab Sensis Corporation
+Phone: 315-445-5703
+Email: Nicholas.Crast at saabsensis.com<mailto:Nicholas.Crast@saabsensis.com>
+
+
+This message is intended only for the addressee and may contain information that is company confidential or privileged. Any technical data in this message may be exported only in accordance with the U.S. International Traffic in Arms Regulations (22 CFR Parts 120-130) or the Export Administration Regulations (15 CFR Parts 730-774). Unauthorized use is strictly prohibited and may be unlawful. If you are not the intended recipient, or the person responsible for delivering to the intended recipient, you should not read, copy, disclose or otherwise use this message. If you have received this email in error, please delete it, and advise the sender immediately.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150226/1fb2e599/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: zc706_defconfig
-Type: application/octet-stream
-Size: 1007 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150226/1fb2e599/attachment.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150226/0f1e32c7/attachment.html>
