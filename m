@@ -1,36 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 23:25:03 +0100
-Subject: [Buildroot] [git commit] make: depend on guile explicitly when
-	available
-Message-ID: <20150226225650.EF8A1817DC@busybox.osuosl.org>
+Date: Fri, 27 Feb 2015 00:18:02 +0100
+Subject: [Buildroot] [PATCH v1] directfb-examples: explicitly add
+	-lstdc++ for static build
+In-Reply-To: <1424900145-26962-2-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Wed, 25 Feb 2015 22:35:45 +0100")
+References: <1424900145-26962-1-git-send-email-ps.report@gmx.net>
+ <1424900145-26962-2-git-send-email-ps.report@gmx.net>
+Message-ID: <8761ao45zp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38ee8a8e1651f1de2b2698e4c6bce2e488001cdb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/make/make.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ > Fixes [1] and [2]:
+ > undefined reference to `___cxa_pure_virtual'
+ > undefined reference to `___gxx_personality_v0'
 
-diff --git a/package/make/make.mk b/package/make/make.mk
-index d643fb0..6e7a8f1 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -16,4 +16,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
- 	MAKE_CONF_OPTS += --disable-load
- endif
- 
-+ifeq ($(BR2_PACKAGE_GUILE),y)
-+MAKE_DEPENDENCIES += guile
-+MAKE_CONF_OPTS += --with-guile
-+else
-+MAKE_CONF_OPTS += --without-guile
-+endif
-+
- $(eval $(autotools-package))
+ > [1] http://autobuild.buildroot.net/results/bd0/bd0f4b3e41bf6330f83e3d9b58d985cc63506a3b/
+ > [2] http://autobuild.buildroot.net/results/584/584ace383204d97fcaad37742e2e035ca78a3d10/
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
+I've also committed a change to drop the local stripping from the
+package.
+
+-- 
+Bye, Peter Korsgaard
