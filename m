@@ -1,73 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 23:05:38 +0100
-Subject: [Buildroot] [git commit] package/libsrtp: fix static build with
-	openssl
-Message-ID: <20150226220950.30180817B2@busybox.osuosl.org>
+Date: Thu, 26 Feb 2015 23:10:58 +0100
+Subject: [Buildroot] [PATCH v2] libgtk2: skip tutorial and faq build
+In-Reply-To: <20150226214959.GC3914@free.fr> (Yann E. MORIN's message of "Thu, 
+ 26 Feb 2015 22:50:00 +0100")
+References: <20150224235024.844FBE0447@smtp.hushmail.com>
+ <877fv57f9j.fsf@dell.be.48ers.dk>
+ <20150226163433.340EDE044A@smtp.hushmail.com>
+ <87385s74rm.fsf@dell.be.48ers.dk> <20150226214959.GC3914@free.fr>
+Message-ID: <87vbio493h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d156559648ae24571f9fbfd5103928fa4177616
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-libsrtp forget to link with zlib for static build when openssl
-support is requested.
+ > Peter, All,
+ > On 2015-02-26 22:16 +0100, Peter Korsgaard spake thusly:
+ >> >>>>> "justin" == justin swartz <justin.swartz@nym.hush.com> writes:
+ >> > On 02/26/2015 at 1:17 AM, "Peter Korsgaard" <peter@korsgaard.com> wrote:
+ >> >> Why not just pass DB2HTML=false in LIBGTK2_CONF_ENV?
+ >> >> 
+ >> > DB2HTML=false works perfectly, thanks for pointing that out!
+ >> 
+ >> Great. I've committed a fix to pass it.
 
-The issue was reported upstream by Vicente Olivert Riera:
-https://github.com/cisco/libsrtp/issues/97
+ > Hmm... Didn't you see his v2?
 
-Backport upstream patch for the upcoming libsrtp 1.5.2.
-Since the libsrtp package already use AUTORECONF, apply only
-the changes for configure.in.
+V3 you mean? Sorry, I didn't (slow mail).
 
-Fixes:
-http://autobuild.buildroot.net/results/a71/a71d85a5bb9af2ee82a8e61054025bceb03dbdeb/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...checks-for-libz-and-libdl-when-OpenSSL-is.patch |   33 ++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
-
-diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
-new file mode 100644
-index 0000000..acb2c9a
---- /dev/null
-+++ b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
-@@ -0,0 +1,33 @@
-+From 3107a0161bf30f7e3e0c356c3d040d99634fbf5b Mon Sep 17 00:00:00 2001
-+From: jfigus <foleyj@cisco.com>
-+Date: Thu, 26 Feb 2015 12:25:08 -0500
-+Subject: [PATCH] A autoconf checks for libz and libdl when OpenSSL is enabled
-+ to allow for static linking of OpenSSL (via CFLAGS=-static).
-+
-+[Romain:
-+  Drop the configure part of the patch since Buildroot
-+  use AUTORECONF in libsrtp.mk]
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ configure.in | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/configure.in b/configure.in
-+index ee30daf..71df46b 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -147,6 +147,10 @@ if test "$enable_openssl" = "yes"; then
-+    LDFLAGS="$LDFLAGS $(pkg-config --libs openssl)";
-+    CFLAGS="$CFLAGS $(pkg-config --cflags openssl)";
-+ 
-++   AC_CHECK_LIB([dl], [dlopen], [],
-++             [AC_MSG_FAILURE([can't find libdl])])
-++   AC_CHECK_LIB([z], [inflate], [],
-++             [AC_MSG_FAILURE([can't find libz])])
-+    AC_CHECK_LIB([crypto], [EVP_EncryptInit], [],
-+              [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
-+    AC_CHECK_LIB([crypto], [EVP_aes_128_ctr], [],
-+-- 
-+1.9.3
-+
+-- 
+Peter Korsgaard 
