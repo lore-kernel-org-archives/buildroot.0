@@ -1,42 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 26 Feb 2015 13:43:41 +0000
-Subject: [Buildroot] [PATCH] git: bump version to 2.3.1
-Message-ID: <1424958221-28824-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 26 Feb 2015 15:24:36 +0100
+Subject: [Buildroot] How do patches get committed?
+In-Reply-To: <54EF1E6B.8060100@nrc-cnrc.gc.ca>
+References: <54EF1E6B.8060100@nrc-cnrc.gc.ca>
+Message-ID: <CAHXCMMLaQA9RTWxPv3mRmCd5E2oArRVakcnExajxLYFrm1mi8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.3.1
-- Update the hash file
+Hi Matthew,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Feb 26, 2015 at 2:23 PM, Matthew Bastian
+<Matthew.Bastian@nrc-cnrc.gc.ca> wrote:
+> This week I submitted some patches for RTAI realtime. I presume that just
+> because I submitted them that they are not automatically incorporated into
+> the latest release.
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index ba3a3ea..aa81df5 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  94b23a14d66df536cfe7de37551f55acf908f8bddf30a0f5325a255bb57b0aca  git-2.3.0.tar.xz
-+sha256  1acc4b051576143eb41d80f5675476629588c7c5fb4e6a1dc2c4590f47c498b7  git-2.3.1.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 674095d..0672d6e 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.3.0
-+GIT_VERSION = 2.3.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+Here is a few answers [1,2] how the Buildroot project works and
+patches get applied.
+
+Don't worry, your patches are not lost. ;-) Just give some time to
+reviewers/testers/maintainers to process the patch backlog [3]. As you
+can see, there is a bit more than 300 patches in the pipes, and we
+tend to process them in a fifo way. ;-)
+
+Anyway, helping the community to process patches is very much
+appreciated :-) You can find how to help here [4].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2013-February/066902.html
+[2] http://lists.busybox.net/pipermail/buildroot/2013-February/066927.html
+[3] http://patchwork.ozlabs.org/project/buildroot/list/
+[4] http://nightly.buildroot.org/#_contributing_to_buildroot
+>
+> So who vets these and how can I make sure my patches get incorporated?
+>
+> Matt
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
 -- 
-1.7.1
+Samuel
