@@ -1,43 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Feb 2015 22:52:07 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/raspberrypi2: update and fix
-	our defconfig
-In-Reply-To: <87h9u85oqf.fsf@dell.be.48ers.dk>
-References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
- <1424817743-3627-2-git-send-email-yann.morin.1998@free.fr>
- <87h9u85oqf.fsf@dell.be.48ers.dk>
-Message-ID: <20150226215207.GE3914@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Feb 2015 22:58:12 +0100
+Subject: [Buildroot] [PATCH v2] libgtk2: skip tutorial and faq build
+In-Reply-To: <20150226173525.GA3914@free.fr> (Yann E. MORIN's message of "Thu, 
+ 26 Feb 2015 18:35:25 +0100")
+References: <20150224235024.844FBE0447@smtp.hushmail.com>
+ <877fv57f9j.fsf@dell.be.48ers.dk> <20150226173525.GA3914@free.fr>
+Message-ID: <87d24w5o97.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2015-02-26 22:47 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > Lock to 3.19 kernel headers; and comment about installing DTBs; bump
->  > kernel sha1.
-> 
->  > Reported-by: Peter Korsgaard <jacmet@uclibc.org>
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Committed to next, thanks.
-> 
-> Will you also send a patch (for master) doing the same for
-> raspberrypi_dt_defconfig?
+Hi,
 
-I can do so, yes... ;-)
+ >> > + AC_CHECK_PROG(DB2HTML, db2html, true, false)
+ >> > +-AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
+ >> > ++AM_CONDITIONAL([HAVE_DOCBOOK], [test ! "$DB2HTML" = "no"])
+ >> 
+ >> Why not just pass DB2HTML=false in LIBGTK2_CONF_ENV?
 
-Regards,
-Yann E. MORIN.
+ > Weird, I was under the impression I did try that and that it did not
+ > work... But Justin is reporting that it does work, so my memory are
+ > obviously flawed...
+
+Yes, as far as I can see AC_CHECK_PROG directly uses the shell variable
+if defined:
+
+https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/Generic-Programs.html
+
+$DB2HTML directly expands to false, so AM_CONDITIONAL isn't true:
+
+https://www.gnu.org/software/automake/manual/html_node/Usage-of-Conditionals.html
+
+ >> What does that buy us? gtk-doc is disabled unless --enable-gtk-doc
+ >> is passed (which we don't), so these shouldn't change anything.
+
+ > Fact is, documentation is still generated even with
+ > --disable-gtk-doc.
+
+Really? That's not what I saw during my tests.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Venlig hilsen,
+Peter Korsgaard 
