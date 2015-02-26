@@ -1,24 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Feb 2015 22:37:01 +0100
-Subject: [Buildroot] [PATCH] git: bump version to 2.3.1
-In-Reply-To: <1424958221-28824-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 26 Feb 2015 13:43:41 +0000")
-References: <1424958221-28824-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87pp8w5p8i.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Feb 2015 22:24:24 +0100
+Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.3.13
+Message-ID: <20150226213723.033278177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=681a90f746e1dfd5c8abde9a9ec6ac31e5bc76cd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > - Bump version to 2.3.1
- > - Update the hash file
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/gnutls.hash |    2 +-
+ package/gnutls/gnutls.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 16a6fcb..24da09d 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	67ab3e92c5d48f3323b897d7c1aa0bb2af6f3a84f5bd9931cda163a7ff32299b	gnutls-3.3.12.tar.xz
++sha256	91bf1ef5c159b7f2176f972184545b287af6507ab55a543f6007d31406b97a99	gnutls-3.3.13.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index ab176a6..6a6199e 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.3
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
