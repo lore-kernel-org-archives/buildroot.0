@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Feb 2015 15:28:25 +0100
-Subject: [Buildroot] [PATCH 5/7] freetype: host-freetype-patch requires
- host-automake
-In-Reply-To: <1425028764-1146-6-git-send-email-fabio.porcedda@gmail.com>
-References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
- <1425028764-1146-6-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150227152825.00c67240@free-electrons.com>
+Date: Fri, 27 Feb 2015 15:30:56 +0100
+Subject: [Buildroot] [git commit] libevent: fix openssl detection when
+ statically linking
+In-Reply-To: <20150227082309.25DB7817F6@busybox.osuosl.org>
+References: <20150227082309.25DB7817F6@busybox.osuosl.org>
+Message-ID: <20150227153056.181ef6f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Peter Korsgaard,
 
-On Fri, 27 Feb 2015 10:19:22 +0100, Fabio Porcedda wrote:
-> The "make host-freetype-patch" fails because using the autogen.sh script
-> it doesn't found the autoconf tool, the problem was already fixed for
-> "make freetype-patch" adding the "host-automake" as a prerequisite to
-> freetype-patch, so fix it by adding "host-automake" as a prerequisite to
-> "host-freetype-patch" too.
+On Fri, 27 Feb 2015 08:54:33 +0100, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=f29bb169cff521e01f9e94af7275a4e110d256bc
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> Fix build failure:
-> running `autoconf --force'
-> ./autogen.sh: line 15: autoconf: command not found
-> error while running `autoconf --force'
-> package/pkg-generic.mk:146: recipe for target 'buildroot/output/build/host-freetype-2.5.5/.stamp_patched' failed
+> Fixes (indirectly):
+> http://autobuild.buildroot.net/results/dbf/dbf2d348de3831a86728f9d72cb56b9f2ddbf554/
+> http://autobuild.buildroot.net/results/6a8/6a89183e558e4ff27841c3e544687ad4a04fb036/
+> http://autobuild.buildroot.net/results/c80/c80eedb4d7335f1aef736a1312900c2b371eabc9/
+> http://autobuild.buildroot.net/results/91b/91b4ab54ed9d422bfaef765d09cc92192012ce7e/
 > 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Maybe this has been discussed before, but why are we doing the autogen
-in a post patch hook rather than in a pre-configure hook ?
+Gaaah. See the proper solution I had already posted at
+http://lists.busybox.net/pipermail/buildroot/2015-February/119998.html.
+
+Thanks,
 
 Thomas
 -- 
