@@ -1,59 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 27 Feb 2015 20:50:36 +0100
-Subject: [Buildroot] [PATCH v1 1/4] directfb: bump version to 1.7.7
-Message-ID: <trinity-852d3963-038d-4f72-af76-b69c57add69c-1425066635930@3capp-gmx-bs23>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 27 Feb 2015 21:50:47 +0100
+Subject: [Buildroot] [git commit] libevent: fix openssl detection when
+ statically linking
+In-Reply-To: <20150227160141.450b7e50@free-electrons.com>
+References: <20150227082309.25DB7817F6@busybox.osuosl.org>
+ <20150227153056.181ef6f3@free-electrons.com>
+ <87y4nj1kjt.fsf@dell.be.48ers.dk>
+ <20150227160141.450b7e50@free-electrons.com>
+Message-ID: <54F0D8A7.9070602@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Thomas, Peter,
 
-On Thu, Feb 26, 2015 at 10:35:32PM +0100, Peter Korsgaard wrote:
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Le 27/02/2015 16:01, Thomas Petazzoni a ?crit :
+> Dear Peter Korsgaard,
 > 
->  > Remove 0003-remove-redefinition-of-__typeof__.patch (the only upstream
->  > committed patch).
+> On Fri, 27 Feb 2015 15:44:06 +0100, Peter Korsgaard wrote:
 > 
-> Thanks, but please merge the patch bumping the version with the one
-> adding the hash file as well.
+>> That also looks ok. Did you try submitting it upstream?
 > 
+> No, I was hoping for Romain to pick up on the task actually :-)
 
-O.k., will do...
+I thought that you would have submit your patch directly on the list.
+Ok sorry, I'll pick up you patch and send it upstream.
 
-> Are you sure no other changes are needed? From the NEWS file I see:
-> 
-> 1.7.0
-> -----
-> Major new feature:
-> 
-> - task-manager (must be enabled explicitly)
-> 
->   The task manager allows to automatically distribute rendering tasks over
->   multiple cpu and/or gpu cores. There is an implementation for the generic
->   (software) driver which can be configured with by setting software-cores=<n>
->   and task-manager options in the directfbrc.
->
+Best regards,
+Romain
 
-As I understand this, it is a config file/runtime option, no compile time option...
- 
-> Merged Projects:
-> - DirectFB-extra (missing bits)
-> - SaWMan
-> - FusionDale
-> - FusionSound
-> - DiVine
-> - ++dfb
 > 
-> So I was expecting to see an option to enable the task manager support
-> and dropping of the sawman package?
+> Thomas
 > 
-
-O.k, will check all options, will maybe take some time...
-
-Regards,
-Peter
-
-> -- 
-> Bye, Peter Korsgaard
