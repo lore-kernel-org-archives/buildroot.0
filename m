@@ -1,106 +1,57 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 27 Feb 2015 23:39:47 +0100
-Subject: [Buildroot] [PATCH] package/libevent: fix static build
-In-Reply-To: <54EBA1B5.7000402@openwide.fr>
-References: <20150223190040.70f41d55@free-electrons.com>	<2008003175.212046.1424715113306.JavaMail.root@openwide.fr>
- <20150223200748.46ce9690@free-electrons.com> <54EBA1B5.7000402@openwide.fr>
-Message-ID: <54F0F233.6030605@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Feb 2015 00:06:00 +0100
+Subject: [Buildroot] [PATCH] pinentry: fix ncurses' unsafe header path
+In-Reply-To: <1425055087-9334-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 27 Feb 2015 16:38:07 +0000")
+References: <1425055087-9334-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87vbinymxz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-[...]
->>
->> From c603940f3d54189a3ef4a430580166cfdda468d0 Mon Sep 17 00:00:00 2001
->> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Date: Mon, 23 Feb 2015 19:58:21 +0100
->> Subject: [PATCH 2/2] Use pkg-config to discover openssl and zlib
->>
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-[...]
->> ---
->>  configure.ac       | 25 ++-----------------------
->>  sample/Makefile.am |  2 +-
->>  test/Makefile.am   |  2 +-
->>  3 files changed, 4 insertions(+), 25 deletions(-)
->>
->> diff --git a/configure.ac b/configure.ac
->> index d42edd8..da5bc49 100644
->> --- a/configure.ac
->> +++ b/configure.ac
->> @@ -146,16 +146,7 @@ AC_CHECK_HEADERS([zlib.h])
->>  if test "x$ac_cv_header_zlib_h" = "xyes"; then
->>  dnl Determine if we have zlib for regression tests
->>  dnl Don't put this one in LIBS
->> -save_LIBS="$LIBS"
->> -LIBS=""
->> -ZLIB_LIBS=""
->> -have_zlib=no
->> -AC_SEARCH_LIBS([inflateEnd], [z],
->> -	[have_zlib=yes
->> -	ZLIB_LIBS="$LIBS"
->> -	AC_DEFINE(HAVE_LIBZ, 1, [Define if the system has zlib])])
->> -LIBS="$save_LIBS"
->> -AC_SUBST(ZLIB_LIBS)
->> +    PKG_CHECK_MODULES([ZLIB], [zlib], [have_zlib=yes])
->>  fi
->>  AM_CONDITIONAL(ZLIB_REGRESS, [test "$have_zlib" = "yes"])
+ > pinentry sets the NCURSES_INCLUDE variable in the Makefile to
+ > /usr/include/ncurses and that causes problems when cross-compiling
+ > because it fails with an error like this one:
 
-The first part of your patch can be upstreamed easily.
+ > Making all in curses
+ > make[3]: Entering directory `/br/output/build/pinentry-0.9.0/curses'
+ > /br/output/host/usr/bin/mips64el-ctng_n64-linux-gnu-gcc -DHAVE_CONFIG_H
+ > -I. -I..  -I/usr/include/ncursesw -I../pinentry -D_LARGEFILE_SOURCE
+ > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall  -D_LARGEFILE_SOURCE
+ > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -Wall -Wcast-align
+ > -Wshadow -Wstrict-prototypes -Wno-pointer-sign -c pinentry-curses.c
+ > mips64el-ctng_n64-linux-gnu-gcc: ERROR: unsafe header/library path used
+ > in cross-compilation: '/usr/include/ncursesw'
+ > make[3]: *** [pinentry-curses.o] Error 1
 
->>  
->> @@ -169,23 +160,11 @@ else
->>  fi
->>  AC_SUBST(EV_LIB_WS32)
->>  AC_SUBST(EV_LIB_GDI)
->> -AC_SUBST(OPENSSL_LIBADD)
->>  
->>  AC_CHECK_HEADERS([openssl/bio.h])
->>  
->>  if test "$enable_openssl" = "yes"; then
->> -save_LIBS="$LIBS"
->> -LIBS=""
->> -OPENSSL_LIBS=""
->> -have_openssl=no
->> -AC_SEARCH_LIBS([SSL_new], [ssl],
->> -	[have_openssl=yes
->> -	OPENSSL_LIBS="$LIBS -lcrypto $EV_LIB_GDI $EV_LIB_WS32 $OPENSSL_LIBADD"
->> -	AC_DEFINE(HAVE_OPENSSL, 1, [Define if the system has openssl])],
->> -	[have_openssl=no],
->> -	[-lcrypto $EV_LIB_GDI $EV_LIB_WS32 $OPENSSL_LIBADD])
->> -LIBS="$save_LIBS"
->> -AC_SUBST(OPENSSL_LIBS)
->> +   PKG_CHECK_MODULES([OPENSSL], [openssl], [have_openssl=yes], [have_openssl=no])
->>  fi
->>  
+ > Fixes:
 
-The second part doesn't apply since the following patch has been merged:
+ >   http://autobuild.buildroot.net/results/5b9/5b9b53a37f7cf4bab4d989f852726a0f0885605f/
 
-"Provide the autoconf m4 macros for the new OpenSSL via pkg-config stuff"
-https://github.com/libevent/libevent/commit/674dc3d34ed0e46890f9db35402841527f2432f3
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ >  package/pinentry/pinentry.mk |    1 +
+ >  1 files changed, 1 insertions(+), 0 deletions(-)
 
-"Use pkg-config (if available) to handle OpenSSL"
-https://github.com/libevent/libevent/commit/1c63860758f5ddb0bd00e9d3c841d488779be1bd
+ > diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+ > index f34cc0e..b38ebb4 100644
+ > --- a/package/pinentry/pinentry.mk
+ > +++ b/package/pinentry/pinentry.mk
+ > @@ -21,6 +21,7 @@ endif
+ 
+ >  # pinentry-ncurses backend
+ >  ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
+ > +PINENTRY_CONF_ENV += inetutils_cv_includedir_ncurses=$(STAGING_DIR)/usr/include/ncurses
 
-It seems that upstream want to make pkg-config optional and fall back to legacy way if
-it's not found.
-So, the PKG_CHECK_MODULES for zlib needs to be reworked to check if pkg-config is
-available...
+Thanks, but we don't actually install anything under
+$(STAGING_DIR)/usr/include/ncurses (it is directly in
+$(STAGING_DIR)/usr/include). Looking at the configure script, the
+documented way of not adding a special -I for ncurses is simply to pass
+--with-ncurses-include-dir=none so I've changed it to use that instead.
 
-I'm not convinced about with/without pkg-config handling, the legacy way is still
-broken for some corner case.
-But from Buildroot point of view, it doesn't matter since pkg-config is always
-available.
-
-For the last part of the patch, sample/Makefile.am and test/Makefile.am has been
-removed/renamed upstream.
-
-What do you suggest ?
-
-Best regards,
-Romain
+-- 
+Bye, Peter Korsgaard
