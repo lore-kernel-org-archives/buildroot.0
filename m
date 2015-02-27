@@ -1,27 +1,39 @@
-From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
-Date: Fri, 27 Feb 2015 15:04:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: add hash file
-Message-ID: <1425045883-8587-1-git-send-email-syntheticpp@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Feb 2015 15:28:25 +0100
+Subject: [Buildroot] [PATCH 5/7] freetype: host-freetype-patch requires
+ host-automake
+In-Reply-To: <1425028764-1146-6-git-send-email-fabio.porcedda@gmail.com>
+References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425028764-1146-6-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150227152825.00c67240@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
----
- package/libmpdclient/libmpdclient.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/libmpdclient/libmpdclient.hash
+Dear Fabio Porcedda,
 
-diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
-new file mode 100644
-index 0000000..d0a4c0e
---- /dev/null
-+++ b/package/libmpdclient/libmpdclient.hash
-@@ -0,0 +1,3 @@
-+# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig, sha256 locally computed
-+sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
-+
+On Fri, 27 Feb 2015 10:19:22 +0100, Fabio Porcedda wrote:
+> The "make host-freetype-patch" fails because using the autogen.sh script
+> it doesn't found the autoconf tool, the problem was already fixed for
+> "make freetype-patch" adding the "host-automake" as a prerequisite to
+> freetype-patch, so fix it by adding "host-automake" as a prerequisite to
+> "host-freetype-patch" too.
+> 
+> Fix build failure:
+> running `autoconf --force'
+> ./autogen.sh: line 15: autoconf: command not found
+> error while running `autoconf --force'
+> package/pkg-generic.mk:146: recipe for target 'buildroot/output/build/host-freetype-2.5.5/.stamp_patched' failed
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+
+Maybe this has been discussed before, but why are we doing the autogen
+in a post patch hook rather than in a pre-configure hook ?
+
+Thomas
 -- 
-2.3.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
