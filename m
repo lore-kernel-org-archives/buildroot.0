@@ -1,64 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Feb 2015 22:24:52 +0100
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
-Message-ID: <20150302222722.C54FF8177D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Feb 2015 14:51:49 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 14, 18}.x series
+Message-ID: <20150302222723.D99D68057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5ce7590c4bddfd9ccab5edd07951809da88d4c7
+commit: http://git.buildroot.net/buildroot/commit/?id=c727a36bcaf0987dc63e22638ec5f63cdc074c55
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Misc fixes and improvements for: DT; hdmi and EDID; video decoding,
-latency and cropping; voltage calculations...
-
-Also: support for RPi-2. :-)
-
-Also remove the workaround previously required when installing DTBs, ad
-they are now in the same branch as the latest firmware.
-
-Signed-off-by: James Hebden <james@hebden.net.au>
-Signed-off-by: "Guillermo A. Amaral" <g@maral.me>
-[yann.morin.1998 at free.fr: further bump, fix and trim commit log]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-firmware/rpi-firmware.mk |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 03178d5..1db1f0e 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,27 +4,22 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 393dcc0e76f18f6ac1b67ba45d36058410670034
-+RPI_FIRMWARE_VERSION = 69b787b2cf9d1ba19bb018d74549699aeae075fb
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
- RPI_FIRMWARE_INSTALL_TARGET = NO
- RPI_FIRMWARE_INSTALL_IMAGES = YES
- 
--ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- RPI_FIRMWARE_DEPENDENCIES += host-rpi-firmware
--# The Device Tree blobs are not yet in the master branch of the
--# raspberrypi firmware project, so we have to use a separate branch
--# for now.
--RPI_FIRMWARE_VERSION = 09627457b9e15bf4ea4e6751d3c173a3fb65df07
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
- 	for ovldtb in  $(@D)/boot/overlays/*.dtb; do \
- 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
- 	done
- endef
--endif
- 
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e50f60c..9ebf48a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -191,14 +191,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.67"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.68"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.70"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.38"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.32"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.34"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.6"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.8"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19"		if BR2_KERNEL_HEADERS_3_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
