@@ -1,36 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 27 Feb 2015 14:20:00 +0200
-Subject: [Buildroot] [PATCH] gpm: avoid use of host emacs
-Message-ID: <5cc51818c93e8e6c44ac6e47e61a858d9f9295da.1425039600.git.baruch@tkos.co.il>
+From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
+Date: Fri, 27 Feb 2015 13:47:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: add hash file
+Message-ID: <1425041237-3204-1-git-send-email-syntheticpp@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-configure looks for emacs installation to byte compile .el files. This may
-break the build if the host installed emacs is missing needed dependencies.
-Since we don't (yet?) package emacs for target, just disable detection of
-emacs.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
 ---
- package/gpm/gpm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libmpdclient/libmpdclient.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/libmpdclient/libmpdclient.hash
 
-diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
-index dcf075a9c636..dee620811308 100644
---- a/package/gpm/gpm.mk
-+++ b/package/gpm/gpm.mk
-@@ -15,7 +15,8 @@ GPM_DEPENDENCIES = host-bison
- # if not already installed in staging dir, gpm Makefile may fail to find some
- # of the headers needed to generate build dependencies, the first time it is
- # built. CPPFLAGS is used to pass the right include path to dependency rules.
--GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/"
-+GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/" \
-+			   ac_cv_path_emacs=no
- 
- # For some reason, Microblaze gcc does not define __ELF__, which gpm
- # configure script uses to determine whether the architecture uses ELF
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+new file mode 100644
+index 0000000..93f372c
+--- /dev/null
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -0,0 +1,3 @@
++# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.gz.sig, sha256 locally computed
++sha256 bf88ddd9beceadef11144811adaabe45008005af02373595daa03446e6b1bf3d  libmpdclient-2.10.tar.gz
++
 -- 
-2.1.4
+2.3.0
