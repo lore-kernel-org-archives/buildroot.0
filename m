@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 16:15:47 +0100
-Subject: [Buildroot] [git commit] libevent: fix openssl detection when
-	statically linking
-In-Reply-To: <20150227160141.450b7e50@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 27 Feb 2015 16:01:41 +0100")
-References: <20150227082309.25DB7817F6@busybox.osuosl.org>
- <20150227153056.181ef6f3@free-electrons.com>
- <87y4nj1kjt.fsf@dell.be.48ers.dk>
- <20150227160141.450b7e50@free-electrons.com>
-Message-ID: <87lhjj1j30.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Feb 2015 16:43:46 +0100
+Subject: [Buildroot] [git commit] libupnpp: fix libupnp detection with
+	static linking
+Message-ID: <20150227154450.4667C7FA39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fb56d371639746f0d90f2e443e1b032883d57cef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Korsgaard,
- > On Fri, 27 Feb 2015 15:44:06 +0100, Peter Korsgaard wrote:
+Fixes http://autobuild.buildroot.net/results/566/566e1510f94670d4ff642c7bfa9918c1d9ec583f/
 
- >> That also looks ok. Did you try submitting it upstream?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libupnpp/libupnpp.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- > No, I was hoping for Romain to pick up on the task actually :-)
-
-Ok :P
-
-I'll leave it as it is for 2015.02 then.
-
--- 
-Bye, Peter Korsgaard 
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index ad790f8..853a724 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -11,4 +11,10 @@ LIBUPNPP_LICENSE_FILES = COPYING
+ LIBUPNPP_INSTALL_STAGING = YES
+ LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
+ 
++# configure script fails to link against the dependencies of libupnp
++# causing upnp detection to fail when statically linking
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBUPNPP_CONF_ENV += LIBS='-lthreadutil -lixml -pthread'
++endif
++
+ $(eval $(autotools-package))
