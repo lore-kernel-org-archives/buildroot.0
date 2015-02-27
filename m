@@ -1,42 +1,81 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 27 Feb 2015 06:44:00 +0200
-Subject: [Buildroot] [PATCH 1/1] libgc: Remove duplicated package
-In-Reply-To: <1424988981-9787-1-git-send-email-paguilar@paguilar.org>
-References: <1424988981-9787-1-git-send-email-paguilar@paguilar.org>
-Message-ID: <20150227044400.GO2402@tarshish>
+Date: Fri, 27 Feb 2015 07:47:09 +0200
+Subject: [Buildroot] [PATCH] bdwgc: bump to version 7.4.2
+Message-ID: <7011f19afdf57c5c52fea635aed911e6c77f7eb5.1425016029.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pedro,
+The code in gcconfig.h indicates that the list of supported architectures is
+now a superset of BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS so we can drop
+BR2_PACKAGE_BDWGC_ARCH_SUPPORTS.
 
-On Thu, Feb 26, 2015 at 11:16:21PM +0100, Pedro Aguilar wrote:
-> Remove libgc that is a copy of bdwgc but it's not used
-> by any package and gives an error when building make-4.1.
-> bdwgc is a mandatory dependency for guile.
+Also, add a hash file.
 
-Thanks for your prompt response.
+Cc: Pedro Aguilar <paguilar@paguilar.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/bdwgc/Config.in  | 8 --------
+ package/bdwgc/bdwgc.hash | 2 ++
+ package/bdwgc/bdwgc.mk   | 4 +---
+ package/guile/Config.in  | 1 -
+ 4 files changed, 3 insertions(+), 12 deletions(-)
+ create mode 100644 package/bdwgc/bdwgc.hash
 
-In addition to Config.in.legacy entry as Peter has mentioned, it would be nice 
-to add an autobuilder reference, and a Reported-by tag. I sent v2 patch with 
-these added.
-
-> Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-> ---
->  package/Config.in                                  |  1 -
->  ...01-Fix-build-on-Linux-x86_64-under-uClibc.patch | 32 ----------------------
->  package/libgc/Config.in                            | 11 --------
->  package/libgc/libgc.mk                             | 15 ----------
->  4 files changed, 59 deletions(-)
->  delete mode 100644 package/libgc/0001-Fix-build-on-Linux-x86_64-under-uClibc.patch
->  delete mode 100644 package/libgc/Config.in
->  delete mode 100644 package/libgc/libgc.mk
-
-baruch
-
+diff --git a/package/bdwgc/Config.in b/package/bdwgc/Config.in
+index ec83fa3a6d62..9aa7c7dff51a 100644
+--- a/package/bdwgc/Config.in
++++ b/package/bdwgc/Config.in
+@@ -1,13 +1,5 @@
+-config BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
+-	bool
+-	default y
+-	depends on BR2_arm || BR2_armeb || BR2_avr32 || BR2_i386 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_sh \
+-		|| BR2_sparc || BR2_x86_64
+-
+ config BR2_PACKAGE_BDWGC
+ 	bool "bdwgc"
+-	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+ 	help
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+new file mode 100644
+index 000000000000..44414e4efa70
+--- /dev/null
++++ b/package/bdwgc/bdwgc.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	63320ad7c45460e4a40e03f5aa4c6893783f21a16416c3282b994f933312afa2	gc-7.4.2.tar.gz
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index b408947359ad..9cf015ed1b41 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,9 +4,7 @@
+ #
+ ################################################################################
+ 
+-# When bumping the version number, check if the list of supported architectures
+-# is still valid; see Config.log.
+-BDWGC_VERSION = 7.2f
++BDWGC_VERSION = 7.4.2
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+ BDWGC_INSTALL_STAGING = YES
+diff --git a/package/guile/Config.in b/package/guile/Config.in
+index 6859caff6125..d24f31844863 100644
+--- a/package/guile/Config.in
++++ b/package/guile/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_GUILE
+ 	bool "guile"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_PACKAGE_BDWGC_ARCH_SUPPORTS # bdwgc
+ 	depends on BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS # bdwgc
+ 	depends on BR2_USE_WCHAR # libunistring
+ 	select BR2_PACKAGE_LIBUNISTRING
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
