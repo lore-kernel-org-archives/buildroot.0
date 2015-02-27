@@ -1,27 +1,69 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 27 Feb 2015 17:52:02 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-02-26
-In-Reply-To: <20150227073017.514B51016A5@stock.ovh.net>
-References: <20150227073017.514B51016A5@stock.ovh.net>
-Message-ID: <54F0A0B2.80502@imgtec.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 27 Feb 2015 15:27:41 -0300
+Subject: [Buildroot] [PATCH 1/1] perl-file-util: new package
+Message-ID: <1425061661-3190-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Richard Braun,
+Perl File::Util module (host and target packages)
 
-On 27/02/15 08:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-02-26
-> ===============================
->       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/4d1c3df41dfb1f8d9cad0ad70a8279d51b37c29a/
->       mipsel |                     strace-4.9 | NOK | http://autobuild.buildroot.net/results/24d1c0417e2a8fa5f82fbe954306f21e70cb0bdb/
+Change-Id: I4fb7693052c372f4b3bbadf56244e0f0e0ca2654
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/Config.in                        |  1 +
+ package/perl-file-util/Config.in         |  6 ++++++
+ package/perl-file-util/perl-file-util.mk | 15 +++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/perl-file-util/Config.in
+ create mode 100644 package/perl-file-util/perl-file-util.mk
 
-these failures are caused because your autobuild-run script is outdated.
-Could you please update it?
-
-Regards,
---
-Vincent
+diff --git a/package/Config.in b/package/Config.in
+index 262a7fb..2159bd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -469,6 +469,7 @@ endif
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-datetime-tiny/Config.in"
++	source "package/perl-file-util/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
+diff --git a/package/perl-file-util/Config.in b/package/perl-file-util/Config.in
+new file mode 100644
+index 0000000..871be98
+--- /dev/null
++++ b/package/perl-file-util/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_FILE_UTIL
++	bool "perl-file-util"
++	help
++	  Easy, versatile, portable file handling
++
++	  https://github.com/tommybutler/file-util/wiki
+diff --git a/package/perl-file-util/perl-file-util.mk b/package/perl-file-util/perl-file-util.mk
+new file mode 100644
+index 0000000..c8b4441
+--- /dev/null
++++ b/package/perl-file-util/perl-file-util.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# perl-file-util
++#
++################################################################################
++
++PERL_FILE_UTIL_VERSION = 4.132140
++PERL_FILE_UTIL_SOURCE = File-Util-$(PERL_FILE_UTIL_VERSION).tar.gz
++PERL_FILE_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOMMY
++PERL_FILE_UTIL_DEPENDENCIES = perl host-perl-module-build
++PERL_FILE_UTIL_LICENSE = Artistic or GPLv1+
++PERL_FILE_UTIL_LICENSE_FILES = COPYING LICENSE
++
++$(eval $(perl-package))
++$(eval $(host-perl-package))
+-- 
+1.8.3.1
