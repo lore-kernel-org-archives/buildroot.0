@@ -1,48 +1,34 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 27 Feb 2015 16:38:07 +0000
-Subject: [Buildroot] [PATCH] pinentry: fix ncurses' unsafe header path
-Message-ID: <1425055087-9334-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 27 Feb 2015 17:51:50 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-02-26
+In-Reply-To: <20150227073017.514B51016A5@stock.ovh.net>
+References: <20150227073017.514B51016A5@stock.ovh.net>
+Message-ID: <54F0A0A6.5000404@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pinentry sets the NCURSES_INCLUDE variable in the Makefile to
-/usr/include/ncurses and that causes problems when cross-compiling
-because it fails with an error like this one:
+Hello everyone,
 
-Making all in curses
-make[3]: Entering directory `/br/output/build/pinentry-0.9.0/curses'
-/br/output/host/usr/bin/mips64el-ctng_n64-linux-gnu-gcc -DHAVE_CONFIG_H
--I. -I..  -I/usr/include/ncursesw -I../pinentry -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall  -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -Wall -Wcast-align
--Wshadow -Wstrict-prototypes -Wno-pointer-sign -c pinentry-curses.c
-mips64el-ctng_n64-linux-gnu-gcc: ERROR: unsafe header/library path used
-in cross-compilation: '/usr/include/ncursesw'
-make[3]: *** [pinentry-curses.o] Error 1
 
-Fixes:
+On 27/02/15 08:30, Thomas Petazzoni wrote:
+> Build statistics for 2015-02-26
+> ===============================
+>       mipsel |                    czmq-v3.0.0 | NOK | http://autobuild.buildroot.net/results/dca03ab0a9d63b0de72bdd80564166d85cdec0ca/
 
-  http://autobuild.buildroot.net/results/5b9/5b9b53a37f7cf4bab4d989f852726a0f0885605f/
+I have reported this upstream:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/pinentry/pinentry.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+  https://github.com/zeromq/czmq/issues/944
 
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index f34cc0e..b38ebb4 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -21,6 +21,7 @@ endif
- 
- # pinentry-ncurses backend
- ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
-+PINENTRY_CONF_ENV += inetutils_cv_includedir_ncurses=$(STAGING_DIR)/usr/include/ncurses
- PINENTRY_CONF_OPTS += --enable-ncurses
- PINENTRY_DEPENDENCIES += ncurses
- else
--- 
-1.7.1
+>     mips64el |                 pinentry-0.9.0 | NOK | http://autobuild.buildroot.net/results/5b9b53a37f7cf4bab4d989f852726a0f0885605f/
+
+I have sent a patch to fix this:
+
+  https://patchwork.ozlabs.org/patch/444338/
+
+Regards,
+--
+Vincent
