@@ -1,36 +1,30 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 27 Feb 2015 21:50:47 +0100
-Subject: [Buildroot] [git commit] libevent: fix openssl detection when
- statically linking
-In-Reply-To: <20150227160141.450b7e50@free-electrons.com>
-References: <20150227082309.25DB7817F6@busybox.osuosl.org>
- <20150227153056.181ef6f3@free-electrons.com>
- <87y4nj1kjt.fsf@dell.be.48ers.dk>
- <20150227160141.450b7e50@free-electrons.com>
-Message-ID: <54F0D8A7.9070602@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Feb 2015 22:48:52 +0100
+Subject: [Buildroot] error in skeleton  ?
+In-Reply-To: <F7D7D32518D04BB5BEB5B0B4D484022D@JohanW7> (Sagaert Johan's
+ message of "Fri, 27 Feb 2015 19:45:35 +0100")
+References: <F7D7D32518D04BB5BEB5B0B4D484022D@JohanW7>
+Message-ID: <87zj7zyqij.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, Peter,
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Le 27/02/2015 16:01, Thomas Petazzoni a ?crit :
-> Dear Peter Korsgaard,
-> 
-> On Fri, 27 Feb 2015 15:44:06 +0100, Peter Korsgaard wrote:
-> 
->> That also looks ok. Did you try submitting it upstream?
-> 
-> No, I was hoping for Romain to pick up on the task actually :-)
+ > Hi
 
-I thought that you would have submit your patch directly on the list.
-Ok sorry, I'll pick up you patch and send it upstream.
+ > In system/skeleton : the /dev/log is a symlink to /tmp/log  
+ > I think this should be a symlink to /var/log 
 
-Best regards,
-Romain
+Well, /dev/log is normally a unix socket to syslog, and /var/log is a
+symlink to /tmp/, so making it point to /var/log (E.G. /tmp) doesn't
+make much sense.
 
-> 
-> Thomas
-> 
+With that said, unless you are using a static /dev instead of devtmpfs
+(which you really shouldn't be doing), it doesn't matter as devtmpfs
+puts a ramdisk on top of /dev.
+
+-- 
+Bye, Peter Korsgaard
