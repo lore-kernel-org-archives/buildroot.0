@@ -1,30 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 17:14:22 +0100
-Subject: [Buildroot] [PATCH] vlc: security bump to version 2.1.6
-In-Reply-To: <1425052318-21287-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 27 Feb 2015 12:51:58 -0300")
-References: <1425052318-21287-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878ufj1gdd.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Feb 2015 17:19:43 +0100
+Subject: [Buildroot] [PATCH 2/7] libxmlrpc: add missing braces for
+	variable CURL_CONFIG in patch 4
+In-Reply-To: <1425028764-1146-3-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Fri, 27 Feb 2015 10:19:19 +0100")
+References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425028764-1146-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <874mq71g4g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
- > * Fix heap overflow in decomp stream filter
- > * Fix buffer overflow in updater
- > * Fix potential buffer overflow in schroedinger encoder
- > * Fix null-pointer dereference in DMO decoder
- > * Fix buffer overflow in parsing of string boxes in mp4 demuxer
- > * Fix SRTP integer overflow
- > * Fix potential crash in zip access
- > * Fix read overflow in Ogg demuxer
+ > Change $CURL_CONFIG to $(CURL_CONFIG) in the patch
+ > 0004-use-correct-curl-config.patch because in a makefile the braces are
+ > required to expand a variable.
 
- > And also add hash file.
+ > Fix error messages:
+ > make[3]: Entering directory '/home/tetsuya/buildroot/br2/output/build/libxmlrpc-1.25.30/lib/curl_transport'
+ > make[3]: URL_CONFIG: Command not found
+ > /bin/sh: line 0: test: <: unary operator expected
+ > make[3]: URL_CONFIG: Command not found
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
 Committed, thanks.
 
