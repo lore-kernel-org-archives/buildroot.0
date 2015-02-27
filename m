@@ -1,41 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 08:54:33 +0100
-Subject: [Buildroot] [git commit] libevent: fix openssl detection when
-	statically linking
-Message-ID: <20150227082309.25DB7817F6@busybox.osuosl.org>
+Date: Fri, 27 Feb 2015 09:21:32 +0100
+Subject: [Buildroot] [git commit] ding-libs: fix build with !locale
+Message-ID: <20150227082309.2AE247FBD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f29bb169cff521e01f9e94af7275a4e110d256bc
+commit: http://git.buildroot.net/buildroot/commit/?id=6a56d7d9d211e40d48b2296ceb9db57c4d321de9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes (indirectly):
-http://autobuild.buildroot.net/results/dbf/dbf2d348de3831a86728f9d72cb56b9f2ddbf554/
-http://autobuild.buildroot.net/results/6a8/6a89183e558e4ff27841c3e544687ad4a04fb036/
-http://autobuild.buildroot.net/results/c80/c80eedb4d7335f1aef736a1312900c2b371eabc9/
-http://autobuild.buildroot.net/results/91b/91b4ab54ed9d422bfaef765d09cc92192012ce7e/
+It needs libiconv if the toolchain doesn't have iconv support.
+
+Fixes:
+http://autobuild.buildroot.net/results/60f/60f85a2144b167f33ed674ff5979c1ef20bc0555/
+http://autobuild.buildroot.net/results/76d/76d249f5a85da72cc53a3e66202c372dc33c9c38/
+http://autobuild.buildroot.net/results/9f7/9f78043f549e09d020d69f45cd26c3e43a91d9dc/
+http://autobuild.buildroot.net/results/8a5/8a586b781b6923444857ef58de659e5f0e8652ee/
+
+And many more.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevent/libevent.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/ding-libs/Config.in    |    1 +
+ package/ding-libs/ding-libs.mk |    4 +++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index c50b1d2..d67c738 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -26,6 +26,11 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBEVENT_DEPENDENCIES += openssl
- LIBEVENT_CONF_OPTS += --enable-openssl
-+# openssl needs zlib but configure forgets to link against it causing
-+# openssl detection to fail
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBEVENT_CONF_ENV += OPENSSL_LIBADD='-lz'
-+endif
- else
- LIBEVENT_CONF_OPTS += --disable-openssl
- endif
+diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
+index 6069ed9..7af75b7 100644
+--- a/package/ding-libs/Config.in
++++ b/package/ding-libs/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DING_LIBS
+ 	bool "ding-libs"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on BR2_USE_WCHAR || !BR2_NEEDS_GETTEXT
+ 	help
+ 	  The ding-libs packages contain a set of libraries used by
+diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
+index d7977ee..5b842ff 100644
+--- a/package/ding-libs/ding-libs.mk
++++ b/package/ding-libs/ding-libs.mk
+@@ -7,7 +7,9 @@
+ DING_LIBS_VERSION = 0_4_0
+ DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
+ DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
+-DING_LIBS_DEPENDENCIES = $(if $(BR2_PACKAGE_GETTEXT),gettext) host-pkgconf
++DING_LIBS_DEPENDENCIES = host-pkgconf \
++	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ DING_LIBS_INSTALL_STAGING = YES
+ DING_LIBS_LICENSE = LGPLv3+ (library),GPLv3+ (test programs)
+ DING_LIBS_LICENSE_FILES = COPYING COPYING.LESSER
