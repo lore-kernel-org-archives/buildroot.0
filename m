@@ -1,35 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Feb 2015 11:04:48 +0100
-Subject: [Buildroot] [PATCH v2] qt-webkit-kiosk: new package
-In-Reply-To: <CALR4fE+EWhwQMX2w7eZTFMpaurAjTo_n8fqes_fbBt5yhO=HSA@mail.gmail.com>
-References: <1424497549-8506-1-git-send-email-jerome.oufella@savoirfairelinux.com>
- <1424578920-21071-1-git-send-email-jerome.oufella@savoirfairelinux.com>
- <20150222223215.701a0a03@free-electrons.com>
- <CALR4fE+EWhwQMX2w7eZTFMpaurAjTo_n8fqes_fbBt5yhO=HSA@mail.gmail.com>
-Message-ID: <20150227110448.3fde124f@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Feb 2015 07:05:47 -0300
+Subject: [Buildroot] [PATCH next] linux-headers: bump 3.{10, 14, 18}.x series
+Message-ID: <1425031547-28700-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Diego Iastrubni,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, 26 Feb 2015 14:04:17 +0200, Diego Iastrubni wrote:
-
-> I disagree. It feels like the problem is in the BR2_PACKAGE_QT5WEBKIT
-> target - it should depend on
-> BR2_PACKAGE_QT5BASE_GUI and BR2_PACKAGE_QT5BASE_WIDGETS
-
-qt5webkit did build perfectly fine with BR2_PACKAGE_QT5BASE_WIDGETS
-disabled. It just doesn't build the part called qt5webkitwidgets, which
-qt-webkit-kiosk uses.
-
-It was really the build of qt-webkit-kiosk that failed due to the
-missing qt5webkitwidgets, the qt5webkit build was alright.
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e50f60c..9ebf48a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -191,14 +191,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.67"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.68"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.70"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.38"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.32"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.34"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.6"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.8"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19"		if BR2_KERNEL_HEADERS_3_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
