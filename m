@@ -1,38 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 14:47:53 +0100
-Subject: [Buildroot] [git commit] gpm: avoid use of host emacs
-Message-ID: <20150227134907.79883817BA@busybox.osuosl.org>
+Date: Fri, 27 Feb 2015 14:51:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: add hash file
+In-Reply-To: <1425041237-3204-1-git-send-email-syntheticpp@gmx.net> ("Peter
+ \=\?utf-8\?Q\?K\=C3\=BCmmel\=22's\?\= message of "Fri,
+ 27 Feb 2015 13:47:17 +0100")
+References: <1425041237-3204-1-git-send-email-syntheticpp@gmx.net>
+Message-ID: <877fv331kn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6c8fbcdf4f89100238d89d393689df1c72f1647
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter K?mmel <syntheticpp@gmx.net> writes:
 
-configure looks for emacs installation to byte compile .el files. This may
-break the build if the host installed emacs is missing needed dependencies.
-Since we don't (yet?) package emacs for target, just disable detection of
-emacs.
+ > Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
+ > ---
+ >  package/libmpdclient/libmpdclient.hash | 3 +++
+ >  1 file changed, 3 insertions(+)
+ >  create mode 100644 package/libmpdclient/libmpdclient.hash
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gpm/gpm.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ > diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+ > new file mode 100644
+ > index 0000000..93f372c
+ > --- /dev/null
+ > +++ b/package/libmpdclient/libmpdclient.hash
+ > @@ -0,0 +1,3 @@
+ > +# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.gz.sig, sha256 locally computed
+ > +sha256 bf88ddd9beceadef11144811adaabe45008005af02373595daa03446e6b1bf3d  libmpdclient-2.10.tar.gz
 
-diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
-index dcf075a..dee6208 100644
---- a/package/gpm/gpm.mk
-+++ b/package/gpm/gpm.mk
-@@ -15,7 +15,8 @@ GPM_DEPENDENCIES = host-bison
- # if not already installed in staging dir, gpm Makefile may fail to find some
- # of the headers needed to generate build dependencies, the first time it is
- # built. CPPFLAGS is used to pass the right include path to dependency rules.
--GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/"
-+GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/" \
-+			   ac_cv_path_emacs=no
- 
- # For some reason, Microblaze gcc does not define __ELF__, which gpm
- # configure script uses to determine whether the architecture uses ELF
+Ehh, we are using libmpdclient-2.10.tar.XZ!
+
+-- 
+Bye, Peter Korsgaard
