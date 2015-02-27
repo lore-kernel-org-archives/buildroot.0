@@ -1,28 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Feb 2015 16:01:41 +0100
-Subject: [Buildroot] [git commit] libevent: fix openssl detection when
- statically linking
-In-Reply-To: <87y4nj1kjt.fsf@dell.be.48ers.dk>
-References: <20150227082309.25DB7817F6@busybox.osuosl.org>
- <20150227153056.181ef6f3@free-electrons.com>
- <87y4nj1kjt.fsf@dell.be.48ers.dk>
-Message-ID: <20150227160141.450b7e50@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Feb 2015 16:10:24 +0100
+Subject: [Buildroot] [PATCH] dstat: add missing runtime dependency for
+	Python curses
+In-Reply-To: <1424896278-3731-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Wed, 25 Feb 2015 21:31:18 +0100")
+References: <1424896278-3731-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87twy71jbz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-On Fri, 27 Feb 2015 15:44:06 +0100, Peter Korsgaard wrote:
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ >  package/dstat/Config.in | 1 +
+ >  1 file changed, 1 insertion(+)
 
-> That also looks ok. Did you try submitting it upstream?
+ > diff --git a/package/dstat/Config.in b/package/dstat/Config.in
+ > index 63db87b..66a9789 100644
+ > --- a/package/dstat/Config.in
+ > +++ b/package/dstat/Config.in
+ > @@ -4,6 +4,7 @@ config BR2_PACKAGE_DSTAT
+ >  	depends on BR2_USE_MMU # python
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS # python
+ >  	select BR2_PACKAGE_PYTHON
+ > +	select BR2_PACKAGE_PYTHON_CURSES # runtime
 
-No, I was hoping for Romain to pick up on the task actually :-)
+From the dstat source it seems like python-curses isn't required, so
+this is wrong:
 
-Thomas
+def gettermcolor(color=True):
+    "Return whether the system can use colors or not"
+    if color and sys.stdout.isatty():
+        try:
+            import curses
+            curses.setupterm()
+            if curses.tigetnum('colors') < 0:
+                return False
+        except:
+            print >>sys.stderr, 'Color support is disabled, python-curses is not installed.'
+            return False
+    return color
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
