@@ -1,52 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 17:13:57 +0100
-Subject: [Buildroot] [git commit] vlc: security bump to version 2.1.6
-Message-ID: <20150227162333.82B80817F4@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 27 Feb 2015 16:38:07 +0000
+Subject: [Buildroot] [PATCH] pinentry: fix ncurses' unsafe header path
+Message-ID: <1425055087-9334-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d13019edd0dd2f2c3c72adc61316f3621b9d831
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+pinentry sets the NCURSES_INCLUDE variable in the Makefile to
+/usr/include/ncurses and that causes problems when cross-compiling
+because it fails with an error like this one:
 
-* Fix heap overflow in decomp stream filter
-* Fix buffer overflow in updater
-* Fix potential buffer overflow in schroedinger encoder
-* Fix null-pointer dereference in DMO decoder
-* Fix buffer overflow in parsing of string boxes in mp4 demuxer
-* Fix SRTP integer overflow
-* Fix potential crash in zip access
-* Fix read overflow in Ogg demuxer
+Making all in curses
+make[3]: Entering directory `/br/output/build/pinentry-0.9.0/curses'
+/br/output/host/usr/bin/mips64el-ctng_n64-linux-gnu-gcc -DHAVE_CONFIG_H
+-I. -I..  -I/usr/include/ncursesw -I../pinentry -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall  -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -Wall -Wcast-align
+-Wshadow -Wstrict-prototypes -Wno-pointer-sign -c pinentry-curses.c
+mips64el-ctng_n64-linux-gnu-gcc: ERROR: unsafe header/library path used
+in cross-compilation: '/usr/include/ncursesw'
+make[3]: *** [pinentry-curses.o] Error 1
 
-And also add hash file.
+Fixes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  http://autobuild.buildroot.net/results/5b9/5b9b53a37f7cf4bab4d989f852726a0f0885605f/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/vlc/vlc.hash |    2 ++
- package/vlc/vlc.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/pinentry/pinentry.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-new file mode 100644
-index 0000000..718a0e6
---- /dev/null
-+++ b/package/vlc/vlc.hash
-@@ -0,0 +1,2 @@
-+# From http://get.videolan.org/vlc/2.1.6/vlc-2.1.6.tar.xz.sha256
-+sha256	1b76cf4b96e18cf224d21b91343f7e579790c5d3e499c8a230f53da695687c04	vlc-2.1.6.tar.xz
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 9d99de6..56006b5 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index f34cc0e..b38ebb4 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -21,6 +21,7 @@ endif
  
--VLC_VERSION = 2.1.5
-+VLC_VERSION = 2.1.6
- VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPLv2+ LGPLv2.1+
+ # pinentry-ncurses backend
+ ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
++PINENTRY_CONF_ENV += inetutils_cv_includedir_ncurses=$(STAGING_DIR)/usr/include/ncurses
+ PINENTRY_CONF_OPTS += --enable-ncurses
+ PINENTRY_DEPENDENCIES += ncurses
+ else
+-- 
+1.7.1
