@@ -1,42 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 14:51:49 +0100
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{10, 14,
-	18}.x series
-Message-ID: <20150227135218.1BE8F80160@busybox.osuosl.org>
+From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
+Date: Fri, 27 Feb 2015 15:04:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: add hash file
+Message-ID: <1425045883-8587-1-git-send-email-syntheticpp@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c727a36bcaf0987dc63e22638ec5f63cdc074c55
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmpdclient/libmpdclient.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/libmpdclient/libmpdclient.hash
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e50f60c..9ebf48a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -191,14 +191,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.67"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.68"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.70"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.38"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.32"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.34"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.6"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.8"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19"		if BR2_KERNEL_HEADERS_3_19
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+new file mode 100644
+index 0000000..d0a4c0e
+--- /dev/null
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -0,0 +1,3 @@
++# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.10.tar.xz.sig, sha256 locally computed
++sha256 4f08cde82dae70895f8e4532a6e9b54b201efd5591c6b5d6834895807ed2ff82  libmpdclient-2.10.tar.xz
++
+-- 
+2.3.0
