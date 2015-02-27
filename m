@@ -1,70 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 17:18:38 +0100
-Subject: [Buildroot] [git commit] libxmlrpc: add missing braces for variable
-	CURL_CONFIG in patch 4
-Message-ID: <20150227162333.8E618817F4@busybox.osuosl.org>
+Date: Fri, 27 Feb 2015 17:13:57 +0100
+Subject: [Buildroot] [git commit] vlc: security bump to version 2.1.6
+Message-ID: <20150227162333.82B80817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f91f5765ad174a801d3daefaa3e1ffa210293ea
+commit: http://git.buildroot.net/buildroot/commit/?id=9d13019edd0dd2f2c3c72adc61316f3621b9d831
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change $CURL_CONFIG to $(CURL_CONFIG) in the patch
-0004-use-correct-curl-config.patch because in a makefile the braces are
-required to expand a variable.
+* Fix heap overflow in decomp stream filter
+* Fix buffer overflow in updater
+* Fix potential buffer overflow in schroedinger encoder
+* Fix null-pointer dereference in DMO decoder
+* Fix buffer overflow in parsing of string boxes in mp4 demuxer
+* Fix SRTP integer overflow
+* Fix potential crash in zip access
+* Fix read overflow in Ogg demuxer
 
-Fix error messages:
-make[3]: Entering directory '/home/tetsuya/buildroot/br2/output/build/libxmlrpc-1.25.30/lib/curl_transport'
-make[3]: URL_CONFIG: Command not found
-/bin/sh: line 0: test: <: unary operator expected
-make[3]: URL_CONFIG: Command not found
+And also add hash file.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libxmlrpc/0004-use-correct-curl-config.patch   |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/vlc/vlc.hash |    2 ++
+ package/vlc/vlc.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libxmlrpc/0004-use-correct-curl-config.patch b/package/libxmlrpc/0004-use-correct-curl-config.patch
-index c0646d3..b581643 100644
---- a/package/libxmlrpc/0004-use-correct-curl-config.patch
-+++ b/package/libxmlrpc/0004-use-correct-curl-config.patch
-@@ -55,7 +55,7 @@ Index: b/lib/curl_transport/Makefile
-  $(SRCDIR)/common.mk: srcdir blddir
-  
- -CURL_VERSION := $(shell curl-config --vernum)
--+CURL_VERSION := $(shell $CURL_CONFIG --vernum)
-++CURL_VERSION := $(shell $(CURL_CONFIG) --vernum)
-  
-  # Some time at or before Curl 7.12, <curl/types.h> became an empty file
-  # (no-op).  Some time after Curl 7.18, <curl/types.h> ceased to exist.
-@@ -64,7 +64,7 @@ Index: b/lib/curl_transport/Makefile
-  endif
-  
- -CURL_INCLUDES := $(shell curl-config --cflags)
--+CURL_INCLUDES := $(shell $CURL_CONFIG --cflags)
-++CURL_INCLUDES := $(shell $(CURL_CONFIG) --cflags)
-  # We expect that curl-config --cflags just gives us -I options, because
-  # we need just the -I options for 'make dep'.  Plus, it's scary to think
-  # of what any other compiler flag would do to our compile.
-@@ -77,7 +77,7 @@ Index: b/src/cpp/test/Makefile
-  
-  ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
- -  LIBS += $(shell curl-config --libs)
--+  LIBS += $(shell $CURL_CONFIG --libs)
-++  LIBS += $(shell $(CURL_CONFIG) --libs)
-  endif
-  ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
-    LIBS += $(shell libwww-config --libs)
-@@ -90,7 +90,7 @@ Index: b/tools/common.mk
-  endif
-  ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
- -  CLIENT_LDLIBS += $(shell curl-config --libs)
--+  CLIENT_LDLIBS += $(shell $CURL_CONFIG --libs)
-++  CLIENT_LDLIBS += $(shell $(CURL_CONFIG) --libs)
-  endif
-  ifeq ($(MUST_BUILD_WININET_CLIENT),yes)
-    CLIENT_LDLIBS += $(shell wininet-config --libs)
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+new file mode 100644
+index 0000000..718a0e6
+--- /dev/null
++++ b/package/vlc/vlc.hash
+@@ -0,0 +1,2 @@
++# From http://get.videolan.org/vlc/2.1.6/vlc-2.1.6.tar.xz.sha256
++sha256	1b76cf4b96e18cf224d21b91343f7e579790c5d3e499c8a230f53da695687c04	vlc-2.1.6.tar.xz
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 9d99de6..56006b5 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 2.1.5
++VLC_VERSION = 2.1.6
+ VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+ LGPLv2.1+
