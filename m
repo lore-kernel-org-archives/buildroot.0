@@ -1,33 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Feb 2015 17:19:43 +0100
-Subject: [Buildroot] [PATCH 2/7] libxmlrpc: add missing braces for
-	variable CURL_CONFIG in patch 4
-In-Reply-To: <1425028764-1146-3-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Fri, 27 Feb 2015 10:19:19 +0100")
-References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
- <1425028764-1146-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <874mq71g4g.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Feb 2015 17:18:38 +0100
+Subject: [Buildroot] [git commit] libxmlrpc: add missing braces for variable
+	CURL_CONFIG in patch 4
+Message-ID: <20150227162333.8E618817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5f91f5765ad174a801d3daefaa3e1ffa210293ea
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Change $CURL_CONFIG to $(CURL_CONFIG) in the patch
- > 0004-use-correct-curl-config.patch because in a makefile the braces are
- > required to expand a variable.
+Change $CURL_CONFIG to $(CURL_CONFIG) in the patch
+0004-use-correct-curl-config.patch because in a makefile the braces are
+required to expand a variable.
 
- > Fix error messages:
- > make[3]: Entering directory '/home/tetsuya/buildroot/br2/output/build/libxmlrpc-1.25.30/lib/curl_transport'
- > make[3]: URL_CONFIG: Command not found
- > /bin/sh: line 0: test: <: unary operator expected
- > make[3]: URL_CONFIG: Command not found
+Fix error messages:
+make[3]: Entering directory '/home/tetsuya/buildroot/br2/output/build/libxmlrpc-1.25.30/lib/curl_transport'
+make[3]: URL_CONFIG: Command not found
+/bin/sh: line 0: test: <: unary operator expected
+make[3]: URL_CONFIG: Command not found
 
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../libxmlrpc/0004-use-correct-curl-config.patch   |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libxmlrpc/0004-use-correct-curl-config.patch b/package/libxmlrpc/0004-use-correct-curl-config.patch
+index c0646d3..b581643 100644
+--- a/package/libxmlrpc/0004-use-correct-curl-config.patch
++++ b/package/libxmlrpc/0004-use-correct-curl-config.patch
+@@ -55,7 +55,7 @@ Index: b/lib/curl_transport/Makefile
+  $(SRCDIR)/common.mk: srcdir blddir
+  
+ -CURL_VERSION := $(shell curl-config --vernum)
+-+CURL_VERSION := $(shell $CURL_CONFIG --vernum)
+++CURL_VERSION := $(shell $(CURL_CONFIG) --vernum)
+  
+  # Some time at or before Curl 7.12, <curl/types.h> became an empty file
+  # (no-op).  Some time after Curl 7.18, <curl/types.h> ceased to exist.
+@@ -64,7 +64,7 @@ Index: b/lib/curl_transport/Makefile
+  endif
+  
+ -CURL_INCLUDES := $(shell curl-config --cflags)
+-+CURL_INCLUDES := $(shell $CURL_CONFIG --cflags)
+++CURL_INCLUDES := $(shell $(CURL_CONFIG) --cflags)
+  # We expect that curl-config --cflags just gives us -I options, because
+  # we need just the -I options for 'make dep'.  Plus, it's scary to think
+  # of what any other compiler flag would do to our compile.
+@@ -77,7 +77,7 @@ Index: b/src/cpp/test/Makefile
+  
+  ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
+ -  LIBS += $(shell curl-config --libs)
+-+  LIBS += $(shell $CURL_CONFIG --libs)
+++  LIBS += $(shell $(CURL_CONFIG) --libs)
+  endif
+  ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
+    LIBS += $(shell libwww-config --libs)
+@@ -90,7 +90,7 @@ Index: b/tools/common.mk
+  endif
+  ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
+ -  CLIENT_LDLIBS += $(shell curl-config --libs)
+-+  CLIENT_LDLIBS += $(shell $CURL_CONFIG --libs)
+++  CLIENT_LDLIBS += $(shell $(CURL_CONFIG) --libs)
+  endif
+  ifeq ($(MUST_BUILD_WININET_CLIENT),yes)
+    CLIENT_LDLIBS += $(shell wininet-config --libs)
