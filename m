@@ -1,70 +1,61 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 27 Feb 2015 10:19:19 +0100
-Subject: [Buildroot] [PATCH 2/7] libxmlrpc: add missing braces for variable
-	CURL_CONFIG in patch 4
+Date: Fri, 27 Feb 2015 10:19:21 +0100
+Subject: [Buildroot] [PATCH 4/7] package/civetweb: fix build error on a host
+	with make v4.0
 In-Reply-To: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1425028764-1146-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1425028764-1146-5-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change $CURL_CONFIG to $(CURL_CONFIG) in the patch
-0004-use-correct-curl-config.patch because in a makefile the braces are
-required to expand a variable.
+Add a patch to fix a typo that on a system with make v4.0 and
+BR2_CIVETWEB_WITH_LUA=y fails to build:
+  Makefile:203: *** mixed implicit and normal rules.  Stop.
 
-Fix error messages:
-make[3]: Entering directory '/home/tetsuya/buildroot/br2/output/build/libxmlrpc-1.25.30/lib/curl_transport'
-make[3]: URL_CONFIG: Command not found
-/bin/sh: line 0: test: <: unary operator expected
-make[3]: URL_CONFIG: Command not found
+The patch was not sent upstream because this problem is already fixed on
+master.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/libxmlrpc/0004-use-correct-curl-config.patch | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...ua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
 
-diff --git a/package/libxmlrpc/0004-use-correct-curl-config.patch b/package/libxmlrpc/0004-use-correct-curl-config.patch
-index c0646d3..b581643 100644
---- a/package/libxmlrpc/0004-use-correct-curl-config.patch
-+++ b/package/libxmlrpc/0004-use-correct-curl-config.patch
-@@ -55,7 +55,7 @@ Index: b/lib/curl_transport/Makefile
-  $(SRCDIR)/common.mk: srcdir blddir
-  
- -CURL_VERSION := $(shell curl-config --vernum)
--+CURL_VERSION := $(shell $CURL_CONFIG --vernum)
-++CURL_VERSION := $(shell $(CURL_CONFIG) --vernum)
-  
-  # Some time at or before Curl 7.12, <curl/types.h> became an empty file
-  # (no-op).  Some time after Curl 7.18, <curl/types.h> ceased to exist.
-@@ -64,7 +64,7 @@ Index: b/lib/curl_transport/Makefile
-  endif
-  
- -CURL_INCLUDES := $(shell curl-config --cflags)
--+CURL_INCLUDES := $(shell $CURL_CONFIG --cflags)
-++CURL_INCLUDES := $(shell $(CURL_CONFIG) --cflags)
-  # We expect that curl-config --cflags just gives us -I options, because
-  # we need just the -I options for 'make dep'.  Plus, it's scary to think
-  # of what any other compiler flag would do to our compile.
-@@ -77,7 +77,7 @@ Index: b/src/cpp/test/Makefile
-  
-  ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
- -  LIBS += $(shell curl-config --libs)
--+  LIBS += $(shell $CURL_CONFIG --libs)
-++  LIBS += $(shell $(CURL_CONFIG) --libs)
-  endif
-  ifeq ($(MUST_BUILD_LIBWWW_CLIENT),yes)
-    LIBS += $(shell libwww-config --libs)
-@@ -90,7 +90,7 @@ Index: b/tools/common.mk
-  endif
-  ifeq ($(MUST_BUILD_CURL_CLIENT),yes)
- -  CLIENT_LDLIBS += $(shell curl-config --libs)
--+  CLIENT_LDLIBS += $(shell $CURL_CONFIG --libs)
-++  CLIENT_LDLIBS += $(shell $(CURL_CONFIG) --libs)
-  endif
-  ifeq ($(MUST_BUILD_WININET_CLIENT),yes)
-    CLIENT_LDLIBS += $(shell wininet-config --libs)
+diff --git a/package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch b/package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
+new file mode 100644
+index 0000000..aee3cfc
+--- /dev/null
++++ b/package/civetweb/0001-Lua-fix-a-typo-changing-LFS_DIR-to-LFS_DIR.patch
+@@ -0,0 +1,27 @@
++From 0821066f9adf8410891cd07684ecac50a9bc36a4 Mon Sep 17 00:00:00 2001
++From: Fabio Porcedda <fabio.porcedda@gmail>
++Date: Wed, 25 Feb 2015 18:40:24 +0100
++Subject: [PATCH] Lua: fix a typo changing %(LFS_DIR) to $(LFS_DIR)
++
++Also this fix a error on GNU Make v4.0:
++  Makefile:203: *** mixed implicit and normal rules.  Stop.
++
++Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail>
++---
++ resources/Makefile.in-lua | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/resources/Makefile.in-lua b/resources/Makefile.in-lua
++index 0902f11..f3d95fd 100644
++--- a/resources/Makefile.in-lua
+++++ b/resources/Makefile.in-lua
++@@ -57,5 +57,5 @@ LFS_CFLAGS = -I$(LFS_DIR)
++ 
++ OBJECTS += $(LUA_OBJECTS) $(SQLITE_OBJECTS) $(LFS_OBJECTS)
++ CFLAGS += $(LUA_CFLAGS) $(SQLITE_CFLAGS) $(LFS_CFLAGS) -DUSE_LUA -DUSE_LUA_SQLITE3 -DUSE_LUA_FILE_SYSTEM
++-SOURCE_DIRS = $(LUA_DIR) $(SQLITE_DIR) %(LFS_DIR)
+++SOURCE_DIRS = $(LUA_DIR) $(SQLITE_DIR) $(LFS_DIR)
++ 
++-- 
++2.3.0
++
 -- 
 2.3.0
