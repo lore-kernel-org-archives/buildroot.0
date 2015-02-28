@@ -1,47 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 28 Feb 2015 08:09:13 -0300
-Subject: [Buildroot] [PATCH 2/2] gnupg: security bump to version 1.4.19
-In-Reply-To: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1425121753-25802-2-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 28 Feb 2015 13:03:16 +0100
+Subject: [Buildroot] [PATCH next 1/1] package/portaudio: Remove threads
+	dependency for alsa module
+Message-ID: <1425124996-17097-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-3591 - Use ciphertext blinding for Elgamal decryption
-CVE-2015-0837 - Fixed data-dependent timing variations in modular
-exponentiation.
+Portaudio as a whole already depends on threads support, so there is no
+need to have an additional dependency for its alsa module.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gnupg/gnupg.hash | 4 ++--
- package/gnupg/gnupg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/portaudio/Config.in |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
-index d6733f5..ba38d38 100644
---- a/package/gnupg/gnupg.hash
-+++ b/package/gnupg/gnupg.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	b7b5fdda78849955e0cdbc5a085f3a08f8b7fba126c622085debb62def5d6388	gnupg-1.4.18.tar.bz2
-+# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000363.html
-+sha1	5503f7faa0a0e84450838706a67621546241ca50	gnupg-1.4.19.tar.bz2
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index c0bf88c..94f5d89 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG_VERSION = 1.4.18
-+GNUPG_VERSION = 1.4.19
- GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
- GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
- GNUPG_LICENSE = GPLv3+
+diff --git a/package/portaudio/Config.in b/package/portaudio/Config.in
+index eaf095c..252a92a 100644
+--- a/package/portaudio/Config.in
++++ b/package/portaudio/Config.in
+@@ -15,7 +15,6 @@ if BR2_PACKAGE_PORTAUDIO
+ config BR2_PACKAGE_PORTAUDIO_ALSA
+ 	bool "alsa support"
+ 	select BR2_PACKAGE_ALSA_LIB
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	default y
+ 	help
+ 	  Compile with ALSA support.
 -- 
-2.0.5
+1.7.10.4
