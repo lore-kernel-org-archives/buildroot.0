@@ -1,52 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Feb 2015 08:10:48 +0100
-Subject: [Buildroot] [git commit] pinentry: fix ncurses' unsafe header path
-Message-ID: <20150228071137.B580E800AF@busybox.osuosl.org>
+Date: Sat, 28 Feb 2015 08:15:21 +0100
+Subject: [Buildroot] error in skeleton  ?
+In-Reply-To: <33C946992B0B426D816DA8DF2CC39BD1@JohanW7> (Sagaert Johan's
+ message of "Sat, 28 Feb 2015 00:46:11 +0100")
+References: <F7D7D32518D04BB5BEB5B0B4D484022D@JohanW7>
+ <87zj7zyqij.fsf@dell.be.48ers.dk>
+ <33C946992B0B426D816DA8DF2CC39BD1@JohanW7>
+Message-ID: <87mw3yzeuu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63f5f44e6138344b31d81cf8b760ea613b00c75d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-pinentry sets the NCURSES_INCLUDE variable in the Makefile to
-/usr/include/ncurses and that causes problems when cross-compiling
-because it fails with an error like this one:
+Hi,
 
-Making all in curses
-make[3]: Entering directory `/br/output/build/pinentry-0.9.0/curses'
-/br/output/host/usr/bin/mips64el-ctng_n64-linux-gnu-gcc -DHAVE_CONFIG_H
--I. -I..  -I/usr/include/ncursesw -I../pinentry -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall  -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -Wall -Wcast-align
--Wshadow -Wstrict-prototypes -Wno-pointer-sign -c pinentry-curses.c
-mips64el-ctng_n64-linux-gnu-gcc: ERROR: unsafe header/library path used
-in cross-compilation: '/usr/include/ncursesw'
-make[3]: *** [pinentry-curses.o] Error 1
+> Dear Peter;
 
-Fixes:
+ > Agreed, does not make sense to create directories in a mountpoint
+ > with devtmpfs.
 
-  http://autobuild.buildroot.net/results/5b9/5b9b53a37f7cf4bab4d989f852726a0f0885605f/
+ > Just wondering if the device_table.txt needs an entry for the /run
+ > directory introduced in 2015-02-rc1
 
-[Peter: use --with-ncurses-include-dir=none instead]
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pinentry/pinentry.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Why would it need a device_table.txt entry? It is just a mount point and
+the skeleton already has the directory.
 
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index f34cc0e..c4d83ee 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -21,7 +21,7 @@ endif
- 
- # pinentry-ncurses backend
- ifeq ($(BR2_PACKAGE_PINENTRY_NCURSES),y)
--PINENTRY_CONF_OPTS += --enable-ncurses
-+PINENTRY_CONF_OPTS += --enable-ncurses --with-ncurses-include-dir=none
- PINENTRY_DEPENDENCIES += ncurses
- else
- PINENTRY_CONF_OPTS += --disable-ncurses
+-- 
+Peter Korsgaard 
