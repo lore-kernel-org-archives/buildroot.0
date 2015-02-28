@@ -1,47 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Feb 2015 13:03:54 +0100
-Subject: [Buildroot] [git commit] libgcrypt: security bump to version 1.6.3
-Message-ID: <20150228120508.45D2380106@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 28 Feb 2015 15:20:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 7892] systemd-journald is broken
+In-Reply-To: <bug-7892-163@https.bugs.busybox.net/>
+References: <bug-7892-163@https.bugs.busybox.net/>
+Message-ID: <20150228152002.90271805CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b3db3aba6e442da91e5b55ee97ac3c789849051c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7892
 
-Fixes:
-CVE-2014-3591 - Use ciphertext blinding for Elgamal decryption
-CVE-2015-0837 - Fixed data-dependent timing variations in modular
-exponentiation.
+--- Comment #5 from nroach44 at gmail.com 2015-02-28 15:20:01 UTC ---
+Further testing has shown that editing tmpfiles.d to create the folders results
+in them being used, and seems to stop the logspam, but journalctl still reports
+no logs were found.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgcrypt/libgcrypt.hash |    4 ++--
- package/libgcrypt/libgcrypt.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Testing on the x86 machine has shown that after commit (not inclusive)
+cb8ce5f0016fa14f5e6971e07416ed465e641ff7 all builds tested resulted in the same
+issue.
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 2ce7a67..9cad1c4 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,2 +1,2 @@
--# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q3/000355.html
--sha1	cc31aca87e4a3769cb86884a3f5982b2cc8eb7ec	libgcrypt-1.6.2.tar.bz2
-+# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000364.html
-+sha1	9456e7b64db9df8360a1407a38c8c958da80bbf1	libgcrypt-1.6.3.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 4d64da8..e2a4b39 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGCRYPT_VERSION = 1.6.2
-+LIBGCRYPT_VERSION = 1.6.3
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+The bug was likely introduced in d380dde1d2878bd8f09317081960bfc82b0f420b
+("skeleton: make /run a proper directory/filesystem"), but that build fails.
+(The build failure was fixed in c6ca6fc9a3714842485618676390aba114442511)
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
