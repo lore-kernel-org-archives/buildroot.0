@@ -1,63 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Feb 2015 19:15:06 +0100
-Subject: [Buildroot] [PATCH 0/7] Improvements to the download logic
-Message-ID: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Feb 2015 19:15:07 +0100
+Subject: [Buildroot] [PATCH 1/7] linux: use the package infrastructure to
+	download patches
+In-Reply-To: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The linux package has a special handling of patches, with quite a bit
+of legacy in it. A problem caused by this special handling is that the
+linux package calls directly the DOWNLOAD_WGET macro, which means that
+the package infrastructure isn't aware of which patches get
+downloaded, and it prevents doing changes inside the package download
+infrastructure.
 
-This set of 7 patches is some preparation work needed to fully bring
-into the package infrastructure the responsability of features such as
-"make source", "make external-deps" or "make legal-info".
+This commit changes the handling of patches in the linux package in
+the following way:
 
-In order to make this possible, we need to make sure that the package
-infrastructure is aware of all downloads made by packages: calling the
-"DOWNLOAD" macro directly is bypassing this. Currently, the linux and
-perl packages are doing this, which means the package infrastructure
-is not aware of certain things that the linux and perl packages are
-downloading.
+ * The LINUX_PATCHES variable is kept as is: it lists all the patches
+   mentionned in the Config.in option BR2_LINUX_KERNEL_PATCH. This
+   option can contain http://, ftp://, https:// URLs, path to local
+   files or local directories.
 
-This series therefore:
+   This variable is *not* used by the generic package infrastructure,
+   so it is purely internal to the Linux package.
 
- * Fixes the 'linux' package to use the package infra to download
-   patches. No changes to the package infra are needed to make this
-   possible.
+ * The LINUX_PATCH variable is now filled in with the list of patches
+   that should be downloaded. It is derived from LINUX_PATCHES by
+   filtering the patches that have http://, ftp:// or https:// in
+   their path. Since <pkg>_PATCH is handled by the package
+   infrastructure, it means that those patches are now automatically
+   downloaded and applied by the package infrastructure.
 
- * Fixup the handling of the "Downloading" message.
+ * The LINUX_APPLY_PATCHES hook is renamed to
+   LINUX_APPLY_LOCAL_PATCHES, because it is now only responsible of
+   applying local patches: remote patches are handled by
+   LINUX_PATCH. The implementation of the hook is changed to filter
+   out the patches that have already taken care of by LINUX_PATCH, so
+   that we only iterate through the list of local patches or local
+   patch directories.
 
- * Allow full URLs in <pkg>_EXTRA_DOWNLOADS, and not just a file name
-   relative to <pkg>_SITE.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk | 25 +++++++++----------------
+ 1 file changed, 9 insertions(+), 16 deletions(-)
 
- * Fix the 'perl' package to use <pkg>_EXTRA_DOWNLOADS to download
-   perl-cross.
-
-I would like to see this small series merged, so that I can then
-submit some additional patches later in the development cycle.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (7):
-  linux: use the package infrastructure to download patches
-  pkg-generic: fix the logic showing the "Downloading" message
-  pkg-generic: take into account <pkg>_EXTRA_DOWNLOADS to display
-    "Downloading" message
-  pkg-generic: refactor the "Downloading" message logic
-  pkg-generic: allow full URLs for <pkg>_EXTRA_DOWNLOADS
-  docs/manual: update documentation about <pkg>_SOURCE, <pkg>_PATCH and
-    <pkg>_EXTRA_DOWNLOADS
-  perl: use <pkg>_EXTRA_DOWNLOADS
-
- docs/manual/adding-packages-generic.txt | 32 ++++++++++++++++++--------------
- linux/linux.mk                          | 25 +++++++++----------------
- package/perl/perl.mk                    | 15 ++++++---------
- package/pkg-generic.mk                  | 23 ++++++++++++-----------
- 4 files changed, 45 insertions(+), 50 deletions(-)
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fc90fc5..d591e1e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -40,6 +40,11 @@ endif
+ 
+ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ 
++# We really on the generic package infrastructure to download and
++# apply remote patches (downloaded from ftp, http or https). For local
++# patches, we have a custom post-patch hook below.
++LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
++
+ LINUX_INSTALL_IMAGES = YES
+ LINUX_DEPENDENCIES += host-kmod host-lzop
+ 
+@@ -144,20 +149,9 @@ else
+ LINUX_IMAGE_PATH = $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
+-define LINUX_DOWNLOAD_PATCHES
+-	$(if $(LINUX_PATCHES),
+-		@$(call MESSAGE,"Download additional patches"))
+-	$(foreach patch,$(filter ftp://% http://% https://%,$(LINUX_PATCHES)),\
+-		$(call DOWNLOAD_WGET,$(patch),$(notdir $(patch)))$(sep))
+-endef
+-
+-LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+-
+-define LINUX_APPLY_PATCHES
+-	for p in $(LINUX_PATCHES) ; do \
+-		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
+-			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
+-		elif test -d $$p ; then \
++define LINUX_APPLY_LOCAL_PATCHES
++	for p in $(filter-out ftp://% http://% https://%,$(LINUX_PATCHES)) ; do \
++		if test -d $$p ; then \
+ 			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
+ 		else \
+ 			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` ; \
+@@ -165,8 +159,7 @@ define LINUX_APPLY_PATCHES
+ 	done
+ endef
+ 
+-LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
+-
++LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
 -- 
 2.1.0
