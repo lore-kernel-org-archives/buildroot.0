@@ -1,41 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Feb 2015 12:29:49 +0100
-Subject: [Buildroot] [git commit] libsrtp: openssl handling needs shared
-	library support
-Message-ID: <20150228120508.3CFC680504@busybox.osuosl.org>
+Date: Sat, 28 Feb 2015 13:04:04 +0100
+Subject: [Buildroot] [git commit] gnupg: security bump to version 1.4.19
+Message-ID: <20150228120508.51AE2805E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67cebbdf5f349cc176037fa15c281a9462dae591
+commit: http://git.buildroot.net/buildroot/commit/?id=b6997c8e4c93ab4385c666d982d573f5e6f641fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.net/results/ab8/ab80094080c18602a2adb266981f53ebe0647f63/
-http://autobuild.buildroot.net/results/a77/a770318af841610e0c10f61cf61bdae298aa59a8/
-http://autobuild.buildroot.net/results/ce2/ce27f5b81b74320f4d2efbbaa4754c23fb2feeab/
-http://autobuild.buildroot.net/results/57f/57f54c6f00953e8b7da70f4467f38cc9dfca2380/
+CVE-2014-3591 - Use ciphertext blinding for Elgamal decryption
+CVE-2015-0837 - Fixed data-dependent timing variations in modular
+exponentiation.
 
-And many more.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsrtp/libsrtp.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/gnupg/gnupg.hash |    4 ++--
+ package/gnupg/gnupg.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index 5e62255..e5cf47b 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -25,7 +25,8 @@ endif
- # host-pkgconf to make sure pkg-config is installed.
- LIBSRTP_DEPENDENCIES = host-pkgconf
+diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
+index d6733f5..ba38d38 100644
+--- a/package/gnupg/gnupg.hash
++++ b/package/gnupg/gnupg.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	b7b5fdda78849955e0cdbc5a085f3a08f8b7fba126c622085debb62def5d6388	gnupg-1.4.18.tar.bz2
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000363.html
++sha1	5503f7faa0a0e84450838706a67621546241ca50	gnupg-1.4.19.tar.bz2
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index c0bf88c..94f5d89 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+# openssl handling needs libdl support
-+ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
- LIBSRTP_DEPENDENCIES += openssl
- LIBSRTP_CONF_OPTS += --enable-openssl
- else
+-GNUPG_VERSION = 1.4.18
++GNUPG_VERSION = 1.4.19
+ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
