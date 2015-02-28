@@ -1,33 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Feb 2015 13:03:16 +0100
-Subject: [Buildroot] [PATCH next 1/1] package/portaudio: Remove threads
-	dependency for alsa module
-Message-ID: <1425124996-17097-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Feb 2015 13:04:18 +0100
+Subject: [Buildroot] [PATCH 1/2] libgcrypt: security bump to version
+	1.6.3
+In-Reply-To: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 28 Feb 2015 08:09:12 -0300")
+References: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wq32xmwt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Portaudio as a whole already depends on threads support, so there is no
-need to have an additional dependency for its alsa module.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/portaudio/Config.in |    1 -
- 1 file changed, 1 deletion(-)
+ > Fixes:
+ > CVE-2014-3591 - Use ciphertext blinding for Elgamal decryption
+ > CVE-2015-0837 - Fixed data-dependent timing variations in modular
+ > exponentiation.
 
-diff --git a/package/portaudio/Config.in b/package/portaudio/Config.in
-index eaf095c..252a92a 100644
---- a/package/portaudio/Config.in
-+++ b/package/portaudio/Config.in
-@@ -15,7 +15,6 @@ if BR2_PACKAGE_PORTAUDIO
- config BR2_PACKAGE_PORTAUDIO_ALSA
- 	bool "alsa support"
- 	select BR2_PACKAGE_ALSA_LIB
--	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	default y
- 	help
- 	  Compile with ALSA support.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
