@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Feb 2015 11:58:12 +0100
-Subject: [Buildroot] [PATCH next 3/3] package/php: add unixodbc support
+Date: Sat, 28 Feb 2015 11:58:11 +0100
+Subject: [Buildroot] [PATCH next 2/3] package/qt: enable unixodbc support
 In-Reply-To: <1425121092-10878-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1425121092-10878-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1425121092-10878-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1425121092-10878-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/Config.ext |    6 ++++++
- package/php/php.mk     |    4 ++++
- 2 files changed, 10 insertions(+)
+ package/qt/Config.sql.in |    2 +-
+ package/qt/qt.mk         |    1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 2b1e615..466f3f1 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -160,6 +160,12 @@ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
- 	help
- 	  SQLite3 driver for PDO
+diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
+index fd62657..81337a1 100644
+--- a/package/qt/Config.sql.in
++++ b/package/qt/Config.sql.in
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_QT_IBASE
  
-+config BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC
-+	bool "unixODBC"
+ config BR2_PACKAGE_QT_ODBC
+ 	bool "ODBC Driver"
+-	depends on BROKEN # libodbc not in BR
 +	select BR2_PACKAGE_UNIXODBC
-+	help
-+	  unixODBC driver for PDO
-+
+ 	help
+ 	  Build ODBC driver
+ 	  If unsure, say n.
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 9ea676c..aedc2ce 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -361,6 +361,7 @@ QT_DEPENDENCIES += mysql
  endif
- 
- comment "Human language and character encoding support"
-diff --git a/package/php/php.mk b/package/php/php.mk
-index dd52508..054fdc7 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -174,6 +174,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
- 	PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
- 	PHP_DEPENDENCIES += postgresql
+ ifeq ($(BR2_PACKAGE_QT_ODBC),y)
+ QT_CONFIGURE_OPTS += -qt-sql-odbc
++QT_DEPENDENCIES += unixodbc
  endif
-+ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC),y)
-+	PHP_CONF_OPTS += --with-pdo-odbc=unixODBC,$(STAGING_DIR)/usr
-+	PHP_DEPENDENCIES += unixodbc
-+endif
- endif
- 
- ### Use external PCRE if it's available
+ ifeq ($(BR2_PACKAGE_QT_PSQL),y)
+ QT_CONFIGURE_OPTS += -qt-sql-psql
 -- 
 1.7.10.4
