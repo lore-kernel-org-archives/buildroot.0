@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Feb 2015 20:28:05 +0100
-Subject: [Buildroot] [PATCH v5 10/11] autobuild-run: kill all children
- on SIGTERM
-In-Reply-To: <1418414696-32584-11-git-send-email-patrickdepinguin@gmail.com>
+Date: Sat, 28 Feb 2015 20:29:09 +0100
+Subject: [Buildroot] [PATCH v5 03/11] autobuild-run: add option
+ --make-opts for custom Buildroot options
+In-Reply-To: <1418414696-32584-4-git-send-email-patrickdepinguin@gmail.com>
 References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
- <1418414696-32584-11-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150228202805.50d377d3@free-electrons.com>
+ <1418414696-32584-4-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150228202909.3b5ce127@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,24 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Fri, 12 Dec 2014 21:04:55 +0100, Thomas De Schampheleire wrote:
+On Fri, 12 Dec 2014 21:04:48 +0100, Thomas De Schampheleire wrote:
 
-> -from multiprocessing import Process
-> +import multiprocessing
+> +    cmd = ["timeout", str(MAX_DURATION), "make", "O=%s" % outputdir,
+> +            "-C", srcdir, "BR2_DL_DIR=%s" % dldir, "BR2_JLEVEL=%s" % njobs] \
+> +          + make_opts.split()
 
-This change...
+This breaks badly when no make_opts are passed:
 
->      for i in range(0, int(args['--ninstances'])):
->          p = Process(target=run_instance, kwargs=dict(
-
-Breaks this, it should be changed to multiprocessing.Process.
-
-I've fixed that up locally for now, but it essentially means that your
-patch series was never executed, as it basically cannot work at all :-/
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/multiprocessing/process.py", line 232, in _bootstrap
+    self.run()
+  File "/usr/lib/python2.6/multiprocessing/process.py", line 88, in run
+    self._target(*self._args, **self._kwargs)
+  File "./autobuild-run", line 660, in run_instance
+    ret = do_build(**kwargs)
+  File "./autobuild-run", line 471, in do_build
+    + kwargs['make_opts'].split()
+AttributeError: 'NoneType' object has no attribute 'split'
 
 Best regards,
 
