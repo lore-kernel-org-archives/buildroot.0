@@ -1,56 +1,35 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sat, 28 Feb 2015 10:47:12 +0100
-Subject: [Buildroot] [PATCH 4/7] package/civetweb: fix build error on a
-	host with make v4.0
-In-Reply-To: <87egpaz9rx.fsf@dell.be.48ers.dk>
-References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
- <1425028764-1146-5-git-send-email-fabio.porcedda@gmail.com>
- <87egpaz9rx.fsf@dell.be.48ers.dk>
-Message-ID: <CAHkwnC_Qnxfj=bNw4++ytgX0eLa_w6+yggY1qMvyLp5TgcV-Og@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Feb 2015 10:59:31 +0100
+Subject: [Buildroot] [git commit] libevent: fix openssl detection when
+ statically linking
+In-Reply-To: <54F0D8A7.9070602@openwide.fr>
+References: <20150227082309.25DB7817F6@busybox.osuosl.org>
+ <20150227153056.181ef6f3@free-electrons.com>
+ <87y4nj1kjt.fsf@dell.be.48ers.dk>
+ <20150227160141.450b7e50@free-electrons.com>
+ <54F0D8A7.9070602@openwide.fr>
+Message-ID: <20150228105931.3bcae77a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 28, 2015 at 10:05 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
->
->  > Add a patch to fix a typo that on a system with make v4.0 and
->  > BR2_CIVETWEB_WITH_LUA=y fails to build:
->  >   Makefile:203: *** mixed implicit and normal rules.  Stop.
->
->  > The patch was not sent upstream because this problem is already fixed on
->  > master.
->
->  > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->
-> Committed, thanks.
->
-> Strangely enough, make on my system (Debian 4.0-8.1) only warns about
-> the syntax:
->
-> Makefile:203: *** mixed implicit and normal rules: deprecated syntax
+Dear Romain Naour,
 
-That is because in the debian package the have backported a change to
-turn it in a worning:
-http://metadata.ftp-master.debian.org/changelogs//main/m/make-dfsg/make-dfsg_4.0-8.1_changelog
-make-dfsg (4.0-2) experimental; urgency=medium
+On Fri, 27 Feb 2015 21:50:47 +0100, Romain Naour wrote:
 
-  * Pull back some patches from upstream git that fix bugs. One of these
-    converts the mixed implicit and explicit rule error into a warning,
-    and that should give us a grace period to fix the Makefiles,
+> > No, I was hoping for Romain to pick up on the task actually :-)
+> 
+> I thought that you would have submit your patch directly on the list.
+> Ok sorry, I'll pick up you patch and send it upstream.
 
-The make on fedora 21 does not have such a patch so it fails like the
-officiale make 4.0 release.
+Yes, maybe I was not explicit enough. Sorry about this.
 
-> With the patch applied I get another warning, but that can probably be
-> ignored:
->
-> Makefile:203: target 'out/src/third_party' given more than once in the same rule
-> --
-> Bye, Peter Korsgaard
+Thanks!
 
-BR
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
