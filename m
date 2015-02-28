@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Feb 2015 20:31:16 +0100
-Subject: [Buildroot] [PATCH v5 02/11] autobuild-run: use docopt for
- argument parsing
-In-Reply-To: <1418414696-32584-3-git-send-email-patrickdepinguin@gmail.com>
+Date: Sat, 28 Feb 2015 20:34:51 +0100
+Subject: [Buildroot] [PATCH v5 00/11] autobuild-run improvements
+In-Reply-To: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
- <1418414696-32584-3-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150228203116.526a8cc8@free-electrons.com>
+Message-ID: <20150228203451.57206a8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +12,28 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Fri, 12 Dec 2014 21:04:47 +0100, Thomas De Schampheleire wrote:
+On Fri, 12 Dec 2014 21:04:45 +0100, Thomas De Schampheleire wrote:
 
-> +    if args['--config']:
-> +        ini_config = load_ini_config(args['--config'])
-> +        # merge config/args, priority given to config
-> +        args = merge(ini_config, args)
+> This series against the buildroot-test repo makes some improvements to the
+> autobuild-run script.
 
-As we discussed, I changed this to:
+I've finally taken some time to test this series, and I've reported two
+separate problems as replies to e-mails: the make-opts split() issue,
+and the merging of argument vs. configuration file values.
 
-	args = merge(args, ini_config)
+To avoid duplicate work, I've pushed the current state of your work
+(with the fix to the merging order, and the multiprocessing.Process
+fix) to:
 
-since the command line arguments should have priority over the values
-defined in the configuration file, like any other Unix tool does.
+   git://git.free-electrons.com/users/thomas-petazzoni/buildroot-test.git
 
-However, this doesn't seem to work: since the docopt documentation says
-that ninstances default value is 1 when no value is defined, I believe
-'args' contains a value of 1 for ninstances, and it doesn't fall back
-to using the value defined in the configuration file.
+in a branch called 'thomas-ds'.
 
-Do you see a way of fixing this?
+Since both issues are more or less tied to the docopt migration, can
+you have a look at them, and maybe simply propose followup patches that
+I can merge back into the problematic commits, to fix those issues?
 
-Thanks,
+Thanks a lot,
 
 Thomas
 -- 
