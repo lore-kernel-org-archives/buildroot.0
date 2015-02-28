@@ -1,42 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Feb 2015 19:15:09 +0100
-Subject: [Buildroot] [PATCH 3/7] pkg-generic: take into account
-	<pkg>_EXTRA_DOWNLOADS to display "Downloading" message
+Date: Sat, 28 Feb 2015 19:15:10 +0100
+Subject: [Buildroot] [PATCH 4/7] pkg-generic: refactor the "Downloading"
+	message logic
 In-Reply-To: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1425147313-17380-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1425147313-17380-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The .stamp_downloaded target displays the "Downloading" message even
-if there is really something to download. However, this logic only
-checks for <pkg>_SOURCE and <pkg>_PATCH: it does not check if
-something needs to be downloaded in <pkg>_EXTRA_DOWNLOADS.
+In the .stamp_downloaded hook, the logic to decide whether or not to
+display the "Downloading" message is treating the check of
+<pkg>_SOURCE as a special case. But in fact, there is no real reason
+to do so: the existing loop used for <pkg>_PATCH and
+<pkg>_EXTRA_DOWNLOADS could work just as well.
 
-This commit fixes that, which makes sure that the "Downloading"
-message is displayed if one of the items in <pkg>_EXTRA_DOWNLOADS has
-not yet been downloaded.
+This commit therefore refactors this piece of code, to have a single
+loop checking <pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-generic.mk | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1482194..0098b29 100644
+index 0098b29..7a9da43 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -76,7 +76,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
- 		$(call MESSAGE,"Downloading") ; \
- 	else \
--		for p in $($(PKG)_PATCH) ; do \
-+		for p in $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
- 			if test ! -e $(DL_DIR)/`basename $$p` ; then \
- 				$(call MESSAGE,"Downloading") ; \
- 				break ; \
+@@ -73,16 +73,12 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ # Only show the download message if it isn't already downloaded
+-	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
+-		$(call MESSAGE,"Downloading") ; \
+-	else \
+-		for p in $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+-			if test ! -e $(DL_DIR)/`basename $$p` ; then \
+-				$(call MESSAGE,"Downloading") ; \
+-				break ; \
+-			fi ; \
+-		done ; \
+-	fi
++	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
++		if test ! -e $(DL_DIR)/`basename $$p` ; then \
++			$(call MESSAGE,"Downloading") ; \
++			break ; \
++		fi ; \
++	done
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+ 	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
 -- 
 2.1.0
