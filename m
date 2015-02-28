@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Feb 2015 20:34:51 +0100
-Subject: [Buildroot] [PATCH v5 00/11] autobuild-run improvements
-In-Reply-To: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150228203451.57206a8d@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 28 Feb 2015 21:54:11 +0200
+Subject: [Buildroot] [PATCH 1/7] linux: use the package infrastructure
+ to download patches
+In-Reply-To: <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150228195411.GA15668@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hi Thomas,
 
-On Fri, 12 Dec 2014 21:04:45 +0100, Thomas De Schampheleire wrote:
+On Sat, Feb 28, 2015 at 07:15:07PM +0100, Thomas Petazzoni wrote:
+> +# We really on the generic package infrastructure to download and
 
-> This series against the buildroot-test repo makes some improvements to the
-> autobuild-run script.
+s/really/rely/
 
-I've finally taken some time to test this series, and I've reported two
-separate problems as replies to e-mails: the make-opts split() issue,
-and the merging of argument vs. configuration file values.
+> +# apply remote patches (downloaded from ftp, http or https). For local
+> +# patches, we have a custom post-patch hook below.
+> +LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
 
-To avoid duplicate work, I've pushed the current state of your work
-(with the fix to the merging order, and the multiprocessing.Process
-fix) to:
+baruch
 
-   git://git.free-electrons.com/users/thomas-petazzoni/buildroot-test.git
-
-in a branch called 'thomas-ds'.
-
-Since both issues are more or less tied to the docopt migration, can
-you have a look at them, and maybe simply propose followup patches that
-I can merge back into the problematic commits, to fix those issues?
-
-Thanks a lot,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
