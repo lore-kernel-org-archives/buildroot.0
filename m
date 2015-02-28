@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Feb 2015 13:04:18 +0100
-Subject: [Buildroot] [PATCH 1/2] libgcrypt: security bump to version
-	1.6.3
-In-Reply-To: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 28 Feb 2015 08:09:12 -0300")
+Date: Sat, 28 Feb 2015 13:04:29 +0100
+Subject: [Buildroot] [PATCH 2/2] gnupg: security bump to version 1.4.19
+In-Reply-To: <1425121753-25802-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 28 Feb 2015 08:09:13 -0300")
 References: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wq32xmwt.fsf@dell.be.48ers.dk>
+ <1425121753-25802-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sidqxmwi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
