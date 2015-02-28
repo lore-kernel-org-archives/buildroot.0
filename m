@@ -1,53 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Feb 2015 10:34:39 +0100
-Subject: [Buildroot] [git commit] x11r7/xcb-util-keysyms: depends on
-	host-pkgconf and libxcb
-Message-ID: <20150228094510.29717804CC@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 28 Feb 2015 10:46:56 +0100
+Subject: [Buildroot] error in skeleton  ?
+In-Reply-To: <87mw3yzeuu.fsf@dell.be.48ers.dk>
+References: <F7D7D32518D04BB5BEB5B0B4D484022D@JohanW7>
+ <87zj7zyqij.fsf@dell.be.48ers.dk> <33C946992B0B426D816DA8DF2CC39BD1@JohanW7>
+ <87mw3yzeuu.fsf@dell.be.48ers.dk>
+Message-ID: <59B2D366CCB24C38B692FB25823D5528@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ce6a0e685ef38a09e9aeb120cc36544eea40d913
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix build failure:
-./configure: line 11453: /home/tetsuya/buildroot/br/output/host/usr/bin/pkg-config: No such file or directory
-configure: error: in `/home/tetsuya/buildroot/br/output/build/xcb-util-keysyms-0.3.9':
-configure: error: The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Fix build failure:
-configure: error: Package requirements (xcb >= 1.4) were not met:
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xcb-util-keysyms/Config.in           |    1 +
- package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk |    2 ++
- 2 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/x11r7/xcb-util-keysyms/Config.in b/package/x11r7/xcb-util-keysyms/Config.in
-index ef42eb2..0c1d8cc 100644
---- a/package/x11r7/xcb-util-keysyms/Config.in
-+++ b/package/x11r7/xcb-util-keysyms/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XCB_UTIL_KEYSYMS
- 	bool "xcb-util-keysyms"
-+	select BR2_PACKAGE_LIBXCB
- 	help
- 	  The XCB util modules provides a number of libraries which sit on top
- 	  of libxcb, the core X protocol library, and some of the extension
-diff --git a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
-index 0f653c3..6bc0a79 100644
---- a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
-+++ b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
-@@ -13,4 +13,6 @@ XCB_UTIL_KEYSYMS_LICENSE = MIT
  
- XCB_UTIL_KEYSYMS_INSTALL_STAGING = YES
- 
-+XCB_UTIL_KEYSYMS_DEPENDENCIES = host-pkgconf libxcb
-+
- $(eval $(autotools-package))
+
+-----Oorspronkelijk bericht-----
+Van: buildroot [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
+Verzonden: zaterdag 28 februari 2015 8:15
+Aan: Sagaert Johan
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] error in skeleton ?
+
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+
+Hi,
+
+> Dear Peter;
+
+ > Agreed, does not make sense to create directories in a mountpoint  > with devtmpfs.
+
+ > Just wondering if the device_table.txt needs an entry for the /run  > directory introduced in 2015-02-rc1
+
+Why would it need a device_table.txt entry? It is just a mount point and the skeleton already has the directory.
+
+--
+Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+Peter 
+Ok I understand that the special permissions for the /run directory
+are determinated by the permissions of the mount point in the fstab file
+and not by the orignal permissions of the mount point directory.
+
+Best regards, johan
