@@ -1,27 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Feb 2015 13:04:29 +0100
-Subject: [Buildroot] [PATCH 2/2] gnupg: security bump to version 1.4.19
-In-Reply-To: <1425121753-25802-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 28 Feb 2015 08:09:13 -0300")
-References: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
- <1425121753-25802-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87sidqxmwi.fsf@dell.be.48ers.dk>
+Date: Sat, 28 Feb 2015 12:29:49 +0100
+Subject: [Buildroot] [git commit] libsrtp: openssl handling needs shared
+	library support
+Message-ID: <20150228120508.3CFC680504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=67cebbdf5f349cc176037fa15c281a9462dae591
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > CVE-2014-3591 - Use ciphertext blinding for Elgamal decryption
- > CVE-2015-0837 - Fixed data-dependent timing variations in modular
- > exponentiation.
+Fixes:
+http://autobuild.buildroot.net/results/ab8/ab80094080c18602a2adb266981f53ebe0647f63/
+http://autobuild.buildroot.net/results/a77/a770318af841610e0c10f61cf61bdae298aa59a8/
+http://autobuild.buildroot.net/results/ce2/ce27f5b81b74320f4d2efbbaa4754c23fb2feeab/
+http://autobuild.buildroot.net/results/57f/57f54c6f00953e8b7da70f4467f38cc9dfca2380/
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+And many more.
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsrtp/libsrtp.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
+index 5e62255..e5cf47b 100644
+--- a/package/libsrtp/libsrtp.mk
++++ b/package/libsrtp/libsrtp.mk
+@@ -25,7 +25,8 @@ endif
+ # host-pkgconf to make sure pkg-config is installed.
+ LIBSRTP_DEPENDENCIES = host-pkgconf
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++# openssl handling needs libdl support
++ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ LIBSRTP_DEPENDENCIES += openssl
+ LIBSRTP_CONF_OPTS += --enable-openssl
+ else
