@@ -1,46 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Feb 2015 11:58:11 +0100
-Subject: [Buildroot] [PATCH next 2/3] package/qt: enable unixodbc support
-In-Reply-To: <1425121092-10878-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1425121092-10878-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1425121092-10878-2-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 28 Feb 2015 08:09:12 -0300
+Subject: [Buildroot] [PATCH 1/2] libgcrypt: security bump to version 1.6.3
+Message-ID: <1425121753-25802-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2014-3591 - Use ciphertext blinding for Elgamal decryption
+CVE-2015-0837 - Fixed data-dependent timing variations in modular
+exponentiation.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/qt/Config.sql.in |    2 +-
- package/qt/qt.mk         |    1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/libgcrypt/libgcrypt.hash | 4 ++--
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
-index fd62657..81337a1 100644
---- a/package/qt/Config.sql.in
-+++ b/package/qt/Config.sql.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_QT_IBASE
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 2ce7a67..9cad1c4 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnupg.org/pipermail/gnupg-announce/2014q3/000355.html
+-sha1	cc31aca87e4a3769cb86884a3f5982b2cc8eb7ec	libgcrypt-1.6.2.tar.bz2
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000364.html
++sha1	9456e7b64db9df8360a1407a38c8c958da80bbf1	libgcrypt-1.6.3.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 4d64da8..e2a4b39 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_QT_ODBC
- 	bool "ODBC Driver"
--	depends on BROKEN # libodbc not in BR
-+	select BR2_PACKAGE_UNIXODBC
- 	help
- 	  Build ODBC driver
- 	  If unsure, say n.
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 9ea676c..aedc2ce 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -361,6 +361,7 @@ QT_DEPENDENCIES += mysql
- endif
- ifeq ($(BR2_PACKAGE_QT_ODBC),y)
- QT_CONFIGURE_OPTS += -qt-sql-odbc
-+QT_DEPENDENCIES += unixodbc
- endif
- ifeq ($(BR2_PACKAGE_QT_PSQL),y)
- QT_CONFIGURE_OPTS += -qt-sql-psql
+-LIBGCRYPT_VERSION = 1.6.2
++LIBGCRYPT_VERSION = 1.6.3
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
-1.7.10.4
+2.0.5
