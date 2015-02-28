@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Feb 2015 10:59:31 +0100
-Subject: [Buildroot] [git commit] libevent: fix openssl detection when
- statically linking
-In-Reply-To: <54F0D8A7.9070602@openwide.fr>
-References: <20150227082309.25DB7817F6@busybox.osuosl.org>
- <20150227153056.181ef6f3@free-electrons.com>
- <87y4nj1kjt.fsf@dell.be.48ers.dk>
- <20150227160141.450b7e50@free-electrons.com>
- <54F0D8A7.9070602@openwide.fr>
-Message-ID: <20150228105931.3bcae77a@free-electrons.com>
+Date: Sat, 28 Feb 2015 11:35:26 +0100
+Subject: [Buildroot] Please Remove me from the mailing list
+In-Reply-To: <54F135DF.20309@gtrnx.com>
+References: <54F135DF.20309@gtrnx.com>
+Message-ID: <20150228113526.65f4cfe4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Ron Black,
 
-On Fri, 27 Feb 2015 21:50:47 +0100, Romain Naour wrote:
+On Fri, 27 Feb 2015 21:28:31 -0600, Ron Black wrote:
 
-> > No, I was hoping for Romain to pick up on the task actually :-)
+> Please remove me from buildroot mailing list.
 > 
-> I thought that you would have submit your patch directly on the list.
-> Ok sorry, I'll pick up you patch and send it upstream.
+> ron at gtrnx.com
 
-Yes, maybe I was not explicit enough. Sorry about this.
+Like every mailing list, it is up to you to unsubscribe. At the end of
+each e-mail sent to the list, there is a link:
+http://lists.busybox.net/mailman/listinfo/buildroot. Click on this
+link, and follow the instructions to unsubscribe.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
