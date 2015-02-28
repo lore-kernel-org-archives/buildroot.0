@@ -1,49 +1,56 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 28 Feb 2015 10:46:56 +0100
-Subject: [Buildroot] error in skeleton  ?
-In-Reply-To: <87mw3yzeuu.fsf@dell.be.48ers.dk>
-References: <F7D7D32518D04BB5BEB5B0B4D484022D@JohanW7>
- <87zj7zyqij.fsf@dell.be.48ers.dk> <33C946992B0B426D816DA8DF2CC39BD1@JohanW7>
- <87mw3yzeuu.fsf@dell.be.48ers.dk>
-Message-ID: <59B2D366CCB24C38B692FB25823D5528@JohanW7>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sat, 28 Feb 2015 10:47:12 +0100
+Subject: [Buildroot] [PATCH 4/7] package/civetweb: fix build error on a
+	host with make v4.0
+In-Reply-To: <87egpaz9rx.fsf@dell.be.48ers.dk>
+References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425028764-1146-5-git-send-email-fabio.porcedda@gmail.com>
+ <87egpaz9rx.fsf@dell.be.48ers.dk>
+Message-ID: <CAHkwnC_Qnxfj=bNw4++ytgX0eLa_w6+yggY1qMvyLp5TgcV-Og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
+On Sat, Feb 28, 2015 at 10:05 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>
+>  > Add a patch to fix a typo that on a system with make v4.0 and
+>  > BR2_CIVETWEB_WITH_LUA=y fails to build:
+>  >   Makefile:203: *** mixed implicit and normal rules.  Stop.
+>
+>  > The patch was not sent upstream because this problem is already fixed on
+>  > master.
+>
+>  > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>
+> Committed, thanks.
+>
+> Strangely enough, make on my system (Debian 4.0-8.1) only warns about
+> the syntax:
+>
+> Makefile:203: *** mixed implicit and normal rules: deprecated syntax
 
------Oorspronkelijk bericht-----
-Van: buildroot [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
-Verzonden: zaterdag 28 februari 2015 8:15
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] error in skeleton ?
+That is because in the debian package the have backported a change to
+turn it in a worning:
+http://metadata.ftp-master.debian.org/changelogs//main/m/make-dfsg/make-dfsg_4.0-8.1_changelog
+make-dfsg (4.0-2) experimental; urgency=medium
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+  * Pull back some patches from upstream git that fix bugs. One of these
+    converts the mixed implicit and explicit rule error into a warning,
+    and that should give us a grace period to fix the Makefiles,
 
-Hi,
+The make on fedora 21 does not have such a patch so it fails like the
+officiale make 4.0 release.
 
-> Dear Peter;
+> With the patch applied I get another warning, but that can probably be
+> ignored:
+>
+> Makefile:203: target 'out/src/third_party' given more than once in the same rule
+> --
+> Bye, Peter Korsgaard
 
- > Agreed, does not make sense to create directories in a mountpoint  > with devtmpfs.
-
- > Just wondering if the device_table.txt needs an entry for the /run  > directory introduced in 2015-02-rc1
-
-Why would it need a device_table.txt entry? It is just a mount point and the skeleton already has the directory.
-
---
-Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-Peter 
-Ok I understand that the special permissions for the /run directory
-are determinated by the permissions of the mount point in the fstab file
-and not by the orignal permissions of the mount point directory.
-
-Best regards, johan
+BR
+-- 
+Fabio Porcedda
