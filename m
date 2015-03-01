@@ -1,40 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Mar 2015 11:07:41 +0100
-Subject: [Buildroot] [PATCH next v2 4/4] package/apr-util: add support for
-	unixodbc
-In-Reply-To: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1425204461-27877-4-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 Mar 2015 11:50:37 +0100
+Subject: [Buildroot] [PATCH 1/1] perl-file-util: new package
+In-Reply-To: <1149779921.3174899.1425159102229.JavaMail.zimbra@datacom.ind.br>
+References: <1425061661-3190-1-git-send-email-casantos@datacom.ind.br>
+ <20150228113933.00d7ac8e@free-electrons.com>
+ <1149779921.3174899.1425159102229.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20150301115037.53e2cffc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: first inclusion in patch series, unix odbc detection works without
-    odbc_config
+On Sat, 28 Feb 2015 18:31:42 -0300 (BRT), DATACOM - casantos wrote:
 
- package/apr-util/apr-util.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+> At the company I work for (DATACOM) we use a third-party software by
+> whose compilation is performed by a set of Perl scripts which use the
+> File::Util module. That's why we need the host package. Of course we
+> could use the Perl packages provided by the host OS but we prefer to
+> reduce the dependency on locally installed packages in order to
+> reduce dependencies with regard to the host OS.
 
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-index 3b0a71b..07ac573 100644
---- a/package/apr-util/apr-util.mk
-+++ b/package/apr-util/apr-util.mk
-@@ -53,4 +53,11 @@ else
- APR_UTIL_CONF_OPTS += --without-crypto
- endif
- 
-+ifeq ($(BR2_PACKAGE_UNIXODBC),y)
-+APR_UTIL_CONF_OPTS += --with-odbc="$(STAGING_DIR)/usr"
-+APR_UTIL_DEPENDENCIES += unixodbc
-+else
-+APR_UTIL_CONF_OPTS += --without-odbc
-+endif
-+
- $(eval $(autotools-package))
+Ok. It would be good to indicate this in the commit log, because your
+patch adds a host package without any way to build it, unless another
+custom package is added with a dependency on host-perl-file-util.
+
+Best regards,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
