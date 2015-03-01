@@ -1,48 +1,55 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Sun,  1 Mar 2015 17:10:58 +0800
-Subject: [Buildroot] [PATCH 1/1] package/systemd: journald should use
-	volatile storage
-Message-ID: <1425201058-3946-1-git-send-email-nroach44@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  1 Mar 2015 11:07:40 +0100
+Subject: [Buildroot] [PATCH next v2 3/4] package/php: add unixodbc support
+In-Reply-To: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1425204461-27877-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(By default)
 
-This fixes https://bugs.busybox.net/show_bug.cgi?id=7892
-
-Journald was attempting to write the logs to file before the
-underlying file system was up. A proposed solution was to bring
-/tmp up beforehand, but that did not always solve the issue.
-
-In addition, since the logging directory was a tmpfs to begin with
-(/var/log -> /tmp) this should save some cycles.
-
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/systemd/0004-fix-journald-on-tmpfs.patch | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
- create mode 100644 package/systemd/0004-fix-journald-on-tmpfs.patch
+v2: no changes
 
-diff --git a/package/systemd/0004-fix-journald-on-tmpfs.patch b/package/systemd/0004-fix-journald-on-tmpfs.patch
-new file mode 100644
-index 0000000..c143e47
---- /dev/null
-+++ b/package/systemd/0004-fix-journald-on-tmpfs.patch
-@@ -0,0 +1,12 @@
-+--- systemd-218.orig/src/journal/journald.conf
-++++ systemd-218/src/journal/journald.conf
-+@@ -11,7 +11,7 @@
-+ # See journald.conf(5) for details
-+ 
-+ [Journal]
-+-#Storage=auto
-++Storage=volatile
-+ #Compress=yes
-+ #Seal=yes
-+ #SplitMode=uid
+ package/php/Config.ext |    6 ++++++
+ package/php/php.mk     |    4 ++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 2b1e615..466f3f1 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -160,6 +160,12 @@ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
+ 	help
+ 	  SQLite3 driver for PDO
+ 
++config BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC
++	bool "unixODBC"
++	select BR2_PACKAGE_UNIXODBC
++	help
++	  unixODBC driver for PDO
 +
+ endif
+ 
+ comment "Human language and character encoding support"
+diff --git a/package/php/php.mk b/package/php/php.mk
+index dd52508..054fdc7 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -174,6 +174,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
+ 	PHP_CONF_OPTS += --with-pdo-pgsql=$(STAGING_DIR)/usr
+ 	PHP_DEPENDENCIES += postgresql
+ endif
++ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_UNIXODBC),y)
++	PHP_CONF_OPTS += --with-pdo-odbc=unixODBC,$(STAGING_DIR)/usr
++	PHP_DEPENDENCIES += unixodbc
++endif
+ endif
+ 
+ ### Use external PCRE if it's available
 -- 
-2.1.4
+1.7.10.4
