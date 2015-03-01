@@ -1,33 +1,39 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 1 Mar 2015 11:53:37 +0100
-Subject: [Buildroot] [PATCH 0/3] uclibc: add support for uClibc-ng
-In-Reply-To: <1423947668-23312-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1423947668-23312-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150301105336.GE3937@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 Mar 2015 12:03:05 +0100
+Subject: [Buildroot] [git commit branch/next] uclibc: enable Xtensa NPTL
+	support with uClibc-ng
+Message-ID: <20150301110350.4A61E7F8D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+commit: http://git.buildroot.net/buildroot/commit/?id=060125b4fed11458288b14fbd2d49e1c12eb11df
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Hello,
-> 
-> The following three set of patches add support for uClibc-ng. The main
-> patch is based on previous work from Waldemar (thanks!).
-> 
-> I have build tested and runtime tested in Qemu the following
-> configurations: ARM Cortex-A9 EABIhf (qemu-vexpress) and Xtensa NPTL
-> (qemu emulation). The build includes the toolchain, Busybox and the
-> kernel.
+Contrary to mainline uClibc, uClibc-ng has support for NPTL on Xtensa,
+so let's allow selecting NPTL when a uClibc version other than the
+Xtensa special uClibc version is used.
 
-I have tested Qemu-Mips (le), Qemu-SH4, Qemu-Sparc and Qemu-ARM.
-All worked fine.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+---
+ package/uclibc/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-You can add
-Tested-By: Waldemar Brodkorb <wbx@uclibc-ng.org>
-
-Best regards
- Waldemar
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index a8af197..3a65752 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -129,7 +129,9 @@ choice
+ 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 		depends on !BR2_arc
+ 		depends on !BR2_bfin
+-		depends on !BR2_xtensa
++		# There is NPTL support for Xtensa in uClibc-ng, but
++		# not in the main uClibc repository.
++		depends on !BR2_xtensa || !BR2_UCLIBC_VERSION_XTENSA_GIT
+ 		depends on !BR2_x86_i386
+ endchoice
+ 
