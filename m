@@ -1,93 +1,106 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun,  1 Mar 2015 22:06:52 +0100
-Subject: [Buildroot] [PATCH v3 1/2] popt: add to the "popt.pc" file the
-	libintl library
-In-Reply-To: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1425244013-2509-2-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun,  1 Mar 2015 22:09:46 +0100
+Subject: [Buildroot] [PATCH 1/2] autobuild-run: correctly handle default
+	argument values
+Message-ID: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change permits through pkg-config to retrive even the depenencies
-that is useful for a static linking.
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+In the original code sent on the mailing list, priority for arguments was
+given to the config file, followed by arguments passed on the command-line.
+In this order, the defaults specified to docopt would indeed be treated as
+lowest priority, as expected.
+
+However, the arguments specified on the command-line should have priority
+over those from the config file, so the expected priority is:
+    command-line > config file > defaults
+
+By switching the order of argument dictionaries when calling the merge
+method, the defaults are no longer handled correctly. To fix this, we must
+not tell docopt about the defaults, but keep them in a separate dictionary.
+Then, using a two-step merge we can obtain the right priority for arguments.
+
+For some reason, docopt does not like us passing __doc__ directly if it is
+constructed dynamically with %s specifiers. Work around this via an
+intermediate variable doc.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- ...-the-libintl-library-to-the-Libs.private-.patch | 47 ++++++++++++++++++++++
- package/popt/popt.mk                               |  4 ++
- 2 files changed, 51 insertions(+)
- create mode 100644 package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch
+ scripts/autobuild-run | 31 +++++++++++++++++++++++++------
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch b/package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch
-new file mode 100644
-index 0000000..9b0b07e
---- /dev/null
-+++ b/package/popt/0004-popt.pc-add-the-libintl-library-to-the-Libs.private-.patch
-@@ -0,0 +1,47 @@
-+From 470755ccc353b59107c957972d908cbde4942c8d Mon Sep 17 00:00:00 2001
-+From: Fabio Porcedda <fabio.porcedda@gmail.com>
-+Date: Sun, 1 Mar 2015 21:13:48 +0100
-+Subject: [PATCH] popt.pc: add the libintl library to the Libs.private field
-+
-+If static linking and libintl is used, the program that uses the popt
-+library needs to link to the libintl library too so add the libintl
-+library to the libs.private field because is useful for programs that call
-+  pkg-config --static --libs popt
-+they get the libintl library too:
-+  -L<...> -lpopt -lintl
-+
-+This patch was already sent upstream:
-+http://rpm5.org/community/popt-devel/0294.html
-+
-+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-+---
-+ configure.ac | 1 +
-+ popt.pc.in   | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index e8eb238..816d272 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -90,6 +90,7 @@ popt_sysconfdir="${sysconfdir}"
-+ eval "popt_sysconfdir=\"${popt_sysconfdir}\"" # expand contained ${prefix}
-+ AC_DEFINE_UNQUOTED([POPT_SYSCONFDIR], ["$popt_sysconfdir"], [Full path to default POPT configuration directory])
-+ 
-++AC_SUBST([POPT_PKGCONFIG_LIBS_PRIVATE],"$LIBINTL")
-+ 
-+ # Define a (hope) portable Libs pkgconfig directive that 
-+ # - Don't harm if the default library search path include ${libdir}
-+diff --git a/popt.pc.in b/popt.pc.in
-+index a86437c..0acfdb9 100644
-+--- a/popt.pc.in
-++++ b/popt.pc.in
-+@@ -6,5 +6,6 @@ includedir=@includedir@
-+ Name: popt
-+ Version: @VERSION@
-+ Description: popt library.
-++Libs.private: @POPT_PKGCONFIG_LIBS_PRIVATE@
-+ Libs: @POPT_PKGCONFIG_LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.3.1
-+
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 8ce64d4..605649b 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -13,6 +13,10 @@ POPT_LICENSE_FILES = COPYING
- POPT_AUTORECONF = YES
- POPT_GETTEXTIZE = YES
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 442531f..246a032 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -59,16 +59,25 @@
+ #   message 'directory not empty' which suggests that someone is writing to the
+ #   directory at the time of removal.
  
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+POPT_DEPENDENCIES += gettext
-+endif
+-"""autobuild-run - run Buildroot autobuilder
++# Don't tell docopt about the defaults, as it would not allow the following
++# priority hierarchy for arguments: command-line > config file > defaults
++defaults = {
++    '--ninstances': '1',
++    '--njobs': '1',
++    '--submitter': 'N/A',
++    '--make-opts': '',
++}
 +
- POPT_CONF_ENV = ac_cv_va_copy=yes
++doc = """autobuild-run - run Buildroot autobuilder
  
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ Usage: autobuild-run [options]
+ 
+ Options:
+   -h, --help                     show this help message and exit
+   -V, --version                  show version
+-  -n, --ninstances NINSTANCES    number of parallel instances [default: 1]
+-  -j, --njobs NJOBS              number of parallel jobs [default: 1]
+-  -s, --submitter SUBMITTER      name/machine of submitter [default: N/A]
++  -n, --ninstances NINSTANCES    number of parallel instances
++  -j, --njobs NJOBS              number of parallel jobs
++  -s, --submitter SUBMITTER      name/machine of submitter
+   --http-login LOGIN             username to send results with
+   --http-password PASSWORD       password to send results with (for security
+                                  reasons it is recommended to define this in the
+@@ -91,7 +100,14 @@ Format of the configuration file:
+    http-login = <value>
+    http-password = <value>
+    submitter = <value>
+-"""
++
++Default values for the arguments are:
++
++  %s
++""" % '\n  '.join(
++    ['%s = %s' % (key, val) for (key, val) in defaults.iteritems()])
++
++__doc__ = doc
+ 
+ import urllib2
+ import csv
+@@ -700,13 +716,16 @@ def main():
+     check_version()
+     sysinfo = SystemInfo()
+ 
+-    args = docopt.docopt(__doc__, version=VERSION)
++    args = docopt.docopt(doc, version=VERSION)
+ 
+     if args['--config']:
+         ini_config = load_ini_config(args['--config'])
+         # merge config/args, priority given to args
+         args = merge(args, ini_config)
+ 
++    # load in defaults at lowest priority
++    args = merge(args, defaults)
++
+     # http_login/password could theoretically be allowed as empty, so check
+     # explicitly on None.
+     upload = (args['--http-login'] is not None) \
 -- 
-2.3.1
+1.8.5.1
