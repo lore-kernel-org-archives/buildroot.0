@@ -1,26 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Mar 2015 12:50:41 +0100
-Subject: [Buildroot] [PATCH 0/3] uclibc: add support for uClibc-ng
-In-Reply-To: <1423947668-23312-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1423947668-23312-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150301125041.334635ba@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 1 Mar 2015 12:00:49 +0000
+Subject: [Buildroot] [PATCH] wget: bump version to 1.16.2
+Message-ID: <1425211249-11010-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+- Bump version to 1.16.2
+- Update the hash file
 
-On Sat, 14 Feb 2015 22:01:04 +0100, Thomas Petazzoni wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/wget/wget.hash |    2 +-
+ package/wget/wget.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->   uclibc: add ability to use uClibc-ng 1.0.0
->   uclibc: enable Xtensa NPTL support with uClibc-ng
-
-Applied, with Waldemar's Tested-by.
-
-Thomas
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index f9a274e..dffed4e 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	2b96c707ee15fe847f5bc2f872a7a530dca803b927a750419b44f50803e14d33  wget-1.16.1.tar.xz
++sha256  a7dfde1bcb0eb135addf587a649fd0e47c1a876edef359b9197cdffd1fdcd7d5  wget-1.16.2.tar.xz
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index bd8e378..382cdf7 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.16.1
++WGET_VERSION = 1.16.2
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
