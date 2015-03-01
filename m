@@ -1,50 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Mar 2015 21:58:41 +0100
-Subject: [Buildroot] [git commit] shared-mime-info: host variant requires
-	libxml2 and libglib2
-Message-ID: <20150301214632.B0A157FDF3@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 01 Mar 2015 22:52:41 +0100
+Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
+	misc improvements
+In-Reply-To: <CAGrucu3y+dK6ifA86fKfTDPCwqm9tOtv3vaW-NCgSMg-wu6wnQ@mail.gmail.com>
+References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+ <20150226110858.183d31f3@free-electrons.com>
+ <EEF2BEA7-3CA2-4250-8E78-E2585246EE66@gmail.com>
+ <54F258AD.5040301@mailerd.de>
+ <CAAXf6LXbRo40L9HZHZKcmHBqMz-KtOXvipQ1GrPd57DhUKzo3Q@mail.gmail.com>
+ <CAGrucu3y+dK6ifA86fKfTDPCwqm9tOtv3vaW-NCgSMg-wu6wnQ@mail.gmail.com>
+Message-ID: <06D2305A-C43B-470D-A1C3-941D44CB367B@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40fa6dcdcc2c3992291e937de2e8959f55be7cfd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On March 1, 2015 10:37:09 PM CET, "Andr? Erdmann" <dywi@mailerd.de> wrote:
+...
+>>>
+>>> The advantage of docopt is that it's really simple and you always
+>have the
+>>> usage message in the script, but I'd prefer argparse primarily
+>because it's a built-in
+>>> module (in py >= 2.7). It also features arg validation (via
+>type=<function|type>).
+>>> There's much more like subparsers, call a <function> each time an
+><arg> is encountered
+>>> and whatnot, but that's not of interest here.
+>>>
+>>> The major improvement of the docopt approach is reading the config
+>(argv/file)
+>>> into a few dicts that can be easily merged rather than doing a 3-way
+>merge manually
+>>> (defaults as locals X ini file parser X argparser namedtuple-like
+>object). That's a
+>>> good idea. It's doable with argparse as well,
+>"vars(parser.parse_args())" returns
+>>> the parsed args as dict.
+>>>
+>>> So, the ((untested)) prototype of a "dict-improved" config_get()
+>argparse variant would be:
+>>>
+>>>
+>>> [...]
+>>>
+>>
+>> Thanks a lot for your feedback.
+>>
+>> Maybe it's because I haven't seen the full solution yet, but this
+>> handling seems much more involved than the docopt approach. In
+>> particular it's odd that there would need to be explicit handling of
+>> things like nonempty or positive_int, which isn't necessary with
+>> standard argparse nor docopt.
+>
+>They're purely optional - I've just put them in there to demonstrate
+>how the input can be restricted so that "--ninstances hello" would get
+>rejected by the parser (which docopt would not). You could also set
+>"type=int" instead of "type=positive_int", which is shorter code-wise,
+>but slighlty less correct.
 
-Add to HOST_SHARED_MIME_INFO_DEPENDENCIES the missing dependencies
-host-libxml2 and host-libglib2.
+Thanks for clarifying, it makes more sense to me now. Keeping argparse but using the
+ dict-merging isn't too bad, it would address my main concern with the original
+ code (the not-so-beautiful handling of the arguments).
 
-Also remove from SHARED_MIME_INFO_DEPENDENCIES dependencies already
-present in HOST_SHARED_MIME_INFO_DEPENDENCIES.
+So Thomas P: it's your call now: I'm just as ok with going for the approach proposed
+ by Andr?.
 
-Fix build failure:
-configure: error: Package requirements ( libxml-2.0 >= 2.4 glib-2.0 >= 2.6.0) were not met
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/shared-mime-info/shared-mime-info.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index 978cd31..80a9526 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -9,13 +9,14 @@ SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.bz2
- SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
- SHARED_MIME_INFO_INSTALL_STAGING = YES
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
--SHARED_MIME_INFO_DEPENDENCIES = host-pkgconf host-libglib2 host-libxml2 host-shared-mime-info libxml2 libglib2
-+SHARED_MIME_INFO_DEPENDENCIES = host-shared-mime-info libxml2 libglib2
- SHARED_MIME_INFO_CONF_OPTS = --disable-update-mimedb
- SHARED_MIME_INFO_MAKE = $(MAKE1)
- SHARED_MIME_INFO_LICENSE = GPLv2
- SHARED_MIME_INFO_LICENSE_FILES = COPYING
- 
--HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkgconf host-intltool
-+HOST_SHARED_MIME_INFO_DEPENDENCIES = \
-+	host-pkgconf host-intltool host-libxml2 host-libglib2
- 
- HOST_SHARED_MIME_INFO_CONF_OPTS = --disable-update-mimedb
- HOST_SHARED_MIME_INFO_MAKE = $(MAKE1)
+Best regards,
+Thomas
