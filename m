@@ -1,27 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Mar 2015 13:09:49 +0100
-Subject: [Buildroot] [PATCH 0/3] uclibc: add support for uClibc-ng
-In-Reply-To: <20150301105336.GE3937@waldemar-brodkorb.de>
-References: <1423947668-23312-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150301105336.GE3937@waldemar-brodkorb.de>
-Message-ID: <20150301130949.00841a12@free-electrons.com>
+Date: Sun, 1 Mar 2015 13:12:24 +0100
+Subject: [Buildroot] [PATCH v9] wine: New package
+In-Reply-To: <54ECDDE1.3040507@dawncrow.de>
+References: <54ECDDE1.3040507@dawncrow.de>
+Message-ID: <20150301131224.60a193ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Andr? Hentschel,
 
-On Sun, 1 Mar 2015 11:53:37 +0100, Waldemar Brodkorb wrote:
-
-> I have tested Qemu-Mips (le), Qemu-SH4, Qemu-Sparc and Qemu-ARM.
-> All worked fine.
+On Tue, 24 Feb 2015 21:24:01 +0100, Andr? Hentschel wrote:
+> Adds new package: wine
 > 
-> You can add
-> Tested-By: Waldemar Brodkorb <wbx@uclibc-ng.org>
+>   Wine is a compatibility layer capable of running Windows applications on Linux.
+> 
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> [Only build-tested, not run-time tested y lack of Windows apps]
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks for the testing, I've applied after adding your Tested-by!
+I've applied this patch to the next branch, after fixing some minor
+typos and rewording a bit the comment about the external toolchain
+prefix issue.
+
+Thanks a lot Andr?, and thanks to Yann for the testing and Acked-by!
 
 Thomas
 -- 
