@@ -1,68 +1,39 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Sun, 01 Mar 2015 20:29:18 +0100
-Subject: [Buildroot] [PATCH next] wine: Add patch to fix miscompilation with
-	gcc 4.9
-Message-ID: <54F3688E.6050600@dawncrow.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 1 Mar 2015 21:02:55 +0100
+Subject: [Buildroot] [PATCH v5 10/11] autobuild-run: kill all children
+	on SIGTERM
+In-Reply-To: <20150228202805.50d377d3@free-electrons.com>
+References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
+ <1418414696-32584-11-git-send-email-patrickdepinguin@gmail.com>
+ <20150228202805.50d377d3@free-electrons.com>
+Message-ID: <CAAXf6LUhzNcJ=W-uFqx0dSTqguNbr+Urxrw-93tWMCbaUSOy-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
+Hi Thomas,
 
-Fix miscompilation with gcc >= 4.9
-See https://bugs.winehq.org/show_bug.cgi?id=36139 for the upstream
-bug report. There won't be a Wine 1.6.3 so we need to address this
-anyway.
+On Sat, Feb 28, 2015 at 8:28 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Fri, 12 Dec 2014 21:04:55 +0100, Thomas De Schampheleire wrote:
+>
+>> -from multiprocessing import Process
+>> +import multiprocessing
+>
+> This change...
+>
+>>      for i in range(0, int(args['--ninstances'])):
+>>          p = Process(target=run_instance, kwargs=dict(
+>
+> Breaks this, it should be changed to multiprocessing.Process.
+>
+> I've fixed that up locally for now, but it essentially means that your
+> patch series was never executed, as it basically cannot work at all :-/
 
- package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
-new file mode 100644
-index 0000000..f6d5a9d
---- /dev/null
-+++ b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
-@@ -0,0 +1,40 @@
-+commit deb274226783ab886bdb44876944e156757efe2b
-+Author: Daniel Beitler <dan@dablabs.com>
-+Date:   Sun May 18 13:27:42 2014 -0400
-+
-+    msi: Prevent call to memset with a null pointer
-+         in get_tablecolumns function.
-+
-+Fix miscompilation with gcc >= 4.9
-+See https://bugs.winehq.org/show_bug.cgi?id=36139 for the upstream
-+bug report. There won't be a Wine 1.6.3 so we need to address this
-+anyway.
-+
-+Backported from: deb274226783ab886bdb44876944e156757efe2b
-+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-+---
-+ dlls/msi/table.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/dlls/msi/table.c b/dlls/msi/table.c
-+index 8012369..9ed9421 100644
-+--- a/dlls/msi/table.c
-++++ b/dlls/msi/table.c
-+@@ -671,7 +671,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
-+     /* Note: _Columns table doesn't have non-persistent data */
-+ 
-+     /* if maxcount is non-zero, assume it's exactly right for this table */
-+-    memset( colinfo, 0, maxcount * sizeof(*colinfo) );
-++    if (colinfo) memset( colinfo, 0, maxcount * sizeof(*colinfo) );
-+     count = table->row_count;
-+     for (i = 0; i < count; i++)
-+     {
-+@@ -684,7 +684,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
-+             /* check the column number is in range */
-+             if (col < 1 || col > maxcount)
-+             {
-+-                ERR("column %d out of range\n", col);
-++                ERR("column %d out of range (maxcount: %d)\n", col, maxcount);
-+                 continue;
-+             }
-+             /* check if this column was already set */
+Naturally I did test this series, and this patch, but I must have made
+a final 'fixup' before submitting without retesting. Shame on me,
+sorry :-s
