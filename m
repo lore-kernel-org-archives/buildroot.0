@@ -1,38 +1,25 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun,  1 Mar 2015 22:09:47 +0100
-Subject: [Buildroot] [PATCH 2/2] autobuild-run: remove handled TODO item for
-	killing all subprocesses
-In-Reply-To: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1425244187-21189-2-git-send-email-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Mar 2015 22:11:09 +0100
+Subject: [Buildroot] [PATCH] gnupg2: needs dynamic library support
+In-Reply-To: <6844339e2113d5b84495cff8f41d794ef0b02182.1425242856.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 1 Mar 2015 22:47:36 +0200")
+References: <6844339e2113d5b84495cff8f41d794ef0b02182.1425242856.git.baruch@tkos.co.il>
+Message-ID: <87zj7wwhhu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-(to be squashed with commit 0002f12 (autobuild-run: kill all children on
-SIGTERM)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d2f/d2fc4cfb0c42d352d1119d8196d6df5fc2ab4be2/
+ > http://autobuild.buildroot.net/results/4ff/4ff76c7da4c50f10d2194a1c50c6c10adaf6f8b6/
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- scripts/autobuild-run | 2 --
- 1 file changed, 2 deletions(-)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 246a032..4c9d55c 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -53,8 +53,6 @@
- #   etc.
- # - Detect selection of multiple virtual package providers and don't consider it
- #   a failure
--# - Properly handle kill of main script: stop all running children and do not
--#   print out stacktraces
- # - Fix problem in removal of output directory: sometimes this fails with
- #   message 'directory not empty' which suggests that someone is writing to the
- #   directory at the time of removal.
+Committed, thanks.
+
 -- 
-1.8.5.1
+Bye, Peter Korsgaard
