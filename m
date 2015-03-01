@@ -1,137 +1,160 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Sun,  1 Mar 2015 18:17:55 +0100
-Subject: [Buildroot] [PATCH v4] linux-headers: allow use of headers from
-	kernel "package" selected
-Message-ID: <1425230275-127768-1-git-send-email-kaszak@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 1 Mar 2015 19:55:58 +0100
+Subject: [Buildroot] [PATCH v1 1/4] directfb: bump version to 1.7.7
+Message-ID: <trinity-e4175d31-9c50-4596-bdda-1d1d4cc15193-1425236158092@3capp-gmx-bs62>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change makes it possible to use exactly the same sources for both
-headers during toolchain building and for kernel building itself, even
-if custom kernel is selected.
+Hello Zygmunt Ptak,
 
-That way users can be sure that ABI mismatch won't happen between toolchain
-and kernel.
+On Fri, Feb 27, 2015 at 10:53:53PM +0100, Zygmunt Ptak wrote:
+> Hi,
+> I saw this thread, and I want share with you my few small changes.
+> Directfb can be compiled with gles on raspberry pi, by this patches:
+> 
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
----
+Sounds interesting, will try out (and take a closer look at it) as time
+permits...
 
-Changes v3 -> v4:
-  - Rebased to cleanly apply again
+Regards,
+Peter
 
- linux/Config.in                        |    1 +
- linux/linux.mk                         |    7 +++++++
- package/linux-headers/Config.in.host   |   14 ++++++++++++--
- package/linux-headers/linux-headers.mk |    9 +++++++++
- 4 files changed, 29 insertions(+), 2 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index c981493..30faaaf 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -26,6 +26,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
- 	depends on BR2_TOOLCHAIN_BUILDROOT
-+	depends on !BR2_KERNEL_HEADERS_SAME_AS_KERNEL
- 	help
- 	  This option will re-use the same kernel sources as the one
- 	  that have been used for the kernel headers of the
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 0b8c912..29d93db 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -8,6 +8,9 @@ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_LICENSE = GPLv2
- LINUX_LICENSE_FILES = COPYING
- 
-+# Compute variables as a function, so linux-headers can call it when needed
-+define BR2_LINUX_COMPUTE_VARS
-+
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-@@ -40,6 +43,10 @@ LINUX_SITE := $(LINUX_SITE)/testing/
- endif # -rc
- endif
- 
-+endef
-+
-+$(eval $(BR2_LINUX_COMPUTE_VARS))
-+
- LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- LINUX_INSTALL_IMAGES = YES
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2755f2f..7a06224 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -5,6 +5,7 @@ comment "Kernel Header Options"
- 
- choice
- 	prompt "Kernel Headers"
-+	default BR2_KERNEL_HEADERS_SAME_AS_KERNEL if BR2_LINUX_KERNEL
- 	default BR2_KERNEL_HEADERS_3_18
- 	help
- 	  Select the version of kernel header files you wish to use.
-@@ -69,6 +70,13 @@ choice
- 
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
-+
-+	config BR2_KERNEL_HEADERS_SAME_AS_KERNEL
-+		bool "Use Linux kernel specified for target"
-+		depends on BR2_LINUX_KERNEL
-+		help
-+		  Use the Linux kernel specified for the target in
-+		  the Kernel menu.
- endchoice
- 
- config BR2_DEFAULT_KERNEL_VERSION
-@@ -80,10 +88,12 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- choice
- 	bool "Custom kernel headers series"
--	depends on BR2_KERNEL_HEADERS_VERSION
-+	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_SAME_AS_KERNEL
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
- 	help
--	  Set to the kernel headers series you manually set above.
-+	  Set to the kernel headers series you manually entered in
-+	  "linux version" field or matching version of specific kernel selected
-+	  for building in "kernel" section.
- 
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index d770927..b4a1c8d 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -7,6 +7,14 @@
- # This package is used to provide Linux kernel headers for the
- # internal toolchain backend.
- 
-+ifeq ($(BR2_KERNEL_HEADERS_SAME_AS_KERNEL),y)
-+# Force computing the variables from the Kernel package
-+$(eval $(BR2_LINUX_COMPUTE_VARS))
-+LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_HEADERS_SOURCE = $(LINUX_SOURCE)
-+LINUX_HEADERS_SITE = $(LINUX_SITE)
-+LINUX_HEADERS_SITE_METHOD = $(LINUX_SITE_METHOD)
-+else
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-@@ -14,6 +22,7 @@ else
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
- endif
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-+endif
- 
- LINUX_HEADERS_INSTALL_STAGING = YES
- 
--- 
-1.7.10.4
+> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+> index 7759f8f..f8d269f 100644
+> --- a/package/directfb/Config.in
+> +++ b/package/directfb/Config.in
+> @@ -70,6 +70,12 @@ config BR2_PACKAGE_DIRECTFB_EP9X
+> 
+>           http://cirrus.com/en/products/arm9.html
+> 
+> +config BR2_PACKAGE_DIRECTFB_GLES2
+> +    bool "compile rpi gles2 driver"
+> +    depends on BR2_arm
+> +    help
+> +      Enable GLESv2 in directfb
+> +
+>  config BR2_PACKAGE_DIRECTFB_UNICHROME
+>         bool "compile unichrome graphics driver"
+>         default y
+> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+> index e3dc506..2da9576 100644
+> --- a/package/directfb/directfb.mk
+> +++ b/package/directfb/directfb.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+> 
+> -DIRECTFB_VERSION_MAJOR = 1.6
+> -DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).3
+> +DIRECTFB_VERSION_MAJOR = 1.7
+> +DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
+>  DIRECTFB_SITE =
+> http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+>  DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+>  DIRECTFB_LICENSE = LGPLv2.1+
+> @@ -13,6 +13,9 @@ DIRECTFB_LICENSE_FILES = COPYING
+>  DIRECTFB_INSTALL_STAGING = YES
+>  DIRECTFB_AUTORECONF = YES
+> 
+> +DIRECTFB_CONF_ENV += EGL_LIBS="-lEGL -lGLESv2 -lbcm_host -lvchostif
+> -L$(STAGING_DIR)/usr/lib"
+> +DIRECTFB_CONF_ENV += EGL_CFLAGS="-I$(STAGING_DIR)/usr/include/
+> -I$(STAGING_DIR)/usr/include/interface/vcos/pthreads/
+> -I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
+> +
+>  DIRECTFB_CONF_OPTS = \
+>         --disable-explicit-deps \
+>         --enable-zlib \
+> @@ -67,13 +70,15 @@ DIRECTFB_GFX = \
+>         $(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
+>         $(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
+>         $(if $(BR2_PACKAGE_DIRECTFB_I830),i830) \
+> -       $(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
+> +       $(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x) \
+> +       $(if $(BR2_PACKAGE_DIRECTFB_GLES2),gles2)
+> 
+>  ifeq ($(strip $(DIRECTFB_GFX)),)
+>  DIRECTFB_CONF_OPTS += --with-gfxdrivers=none
+>  else
+>  DIRECTFB_CONF_OPTS += \
+> -       --with-gfxdrivers=$(subst $(space),$(comma),$(strip
+> $(DIRECTFB_GFX)))
+> +       --with-gfxdrivers=$(subst $(space),$(comma),$(strip
+> $(DIRECTFB_GFX))) \
+> +       --enable-egl
+>  endif
+> 
+>  DIRECTFB_INPUT = \
+> 
+> I don't know how to better write: DIRECTFB_CONF_ENV here, it's hardcoded.
+> And also there is needed patch for directfb which will add line
+> in file: directfb-1.7.7/systems/egl/egl_system.h
+> with include: #include <bcm_host.h>
+> 
+> Regards
+> Zygmunt
+> 
+> 
+> 2015-02-27 20:50 GMT+01:00 Peter Seiderer <ps.report@gmx.net>:
+> 
+> > Hello Peter,
+> >
+> > On Thu, Feb 26, 2015 at 10:35:32PM +0100, Peter Korsgaard wrote:
+> > > >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> > >
+> > >  > Remove 0003-remove-redefinition-of-__typeof__.patch (the only upstream
+> > >  > committed patch).
+> > >
+> > > Thanks, but please merge the patch bumping the version with the one
+> > > adding the hash file as well.
+> > >
+> >
+> > O.k., will do...
+> >
+> > > Are you sure no other changes are needed? From the NEWS file I see:
+> > >
+> > > 1.7.0
+> > > -----
+> > > Major new feature:
+> > >
+> > > - task-manager (must be enabled explicitly)
+> > >
+> > >   The task manager allows to automatically distribute rendering tasks
+> > over
+> > >   multiple cpu and/or gpu cores. There is an implementation for the
+> > generic
+> > >   (software) driver which can be configured with by setting
+> > software-cores=<n>
+> > >   and task-manager options in the directfbrc.
+> > >
+> >
+> > As I understand this, it is a config file/runtime option, no compile time
+> > option...
+> >
+> > > Merged Projects:
+> > > - DirectFB-extra (missing bits)
+> > > - SaWMan
+> > > - FusionDale
+> > > - FusionSound
+> > > - DiVine
+> > > - ++dfb
+> > >
+> > > So I was expecting to see an option to enable the task manager support
+> > > and dropping of the sawman package?
+> > >
+> >
+> > O.k, will check all options, will maybe take some time...
+> >
+> > Regards,
+> > Peter
+> >
+> > > --
+> > > Bye, Peter Korsgaard
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
