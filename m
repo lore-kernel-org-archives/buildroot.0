@@ -1,41 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  1 Mar 2015 22:47:36 +0200
-Subject: [Buildroot] [PATCH] gnupg2: needs dynamic library support
-Message-ID: <6844339e2113d5b84495cff8f41d794ef0b02182.1425242856.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Mar 2015 22:02:49 +0100
+Subject: [Buildroot] [PATCH 1/7] shared-mime-info: host variant requires
+	libxml2 and libglib2
+In-Reply-To: <1425028764-1146-2-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Fri, 27 Feb 2015 10:19:18 +0100")
+References: <1425028764-1146-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425028764-1146-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87d24sxwg6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d2f/d2fc4cfb0c42d352d1119d8196d6df5fc2ab4be2/
-http://autobuild.buildroot.net/results/4ff/4ff76c7da4c50f10d2194a1c50c6c10adaf6f8b6/
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/gnupg2/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ > Add to HOST_SHARED_MIME_INFO_DEPENDENCIES the missing dependencies
+ > host-libxml2 and host-libglib2.
 
-diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
-index d24eaaee1f84..e246fd79e30b 100644
---- a/package/gnupg2/Config.in
-+++ b/package/gnupg2/Config.in
-@@ -1,3 +1,7 @@
-+comment "gnupg2 needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_GNUPG2
- 	bool "gnupg2"
- 	select BR2_PACKAGE_ZLIB
-@@ -9,6 +13,7 @@ config BR2_PACKAGE_GNUPG2
- 	select BR2_PACKAGE_LIBPTHSEM_COMPAT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on BR2_USE_MMU # libassuan
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  GnuPG is the GNU project's complete and free implementation
- 	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
+ > Also remove from SHARED_MIME_INFO_DEPENDENCIES dependencies already
+ > present in HOST_SHARED_MIME_INFO_DEPENDENCIES.
+
+ > Fix build failure:
+ > configure: error: Package requirements ( libxml-2.0 >= 2.4 glib-2.0 >= 2.6.0) were not met
+
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
