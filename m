@@ -1,34 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 01 Mar 2015 09:39:30 +0100
-Subject: [Buildroot] [PATCH] package/rpi-firmware: fix config.txt parsing
-In-Reply-To: <1425161651-28674-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 28 Feb 2015 23:14:11 +0100")
-References: <1425161651-28674-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87lhjhxgal.fsf@dell.be.48ers.dk>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Sun,  1 Mar 2015 17:10:58 +0800
+Subject: [Buildroot] [PATCH 1/1] package/systemd: journald should use
+	volatile storage
+Message-ID: <1425201058-3946-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+(By default)
 
- > The rpi-firmware we currently package has a fiscious bug, that happens
- > in corner cases while reading config.txt (mostly seen on RPi-2, but may
- > also occur on RPi-1).
+This fixes https://bugs.busybox.net/show_bug.cgi?id=7892
 
- > Both the DT-aware and DT-unaware branches are affected.
+Journald was attempting to write the logs to file before the
+underlying file system was up. A proposed solution was to bring
+/tmp up beforehand, but that did not always solve the issue.
 
- > Bump to the latest rpi-firmware to fix that.
+In addition, since the logging directory was a tmpfs to begin with
+(/var/log -> /tmp) this should save some cycles.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- > Note: this is an urgent fix intended to go into master before the
- > release is cut. This implies we're bringing in RPi-2 support in the
- > rpi-firmware, but there's no way to fix the issue without that.
- > YEM.
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+---
+ package/systemd/0004-fix-journald-on-tmpfs.patch | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/systemd/0004-fix-journald-on-tmpfs.patch
 
-Committed, thanks.
-
+diff --git a/package/systemd/0004-fix-journald-on-tmpfs.patch b/package/systemd/0004-fix-journald-on-tmpfs.patch
+new file mode 100644
+index 0000000..c143e47
+--- /dev/null
++++ b/package/systemd/0004-fix-journald-on-tmpfs.patch
+@@ -0,0 +1,12 @@
++--- systemd-218.orig/src/journal/journald.conf
+++++ systemd-218/src/journal/journald.conf
++@@ -11,7 +11,7 @@
++ # See journald.conf(5) for details
++ 
++ [Journal]
++-#Storage=auto
+++Storage=volatile
++ #Compress=yes
++ #Seal=yes
++ #SplitMode=uid
++
 -- 
-Bye, Peter Korsgaard
+2.1.4
