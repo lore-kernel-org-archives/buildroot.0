@@ -1,54 +1,139 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 1 Mar 2015 22:13:45 +0100
-Subject: [Buildroot] [PATCH v5 00/11] autobuild-run improvements
-In-Reply-To: <20150228203451.57206a8d@free-electrons.com>
-References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
- <20150228203451.57206a8d@free-electrons.com>
-Message-ID: <CAAXf6LWsMp3-wNnfaBZLEPOPaFW4HXMaHTV8dycMehkqZkExjg@mail.gmail.com>
+Date: Sun, 1 Mar 2015 22:17:26 +0100
+Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
+	misc improvements
+In-Reply-To: <54F258AD.5040301@mailerd.de>
+References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+ <20150226110858.183d31f3@free-electrons.com>
+ <EEF2BEA7-3CA2-4250-8E78-E2585246EE66@gmail.com>
+ <54F258AD.5040301@mailerd.de>
+Message-ID: <CAAXf6LXbRo40L9HZHZKcmHBqMz-KtOXvipQ1GrPd57DhUKzo3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Andr?,
 
-On Sat, Feb 28, 2015 at 8:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
+On Sun, Mar 1, 2015 at 1:09 AM, Andr? Erdmann <dywi@mailerd.de> wrote:
+> 2015/2/28 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
+>> On February 26, 2015 11:08:58 AM CET, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>>> Dear Andr? Erdmann,
+>>>
+>>> On Wed, 25 Feb 2015 22:17:17 +0100, Andr? Erdmann wrote:
+>>>> Patches 1-4 make autobuild-run compatible with both python >=2.6 and
+>>> 3.
+>>>>
+>>>> Patches 5-9 are minor enhancements (mostly cleanup).
+>>>>
+>>>> Patches 10- are more invasive:
+>>>> * move the check_requirements() logic to the SystemInfo class
+>>>> * control environment(->locale), std{in,out,err} of all called
+>>> commands
+>>>
+>>> Thanks a lot all those patches. Overall they look very useful!
+>>>
+>>> I really need to spend some time to merge the patches proposed by
+>>> Thomas DS, and then your patches. I would still like to give the
+>>> priority to Thomas DS patches, since they have been in the queue for a
+>>> very long time.
+>>>
+>>
+>> Andr?,
+>>
+>> Could you give your personal feedback on the usage of docopt in my patches? Do
+>>  you think it is an improvement or rather an unnecessary dependency?
+>>
+>> ThomasP has a different opinion than me, and there haven't been many other
+>>  opinions so far. Your input is this most definitely welcome, no matter which side
+>>  you choose.
+>>
 >
-> On Fri, 12 Dec 2014 21:04:45 +0100, Thomas De Schampheleire wrote:
 >
->> This series against the buildroot-test repo makes some improvements to the
->> autobuild-run script.
+> The advantage of docopt is that it's really simple and you always have the
+> usage message in the script, but I'd prefer argparse primarily because it's a built-in
+> module (in py >= 2.7). It also features arg validation (via type=<function|type>).
+> There's much more like subparsers, call a <function> each time an <arg> is encountered
+> and whatnot, but that's not of interest here.
 >
-> I've finally taken some time to test this series, and I've reported two
-> separate problems as replies to e-mails: the make-opts split() issue,
-> and the merging of argument vs. configuration file values.
+> The major improvement of the docopt approach is reading the config (argv/file)
+> into a few dicts that can be easily merged rather than doing a 3-way merge manually
+> (defaults as locals X ini file parser X argparser namedtuple-like object). That's a
+> good idea. It's doable with argparse as well, "vars(parser.parse_args())" returns
+> the parsed args as dict.
 >
-> To avoid duplicate work, I've pushed the current state of your work
-> (with the fix to the merging order, and the multiprocessing.Process
-> fix) to:
+> So, the ((untested)) prototype of a "dict-improved" config_get() argparse variant would be:
 >
->    git://git.free-electrons.com/users/thomas-petazzoni/buildroot-test.git
 >
-> in a branch called 'thomas-ds'.
+> def config_get():
+>    def nonempty(val):
+>       if val:
+>          return val
+>       raise argparse.ArgumentTypeError("must be a non-empty value.")
+>    # --- end of nonempty (...) ---
 >
-> Since both issues are more or less tied to the docopt migration, can
-> you have a look at them, and maybe simply propose followup patches that
-> I can merge back into the problematic commits, to fix those issues?
+>    def positive_int(val):
+>       ival = int(val)
+>       if ival > 0:
+>          return ival
+>       raise argparse.ArgumentTypeError("must be > 0 : %s" % val)
+>    # --- end of positive_int (...) ---
+>
+>    ## this is the dict that config_get() will return later on
+>    config = {
+>       "ninstances": 1, "njobs": 1, "http_login": None, "http_password": None, submitter: "N/A"
+>    }
+>
+>    ## build up the arg parser
+>    parser = argparse.ArgumentParser(...)
+>
+>    ## note the use of SUPPRESS:
+>    ##  the option won't make it into the (namespace object =>) dict if it is not specified on the cmdline
+>    parser.add_argument("--ninstances", "-n", default=argparse.SUPPRESS, type=positive_int, help=...)
+>    ...more args...
+>    parser.add_argument("--submitter", "-s", default=argparse.SUPPRESS, type=nonempty, ...)
+>    parser.add_argument("--config", "-c", default=None, ...)
+>
+>    ## parse args, store key/values in a dict
+>    argv_config = vars(parser.parse_args())
+>
+>    ## load config file, if any
+>    if argv_config.get("config"):
+>       ## load_ini_config() must return a "usable" dict
+>       ##  (e.g. convert "a-b" keys to "a_b", drop empty values, use parser.getint() where appropriate)
+>       config_from_file = load_ini_config(argv_config["config"])
+>
+>       ## transfer config from file to the result dict
+>       ##  (overrides default entries)
+>       config.update(config_from_file)
+>    # -- end if
+>
+>    ## drop the "config" key from argv config, no longer needed
+>    argv_config.pop("config",None)
+>
+>    ## transfer argv config to the result dict
+>    ##  (overrides entries from defaults, config_from_file)
+>    config.update(argv_config)
+>
+>    return config
+> # --- end of config_get (...) ---
+>
+>
+> config_get() would then return a dict that can be passed around
+> (multiprocessing.Process(target=run_instance, args=(i, config, sysinfo)),
+> do_build(instance, log, config), send_results(instance, log, result, config) a.s.o.)
+>
 
-Thanks for looking into this.
-As replied on both mails, the make-opts split() issue is AFAICS not
-present in the original code, but the multiprocessing error was a big
-mistake by me.
+Thanks a lot for your feedback.
 
-I have sent two follow-up patches based on your branch. The first one
-solves the argument handling priority issue you mentioned, while the
-second one is a forgotten change in one of the earlier patches, as I
-had mentioned before.
-
-Let me know if I can address other issues.
+Maybe it's because I haven't seen the full solution yet, but this
+handling seems much more involved than the docopt approach. In
+particular it's odd that there would need to be explicit handling of
+things like nonempty or positive_int, which isn't necessary with
+standard argparse nor docopt.
+I'm biased, of course, but this does not look more desirable to me
+than having an extra docopt dependency.
 
 Best regards,
 Thomas
