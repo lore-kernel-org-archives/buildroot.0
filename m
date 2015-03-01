@@ -1,83 +1,65 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sun,  1 Mar 2015 20:06:12 +0100
-Subject: [Buildroot] [PATCH 1/1] fftw: add compile precision option
-Message-ID: <1425236772-13124-1-git-send-email-gwenj@trabucayre.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 1 Mar 2015 20:15:55 +0100
+Subject: [Buildroot] [PATCH v2 1/7] directfb: bump version to 1.7.7 and
+ add hash
+Message-ID: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hello Thomas,
 
-fftw has options to select compile precision between single, long-double and
-quad. These options are exclusives. This patch adds choice to select precision
-option.
+On Sat, Feb 28, 2015 at 07:00:21PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 28 Feb 2015 11:37:10 +0100, Thomas Petazzoni wrote:
+> 
+> > I already had a series to bump DirectFB, but I never finished testing
+> > it, so I never submitted it. I think my series has some more cleanups
+> > than your series. Do you mind if I push my series somewhere so you can
+> > have a look, and maybe pick up some additional things?
+> 
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/fftw/Config.in | 32 ++++++++++++++++++++++++++++++++
- package/fftw/fftw.mk   | 10 ++++++++++
- 2 files changed, 42 insertions(+)
+Yes, for sure, you spotted a lot more cleanups and issues...
 
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index 36f849f..f35179b 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -9,3 +9,35 @@ config BR2_PACKAGE_FFTW
- 	  double precision.
+> I've pushed my patch series at:
+> 
+>   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=directfb-bump
+> 
+> The list of commits is (in reverse order) :
+> 
+> directfb-examples: bump to 1.7.0, add hash file
+> directfb-examples: do not install to staging
+> directfb-examples: remove options for each example
+> linux-fusion: use a more traditional style to define LINUX_FUSION_MAKE_OPTS
+> linux-fusion: bump to 9.0.3, use .tar.xz and add hash file
+> sawman: remove package
+> divine: remove package
+> directfb: add options for divine and sawman
+> directfb: remove BR2_PACKAGE_DIRECTFB_DEBUG option
+> directfb: remove BR2_PACKAGE_DIRECTFB_UNIQUE option
+> directfb: remove broken X.org support
+> directfb: add hash file
+> directfb: bump to 1.7.6
+> directfb: rename patches to the new naming convention
+> 
+> How shall we proceed to merge both of our series together? Are you
+> willing to take care of this?
+>
+
+Will try to provide an updated patch version (my versions plus yours)
+and do more testing...
+
+Regards,
+Peter
+
  
- 	  http://www.fftw.org
-+
-+if BR2_PACKAGE_FFTW
-+
-+choice
-+	prompt "fftw precision"
-+	default BR2_PACKAGE_FFTW_PRECISION_NONE
-+	help
-+	  Selects fftw precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_NONE
-+	bool "none"
-+	help
-+	  no compile precision selected
-+
-+config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	bool "single precision"
-+	help
-+	  compile fftw in single precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-+	bool "long double precision"
-+	help
-+	  compile fftw in long-double precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_QUAD
-+	bool "quad precision"
-+	help
-+	  compile fftw in quadruple precision if available
-+
-+endchoice
-+
-+endif
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 3b302df..68ddc35 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -10,4 +10,14 @@ FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPLv2+
- FFTW_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-+FFTW_CONFIGURE_OPTS += --enable-single
-+endif
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
-+FFTW_CONFIGURE_OPTS += --enable-long-double
-+endif
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_QUAD),y)
-+FFTW_CONFIGURE_OPTS += --enable-quad-precision
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.0.5
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
