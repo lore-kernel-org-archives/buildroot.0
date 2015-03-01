@@ -1,139 +1,115 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 1 Mar 2015 22:17:26 +0100
-Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
-	misc improvements
-In-Reply-To: <54F258AD.5040301@mailerd.de>
-References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
- <20150226110858.183d31f3@free-electrons.com>
- <EEF2BEA7-3CA2-4250-8E78-E2585246EE66@gmail.com>
- <54F258AD.5040301@mailerd.de>
-Message-ID: <CAAXf6LXbRo40L9HZHZKcmHBqMz-KtOXvipQ1GrPd57DhUKzo3Q@mail.gmail.com>
+Date: Sun, 1 Mar 2015 22:19:13 +0100
+Subject: [Buildroot] [PATCH 1/2] autobuild-run: correctly handle default
+	argument values
+In-Reply-To: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LW51OUJ_RNd-Oif9MzgCRUS+AwxwS9nTofhccTEDxDsyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andr?,
-
-On Sun, Mar 1, 2015 at 1:09 AM, Andr? Erdmann <dywi@mailerd.de> wrote:
-> 2015/2/28 Thomas De Schampheleire <patrickdepinguin@gmail.com>:
->> On February 26, 2015 11:08:58 AM CET, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->>> Dear Andr? Erdmann,
->>>
->>> On Wed, 25 Feb 2015 22:17:17 +0100, Andr? Erdmann wrote:
->>>> Patches 1-4 make autobuild-run compatible with both python >=2.6 and
->>> 3.
->>>>
->>>> Patches 5-9 are minor enhancements (mostly cleanup).
->>>>
->>>> Patches 10- are more invasive:
->>>> * move the check_requirements() logic to the SystemInfo class
->>>> * control environment(->locale), std{in,out,err} of all called
->>> commands
->>>
->>> Thanks a lot all those patches. Overall they look very useful!
->>>
->>> I really need to spend some time to merge the patches proposed by
->>> Thomas DS, and then your patches. I would still like to give the
->>> priority to Thomas DS patches, since they have been in the queue for a
->>> very long time.
->>>
->>
->> Andr?,
->>
->> Could you give your personal feedback on the usage of docopt in my patches? Do
->>  you think it is an improvement or rather an unnecessary dependency?
->>
->> ThomasP has a different opinion than me, and there haven't been many other
->>  opinions so far. Your input is this most definitely welcome, no matter which side
->>  you choose.
->>
+On Sun, Mar 1, 2015 at 10:09 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
+> In the original code sent on the mailing list, priority for arguments was
+> given to the config file, followed by arguments passed on the command-line.
+> In this order, the defaults specified to docopt would indeed be treated as
+> lowest priority, as expected.
 >
-> The advantage of docopt is that it's really simple and you always have the
-> usage message in the script, but I'd prefer argparse primarily because it's a built-in
-> module (in py >= 2.7). It also features arg validation (via type=<function|type>).
-> There's much more like subparsers, call a <function> each time an <arg> is encountered
-> and whatnot, but that's not of interest here.
+> However, the arguments specified on the command-line should have priority
+> over those from the config file, so the expected priority is:
+>     command-line > config file > defaults
 >
-> The major improvement of the docopt approach is reading the config (argv/file)
-> into a few dicts that can be easily merged rather than doing a 3-way merge manually
-> (defaults as locals X ini file parser X argparser namedtuple-like object). That's a
-> good idea. It's doable with argparse as well, "vars(parser.parse_args())" returns
-> the parsed args as dict.
+> By switching the order of argument dictionaries when calling the merge
+> method, the defaults are no longer handled correctly. To fix this, we must
+> not tell docopt about the defaults, but keep them in a separate dictionary.
+> Then, using a two-step merge we can obtain the right priority for arguments.
 >
-> So, the ((untested)) prototype of a "dict-improved" config_get() argparse variant would be:
+> For some reason, docopt does not like us passing __doc__ directly if it is
+> constructed dynamically with %s specifiers. Work around this via an
+> intermediate variable doc.
 >
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  scripts/autobuild-run | 31 +++++++++++++++++++++++++------
+>  1 file changed, 25 insertions(+), 6 deletions(-)
 >
-> def config_get():
->    def nonempty(val):
->       if val:
->          return val
->       raise argparse.ArgumentTypeError("must be a non-empty value.")
->    # --- end of nonempty (...) ---
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index 442531f..246a032 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -59,16 +59,25 @@
+>  #   message 'directory not empty' which suggests that someone is writing to the
+>  #   directory at the time of removal.
 >
->    def positive_int(val):
->       ival = int(val)
->       if ival > 0:
->          return ival
->       raise argparse.ArgumentTypeError("must be > 0 : %s" % val)
->    # --- end of positive_int (...) ---
+> -"""autobuild-run - run Buildroot autobuilder
+> +# Don't tell docopt about the defaults, as it would not allow the following
+> +# priority hierarchy for arguments: command-line > config file > defaults
+> +defaults = {
+> +    '--ninstances': '1',
+> +    '--njobs': '1',
+> +    '--submitter': 'N/A',
+> +    '--make-opts': '',
+> +}
+> +
+> +doc = """autobuild-run - run Buildroot autobuilder
 >
->    ## this is the dict that config_get() will return later on
->    config = {
->       "ninstances": 1, "njobs": 1, "http_login": None, "http_password": None, submitter: "N/A"
->    }
+>  Usage: autobuild-run [options]
 >
->    ## build up the arg parser
->    parser = argparse.ArgumentParser(...)
+>  Options:
+>    -h, --help                     show this help message and exit
+>    -V, --version                  show version
+> -  -n, --ninstances NINSTANCES    number of parallel instances [default: 1]
+> -  -j, --njobs NJOBS              number of parallel jobs [default: 1]
+> -  -s, --submitter SUBMITTER      name/machine of submitter [default: N/A]
+> +  -n, --ninstances NINSTANCES    number of parallel instances
+> +  -j, --njobs NJOBS              number of parallel jobs
+> +  -s, --submitter SUBMITTER      name/machine of submitter
+>    --http-login LOGIN             username to send results with
+>    --http-password PASSWORD       password to send results with (for security
+>                                   reasons it is recommended to define this in the
+> @@ -91,7 +100,14 @@ Format of the configuration file:
+>     http-login = <value>
+>     http-password = <value>
+>     submitter = <value>
+> -"""
+> +
+> +Default values for the arguments are:
+> +
+> +  %s
+> +""" % '\n  '.join(
+> +    ['%s = %s' % (key, val) for (key, val) in defaults.iteritems()])
+> +
+> +__doc__ = doc
 >
->    ## note the use of SUPPRESS:
->    ##  the option won't make it into the (namespace object =>) dict if it is not specified on the cmdline
->    parser.add_argument("--ninstances", "-n", default=argparse.SUPPRESS, type=positive_int, help=...)
->    ...more args...
->    parser.add_argument("--submitter", "-s", default=argparse.SUPPRESS, type=nonempty, ...)
->    parser.add_argument("--config", "-c", default=None, ...)
+>  import urllib2
+>  import csv
+> @@ -700,13 +716,16 @@ def main():
+>      check_version()
+>      sysinfo = SystemInfo()
 >
->    ## parse args, store key/values in a dict
->    argv_config = vars(parser.parse_args())
+> -    args = docopt.docopt(__doc__, version=VERSION)
+> +    args = docopt.docopt(doc, version=VERSION)
 >
->    ## load config file, if any
->    if argv_config.get("config"):
->       ## load_ini_config() must return a "usable" dict
->       ##  (e.g. convert "a-b" keys to "a_b", drop empty values, use parser.getint() where appropriate)
->       config_from_file = load_ini_config(argv_config["config"])
+>      if args['--config']:
+>          ini_config = load_ini_config(args['--config'])
+>          # merge config/args, priority given to args
+>          args = merge(args, ini_config)
 >
->       ## transfer config from file to the result dict
->       ##  (overrides default entries)
->       config.update(config_from_file)
->    # -- end if
->
->    ## drop the "config" key from argv config, no longer needed
->    argv_config.pop("config",None)
->
->    ## transfer argv config to the result dict
->    ##  (overrides entries from defaults, config_from_file)
->    config.update(argv_config)
->
->    return config
-> # --- end of config_get (...) ---
->
->
-> config_get() would then return a dict that can be passed around
-> (multiprocessing.Process(target=run_instance, args=(i, config, sysinfo)),
-> do_build(instance, log, config), send_results(instance, log, result, config) a.s.o.)
+> +    # load in defaults at lowest priority
+> +    args = merge(args, defaults)
+> +
+>      # http_login/password could theoretically be allowed as empty, so check
+>      # explicitly on None.
+>      upload = (args['--http-login'] is not None) \
+> --
+> 1.8.5.1
 >
 
-Thanks a lot for your feedback.
-
-Maybe it's because I haven't seen the full solution yet, but this
-handling seems much more involved than the docopt approach. In
-particular it's odd that there would need to be explicit handling of
-things like nonempty or positive_int, which isn't necessary with
-standard argparse nor docopt.
-I'm biased, of course, but this does not look more desirable to me
-than having an extra docopt dependency.
-
-Best regards,
-Thomas
+To be clear, this patch series builds on top of my earlier
+autobuild-series, which was added to ThomasP's autobuild-test tree
+with some fixups.
