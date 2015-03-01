@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  1 Mar 2015 11:07:39 +0100
-Subject: [Buildroot] [PATCH next v2 2/4] package/qt: enable unixodbc support
+Date: Sun,  1 Mar 2015 11:07:41 +0100
+Subject: [Buildroot] [PATCH next v2 4/4] package/apr-util: add support for
+	unixodbc
 In-Reply-To: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1425204461-27877-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1425204461-27877-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +14,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: no changes
+v2: first inclusion in patch series, unix odbc detection works without
+    odbc_config
 
- package/qt/Config.sql.in |    2 +-
- package/qt/qt.mk         |    1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/apr-util/apr-util.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
-index fd62657..81337a1 100644
---- a/package/qt/Config.sql.in
-+++ b/package/qt/Config.sql.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_QT_IBASE
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 3b0a71b..07ac573 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -53,4 +53,11 @@ else
+ APR_UTIL_CONF_OPTS += --without-crypto
+ endif
  
- config BR2_PACKAGE_QT_ODBC
- 	bool "ODBC Driver"
--	depends on BROKEN # libodbc not in BR
-+	select BR2_PACKAGE_UNIXODBC
- 	help
- 	  Build ODBC driver
- 	  If unsure, say n.
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 9ea676c..aedc2ce 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -361,6 +361,7 @@ QT_DEPENDENCIES += mysql
- endif
- ifeq ($(BR2_PACKAGE_QT_ODBC),y)
- QT_CONFIGURE_OPTS += -qt-sql-odbc
-+QT_DEPENDENCIES += unixodbc
- endif
- ifeq ($(BR2_PACKAGE_QT_PSQL),y)
- QT_CONFIGURE_OPTS += -qt-sql-psql
++ifeq ($(BR2_PACKAGE_UNIXODBC),y)
++APR_UTIL_CONF_OPTS += --with-odbc="$(STAGING_DIR)/usr"
++APR_UTIL_DEPENDENCIES += unixodbc
++else
++APR_UTIL_CONF_OPTS += --without-odbc
++endif
++
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
