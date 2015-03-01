@@ -1,115 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 1 Mar 2015 22:19:13 +0100
-Subject: [Buildroot] [PATCH 1/2] autobuild-run: correctly handle default
-	argument values
-In-Reply-To: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1425244187-21189-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LW51OUJ_RNd-Oif9MzgCRUS+AwxwS9nTofhccTEDxDsyw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 01 Mar 2015 22:35:31 +0100
+Subject: [Buildroot] [PATCH v3 0/2] Fix logrotate autobuild failure
+In-Reply-To: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Sun, 1 Mar 2015 22:06:51 +0100")
+References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87vbikwgd8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 1, 2015 at 10:09 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> In the original code sent on the mailing list, priority for arguments was
-> given to the config file, followed by arguments passed on the command-line.
-> In this order, the defaults specified to docopt would indeed be treated as
-> lowest priority, as expected.
->
-> However, the arguments specified on the command-line should have priority
-> over those from the config file, so the expected priority is:
->     command-line > config file > defaults
->
-> By switching the order of argument dictionaries when calling the merge
-> method, the defaults are no longer handled correctly. To fix this, we must
-> not tell docopt about the defaults, but keep them in a separate dictionary.
-> Then, using a two-step merge we can obtain the right priority for arguments.
->
-> For some reason, docopt does not like us passing __doc__ directly if it is
-> constructed dynamically with %s specifiers. Work around this via an
-> intermediate variable doc.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  scripts/autobuild-run | 31 +++++++++++++++++++++++++------
->  1 file changed, 25 insertions(+), 6 deletions(-)
->
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 442531f..246a032 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -59,16 +59,25 @@
->  #   message 'directory not empty' which suggests that someone is writing to the
->  #   directory at the time of removal.
->
-> -"""autobuild-run - run Buildroot autobuilder
-> +# Don't tell docopt about the defaults, as it would not allow the following
-> +# priority hierarchy for arguments: command-line > config file > defaults
-> +defaults = {
-> +    '--ninstances': '1',
-> +    '--njobs': '1',
-> +    '--submitter': 'N/A',
-> +    '--make-opts': '',
-> +}
-> +
-> +doc = """autobuild-run - run Buildroot autobuilder
->
->  Usage: autobuild-run [options]
->
->  Options:
->    -h, --help                     show this help message and exit
->    -V, --version                  show version
-> -  -n, --ninstances NINSTANCES    number of parallel instances [default: 1]
-> -  -j, --njobs NJOBS              number of parallel jobs [default: 1]
-> -  -s, --submitter SUBMITTER      name/machine of submitter [default: N/A]
-> +  -n, --ninstances NINSTANCES    number of parallel instances
-> +  -j, --njobs NJOBS              number of parallel jobs
-> +  -s, --submitter SUBMITTER      name/machine of submitter
->    --http-login LOGIN             username to send results with
->    --http-password PASSWORD       password to send results with (for security
->                                   reasons it is recommended to define this in the
-> @@ -91,7 +100,14 @@ Format of the configuration file:
->     http-login = <value>
->     http-password = <value>
->     submitter = <value>
-> -"""
-> +
-> +Default values for the arguments are:
-> +
-> +  %s
-> +""" % '\n  '.join(
-> +    ['%s = %s' % (key, val) for (key, val) in defaults.iteritems()])
-> +
-> +__doc__ = doc
->
->  import urllib2
->  import csv
-> @@ -700,13 +716,16 @@ def main():
->      check_version()
->      sysinfo = SystemInfo()
->
-> -    args = docopt.docopt(__doc__, version=VERSION)
-> +    args = docopt.docopt(doc, version=VERSION)
->
->      if args['--config']:
->          ini_config = load_ini_config(args['--config'])
->          # merge config/args, priority given to args
->          args = merge(args, ini_config)
->
-> +    # load in defaults at lowest priority
-> +    args = merge(args, defaults)
-> +
->      # http_login/password could theoretically be allowed as empty, so check
->      # explicitly on None.
->      upload = (args['--http-login'] is not None) \
-> --
-> 1.8.5.1
->
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-To be clear, this patch series builds on top of my earlier
-autobuild-series, which was added to ThomasP's autobuild-test tree
-with some fixups.
+ > This patch set fix a logrotate autobuild failure:
+ >     http://autobuild.buildroot.net/results/159bf5730414ca7f73dcdae95090177355193636
+ >     http://autobuild.buildroot.net/results/ebe6ab7fc0f2cff98de06b3dc374730da9e9e4f2
+
+ > v3:
+ >  - popt: instead of using sed add a patch and send it upstream
+ >  - logrotate: improve commit message
+ > v2:
+ >  - logroate: instead of adding a patch just overwrite from the command line the
+ >    LOADLIBES variable
+
+Hmm, while this is an improvement I still see failures.
+
+I could only get popt to pull in the gettext/libintl dependency if I
+added libiconv, but as we don't add libiconv to Libs.private we then end
+up with linker issues for it in logrotate:
+
+/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc    -Os  -static   logrotate.o log.o config.o basenames.o -L/home/peko/source/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lpopt    -o logrotate
+logrotate.o: In function `compressLogFile':
+/home/peko/source/buildroot/output/build/logrotate-3.8.7/logrotate.c:537: warning: the use of OBSOLESCENT `utime' is discouraged, use `utimes'
+/home/peko/source/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpopt.a(poptint.o): In function `POPT_fprintf':
+poptint.c:(.text+0x534): undefined reference to `libiconv_open'
+poptint.c:(.text+0x58c): undefined reference to `libiconv'
+poptint.c:(.text+0x5b8): undefined reference to `libiconv'
+poptint.c:(.text+0x62c): undefined reference to `libiconv_close'
+collect2: ld returned 1 exit status
+<builtin>: recipe for target 'logrotate' failed
+
+So I have left out this series for 2015.02.
+
+-- 
+Bye, Peter Korsgaard
