@@ -1,31 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:20 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-v4l: mark
-	as broken
-Message-ID: <20150302222717.9138A807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch: kill avr32
+Message-ID: <20150302222718.16DB6807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b0ee197f87ed86f6a42862690a1b1297dae9a327
+commit: http://git.buildroot.net/buildroot/commit/?id=a46007daa7128d316ab3f36da23828b8ab7aaf58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+avr32 was slated for removal in 2015.02. Make it so!
+
+This patch only definitively hides the symbol. When all references
+to it are eradicated (to come in followup patches), we'll eventually
+kill the symbol altogether.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-video-v4l/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .defconfig     |    1 -
+ arch/Config.in |    2 +-
+ 2 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-v4l/Config.in b/package/x11r7/xdriver_xf86-video-v4l/Config.in
-index 6d85c17..27ffd87 100644
---- a/package/x11r7/xdriver_xf86-video-v4l/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-v4l/Config.in
-@@ -3,5 +3,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_V4L
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-+	depends on BROKEN # Fails to build with xorg xserver >= 1.17
+diff --git a/.defconfig b/.defconfig
+index 77ab11a..585be55 100644
+--- a/.defconfig
++++ b/.defconfig
+@@ -6,7 +6,6 @@ BR2_HAVE_DOT_CONFIG=y
+ # BR2_alpha is not set
+ # BR2_arm is not set
+ # BR2_armeb is not set
+-# BR2_avr32 is not set
+ # BR2_cris is not set
+ # BR2_ia64 is not set
+ BR2_i386=y
+diff --git a/arch/Config.in b/arch/Config.in
+index 890e7e2..1719fe6 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -61,7 +61,7 @@ config BR2_avr32
+ 	# components. If you're interested by AVR32, contact the
+ 	# Buildroot community. Otherwise, its support will be removed
+ 	# by the 2015.02 release.
+-	depends on BR2_DEPRECATED_SINCE_2014_08
++	depends on BR2_BROKEN
  	help
- 	  video4linux driver
+ 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+ 	  Atmel.
