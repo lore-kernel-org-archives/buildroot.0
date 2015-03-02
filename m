@@ -1,23 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  2 Mar 2015 08:02:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 7892] systemd-journald is broken
-In-Reply-To: <bug-7892-163@https.bugs.busybox.net/>
-References: <bug-7892-163@https.bugs.busybox.net/>
-Message-ID: <20150302080220.111D1803D6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Mar 2015 09:32:28 +0100
+Subject: [Buildroot] [PATCH v2 1/7] directfb: bump version to 1.7.7 and
+ add hash
+In-Reply-To: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
+References: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
+Message-ID: <20150302093228.1cba64f0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7892
+Dear Peter Seiderer,
 
---- Comment #12 from nroach44 at gmail.com 2015-03-02 08:02:19 UTC ---
-Created attachment 5906
-  --> https://bugs.busybox.net/attachment.cgi?id=5906
-Buildroot config (sama5d3)
+On Sun, 1 Mar 2015 20:15:55 +0100, Peter Seiderer wrote:
 
+> Will try to provide an updated patch version (my versions plus yours)
+> and do more testing...
+
+Thanks a lot!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
