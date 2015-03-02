@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:19 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-voodoo:
-	bump version
-Message-ID: <20150302222717.724BF807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_fslsfonts: bump version
+	to 1.0.5
+Message-ID: <20150302222716.978E1807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab70743b257bf80e8ac81feecb4a544f4103f017
+commit: http://git.buildroot.net/buildroot/commit/?id=e732d8ff8da592207b3a3a66fe7b85b5ecbe1825
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Use git snapshot for compatibility with xorg xserver 1.17.0.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-voodoo.mk                   |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk b/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
-index 32efabd..e1ef0c6 100644
---- a/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
-+++ b/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk b/package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk
+index 503b552..27786a5 100644
+--- a/package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk
++++ b/package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_VOODOO_VERSION = 1.2.5
--XDRIVER_XF86_VIDEO_VOODOO_SOURCE = xf86-video-voodoo-$(XDRIVER_XF86_VIDEO_VOODOO_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_VOODOO_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_VOODOO_VERSION = 9172ae566a0e85313fc80ab62b4455393eefe593
-+XDRIVER_XF86_VIDEO_VOODOO_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-voodoo
- XDRIVER_XF86_VIDEO_VOODOO_LICENSE = MIT
- XDRIVER_XF86_VIDEO_VOODOO_LICENSE_FILES = COPYING
-+XDRIVER_XF86_VIDEO_VOODOO_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_VOODOO_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
- 
- $(eval $(autotools-package))
+-XAPP_FSLSFONTS_VERSION = 1.0.4
++XAPP_FSLSFONTS_VERSION = 1.0.5
+ XAPP_FSLSFONTS_SOURCE = fslsfonts-$(XAPP_FSLSFONTS_VERSION).tar.bz2
+ XAPP_FSLSFONTS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FSLSFONTS_LICENSE = MIT
