@@ -1,33 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 02 Mar 2015 22:27:29 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xapp_showfont: bump version
-	to 1.0.5
-Message-ID: <20150302222716.D1C37807B5@busybox.osuosl.org>
+Date: Mon, 02 Mar 2015 22:27:24 -0000
+Subject: [Buildroot] [git commit] package/eudev: we won't miss you, avr32
+Message-ID: <20150302222718.8D13D807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29803f9da8c2493beba7e9dfd44b4868eeb49e56
+commit: http://git.buildroot.net/buildroot/commit/?id=c6f76ffea6bf379a23c08a13d96d9a84cc0c7756
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_showfont/xapp_showfont.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/eudev/Config.in |    3 ---
+ system/Config.in        |    2 --
+ 2 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_showfont/xapp_showfont.mk b/package/x11r7/xapp_showfont/xapp_showfont.mk
-index 494e2af..c0b8c9a 100644
---- a/package/x11r7/xapp_showfont/xapp_showfont.mk
-+++ b/package/x11r7/xapp_showfont/xapp_showfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 7916fd0..7934cd7 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_EUDEV
+ 	bool "eudev"
+-	depends on !BR2_avr32 # no epoll_create1
+ 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	depends on BR2_USE_MMU # uses fork()
+ 	depends on BR2_LARGEFILE # util-linux
+@@ -32,11 +31,9 @@ config BR2_PACKAGE_EUDEV_RULES_GEN
+ endif
  
--XAPP_SHOWFONT_VERSION = 1.0.4
-+XAPP_SHOWFONT_VERSION = 1.0.5
- XAPP_SHOWFONT_SOURCE = showfont-$(XAPP_SHOWFONT_VERSION).tar.bz2
- XAPP_SHOWFONT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_SHOWFONT_LICENSE = MIT
+ comment "eudev needs eudev /dev management"
+-	depends on !BR2_avr32
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 
+ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
+-	depends on !BR2_avr32
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/system/Config.in b/system/Config.in
+index 95e10ab..fb8b686 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -124,7 +124,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
+ 
+ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	bool "Dynamic using eudev"
+-	depends on !BR2_avr32 # eudev
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
+@@ -133,7 +132,6 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	select BR2_PACKAGE_EUDEV
+ 
+ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
+-	depends on !BR2_avr32 # eudev
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
