@@ -1,43 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  2 Mar 2015 13:53:53 +0200
-Subject: [Buildroot] [PATCH] bdwgc: fix static build
-Message-ID: <663156112102c76e76ca7dc923503bea10062f5f.1425297233.git.baruch@tkos.co.il>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon,  2 Mar 2015 09:52:59 -0300
+Subject: [Buildroot] [PATCH 1/1] gtest: update recipe to use autotools
+Message-ID: <1425300779-18236-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/6d3/6d3f73f7b5e4e7bd1293aae9b626f38ac456b6c4/
-http://autobuild.buildroot.net/results/1ba/1ba511c629f724eee8b75b9b34fe8db154b3cfe1/
-http://autobuild.buildroot.net/results/a54/a54cc1bdc5dcb4c459cfbcae3368811e2170d100/
+The previous recipe build gtest using cmake, which prevented compiling
+gmock (to be submitted in a following patch).
 
-and more.
+Gmock requires the gtest-config script, which is installed only if gtest
+is built with autotools.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/bdwgc/bdwgc.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/gtest/gtest.mk | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index 9cf015ed1b41..19a66f33cf70 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -18,8 +18,13 @@ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
- # solution.
- BDWGC_AUTORECONF = YES
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index 7129c93..e148462 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -12,24 +12,16 @@ GTEST_INSTALL_TARGET = NO
+ GTEST_LICENSE = BSD-3c
+ GTEST_LICENSE_FILES = LICENSE
  
-+BDWGC_CFLAGS = $(TARGET_CFLAGS)
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BDWGC_CFLAGS += -DGC_NO_DLOPEN
-+endif
-+
- # Ensure we use the system libatomic_ops, and not the internal one.
--BDWGC_CONF_OPTS = --with-libatomic-ops=yes
-+BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
- HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+-# While it is possible to build gtest as shared library, using this gtest shared
+-# library requires to set some special configure option in the project using
+-# gtest.
+-# So, force to build gtest as a static library.
+-#
+-# For further details, refer to the explaination given in the README file from
+-# the gtest sources.
+-GTEST_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
+-
+ define GTEST_EXTRACT_CMDS
+ 	$(UNZIP) $(DL_DIR)/$(GTEST_SOURCE) -d $(BUILD_DIR)
+ endef
  
- $(eval $(autotools-package))
+ define GTEST_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
+-	$(INSTALL) -D -m 0755 $(@D)/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
++	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgtest.a $(STAGING_DIR)/usr/lib/libgtest.a
++	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgtest_main.a $(STAGING_DIR)/usr/lib/libgtest_main.a
++	$(INSTALL) -D -m 0755 $(@D)/scripts/gtest-config $(STAGING_DIR)/usr/lib/scripts/gtest-config
+ 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gtest/
+ 	cp -rp $(@D)/include/gtest/* $(STAGING_DIR)/usr/include/gtest/
+ endef
+ 
+-$(eval $(cmake-package))
++$(eval $(autotools-package))
 -- 
-2.1.4
+1.8.3.1
