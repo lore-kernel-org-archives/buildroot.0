@@ -1,36 +1,41 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon,  2 Mar 2015 22:40:25 +0100
-Subject: [Buildroot] [PATCH 2/2] Revert "libsrtp: openssl handling needs
-	shared library support"
-In-Reply-To: <1425332425-7034-1-git-send-email-romain.naour@openwide.fr>
-References: <1425332425-7034-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1425332425-7034-2-git-send-email-romain.naour@openwide.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 2 Mar 2015 22:55:11 +0100
+Subject: [Buildroot] [PATCH v2 1/4] pkg-cmake: allow to build package in
+	a subdirectory
+In-Reply-To: <1424891914-27748-1-git-send-email-gwenj@trabucayre.com>
+References: <1424891914-27748-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <CAHXCMM+Vw-njSXvDLMEf-LSwxxDdGY_=g9Yda=2dyfgG=TFmiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openssl handling has been fixed by the previous commit.
+Hi Gwenhael,
 
-This reverts commit 67cebbdf5f349cc176037fa15c281a9462dae591.
----
- package/libsrtp/libsrtp.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Wed, Feb 25, 2015 at 8:18 PM, Gwenhael Goavec-Merou
+<gwenj@trabucayre.com> wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>
+> For some cmake based packages, like GNURadio, it's forbidden to do the
+> compilation directly in the sources directory. This patch add a new
+> variable to specify, if needed, the name of a sub-directory used to compile.
+>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index e5cf47b..5e62255 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -25,8 +25,7 @@ endif
- # host-pkgconf to make sure pkg-config is installed.
- LIBSRTP_DEPENDENCIES = host-pkgconf
- 
--# openssl handling needs libdl support
--ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBSRTP_DEPENDENCIES += openssl
- LIBSRTP_CONF_OPTS += --enable-openssl
- else
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+
+It would be good to update the cmake-package section of the manual as well. ;-)
+
+This doc should mention that the user has to set the build location
+path for the target package, but also for the host package if any.
+I.e.:
+FOO_BUILDDIR = $(FOO_SRCDIR)/.build
+HOST_FOO_BUILDDIR = $(HOST_FOO_SRCDIR)/.build
+
+
+Regards,
+
 -- 
-1.9.3
+Samuel
