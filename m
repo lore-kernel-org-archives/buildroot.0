@@ -1,72 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:17 -0000
-Subject: [Buildroot] [git commit] package/x11r7/libepoxy: New package
-Message-ID: <20150302222716.78FAB807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] pkg-cmake: reduce output when being silent
+Message-ID: <20150302222716.52A24807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ac0250cc6f1522f7b8de65b538e3882b11c0a6f
+commit: http://git.buildroot.net/buildroot/commit/?id=96e7bca18bd55a70c7f837949c791af52ba91e7e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xdriver_xf86-video-ati needs glamor support from xserver_xorg-server,
-which in turn depends on libepoxy.
+Use CMAKE_RULE_MESSAGES and CMAKE_INSTALL_MESSAGE variables to reduce
+cmake output when it is a silent build.
 
-[Thomas: add license information.]
+[Thomas:
+ - use ifneq instead of ifdef
+ - remove unneeded else clause
+ - also add to the host variant of the configure commands]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in            |    1 +
- package/x11r7/libepoxy/Config.in   |    7 +++++++
- package/x11r7/libepoxy/libepoxy.mk |   15 +++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+ package/pkg-cmake.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 2fd1ff0..f60c752 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -15,6 +15,7 @@ if BR2_PACKAGE_XORG7
- 	endmenu
- 	menu "X11R7 Libraries"
- 		source package/x11r7/libxcb/Config.in
-+		source package/x11r7/libepoxy/Config.in
- 		source package/x11r7/xcb-util/Config.in
- 		source package/x11r7/xcb-util-image/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
-diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
-new file mode 100644
-index 0000000..c4f5794
---- /dev/null
-+++ b/package/x11r7/libepoxy/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBEPOXY
-+	bool "epoxy"
-+	depends on BR2_PACKAGE_MESA3D
-+	help
-+	  Epoxy is a library for handling OpenGL function pointer management for you.
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 6c9955d..958639f 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -31,6 +31,10 @@ CMAKE_HOST_C_COMPILER = $(HOSTCC)
+ CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+ endif
+ 
++ifneq ($(QUIET),)
++CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
++endif
 +
-+	  https://github.com/anholt/libepoxy
-diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
-new file mode 100644
-index 0000000..9858cfe
---- /dev/null
-+++ b/package/x11r7/libepoxy/libepoxy.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libepoxy
-+#
-+#################################################################################
-+
-+LIBEPOXY_VERSION = v1.2
-+LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
-+LIBEPOXY_INSTALL_STAGING = YES
-+LIBEPOXY_AUTORECONF = YES
-+LIBEPOXY_DEPENDENCIES = mesa3d
-+LIBEPOXY_LICENSE = MIT
-+LIBEPOXY_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ ################################################################################
+ # inner-cmake-package -- defines how the configuration, compilation and
+ # installation of a CMake package should be done, implements a few hooks to
+@@ -86,6 +90,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DBUILD_TESTING=OFF \
+ 		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
+ 		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
++		$$(CMAKE_QUIET) \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 	)
+ endef
+@@ -121,6 +126,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DBUILD_TEST=OFF \
+ 		-DBUILD_TESTS=OFF \
+ 		-DBUILD_TESTING=OFF \
++		$$(CMAKE_QUIET) \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 	)
+ endef
