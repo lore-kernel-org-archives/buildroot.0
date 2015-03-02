@@ -1,42 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 02 Mar 2015 22:27:20 -0000
-Subject: [Buildroot] [git commit] kconfig infra: make
-	update-config/defconfig handling symmetrical
-Message-ID: <20150302222717.BB6C8807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iproute2: bump to version 3.19.0
+Message-ID: <20150302222718.BF0C3807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1941386c3da9a4d5f14ab2c3c500188a0e221c08
+commit: http://git.buildroot.net/buildroot/commit/?id=47ecd4a841c70148903bb3c534e589d8b6df4882
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace a 'cp --preserve' with a 'touch --reference' so that the code
-for foo-update-config and foo-update-defconfig is symmetrical to ease
-maintainability and increase clarity.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kconfig.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/iproute2/iproute2.hash |    2 +-
+ package/iproute2/iproute2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index db56b7a..f76c7a7 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -78,8 +78,11 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 		$$($(2)_KCONFIG_OPTS) savedefconfig
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 35dc554..40dd0a5 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,2 +1,2 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	d5a182154abd0749b1df7d1649115a32c65f559951477396203b1f514dbff1df	iproute2-3.18.0.tar.xz
++sha256	e2f9f8c36e166f2ba6c0e1e7a9ad84cdf7c1615b93df49dac44563d7b57fd7b0	iproute2-3.19.0.tar.xz
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 0838463..688ae97 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Target to copy back the configuration to the source configuration file
-+# Even though we could use 'cp --preserve-timestamps' here, the separate
-+# cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
- $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
--	cp --preserve=timestamps -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
- 
- # Note: make sure the timestamp of the stored configuration is not newer than
- # the .config to avoid a useless rebuild. Note that, contrary to
+-IPROUTE2_VERSION = 3.18.0
++IPROUTE2_VERSION = 3.19.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex
