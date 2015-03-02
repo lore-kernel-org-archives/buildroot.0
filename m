@@ -1,81 +1,43 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon,  2 Mar 2015 07:55:47 -0300
-Subject: [Buildroot] [PATCH v2 1/1] perl-file-util: new package
-In-Reply-To: <1425293747-15440-1-git-send-email-casantos@datacom.ind.br>
-References: <1425293747-15440-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1425293747-15440-2-git-send-email-casantos@datacom.ind.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  2 Mar 2015 13:53:53 +0200
+Subject: [Buildroot] [PATCH] bdwgc: fix static build
+Message-ID: <663156112102c76e76ca7dc923503bea10062f5f.1425297233.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Perl File::Util module (host and target packages)
+Fixes:
+http://autobuild.buildroot.net/results/6d3/6d3f73f7b5e4e7bd1293aae9b626f38ac456b6c4/
+http://autobuild.buildroot.net/results/1ba/1ba511c629f724eee8b75b9b34fe8db154b3cfe1/
+http://autobuild.buildroot.net/results/a54/a54cc1bdc5dcb4c459cfbcae3368811e2170d100/
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+and more.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/Config.in                          |  1 +
- package/perl-file-util/Config.in           |  6 ++++++
- package/perl-file-util/perl-file-util.hash |  3 +++
- package/perl-file-util/perl-file-util.mk   | 15 +++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/perl-file-util/Config.in
- create mode 100644 package/perl-file-util/perl-file-util.hash
- create mode 100644 package/perl-file-util/perl-file-util.mk
+ package/bdwgc/bdwgc.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 262a7fb..2159bd6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -469,6 +469,7 @@ endif
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
- 	source "package/perl-datetime-tiny/Config.in"
-+	source "package/perl-file-util/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
- 	source "package/perl-gdtextutil/Config.in"
-diff --git a/package/perl-file-util/Config.in b/package/perl-file-util/Config.in
-new file mode 100644
-index 0000000..871be98
---- /dev/null
-+++ b/package/perl-file-util/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_FILE_UTIL
-+	bool "perl-file-util"
-+	help
-+	  Easy, versatile, portable file handling
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 9cf015ed1b41..19a66f33cf70 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -18,8 +18,13 @@ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
+ # solution.
+ BDWGC_AUTORECONF = YES
+ 
++BDWGC_CFLAGS = $(TARGET_CFLAGS)
++ifeq ($(BR2_STATIC_LIBS),y)
++BDWGC_CFLAGS += -DGC_NO_DLOPEN
++endif
 +
-+	  https://github.com/tommybutler/file-util/wiki
-diff --git a/package/perl-file-util/perl-file-util.hash b/package/perl-file-util/perl-file-util.hash
-new file mode 100644
-index 0000000..1e613dc
---- /dev/null
-+++ b/package/perl-file-util/perl-file-util.hash
-@@ -0,0 +1,3 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    93c572b4c54743a7ef383486dd2c4014 File-Util-4.132140.tar.gz
-+sha256 4233c493468da8b34f2df19b191aaa400f328d877c8c023605e43385976a99d1 File-Util-4.132140.tar.gz
-diff --git a/package/perl-file-util/perl-file-util.mk b/package/perl-file-util/perl-file-util.mk
-new file mode 100644
-index 0000000..c8b4441
---- /dev/null
-+++ b/package/perl-file-util/perl-file-util.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# perl-file-util
-+#
-+################################################################################
-+
-+PERL_FILE_UTIL_VERSION = 4.132140
-+PERL_FILE_UTIL_SOURCE = File-Util-$(PERL_FILE_UTIL_VERSION).tar.gz
-+PERL_FILE_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOMMY
-+PERL_FILE_UTIL_DEPENDENCIES = perl host-perl-module-build
-+PERL_FILE_UTIL_LICENSE = Artistic or GPLv1+
-+PERL_FILE_UTIL_LICENSE_FILES = COPYING LICENSE
-+
-+$(eval $(perl-package))
-+$(eval $(host-perl-package))
+ # Ensure we use the system libatomic_ops, and not the internal one.
+-BDWGC_CONF_OPTS = --with-libatomic-ops=yes
++BDWGC_CONF_OPTS = --with-libatomic-ops=yes CFLAGS="$(BDWGC_CFLAGS)"
+ HOST_BDWGC_CONF_OPTS = --with-libatomic-ops=yes
+ 
+ $(eval $(autotools-package))
 -- 
-1.8.3.1
+2.1.4
