@@ -1,68 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:18 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
-	bump version to 2.9.1
-Message-ID: <20150302222717.0B5DC807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-tdfx:
+	bump version
+Message-ID: <20150302222717.62589807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6bc6c3aabe9d3c9592754e0c49a2d476473b5754
+commit: http://git.buildroot.net/buildroot/commit/?id=4de9b2b89baac7daa5c03c3b6d9706166f11d8bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package now needs libevdev:
-http://cgit.freedesktop.org/xorg/driver/xf86-input-evdev/commit/?id=164c62a97591d4c9b649460e7442977ea82ac02b
-
-[Thomas: adapt to current master, update hash file.]
+Use git snapshot for compatibility with xorg xserver 1.17.0,
+remove patch applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-evdev/Config.in   |    1 +
- .../xdriver_xf86-input-evdev.hash                  |    4 ++--
- .../xdriver_xf86-input-evdev.mk                    |    3 ++-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-tdfx/0002-mibstore.patch    |   36 --------------------
+ .../xdriver_xf86-video-tdfx.mk                     |    5 +--
+ 2 files changed, 2 insertions(+), 39 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-index 6ec14bf..f44e79f 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
- 	bool "xf86-input-evdev"
- 	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
-+	select BR2_PACKAGE_LIBEVDEV
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index fb46aca..ea5233e 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2014-May/056599.html
--sha256 85fade9f5e9cf70f02c877165e95b3df4cdb9e08282416122ca80218e254100c  xf86-input-evdev-2.8.4.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2014-November/002499.html
-+sha256 0ce30328adfeac90a6f4b508d992fb834d8e50b484b29d3d58cf6683fa8502f9  xf86-input-evdev-2.9.1.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index edf2d48..5f029a2 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -4,13 +4,14 @@
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/0002-mibstore.patch b/package/x11r7/xdriver_xf86-video-tdfx/0002-mibstore.patch
+deleted file mode 100644
+index f156ea7..0000000
+--- a/package/x11r7/xdriver_xf86-video-tdfx/0002-mibstore.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 10498d2730c651eb7a1890eb9e728269732e9dad Mon Sep 17 00:00:00 2001
+-From: Adam Jackson <ajax@redhat.com>
+-Date: Tue, 25 Sep 2012 12:54:59 +0000
+-Subject: Remove mibstore.h
+-
+-Signed-off-by: Adam Jackson <ajax@redhat.com>
+----
+-Fetch from:
+-http://cgit.freedesktop.org/xorg/driver/xf86-video-tdfx/commit/?id=10498d2730c651eb7a1890eb9e728269732e9dad
+-
+-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-diff --git a/src/tdfx_driver.c b/src/tdfx_driver.c
+-index ddd5431..412da07 100644
+---- a/src/tdfx_driver.c
+-+++ b/src/tdfx_driver.c
+-@@ -62,10 +62,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- 
+- #include "compiler.h"
+- 
+--/* Drivers using the mi implementation of backing store need: */
+--
+--#include "mibstore.h"
+--
+- /* All drivers using the vgahw module need this */
+- /* This driver needs to be modified to not use vgaHW for multihead operation */
+- #include "vgaHW.h"
+-@@ -2373,7 +2369,6 @@ TDFXScreenInit(SCREEN_INIT_ARGS_DECL) {
+-     }
+-   }
+- 
+--  miInitializeBackingStore(pScreen);
+-   xf86SetBackingStore(pScreen);
+-   xf86SetSilkenMouse(pScreen);
+- 
+---
+-cgit v0.9.0.2-2-gbebe
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+index c23aa31..745fd2d 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
++++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.4
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.9.1
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
- XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
- 	host-pkgconf \
-+	libevdev \
- 	xproto_inputproto \
- 	xserver_xorg-server \
- 	xproto_randrproto \
+-XDRIVER_XF86_VIDEO_TDFX_VERSION = 1.4.5
+-XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_TDFX_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_TDFX_VERSION = 2f71b05e29ae13a0fb6fbc74f4f76c78b6ddb0d7
++XDRIVER_XF86_VIDEO_TDFX_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-tdfx
+ XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_TDFX_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_TDFX_AUTORECONF = YES
