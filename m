@@ -1,44 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Mar 2015 19:40:47 -0300
-Subject: [Buildroot] [PATCH 2/2] alsa-utils: bump to version 1.0.29
-In-Reply-To: <1425336047-7409-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425336047-7409-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1425336047-7409-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Mar 2015 23:45:56 +0100
+Subject: [Buildroot] [PATCH] bdwgc: fix static build
+In-Reply-To: <663156112102c76e76ca7dc923503bea10062f5f.1425297233.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 2 Mar 2015 13:53:53 +0200")
+References: <663156112102c76e76ca7dc923503bea10062f5f.1425297233.git.baruch@tkos.co.il>
+Message-ID: <87sidnuifv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/alsa-utils/alsa-utils.hash | 2 ++
- package/alsa-utils/alsa-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/alsa-utils/alsa-utils.hash
+ > Fixes:
+ > http://autobuild.buildroot.net/results/6d3/6d3f73f7b5e4e7bd1293aae9b626f38ac456b6c4/
+ > http://autobuild.buildroot.net/results/1ba/1ba511c629f724eee8b75b9b34fe8db154b3cfe1/
+ > http://autobuild.buildroot.net/results/a54/a54cc1bdc5dcb4c459cfbcae3368811e2170d100/
 
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-new file mode 100644
-index 0000000..ba5061b
---- /dev/null
-+++ b/package/alsa-utils/alsa-utils.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index f95e7a8..65702b7 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_UTILS_VERSION = 1.0.28
-+ALSA_UTILS_VERSION = 1.0.29
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_LICENSE = GPLv2
+ > and more.
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-2.0.5
+Bye, Peter Korsgaard
