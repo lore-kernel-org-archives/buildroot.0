@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:18 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xapp_iceauth: bump version
-	to 1.0.7
-Message-ID: <20150302222716.ABAB0807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpciaccess: bump version to
+	0.13.3
+Message-ID: <20150302222716.808B3807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6016498bad3958f8b6f34dd2f5c91d0511907826
+commit: http://git.buildroot.net/buildroot/commit/?id=84fb60703623d733de777d7fbfe0220f52ae85fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xapp_iceauth/xapp_iceauth.mk |    2 +-
+ package/libpciaccess/libpciaccess.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.mk b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
-index 0f6ef3e..d30ff6f 100644
---- a/package/x11r7/xapp_iceauth/xapp_iceauth.mk
-+++ b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
+index f27925d..ade4cc6 100644
+--- a/package/libpciaccess/libpciaccess.mk
++++ b/package/libpciaccess/libpciaccess.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_ICEAUTH_VERSION = 1.0.6
-+XAPP_ICEAUTH_VERSION = 1.0.7
- XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.bz2
- XAPP_ICEAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_ICEAUTH_LICENSE = MIT
+-LIBPCIACCESS_VERSION = 0.13.2
++LIBPCIACCESS_VERSION = 0.13.3
+ LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.bz2
+ LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ LIBPCIACCESS_LICENSE = MIT
