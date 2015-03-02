@@ -1,41 +1,52 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Mon, 2 Mar 2015 12:13:04 -0500
-Subject: [Buildroot] [PATCH 1/1] package/systemd: journald should use
- volatile storage
-In-Reply-To: <87h9u4xxb1.fsf@dell.be.48ers.dk>
-References: <1425201058-3946-1-git-send-email-nroach44@gmail.com>
- <87h9u4xxb1.fsf@dell.be.48ers.dk>
-Message-ID: <CANPyyuN093C11GRiFUC+kTqq2T-XtSe4Adh3P+vSTBXJELGo6A@mail.gmail.com>
+From: =?UTF-8?Q?Andr=C3=A9_Erdmann?= <dywi@mailerd.de>
+Date: Mon, 2 Mar 2015 21:00:33 +0100
+Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
+	misc improvements
+In-Reply-To: <20150302093656.14272535@free-electrons.com>
+References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+ <20150226110858.183d31f3@free-electrons.com>
+ <EEF2BEA7-3CA2-4250-8E78-E2585246EE66@gmail.com>
+ <54F258AD.5040301@mailerd.de>
+ <CAAXf6LXbRo40L9HZHZKcmHBqMz-KtOXvipQ1GrPd57DhUKzo3Q@mail.gmail.com>
+ <CAGrucu3y+dK6ifA86fKfTDPCwqm9tOtv3vaW-NCgSMg-wu6wnQ@mail.gmail.com>
+ <06D2305A-C43B-470D-A1C3-941D44CB367B@gmail.com>
+ <20150302093656.14272535@free-electrons.com>
+Message-ID: <CAGrucu0+DcwqYFsJ7pWv05ievwiCy==BD6n4cStkEgFFVTOsDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 1, 2015 at 3:44 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Nathaniel" == Nathaniel Roach <nroach44@gmail.com> writes:
+2015-03-02 9:36 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Thomas De Schampheleire,
 >
->  > (By default)
->  > This fixes https://bugs.busybox.net/show_bug.cgi?id=7892
+> On Sun, 01 Mar 2015 22:52:41 +0100, Thomas De Schampheleire wrote:
 >
->  > Journald was attempting to write the logs to file before the
->  > underlying file system was up. A proposed solution was to bring
->  > /tmp up beforehand, but that did not always solve the issue.
+>> Thanks for clarifying, it makes more sense to me now. Keeping argparse but using the
+>>  dict-merging isn't too bad, it would address my main concern with the original
+>>  code (the not-so-beautiful handling of the arguments).
+>>
+>> So Thomas P: it's your call now: I'm just as ok with going for the approach proposed
+>>  by Andr?.
 >
->  > In addition, since the logging directory was a tmpfs to begin with
->  > (/var/log -> /tmp) this should save some cycles.
+> I really don't know to be honest. Originally, I was really in favor of
+> keeping a solution that doesn't require external modules, but you
+> pushed docopt, and I ended up being OK with it. So if now you tell me
+> there is a reasonable solution without docopt, why not.
 >
->  > Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
->
-> Sorry, cannot reproduce this here. How do you see it exactly?
->
-> See bugtracker for details about my tests with
-> qemu_arm_versatile_defconfig.
+> Who would do the rework? Andr?, are you willing to do it?
 >
 
-I recently started having this issue on my SAMA5 system and this patch
-fixed it. It seems to be some sort of race condition; before this
-patch it would occur about 1 out of 3 boots. I've since booted a dozen
-times without an issue.
+Sure - should I base it on Thomas DS' patchset (once merged) or his+this series?
 
-Mike
+> The thing is that there is still a number of very useful improvements
+> in the branch provided by Thomas DS. So in fact, I believe I might be
+> applying Thomas DS patches first, and then if someone wants to revert
+> back to argparse for argument parsing, a follow-up series should be
+> sent.
+>
+
+-- 
+Andr?
