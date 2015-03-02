@@ -1,41 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Mar 2015 23:46:28 +0100
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.0-9
-Message-ID: <20150302224950.845D77FA36@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 Mar 2015 20:00:38 -0300
+Subject: [Buildroot] [PATCH] libidn: bump to version 1.30
+Message-ID: <1425337238-15597-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f6edcc7927de81c7600e92a6101226bc1f7a65a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libidn/libidn.hash | 4 ++--
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 9d331f5..7df1ade 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index f486626..d41443e 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
 @@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 90c90397ccf74200cd0e3931d3b26e6722665db235a66a5af392ac25d133d8c2 ImageMagick-6.9.0-7.tar.xz
-+sha256 4f680e1ccfa31e18a8ca829e7749ebd62f2f81dfdba943f9504a824176f51c76 ImageMagick-6.9.0-9.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 03c1bd4..9a10e93 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+-# From https://lists.gnu.org/archive/html/info-gnu/2014-08/msg00006.html
+-sha256	fb82747dbbf9b36f703ed27293317d818d7e851d4f5773dedf3efa4db32a7c7c	libidn-1.29.tar.gz
++# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
++sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index fac9816..13436e9 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.9.0-7
-+IMAGEMAGICK_VERSION = 6.9.0-9
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-LIBIDN_VERSION = 1.29
++LIBIDN_VERSION = 1.30
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
+-- 
+2.0.5
