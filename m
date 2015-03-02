@@ -1,97 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 02 Mar 2015 22:27:17 -0000
-Subject: [Buildroot] [git commit] batctl: new package
-Message-ID: <20150302222715.E207F8057D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Mar 2015 22:27:18 -0000
+Subject: [Buildroot] [git commit] xdriver_xf86-input-evdev: needs
+	host-pkgconf
+Message-ID: <20150302222716.1AD9881771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20fcdcb34bfb7e03db1254bc8489c0e20ab31dab
+commit: http://git.buildroot.net/buildroot/commit/?id=69cf5f5ff70873d700ad7332c37e0a5c8e0ed509
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas:
- - remove trailing whitespace
- - remove "# libnl" comment in Config.in
- - remove BATCTL_SOURCE, which is not needed, since the default value
-   is used
- - pass $(TARGET_CONFIGURE_OPTS) in the make environment, not as a
-   make option, otherwise the CFLAGS += lines of batctl Makefile do
-   not have any effect, and lead to not have the proper include path
-   to the libnl header files.]
+The configure script uses PKG_CHECK_MODULES, so explictly add it to
+dependencies instead of relying on the fact that the xserver pulls it in.
 
-Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |    1 +
- package/batctl/Config.in   |   12 ++++++++++++
- package/batctl/batctl.hash |    2 ++
- package/batctl/batctl.mk   |   21 +++++++++++++++++++++
- 4 files changed, 36 insertions(+), 0 deletions(-)
+ .../xdriver_xf86-input-evdev.mk                    |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fe3d3d0..b9d6753 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1055,6 +1055,7 @@ menu "Networking applications"
- 	source "package/avahi/Config.in"
- 	source "package/axel/Config.in"
- 	source "package/bandwidthd/Config.in"
-+	source "package/batctl/Config.in"
- 	source "package/bcusdk/Config.in"
- 	source "package/bind/Config.in"
- 	source "package/bluez_utils/Config.in"
-diff --git a/package/batctl/Config.in b/package/batctl/Config.in
-new file mode 100644
-index 0000000..a60f4f6
---- /dev/null
-+++ b/package/batctl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_BATCTL
-+	bool "batctl"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  Batctl is the configuration and debugging tool for batman-adv.
-+
-+	  http://www.open-mesh.org/projects/batman-adv/wiki/Using-batctl
-+
-+comment "batctl needs a toolchain w/ IPv6, threads"
-+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
-new file mode 100644
-index 0000000..663e602
---- /dev/null
-+++ b/package/batctl/batctl.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	77509ed70232ebc0b73e2fa9471ae13b12d6547d167dda0a82f7a7fad7252c36  batctl-2014.4.0.tar.gz
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-new file mode 100644
-index 0000000..c458752
---- /dev/null
-+++ b/package/batctl/batctl.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# batctl
-+#
-+################################################################################
-+
-+BATCTL_VERSION = 2014.4.0
-+BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
-+BATCTL_LICENSE = GPLv2
-+BATCTL_DEPENDENCIES = libnl host-pkgconf
-+
-+define BATCTL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-+endef
-+
-+define BATCTL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index a8a9adf..5140301 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -9,6 +9,12 @@ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VE
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server xproto_randrproto xproto_xproto udev
++XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
++	host-pkgconf \
++	xproto_inputproto \
++	xserver_xorg-server \
++	xproto_randrproto \
++	xproto_xproto \
++	udev
+ 
+ $(eval $(autotools-package))
