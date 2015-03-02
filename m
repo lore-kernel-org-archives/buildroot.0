@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:20 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-r128:
-	bump version
-Message-ID: <20150302222717.4B4E0807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kconfig infra: make
+	update-config/defconfig handling symmetrical
+Message-ID: <20150302222717.BB6C8807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8f65d1d359a4b145eecddb3a6ba38c810e61dbda
+commit: http://git.buildroot.net/buildroot/commit/?id=1941386c3da9a4d5f14ab2c3c500188a0e221c08
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use git snapshot for compatibility with xorg xserver 1.17.0.
+Replace a 'cp --preserve' with a 'touch --reference' so that the code
+for foo-update-config and foo-update-defconfig is symmetrical to ease
+maintainability and increase clarity.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-r128.mk                     |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/pkg-kconfig.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-index 027186c..d4294ad 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index db56b7a..f76c7a7 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -78,8 +78,11 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 		$$($(2)_KCONFIG_OPTS) savedefconfig
  
--XDRIVER_XF86_VIDEO_R128_VERSION = 6.9.2
--XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_R128_VERSION = fcee44e469b22934a04bd3ee19ed101aaa176a54
-+XDRIVER_XF86_VIDEO_R128_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-r128
- XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_R128_AUTORECONF = YES
+ # Target to copy back the configuration to the source configuration file
++# Even though we could use 'cp --preserve-timestamps' here, the separate
++# cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
+ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+-	cp --preserve=timestamps -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
++	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
++	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+ 
+ # Note: make sure the timestamp of the stored configuration is not newer than
+ # the .config to avoid a useless rebuild. Note that, contrary to
