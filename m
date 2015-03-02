@@ -1,64 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 02 Mar 2015 21:43:27 +0100
-Subject: [Buildroot] Use case: legacy kernel with modern user-space?
-In-Reply-To: <201502191302.17430.ste@junkomatic.net>
-References: <201502191302.17430.ste@junkomatic.net>
-Message-ID: <54F4CB6F.4030606@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon,  2 Mar 2015 22:40:24 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libsrtp: don't error out if libdl
+	and zlib are not found
+Message-ID: <1425332425-7034-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/02/15 14:02, Steve James wrote:
-> Hello all,
-> 
-> We are using Buildroot with a vendor supplied 2.6 kernel and drivers, but I 
-> wish to include some modern user-space tools. The problem is that these 
-> require a newer GCC version that the one that was contemporary when the kernel 
-> and drivers were written. The team is reluctant to move GCC forward (from 
-> 4.5.3 to 4.7.4) for fear that this may expose subtle bugs in the vendor's 
-> drivers.
+Depending on how openssl was compiled, libdl and zlib may not be
+necessary for linking with libcrypto.a.
 
- Which userspace tools don't build anymore with 4.5.3? If it's just one or two,
-you could even consider compiling just that one with a first-stage 4.7.4 compiler.
+Upstream turn the error to a warning.
+https://github.com/cisco/libsrtp/commit/13fd694ae216fcdbc7165bcf77be9e5a1acbecfa
 
-> 
-> Can I invite your thought on how to resolve this?
-> 
-> 1. I have attempted to persuade the team that the risk to upgrading the 
-> compiler is acceptably small, that this is a difficult argument to win.
-> 
-> 2. I have proposed that we build only the kernel space with the old GCC and 
-> build user-space with the new GCC. I realise this is going off piste for 
-> Buildroot. What are the obstacles to this approach? Is it worth a try?
+Ref:
+https://github.com/cisco/libsrtp/issues/97
 
- I think this is your best bet. Toolchain for kernel and for userspace can be
-completely different, and the kernel can easily be built outside of buildroot
-(as long as you don't need to build out-of-tree modules like cryptodev of course).
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ .../0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
- Regards,
- Arnout
-
-
-> 
-> If it matters, we are building stock GCC with crostool-NG but I'd be receptive 
-> to alternative methods if it helped.
-> 
-> Thanks for your attention,
-> Steve.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
+index acb2c9a..1240d9f 100644
+--- a/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
++++ b/package/libsrtp/0002-A-autoconf-checks-for-libz-and-libdl-when-OpenSSL-is.patch
+@@ -22,9 +22,9 @@ index ee30daf..71df46b 100644
+     CFLAGS="$CFLAGS $(pkg-config --cflags openssl)";
+  
+ +   AC_CHECK_LIB([dl], [dlopen], [],
+-+             [AC_MSG_FAILURE([can't find libdl])])
+++             [AC_MSG_WARN([can't find libdl])])
+ +   AC_CHECK_LIB([z], [inflate], [],
+-+             [AC_MSG_FAILURE([can't find libz])])
+++             [AC_MSG_WARN([can't find libz])])
+     AC_CHECK_LIB([crypto], [EVP_EncryptInit], [],
+               [AC_MSG_FAILURE([can't find openssl >1.0.1 crypto lib])])
+     AC_CHECK_LIB([crypto], [EVP_aes_128_ctr], [],
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
