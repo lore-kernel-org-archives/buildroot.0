@@ -1,50 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Mar 2015 09:36:56 +0100
-Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
- misc improvements
-In-Reply-To: <06D2305A-C43B-470D-A1C3-941D44CB367B@gmail.com>
-References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
- <20150226110858.183d31f3@free-electrons.com>
- <EEF2BEA7-3CA2-4250-8E78-E2585246EE66@gmail.com>
- <54F258AD.5040301@mailerd.de>
- <CAAXf6LXbRo40L9HZHZKcmHBqMz-KtOXvipQ1GrPd57DhUKzo3Q@mail.gmail.com>
- <CAGrucu3y+dK6ifA86fKfTDPCwqm9tOtv3vaW-NCgSMg-wu6wnQ@mail.gmail.com>
- <06D2305A-C43B-470D-A1C3-941D44CB367B@gmail.com>
-Message-ID: <20150302093656.14272535@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 2 Mar 2015 08:53:57 +0000
+Subject: [Buildroot] [PATCH] kmod: bump version to 20
+Message-ID: <1425286437-52739-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+- Bump version to 20
+- Update the hash file
 
-On Sun, 01 Mar 2015 22:52:41 +0100, Thomas De Schampheleire wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/kmod/kmod.hash |    2 +-
+ package/kmod/kmod.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Thanks for clarifying, it makes more sense to me now. Keeping argparse but using the
->  dict-merging isn't too bad, it would address my main concern with the original
->  code (the not-so-beautiful handling of the arguments).
-> 
-> So Thomas P: it's your call now: I'm just as ok with going for the approach proposed
->  by Andr?.
-
-I really don't know to be honest. Originally, I was really in favor of
-keeping a solution that doesn't require external modules, but you
-pushed docopt, and I ended up being OK with it. So if now you tell me
-there is a reasonable solution without docopt, why not.
-
-Who would do the rework? Andr?, are you willing to do it?
-
-The thing is that there is still a number of very useful improvements
-in the branch provided by Thomas DS. So in fact, I believe I might be
-applying Thomas DS patches first, and then if someone wants to revert
-back to argparse for argument parsing, a follow-up series should be
-sent.
-
-Best regards,
-
-Thomas
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index 28f1ca1..cf7e802 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  3e7fee6eeff5435848b2dcc852bc8959066478d687d232284d67300c071e7b14  kmod-19.tar.xz
++sha256  89c1a1a2193c31f9ebe582640bfa2bd401341dc24119f5a7f702588116fadaa0  kmod-20.tar.xz
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index ff07c78..1ac83ea 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 19
++KMOD_VERSION = 20
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
