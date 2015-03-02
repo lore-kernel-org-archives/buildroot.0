@@ -1,38 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 02 Mar 2015 22:27:23 -0000
-Subject: [Buildroot] [git commit] barebox: qstrip the path to the custom
-	configuration file
-Message-ID: <20150302222717.E8FAE807B5@busybox.osuosl.org>
+Date: Mon, 02 Mar 2015 22:27:24 -0000
+Subject: [Buildroot] [git commit] configs: get rid of avr32 defconfigs
+Message-ID: <20150302222718.1FFF9807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cd04c3139bfc409b3c680ae136a2627af40417d
+commit: http://git.buildroot.net/buildroot/commit/?id=188c0a3168e1670069556c42c3130f006f5b062d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though this is not strictly necessary with the current version
-of barebox.mk, it becomes necessary when migrating barebox.mk to the
-kconfig infrastructure.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/barebox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/atngw100_defconfig  |   35 -----------------------------------
+ configs/atstk100x_defconfig |   26 --------------------------
+ 2 files changed, 0 insertions(+), 61 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 0fb7cec..f26c151 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -55,7 +55,7 @@ ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
- BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,\
- 	$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
- else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
--BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
-+BAREBOX_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
- endif
- 
- define BAREBOX_CONFIGURE_CMDS
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+deleted file mode 100644
+index d410f5b..0000000
+--- a/configs/atngw100_defconfig
++++ /dev/null
+@@ -1,35 +0,0 @@
+-# AVR32 is deprecated
+-BR2_DEPRECATED=y
+-
+-# Architecture
+-BR2_avr32=y
+-
+-# Lock down kernel headers version, to match the kernel version used
+-# below.
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.9.11"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
+-
+-# Filesystems
+-BR2_TARGET_ROOTFS_JFFS2=y
+-BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
+-BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x1000
+-BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
+-BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+-BR2_TARGET_ROOTFS_JFFS2_BE=y
+-BR2_TARGET_ROOTFS_TAR=y
+-BR2_TARGET_ROOTFS_TAR_NONE=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="atngw100"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
+-
+-# Kernel. Locked to 3.9.x, because 3.10.x fails to build with
+-# relocation truncated to fit: R_AVR32_16N_PCREL against symbol
+-# `_ctype'
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
+-BR2_LINUX_KERNEL_DEFCONFIG="atngw100"
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+deleted file mode 100644
+index 0e17e36..0000000
+--- a/configs/atstk100x_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-# AVR32 is deprecated
+-BR2_DEPRECATED=y
+-
+-# Architecture
+-BR2_avr32=y
+-
+-# Lock to same version as kernel
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.9.11"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
+-
+-# U-Boot
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="atstk1002"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.09"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.9.11"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="atstk1002"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_TAR=y
