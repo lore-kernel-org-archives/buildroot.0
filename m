@@ -1,52 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:20 -0000
-Subject: [Buildroot] [git commit] arch: kill avr32
-Message-ID: <20150302222718.16DB6807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-vmware:
+	bump version to 13.1.0
+Message-ID: <20150302222717.693B8807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a46007daa7128d316ab3f36da23828b8ab7aaf58
+commit: http://git.buildroot.net/buildroot/commit/?id=dd0fb09319749bedf7ee831a657161f693a64ec1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-avr32 was slated for removal in 2015.02. Make it so!
-
-This patch only definitively hides the symbol. When all references
-to it are eradicated (to come in followup patches), we'll eventually
-kill the symbol altogether.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .defconfig     |    1 -
- arch/Config.in |    2 +-
- 2 files changed, 1 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-vmware.mk                   |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/.defconfig b/.defconfig
-index 77ab11a..585be55 100644
---- a/.defconfig
-+++ b/.defconfig
-@@ -6,7 +6,6 @@ BR2_HAVE_DOT_CONFIG=y
- # BR2_alpha is not set
- # BR2_arm is not set
- # BR2_armeb is not set
--# BR2_avr32 is not set
- # BR2_cris is not set
- # BR2_ia64 is not set
- BR2_i386=y
-diff --git a/arch/Config.in b/arch/Config.in
-index 890e7e2..1719fe6 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -61,7 +61,7 @@ config BR2_avr32
- 	# components. If you're interested by AVR32, contact the
- 	# Buildroot community. Otherwise, its support will be removed
- 	# by the 2015.02 release.
--	depends on BR2_DEPRECATED_SINCE_2014_08
-+	depends on BR2_BROKEN
- 	help
- 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
- 	  Atmel.
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+index e77e5b8..ea4dd48 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.0.2
++XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.1.0
+ XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
