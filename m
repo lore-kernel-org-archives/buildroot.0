@@ -1,33 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Mar 2015 21:05:32 +0100
-Subject: [Buildroot] [git commit] website/news.html: add 2015.02
-	announcement link
-Message-ID: <20150302222724.3BF198057D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 02 Mar 2015 22:27:26 -0000
+Subject: [Buildroot] [git commit] package/x11r7/xlib_xtrans: bump to version
+	1.3.5, add hash
+Message-ID: <20150302222716.69F20807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1021766976319b40e64ca8dee12d21c758197801
+commit: http://git.buildroot.net/buildroot/commit/?id=2b81dea67f8ca3c4b35c970ef2a09e035d3cb49a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+xserver_xorg-server 1.17.0 depends on it.
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 99c9855..308152a 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -13,7 +13,8 @@
-     <p>The stable 2015.02 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02">CHANGES</a>
--    file for more details,
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2015-March/120396.html">announcement</a>
-     and go to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2015.02.tar.bz2">2015.02 release</a>.</p>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xlib_xtrans/xlib_xtrans.hash |    3 +++
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/package/x11r7/xlib_xtrans/xlib_xtrans.hash b/package/x11r7/xlib_xtrans/xlib_xtrans.hash
+new file mode 100644
+index 0000000..26c69a0
+--- /dev/null
++++ b/package/x11r7/xlib_xtrans/xlib_xtrans.hash
+@@ -0,0 +1,3 @@
++# From http://lists.x.org/archives/xorg-announce/2014-September/002481.html
++sha1	2d3ae1839d841f568bc481c6116af7d2a9f9ba59				xtrans-1.3.5.tar.bz2
++sha256	adbd3b36932ce4c062cd10f57d78a156ba98d618bdb6f50664da327502bc8301	xtrans-1.3.5.tar.bz2
+diff --git a/package/x11r7/xlib_xtrans/xlib_xtrans.mk b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+index bc84dfb..40f613c 100644
+--- a/package/x11r7/xlib_xtrans/xlib_xtrans.mk
++++ b/package/x11r7/xlib_xtrans/xlib_xtrans.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-XLIB_XTRANS_VERSION = 1.3.4
++XLIB_XTRANS_VERSION = 1.3.5
+ XLIB_XTRANS_SOURCE = xtrans-$(XLIB_XTRANS_VERSION).tar.bz2
+ XLIB_XTRANS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_XTRANS_LICENSE = MIT
