@@ -1,96 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:21 -0000
-Subject: [Buildroot] [git commit] package/gdb: farewell avr32
-Message-ID: <20150302222718.712CC807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: migrate to the kconfig
+	infrastructure
+Message-ID: <20150302222717.E1142807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=608060caa1c561cf80c899f14d755c66e3b86792
+commit: http://git.buildroot.net/buildroot/commit/?id=dff25ea2b9902ac786f4dbfa13056b79b902a734
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Migrate the linux package to the kconfig infrastructure.
+A notable change compared to the original behavior:
+
+- the targets linux-update-(def)config are now always saving the config
+  file, even for a defconfig bundled in the linux sources. This is done
+  to keep the kconfig infrastructure simple.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdb/Config.in      |    4 ++--
- package/gdb/Config.in.host |    7 -------
- package/gdb/gdb.mk         |    9 +--------
- 3 files changed, 3 insertions(+), 17 deletions(-)
+ linux/linux.mk |   36 ++++++++----------------------------
+ 1 files changed, 8 insertions(+), 28 deletions(-)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index b211878..db6adf5 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -40,10 +40,10 @@ config BR2_PACKAGE_GDB_DEBUGGER
- 	bool "full debugger"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
-+	depends on !BR2_sh && !BR2_sh64 && !BR2_microblaze && !BR2_bfin
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a321fa7..86dd1ee 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,6 +55,8 @@ LINUX_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
  
- comment "full gdb on target needs a toolchain w/ wchar"
--	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
-+	depends on !BR2_sh && !BR2_sh64 && !BR2_microblaze && !BR2_bfin
- 	depends on !BR2_USE_WCHAR
- 
- if BR2_PACKAGE_GDB_DEBUGGER
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index c8d6a94..2a03939 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -27,15 +27,10 @@ choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
- 	depends on !BR2_microblaze
--	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
- 	default BR2_GDB_VERSION_7_7
- 	help
- 	  Select the version of gdb you wish to use.
- 
--	config BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
--		depends on BR2_avr32
--		bool "gdb 6.7.1-avr32-2.1.5"
--
- 	config BR2_GDB_VERSION_7_7
- 		bool "gdb 7.7.x"
- 
-@@ -50,8 +45,6 @@ endif
- config BR2_GDB_VERSION
- 	string
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
--	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
--                                   (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
- 	default "arc-2014.12-gdb" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 24084b8..6a192fb 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -19,10 +19,6 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
++LINUX_MAKE_ENV = $(TARGET_MAKE_ENV)
++
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
+@@ -174,10 +176,11 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
  endif
  
--ifeq ($(GDB_VERSION),6.7.1-avr32-2.1.5)
--GDB_SITE = ftp://www.at91.com/pub/buildroot
--endif
+-define LINUX_CONFIGURE_CMDS
+-	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+-	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+-	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
++LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
++LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
++
++define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(BR2_arm)$(BR2_armeb),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+ 	$(if $(BR2_TARGET_ROOTFS_CPIO),
+@@ -222,7 +225,6 @@ define LINUX_CONFIGURE_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+-	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
+ endef
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+@@ -319,29 +321,7 @@ endef
+ 
+ include $(sort $(wildcard linux/linux-ext-*.mk))
+ 
+-$(eval $(generic-package))
 -
- # Starting from 7.8.x, bz2 tarballs no longer available, use .tar.xz
- # instead.
- ifneq ($(filter 7.8.%,$(GDB_VERSION)),)
-@@ -129,12 +125,9 @@ endif
- #  * --target, because we're doing a cross build rather than a real
- #    host build.
- #  * --enable-static because gdb really wants to use libbfd.a
--#  * --disable-shared, otherwise the old 6.7 version specific to AVR32
--#    doesn't build because it wants to link a shared libbfd.so against
--#    non-PIC liberty.a.
- HOST_GDB_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
--	--enable-static --disable-shared \
-+	--enable-static \
- 	--without-uiout \
- 	--disable-gdbtk \
- 	--without-x \
+-ifeq ($(BR2_LINUX_KERNEL),y)
+-linux-menuconfig linux-xconfig linux-gconfig linux-nconfig: linux-configure
+-	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+-		$(subst linux-,,$@)
+-	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
+-
+-linux-savedefconfig: linux-configure
+-	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+-		$(subst linux-,,$@)
+-
+-ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-linux-update-config: linux-configure $(LINUX_DIR)/.config
+-	cp -f $(LINUX_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+-
+-linux-update-defconfig: linux-savedefconfig
+-	cp -f $(LINUX_DIR)/defconfig $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+-else
+-linux-update-config: ;
+-linux-update-defconfig: ;
+-endif
+-endif
++$(eval $(kconfig-package))
+ 
+ # Support for rebuilding the kernel after the cpio archive has
+ # been generated in $(BINARIES_DIR)/rootfs.cpio.
