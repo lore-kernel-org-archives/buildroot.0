@@ -1,45 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:19 -0000
-Subject: [Buildroot] [git commit] ffmpeg: bump version to 2.5.4
-Message-ID: <20150302222718.AD351807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-mga: bump
+	version
+Message-ID: <20150302222717.8A2ED807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b32eac742e426e2a8e3e2cb01a4b17491c2bdfef
+commit: http://git.buildroot.net/buildroot/commit/?id=47e43a529b7961c9fa70e6f5bdc43beac54fc5e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 2.5.4
-- Update the hash file
+Use git snapshot for compatibility with xorg xserver 1.17.0.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash |    2 +-
- package/ffmpeg/ffmpeg.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-mga.mk                      |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index b1d8c95..c39174f 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	9d383d7ef9dffe6980849a93accfef848e197fdac9b1fbd02fca2798f863411a	ffmpeg-2.5.3.tar.bz2
-+sha256  cc91c166c2b0ad9aacc533e4d5637912df583b43834c68aeec12ded7e082a286  ffmpeg-2.5.4.tar.bz2
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f9c1d94..68a28a2 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+index b530394..b800fcf 100644
+--- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
++++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 2.5.3
-+FFMPEG_VERSION = 2.5.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-XDRIVER_XF86_VIDEO_MGA_VERSION = 1.6.3
+-XDRIVER_XF86_VIDEO_MGA_SOURCE = xf86-video-mga-$(XDRIVER_XF86_VIDEO_MGA_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_MGA_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_MGA_VERSION = 132dee029e36c9a91a85f178885e94a9f9b5ee37
++XDRIVER_XF86_VIDEO_MGA_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-mga
+ XDRIVER_XF86_VIDEO_MGA_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_MGA_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_MGA_AUTORECONF = YES
