@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 Mar 2015 19:40:46 -0300
-Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.0.29
-Message-ID: <1425336047-7409-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  2 Mar 2015 19:40:47 -0300
+Subject: [Buildroot] [PATCH 2/2] alsa-utils: bump to version 1.0.29
+In-Reply-To: <1425336047-7409-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1425336047-7409-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1425336047-7409-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +14,31 @@ Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/alsa-lib/alsa-lib.hash | 2 ++
- package/alsa-lib/alsa-lib.mk   | 2 +-
+ package/alsa-utils/alsa-utils.hash | 2 ++
+ package/alsa-utils/alsa-utils.mk   | 2 +-
  2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/alsa-lib/alsa-lib.hash
+ create mode 100644 package/alsa-utils/alsa-utils.hash
 
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
 new file mode 100644
-index 0000000..3e132c8
+index 0000000..ba5061b
 --- /dev/null
-+++ b/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index c67258f..3115433 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
++sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index f95e7a8..65702b7 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.0.28
-+ALSA_LIB_VERSION = 1.0.29
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPLv2.1+
+-ALSA_UTILS_VERSION = 1.0.28
++ALSA_UTILS_VERSION = 1.0.29
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPLv2
 -- 
 2.0.5
