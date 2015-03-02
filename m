@@ -1,84 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 02 Mar 2015 22:27:20 -0000
-Subject: [Buildroot] [git commit] package/binutils: avr32 is gone
-Message-ID: <20150302222718.5B8FB807B5@busybox.osuosl.org>
+Date: Mon, 02 Mar 2015 22:27:21 -0000
+Subject: [Buildroot] [git commit] linux: qstrip the path to the custom
+	configuration file
+Message-ID: <20150302222717.D476A807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a645f61b0eb40423cee3ccf1bd1d5d61ac89be5e
+commit: http://git.buildroot.net/buildroot/commit/?id=89a47724e943fe449ce55b6341d64744fcb8e18a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Even though this is not strictly necessary with the current version of
+linux.mk, it becomes necessary when migrating linux.mk to the kconfig
+infrastructure.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in.host |   13 ++++---------
- package/binutils/binutils.mk    |    8 --------
- 2 files changed, 4 insertions(+), 17 deletions(-)
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 0739467..504e9ca 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -7,33 +7,28 @@ choice
- 	help
- 	  Select the version of binutils you wish to use.
- 
--	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
--		depends on BR2_avr32
--		bool "binutils 2.18-avr32-1.0.1"
--
- 	config BR2_BINUTILS_VERSION_2_22
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
-+		depends on !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.22"
- 
- 	# bfin disabled for newer binutils due to
- 	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
- 	config BR2_BINUTILS_VERSION_2_23_2
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
-+		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24
--		depends on !BR2_avr32 && !BR2_bfin
-+		depends on !BR2_bfin
- 		bool "binutils 2.24"
- 
- 	config BR2_BINUTILS_VERSION_2_25
--		depends on !BR2_avr32 && !BR2_bfin
-+		depends on !BR2_bfin
- 		bool "binutils 2.25"
- 
- endchoice
- 
- config BR2_BINUTILS_VERSION
- 	string
--	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
- 	default "arc-2014.12"	if BR2_arc
- 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
- 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index c3b3c18..9e99253 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -8,17 +8,9 @@
- # If not, we do like other packages
- BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
- ifeq ($(BINUTILS_VERSION),)
--ifeq ($(BR2_avr32),y)
--# avr32 uses a special version
--BINUTILS_VERSION = 2.18-avr32-1.0.1
--else
- BINUTILS_VERSION = 2.22
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29f59e8..a321fa7 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -171,7 +171,7 @@ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
++KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
  endif
--endif
  
--ifeq ($(ARCH),avr32)
--BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
--endif
- ifeq ($(BR2_arc),y)
- BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+ define LINUX_CONFIGURE_CMDS
