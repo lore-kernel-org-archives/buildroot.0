@@ -1,24 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Mar 2015 09:32:28 +0100
-Subject: [Buildroot] [PATCH v2 1/7] directfb: bump version to 1.7.7 and
- add hash
-In-Reply-To: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
-References: <trinity-1742d787-d422-4294-95ae-83889bfe4ab0-1425237355742@3capp-gmx-bs62>
-Message-ID: <20150302093228.1cba64f0@free-electrons.com>
+Date: Mon, 2 Mar 2015 09:33:38 +0100
+Subject: [Buildroot] [PATCH v5 03/11] autobuild-run: add option
+ --make-opts for custom Buildroot options
+In-Reply-To: <CAAXf6LVaaz7UhstS+aZVsat=N1DUm02Dk6RC=TDvYoxK-0Rdsg@mail.gmail.com>
+References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
+ <1418414696-32584-4-git-send-email-patrickdepinguin@gmail.com>
+ <20150228202909.3b5ce127@free-electrons.com>
+ <CAAXf6LVaaz7UhstS+aZVsat=N1DUm02Dk6RC=TDvYoxK-0Rdsg@mail.gmail.com>
+Message-ID: <20150302093338.75ab5e78@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Thomas De Schampheleire,
 
-On Sun, 1 Mar 2015 20:15:55 +0100, Peter Seiderer wrote:
+On Sun, 1 Mar 2015 21:42:34 +0100, Thomas De Schampheleire wrote:
 
-> Will try to provide an updated patch version (my versions plus yours)
-> and do more testing...
+> make-opts is given the empty string '' as default in the original code
+> I sent, and thus can be splitted without the above error. I guess you
+> are seeing this after making some other change?
 
-Thanks a lot!
+Nope, I don't think I've done any change regarding this, unless I did
+a mistake, of course. You can see the code as I tested it in the Git
+repository I pointed at.
 
 Thomas
 -- 
