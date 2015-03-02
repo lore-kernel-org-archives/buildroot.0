@@ -1,350 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:19 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: bump
-	version
-Message-ID: <20150302222717.2AE2E807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: avoid unnecessary changes in
+	defconfig for INITRAMFS_SOURCE
+Message-ID: <20150302222718.0BF6A807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e5e33d608d93c82fb3339d390f7dd80af1bb368
+commit: http://git.buildroot.net/buildroot/commit/?id=00daf37c4f43630d92dd54c5e36005e00a9b25c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use git snapshot for compatibility with xorg xserver 1.17.0,
-remove patches applied upstream.
+When Buildroot is configured to append the root filesystem to the Linux
+kernel as initramfs, Buildroot sets the path to the initramfs source
+dynamically in the Linux configuration file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+As this path is specified as an absolute path, typically being different
+for different users of the same project (e.g. containing a username),
+saving the configuration to a version control system (for example using
+'make linux-update-defconfig') would result in a difference for this
+path at every invocation by a different user.
+Although this is technically not an issue, it is confusing that this
+generates a difference.
+
+Address this issue by using a not-yet-expanded make variable to specify
+the path to the initramfs source. That variable will be expanded by the
+Linux build system, which uses it both as a Makefile variable and a
+shell variable; thus, it needs to be specified in LINUX_MAKE_ENV (so
+it is exported and available in sub-processes of make).  Any saved
+configuration file would simply contain the reference to the
+not-yet-expanded variable.
+
+As in the Linux build system, the config variables are both read from
+make as from a shell script, we cannot use $() syntax as this would be
+interpreted as a command invocation by the shell. Instead, use ${}
+syntax which is interpreted as variable reference both by the shell as
+by make.
+
+[Thomas:
+ - Really make the patch work by using $(LINUX_MAKE_ENV) instead of
+   $(TARGET_MAKE_ENV). Otherwise, the new BR2_BINARIES_DIR variable is
+   not passed at all stages of the build process, which makes the
+   build fail when an initramfs is used.]
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-sis/0002-mibstore.patch     |   34 --------
- .../0003-xf86UnMapVidMem.patch                     |   86 --------------------
- .../xdriver_xf86-video-sis/0004-xf86Priv.patch     |   43 ----------
- .../xdriver_xf86-video-sis/0005-hvdisplay.patch    |   46 -----------
- .../xdriver_xf86-video-sis/0006-fixwarnings.patch  |   67 ---------------
- .../xdriver_xf86-video-sis.mk                      |    5 +-
- 6 files changed, 2 insertions(+), 279 deletions(-)
+ linux/linux.mk |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-mibstore.patch b/package/x11r7/xdriver_xf86-video-sis/0002-mibstore.patch
-deleted file mode 100644
-index 436e437..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0002-mibstore.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 926d4f655c8491b68a338f50c810f6729686ec9f Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Tue, 25 Sep 2012 12:54:51 +0000
--Subject: Remove mibstore.h
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=926d4f655c8491b68a338f50c810f6729686ec9f
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 4c9b9cb..46cfefd 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -57,7 +57,6 @@
-- #include "fb.h"
-- #include "micmap.h"
-- #include "mipointer.h"
---#include "mibstore.h"
-- #include "edid.h"
-- 
-- #define SIS_NEED_inSISREG
--@@ -8883,7 +8882,6 @@ SISScreenInit(SCREEN_INIT_ARGS_DECL)
--     }
--     pSiS->SiSFastVidCopyDone = TRUE;
-- 
---    miInitializeBackingStore(pScreen);
--     xf86SetBackingStore(pScreen);
--     xf86SetSilkenMouse(pScreen);
-- 
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0003-xf86UnMapVidMem.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xf86UnMapVidMem.patch
-deleted file mode 100644
-index 6082fb9..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0003-xf86UnMapVidMem.patch
-+++ /dev/null
-@@ -1,86 +0,0 @@
--From 339fb3bc032b9f35b07b90480ae82a0fd352e078 Mon Sep 17 00:00:00 2001
--From: Jan Lindemann <jan@jannet.de>
--Date: Thu, 30 Aug 2012 18:09:10 +0000
--Subject: Replace xf86UnMapVidMem with pci_device_unmap_range
--
--Mixing pci_device_map_range with xf86UnMapVidMem doesn't work too well.
--
--X.Org bug#18028 <https://bugs.freedesktop.org/show_bug.cgi?id=18028>
--
--Bug found by Bryan Henderson <bryanh@giraffe-data.com>
--
--Signed-off-by: Julien Cristau <jcristau@debian.org>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=339fb3bc032b9f35b07b90480ae82a0fd352e078
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 61e8075..4c9b9cb 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -7344,7 +7344,11 @@ SISUnmapMem(ScrnInfoPtr pScrn)
--         if(pSiSEnt->MapCountIOBase) {
-- 	    pSiSEnt->MapCountIOBase--;
-- 	    if((pSiSEnt->MapCountIOBase == 0) || (pSiSEnt->forceUnmapIOBase)) {
--+#ifndef XSERVER_LIBPCIACCESS
-- 		xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiSEnt->IOBase, (pSiS->mmioSize * 1024));
--+#else
--+	        pci_device_unmap_range(pSiS->PciInfo, pSiSEnt->IOBase, (pSiS->mmioSize * 1024));
--+#endif
-- 		pSiSEnt->IOBase = NULL;
-- 		pSiSEnt->MapCountIOBase = 0;
-- 		pSiSEnt->forceUnmapIOBase = FALSE;
--@@ -7355,7 +7359,11 @@ SISUnmapMem(ScrnInfoPtr pScrn)
-- 	if(pSiSEnt->MapCountIOBaseDense) {
-- 	    pSiSEnt->MapCountIOBaseDense--;
-- 	    if((pSiSEnt->MapCountIOBaseDense == 0) || (pSiSEnt->forceUnmapIOBaseDense)) {
--+#ifndef XSERVER_LIBPCIACCESS
-- 		xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiSEnt->IOBaseDense, (pSiS->mmioSize * 1024));
--+#else
--+		pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiSEnt->IOBaseDense, (pSiS->mmioSize * 1024));
--+#endif
-- 		pSiSEnt->IOBaseDense = NULL;
-- 		pSiSEnt->MapCountIOBaseDense = 0;
-- 		pSiSEnt->forceUnmapIOBaseDense = FALSE;
--@@ -7366,7 +7374,11 @@ SISUnmapMem(ScrnInfoPtr pScrn)
-- 	if(pSiSEnt->MapCountFbBase) {
-- 	    pSiSEnt->MapCountFbBase--;
-- 	    if((pSiSEnt->MapCountFbBase == 0) || (pSiSEnt->forceUnmapFbBase)) {
--+#ifndef XSERVER_LIBPCIACCESS
-- 		xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiSEnt->RealFbBase, pSiS->FbMapSize);
--+#else
--+		pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiSEnt->RealFbBase, pSiS->FbMapSize);
--+#endif
-- 		pSiSEnt->FbBase = pSiSEnt->RealFbBase = NULL;
-- 		pSiSEnt->MapCountFbBase = 0;
-- 		pSiSEnt->forceUnmapFbBase = FALSE;
--@@ -7376,13 +7388,25 @@ SISUnmapMem(ScrnInfoPtr pScrn)
-- 	}
--     } else {
-- #endif
--+#ifndef XSERVER_LIBPCIACCESS
-- 	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiS->IOBase, (pSiS->mmioSize * 1024));
--+#else
--+	pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiS->IOBase, (pSiS->mmioSize * 1024));
--+#endif
-- 	pSiS->IOBase = NULL;
-- #ifdef __alpha__
--+#ifndef XSERVER_LIBPCIACCESS
-- 	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiS->IOBaseDense, (pSiS->mmioSize * 1024));
--+#else
--+	pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiS->IOBaseDense, (pSiS->mmioSize * 1024));
--+#endif
-- 	pSiS->IOBaseDense = NULL;
-- #endif
--+#ifndef XSERVER_LIBPCIACCESS
-- 	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pSiS->RealFbBase, pSiS->FbMapSize);
--+#else
--+	pci_device_unmap_range(pSiS->PciInfo, (pointer)pSiS->RealFbBase, pSiS->FbMapSize);
--+#endif
-- 	pSiS->FbBase = pSiS->RealFbBase = NULL;
-- #ifdef SISDUALHEAD
--     }
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0004-xf86Priv.patch b/package/x11r7/xdriver_xf86-video-sis/0004-xf86Priv.patch
-deleted file mode 100644
-index bf36b0d..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0004-xf86Priv.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 7d4402786b758de3e6ce2641e15a39d612d5c518 Mon Sep 17 00:00:00 2001
--From: Adam Jackson <ajax@redhat.com>
--Date: Mon, 15 Oct 2012 23:11:30 +0000
--Subject: Stop including xf86Priv.h
--
--As the name might suggest, it's server-private.
--
--Signed-off-by: Adam Jackson <ajax@redhat.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=7d4402786b758de3e6ce2641e15a39d612d5c518
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis.h b/src/sis.h
--index 46fca2a..20e6134 100644
----- a/src/sis.h
--+++ b/src/sis.h
--@@ -75,7 +75,6 @@
-- 
-- #include "compiler.h"
-- #include "xf86Pci.h"
---#include "xf86Priv.h"
-- #include "xf86_OSproc.h"
-- #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 6
-- #include "xf86Resources.h"
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 46cfefd..cefe503 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -93,6 +93,10 @@
-- #include "dri.h"
-- #endif
-- 
--+#ifndef DEFAULT_DPI
--+#define DEFAULT_DPI 96
--+#endif
--+
-- /*
--  * LookupWindow was removed with video abi 11.
--  */
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0005-hvdisplay.patch b/package/x11r7/xdriver_xf86-video-sis/0005-hvdisplay.patch
-deleted file mode 100644
-index 584d3f4..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0005-hvdisplay.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 0a4336efaafac4c34d4287b5df586bbb418f7f76 Mon Sep 17 00:00:00 2001
--From: Alan Coopersmith <alan.coopersmith@oracle.com>
--Date: Sat, 26 Oct 2013 21:27:17 +0000
--Subject: Fix HDisplay/VDisplay typos
--
--Found by gcc -Wlogicalops:
--
--sis_driver.c: In function 'SiS_CheckModeCRT2':
--sis_driver.c:13754:5: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13755:6: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13756:6: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13758:5: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--sis_driver.c:13759:6: warning: logical 'and' of mutually exclusive tests is always false [-Wlogical-op]
--
--Signed-off-by: Alan Coopersmith <alan.coopersmith@oracle.com>
--Reviewed-by: Gaetan Nadon <memsize@videotron.ca>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=0a4336efaafac4c34d4287b5df586bbb418f7f76
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index cefe503..80b8d51 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -13751,12 +13751,12 @@ SiS_CheckModeCRT2(ScrnInfoPtr pScrn, DisplayModePtr mode, unsigned int VBFlags,
--       if( ((mode->HDisplay <= pSiS->LCDwidth) &&
--            (mode->VDisplay <= pSiS->LCDheight)) ||
-- 	  ((pSiS->SiS_Pr->SiS_CustomT == CUT_PANEL848) &&
---	   (((mode->HDisplay == 1360) && (mode->HDisplay == 768)) ||
---	    ((mode->HDisplay == 1024) && (mode->HDisplay == 768)) ||
---	    ((mode->HDisplay ==  800) && (mode->HDisplay == 600)))) ||
--+	   (((mode->HDisplay == 1360) && (mode->VDisplay == 768)) ||
--+	    ((mode->HDisplay == 1024) && (mode->VDisplay == 768)) ||
--+	    ((mode->HDisplay ==  800) && (mode->VDisplay == 600)))) ||
-- 	  ((pSiS->SiS_Pr->SiS_CustomT == CUT_PANEL856) &&
---	   (((mode->HDisplay == 1024) && (mode->HDisplay == 768)) ||
---	    ((mode->HDisplay ==  800) && (mode->HDisplay == 600)))) ) {
--+	   (((mode->HDisplay == 1024) && (mode->VDisplay == 768)) ||
--+	    ((mode->HDisplay ==  800) && (mode->VDisplay == 600)))) ) {
-- 
-- 	 ModeIndex = SiS_GetModeID_LCD(pSiS->VGAEngine, VBFlags, mode->HDisplay, mode->VDisplay, i,
-- 				pSiS->FSTN, pSiS->SiS_Pr->SiS_CustomT, pSiS->LCDwidth, pSiS->LCDheight,
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0006-fixwarnings.patch b/package/x11r7/xdriver_xf86-video-sis/0006-fixwarnings.patch
-deleted file mode 100644
-index 3598c9e..0000000
---- a/package/x11r7/xdriver_xf86-video-sis/0006-fixwarnings.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From 49796d6a3274adc0250ee07faa6bc63e41c98740 Mon Sep 17 00:00:00 2001
--From: Peter Hutterer <peter.hutterer@who-t.net>
--Date: Thu, 21 Nov 2013 22:21:18 +0000
--Subject: Fix format-security warnings
--
--sis_driver.c: In function 'SISErrorLog':
--sis_driver.c:432:5: error: format not a string literal and no format arguments [-Werror=format-security]
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--     ^
--sis_driver.c:439:5: error: format not a string literal and no format arguments [-Werror=format-security]
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--     ^
--sis_driver.c: In function 'SiSUpdateXineramaScreenInfo':
--sis_driver.c:1917:4: error: format not a string literal and no format arguments [-Werror=format-security]
--    xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--    ^
--sis_driver.c:1924:8: error: format not a string literal and no format arguments [-Werror=format-security]
--        xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Reviewed-by: Alan Coopersmith <alan.coopersmith@oracle.com>
-----
--Fetch from:
--http://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=49796d6a3274adc0250ee07faa6bc63e41c98740
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
--diff --git a/src/sis_driver.c b/src/sis_driver.c
--index 80b8d51..bd9c4e1 100644
----- a/src/sis_driver.c
--+++ b/src/sis_driver.c
--@@ -429,14 +429,14 @@ SISErrorLog(ScrnInfoPtr pScrn, const char *format, ...)
--     static const char *str = "**************************************************\n";
-- 
--     va_start(ap, format);
---    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--+    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "%s", str);
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-- 	"                      ERROR:\n");
--     xf86VDrvMsgVerb(pScrn->scrnIndex, X_ERROR, 1, format, ap);
--     va_end(ap);
--     xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
-- 	"                  END OF MESSAGE\n");
---    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, str);
--+    xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "%s", str);
-- }
-- 
-- static void
--@@ -1914,14 +1914,14 @@ SiSUpdateXineramaScreenInfo(ScrnInfoPtr pScrn1)
--        if(infochanged && !usenonrect) {
-- 	  xf86DrvMsg(pScrn1->scrnIndex, X_INFO,
-- 			"Virtual screen size does not match maximum display modes...\n");
---	  xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--+	  xf86DrvMsg(pScrn1->scrnIndex, X_INFO, "%s", rectxine);
-- 
--        }
--     } else if(infochanged && usenonrect) {
--        usenonrect = FALSE;
--        xf86DrvMsg(pScrn1->scrnIndex, X_INFO,
-- 		"Only clone modes available for this virtual screen size...\n");
---       xf86DrvMsg(pScrn1->scrnIndex, X_INFO, rectxine);
--+       xf86DrvMsg(pScrn1->scrnIndex, X_INFO, "%s", rectxine);
--     }
-- 
--     if(pSiS->maxCRT1_X1) {		/* Means we have at least one non-clone mode */
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index 1937c45..ee93526 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 86dd1ee..accc42e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -55,7 +55,9 @@ LINUX_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
  
--XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.7
--XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_SIS_VERSION = 0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
-+XDRIVER_XF86_VIDEO_SIS_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-sis
- XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
+-LINUX_MAKE_ENV = $(TARGET_MAKE_ENV)
++LINUX_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	BR_BINARIES_DIR=$(BINARIES_DIR)
+ 
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+@@ -191,7 +193,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	# rebuilt using the linux-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$(BINARIES_DIR)/rootfs.cpio",$(@D)/.config)
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+@@ -230,7 +232,7 @@ endef
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
+ endef
+ define LINUX_INSTALL_DTB
+ 	# dtbs moved from arch/<ARCH>/boot to arch/<ARCH>/boot/dts since 3.8-rc1
+@@ -277,9 +279,9 @@ endif
+ define LINUX_BUILD_CMDS
+ 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+ 		cp $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+-		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
++		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+@@ -312,7 +314,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+-		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
++		$(LINUX_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) modules_install; \
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
+ 	fi
+@@ -328,7 +330,7 @@ $(eval $(kconfig-package))
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
