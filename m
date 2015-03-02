@@ -1,37 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 02 Mar 2015 21:37:24 +0100
-Subject: [Buildroot] Kernel Patches Not Applied
-In-Reply-To: <36A43B0E1E88D84791516F9D44BC48331B4A722A@corpmail01.corp.sensis.com>
-References: <36A43B0E1E88D84791516F9D44BC48331B4A722A@corpmail01.corp.sensis.com>
-Message-ID: <54F4CA04.8050601@mind.be>
+Date: Mon, 02 Mar 2015 21:43:27 +0100
+Subject: [Buildroot] Use case: legacy kernel with modern user-space?
+In-Reply-To: <201502191302.17430.ste@junkomatic.net>
+References: <201502191302.17430.ste@junkomatic.net>
+Message-ID: <54F4CB6F.4030606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Nicholas,
+On 19/02/15 14:02, Steve James wrote:
+> Hello all,
+> 
+> We are using Buildroot with a vendor supplied 2.6 kernel and drivers, but I 
+> wish to include some modern user-space tools. The problem is that these 
+> require a newer GCC version that the one that was contemporary when the kernel 
+> and drivers were written. The team is reluctant to move GCC forward (from 
+> 4.5.3 to 4.7.4) for fear that this may expose subtle bugs in the vendor's 
+> drivers.
 
-On 26/02/15 19:29, Crast, Nicholas wrote:
+ Which userspace tools don't build anymore with 4.5.3? If it's just one or two,
+you could even consider compiling just that one with a first-stage 4.7.4 compiler.
 
-> I am currently using buildroot-2014.11, and I am having issues patching my
-> kernel. My kernel is a custom (untarred) source, so the build output is in
-> output/build/linux-custom.
+> 
+> Can I invite your thought on how to resolve this?
+> 
+> 1. I have attempted to persuade the team that the risk to upgrading the 
+> compiler is acceptably small, that this is a difficult argument to win.
+> 
+> 2. I have proposed that we build only the kernel space with the old GCC and 
+> build user-space with the new GCC. I realise this is going off piste for 
+> Buildroot. What are the obstacles to this approach? Is it worth a try?
 
- Patches are not applied on a custom local source tree
-(BR2_LINUX_KERNEL_CUSTOM_LOCAL). The typical use case for this is when you have
-a local checkout of the source code which is managed by something like git
-submodules or gerrit or whatnot.
-
- If you want to apply patches to a custom source tree, use
-BR2_LINUX_KERNEL_CUSTOM_TARBALL with a file: or scp: URL.
+ I think this is your best bet. Toolchain for kernel and for userspace can be
+completely different, and the kernel can easily be built outside of buildroot
+(as long as you don't need to build out-of-tree modules like cryptodev of course).
 
 
  Regards,
  Arnout
 
 
-[snip]
+> 
+> If it matters, we are building stock GCC with crostool-NG but I'd be receptive 
+> to alternative methods if it helped.
+> 
+> Thanks for your attention,
+> Steve.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
