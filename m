@@ -1,40 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 02 Mar 2015 22:27:16 -0000
-Subject: [Buildroot] [git commit] linux: bump default to version 3.19
-Message-ID: <20150302222715.CD5508057D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] glibc: set version 2.20 as default
+Message-ID: <20150302222715.982578057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e076d6a8d4e2130b749bbcaf2ae7ac3c40e5d526
+commit: http://git.buildroot.net/buildroot/commit/?id=d15b3df04e78515907575cc4087dc28fcb200c70
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibc/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c981493..28cb36e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 37e108e..890d007 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_GLIBC
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.18.6"
-+	bool "3.19"
+ choice
+ 	prompt "glibc version"
+-	default BR2_GLIBC_VERSION_2_19
++	default BR2_GLIBC_VERSION_2_20
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.18.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.19" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ config BR2_GLIBC_VERSION_2_19
+ 	bool "2.19"
