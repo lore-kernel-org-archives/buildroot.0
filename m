@@ -1,43 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:20 -0000
-Subject: [Buildroot] [git commit] iproute2: bump to version 3.19.0
-Message-ID: <20150302222718.BF0C3807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/avr32: decommission for real
+Message-ID: <20150302222718.9843D807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47ecd4a841c70148903bb3c534e589d8b6df4882
+commit: http://git.buildroot.net/buildroot/commit/?id=80be8753d5bacc865ceeee26c55bf4b0c2940e10
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/iproute2/iproute2.hash |    2 +-
- package/iproute2/iproute2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Now that we have absolutely zero reference to the avr32 architecture, we
+can now really decommission the symbol.
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 35dc554..40dd0a5 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,2 +1,2 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	d5a182154abd0749b1df7d1649115a32c65f559951477396203b1f514dbff1df	iproute2-3.18.0.tar.xz
-+sha256	e2f9f8c36e166f2ba6c0e1e7a9ad84cdf7c1615b93df49dac44563d7b57fd7b0	iproute2-3.19.0.tar.xz
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 0838463..688ae97 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in       |   19 -------------------
+ arch/Config.in.avr32 |   11 -----------
+ 2 files changed, 0 insertions(+), 30 deletions(-)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 1719fe6..16ad8be 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -53,21 +53,6 @@ config BR2_aarch64
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+ 	  http://en.wikipedia.org/wiki/ARM
  
--IPROUTE2_VERSION = 3.18.0
-+IPROUTE2_VERSION = 3.19.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex
+-config BR2_avr32
+-	bool "AVR32"
+-	select BR2_SOFT_FLOAT
+-	# This architecture is obsolete and complicated to maintain to
+-	# do the lack of upstream support in the major toolchain
+-	# components. If you're interested by AVR32, contact the
+-	# Buildroot community. Otherwise, its support will be removed
+-	# by the 2015.02 release.
+-	depends on BR2_BROKEN
+-	help
+-	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+-	  Atmel.
+-	  http://www.atmel.com/
+-	  http://en.wikipedia.org/wiki/Avr32
+-
+ config BR2_bfin
+ 	bool "Blackfin"
+ 	help
+@@ -328,10 +313,6 @@ if BR2_aarch64
+ source "arch/Config.in.aarch64"
+ endif
+ 
+-if BR2_avr32
+-source "arch/Config.in.avr32"
+-endif
+-
+ if BR2_bfin
+ source "arch/Config.in.bfin"
+ endif
+diff --git a/arch/Config.in.avr32 b/arch/Config.in.avr32
+deleted file mode 100644
+index fc1f4f6..0000000
+--- a/arch/Config.in.avr32
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_ARCH
+-	default "avr32"
+-
+-config BR2_ENDIAN
+-	default "BIG"
+-
+-config BR2_GCC_TARGET_ARCH
+-	default "ap"
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
