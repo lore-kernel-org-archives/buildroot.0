@@ -1,376 +1,597 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Mar 2015 13:07:44 +0100
-Subject: [Buildroot] [git commit] wine: New package
-Message-ID: <20150302222724.0E4FE8057D@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 Mar 2015 19:31:23 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: update to the latest
+	kernel/headers versions
+Message-ID: <1425335483-6982-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6803b9f91357773154daed13d6e83712d49476c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+qemu_arm_vexpress_defconfig is broken for 3.19 so keep it with 3.18.x
 
-Wine is a compatibility layer capable of running Windows applications
-on Linux.
-
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Only build-tested, not run-time tested y lack of Windows apps]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: fix a few typos in one comment in the .mk file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in      |    1 +
- package/wine/Config.in |   21 ++++
- package/wine/wine.hash |    3 +
- package/wine/wine.mk   |  292 ++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 317 insertions(+), 0 deletions(-)
+ .../qemu/aarch64-virt/{linux-3.18.config => linux-3.19.config} |  0
+ .../arm-versatile/{linux-3.18.config => linux-3.19.config}     |  0
+ .../microblazebe-mmu/{linux-3.18.config => linux-3.19.config}  |  0
+ .../microblazeel-mmu/{linux-3.18.config => linux-3.19.config}  |  0
+ board/qemu/mips-malta/{linux-3.18.config => linux-3.19.config} |  0
+ .../qemu/mips64-malta/{linux-3.18.config => linux-3.19.config} |  0
+ .../mips64el-malta/{linux-3.18.config => linux-3.19.config}    |  0
+ .../qemu/mipsel-malta/{linux-3.18.config => linux-3.19.config} |  0
+ .../qemu/ppc-g3beige/{linux-3.18.config => linux-3.19.config}  |  0
+ board/qemu/sh4-r2d/{linux-3.18.config => linux-3.19.config}    |  0
+ board/qemu/sparc-ss10/{linux-3.18.config => linux-3.19.config} |  0
+ board/qemu/{x86_64/linux-3.18.config => x86/linux-3.19.config} |  0
+ board/qemu/{x86/linux-3.18.config => x86_64/linux-3.19.config} |  0
+ .../qemu/xtensa-lx60/{linux-3.18.config => linux-3.19.config}  |  0
+ configs/qemu_aarch64_virt_defconfig                            | 10 +++++-----
+ configs/qemu_arm_nuri_defconfig                                |  4 ++--
+ configs/qemu_arm_versatile_defconfig                           | 10 +++++-----
+ configs/qemu_arm_vexpress_defconfig                            |  4 ++--
+ configs/qemu_microblazebe_mmu_defconfig                        | 10 +++++-----
+ configs/qemu_microblazeel_mmu_defconfig                        | 10 +++++-----
+ configs/qemu_mips64_malta_defconfig                            | 10 +++++-----
+ configs/qemu_mips64el_malta_defconfig                          | 10 +++++-----
+ configs/qemu_mips_malta_defconfig                              | 10 +++++-----
+ configs/qemu_mipsel_malta_defconfig                            | 10 +++++-----
+ configs/qemu_ppc64_pseries_defconfig                           |  8 ++++----
+ configs/qemu_ppc_g3beige_defconfig                             | 10 +++++-----
+ configs/qemu_ppc_mpc8544ds_defconfig                           |  8 ++++----
+ configs/qemu_ppc_virtex_ml507_defconfig                        |  8 ++++----
+ configs/qemu_sh4_r2d_defconfig                                 | 10 +++++-----
+ configs/qemu_sparc_ss10_defconfig                              | 10 +++++-----
+ configs/qemu_x86_64_defconfig                                  | 10 +++++-----
+ configs/qemu_x86_defconfig                                     | 10 +++++-----
+ configs/qemu_xtensa_lx60_defconfig                             | 10 +++++-----
+ 33 files changed, 86 insertions(+), 86 deletions(-)
+ rename board/qemu/aarch64-virt/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/arm-versatile/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/microblazebe-mmu/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/microblazeel-mmu/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/mips-malta/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/mips64-malta/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/mips64el-malta/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/mipsel-malta/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/ppc-g3beige/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/sh4-r2d/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/sparc-ss10/{linux-3.18.config => linux-3.19.config} (100%)
+ rename board/qemu/{x86_64/linux-3.18.config => x86/linux-3.19.config} (100%)
+ rename board/qemu/{x86/linux-3.18.config => x86_64/linux-3.19.config} (100%)
+ rename board/qemu/xtensa-lx60/{linux-3.18.config => linux-3.19.config} (100%)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1d8ec1a..3aa664a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1051,6 +1051,7 @@ menu "Miscellaneous"
- 	source "package/snowball-init/Config.in"
- 	source "package/sound-theme-borealis/Config.in"
- 	source "package/sound-theme-freedesktop/Config.in"
-+	source "package/wine/Config.in"
- endmenu
+diff --git a/board/qemu/aarch64-virt/linux-3.18.config b/board/qemu/aarch64-virt/linux-3.19.config
+similarity index 100%
+rename from board/qemu/aarch64-virt/linux-3.18.config
+rename to board/qemu/aarch64-virt/linux-3.19.config
+diff --git a/board/qemu/arm-versatile/linux-3.18.config b/board/qemu/arm-versatile/linux-3.19.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-3.18.config
+rename to board/qemu/arm-versatile/linux-3.19.config
+diff --git a/board/qemu/microblazebe-mmu/linux-3.18.config b/board/qemu/microblazebe-mmu/linux-3.19.config
+similarity index 100%
+rename from board/qemu/microblazebe-mmu/linux-3.18.config
+rename to board/qemu/microblazebe-mmu/linux-3.19.config
+diff --git a/board/qemu/microblazeel-mmu/linux-3.18.config b/board/qemu/microblazeel-mmu/linux-3.19.config
+similarity index 100%
+rename from board/qemu/microblazeel-mmu/linux-3.18.config
+rename to board/qemu/microblazeel-mmu/linux-3.19.config
+diff --git a/board/qemu/mips-malta/linux-3.18.config b/board/qemu/mips-malta/linux-3.19.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-3.18.config
+rename to board/qemu/mips-malta/linux-3.19.config
+diff --git a/board/qemu/mips64-malta/linux-3.18.config b/board/qemu/mips64-malta/linux-3.19.config
+similarity index 100%
+rename from board/qemu/mips64-malta/linux-3.18.config
+rename to board/qemu/mips64-malta/linux-3.19.config
+diff --git a/board/qemu/mips64el-malta/linux-3.18.config b/board/qemu/mips64el-malta/linux-3.19.config
+similarity index 100%
+rename from board/qemu/mips64el-malta/linux-3.18.config
+rename to board/qemu/mips64el-malta/linux-3.19.config
+diff --git a/board/qemu/mipsel-malta/linux-3.18.config b/board/qemu/mipsel-malta/linux-3.19.config
+similarity index 100%
+rename from board/qemu/mipsel-malta/linux-3.18.config
+rename to board/qemu/mipsel-malta/linux-3.19.config
+diff --git a/board/qemu/ppc-g3beige/linux-3.18.config b/board/qemu/ppc-g3beige/linux-3.19.config
+similarity index 100%
+rename from board/qemu/ppc-g3beige/linux-3.18.config
+rename to board/qemu/ppc-g3beige/linux-3.19.config
+diff --git a/board/qemu/sh4-r2d/linux-3.18.config b/board/qemu/sh4-r2d/linux-3.19.config
+similarity index 100%
+rename from board/qemu/sh4-r2d/linux-3.18.config
+rename to board/qemu/sh4-r2d/linux-3.19.config
+diff --git a/board/qemu/sparc-ss10/linux-3.18.config b/board/qemu/sparc-ss10/linux-3.19.config
+similarity index 100%
+rename from board/qemu/sparc-ss10/linux-3.18.config
+rename to board/qemu/sparc-ss10/linux-3.19.config
+diff --git a/board/qemu/x86_64/linux-3.18.config b/board/qemu/x86/linux-3.19.config
+similarity index 100%
+rename from board/qemu/x86_64/linux-3.18.config
+rename to board/qemu/x86/linux-3.19.config
+diff --git a/board/qemu/x86/linux-3.18.config b/board/qemu/x86_64/linux-3.19.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.18.config
+rename to board/qemu/x86_64/linux-3.19.config
+diff --git a/board/qemu/xtensa-lx60/linux-3.18.config b/board/qemu/xtensa-lx60/linux-3.19.config
+similarity index 100%
+rename from board/qemu/xtensa-lx60/linux-3.18.config
+rename to board/qemu/xtensa-lx60/linux-3.19.config
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 94ea2ed..c99edfa 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -8,16 +8,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
  
- menu "Networking applications"
-diff --git a/package/wine/Config.in b/package/wine/Config.in
-new file mode 100644
-index 0000000..26de143
---- /dev/null
-+++ b/package/wine/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_WINE
-+	bool "wine"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# Wine only builds on certain architectures
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	# Wine has much CPU specific code and mostly makes sense on x86
-+	depends on BR2_i386
-+	help
-+	  Wine is a compatibility layer capable of running Windows
-+	  applications on Linux. Instead of simulating internal
-+	  Windows logic like a virtual machine or emulator, Wine
-+	  translates Windows API calls into POSIX calls on-the-fly,
-+	  eliminating the performance and memory penalties of other
-+	  methods.
-+
-+	  http://www.winehq.org
-+
-+comment "wine needs a (e)glibc toolchain"
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_i386
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-new file mode 100644
-index 0000000..71d633c
---- /dev/null
-+++ b/package/wine/wine.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/wine/files/Source/
-+md5	0f6c56f86befe38e219090915f81f48a	wine-1.6.2.tar.bz2
-+sha1	574b9ccedbf213622b7ee55f715764673fc27692	wine-1.6.2.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-new file mode 100644
-index 0000000..926ac99
---- /dev/null
-+++ b/package/wine/wine.mk
-@@ -0,0 +1,292 @@
-+################################################################################
-+#
-+# wine
-+#
-+################################################################################
-+
-+WINE_VERSION = 1.6.2
-+WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
-+WINE_SITE = http://downloads.sourceforge.net/project/wine/Source/
-+WINE_LICENSE = LGPLv2.1+
-+WINE_LICENSE_FILES = COPYING.LIB LICENSE
-+WINE_DEPENDENCIES = host-bison host-flex host-wine
-+
-+# Wine needs its own directory structure and tools for cross compiling
-+WINE_CONF_OPTS = \
-+	--with-wine-tools=../host-wine-$(WINE_VERSION) \
-+	--disable-tests \
-+	--disable-win64 \
-+	--without-opengl
-+
-+# Wine uses a wrapper around gcc, and uses the value of --host to
-+# construct the filename of the gcc to call.  But for external
-+# toolchains, the GNU_TARGET_NAME tuple that we construct from our
-+# internal variables may differ from the actual gcc prefix for the
-+# external toolchains. So, we have to override whatever the gcc
-+# wrapper believes what the real gcc is named, and force the tuple of
-+# the external toolchain, not the one we compute in GNU_TARGET_NAME.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-+WINE_CONF_OPTS += TARGETFLAGS="-b $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CUPS),y)
-+WINE_CONF_OPTS += --with-cups
-+WINE_DEPENDENCIES += cups
-+else
-+WINE_CONF_OPTS += --without-cups
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+WINE_CONF_OPTS += --with-dbus
-+WINE_DEPENDENCIES += dbus
-+else
-+WINE_CONF_OPTS += --without-dbus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+WINE_CONF_OPTS += --with-fontconfig
-+WINE_DEPENDENCIES += fontconfig
-+else
-+WINE_CONF_OPTS += --without-fontconfig
-+endif
-+
-+# To support freetype in wine we also need freetype in host-wine for the cross compiling tools
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+WINE_CONF_OPTS += --with-freetype
-+HOST_WINE_CONF_OPTS += --with-freetype
-+WINE_DEPENDENCIES += freetype
-+HOST_WINE_DEPENDENCIES += host-freetype
-+else
-+WINE_CONF_OPTS += --without-freetype
-+HOST_WINE_CONF_OPTS += --without-freetype
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+WINE_CONF_OPTS += --with-gnutls
-+WINE_DEPENDENCIES += gnutls
-+else
-+WINE_CONF_OPTS += --without-gnutls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
-+WINE_CONF_OPTS += --with-gstreamer
-+WINE_DEPENDENCIES += gst-plugins-base
-+else
-+WINE_CONF_OPTS += --without-gstreamer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+WINE_CONF_OPTS += --with-jpeg
-+WINE_DEPENDENCIES += jpeg
-+else
-+WINE_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LCMS2),y)
-+WINE_CONF_OPTS += --with-cms
-+WINE_DEPENDENCIES += lcms2
-+else
-+WINE_CONF_OPTS += --without-cms
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLU),y)
-+WINE_CONF_OPTS += --with-glu
-+WINE_DEPENDENCIES += libglu
-+else
-+WINE_CONF_OPTS += --without-glu
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+WINE_CONF_OPTS += --with-png
-+WINE_DEPENDENCIES += libpng
-+else
-+WINE_CONF_OPTS += --without-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+WINE_CONF_OPTS += --with-v4l
-+WINE_DEPENDENCIES += libv4l
-+else
-+WINE_CONF_OPTS += --without-v4l
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+WINE_CONF_OPTS += --with-xml
-+WINE_DEPENDENCIES += libxml2
-+else
-+WINE_CONF_OPTS += --without-xml
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXSLT),y)
-+WINE_CONF_OPTS += --with-xslt
-+WINE_DEPENDENCIES += libxslt
-+else
-+WINE_CONF_OPTS += --without-xslt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MPG123),y)
-+WINE_CONF_OPTS += --with-mpg123
-+WINE_DEPENDENCIES += mpg123
-+else
-+WINE_CONF_OPTS += --without-mpg123
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+WINE_CONF_OPTS += --with-curses
-+WINE_DEPENDENCIES += ncurses
-+else
-+WINE_CONF_OPTS += --without-curses
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
-+WINE_CONF_OPTS += --with-sane
-+WINE_DEPENDENCIES += sane-backends
-+else
-+WINE_CONF_OPTS += --without-sane
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+WINE_CONF_OPTS += --with-tiff
-+WINE_DEPENDENCIES += tiff
-+else
-+WINE_CONF_OPTS += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+WINE_CONF_OPTS += --with-x
-+WINE_DEPENDENCIES += xlib_libX11
-+else
-+WINE_CONF_OPTS += --without-x
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
-+WINE_CONF_OPTS += --with-xcomposite
-+WINE_DEPENDENCIES += xlib_libXcomposite
-+else
-+WINE_CONF_OPTS += --without-xcomposite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-+WINE_CONF_OPTS += --with-xcursor
-+WINE_DEPENDENCIES += xlib_libXcursor
-+else
-+WINE_CONF_OPTS += --without-xcursor
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
-+WINE_CONF_OPTS += --with-xinput --with-xinput2
-+WINE_DEPENDENCIES += xlib_libXi
-+else
-+WINE_CONF_OPTS += --without-xinput --without-xinput2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+WINE_CONF_OPTS += --with-xinerama
-+WINE_DEPENDENCIES += xlib_libXinerama
-+else
-+WINE_CONF_OPTS += --without-xinerama
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+WINE_CONF_OPTS += --with-xrandr
-+WINE_DEPENDENCIES += xlib_libXrandr
-+else
-+WINE_CONF_OPTS += --without-xrandr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
-+WINE_CONF_OPTS += --with-xrender
-+WINE_DEPENDENCIES += xlib_libXrender
-+else
-+WINE_CONF_OPTS += --without-xrender
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
-+WINE_CONF_OPTS += --with-xxf86vm
-+WINE_DEPENDENCIES += xlib_libXxf86vm
-+else
-+WINE_CONF_OPTS += --without-xxf86vm
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+WINE_CONF_OPTS += --with-zlib
-+WINE_DEPENDENCIES += zlib
-+else
-+WINE_CONF_OPTS += --without-zlib
-+endif
-+
-+# Wine needs to enable 64-bit build tools on 64-bit host
-+ifeq ($(HOSTARCH),x86_64)
-+HOST_WINE_CONF_OPTS += --enable-win64
-+endif
-+
-+# Wine only needs the host tools to be built, so cut-down the
-+# build time by building just what we need.
-+define HOST_WINE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+	  tools \
-+	  tools/widl \
-+	  tools/winebuild \
-+	  tools/winegcc \
-+	  tools/wmc \
-+	  tools/wrc
-+endef
-+
-+# Wine only needs its host variant to be built, not that it is
-+# installed, as it uses the tools from the build directory. But
-+# we have no way in Buildroot to state that a host package should
-+# not be installed. So, just provide an noop install command.
-+define HOST_WINE_INSTALL_CMDS
-+	:
-+endef
-+
-+# We are focused on the cross compiling tools, disable everything else
-+HOST_WINE_CONF_OPTS += \
-+	--disable-tests \
-+	--disable-win16 \
-+	--without-alsa \
-+	--without-capi \
-+	--without-cms \
-+	--without-coreaudio \
-+	--without-cups \
-+	--without-curses \
-+	--without-dbus \
-+	--without-fontconfig \
-+	--without-gettext \
-+	--without-gettextpo \
-+	--without-gphoto \
-+	--without-glu \
-+	--without-gnutls \
-+	--without-gsm \
-+	--without-gstreamer \
-+	--without-hal \
-+	--without-jpeg \
-+	--without-ldap \
-+	--without-mpg123 \
-+	--without-netapi \
-+	--without-openal \
-+	--without-opencl \
-+	--without-opengl \
-+	--without-osmesa \
-+	--without-oss \
-+	--without-png \
-+	--without-sane \
-+	--without-tiff \
-+	--without-v4l \
-+	--without-x \
-+	--without-xcomposite \
-+	--without-xcursor \
-+	--without-xinerama \
-+	--without-xinput \
-+	--without-xinput2 \
-+	--without-xml \
-+	--without-xrandr \
-+	--without-xrender \
-+	--without-xshape \
-+	--without-xshm \
-+	--without-xslt \
-+	--without-xxf86vm \
-+	--without-zlib
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.19.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 1b691d9..bf70df0 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -16,12 +16,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Lock to 3.10 headers to avoid breaking with newer kernels
+ # Stuck at 3.10.x because there's no Nuri DTS
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.66"
++BR2_DEFAULT_KERNEL_VERSION="3.10.70"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.66"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.70"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index f48a64d..272e55b 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -10,15 +10,15 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.19.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 9574d95..f23da96 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -15,12 +15,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Lock to 3.18 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
++BR2_DEFAULT_KERNEL_VERSION="3.18.8"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 93d43c1..8fb077b 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.19.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index dacc79c..80f8207 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.19.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 2d6202e..8bce340 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_MIPS_NABI64=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.19.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index cbdb7f8..8d3a132 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -9,17 +9,17 @@ BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.19.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index f018317..4ed02c0 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.19.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index 71dbe23..012eefe 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.19.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index c2cf1af..d73e67f 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index a85e93e..285093c 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -6,17 +6,17 @@ BR2_powerpc_750=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux-3.19.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 33551ab..14faac3 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -6,15 +6,15 @@ BR2_powerpc_8548=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index c33aeec..a5b97db 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -6,10 +6,10 @@ BR2_powerpc_440=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Use soft float
+ BR2_SOFT_FLOAT=y
+@@ -17,7 +17,7 @@ BR2_SOFT_FLOAT=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index fce1c4b..88bf914 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -14,15 +14,15 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # doesn't use floating point operations.
+ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.19.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 8f2702b..73195fa 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -8,15 +8,15 @@ BR2_GLOBAL_PATCH_DIR="board/qemu/sparc-ss10"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-3.19.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 4bc0b49..8cb777a 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -9,14 +9,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.19.config"
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index ce89ff7..f0831b0 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.19.config"
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index 8874c7c..4eb10fb 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -14,17 +14,17 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 3.18 headers to avoid breaking with newer kernels
++# Lock to 3.19 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.4"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-3.19.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
+-- 
+2.0.5
