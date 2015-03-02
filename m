@@ -1,42 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:18 -0000
-Subject: [Buildroot] [git commit] xdriver_xf86-input-evdev: bump version
-Message-ID: <20150302222716.11A9C807B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_rgb: bump version to
+	1.0.6
+Message-ID: <20150302222716.BEC36807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29125e2556245aa6cc3543af4f44deeb9732778b
+commit: http://git.buildroot.net/buildroot/commit/?id=9add3118c8da851ad204a3418d9e5cb90e8e0e76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And add hash file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-input-evdev.hash                  |    2 ++
- .../xdriver_xf86-input-evdev.mk                    |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/x11r7/xapp_rgb/xapp_rgb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-new file mode 100644
-index 0000000..fb46aca
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.freedesktop.org/archives/xorg/2014-May/056599.html
-+sha256 85fade9f5e9cf70f02c877165e95b3df4cdb9e08282416122ca80218e254100c  xf86-input-evdev-2.8.4.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 46e62c7..a8a9adf 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+diff --git a/package/x11r7/xapp_rgb/xapp_rgb.mk b/package/x11r7/xapp_rgb/xapp_rgb.mk
+index 7a07614..82878ab 100644
+--- a/package/x11r7/xapp_rgb/xapp_rgb.mk
++++ b/package/x11r7/xapp_rgb/xapp_rgb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.2
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.8.4
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+-XAPP_RGB_VERSION = 1.0.5
++XAPP_RGB_VERSION = 1.0.6
+ XAPP_RGB_SOURCE = rgb-$(XAPP_RGB_VERSION).tar.bz2
+ XAPP_RGB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_RGB_LICENSE = MIT
