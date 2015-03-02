@@ -1,44 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 02 Mar 2015 22:27:17 -0000
-Subject: [Buildroot] [git commit] cmake: bump version to 3.1.2
-Message-ID: <20150302222715.D71CF8057D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xdriver_xf86-input-evdev: add optional
+	mtdev support
+Message-ID: <20150302222716.264BE807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d09ad2620dac14bff88cba460d0487dcdfb0d3e0
+commit: http://git.buildroot.net/buildroot/commit/?id=6eb0a96770d1af7649b972a850e8d24f89f8107d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump version to 3.1.2
-- Add a hash file
+Needed for multitouch handling.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.hash |    2 ++
- package/cmake/cmake.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-input-evdev.mk                    |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-new file mode 100644
-index 0000000..1b6b658
---- /dev/null
-+++ b/package/cmake/cmake.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  2b210f7d867a1e716c1895357ebe63c7b9ae61fdb5f2d300ab2f01795f085b35  cmake-3.1.2.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index e09fddf..f283a09 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 5140301..edf2d48 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -15,6 +15,7 @@ XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
+ 	xserver_xorg-server \
+ 	xproto_randrproto \
+ 	xproto_xproto \
+-	udev
++	udev \
++	$(if $(BR2_PACKAGE_MTDEV),mtdev)
  
--CMAKE_VERSION_MAJOR = 3.0
-+CMAKE_VERSION_MAJOR = 3.1
- CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
- CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
+ $(eval $(autotools-package))
