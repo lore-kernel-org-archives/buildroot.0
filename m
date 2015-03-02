@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:22 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-savage:
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-neomagic:
 	bump version
-Message-ID: <20150302222717.52D43807B5@busybox.osuosl.org>
+Message-ID: <20150302222717.7B0E8807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=35a3259831d79e24edfff9c9c4eb6fdd1fc2d030
+commit: http://git.buildroot.net/buildroot/commit/?id=a1915e7ece6b2fd886d1672507968b1116b1ac4d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Use git snapshot for compatibility with xorg xserver 1.17.0.
@@ -17,22 +17,25 @@ Use git snapshot for compatibility with xorg xserver 1.17.0.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-savage.mk                   |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-neomagic.mk                 |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-index 2b2ef55..676ffed 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+index 884c249..85bcb2a 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
++++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.3.7
--XDRIVER_XF86_VIDEO_SAVAGE_SOURCE = xf86-video-savage-$(XDRIVER_XF86_VIDEO_SAVAGE_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SAVAGE_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_SAVAGE_VERSION = d28cd83c7b0b4a943efbe5ddf257c8ee2646ea73
-+XDRIVER_XF86_VIDEO_SAVAGE_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-savage
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
+-XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 1.2.8
+-XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
++XDRIVER_XF86_VIDEO_NEOMAGIC_VERSION = 6661bdd4551e4e63e983685464a277845aed3012
++XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-neomagic
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
++XDRIVER_XF86_VIDEO_NEOMAGIC_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
+ 
+ $(eval $(autotools-package))
