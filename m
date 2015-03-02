@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 02 Mar 2015 22:27:28 -0000
-Subject: [Buildroot] [git commit] toolchain/buildroot: forget about avr32
-Message-ID: <20150302222718.48746807B5@busybox.osuosl.org>
+Date: Mon, 02 Mar 2015 22:27:29 -0000
+Subject: [Buildroot] [git commit] package/x11r7/xapp_mkfontscale: bump
+	version to 1.1.2
+Message-ID: <20150302222716.B51A8807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d3cc4b27f6a2ab9a83feda55d24c117b08d5643
+commit: http://git.buildroot.net/buildroot/commit/?id=b6190e62d6b7e39f084764a2dd5d44ee5db955bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in |    2 +-
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 2955b2e..a69013f 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -29,7 +29,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	bool "uClibc"
- 	select BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_arcle   || BR2_arceb  || BR2_arm    || BR2_armeb    || \
--		   BR2_avr32   || BR2_bfin   || BR2_i386   || BR2_m68k     || \
-+		   BR2_bfin    || BR2_i386   || BR2_m68k   || \
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_powerpc || BR2_sh     || BR2_sparc  || BR2_xtensa   || \
- 		   BR2_x86_64
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+index c50bb0c..b99a646 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_MKFONTSCALE_VERSION = 1.1.1
++XAPP_MKFONTSCALE_VERSION = 1.1.2
+ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+ XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTSCALE_LICENSE = MIT
