@@ -1,54 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 02 Mar 2015 22:27:17 -0000
-Subject: [Buildroot] [git commit] toolchain: add 3.19 choice for headers
-Message-ID: <20150302222715.BE3108057D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
+	2.2.1
+Message-ID: <20150302222716.311DE807B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81366edd7c20f395a4269a243eca9cbbd995a48b
+commit: http://git.buildroot.net/buildroot/commit/?id=6001229608f0f165ff104071bbef05d591520a87
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-common.in          |    5 +++++
- toolchain/toolchain-external/Config.in |    4 ++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/shairport-sync/shairport-sync.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 2ee2019..304afe4 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -221,10 +221,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 9f3c0f0..9b85f1d 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "3.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
- 	default "3.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
- 	default "3.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
- 	default "3.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 50daa66..6ab483a 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -1038,6 +1038,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+-SHAIRPORT_SYNC_VERSION = 2.1.15
++SHAIRPORT_SYNC_VERSION = 2.2.1
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
  
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_19
-+	bool "3.19.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_18
- 	bool "3.18.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
