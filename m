@@ -1,46 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 11:18:54 -0300
-Subject: [Buildroot] [PATCH] ruby: bump to version 2.2.1
-Message-ID: <1425392334-23937-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Mar 2015 15:21:21 +0100
+Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
+In-Reply-To: <CAHkwnC94xHciiK2n8X0Gr7=PVTs_LWoqQ-bG1bg20jO1ygd0Gw@mail.gmail.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150303142901.5998a72c@free-electrons.com>
+ <CAHkwnC94xHciiK2n8X0Gr7=PVTs_LWoqQ-bG1bg20jO1ygd0Gw@mail.gmail.com>
+Message-ID: <20150303152121.408c2733@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+Dear Fabio Porcedda,
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 9d56eee..6fa47a4 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,2 +1,2 @@
--# From https://www.ruby-lang.org/en/news/2014/11/13/ruby-2-1-5-is-released/
--sha256	4305cc6ceb094df55210d83548dcbeb5117d74eea25196a9b14fa268d354b100	ruby-2.1.5.tar.gz
-+# From https://www.ruby-lang.org/en/news/2015/03/03/ruby-2-2-1-released/
-+sha256	3b2852c07fdc12d0ba2b5698c7587ae2b46141539a526d143da5860b55a626c0	ruby-2.2.1.tar.xz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 00a785c..d44237a 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--RUBY_VERSION_MAJOR = 2.1
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
--RUBY_VERSION_EXT = 2.1.0
-+RUBY_VERSION_MAJOR = 2.2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
-+RUBY_VERSION_EXT = 2.2.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
-+RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-pkgconf
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+On Tue, 3 Mar 2015 15:03:46 +0100, Fabio Porcedda wrote:
+
+> > Could you give some hints about the performance impact of those copies
+> > of the staging directory? Does it continue to make the top-level
+> > parallel build thing useful?
+> 
+> IMHO the per-package staging feature is useful even without taking in
+> consideration the top-level parallel build, the unspecified optional
+> dependency issue are not common, they can generate build faulres or
+> just binary with unexpected behavior.
+
+Yes, correct, this is indeed another benefit of this approach.
+
+> > Preferably something with a fairly deep dependency tree, i.e lots of
+> > small packages that depend on each other. A X.org stack + gtk2 would be
+> > a good example.
+> 
+> The most complete selection of package that i've tested is the
+> defconfig + allyespacakgeconfig (693 targets), i've tried to enable a
+> wider range of packages, defconfig + glibc + allyespackageconfig but
+> even without using the pps they fail to build.
+> So i will provide build times of the configuration defconfig +
+> allyespackageconfig.
+
+Ok.
+
+> If you provide a defconfig on the release 2015.02, i can try to build that.
+
+Something like:
+
+BR2_arm=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_LIBGTK3=y
+
+Thanks!
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
