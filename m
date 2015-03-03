@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Mar 2015 14:29:01 +0100
-Subject: [Buildroot] [RFC v3 00/30]   Add per-package staging feature
-In-Reply-To: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150303142901.5998a72c@free-electrons.com>
+Date: Tue, 3 Mar 2015 14:31:25 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix barebox compilation issue with
+ 64bit kernel
+In-Reply-To: <1425385673-2462-1-git-send-email-fabienlahoudere.pro@gmail.com>
+References: <1425385673-2462-1-git-send-email-fabienlahoudere.pro@gmail.com>
+Message-ID: <20150303143125.75a1a4d3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Lahoudere Fabien,
 
-On Tue,  3 Mar 2015 10:17:05 +0100, Fabio Porcedda wrote:
+On Tue,  3 Mar 2015 13:27:53 +0100, Lahoudere Fabien wrote:
+> Signed-off-by: Lahoudere Fabien <fabienlahoudere.pro@gmail.com>
 
-> this patch set aims to improve build reproducibility by using a
-> per-package staging directory.
-> Also this feature aims to enable as default the top-level parallel make.
+This should normally be:
 
-Interesting! I must say I'm a bit worried about the implications of
-having to pass custom -I and -L flags all the time: we did arrange the
-compiler do not require those (by configuration for the internal
-toolchain case, and using the wrapper for the external toolchain case).
+	Signed-off-by: <first name> <last name> <email>
 
-Could you give some hints about the performance impact of those copies
-of the staging directory? Does it continue to make the top-level
-parallel build thing useful?
+> ---
+>  boot/barebox/barebox.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-I.e can you compare in terms of build time the following cases:
+This looks good but the commit log could be improved:
 
- * Normal non-top-level parallel build.
- * A top-level parallel build without this PPS feature
- * A top-level parallel build with this PPS feature
+	barebox: fix compilation on x86-64 architecture
 
-Preferably something with a fairly deep dependency tree, i.e lots of
-small packages that depend on each other. A X.org stack + gtk2 would be
-a good example.
+	Barebox uses KERNEL_ARCH to derive BAREBOX_ARCH, but doesn't
+	currently handle the case of the x86-64 architecture. In this
+	case KERNEL_ARCH is x86_64, but BAREBOX_ARCH should be x86
+	nonetheless.
 
-Thanks!
+The commit title should almost always look like:
+
+	<pkg>: <description>
+
+Thanks,
 
 Thomas
 -- 
