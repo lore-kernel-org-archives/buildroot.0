@@ -1,27 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 21:56:51 +0100
-Subject: [Buildroot] [git commit] syslinux: add hash
-Message-ID: <20150303212043.EC05B7FF09@busybox.osuosl.org>
+Date: Tue, 3 Mar 2015 21:58:43 +0100
+Subject: [Buildroot] [git commit] gcc: make branding unconditional
+Message-ID: <20150303212044.1374A7FF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03f373184b0264886e1ed766f673779b90af1af2
+commit: http://git.buildroot.net/buildroot/commit/?id=7f2a52ef83e7989a3afc7e7bdfca166168fd98bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We don't support older versions that can't handle it any more.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/syslinux/syslinux.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/gcc/gcc.mk |   11 +++--------
+ 1 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/boot/syslinux/syslinux.hash b/boot/syslinux/syslinux.hash
-new file mode 100644
-index 0000000..4ec039f
---- /dev/null
-+++ b/boot/syslinux/syslinux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/utils/boot/syslinux/sha256sums.asc
-+sha256	afa31b7cbf72e1c0c1752a0636ba724ce01c0e374366e46e61db6862b4685478	syslinux-6.02.tar.xz
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 477f846..ffac15c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -91,7 +91,9 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ 	--disable-libssp \
+ 	--disable-multilib \
+ 	--with-gmp=$(HOST_DIR)/usr \
+-	--with-mpfr=$(HOST_DIR)/usr
++	--with-mpfr=$(HOST_DIR)/usr \
++	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
++	--with-bugurl="http://bugs.buildroot.net/"
+ 
+ # Don't build documentation. It takes up extra space / build time,
+ # and sometimes needs specific makeinfo versions to work
+@@ -206,13 +208,6 @@ ifneq ($(GCC_TARGET_MODE),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
+ endif
+ 
+-# Branding works on >= 4.3
+-ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+-HOST_GCC_COMMON_CONF_OPTS += \
+-	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
+-	--with-bugurl="http://bugs.buildroot.net/"
+-endif
+-
+ # Enable proper double/long double for SPE ABI
+ ifeq ($(BR2_powerpc_SPE),y)
+ HOST_GCC_COMMON_CONF_OPTS += \
