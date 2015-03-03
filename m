@@ -1,32 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 22:00:18 +0100
-Subject: [Buildroot] [git commit] agentpp: update URL address
-Message-ID: <20150303212044.264B380DF3@busybox.osuosl.org>
+Date: Tue, 3 Mar 2015 21:57:11 +0100
+Subject: [Buildroot] [git commit] grub: add hash
+Message-ID: <20150303212044.0084E7FF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a30d7b0741e910ef9044852068af445f6296363
+commit: http://git.buildroot.net/buildroot/commit/?id=8cce65ef5ef6fe3270648fa4a059cdf2ebfdeef8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/agentpp/agentpp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/grub/grub.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-index 3d95ff4..29d809e 100644
---- a/package/agentpp/agentpp.mk
-+++ b/package/agentpp/agentpp.mk
-@@ -6,7 +6,7 @@
- 
- AGENTPP_VERSION = 4.0.3
- AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
--AGENTPP_SITE = http://www.agentpp.com
-+AGENTPP_SITE = http://www.agentpp.com/download
- AGENTPP_LICENSE = Apache-2.0
- AGENTPP_LICENSE_FILES = LICENSE-2_0.txt
- AGENTPP_INSTALL_STAGING = YES
+diff --git a/boot/grub/grub.hash b/boot/grub/grub.hash
+new file mode 100644
+index 0000000..566dec8
+--- /dev/null
++++ b/boot/grub/grub.hash
+@@ -0,0 +1,3 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/g/grub/grub_0.97-68.dsc
++sha256	4e1d15d12dbd3e9208111d6b806ad5a9857ca8850c47877d36575b904559260b	grub_0.97.orig.tar.gz
++sha256	a453489cf1fec5d311a0b76dea8c8b2ff67eee1a3eba6c06ab80864494d9773c	grub_0.97-68.diff.gz
