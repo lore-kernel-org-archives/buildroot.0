@@ -1,48 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 13:44:04 -0300
-Subject: [Buildroot] [PATCH] gcc: make branding unconditional
-Message-ID: <1425401044-7977-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 3 Mar 2015 18:56:07 +0200
+Subject: [Buildroot] [RFC v3 21/30] lmbench: to be checked
+In-Reply-To: <1425374255-6827-22-git-send-email-fabio.porcedda@gmail.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425374255-6827-22-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150303165607.GR15668@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support older versions that can't handle it any more.
+On Tue, Mar 03, 2015 at 10:17:26AM +0100, Fabio Porcedda wrote:
+> ---
+>  package/lmbench/lmbench.mk | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+> index 63a83fd..954f7eb 100644
+> --- a/package/lmbench/lmbench.mk
+> +++ b/package/lmbench/lmbench.mk
+> @@ -10,9 +10,6 @@ LMBENCH_SITE = http://downloads.sourceforge.net/project/lmbench/development/lmbe
+>  LMBENCH_LICENSE = lmbench license (based on GPLv2)
+>  LMBENCH_LICENSE_FILES = COPYING COPYING-2
+>  
+> -LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+> -LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+> -
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcc/gcc.mk | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+Please see http://patchwork.ozlabs.org/patch/442832/.
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 477f846..ffac15c 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -91,7 +91,9 @@ HOST_GCC_COMMON_CONF_OPTS = \
- 	--disable-libssp \
- 	--disable-multilib \
- 	--with-gmp=$(HOST_DIR)/usr \
--	--with-mpfr=$(HOST_DIR)/usr
-+	--with-mpfr=$(HOST_DIR)/usr \
-+	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
-+	--with-bugurl="http://bugs.buildroot.net/"
- 
- # Don't build documentation. It takes up extra space / build time,
- # and sometimes needs specific makeinfo versions to work
-@@ -206,13 +208,6 @@ ifneq ($(GCC_TARGET_MODE),)
- HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
- endif
- 
--# Branding works on >= 4.3
--ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
--HOST_GCC_COMMON_CONF_OPTS += \
--	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
--	--with-bugurl="http://bugs.buildroot.net/"
--endif
--
- # Enable proper double/long double for SPE ABI
- ifeq ($(BR2_powerpc_SPE),y)
- HOST_GCC_COMMON_CONF_OPTS += \
+baruch
+
+>  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+>  LMBENCH_DEPENDENCIES += libtirpc
+>  LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+> @@ -28,7 +25,7 @@ define LMBENCH_CONFIGURE_CMDS
+>  endef
+>  
+>  define LMBENCH_BUILD_CMDS
+> -	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
+> +	$(MAKE) CFLAGS="$(TARGET_CFLAGS) $(LMBENCH_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS) $(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
+>  endef
+>  
+>  define LMBENCH_INSTALL_TARGET_CMDS
+
 -- 
-2.0.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
