@@ -1,50 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 21:58:43 +0100
-Subject: [Buildroot] [git commit] gcc: make branding unconditional
-Message-ID: <20150303212044.1374A7FF09@busybox.osuosl.org>
+Date: Tue, 3 Mar 2015 21:55:45 +0100
+Subject: [Buildroot] [git commit] ruby: bump to version 2.2.1
+Message-ID: <20150303212043.E39DA7FF09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f2a52ef83e7989a3afc7e7bdfca166168fd98bd
+commit: http://git.buildroot.net/buildroot/commit/?id=ada937a94b7e43bc4d46973946e24590064a7923
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We don't support older versions that can't handle it any more.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk |   11 +++--------
- 1 files changed, 3 insertions(+), 8 deletions(-)
+ package/ruby/ruby.hash |    4 ++--
+ package/ruby/ruby.mk   |    7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 477f846..ffac15c 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -91,7 +91,9 @@ HOST_GCC_COMMON_CONF_OPTS = \
- 	--disable-libssp \
- 	--disable-multilib \
- 	--with-gmp=$(HOST_DIR)/usr \
--	--with-mpfr=$(HOST_DIR)/usr
-+	--with-mpfr=$(HOST_DIR)/usr \
-+	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
-+	--with-bugurl="http://bugs.buildroot.net/"
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 9d56eee..6fa47a4 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2014/11/13/ruby-2-1-5-is-released/
+-sha256	4305cc6ceb094df55210d83548dcbeb5117d74eea25196a9b14fa268d354b100	ruby-2.1.5.tar.gz
++# From https://www.ruby-lang.org/en/news/2015/03/03/ruby-2-2-1-released/
++sha256	3b2852c07fdc12d0ba2b5698c7587ae2b46141539a526d143da5860b55a626c0	ruby-2.2.1.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 00a785c..d44237a 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
  
- # Don't build documentation. It takes up extra space / build time,
- # and sometimes needs specific makeinfo versions to work
-@@ -206,13 +208,6 @@ ifneq ($(GCC_TARGET_MODE),)
- HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
- endif
- 
--# Branding works on >= 4.3
--ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
--HOST_GCC_COMMON_CONF_OPTS += \
--	--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
--	--with-bugurl="http://bugs.buildroot.net/"
--endif
--
- # Enable proper double/long double for SPE ABI
- ifeq ($(BR2_powerpc_SPE),y)
- HOST_GCC_COMMON_CONF_OPTS += \
+-RUBY_VERSION_MAJOR = 2.1
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
+-RUBY_VERSION_EXT = 2.1.0
++RUBY_VERSION_MAJOR = 2.2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION_EXT = 2.2.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
++RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
