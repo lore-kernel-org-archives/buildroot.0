@@ -1,10 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 11:10:29 -0300
-Subject: [Buildroot] [PATCH 3/3] libglib2: remove kludges for old and
-	removed xilinx toolchains
-In-Reply-To: <1425391829-16539-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425391829-16539-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1425391829-16539-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 11:18:54 -0300
+Subject: [Buildroot] [PATCH] ruby: bump to version 2.2.1
+Message-ID: <1425392334-23937-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libglib2/libglib2.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 991c972..2129a85 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -49,17 +49,12 @@ LIBGLIB2_CONF_ENV = \
- 	gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 9d56eee..6fa47a4 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2014/11/13/ruby-2-1-5-is-released/
+-sha256	4305cc6ceb094df55210d83548dcbeb5117d74eea25196a9b14fa268d354b100	ruby-2.1.5.tar.gz
++# From https://www.ruby-lang.org/en/news/2015/03/03/ruby-2-2-1-released/
++sha256	3b2852c07fdc12d0ba2b5698c7587ae2b46141539a526d143da5860b55a626c0	ruby-2.2.1.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 00a785c..d44237a 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
  
- # old uClibc versions don't provide qsort_r
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=no
- else
- LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=yes
- endif
- 
--# old toolchains don't have working inotify support
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
--LIBGLIB2_CONF_ENV += ac_cv_header_sys_inotify_h=no
--endif
--
- HOST_LIBGLIB2_CONF_OPTS = \
- 	--disable-dtrace \
- 	--disable-systemtap \
+-RUBY_VERSION_MAJOR = 2.1
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
+-RUBY_VERSION_EXT = 2.1.0
++RUBY_VERSION_MAJOR = 2.2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION_EXT = 2.2.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
++RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
+ HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
 -- 
 2.0.5
