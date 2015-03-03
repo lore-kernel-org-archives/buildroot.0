@@ -1,30 +1,42 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue,  3 Mar 2015 18:16:23 +0100
-Subject: [Buildroot] [PATCH 1/1] agentpp: update URL address
-Message-ID: <1425402983-22692-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 15:43:09 -0300
+Subject: [Buildroot] [PATCH] whois: bump to version 5.2.5
+Message-ID: <1425408189-31633-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/agentpp/agentpp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-index 3d95ff4..29d809e 100644
---- a/package/agentpp/agentpp.mk
-+++ b/package/agentpp/agentpp.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index b52a8b9..fc8366f 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.4.dsc
+-sha256	f1827e3b61e6f647b6093e6dcf52d3b44775fdbd6bf0cf7413aff26825f0bc43	whois_5.2.4.tar.xz
++# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.5.dsc
++sha256	1a84fb9c1190dc37df396ea1f24aae56a1beb846257ee692c9d4b44337135d10	whois_5.2.5.tar.xz
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index e4f8184..fee0425 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- AGENTPP_VERSION = 4.0.3
- AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
--AGENTPP_SITE = http://www.agentpp.com
-+AGENTPP_SITE = http://www.agentpp.com/download
- AGENTPP_LICENSE = Apache-2.0
- AGENTPP_LICENSE_FILES = LICENSE-2_0.txt
- AGENTPP_INSTALL_STAGING = YES
+-WHOIS_VERSION = 5.2.4
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150125T100758Z/pool/main/w/whois
++WHOIS_VERSION = 5.2.5
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150303T100910Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
 -- 
-1.9.1
+2.0.5
