@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 13:13:34 -0300
-Subject: [Buildroot] [PATCH 1/3] syslinux: add hash
-Message-ID: <1425399216-3522-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 13:13:35 -0300
+Subject: [Buildroot] [PATCH 2/3] grub: add hash
+In-Reply-To: <1425399216-3522-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1425399216-3522-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1425399216-3522-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- boot/syslinux/syslinux.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 boot/syslinux/syslinux.hash
+ boot/grub/grub.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 boot/grub/grub.hash
 
-diff --git a/boot/syslinux/syslinux.hash b/boot/syslinux/syslinux.hash
+diff --git a/boot/grub/grub.hash b/boot/grub/grub.hash
 new file mode 100644
-index 0000000..4ec039f
+index 0000000..566dec8
 --- /dev/null
-+++ b/boot/syslinux/syslinux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/utils/boot/syslinux/sha256sums.asc
-+sha256	afa31b7cbf72e1c0c1752a0636ba724ce01c0e374366e46e61db6862b4685478	syslinux-6.02.tar.xz
++++ b/boot/grub/grub.hash
+@@ -0,0 +1,3 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/g/grub/grub_0.97-68.dsc
++sha256	4e1d15d12dbd3e9208111d6b806ad5a9857ca8850c47877d36575b904559260b	grub_0.97.orig.tar.gz
++sha256	a453489cf1fec5d311a0b76dea8c8b2ff67eee1a3eba6c06ab80864494d9773c	grub_0.97-68.diff.gz
 -- 
 2.0.5
