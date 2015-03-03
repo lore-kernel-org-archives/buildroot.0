@@ -1,37 +1,32 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Tue,  3 Mar 2015 14:42:18 -0500
-Subject: [Buildroot] [PATCH] wpa_supplicant: install systemd service files
-Message-ID: <1425411738-3369-1-git-send-email-mike@mikebwilliams.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  3 Mar 2015 20:53:06 +0100
+Subject: [Buildroot] [PATCH] perl: fix build
+Message-ID: <1425412386-12285-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mike Williams <mike@mikebwilliams.com>
----
- package/wpa_supplicant/wpa_supplicant.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+see http://autobuild.buildroot.net/results/1c2/1c261b09f5a4a314d5dcbc1e5811af9c7d18658a/
+(without adding host-bison as dependency)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 682cb4c..185c646 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -164,4 +164,15 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
- 	$(WPA_SUPPLICANT_INSTALL_DBUS)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0636aba..cd4c286 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -85,6 +85,7 @@ endif
+ define PERL_CONFIGURE_CMDS
+ 	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPTS))
+ 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++	touch $(@D)/x2p/a2p.c # prevents regen by yacc
  endef
  
-+define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
-+		$(TARGET_DIR)/lib/systemd/system
-+	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
-+		$(TARGET_DIR)/lib/systemd/system
-+	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
-+		$(TARGET_DIR)/lib/systemd/system
-+	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
-+		$(TARGET_DIR)/lib/systemd/system
-+endef
-+
- $(eval $(generic-package))
+ define PERL_BUILD_CMDS
 -- 
 2.1.0
