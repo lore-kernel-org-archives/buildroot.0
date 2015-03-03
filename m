@@ -1,40 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 08:51:40 +0100
-Subject: [Buildroot] [git commit] libvorbis: bump version
-Message-ID: <20150303075159.B7CF5817ED@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue,  3 Mar 2015 09:41:13 +0100
+Subject: [Buildroot] [PATCH 3/5] libass: add hash file
+In-Reply-To: <1425372075-22985-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1425372075-22985-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1425372075-22985-3-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9142661f402a22b5c14672e8ca8c254ba8a051f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/libvorbis/libvorbis.hash |    2 +-
- package/libvorbis/libvorbis.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libass/libass.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libass/libass.hash
 
-diff --git a/package/libvorbis/libvorbis.hash b/package/libvorbis/libvorbis.hash
-index 3b997ba..e990f4d 100644
---- a/package/libvorbis/libvorbis.hash
-+++ b/package/libvorbis/libvorbis.hash
-@@ -1,2 +1,2 @@
- # From http://www.xiph.org/downloads/
--sha256 2f05497d29195dc23ee952a24ee3973a74e6277569c4c2eca0ec5968e541f372 libvorbis-1.3.4.tar.xz
-+sha256 54f94a9527ff0a88477be0a71c0bab09a4c3febe0ed878b24824906cd4b0e1d1 libvorbis-1.3.5.tar.xz
-diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
-index 7fd789a..f1b710c 100644
---- a/package/libvorbis/libvorbis.mk
-+++ b/package/libvorbis/libvorbis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVORBIS_VERSION = 1.3.4
-+LIBVORBIS_VERSION = 1.3.5
- LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.xz
- LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis
- LIBVORBIS_INSTALL_STAGING = YES
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+new file mode 100644
+index 0000000..b7510de
+--- /dev/null
++++ b/package/libass/libass.hash
+@@ -0,0 +1,2 @@
++# From https://code.google.com/p/libass/downloads/detail?name=libass-0.10.2.tar.xz&can=2&q=
++sha1 72a153364e838d3b561bae3653f1515169d479c4 libass-0.10.2.tar.xz
+-- 
+1.9.1
