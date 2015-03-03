@@ -1,110 +1,95 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 12:52:30 -0300
-Subject: [Buildroot] [PATCH v2 7/8] arch: add support for AMD steamroller
+Date: Tue,  3 Mar 2015 12:52:31 -0300
+Subject: [Buildroot] [PATCH v2 8/8] toolchain-external: add CodeSourcery
+	AMD64 2014.05
 In-Reply-To: <1425397951-30603-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1425397951-30603-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1425397951-30603-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1425397951-30603-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for AMD steamroller optimizations, available in gcc 4.8+ as
-bdver3.
+This toolchain is AMD64-only so restrict it accordingly.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- arch/Config.in.x86                     | 11 +++++++++++
- package/gcc/Config.in.host             |  4 ++--
- toolchain/toolchain-external/Config.in |  3 +++
- 3 files changed, 16 insertions(+), 2 deletions(-)
+ toolchain/toolchain-external/Config.in             | 24 ++++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 ++++
+ toolchain/toolchain-external/toolchain-external.mk |  3 +++
+ 3 files changed, 31 insertions(+)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 8a844db..d5788b1 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -139,6 +139,15 @@ config BR2_x86_jaguar
- 	select BR2_X86_CPU_HAS_SSSE3
- 	select BR2_X86_CPU_HAS_SSE4
- 	select BR2_X86_CPU_HAS_SSE42
-+config BR2_x86_steamroller
-+	bool "steamroller"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_X86_CPU_HAS_SSE4
-+	select BR2_X86_CPU_HAS_SSE42
- config BR2_x86_geode
- 	bool "geode"
- 	# Don't include MMX support because there several variant of geode
-@@ -189,6 +198,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
- 	default "i686"		if BR2_x86_barcelona && BR2_i386
- 	default "i686"		if BR2_x86_jaguar && BR2_i386
-+	default "i686"		if BR2_x86_steamroller && BR2_i386
- 	default "i686"		if BR2_x86_k6
- 	default "i686"		if BR2_x86_k6_2
- 	default "i686"		if BR2_x86_athlon
-@@ -221,6 +231,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
- 	default "barcelona"	if BR2_x86_barcelona
- 	default "btver2"	if BR2_x86_jaguar
-+	default "bdver3"	if BR2_x86_steamroller
- 	default "k6"		if BR2_x86_k6
- 	default "k6-2"		if BR2_x86_k6_2
- 	default "athlon"	if BR2_x86_athlon
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index dd61f51..e07d881 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -29,7 +29,7 @@ choice
- 		# SPARC -mcpu=leon3 appeared in gcc 4.8.x
- 		depends on !BR2_sparc_leon3
- 		# Broken or unsupported X86 cores
--		depends on !BR2_x86_corei7 && !BR2_x86_jaguar
-+		depends on !BR2_x86_corei7 && !BR2_x86_jaguar && !BR2_x86_steamroller
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		# musl patches only for gcc 4.7+
-@@ -49,7 +49,7 @@ choice
- 		# SPARC -mcpu=leon3 appeared in gcc 4.8.x
- 		depends on !BR2_sparc_leon3
- 		# Broken or unsupported x86 cores
--		depends on !BR2_x86_jaguar
-+		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
- 		select BR2_GCC_NEEDS_MPC
- 
- 	config BR2_GCC_VERSION_4_8_X
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 4321e43..e70c3ce 100644
+index e70c3ce..d29bf43 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -676,6 +676,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_x86_jaguar
-+	depends on !BR2_x86_steamroller
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -703,6 +704,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_x86_jaguar
-+	depends on !BR2_x86_steamroller
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -729,6 +731,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_x86_jaguar
-+	depends on !BR2_x86_steamroller
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
+@@ -670,6 +670,29 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	  has support for the following variants:
+ 	    - SH2A, uClibc, big endian
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
++	bool "Sourcery CodeBench AMD64 2014.05"
++	depends on BR2_x86_64
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_x86_jaguar || BR2_x86_steamroller
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++	help
++	  Sourcery CodeBench toolchain for the amd64 (x86_64)
++	  architectures, from Mentor Graphics. It uses gcc 4.8.3,
++	  binutils 2.24.51, glibc 2.18, gdb 7.7.50 and kernel headers
++	  3.13.0. It has support for the following variants:
++	    - AMD Puma/Jaguar (family 16h), glibc
++	    Default for x86_64, nothing special to do.
++	    - AMD Steamroller (family 15h), glibc
++	    Select a steamroller core.
++	  No other architecture variants are supported since glibc
++	  is optimized for one of these two baselines.
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+ 	bool "Sourcery CodeBench x86/x86_64 2012.09"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -931,6 +954,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
++	default "x86_64-amd-linux-gnu"   if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 1f4de78..386f987 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -6,6 +6,10 @@ md5  14facaac538a43533b89d969d7904d46  mips-2014.05-27-mips-linux-gnu-i686-pc-li
+ # From: https://sourcery.mentor.com/GNUToolchain/release2640
+ md5  0ba8bc4923c04728ee3787bed4cd5148  mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ 
++# Sourcery CodeBench Lite for AMD64
++# From https://sourcery.mentor.com/GNUToolchain/release2777
++md5	a1f8650d1a5ff726cca0893522fd8745	amd-2014.05-25-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
++
+ ######################################
+ # Next hashes are all locally computed
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index f9b8517..78138d3 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -328,6 +328,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64_201405),y)
++TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/x86_64-amd-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE = amd-2014.05-25-x86_64-amd-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
 -- 
 2.0.5
