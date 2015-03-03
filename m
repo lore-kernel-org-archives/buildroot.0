@@ -1,26 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Mar 2015 15:23:50 +0100
-Subject: [Buildroot] [PATCH 1/3] Config.in: Add
- BR2_DEPRECATED_SINCE_2015_005
-In-Reply-To: <1425390818-22958-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425390818-22958-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150303152350.447a9ae7@free-electrons.com>
+From: Fabien Lahoudere <fabienlahoudere.pro@gmail.com>
+Date: Tue, 03 Mar 2015 15:25:24 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix barebox compilation issue with
+ 64bit kernel
+In-Reply-To: <20150303143125.75a1a4d3@free-electrons.com>
+References: <1425385673-2462-1-git-send-email-fabienlahoudere.pro@gmail.com>
+ <20150303143125.75a1a4d3@free-electrons.com>
+Message-ID: <54F5C454.9060208@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hello
 
-On Tue,  3 Mar 2015 10:53:36 -0300, Gustavo Zacarias wrote:
-> In preparation for the deprecation of certain features in 2015.05, add
-> the BR2_DEPRECATED_SINCE_2015_05 symbol.
+Thank you for the correction.
+I will rework my patch but I have questions:
+- If I change the title, and submit a new patch, what happened to the
+old one in the patchwork?
+- Is it necessary to prefix the new title with "PATCH v2"?
 
-Minor typo in commit title: 005 -> 05.
+Fabien
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Le 03/03/2015 14:31, Thomas Petazzoni a ?crit :
+> Dear Lahoudere Fabien,
+>
+> On Tue,  3 Mar 2015 13:27:53 +0100, Lahoudere Fabien wrote:
+>> Signed-off-by: Lahoudere Fabien <fabienlahoudere.pro@gmail.com>
+> This should normally be:
+>
+> 	Signed-off-by: <first name> <last name> <email>
+>
+>> ---
+>>   boot/barebox/barebox.mk | 2 ++
+>>   1 file changed, 2 insertions(+)
+> This looks good but the commit log could be improved:
+>
+> 	barebox: fix compilation on x86-64 architecture
+>
+> 	Barebox uses KERNEL_ARCH to derive BAREBOX_ARCH, but doesn't
+> 	currently handle the case of the x86-64 architecture. In this
+> 	case KERNEL_ARCH is x86_64, but BAREBOX_ARCH should be x86
+> 	nonetheless.
+>
+> The commit title should almost always look like:
+>
+> 	<pkg>: <description>
+>
+> Thanks,
+>
+> Thomas
