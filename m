@@ -1,9 +1,9 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  3 Mar 2015 10:17:10 +0100
-Subject: [Buildroot] [RFC v3 05/30] pppd: use TARGET_LDFLAGS
+Date: Tue,  3 Mar 2015 10:17:11 +0100
+Subject: [Buildroot] [RFC v3 06/30] openswan: set LDFLAGS
 In-Reply-To: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1425374255-6827-6-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1425374255-6827-7-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,22 @@ This is in order to support the per-package staging directory.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/pppd/pppd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openswan/openswan.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 453445b..a5095fe 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -53,7 +53,7 @@ define PPPD_CONFIGURE_CMDS
- endef
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index ba36f7c..79f1409 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -12,7 +12,8 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+ OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+ 	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
+-	USE_KLIPS=false USE_MAST=false USE_NM=false
++	USE_KLIPS=false USE_MAST=false USE_NM=false \
++	LDFLAGS="$(TARGET_LDFLAGS)"
  
- define PPPD_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" \
-+	$(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
- 		-C $(@D) $(PPPD_MAKE_OPTS)
- endef
- 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ 	OPENSWAN_DEPENDENCIES += libcurl
 -- 
 2.3.1
