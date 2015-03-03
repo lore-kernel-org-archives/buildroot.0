@@ -1,9 +1,9 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  3 Mar 2015 10:17:11 +0100
-Subject: [Buildroot] [RFC v3 06/30] openswan: set LDFLAGS
+Date: Tue,  3 Mar 2015 10:17:08 +0100
+Subject: [Buildroot] [RFC v3 03/30] iproute2: use the TARGET_LDFLAGS variable
 In-Reply-To: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1425374255-6827-7-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1425374255-6827-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,21 @@ This is in order to support the per-package staging directory.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/openswan/openswan.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/iproute2/iproute2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index ba36f7c..79f1409 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
-@@ -12,7 +12,8 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
- OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
- OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
- 	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
--	USE_KLIPS=false USE_MAST=false USE_NM=false
-+	USE_KLIPS=false USE_MAST=false USE_NM=false \
-+	LDFLAGS="$(TARGET_LDFLAGS)"
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 0838463..5f144cd 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -59,7 +59,7 @@ endef
  
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- 	OPENSWAN_DEPENDENCIES += libcurl
+ define IPROUTE2_BUILD_CMDS
+ 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
+-	$(TARGET_MAKE_ENV) $(MAKE) \
++	$(TARGET_MAKE_ENV) LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) \
+ 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
+ 		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
+ endef
 -- 
 2.3.1
