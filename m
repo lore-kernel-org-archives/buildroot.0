@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 08:36:01 +0100
-Subject: [Buildroot] [git commit] bind: bump to version 9.9.7
-Message-ID: <20150303074049.7CB6080481@busybox.osuosl.org>
+Date: Tue, 3 Mar 2015 08:51:40 +0100
+Subject: [Buildroot] [git commit] libvorbis: bump version
+Message-ID: <20150303075159.B7CF5817ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb107525484304ddc47332c215d0bbeb5995b856
+commit: http://git.buildroot.net/buildroot/commit/?id=9142661f402a22b5c14672e8ca8c254ba8a051f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash |    4 ++--
- package/bind/bind.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libvorbis/libvorbis.hash |    2 +-
+ package/libvorbis/libvorbis.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index aac0a84..6bbd00f 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/libvorbis/libvorbis.hash b/package/libvorbis/libvorbis.hash
+index 3b997ba..e990f4d 100644
+--- a/package/libvorbis/libvorbis.hash
++++ b/package/libvorbis/libvorbis.hash
 @@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.9.6-P2/bind-9.9.6-P2.tar.gz.sha256.asc
--sha256	5e882f453a8c799a121272f68bdb90936ce97bb857f8c2b3af1c8ba3d1b749ed	bind-9.9.6-P2.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7/bind-9.9.7.tar.gz.sha256.asc
-+sha256	3f23e7fcb363a2594ed1f065868c2c1080a93636a4fcb4c47f9e164e2cd74c66	bind-9.9.7.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ad41330..96ed23e 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+ # From http://www.xiph.org/downloads/
+-sha256 2f05497d29195dc23ee952a24ee3973a74e6277569c4c2eca0ec5968e541f372 libvorbis-1.3.4.tar.xz
++sha256 54f94a9527ff0a88477be0a71c0bab09a4c3febe0ed878b24824906cd4b0e1d1 libvorbis-1.3.5.tar.xz
+diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
+index 7fd789a..f1b710c 100644
+--- a/package/libvorbis/libvorbis.mk
++++ b/package/libvorbis/libvorbis.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.9.6-P2
-+BIND_VERSION = 9.9.7
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+-LIBVORBIS_VERSION = 1.3.4
++LIBVORBIS_VERSION = 1.3.5
+ LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.xz
+ LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis
+ LIBVORBIS_INSTALL_STAGING = YES
