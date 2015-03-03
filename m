@@ -1,41 +1,44 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  3 Mar 2015 10:17:26 +0100
-Subject: [Buildroot] [RFC v3 21/30] lmbench: to be checked
+Date: Tue,  3 Mar 2015 10:17:28 +0100
+Subject: [Buildroot] [RFC v3 23/30] gpsd: add support for per-package
+	staging directory
 In-Reply-To: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1425374255-6827-22-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1425374255-6827-24-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/lmbench/lmbench.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Pass the TARGET_LDFLAGS variable.
 
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index 63a83fd..954f7eb 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -10,9 +10,6 @@ LMBENCH_SITE = http://downloads.sourceforge.net/project/lmbench/development/lmbe
- LMBENCH_LICENSE = lmbench license (based on GPLv2)
- LMBENCH_LICENSE_FILES = COPYING COPYING-2
+Also use $(STAGINGNOPKG_DIR) instead of $(STAGING_DIR) because now the
+STAGING_DIR variable point to the per-package staging directory.
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/gpsd/gpsd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 3e6411b..62fd207 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -14,12 +14,12 @@ GPSD_DEPENDENCIES = host-scons host-pkgconf
  
--LMBENCH_CFLAGS = $(TARGET_CFLAGS)
--LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
--
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- LMBENCH_DEPENDENCIES += libtirpc
- LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-@@ -28,7 +25,7 @@ define LMBENCH_CONFIGURE_CMDS
- endef
+ GPSD_LDFLAGS = $(TARGET_LDFLAGS)
  
- define LMBENCH_BUILD_CMDS
--	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
-+	$(MAKE) CFLAGS="$(TARGET_CFLAGS) $(LMBENCH_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS) $(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
- endef
+-GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
++GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS) LINKFLAGS="$(TARGET_LDFLAGS)"
  
- define LMBENCH_INSTALL_TARGET_CMDS
+ GPSD_SCONS_OPTS = \
+ 	arch=$(ARCH)\
+ 	prefix=/usr\
+-	sysroot=$(STAGING_DIR)\
++	sysroot=$(STAGINGNOPKG_DIR) \
+ 	strip=no\
+ 	python=no
+ 
 -- 
 2.3.1
