@@ -1,65 +1,59 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 3 Mar 2015 11:00:29 +0100
-Subject: [Buildroot] [PATCH v2 1/4] pkg-cmake: allow to build package in
-	a subdirectory
-In-Reply-To: <20150303110034.323036d0@x230.trabucayre.com>
-References: <1424891914-27748-1-git-send-email-gwenj@trabucayre.com>
- <CAHXCMM+Vw-njSXvDLMEf-LSwxxDdGY_=g9Yda=2dyfgG=TFmiw@mail.gmail.com>
- <20150303110034.323036d0@x230.trabucayre.com>
-Message-ID: <CAHXCMM+k0uZWebKF6YLCVDOp0kz0GFG-2cH0-u1g4GxWmK1h1A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 07:31:03 -0300
+Subject: [Buildroot] [PATCH] perl: needs host-bison
+Message-ID: <1425378663-2659-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 3, 2015 at 11:00 AM, gwenhael.goavec <gwenj@trabucayre.com> wrote:
-> Hi Samuel,
->
-> On Mon, 2 Mar 2015 22:55:11 +0100
-> Samuel Martin <s.martin49@gmail.com> wrote:
->
->> Hi Gwenhael,
->>
->> On Wed, Feb 25, 2015 at 8:18 PM, Gwenhael Goavec-Merou
->> <gwenj@trabucayre.com> wrote:
->> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->> >
->> > For some cmake based packages, like GNURadio, it's forbidden to do the
->> > compilation directly in the sources directory. This patch add a new
->> > variable to specify, if needed, the name of a sub-directory used to compile.
->> >
->> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->>
->> Tested-by: Samuel Martin <s.martin49@gmail.com>
->> Acked-by: Samuel Martin <s.martin49@gmail.com>
->>
->> It would be good to update the cmake-package section of the manual as well. ;-)
->>
->> This doc should mention that the user has to set the build location
->> path for the target package, but also for the host package if any.
->> I.e.:
->> FOO_BUILDDIR = $(FOO_SRCDIR)/.build
->> HOST_FOO_BUILDDIR = $(HOST_FOO_SRCDIR)/.build
->>
-> True. This update needs to be provided by a new version of this series of patch
-> or a new patch ?
+It's from last bump, fixes:
+http://autobuild.buildroot.net/results/1c2/1c261b09f5a4a314d5dcbc1e5811af9c7d18658a/
 
-A follow-up patch is enough to me ;)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/perl/perl.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
->>
->> Regards,
->>
->> --
->> Samuel
->
-> Thank for review and test.
->
-> Regards
->
-> Gwen
-
-Cheers,
-
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0636aba..81e6275 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -8,6 +8,7 @@ PERL_VERSION_MAJOR = 20
+ PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
++PERL_DEPENDENCIES = host-bison
+ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+@@ -88,7 +89,7 @@ define PERL_CONFIGURE_CMDS
+ endef
+ 
+ define PERL_BUILD_CMDS
+-	$(MAKE1) -C $(@D) all
++	PATH=$(BR_PATH) $(MAKE1) -C $(@D) all
+ endef
+ 
+ define PERL_INSTALL_STAGING_CMDS
+@@ -101,7 +102,7 @@ endef
+ 
+ # We never want to have host-berkeleydb or host-gdbm as dependencies
+ # of host-perl.
+-HOST_PERL_DEPENDENCIES =
++HOST_PERL_DEPENDENCIES = host-bison
+ 
+ HOST_PERL_CONF_OPTS = \
+ 	-des \
+@@ -113,7 +114,7 @@ define HOST_PERL_CONFIGURE_CMDS
+ endef
+ 
+ define HOST_PERL_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	PATH=$(BR_PATH) $(MAKE) -C $(@D)
+ endef
+ 
+ define HOST_PERL_INSTALL_CMDS
 -- 
-Samuel
+2.0.5
