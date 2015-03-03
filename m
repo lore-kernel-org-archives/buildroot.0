@@ -1,55 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 07:59:59 +0100
-Subject: [Buildroot] [git commit] configs/qemu: update to the latest
-	kernel/headers versions
-Message-ID: <20150303070134.31230807DA@busybox.osuosl.org>
+Date: Tue, 3 Mar 2015 08:00:32 +0100
+Subject: [Buildroot] [git commit] alsa-lib: bump to version 1.0.29
+Message-ID: <20150303070134.38818801F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=059a013ed887234b3d434d476989c204b066e420
+commit: http://git.buildroot.net/buildroot/commit/?id=5aaa8ea153c597ec2a2a5e6f5e4190e55f429654
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qemu_arm_vexpress_defconfig is broken for 3.19 so keep it with 3.18.x
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../x86/{linux-3.18.config => linux-3.19.config}   |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- .../{linux-3.18.config => linux-3.19.config}       |    0
- configs/qemu_aarch64_virt_defconfig                |   10 +++++-----
- configs/qemu_arm_nuri_defconfig                    |    4 ++--
- configs/qemu_arm_versatile_defconfig               |   10 +++++-----
- configs/qemu_arm_vexpress_defconfig                |    4 ++--
- configs/qemu_microblazebe_mmu_defconfig            |   10 +++++-----
- configs/qemu_microblazeel_mmu_defconfig            |   10 +++++-----
- configs/qemu_mips64_malta_defconfig                |   10 +++++-----
- configs/qemu_mips64el_malta_defconfig              |   10 +++++-----
- configs/qemu_mips_malta_defconfig                  |   10 +++++-----
- configs/qemu_mipsel_malta_defconfig                |   10 +++++-----
- configs/qemu_ppc64_pseries_defconfig               |    8 ++++----
- configs/qemu_ppc_g3beige_defconfig                 |   10 +++++-----
- configs/qemu_ppc_mpc8544ds_defconfig               |    8 ++++----
- configs/qemu_ppc_virtex_ml507_defconfig            |    8 ++++----
- configs/qemu_sh4_r2d_defconfig                     |   10 +++++-----
- configs/qemu_sparc_ss10_defconfig                  |   10 +++++-----
- configs/qemu_x86_64_defconfig                      |   10 +++++-----
- configs/qemu_x86_defconfig                         |   10 +++++-----
- configs/qemu_xtensa_lx60_defconfig                 |   10 +++++-----
- 33 files changed, 86 insertions(+), 86 deletions(-)
+ package/alsa-lib/alsa-lib.hash |    2 ++
+ package/alsa-lib/alsa-lib.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+new file mode 100644
+index 0000000..3e132c8
+--- /dev/null
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index c67258f..3115433 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_LIB_VERSION = 1.0.28
++ALSA_LIB_VERSION = 1.0.29
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPLv2.1+
