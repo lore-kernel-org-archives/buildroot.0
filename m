@@ -1,52 +1,36 @@
-From: Fabien Lahoudere <fabienlahoudere.pro@gmail.com>
-Date: Tue, 03 Mar 2015 15:25:24 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix barebox compilation issue with
- 64bit kernel
-In-Reply-To: <20150303143125.75a1a4d3@free-electrons.com>
-References: <1425385673-2462-1-git-send-email-fabienlahoudere.pro@gmail.com>
- <20150303143125.75a1a4d3@free-electrons.com>
-Message-ID: <54F5C454.9060208@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 12:52:24 -0300
+Subject: [Buildroot] [PATCH v2 1/8] Config.in: Add
+	BR2_DEPRECATED_SINCE_2015_05
+Message-ID: <1425397951-30603-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+In preparation for the deprecation of certain features in 2015.05, add
+the BR2_DEPRECATED_SINCE_2015_05 symbol.
 
-Thank you for the correction.
-I will rework my patch but I have questions:
-- If I change the title, and submit a new patch, what happened to the
-old one in the patchwork?
-- Is it necessary to prefix the new title with "PATCH v2"?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Fabien
-
-Le 03/03/2015 14:31, Thomas Petazzoni a ?crit :
-> Dear Lahoudere Fabien,
->
-> On Tue,  3 Mar 2015 13:27:53 +0100, Lahoudere Fabien wrote:
->> Signed-off-by: Lahoudere Fabien <fabienlahoudere.pro@gmail.com>
-> This should normally be:
->
-> 	Signed-off-by: <first name> <last name> <email>
->
->> ---
->>   boot/barebox/barebox.mk | 2 ++
->>   1 file changed, 2 insertions(+)
-> This looks good but the commit log could be improved:
->
-> 	barebox: fix compilation on x86-64 architecture
->
-> 	Barebox uses KERNEL_ARCH to derive BAREBOX_ARCH, but doesn't
-> 	currently handle the case of the x86-64 architecture. In this
-> 	case KERNEL_ARCH is x86_64, but BAREBOX_ARCH should be x86
-> 	nonetheless.
->
-> The commit title should almost always look like:
->
-> 	<pkg>: <description>
->
-> Thanks,
->
-> Thomas
+diff --git a/Config.in b/Config.in
+index ce239d6..0598042 100644
+--- a/Config.in
++++ b/Config.in
+@@ -312,6 +312,10 @@ config BR2_DEPRECATED_SINCE_2015_02
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2015_05
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
+-- 
+2.0.5
