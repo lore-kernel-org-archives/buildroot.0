@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Mar 2015 08:00:32 +0100
-Subject: [Buildroot] [git commit] alsa-lib: bump to version 1.0.29
-Message-ID: <20150303070134.38818801F7@busybox.osuosl.org>
+Date: Tue, 3 Mar 2015 08:00:49 +0100
+Subject: [Buildroot] [git commit] alsa-utils: bump to version 1.0.29
+Message-ID: <20150303070134.4F517801F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5aaa8ea153c597ec2a2a5e6f5e4190e55f429654
+commit: http://git.buildroot.net/buildroot/commit/?id=160d24fd704f18acbff12ccc27e745e9ad7725cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Also add hash file.
@@ -16,28 +16,28 @@ Also add hash file.
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-lib/alsa-lib.hash |    2 ++
- package/alsa-lib/alsa-lib.mk   |    2 +-
+ package/alsa-utils/alsa-utils.hash |    2 ++
+ package/alsa-utils/alsa-utils.mk   |    2 +-
  2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
 new file mode 100644
-index 0000000..3e132c8
+index 0000000..ba5061b
 --- /dev/null
-+++ b/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	73043c35eb9636be0f4af6a240235c213f12a25feb1f04aeeac8cb7e30fcbdd0	alsa-lib-1.0.29.tar.bz2
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index c67258f..3115433 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
++sha256	5160058f3e14483ced5de919dd473f93932059454530a9b7ef97dcabd6833e9b	alsa-utils-1.0.29.tar.bz2
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index f95e7a8..65702b7 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.0.28
-+ALSA_LIB_VERSION = 1.0.29
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPLv2.1+
+-ALSA_UTILS_VERSION = 1.0.28
++ALSA_UTILS_VERSION = 1.0.29
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_LICENSE = GPLv2
