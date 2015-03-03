@@ -1,42 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 15:43:09 -0300
-Subject: [Buildroot] [PATCH] whois: bump to version 5.2.5
-Message-ID: <1425408189-31633-1-git-send-email-gustavo@zacarias.com.ar>
+From: drasko.draskovic at gmail.com <drasko.draskovic@gmail.com>
+Date: Tue, 03 Mar 2015 13:10:41 -0600
+Subject: [Buildroot] drasko.draskovic@gmail.com has indicated you're a
+	friend(4 mutual friends). Accept?
+Message-ID: <0.0.2A3.A47.1D055E4FBAC920E.276A@mail9.infoaxe.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index b52a8b9..fc8366f 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.4.dsc
--sha256	f1827e3b61e6f647b6093e6dcf52d3b44775fdbd6bf0cf7413aff26825f0bc43	whois_5.2.4.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.5.dsc
-+sha256	1a84fb9c1190dc37df396ea1f24aae56a1beb846257ee692c9d4b44337135d10	whois_5.2.5.tar.xz
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index e4f8184..fee0425 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.2.4
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150125T100758Z/pool/main/w/whois
-+WHOIS_VERSION = 5.2.5
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150303T100910Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
--- 
-2.0.5
+drasko.draskovic at gmail.com wants to follow you.
+
+****** Is drasko.draskovic at gmail.com you friend? ******
+If Yes please follow the link below:
+http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at busybox.net&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=5006d53a-a42f-48e7-919a-72cff61de2f7&amp;from=drasko.draskovic at gmail.com&src=txt_yes
+
+If No please follow the link below:
+http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at busybox.net&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=5006d53a-a42f-48e7-919a-72cff61de2f7&amp;from=drasko.draskovic at gmail.com&src=txt_no
+
+
+Follow the link below to remove yourself from all such emails
+http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at busybox.net&amp;iid=5006d53a-a42f-48e7-919a-72cff61de2f7&amp;from=drasko.draskovic at gmail.com
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150303/741b34d5/attachment.html>
