@@ -1,30 +1,100 @@
-From: drasko.draskovic at gmail.com <drasko.draskovic@gmail.com>
-Date: Tue, 03 Mar 2015 13:10:41 -0600
-Subject: [Buildroot] drasko.draskovic@gmail.com has indicated you're a
-	friend(4 mutual friends). Accept?
-Message-ID: <0.0.2A3.A47.1D055E4FBAC920E.276A@mail9.infoaxe.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 16:10:42 -0300
+Subject: [Buildroot] [PATCH 1/2] uclibc: add patch to unbreak sparc
+	non-threaded builds
+Message-ID: <1425409843-13569-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+SPARC non-threaded builds are broken, add patch for uClibc & uClibc-ng to fix
+it.
 
-drasko.draskovic at gmail.com wants to follow you.
+Status: upstream uClibc (so likely -ng will follow suit shortly).
 
-****** Is drasko.draskovic at gmail.com you friend? ******
-If Yes please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at busybox.net&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=5006d53a-a42f-48e7-919a-72cff61de2f7&amp;from=drasko.draskovic at gmail.com&src=txt_yes
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-guard-tcb-offsets.h-include-with-RESET_P.patch | 31 ++++++++++++++++++++++
+ ...-guard-tcb-offsets.h-include-with-RESET_P.patch | 31 ++++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+ create mode 100644 package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
 
-If No please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at busybox.net&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=5006d53a-a42f-48e7-919a-72cff61de2f7&amp;from=drasko.draskovic at gmail.com&src=txt_no
-
-
-Follow the link below to remove yourself from all such emails
-http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at busybox.net&amp;iid=5006d53a-a42f-48e7-919a-72cff61de2f7&amp;from=drasko.draskovic at gmail.com
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150303/741b34d5/attachment.html>
+diff --git a/package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch b/package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+new file mode 100644
+index 0000000..a98ee68
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+@@ -0,0 +1,31 @@
++From 857420a3271dc5bbddbe45a9e9878b9dc88fd143 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 3 Mar 2015 14:56:17 -0300
++Subject: [PATCH] sparc/clone.S: guard tcb-offsets.h include with RESET_PID
++
++Status: upstream [uClibc]
++
++Otherwise we have a broken scenario with non-threading builds.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/sysdeps/linux/sparc/clone.S | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libc/sysdeps/linux/sparc/clone.S b/libc/sysdeps/linux/sparc/clone.S
++index 8d9da5a..1d0e3e6 100644
++--- a/libc/sysdeps/linux/sparc/clone.S
+++++ b/libc/sysdeps/linux/sparc/clone.S
++@@ -22,7 +22,9 @@
++ 
++ #include <asm/errno.h>
++ #include <asm/unistd.h>
+++#ifdef RESET_PID
++ #include <tcb-offsets.h>
+++#endif
++ #include <sysdep.h>
++ 
++ #define CLONE_VM	0x00000100
++-- 
++2.0.5
++
+diff --git a/package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch b/package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+new file mode 100644
+index 0000000..a98ee68
+--- /dev/null
++++ b/package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+@@ -0,0 +1,31 @@
++From 857420a3271dc5bbddbe45a9e9878b9dc88fd143 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 3 Mar 2015 14:56:17 -0300
++Subject: [PATCH] sparc/clone.S: guard tcb-offsets.h include with RESET_PID
++
++Status: upstream [uClibc]
++
++Otherwise we have a broken scenario with non-threading builds.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/sysdeps/linux/sparc/clone.S | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libc/sysdeps/linux/sparc/clone.S b/libc/sysdeps/linux/sparc/clone.S
++index 8d9da5a..1d0e3e6 100644
++--- a/libc/sysdeps/linux/sparc/clone.S
+++++ b/libc/sysdeps/linux/sparc/clone.S
++@@ -22,7 +22,9 @@
++ 
++ #include <asm/errno.h>
++ #include <asm/unistd.h>
+++#ifdef RESET_PID
++ #include <tcb-offsets.h>
+++#endif
++ #include <sysdep.h>
++ 
++ #define CLONE_VM	0x00000100
++-- 
++2.0.5
++
+-- 
+2.0.5
