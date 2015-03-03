@@ -1,35 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Mar 2015 10:53:36 -0300
-Subject: [Buildroot] [PATCH 1/3] Config.in: Add BR2_DEPRECATED_SINCE_2015_005
-Message-ID: <1425390818-22958-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 10:53:37 -0300
+Subject: [Buildroot] [PATCH 2/3] ts5x00_defconfig: switch to
+	BR2_KERNEL_HEADERS_VERSION
+In-Reply-To: <1425390818-22958-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1425390818-22958-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1425390818-22958-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for the deprecation of certain features in 2015.05, add
-the BR2_DEPRECATED_SINCE_2015_05 symbol.
+In preparation for BR2_KERNEL_HEADERS_3_17 deprecation.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ configs/ts5x00_defconfig | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index ce239d6..0598042 100644
---- a/Config.in
-+++ b/Config.in
-@@ -312,6 +312,10 @@ config BR2_DEPRECATED_SINCE_2015_02
- 	bool
- 	default y
- 
-+config BR2_DEPRECATED_SINCE_2015_05
-+	bool
-+	default y
+diff --git a/configs/ts5x00_defconfig b/configs/ts5x00_defconfig
+index 336f6d9..befb655 100644
+--- a/configs/ts5x00_defconfig
++++ b/configs/ts5x00_defconfig
+@@ -1,6 +1,11 @@
+ BR2_i386=y
+ BR2_x86_i586=y
+-BR2_KERNEL_HEADERS_3_17=y
 +
- endif
- 
- config BR2_ENABLE_DEBUG
++# Lock headers version to match and avoid breakage
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.17.8"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
++
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
+ BR2_ROOTFS_OVERLAY="board/ts/ts5x00/fs-overlay"
+ BR2_LINUX_KERNEL=y
 -- 
 2.0.5
