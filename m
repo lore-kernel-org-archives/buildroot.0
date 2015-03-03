@@ -1,26 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Mar 2015 16:58:37 +0100
-Subject: [Buildroot] [PATCH v2 4/8] toolchain/external: remove xilinx
- microblaze v2/14.3 toolchains
-In-Reply-To: <1425397951-30603-4-git-send-email-gustavo@zacarias.com.ar>
-References: <1425397951-30603-1-git-send-email-gustavo@zacarias.com.ar>
- <1425397951-30603-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150303165837.0f1d4283@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Mar 2015 13:13:34 -0300
+Subject: [Buildroot] [PATCH 1/3] syslinux: add hash
+Message-ID: <1425399216-3522-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ boot/syslinux/syslinux.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 boot/syslinux/syslinux.hash
 
-On Tue,  3 Mar 2015 12:52:27 -0300, Gustavo Zacarias wrote:
-> These have been deprecated since 2014.02
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+diff --git a/boot/syslinux/syslinux.hash b/boot/syslinux/syslinux.hash
+new file mode 100644
+index 0000000..4ec039f
+--- /dev/null
++++ b/boot/syslinux/syslinux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/utils/boot/syslinux/sha256sums.asc
++sha256	afa31b7cbf72e1c0c1752a0636ba724ce01c0e374366e46e61db6862b4685478	syslinux-6.02.tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
