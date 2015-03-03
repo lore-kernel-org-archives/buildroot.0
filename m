@@ -1,44 +1,36 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  3 Mar 2015 10:17:18 +0100
-Subject: [Buildroot] [RFC v3 13/30] dtc: add add support for per-package
-	staging directory
+Date: Tue,  3 Mar 2015 10:17:19 +0100
+Subject: [Buildroot] [RFC v3 14/30] openssh: add support to the per-package
+	staging directory.
 In-Reply-To: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <1425374255-6827-14-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1425374255-6827-15-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use $(TARGET_CONFIGURE_OPTS) in the install commands because it builds
-something so it needs it to suppoer the per-package staging directory.
+Add "-L$(STAGING_DIR)/usr/lib" to the LDFLAGS environment variable to be
+used by the configure script.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/dtc/dtc.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/openssh/openssh.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index e094f7b..3da3369 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -36,12 +36,13 @@ endef
- 
- # For staging, only the library is needed
- define DTC_INSTALL_STAGING_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install-lib \
--		install-includes
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
-+		PREFIX=/usr install-lib install-includes
- endef
- 
- define DTC_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_GOAL)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
-+		PREFIX=/usr $(DTC_INSTALL_GOAL)
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index be471b6..22cdb12 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -8,7 +8,7 @@ OPENSSH_VERSION = 6.7p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+-OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
++OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS) -L$(STAGING_DIR)/usr/lib"
+ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
+ 	--disable-lastlog \
 -- 
 2.3.1
