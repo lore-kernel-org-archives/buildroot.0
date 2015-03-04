@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:05:37 +0100
-Subject: [Buildroot] [git commit] rpi-firmware: remove no longer used
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-In-Reply-To: <54F78019.7020603@mind.be>
-References: <20150304202748.6C184817F9@busybox.osuosl.org>
- <54F78019.7020603@mind.be>
-Message-ID: <20150304230537.78290b41@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:04:29 +0100
+Subject: [Buildroot] [git commit] openswan: re-add -fPIE flag
+Message-ID: <20150304220553.EABE67FB09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+commit: http://git.buildroot.net/buildroot/commit/?id=9d0c45094118d1c238b389c5d6dc9a1a901bc575
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 04 Mar 2015 22:58:49 +0100, Arnout Vandecappelle wrote:
+This flag was mistakenly removed in unrelated commit
+5287358ff33ec4920a677a58152ad040151b843f.
 
-> > -config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
-> 
->  Is there no legacy handling needed?
+Reported-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openswan/openswan.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I thought about this, but my reasoning is that since the package now
-installs the DTBs unconditionally, the behavior is now the same as
-having this option =y, and therefore there is no need for legacy
-handling.
-
-Did I miss something?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 3c878c9..ba36f7c 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -11,7 +11,7 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ 
+ OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+ OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+-	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
++	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
+ 	USE_KLIPS=false USE_MAST=false USE_NM=false
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
