@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:39:21 +0100
-Subject: [Buildroot] [PATCH 1/1] linux/linux.mk: custom dts path - build
- dtb only from *.dts files
-In-Reply-To: <1425221504-28223-1-git-send-email-ivo.slanina@gmail.com>
-References: <1425221504-28223-1-git-send-email-ivo.slanina@gmail.com>
-Message-ID: <20150304233921.4637fdef@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:43:06 +0100
+Subject: [Buildroot] [git commit] package/portaudio: Remove threads
+	dependency for alsa module
+Message-ID: <20150304224315.4903580E38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ivo Slanina,
+commit: http://git.buildroot.net/buildroot/commit/?id=1903260da6e9c13b6c4ccb7fbb4f107e1285d5b7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 Mar 2015 15:51:44 +0100, Ivo Slanina wrote:
-> When building device tree blobs from custom *.dts files, buildroot
-> initializes KERNEL_DTS_NAME variable from all given file names.
-> This causes that user can't provide one *.dts file and some other
-> *.dtsi files as dependencies.
-> 
-> Problem is fixed by adding filter for initializing KERNEL_DTS_NAME
-> variable with *.dts files only. All user provided files are copied
-> into kernel source tree, but only file names suffixed with *.dts
-> are used for building appropriate *.dtb files.
-> 
-> Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
+Portaudio as a whole already depends on threads support, so there is no
+need to have an additional dependency for its alsa module.
 
-Thanks, applied!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/portaudio/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-I've only added a comment in the linux.mk file itself to explain why we
-are doing this .dts filtering.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/portaudio/Config.in b/package/portaudio/Config.in
+index eaf095c..252a92a 100644
+--- a/package/portaudio/Config.in
++++ b/package/portaudio/Config.in
+@@ -15,7 +15,6 @@ if BR2_PACKAGE_PORTAUDIO
+ config BR2_PACKAGE_PORTAUDIO_ALSA
+ 	bool "alsa support"
+ 	select BR2_PACKAGE_ALSA_LIB
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	default y
+ 	help
+ 	  Compile with ALSA support.
