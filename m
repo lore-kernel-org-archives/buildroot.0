@@ -1,30 +1,32 @@
-From: buildroot at uclibc.org <buildroot@uclibc.org>
-Date: Wed, 04 Mar 2015 14:43:15 -0600
-Subject: [Buildroot] buildroot@uclibc.org has indicated you're a friend(20
-	mutual friends). Accept?
-Message-ID: <0.0.1C1.CEF.1D056BB13BD37A0.273A@mail12.infoaxe.net>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  4 Mar 2015 22:01:02 +0100
+Subject: [Buildroot] [PATCH] package/libiconv: typo
+Message-ID: <1425502862-17966-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-buildroot at uclibc.org wants to follow you.
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/libiconv/libiconv.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-****** Is buildroot at uclibc.org you friend? ******
-If Yes please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=Buildroot&amp;email=buildroot at buildroot.org&amp;invitername=buildroot&amp;inviterid=37100377&amp;userid=0&amp;token=0&amp;emailmasterid=c02a8d26-38cf-41b4-a28e-7e07586ad0f5&amp;from=buildroot at uclibc.org&src=txt_yes
-
-If No please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=Buildroot&amp;email=buildroot at buildroot.org&amp;invitername=buildroot&amp;inviterid=37100377&amp;userid=0&amp;token=0&amp;emailmasterid=c02a8d26-38cf-41b4-a28e-7e07586ad0f5&amp;from=buildroot at uclibc.org&src=txt_no
-
-
-Follow the link below to remove yourself from all such emails
-http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at buildroot.org&amp;iid=c02a8d26-38cf-41b4-a28e-7e07586ad0f5&amp;from=buildroot at uclibc.org
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150304/572a7091/attachment.html>
+diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
+index af55b60..f014da0 100644
+--- a/package/libiconv/libiconv.mk
++++ b/package/libiconv/libiconv.mk
+@@ -12,7 +12,7 @@ LIBICONV_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ # Don't build the preloadable library, as we don't need it (it's only
+ # for LD_PRELOAD to replace glibc's iconv, but we never build libiconv
+-# when glibc is ued). And it causes problems for static only builds.
++# when glibc is used). And it causes problems for static only builds.
+ define LIBICONV_DISABLE_PRELOAD
+ 	$(SED) '/preload/d' $(@D)/Makefile.in
+ endef
+-- 
+1.7.9.5
