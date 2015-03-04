@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:43:06 +0100
-Subject: [Buildroot] [git commit] package/portaudio: Remove threads
-	dependency for alsa module
-Message-ID: <20150304224315.4903580E38@busybox.osuosl.org>
+Date: Wed, 4 Mar 2015 23:40:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/vlc: express the dependency on
+	freerdp
+In-Reply-To: <87oao8s8ea.fsf@dell.be.48ers.dk>
+References: <cover.1425507251.git.yann.morin.1998@free.fr>
+ <f6508071f9c26276a9840a3f197ca5a866f1039e.1425507251.git.yann.morin.1998@free.fr>
+ <20150304232410.175ac1ed@free-electrons.com>
+ <87oao8s8ea.fsf@dell.be.48ers.dk>
+Message-ID: <20150304234051.26830a00@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1903260da6e9c13b6c4ccb7fbb4f107e1285d5b7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Portaudio as a whole already depends on threads support, so there is no
-need to have an additional dependency for its alsa module.
+On Wed, 04 Mar 2015 23:30:21 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/portaudio/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+>  >> Explcitly add freerdp (if enabled) as a dependency of vlc to ensure
+>  >> build order in every vases.
+> 
+>  > a vase is for flowers, I guess you wanted to say 'case', right?
+> 
+>  > Committed with this fixed.
+> 
+> But you forgot to fix the 'Explcitly' in the line above.
 
-diff --git a/package/portaudio/Config.in b/package/portaudio/Config.in
-index eaf095c..252a92a 100644
---- a/package/portaudio/Config.in
-+++ b/package/portaudio/Config.in
-@@ -15,7 +15,6 @@ if BR2_PACKAGE_PORTAUDIO
- config BR2_PACKAGE_PORTAUDIO_ALSA
- 	bool "alsa support"
- 	select BR2_PACKAGE_ALSA_LIB
--	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	default y
- 	help
- 	  Compile with ALSA support.
+Damn :/ And it's a commit log, so I can't fix it once committed. Shame
+on me.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
