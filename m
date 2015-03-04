@@ -1,29 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 21:28:36 +0100
-Subject: [Buildroot] [PATCH] can-utils: bump version
-In-Reply-To: <1425498694-24272-1-git-send-email-yegorslists@googlemail.com>
-References: <1425498694-24272-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150304212836.30cd9f34@free-electrons.com>
+Date: Wed, 4 Mar 2015 21:29:24 +0100
+Subject: [Buildroot] [git commit] uclibc: add patch to unbreak sparc
+	non-threaded builds
+Message-ID: <20150304203109.37D1980E2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=6b2b72101124d4bf5cb91aaba577af2455ef0558
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  4 Mar 2015 20:51:34 +0100, Yegor Yefremov wrote:
-> Change download location as the package has moved to GitHub.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/can-utils/can-utils.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+SPARC non-threaded builds are broken, add patch for uClibc & uClibc-ng to fix
+it.
 
-Applied, thanks!
+Status: upstream uClibc (so likely -ng will follow suit shortly).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-guard-tcb-offsets.h-include-with-RESET_P.patch |   31 ++++++++++++++++++++
+ ...-guard-tcb-offsets.h-include-with-RESET_P.patch |   31 ++++++++++++++++++++
+ 2 files changed, 62 insertions(+), 0 deletions(-)
+
+diff --git a/package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch b/package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+new file mode 100644
+index 0000000..a98ee68
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/0067-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+@@ -0,0 +1,31 @@
++From 857420a3271dc5bbddbe45a9e9878b9dc88fd143 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 3 Mar 2015 14:56:17 -0300
++Subject: [PATCH] sparc/clone.S: guard tcb-offsets.h include with RESET_PID
++
++Status: upstream [uClibc]
++
++Otherwise we have a broken scenario with non-threading builds.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/sysdeps/linux/sparc/clone.S | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libc/sysdeps/linux/sparc/clone.S b/libc/sysdeps/linux/sparc/clone.S
++index 8d9da5a..1d0e3e6 100644
++--- a/libc/sysdeps/linux/sparc/clone.S
+++++ b/libc/sysdeps/linux/sparc/clone.S
++@@ -22,7 +22,9 @@
++ 
++ #include <asm/errno.h>
++ #include <asm/unistd.h>
+++#ifdef RESET_PID
++ #include <tcb-offsets.h>
+++#endif
++ #include <sysdep.h>
++ 
++ #define CLONE_VM	0x00000100
++-- 
++2.0.5
++
+diff --git a/package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch b/package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+new file mode 100644
+index 0000000..a98ee68
+--- /dev/null
++++ b/package/uclibc/1.0.0/0001-sparc-clone.S-guard-tcb-offsets.h-include-with-RESET_P.patch
+@@ -0,0 +1,31 @@
++From 857420a3271dc5bbddbe45a9e9878b9dc88fd143 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 3 Mar 2015 14:56:17 -0300
++Subject: [PATCH] sparc/clone.S: guard tcb-offsets.h include with RESET_PID
++
++Status: upstream [uClibc]
++
++Otherwise we have a broken scenario with non-threading builds.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/sysdeps/linux/sparc/clone.S | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/libc/sysdeps/linux/sparc/clone.S b/libc/sysdeps/linux/sparc/clone.S
++index 8d9da5a..1d0e3e6 100644
++--- a/libc/sysdeps/linux/sparc/clone.S
+++++ b/libc/sysdeps/linux/sparc/clone.S
++@@ -22,7 +22,9 @@
++ 
++ #include <asm/errno.h>
++ #include <asm/unistd.h>
+++#ifdef RESET_PID
++ #include <tcb-offsets.h>
+++#endif
++ #include <sysdep.h>
++ 
++ #define CLONE_VM	0x00000100
++-- 
++2.0.5
++
