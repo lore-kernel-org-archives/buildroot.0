@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 22:47:31 +0100
-Subject: [Buildroot] [PATCH v3 2/4] python-markdown: add host-package
+Date: Wed, 4 Mar 2015 22:49:40 +0100
+Subject: [Buildroot] [PATCH v3 3/4] python-cheetah: add host-package
  support
-In-Reply-To: <1425484811-26238-2-git-send-email-gwenj@trabucayre.com>
+In-Reply-To: <1425484811-26238-3-git-send-email-gwenj@trabucayre.com>
 References: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
- <1425484811-26238-2-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150304224731.7a3eaf8f@free-electrons.com>
+ <1425484811-26238-3-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20150304224940.69efc51c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,44 @@ To: buildroot@busybox.net
 
 Dear Gwenhael Goavec-Merou,
 
-On Wed,  4 Mar 2015 17:00:09 +0100, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Host-cheetah needs host-markdown.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/python-markdown/python-markdown.mk | 1 +
->  1 file changed, 1 insertion(+)
+On Wed,  4 Mar 2015 17:00:10 +0100, Gwenhael Goavec-Merou wrote:
 
-Applied, thanks!
+> diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+> index 08076b5..faf2436 100644
+> --- a/package/python-cheetah/python-cheetah.mk
+> +++ b/package/python-cheetah/python-cheetah.mk
+> @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+>  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+>  PYTHON_CHEETAH_LICENSE = MIT
+>  PYTHON_CHEETAH_SETUP_TYPE = setuptools
+> +PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
+
+Are you sure you need to add host-python-markdown as a dependency to
+the target python-cheetah package ? I.e, I'd like to understand if what
+you need is:
+
+PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+
+ (i.e adds host-python-markdown to the dependencies of both
+ python-cheetah and host-python-cheetah)
+
+*OR*
+
+PYTHON_CHEETAH_DEPENDENCIES = python-markdown
+
+ (i.e adds python-markdown to the dependencies of python-cheetah, and
+ host-python-markdown to the dependencies of host-python-cheetah)
+
+*OR*
+
+HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+
+ (i.e adds host-python-markdown to the dependencies of
+ host-python-cheetah)
+
+Also, use '=' and not '+=' in such situations.
+
+Thanks!
 
 Thomas
 -- 
