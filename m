@@ -1,60 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 22:49:40 +0100
-Subject: [Buildroot] [PATCH v3 3/4] python-cheetah: add host-package
- support
-In-Reply-To: <1425484811-26238-3-git-send-email-gwenj@trabucayre.com>
-References: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
- <1425484811-26238-3-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150304224940.69efc51c@free-electrons.com>
+Date: Wed, 4 Mar 2015 22:50:12 +0100
+Subject: [Buildroot] [git commit] package/kodi: Use i.MX VPU (video codec)
+	when available
+Message-ID: <20150304215037.AFB9E80F41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwenhael Goavec-Merou,
+commit: http://git.buildroot.net/buildroot/commit/?id=5287358ff33ec4920a677a58152ad040151b843f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  4 Mar 2015 17:00:10 +0100, Gwenhael Goavec-Merou wrote:
+Tested on i.MX6.
 
-> diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-> index 08076b5..faf2436 100644
-> --- a/package/python-cheetah/python-cheetah.mk
-> +++ b/package/python-cheetah/python-cheetah.mk
-> @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
->  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
->  PYTHON_CHEETAH_LICENSE = MIT
->  PYTHON_CHEETAH_SETUP_TYPE = setuptools
-> +PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
+[Thomas: drop comment in Config.in help text, hard to maintain for all
+platforms.]
 
-Are you sure you need to add host-python-markdown as a dependency to
-the target python-cheetah package ? I.e, I'd like to understand if what
-you need is:
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi/kodi.mk         |    5 +++++
+ package/openswan/openswan.mk |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
 
-PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
-
- (i.e adds host-python-markdown to the dependencies of both
- python-cheetah and host-python-cheetah)
-
-*OR*
-
-PYTHON_CHEETAH_DEPENDENCIES = python-markdown
-
- (i.e adds python-markdown to the dependencies of python-cheetah, and
- host-python-markdown to the dependencies of host-python-cheetah)
-
-*OR*
-
-HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
-
- (i.e adds host-python-markdown to the dependencies of
- host-python-cheetah)
-
-Also, use '=' and not '+=' in such situations.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 0a6fe7c..f40fc31 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -61,6 +61,11 @@ KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
+ 	LIBS="-lvcos -lvchostif"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBFSLVPUWRAP),y)
++KODI_DEPENDENCIES += libfslvpuwrap
++KODI_CONF_OPTS += --enable-codec=imxvpu
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ KODI_CONF_OPTS += --enable-libcap
+ KODI_DEPENDENCIES += libcap
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index ba36f7c..3c878c9 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -11,7 +11,7 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ 
+ OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+ OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+-	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
++	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
+ 	USE_KLIPS=false USE_MAST=false USE_NM=false
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
