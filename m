@@ -1,25 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:43:39 +0100
-Subject: [Buildroot] [PATCH next 1/1] package/portaudio: Remove threads
- dependency for alsa module
-In-Reply-To: <1425124996-17097-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1425124996-17097-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150304234339.63127ac2@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:44:46 +0100
+Subject: [Buildroot] [PATCH] autoconf-archive: add hash
+In-Reply-To: <1424874186-10571-1-git-send-email-bgolaszewski@baylibre.com>
+References: <1424874186-10571-1-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <20150304234446.12901fc2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Bartosz Golaszewski,
 
-On Sat, 28 Feb 2015 13:03:16 +0100, Bernd Kuhls wrote:
-> Portaudio as a whole already depends on threads support, so there is no
-> need to have an additional dependency for its alsa module.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Wed, 25 Feb 2015 15:23:06 +0100, Bartosz Golaszewski wrote:
 
-Applied, thanks!
+> diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+> new file mode 100644
+> index 0000000..9abb905
+> --- /dev/null
+> +++ b/package/autoconf-archive/autoconf-archive.hash
+> @@ -0,0 +1 @@
+> +sha512 54382adcf55b9dd126de6727c034cae7c72c8217c9979d3b889705c3bfe41ec8329621dea5ff592ebf7e530775ce96faf47baffe36e8fedf9cd78c8dc423932e autoconf-archive-2015.02.04.tar.xz
+
+There should be a comment above that says where the hash was found:
+from which URL, or computed locally.
+
+And if it's computed locally, our current rule is to use sha256, not
+sha512.
+
+Can you fix and resend? Thanks!
 
 Thomas
 -- 
