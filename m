@@ -1,38 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 04 Mar 2015 23:30:21 +0100
-Subject: [Buildroot] [PATCH 1/2] package/vlc: express the dependency on
-	freerdp
-In-Reply-To: <20150304232410.175ac1ed@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 4 Mar 2015 23:24:10 +0100")
-References: <cover.1425507251.git.yann.morin.1998@free.fr>
- <f6508071f9c26276a9840a3f197ca5a866f1039e.1425507251.git.yann.morin.1998@free.fr>
- <20150304232410.175ac1ed@free-electrons.com>
-Message-ID: <87oao8s8ea.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:29:09 +0100
+Subject: [Buildroot] [PATCH v3 2/2] logrotate: use pkg-config for the
+ opt library
+In-Reply-To: <1425244013-2509-3-git-send-email-fabio.porcedda@gmail.com>
+References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425244013-2509-3-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150304232909.625985fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Fabio Porcedda,
 
- > Dear Yann E. MORIN,
- > On Wed,  4 Mar 2015 23:15:33 +0100, Yann E. MORIN wrote:
- >> vlc can use the freerdp library if present.
- >> 
- >> This is currently a hidden dependency, as we do not express it in our
- >> vlc.mk rules. Package ordering makes it so that freerdp is built before
- >> vlc; however, manually building vlc (with 'make vlc') would miss the
- >> dependency because of that package ordering.
- >> 
- >> Explcitly add freerdp (if enabled) as a dependency of vlc to ensure
- >> build order in every vases.
+In the title: s/opt/popt/
 
- > a vase is for flowers, I guess you wanted to say 'case', right?
+On Sun,  1 Mar 2015 22:06:53 +0100, Fabio Porcedda wrote:
+> Without using the pkg-config the dependencies are not included for a
+> static linking so it fails to build.
+> These failures are fixed by linking the libintl library that is a
+> dependency of the opt library.
 
- > Committed with this fixed.
+s/opt/popt/
 
-But you forgot to fix the 'Explcitly' in the line above.
+I've fixed and committed. Though I have one concern below.
 
+
+> +	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" \
+> +		LOADLIBES="$(shell $(PKG_CONFIG_HOST_BINARY) --libs popt)" \
+
+It's not currently supported in Buildroot, but LOADLIBES is extended by
+the logrotate Makefile with -lacl or -lselinux when WITH_ACL or
+WITH_SELINUX are used. I'm not sure this will play well with your
+proposed solution.
+
+But ok, this can be handled when/if someone adds ACL and/or SELinux
+support to logrotate.
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
