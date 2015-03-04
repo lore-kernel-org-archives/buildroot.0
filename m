@@ -1,11 +1,9 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 4 Mar 2015 15:55:51 +0100
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: Add the option to
-	download via git
-In-Reply-To: <CA+TH9Vmg41ujOeGLgyBHVCaSe4oH+0xg3cv8Yej-o-ohJammiA@mail.gmail.com>
-References: <1422636725-25148-1-git-send-email-angelo.compagnucci@gmail.com>
- <CA+TH9Vmg41ujOeGLgyBHVCaSe4oH+0xg3cv8Yej-o-ohJammiA@mail.gmail.com>
-Message-ID: <CA+TH9V=htTvNFv=5YY-VFSD4Lc_BnXSDH2+LPrsDa3B661T=mQ@mail.gmail.com>
+Date: Wed, 4 Mar 2015 15:56:44 +0100
+Subject: [Buildroot] [PATCH] package/mono-gtksharp: new package
+In-Reply-To: <1423908982-23475-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1423908982-23475-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CA+TH9V=JwEhCrCqJzxEhATUD7pwgaxKg8ifvxJ=hxRkAejJudQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,110 +12,76 @@ To: buildroot@busybox.net
 
 Hello List,
 
-
-2015-02-16 10:12 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Hello All,
+2015-02-14 11:16 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
+> This patch adds gtksharp package for mono.
 >
-> Any news on this one?
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
 >
-> Staiyng to this comment on at91bootstrap git tree [1] there is no
-> infrastructure in place to add third parties boards.
+> Changes: I superseeded previous patch to adhere the package naming, so
+> gtksharp becames mono-gtksharp.
 >
-> Personally, I need this option cause I'm in the process to prepare a
-> comprehensive board support for Acmesystems' products and ask for
-> inclusion in the near future.
+>  package/Config.in                      |  5 +++++
+>  package/mono-gtksharp/Config.in        |  7 +++++++
+>  package/mono-gtksharp/mono-gtksharp.mk | 16 ++++++++++++++++
+>  3 files changed, 28 insertions(+)
+>  create mode 100644 package/mono-gtksharp/Config.in
+>  create mode 100644 package/mono-gtksharp/mono-gtksharp.mk
 >
-> Thanks!
->
-> Sincerely, Angelo
->
-> [1] https://github.com/linux4sam/at91bootstrap/pull/2#issuecomment-27954225
->
-> 2015-01-30 17:52 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
->> Adding support for git downloading of a custom repository.
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->>  boot/at91bootstrap3/Config.in         | 35 +++++++++++++++++++++++++++++++++++
->>  boot/at91bootstrap3/at91bootstrap3.mk |  8 +++++++-
->>  2 files changed, 42 insertions(+), 1 deletion(-)
->>
->> diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
->> index 8ac40ed..6f2f7db 100644
->> --- a/boot/at91bootstrap3/Config.in
->> +++ b/boot/at91bootstrap3/Config.in
->> @@ -8,8 +8,43 @@ config BR2_TARGET_AT91BOOTSTRAP3
->>           - Peripheral drivers such as PIO, PMC or SDRAMC...
->>           - Physical media algorithm such as DataFlash, NandFlash, NOR Flash...
->>
->> +
->>  if BR2_TARGET_AT91BOOTSTRAP3
->>
->> +choice
->> +
->> +       prompt "AT91 Bootstrap 3 version"
->> +
->> +config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
->> +       bool "3.7.1"
->> +
->> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
->> +       bool "Custom Git repository"
->> +       help
->> +         This option allows Buildroot to get the AT91 Bootstrap 3 source
->> +         code from a Git repository.
->> +
->> +endchoice
->> +
->> +if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
->> +
->> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
->> +       string "URL of custom repository"
->> +
->> +config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
->> +       string "Custom repository version"
->> +       help
->> +         Revision to use in the typical format used by Git
->> +         E.G. a sha id, a tag, branch, ..
->> +
->> +endif
->> +
->> +config BR2_TARGET_AT91BOOTSTRAP3_VERSION
->> +       string
->> +       default "v3.7.1" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
->> +       default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
->> +               if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
->> +
->>  config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
->>         string "custom patch dir"
->>         help
->> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
->> index 098e7bf..39f2365 100644
->> --- a/boot/at91bootstrap3/at91bootstrap3.mk
->> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
->> @@ -4,8 +4,14 @@
->>  #
->>  ################################################################################
->>
->> -AT91BOOTSTRAP3_VERSION = v3.7.1
->> +AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
->> +
->> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
->> +AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
->> +AT91BOOTSTRAP3_SITE_METHOD = git
->> +else
->>  AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
->> +endif
->>
->>  AT91BOOTSTRAP3_INSTALL_IMAGES = YES
->>  AT91BOOTSTRAP3_INSTALL_TARGET = NO
->> --
->> 1.9.1
->>
->
->
->
+> diff --git a/package/Config.in b/package/Config.in
+> index fe3d3d0..fbba20c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -464,6 +464,11 @@ menu "Lua libraries/modules"
+>  endmenu
+>  endif
+>         source "package/mono/Config.in"
+> +if BR2_PACKAGE_MONO
+> +menu "Mono libraries/modules"
+> +       source "package/mono-gtksharp/Config.in"
+> +endmenu
+> +endif
+>         source "package/nodejs/Config.in"
+>         source "package/perl/Config.in"
+>  if BR2_PACKAGE_PERL
+> diff --git a/package/mono-gtksharp/Config.in b/package/mono-gtksharp/Config.in
+> new file mode 100644
+> index 0000000..b3f16f0
+> --- /dev/null
+> +++ b/package/mono-gtksharp/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_MONO_GTKSHARP
+> +       bool "gtk#"
+> +       depends on BR2_PACKAGE_LIBGTK3
+> +       help
+> +         Gtk# is a .NET language binding for the GTK+ toolkit.
+> +
+> +         http://www.mono-project.com/docs/gui/gtksharp/
+> diff --git a/package/mono-gtksharp/mono-gtksharp.mk b/package/mono-gtksharp/mono-gtksharp.mk
+> new file mode 100644
+> index 0000000..58412eb
+> --- /dev/null
+> +++ b/package/mono-gtksharp/mono-gtksharp.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# gtksharp
+> +#
+> +################################################################################
+> +
+> +MONO_GTKSHARP_VERSION_MAJOR = 2.99
+> +MONO_GTKSHARP_VERSION = $(MONO_GTKSHARP_VERSION_MAJOR).3
+> +MONO_GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP_VERSION_MAJOR)/
+> +MONO_GTKSHARP_SOURCE = gtk-sharp-$(MONO_GTKSHARP_VERSION).tar.xz
+> +MONO_GTKSHARP_LICENSE = LGPLv2
+> +MONO_GTKSHARP_LICENSE_FILES = COPYING
+> +MONO_GTKSHARP_INSTALL_STAGING = YES
+> +MONO_GTKSHARP_DEPENDENCIES = mono libgtk3
+> +
+> +$(eval $(autotools-package))
 > --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
+> 1.9.1
+>
 
 Any news on this?
 
