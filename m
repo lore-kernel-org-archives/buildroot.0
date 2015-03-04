@@ -1,61 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 12:03:58 +0100
-Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
-In-Reply-To: <1422879584-18485-1-git-send-email-abrodkin@synopsys.com>
-References: <1422879584-18485-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150304120358.591484a9@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed,  4 Mar 2015 12:07:16 +0100
+Subject: [Buildroot] [PATCH] cmake: use system libzma when the xz package is
+	enabled
+Message-ID: <1425467236-27158-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Fix build failure:
+.../output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:17:1: error: conflicting types for ?lzma_block_buffer_decode?
+ lzma_block_buffer_decode(lzma_block *block, lzma_allocator *allocator,
+ ^
+In file included from /home/tetsuya/buildroot/br2/output/host/usr/include/lzma.h:296:0,
+                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/common.h:34,
+                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_decoder.h:16,
+                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:13:
+/home/tetsuya/buildroot/br2/output/host/usr/include/lzma/block.h:577:27: note: previous declaration of ?lzma_block_buffer_decode? was here
+ extern LZMA_API(lzma_ret) lzma_block_buffer_decode(
+                           ^
+Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/build.make:261: recipe for target 'Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o' failed
+make[3]: *** [Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o] Error 1
 
-On Mon,  2 Feb 2015 15:19:44 +0300, Alexey Brodkin wrote:
-> Now when new shiny tools are released by Synopsys we're ready for
-> version update in Buildroot again.
-> 
-> More details about arc-2014.12 release are available here:
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2014.12
-> 
-> Following patches were removed from GCC since they are a part of release
-> now:
->  * 200-size_type_unsigned_int.patch
->  * 300-ptrdiff_type_int.patch
->  * 400-call-arc_hazard-before-branch-shortening.patch
->  * 401-fix-length-attribute-for-casesi_load-pattern.patch
->  * 402-fix-length-of-instructions-that-are-in-delay-slot-and-needs-to-be-predicated.patch
->  * 403-update-casesi_compact_jump-instruction-length.patch
-> 
-> But since arc-2014.12 tools are still based on GCC 4.8 following patches
-> ar still relevant so moving to the new folder to match ARC gcc bump.
->  * 100-libstdcxx-uclibc-c99.patch
->  * 910-gcc-poison-system-directories.patch
-> 
-> Binutils are still based on 2.23 so following patch still makes sense:
->  * 600-poison-system-directories.patch
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.org/results/4edf6e169dc4a00d8a8bd16a86eba2316cbbd9e5
+http://autobuild.buildroot.org/results/a9ff38b22a36a2f8427d33085d3263a8cbfbd746
+http://autobuild.buildroot.org/results/ecaa0227249207b5450519832a193c1585ac8177
 
-It seems like the update of GDB for ARC is causing some build problems:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/cmake/cmake.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-  http://autobuild.buildroot.org/results/d62/d62f472d70f60281dfe94cffc46a3e0566fd4a3d/build-end.log
-
-It's trying to build a shared libbfd.so using a statically compiled
-libiberty.a which wasn't built with -fPIC. I don't know if the problem
-is specific to ARC GDB or not.
-
-Can you have a look?
-
-Thanks!
-
-Thomas
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 8c64b58..4b53559 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -12,6 +12,11 @@ CMAKE_LICENSE_FILES = Copyright.txt
+ 
+ HOST_CMAKE_DEPENDENCIES = host-pkgconf
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++ HOST_CMAKE_DEPENDENCIES += host-xz
++ HOST_CMAKE_CONF_OPTS += -DCMAKE_USE_SYSTEM_LIBLZMA=ON
++endif
++
+ define HOST_CMAKE_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+@@ -22,6 +27,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 			-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
+ 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
+ 			-DBUILD_CursesDialog=OFF \
++			$(HOST_CMAKE_CONF_OPTS) \
+ 	)
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.1
