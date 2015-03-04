@@ -1,44 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 21:33:45 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: install systemd service
- files
-In-Reply-To: <1425411738-3369-1-git-send-email-mike@mikebwilliams.com>
-References: <1425411738-3369-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20150304213345.6c41d0e8@free-electrons.com>
+From: buildroot at uclibc.org <buildroot@uclibc.org>
+Date: Wed, 04 Mar 2015 14:43:15 -0600
+Subject: [Buildroot] buildroot@uclibc.org has indicated you're a friend(20
+	mutual friends). Accept?
+Message-ID: <0.0.1C1.CEF.1D056BB13BD37A0.273A@mail12.infoaxe.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+Hi,
 
-On Tue,  3 Mar 2015 14:42:18 -0500, Mike Williams wrote:
+buildroot at uclibc.org wants to follow you.
 
-> +define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
-> +		$(TARGET_DIR)/lib/systemd/system
+****** Is buildroot at uclibc.org you friend? ******
+If Yes please follow the link below:
+http://invites.infoaxe.net/signup_e.html?fullname=Buildroot&amp;email=buildroot at buildroot.org&amp;invitername=buildroot&amp;inviterid=37100377&amp;userid=0&amp;token=0&amp;emailmasterid=c02a8d26-38cf-41b4-a28e-7e07586ad0f5&amp;from=buildroot at uclibc.org&src=txt_yes
 
-When using -D, the destination should be a full path, otherwise your
-file will be named $(TARGET_DIR)/lib/systemd/system if
-$(TARGET_DIR)/lib/systemd/system isn't an existing directory.
+If No please follow the link below:
+http://invites.infoaxe.net/signup_e.html?fullname=Buildroot&amp;email=buildroot at buildroot.org&amp;invitername=buildroot&amp;inviterid=37100377&amp;userid=0&amp;token=0&amp;emailmasterid=c02a8d26-38cf-41b4-a28e-7e07586ad0f5&amp;from=buildroot at uclibc.org&src=txt_no
 
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
-> +		$(TARGET_DIR)/lib/systemd/system
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
-> +		$(TARGET_DIR)/lib/systemd/system
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
-> +		$(TARGET_DIR)/lib/systemd/system
 
-Also, and sorry for being so ignorant about systemd, but most of our
-other packages set up a bunch of symbolic links when install systemd
-unit files. I'm surprised to not see the same thing here. Can you give
-some details about this?
+Follow the link below to remove yourself from all such emails
+http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at buildroot.org&amp;iid=c02a8d26-38cf-41b4-a28e-7e07586ad0f5&amp;from=buildroot at uclibc.org
 
-Thanks,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150304/572a7091/attachment.html>
