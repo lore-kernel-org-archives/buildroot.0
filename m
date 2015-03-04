@@ -1,40 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 4 Mar 2015 12:01:20 +0100
-Subject: [Buildroot] [PATCH next] cmake: bump version to 3.1.3
-In-Reply-To: <20150304115951.11b49369@free-electrons.com>
-References: <1424638604-8244-1-git-send-email-fabio.porcedda@gmail.com>
- <20150304115951.11b49369@free-electrons.com>
-Message-ID: <CAHkwnC9S4PgWDLm4r70q6Jh1B-FCwezAPQwF9XNzm3FABiL6_A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Mar 2015 12:02:12 +0100
+Subject: [Buildroot] [PATCH 01/11 v5] package/freerdp: bump version
+In-Reply-To: <56dbfc1bf1b30d83d8a709da1a0106baaef65fe5.1424558036.git.yann.morin.1998@free.fr>
+References: <cover.1424558036.git.yann.morin.1998@free.fr>
+ <56dbfc1bf1b30d83d8a709da1a0106baaef65fe5.1424558036.git.yann.morin.1998@free.fr>
+Message-ID: <20150304120212.5ea5fe4d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 4, 2015 at 11:59 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Sun, 22 Feb 2015 21:56:44 +0100, Fabio Porcedda wrote:
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> ---
->>  package/cmake/cmake.hash | 2 +-
->>  package/cmake/cmake.mk   | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> This update breaks badly in the autobuilders, see:
->
->   http://autobuild.buildroot.org/?reason=host-cmake-3.1.3
->
-> Apparently, there is a conflict between the host installed lzma, and
-> the built-in lzma library of CMake.
->
-> Can you have a look ?
+Dear Yann E. MORIN,
 
-I've already a patch for this-
+On Sat, 21 Feb 2015 23:36:14 +0100, Yann E. MORIN wrote:
 
-I will send it.
+> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> index 57cd7a8..ffe014c 100644
+> --- a/package/freerdp/freerdp.mk
+> +++ b/package/freerdp/freerdp.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  # Changeset on the stable-1.1 branch
+> -FREERDP_VERSION = 440916eae2e07463912d5fe507677e67096eb083
+> +FREERDP_VERSION = b21ff842ef3de5837513042dc30488b12bd9cf9d
 
-BR
+Not sure if it's directly related, but it looks like it is: this new
+version of freerdp is breaking the build of VLC:
+
+  http://autobuild.buildroot.org/?reason=vlc-2.1.6
+
+According to https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=758382,
+bumping VLC to 2.2.0 fixes the problem, as it supports the new FreeRDP
+version properly.
+
+Can you have a look?
+
+Thanks!
+
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
