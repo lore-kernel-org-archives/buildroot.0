@@ -1,9 +1,9 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed,  4 Mar 2015 17:00:11 +0100
-Subject: [Buildroot] [PATCH v3 4/4] GNURadio: new package
+Date: Wed,  4 Mar 2015 17:00:09 +0100
+Subject: [Buildroot] [PATCH v3 2/4] python-markdown: add host-package support
 In-Reply-To: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
 References: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1425484811-26238-4-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1425484811-26238-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,191 +12,21 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
+Host-cheetah needs host-markdown.
+
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
-Changes v2 -> v3:
-* move comment at the beginning of the file.
-* add a patch to suppress boost-test dependency.
-* move python dependencies in the specific option.
-* use stable archive instead of git.
-* add hook specific for ARM for using neon if available (without this hook volk
-  fails to build).
-Changes v1 -> v2:
-* overload _BUILDDIR variable to specify build directory
----
- package/Config.in                                  |  1 +
- package/gnuradio/Config.in                         | 42 +++++++++++++++++++++
- ...dio-0001-suppress-boost_unitest-detection.patch | 44 ++++++++++++++++++++++
- package/gnuradio/gnuradio.hash                     |  2 +
- package/gnuradio/gnuradio.mk                       | 39 +++++++++++++++++++
- 5 files changed, 128 insertions(+)
- create mode 100644 package/gnuradio/Config.in
- create mode 100644 package/gnuradio/gnuradio-0001-suppress-boost_unitest-detection.patch
- create mode 100644 package/gnuradio/gnuradio.hash
- create mode 100644 package/gnuradio/gnuradio.mk
+ package/python-markdown/python-markdown.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index ba45f32..2e167d5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1041,6 +1041,7 @@ menu "Miscellaneous"
- 	source "package/clamav/Config.in"
- 	source "package/collectd/Config.in"
- 	source "package/empty/Config.in"
-+	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
- 	source "package/haveged/Config.in"
- 	source "package/mcrypt/Config.in"
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-new file mode 100644
-index 0000000..8e5c516
---- /dev/null
-+++ b/package/gnuradio/Config.in
-@@ -0,0 +1,42 @@
-+comment "GNURadio needs a toolchain w/ C++, mmu, threads"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_MMU \
-+		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS \
-+		&& BR2_LARGEFILE && BR2_INET_IPV6)
-+
-+config BR2_PACKAGE_GNURADIO
-+	bool "GNURadio"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+
-+	help
-+	  GNU Radio is a free & open-source software development toolkit that
-+	  provides signal processing blocks to implement software radios. It can be
-+	  used with readily-available low-cost external RF hardware to create
-+	  software-defined radios, or without hardware in a simulation-like
-+	  environment. It is widely used in hobbyist, academic and commercial
-+	  environments to support both wireless communications research and
-+	  real-world radio systems.
-+
-+	  http://gnuradio.org/
-+
-+if BR2_PACKAGE_GNURADIO
-+
-+config BR2_PACKAGE_GNURADIO_BLOCKS
-+	bool "gnuradio-blocks"
-+
-+config BR2_PACKAGE_GNURADIO_PYTHON
-+	select BR2_PACKAGE_BOOST_PYTHON
-+	select BR2_PACKAGE_PYTHON
-+	bool "gnuradio-python"
-+
-+endif
-diff --git a/package/gnuradio/gnuradio-0001-suppress-boost_unitest-detection.patch b/package/gnuradio/gnuradio-0001-suppress-boost_unitest-detection.patch
-new file mode 100644
-index 0000000..7b35a59
---- /dev/null
-+++ b/package/gnuradio/gnuradio-0001-suppress-boost_unitest-detection.patch
-@@ -0,0 +1,44 @@
-+Index: gnuradio-3.7.5/volk/cmake/VolkBoost.cmake
-+===================================================================
-+--- gnuradio-3.7.5.orig/volk/cmake/VolkBoost.cmake
-++++ gnuradio-3.7.5/volk/cmake/VolkBoost.cmake
-+@@ -29,7 +29,6 @@ set(__INCLUDED_VOLK_BOOST_CMAKE TRUE)
-+ set(BOOST_REQUIRED_COMPONENTS
-+     filesystem
-+     system
-+-    unit_test_framework
-+     program_options
-+ )
-+ 
-+Index: gnuradio-3.7.5/volk/lib/CMakeLists.txt
-+===================================================================
-+--- gnuradio-3.7.5.orig/volk/lib/CMakeLists.txt
-++++ gnuradio-3.7.5/volk/lib/CMakeLists.txt
-+@@ -535,27 +535,3 @@ if(ENABLE_STATIC_LIBS)
-+     ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT "volk_devel"   # .lib file
-+     )
-+ endif(ENABLE_STATIC_LIBS)
-+-
-+-########################################################################
-+-# Build the QA test application
-+-########################################################################
-+-
-+-
-+-if(Boost_FOUND)
-+-
-+-    set_source_files_properties(
-+-        ${CMAKE_CURRENT_SOURCE_DIR}/testqa.cc PROPERTIES
-+-        COMPILE_DEFINITIONS "BOOST_TEST_DYN_LINK;BOOST_TEST_MAIN"
-+-    )
-+-
-+-    include_directories(${Boost_INCLUDE_DIRS})
-+-    link_directories(${Boost_LIBRARY_DIRS})
-+-
-+-    add_executable(test_all
-+-        ${CMAKE_CURRENT_SOURCE_DIR}/testqa.cc
-+-        ${CMAKE_CURRENT_SOURCE_DIR}/qa_utils.cc
-+-    )
-+-    target_link_libraries(test_all volk ${Boost_LIBRARIES})
-+-    add_test(qa_volk_test_all test_all)
-+-
-+-endif(Boost_FOUND)
-diff --git a/package/gnuradio/gnuradio.hash b/package/gnuradio/gnuradio.hash
-new file mode 100644
-index 0000000..a25b466
---- /dev/null
-+++ b/package/gnuradio/gnuradio.hash
-@@ -0,0 +1,2 @@
-+# From http://gnuradio.org/redmine/projects/gnuradio/files
-+md5	b4a917a548f41ce25c6c88f9bc864bca	gnuradio-3.7.5.tar.gz
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-new file mode 100644
-index 0000000..4528e55
---- /dev/null
-+++ b/package/gnuradio/gnuradio.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# gnuradio
-+#
-+################################################################################
-+
-+GNURADIO_VERSION = 3.7.5
-+GNURADIO_SITE = http://gnuradio.org/redmine/attachments/download/792
-+GNURADIO_SOURCE = gnuradio-$(GNURADIO_VERSION).tar.gz
-+GNURADIO_LICENSE = GPLv3+
-+GNURADIO_LICENSE_FILES = COPYING
-+
-+# gnuradio prevent from in-source-tree build
-+GNURADIO_BUILDDIR = $(GNURADIO_SRCDIR)/build
-+
-+#needed for volk compile
-+GNURADIO_DEPENDENCIES += host-python-cheetah
-+GNURADIO_DEPENDENCIES += host-swig host-boost boost
-+
-+GNURADIO_DEPENDENCIES += $(if $(BR2_PACKAGE_GNURADIO_PYTHON),python)
-+
-+GNURADIO_INSTALL_STAGING = YES
-+
-+GNURADIO_CONF_OPTS += -DENABLE_DEFAULT=OFF -DENABLE_TESTING=OFF
-+GNURADIO_CONF_OPTS += -DENABLE_VOLK=ON -DENABLE_GNURADIO_RUNTIME=ON
-+ifeq ($(BR2_arm),y)
-+ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_ARM_EABIHF),yy)
-+GNURADIO_MTUNE = $(call qstrip,$(BR2_GCC_TARGET_CPU))
-+GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="-mfloat-abi=hard -mfpu=neon -march=armv7-a -mtune=$(GNURADIO_MTUNE)"
-+GNURADIO_CONF_OPTS += -DCMAKE_ASM_FLAGS="-mfpu=neon -mfloat-abi=hard -march=armv7-a"
-+else
-+GNURADIO_CONF_OPTS += -Dhave_mfpu_neon=0
-+endif
-+endif
-+
-+GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=$(if $(BR2_PACKAGE_GNURADIO_BLOCKS),ON,OFF)
-+GNURADIO_CONF_OPTS += -DENABLE_PYTHON=$(if $(BR2_PACKAGE_GNURADIO_PYTHON),ON,OFF)
-+
-+$(eval $(cmake-package))
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index 864825e..3b2217e 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -12,3 +12,4 @@ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = distutils
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.0.5
