@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 22:46:11 +0100
-Subject: [Buildroot] [PATCH] openswan: disable for static builds
-In-Reply-To: <1425490133-51779-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1425490133-51779-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150304224611.5f765059@free-electrons.com>
+Date: Wed, 4 Mar 2015 22:46:44 +0100
+Subject: [Buildroot] [git commit] python-markdown: add host-package support
+Message-ID: <20150304214718.C78BA807B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=5747cc4eb6abb66336e01a2e5f6aeb283b0890c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 4 Mar 2015 17:28:53 +0000, Vicente Olivert Riera wrote:
-> openswan is built with -fPIE which produces shared objects, and shared
-> objects need "/lib/ld.so" which won't be present on a statically built
-> target. So, building openswan with -static -fPIE is invalid and will
-> fail with an error like this one:
+Host-cheetah needs host-markdown.
 
-Did you see that -fPIE is in fact explicitly passed by Buildroot in
-openswan.mk ? So most likely, all what you need to do is to make sure
-to pass -fPIE only if BR2_STATIC_LIBS is disabled.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-markdown/python-markdown.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-I'll mark this patch as Changes Requested in patchwork. Please submit a
-new version that doesn't pass -fPIE when not needed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index 864825e..3b2217e 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -12,3 +12,4 @@ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = distutils
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
