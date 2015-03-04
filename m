@@ -1,49 +1,53 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 4 Mar 2015 17:28:53 +0000
-Subject: [Buildroot] [PATCH] openswan: disable for static builds
-Message-ID: <1425490133-51779-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 4 Mar 2015 18:51:40 +0100
+Subject: [Buildroot] [PATCH 01/11 v5] package/freerdp: bump version
+In-Reply-To: <20150304120212.5ea5fe4d@free-electrons.com>
+References: <cover.1424558036.git.yann.morin.1998@free.fr>
+ <56dbfc1bf1b30d83d8a709da1a0106baaef65fe5.1424558036.git.yann.morin.1998@free.fr>
+ <20150304120212.5ea5fe4d@free-electrons.com>
+Message-ID: <20150304175140.GA4159@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openswan is built with -fPIE which produces shared objects, and shared
-objects need "/lib/ld.so" which won't be present on a statically built
-target. So, building openswan with -static -fPIE is invalid and will
-fail with an error like this one:
+Thomas, All,
 
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-ctng-linux-uclibc/4.8.2/../../../../mipsel-ctng-linux-uclibc/bin/ld:
-/br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libgmp.a(lt2-add.o):
-relocation R_MIPS_HI16 against `__gnu_local_gp' can not be used when
-making a shared object; recompile with -fPIC
+On 2015-03-04 12:02 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 21 Feb 2015 23:36:14 +0100, Yann E. MORIN wrote:
+> 
+> > diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+> > index 57cd7a8..ffe014c 100644
+> > --- a/package/freerdp/freerdp.mk
+> > +++ b/package/freerdp/freerdp.mk
+> > @@ -5,7 +5,7 @@
+> >  ################################################################################
+> >  
+> >  # Changeset on the stable-1.1 branch
+> > -FREERDP_VERSION = 440916eae2e07463912d5fe507677e67096eb083
+> > +FREERDP_VERSION = b21ff842ef3de5837513042dc30488b12bd9cf9d
+> 
+> Not sure if it's directly related, but it looks like it is: this new
+> version of freerdp is breaking the build of VLC:
+> 
+>   http://autobuild.buildroot.org/?reason=vlc-2.1.6
+> 
+> According to https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=758382,
+> bumping VLC to 2.2.0 fixes the problem, as it supports the new FreeRDP
+> version properly.
+> 
+> Can you have a look?
 
-Fixes:
+Yup, I'm on it. Thanks for the hint! ;-)
 
-  http://autobuild.buildroot.net/results/68b/68b2211cc7acfbdfed8d4b161cbdaf1429315017/
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/openswan/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-index 932a75f..1ad255e 100644
---- a/package/openswan/Config.in
-+++ b/package/openswan/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_OPENSWAN
- 	bool "openswan"
- 	depends on BR2_USE_MMU # iproute2
-+	depends on !BR2_STATIC_LIBS # -static -fPIE is invalid
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_IPROUTE2
- 	help
- 	  Openswan is an implementation of IPsec for Linux
- 
- 	  http://www.openswan.org
-+
-+comment "openswan needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
