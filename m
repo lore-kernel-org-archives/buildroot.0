@@ -1,66 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:30:04 +0100
-Subject: [Buildroot] [git commit] wine: Add patch to fix miscompilation with
-	gcc 4.9
-Message-ID: <20150304223010.47A318180C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 04 Mar 2015 23:30:21 +0100
+Subject: [Buildroot] [PATCH 1/2] package/vlc: express the dependency on
+	freerdp
+In-Reply-To: <20150304232410.175ac1ed@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 4 Mar 2015 23:24:10 +0100")
+References: <cover.1425507251.git.yann.morin.1998@free.fr>
+ <f6508071f9c26276a9840a3f197ca5a866f1039e.1425507251.git.yann.morin.1998@free.fr>
+ <20150304232410.175ac1ed@free-electrons.com>
+Message-ID: <87oao8s8ea.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e0c62b61398d87c1034e83d7d9550e1098105da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...revent-call-to-memset-with-a-null-pointer.patch |   40 ++++++++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+ > Dear Yann E. MORIN,
+ > On Wed,  4 Mar 2015 23:15:33 +0100, Yann E. MORIN wrote:
+ >> vlc can use the freerdp library if present.
+ >> 
+ >> This is currently a hidden dependency, as we do not express it in our
+ >> vlc.mk rules. Package ordering makes it so that freerdp is built before
+ >> vlc; however, manually building vlc (with 'make vlc') would miss the
+ >> dependency because of that package ordering.
+ >> 
+ >> Explcitly add freerdp (if enabled) as a dependency of vlc to ensure
+ >> build order in every vases.
 
-diff --git a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
-new file mode 100644
-index 0000000..f6d5a9d
---- /dev/null
-+++ b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
-@@ -0,0 +1,40 @@
-+commit deb274226783ab886bdb44876944e156757efe2b
-+Author: Daniel Beitler <dan@dablabs.com>
-+Date:   Sun May 18 13:27:42 2014 -0400
-+
-+    msi: Prevent call to memset with a null pointer
-+         in get_tablecolumns function.
-+
-+Fix miscompilation with gcc >= 4.9
-+See https://bugs.winehq.org/show_bug.cgi?id=36139 for the upstream
-+bug report. There won't be a Wine 1.6.3 so we need to address this
-+anyway.
-+
-+Backported from: deb274226783ab886bdb44876944e156757efe2b
-+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-+---
-+ dlls/msi/table.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/dlls/msi/table.c b/dlls/msi/table.c
-+index 8012369..9ed9421 100644
-+--- a/dlls/msi/table.c
-++++ b/dlls/msi/table.c
-+@@ -671,7 +671,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
-+     /* Note: _Columns table doesn't have non-persistent data */
-+ 
-+     /* if maxcount is non-zero, assume it's exactly right for this table */
-+-    memset( colinfo, 0, maxcount * sizeof(*colinfo) );
-++    if (colinfo) memset( colinfo, 0, maxcount * sizeof(*colinfo) );
-+     count = table->row_count;
-+     for (i = 0; i < count; i++)
-+     {
-+@@ -684,7 +684,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
-+             /* check the column number is in range */
-+             if (col < 1 || col > maxcount)
-+             {
-+-                ERR("column %d out of range\n", col);
-++                ERR("column %d out of range (maxcount: %d)\n", col, maxcount);
-+                 continue;
-+             }
-+             /* check if this column was already set */
+ > a vase is for flowers, I guess you wanted to say 'case', right?
+
+ > Committed with this fixed.
+
+But you forgot to fix the 'Explcitly' in the line above.
+
+-- 
+Bye, Peter Korsgaard
