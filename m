@@ -1,51 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 11:37:28 +0100
-Subject: [Buildroot] Compile Crypto++ package
-In-Reply-To: <CAJpGAeFK15Vrznw7HLDSrACBHwRKLGi8freygbFcfPaA5BEpTw@mail.gmail.com>
-References: <CAJpGAeFK15Vrznw7HLDSrACBHwRKLGi8freygbFcfPaA5BEpTw@mail.gmail.com>
-Message-ID: <20150304113728.4dfd8bea@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 4 Mar 2015 11:55:32 +0100
+Subject: [Buildroot] [PATCH] uclibc: mask uclibc-ng for xtensa
+In-Reply-To: <54F630E2.5040703@zacarias.com.ar>
+References: <1425415991-20530-1-git-send-email-gustavo@zacarias.com.ar>
+ <87zj7tsrfk.fsf@dell.be.48ers.dk>
+ <54F62886.5090506@zacarias.com.ar>
+ <54F630E2.5040703@zacarias.com.ar>
+Message-ID: <20150304105532.GQ3937@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
+Gustavo Zacarias wrote,
 
-On Wed, 4 Mar 2015 11:33:59 +0800, hardik gohil wrote:
-
-> I am using buildroot to compile packages for MIPS architecture till now.
+> On 03/03/2015 06:32 PM, Gustavo Zacarias wrote:
 > 
-> I want to compile Crypto++ which is not available in Buildroot-2013.02.
+> > On 03/03/2015 06:26 PM, Peter Korsgaard wrote:
+> > 
+> >>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+> >>
+> >>  > Is broken like plain uClibc, fixes:
+> >>  > http://autobuild.buildroot.net/results/77f/77fe89d358a90f5167e58bedb73495d7ee9a7f5d/
+> >>
+> >> So why do we have:
+> >>
+> >> commit 060125b4fed11458288b14fbd2d49e1c12eb11df
+> >> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >> Date:   Sat Feb 14 22:01:07 2015 +0100
+> >>
+> >>     uclibc: enable Xtensa NPTL support with uClibc-ng
+> >>
+> >> Then? Presumably something was working when this was done?
+> > 
+> > Autobuilders are speaking up, i gave uclibc a quick look and xtensa
+> > elfinterp.c is the only arch including dl-tls.h
+> > I'll try droppping that, it doesn't make sense that the interpreter
+> > needs tls, but for the time being i'd nuke uclibc-ng for xtensa pending
+> > testing/upstream aproval.
+> > Regards.
 > 
-> I don't want to use libgcrypt which is available.
-> 
-> Crypto++ uses GNUmakefile method but not autoconf (./configure) to compile.
-> 
-> Is it possible to Integrate this into buildroot or i need to compile
-> separately outside by setting all the paths.
+> Digging up a little more the scenario is:
+> uclibc-ng -> nptl (old threads broken, none possibly as well)
+> uclibc -> no nptl, only old or none.
 
-Of course it is possible to integrate this package in Buildroot. You
-seem to believe that only autoconf-based packages can be supported but
-that's not the case: autoconf/automake based packages are supported
-using the autotools-package infrastructure, but we also support CMake,
-Perl, Python, Luarocks, and other types of packages.
+The analysis is correct. uClibc-ng only support NPTL or NONE for
+NPTL supported architectures like ARM, PPC, MIPS, X86, XTENSA, ...
+It will only support LT.old for BFIN, CRIS, ARM-NOMMU,
+M68k/Coldfire, ..
+ 
+> So basically apply the patch i say, it's not an option we had shipping
+> and uclibc-ng git reverts (and re-reverts!) this so we should wait for a
+> new release to know what's up and let them make up their mind.
 
-And for packages having a custom build system such as a manual makefile
-(which is the case of Crypto++), we have the generic-package
-infrastructure.
+Sorry for the revert stuff. It was an accident while testing some
+pthread static linking stuff with cdrkit. I didn't want to push
+these changes, just some inability on my site to work with branches
+and multiple checkouts ;)
 
-> Help me?
+Please don't apply this patch. I will sent a patch, so that
+XTENSA and other NPTL architectures can not be configured to use
+LT.old or LT.new in Buildroot.
 
-Please read the Buildroot documentation:
-http://buildroot.org/downloads/manual/manual.html#adding-packages. And
-specifically the part about generic-package:
-http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
