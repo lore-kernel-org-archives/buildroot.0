@@ -1,9 +1,9 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed,  4 Mar 2015 17:00:09 +0100
-Subject: [Buildroot] [PATCH v3 2/4] python-markdown: add host-package support
+Date: Wed,  4 Mar 2015 17:00:10 +0100
+Subject: [Buildroot] [PATCH v3 3/4] python-cheetah: add host-package support
 In-Reply-To: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
 References: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1425484811-26238-2-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1425484811-26238-3-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,22 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Host-cheetah needs host-markdown.
+Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/python-markdown/python-markdown.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index 864825e..3b2217e 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
-@@ -12,3 +12,4 @@ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
- PYTHON_MARKDOWN_SETUP_TYPE = distutils
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 08076b5..faf2436 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
++PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
  
  $(eval $(python-package))
 +$(eval $(host-python-package))
