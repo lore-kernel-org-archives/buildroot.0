@@ -1,36 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 15:59:53 +0100
-Subject: [Buildroot] [PATCH v2 7/8] arch: add support for AMD steamroller
-In-Reply-To: <1425397951-30603-7-git-send-email-gustavo@zacarias.com.ar>
-References: <1425397951-30603-1-git-send-email-gustavo@zacarias.com.ar>
- <1425397951-30603-7-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150304155953.7c43ee6c@free-electrons.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed,  4 Mar 2015 17:00:08 +0100
+Subject: [Buildroot] [PATCH v3 1/4] pkg-cmake: allow to build package in a
+	subdirectory
+Message-ID: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On Tue,  3 Mar 2015 12:52:30 -0300, Gustavo Zacarias wrote:
+For some cmake based packages, like GNURadio, it's forbidden to do the
+compilation directly in the sources directory. This patch add a new 
+variable to specify, if needed, the name of a sub-directory used to compile.
 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 4321e43..e70c3ce 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -676,6 +676,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on !BR2_STATIC_LIBS
->  	depends on !BR2_x86_jaguar
-> +	depends on !BR2_x86_steamroller
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+Changes v2 -> v3:
+ * Update docs to add detail about LIBFOO_BUILDDIR
+Changes v1 -> v2:
+ * Allow to overload $(2)_BUILDDIR instead of adding a new variable and test
+---
+ docs/manual/adding-packages-cmake.txt | 7 ++++++-
+ package/pkg-cmake.mk                  | 8 +++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-Why do we need this new dependency? Same question for x86_jaguar in
-fact. Are those toolchains not working at all, or are they just not
-"optimal" ?
-
-Thomas
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index d92b209..05738f0 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -79,7 +79,7 @@ First, all the package metadata information variables that exist in
+ the generic infrastructure also exist in the CMake infrastructure:
+ +LIBFOO_VERSION+, +LIBFOO_SOURCE+, +LIBFOO_PATCH+, +LIBFOO_SITE+,
+ +LIBFOO_SUBDIR+, +LIBFOO_DEPENDENCIES+, +LIBFOO_INSTALL_STAGING+,
+-+LIBFOO_INSTALL_TARGET+.
+++LIBFOO_INSTALL_TARGET+, +LIBFOO_BUILDDIR+.
+ 
+ A few additional variables, specific to the CMake infrastructure, can
+ also be defined. Many of them are only useful in very specific cases,
+@@ -91,6 +91,11 @@ typical packages will therefore only use a few of them.
+   the tree extracted by the tarball. If +HOST_LIBFOO_SUBDIR+ is not
+   specified, it defaults to +LIBFOO_SUBDIR+.
+ 
++* +LIBFOO_BUILDDIR+ may overload the default build directory when a
++  package prevents from in-source-tree build. For example,
++  FOO_BUILDDIR = $(FOO_SRCDIR)/.build, will be used to compile foo
++  package in .build subdirectory.
++
+ * +LIBFOO_CONF_ENV+, to specify additional environment variables to
+   pass to CMake. By default, empty.
+ 
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2404c40..c50039d 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -61,7 +61,7 @@ $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+ $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+ 
+ $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
+-$(2)_BUILDDIR			= $$($(2)_SRCDIR)
++$(2)_BUILDDIR			?= $$($(2)_SRCDIR)
+ 
+ #
+ # Configure step. Only define it if not already defined by the package
+@@ -73,7 +73,8 @@ ifeq ($(4),target)
+ 
+ # Configure package for target
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_BUILDDIR) && \
++	(mkdir -p $$($$(PKG)_BUILDDIR) && \
++	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+@@ -98,7 +99,8 @@ else
+ 
+ # Configure package for host
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_BUILDDIR) && \
++	(mkdir -p $$($$(PKG)_BUILDDIR) && \
++	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
