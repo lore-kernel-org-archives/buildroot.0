@@ -1,29 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:27:40 +0100
-Subject: [Buildroot] [PATCH v3 1/2] popt: add to the "popt.pc" file the
- libintl library
-In-Reply-To: <1425244013-2509-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
- <1425244013-2509-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150304232740.63a14782@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:30:04 +0100
+Subject: [Buildroot] [git commit] wine: Add patch to fix miscompilation with
+	gcc 4.9
+Message-ID: <20150304223010.47A318180C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+commit: http://git.buildroot.net/buildroot/commit/?id=6e0c62b61398d87c1034e83d7d9550e1098105da
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 Mar 2015 22:06:52 +0100, Fabio Porcedda wrote:
-> This change permits through pkg-config to retrive even the depenencies
-> that is useful for a static linking.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...revent-call-to-memset-with-a-null-pointer.patch |   40 ++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
+new file mode 100644
+index 0000000..f6d5a9d
+--- /dev/null
++++ b/package/wine/0001-Prevent-call-to-memset-with-a-null-pointer.patch
+@@ -0,0 +1,40 @@
++commit deb274226783ab886bdb44876944e156757efe2b
++Author: Daniel Beitler <dan@dablabs.com>
++Date:   Sun May 18 13:27:42 2014 -0400
++
++    msi: Prevent call to memset with a null pointer
++         in get_tablecolumns function.
++
++Fix miscompilation with gcc >= 4.9
++See https://bugs.winehq.org/show_bug.cgi?id=36139 for the upstream
++bug report. There won't be a Wine 1.6.3 so we need to address this
++anyway.
++
++Backported from: deb274226783ab886bdb44876944e156757efe2b
++Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
++---
++ dlls/msi/table.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/dlls/msi/table.c b/dlls/msi/table.c
++index 8012369..9ed9421 100644
++--- a/dlls/msi/table.c
+++++ b/dlls/msi/table.c
++@@ -671,7 +671,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
++     /* Note: _Columns table doesn't have non-persistent data */
++ 
++     /* if maxcount is non-zero, assume it's exactly right for this table */
++-    memset( colinfo, 0, maxcount * sizeof(*colinfo) );
+++    if (colinfo) memset( colinfo, 0, maxcount * sizeof(*colinfo) );
++     count = table->row_count;
++     for (i = 0; i < count; i++)
++     {
++@@ -684,7 +684,7 @@ static UINT get_tablecolumns( MSIDATABASE *db, LPCWSTR szTableName, MSICOLUMNINF
++             /* check the column number is in range */
++             if (col < 1 || col > maxcount)
++             {
++-                ERR("column %d out of range\n", col);
+++                ERR("column %d out of range (maxcount: %d)\n", col, maxcount);
++                 continue;
++             }
++             /* check if this column was already set */
