@@ -1,30 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:21:01 +0100
-Subject: [Buildroot] Worried about patches not being merged?
-Message-ID: <20150304232101.437af48f@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:21:35 +0100
+Subject: [Buildroot] [git commit] quagga: remove redundant assignment
+Message-ID: <20150304222214.5135B81804@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=34d032e0d0ceebc0e8f0e8e6d6abe5e81f2f1f24
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If you're worried about patches not being merged, or taking too long to
-get merged, here is a quick statistic I made.
+This redundant assignement was mistakenly added in commit
+a839ac38e158344afb9e5494ce154b93b88bb162.
 
-On http://patchwork.ozlabs.org/project/buildroot/list/, on a total of
-356 pending patches at the time of my testing, only 22 patches had a
-Acked-by, Reviewed-by or Tested-by tag. All of the other 334 patches
-have not been given any of these tags.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/quagga/quagga.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-If you would like to help getting patches merged more quickly, then
-please help by reviewing and testing patches!
-
-Thanks for your help,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 16fcb64..4a12ab3 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -7,7 +7,6 @@
+ QUAGGA_VERSION = 0.99.24
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+-QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
