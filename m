@@ -1,60 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 19:29:54 +0100
-Subject: [Buildroot] [git commit] kmod: needs largefile
-Message-ID: <20150304183008.5A31B803E6@busybox.osuosl.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  4 Mar 2015 19:37:22 +0100
+Subject: [Buildroot] [PATCH] package/kodi: Use i.MX VPU (video codec) when
+	available
+Message-ID: <1425494242-17354-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b185834163ea259b6b24c8bb65a876421282648
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Since version 20 it requires largefile support.
+Tested on i.MX6.
 
-http://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=481ad14550087c77c9df6d117c7a975a38a4ad33
- - Disable --disable-largefile. We already had possible bugs in the
-   index implementation if this were passed. It's now fixed, but it's
-   never tested. Disable it.
-
-Fix build failure:
-configure: error: --disable-largefile is not supported by kmod
-package/pkg-generic.mk:172: recipe for target 'output/build/kmod-20/.stamp_configured' failed
-
-Fixes:
-http://autobuild.buildroot.net/results/f662d9230e4bc2da7dc56a2ffd493cc37254d377//
-http://autobuild.buildroot.net/results/233ec8ee346e15d41658cffc6bbb4a6c9dd46746//
-
-[Thomas:
- - use two separate 'depends on' conditions for BR2_STATIC_LIBS and
-   BR2_LARGEFILE, like we do in most packages.
- - take this opportunity to also indicate the dependency on dynamic
-   library in the comment, which was missing until now.]
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 ---
- package/kmod/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/kodi/Config.in |    5 +++++
+ package/kodi/kodi.mk   |    5 +++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/kmod/Config.in b/package/kmod/Config.in
-index 8703e82..8d8a993 100644
---- a/package/kmod/Config.in
-+++ b/package/kmod/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_KMOD
- 	bool "kmod"
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_LARGEFILE
- 	help
- 	  handle kernel modules
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 1bc8b15..74aeb72 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -105,6 +105,11 @@ menuconfig BR2_PACKAGE_KODI
  
-@@ -16,3 +17,6 @@ config BR2_PACKAGE_KMOD_TOOLS
- 	  modinfo, modprobe, rmmod).
+ 	  http://kodi.tv
  
- endif
++	  To have hardware accelerated video decoding on following platforms,
++	  you will also have to select related package(s):
++	  * RPi: rpi-firmware
++	  * i.MX6: libfslvpuwrap
 +
-+comment "kmod needs a toolchain w/ largefile, dynamic library"
-+	depends on !BR2_LARGEFILE || BR2_STATIC_LIBS
+ if BR2_PACKAGE_KODI
+ 
+ config BR2_PACKAGE_KODI_ALSA_LIB
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 01c7e80..956c3b6 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -54,6 +54,11 @@ KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
+ 	LIBS="-lvcos -lvchostif"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBFSLVPUWRAP),y)
++KODI_DEPENDENCIES += libfslvpuwrap
++KODI_CONF_OPTS += --enable-codec=imxvpu
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ KODI_CONF_OPTS += --enable-libcap
+ KODI_DEPENDENCIES += libcap
+-- 
+1.7.9.5
