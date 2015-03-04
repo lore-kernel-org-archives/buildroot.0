@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 22:11:00 +0100
-Subject: [Buildroot] [PATCH] package/kodi: fix a runtime bug (no text
- displayed in GUI) when an external glibc toolchain is used
-In-Reply-To: <1425502935-18002-1-git-send-email-julien.boibessot@free.fr>
-References: <1425502935-18002-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20150304221100.18c7ff17@free-electrons.com>
+Date: Wed, 4 Mar 2015 21:38:45 +0100
+Subject: [Buildroot] [git commit] barebox: fix compilation on x86-64
+	architecture
+Message-ID: <20150304211116.10B0080756@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear julien.boibessot at free.fr,
+commit: http://git.buildroot.net/buildroot/commit/?id=f31f411883eca64eccff802a85f5c9c5a219ac6e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  4 Mar 2015 22:02:15 +0100, julien.boibessot at free.fr wrote:
+Barebox uses KERNEL_ARCH to derive BAREBOX_ARCH, but doesn't
+currently handle the case of the x86-64 architecture. In this
+case KERNEL_ARCH is x86_64, but BAREBOX_ARCH should be x86
+nonetheless.
 
-> +# Otherwise no text is displayed in user interface when compiled with an
-> +# external glibc toolchain (iconv_open() is required at runtime for UTF-8 to
-> +# UTF-32 conversion)
-> +comment "kodi needs an external glibc toolchain which copy gconv libraries"
-> +	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS && BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> +	depends on !BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
+Signed-off-by: Fabien Lahoudere <fabienlahoudere.pro@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/barebox/barebox.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-As suggested by Yann, what about:
-
-	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-
- ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index b829ae7..5809fb0 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -41,6 +41,8 @@ endif
+ 
+ ifeq ($(KERNEL_ARCH),i386)
+ BAREBOX_ARCH = x86
++else ifeq ($(KERNEL_ARCH),x86_64)
++BAREBOX_ARCH = x86
+ else ifeq ($(KERNEL_ARCH),powerpc)
+ BAREBOX_ARCH = ppc
+ else
