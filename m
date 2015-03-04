@@ -1,30 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 19:43:46 +0100
-Subject: [Buildroot] [PATCH] perl: needs host-bison
-In-Reply-To: <1425378663-2659-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425378663-2659-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150304194346.130b7aed@free-electrons.com>
+Date: Wed, 4 Mar 2015 19:44:30 +0100
+Subject: [Buildroot] [git commit] kodi: allow mysql to be used
+Message-ID: <20150304184442.2670A8041C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=e89fba08b888a4f7d5ea797019787866f04e4404
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  3 Mar 2015 07:31:03 -0300, Gustavo Zacarias wrote:
-> It's from last bump, fixes:
-> http://autobuild.buildroot.net/results/1c2/1c261b09f5a4a314d5dcbc1e5811af9c7d18658a/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi/kodi.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-I've applied Fran?ois fix instead:
-http://git.buildroot.net/buildroot/commit/?id=8a4c8deee9af6fa1a1e906c52d7d49a32434464c.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 01c7e80..0a6fe7c 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -37,7 +37,6 @@ KODI_CONF_OPTS +=  \
+ 	--disable-dvdcss \
+ 	--disable-hal \
+ 	--disable-joystick \
+-	--disable-mysql \
+ 	--disable-openmax \
+ 	--disable-projectm \
+ 	--disable-pulse \
+@@ -46,6 +45,14 @@ KODI_CONF_OPTS +=  \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+ 
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++KODI_CONF_OPTS += --enable-mysql
++KODI_CONF_ENV += ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
++KODI_DEPENDENCIES += mysql
++else
++KODI_CONF_OPTS += --disable-mysql
++endif
++
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ KODI_DEPENDENCIES += rpi-userland
+ KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
