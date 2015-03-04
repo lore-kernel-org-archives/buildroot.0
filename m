@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 22:12:32 +0100
-Subject: [Buildroot] [git commit] Config.in: Add BR2_DEPRECATED_SINCE_2015_05
-Message-ID: <20150304211938.91C7980E2C@busybox.osuosl.org>
+Date: Wed, 4 Mar 2015 22:14:10 +0100
+Subject: [Buildroot] [git commit] libglib2: remove kludges for old and
+	removed xilinx toolchains
+Message-ID: <20150304211938.C32A781809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f1556e1c8fb5a0e4069b1bd692ea90e37df4c7d
+commit: http://git.buildroot.net/buildroot/commit/?id=4274f758ed2b2f9a1440b3f8e4c8bae25786e807
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In preparation for the deprecation of certain features in 2015.05, add
-the BR2_DEPRECATED_SINCE_2015_05 symbol.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/libglib2/libglib2.mk |    7 +------
+ 1 files changed, 1 insertions(+), 6 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index ce239d6..0598042 100644
---- a/Config.in
-+++ b/Config.in
-@@ -312,6 +312,10 @@ config BR2_DEPRECATED_SINCE_2015_02
- 	bool
- 	default y
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 991c972..2129a85 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -49,17 +49,12 @@ LIBGLIB2_CONF_ENV = \
+ 	gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
  
-+config BR2_DEPRECATED_SINCE_2015_05
-+	bool
-+	default y
-+
+ # old uClibc versions don't provide qsort_r
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=no
+ else
+ LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=yes
  endif
  
- config BR2_ENABLE_DEBUG
+-# old toolchains don't have working inotify support
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2)$(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+-LIBGLIB2_CONF_ENV += ac_cv_header_sys_inotify_h=no
+-endif
+-
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	--disable-dtrace \
+ 	--disable-systemtap \
