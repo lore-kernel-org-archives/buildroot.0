@@ -1,47 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:29:09 +0100
-Subject: [Buildroot] [PATCH v3 2/2] logrotate: use pkg-config for the
- opt library
-In-Reply-To: <1425244013-2509-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
- <1425244013-2509-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150304232909.625985fa@free-electrons.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed,  4 Mar 2015 23:31:15 +0100
+Subject: [Buildroot] [PATCH 0/2] Change the name of variable <PKG>_MAJOR to
+	<PKG>_VERSION_MAJOR
+Message-ID: <1425508277-11723-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+We usually use a name <PKG>_VERSION_MAJOR so do it for Buildroot consistency.
 
-In the title: s/opt/popt/
+Jerzy Grzegorek (2):
+  lockdev: change the name of variable LOCKDEV_MAJOR to
+    LOCKDEV_VERSION_MAJOR
+  swig: change the name of variable SWIG_MAJOR to SWIG_VERSION_MAJOR
 
-On Sun,  1 Mar 2015 22:06:53 +0100, Fabio Porcedda wrote:
-> Without using the pkg-config the dependencies are not included for a
-> static linking so it fails to build.
-> These failures are fixed by linking the libintl library that is a
-> dependency of the opt library.
+ package/lockdev/lockdev.mk | 8 ++++----
+ package/swig/swig.mk       | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-s/opt/popt/
-
-I've fixed and committed. Though I have one concern below.
-
-
-> +	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" \
-> +		LOADLIBES="$(shell $(PKG_CONFIG_HOST_BINARY) --libs popt)" \
-
-It's not currently supported in Buildroot, but LOADLIBES is extended by
-the logrotate Makefile with -lacl or -lselinux when WITH_ACL or
-WITH_SELINUX are used. I'm not sure this will play well with your
-proposed solution.
-
-But ok, this can be handled when/if someone adds ACL and/or SELinux
-support to logrotate.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
