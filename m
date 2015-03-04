@@ -1,30 +1,44 @@
-From: drasko.draskovic at gmail.com <drasko.draskovic@gmail.com>
-Date: Tue, 03 Mar 2015 16:36:01 -0600
-Subject: [Buildroot] drasko.draskovic@gmail.com has indicated you're a
-	friend(27 mutual friends). Accept?
-Message-ID: <0.0.363.43.1D05601ABA126CC.2771@mail3.infoaxe.net>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Tue,  3 Mar 2015 19:32:05 -0800
+Subject: [Buildroot] [PATCH 1/1] kodi: allow mysql to be used
+Message-ID: <1425439925-13290-1-git-send-email-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/kodi/kodi.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-drasko.draskovic at gmail.com wants to follow you.
-
-****** Is drasko.draskovic at gmail.com you friend? ******
-If Yes please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=e462efe4-87d4-4f5f-a996-eda8e649462a&amp;from=drasko.draskovic at gmail.com&src=txt_yes
-
-If No please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=e462efe4-87d4-4f5f-a996-eda8e649462a&amp;from=drasko.draskovic at gmail.com&src=txt_no
-
-
-Follow the link below to remove yourself from all such emails
-http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at uclibc.org&amp;iid=e462efe4-87d4-4f5f-a996-eda8e649462a&amp;from=drasko.draskovic at gmail.com
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150303/873ff786/attachment.html>
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 01c7e80..0a6fe7c 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -37,7 +37,6 @@ KODI_CONF_OPTS +=  \
+ 	--disable-dvdcss \
+ 	--disable-hal \
+ 	--disable-joystick \
+-	--disable-mysql \
+ 	--disable-openmax \
+ 	--disable-projectm \
+ 	--disable-pulse \
+@@ -46,6 +45,14 @@ KODI_CONF_OPTS +=  \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+ 
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++KODI_CONF_OPTS += --enable-mysql
++KODI_CONF_ENV += ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
++KODI_DEPENDENCIES += mysql
++else
++KODI_CONF_OPTS += --disable-mysql
++endif
++
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ KODI_DEPENDENCIES += rpi-userland
+ KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
+-- 
+2.3.1
