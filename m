@@ -1,30 +1,49 @@
-From: hardik gohil <hardikmjobs@gmail.com>
-Date: Wed, 4 Mar 2015 11:33:59 +0800
-Subject: [Buildroot] Compile Crypto++ package
-Message-ID: <CAJpGAeFK15Vrznw7HLDSrACBHwRKLGi8freygbFcfPaA5BEpTw@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed,  4 Mar 2015 06:34:40 +0100
+Subject: [Buildroot] [PATCH] kmod: needs largefile
+Message-ID: <1425447280-21873-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since version 20 it requires largefile support.
 
+http://git.kernel.org/cgit/utils/kernel/kmod/kmod.git/commit/?id=481ad14550087c77c9df6d117c7a975a38a4ad33
+ - Disable --disable-largefile. We already had possible bugs in the
+   index implementation if this were passed. It's now fixed, but it's
+   never tested. Disable it.
 
-I am using buildroot to compile packages for MIPS architecture till now.
+Fix build failure:
+configure: error: --disable-largefile is not supported by kmod
+package/pkg-generic.mk:172: recipe for target 'output/build/kmod-20/.stamp_configured' failed
 
-I want to compile Crypto++ which is not available in Buildroot-2013.02.
+Fixes:
+http://autobuild.buildroot.net/results/f662d9230e4bc2da7dc56a2ffd493cc37254d377//
+http://autobuild.buildroot.net/results/233ec8ee346e15d41658cffc6bbb4a6c9dd46746//
+---
+ package/kmod/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-I don't want to use libgcrypt which is available.
-
-Crypto++ uses GNUmakefile method but not autoconf (./configure) to compile.
-
-Is it possible to Integrate this into buildroot or i need to compile
-separately outside by setting all the paths.
-
-Anyone compiled this before
-
-Help me?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150304/2abfe5ed/attachment.html>
+diff --git a/package/kmod/Config.in b/package/kmod/Config.in
+index 8703e82..745c9e2 100644
+--- a/package/kmod/Config.in
++++ b/package/kmod/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KMOD
+ 	bool "kmod"
+-	depends on !BR2_STATIC_LIBS
++	depends on !BR2_STATIC_LIBS && BR2_LARGEFILE
+ 	help
+ 	  handle kernel modules
+ 
+@@ -16,3 +16,6 @@ config BR2_PACKAGE_KMOD_TOOLS
+ 	  modinfo, modprobe, rmmod).
+ 
+ endif
++
++comment "kmod needs a toolchain w/ largefile"
++	depends on !BR2_LARGEFILE
+-- 
+2.3.1
