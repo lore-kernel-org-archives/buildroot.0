@@ -1,68 +1,40 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 4 Mar 2015 11:55:32 +0100
-Subject: [Buildroot] [PATCH] uclibc: mask uclibc-ng for xtensa
-In-Reply-To: <54F630E2.5040703@zacarias.com.ar>
-References: <1425415991-20530-1-git-send-email-gustavo@zacarias.com.ar>
- <87zj7tsrfk.fsf@dell.be.48ers.dk>
- <54F62886.5090506@zacarias.com.ar>
- <54F630E2.5040703@zacarias.com.ar>
-Message-ID: <20150304105532.GQ3937@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Mar 2015 11:59:06 +0100
+Subject: [Buildroot] [PATCH v9] wine: New package
+In-Reply-To: <54ECDDE1.3040507@dawncrow.de>
+References: <54ECDDE1.3040507@dawncrow.de>
+Message-ID: <20150304115906.547fb949@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Gustavo Zacarias wrote,
+Dear Andr? Hentschel,
 
-> On 03/03/2015 06:32 PM, Gustavo Zacarias wrote:
+On Tue, 24 Feb 2015 21:24:01 +0100, Andr? Hentschel wrote:
+> Adds new package: wine
 > 
-> > On 03/03/2015 06:26 PM, Peter Korsgaard wrote:
-> > 
-> >>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
-> >>
-> >>  > Is broken like plain uClibc, fixes:
-> >>  > http://autobuild.buildroot.net/results/77f/77fe89d358a90f5167e58bedb73495d7ee9a7f5d/
-> >>
-> >> So why do we have:
-> >>
-> >> commit 060125b4fed11458288b14fbd2d49e1c12eb11df
-> >> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >> Date:   Sat Feb 14 22:01:07 2015 +0100
-> >>
-> >>     uclibc: enable Xtensa NPTL support with uClibc-ng
-> >>
-> >> Then? Presumably something was working when this was done?
-> > 
-> > Autobuilders are speaking up, i gave uclibc a quick look and xtensa
-> > elfinterp.c is the only arch including dl-tls.h
-> > I'll try droppping that, it doesn't make sense that the interpreter
-> > needs tls, but for the time being i'd nuke uclibc-ng for xtensa pending
-> > testing/upstream aproval.
-> > Regards.
+>   Wine is a compatibility layer capable of running Windows applications on Linux.
 > 
-> Digging up a little more the scenario is:
-> uclibc-ng -> nptl (old threads broken, none possibly as well)
-> uclibc -> no nptl, only old or none.
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> [Only build-tested, not run-time tested y lack of Windows apps]
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The analysis is correct. uClibc-ng only support NPTL or NONE for
-NPTL supported architectures like ARM, PPC, MIPS, X86, XTENSA, ...
-It will only support LT.old for BFIN, CRIS, ARM-NOMMU,
-M68k/Coldfire, ..
- 
-> So basically apply the patch i say, it's not an option we had shipping
-> and uclibc-ng git reverts (and re-reverts!) this so we should wait for a
-> new release to know what's up and let them make up their mind.
+This package is causing some build failures in our autobuilders, see
+http://autobuild.buildroot.org/results/018/018391c5e70d33bc0b5745ad7a2a273efa9be0d7/build-end.log.
 
-Sorry for the revert stuff. It was an accident while testing some
-pthread static linking stuff with cdrkit. I didn't want to push
-these changes, just some inability on my site to work with branches
-and multiple checkouts ;)
+Config to reproduce:
+http://autobuild.buildroot.org/results/018/018391c5e70d33bc0b5745ad7a2a273efa9be0d7/config.
 
-Please don't apply this patch. I will sent a patch, so that
-XTENSA and other NPTL architectures can not be configured to use
-LT.old or LT.new in Buildroot.
+Can you have a look and submit a patch to fix this build problem?
 
-best regards
- Waldemar
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
