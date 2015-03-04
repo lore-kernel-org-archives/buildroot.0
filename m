@@ -1,34 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Mar 2015 23:44:46 +0100
-Subject: [Buildroot] [PATCH] autoconf-archive: add hash
-In-Reply-To: <1424874186-10571-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1424874186-10571-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <20150304234446.12901fc2@free-electrons.com>
+Date: Wed, 4 Mar 2015 23:56:06 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: Fix host _DL_VERSION corner
+ case
+In-Reply-To: <1424816770-14271-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+References: <1424816770-14271-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <20150304235606.23277563@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+Dear Clayton Shotwell,
 
-On Wed, 25 Feb 2015 15:23:06 +0100, Bartosz Golaszewski wrote:
+On Tue, 24 Feb 2015 16:26:10 -0600, Clayton Shotwell wrote:
+> In the case when a package has a host version, the package is dependent
+> on the host version, and the version contains a '/', the host version
+> does not evaluate properly. The host version will contain a '_' instead
+> of a '/', resulting in a failed download. To solve this corner case, add
+> a check to see if the _DL_VERSION of the package has been defined before
+> defining the host _DL_VERSION. If the package _DL_VERSION has not been
+> defined yet, then the version string has not been formatted yet and is
+> still good to use.
+> 
+> This error occured on a package in a BR2_EXTERNAL that uses a git repo
+> for its remote storage with '/' in the tag names. I do not believe this
+> affects any packages in the Buildroot mainline but it could in the
+> future.
+> 
+> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-> diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
-> new file mode 100644
-> index 0000000..9abb905
-> --- /dev/null
-> +++ b/package/autoconf-archive/autoconf-archive.hash
-> @@ -0,0 +1 @@
-> +sha512 54382adcf55b9dd126de6727c034cae7c72c8217c9979d3b889705c3bfe41ec8329621dea5ff592ebf7e530775ce96faf47baffe36e8fedf9cd78c8dc423932e autoconf-archive-2015.02.04.tar.xz
+So, I had a look at the issue, and I can confirm it. I did the
+following stupid change:
 
-There should be a comment above that says where the hash was found:
-from which URL, or computed locally.
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0/bar
 
-And if it's computed locally, our current rule is to use sha256, not
-sha512.
+(which obviously doesn't work, but we don't care)
 
-Can you fix and resend? Thanks!
+And then dumped the interesting variables:
+
+$ make printvars 2> /dev/null | grep LIBGLIB2 | grep VERSION
+HOST_LIBGLIB2_DL_VERSION=2.42.0_bar (2.42.0_bar)
+HOST_LIBGLIB2_VERSION=2.42.0_bar (2.42.0_bar)
+LIBGLIB2_DL_VERSION=2.42.0/bar (2.42.0/bar)
+LIBGLIB2_VERSION=2.42.0_bar (2.42.0_bar)
+
+So indeed, HOST_LIBGLIB2_DL_VERSION is wrong, it should be '2.42.0/bar'.
+
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 1b09955..fcef461 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -323,7 +323,11 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
+>  # version control system branch or tag, for example remotes/origin/1_10_stable.
+>  ifndef $(2)_VERSION
+>   ifdef $(3)_VERSION
+> -  $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+> +  ifdef $(3)_DL_VERSION
+> +   $(2)_DL_VERSION := $$(strip $$($(3)_DL_VERSION))
+> +  else
+> +   $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+> +  endif
+
+However, I haven't yet made up my mind on whether this proposed
+solution is the best one, or if we have a chance of doing something
+clearer/nicer for this _VERSION vs. _DL_VERSION thing.
 
 Thomas
 -- 
