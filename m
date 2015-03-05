@@ -1,92 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 23:48:45 +0100
-Subject: [Buildroot] [PATCH next v2 1/4] package/unixodbc: new package
-In-Reply-To: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1425204461-27877-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150305234845.27589bc7@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Mar 2015 23:48:51 +0100
+Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
+In-Reply-To: <20150303142901.5998a72c@free-electrons.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150303142901.5998a72c@free-electrons.com>
+Message-ID: <54F8DD53.3060000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On 03/03/15 14:29, Thomas Petazzoni wrote:
+> Dear Fabio Porcedda,
+> 
+> On Tue,  3 Mar 2015 10:17:05 +0100, Fabio Porcedda wrote:
+> 
+>> > this patch set aims to improve build reproducibility by using a
+>> > per-package staging directory.
+>> > Also this feature aims to enable as default the top-level parallel make.
+> Interesting! I must say I'm a bit worried about the implications of
+> having to pass custom -I and -L flags all the time: we did arrange the
+> compiler do not require those (by configuration for the internal
+> toolchain case, and using the wrapper for the external toolchain case).
 
-On Sun,  1 Mar 2015 11:07:38 +0100, Bernd Kuhls wrote:
+ I also like this feature very much!
 
-> diff --git a/package/unixodbc/unixodbc.mk b/package/unixodbc/unixodbc.mk
-> new file mode 100644
-> index 0000000..2214385
-> --- /dev/null
-> +++ b/package/unixodbc/unixodbc.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# unixodbc
-> +#
-> +################################################################################
-> +
-> +UNIXODBC_VERSION = 2.3.2
-> +UNIXODBC_SOURCE = unixODBC-$(UNIXODBC_VERSION).tar.gz
-> +UNIXODBC_SITE = ftp://ftp.unixodbc.org/pub/unixODBC
-> +UNIXODBC_INSTALL_STAGING = YES
-> +UNIXODBC_LICENSE = LGPLv2.1+
+ However, I don't like at all the approach of passing the custom -I and -L
+flags. I think it's much better to start with something that was suggested
+before in the BR developer meeting: use the toolchain wrapper also for the
+internal toolchain. Then we can pass the per-package staging dir through the
+environment, and use it in the --sysroot argument of the compiler.
 
-This should probably be:
+ We'll also have to do something about ccache then - that could be a problem.
+Perhaps ccache should be called from within the wrapper as well, that may solve
+a bunch of other ccache problems.
 
-	LGPLv2.1+ (library), GPLv2+ (programs)
 
-> +UNIXODBC_LICENSE_FILES = COPYING
+ Regards,
+ Arnout
 
-This should maybe also contain exe/COPYING
-
-> +
-> +UNIXODBC_CONF_OPTS += --enable-drivers --enable-driver-conf
-
-+= not needed, = is sufficient.
-
-> +
-> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> +	UNIXODBC_CONF_OPTS += --enable-iconv
-> +	UNIXODBC_DEPENDENCIES += libiconv
-
-Don't indent those lines, we typically don't do this in most packages.
-
-> +endif
-
-Please add a 'else' case that does --disable-iconv explicitly.
-
-> +ifeq ($(BR2_PACKAGE_READLINE),y)
-> +	UNIXODBC_CONF_OPTS += --enable-readline
-> +	UNIXODBC_DEPENDENCIES += readline
-> +endif
-
-Ditto.
-
-> +
-> +UNIXODBC_TARGET_BINS = \
-> +	dltest \
-> +	isql \
-> +	iusql \
-> +	odbc_config \
-> +	odbcinst \
-> +	slencheck
-> +
-> +define UNIXODBC_REMOVE_TARGET_BINS_FROM_STAGING
-> +	rm -f $(addprefix $(STAGING_DIR)/usr/bin/,$(UNIXODBC_TARGET_BINS))
-> +endef
-> +
-> +UNIXODBC_POST_INSTALL_STAGING_HOOKS += UNIXODBC_REMOVE_TARGET_BINS_FROM_STAGING
-
-Why do we care about removing binaries from the staging directory? This
-seems to just be useless complexity.
-
-Can you look into these issues and resend an updated version?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
