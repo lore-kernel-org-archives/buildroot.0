@@ -1,29 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 23:23:25 +0100
-Subject: [Buildroot] [PATCH 1/2] samba: deprecate package due to EOL
-In-Reply-To: <54F8D470.9060308@mind.be>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
- <54F8D05F.4050300@mind.be>
- <20150305230631.4e19032b@free-electrons.com>
- <54F8D470.9060308@mind.be>
-Message-ID: <20150305232325.3e137c1d@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 5 Mar 2015 23:24:46 +0100
+Subject: [Buildroot] [PATCH] mipsel-ctng-linux-uclibc.config: add
+	BR2_TOOLCHAIN_EXTERNAL_CXX=y
+In-Reply-To: <20150305224513.3865e7ab@free-electrons.com>
+References: <1425549917-31392-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150305224513.3865e7ab@free-electrons.com>
+Message-ID: <54F8D7AE.50805@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hello Thomas,
 
-On Thu, 05 Mar 2015 23:10:56 +0100, Arnout Vandecappelle wrote:
+On 05/03/15 22:45, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+> 
+> On Thu, 5 Mar 2015 10:05:17 +0000, Vicente Olivert Riera wrote:
+>> This external toolchain has C++ support, so add
+>> BR2_TOOLCHAIN_EXTERNAL_CXX=y to the config file.
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>  .../configs/mipsel-ctng-linux-uclibc.config        |    1 +
+>>  1 files changed, 1 insertions(+), 0 deletions(-)
+> 
+> Applied, thanks.
 
->  But that's just a condition on the .mk file so it has no implications for the
-> missing reverse dependencies.
+thanks to you.
 
-Absolutely. But it means that the gvfs Samba support becomes unusable.
+> Next time, can you include some special thing within the [PATCH ...]
+> text to indicate that this patch is for buildroot-test and not
+> Buildroot? I.e, use:
+> 
+> 	git format-patch --subject-prefix="PATCH buildroot-test"
+> 
+> Otherwise it's a bit annoying to differentiate buildroot-test patches
+> from other patches in patchwork.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+of course, no problem. I have sent many patches to buildroot-test, why
+didn't you tell me this before? :-)
+
+Best wishes,
+--
+Vincent
+
+> Thanks!
+> 
+> Thomas
+> 
