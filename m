@@ -1,79 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 12:12:11 +0100
-Subject: [Buildroot] [git commit] configs: update config for Atmel SAMA5D3
-	Xplained board
-Message-ID: <20150305111233.16E9081813@busybox.osuosl.org>
+Date: Thu, 5 Mar 2015 12:27:27 +0100
+Subject: [Buildroot] Patch: qt5webkitexamples
+In-Reply-To: <87lht5lrd8.fsf@dell.be.48ers.dk>
+References: <1402067773.64897.YahooMailNeo@web172303.mail.ir2.yahoo.com>
+ <20140607122338.33ab44ce@free-electrons.com>
+ <1402138061.2503.YahooMailNeo@web172304.mail.ir2.yahoo.com>
+ <20140607184839.33bfa8e0@free-electrons.com>
+ <87lht5lrd8.fsf@dell.be.48ers.dk>
+Message-ID: <20150305122727.27675823@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6884e5b912eb6ba427cfb13a0996592738107ec5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Update configuration to use the 3.18.8 kernel and update U-Boot to
-2015.01. With the switch to 2015.01. use the U-Boot SPL image for the
-first stage bootloader instead of the at91bootstrap. The U-Boot SPL
-requires that the U-Boot image format be u-boot.img in order to load
-from the SD card.
+Yes, reviving a very old thread.
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/atmel/xplained/readme.txt  |    4 ++--
- configs/atmel_xplained_defconfig |   16 +++++++---------
- 2 files changed, 9 insertions(+), 11 deletions(-)
+On Mon, 09 Jun 2014 23:12:19 +0200, Peter Korsgaard wrote:
 
-diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
-index e29a116..63744dd 100644
---- a/board/atmel/xplained/readme.txt
-+++ b/board/atmel/xplained/readme.txt
-@@ -52,8 +52,8 @@ sudo mount /dev/mmcblk0p2 /media/rootfs
- Copy the bootloaders, kernel image and Device Tree blob to the first
- partition:
- 
--cp output/images/sama5d3_xplained-sdcardboot-uboot-3.6.2.bin /media/boot/boot.bin
--cp output/images/u-boot.bin /media/boot/u-boot.bin
-+cp output/images/uboot-spl.bin /media/boot/boot.bin
-+cp output/images/u-boot.img /media/boot/u-boot.img
- cp output/images/zImage /media/boot/zImage
- cp output/images/at91-sama5d3_xplained.dtb /media/boot/at91-sama5d3_xplained.dtb
- 
-diff --git a/configs/atmel_xplained_defconfig b/configs/atmel_xplained_defconfig
-index 8c06489..087f4fa 100644
---- a/configs/atmel_xplained_defconfig
-+++ b/configs/atmel_xplained_defconfig
-@@ -5,24 +5,22 @@ BR2_cortex_a5=y
- # Toolchain configuration
- BR2_ARM_EABIHF=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.15"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18.8"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- 
- # Kernel configuration
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.8"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
- 
--# First stage bootloader
--BR2_TARGET_AT91BOOTSTRAP3=y
--BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
--
--# Second stage bootloader
-+# First/second stage bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_mmc"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2014.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
+>  > It's just that I haven't automated the task of updating our Github
+>  > clone, so I only do it from time to time.
+> 
+> It would be good if you could add a cronjob to do it daily or so (or I
+> can do it if you prefer). Is there an easy way to inform users that this
+> is just a mirror and we would like contributors to use the mailing list
+> instead of the github features?
+
+This is now done:
+
+ *) I've added a cronjob that updates the Github mirror automatically.
+    A special Github user buildroot-auto-update has been created, which
+    uses a special SSH key with no passphrase, used by my cronjob to do
+    the update of the Github repository. It is updated every 10 minutes.
+
+ *) I've added a mention at https://github.com/buildroot/buildroot that
+    this is not the official Git repository.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
