@@ -1,23 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 11:33:06 +0100
-Subject: [Buildroot] [PATCH v2] autoconf-archive: add hash
-In-Reply-To: <1425550860-3912-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1425550860-3912-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <20150305113306.25352896@free-electrons.com>
+Date: Thu, 5 Mar 2015 11:33:14 +0100
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.12.4
+In-Reply-To: <1425551374-11049-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1425551374-11049-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150305113314.13fb3f4b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+Dear Gustavo Zacarias,
 
-On Thu,  5 Mar 2015 11:21:00 +0100, Bartosz Golaszewski wrote:
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  package/autoconf-archive/autoconf-archive.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/autoconf-archive/autoconf-archive.hash
+On Thu,  5 Mar 2015 07:29:34 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2015-2187 - The ATN-CPDLC dissector could crash.
+> CVE-2015-2188 - The WCP dissector could crash.
+> CVE-2015-2189 - The pcapng file parser could crash.
+> CVE-2015-2190 - The LLDP dissector could crash.
+> CVE-2015-2191 - The TNEF dissector could go into an infinite loop.
+> CVE-2015-2192 - The SCSI OSD dissector could go into an infinite loop.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Applied, thanks!
 
