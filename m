@@ -1,42 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 22:45:13 +0100
-Subject: [Buildroot] [PATCH] mipsel-ctng-linux-uclibc.config: add
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-In-Reply-To: <1425549917-31392-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1425549917-31392-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150305224513.3865e7ab@free-electrons.com>
+Date: Thu, 5 Mar 2015 22:46:42 +0100
+Subject: [Buildroot] [git commit] package/dvb-apps: re-add the patch for gcc
+	< 4.4
+Message-ID: <20150305214658.8143B81815@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=90db2ff71238eae6c412bd5da6657d23c5e10eab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 5 Mar 2015 10:05:17 +0000, Vicente Olivert Riera wrote:
-> This external toolchain has C++ support, so add
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y to the config file.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../configs/mipsel-ctng-linux-uclibc.config        |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+The patch 0002-Fix-compiler-warning-flags.patch was
+removed when the avr32 architecture was removed.
+But it's still needed for blackfin adi-toolchain 2014R1.
 
-Applied, thanks.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../dvb-apps/0002-Fix-compiler-warning-flags.patch |   44 ++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
 
-Next time, can you include some special thing within the [PATCH ...]
-text to indicate that this patch is for buildroot-test and not
-Buildroot? I.e, use:
-
-	git format-patch --subject-prefix="PATCH buildroot-test"
-
-Otherwise it's a bit annoying to differentiate buildroot-test patches
-from other patches in patchwork.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dvb-apps/0002-Fix-compiler-warning-flags.patch b/package/dvb-apps/0002-Fix-compiler-warning-flags.patch
+new file mode 100644
+index 0000000..9c6276b
+--- /dev/null
++++ b/package/dvb-apps/0002-Fix-compiler-warning-flags.patch
+@@ -0,0 +1,44 @@
++From 9b8f1df41f7579da63c27763ff184d351e4c7fef Mon Sep 17 00:00:00 2001
++From: Simon Dawson <spdawson@gmail.com>
++Date: Sun, 4 Jan 2015 12:06:18 +0100
++Subject: [PATCH] Fix compiler warning flags
++
++  When building for bfin, the build fails as follows.
++
++  cc1: error: unrecognized command line option "-Wno-packed-bitfield-compat"
++
++An example of an autobuild failure arising from this is the following.
++
++  http://autobuild.buildroot.net/results/92e/92e472004812a3616f62d766a9ea07a997a66e89/
++  http://autobuild.buildroot.net/results/6e7/6e7b48ad9768349d983985c3067c4267cde80541/
++
++Clearly, not all toolchains provide a gcc that understands
++the -Wno-packed-bitfield-compat flag; remove usage of this flag.
++
++Wno-packed-bitfield-compat option was added in gcc 4.4.
++
++[Romain:
++  - This patch is also needed for bfin toolchains which use gcc 4.3.5
++  - Add a link to bfin build failure]
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ util/scan/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/util/scan/Makefile b/util/scan/Makefile
++index d48c478..88667c5 100644
++--- a/util/scan/Makefile
+++++ b/util/scan/Makefile
++@@ -14,7 +14,7 @@ inst_bin = $(binaries)
++ 
++ removing = atsc_psip_section.c atsc_psip_section.h
++ 
++-CPPFLAGS += -Wno-packed-bitfield-compat -D__KERNEL_STRICT_NAMES
+++CPPFLAGS += -D__KERNEL_STRICT_NAMES
++ 
++ .PHONY: all
++ 
++-- 
++1.9.3
++
