@@ -1,50 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  5 Mar 2015 07:29:34 -0300
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.12.4
-Message-ID: <1425551374-11049-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Mar 2015 11:31:26 +0100
+Subject: [Buildroot] [git commit] autoconf-archive: add hash
+Message-ID: <20150305103131.50DCA817F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-2187 - The ATN-CPDLC dissector could crash.
-CVE-2015-2188 - The WCP dissector could crash.
-CVE-2015-2189 - The pcapng file parser could crash.
-CVE-2015-2190 - The LLDP dissector could crash.
-CVE-2015-2191 - The TNEF dissector could go into an infinite loop.
-CVE-2015-2192 - The SCSI OSD dissector could go into an infinite loop.
+commit: http://git.buildroot.net/buildroot/commit/?id=f0343fd171dcb218aa2d4dd324fd94ff887e0847
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/autoconf-archive/autoconf-archive.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index f6c5434..fa4cf18 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,3 +1,3 @@
--# From https://www.wireshark.org/download/SIGNATURES-1.12.3.txt
--md5	e6318b8451d4e56d39bd911da296ef19	wireshark-1.12.3.tar.bz2
--sha1	44ad77b6e80f41ba34ac0eaf477b81cb1345ceed	wireshark-1.12.3.tar.bz2
-+# From https://www.wireshark.org/download/SIGNATURES-1.12.4.txt
-+md5	acfa156fd35cb66c867b1ace992e4b5b	wireshark-1.12.4.tar.bz2
-+sha1	dbbd4090c02fe170f35b26fa26d8aba0b399c659	wireshark-1.12.4.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index d13d80c..434687c 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 1.12.3
-+WIRESHARK_VERSION = 1.12.4
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-2.0.5
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+new file mode 100644
+index 0000000..9f975d5
+--- /dev/null
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -0,0 +1,2 @@
++# Computed locally
++sha256 dfd460d23a9690322dee29a355ea285b5774f37383d3741cf77a4ad6a11a7e81  autoconf-archive-2015.02.04.tar.xz
