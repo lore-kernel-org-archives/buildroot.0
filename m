@@ -1,51 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 5 Mar 2015 13:52:58 +0200
-Subject: [Buildroot] [PATCH v2] cmake: don't use any header available in
- $(HOST_DIR)/usr/include
-In-Reply-To: <20150305123148.3702fccc@free-electrons.com>
-References: <1425516333-3234-1-git-send-email-fabio.porcedda@gmail.com>
- <20150305070255.GY15668@tarshish>
- <20150305123148.3702fccc@free-electrons.com>
-Message-ID: <20150305115258.GZ15668@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Mar 2015 13:12:52 +0100
+Subject: [Buildroot] [PATCH] package/mono-gtksharp: new package
+In-Reply-To: <CA+TH9VmkD+8yfdhxcf1yPoStPuK8bGkWj6T-GRJpxDPc+Ku0-w@mail.gmail.com>
+References: <1423908982-23475-1-git-send-email-angelo.compagnucci@gmail.com>
+ <54F79F86.90108@mind.be>
+ <CA+TH9VmkD+8yfdhxcf1yPoStPuK8bGkWj6T-GRJpxDPc+Ku0-w@mail.gmail.com>
+Message-ID: <54F84844.2070004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 05/03/15 12:44, Angelo Compagnucci wrote:
+> Dear Arnout Vandecappelle,
+> 
+> 2015-03-05 1:12 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+>> On 14/02/15 11:16, Angelo Compagnucci wrote:
+[snip]
+>>> +MONO_GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP_VERSION_MAJOR)/
+>>> +MONO_GTKSHARP_SOURCE = gtk-sharp-$(MONO_GTKSHARP_VERSION).tar.xz
+>>> +MONO_GTKSHARP_LICENSE = LGPLv2
+>>
+>>  A few files, in particular all of the cairo library, is MIT rather than LGPLv2.
+>> The others are combined with LGPLv2 code in a single DLL so LGPLv2 is correct,
+>> but the cairo library is a separate DLL that doesn't seem to depend on any other
+>> gtksharp library, so I'd make that
+>>
+>> MONO_GTKSHARP_LICENSE = LGPLv2, MIT (cairo)
+> 
+> I don't think there are cairo files distributed with mono, the cairo
+> folder contains a c# wrapper to cairo, but it's original code. Can you
+> point me to the offending files?
 
-On Thu, Mar 05, 2015 at 12:31:48PM +0100, Thomas Petazzoni wrote:
-> On Thu, 5 Mar 2015 09:02:55 +0200, Baruch Siach wrote:
-> > On Thu, Mar 05, 2015 at 01:45:33AM +0100, Fabio Porcedda wrote:
-> > > +# Get rid of -I* options to prevent that a header avaiable in
-> > > +# $(HOST_DIR)/usr/include is used instead of a cmake one, e.g. lzma*
-> > > +# headers of the xz package
-> > > +HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed s/-I[^\ ]*//)
-> > 
-> > How about (untested):
-> > 
-> > 	HOST_CMAKE_CFLAGS = $(filter-out -I%,$(HOST_CFLAGS))
-> 
-> It unfortunately works only if the form:
-> 
-> 	-I/foo/bar
-> 
-> is used. If you use:
-> 
-> 	-I /foo/bar
-> 
-> which is valid for gcc, then filter-out will filter the -I but
-> not /foo/bar.
+ I am indeed referring to the C# wrapper of cairo. Gtk# builds a .so and .dll
+for cairo, which AFAICS can be used independently from the rest of Gtk#, and
+which AFAICS is only derived from sources that carry a MIT license (i.e.,
+everything in the cairo/ directory).
 
-Right. But the original sed expression doesn't work either. This one seems to 
-work:
+ (cairo itself is still LGPLv2+, of course. However, since this is a different
+shared library, the cairo# .dll and .so could be used with a
+differently-licensed implementation of the cairo ABI).
 
-	s/[[:space:]]-I[[:space:]]*[^\ ]*//
-
-baruch
+ Regards,
+ Arnout
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
