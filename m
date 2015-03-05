@@ -1,51 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 09:25:35 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: Fix host _DL_VERSION corner
- case
-In-Reply-To: <CANn-YGRf7_yfdkXPwdjS-5CGSn8XkfUnhwKA+4-aO=PnAUOyxA@mail.gmail.com>
-References: <1424816770-14271-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20150304235606.23277563@free-electrons.com>
- <CANn-YGRf7_yfdkXPwdjS-5CGSn8XkfUnhwKA+4-aO=PnAUOyxA@mail.gmail.com>
-Message-ID: <20150305092535.1f310c0a@free-electrons.com>
+Date: Thu, 5 Mar 2015 09:28:10 +0100
+Subject: [Buildroot] [PATCH v3 2/2] logrotate: use pkg-config for the
+ opt library
+In-Reply-To: <CAHkwnC_SRcjuP+yk4_O8WixZLKVuxLRs-N4+xe12doA=a27jSA@mail.gmail.com>
+References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425244013-2509-3-git-send-email-fabio.porcedda@gmail.com>
+ <20150304232909.625985fa@free-electrons.com>
+ <CAHkwnC_SRcjuP+yk4_O8WixZLKVuxLRs-N4+xe12doA=a27jSA@mail.gmail.com>
+Message-ID: <20150305092810.284ba54a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+Dear Fabio Porcedda,
 
-On Wed, 4 Mar 2015 17:17:50 -0600, Clayton Shotwell wrote:
+On Thu, 5 Mar 2015 00:38:25 +0100, Fabio Porcedda wrote:
 
-> >> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> >> index 1b09955..fcef461 100644
-> >> --- a/package/pkg-generic.mk
-> >> +++ b/package/pkg-generic.mk
-> >> @@ -323,7 +323,11 @@ $(2)_RAWNAME                     =  $$(patsubst host-%,%,$(1))
-> >>  # version control system branch or tag, for example remotes/origin/1_10_stable.
-> >>  ifndef $(2)_VERSION
-> >>   ifdef $(3)_VERSION
-> >> -  $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
-> >> +  ifdef $(3)_DL_VERSION
-> >> +   $(2)_DL_VERSION := $$(strip $$($(3)_DL_VERSION))
-> >> +  else
-> >> +   $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
-> >> +  endif
-> >
-> > However, I haven't yet made up my mind on whether this proposed
-> > solution is the best one, or if we have a chance of doing something
-> > clearer/nicer for this _VERSION vs. _DL_VERSION thing.
+> > It's not currently supported in Buildroot, but LOADLIBES is extended by
+> > the logrotate Makefile with -lacl or -lselinux when WITH_ACL or
+> > WITH_SELINUX are used. I'm not sure this will play well with your
+> > proposed solution.
 > 
-> This was the simplest solution I could come up with without reworking
-> a lot of the pkg-download logic. I figured that if the _DL_VERSION of
-> non-host version was already set then it should be used, otherwise the
-> _VERSION string should be modified.
+> Thanks for noticing it.
+> I didn't know that a variable forced from the command line cannot be extended.
+> Now I'm aware of it.
 
-Note that I was not saying that your proposal is not good. It's just
-that it was already almost midnight my time, and it was too late to
-really think about the right solution :-)
+Depends on whether you pass variables in the environment (on the left
+hand side of make) or as make options (on the right hand side of make).
+Demonstration with a simple Makefile:
 
-Thanks,
+===
+FOO = -lbaz
+
+ifeq ($(WITH_SELINUX),yes)
+FOO += -lselinux
+endif
+
+all:
+	@echo $(FOO)
+===
+
+And now, the different cases:
+
+thomas at skate:/tmp$ make
+-lbaz
+thomas at skate:/tmp$ make FOO=-lpouet
+-lpouet
+thomas at skate:/tmp$ make FOO=-lpouet WITH_SELINUX=yes
+-lpouet
+thomas at skate:/tmp$ make WITH_SELINUX=yes
+-lbaz -lselinux
+thomas at skate:/tmp$ FOO=-lpouet make
+-lbaz
+thomas at skate:/tmp$ FOO=-lpouet make WITH_SELINUX=yes
+-lbaz -lselinux
+
+Best regards,
 
 Thomas
 -- 
