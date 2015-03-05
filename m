@@ -1,93 +1,58 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu,  5 Mar 2015 14:33:02 +0100
-Subject: [Buildroot] [PATCH] package/mono-gtksharp3: new package
-Message-ID: <1425562382-9625-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 5 Mar 2015 14:44:38 +0100
+Subject: [Buildroot] mjpgstreamer build error with ccache and J=0
+Message-ID: <10AA8E3F675B42669EDF6C02D65AAE63@JohanW7>
 List-Id: <buildroot.busybox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds gtksharp3 package for mono.
+ 
+Hi
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
+mjpgstreamer seems to fail bilding when I have ccache on and number of jobs=0
 
-This patch supersed previous package/mono-gtksharp.
+I cleaned the ccache before building.
 
-Changelog:
-* added version number everywhere (gtksharp3).
-* added license file for cairo components.
-* added hash file
+This is the output of make V=1
 
- package/Config.in                          |  5 +++++
- package/mono-gtksharp3/Config.in           |  8 ++++++++
- package/mono-gtksharp3/mono-gtksharp3.hash |  2 ++
- package/mono-gtksharp3/mono-gtksharp3.mk   | 16 ++++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/mono-gtksharp3/Config.in
- create mode 100644 package/mono-gtksharp3/mono-gtksharp3.hash
- create mode 100644 package/mono-gtksharp3/mono-gtksharp3.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 0555e14..dd5682a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -468,6 +468,11 @@ menu "Lua libraries/modules"
- endmenu
- endif
- 	source "package/mono/Config.in"
-+if BR2_PACKAGE_MONO
-+menu "Mono libraries/modules"
-+	source "package/mono-gtksharp3/Config.in"
-+endmenu
-+endif
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/mono-gtksharp3/Config.in b/package/mono-gtksharp3/Config.in
-new file mode 100644
-index 0000000..ef5d0fe
---- /dev/null
-+++ b/package/mono-gtksharp3/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MONO_GTKSHARP3
-+	bool "gtk# 3"
-+	depends on BR2_PACKAGE_LIBGTK3
-+	help
-+	  Gtk# is a .NET language binding for the GTK+ toolkit.
-+	  This package provides version 3 of the bindings.
-+
-+	  http://www.mono-project.com/docs/gui/gtksharp/
-diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
-new file mode 100644
-index 0000000..4005051
---- /dev/null
-+++ b/package/mono-gtksharp3/mono-gtksharp3.hash
-@@ -0,0 +1,2 @@
-+# sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
-+sha256 6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2	gtk-sharp-2.99.3.tar.xz
-diff --git a/package/mono-gtksharp3/mono-gtksharp3.mk b/package/mono-gtksharp3/mono-gtksharp3.mk
-new file mode 100644
-index 0000000..fa8b301
---- /dev/null
-+++ b/package/mono-gtksharp3/mono-gtksharp3.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# gtksharp3
-+#
-+################################################################################
-+
-+MONO_GTKSHARP3_VERSION_MAJOR = 2.99
-+MONO_GTKSHARP3_VERSION = $(MONO_GTKSHARP3_VERSION_MAJOR).3
-+MONO_GTKSHARP3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP3_VERSION_MAJOR)/
-+MONO_GTKSHARP3_SOURCE = gtk-sharp-$(MONO_GTKSHARP3_VERSION).tar.xz
-+MONO_GTKSHARP3_LICENSE = LGPLv2, MIT (cairo)
-+MONO_GTKSHARP3_LICENSE_FILES = COPYING
-+MONO_GTKSHARP3_INSTALL_STAGING = YES
-+MONO_GTKSHARP3_DEPENDENCIES = mono libgtk3
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+[7m>>> mjpg-streamer 730b5bcdc378b6a201131c6c2620eedbe0f6eb30 Installing to target[27m
+PATH="/home/buildroot12git2/output/host/bin:/home/buildroot12git2/output/host/sbin:/home/buildroot12git2/output/host/usr/bin:/home/b
+uildroot12git2/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/build/h
+ost-cmake-3.0.2/bin" /usr/bin/make -j5 -C /home/buildroot12git2/output/build/mjpg-streamer-730b5bcdc378b6a201131c6c2620eedbe0f6eb30
+DESTDIR=/home/buildroot12git2/output/target/usr install
+make[1]: Entering directory `/home/buildroot12git2/output/build/mjpg-streamer-730b5bcdc378b6a201131c6c2620eedbe0f6eb30'
+gcc -D'GIT_REV="2015.02-rc3-957-g7ff46a9-dirty"' -DLINUX -D_GNU_SOURCE -Wall  -g -Wuninitialized mjpg_streamer.o utils.o -lpthread
+-ldl -o mjpg_streamer
+make -C plugins/input_uvc all
+make[2]: Entering directory
+`/home/buildroot12git2/output/build/mjpg-streamer-730b5bcdc378b6a201131c6c2620eedbe0f6eb30/plugins/input_uvc'
+make[2]: warning: jobserver unavailable: using -j1.  Add `+' to parent make rule.
+gcc -c -O1  -DLINUX -D_GNU_SOURCE -Wall -shared -fPIC -g -DDEBUG -o v4l2uvc.lo v4l2uvc.c
+chmod 755 mjpg_streamer
+In file included from v4l2uvc.c:30:0:
+dynctrl.h:24:28: fatal error: linux/uvcvideo.h: No such file or directory
+compilation terminated.
+make[2]: *** [v4l2uvc.lo] Error 1
+make[2]: Leaving directory
+`/home/buildroot12git2/output/build/mjpg-streamer-730b5bcdc378b6a201131c6c2620eedbe0f6eb30/plugins/input_uvc'
+make[1]: *** [input_uvc.so] Error 2
+make[1]: Leaving directory `/home/buildroot12git2/output/build/mjpg-streamer-730b5bcdc378b6a201131c6c2620eedbe0f6eb30'
+make: *** [/home/buildroot12git2/output/build/mjpg-streamer-730b5bcdc378b6a201131c6c2620eedbe0f6eb30/.stamp_target_installed] Error
+2
+
+
+No build errors with ccache off and J=0
+
+I had build problems before using the ccache but removing the ccache 
+before running make did not seem to work this time.
+
+Is it possible to disable the usage of the ccache for certain packages, or what is the cause for this?
+
+Best Regards 
+Sagaert Johan
+
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: config.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150305/5012ef4b/attachment.txt>
