@@ -1,112 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 23:29:46 +0100
-Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
-In-Reply-To: <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
- <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150305232946.3620697e@free-electrons.com>
+Date: Thu, 5 Mar 2015 23:32:17 +0100
+Subject: [Buildroot] [git commit] openswan: do not use -fPIE for static
+	builds
+Message-ID: <20150305223735.2FBB781807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=ecdcd55eb5a39815ea3b4737bae37c41d89cef36
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  5 Mar 2015 17:44:09 -0300, Gustavo Zacarias wrote:
-> Now with support for AD DC, ADS and clustering features.
-> All dropped patches are upstream.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-fPIE produces shared objects, and shared objects need "/lib/ld.so"
+which won't be present on a statically built target. So, building
+openswan with -static -fPIE is invalid and will fail with an error like
+this one:
 
-Ok, I'm going to be annoying on this one, but since this is something
-we generally ask all developers to do, I think we should ask you to do
-it too.
+/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-ctng-linux-uclibc/4.8.2/../../../../mipsel-ctng-linux-uclibc/bin/ld:
+/br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libgmp.a(lt2-add.o):
+relocation R_MIPS_HI16 against `__gnu_local_gp' can not be used when
+making a shared object; recompile with -fPIC
 
->  ifeq ($(BR2_PACKAGE_ACL),y)
-> -	SAMBA4_CONF_OPTS += --with-acl-support
-> -	SAMBA4_DEPENDENCIES += acl
-> +SAMBA4_CONF_OPTS += --with-acl-support
-> +SAMBA4_DEPENDENCIES += acl
->  else
-> -	SAMBA4_CONF_OPTS += --without-acl-support
-> +SAMBA4_CONF_OPTS += --without-acl-support
->  endif
->  
->  ifeq ($(BR2_PACKAGE_CUPS),y)
-> -	SAMBA4_CONF_ENV += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
-> -	SAMBA4_CONF_OPTS += --enable-cups
-> -	SAMBA4_DEPENDENCIES += cups
-> +SAMBA4_CONF_ENV += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
-> +SAMBA4_CONF_OPTS += --enable-cups
-> +SAMBA4_DEPENDENCIES += cups
->  else
-> -	SAMBA4_CONF_OPTS += --disable-cups
-> +SAMBA4_CONF_OPTS += --disable-cups
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBAIO),y)
-> -	SAMBA4_CONF_OPTS += --with-aio-support
-> -	SAMBA4_DEPENDENCIES += libaio
-> +SAMBA4_CONF_OPTS += --with-aio-support
-> +SAMBA4_DEPENDENCIES += libaio
->  else
-> -	SAMBA4_CONF_OPTS += --without-aio-support
-> +SAMBA4_CONF_OPTS += --without-aio-support
->  endif
->  
->  ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
-> -	SAMBA4_CONF_OPTS += --enable-avahi
-> -	SAMBA4_DEPENDENCIES += avahi
-> +SAMBA4_CONF_OPTS += --enable-avahi
-> +SAMBA4_DEPENDENCIES += avahi
->  else
-> -	SAMBA4_CONF_OPTS += --disable-avahi
-> +SAMBA4_CONF_OPTS += --disable-avahi
->  endif
->  
->  ifeq ($(BR2_PACKAGE_GAMIN),y)
-> -	SAMBA4_CONF_OPTS += --with-fam
-> -	SAMBA4_DEPENDENCIES += gamin
-> +SAMBA4_CONF_OPTS += --with-fam
-> +SAMBA4_DEPENDENCIES += gamin
->  else
-> -	SAMBA4_CONF_OPTS += --without-fam
-> +SAMBA4_CONF_OPTS += --without-fam
->  endif
->  
->  ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> -	SAMBA4_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
-> -	SAMBA4_DEPENDENCIES += gettext
-> +SAMBA4_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
-> +SAMBA4_DEPENDENCIES += gettext
->  else
-> -	SAMBA4_CONF_OPTS += --without-gettext
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> -	SAMBA4_CONF_OPTS += --enable-gnutls
-> -	SAMBA4_DEPENDENCIES += gnutls
-> -else
-> -	SAMBA4_CONF_OPTS += --disable-gnutls
-> +SAMBA4_CONF_OPTS += --without-gettext
->  endif
->  
->  ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM)$(BR2_PACKAGE_NCURSES_TARGET_MENU)$(BR2_PACKAGE_NCURSES_TARGET_PANEL),yyy)
-> -	SAMBA4_DEPENDENCIES += ncurses
-> +SAMBA4_DEPENDENCIES += ncurses
->  else
-> -	SAMBA4_CONF_OPTS += --without-regedit
-> +SAMBA4_CONF_OPTS += --without-regedit
->  endif
+Fixes:
 
-This cleanup of the indentation is definitely good, but has nothing to
-do with the bump to 4.2.0. It should be part of a separate patch.
+  http://autobuild.buildroot.net/results/68b/68b2211cc7acfbdfed8d4b161cbdaf1429315017/
 
-Thanks!
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openswan/openswan.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index ba36f7c..863d1f4 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -11,8 +11,9 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ 
+ OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+ OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+-	USERCOMPILE="$(TARGET_CFLAGS) -fPIE" INC_USRLOCAL=/usr \
+-	USE_KLIPS=false USE_MAST=false USE_NM=false
++	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_STATIC_LIBS),,-fPIE)" \
++	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_STATIC_LIBS),,-fPIE)" \
++	INC_USRLOCAL=/usr USE_KLIPS=false USE_MAST=false USE_NM=false
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ 	OPENSWAN_DEPENDENCIES += libcurl
