@@ -1,42 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 05 Mar 2015 23:08:18 +0100
-Subject: [Buildroot] log storage strategy
-In-Reply-To: <CAK9TtU1zZpPYOf_B695CkRRzHbVc46diwihTpKs9O4QrJmczJg@mail.gmail.com>
-References: <CAK9TtU1zZpPYOf_B695CkRRzHbVc46diwihTpKs9O4QrJmczJg@mail.gmail.com>
-Message-ID: <54F8D3D2.1030102@mind.be>
+Date: Thu, 05 Mar 2015 23:10:56 +0100
+Subject: [Buildroot] [PATCH 1/2] samba: deprecate package due to EOL
+In-Reply-To: <20150305230631.4e19032b@free-electrons.com>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>	<54F8D05F.4050300@mind.be>
+ <20150305230631.4e19032b@free-electrons.com>
+Message-ID: <54F8D470.9060308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/03/15 10:30, Sylvain LG wrote:
-> Hello,
+On 05/03/15 23:06, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 > 
-> many services like to write log files.
+> On Thu, 05 Mar 2015 22:53:35 +0100, Arnout Vandecappelle wrote:
+>> On 05/03/15 21:44, Gustavo Zacarias wrote:
+>>> Samba 3.6.x is now EOL, people should move to samba4.
+>>
+>>  What about samba support in mpd and kodi?
 > 
-> I suppose that it could be a problem on an embedded device, since space is
-> limited and NAND has write limitation in time.
-> 
-> What is the correct strategy to deal with log?
+> And gvfs.
 
- There is no single strategy that will work for everybody.
-
- Often the logs are put in a tmpfs so they are never committed to NAND. But then
-of course you loose them when the system reboots.
-
- If you do write to flash, with a decent wear-levelling filesystem the write
-limit is not necessarily a problem, especially if you enable some write
-buffering (which defaults to 5-30 secs anyway, cfr. sysctl
-vm.dirty_writeback_centisecs and vm.dirty_expire_centisecs) and rate limiting
-(rsyslogd and journald have controls for that).
-
- And finally, you'll have to clean up old logs. You can use logrotate, or the
-built-in rotation in rsyslogd and journald.
-
+ But that's just a condition on the .mk file so it has no implications for the
+missing reverse dependencies.
 
  Regards,
  Arnout
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
