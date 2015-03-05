@@ -1,39 +1,32 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 5 Mar 2015 14:11:57 -0600
-Subject: [Buildroot] [PATCH] wine: Add dependency check for ALSA
-In-Reply-To: <54F8B0C0.2040806@dawncrow.de>
-References: <54F8B0C0.2040806@dawncrow.de>
-Message-ID: <CAMQcK5KuEbdPvpCXssPfstXrtn6ogPHoQesPe1_O7ceDxFBOTA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Mar 2015 21:17:35 +0100
+Subject: [Buildroot] [git commit] cups: fix dependency check for libX11
+Message-ID: <20150305201752.C3B7581807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr? ,
+commit: http://git.buildroot.net/buildroot/commit/?id=4554ed568dd945b75edd4e20f886871c5f978cc8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Mar 5, 2015 at 1:38 PM, Andr? Hentschel <nerv@dawncrow.de> wrote:
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cups/cups.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-You should move the fixes line above your signed off line as follows
-otherwise it will not be preserved in the commit message:
-
-Fixes:
-  http://autobuild.buildroot.org/results/018/018391c5e70d33bc0b5745ad7a2a273efa9be0d7/
-
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->
-> This fixes the problem from http://autobuild.buildroot.org/results/018/018391c5e70d33bc0b5745ad7a2a273efa9be0d7/
->
->  package/wine/wine.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-
-Thanks,
--Ryan
-
--- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index cc87574..b6a0663 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -34,7 +34,7 @@ else
+ 	CUPS_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ 	CUPS_DEPENDENCIES += xlib_libX11
+ endif
+ 
