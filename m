@@ -1,52 +1,29 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Thu,  5 Mar 2015 12:55:12 -0500
-Subject: [Buildroot] [PATCH] linux: clarify kernel configuration entries
-Message-ID: <1425578112-7407-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 5 Mar 2015 19:03:51 +0100
+Subject: [Buildroot] [PATCH] lmbench: fix build with libtirpc
+In-Reply-To: <f0fb27c9ad91fe83813103a3d6035930fb63636e.1424766423.git.baruch@tkos.co.il>
+References: <f0fb27c9ad91fe83813103a3d6035930fb63636e.1424766423.git.baruch@tkos.co.il>
+Message-ID: <CAHkwnC8Zeo-WnPNWyCMdGgQJJVenJeG_iOw49G7qY-HkEg_G1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE can either be a complete
-.config file or a defconfig file, it can be confusing to the user
-whether to choose BR2_LINUX_KERNEL_USE_DEFCONFIG or
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG.
+On Tue, Feb 24, 2015 at 9:27 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> When linking with an external libtirpc, -ltirpc must come after lmbench.a in
+> the linker command line. Use LDLIBS for that.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/89e/89ee35561d3a49f38e9a747ed78a5846be4764c8/
+> http://autobuild.buildroot.net/results/409/4097b1c2585db2de517a8741174c02177aabee00/
+>
+> and more.
 
-To avoid that confusion, clarify Kconfig entry messages for in-tree
-defconfig and custom (def)config files.
+This patch doesn't apply anymore.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- linux/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Could you rebase it?
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 95c847b..36d7691 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -140,10 +140,10 @@ choice
- 	default BR2_LINUX_KERNEL_USE_DEFCONFIG
- 
- config BR2_LINUX_KERNEL_USE_DEFCONFIG
--	bool "Using a defconfig"
-+	bool "Using an in-tree defconfig file"
- 
- config BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG
--	bool "Using a custom config file"
-+	bool "Using a custom (def)config file"
- 
- endchoice
- 
-@@ -161,6 +161,9 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
- 
-+	  Note: this can be a defconfig file or a complete .config file,
-+	  which can later be saved back with make linux-update-(def)config.
-+
- #
- # Binary format
- #
+BR
 -- 
-2.3.1
+Fabio Porcedda
