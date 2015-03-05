@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 12:27:27 +0100
-Subject: [Buildroot] Patch: qt5webkitexamples
-In-Reply-To: <87lht5lrd8.fsf@dell.be.48ers.dk>
-References: <1402067773.64897.YahooMailNeo@web172303.mail.ir2.yahoo.com>
- <20140607122338.33ab44ce@free-electrons.com>
- <1402138061.2503.YahooMailNeo@web172304.mail.ir2.yahoo.com>
- <20140607184839.33bfa8e0@free-electrons.com>
- <87lht5lrd8.fsf@dell.be.48ers.dk>
-Message-ID: <20150305122727.27675823@free-electrons.com>
+Date: Thu, 5 Mar 2015 12:30:54 +0100
+Subject: [Buildroot] [PATCH 1/1] configs: update config for Atmel
+ SAMA5D3 Xplained board
+In-Reply-To: <1425526590-5961-1-git-send-email-ryanbarnett3@gmail.com>
+References: <1425526590-5961-1-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <20150305123054.3e454df6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Ryan Barnett,
 
-Yes, reviving a very old thread.
-
-On Mon, 09 Jun 2014 23:12:19 +0200, Peter Korsgaard wrote:
-
->  > It's just that I haven't automated the task of updating our Github
->  > clone, so I only do it from time to time.
+On Wed,  4 Mar 2015 21:36:30 -0600, Ryan Barnett wrote:
+> Update configuration to use the 3.18.8 kernel and update U-Boot to
+> 2015.01. With the switch to 2015.01. use the U-Boot SPL image for the
+> first stage bootloader instead of the at91bootstrap. The U-Boot SPL
+> requires that the U-Boot image format be u-boot.img in order to load
+> from the SD card.
 > 
-> It would be good if you could add a cronjob to do it daily or so (or I
-> can do it if you prefer). Is there an easy way to inform users that this
-> is just a mirror and we would like contributors to use the mailing list
-> instead of the github features?
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> ---
+>  board/atmel/xplained/readme.txt  |  4 ++--
+>  configs/atmel_xplained_defconfig | 16 +++++++---------
+>  2 files changed, 9 insertions(+), 11 deletions(-)
 
-This is now done:
+I've tested this on HW, and applied, thanks!
 
- *) I've added a cronjob that updates the Github mirror automatically.
-    A special Github user buildroot-auto-update has been created, which
-    uses a special SSH key with no passphrase, used by my cronjob to do
-    the update of the Github repository. It is updated every 10 minutes.
-
- *) I've added a mention at https://github.com/buildroot/buildroot that
-    this is not the official Git repository.
-
-Best regards,
+Now that there is a sama5d4 Xplained board, maybe we should rename this
+defconfig, and the board directory to sama5d3-xplained or something
+like that.
 
 Thomas
 -- 
