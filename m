@@ -1,126 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 05 Mar 2015 01:12:54 +0100
-Subject: [Buildroot] [PATCH] package/mono-gtksharp: new package
-In-Reply-To: <1423908982-23475-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1423908982-23475-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <54F79F86.90108@mind.be>
+Date: Thu, 05 Mar 2015 01:14:29 +0100
+Subject: [Buildroot] [git commit] rpi-firmware: remove no longer used
+ BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+In-Reply-To: <20150304230537.78290b41@free-electrons.com>
+References: <20150304202748.6C184817F9@busybox.osuosl.org>	<54F78019.7020603@mind.be>
+ <20150304230537.78290b41@free-electrons.com>
+Message-ID: <54F79FE5.6030308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/02/15 11:16, Angelo Compagnucci wrote:
-> This patch adds gtksharp package for mono.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+On 04/03/15 23:05, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Wed, 04 Mar 2015 22:58:49 +0100, Arnout Vandecappelle wrote:
+>
+> >> -config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+> >
+> >  Is there no legacy handling needed?
+>
+> I thought about this, but my reasoning is that since the package now
+> installs the DTBs unconditionally, the behavior is now the same as
+> having this option =y, and therefore there is no need for legacy
+> handling.
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-A few comments below, but nothing obligatory.
-
-> ---
-> 
-> Changes: I superseeded previous patch to adhere the package naming, so
-> gtksharp becames mono-gtksharp.
-> 
->  package/Config.in                      |  5 +++++
->  package/mono-gtksharp/Config.in        |  7 +++++++
->  package/mono-gtksharp/mono-gtksharp.mk | 16 ++++++++++++++++
->  3 files changed, 28 insertions(+)
->  create mode 100644 package/mono-gtksharp/Config.in
->  create mode 100644 package/mono-gtksharp/mono-gtksharp.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index fe3d3d0..fbba20c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -464,6 +464,11 @@ menu "Lua libraries/modules"
->  endmenu
->  endif
->  	source "package/mono/Config.in"
-> +if BR2_PACKAGE_MONO
-> +menu "Mono libraries/modules"
-> +	source "package/mono-gtksharp/Config.in"
-> +endmenu
-> +endif
->  	source "package/nodejs/Config.in"
->  	source "package/perl/Config.in"
->  if BR2_PACKAGE_PERL
-> diff --git a/package/mono-gtksharp/Config.in b/package/mono-gtksharp/Config.in
-> new file mode 100644
-> index 0000000..b3f16f0
-> --- /dev/null
-> +++ b/package/mono-gtksharp/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_MONO_GTKSHARP
-> +	bool "gtk#"
-> +	depends on BR2_PACKAGE_LIBGTK3
-
- I think it would be appropriate to select libgtk3 rather than depending on it.
-
-> +	help
-> +	  Gtk# is a .NET language binding for the GTK+ toolkit.
-
- Perhaps mention that it's GTK3.
-
-> +
-> +	  http://www.mono-project.com/docs/gui/gtksharp/
-> diff --git a/package/mono-gtksharp/mono-gtksharp.mk b/package/mono-gtksharp/mono-gtksharp.mk
-> new file mode 100644
-> index 0000000..58412eb
-> --- /dev/null
-> +++ b/package/mono-gtksharp/mono-gtksharp.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# gtksharp
-> +#
-> +################################################################################
-> +
-> +MONO_GTKSHARP_VERSION_MAJOR = 2.99
-> +MONO_GTKSHARP_VERSION = $(MONO_GTKSHARP_VERSION_MAJOR).3
-
- We normally prefer stable releases rather than beta releases, so that would be
-2.12.25. However, that release still uses gtk2 rather than gtk3, so it does make
-complete sense to me to go for the beta.
-
-> +MONO_GTKSHARP_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP_VERSION_MAJOR)/
-> +MONO_GTKSHARP_SOURCE = gtk-sharp-$(MONO_GTKSHARP_VERSION).tar.xz
-> +MONO_GTKSHARP_LICENSE = LGPLv2
-
- A few files, in particular all of the cairo library, is MIT rather than LGPLv2.
-The others are combined with LGPLv2 code in a single DLL so LGPLv2 is correct,
-but the cairo library is a separate DLL that doesn't seem to depend on any other
-gtksharp library, so I'd make that
-
-MONO_GTKSHARP_LICENSE = LGPLv2, MIT (cairo)
-
-
-> +MONO_GTKSHARP_LICENSE_FILES = COPYING
-> +MONO_GTKSHARP_INSTALL_STAGING = YES
-> +MONO_GTKSHARP_DEPENDENCIES = mono libgtk3
-> +
-> +$(eval $(autotools-package))
-> 
-
- Perhaps add a hash file?
-
-# sha256 from
-https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
-sha256	6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2
-gtk-sharp-2.99.3.tar.xz
-
-
+ Yep makes sense.
 
  Regards,
  Arnout
 
+>
+> Did I miss something?
+>
+> Thomas
+>
+
+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+Arnout Vandecappelle arnout at mind be
+Senior Embedded Software Architect +32-16-286500
+Essensium/Mind http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
