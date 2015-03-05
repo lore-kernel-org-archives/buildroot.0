@@ -1,62 +1,72 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  5 Mar 2015 22:01:05 +0100
-Subject: [Buildroot] [PATCH v1] libsvg: fix undefined symbol
-	png_set_gray_1_2_4_to_8
-Message-ID: <1425589265-16605-1-git-send-email-ps.report@gmx.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu,  5 Mar 2015 22:06:13 +0100
+Subject: [Buildroot] [PATCH] package/dvb-apps: re-add the patch for gcc < 4.4
+Message-ID: <1425589573-14625-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following runtime error e.g. from df_texture:
+The patch 0002-Fix-compiler-warning-flags.patch was
+removed when the avr32 architecture was removed.
+But it's still needed for blackfin adi-toolchain 2014R1.
 
-(!) Direct/Interface: Unable to dlopen `/usr/lib/directfb-1.6-0/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_svg.so'!
-    --> /usr/lib/libsvg.so.1: undefined symbol: png_set_gray_1_2_4_to_8
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- ...-undefined-symbol-png_set_gray_1_2_4_to_8.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch
+ .../dvb-apps/0002-Fix-compiler-warning-flags.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/dvb-apps/0002-Fix-compiler-warning-flags.patch
 
-diff --git a/package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch b/package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch
+diff --git a/package/dvb-apps/0002-Fix-compiler-warning-flags.patch b/package/dvb-apps/0002-Fix-compiler-warning-flags.patch
 new file mode 100644
-index 0000000..d0bbeab
+index 0000000..9c6276b
 --- /dev/null
-+++ b/package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch
-@@ -0,0 +1,32 @@
-+From 213e5749947fad08d985eda8d06839efedda78ef Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 5 Mar 2015 21:42:52 +0100
-+Subject: [PATCH] Fix undefined symbol png_set_gray_1_2_4_to_8
++++ b/package/dvb-apps/0002-Fix-compiler-warning-flags.patch
+@@ -0,0 +1,44 @@
++From 9b8f1df41f7579da63c27763ff184d351e4c7fef Mon Sep 17 00:00:00 2001
++From: Simon Dawson <spdawson@gmail.com>
++Date: Sun, 4 Jan 2015 12:06:18 +0100
++Subject: [PATCH] Fix compiler warning flags
 +
-+Since libpng-1.4.0 the function png_set_gray_1_2_4_to_8() was
-+removed, the replacement function is called
-+png_set_expand_gray_1_2_4_to_8() (see [1]).
++  When building for bfin, the build fails as follows.
 +
-+[1] http://libpng.sourceforge.net/ANNOUNCE-1.4.0.txt
++  cc1: error: unrecognized command line option "-Wno-packed-bitfield-compat"
 +
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++An example of an autobuild failure arising from this is the following.
++
++  http://autobuild.buildroot.net/results/92e/92e472004812a3616f62d766a9ea07a997a66e89/
++  http://autobuild.buildroot.net/results/6e7/6e7b48ad9768349d983985c3067c4267cde80541/
++
++Clearly, not all toolchains provide a gcc that understands
++the -Wno-packed-bitfield-compat flag; remove usage of this flag.
++
++Wno-packed-bitfield-compat option was added in gcc 4.4.
++
++[Romain:
++  - This patch is also needed for bfin toolchains which use gcc 4.3.5
++  - Add a link to bfin build failure]
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+ src/svg_image.c | 2 +-
++ util/scan/Makefile | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/svg_image.c b/src/svg_image.c
-+index cd8a95a..f256943 100755
-+--- a/src/svg_image.c
-++++ b/src/svg_image.c
-+@@ -271,7 +271,7 @@ _svg_image_read_png (const char		*filename,
++diff --git a/util/scan/Makefile b/util/scan/Makefile
++index d48c478..88667c5 100644
++--- a/util/scan/Makefile
+++++ b/util/scan/Makefile
++@@ -14,7 +14,7 @@ inst_bin = $(binaries)
 + 
-+     /* expand gray bit depth if needed */
-+     if (color_type == PNG_COLOR_TYPE_GRAY && depth < 8)
-+-	png_set_gray_1_2_4_to_8 (png);
-++	png_set_expand_gray_1_2_4_to_8 (png);
++ removing = atsc_psip_section.c atsc_psip_section.h
 + 
-+     /* transform transparency to alpha */
-+     if (png_get_valid(png, info, PNG_INFO_tRNS))
++-CPPFLAGS += -Wno-packed-bitfield-compat -D__KERNEL_STRICT_NAMES
+++CPPFLAGS += -D__KERNEL_STRICT_NAMES
++ 
++ .PHONY: all
++ 
 +-- 
-+2.1.4
++1.9.3
 +
 -- 
-2.1.4
+1.9.3
