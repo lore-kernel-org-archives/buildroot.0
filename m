@@ -1,53 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 23:05:36 +0100
-Subject: [Buildroot] [PATCH v1] libsvg: fix undefined symbol
- png_set_gray_1_2_4_to_8
-In-Reply-To: <1425589265-16605-1-git-send-email-ps.report@gmx.net>
-References: <1425589265-16605-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150305230536.0e144343@free-electrons.com>
+Date: Thu, 5 Mar 2015 23:06:31 +0100
+Subject: [Buildroot] [PATCH 1/2] samba: deprecate package due to EOL
+In-Reply-To: <54F8D05F.4050300@mind.be>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
+ <54F8D05F.4050300@mind.be>
+Message-ID: <20150305230631.4e19032b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Arnout Vandecappelle,
 
-On Thu,  5 Mar 2015 22:01:05 +0100, Peter Seiderer wrote:
-> Fixes the following runtime error e.g. from df_texture:
+On Thu, 05 Mar 2015 22:53:35 +0100, Arnout Vandecappelle wrote:
+> On 05/03/15 21:44, Gustavo Zacarias wrote:
+> > Samba 3.6.x is now EOL, people should move to samba4.
 > 
-> (!) Direct/Interface: Unable to dlopen `/usr/lib/directfb-1.6-0/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_svg.so'!
->     --> /usr/lib/libsvg.so.1: undefined symbol: png_set_gray_1_2_4_to_8
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...-undefined-symbol-png_set_gray_1_2_4_to_8.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch
+>  What about samba support in mpd and kodi?
 
-Thanks, I've applied your patch. However:
-
- 1/ libsvg is still severely broken. It uses symbols from libpng and
-    libjpeg, but it doesn't link against those libraries. The output of
-    'readelf -d' on libsvg says:
-
- 0x00000001 (NEEDED)                     Shared library: [libxml2.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
- 0x0000000e (SONAME)                     Library soname: [libsvg.so.1]
-
-    This means that if you try to compile an application with just
-    '-lsvg', it doesn't build because the shared library doesn't
-    express its dependency on other libraries. This is wrong.
-
-    The configure.in script also doesn't check for the presence of
-    libjpeg and libpng. Bad.
-
- 2/ Isn't libsvg abandoned? Latest release in 2005. Same for
-    libsvg-cairo. DirectFB is apparently the only remaining user of
-    this library. Is the latest version of DirectFB still using
-    libsvg-cairo ?
-
-Best regards,
+And gvfs.
 
 Thomas
 -- 
