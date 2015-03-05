@@ -1,76 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Mar 2015 19:30:04 +0100
-Subject: [Buildroot] [PATCH] linux: clarify kernel configuration entries
-In-Reply-To: <1425578112-7407-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1425578112-7407-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <20150305183004.GC3944@free.fr>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Thu, 05 Mar 2015 19:37:07 +0100
+Subject: [Buildroot] [PATCH] package/kodi: fix a runtime bug (no text
+ displayed in GUI) when an external glibc toolchain is used
+In-Reply-To: <20150304221100.18c7ff17@free-electrons.com>
+References: <1425502935-18002-1-git-send-email-julien.boibessot@free.fr>
+ <20150304221100.18c7ff17@free-electrons.com>
+Message-ID: <54F8A253.6090504@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vivien, Thomas, All,
+Hello Thomas,
 
-On 2015-03-05 12:55 -0500, Vivien Didelot spake thusly:
-> Since BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE can either be a complete
-> .config file or a defconfig file, it can be confusing to the user
-> whether to choose BR2_LINUX_KERNEL_USE_DEFCONFIG or
-> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG.
-> 
-> To avoid that confusion, clarify Kconfig entry messages for in-tree
-> defconfig and custom (def)config files.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+On 03/04/2015 10:11 PM, Thomas Petazzoni wrote:
+> Dear julien.boibessot at free.fr,
+>
+> On Wed,  4 Mar 2015 22:02:15 +0100, julien.boibessot at free.fr wrote:
+>
+>> +# Otherwise no text is displayed in user interface when compiled with an
+>> +# external glibc toolchain (iconv_open() is required at runtime for UTF-8 to
+>> +# UTF-32 conversion)
+>> +comment "kodi needs an external glibc toolchain which copy gconv libraries"
+>> +	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS && BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>> +	depends on !BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
+> As suggested by Yann, what about:
+>
+> 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>
+>  ?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I didn't know it was possible, :-), so let me check it and come back to
+you ASAP.
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  linux/Config.in | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 95c847b..36d7691 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -140,10 +140,10 @@ choice
->  	default BR2_LINUX_KERNEL_USE_DEFCONFIG
->  
->  config BR2_LINUX_KERNEL_USE_DEFCONFIG
-> -	bool "Using a defconfig"
-> +	bool "Using an in-tree defconfig file"
->  
->  config BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG
-> -	bool "Using a custom config file"
-> +	bool "Using a custom (def)config file"
->  
->  endchoice
->  
-> @@ -161,6 +161,9 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
->  	help
->  	  Path to the kernel configuration file
->  
-> +	  Note: this can be a defconfig file or a complete .config file,
-> +	  which can later be saved back with make linux-update-(def)config.
-> +
->  #
->  # Binary format
->  #
-> -- 
-> 2.3.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Julien
