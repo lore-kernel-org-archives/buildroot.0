@@ -1,32 +1,54 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 5 Mar 2015 09:14:43 +0100
-Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
-In-Reply-To: <923679587.1206514.1425527688133.JavaMail.zimbra@savoirfairelinux.com>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <20150303142901.5998a72c@free-electrons.com>
- <923679587.1206514.1425527688133.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <CAHkwnC9Lq6eD1HLP56dBrND4iZ_Dwhh1FrbzPsT+6tO-=AdMrg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Mar 2015 09:25:35 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: Fix host _DL_VERSION corner
+ case
+In-Reply-To: <CANn-YGRf7_yfdkXPwdjS-5CGSn8XkfUnhwKA+4-aO=PnAUOyxA@mail.gmail.com>
+References: <1424816770-14271-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <20150304235606.23277563@free-electrons.com>
+ <CANn-YGRf7_yfdkXPwdjS-5CGSn8XkfUnhwKA+4-aO=PnAUOyxA@mail.gmail.com>
+Message-ID: <20150305092535.1f310c0a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 5, 2015 at 4:54 AM, J?r?me Oufella
-<jerome.oufella@savoirfairelinux.com> wrote:
-> Thomas Petazzoni wrote:
->> Could you give some hints about the performance impact of those copies
->> of the staging directory? Does it continue to make the top-level
->> parallel build thing useful?
->
-> In this case, it may make sense to use file linking (cp -al)
-> instead of file copy, assuming the staging spaces are on the same
-> filesystem ?
+Dear Clayton Shotwell,
 
-My only fear if a copy will be overwritten (without using unlink),
-also all the copies will be changed, so defeating the purpose of pps,
-nevertheless I'm not sure if is a real problem or not.
+On Wed, 4 Mar 2015 17:17:50 -0600, Clayton Shotwell wrote:
 
-BR
+> >> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> >> index 1b09955..fcef461 100644
+> >> --- a/package/pkg-generic.mk
+> >> +++ b/package/pkg-generic.mk
+> >> @@ -323,7 +323,11 @@ $(2)_RAWNAME                     =  $$(patsubst host-%,%,$(1))
+> >>  # version control system branch or tag, for example remotes/origin/1_10_stable.
+> >>  ifndef $(2)_VERSION
+> >>   ifdef $(3)_VERSION
+> >> -  $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+> >> +  ifdef $(3)_DL_VERSION
+> >> +   $(2)_DL_VERSION := $$(strip $$($(3)_DL_VERSION))
+> >> +  else
+> >> +   $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+> >> +  endif
+> >
+> > However, I haven't yet made up my mind on whether this proposed
+> > solution is the best one, or if we have a chance of doing something
+> > clearer/nicer for this _VERSION vs. _DL_VERSION thing.
+> 
+> This was the simplest solution I could come up with without reworking
+> a lot of the pkg-download logic. I figured that if the _DL_VERSION of
+> non-host version was already set then it should be used, otherwise the
+> _VERSION string should be modified.
+
+Note that I was not saying that your proposal is not good. It's just
+that it was already almost midnight my time, and it was too late to
+really think about the right solution :-)
+
+Thanks,
+
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
