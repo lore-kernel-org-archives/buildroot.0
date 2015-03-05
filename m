@@ -1,43 +1,55 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 5 Mar 2015 13:43:23 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: update config for Atmel
- SAMA5D3 Xplained board
-In-Reply-To: <20150305123054.3e454df6@free-electrons.com>
-References: <1425526590-5961-1-git-send-email-ryanbarnett3@gmail.com>
- <20150305123054.3e454df6@free-electrons.com>
-Message-ID: <20150305124323.GR3989@piout.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 5 Mar 2015 14:11:51 +0100
+Subject: [Buildroot] [PATCH v2] cmake: don't use any header available in
+	$(HOST_DIR)/usr/include
+In-Reply-To: <20150305115258.GZ15668@tarshish>
+References: <1425516333-3234-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150305070255.GY15668@tarshish> <20150305123148.3702fccc@free-electrons.com>
+ <20150305115258.GZ15668@tarshish>
+Message-ID: <CAHXCMMKXSfJfErMjw21GVBq1C00GW2Y4_oiOt7Ln+koP9kV8PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/03/2015 at 12:30:54 +0100, Thomas Petazzoni wrote :
-> Dear Ryan Barnett,
-> 
-> On Wed,  4 Mar 2015 21:36:30 -0600, Ryan Barnett wrote:
-> > Update configuration to use the 3.18.8 kernel and update U-Boot to
-> > 2015.01. With the switch to 2015.01. use the U-Boot SPL image for the
-> > first stage bootloader instead of the at91bootstrap. The U-Boot SPL
-> > requires that the U-Boot image format be u-boot.img in order to load
-> > from the SD card.
-> > 
-> > Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> > ---
-> >  board/atmel/xplained/readme.txt  |  4 ++--
-> >  configs/atmel_xplained_defconfig | 16 +++++++---------
-> >  2 files changed, 9 insertions(+), 11 deletions(-)
-> 
-> I've tested this on HW, and applied, thanks!
-> 
-> Now that there is a sama5d4 Xplained board, maybe we should rename this
+On Thu, Mar 5, 2015 at 12:52 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Thomas,
+>
+> On Thu, Mar 05, 2015 at 12:31:48PM +0100, Thomas Petazzoni wrote:
+>> On Thu, 5 Mar 2015 09:02:55 +0200, Baruch Siach wrote:
+>> > On Thu, Mar 05, 2015 at 01:45:33AM +0100, Fabio Porcedda wrote:
+>> > > +# Get rid of -I* options to prevent that a header avaiable in
+>> > > +# $(HOST_DIR)/usr/include is used instead of a cmake one, e.g. lzma*
+>> > > +# headers of the xz package
+>> > > +HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed s/-I[^\ ]*//)
+>> >
+>> > How about (untested):
+>> >
+>> >     HOST_CMAKE_CFLAGS = $(filter-out -I%,$(HOST_CFLAGS))
+>>
+>> It unfortunately works only if the form:
+>>
+>>       -I/foo/bar
+>>
+>> is used. If you use:
+>>
+>>       -I /foo/bar
+>>
+>> which is valid for gcc, then filter-out will filter the -I but
+>> not /foo/bar.
+>
+> Right. But the original sed expression doesn't work either. This one seems to
+> work:
+>
+>         s/[[:space:]]-I[[:space:]]*[^\ ]*//
 
-The sama5d4 Xplained real name is actually sama5d4 Xplained Ultra. That
-would probably be different enough, unless Linux starts running on the
-MCUs.
+could also be something like that:
 
+HOST_CMAKE_CFLAGS=$(filter-out -I$(HOST_DIR)/usr/include,$(subst -I
+,-I,$(HOST_CFLAGS)))
+
+Regards,
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
