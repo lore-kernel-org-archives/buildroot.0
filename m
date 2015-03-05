@@ -1,38 +1,29 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Thu, 05 Mar 2015 19:37:07 +0100
-Subject: [Buildroot] [PATCH] package/kodi: fix a runtime bug (no text
- displayed in GUI) when an external glibc toolchain is used
-In-Reply-To: <20150304221100.18c7ff17@free-electrons.com>
-References: <1425502935-18002-1-git-send-email-julien.boibessot@free.fr>
- <20150304221100.18c7ff17@free-electrons.com>
-Message-ID: <54F8A253.6090504@free.fr>
+From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
+Date: Thu, 05 Mar 2015 20:38:38 +0100
+Subject: [Buildroot] [PATCH] cups: Fix dependency check
+Message-ID: <54F8B0BE.2060800@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
 
-On 03/04/2015 10:11 PM, Thomas Petazzoni wrote:
-> Dear julien.boibessot at free.fr,
->
-> On Wed,  4 Mar 2015 22:02:15 +0100, julien.boibessot at free.fr wrote:
->
->> +# Otherwise no text is displayed in user interface when compiled with an
->> +# external glibc toolchain (iconv_open() is required at runtime for UTF-8 to
->> +# UTF-32 conversion)
->> +comment "kodi needs an external glibc toolchain which copy gconv libraries"
->> +	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS && BR2_TOOLCHAIN_EXTERNAL_GLIBC
->> +	depends on !BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
-> As suggested by Yann, what about:
->
-> 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_EXTERNAL_GLIBC
->
->  ?
+ package/cups/cups.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I didn't know it was possible, :-), so let me check it and come back to
-you ASAP.
-
-Regards,
-Julien
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index cc87574..b6a0663 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -34,7 +34,7 @@ else
+ 	CUPS_CONF_OPTS += --disable-dbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ 	CUPS_DEPENDENCIES += xlib_libX11
+ endif
+ 
