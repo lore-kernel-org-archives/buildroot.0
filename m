@@ -1,66 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 09:28:10 +0100
-Subject: [Buildroot] [PATCH v3 2/2] logrotate: use pkg-config for the
- opt library
-In-Reply-To: <CAHkwnC_SRcjuP+yk4_O8WixZLKVuxLRs-N4+xe12doA=a27jSA@mail.gmail.com>
-References: <1425244013-2509-1-git-send-email-fabio.porcedda@gmail.com>
- <1425244013-2509-3-git-send-email-fabio.porcedda@gmail.com>
- <20150304232909.625985fa@free-electrons.com>
- <CAHkwnC_SRcjuP+yk4_O8WixZLKVuxLRs-N4+xe12doA=a27jSA@mail.gmail.com>
-Message-ID: <20150305092810.284ba54a@free-electrons.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Thu, 5 Mar 2015 09:40:49 +0100
+Subject: [Buildroot] [PATCH v3 3/4] python-cheetah: add host-package
+ support
+In-Reply-To: <20150304224940.69efc51c@free-electrons.com>
+References: <1425484811-26238-1-git-send-email-gwenj@trabucayre.com>
+ <1425484811-26238-3-git-send-email-gwenj@trabucayre.com>
+ <20150304224940.69efc51c@free-electrons.com>
+Message-ID: <20150305094049.055a39b7@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Thomas Petazzoni
+On Wed, 4 Mar 2015 22:49:40 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-On Thu, 5 Mar 2015 00:38:25 +0100, Fabio Porcedda wrote:
-
-> > It's not currently supported in Buildroot, but LOADLIBES is extended by
-> > the logrotate Makefile with -lacl or -lselinux when WITH_ACL or
-> > WITH_SELINUX are used. I'm not sure this will play well with your
-> > proposed solution.
+> Dear Gwenhael Goavec-Merou,
 > 
-> Thanks for noticing it.
-> I didn't know that a variable forced from the command line cannot be extended.
-> Now I'm aware of it.
+> On Wed,  4 Mar 2015 17:00:10 +0100, Gwenhael Goavec-Merou wrote:
+> 
+> > diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+> > index 08076b5..faf2436 100644
+> > --- a/package/python-cheetah/python-cheetah.mk
+> > +++ b/package/python-cheetah/python-cheetah.mk
+> > @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+> >  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+> >  PYTHON_CHEETAH_LICENSE = MIT
+> >  PYTHON_CHEETAH_SETUP_TYPE = setuptools
+> > +PYTHON_CHEETAH_DEPENDENCIES += host-python-markdown
+> 
+> Are you sure you need to add host-python-markdown as a dependency to
+> the target python-cheetah package ? I.e, I'd like to understand if what
+> you need is:
+> 
+> PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+> 
+>  (i.e adds host-python-markdown to the dependencies of both
+>  python-cheetah and host-python-cheetah)
+> 
+> *OR*
+> 
+> PYTHON_CHEETAH_DEPENDENCIES = python-markdown
+> 
+>  (i.e adds python-markdown to the dependencies of python-cheetah, and
+>  host-python-markdown to the dependencies of host-python-cheetah)
+> 
+> *OR*
+> 
+> HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+> 
+>  (i.e adds host-python-markdown to the dependencies of
+>  host-python-cheetah)
+> 
+I'm wrong, it's true, host-python-markdown is only needed for
+host-python-cheetah. I think the best solution is the second option, ie.
+PYTHON_CHEETAH_DEPENDENCIES = python-markdown to be sure to have the correct
+dependency in all case (although python-cheetah as not really needed to
+python-markdown to be compiles).
+>
+> Also, use '=' and not '+=' in such situations.
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Depends on whether you pass variables in the environment (on the left
-hand side of make) or as make options (on the right hand side of make).
-Demonstration with a simple Makefile:
-
-===
-FOO = -lbaz
-
-ifeq ($(WITH_SELINUX),yes)
-FOO += -lselinux
-endif
-
-all:
-	@echo $(FOO)
-===
-
-And now, the different cases:
-
-thomas at skate:/tmp$ make
--lbaz
-thomas at skate:/tmp$ make FOO=-lpouet
--lpouet
-thomas at skate:/tmp$ make FOO=-lpouet WITH_SELINUX=yes
--lpouet
-thomas at skate:/tmp$ make WITH_SELINUX=yes
--lbaz -lselinux
-thomas at skate:/tmp$ FOO=-lpouet make
--lbaz
-thomas at skate:/tmp$ FOO=-lpouet make WITH_SELINUX=yes
--lbaz -lselinux
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards
+Gwen
