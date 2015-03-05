@@ -1,30 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 5 Mar 2015 10:05:17 +0000
-Subject: [Buildroot] [PATCH] mipsel-ctng-linux-uclibc.config: add
-	BR2_TOOLCHAIN_EXTERNAL_CXX=y
-Message-ID: <1425549917-31392-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Thu,  5 Mar 2015 12:03:20 +0100
+Subject: [Buildroot] [PATCH v4 2/3] python-cheetah: add host-package support
+In-Reply-To: <1425553401-27461-1-git-send-email-gwenj@trabucayre.com>
+References: <1425553401-27461-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1425553401-27461-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This external toolchain has C++ support, so add
-BR2_TOOLCHAIN_EXTERNAL_CXX=y to the config file.
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- .../configs/mipsel-ctng-linux-uclibc.config        |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Changes v3 -> v4:
+ * use HOST_PYTHON_CHEETAH_DEPENDENCIES instead of PYTHON_CHEETAH_DEPENDENCIES
+ * suppress '+' for dependency definition
+---
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/web/toolchains/configs/mipsel-ctng-linux-uclibc.config b/web/toolchains/configs/mipsel-ctng-linux-uclibc.config
-index c6ad9fb..d0ac37e 100644
---- a/web/toolchains/configs/mipsel-ctng-linux-uclibc.config
-+++ b/web/toolchains/configs/mipsel-ctng-linux-uclibc.config
-@@ -8,3 +8,4 @@ BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
- BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
- BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
- BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 08076b5..3155951 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
++HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-1.7.1
+2.0.5
