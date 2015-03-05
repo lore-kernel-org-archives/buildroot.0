@@ -1,52 +1,72 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 5 Mar 2015 23:24:46 +0100
-Subject: [Buildroot] [PATCH] mipsel-ctng-linux-uclibc.config: add
-	BR2_TOOLCHAIN_EXTERNAL_CXX=y
-In-Reply-To: <20150305224513.3865e7ab@free-electrons.com>
-References: <1425549917-31392-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150305224513.3865e7ab@free-electrons.com>
-Message-ID: <54F8D7AE.50805@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Mar 2015 23:21:14 +0100
+Subject: [Buildroot] [git commit] directfb: fix imlib image provider
+Message-ID: <20150305222601.41BCD8181D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=61d3b3a1736a775f17477dab48e87a59f52776fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 05/03/15 22:45, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Thu, 5 Mar 2015 10:05:17 +0000, Vicente Olivert Riera wrote:
->> This external toolchain has C++ support, so add
->> BR2_TOOLCHAIN_EXTERNAL_CXX=y to the config file.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>  .../configs/mipsel-ctng-linux-uclibc.config        |    1 +
->>  1 files changed, 1 insertions(+), 0 deletions(-)
-> 
-> Applied, thanks.
+Change 0002-imlib2-config.patch to patch configure.in instead of
+configure to survicve the autoreconf step introduced by [1].
 
-thanks to you.
+Fixes the following runtime error, e.g. from df_texture:
 
-> Next time, can you include some special thing within the [PATCH ...]
-> text to indicate that this patch is for buildroot-test and not
-> Buildroot? I.e, use:
-> 
-> 	git format-patch --subject-prefix="PATCH buildroot-test"
-> 
-> Otherwise it's a bit annoying to differentiate buildroot-test patches
-> from other patches in patchwork.
+(!) Direct/Interface: Unable to dlopen `/usr/lib/directfb-1.6-0/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_imlib2.so'!
+    --> /usr/lib/directfb-1.6-0/interfaces/IDirectFBImageProvider/libidirectfbimageprovider_imlib2.so: undefined symbol: imlib_image_get_width
 
-of course, no problem. I have sent many patches to buildroot-test, why
-didn't you tell me this before? :-)
+[1] http://git.buildroot.net/buildroot/commit/?id=7e9264956bb5693bc49274ee0b42ffb4c869e23f
 
-Best wishes,
---
-Vincent
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/directfb/0002-imlib2-config.patch |   23 +++++++++++++++++++----
+ 1 files changed, 19 insertions(+), 4 deletions(-)
 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/directfb/0002-imlib2-config.patch b/package/directfb/0002-imlib2-config.patch
+index 1203475..ea2bf82 100644
+--- a/package/directfb/0002-imlib2-config.patch
++++ b/package/directfb/0002-imlib2-config.patch
+@@ -1,3 +1,8 @@
++From 8352c434e515f19dd1ba36256bfcc3ec9480838d Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 5 Mar 2015 22:38:52 +0100
++Subject: [PATCH] imlib2 config
++
+ Call the imlib2-conf variable that are set by ac_cv_path_IMLIB2_CONFIG
+ with the absolute path because the imlib2-config file is not covered
+ by the PATH variable.
+@@ -5,11 +10,18 @@ This is important for cross compiler that need to get the staging settings
+ instead of the host settings.
+ 
+ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
++[ patch configure.in instead of configure to survive autoreconf ]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+---- directfb-1.6.3/configure.orig	2013-03-31 13:18:22.837560379 +0200
+-+++ directfb-1.6.3/configure	2013-03-31 13:23:40.177541099 +0200
+-@@ -19816,8 +19816,8 @@ fi
+- $as_echo "$as_me: WARNING: *** Imlib2 library not found, building without Imlib2 support ***" >&2;}
++diff --git a/configure.in b/configure.in
++index 38d7e78..fa5e87f 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -1094,8 +1094,8 @@ if test "x$enable_imlib2" = "xyes"; then
++     AC_MSG_WARN([*** Imlib2 library not found, building without Imlib2 support ***])
+      imlib2="no"
+    else
+ -    IMLIB2_CFLAGS=`imlib2-config --cflags`
+@@ -19,3 +31,6 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+      imlib2="yes"
+    fi
+  fi
++-- 
++2.1.4
++
