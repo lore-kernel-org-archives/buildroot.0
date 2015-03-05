@@ -1,23 +1,31 @@
-From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
-Date: Wed, 4 Mar 2015 22:54:48 -0500 (EST)
-Subject: [Buildroot] [RFC v3 00/30]   Add per-package staging feature
-In-Reply-To: <20150303142901.5998a72c@free-electrons.com>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <20150303142901.5998a72c@free-electrons.com>
-Message-ID: <923679587.1206514.1425527688133.JavaMail.zimbra@savoirfairelinux.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 5 Mar 2015 09:02:55 +0200
+Subject: [Buildroot] [PATCH v2] cmake: don't use any header available in
+ $(HOST_DIR)/usr/include
+In-Reply-To: <1425516333-3234-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1425516333-3234-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150305070255.GY15668@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Could you give some hints about the performance impact of those copies
-> of the staging directory? Does it continue to make the top-level
-> parallel build thing useful?
+Hi Fabio,
 
-In this case, it may make sense to use file linking (cp -al)
-instead of file copy, assuming the staging spaces are on the same
-filesystem ?
+On Thu, Mar 05, 2015 at 01:45:33AM +0100, Fabio Porcedda wrote:
+> +# Get rid of -I* options to prevent that a header avaiable in
+> +# $(HOST_DIR)/usr/include is used instead of a cmake one, e.g. lzma*
+> +# headers of the xz package
+> +HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed s/-I[^\ ]*//)
 
-J?r?me
+How about (untested):
+
+	HOST_CMAKE_CFLAGS = $(filter-out -I%,$(HOST_CFLAGS))
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
