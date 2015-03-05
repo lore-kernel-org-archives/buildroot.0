@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Mar 2015 12:30:54 +0100
-Subject: [Buildroot] [PATCH 1/1] configs: update config for Atmel
- SAMA5D3 Xplained board
-In-Reply-To: <1425526590-5961-1-git-send-email-ryanbarnett3@gmail.com>
-References: <1425526590-5961-1-git-send-email-ryanbarnett3@gmail.com>
-Message-ID: <20150305123054.3e454df6@free-electrons.com>
+Date: Thu, 5 Mar 2015 12:31:48 +0100
+Subject: [Buildroot] [PATCH v2] cmake: don't use any header available in
+ $(HOST_DIR)/usr/include
+In-Reply-To: <20150305070255.GY15668@tarshish>
+References: <1425516333-3234-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150305070255.GY15668@tarshish>
+Message-ID: <20150305123148.3702fccc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Dear Baruch Siach,
 
-On Wed,  4 Mar 2015 21:36:30 -0600, Ryan Barnett wrote:
-> Update configuration to use the 3.18.8 kernel and update U-Boot to
-> 2015.01. With the switch to 2015.01. use the U-Boot SPL image for the
-> first stage bootloader instead of the at91bootstrap. The U-Boot SPL
-> requires that the U-Boot image format be u-boot.img in order to load
-> from the SD card.
+On Thu, 5 Mar 2015 09:02:55 +0200, Baruch Siach wrote:
+
+> On Thu, Mar 05, 2015 at 01:45:33AM +0100, Fabio Porcedda wrote:
+> > +# Get rid of -I* options to prevent that a header avaiable in
+> > +# $(HOST_DIR)/usr/include is used instead of a cmake one, e.g. lzma*
+> > +# headers of the xz package
+> > +HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed s/-I[^\ ]*//)
 > 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> ---
->  board/atmel/xplained/readme.txt  |  4 ++--
->  configs/atmel_xplained_defconfig | 16 +++++++---------
->  2 files changed, 9 insertions(+), 11 deletions(-)
+> How about (untested):
+> 
+> 	HOST_CMAKE_CFLAGS = $(filter-out -I%,$(HOST_CFLAGS))
 
-I've tested this on HW, and applied, thanks!
+It unfortunately works only if the form:
 
-Now that there is a sama5d4 Xplained board, maybe we should rename this
-defconfig, and the board directory to sama5d3-xplained or something
-like that.
+	-I/foo/bar
+
+is used. If you use:
+
+	-I /foo/bar
+
+which is valid for gcc, then filter-out will filter the -I but
+not /foo/bar.
+
+Best regards,
 
 Thomas
 -- 
