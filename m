@@ -1,39 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 6 Mar 2015 06:24:26 +0200
-Subject: [Buildroot] [PATCH] lmbench: fix build with libtirpc
-In-Reply-To: <CAHkwnC8Zeo-WnPNWyCMdGgQJJVenJeG_iOw49G7qY-HkEg_G1A@mail.gmail.com>
-References: <f0fb27c9ad91fe83813103a3d6035930fb63636e.1424766423.git.baruch@tkos.co.il>
- <CAHkwnC8Zeo-WnPNWyCMdGgQJJVenJeG_iOw49G7qY-HkEg_G1A@mail.gmail.com>
-Message-ID: <20150306042426.GA15668@tarshish>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri,  6 Mar 2015 05:46:25 +0100
+Subject: [Buildroot] [PATCH 1/2] libglib2: bump to version 2.42.2
+Message-ID: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/libglib2/libglib2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Mar 05, 2015 at 07:03:51PM +0100, Fabio Porcedda wrote:
-> On Tue, Feb 24, 2015 at 9:27 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > When linking with an external libtirpc, -ltirpc must come after lmbench.a in
-> > the linker command line. Use LDLIBS for that.
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/89e/89ee35561d3a49f38e9a747ed78a5846be4764c8/
-> > http://autobuild.buildroot.net/results/409/4097b1c2585db2de517a8741174c02177aabee00/
-> >
-> > and more.
-> 
-> This patch doesn't apply anymore.
-> 
-> Could you rebase it?
-
-Just sent an updated version.
-
-Thanks for noticing,
-baruch
-
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 2129a85..2476698 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.42
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
