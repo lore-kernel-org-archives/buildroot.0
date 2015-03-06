@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 09:40:08 +0100
-Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
-In-Reply-To: <54F8F0AC.8030707@zacarias.com.ar>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
- <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
- <20150305232946.3620697e@free-electrons.com>
- <54F8F0AC.8030707@zacarias.com.ar>
-Message-ID: <20150306094008.7baf8c91@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 6 Mar 2015 09:53:20 +0100
+Subject: [Buildroot] [PATCH 2/2] modem-manager: bump to version 1.4.4
+In-Reply-To: <1425617186-14203-2-git-send-email-petr.vorel@gmail.com>
+References: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
+ <1425617186-14203-2-git-send-email-petr.vorel@gmail.com>
+Message-ID: <CAGm1_kvNZOBMmvL4ivi59xRgsHJsJmpYwcsU=bqVK=xW+OtYgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Petr,
 
-On Thu, 05 Mar 2015 21:11:24 -0300, Gustavo Zacarias wrote:
+On Fri, Mar 6, 2015 at 5:46 AM, Petr Vorel <petr.vorel@gmail.com> wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  package/modem-manager/modem-manager.mk | 2 +-
 
-> > This cleanup of the indentation is definitely good, but has nothing to
-> > do with the bump to 4.2.0. It should be part of a separate patch.
-> 
-> Well, it's pointless IMHO to split it, since some options changed and
-> it's a major bump, does it really make sense?
-> I won't make a badly-indented 4.2.x package file to fix it later, it
-> would be pointless. It'll give me one more commit that doesn't do
-> anything useful.
-> And "fixing" 4.1.x just to just stomp on it later with the bump would
-> make no sense either, same case, many changes.
+Hash file update missing.
 
-I'm sorry, but I don't buy this. Separating logical changes is
-something we ask to all contributors. And the specific chunk I pointed
-at does not change at *all* when doing the 4.1 -> 4.2 bump. And even if
-some parts of it are changed by the 4.1 -> 4.2 bump, that's OK.
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> index 349517d..a6e1b36 100644
+> --- a/package/modem-manager/modem-manager.mk
+> +++ b/package/modem-manager/modem-manager.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -MODEM_MANAGER_VERSION = 1.4.2
+> +MODEM_MANAGER_VERSION = 1.4.4
+>  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+>  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+>  MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 
-Best regards,
+Have you tried to compile it with libqmi support? This failed on my
+system, because the version was a little bit outdated, but when I bump
+it to 1.12.6 it compiles. So please send one more patch with libqmi
+bump.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yegor
