@@ -1,35 +1,39 @@
-From: Jens Zettelmeyer <zettelmeyerj@gmail.com>
-Date: Fri,  6 Mar 2015 20:15:48 +0000
-Subject: [Buildroot] [PATCH 1/1] Fix batctl for static builds
-Message-ID: <1425672948-1668-1-git-send-email-zettelmeyerj@goooglemail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri,  6 Mar 2015 22:15:02 +0100
+Subject: [Buildroot] [PATCH 2/2] modem-manager: bump to version 1.4.4
+Message-ID: <1425676502-19554-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/batctl/batctl.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-index c458752..d99239f 100644
---- a/package/batctl/batctl.mk
-+++ b/package/batctl/batctl.mk
-@@ -9,8 +9,12 @@ BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL
- BATCTL_LICENSE = GPLv2
- BATCTL_DEPENDENCIES = libnl host-pkgconf
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index eae148f..20376b2 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  07d332fbe6f45f788f740810951e04042aaf023bd5ecf8ef0b3a06e37703585d  ModemManager-1.4.2.tar.xz
++sha256  1bf88861259772dc81e864e2faccfff0590d41676451a128c5f4e73550dd14d8  ModemManager-1.4.4.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 349517d..a6e1b36 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BATCTL_LIBS += -lnl-3 -lm -lpthread
-+endif
-+
- define BATCTL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) LDLIBS="$(TARGET_LIBS) $(BATCTL_LIBS)" $(MAKE) -C $(@D) all
- endef
- 
- define BATCTL_INSTALL_TARGET_CMDS
+-MODEM_MANAGER_VERSION = 1.4.2
++MODEM_MANAGER_VERSION = 1.4.4
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 -- 
-2.0.5
+2.1.4
