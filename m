@@ -1,59 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 6 Mar 2015 22:30:22 +0000
-Subject: [Buildroot] [PATCH 2/2] tcl: rename BR2_PACKAGE_TCL_SHLIB_ONLY to
-	be more consistent
-In-Reply-To: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1425681022-16612-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Mar 2015 23:30:22 +0100
+Subject: [Buildroot] [git commit] lttng-babeltrace: update Config.in's help
+Message-ID: <20150306223040.5C31481848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_PACKAGE_TCL_SHLIB_ONLY is confusing because someone could think
-that only shared libraries would be installed. But, what actually does
-is removing the 'tclsh' binary, so better to reword it in order to be
-consistent with what actually does.
+commit: http://git.buildroot.net/buildroot/commit/?id=c76739b5ede4aabd36286a9ad1e9239fdf4e1051
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas: rewrap Config.in help text.]
+
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcl/Config.in |    7 +++----
- package/tcl/tcl.mk    |    2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/lttng-babeltrace/Config.in |   15 +++++++++------
+ 1 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/tcl/Config.in b/package/tcl/Config.in
-index c3d0d87..996dc96 100644
---- a/package/tcl/Config.in
-+++ b/package/tcl/Config.in
-@@ -25,12 +25,11 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
- 
- 	  It saves approx. 1.6 Mb of space.
- 
--config BR2_PACKAGE_TCL_SHLIB_ONLY
--	bool "install only shared library"
-+config BR2_PACKAGE_TCL_REMOVE_TCLSH
-+	bool "do not install tclsh"
- 	default y
+diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+index 3fe1b3a..1040e26 100644
+--- a/package/lttng-babeltrace/Config.in
++++ b/package/lttng-babeltrace/Config.in
+@@ -9,12 +9,15 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC # posix_fallocate
  	help
--	  Install only TCL shared library and not binary tcl
--	  interpreter (tclsh).
-+	  Do not install the tcl interpreter (tclsh).
+-	  Babeltrace is part of the LTTng 2.x project.
++	  The Babeltrace project provides trace read and write
++	  libraries, as well as a trace converter application. Plugins
++	  can be created for any trace format to allow its conversion
++	  to/from another trace format.
  
- 	  Saves ~14kb.
+-	  This project provides trace read and write libraries, as
+-	  well as a trace converter. A plugin can be created for any
+-	  trace format to allow its conversion to/from another trace
+-	  format.
++	  Babeltrace is the reference implementation of the Common
++	  Trace Format (see <http://diamon.org/docs/ctf/>). Babeltrace
++	  can decode and display LTTng traces, since the latter are
++	  written using the CTF format.
  
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index ad76e9b..b6c86be 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -72,7 +72,7 @@ endef
- TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_ENCODINGS
- endif
+ 	  Having this tool on the target is not mandatory. You can
+ 	  transfer the binary trace output from the target to your
+@@ -23,7 +26,7 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	  $(O)/host/usr/bin/babeltrace as a dependency of the
+ 	  lttng-tools package.
  
--ifeq ($(BR2_PACKAGE_TCL_SHLIB_ONLY),y)
-+ifeq ($(BR2_PACKAGE_TCL_REMOVE_TCLSH),y)
- define TCL_REMOVE_TCLSH
- 	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
- endef
--- 
-1.7.1
+-	  http://lttng.org
++	  http://www.efficios.com/babeltrace
+ 
+ comment "lttng-babeltrace needs a uclibc snapshot or (e)glib toolchain w/ wchar, threads, largefile"
+ 	depends on BR2_USE_MMU
