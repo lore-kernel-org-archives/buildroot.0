@@ -1,38 +1,109 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 6 Mar 2015 10:56:08 +0100
-Subject: [Buildroot] [PATCH v3] lmbench: fix build with libtirpc
-In-Reply-To: <0997c42f827ac8a01c0465654e89995c70d5f5a5.1425634986.git.baruch@tkos.co.il>
-References: <0997c42f827ac8a01c0465654e89995c70d5f5a5.1425634986.git.baruch@tkos.co.il>
-Message-ID: <CAHkwnC9OjVj8wc=MrX-BWLKivcpLnXtxOD5H6ev0OEveBweyDQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Mar 2015 11:00:43 +0100
+Subject: [Buildroot] [git commit] samba4: fix indentation
+Message-ID: <20150306100152.DAC428080B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 6, 2015 at 10:43 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> When linking with an external libtirpc, -ltirpc must come after lmbench.a in
-> the linker command line. Use LDLIBS for that.
+commit: http://git.buildroot.net/buildroot/commit/?id=7152a50588e7eabfc4ba3bbe30e608fc2187e8bb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Maybe just add a note about the removing of TARGET_LDFLAGS, e.g.:
+In preparation to the bump of samba4 to 4.2, let's re-indent the
+samba4.mk to the usual Buildroot convention.
 
-Also remove TARGET_LDFLAGS because.....
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/samba4/samba4.mk |   48 +++++++++++++++++++++++-----------------------
+ 1 files changed, 24 insertions(+), 24 deletions(-)
 
-> Fixes:
-> http://autobuild.buildroot.net/results/89e/89ee35561d3a49f38e9a747ed78a5846be4764c8/
-> http://autobuild.buildroot.net/results/409/4097b1c2585db2de517a8741174c02177aabee00/
->
-> and more.
->
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-With the above note  added:
-Reviewed-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-[test: Fix the build failure with the following "defconfig":
-BR2_STATIC_LIBS=y
-BR2_PACKAGE_LMBENCH=y]
-
-Thanks
--- 
-Fabio Porcedda
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index bd8ed12..3932124 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -14,59 +14,59 @@ SAMBA4_DEPENDENCIES = host-e2fsprogs host-heimdal e2fsprogs popt python zlib \
+ 	$(if $(BR2_PACKAGE_READLINE),readline)
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+-	SAMBA4_CONF_OPTS += --with-acl-support
+-	SAMBA4_DEPENDENCIES += acl
++SAMBA4_CONF_OPTS += --with-acl-support
++SAMBA4_DEPENDENCIES += acl
+ else
+-	SAMBA4_CONF_OPTS += --without-acl-support
++SAMBA4_CONF_OPTS += --without-acl-support
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+-	SAMBA4_CONF_ENV += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
+-	SAMBA4_CONF_OPTS += --enable-cups
+-	SAMBA4_DEPENDENCIES += cups
++SAMBA4_CONF_ENV += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
++SAMBA4_CONF_OPTS += --enable-cups
++SAMBA4_DEPENDENCIES += cups
+ else
+-	SAMBA4_CONF_OPTS += --disable-cups
++SAMBA4_CONF_OPTS += --disable-cups
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBAIO),y)
+-	SAMBA4_CONF_OPTS += --with-aio-support
+-	SAMBA4_DEPENDENCIES += libaio
++SAMBA4_CONF_OPTS += --with-aio-support
++SAMBA4_DEPENDENCIES += libaio
+ else
+-	SAMBA4_CONF_OPTS += --without-aio-support
++SAMBA4_CONF_OPTS += --without-aio-support
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
+-	SAMBA4_CONF_OPTS += --enable-avahi
+-	SAMBA4_DEPENDENCIES += avahi
++SAMBA4_CONF_OPTS += --enable-avahi
++SAMBA4_DEPENDENCIES += avahi
+ else
+-	SAMBA4_CONF_OPTS += --disable-avahi
++SAMBA4_CONF_OPTS += --disable-avahi
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GAMIN),y)
+-	SAMBA4_CONF_OPTS += --with-fam
+-	SAMBA4_DEPENDENCIES += gamin
++SAMBA4_CONF_OPTS += --with-fam
++SAMBA4_DEPENDENCIES += gamin
+ else
+-	SAMBA4_CONF_OPTS += --without-fam
++SAMBA4_CONF_OPTS += --without-fam
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GETTEXT),y)
+-	SAMBA4_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
+-	SAMBA4_DEPENDENCIES += gettext
++SAMBA4_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
++SAMBA4_DEPENDENCIES += gettext
+ else
+-	SAMBA4_CONF_OPTS += --without-gettext
++SAMBA4_CONF_OPTS += --without-gettext
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-	SAMBA4_CONF_OPTS += --enable-gnutls
+-	SAMBA4_DEPENDENCIES += gnutls
++SAMBA4_CONF_OPTS += --enable-gnutls
++SAMBA4_DEPENDENCIES += gnutls
+ else
+-	SAMBA4_CONF_OPTS += --disable-gnutls
++SAMBA4_CONF_OPTS += --disable-gnutls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM)$(BR2_PACKAGE_NCURSES_TARGET_MENU)$(BR2_PACKAGE_NCURSES_TARGET_PANEL),yyy)
+-	SAMBA4_DEPENDENCIES += ncurses
++SAMBA4_DEPENDENCIES += ncurses
+ else
+-	SAMBA4_CONF_OPTS += --without-regedit
++SAMBA4_CONF_OPTS += --without-regedit
+ endif
+ 
+ define SAMBA4_CONFIGURE_CMDS
