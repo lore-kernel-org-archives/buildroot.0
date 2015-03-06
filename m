@@ -1,43 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 6 Mar 2015 23:20:58 +0100
-Subject: [Buildroot] [git commit] liburcu: bump to version 0.8.6
-Message-ID: <20150306222135.B97EC81826@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lttng-tools: bump to version 2.6.0
+Message-ID: <20150306222135.C27E780481@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38a6552635e98cca09b75abc79c9f0e71cfdea20
+commit: http://git.buildroot.net/buildroot/commit/?id=55b900426fca0798d974fa9e02ebe7026998f031
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liburcu/liburcu.hash |    4 ++++
- package/liburcu/liburcu.mk   |    2 +-
- 2 files changed, 5 insertions(+), 1 deletions(-)
+ package/lttng-tools/Config.in        |    2 +-
+ package/lttng-tools/lttng-tools.hash |    2 +-
+ package/lttng-tools/lttng-tools.mk   |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-new file mode 100644
-index 0000000..2b1693d
---- /dev/null
-+++ b/package/liburcu/liburcu.hash
-@@ -0,0 +1,4 @@
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.8.6.tar.bz2.sha1
-+sha1  f10e9bf812557cd0c2a35a277e04010ec278d25d  userspace-rcu-0.8.6.tar.bz2
-+# Locally generated
-+sha256 b1a5d3bce014ba7a702759bc60b692c1cd46ff0e8a5b53f0d0a95e22db74ab21 userspace-rcu-0.8.6.tar.bz2
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index c48f659..1582d07 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index ea969a5..a960b21 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+-	  Userspace utilities for the LTTng 2.0 tracing
++	  Userspace utilities for the LTTng 2.x tracing
+ 	  infrastructure.
+ 
+ 	  Those utilities are required on the target system to start
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index fc2640e..a356911 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally generated
+-sha256  1f52d342fb5b56a6675748f0b8e8557ec7c4e90732c3d8f5732bd10b920b233d  lttng-tools-2.5.2.tar.bz2
++sha256  128166445126d76da7d9f42a56dec12716732a1ed697a6cfdf40c9e135384f32  lttng-tools-2.6.0.tar.bz2
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 44b6880..e218a95 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBURCU_VERSION = 0.8.4
-+LIBURCU_VERSION = 0.8.6
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
+-LTTNG_TOOLS_VERSION = 2.5.2
++LTTNG_TOOLS_VERSION = 2.6.0
+ LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
