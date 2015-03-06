@@ -1,77 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 23:48:37 +0100
-Subject: [Buildroot] [PATCH] fix eudev really not depending kernel
- headers >=3.9
-In-Reply-To: <1425661783-26577-1-git-send-email-swexru@gmail.com>
-References: <1425661783-26577-1-git-send-email-swexru@gmail.com>
-Message-ID: <20150306234837.0e201d35@free-electrons.com>
+Date: Fri, 6 Mar 2015 23:49:27 +0100
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.117
+Message-ID: <20150306224933.47D9981825@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Mednyy,
+commit: http://git.buildroot.net/buildroot/commit/?id=62dc087f9f4b02feb2b5a5504dfedeac31965029
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution, see some comments below.
+- Bump version to 2.02.117
+- Update the hash file
 
-The commit title should be something like:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-	eudev: relax dependency on kernel headers version
-
-at least, the format should almost always be:
-
-	<package name>: <description>
-
-Also, since the patch is doing not so trivial things, an empty commit
-log is a bit strange.
-
-On Fri,  6 Mar 2015 20:09:43 +0300, Alexey Mednyy wrote:
-
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> index 2221966..eb266a1 100644
-> --- a/package/eudev/eudev.mk
-> +++ b/package/eudev/eudev.mk
-> @@ -10,6 +10,7 @@ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
->  EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
->  EUDEV_LICENSE_FILES = COPYING
->  EUDEV_INSTALL_STAGING = YES
-> +EUDEV_AUTORECONF = YES
-
-Add a comment above this line saying:
-
-# We're patching configure.ac
-
->  # mq_getattr is in librt
->  EUDEV_CONF_ENV += LIBS=-lrt
-> diff --git a/system/Config.in b/system/Config.in
-> index 4d1c3d2..9e2b13f 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -128,13 +128,12 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
->  	depends on BR2_USE_WCHAR
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_USE_MMU # eudev
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-> +#	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-
-On which kernel headers version does eudev now depends? If it really
-builds with old 2.6 kernel headers, then just get rid of this line
-instead of commenting it out.
-
-However, looking at the eudev source code, I don't see how your
-solution can fix the problem. Indeed src/udev/udev-builtin-btrfs.c only
-includes <linux/btrfs.h> if HAVE_LINUX_BTRFS_H is defined. But it uses
-BTRFS_IOC_DEVICES_READY unconditionally, and this definition is only
-available in <linux/btrfs.h>.
-
-Can you expand a little bit on how this can work? Maybe I missed
-something obvious?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index adffcdb..e7f7b2d 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  f71aa8e64030f3d2a3fdabcc36e45094  LVM2.2.02.113.tgz
++md5  ab5889dae7924b44ed2444161058a419  LVM2.2.02.117.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 48a3116..6e324eb 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.113
++LVM2_VERSION = 2.02.117
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
