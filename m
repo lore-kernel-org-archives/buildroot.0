@@ -1,38 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 05 Mar 2015 21:11:24 -0300
-Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
-In-Reply-To: <20150305232946.3620697e@free-electrons.com>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>	<1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
- <20150305232946.3620697e@free-electrons.com>
-Message-ID: <54F8F0AC.8030707@zacarias.com.ar>
+Date: Thu, 05 Mar 2015 21:11:22 -0300
+Subject: [Buildroot] [PATCH 1/2] samba: deprecate package due to EOL
+In-Reply-To: <20150305232325.3e137c1d@free-electrons.com>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>	<54F8D05F.4050300@mind.be>	<20150305230631.4e19032b@free-electrons.com>	<54F8D470.9060308@mind.be>
+ <20150305232325.3e137c1d@free-electrons.com>
+Message-ID: <54F8F0AA.5020902@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/05/2015 07:29 PM, Thomas Petazzoni wrote:
+On 03/05/2015 07:23 PM, Thomas Petazzoni wrote:
 
-> Dear Gustavo Zacarias,
+> Dear Arnout Vandecappelle,
 > 
-> On Thu,  5 Mar 2015 17:44:09 -0300, Gustavo Zacarias wrote:
->> Now with support for AD DC, ADS and clustering features.
->> All dropped patches are upstream.
->>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> On Thu, 05 Mar 2015 23:10:56 +0100, Arnout Vandecappelle wrote:
 > 
-> Ok, I'm going to be annoying on this one, but since this is something
-> we generally ask all developers to do, I think we should ask you to do
-> it too.
+>>  But that's just a condition on the .mk file so it has no implications for the
+>> missing reverse dependencies.
 > 
-> This cleanup of the indentation is definitely good, but has nothing to
-> do with the bump to 4.2.0. It should be part of a separate patch.
+> Absolutely. But it means that the gvfs Samba support becomes unusable.
 
-Well, it's pointless IMHO to split it, since some options changed and
-it's a major bump, does it really make sense?
-I won't make a badly-indented 4.2.x package file to fix it later, it
-would be pointless. It'll give me one more commit that doesn't do
-anything useful.
-And "fixing" 4.1.x just to just stomp on it later with the bump would
-make no sense either, same case, many changes.
+There's no pretty way out of this, the 3.6.x codebase is going
+completely unmaintained upstream.
+It's basically sheer luck that upstream fixed CVE-2015-0240 (which is
+pretty severe) on the 3.6.x branch, just because 4.2.0 was delayed.
+The best solution i can think of is either use samba 3.6.x as a fallback
+libsmbclient (not very nice looking forward) or switch everything to
+samba4 with the added size and restrictions.
+kodi and mpd aren't small so i don't think it should be a deciding
+factor, gvfs is meh, but then it's optional.
+I'd favor the 2nd option.
+Another factor to consider is that eventually (maybe already) the old
+libsmbclient won't be able to talk to newer windows servers anyway,
+specially when older versions of the protocol are disabled for security
+reasons.
 Regards.
