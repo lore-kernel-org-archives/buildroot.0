@@ -1,110 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 6 Mar 2015 23:12:24 +0100
-Subject: [Buildroot] postgresql: uClibc build
-Message-ID: <trinity-777022ff-7888-4fc4-b65b-f69ff903231c-1425679944566@3capp-gmx-bs39>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Mar 2015 23:11:58 +0100
+Subject: [Buildroot] [git commit] libqmi: bump to 1.12.6
+Message-ID: <20150306221229.38DA381835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alex,
+commit: http://git.buildroot.net/buildroot/commit/?id=3890d1d10ef5c3ecd87778d77cb8849a77112ebe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Mar 06, 2015 at 10:05:57PM +0200, Alex Potapenko wrote:
-> Hi all,
-> Currently in buildroot postgresql build requires glibc. According to the
-> comments, due to this issue:
-> http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html. However,
-> it is pretty simple to have it built: simply comment out line "#define
-> HAVE_LOCALE_T" in src/include/pg_config.h after running configure build.
-> This will disable the use of locale_t, and therefore of undefined
-> __uclibc_locale_struct.
-> I have built optware package postgresql this way using
-> arm-buildroot-linux-uclibcgnueabi
-> uClibc 0.9.33.2 buildroot 2015.02 toolchain just fine:
-> https://github.com/alllexx88/optware/blob/master/make/postgresql.mk, so I
-> think you can use a similar fix and remove glibc requirement
->
+ModemManager 1.4.4 requires libqmi >= 1.12.4.
 
-you can try the following patch (partly compile tested, not yet
-runtime tested):
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libqmi/libqmi.hash |    2 +-
+ package/libqmi/libqmi.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
----begin---
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 3ef5e6c..519b2a1 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_POSTGRESQL
- 	bool "postgresql"
--	# PostgreSQL does not build against uClibc with locales
--	# enabled, due to an uClibc bug, see
--	# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html.
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  PostgreSQL is a powerful, open source object-relational
- 	  database system.
-@@ -16,6 +12,3 @@ config BR2_PACKAGE_POSTGRESQL
- 	  archives with pg_dump and pg_restore.
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index f5f2578..a2c37d3 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  d1661d73b510482b29b93b7e396756c433d35360b3d44c72afa7921339a98624  libqmi-1.12.2.tar.xz
++sha256  0857bffece4e8ddfa7f721dd9ca63b4c78de345ac9ae2faebf04062cacba3780  libqmi-1.12.6.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 9e5f9cb..1bc6121 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.postgresql.org
--
--comment "postgresql needs a toolchain w/ glibc"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 7dfef06..6e9dabf 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -13,11 +13,29 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- 
-+# unsupported platform, overwrite manually
-+ifeq ($(BR2_bfin),y)
-+POSTGRESQL_CONF_OPTS += --with-template=linux
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+ifeq ($(BR2_INET_IPV6),y)
-+POSTGRESQL_CONF_ENV += ac_cv_type_struct_sockaddr_in6=yes
-+else
-+POSTGRESQL_CONF_ENV += ac_cv_type_struct_sockaddr_in6=no
-+endif
-+# PostgreSQL does not build against uClibc with locales
-+# enabled, due to an uClibc bug, see
-+# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html
-+# so overwrite automatic detection
-+POSTGRESQL_CONF_ENV += pgac_cv_type_locale_t=no
-+endif
-+
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2),y)
-+ifeq ($(BR2_bfin)$(BR2_microblazebe)$(BR2_microblazeel)$(BR2_nios2),y)
- 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
----end--- 
-
-With 'bfin-uclinux-gcc (ADI-2014R1-RC2) 4.3.5' there is the following ICE while
-compiling postgresql:
-
-host/usr/bin/bfin-uclinux-gcc -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os   -Wl,-elf2flt -static -I../../../../src/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE   -c -o heapam.o heapam.c
-heapam.c: In function ?heap_update?:
-heapam.c:3834: internal compiler error: Segmentation fault
-Please submit a full bug report,
-with preprocessed source if appropriate.
-See <URL:http://blackfin.uclinux.org/gf/project/toolchain/tracker> for instructions.
-<builtin>: recipe for target 'heapam.o' failed
-
-with http://autobuild.buildroot.org/toolchains/tarballs/powerpc-ctng-linux-uclibc.tar.xz
-postgresql builds fine...
-
-Regards,
-Peter
-
-> -- 
-> Best regards,
-> Alex Potapenko
+-LIBQMI_VERSION = 1.12.2
++LIBQMI_VERSION = 1.12.6
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
