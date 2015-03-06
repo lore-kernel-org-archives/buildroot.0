@@ -1,88 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 11:05:12 +0100
-Subject: [Buildroot] [git commit] cmake: don't use any header available in
-	$(HOST_DIR)/usr/include
-Message-ID: <20150307100623.3AEB4807AD@busybox.osuosl.org>
+Date: Fri, 6 Mar 2015 23:52:01 +0100
+Subject: [Buildroot] [git commit] board: add support for RIoTboard
+Message-ID: <20150307100623.2A4C2804F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=46bf8e8fd2428a733486ca192ba93588a7ac8d0e
+commit: http://git.buildroot.net/buildroot/commit/?id=3c9aa3218339ce8d896adfc5facd812b1fffa889
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The -I<dir> options added to CMAKE_C_FLAGS are passed to the compiler
-before the -I<dir> options of the cmake internal headers, so when the
-host-xz package was already built, a #include <lzma.h> directive loads
-the host-xz header instead of the cmake internal one.
+This is a small development board, based on Freescale IMX6 Solo SoC
+(single core ARM Cortex-A9). The board has excellent support in mainline
+U-Boot and Linux.
 
-Because we don't want to use any header avaiable in -I$(HOST_DIR)/usr/include,
-just get rid of the -I<dir> options in the HOST_CFLAGS.
-
-Fix build failure:
-  make host-xz host-cmake
-
-.../output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:17:1: error: conflicting types for ???lzma_block_buffer_decode???
- lzma_block_buffer_decode(lzma_block *block, lzma_allocator *allocator,
- ^
-In file included from /home/tetsuya/buildroot/br2/output/host/usr/include/lzma.h:296:0,
-                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/common.h:34,
-                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_decoder.h:16,
-                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:13:
-/home/tetsuya/buildroot/br2/output/host/usr/include/lzma/block.h:577:27: note: previous declaration of ???lzma_block_buffer_decode??? was here
- extern LZMA_API(lzma_ret) lzma_block_buffer_decode(
-                           ^
-Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/build.make:261: recipe for target 'Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o' failed
-make[3]: *** [Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o] Error 1
-
-Fixes:
-http://autobuild.buildroot.org/results/4edf6e169dc4a00d8a8bd16a86eba2316cbbd9e5
-http://autobuild.buildroot.org/results/a9ff38b22a36a2f8427d33085d3263a8cbfbd746
-http://autobuild.buildroot.org/results/ecaa0227249207b5450519832a193c1585ac8177
-
-[Thomas:
- - simplify the sed expression. Instead of trying to remove '-I
-   <something>' from $(HOST_CFLAGS), simply remove $(HOST_CPPFLAGS)
-   from $(HOST_CFLAGS).
- - add the same logic for HOST_CXXFLAGS.]
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cmake/cmake.mk |   12 +++++++++---
- 1 files changed, 9 insertions(+), 3 deletions(-)
+ board/embest/riotboard/readme.txt                  |   46 ++++++++++++++++++++
+ .../rootfs_overlay/boot/extlinux/extlinux.conf     |    6 +++
+ configs/riotboard_defconfig                        |   34 ++++++++++++++
+ 3 files changed, 86 insertions(+), 0 deletions(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 8c64b58..a00b8cd 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -12,14 +12,20 @@ CMAKE_LICENSE_FILES = Copyright.txt
- 
- HOST_CMAKE_DEPENDENCIES = host-pkgconf
- 
-+# Get rid of -I* options from $(HOST_CPPFLAGS) to prevent that a
-+# header available in $(HOST_DIR)/usr/include is used instead of a
-+# CMake internal header, e.g. lzma* headers of the xz package
-+HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
-+HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
+diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
+new file mode 100644
+index 0000000..8c31bbe
+--- /dev/null
++++ b/board/embest/riotboard/readme.txt
+@@ -0,0 +1,46 @@
++Buildroot for Embest RIoTboard
++==============================
 +
- define HOST_CMAKE_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
--		CFLAGS="$(HOST_CFLAGS)" \
-+		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
- 		./bootstrap --prefix=$(HOST_DIR)/usr \
- 			--parallel=$(PARALLEL_JOBS) -- \
--			-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
--			-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
-+			-DCMAKE_C_FLAGS="$(HOST_CMAKE_CFLAGS)" \
-+			-DCMAKE_CXX_FLAGS="$(HOST_CMAKE_CXXFLAGS)" \
- 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
- 			-DBUILD_CursesDialog=OFF \
- 	)
++1. Compiling buildroot
++----------------------
++
++make riotboard_defconfig
++make
++
++2. Installing buildroot
++-----------------------
++
++Prepare an SD-card and plug it into your card reader. Write the bootloader to
++your SD-card:
++
++sudo dd if=output/images/u-boot.imx of=/dev/sdX bs=1k seek=1
++
++Create 1 partition on the SD-card using your favourite tool. The partition
++should be big enough to hold your rootfs, for example 128MiB. Here's how an
++example of such partition layout:
++
++   Device Boot      Start         End      Blocks   Id  System
++/dev/sdX1            2048      264191      131072   83  Linux
++
++Format the SD-card partition with your favourite filesystem:
++
++sudo mkfs.ext2 /dev/sdX1
++
++Deploy your rootfs to the SD-card:
++
++sudo mkdir /mnt/sdcard/
++sudo mount /dev/sdX1 /mnt/sdcard/
++sudo tar xf rootfs.tar -C /mnt/sdcard/
++sudo umount /dev/sdX1
++
++3. Running buildroot
++--------------------
++
++Position the board so you can read the label "RIoTboard" on the right side of
++SW1 DIP switches. Configure the SW1 swiches like this:
++
++10100101 (1 means ON position, 0 means OFF position)
++
++Now plug your prepared SD-card in slot J6. Connect a serial console (115200, 8,
++N, 1) to header J18. Connect a 5V/1A power supply to the board and enjoy your
++new toy.
+diff --git a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 0000000..c7d32e0
+--- /dev/null
++++ b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,6 @@
++default buildroot
++
++label buildroot
++kernel /boot/uImage
++devicetree /boot/imx6dl-riotboard.dtb
++append console=ttymxc1,115200 root=/dev/mmcblk0p1 rw
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+new file mode 100644
+index 0000000..034bf40
+--- /dev/null
++++ b/configs/riotboard_defconfig
+@@ -0,0 +1,34 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_EABIHF=y
++
++# system
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++
++# rootfs
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_2r1=y
++BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_VERSION="2015.01"
++BR2_TARGET_UBOOT_BOARDNAME="riotboard"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++
++# kernel headers
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.18"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
