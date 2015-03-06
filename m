@@ -1,31 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 11:03:15 +0100
-Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
-In-Reply-To: <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
- <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150306110315.4260a5b1@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  6 Mar 2015 12:10:50 +0200
+Subject: [Buildroot] [PATCH v4] lmbench: fix build with libtirpc
+Message-ID: <c76c5fb6b3cab78e103c6ed6e280da6b8ccdfdcb.1425636650.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+When linking with an external libtirpc, -ltirpc must come after lmbench.a in
+the linker command line. Use LDLIBS for that.
 
-On Thu,  5 Mar 2015 17:44:09 -0300, Gustavo Zacarias wrote:
-> Now with support for AD DC, ADS and clustering features.
-> All dropped patches are upstream.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/89e/89ee35561d3a49f38e9a747ed78a5846be4764c8/
+http://autobuild.buildroot.net/results/409/4097b1c2585db2de517a8741174c02177aabee00/
 
-Applied, after splitting into a separate patch the indentation fixes of
-samba4.mk.
+and more.
 
-Thanks,
+Also, remove LMBENCH_LDLIBS assignment. This variable was not used before.
 
-Thomas
+Reviewed-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v4:
+   Add a comment in the commit log on LMBENCH_LDLIBS removal (Fabio Porcedda)
+   Add Fabio's review and test tags
+
+v3:
+   Edit scripts/build with sed instead of using a patch (Fabio Porcedda)
+
+v2:
+   Rebase on current master (Fabio Porcedda)
+---
+ package/lmbench/lmbench.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 59e750c5892f..f593428ac1c8 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -11,24 +11,27 @@ LMBENCH_LICENSE = lmbench license (based on GPLv2)
+ LMBENCH_LICENSE_FILES = COPYING COPYING-2
+ 
+ LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+-LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LMBENCH_DEPENDENCIES += host-pkgconf libtirpc
+ LMBENCH_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libtirpc)
+-LMBENCH_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
++LMBENCH_LDLIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
+ endif
+ 
+ define LMBENCH_CONFIGURE_CMDS
+ 	$(call CONFIG_UPDATE,$(@D))
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
++	sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
+ 	sed -i '/cd .*doc/d' $(@D)/src/Makefile
+ 	sed -i '/include/d' $(@D)/src/Makefile
+ 	touch $@
+ endef
+ 
++# Note: there is a second stage 'make' invocation from the 'scripts/build'
++# script. So the variables override below don't take direct effect in
++# src/Makefile.
+ define LMBENCH_BUILD_CMDS
+-	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
++	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDLIBS="$(LMBENCH_LDLIBS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
+ endef
+ 
+ define LMBENCH_INSTALL_TARGET_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
