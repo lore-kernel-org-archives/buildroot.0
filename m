@@ -1,9 +1,9 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Fri,  6 Mar 2015 12:35:53 -0500
-Subject: [Buildroot] [PATCH 3/7] lttng-libust: bump to version 2.6.0
+Date: Fri,  6 Mar 2015 12:35:54 -0500
+Subject: [Buildroot] [PATCH 4/7] lttng-modules: bump to version 2.6.0
 In-Reply-To: <1425663357-22541-1-git-send-email-eeppeliteloop@gmail.com>
 References: <1425663357-22541-1-git-send-email-eeppeliteloop@gmail.com>
-Message-ID: <1425663357-22541-4-git-send-email-eeppeliteloop@gmail.com>
+Message-ID: <1425663357-22541-5-git-send-email-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,84 @@ To: buildroot@busybox.net
 
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 ---
- package/lttng-libust/Config.in         |  2 +-
- package/lttng-libust/lttng-libust.hash |  8 ++------
- package/lttng-libust/lttng-libust.mk   | 12 ++----------
- 3 files changed, 5 insertions(+), 17 deletions(-)
+ package/lttng-modules/Config.in          | 34 +++++++++++++++++++++++---------
+ package/lttng-modules/lttng-modules.hash |  8 ++------
+ package/lttng-modules/lttng-modules.mk   |  2 +-
+ 3 files changed, 28 insertions(+), 16 deletions(-)
 
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 4583380..0a6abb6 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/lttng-modules/Config.in b/package/lttng-modules/Config.in
+index 8cfa874..e8ba9ba 100644
+--- a/package/lttng-modules/Config.in
++++ b/package/lttng-modules/Config.in
+@@ -2,18 +2,34 @@ config BR2_PACKAGE_LTTNG_MODULES
+ 	bool "lttng-modules"
+ 	depends on BR2_LINUX_KERNEL
  	help
--	  Userspace tracing library for the Lttng tracing
-+	  Userspace tracing library for the LTTng 2.x tracing
- 	  infrastructure. It allows userspace programs to create
- 	  custom trace events that are integrated with all other
- 	  events gathered by LTTng.
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index ac897f3..65db612 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
+-	  Kernel modules for the LTTng 2.0 kernel tracing
++	  Linux kernel modules for the LTTng 2.x kernel tracing
+ 	  infrastructure.
+ 
+-	  Your kernel must have CONFIG_TRACEPOINTS enabled for this
+-	  package to build something useful. You may also want to have
+-	  CONFIG_PERF_EVENTS to access perf event counters from
+-	  ltt-ng. Note that system call tracing is only available on
+-	  architectures that support CONFIG_HAVE_SYSCALL_TRACEPOINTS.
++	  Make sure your target kernel has the following config
++	  options enabled:
+ 
+-	  The packaged version is compatible with kernel 2.6.38,
+-	  2.6.39, 3.0 and 3.1.0. See
+-	  http://lttng.org/files/bundles/20111214/README.compatible.kernels.txt
++	    * CONFIG_MODULES: loadable module support
++	    * CONFIG_KALLSYMS: this is necessary until the few
++	      required missing symbols are exported to GPL
++	      modules from mainline
++	    * CONFIG_HIGH_RES_TIMERS: needed for LTTng 2.x
++	      clock source
++	    * CONFIG_TRACEPOINTS: kernel tracepoint instrumentation
++	      (enabled as a side-effect of any of the
++	      perf/ftrace/blktrace instrumentation features)
++
++	  The following kernel configuration options will
++	  affect the features available from LTTng:
++
++	    * CONFIG_HAVE_SYSCALL_TRACEPOINTS: system call tracing
++	    * CONFIG_PERF_EVENTS: performance counters
++	    * CONFIG_EVENT_TRACING: needed to allow block layer tracing
++	    * CONFIG_KPROBES: dynamic probes
++	    * CONFIG_KRETPROBES: dynamic function entry/return probes
++	    * CONFIG_KALLSYMS_ALL: state dump of mapping between block
++	      device number and name
++
++	  The packaged version is compatible with Linux 2.6.38 to 3.16.
+ 
+ 	  http://lttng.org
+ 
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index 25dba0c..918b4cf 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
 @@ -1,6 +1,2 @@
--# From http://lttng.org/files/lttng-ust/lttng-ust-2.6.0-rc1.tar.bz2.sha1
--sha1    8db1627f16f466589c7842822ea4ad2f9d406b02  lttng-ust-2.5.1.tar.bz2
--# From http://lttng.org/files/lttng-ust/lttng-ust-2.6.0-rc1.tar.bz2.md5
--md5     d551d601bdc1a9285e1cd6c5728fb803  lttng-ust-2.5.1.tar.bz2
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.5.1.tar.bz2.sha1
+-sha1   75d9662ed3f8d7c53833663a5d89fe31c015b3ca  lttng-modules-2.5.1.tar.bz2
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.5.1.tar.bz2.md5
+-md5    2d99bb7311ba92e82e3b675f0b8dee7d  lttng-modules-2.5.1.tar.bz2
 -# Locally generated
--sha256  fbd9e2d78641e5c659f1d51f8097c8279c155ff50f8e38a4c57f188ca4b84546  lttng-ust-2.5.1.tar.bz2
-+# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.0.tar.bz2.sha1
-+sha1  774fc2052781ba6fd789d422223c739d5f64482d  lttng-ust-2.6.0.tar.bz2
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index e6f02ca..0a4f6bf 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,20 +5,12 @@
+-sha256 962238175f0959ac71b97fdde144a3f76a84f63aea6b3645f94da88512bcccdb  lttng-modules-2.5.1.tar.bz2
++# http://www.lttng.org/files/lttng-modules/lttng-modules-2.6.0.tar.bz2.sha1
++sha1  6402ec848e2a75250e04be35f0c49332bf37a388  lttng-modules-2.6.0.tar.bz2
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 02ec202..6833ad2 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
--LTTNG_LIBUST_VERSION = 2.5.1
-+LTTNG_LIBUST_VERSION = 2.6.0
- LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
--LTTNG_LIBUST_LICENSE_FILES = COPYING
-+LTTNG_LIBUST_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt mit-license.txt COPYING LICENSE
- 
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
- 
--ifeq ($(BR2_PACKAGE_PYTHON),y)
--LTTNG_LIBUST_DEPENDENCIES += python
--else ifeq ($(BR2_PACKAGE_PYTHON3),y)
--LTTNG_LIBUST_DEPENDENCIES += python3
--else
--LTTNG_LIBUST_CONF_ENV = am_cv_pathless_PYTHON="none"
--endif
--
- $(eval $(autotools-package))
+-LTTNG_MODULES_VERSION = 2.5.1
++LTTNG_MODULES_VERSION = 2.6.0
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPLv2.1/GPLv2 for kernel modules; MIT for lib/bitfield.h and lib/prio_heap/*
 -- 
 2.2.1
