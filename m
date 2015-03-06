@@ -1,63 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 15:09:50 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 06 Mar 2015 11:30:29 -0300
 Subject: [Buildroot] [PATCH] cups: deprecate package due to security
- issues
-In-Reply-To: <1425649164-31813-1-git-send-email-gustavo@zacarias.com.ar>
+	issues
+In-Reply-To: <20150306150950.0fbaa59e@free-electrons.com>
 References: <1425649164-31813-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150306150950.0fbaa59e@free-electrons.com>
+ <20150306150950.0fbaa59e@free-electrons.com>
+Message-ID: <54F9BA05.9050702@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
-
-On Fri,  6 Mar 2015 10:39:24 -0300, Gustavo Zacarias wrote:
-> Also mark packages that depend on cups as deprecated as well for easier
-> tracking.
+On 03/06/2015 11:09 AM, Thomas Petazzoni wrote:
+> Any reason why this is done on the comment only, and not on the package
+> itself?
 > 
-> It would probably be better to mark it as a legacy option so users get a
-> warning when migrating configuration files, but it would require a
-> direct removal for that.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/cups/Config.in             | 2 ++
->  package/foomatic-filters/Config.in | 2 ++
->  package/gutenprint/Config.in       | 2 ++
->  package/hplip/Config.in            | 2 ++
->  4 files changed, 8 insertions(+)
-> 
-> diff --git a/package/cups/Config.in b/package/cups/Config.in
-> index ea1f003..8e60221 100644
-> --- a/package/cups/Config.in
-> +++ b/package/cups/Config.in
-> @@ -1,5 +1,7 @@
->  config BR2_PACKAGE_CUPS
->  	bool "cups"
-> +	# serious security issues, needs upgrading
-> +	depends on BR2_DEPRECATED_SINCE_2015_05
->  	# needs fork()
->  	depends on BR2_USE_MMU
->  	help
-> diff --git a/package/foomatic-filters/Config.in b/package/foomatic-filters/Config.in
-> index 377566e..158bf44 100644
-> --- a/package/foomatic-filters/Config.in
-> +++ b/package/foomatic-filters/Config.in
-> @@ -1,4 +1,6 @@
->  comment "foomatic-filters needs a toolchain w/ threads"
-> +	# because of cups security issues
-> +	depends on BR2_DEPRECATED_SINCE_2015_05
+> Other than that, I'd personally be in favor of this deprecation.
+> Hopefully it will encourage someone to step up and upgrade cups.
 
-Any reason why this is done on the comment only, and not on the package
-itself?
-
-Other than that, I'd personally be in favor of this deprecation.
-Hopefully it will encourage someone to step up and upgrade cups.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I just used it as a mark for when/if removing it, since they all depend
+on BR2_PACKAGE_CUPS being selected, not needed really.
+Ideally something like BR2_LEGACY would be best for the users to get a
+big warning, problem is that introducing it for just one package isn't
+very useful, and it would set a precedent for other packages to lag
+behind as well.
+Regards.
