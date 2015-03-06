@@ -1,48 +1,54 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 6 Mar 2015 08:53:23 +0100
-Subject: [Buildroot] [PATCH v2] lmbench: fix build with libtirpc
-In-Reply-To: <7760c8e2eb6de04f4acc5b4fd348cb35216bc2b7.1425615675.git.baruch@tkos.co.il>
-References: <7760c8e2eb6de04f4acc5b4fd348cb35216bc2b7.1425615675.git.baruch@tkos.co.il>
-Message-ID: <CAHkwnC9QDdr1k00RcbS6Mu=JAn_6Ka2HxU_g9kFL9T+0Yx4Mhg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Mar 2015 09:19:32 +0100
+Subject: [Buildroot] [PATCH 1/2] samba: deprecate package due to EOL
+In-Reply-To: <54F8F0AA.5020902@zacarias.com.ar>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
+ <54F8D05F.4050300@mind.be>
+ <20150305230631.4e19032b@free-electrons.com>
+ <54F8D470.9060308@mind.be>
+ <20150305232325.3e137c1d@free-electrons.com>
+ <54F8F0AA.5020902@zacarias.com.ar>
+Message-ID: <20150306091932.2ec87e37@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 6, 2015 at 5:21 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-<snip>
-> +
-> +-LDLIBS=-lm
-> ++LDLIBS="${LDLIBS} -lm"
+Dear Gustavo Zacarias,
 
-Because we already do that for CFLAGS, instead of adding a patch just use sed:
+On Thu, 05 Mar 2015 21:11:22 -0300, Gustavo Zacarias wrote:
 
- define LMBENCH_CONFIGURE_CMDS
-        $(call CONFIG_UPDATE,$(@D))
-        sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
-+       sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
-        sed -i '/cd .*doc/d' $(@D)/src/Makefile
-        sed -i '/include/d' $(@D)/src/Makefile
-        touch $@
- endef
+> There's no pretty way out of this, the 3.6.x codebase is going
+> completely unmaintained upstream.
+> It's basically sheer luck that upstream fixed CVE-2015-0240 (which is
+> pretty severe) on the 3.6.x branch, just because 4.2.0 was delayed.
+> The best solution i can think of is either use samba 3.6.x as a fallback
+> libsmbclient (not very nice looking forward) or switch everything to
+> samba4 with the added size and restrictions.
+> kodi and mpd aren't small so i don't think it should be a deciding
+> factor, gvfs is meh, but then it's optional.
+> I'd favor the 2nd option.
+> Another factor to consider is that eventually (maybe already) the old
+> libsmbclient won't be able to talk to newer windows servers anyway,
+> specially when older versions of the protocol are disabled for security
+> reasons.
 
+Switching everything to Samba 4 is fine for me: that's the upstream
+decision, and in Buildroot we generally try to follow upstream
+decisions. If people are unhappy with Samba 4 being much bigger than
+Samba 3, then it's up to them to work with the Samba folks upstream to
+solve this. One guy posted some Buildroot patches at some point to only
+install certain parts of Samba 4 to reduce the installed size, and we
+invited him to work with upstream to resolve this.
 
-> + # check for HP-UX's ANSI compiler
-> + echo "main(int ac, char *av[]) { int i; }" > ${BASE}$$.c
-> diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-> index 59e750c5892f..224ec6983a66 100644
-> --- a/package/lmbench/lmbench.mk
-> +++ b/package/lmbench/lmbench.mk
-> @@ -11,12 +11,11 @@ LMBENCH_LICENSE = lmbench license (based on GPLv2)
->  LMBENCH_LICENSE_FILES = COPYING COPYING-2
->
->  LMBENCH_CFLAGS = $(TARGET_CFLAGS)
-> -LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+So in my side, I'm fully OK with a solution that consists in switching
+kodi, mpd and gvfs over to Samba 4.
 
-Why you don't want to use the TARGET_LDFLAGS variable anymore? This
-change is not needed to fix this build failure.
+Best regards,
 
-BR
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
