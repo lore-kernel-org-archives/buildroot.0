@@ -1,42 +1,56 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  6 Mar 2015 09:50:29 -0300
-Subject: [Buildroot] [PATCH 1/6] samba4: install to staging
-Message-ID: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  6 Mar 2015 09:50:30 -0300
+Subject: [Buildroot] [PATCH 2/6] mpd: switch smb support to samba4
+In-Reply-To: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1425646234-22041-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's required for packages that need libsmbclient.
+samba3 is deprecated upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba4/samba4.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/mpd/Config.in | 7 +++++--
+ package/mpd/mpd.mk    | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 527d584..78d92ef 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -7,6 +7,7 @@
- SAMBA4_VERSION = 4.2.0
- SAMBA4_SITE = http://ftp.samba.org/pub/samba
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
-+SAMBA4_INSTALL_STAGING = YES
- SAMBA4_LICENSE = GPLv3+
- SAMBA4_LICENSE_FILES = COPYING
- SAMBA4_DEPENDENCIES = host-e2fsprogs host-heimdal e2fsprogs popt python zlib \
-@@ -113,6 +114,10 @@ define SAMBA4_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 287ccf3..d077792 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -202,11 +202,14 @@ config BR2_PACKAGE_MPD_LIBNFS
+ comment "nfs support needs a toolchain w/ RPC"
+ 	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
  
-+define SAMBA4_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+endef
++comment "samba support needs an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
 +
- define SAMBA4_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- endef
+ config BR2_PACKAGE_MPD_LIBSMBCLIENT
+ 	bool "samba"
+ 	depends on !BR2_nios2 # samba
+-	select BR2_PACKAGE_SAMBA
+-	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_SAMBA4
+ 	help
+ 	  Enable Samba support.
+ 
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 41f3564..b5adafd 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -114,7 +114,7 @@ MPD_CONF_OPTS += --disable-nfs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_LIBSMBCLIENT),y)
+-MPD_DEPENDENCIES += samba
++MPD_DEPENDENCIES += samba4
+ MPD_CONF_OPTS += --enable-smbclient
+ else
+ MPD_CONF_OPTS += --disable-smbclient
 -- 
 2.0.5
