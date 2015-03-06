@@ -1,24 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 23:51:26 +0100
-Subject: [Buildroot] [PATCH 6/6] gvfs: add hash
-In-Reply-To: <1425646234-22041-6-git-send-email-gustavo@zacarias.com.ar>
-References: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
- <1425646234-22041-6-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150306235126.0f3c5fe1@free-electrons.com>
+Date: Fri, 6 Mar 2015 23:52:20 +0100
+Subject: [Buildroot] [PATCH v4 1/1] board: add support for RIoTboard
+In-Reply-To: <1425615085-4669-1-git-send-email-picmaster@mail.bg>
+References: <1425615085-4669-1-git-send-email-picmaster@mail.bg>
+Message-ID: <20150306235220.1bf96e68@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Nikolay Dimitrov,
 
-On Fri,  6 Mar 2015 09:50:34 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gvfs/gvfs.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/gvfs/gvfs.hash
+On Fri,  6 Mar 2015 06:11:25 +0200, Nikolay Dimitrov wrote:
+> This is a small development board, based on Freescale IMX6 Solo SoC
+> (single core ARM Cortex-A9). The board has excellent support in mainline
+> U-Boot and Linux.
+> 
+> Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 
 Applied, thanks!
 
