@@ -1,34 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 06 Mar 2015 06:07:08 -0300
-Subject: [Buildroot] [PATCH 1/2] samba: deprecate package due to EOL
-In-Reply-To: <20150306091932.2ec87e37@free-electrons.com>
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>	<54F8D05F.4050300@mind.be>	<20150305230631.4e19032b@free-electrons.com>	<54F8D470.9060308@mind.be>	<20150305232325.3e137c1d@free-electrons.com>	<54F8F0AA.5020902@zacarias.com.ar>
- <20150306091932.2ec87e37@free-electrons.com>
-Message-ID: <54F96E3C.7080201@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 6 Mar 2015 11:24:01 +0200
+Subject: [Buildroot] [PATCH v2] lmbench: fix build with libtirpc
+In-Reply-To: <CAHkwnC9QDdr1k00RcbS6Mu=JAn_6Ka2HxU_g9kFL9T+0Yx4Mhg@mail.gmail.com>
+References: <7760c8e2eb6de04f4acc5b4fd348cb35216bc2b7.1425615675.git.baruch@tkos.co.il>
+ <CAHkwnC9QDdr1k00RcbS6Mu=JAn_6Ka2HxU_g9kFL9T+0Yx4Mhg@mail.gmail.com>
+Message-ID: <20150306092401.GB15668@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/06/2015 05:19 AM, Thomas Petazzoni wrote:
-> Switching everything to Samba 4 is fine for me: that's the upstream
-> decision, and in Buildroot we generally try to follow upstream
-> decisions. If people are unhappy with Samba 4 being much bigger than
-> Samba 3, then it's up to them to work with the Samba folks upstream to
-> solve this. One guy posted some Buildroot patches at some point to only
-> install certain parts of Samba 4 to reduce the installed size, and we
-> invited him to work with upstream to resolve this.
-> 
-> So in my side, I'm fully OK with a solution that consists in switching
-> kodi, mpd and gvfs over to Samba 4.
+Hi Fabio,
 
-Just to document for people: The problem is that the libsmbclient
-library is pretty much connected with many of the other libraries, you
-just can't build that library alone and expect it to work.
-And for samba4 it's not binary (as in /usr/bin/* & /usr/sbin/*) size
-that bloats since all common code was moved to libraries.
-With the new smbtorture option (the one and only big binary) i think
-it's not worth the effort, specially that python is being pulled in and,
-again, it's pretty wired into the samba4 build system hence hard to avoid.
-Regards.
+On Fri, Mar 06, 2015 at 08:53:23AM +0100, Fabio Porcedda wrote:
+> On Fri, Mar 6, 2015 at 5:21 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> <snip>
+> > +
+> > +-LDLIBS=-lm
+> > ++LDLIBS="${LDLIBS} -lm"
+> 
+> Because we already do that for CFLAGS, instead of adding a patch just use sed:
+> 
+>  define LMBENCH_CONFIGURE_CMDS
+>         $(call CONFIG_UPDATE,$(@D))
+>         sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
+> +       sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
+>         sed -i '/cd .*doc/d' $(@D)/src/Makefile
+>         sed -i '/include/d' $(@D)/src/Makefile
+>         touch $@
+>  endef
+
+Good point. Will do in v3.
+
+> > + # check for HP-UX's ANSI compiler
+> > + echo "main(int ac, char *av[]) { int i; }" > ${BASE}$$.c
+> > diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+> > index 59e750c5892f..224ec6983a66 100644
+> > --- a/package/lmbench/lmbench.mk
+> > +++ b/package/lmbench/lmbench.mk
+> > @@ -11,12 +11,11 @@ LMBENCH_LICENSE = lmbench license (based on GPLv2)
+> >  LMBENCH_LICENSE_FILES = COPYING COPYING-2
+> >
+> >  LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+> > -LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+> 
+> Why you don't want to use the TARGET_LDFLAGS variable anymore? This
+> change is not needed to fix this build failure.
+
+The $(LMBENCH_LDLIBS) variable was not used before this patch, so this is just 
+dead code removal. Since this patch uses this variable I think we should 
+remove this in this patch to avoid unintended side effects.
+
+Thanks for reviewing,
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
