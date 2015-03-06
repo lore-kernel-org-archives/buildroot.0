@@ -1,185 +1,154 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 06 Mar 2015 01:28:42 +0100
-Subject: [Buildroot] [RFC v3 30/30] pkg-generic: add support for
- per-package staging directory
-In-Reply-To: <1425374255-6827-31-git-send-email-fabio.porcedda@gmail.com>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <1425374255-6827-31-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <54F8F4BA.7020800@mind.be>
+From: Nikolay Dimitrov <picmaster@mail.bg>
+Date: Fri, 06 Mar 2015 06:06:36 +0200
+Subject: [Buildroot] [PATCH v3 1/1] board: add support for RIoTboard
+In-Reply-To: <20150305212333.40293868@free-electrons.com>
+References: <1425574641-28524-1-git-send-email-picmaster@mail.bg>
+ <20150305212333.40293868@free-electrons.com>
+Message-ID: <54F927CC.3070503@mail.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/03/15 10:17, Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  Makefile               |  2 +-
->  package/Makefile.in    |  1 +
->  package/pkg-generic.mk | 54 ++++++++++++++++++++++++++++++++++++++++++++++++--
->  3 files changed, 54 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 3723abc..6619bad 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -832,7 +832,7 @@ printvars:
->  
->  clean:
->  	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
-> -		$(BUILD_DIR) $(BASE_DIR)/staging \
-> +		$(BUILD_DIR) $(BASE_DIR)/staging $(STAGINGPKG_DIR) \
->  		$(LEGAL_INFO_DIR)
->  
->  distclean: clean
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 6cfe3ed..2a21c9d 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -109,6 +109,7 @@ endif
->  STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
->  STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
->  STAGINGNOPKG_DIR := $(STAGING_DIR)
-> +STAGINGPKG_DIR = $(BASE_DIR)/stagingpkg
+Hi Thomas,
 
- Since $(STAGING_DIR) no longer contains everything, the staging symlink has
-really become pointless. For me, it's only use was that you could set the
-debugger's sysroot to it to get access to unstripped .so files. And then, we can
-reuse $(BASE_DIR)/staging for $(STAGINGPKG_DIR).
+On 03/05/2015 10:23 PM, Thomas Petazzoni wrote:
+> Dear Nikolay Dimitrov,
+>
+> On Thu,  5 Mar 2015 18:57:21 +0200, Nikolay Dimitrov wrote:
+>> This is a small development board, based on Freescale IMX6 Solo SoC
+>> (single core ARM Cortex-A9). The board has excellent support in mainline
+>> U-Boot and Linux.
+>>
+>> Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+>
+> This looks much simpler and nicer! Some remaining comments I forgot to
+> make on earlier versions.
+>
+>> +1. Compiling buildroot
+>> +----------------------
+>
+> An empty line between the title and the contents of the section would
+> be nice.
 
->  
->  TARGET_OPTIMIZATION := $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
->  
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 43289d0..c35f801 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -208,7 +208,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->  		$(call MESSAGE,"Fixing package configuration files") ;\
->  			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
->  				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
-> -				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
-> +				-e 's,^\(exec_\)\?prefix=.*,\1prefix=`echo $$0 | sed '"'"'s_/[^/]*/[^/]*$$__'"'"'`,g' \
+Fixed.
 
- Wow, ridiculously complicated quoting...
- More importantly, however: shouldn't this be for all the replacements, i.e. a
-couple of lines below...
+>> +make distclean
+>
+> We generally don't indicate to use 'make distclean' in the other
+> instructions related to board specific details.
 
->  				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
->  				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
->  				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
+Fixed.
 
- ... here?
+>> +make riotboard_defconfig
+>> +make
+>> +
+>> +2. Installing buildroot
+>> +-----------------------
+>
+> Same: an empty new line here.
 
-> @@ -247,7 +247,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
->  
->  # Remove package sources
->  $(BUILD_DIR)/%/.stamp_dircleaned:
-> -	rm -Rf $(@D)
-> +	rm -Rf $(@D) $(STAGINGPKG_DIR)/$(call LOWERCASE,$(PKG))
->  
->  ################################################################################
->  # virt-provides-single -- check that provider-pkg is the declared provider for
-> @@ -431,6 +431,38 @@ endif
->  # Eliminate duplicates in dependencies
->  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
->  
-> +ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+Fixed.
 
- I guess the intention here is to still install the toolchain stuff in the
-original staging directory. But is that really needed? Since all packages depend
-on toolchain, they'd just copy in the toolchain staging dir into their private
-staging dir. Right?
+>> +Prepare an SD-card and plug it into your card reader. Write the bootloader to
+>> +your SD-card:
+>> +
+>> +sudo dd if=output/images/u-boot.imx of=/dev/sdX bs=1k seek=1
+>> +
+>> +Create 1 partition on the SD-card using your favourite tool. The partition
+>> +should be big enough to hold your rootfs, for example 128MiB. Here's how an
+>> +example of such partition layout:
+>> +
+>> +   Device Boot      Start         End      Blocks   Id  System
+>> +/dev/sdX1            2048      264191      131072   83  Linux
+>> +
+>> +Format the SD-card partition with your favourite filesystem:
+>> +
+>> +sudo mkfs.ext2 /dev/sdX1
+>> +
+>> +Deploy your rootfs to the SD-card:
+>> +
+>> +sudo mkdir /mnt/sdcard/
+>> +sudo mount /dev/sdX1 /mnt/sdcard/
+>> +sudo tar xf rootfs.tar -C /mnt/sdcard/
+>> +sudo umount /dev/sdX1
+>> +
+>> +3. Running buildroot
+>> +--------------------
+>
+> Same.
 
-> + $(2)_STAGING_DIR = $$(STAGINGPKG_DIR)/$(1)
-> + $(2)_TARGET_CPPFLAGS = $$(strip $$(TARGET_CPPFLAGS) -I$$($(2)_STAGING_DIR)/usr/include)
+Fixed.
 
- Actually, it would be sufficient to add -I$(STAGING_DIR)/usr/include to
-TARGET_CPPFLAGS. Since STAGING_DIR is set to the per-package staging dir in the
-build rules below, it will get carried over into the TARGET_CPPFLAGS variable,
-which only gets expanded when the rules are run. Same for all the other
-variables you set here.
+>> diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+>> new file mode 100644
+>> index 0000000..d5b50e9
+>> --- /dev/null
+>> +++ b/configs/riotboard_defconfig
+>> @@ -0,0 +1,32 @@
+>> +# architecture
+>> +BR2_arm=y
+>> +BR2_cortex_a9=y
+>
+> I believe you should try to enable BR2_ARM_EABIHF=y. It should really
+> be the default for ARMv7 platforms nowadays, unless you have old
+> non-EABIhf pre-built binaries.
 
-> + $(2)_TARGET_LDFLAGS = $$(TARGET_LDFLAGS) -L$$($(2)_STAGING_DIR)/usr/lib -Wl,-rpath,$$($(2)_STAGING_DIR)/usr/lib
-> + $(2)_TARGET_CONFIGURE_OPTS = \
-> +	$$(TARGET_CONFIGURE_OPTS) \
-> +	PKG_CONFIG_SYSROOT_DIR="$$($(2)_STAGING_DIR)" \
-> +	PKG_CONFIG_PATH="$$($(2)_STAGING_DIR)/usr/lib/pkgconfig"
-> + $(2)_TARGET_MAKE_ENV = \
-> +	$$(TARGET_MAKE_ENV) \
-> +	PKG_CONFIG_SYSROOT_DIR="$$($(2)_STAGING_DIR)" \
-> +	PKG_CONFIG_PATH="$$($(2)_STAGING_DIR)/usr/lib/pkgconfig"
-> +else
-> + $(2)_STAGING_DIR = $$(STAGING_DIR)
-> + $(2)_TARGET_CONFIGURE_OPTS = $$(TARGET_CONFIGURE_OPTS)
-> + $(2)_TARGET_MAKE_ENV = $$(TARGET_MAKE_ENV)
-> +endif
-> +
-> +ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
-> + $(2)_STAGING_DIRS = $$(wildcard $$(foreach dep,\
-> +	$$(filter-out host-% toolchain,$$($(2)_FINAL_DEPENDENCIES)),\
-> +	$$($$(call UPPERCASE,$$(dep))_STAGING_DIR)))
-> +
-> + define $(2)_PREPARE_STAGING_DIR
-> +	mkdir -p $$(STAGING_DIR)/usr/include $$(STAGING_DIR)/usr/lib
-> +	$$(if $$($(2)_STAGING_DIRS),
-> +		cp -rdpf $$(addsuffix /*,$$($(2)_STAGING_DIRS)) \
-> +			$$($(2)_STAGING_DIR))
+Fixed.
 
- Why not just
-		cp -rdpf -t $$($(2)_STAGING_DIR) $$($(2)_STAGING_DIRS)
-?
+>> +# system
+>> +BR2_TARGET_GENERIC_GETTY=y
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+>> +
+>> +# toolchain
+>> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+>
+> No, please don't include largefile support by default. We try to keep
+> the defconfigs minimal.
 
+Fixed.
 
- Regards,
- Arnout
+>> +# rootfs
+>> +BR2_TARGET_ROOTFS_EXT2=y
+>> +BR2_TARGET_ROOTFS_EXT2_2r1=y
+>> +BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
+>> +
+>> +# bootloader
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_VERSION="2015.01"
+>> +BR2_TARGET_UBOOT_BOARDNAME="riotboard"
+>> +BR2_TARGET_UBOOT_FORMAT_IMX=y
+>> +
+>> +# kernel headers
+>> +BR2_KERNEL_HEADERS_3_18=y
+>
+> For the kernel headers, please use:
+>
+> BR2_KERNEL_HEADERS_VERSION=y
+> BR2_DEFAULT_KERNEL_VERSION="3.18"
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+>
+> That's because the BR2_KERNEL_HEADERS_3_18 option may become
+> deprecated/removed in the future.
 
+Fixed.
 
-> + endef
-> + $(2)_PRE_CONFIGURE_HOOKS := $(2)_PREPARE_STAGING_DIR $$($(2)_PRE_CONFIGURE_HOOKS)
-> +endif
-> +
->  $(2)_INSTALL_STAGING		?= NO
->  $(2)_INSTALL_IMAGES		?= NO
->  $(2)_INSTALL_TARGET		?= YES
-> @@ -604,11 +636,29 @@ $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
->  # define the PKG variable for all targets, containing the
->  # uppercase package variable prefix
->  $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
-> +$$($(2)_TARGET_INSTALL_TARGET):		STAGING_DIR:=$$($(2)_STAGING_DIR)
-> +$$($(2)_TARGET_INSTALL_TARGET):		TARGET_CPPFLAGS:=$$($(2)_TARGET_CPPFLAGS)
-> +$$($(2)_TARGET_INSTALL_TARGET):		TARGET_LDFLAGS:=$$($(2)_TARGET_LDFLAGS)
-> +$$($(2)_TARGET_INSTALL_TARGET):		TARGET_CONFIGURE_OPTS:=$$($(2)_TARGET_CONFIGURE_OPTS)
->  $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
-> +$$($(2)_TARGET_INSTALL_STAGING):	STAGING_DIR:=$$($(2)_STAGING_DIR)
-> +$$($(2)_TARGET_INSTALL_STAGING):	TARGET_CPPFLAGS:=$$($(2)_TARGET_CPPFLAGS)
-> +$$($(2)_TARGET_INSTALL_STAGING):	TARGET_LDFLAGS:=$$($(2)_TARGET_LDFLAGS)
-> +$$($(2)_TARGET_INSTALL_STAGING):	TARGET_CONFIGURE_OPTS:=$$($(2)_TARGET_CONFIGURE_OPTS)
->  $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
->  $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
-> +$$($(2)_TARGET_INSTALL_HOST):		STAGING_DIR:=$$($(2)_STAGING_DIR)
->  $$($(2)_TARGET_BUILD):			PKG=$(2)
-> +$$($(2)_TARGET_BUILD):			STAGING_DIR:=$$($(2)_STAGING_DIR)
-> +$$($(2)_TARGET_BUILD):			TARGET_CPPFLAGS:=$$($(2)_TARGET_CPPFLAGS)
-> +$$($(2)_TARGET_BUILD):			TARGET_LDFLAGS:=$$($(2)_TARGET_LDFLAGS)
-> +$$($(2)_TARGET_BUILD):			TARGET_CONFIGURE_OPTS:=$$($(2)_TARGET_CONFIGURE_OPTS)
-> +$$($(2)_TARGET_BUILD):			TARGET_MAKE_ENV:=$$($(2)_TARGET_MAKE_ENV)
->  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-> +$$($(2)_TARGET_CONFIGURE):		STAGING_DIR:=$$($(2)_STAGING_DIR)
-> +$$($(2)_TARGET_CONFIGURE):		TARGET_CPPFLAGS:=$$($(2)_TARGET_CPPFLAGS)
-> +$$($(2)_TARGET_CONFIGURE):		TARGET_LDFLAGS:=$$($(2)_TARGET_LDFLAGS)
-> +$$($(2)_TARGET_CONFIGURE):		TARGET_CONFIGURE_OPTS:=$$($(2)_TARGET_CONFIGURE_OPTS)
->  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
->  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
->  $$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
-> 
+>> +# kernel
+>> +BR2_LINUX_KERNEL=y
+>
+> Please specify:
+>
+> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
+>
+> Even if the current default version is fine for you, this default
+> version will change over time, and we want to be sure to rebuild the
+> same kernel version.
 
+Fixed.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+v4 is on the way.
+
+Regards.
+Nikolay
