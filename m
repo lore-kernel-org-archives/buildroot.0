@@ -1,42 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 5 Mar 2015 23:05:21 +0000
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.117
-Message-ID: <1425596721-20962-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 05 Mar 2015 21:11:24 -0300
+Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
+In-Reply-To: <20150305232946.3620697e@free-electrons.com>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>	<1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
+ <20150305232946.3620697e@free-electrons.com>
+Message-ID: <54F8F0AC.8030707@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.02.117
-- Update the hash file
+On 03/05/2015 07:29 PM, Thomas Petazzoni wrote:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Dear Gustavo Zacarias,
+> 
+> On Thu,  5 Mar 2015 17:44:09 -0300, Gustavo Zacarias wrote:
+>> Now with support for AD DC, ADS and clustering features.
+>> All dropped patches are upstream.
+>>
+>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> 
+> Ok, I'm going to be annoying on this one, but since this is something
+> we generally ask all developers to do, I think we should ask you to do
+> it too.
+> 
+> This cleanup of the indentation is definitely good, but has nothing to
+> do with the bump to 4.2.0. It should be part of a separate patch.
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index adffcdb..e7f7b2d 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5  f71aa8e64030f3d2a3fdabcc36e45094  LVM2.2.02.113.tgz
-+md5  ab5889dae7924b44ed2444161058a419  LVM2.2.02.117.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 48a3116..6e324eb 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.113
-+LVM2_VERSION = 2.02.117
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
--- 
-1.7.1
+Well, it's pointless IMHO to split it, since some options changed and
+it's a major bump, does it really make sense?
+I won't make a badly-indented 4.2.x package file to fix it later, it
+would be pointless. It'll give me one more commit that doesn't do
+anything useful.
+And "fixing" 4.1.x just to just stomp on it later with the bump would
+make no sense either, same case, many changes.
+Regards.
