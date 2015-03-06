@@ -1,47 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 23:42:39 +0100
-Subject: [Buildroot] [PATCH 2/2] tcl: rename BR2_PACKAGE_TCL_SHLIB_ONLY
- to be more consistent
-In-Reply-To: <1425681022-16612-2-git-send-email-Vincent.Riera@imgtec.com>
-References: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
- <1425681022-16612-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150306234239.00ede664@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri,  6 Mar 2015 23:42:44 +0100
+Subject: [Buildroot] [PATCH] socketcand: bump version
+Message-ID: <1425681764-18099-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/socketcand/socketcand.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, 6 Mar 2015 22:30:22 +0000, Vicente Olivert Riera wrote:
-> The BR2_PACKAGE_TCL_SHLIB_ONLY is confusing because someone could think
-> that only shared libraries would be installed. But, what actually does
-> is removing the 'tclsh' binary, so better to reword it in order to be
-> consistent with what actually does.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/tcl/Config.in |    7 +++----
->  package/tcl/tcl.mk    |    2 +-
->  2 files changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/tcl/Config.in b/package/tcl/Config.in
-> index c3d0d87..996dc96 100644
-> --- a/package/tcl/Config.in
-> +++ b/package/tcl/Config.in
-> @@ -25,12 +25,11 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
->  
->  	  It saves approx. 1.6 Mb of space.
->  
-> -config BR2_PACKAGE_TCL_SHLIB_ONLY
-> -	bool "install only shared library"
-> +config BR2_PACKAGE_TCL_REMOVE_TCLSH
-
-Renaming options requires Config.in.legacy handling.
-
-Thomas
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index 90d7540..10b8b5b 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCKETCAND_VERSION = 274e4e44107f6138a29bbc4e20f9fbd2a7d4dab1
++SOCKETCAND_VERSION = 8339e62a6bf60be571672678fb1de544768cf40e
+ SOCKETCAND_SITE = $(call github,dschanoeh,socketcand,$(SOCKETCAND_VERSION))
+ SOCKETCAND_AUTORECONF = YES
+ SOCKETCAND_LICENSE = BSD-3c or GPLv2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
