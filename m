@@ -1,40 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  6 Mar 2015 09:50:32 -0300
-Subject: [Buildroot] [PATCH 4/6] gvfs: switch smb support to samba4
+Date: Fri,  6 Mar 2015 09:50:33 -0300
+Subject: [Buildroot] [PATCH 5/6] samba: deprecate package due to EOL
 In-Reply-To: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1425646234-22041-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1425646234-22041-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-samba3 is deprecated upstream.
+Samba 3.6.x is now EOL, people should move to samba4.
+
+See: https://www.samba.org/samba/history/samba-4.2.0.html
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gvfs/gvfs.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/samba/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index d3f5a4f..4242e80 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -58,11 +58,11 @@ else
- GVFS_CONF_OPTS += --disable-http
- endif
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index 9d04851..7ff8428 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SAMBA
+ 	bool "samba"
++	depends on BR2_DEPRECATED_SINCE_2015_05
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_nios2 # binary too large, relocations don't fit
+@@ -15,6 +16,7 @@ config BR2_PACKAGE_SAMBA
+ 		so choose only the components you need.
  
--ifeq ($(BR2_PACKAGE_SAMBA_LIBSMBCLIENT),y)
--GVFS_DEPENDENCIES += samba
-+ifeq ($(BR2_PACKAGE_SAMBA4),y)
-+GVFS_DEPENDENCIES += samba4
- GVFS_CONF_OPTS += \
- 	--enable-samba \
--	--with-samba-includes=$(STAGING_DIR)/usr/include \
-+	--with-samba-includes=$(STAGING_DIR)/usr/include/samba-4.0 \
- 	--with-samba-libs=$(STAGING_DIR)/usr/lib \
- 	ac_cv_lib_smbclient_smbc_option_get=yes
- else
+ comment "samba needs a toolchain w/ threads"
++	depends on BR2_DEPRECATED_SINCE_2015_05
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
 -- 
 2.0.5
