@@ -1,7 +1,9 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri,  6 Mar 2015 05:46:25 +0100
-Subject: [Buildroot] [PATCH 1/2] libglib2: bump to version 2.42.2
-Message-ID: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
+Date: Fri,  6 Mar 2015 05:46:26 +0100
+Subject: [Buildroot] [PATCH 2/2] modem-manager: bump to version 1.4.4
+In-Reply-To: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
+References: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <1425617186-14203-2-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/libglib2/libglib2.mk | 2 +-
+ package/modem-manager/modem-manager.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 2129a85..2476698 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 349517d..a6e1b36 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.42
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
+-MODEM_MANAGER_VERSION = 1.4.2
++MODEM_MANAGER_VERSION = 1.4.4
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 -- 
 2.1.4
