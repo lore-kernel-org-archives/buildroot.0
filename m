@@ -1,25 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 23:41:54 +0100
-Subject: [Buildroot] [PATCH] dstat: add hash file
-In-Reply-To: <1425681237-10973-1-git-send-email-yegorslists@googlemail.com>
-References: <1425681237-10973-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150306234154.006537f8@free-electrons.com>
+Date: Fri, 6 Mar 2015 23:42:39 +0100
+Subject: [Buildroot] [PATCH 2/2] tcl: rename BR2_PACKAGE_TCL_SHLIB_ONLY
+ to be more consistent
+In-Reply-To: <1425681022-16612-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1425681022-16612-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150306234239.00ede664@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Vicente Olivert Riera,
 
-On Fri,  6 Mar 2015 23:33:57 +0100, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, 6 Mar 2015 22:30:22 +0000, Vicente Olivert Riera wrote:
+> The BR2_PACKAGE_TCL_SHLIB_ONLY is confusing because someone could think
+> that only shared libraries would be installed. But, what actually does
+> is removing the 'tclsh' binary, so better to reword it in order to be
+> consistent with what actually does.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/dstat/dstat.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/dstat/dstat.hash
+>  package/tcl/Config.in |    7 +++----
+>  package/tcl/tcl.mk    |    2 +-
+>  2 files changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/tcl/Config.in b/package/tcl/Config.in
+> index c3d0d87..996dc96 100644
+> --- a/package/tcl/Config.in
+> +++ b/package/tcl/Config.in
+> @@ -25,12 +25,11 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
+>  
+>  	  It saves approx. 1.6 Mb of space.
+>  
+> -config BR2_PACKAGE_TCL_SHLIB_ONLY
+> -	bool "install only shared library"
+> +config BR2_PACKAGE_TCL_REMOVE_TCLSH
 
-Applied, thanks.
+Renaming options requires Config.in.legacy handling.
 
 Thomas
 -- 
