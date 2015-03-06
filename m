@@ -1,75 +1,106 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  6 Mar 2015 12:10:50 +0200
-Subject: [Buildroot] [PATCH v4] lmbench: fix build with libtirpc
-Message-ID: <c76c5fb6b3cab78e103c6ed6e280da6b8ccdfdcb.1425636650.git.baruch@tkos.co.il>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Fri, 6 Mar 2015 11:16:31 +0100
+Subject: [Buildroot] [RESEND PATCH] pulseview: new package
+In-Reply-To: <1425304479-8490-1-git-send-email-bgolaszewski@baylibre.com>
+References: <1425304479-8490-1-git-send-email-bgolaszewski@baylibre.com>
+Message-ID: <CAMpxmJU0dVs2oNe72-YrpJ-y35yUiOy+T1xkwKa7sjOrnBmkAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When linking with an external libtirpc, -ltirpc must come after lmbench.a in
-the linker command line. Use LDLIBS for that.
+2015-03-02 14:54 GMT+01:00 Bartosz Golaszewski <bgolaszewski@baylibre.com>:
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  package/Config.in              |  1 +
+>  package/pulseview/Config.in    | 28 ++++++++++++++++++++++++++++
+>  package/pulseview/pulseview.mk | 24 ++++++++++++++++++++++++
+>  3 files changed, 53 insertions(+)
+>  create mode 100644 package/pulseview/Config.in
+>  create mode 100644 package/pulseview/pulseview.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 3aa664a..c160f5f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -362,6 +362,7 @@ endif
+>         source "package/picocom/Config.in"
+>         source "package/pifmrds/Config.in"
+>         source "package/pps-tools/Config.in"
+> +       source "package/pulseview/Config.in"
+>         source "package/read-edid/Config.in"
+>         source "package/rng-tools/Config.in"
+>         source "package/rpi-userland/Config.in"
+> diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+> new file mode 100644
+> index 0000000..4428db7
+> --- /dev/null
+> +++ b/package/pulseview/Config.in
+> @@ -0,0 +1,28 @@
+> +config BR2_PACKAGE_PULSEVIEW
+> +       bool "pulseview"
+> +       select BR2_PACKAGE_LIBSERIALPORT
+> +       select BR2_PACKAGE_LIBSIGROK
+> +       select BR2_PACKAGE_LIBSIGROKCXX
+> +       depends on BR2_PACKAGE_QT5
+> +       select BR2_PACKAGE_QT5BASE_WIDGETS
+> +       select BR2_PACKAGE_QT5SVG
+> +       select BR2_PACKAGE_BOOST
+> +       select BR2_PACKAGE_BOOST_FILESYSTEM
+> +       select BR2_PACKAGE_BOOST_SYSTEM
+> +       select BR2_PACKAGE_BOOST_THREAD
+> +       # libsigrok->libglib2:
+> +       depends on BR2_USE_WCHAR
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on BR2_USE_MMU
+> +       depends on BR2_TOOLCHAIN_BUILDROOT_CXX
+> +       help
+> +         PulseView is a Qt based logic analyzer, oscilloscope
+> +         and MSO GUI for sigrok.
+> +
+> +         http://sigrok.org/wiki/PulseView
+> +
+> +comment "pulseview needs a toolchain w/ wchar, threads, C++"
+> +       depends on BR2_USE_MMU
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on !BR2_PACKAGE_QT5
+> +       depends on !BR2_TOOLCHAIN_BUILDROOT_CXX
+> diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
+> new file mode 100644
+> index 0000000..923459d
+> --- /dev/null
+> +++ b/package/pulseview/pulseview.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# pulseview
+> +#
+> +################################################################################
+> +
+> +# TODO Pulseview can be built and linked against Qt4 as well.
+> +
+> +# No https access on upstream git
+> +PULSEVIEW_SITE = git://sigrok.org/pulseview
+> +PULSEVIEW_VERSION = 19be0af16af83ca10f7ce69cb64f0b0c6f6a0d81
+> +PULSEVIEW_LICENSE = GPLv3+
+> +PULSEVIEW_LICENSE_FILES = COPYING
+> +PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
+> +PULSEVIEW_CONF_OPTS = -DDISABLE_WERROR=y
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSIGROKDECODE),y)
+> +PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=TRUE
+> +PULSEVIEW_DEPENDENCIES += libsigrokdecode
+> +else
+> +PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=FALSE
+> +endif
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.1.4
+>
 
-Fixes:
-http://autobuild.buildroot.net/results/89e/89ee35561d3a49f38e9a747ed78a5846be4764c8/
-http://autobuild.buildroot.net/results/409/4097b1c2585db2de517a8741174c02177aabee00/
+Just a friendly ping as this patch seems to have been forgotten.
 
-and more.
-
-Also, remove LMBENCH_LDLIBS assignment. This variable was not used before.
-
-Reviewed-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v4:
-   Add a comment in the commit log on LMBENCH_LDLIBS removal (Fabio Porcedda)
-   Add Fabio's review and test tags
-
-v3:
-   Edit scripts/build with sed instead of using a patch (Fabio Porcedda)
-
-v2:
-   Rebase on current master (Fabio Porcedda)
----
- package/lmbench/lmbench.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index 59e750c5892f..f593428ac1c8 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -11,24 +11,27 @@ LMBENCH_LICENSE = lmbench license (based on GPLv2)
- LMBENCH_LICENSE_FILES = COPYING COPYING-2
- 
- LMBENCH_CFLAGS = $(TARGET_CFLAGS)
--LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- LMBENCH_DEPENDENCIES += host-pkgconf libtirpc
- LMBENCH_CFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libtirpc)
--LMBENCH_LDFLAGS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
-+LMBENCH_LDLIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs libtirpc)
- endif
- 
- define LMBENCH_CONFIGURE_CMDS
- 	$(call CONFIG_UPDATE,$(@D))
- 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
-+	sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
- 	sed -i '/cd .*doc/d' $(@D)/src/Makefile
- 	sed -i '/include/d' $(@D)/src/Makefile
- 	touch $@
- endef
- 
-+# Note: there is a second stage 'make' invocation from the 'scripts/build'
-+# script. So the variables override below don't take direct effect in
-+# src/Makefile.
- define LMBENCH_BUILD_CMDS
--	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
-+	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDLIBS="$(LMBENCH_LDLIBS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
- endef
- 
- define LMBENCH_INSTALL_TARGET_CMDS
--- 
-2.1.4
+Best regards,
+Bartosz Golaszewski
