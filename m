@@ -1,61 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 6 Mar 2015 11:24:01 +0200
-Subject: [Buildroot] [PATCH v2] lmbench: fix build with libtirpc
-In-Reply-To: <CAHkwnC9QDdr1k00RcbS6Mu=JAn_6Ka2HxU_g9kFL9T+0Yx4Mhg@mail.gmail.com>
-References: <7760c8e2eb6de04f4acc5b4fd348cb35216bc2b7.1425615675.git.baruch@tkos.co.il>
- <CAHkwnC9QDdr1k00RcbS6Mu=JAn_6Ka2HxU_g9kFL9T+0Yx4Mhg@mail.gmail.com>
-Message-ID: <20150306092401.GB15668@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 Mar 2015 10:26:32 +0100
+Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
+In-Reply-To: <54F96D83.4010304@zacarias.com.ar>
+References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
+ <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
+ <20150305232946.3620697e@free-electrons.com>
+ <54F8F0AC.8030707@zacarias.com.ar>
+ <20150306094008.7baf8c91@free-electrons.com>
+ <54F96D83.4010304@zacarias.com.ar>
+Message-ID: <20150306102632.20dff6f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+Dear Gustavo Zacarias,
 
-On Fri, Mar 06, 2015 at 08:53:23AM +0100, Fabio Porcedda wrote:
-> On Fri, Mar 6, 2015 at 5:21 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> <snip>
-> > +
-> > +-LDLIBS=-lm
-> > ++LDLIBS="${LDLIBS} -lm"
-> 
-> Because we already do that for CFLAGS, instead of adding a patch just use sed:
-> 
->  define LMBENCH_CONFIGURE_CMDS
->         $(call CONFIG_UPDATE,$(@D))
->         sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
-> +       sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
->         sed -i '/cd .*doc/d' $(@D)/src/Makefile
->         sed -i '/include/d' $(@D)/src/Makefile
->         touch $@
->  endef
+On Fri, 06 Mar 2015 06:04:03 -0300, Gustavo Zacarias wrote:
 
-Good point. Will do in v3.
+> Well,  i've done it several times in the past, just search for "While at
+> it" and "Also" in the commit logs - in fact it was you who committed
+> them in many cases (and not only mine).
+> Does this mean that i should separate bumps from adding hash files
+> and/or renaming patches?
 
-> > + # check for HP-UX's ANSI compiler
-> > + echo "main(int ac, char *av[]) { int i; }" > ${BASE}$$.c
-> > diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-> > index 59e750c5892f..224ec6983a66 100644
-> > --- a/package/lmbench/lmbench.mk
-> > +++ b/package/lmbench/lmbench.mk
-> > @@ -11,12 +11,11 @@ LMBENCH_LICENSE = lmbench license (based on GPLv2)
-> >  LMBENCH_LICENSE_FILES = COPYING COPYING-2
-> >
-> >  LMBENCH_CFLAGS = $(TARGET_CFLAGS)
-> > -LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
-> 
-> Why you don't want to use the TARGET_LDFLAGS variable anymore? This
-> change is not needed to fix this build failure.
+There is obviously a line to draw between things that we can do in the
+same commit, and things that we should not. I believe adding a hash
+file together with a bump is OK since anyway doing the bump would
+change the hash file.
 
-The $(LMBENCH_LDLIBS) variable was not used before this patch, so this is just 
-dead code removal. Since this patch uses this variable I think we should 
-remove this in this patch to avoid unintended side effects.
+> Because the workload and noise committing will go up higher if that's
+> the choice.
+> And how does a package style fix differ from renaming patches that's
+> another style fix?
 
-Thanks for reviewing,
-baruch
+I'd say readability. Renaming patches is clearly separated from .mk
+changes. In the case of your Samba 4.2 bump, the changes within the .mk
+file are mixed between bump-related changes, and indentation-related
+changes, and this is what bothers me.
 
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
