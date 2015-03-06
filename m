@@ -1,32 +1,61 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri,  6 Mar 2015 05:46:26 +0100
-Subject: [Buildroot] [PATCH 2/2] modem-manager: bump to version 1.4.4
-In-Reply-To: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
-References: <1425617186-14203-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <1425617186-14203-2-git-send-email-petr.vorel@gmail.com>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Fri,  6 Mar 2015 06:43:15 +0100
+Subject: [Buildroot] [PATCH 1/1] docs/manual: add host package documentation
+Message-ID: <1425620595-4032-1-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Jan Heylen <heyleke@gmail.com>
 ---
- package/modem-manager/modem-manager.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/adding-packages-directory.txt | 33 +++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 349517d..a6e1b36 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 8a88282..9abef23 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -49,6 +49,39 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
  
--MODEM_MANAGER_VERSION = 1.4.2
-+MODEM_MANAGER_VERSION = 1.4.4
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
++
++=== Target packages with a host part
++
++For packages having a host part, there are two options:
++Either the host packages is only required for one or more target packages
++to be build. In that case, add a host-<foo> to each of the packages +depends+
++or +select+.
++
++Or if it is feasible that the user wants to be able to select or deselect the
++host package, you can use the +Config.in.host+ file. This file will contain the
++option descriptions related to our +host-<foo>+ software that will be used
++and displayed in the configuration tool. It should basically contain:
++
++---------------------------
++config BR2_PACKAGE_HOST_FOO
++	bool "host foo"
++	help
++	  This is a comment that explains what foo for the host is.
++
++	  http://foosoftware.org/foo/
++---------------------------
++
++The same coding style and options as for the +Config.in+ file are valid.
++
++Finally you have to add your new +libfoo/Config.in.host+ to
+++package/Config.in.host+. The files included there are 'sorted alphabetically'
++and are 'NOT' supposed to contain anything but the 'bare' name of the package.
++
++--------------------------
++source "package/foo/Config.in.host"
++--------------------------
++
++
+ [[depends-on-vs-select]]
+ ==== Choosing +depends on+ or +select+
+ 
 -- 
-2.1.4
+1.9.1
