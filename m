@@ -1,96 +1,80 @@
-From: Alexey Mednyy <swexru@gmail.com>
-Date: Fri,  6 Mar 2015 20:09:43 +0300
-Subject: [Buildroot] [PATCH] fix eudev really not depending kernel headers
-	>=3.9
-Message-ID: <1425661783-26577-1-git-send-email-swexru@gmail.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Fri,  6 Mar 2015 12:17:45 -0500
+Subject: [Buildroot] [PATCH v2] valgrind: rename ptrcheck to sgcheck like
+	upstream
+Message-ID: <1425662265-23105-1-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- ...c-don-t-die-on-missing-linux-btrfs.h-fixe.patch | 37 ++++++++++++++++++++++
- package/eudev/eudev.mk                             |  1 +
- system/Config.in                                   |  7 ++--
- 3 files changed, 41 insertions(+), 4 deletions(-)
- create mode 100644 package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch
+ Config.in.legacy             | 9 +++++++++
+ package/valgrind/Config.in   | 6 +++---
+ package/valgrind/valgrind.mk | 8 ++++----
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch b/package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch
-new file mode 100644
-index 0000000..a749b08
---- /dev/null
-+++ b/package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch
-@@ -0,0 +1,37 @@
-+From 6740579367ddd2ce0b315863cdb92d34d1d693c7 Mon Sep 17 00:00:00 2001
-+From: "Anthony G. Basile" <blueness@gentoo.org>
-+Date: Sun, 16 Nov 2014 13:40:43 -0500
-+Subject: [PATCH] configure.ac: don't die on missing linux/btrfs.h, fixes issue
-+ #100
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0b87ddb..1f57671 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -99,7 +99,16 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2015.05"
+ 
++config BR2_PACKAGE_VALGRIND_PTRCHECK
++	bool "valgrind's PTRCheck was renamed to SGCheck"
++	select BR2_LEGACY
++	select BR2_PACKAGE_VALGRIND_SGCHECK
++	help
++	  PTRCheck was renamed to SGCheck in valgrind
 +
-+Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
-+---
-+ configure.ac | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index a3747f9..dbca833 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -49,11 +49,17 @@ AC_CHECK_HEADERS(
-+ )
-+ 
-+ AC_CHECK_HEADERS(
-+-	[linux/btrfs.h mtd/mtd-user.h],
-++	[mtd/mtd-user.h],
-+ 	[],
-+ 	[AC_MSG_ERROR([*** KERNEL header not found])]
-+ )
-+ 
-++AC_CHECK_HEADERS(
-++	[linux/btrfs.h],
-++	[],
-++	[AC_MSG_WARN([*** KERNEL header not found])]
-++)
-++
-+ # Checks for typedefs, structures, and compiler characteristics.
-+ AC_TYPE_UID_T
-+ AC_C_INLINE
-+-- 
-+1.9.1
-+
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 2221966..eb266a1 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -10,6 +10,7 @@ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
- EUDEV_INSTALL_STAGING = YES
-+EUDEV_AUTORECONF = YES
++###############################################################################
+ comment "Legacy options removed in 2015.02"
  
- # mq_getattr is in librt
- EUDEV_CONF_ENV += LIBS=-lrt
-diff --git a/system/Config.in b/system/Config.in
-index 4d1c3d2..9e2b13f 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -128,13 +128,12 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # eudev
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+#	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 	select BR2_PACKAGE_EUDEV
+ config BR2_PACKAGE_LIBGC
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 558d5f0..d9116dd 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -53,10 +53,10 @@ config BR2_PACKAGE_VALGRIND_DHAT
+ 	help
+ 	  This option allows to install the DHAT tool
  
--comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
-+comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+-config BR2_PACKAGE_VALGRIND_PTRCHECK
+-	bool "Ptrcheck: an experimental head, stack and global array overrun detector"
++config BR2_PACKAGE_VALGRIND_SGCHECK
++	bool "SGCheck: an experimental stack and global array overrun detector"
+ 	help
+-	  This option allows to install the Ptrcheck tool
++	  This option allows to install the SGCheck tool
  
- endchoice
+ config BR2_PACKAGE_VALGRIND_BBV
+ 	bool "BBV: an experimental basic block vector generation tool"
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index aaca39f..cfce8da 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -91,12 +91,12 @@ endef
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
+ endif
  
+-ifeq ($(BR2_PACKAGE_VALGRIND_PTRCHECK),)
+-define VALGRIND_REMOVE_PTRCHECK
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*ptrcheck*
++ifeq ($(BR2_PACKAGE_VALGRIND_SGCHECK),)
++define VALGRIND_REMOVE_SGCHECK
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*sgcheck*
+ endef
+ 
+-VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_PTRCHECK
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_SGCHECK
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
 -- 
-1.9.1
+2.1.0
