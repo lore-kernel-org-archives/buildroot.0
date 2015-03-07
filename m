@@ -1,59 +1,88 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 07 Mar 2015 10:53:53 +0100
-Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
-	new package
-References: <cover.1423597914.git.yann.morin.1998@free.fr>
- <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
- <20150221234636.50616706@free-electrons.com> <20150221225836.GB4246@free.fr>
- <20150223124136.5fb4ea97@nserafini-N550JK> <54F7898A.6090601@free.fr>
- <20150306231558.GE4220@free.fr> <20150307090354.60c844a3@free-electrons.com>
-Message-ID: <XnsA4566EDC41249berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Mar 2015 11:05:12 +0100
+Subject: [Buildroot] [git commit] cmake: don't use any header available in
+	$(HOST_DIR)/usr/include
+Message-ID: <20150307100623.3AEB4807AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+commit: http://git.buildroot.net/buildroot/commit/?id=46bf8e8fd2428a733486ca192ba93588a7ac8d0e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20150307090354.60c844a3 at free-electrons.com: 
+The -I<dir> options added to CMAKE_C_FLAGS are passed to the compiler
+before the -I<dir> options of the cmake internal headers, so when the
+host-xz package was already built, a #include <lzma.h> directive loads
+the host-xz header instead of the cmake internal one.
 
-> Will an old X.org server build/work fine with recent versions of the
-> X.org libraries around it, so that we only have to change the version of
-> the X.org server 
+Because we don't want to use any header avaiable in -I$(HOST_DIR)/usr/include,
+just get rid of the -I<dir> options in the HOST_CFLAGS.
 
-Hi Thomas,
+Fix build failure:
+  make host-xz host-cmake
 
-I just compiled
+.../output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:17:1: error: conflicting types for ???lzma_block_buffer_decode???
+ lzma_block_buffer_decode(lzma_block *block, lzma_allocator *allocator,
+ ^
+In file included from /home/tetsuya/buildroot/br2/output/host/usr/include/lzma.h:296:0,
+                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/common.h:34,
+                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_decoder.h:16,
+                 from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:13:
+/home/tetsuya/buildroot/br2/output/host/usr/include/lzma/block.h:577:27: note: previous declaration of ???lzma_block_buffer_decode??? was here
+ extern LZMA_API(lzma_ret) lzma_block_buffer_decode(
+                           ^
+Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/build.make:261: recipe for target 'Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o' failed
+make[3]: *** [Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o] Error 1
 
--XSERVER_XORG_SERVER_VERSION = 1.17.1
-+XSERVER_XORG_SERVER_VERSION = 1.14.7
+Fixes:
+http://autobuild.buildroot.org/results/4edf6e169dc4a00d8a8bd16a86eba2316cbbd9e5
+http://autobuild.buildroot.org/results/a9ff38b22a36a2f8427d33085d3263a8cbfbd746
+http://autobuild.buildroot.org/results/ecaa0227249207b5450519832a193c1585ac8177
 
-(also removed package/x11r7/xserver_xorg-server/0004-backtrace.c-Fix-word-
-cast-to-a-pointer.patch)
+[Thomas:
+ - simplify the sed expression. Instead of trying to remove '-I
+   <something>' from $(HOST_CFLAGS), simply remove $(HOST_CPPFLAGS)
+   from $(HOST_CFLAGS).
+ - add the same logic for HOST_CXXFLAGS.]
 
-successfully using buildroot git master using this defconfig:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cmake/cmake.mk |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-
-Regards, Bernd
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 8c64b58..a00b8cd 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -12,14 +12,20 @@ CMAKE_LICENSE_FILES = Copyright.txt
+ 
+ HOST_CMAKE_DEPENDENCIES = host-pkgconf
+ 
++# Get rid of -I* options from $(HOST_CPPFLAGS) to prevent that a
++# header available in $(HOST_DIR)/usr/include is used instead of a
++# CMake internal header, e.g. lzma* headers of the xz package
++HOST_CMAKE_CFLAGS = $(shell echo $(HOST_CFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
++HOST_CMAKE_CXXFLAGS = $(shell echo $(HOST_CXXFLAGS) | sed -r "s%$(HOST_CPPFLAGS)%%")
++
+ define HOST_CMAKE_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+-		CFLAGS="$(HOST_CFLAGS)" \
++		CFLAGS="$(HOST_CMAKE_CFLAGS)" \
+ 		./bootstrap --prefix=$(HOST_DIR)/usr \
+ 			--parallel=$(PARALLEL_JOBS) -- \
+-			-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
+-			-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
++			-DCMAKE_C_FLAGS="$(HOST_CMAKE_CFLAGS)" \
++			-DCMAKE_CXX_FLAGS="$(HOST_CMAKE_CXXFLAGS)" \
+ 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
+ 			-DBUILD_CursesDialog=OFF \
+ 	)
