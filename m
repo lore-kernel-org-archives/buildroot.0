@@ -1,59 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 7 Mar 2015 14:48:12 +0100
-Subject: [Buildroot] [git commit] crda: remove static library handling
-Message-ID: <20150307134826.32B847FFF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] valgrind: rename ptrcheck to sgcheck like
+	upstream
+Message-ID: <20150307134826.2B8F0803C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=518cdabb896235c8c5c43e9d65a7222961c18579
+commit: http://git.buildroot.net/buildroot/commit/?id=fd0e5f6b8818b4301e70dcd24ac790639e3e2470
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit d54418f2bcd9267fd049511d6236fb91c83b94ea ("crda: fix static
-build failure"), some static linking handling was added in crda. But
-in a later commit, 7c08fa935f55d108e20834e6b4bba664e1d2d408 ("crda:
-needs dynamic library support"), crda was marked as not available for
-static only builds.
-
-This means that the static linking logic in crda.mk is now just dead
-code, so this commit gets rid of it.
-
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/crda/crda.mk |   13 -------------
- 1 files changed, 0 insertions(+), 13 deletions(-)
+ Config.in.legacy             |    9 +++++++++
+ package/valgrind/Config.in   |    6 +++---
+ package/valgrind/valgrind.mk |    8 ++++----
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index abfbb8e..24bfd5f 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
-@@ -12,17 +12,6 @@ CRDA_DEPENDENCIES = host-pkgconf host-python-m2crypto \
- CRDA_LICENSE = ISC
- CRDA_LICENSE_FILES = LICENSE
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0b87ddb..1f57671 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -99,7 +99,16 @@ comment "----------------------------------------------------"
+ endif
  
--# libnl-3 needs -lm (for rint) and -lpthread if linking statically.
--# And library order matters hence stick -lnl-3 first since it's appended
--# in the crda Makefiles as in NLLIBS+=-lnl-3 ... thus failing.
--#
--# libgcrypt needs -lgpg-error if linking statically, which is correctly
--# set by the libgcrypt-config script (and in the right order).
--ifeq ($(BR2_STATIC_LIBS),y)
--CRDA_NLLIBS += -lnl-3 -lm -lpthread
--CRDA_LDLIBS += `$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`
--endif
--
- # * key2pub.py currently is not python3 compliant (though python2/python3
- #   compliance could rather easily be achieved.
- # * key2pub.py uses M2Crypto python module, which is only available for
-@@ -30,8 +19,6 @@ endif
- #   interpreter, hence the host-python dependency and the PYTHON variable.
- define CRDA_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		LDLIBS="$(CRDA_LDLIBS)" \
--		NLLIBS="$(CRDA_NLLIBS)" \
- 		PYTHON=$(HOST_DIR)/usr/bin/python2 \
- 		$(MAKE) all_noverify -C $(@D)
+ ###############################################################################
++comment "Legacy options removed in 2015.05"
+ 
++config BR2_PACKAGE_VALGRIND_PTRCHECK
++	bool "valgrind's PTRCheck was renamed to SGCheck"
++	select BR2_LEGACY
++	select BR2_PACKAGE_VALGRIND_SGCHECK
++	help
++	  PTRCheck was renamed to SGCheck in valgrind
++
++###############################################################################
+ comment "Legacy options removed in 2015.02"
+ 
+ config BR2_PACKAGE_LIBGC
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 558d5f0..d9116dd 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -53,10 +53,10 @@ config BR2_PACKAGE_VALGRIND_DHAT
+ 	help
+ 	  This option allows to install the DHAT tool
+ 
+-config BR2_PACKAGE_VALGRIND_PTRCHECK
+-	bool "Ptrcheck: an experimental head, stack and global array overrun detector"
++config BR2_PACKAGE_VALGRIND_SGCHECK
++	bool "SGCheck: an experimental stack and global array overrun detector"
+ 	help
+-	  This option allows to install the Ptrcheck tool
++	  This option allows to install the SGCheck tool
+ 
+ config BR2_PACKAGE_VALGRIND_BBV
+ 	bool "BBV: an experimental basic block vector generation tool"
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index aaca39f..cfce8da 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -91,12 +91,12 @@ endef
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_VALGRIND_PTRCHECK),)
+-define VALGRIND_REMOVE_PTRCHECK
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*ptrcheck*
++ifeq ($(BR2_PACKAGE_VALGRIND_SGCHECK),)
++define VALGRIND_REMOVE_SGCHECK
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*sgcheck*
  endef
+ 
+-VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_PTRCHECK
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_SGCHECK
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
