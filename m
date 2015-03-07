@@ -1,50 +1,65 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Mar 2015 17:10:56 +0000
-Subject: [Buildroot] [PATCH] tcl: disable for static builds
-Message-ID: <1425748256-20330-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sat, 7 Mar 2015 18:19:25 +0100
+Subject: [Buildroot] [PATCH 5/5] package/libungif: deprecate package
+In-Reply-To: <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
+References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
+ <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAHkwnC-oVX3gwSuNcZGprZCPm2sPQia0micJ9jTMVHVUOJq6pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After discussion on mailing list...
+On Mon, Jan 26, 2015 at 8:24 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> To be replaced with giflib.
 
-http://lists.busybox.net/pipermail/buildroot/2015-March/121198.html
+Can you respin this patch?
 
-...we decided to disable tcl for static builds and let someone
-interested on it to do the needed changes to add support for static
-builds.
+It's important to deprecate libungif because it's incompatible with
+libgif so if both are installed, the headers get overwritten, right
+now we don't have build problems because we are lucky and they are
+overwritten in right order :)
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/tcl/Config.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+But using top-parallel make i get build failures because the order is changed.
 
-diff --git a/package/tcl/Config.in b/package/tcl/Config.in
-index c3d0d87..11d46d3 100644
---- a/package/tcl/Config.in
-+++ b/package/tcl/Config.in
-@@ -4,14 +4,18 @@ config BR2_PACKAGE_TCL
- 	depends on BR2_USE_MMU
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# See this mailing list thread:
-+	# http://lists.busybox.net/pipermail/buildroot/2015-March/121198.html
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  TCL (Tool Command Language) is a simple textual language.
- 
- 	  http://www.tcl.tk
- 
--comment "tcl needs a toolchain w/ ipv6, threads"
-+comment "tcl needs a toolchain w/ ipv6, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
- 
- if BR2_PACKAGE_TCL
- 
+Example:
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_FBV=y
+BR2_PACKAGE_LIBUNGIF=y
+
+The following command build fine:
+make clean libungif giflib fbv
+
+But fbv fail to build with the following command:
+make clean giflib libungif fbv
+
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libungif/Config.in |    2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/libungif/Config.in b/package/libungif/Config.in
+> index e8c301c..012ef76 100644
+> --- a/package/libungif/Config.in
+> +++ b/package/libungif/Config.in
+> @@ -1,5 +1,7 @@
+>  config BR2_PACKAGE_LIBUNGIF
+>         bool "libungif"
+> +       depends on !BR2_PACKAGE_GIFLIB
+> +       depends on BR2_DEPRECATED_SINCE_2015_02 # giflib
+>         help
+>           libungif is a library for handling the uncompressed GIF image format.
+>
+> --
+> 1.7.10.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-1.7.1
+Fabio Porcedda
