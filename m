@@ -1,44 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Mar 2015 16:05:17 +0100
-Subject: [Buildroot] [PATCH V2 1/2] tcl: add support for static builds
-In-Reply-To: <20150307155634.605f5a68@free-electrons.com>
-References: <1425734562-5312-1-git-send-email-Vincent.Riera@imgtec.com>	<20150307144233.5ee1db01@free-electrons.com>	<54FB0B22.8050604@imgtec.com>
- <20150307155634.605f5a68@free-electrons.com>
-Message-ID: <54FB13AD.5080008@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Mar 2015 16:04:24 +0100
+Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <20150307141903.4a4c3b4f@free-electrons.com>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
+ <20150221234636.50616706@free-electrons.com>
+ <20150221225836.GB4246@free.fr>
+ <20150223124136.5fb4ea97@nserafini-N550JK>
+ <54F7898A.6090601@free.fr> <20150306231558.GE4220@free.fr>
+ <20150307090354.60c844a3@free-electrons.com>
+ <20150307130141.GB4186@free.fr>
+ <20150307141903.4a4c3b4f@free-electrons.com>
+Message-ID: <20150307150424.GF4186@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Thomas, All,
 
-
-On 07/03/15 15:56, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
+On 2015-03-07 14:19 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 7 Mar 2015 14:01:42 +0100, Yann E. MORIN wrote:
+> > Given the feedback from Bernd, I'll see at adding such a version choice.
+> > Let's say we go this route:
+> >   - add a version choice for 1.14.7 (for tegra-binaries) and 1.17.1 (the
+> >     current version), defaulting to 17.1;
+> >   - add hidden symbols for the driver ABI supported by each version;
+> >   - make nvidia-tegra23 depend on the appropriate ABI symbol.
 > 
-> On Sat, 7 Mar 2015 15:28:50 +0100, Vicente Olivert Riera wrote:
-> 
->> I guess you could need tcl to build something that depends on it, and
->> link against libtcl8.6.a, for instance.
-> 
-> If you need tcl to build something, then it's the host tcl, not the
-> target tcl.
+> Seems OK to me. Though it would be good if someone can actually test
+> the patches. I don't know when I'll have the time to test on the Tegra
+> 3 platform.
 
-uhm..., I'm sorry but I don't understand what you mean.
-
-If you have a package that depends on tcl (it links against libtcl8.6.a,
-for instance), then you will need the target tcl (actually the staging
-one), which has the right architecture for your target, no? The host tcl
-would have the same architecture as the host machine which may not be
-the same as the target one.
-
-Am I missing anything?
+Well, we can at least go up to the point where it builds. From there,
+you can pick it up when you are available for run-time testing.
 
 Regards,
---
-Vincent
+Yann E. MORIN.
 
-
-> Thomas
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
