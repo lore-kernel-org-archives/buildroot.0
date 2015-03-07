@@ -1,36 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Mar 2015 10:11:52 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/mesa3d-headers: bump version to
-	10.4.6
-In-Reply-To: <1425719512-2593-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1425719512-2593-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1425719512-2593-2-git-send-email-bernd.kuhls@t-online.de>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sat, 7 Mar 2015 11:27:37 +0200
+Subject: [Buildroot] SysV init script revamp (proposal)
+In-Reply-To: <54FA0173.60504@zacarias.com.ar>
+References: <54FA0173.60504@zacarias.com.ar>
+Message-ID: <20150307092737.GA28097@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fri, Mar 06, 2015 at 04:35:15PM -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: no changes
+> Before going all crazy sending patches and possibly wasting a lot of
+> time i'll write up my thoughts on how we could enhance/fix/clean the
+> current scenario regarding initscript:
 
- package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+A word of support, it's a mess at present.
+And since I was doing something related I'll post it here too.
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e20859e..5e113ce 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.4.5
-+MESA3D_HEADERS_VERSION = 10.4.6
- MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_HEADERS_VERSION).tar.bz2
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
--- 
-1.7.10.4
+My goal was to merge initscripts, systemd, scriptless sysv and my own init,
+with focus mostly on foreground daemons.
+The result, however, seems to be pretty close to your proposal,
+with uniform (generated, in fact) initscripts, and possibly also
+uniform pid file handling.
+
+https://github.com/arsv/br
+long(ish) description of ideas behind this:
+https://raw.githubusercontent.com/arsv/br/master/brinits
+
+Sysv-style configuration is missing atm, the plan was
+to pick any variables from .run files (see netsnmp/snmpd.run)
+and write them to relevant /etc/config.d/*.conf files.
+
+The limiting factor is that any non-trivial variable handling,
+basically any conditions, are not going to work well with systemd
+(example: package/tvheadend/S99tvheadend).
+And I feel better about residing to simple ARGS=... vs dropping
+systemd just because of this.
