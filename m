@@ -1,47 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 07 Mar 2015 17:35:17 +0100
-Subject: [Buildroot] [git commit] toolchain: add link-time-optimization
- support
-In-Reply-To: <20150307172438.73f5a634@free-electrons.com>
-References: <20150307142749.E241880468@busybox.osuosl.org>	<54FB23E5.3050707@mind.be>
- <20150307172438.73f5a634@free-electrons.com>
-Message-ID: <54FB28C5.5040107@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Mar 2015 17:36:58 +0100
+Subject: [Buildroot] [PATCH v2 2/2] wine: Add gettext dependency check
+ for host-wine
+In-Reply-To: <54FB2609.6020305@dawncrow.de>
+References: <54FB2609.6020305@dawncrow.de>
+Message-ID: <20150307173658.7947562a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/03/15 17:24, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Sat, 07 Mar 2015 17:14:29 +0100, Arnout Vandecappelle wrote:
-> 
->>  Given that this new option (probably) changes how some packages are built, I
->> think there should be a few autobuilder configs that enable it. Any volunteers
->> to take care of that?
-> 
-> No: the commit only allows to enable LTO support in the compiler. It
-> does not start building packages with -flto, unless of course some
-> packages automatically detect the availability of the LTO feature in
-> the compiler and make use of it.
+Dear Andr? Hentschel,
 
- That's precisely what I mean. As far as I know, there isn't a single package
-where we pass something like --disable-lto. Now, I'm not sure if there is any
-package at all that will automatically turn on lto, but if there are then I
-think we should build it.
+On Sat, 07 Mar 2015 17:23:37 +0100, Andr? Hentschel wrote:
 
- However, I just realized that we are already building with external sourcery
-and linaro toolchains that support lto. So we already have the tests that I wanted.
+> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
 
- Regards,
- Arnout
+This indicates that gettext is going to be built for the target.
 
+> +HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
 
+This changes the configuration of a host package.
+
+Conclusion: this doesn't make sense, unless a better explanation is
+provided to explain why such a weird thing is needed.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
