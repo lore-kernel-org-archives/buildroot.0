@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 14:43:40 +0100
-Subject: [Buildroot] [PATCH] disable linuxthreads for NPTL only
- architectures for uClibc-ng
-In-Reply-To: <20150304144816.GA14815@waldemar-brodkorb.de>
-References: <20150304144816.GA14815@waldemar-brodkorb.de>
-Message-ID: <20150307144340.4a07e177@free-electrons.com>
+Date: Sat, 7 Mar 2015 14:46:35 +0100
+Subject: [Buildroot] [PATCH 3/5] crda: remove static library handling
+In-Reply-To: <1425728422-14113-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425728422-14113-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150307144635.255df5d6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Hello,
 
-On Wed, 4 Mar 2015 15:48:17 +0100, Waldemar Brodkorb wrote:
-> uClibc-ng does not support multiple thread implementations for
-> an architecture and MMU configuration.
-> BFIN, ARM noMMU and m68k/Coldfire noMMU still uses linuxthreads in uClibc-ng.
-> The other buildroot supported architectures support NPTL.
-> Reflect this in Buildroot configuration.
-> ARC would work with uClibc-ng 1.0.0 and TLS/NPTL, but the correct
-> toolchain must be used.
+On Sat,  7 Mar 2015 12:40:20 +0100, Thomas Petazzoni wrote:
+> In commit d54418f2bcd9267fd049511d6236fb91c83b94ea ("crda: fix static
+> build failure"), some static linking handling was added in crda. But
+> in a later commit, 7c08fa935f55d108e20834e6b4bba664e1d2d408 ("crda:
+> needs dynamic library support"), crda was marked as not available for
+> static only builds.
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> This means that the static linking logic in crda.mk is now just dead
+> code, so this commit gets rid of it.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I've posted a different proposal at
-http://patchwork.ozlabs.org/patch/447577/. Can you review it?
-
-Thanks!
+Applied.
 
 Thomas
 -- 
