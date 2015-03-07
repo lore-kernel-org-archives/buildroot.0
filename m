@@ -1,38 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 17:30:48 +0100
-Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
- build on Xtensa for uClibc-ng 1.0.0
-In-Reply-To: <20150307154325.GH3937@waldemar-brodkorb.de>
-References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150307144013.GE4186@free.fr>
- <20150307154325.GH3937@waldemar-brodkorb.de>
-Message-ID: <20150307173048.4652ee0c@free-electrons.com>
+Date: Sat, 7 Mar 2015 17:32:34 +0100
+Subject: [Buildroot] [PATCH 4/5] package/efl/libevas: Switch to giflib
+In-Reply-To: <CAHkwnC-cVh1fKVKyR=RhWv+tQgRVeQomt0dL1Z0TW_cbnyQ_+w@mail.gmail.com>
+References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
+ <1422300260-5361-4-git-send-email-bernd.kuhls@t-online.de>
+ <CAHkwnC-cVh1fKVKyR=RhWv+tQgRVeQomt0dL1Z0TW_cbnyQ_+w@mail.gmail.com>
+Message-ID: <20150307173234.57c8bf4f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Fabio Porcedda,
 
-On Sat, 7 Mar 2015 16:43:26 +0100, Waldemar Brodkorb wrote:
+On Sat, 7 Mar 2015 17:29:56 +0100, Fabio Porcedda wrote:
 
-> May be then we get an extra package for uClibc-ng?
+> IMHO it's cleaner if instead of adding this patch you can add a
+> post_patch hook that using sed change all "DGifCloseFile(gif)" to
+> "DGifCloseFile(gif, NULL)".
 
-No, I'm still not convinced we need separate packages at this point.
-Maybe in the future if uClibc and uClibc-ng diverge significantly, but
-it's not the case right now.
-
-> Bernhard is planning 0.9.34 release, so it is more a theoretically
-> problem. I am sure uClibc-ng 1.1 is out before uClibc tags 1.0.0.
-
-I'll wait for real acts from Bernhard before presuming that something
-will happen in uClibc land. It may very well that we'll get rid of
-uClibc support entirely in favor of uClibc-ng before Bernhard gets to
-doing a new release for uClibc.
-
-Best regards,
+I don't agree. Such sed expressions can very easily be overlooked when
+bumping the package, and they don't solve a problem that should be
+solved by submitting a patch to the upstream project.
 
 Thomas
 -- 
