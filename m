@@ -1,53 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 17:41:04 +0100
-Subject: [Buildroot] [PATCH 1/3] uclibc: adapt thread implementation
- selection to uClibc-ng
-In-Reply-To: <20150307143411.GC4186@free.fr>
-References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150307143411.GC4186@free.fr>
-Message-ID: <20150307174104.6cefa362@free-electrons.com>
+Date: Sat, 7 Mar 2015 17:43:24 +0100
+Subject: [Buildroot] [git commit] toolchain: add link-time-optimization
+ support
+In-Reply-To: <54FB28C5.5040107@mind.be>
+References: <20150307142749.E241880468@busybox.osuosl.org>
+ <54FB23E5.3050707@mind.be>
+ <20150307172438.73f5a634@free-electrons.com>
+ <54FB28C5.5040107@mind.be>
+Message-ID: <20150307174324.18dd04f9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Arnout Vandecappelle,
 
-On Sat, 7 Mar 2015 15:34:11 +0100, Yann E. MORIN wrote:
+On Sat, 07 Mar 2015 17:35:17 +0100, Arnout Vandecappelle wrote:
 
-> >  	config BR2_UCLIBC_NG_VERSION_1_0_0
-> >  		bool "uClibc-ng 1.0.0"
-> > +		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
-> > +		       if BR2_arc || BR2_m68k
-> > +		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
-> > +		       if BR2_arc || BR2_bfin || BR2_m68k
-> > +		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-> > +		       if !BR2_arc && !BR2_bfin && !BR2_x86_i386
-> 
-> I will trust you on these combinations. ;-)
+>  That's precisely what I mean. As far as I know, there isn't a single package
+> where we pass something like --disable-lto. Now, I'm not sure if there is any
+> package at all that will automatically turn on lto, but if there are then I
+> think we should build it.
 
-Well, I was actually looking for some review on those combinations. In
-short:
+Ok.
 
- * There should not be any change for uClibc itself (0.9.33, special
-   ARC and Xtensa version, snapshot)
+>  However, I just realized that we are already building with external sourcery
+> and linaro toolchains that support lto. So we already have the tests that I wanted.
 
- * For uClibc-ng, the change should be that NPTL becomes the only
-   available option, unless you're on ARC, Blackfin or i386 (and by
-   i386, I really mean only i386: NPTL on >= i486 is fine).
-
-> Please be consistent: either put the 'select' before or after the
-> 'depends' as you prefer, but do it consistently across all options. ;-)
-> 
-> I tend to prefer depends before select, as it seems more logical to me,
-> but I don't mind either, as long as it is consistent.
-
-Sure, I'll fix that up. But I'd prefer to have a review on the
-combinations.
-
-Thanks,
+Right. But that shouldn't prevent us from enabling LTO once a while in
+the autobuilders for internal toolchain builds, so your original idea
+is still useful :)
 
 Thomas
 -- 
