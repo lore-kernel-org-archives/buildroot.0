@@ -1,42 +1,47 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Mar 2015 16:14:28 +0000
-Subject: [Buildroot] [PATCH] git: bump version to 2.3.2
-Message-ID: <1425744868-48943-1-git-send-email-Vincent.Riera@imgtec.com>
+From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
+Date: Sat, 07 Mar 2015 17:23:18 +0100
+Subject: [Buildroot] [PATCH v2 1/2] wine: Disable more configure options
+Message-ID: <54FB25F6.7040908@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump version to 2.3.2
-- Update the hash file
+To avoid potential future problems.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: minor fixes
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index aa81df5..8cc7be7 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  1acc4b051576143eb41d80f5675476629588c7c5fb4e6a1dc2c4590f47c498b7  git-2.3.1.tar.xz
-+sha256  18eb8462026a55ab34a657282e894bdaad331ea59bfebeba5eb45b27b58cf825  git-2.3.2.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 0672d6e..fc7b6fe 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/wine/wine.mk | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 47c7259..e931c87 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -16,7 +16,22 @@ WINE_CONF_OPTS = \
+ 	--with-wine-tools=../host-wine-$(WINE_VERSION) \
+ 	--disable-tests \
+ 	--disable-win64 \
+-	--without-opengl
++	--without-capi \
++	--without-coreaudio \
++	--without-gettext \
++	--without-gettextpo \
++	--without-gphoto \
++	--without-gsm \
++	--without-hal \
++	--without-ldap \
++	--without-netapi \
++	--without-openal \
++	--without-opencl \
++	--without-opengl \
++	--without-osmesa \
++	--without-oss \
++	--without-xshape \
++	--without-xshm
  
--GIT_VERSION = 2.3.1
-+GIT_VERSION = 2.3.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
--- 
-1.7.1
+ # Wine uses a wrapper around gcc, and uses the value of --host to
+ # construct the filename of the gcc to call.  But for external
