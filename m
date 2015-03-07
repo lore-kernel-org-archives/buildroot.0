@@ -1,44 +1,110 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Sat, 07 Mar 2015 15:35:20 +0100
-Subject: [Buildroot] [PATCH 2/2] wine: Add gettext dependency check for
-	host-wine
-Message-ID: <54FB0CA8.10001@dawncrow.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Mar 2015 15:40:13 +0100
+Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
+ build on Xtensa for uClibc-ng 1.0.0
+In-Reply-To: <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150307144013.GE4186@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
+Thomas, All,
 
- package/wine/wine.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On 2015-03-07 14:40 +0100, Thomas Petazzoni spake thusly:
+> Backported from upstream, will be part of the next release of
+> uClibc-ng.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .../0002-fix-non-thread-compile-for-xtensa.patch   | 49 ++++++++++++++++++++++
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index e931c87..9c6e2aa 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -237,6 +237,13 @@ else
- WINE_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-+WINE_DEPENDENCIES += gettext
-+else
-+HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
-+endif
-+
- # Wine needs to enable 64-bit build tools on 64-bit host
- ifeq ($(HOSTARCH),x86_64)
- HOST_WINE_CONF_OPTS += --enable-win64
-@@ -274,8 +281,6 @@ HOST_WINE_CONF_OPTS += \
-        --without-curses \
-        --without-dbus \
-        --without-fontconfig \
--       --without-gettext \
--       --without-gettextpo \
-        --without-gphoto \
-        --without-glu \
-        --without-gnutls \
+I know this is not the first patch we have against uClibc-ng, but what
+will happen when uClibc eventually tags 1.0.0? How will we differentiate
+the patch directories between uClibc-1.0.0 and uClibc-ng 1.0.0 ?
+
+(or for any other version, for what it's worth...)
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+(BTW, there's no bc8a6a6 commit upstream, it's b15663c)
+
+Regards,
+Yann E. MORIN.
+
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch
+> 
+> diff --git a/package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch b/package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch
+> new file mode 100644
+> index 0000000..33f876b
+> --- /dev/null
+> +++ b/package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch
+> @@ -0,0 +1,49 @@
+> +From bc8a6a6d8075998f0d1563cf202dcc18c39974b3 Mon Sep 17 00:00:00 2001
+> +From: Waldemar Brodkorb <wbx@openadk.org>
+> +Date: Thu, 5 Mar 2015 19:47:26 +0100
+> +Subject: [PATCH 2/2] fix non-thread compile for xtensa
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +---
+> + ldso/ldso/xtensa/dl-tlsdesc.S | 4 ++++
+> + ldso/ldso/xtensa/elfinterp.c  | 3 +++
+> + 2 files changed, 7 insertions(+)
+> +
+> +diff --git a/ldso/ldso/xtensa/dl-tlsdesc.S b/ldso/ldso/xtensa/dl-tlsdesc.S
+> +index a6ebc94..dee4258 100644
+> +--- a/ldso/ldso/xtensa/dl-tlsdesc.S
+> ++++ b/ldso/ldso/xtensa/dl-tlsdesc.S
+> +@@ -18,6 +18,9 @@
+> + 
+> + #include <sysdep.h>
+> + #include <tls.h>
+> ++
+> ++#if defined(USE_TLS) && USE_TLS
+> ++
+> + #include "tlsdesc.h"
+> + 
+> + 
+> +@@ -94,3 +97,4 @@ _dl_tlsdesc_dynamic:
+> + 	.size	_dl_tlsdesc_dynamic, .-_dl_tlsdesc_dynamic
+> + 
+> + #endif /* SHARED */
+> ++#endif /* USE_TLS */
+> +diff --git a/ldso/ldso/xtensa/elfinterp.c b/ldso/ldso/xtensa/elfinterp.c
+> +index 1397e95..66deb63 100644
+> +--- a/ldso/ldso/xtensa/elfinterp.c
+> ++++ b/ldso/ldso/xtensa/elfinterp.c
+> +@@ -31,8 +31,11 @@
+> +  */
+> + 
+> + #include "ldso.h"
+> ++
+> ++#if defined(USE_TLS) && USE_TLS
+> + #include "dl-tls.h"
+> + #include "tlsdeschtab.h"
+> ++#endif
+> + 
+> + unsigned long
+> + _dl_linux_resolver (struct elf_resolve *tpnt, int reloc_entry)
+> +-- 
+> +2.1.0
+> +
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
