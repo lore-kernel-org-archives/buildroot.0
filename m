@@ -1,39 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 17:43:24 +0100
-Subject: [Buildroot] [git commit] toolchain: add link-time-optimization
- support
-In-Reply-To: <54FB28C5.5040107@mind.be>
-References: <20150307142749.E241880468@busybox.osuosl.org>
- <54FB23E5.3050707@mind.be>
- <20150307172438.73f5a634@free-electrons.com>
- <54FB28C5.5040107@mind.be>
-Message-ID: <20150307174324.18dd04f9@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 07 Mar 2015 17:44:30 +0100
+Subject: [Buildroot] [PATCH V2 1/2] tcl: add support for static builds
+In-Reply-To: <20150307144233.5ee1db01@free-electrons.com>
+References: <1425734562-5312-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150307144233.5ee1db01@free-electrons.com>
+Message-ID: <54FB2AEE.30108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On 07/03/15 14:42, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+> 
+> On Sat, 7 Mar 2015 13:22:41 +0000, Vicente Olivert Riera wrote:
+> 
+>> +ifeq ($(BR2_STATIC_LIBS),y)
+>> +# Do not build tclsh with dynamic loading support when building it
+>> +# statically because it needs dlopen() and friends.
+>> +TCL_CONF_OPTS += --disable-load
+>> +# Also, build only the binaries and libraries and don't build the
+>> +# 'packages' because they are shared objects which are intended to be
+>> +# loaded dynamically.
+>> +TCL_MAKE_OPTS = binaries libraries
+>> +TCL_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-binaries install-libraries
+>> +TCL_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-binaries
+>> +endif
+> 
+> But, if we don't build the 'packages', is the tcl stuff still useful?
 
-On Sat, 07 Mar 2015 17:35:17 +0100, Arnout Vandecappelle wrote:
+ The packages are a bunch of additional packages that happen to be distributed
+together with tcl. In this case:
 
->  That's precisely what I mean. As far as I know, there isn't a single package
-> where we pass something like --disable-lto. Now, I'm not sure if there is any
-> package at all that will automatically turn on lto, but if there are then I
-> think we should build it.
+incr Tcl (object-oriented extensions)
+sqlite
+thread
+tdbc (database connector)
 
-Ok.
+ So if you want to run scripts that make use of these packages, yes you're in
+trouble. But I expect that there will be plenty of scripts that don't use these
+extensions.
 
->  However, I just realized that we are already building with external sourcery
-> and linaro toolchains that support lto. So we already have the tests that I wanted.
 
-Right. But that shouldn't prevent us from enabling LTO once a while in
-the autobuilders for internal toolchain builds, so your original idea
-is still useful :)
+ That said, I agree with Thomas's final statement that unless you're actually
+using this, it's both pointless and dangerous to make such a change.
 
-Thomas
+
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
