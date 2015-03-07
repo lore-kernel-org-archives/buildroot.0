@@ -1,50 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Mar 2015 18:49:04 +0000
-Subject: [Buildroot] [PATCH buildroot-test] autobuild-run: do not build
-	weston using an incompatible toolchain
-Message-ID: <1425754144-37492-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  7 Mar 2015 19:51:55 +0100
+Subject: [Buildroot] [PATCH] openpgm: Blacklist Blackfin ADI 2014R1 toolchain
+Message-ID: <1425754315-524-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This external MIPS toolchain uses an old version of uClibc which doesn't
-include this patch:
-
-  http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux?id=3d1b82c7d9dce11c733fe23a85df7f975c7e2486
-
-Because of that, weston package fails to build with this error message:
-
-src/compositor.c: In function
-'weston_compositor_set_presentation_clock_software':
-src/compositor.c:4283:3: error: 'CLOCK_MONOTONIC_RAW' undeclared (first
-use in this function)
-   CLOCK_MONOTONIC_RAW, /* no jumps, no crawling */
+Openpgm requires compiler intrinsics not available with Blackfin ADI toolchains.
 
 Fixes:
+http://autobuild.buildroot.net/results/394/394cf96cc0ab9029e5baa84b19e2b4d7a553f077/
 
-  http://autobuild.buildroot.net/results/d36/d367eda8b549b6facd624d0b44cfdc6eb0486c72/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- scripts/autobuild-run |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/openpgm/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index a75006f..9a6d15b 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -324,6 +324,10 @@ def fixup_config(instance, sysinfo):
-        'BR2_STATIC_LIBS=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-         return False
-+    # This MIPS uClibc toolchain fails to build the weston package
-+    if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
-+       'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
-+        return False
- 
-     with open(os.path.join(outputdir, ".config"), "w+") as configf:
-         configf.writelines(configlines)
+diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
+index 3a26212..8d03c84 100644
+--- a/package/openpgm/Config.in
++++ b/package/openpgm/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_OPENPGM
+ 	bool "openpgm"
+ 	# The following toolchains lack required compiler intrinsics
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -- 
-1.7.1
+1.9.3
