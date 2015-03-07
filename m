@@ -1,60 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 07 Mar 2015 17:44:30 +0100
-Subject: [Buildroot] [PATCH V2 1/2] tcl: add support for static builds
-In-Reply-To: <20150307144233.5ee1db01@free-electrons.com>
-References: <1425734562-5312-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150307144233.5ee1db01@free-electrons.com>
-Message-ID: <54FB2AEE.30108@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sat, 7 Mar 2015 18:01:41 +0100
+Subject: [Buildroot] [PATCH 4/5] package/efl/libevas: Switch to giflib
+In-Reply-To: <20150307173234.57c8bf4f@free-electrons.com>
+References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
+ <1422300260-5361-4-git-send-email-bernd.kuhls@t-online.de>
+ <CAHkwnC-cVh1fKVKyR=RhWv+tQgRVeQomt0dL1Z0TW_cbnyQ_+w@mail.gmail.com>
+ <20150307173234.57c8bf4f@free-electrons.com>
+Message-ID: <CAHkwnC_PjANbN1MN7uXUq2wBjaR-Z62KuWeE3bMFrJ-7oWXBww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/03/15 14:42, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Sat, 7 Mar 2015 13:22:41 +0000, Vicente Olivert Riera wrote:
-> 
->> +ifeq ($(BR2_STATIC_LIBS),y)
->> +# Do not build tclsh with dynamic loading support when building it
->> +# statically because it needs dlopen() and friends.
->> +TCL_CONF_OPTS += --disable-load
->> +# Also, build only the binaries and libraries and don't build the
->> +# 'packages' because they are shared objects which are intended to be
->> +# loaded dynamically.
->> +TCL_MAKE_OPTS = binaries libraries
->> +TCL_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-binaries install-libraries
->> +TCL_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-binaries
->> +endif
-> 
-> But, if we don't build the 'packages', is the tcl stuff still useful?
+On Sat, Mar 7, 2015 at 5:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Sat, 7 Mar 2015 17:29:56 +0100, Fabio Porcedda wrote:
+>
+>> IMHO it's cleaner if instead of adding this patch you can add a
+>> post_patch hook that using sed change all "DGifCloseFile(gif)" to
+>> "DGifCloseFile(gif, NULL)".
+>
+> I don't agree. Such sed expressions can very easily be overlooked when
+> bumping the package, and they don't solve a problem that should be
+> solved by submitting a patch to the upstream project.
 
- The packages are a bunch of additional packages that happen to be distributed
-together with tcl. In this case:
+I don't know exactly but the libevas seems dead, the last change in
+the git repository was made 15 months ago.
 
-incr Tcl (object-oriented extensions)
-sqlite
-thread
-tdbc (database connector)
+https://git.enlightenment.org/legacy/evas.git/
 
- So if you want to run scripts that make use of these packages, yes you're in
-trouble. But I expect that there will be plenty of scripts that don't use these
-extensions.
+I hope there is a chance for the patch to be accepted.
 
+Bernd, have you tried to send the patch upstream?
 
- That said, I agree with Thomas's final statement that unless you're actually
-using this, it's both pointless and dangerous to make such a change.
+Could you add a note in patch to justify the change?
+Example:
+From http://giflib.sourceforge.net/gif_lib.html
+GIF file openers and closers - DGifOpenFileName(),
+DGifOpenFileHandle(), DGifOpen(), DGifClose(), EGifOpenFileName(),
+EGifOpenFileHandle(), EGifOpen(), and EGifClose() - all now take a
+final integer address argument. If non-null, this is used to pass back
+an error code when the function returns NULL.
 
+With above note added and because the sed option is not available:
+Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[build fine the following defconfig:
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_EFL=y
+BR2_PACKAGE_LIBEVAS=y
+BR2_PACKAGE_LIBEVAS_GIF=y]
 
- Regards,
- Arnout
-
-
+BR
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
