@@ -1,88 +1,55 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 7 Mar 2015 13:55:27 +0100
-Subject: [Buildroot] asm/errno.h: No such file or directory compiling
-	luajit
-In-Reply-To: <CA+TH9VkSZ0b3FuCPA5LHMFPetwCuz+cwu4HKfBCBQNuvCOV-QQ@mail.gmail.com>
-References: <CA+TH9Vn=OjM74WB46dgXXm3Xcjy5X6z8i++p8o6EK1vBs9xrxQ@mail.gmail.com>
- <20150306195416.62f7424b@free-electrons.com>
- <CA+TH9Vm09qBNY2qrykL1zTe5JmPmiRObfg_-K1juURVSjWwvZA@mail.gmail.com>
- <54FA4B00.4000901@mind.be>
- <CA+TH9Vk8eGbdW+X+NK=jkKeWRQO4MagfhU06P05HzP229zjDsQ@mail.gmail.com>
- <CA+TH9V=GWMch_yqBNcfvjXuW1oGWSgWEuvbwqtzTjQ-ptWVpzQ@mail.gmail.com>
- <20150307130339.0dbc801c@free-electrons.com>
- <CA+TH9VkSZ0b3FuCPA5LHMFPetwCuz+cwu4HKfBCBQNuvCOV-QQ@mail.gmail.com>
-Message-ID: <CA+TH9V=LkkNuQ1fwzc_7oiTM0A3XFvzw83Yavn2Z3KBVq57=zA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Mar 2015 14:01:42 +0100
+Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <20150307090354.60c844a3@free-electrons.com>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
+ <20150221234636.50616706@free-electrons.com>
+ <20150221225836.GB4246@free.fr>
+ <20150223124136.5fb4ea97@nserafini-N550JK>
+ <54F7898A.6090601@free.fr> <20150306231558.GE4220@free.fr>
+ <20150307090354.60c844a3@free-electrons.com>
+Message-ID: <20150307130141.GB4186@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni, Arnout Vandecappelle,
+Thomas, All,
 
-2015-03-07 13:26 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Dear Thomas Petazzoni,
->
-> 2015-03-07 13:03 GMT+01:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->> Dear Angelo Compagnucci,
->>
->> On Sat, 7 Mar 2015 12:44:04 +0100, Angelo Compagnucci wrote:
->>
->>> Making that link manually
->>>
->>> ln -s $PWD/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm
->>> host/usr/include/asm
->>
->> Doing this is absolutely *horrible*. It's making host headers point to
->> target headers. A recipe for disaster.
->>
->> Clearly not the right fix.
->
-> Yes, obviously, it was only an experiment to keep the build going to the end.
-> Unfortunately the problem remains, I have not an host/usr/include/asm
-> link in my host directory and I am eager to understand what's going
-> on.
->
-> Thank you for your time!
+On 2015-03-07 09:03 +0100, Thomas Petazzoni spake thusly:
+> On Sat, 7 Mar 2015 00:15:58 +0100, Yann E. MORIN wrote:
+[--SNIP--]
+> Now the question is: is it possible to offer a version selection for
+> the X.org server ? Will an old X.org server build/work fine with recent
+> versions of the X.org libraries around it, so that we only have to
+> change the version of the X.org server, or will we enter an horrible
+> mess of "if the X.org server is at version <foo>, then we must use
+> version <bar> of this library, and version <foobar> of this other
+> library" ?
 
-I finally managed to solve the problem.
+Given the feedback from Bernd, I'll see at adding such a version choice.
 
-Luajit is also an host package, so to compile it uses host libraries
-installed on my system. One of the package it uses is linux-libc-dev.
-I'm on a 64 bits, so the package is in the 64bit variant. It usually
-compiles without a problem until this patch:
+Let's say we go this route:
 
-luajit: needs for 32bit archictectures a 32bit host gcc
+  - add a version choice for 1.14.7 (for tegra-binaries) and 1.17.1 (the
+    current version), defaulting to 17.1;
 
-So the host compiler doesn't look anymore for the 64bit version of
-linux-libc-dev but for the i386 one. So solving the problem was a
-matter of installing linux-libc-dev:i386.
+  - add hidden symbols for the driver ABI supported by each version;
 
-Is there any reason why this package not warned me about this type of
-behaviour? Or it's a matter of fact that buildroot doesn't provides
-any guarantee on host packages?
+  - make nvidia-tegra23 depend on the appropriate ABI symbol.
 
-Thank you for your time!
+OK?
 
->
-> Sincerely, Angelo.
->
->>
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
-
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
