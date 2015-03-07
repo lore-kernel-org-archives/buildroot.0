@@ -1,32 +1,37 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 7 Mar 2015 12:52:21 +0100
-Subject: [Buildroot] [PATCH 3/5] crda: remove static library handling
-In-Reply-To: <1425728422-14113-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425728422-14113-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMLf0bt8LfU79AMdzRgeXsB8=z1T-uQZHukWQmcxNTTARQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Mar 2015 13:01:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Fix batctl for static builds
+In-Reply-To: <1425672948-1668-1-git-send-email-zettelmeyerj@goooglemail.com>
+References: <1425672948-1668-1-git-send-email-zettelmeyerj@goooglemail.com>
+Message-ID: <20150307130153.3fed78de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 7, 2015 at 12:40 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> In commit d54418f2bcd9267fd049511d6236fb91c83b94ea ("crda: fix static
-> build failure"), some static linking handling was added in crda. But
-> in a later commit, 7c08fa935f55d108e20834e6b4bba664e1d2d408 ("crda:
-> needs dynamic library support"), crda was marked as not available for
-> static only builds.
->
-> This means that the static linking logic in crda.mk is now just dead
-> code, so this commit gets rid of it.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Dear Jens Zettelmeyer,
 
-Regards,
+On Fri,  6 Mar 2015 20:15:48 +0000, Jens Zettelmeyer wrote:
+> Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
+> ---
+>  package/batctl/batctl.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
+Thanks for working on this. However, this isn't the right fix for the
+problem: batctl uses pkg-config to discover how to link with libnl.
+It's just that the libnl .pc files were not correct in terms of static
+linking handling. Fixing those .pc files is a better solution, as it 1/
+can be upstreamed to libnl, 2/ avoids hacks in batctl.mk, and 3/ allows
+to also removes hacks in other Buildroot packages.
 
+See the series I have sent at
+http://lists.busybox.net/pipermail/buildroot/2015-March/121180.html.
+
+Thanks,
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
