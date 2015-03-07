@@ -1,129 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Mar 2015 23:52:01 +0100
-Subject: [Buildroot] [git commit] board: add support for RIoTboard
-Message-ID: <20150307100623.2A4C2804F1@busybox.osuosl.org>
+Date: Sat, 7 Mar 2015 09:16:12 +0100
+Subject: [Buildroot] [git commit] lttng-libust: bump to version 2.6.0
+Message-ID: <20150307100623.317227FF36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c9aa3218339ce8d896adfc5facd812b1fffa889
+commit: http://git.buildroot.net/buildroot/commit/?id=d8b4ba71d11a1e8c6898ac8ad46bf0a42e0e445d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a small development board, based on Freescale IMX6 Solo SoC
-(single core ARM Cortex-A9). The board has excellent support in mainline
-U-Boot and Linux.
+[Thomas: revert the change of <pkg>_LICENSE_FILES, which was
+incorrect.]
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/embest/riotboard/readme.txt                  |   46 ++++++++++++++++++++
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |    6 +++
- configs/riotboard_defconfig                        |   34 ++++++++++++++
- 3 files changed, 86 insertions(+), 0 deletions(-)
+ package/lttng-libust/Config.in         |    2 +-
+ package/lttng-libust/lttng-libust.hash |    8 ++------
+ package/lttng-libust/lttng-libust.mk   |    2 +-
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
-new file mode 100644
-index 0000000..8c31bbe
---- /dev/null
-+++ b/board/embest/riotboard/readme.txt
-@@ -0,0 +1,46 @@
-+Buildroot for Embest RIoTboard
-+==============================
-+
-+1. Compiling buildroot
-+----------------------
-+
-+make riotboard_defconfig
-+make
-+
-+2. Installing buildroot
-+-----------------------
-+
-+Prepare an SD-card and plug it into your card reader. Write the bootloader to
-+your SD-card:
-+
-+sudo dd if=output/images/u-boot.imx of=/dev/sdX bs=1k seek=1
-+
-+Create 1 partition on the SD-card using your favourite tool. The partition
-+should be big enough to hold your rootfs, for example 128MiB. Here's how an
-+example of such partition layout:
-+
-+   Device Boot      Start         End      Blocks   Id  System
-+/dev/sdX1            2048      264191      131072   83  Linux
-+
-+Format the SD-card partition with your favourite filesystem:
-+
-+sudo mkfs.ext2 /dev/sdX1
-+
-+Deploy your rootfs to the SD-card:
-+
-+sudo mkdir /mnt/sdcard/
-+sudo mount /dev/sdX1 /mnt/sdcard/
-+sudo tar xf rootfs.tar -C /mnt/sdcard/
-+sudo umount /dev/sdX1
-+
-+3. Running buildroot
-+--------------------
-+
-+Position the board so you can read the label "RIoTboard" on the right side of
-+SW1 DIP switches. Configure the SW1 swiches like this:
-+
-+10100101 (1 means ON position, 0 means OFF position)
-+
-+Now plug your prepared SD-card in slot J6. Connect a serial console (115200, 8,
-+N, 1) to header J18. Connect a 5V/1A power supply to the board and enjoy your
-+new toy.
-diff --git a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000..c7d32e0
---- /dev/null
-+++ b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,6 @@
-+default buildroot
-+
-+label buildroot
-+kernel /boot/uImage
-+devicetree /boot/imx6dl-riotboard.dtb
-+append console=ttymxc1,115200 root=/dev/mmcblk0p1 rw
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-new file mode 100644
-index 0000000..034bf40
---- /dev/null
-+++ b/configs/riotboard_defconfig
-@@ -0,0 +1,34 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_EABIHF=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+
-+# rootfs
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_2r1=y
-+BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_VERSION="2015.01"
-+BR2_TARGET_UBOOT_BOARDNAME="riotboard"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+
-+# kernel headers
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
+index 4583380..0a6abb6 100644
+--- a/package/lttng-libust/Config.in
++++ b/package/lttng-libust/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+-	  Userspace tracing library for the Lttng tracing
++	  Userspace tracing library for the LTTng 2.x tracing
+ 	  infrastructure. It allows userspace programs to create
+ 	  custom trace events that are integrated with all other
+ 	  events gathered by LTTng.
+diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+index ac897f3..65db612 100644
+--- a/package/lttng-libust/lttng-libust.hash
++++ b/package/lttng-libust/lttng-libust.hash
+@@ -1,6 +1,2 @@
+-# From http://lttng.org/files/lttng-ust/lttng-ust-2.6.0-rc1.tar.bz2.sha1
+-sha1    8db1627f16f466589c7842822ea4ad2f9d406b02  lttng-ust-2.5.1.tar.bz2
+-# From http://lttng.org/files/lttng-ust/lttng-ust-2.6.0-rc1.tar.bz2.md5
+-md5     d551d601bdc1a9285e1cd6c5728fb803  lttng-ust-2.5.1.tar.bz2
+-# Locally generated
+-sha256  fbd9e2d78641e5c659f1d51f8097c8279c155ff50f8e38a4c57f188ca4b84546  lttng-ust-2.5.1.tar.bz2
++# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.0.tar.bz2.sha1
++sha1  774fc2052781ba6fd789d422223c739d5f64482d  lttng-ust-2.6.0.tar.bz2
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index e6f02ca..2afcd61 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+-LTTNG_LIBUST_VERSION = 2.5.1
++LTTNG_LIBUST_VERSION = 2.6.0
+ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
