@@ -1,46 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 16:35:01 +0100
-Subject: [Buildroot] [PATCH V2 1/2] tcl: add support for static builds
-In-Reply-To: <54FB13AD.5080008@imgtec.com>
-References: <1425734562-5312-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150307144233.5ee1db01@free-electrons.com>
- <54FB0B22.8050604@imgtec.com>
- <20150307155634.605f5a68@free-electrons.com>
- <54FB13AD.5080008@imgtec.com>
-Message-ID: <20150307163501.23dbf86c@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 7 Mar 2015 16:43:26 +0100
+Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
+ build on Xtensa for uClibc-ng 1.0.0
+In-Reply-To: <20150307144013.GE4186@free.fr>
+References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150307144013.GE4186@free.fr>
+Message-ID: <20150307154325.GH3937@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Hi Yann,
+Yann E. MORIN wrote,
 
-On Sat, 7 Mar 2015 16:05:17 +0100, Vicente Olivert Riera wrote:
-
-> If you have a package that depends on tcl (it links against libtcl8.6.a,
-> for instance), then you will need the target tcl (actually the staging
-> one), which has the right architecture for your target, no? The host tcl
-> would have the same architecture as the host machine which may not be
-> the same as the target one.
+> Thomas, All,
 > 
-> Am I missing anything?
+> On 2015-03-07 14:40 +0100, Thomas Petazzoni spake thusly:
+> > Backported from upstream, will be part of the next release of
+> > uClibc-ng.
+> > 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  .../0002-fix-non-thread-compile-for-xtensa.patch   | 49 ++++++++++++++++++++++
+> 
+> I know this is not the first patch we have against uClibc-ng, but what
+> will happen when uClibc eventually tags 1.0.0? How will we differentiate
+> the patch directories between uClibc-1.0.0 and uClibc-ng 1.0.0 ?
 
-Yes: you still haven't answered whether the 'packages' thing in TCL is
-important or not. Yes, your tcl static linking thing is *building*
-properly. But does it work? Does the result actually make sense? You've
-solved the static linking case by simply not building everything. What
-guarantees you that the result is something that works?
+May be then we get an extra package for uClibc-ng?
+Bernhard is planning 0.9.34 release, so it is more a theoretically
+problem. I am sure uClibc-ng 1.1 is out before uClibc tags 1.0.0.
 
-Since it seems you actually don't know what TCL is and how it works
-(and neither do I), I'd prefer to mark it !BR2_STATIC_LIBS, and let
-someone actually interested in using TCL in a statically linked
-scenario take care of implementing this.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
+ 
