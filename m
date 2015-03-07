@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 13:01:53 +0100
-Subject: [Buildroot] [PATCH 1/1] Fix batctl for static builds
-In-Reply-To: <1425672948-1668-1-git-send-email-zettelmeyerj@goooglemail.com>
-References: <1425672948-1668-1-git-send-email-zettelmeyerj@goooglemail.com>
-Message-ID: <20150307130153.3fed78de@free-electrons.com>
+Date: Sat, 7 Mar 2015 13:03:39 +0100
+Subject: [Buildroot] asm/errno.h: No such file or directory compiling
+ luajit
+In-Reply-To: <CA+TH9V=GWMch_yqBNcfvjXuW1oGWSgWEuvbwqtzTjQ-ptWVpzQ@mail.gmail.com>
+References: <CA+TH9Vn=OjM74WB46dgXXm3Xcjy5X6z8i++p8o6EK1vBs9xrxQ@mail.gmail.com>
+ <20150306195416.62f7424b@free-electrons.com>
+ <CA+TH9Vm09qBNY2qrykL1zTe5JmPmiRObfg_-K1juURVSjWwvZA@mail.gmail.com>
+ <54FA4B00.4000901@mind.be>
+ <CA+TH9Vk8eGbdW+X+NK=jkKeWRQO4MagfhU06P05HzP229zjDsQ@mail.gmail.com>
+ <CA+TH9V=GWMch_yqBNcfvjXuW1oGWSgWEuvbwqtzTjQ-ptWVpzQ@mail.gmail.com>
+Message-ID: <20150307130339.0dbc801c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jens Zettelmeyer,
+Dear Angelo Compagnucci,
 
-On Fri,  6 Mar 2015 20:15:48 +0000, Jens Zettelmeyer wrote:
-> Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
-> ---
->  package/batctl/batctl.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+On Sat, 7 Mar 2015 12:44:04 +0100, Angelo Compagnucci wrote:
 
-Thanks for working on this. However, this isn't the right fix for the
-problem: batctl uses pkg-config to discover how to link with libnl.
-It's just that the libnl .pc files were not correct in terms of static
-linking handling. Fixing those .pc files is a better solution, as it 1/
-can be upstreamed to libnl, 2/ avoids hacks in batctl.mk, and 3/ allows
-to also removes hacks in other Buildroot packages.
+> Making that link manually
+> 
+> ln -s $PWD/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm
+> host/usr/include/asm
 
-See the series I have sent at
-http://lists.busybox.net/pipermail/buildroot/2015-March/121180.html.
+Doing this is absolutely *horrible*. It's making host headers point to
+target headers. A recipe for disaster.
 
-Thanks,
+Clearly not the right fix.
+
+Best regards,
 
 Thomas
 -- 
