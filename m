@@ -1,32 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 07 Mar 2015 17:14:29 +0100
-Subject: [Buildroot] [git commit] toolchain: add link-time-optimization
- support
-In-Reply-To: <20150307142749.E241880468@busybox.osuosl.org>
-References: <20150307142749.E241880468@busybox.osuosl.org>
-Message-ID: <54FB23E5.3050707@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 7 Mar 2015 16:14:28 +0000
+Subject: [Buildroot] [PATCH] git: bump version to 2.3.2
+Message-ID: <1425744868-48943-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/03/15 15:01, Thomas Petazzoni wrote:
-> Individual packages still have to enable LTO explicitly by passing '-flto' to
-> GCC, which passes it on to the linker. This option does not add that flag
-> globally. Some packages detect if the compiler supports LTO and enable the flag
-> if it does.
+- Bump version to 2.3.2
+- Update the hash file
 
- Given that this new option (probably) changes how some packages are built, I
-think there should be a few autobuilder configs that enable it. Any volunteers
-to take care of that?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
+diff --git a/package/git/git.hash b/package/git/git.hash
+index aa81df5..8cc7be7 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  1acc4b051576143eb41d80f5675476629588c7c5fb4e6a1dc2c4590f47c498b7  git-2.3.1.tar.xz
++sha256  18eb8462026a55ab34a657282e894bdaad331ea59bfebeba5eb45b27b58cf825  git-2.3.2.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 0672d6e..fc7b6fe 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.3.1
++GIT_VERSION = 2.3.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.1
