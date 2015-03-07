@@ -1,16 +1,10 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 7 Mar 2015 13:26:02 +0100
-Subject: [Buildroot] asm/errno.h: No such file or directory compiling
-	luajit
-In-Reply-To: <20150307130339.0dbc801c@free-electrons.com>
-References: <CA+TH9Vn=OjM74WB46dgXXm3Xcjy5X6z8i++p8o6EK1vBs9xrxQ@mail.gmail.com>
- <20150306195416.62f7424b@free-electrons.com>
- <CA+TH9Vm09qBNY2qrykL1zTe5JmPmiRObfg_-K1juURVSjWwvZA@mail.gmail.com>
- <54FA4B00.4000901@mind.be>
- <CA+TH9Vk8eGbdW+X+NK=jkKeWRQO4MagfhU06P05HzP229zjDsQ@mail.gmail.com>
- <CA+TH9V=GWMch_yqBNcfvjXuW1oGWSgWEuvbwqtzTjQ-ptWVpzQ@mail.gmail.com>
- <20150307130339.0dbc801c@free-electrons.com>
-Message-ID: <CA+TH9VkSZ0b3FuCPA5LHMFPetwCuz+cwu4HKfBCBQNuvCOV-QQ@mail.gmail.com>
+From: Jens Zettelmeyer <zettelmeyerj@gmail.com>
+Date: Sat, 7 Mar 2015 12:27:13 +0000
+Subject: [Buildroot] [PATCH 1/1] Fix batctl for static builds
+In-Reply-To: <20150307130153.3fed78de@free-electrons.com>
+References: <1425672948-1668-1-git-send-email-zettelmeyerj@goooglemail.com>
+ <20150307130153.3fed78de@free-electrons.com>
+Message-ID: <CAFNoKavbHT--DMvePP6KJvCddT3ydvSKRN-UMUnbhQHa4EiQMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,41 +13,41 @@ To: buildroot@busybox.net
 
 Dear Thomas Petazzoni,
 
-2015-03-07 13:03 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Sat, 7 Mar 2015 12:44:04 +0100, Angelo Compagnucci wrote:
->
->> Making that link manually
->>
->> ln -s $PWD/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm
->> host/usr/include/asm
->
-> Doing this is absolutely *horrible*. It's making host headers point to
-> target headers. A recipe for disaster.
->
-> Clearly not the right fix.
+Thank you. I had a look at the libnl pkg-config patch. That makes a lot
+more sense than what i did.
 
-Yes, obviously, it was only an experiment to keep the build going to the end.
-Unfortunately the problem remains, I have not an host/usr/include/asm
-link in my host directory and I am eager to understand what's going
-on.
+Thank you
+Jens
 
-Thank you for your time!
+2015-03-07 12:01 GMT+00:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
 
-Sincerely, Angelo.
-
+> Dear Jens Zettelmeyer,
 >
-> Best regards,
+> On Fri,  6 Mar 2015 20:15:48 +0000, Jens Zettelmeyer wrote:
+> > Signed-off-by: Jens Zettelmeyer <zettelmeyerj@goooglemail.com>
+> > ---
+> >  package/batctl/batctl.mk | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> Thanks for working on this. However, this isn't the right fix for the
+> problem: batctl uses pkg-config to discover how to link with libnl.
+> It's just that the libnl .pc files were not correct in terms of static
+> linking handling. Fixing those .pc files is a better solution, as it 1/
+> can be upstreamed to libnl, 2/ avoids hacks in batctl.mk, and 3/ allows
+> to also removes hacks in other Buildroot packages.
+>
+> See the series I have sent at
+> http://lists.busybox.net/pipermail/buildroot/2015-March/121180.html.
+>
+> Thanks,
 >
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150307/9626da09/attachment.html>
