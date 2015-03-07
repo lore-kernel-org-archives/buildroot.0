@@ -1,102 +1,39 @@
-From: Michael Trimarchi <michael@amarulasolutions.com>
-Date: Sun, 8 Mar 2015 00:10:32 +0100
-Subject: [Buildroot] [PATCH 1/1] python: spidev: add spidev plugin to
- manage spi from userspace
-In-Reply-To: <CAGm1_kso-jhZ510Yr0SGGjNCnRwKnAWsDKCpER7D+aTGpYW2+Q@mail.gmail.com>
-References: <1425749173-22326-1-git-send-email-michael@amarulasolutions.com>
- <CAGm1_kso-jhZ510Yr0SGGjNCnRwKnAWsDKCpER7D+aTGpYW2+Q@mail.gmail.com>
-Message-ID: <CAOf5uwnp2rc6DjAmB2Ob2pHvzjruaXqwQZdCk=zB=RmEkx46xw@mail.gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 8 Mar 2015 02:39:34 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-03-06
+In-Reply-To: <20150307231115.GA2518@tarshish>
+References: <20150307073020.C6D511011A8@stock.ovh.net>
+ <CAMo8BfJo6EJG4SeU3=ZEBB=9gG+SF9pJ9N0fCHh567o-jpfr5Q@mail.gmail.com>
+ <20150307231115.GA2518@tarshish>
+Message-ID: <CAMo8BfKYm-p4ETuX==DQbtz_s=4wpuwemfePnGaOz4G2YmsmYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Baruch,
 
-On 7 Mar 2015 20:00, "Yegor Yefremov" <yegorslists@googlemail.com> wrote:
+On Sun, Mar 8, 2015 at 2:11 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> On Sat, Mar 07, 2015 at 02:43:29PM +0300, Max Filippov wrote:
+>> it's been like that for about a week, two questions:
+>> - is anybody looking at it/going to take care of it?
 >
-> On Sat, Mar 7, 2015 at 6:26 PM, Michael Trimarchi
-> <michael@amarulasolutions.com> wrote:
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > ---
-> >  package/Config.in                      |  1 +
-> >  package/python-spidev/Config.in        |  8 ++++++++
-> >  package/python-spidev/python-spidev.mk | 14 ++++++++++++++
-> >  3 files changed, 23 insertions(+)
-> >  create mode 100644 package/python-spidev/Config.in
-> >  create mode 100644 package/python-spidev/python-spidev.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 584887b..8814a07 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -576,6 +576,7 @@ menu "external python modules"
-> >         source "package/python-setuptools/Config.in"
-> >         source "package/python-simplejson/Config.in"
-> >         source "package/python-six/Config.in"
-> > +       source "package/python-spidev/Config.in"
-> >         source "package/python-thrift/Config.in"
-> >         source "package/python-tornado/Config.in"
-> >         source "package/python-twisted/Config.in"
-> > diff --git a/package/python-spidev/Config.in
-b/package/python-spidev/Config.in
-> > new file mode 100644
-> > index 0000000..40d22af
-> > --- /dev/null
-> > +++ b/package/python-spidev/Config.in
-> > @@ -0,0 +1,8 @@
-> > +config BR2_PACKAGE_PYTHON_SPIDEV
-> > +       bool "python-spidev"
-> > +       depends on BR2_PACKAGE_PYTHON
->
-> According to https://pypi.python.org/pypi/spidev this package supports
-> both Python 2.x and 3.x. So please remove this statement (depends on
-> BR2_PACKAGE_PYTHON).
->
-> Other than that you can add my Reviewed-by: Yegor Yefremov
-> <yegorslists@googlemail.com>
->
+> See http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/108702.
 
-I will submit v2
+Yes, I saw it, and also got reply from Waldemar.
 
-Michael
+>> - is there any regression policy in the buildroot?
+>
+> How is this a regression? uClibc-ng is a new package that was not included in
+> any released version of Buildroot yet.
 
-> > +       help
-> > +         Python module for interfacing with SPI devices from user
-> > +         space via the spidev linux kernel driver.
-> > +
-> > +         https://pypi.python.org/pypi/spidev
-> > diff --git a/package/python-spidev/python-spidev.mk
-b/package/python-spidev/python-spidev.mk
-> > new file mode 100644
-> > index 0000000..b6e1fce
-> > --- /dev/null
-> > +++ b/package/python-spidev/python-spidev.mk
-> > @@ -0,0 +1,14 @@
-> >
-+################################################################################
-> > +#
-> > +# python-spidev
-> > +#
-> >
-+################################################################################
-> > +
-> > +PYTHON_SPIDEV_VERSION = 3.0
-> > +PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
-> > +PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
-> > +PYTHON_SPIDEV_SETUP_TYPE = distutils
-> > +PYTHON_SPIDEV_LICENSE = GPLv2
-> > +PYTHON_SPIDEV_LICENSE_FILES = LICENSE
-> > +
-> > +$(eval $(python-package))
-> > --
-> > 1.9.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150308/b32cf36a/attachment.html>
+I couldn't find any written rule, so am wondering.
+It may not be a regression per se, but uClibc-ng became a default libc
+for xtensa, and
+broken default is arguably a regression.
+
+-- 
+Thanks.
+-- Max
