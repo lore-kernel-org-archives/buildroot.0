@@ -1,10 +1,16 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Mar 2015 13:20:31 +0100
-Subject: [Buildroot] [PATCH 1/2] tcl: add support for static builds
-In-Reply-To: <20150307111101.5c44cd2c@free-electrons.com>
-References: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150307111101.5c44cd2c@free-electrons.com>
-Message-ID: <54FAED0F.8030804@imgtec.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 7 Mar 2015 13:26:02 +0100
+Subject: [Buildroot] asm/errno.h: No such file or directory compiling
+	luajit
+In-Reply-To: <20150307130339.0dbc801c@free-electrons.com>
+References: <CA+TH9Vn=OjM74WB46dgXXm3Xcjy5X6z8i++p8o6EK1vBs9xrxQ@mail.gmail.com>
+ <20150306195416.62f7424b@free-electrons.com>
+ <CA+TH9Vm09qBNY2qrykL1zTe5JmPmiRObfg_-K1juURVSjWwvZA@mail.gmail.com>
+ <54FA4B00.4000901@mind.be>
+ <CA+TH9Vk8eGbdW+X+NK=jkKeWRQO4MagfhU06P05HzP229zjDsQ@mail.gmail.com>
+ <CA+TH9V=GWMch_yqBNcfvjXuW1oGWSgWEuvbwqtzTjQ-ptWVpzQ@mail.gmail.com>
+ <20150307130339.0dbc801c@free-electrons.com>
+Message-ID: <CA+TH9VkSZ0b3FuCPA5LHMFPetwCuz+cwu4HKfBCBQNuvCOV-QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +19,41 @@ To: buildroot@busybox.net
 
 Dear Thomas Petazzoni,
 
-On 07/03/15 11:11, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Fri, 6 Mar 2015 22:30:21 +0000, Vicente Olivert Riera wrote:
-> 
->> +ifeq ($(BR2_STATIC_LIBS),y)
->> +# Do not build tclsh with dynamic loading support when building it
->> +# statically because it needs dlopen() and friends.
->> +TCL_CONF_OPTS += --disable-load
->> +HOST_TCL_CONF_OPTS += --disable-load
->> +# Also, build only the binaries and libraries and don't build the
->> +# 'packages' because they are shared objects which are intended to be
->> +# loaded dynamically.
->> +TCL_MAKE_OPTS = binaries libraries
->> +HOST_TCL_MAKE_OPTS = binaries libraries
->> +TCL_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-binaries install-libraries
->> +TCL_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-binaries
->> +HOST_TCL_INSTALL_OPTS = DESTDIR=$(STAGING_DIR) install-binaries install-libraries
->> +endif
-> 
-> BR2_STATIC_LIBS indicates that the *target* packages are built static
-> only. Host packages continue to be built dynamically. So I believe all
-> the HOST_* assignments in here are wrong.
+2015-03-07 13:03 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
+>
+> On Sat, 7 Mar 2015 12:44:04 +0100, Angelo Compagnucci wrote:
+>
+>> Making that link manually
+>>
+>> ln -s $PWD/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm
+>> host/usr/include/asm
+>
+> Doing this is absolutely *horrible*. It's making host headers point to
+> target headers. A recipe for disaster.
+>
+> Clearly not the right fix.
 
-Noted. I will fix that in the v2. Thanks!
+Yes, obviously, it was only an experiment to keep the build going to the end.
+Unfortunately the problem remains, I have not an host/usr/include/asm
+link in my host directory and I am eager to understand what's going
+on.
 
---
-Vincent
+Thank you for your time!
 
+Sincerely, Angelo.
+
+>
 > Best regards,
-> 
+>
 > Thomas
-> 
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
