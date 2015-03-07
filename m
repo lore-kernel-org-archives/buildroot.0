@@ -1,41 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  7 Mar 2015 14:40:52 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.19.1
-In-Reply-To: <1425750052-13206-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425750052-13206-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1425750052-13206-2-git-send-email-gustavo@zacarias.com.ar>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 7 Mar 2015 18:56:51 +0100
+Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
+ build on Xtensa for uClibc-ng 1.0.0
+In-Reply-To: <20150307173048.4652ee0c@free-electrons.com>
+References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150307144013.GE4186@free.fr>
+ <20150307154325.GH3937@waldemar-brodkorb.de>
+ <20150307173048.4652ee0c@free-electrons.com>
+Message-ID: <20150307175651.GJ3937@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 36d7691..af22ab4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.19"
-+	bool "3.19.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.19" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.19.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.0.5
+> Dear Waldemar Brodkorb,
+> 
+> On Sat, 7 Mar 2015 16:43:26 +0100, Waldemar Brodkorb wrote:
+> 
+> > May be then we get an extra package for uClibc-ng?
+           ^^^^ 
+
+> No, I'm still not convinced we need separate packages at this point.
+> Maybe in the future if uClibc and uClibc-ng diverge significantly, but
+> it's not the case right now.
+
+To clear things up, I am happy with the version stuff and we don't
+need an extra package. I just thought whenever we get the situation
+that uClibc 1.0.0 is released _and_ uClibc-ng is still using 1.0.x
+;)
+
+best regards
+
+        Waldemar
+
+I shut up now.
