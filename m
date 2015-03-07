@@ -1,49 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 7 Mar 2015 17:12:09 +0100
-Subject: [Buildroot] [PATCH V2 1/2] tcl: add support for static builds
-In-Reply-To: <20150307163501.23dbf86c@free-electrons.com>
-References: <1425734562-5312-1-git-send-email-Vincent.Riera@imgtec.com>	<20150307144233.5ee1db01@free-electrons.com>	<54FB0B22.8050604@imgtec.com>	<20150307155634.605f5a68@free-electrons.com>	<54FB13AD.5080008@imgtec.com>
- <20150307163501.23dbf86c@free-electrons.com>
-Message-ID: <54FB2359.4060605@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 07 Mar 2015 17:14:29 +0100
+Subject: [Buildroot] [git commit] toolchain: add link-time-optimization
+ support
+In-Reply-To: <20150307142749.E241880468@busybox.osuosl.org>
+References: <20150307142749.E241880468@busybox.osuosl.org>
+Message-ID: <54FB23E5.3050707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+On 07/03/15 15:01, Thomas Petazzoni wrote:
+> Individual packages still have to enable LTO explicitly by passing '-flto' to
+> GCC, which passes it on to the linker. This option does not add that flag
+> globally. Some packages detect if the compiler supports LTO and enable the flag
+> if it does.
 
-On 07/03/15 16:35, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Sat, 7 Mar 2015 16:05:17 +0100, Vicente Olivert Riera wrote:
-> 
->> If you have a package that depends on tcl (it links against libtcl8.6.a,
->> for instance), then you will need the target tcl (actually the staging
->> one), which has the right architecture for your target, no? The host tcl
->> would have the same architecture as the host machine which may not be
->> the same as the target one.
->>
->> Am I missing anything?
-> 
-> Yes: you still haven't answered whether the 'packages' thing in TCL is
-> important or not. Yes, your tcl static linking thing is *building*
-> properly. But does it work? Does the result actually make sense? You've
-> solved the static linking case by simply not building everything. What
-> guarantees you that the result is something that works?
-> 
-> Since it seems you actually don't know what TCL is and how it works
-> (and neither do I), I'd prefer to mark it !BR2_STATIC_LIBS, and let
-> someone actually interested in using TCL in a statically linked
-> scenario take care of implementing this.
+ Given that this new option (probably) changes how some packages are built, I
+think there should be a few autobuilder configs that enable it. Any volunteers
+to take care of that?
 
-Ok, no problem.
-
-Regards,
---
-Vincent
-
-> Thanks,
-> 
-> Thomas
-> 
+ Regards,
+ Arnout
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
