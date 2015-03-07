@@ -1,49 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Mar 2015 16:50:50 +0100
-Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
- build on Xtensa for uClibc-ng 1.0.0
-In-Reply-To: <20150307154325.GH3937@waldemar-brodkorb.de>
-References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150307144013.GE4186@free.fr>
- <20150307154325.GH3937@waldemar-brodkorb.de>
-Message-ID: <20150307155050.GG4186@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 07 Mar 2015 17:01:14 +0100
+Subject: [Buildroot] [PATCH] boot/at91bootstrap3: Add the option to
+ download via git
+In-Reply-To: <20150307112128.GA4186@free.fr>
+References: <1422636725-25148-1-git-send-email-angelo.compagnucci@gmail.com>
+ <CA+TH9Vmg41ujOeGLgyBHVCaSe4oH+0xg3cv8Yej-o-ohJammiA@mail.gmail.com>
+ <CA+TH9V=htTvNFv=5YY-VFSD4Lc_BnXSDH2+LPrsDa3B661T=mQ@mail.gmail.com>
+ <20150306225318.GD4220@free.fr>
+ <CA+TH9VkkqdJtyWBFGu2Jc13grJeBYO8pvEjX4XUi2YU1oL+RbQ@mail.gmail.com>
+ <20150307112128.GA4186@free.fr>
+Message-ID: <54FB20CA.9060706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-03-07 16:43 +0100, Waldemar Brodkorb spake thusly:
-> Yann E. MORIN wrote,
-> > On 2015-03-07 14:40 +0100, Thomas Petazzoni spake thusly:
-> > > Backported from upstream, will be part of the next release of
-> > > uClibc-ng.
-> > > 
-> > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > > ---
-> > >  .../0002-fix-non-thread-compile-for-xtensa.patch   | 49 ++++++++++++++++++++++
-> > 
-> > I know this is not the first patch we have against uClibc-ng, but what
-> > will happen when uClibc eventually tags 1.0.0? How will we differentiate
-> > the patch directories between uClibc-1.0.0 and uClibc-ng 1.0.0 ?
-> 
-> May be then we get an extra package for uClibc-ng?
+On 07/03/15 12:21, Yann E. MORIN wrote:
+>     Reviewed-by: Firstname NAME <your.name@example.net>
 
-Well, uClibc-ng is still too similar to uClibc to warrant a different
-package. That's the whole point Thomas argued for in the previous
-attempts at adding uClibc-ng.
+ Small correction: if you're not French, you are not required to shout your last
+name :-)
 
-We could make the version string something like "ng-1.0.0"... That's a
-bit of a hack, however.
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
