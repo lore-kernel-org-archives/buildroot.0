@@ -1,65 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sat, 7 Mar 2015 18:19:25 +0100
-Subject: [Buildroot] [PATCH 5/5] package/libungif: deprecate package
-In-Reply-To: <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
-References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
- <1422300260-5361-5-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAHkwnC-oVX3gwSuNcZGprZCPm2sPQia0micJ9jTMVHVUOJq6pw@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 7 Mar 2015 18:20:39 +0100
+Subject: [Buildroot] [PATCH 1/3] uclibc: adapt thread implementation
+ selection to uClibc-ng
+In-Reply-To: <1425735600-16762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425735600-16762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150307172039.GI3937@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 26, 2015 at 8:24 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> To be replaced with giflib.
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Can you respin this patch?
+> uClibc-ng does not support linuxthreads or linuxthreads.old on
+> architectures that have NPTL support. This creates another complicated
+> dependency: dependeing on the uClibc version being used, not the same
+> thread implementations are available.
+> 
+> In order to handle this situation, this patch introduces three hidden
+> booleans:
+> 
+>  - BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+>  - BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+>  - BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+> 
+> They are selected by the different uClibc versions, depending on which
+> thread implementation they support on the different architectures.
+> 
+> Then, the choice of the thread implementation can rely on those
+> booleans to know if a given thread implementation is available in the
+> current architecture / uClibc version selection.
 
-It's important to deprecate libungif because it's incompatible with
-libgif so if both are installed, the headers get overwritten, right
-now we don't have build problems because we are lucky and they are
-overwritten in right order :)
+Looks good to me so far.
+I am still unsatisfied about the ARC situation.
+If you use this branch of gcc:
+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/tree/arc-4.8-tls
 
-But using top-parallel make i get build failures because the order is changed.
+You get a working toolchain with TLS support and can use uClibc-git
+or uClibc-ng 1.0.0 with NPTL.
 
-Example:
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_FBV=y
-BR2_PACKAGE_LIBUNGIF=y
-
-The following command build fine:
-make clean libungif giflib fbv
-
-But fbv fail to build with the following command:
-make clean giflib libungif fbv
-
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libungif/Config.in |    2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/package/libungif/Config.in b/package/libungif/Config.in
-> index e8c301c..012ef76 100644
-> --- a/package/libungif/Config.in
-> +++ b/package/libungif/Config.in
-> @@ -1,5 +1,7 @@
->  config BR2_PACKAGE_LIBUNGIF
->         bool "libungif"
-> +       depends on !BR2_PACKAGE_GIFLIB
-> +       depends on BR2_DEPRECATED_SINCE_2015_02 # giflib
->         help
->           libungif is a library for handling the uncompressed GIF image format.
->
-> --
-> 1.7.10.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Fabio Porcedda
+best regards
+ Waldemar
