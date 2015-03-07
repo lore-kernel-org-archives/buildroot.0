@@ -1,48 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  7 Mar 2015 12:40:21 +0100
-Subject: [Buildroot] [PATCH 4/5] ti-utils: simplify static linking case by
-	using pkg-config
+Date: Sat,  7 Mar 2015 12:40:22 +0100
+Subject: [Buildroot] [PATCH 5/5] iw: simplify static linking handling
 In-Reply-To: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1425728422-14113-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1425728422-14113-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of hardcoding the dependencies of libnl, use pkg-config to
-discover them.
+Now that libnl pkg-config file is correct, there is no need to have
+special handling for static linking in the iw package: it already uses
+pkg-config to get the necessary flags to link with libnl.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ti-utils/ti-utils.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/iw/iw.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
-index 7ee7afa..3141219 100644
---- a/package/ti-utils/ti-utils.mk
-+++ b/package/ti-utils/ti-utils.mk
-@@ -6,14 +6,17 @@
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index df6e257..1286915 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -14,12 +14,6 @@ IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+ IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+ 	GIT_DIR=$(IW_DIR)
  
- TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
- TI_UTILS_SITE = $(call github,gxk,ti-utils,$(TI_UTILS_VERSION))
--TI_UTILS_DEPENDENCIES = libnl
-+TI_UTILS_DEPENDENCIES = libnl host-pkgconf
- TI_UTILS_LICENSE = BSD-3c
- TI_UTILS_LICENSE_FILES = COPYING
- 
-+TI_UTILS_CFLAGS = $(shell $(PKG_CONFIG_HOST_BINARY) --cflags libnl-genl-3.0)
-+TI_UTILS_LIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs libnl-genl-3.0)
-+
- define TI_UTILS_BUILD_CMDS
- 	$(MAKE1) NFSROOT="$(STAGING_DIR)" \
--		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -I$(STAGING_DIR)/usr/include/libnl3" \
--		LIBS="-lnl-3 -lnl-genl-3 -lpthread -lm" -C $(@D) all
-+		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(TI_UTILS_CFLAGS)" \
-+		LIBS="$(TI_UTILS_LIBS)" -C $(@D) all
+-ifeq ($(BR2_STATIC_LIBS),y)
+-# libnl needs pthread/m, so we need to explicitly with them when static
+-# these need to added AFTER libnl, so we have to override LIBS completely
+-IW_MAKE_OPTS += LIBS='-lnl-genl-3 -lnl-3 -lpthread -lm'
+-endif
+-
+ define IW_BUILD_CMDS
+ 	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPTS) -C $(@D)
  endef
- 
- define TI_UTILS_INSTALL_TARGET_CMDS
 -- 
 2.1.0
