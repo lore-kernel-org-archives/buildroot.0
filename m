@@ -1,24 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 11:09:59 +0100
-Subject: [Buildroot] [PATCH] socketcand: bump version
-In-Reply-To: <1425681764-18099-1-git-send-email-yegorslists@googlemail.com>
-References: <1425681764-18099-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150307110959.5e15eaf8@free-electrons.com>
+Date: Sat, 7 Mar 2015 11:11:01 +0100
+Subject: [Buildroot] [PATCH 1/2] tcl: add support for static builds
+In-Reply-To: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1425681022-16612-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150307111101.5c44cd2c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Vicente Olivert Riera,
 
-On Fri,  6 Mar 2015 23:42:44 +0100, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/socketcand/socketcand.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 6 Mar 2015 22:30:21 +0000, Vicente Olivert Riera wrote:
 
-Applied, thanks.
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +# Do not build tclsh with dynamic loading support when building it
+> +# statically because it needs dlopen() and friends.
+> +TCL_CONF_OPTS += --disable-load
+> +HOST_TCL_CONF_OPTS += --disable-load
+> +# Also, build only the binaries and libraries and don't build the
+> +# 'packages' because they are shared objects which are intended to be
+> +# loaded dynamically.
+> +TCL_MAKE_OPTS = binaries libraries
+> +HOST_TCL_MAKE_OPTS = binaries libraries
+> +TCL_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-binaries install-libraries
+> +TCL_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-binaries
+> +HOST_TCL_INSTALL_OPTS = DESTDIR=$(STAGING_DIR) install-binaries install-libraries
+> +endif
+
+BR2_STATIC_LIBS indicates that the *target* packages are built static
+only. Host packages continue to be built dynamically. So I believe all
+the HOST_* assignments in here are wrong.
+
+Best regards,
 
 Thomas
 -- 
