@@ -1,68 +1,43 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 7 Mar 2015 10:08:56 +0100
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: Add the option to
- download via git
-In-Reply-To: <20150306225318.GD4220@free.fr>
-References: <1422636725-25148-1-git-send-email-angelo.compagnucci@gmail.com>
- <CA+TH9Vmg41ujOeGLgyBHVCaSe4oH+0xg3cv8Yej-o-ohJammiA@mail.gmail.com>
- <CA+TH9V=htTvNFv=5YY-VFSD4Lc_BnXSDH2+LPrsDa3B661T=mQ@mail.gmail.com>
- <20150306225318.GD4220@free.fr>
-Message-ID: <CA+TH9VkkqdJtyWBFGu2Jc13grJeBYO8pvEjX4XUi2YU1oL+RbQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  7 Mar 2015 10:11:51 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/mesa3d: bump version to 10.4.6
+Message-ID: <1425719512-2593-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
 
-2015-03-06 23:53 GMT+01:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Angelo, All,
->
-> On 2015-03-04 15:55 +0100, Angelo Compagnucci spake thusly:
->> >> Adding support for git downloading of a custom repository.
-> [--SNIP--]
->> Any news on this?
->
-> Sorry it takes so long, but we are just getting out of a release cycle
-> (i.e. the last month was a feature-freeze), and we're trying to catch up
-> with the currently 363-or-so patches pending in our patch-tracker:
->     http://patchwork.ozlabs.org/project/buildroot/list/
->
-> One reason that it takes so much time is that there are very
-> reviewers/testers that give feedback on patches (I have been myself not
-> very active in that activity recently), and Peter and Thomas have to do
-> the grunt work of the triaging, reviewing, testing and applying almost
-> all on their own...
->
-> A little bit of help in reviewing those patches, testing them, triaging
-> the duplicates and so on... is very welcome.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: updated hash (Thomas)
 
-I usually contribute to several Open Source software and I usually
-tend to lend a hand because it's fun!
-Unfortunately I'm still grasping the internal of Buildroot and I've
-not the necessary knowledge to help reviewing patches.
-I'm monitorin the mailing list everyday and in case I find something
-to work on, you can count on me!
+ package/mesa3d/mesa3d.hash |    4 ++--
+ package/mesa3d/mesa3d.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm open to some sort of mentorship if someone wants to help me became
-proficient and helpful!
-
-Sincerely, Angelo.
-
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
-
-
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 677781f..9d193dc 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://cgit.freedesktop.org/mesa/mesa/commit/?h=10.4&id=41bdeda10210b8f1d358c04b25af2fbfe3335531
+-sha256	bf60000700a9d58e3aca2bfeee7e781053b0d839e61a95b1883e05a2dee247a0	MesaLib-10.4.5.tar.bz2
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-March/000144.html
++sha256	d8baedd20e79ccd98a5a7b05e23d59a30892e68de1fcc057ca6873dafca02735	MesaLib-10.4.6.tar.bz2
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9134d72..811a1ef 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.4.5
++MESA3D_VERSION = 10.4.6
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+1.7.10.4
