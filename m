@@ -1,110 +1,183 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Mar 2015 15:40:13 +0100
-Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
- build on Xtensa for uClibc-ng 1.0.0
-In-Reply-To: <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150307144013.GE4186@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Mar 2015 15:51:41 +0100
+Subject: [Buildroot] [PATCH 1/1] board: add support for Xilinx zc706
+In-Reply-To: <1425221334-4252-1-git-send-email-jordi.montagne66@gmail.com>
+References: <1425221334-4252-1-git-send-email-jordi.montagne66@gmail.com>
+Message-ID: <20150307155141.688f1cc4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Jordi Montagne,
 
-On 2015-03-07 14:40 +0100, Thomas Petazzoni spake thusly:
-> Backported from upstream, will be part of the next release of
-> uClibc-ng.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  .../0002-fix-non-thread-compile-for-xtensa.patch   | 49 ++++++++++++++++++++++
+Thanks for this patch. It's almost ready to go in, but there are a few
+comments below.
 
-I know this is not the first patch we have against uClibc-ng, but what
-will happen when uClibc eventually tags 1.0.0? How will we differentiate
-the patch directories between uClibc-1.0.0 and uClibc-ng 1.0.0 ?
+On Sun,  1 Mar 2015 15:48:54 +0100, Jordi Montagne wrote:
 
-(or for any other version, for what it's worth...)
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-(BTW, there's no bc8a6a6 commit upstream, it's b15663c)
-
-Regards,
-Yann E. MORIN.
-
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch
-> 
-> diff --git a/package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch b/package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch
+> diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
 > new file mode 100644
-> index 0000000..33f876b
+> index 0000000..00e45b3
 > --- /dev/null
-> +++ b/package/uclibc/1.0.0/0002-fix-non-thread-compile-for-xtensa.patch
-> @@ -0,0 +1,49 @@
-> +From bc8a6a6d8075998f0d1563cf202dcc18c39974b3 Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@openadk.org>
-> +Date: Thu, 5 Mar 2015 19:47:26 +0100
-> +Subject: [PATCH 2/2] fix non-thread compile for xtensa
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +---
-> + ldso/ldso/xtensa/dl-tlsdesc.S | 4 ++++
-> + ldso/ldso/xtensa/elfinterp.c  | 3 +++
-> + 2 files changed, 7 insertions(+)
-> +
-> +diff --git a/ldso/ldso/xtensa/dl-tlsdesc.S b/ldso/ldso/xtensa/dl-tlsdesc.S
-> +index a6ebc94..dee4258 100644
-> +--- a/ldso/ldso/xtensa/dl-tlsdesc.S
-> ++++ b/ldso/ldso/xtensa/dl-tlsdesc.S
-> +@@ -18,6 +18,9 @@
-> + 
-> + #include <sysdep.h>
-> + #include <tls.h>
-> ++
-> ++#if defined(USE_TLS) && USE_TLS
-> ++
-> + #include "tlsdesc.h"
-> + 
-> + 
-> +@@ -94,3 +97,4 @@ _dl_tlsdesc_dynamic:
-> + 	.size	_dl_tlsdesc_dynamic, .-_dl_tlsdesc_dynamic
-> + 
-> + #endif /* SHARED */
-> ++#endif /* USE_TLS */
-> +diff --git a/ldso/ldso/xtensa/elfinterp.c b/ldso/ldso/xtensa/elfinterp.c
-> +index 1397e95..66deb63 100644
-> +--- a/ldso/ldso/xtensa/elfinterp.c
-> ++++ b/ldso/ldso/xtensa/elfinterp.c
-> +@@ -31,8 +31,11 @@
-> +  */
-> + 
-> + #include "ldso.h"
-> ++
-> ++#if defined(USE_TLS) && USE_TLS
-> + #include "dl-tls.h"
-> + #include "tlsdeschtab.h"
-> ++#endif
-> + 
-> + unsigned long
-> + _dl_linux_resolver (struct elf_resolve *tpnt, int reloc_entry)
-> +-- 
-> +2.1.0
-> +
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +++ b/board/xilinx/zc706/readme.txt
+> @@ -0,0 +1,75 @@
+> +This is the buildroot board support for the Xilinx ZC706. The ZC706 is
 
+buildroot -> Buildroot.
+
+> +a development board based on the Xilinx Zynq-7000 based All-Programmable
+> +System-On-Chip.
+> +
+> +ZC706 information including schematics, reference designs, and manuals are
+> +available from
+> +http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
+> +
+> +The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
+> +on some propietary code. This dependency consists of a pair of
+> +files are available from the Xilinx SDK installation.
+
+"are available" -> "available".
+
+> +You will need these files from Xilinx SDK installation to generate
+
+"from" -> "from the".
+
+> +the U-Boot firmware:
+> +	ps7_init.c
+> +	ps7_init.h
+> +
+> +Buildroot will create the following files and place them in the
+> +<output>/images directory.
+> +	zynq-zc706.dtb
+> +	rootfs.cpio.uboot
+> +	uImage
+> +	u-boot.img
+> +	boot.bin
+
+It's a little bit weird to mention the generated files here, since the
+build hasn't been started at this point of the documentation.
+
+> +uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+> +---------------------------------------------------
+> +
+> +Due to licensing issues, the files ps7_init.c/h are not able to be
+> +distributed with the U-Boot source code.  These files are required to make a
+> +boot.bin file.
+
+This is repeated from above, so you should refactor that.
+
+> +If you already have the Xilinx tools installed, the following sequence will
+> +unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+> +
+> +make zc706_defconfig
+> +make uboot-patch
+> +cp ${XILINX_SDK}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
+> +output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+> +
+> +Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
+
+I don't see where XILINX_SDK_LIB is referenced.
+
+> +After copying these files into the U-Boot source tree, you can
+> +continue the build with:
+> +
+> +make
+> +
+> +*Notice*
+> +While the build will successfully complete without the ps7_init.*
+> +files,  the uboot.bin file generated by this configuration will not
+
+",  " -> ", ". I.e, only one space after a comma.
+
+> +function properly on the ZC706.  Therefore, it is imperative that
+
+Ditto, only one space after the ".".
+
+> +the ps7_init.* files be copied into the U-Boot source tree any time
+> +the clean, or uboot-dirclean targets are made.
+
+"are made" -> "are executed" or "are triggered".
+
+> +Resulting system
+> +----------------
+
+One empty new line between the title and the paragraph would be good.
+
+> +A FAT32 partition should be created at the beggining of the SD Card
+> +and the following files should be installed:
+> +	/boot.bin
+> +	/devicetree.dtb
+> +	/uImage
+> +	/uramdisk.image.gz
+> +	/u-boot.img
+
+Why do you have a slash at the beginning of all these files?
+
+> +All needed files can be taken from output/images/
+> +
+> +boot.bin, uImage and u-boot.img are direct copies of the same files
+> +available on output/images/
+> +
+> +devicetree.dtb is just zynq-zc706.dtb renamed.
+> +
+> +uramdisk.image.gz is rootfs.cpio.uboot renamed
+
+Why not use commands instead? Like replace all of this with:
+
+	cp output/images/boot.bin /media/sdcard/
+	cp output/images/uImage /media/sdcard/
+	cp output/images/u-boot.img /media/sdcard/
+	cp output/images/zynq-zc706.dtb /media/sdcard/devicetree.dtb
+	cp output/images/rootfs.cpio.uboot /media/sdcard/uramdisk.image.gz
+
+
+
+> diff --git a/configs/zc706_defconfig b/configs/zc706_defconfig
+> new file mode 100644
+> index 0000000..bb0aadc
+> --- /dev/null
+> +++ b/configs/zc706_defconfig
+> @@ -0,0 +1,26 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_ARM_ENABLE_NEON=y
+
+What about using BR2_ARM_EABIHF=y ?
+
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="3.8"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
+> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
+> +BR2_TARGET_ROOTFS_CPIO=y
+> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
+> +BR2_TARGET_UBOOT_FORMAT_IMG=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
+
+Other than that, looks good to me.
+
+Can you fix those issues and resend an updated version?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
