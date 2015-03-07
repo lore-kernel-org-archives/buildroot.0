@@ -1,47 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 15:30:24 +0100
-Subject: [Buildroot] [PATCH 1/1] [PATCH v2 1/1] Add support for gold
- linker and LTO for GCC.
-In-Reply-To: <BLU436-SMTP186D00E2AE794694F2CA956A8130@phx.gbl>
-References: <BLU436-SMTP186D00E2AE794694F2CA956A8130@phx.gbl>
-Message-ID: <20150307153024.1996a936@free-electrons.com>
+Date: Sat, 7 Mar 2015 15:31:11 +0100
+Subject: [Buildroot] [git commit] qt-webkit-kiosk: new package
+Message-ID: <20150307143118.778F98079D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=ad032ade03a3dc6e8c246eed3c234b43a4c4db8b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Jun 2014 22:55:23 +0000, Steve Thomas wrote:
-> Link Time Optimisations (LTO) from GCC needs the linker plugin. It also
-> needs support from the tools, in particular the archiver (AR) to
-> properly form archives that can be used by the linker.  The linker needs
-> to support the plugin also.
-> 
-> This patch changes the linker from BFD to GOLD and wraps the ar, nm and
-> ranlib utilities with a wrapper that calls the gcc-wrapper version that
-> call the actual utilities with an additional argument. This is a
-> temporary measure until the binutils supoort LTO natively.
-> 
-> Changes v1 -> v2:
->     - removed unecessary configuration option for binutils
->     - added siginging off to patches.
->     - cleaned up formatting and added missing comments.
-> 
-> Signed-off-by: Steve Thomas <scjthm@live.com>
+Qt-webkit-kiosk is a simple browser working in kiosk-mode, powered by
+QtWebkit. It provides a convenient way to deploy a full-screen browser
+on embedded system platforms.
 
-I have just applied a patch adding LTO support to gcc and binutils. Can
-you have a look at it, and see if it does all you need? See
-http://git.buildroot.net/buildroot/commit/?id=814f63ec32585f281855587fe0a287cee32e4232.
+This commit adds the appropriate packaging to Buildroot, including an
+option to deploy the provided sound files.
 
-If it does not, can you send an updated set of patches that add what's
-missing for your use case?
+Signed-off-by: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |    1 +
+ package/qt-webkit-kiosk/Config.in          |   23 ++++++++++++++++++++
+ package/qt-webkit-kiosk/qt-webkit-kiosk.mk |   32 ++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 584887b..1bce00a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -251,6 +251,7 @@ comment "X applications"
+ 	source "package/leafpad/Config.in"
+ 	source "package/midori/Config.in"
+ 	source "package/pcmanfm/Config.in"
++	source "package/qt-webkit-kiosk/Config.in"
+ 	source "package/rdesktop/Config.in"
+ 	source "package/synergy/Config.in"
+ 	source "package/torsmo/Config.in"
+diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
+new file mode 100644
+index 0000000..075258e
+--- /dev/null
++++ b/package/qt-webkit-kiosk/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_QT_WEBKIT_KIOSK
++	bool "qt-webkit-kiosk"
++	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	select BR2_PACKAGE_QT5WEBKIT
++	select BR2_PACKAGE_QT5MULTIMEDIA
++	depends on !BR2_STATIC_LIBS # qt5webkit
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
++	depends on BR2_ARCH_HAS_ATOMICS # qt5webkit
++	depends on !BR2_BINFMT_FLAT # qt5webkit
++	help
++	  Simple kiosk-mode browser powered by Qt5Webkit
++
++if BR2_PACKAGE_QT_WEBKIT_KIOSK
++
++config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
++        bool "Install browser sound files"
++        help
++          Deploy browser sound files on target
++
++endif
+diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+new file mode 100644
+index 0000000..d54c8d5
+--- /dev/null
++++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# qt-webkit-kiosk
++#
++################################################################################
++
++QT_WEBKIT_KIOSK_VERSION = 7fe40a350abfbe5ec194e7c6c740f7099e8704cd
++QT_WEBKIT_KIOSK_SITE = https://github.com/sergey-dryabzhinsky/qt-webkit-kiosk.git
++QT_WEBKIT_KIOSK_SITE_METHOD = git
++QT_WEBKIT_KIOSK_DEPENDENCIES = qt5webkit qt5multimedia
++QT_WEBKIT_KIOSK_LICENSE = LGPLv3
++QT_WEBKIT_KIOSK_LICENSE_FILES = doc/lgpl.html
++
++define QT_WEBKIT_KIOSK_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
++endef
++
++define QT_WEBKIT_KIOSK_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src -f Makefile.qt-webkit-kiosk \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		install_target
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		install_config \
++		$(if $(BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS),install_sound)
++endef
++
++$(eval $(generic-package))
