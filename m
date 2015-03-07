@@ -1,85 +1,49 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 7 Mar 2015 20:00:29 +0100
-Subject: [Buildroot] [PATCH 1/1] python: spidev: add spidev plugin to
- manage spi from userspace
-In-Reply-To: <1425749173-22326-1-git-send-email-michael@amarulasolutions.com>
-References: <1425749173-22326-1-git-send-email-michael@amarulasolutions.com>
-Message-ID: <CAGm1_kso-jhZ510Yr0SGGjNCnRwKnAWsDKCpER7D+aTGpYW2+Q@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Sat, 7 Mar 2015 15:50:00 -0500
+Subject: [Buildroot] [PATCH 0/7] General LTTng packages maintenance
+In-Reply-To: <20150307085921.087c637a@free-electrons.com>
+References: <1425663357-22541-1-git-send-email-eeppeliteloop@gmail.com>
+ <20150306233246.11b83af2@free-electrons.com> <54FA4E1C.9080909@mind.be>
+ <20150307085921.087c637a@free-electrons.com>
+Message-ID: <CAB4xu_2987X_QpbusZowfA=UbNM0tU90xDz6vdTa2itBQFxGig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 7, 2015 at 6:26 PM, Michael Trimarchi
-<michael@amarulasolutions.com> wrote:
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> ---
->  package/Config.in                      |  1 +
->  package/python-spidev/Config.in        |  8 ++++++++
->  package/python-spidev/python-spidev.mk | 14 ++++++++++++++
->  3 files changed, 23 insertions(+)
->  create mode 100644 package/python-spidev/Config.in
->  create mode 100644 package/python-spidev/python-spidev.mk
+On Sat, Mar 7, 2015 at 2:59 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Arnout Vandecappelle,
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 584887b..8814a07 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -576,6 +576,7 @@ menu "external python modules"
->         source "package/python-setuptools/Config.in"
->         source "package/python-simplejson/Config.in"
->         source "package/python-six/Config.in"
-> +       source "package/python-spidev/Config.in"
->         source "package/python-thrift/Config.in"
->         source "package/python-tornado/Config.in"
->         source "package/python-twisted/Config.in"
-> diff --git a/package/python-spidev/Config.in b/package/python-spidev/Config.in
-> new file mode 100644
-> index 0000000..40d22af
-> --- /dev/null
-> +++ b/package/python-spidev/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_SPIDEV
-> +       bool "python-spidev"
-> +       depends on BR2_PACKAGE_PYTHON
+> On Sat, 07 Mar 2015 02:02:20 +0100, Arnout Vandecappelle wrote:
+>
+>>  For lttng-libust, I really think it's silly to rename it. Nobody will be
+>> bothered by it.
+>>
+>>  Babeltrace on the other hand is more defendable. Are there any other packages
+>> that we carry that produces traces that can be read by babeltrace?
+>
+> Not that I am aware of, but Philippe might have some more details about
+> this.
+>
+>>  Note also that there always has been pushback from Peter against gratuitous
+>> renaming.
+>
+> Yes, which is why I decided to not apply those patches for the moment.
 
-According to https://pypi.python.org/pypi/spidev this package supports
-both Python 2.x and 3.x. So please remove this statement (depends on
-BR2_PACKAGE_PYTHON).
+I have no strong opinion on this, guys! I renamed those only for them
+to be more consistent with the upstream project names.
 
-Other than that you can add my Reviewed-by: Yegor Yefremov
-<yegorslists@googlemail.com>
+I don't think any application other than LTTng in Buildroot produces traces
+which can be decoded by Babeltrace, but Babeltrace is still an independent
+project, reading CTF traces for the moment, also an independent format.
 
-> +       help
-> +         Python module for interfacing with SPI devices from user
-> +         space via the spidev linux kernel driver.
-> +
-> +         https://pypi.python.org/pypi/spidev
-> diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
-> new file mode 100644
-> index 0000000..b6e1fce
-> --- /dev/null
-> +++ b/package/python-spidev/python-spidev.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-spidev
-> +#
-> +################################################################################
-> +
-> +PYTHON_SPIDEV_VERSION = 3.0
-> +PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
-> +PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
-> +PYTHON_SPIDEV_SETUP_TYPE = distutils
-> +PYTHON_SPIDEV_LICENSE = GPLv2
-> +PYTHON_SPIDEV_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
+Phil
+
+>
+> Thomas
 > --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
