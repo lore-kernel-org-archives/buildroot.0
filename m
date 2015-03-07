@@ -1,34 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 08:59:21 +0100
-Subject: [Buildroot] [PATCH 0/7] General LTTng packages maintenance
-In-Reply-To: <54FA4E1C.9080909@mind.be>
-References: <1425663357-22541-1-git-send-email-eeppeliteloop@gmail.com>
- <20150306233246.11b83af2@free-electrons.com>
- <54FA4E1C.9080909@mind.be>
-Message-ID: <20150307085921.087c637a@free-electrons.com>
+Date: Sat, 7 Mar 2015 09:03:54 +0100
+Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <20150306231558.GE4220@free.fr>
+References: <cover.1423597914.git.yann.morin.1998@free.fr>
+ <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
+ <20150221234636.50616706@free-electrons.com>
+ <20150221225836.GB4246@free.fr>
+ <20150223124136.5fb4ea97@nserafini-N550JK>
+ <54F7898A.6090601@free.fr> <20150306231558.GE4220@free.fr>
+Message-ID: <20150307090354.60c844a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Yann E. MORIN,
 
-On Sat, 07 Mar 2015 02:02:20 +0100, Arnout Vandecappelle wrote:
+Adding Bernd in the Cc loop, he might have some insights.
 
->  For lttng-libust, I really think it's silly to rename it. Nobody will be
-> bothered by it.
+On Sat, 7 Mar 2015 00:15:58 +0100, Yann E. MORIN wrote:
+
+> OK, we have the current situation:
 > 
->  Babeltrace on the other hand is more defendable. Are there any other packages
-> that we carry that produces traces that can be read by babeltrace?
+>   - Buildroot uses Xorg 1.17.1, which implements ABI 19;
+> 
+>   - nvidia-tegra23 only has support for ABI up to 14;
+> 
+>   - NVidia won't update those drivers.
 
-Not that I am aware of, but Philippe might have some more details about
-this.
+Correct, that's my understanding.
 
->  Note also that there always has been pushback from Peter against gratuitous
-> renaming.
+> Question: is Xorg ABI backward compatible? I.e. are drivers written for
+> a specific ABI able to work on a newer ABI?
 
-Yes, which is why I decided to not apply those patches for the moment.
+My understanding is that no, there is no backward compatibility. Maybe
+I'm wrong, but I remember a few years ago having to downgrade the X.org
+server version + a bunch of other X.org libraries, in order to have a
+sufficiently old X.org server to match the ABI used by proprietary ATI
+drivers.
+
+Now the question is: is it possible to offer a version selection for
+the X.org server ? Will an old X.org server build/work fine with recent
+versions of the X.org libraries around it, so that we only have to
+change the version of the X.org server, or will we enter an horrible
+mess of "if the X.org server is at version <foo>, then we must use
+version <bar> of this library, and version <foobar> of this other
+library" ?
+
+Best regards,
 
 Thomas
 -- 
