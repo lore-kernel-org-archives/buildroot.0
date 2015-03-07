@@ -1,46 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  7 Mar 2015 12:40:17 +0100
-Subject: [Buildroot] [PATCH 0/5] Fix libnl static linking
-Message-ID: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat,  7 Mar 2015 12:40:19 +0100
+Subject: [Buildroot] [PATCH 2/5] libnl: add patch to add Libs.private in
+	libnl-3.0.pc
+In-Reply-To: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425728422-14113-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1425728422-14113-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Having a properly defined Libs.private field allows to make sure
+static linking against libnl-3.0 works fine, at least as long as
+pkg-config is used.
 
-This set of patches was triggered by the batctl static linking patch
-sent by Jens Zettelmeyer.
-
-It turns out that batctl properly uses pkg-config to know how to link
-with libnl, so it's ctually libnl pkg-config that aren't correct. This
-is what the first two patches are fixing. This fixes batctl static
-linking.
-
-As a follow-up, I reviewed some of the packages that link against
-libnl and have special handling for static linking, and did some
-related cleanups.
-
-Thomas
-
-Thomas Petazzoni (5):
-  libnl: use the backported patch for poll.h issue
-  libnl: add patch to add Libs.private in libnl-3.0.pc
-  crda: remove static library handling
-  ti-utils: simplify static linking case by using pkg-config
-  iw: simplify static linking handling
-
- package/crda/crda.mk                               | 13 ----------
- package/iw/iw.mk                                   |  6 -----
- ...etlink-h-use-poll-h-instead-of-sys-poll-h.patch | 18 -------------
- ...link.h-fix-build-including-poll.h-with-th.patch | 30 ++++++++++++++++++++++
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  ...ibs.private-field-in-libnl-pkg-config-fil.patch | 30 ++++++++++++++++++++++
- package/ti-utils/ti-utils.mk                       |  9 ++++---
- 6 files changed, 66 insertions(+), 40 deletions(-)
- delete mode 100644 package/libnl/0001-netlink-netlink-h-use-poll-h-instead-of-sys-poll-h.patch
- create mode 100644 package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
+ 1 file changed, 30 insertions(+)
  create mode 100644 package/libnl/0002-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch
 
+diff --git a/package/libnl/0002-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch b/package/libnl/0002-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch
+new file mode 100644
+index 0000000..845a593
+--- /dev/null
++++ b/package/libnl/0002-build-add-Libs.private-field-in-libnl-pkg-config-fil.patch
+@@ -0,0 +1,30 @@
++From db0d59cd06f3ffd350379847c0885e1bfb85af0f Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 7 Mar 2015 11:34:42 +0100
++Subject: [PATCH 2/2] build: add Libs.private field in libnl pkg-config file
++
++In order to support static linking, the libnl pkg-config file should
++indicate in its Libs.private field the libraries that libnl-3.0.a
++requires. The LIBS variable contains the appropriate list of
++libraries: -lm in all cases, and -lpthread when pthread support is
++enabled. This allows to statically link applications against libnl
++properly.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ libnl-3.0.pc.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libnl-3.0.pc.in b/libnl-3.0.pc.in
++index b87e3dc..ddbc999 100644
++--- a/libnl-3.0.pc.in
+++++ b/libnl-3.0.pc.in
++@@ -7,4 +7,5 @@ Name: libnl
++ Description: Convenience library for netlink sockets
++ Version: @PACKAGE_VERSION@
++ Libs: -L${libdir} -lnl- at MAJ_VERSION@
+++Libs.private: @LIBS@
++ Cflags: -I${includedir}/libnl at MAJ_VERSION@
++-- 
++2.1.0
++
 -- 
 2.1.0
