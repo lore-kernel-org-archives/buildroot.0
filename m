@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 17:36:58 +0100
-Subject: [Buildroot] [PATCH v2 2/2] wine: Add gettext dependency check
- for host-wine
-In-Reply-To: <54FB2609.6020305@dawncrow.de>
-References: <54FB2609.6020305@dawncrow.de>
-Message-ID: <20150307173658.7947562a@free-electrons.com>
+Date: Sat, 7 Mar 2015 17:37:21 +0100
+Subject: [Buildroot] [git commit] wine: Disable more configure options
+Message-ID: <20150307163728.425138075F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+commit: http://git.buildroot.net/buildroot/commit/?id=e982dcb7cc8cb7b62941f4f24ae55daa59b06860
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 07 Mar 2015 17:23:37 +0100, Andr? Hentschel wrote:
+To avoid potential future problems.
 
-> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wine/wine.mk |   17 ++++++++++++++++-
+ 1 files changed, 16 insertions(+), 1 deletions(-)
 
-This indicates that gettext is going to be built for the target.
-
-> +HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-
-This changes the configuration of a host package.
-
-Conclusion: this doesn't make sense, unless a better explanation is
-provided to explain why such a weird thing is needed.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 47c7259..e931c87 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -16,7 +16,22 @@ WINE_CONF_OPTS = \
+ 	--with-wine-tools=../host-wine-$(WINE_VERSION) \
+ 	--disable-tests \
+ 	--disable-win64 \
+-	--without-opengl
++	--without-capi \
++	--without-coreaudio \
++	--without-gettext \
++	--without-gettextpo \
++	--without-gphoto \
++	--without-gsm \
++	--without-hal \
++	--without-ldap \
++	--without-netapi \
++	--without-openal \
++	--without-opencl \
++	--without-opengl \
++	--without-osmesa \
++	--without-oss \
++	--without-xshape \
++	--without-xshm
+ 
+ # Wine uses a wrapper around gcc, and uses the value of --host to
+ # construct the filename of the gcc to call.  But for external
