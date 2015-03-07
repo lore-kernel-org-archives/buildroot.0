@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 09:06:06 +0100
-Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
- new package
-In-Reply-To: <20150223124136.5fb4ea97@nserafini-N550JK>
-References: <cover.1423597914.git.yann.morin.1998@free.fr>
- <af61ad6f5736862b334002ce47727c9ce3bb2ab3.1423597914.git.yann.morin.1998@free.fr>
- <20150221234636.50616706@free-electrons.com>
- <20150221225836.GB4246@free.fr>
- <20150223124136.5fb4ea97@nserafini-N550JK>
-Message-ID: <20150307090606.4e1478b0@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  7 Mar 2015 09:13:28 +0100
+Subject: [Buildroot] [PATCH 2/2] package/mesa3d-headers: bump version to
+	10.4.6
+In-Reply-To: <1425716008-32544-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1425716008-32544-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1425716008-32544-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Serafini,
 
-On Mon, 23 Feb 2015 12:41:36 +0100, Nicolas Serafini wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> You right, I have only tested with an old version (1.14.7) of X.org so
-> this driver won't work with the 1.17.1 version. I don't know if Nvidia
-> will provide new driver with support of latest ABI version.
-> Currently I have no more hardware with display to test the graphics
-> part.
-
-How were you building an old version of X.org ? By patching many
-Buildroot packages ?
-
-Thomas
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e20859e..5e113ce 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.4.5
++MESA3D_HEADERS_VERSION = 10.4.6
+ MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_HEADERS_VERSION).tar.bz2
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
