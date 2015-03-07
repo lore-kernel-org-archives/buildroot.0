@@ -1,65 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 11:07:37 +0100
-Subject: [Buildroot] [PATCH v4] cmake: don't use any header available in
- $(HOST_DIR)/usr/include
-In-Reply-To: <1425716875-7054-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1425716875-7054-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150307110737.678ef8bf@free-electrons.com>
+Date: Sat, 7 Mar 2015 11:08:27 +0100
+Subject: [Buildroot] [PATCH v2] lttng-libust: bump to version 2.6.0
+In-Reply-To: <1425689293-8210-1-git-send-email-eeppeliteloop@gmail.com>
+References: <1425689293-8210-1-git-send-email-eeppeliteloop@gmail.com>
+Message-ID: <20150307110827.1a6648ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Philippe Proulx,
 
-On Sat,  7 Mar 2015 09:27:55 +0100, Fabio Porcedda wrote:
-> The -I<dir> options added to CMAKE_C_FLAGS are passed to the compiler
-> before the -I<dir> options of the cmake internal headers, so when the
-> host-xz package was already built, a #include <lzma.h> directive loads
-> the host-xz header instead of the cmake internal one.
-> 
-> Because we don't want to use any header avaiable in -I$(HOST_DIR)/usr/include,
-> just get rid of the -I<dir> options in the HOST_CFLAGS.
-> 
-> Fix build failure:
->   make host-xz host-cmake
-> 
-> .../output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:17:1: error: conflicting types for ?lzma_block_buffer_decode?
->  lzma_block_buffer_decode(lzma_block *block, lzma_allocator *allocator,
->  ^
-> In file included from /home/tetsuya/buildroot/br2/output/host/usr/include/lzma.h:296:0,
->                  from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/common.h:34,
->                  from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_decoder.h:16,
->                  from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:13:
-> /home/tetsuya/buildroot/br2/output/host/usr/include/lzma/block.h:577:27: note: previous declaration of ?lzma_block_buffer_decode? was here
->  extern LZMA_API(lzma_ret) lzma_block_buffer_decode(
->                            ^
-> Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/build.make:261: recipe for target 'Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o' failed
-> make[3]: *** [Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o] Error 1
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/4edf6e169dc4a00d8a8bd16a86eba2316cbbd9e5
-> http://autobuild.buildroot.org/results/a9ff38b22a36a2f8427d33085d3263a8cbfbd746
-> http://autobuild.buildroot.org/results/ecaa0227249207b5450519832a193c1585ac8177
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: Samuel Martin <s.martin49@gmail.com>
+On Fri,  6 Mar 2015 19:48:13 -0500, Philippe Proulx wrote:
 
-Thanks, I applied this patch, but I did some further changes:
+> -LTTNG_LIBUST_LICENSE_FILES = COPYING
+> +LTTNG_LIBUST_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt mit-license.txt COPYING LICENSE
 
-    [Thomas:
-     - simplify the sed expression. Instead of trying to remove '-I
-       <something>' from $(HOST_CFLAGS), simply remove $(HOST_CPPFLAGS)
-       from $(HOST_CFLAGS).
-     - add the same logic for HOST_CXXFLAGS.]
+Did you actually test this change by running "make legal-info" ? I had
+a look at the lttng-libust tarball, and there are no files named
+gpl-2.0.txt and so on, only a 'COPYING' file. So I believe this
+variable shouldn't be changed.
 
-See the final commit at
-http://git.buildroot.net/buildroot/commit/?id=46bf8e8fd2428a733486ca192ba93588a7ac8d0e.
+I've applied your patch after fixing this.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
