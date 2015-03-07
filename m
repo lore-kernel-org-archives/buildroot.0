@@ -1,45 +1,34 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Sat, 07 Mar 2015 17:23:37 +0100
-Subject: [Buildroot] [PATCH v2 2/2] wine: Add gettext dependency check for
-	host-wine
-Message-ID: <54FB2609.6020305@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 Mar 2015 17:24:38 +0100
+Subject: [Buildroot] [git commit] toolchain: add link-time-optimization
+ support
+In-Reply-To: <54FB23E5.3050707@mind.be>
+References: <20150307142749.E241880468@busybox.osuosl.org>
+ <54FB23E5.3050707@mind.be>
+Message-ID: <20150307172438.73f5a634@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
-v2: minor fixes
+Dear Arnout Vandecappelle,
 
- package/wine/wine.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On Sat, 07 Mar 2015 17:14:29 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index e931c87..9c6e2aa 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -237,6 +237,13 @@ else
- WINE_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-+WINE_DEPENDENCIES += gettext
-+else
-+HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
-+endif
-+
- # Wine needs to enable 64-bit build tools on 64-bit host
- ifeq ($(HOSTARCH),x86_64)
- HOST_WINE_CONF_OPTS += --enable-win64
-@@ -274,8 +281,6 @@ HOST_WINE_CONF_OPTS += \
- 	--without-curses \
- 	--without-dbus \
- 	--without-fontconfig \
--	--without-gettext \
--	--without-gettextpo \
- 	--without-gphoto \
- 	--without-glu \
- 	--without-gnutls \
+>  Given that this new option (probably) changes how some packages are built, I
+> think there should be a few autobuilder configs that enable it. Any volunteers
+> to take care of that?
+
+No: the commit only allows to enable LTO support in the compiler. It
+does not start building packages with -flto, unless of course some
+packages automatically detect the availability of the LTO feature in
+the compiler and make use of it.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
