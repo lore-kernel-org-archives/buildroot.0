@@ -1,55 +1,83 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 07 Mar 2015 02:02:20 +0100
-Subject: [Buildroot] [PATCH 0/7] General LTTng packages maintenance
-In-Reply-To: <20150306233246.11b83af2@free-electrons.com>
-References: <1425663357-22541-1-git-send-email-eeppeliteloop@gmail.com>
- <20150306233246.11b83af2@free-electrons.com>
-Message-ID: <54FA4E1C.9080909@mind.be>
+From: Alexey Mednyy <swexru@gmail.com>
+Date: Sat, 07 Mar 2015 04:09:43 +0300
+Subject: [Buildroot] [PATCH] fix eudev really not depending kernel
+ headers >=3.9
+In-Reply-To: <20150306234837.0e201d35@free-electrons.com>
+References: <1425661783-26577-1-git-send-email-swexru@gmail.com>
+ <20150306234837.0e201d35@free-electrons.com>
+Message-ID: <54FA4FD7.6080206@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/15 23:32, Thomas Petazzoni wrote:
-> Dear Philippe Proulx,
-> 
-> On Fri,  6 Mar 2015 12:35:50 -0500, Philippe Proulx wrote:
-> 
->>   lttng-libust: rename package to lttng-ust
->>   lttng-babeltrace: rename package to babeltrace
-> 
-> To be honest, I am not sure about those ones. Renaming packages causes
-> backward compatibility problems (that should be handled by adding the
-> relevant entries in Config.in.legacy, which your patches is not doing),
-> so renaming just for the sake of renaming, I'm not sure.
+Dear Thomas Petazzoni,
 
- For lttng-libust, I really think it's silly to rename it. Nobody will be
-bothered by it.
+On 03/07/2015 01:48 AM, Thomas Petazzoni wrote:
+> Dear Alexey Mednyy,
+>
+> Thanks for this contribution, see some comments below.
+>
+> The commit title should be something like:
+>
+> 	eudev: relax dependency on kernel headers version
+>
+> at least, the format should almost always be:
+>
+> 	<package name>: <description>
+>
+> Also, since the patch is doing not so trivial things, an empty commit
+> log is a bit strange.
+Thanks, will fix that in patch v2.
+>
+> On Fri,  6 Mar 2015 20:09:43 +0300, Alexey Mednyy wrote:
+>
+>> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+>> index 2221966..eb266a1 100644
+>> --- a/package/eudev/eudev.mk
+>> +++ b/package/eudev/eudev.mk
+>> @@ -10,6 +10,7 @@ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+>>  EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+>>  EUDEV_LICENSE_FILES = COPYING
+>>  EUDEV_INSTALL_STAGING = YES
+>> +EUDEV_AUTORECONF = YES
+> Add a comment above this line saying:
+>
+> # We're patching configure.ac
+>
+>>  # mq_getattr is in librt
+>>  EUDEV_CONF_ENV += LIBS=-lrt
+>> diff --git a/system/Config.in b/system/Config.in
+>> index 4d1c3d2..9e2b13f 100644
+>> --- a/system/Config.in
+>> +++ b/system/Config.in
+>> @@ -128,13 +128,12 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>>  	depends on BR2_USE_WCHAR
+>>  	depends on !BR2_STATIC_LIBS
+>>  	depends on BR2_USE_MMU # eudev
+>> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>> +#	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+> On which kernel headers version does eudev now depends? If it really
+> builds with old 2.6 kernel headers, then just get rid of this line
+> instead of commenting it out.
+I'm currently successfully built roots with headers of 2.6.36 and yes I
+used to delete this line, but forgot it (commented and started test
+build). Will fix in patch v2.
+>
+> However, looking at the eudev source code, I don't see how your
+> solution can fix the problem. Indeed src/udev/udev-builtin-btrfs.c only
+> includes <linux/btrfs.h> if HAVE_LINUX_BTRFS_H is defined. But it uses
+> BTRFS_IOC_DEVICES_READY unconditionally, and this definition is only
+> available in <linux/btrfs.h>.
+>
+> Can you expand a little bit on how this can work? Maybe I missed
+> something obvious?
+I'm not sure why, but seem older kernels - reason for inclusion of
+BTRFS_IOC_DEVICES_READY in src/shared/missing.h header in eudev.
 
- Babeltrace on the other hand is more defendable. Are there any other packages
-that we carry that produces traces that can be read by babeltrace?
-
- Note also that there always has been pushback from Peter against gratuitous
-renaming.
-
-> 
-> Since they lack the Config.in.legacy handling, I'll mark your patches
-> as Changes Requested in our patch tracking system. When you'll resubmit
-> them, I'll try to gather the opinion of other Buildroot developers to
-> see what they think.
-
- Not only legacy handling, but also alphabetical ordering in package/Config.in.
-
-
- Regards,
- Arnout
-
+Thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+_________________________________
+Best regards, Mednyy Alexey.
