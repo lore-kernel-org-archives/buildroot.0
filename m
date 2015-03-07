@@ -1,63 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Mar 2015 09:16:12 +0100
-Subject: [Buildroot] [git commit] lttng-libust: bump to version 2.6.0
-Message-ID: <20150307100623.317227FF36@busybox.osuosl.org>
+Date: Sat, 7 Mar 2015 11:07:37 +0100
+Subject: [Buildroot] [PATCH v4] cmake: don't use any header available in
+ $(HOST_DIR)/usr/include
+In-Reply-To: <1425716875-7054-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1425716875-7054-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150307110737.678ef8bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8b4ba71d11a1e8c6898ac8ad46bf0a42e0e445d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-[Thomas: revert the change of <pkg>_LICENSE_FILES, which was
-incorrect.]
+On Sat,  7 Mar 2015 09:27:55 +0100, Fabio Porcedda wrote:
+> The -I<dir> options added to CMAKE_C_FLAGS are passed to the compiler
+> before the -I<dir> options of the cmake internal headers, so when the
+> host-xz package was already built, a #include <lzma.h> directive loads
+> the host-xz header instead of the cmake internal one.
+> 
+> Because we don't want to use any header avaiable in -I$(HOST_DIR)/usr/include,
+> just get rid of the -I<dir> options in the HOST_CFLAGS.
+> 
+> Fix build failure:
+>   make host-xz host-cmake
+> 
+> .../output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:17:1: error: conflicting types for ?lzma_block_buffer_decode?
+>  lzma_block_buffer_decode(lzma_block *block, lzma_allocator *allocator,
+>  ^
+> In file included from /home/tetsuya/buildroot/br2/output/host/usr/include/lzma.h:296:0,
+>                  from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/common.h:34,
+>                  from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_decoder.h:16,
+>                  from /home/tetsuya/buildroot/br2/output/build/host-cmake-3.1.3/Utilities/cmliblzma/liblzma/common/block_buffer_decoder.c:13:
+> /home/tetsuya/buildroot/br2/output/host/usr/include/lzma/block.h:577:27: note: previous declaration of ?lzma_block_buffer_decode? was here
+>  extern LZMA_API(lzma_ret) lzma_block_buffer_decode(
+>                            ^
+> Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/build.make:261: recipe for target 'Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o' failed
+> make[3]: *** [Utilities/cmliblzma/CMakeFiles/cmliblzma.dir/liblzma/common/block_buffer_decoder.c.o] Error 1
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/4edf6e169dc4a00d8a8bd16a86eba2316cbbd9e5
+> http://autobuild.buildroot.org/results/a9ff38b22a36a2f8427d33085d3263a8cbfbd746
+> http://autobuild.buildroot.org/results/ecaa0227249207b5450519832a193c1585ac8177
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> Cc: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lttng-libust/Config.in         |    2 +-
- package/lttng-libust/lttng-libust.hash |    8 ++------
- package/lttng-libust/lttng-libust.mk   |    2 +-
- 3 files changed, 4 insertions(+), 8 deletions(-)
+Thanks, I applied this patch, but I did some further changes:
 
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 4583380..0a6abb6 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
--	  Userspace tracing library for the Lttng tracing
-+	  Userspace tracing library for the LTTng 2.x tracing
- 	  infrastructure. It allows userspace programs to create
- 	  custom trace events that are integrated with all other
- 	  events gathered by LTTng.
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index ac897f3..65db612 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
-@@ -1,6 +1,2 @@
--# From http://lttng.org/files/lttng-ust/lttng-ust-2.6.0-rc1.tar.bz2.sha1
--sha1    8db1627f16f466589c7842822ea4ad2f9d406b02  lttng-ust-2.5.1.tar.bz2
--# From http://lttng.org/files/lttng-ust/lttng-ust-2.6.0-rc1.tar.bz2.md5
--md5     d551d601bdc1a9285e1cd6c5728fb803  lttng-ust-2.5.1.tar.bz2
--# Locally generated
--sha256  fbd9e2d78641e5c659f1d51f8097c8279c155ff50f8e38a4c57f188ca4b84546  lttng-ust-2.5.1.tar.bz2
-+# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.0.tar.bz2.sha1
-+sha1  774fc2052781ba6fd789d422223c739d5f64482d  lttng-ust-2.6.0.tar.bz2
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index e6f02ca..2afcd61 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
--LTTNG_LIBUST_VERSION = 2.5.1
-+LTTNG_LIBUST_VERSION = 2.6.0
- LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
+    [Thomas:
+     - simplify the sed expression. Instead of trying to remove '-I
+       <something>' from $(HOST_CFLAGS), simply remove $(HOST_CPPFLAGS)
+       from $(HOST_CFLAGS).
+     - add the same logic for HOST_CXXFLAGS.]
+
+See the final commit at
+http://git.buildroot.net/buildroot/commit/?id=46bf8e8fd2428a733486ca192ba93588a7ac8d0e.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
