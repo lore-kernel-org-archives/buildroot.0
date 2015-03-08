@@ -1,52 +1,79 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 8 Mar 2015 13:48:42 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
- instead of libftdi
-In-Reply-To: <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
-References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
- <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150308114842.GB2518@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  8 Mar 2015 13:01:23 +0100
+Subject: [Buildroot] [PATCH 1/2] package/jsoncpp: new package
+Message-ID: <1425816084-5764-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Needed for upcoming Kodi pctv/filmon PVR packages:
 
-On Sun, Mar 08, 2015 at 12:26:03PM +0100, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v1->v2:
-> - rebase
-> ---
->  package/avrdude/avrdude.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-> index 03d6490..a4e0ebd 100644
-> --- a/package/avrdude/avrdude.mk
-> +++ b/package/avrdude/avrdude.mk
-> @@ -17,8 +17,8 @@ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
->  AVRDUDE_LICENSE = GPLv2+
->  AVRDUDE_LICENSE_FILES = avrdude/COPYING
->  
-> -ifeq ($(BR2_PACKAGE_LIBFTDI),y)
-> -AVRDUDE_DEPENDENCIES += libftdi
-> +ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
-> +AVRDUDE_DEPENDENCIES += libftdi1
+https://github.com/kodi-pvr/pvr.pctv/blob/master/CMakeLists.txt#L11
+https://github.com/kodi-pvr/pvr.filmon/blob/master/CMakeLists.txt#L11
 
-How do you tell avrdude to link with libftdi1 and not libftdi when both are 
-built? The same question goes for openocd.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in          |    1 +
+ package/jsoncpp/Config.in  |   13 +++++++++++++
+ package/jsoncpp/jsoncpp.mk |   16 ++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/jsoncpp/Config.in
+ create mode 100644 package/jsoncpp/jsoncpp.mk
 
->  endif
->  
->  # if /etc/avrdude.conf exists, the installation process creates a
-
-baruch
-
+diff --git a/package/Config.in b/package/Config.in
+index 734b85d..5b4b639 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -805,6 +805,7 @@ menu "JSON/XML"
+ 	source "package/jansson/Config.in"
+ 	source "package/json-c/Config.in"
+ 	source "package/json-glib/Config.in"
++	source "package/jsoncpp/Config.in"
+ 	source "package/libjson/Config.in"
+ 	source "package/libroxml/Config.in"
+ 	source "package/libxml2/Config.in"
+diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
+new file mode 100644
+index 0000000..19a901e
+--- /dev/null
++++ b/package/jsoncpp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_JSONCPP
++	depends on BR2_INSTALL_LIBSTDCPP
++	bool "jsoncpp"
++	help
++	  JsonCpp is a C++ library that allows manipulating JSON values,
++	  including serialization and deserialization to and from strings.
++	  It can also preserve existing comment in unserialization/serialization
++	  steps, making it a convenient format to store user input files.
++
++	  https://github.com/open-source-parsers/jsoncpp
++
++comment "jsoncpp needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+new file mode 100644
+index 0000000..e0646f5
+--- /dev/null
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# jsoncpp
++#
++################################################################################
++
++JSONCPP_VERSION = 1.5.4
++JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
++JSONCPP_LICENSE = MIT
++JSONCPP_LICENSE_FILES = LICENSE
++JSONCPP_INSTALL_STAGING = YES
++
++JSONCPP_CONF_OPTS += \
++	-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF
++
++$(eval $(cmake-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.10.4
