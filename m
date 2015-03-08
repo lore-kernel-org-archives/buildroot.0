@@ -1,74 +1,112 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  8 Mar 2015 13:01:24 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tinyxml2: new package
-In-Reply-To: <1425816084-5764-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1425816084-5764-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1425816084-5764-2-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 14:32:31 +0100
+Subject: [Buildroot] [git commit] minidlna: add init script for sysv and
+	systemd
+Message-ID: <20150308133314.B33678055B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Required for upcoming kodi-pvr-dvblink package:
-https://github.com/kodi-pvr/pvr.dvblink/blob/master/CMakeLists.txt#L11
+commit: http://git.buildroot.net/buildroot/commit/?id=84b13410b9a9c0582e8acab02316ec1bb07d8f10
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: add a sleep 1 between stop and start, otherwise minidlnad
+does not restart properly.]
+
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/tinyxml2/Config.in   |   11 +++++++++++
- package/tinyxml2/tinyxml2.mk |   13 +++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/tinyxml2/Config.in
- create mode 100644 package/tinyxml2/tinyxml2.mk
+ package/minidlna/S60minidlnad      |   40 ++++++++++++++++++++++++++++++++++++
+ package/minidlna/minidlna.mk       |   15 +++++++++++++
+ package/minidlna/minidlnad.service |   11 +++++++++
+ 3 files changed, 66 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5b4b639..6800027 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -816,6 +816,7 @@ menu "JSON/XML"
- 	source "package/mxml/Config.in"
- 	source "package/rapidjson/Config.in"
- 	source "package/tinyxml/Config.in"
-+	source "package/tinyxml2/Config.in"
- 	source "package/xerces/Config.in"
- 	source "package/yajl/Config.in"
- 	source "package/yaml-cpp/Config.in"
-diff --git a/package/tinyxml2/Config.in b/package/tinyxml2/Config.in
+diff --git a/package/minidlna/S60minidlnad b/package/minidlna/S60minidlnad
 new file mode 100644
-index 0000000..25bc594
+index 0000000..f99999a
 --- /dev/null
-+++ b/package/tinyxml2/Config.in
++++ b/package/minidlna/S60minidlnad
+@@ -0,0 +1,40 @@
++#!/bin/sh
++#
++# minidlnad        Starts minidlnad.
++#
++
++start() {
++	echo -n "Starting minidlna: "
++	umask 077
++	start-stop-daemon -S -q -p /var/run/minidlna/minidlna.pid \
++		--exec /usr/sbin/minidlnad
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	echo -n "Stopping minidlna: "
++	start-stop-daemon -K -q -p /var/run/minidlna/minidlna.pid
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	# Sleep needed for minidlna to restart properly
++	sleep 1
++	start
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index bcbe5fa..1ff76e3 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -24,4 +24,19 @@ MINIDLNA_CONF_OPTS = \
+ 	--disable-static
+ endif
+ 
++define MINIDLNA_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/minidlna/S60minidlnad \
++		$(TARGET_DIR)/etc/init.d/S60minidlnad
++endef
++
++define MINIDLNA_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 package/minidlna/minidlnad.service \
++		$(TARGET_DIR)/lib/systemd/system/minidlnad.service
++
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++
++	ln -fs ../minidlnad.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/minidlnad.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/minidlna/minidlnad.service b/package/minidlna/minidlnad.service
+new file mode 100644
+index 0000000..f69476b
+--- /dev/null
++++ b/package/minidlna/minidlnad.service
 @@ -0,0 +1,11 @@
-+config BR2_PACKAGE_TINYXML2
-+	bool "tinyxml2"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  TinyXML-2 is a simple, small, efficient, C++ XML parser that can be
-+	  easily integrating into other programs.
++[Unit]
++Description=minidlna server
++After=network.target
 +
-+	  http://www.grinninglizard.com/tinyxml2/index.html
++[Service]
++Type=forking
++ExecStart=/usr/sbin/minidlnad
++PIDFile=/var/run/minidlna/minidlna.pid
 +
-+comment "tinyxml2 needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-new file mode 100644
-index 0000000..370049b
---- /dev/null
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tinyxml2
-+#
-+################################################################################
-+
-+TINYXML2_VERSION = 2.2.0
-+TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
-+TINYXML2_LICENSE = zlib
-+TINYXML2_LICENSE_FILES = readme.md
-+TINYXML2_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
--- 
-1.7.10.4
++[Install]
++WantedBy=multi-user.target
