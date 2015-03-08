@@ -1,67 +1,56 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 8 Mar 2015 13:59:58 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-03-06
-In-Reply-To: <20150308081737.3b35f001@free-electrons.com>
-References: <20150307073020.C6D511011A8@stock.ovh.net>
- <CAMo8BfJo6EJG4SeU3=ZEBB=9gG+SF9pJ9N0fCHh567o-jpfr5Q@mail.gmail.com>
- <20150307231115.GA2518@tarshish>
- <CAMo8BfKYm-p4ETuX==DQbtz_s=4wpuwemfePnGaOz4G2YmsmYQ@mail.gmail.com>
- <20150308081737.3b35f001@free-electrons.com>
-Message-ID: <CAMo8BfLeQdxJSNW9SdP+ACN1cgwnjE0sdavFR9=LxfLc0GYU3Q@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  8 Mar 2015 12:26:00 +0100
+Subject: [Buildroot] [PATCH v2 0/4] libftdi{0,1} related work
+Message-ID: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 8, 2015 at 10:17 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Max Filippov,
->
-> On Sun, 8 Mar 2015 02:39:34 +0300, Max Filippov wrote:
->
->> I couldn't find any written rule, so am wondering.
->> It may not be a regression per se, but uClibc-ng became a default libc
->> for xtensa, and
->> broken default is arguably a regression.
->
-> I posted a set of commits fixing this:
-> http://lists.busybox.net/pipermail/buildroot/2015-March/121200.html.
+Hi all,
 
-Thank you, Thomas.
-Still uclibc build fails for me with the following message:
+The short series does:
+- bump libftdi and add libftdi1
+- use libftdi1 for the 2 packages explicitly dependending on libftdi (only
+  build tests, runtime test feedback is welcome).
+  It seems ola also depends on libftdi, but does not support libftdi1. Who
+  knows how many other packages silently depend on libftdi depending on the
+  buildroot configuration...
 
-  GEN include/bits/sysnum.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelbarrier.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/pthread-pi-defines.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelbarrier.h
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/pthread-pi-defines.h
-In file included from ./libpthread/nptl/pthreadP.h:25:0,
-                 from <stdin>:2:
-./include/sys/syscall.h:24:25: fatal error: bits/sysnum.h: No such
-file or directory
- #include <bits/sysnum.h>
-                         ^
-compilation terminated.
-  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
-make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h]
-Error 1
-make[1]: *** Waiting for unfinished jobs....
+Regards,
 
-Attached patch fixes it for me.
+Samuel
+--
 
--- 
-Thanks.
--- Max
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Makefile.in-add-missing-dependency-on-bits-sysnum.h-.patch
-Type: text/x-patch
-Size: 1891 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150308/c6fbceed/attachment.bin>
+Daniel Sangue (1):
+  package/libftdi1: new package
+
+Samuel Martin (3):
+  package/libftdi: bump to version 0.20
+  package/avrdude: depends on libftdi1 instead of libftdi
+  package/openocd: depends on libftdi1 instead of libftdi
+
+ package/Config.in                                  |  1 +
+ package/avrdude/avrdude.mk                         |  4 +-
+ package/libftdi/libftdi.hash                       |  2 +
+ package/libftdi/libftdi.mk                         |  2 +-
+ ...he-standard-CMake-flag-to-drive-the-share.patch | 96 ++++++++++++++++++++++
+ .../libftdi1/0002-cmake-fix-FindUSB1.cmake.patch   | 34 ++++++++
+ ...o-not-check-for-g-when-FTDIPP-is-disabled.patch | 46 +++++++++++
+ package/libftdi1/Config.in                         | 37 +++++++++
+ package/libftdi1/libftdi1.hash                     |  2 +
+ package/libftdi1/libftdi1.mk                       | 37 +++++++++
+ package/openocd/Config.in                          |  8 +-
+ package/openocd/openocd.mk                         |  2 +-
+ 12 files changed, 263 insertions(+), 8 deletions(-)
+ create mode 100644 package/libftdi/libftdi.hash
+ create mode 100644 package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+ create mode 100644 package/libftdi1/0002-cmake-fix-FindUSB1.cmake.patch
+ create mode 100644 package/libftdi1/0003-cmake-do-not-check-for-g-when-FTDIPP-is-disabled.patch
+ create mode 100644 package/libftdi1/Config.in
+ create mode 100644 package/libftdi1/libftdi1.hash
+ create mode 100644 package/libftdi1/libftdi1.mk
+
+--
+2.3.2
