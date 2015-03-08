@@ -1,50 +1,54 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 8 Mar 2015 08:28:44 +0100
-Subject: [Buildroot] [PATCH 4/5] package/efl/libevas: Switch to giflib
-In-Reply-To: <20150308081520.1a6e9fc7@free-electrons.com>
-References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
- <1422300260-5361-4-git-send-email-bernd.kuhls@t-online.de>
- <CAHkwnC-cVh1fKVKyR=RhWv+tQgRVeQomt0dL1Z0TW_cbnyQ_+w@mail.gmail.com>
- <20150307173234.57c8bf4f@free-electrons.com>
- <CAHkwnC_PjANbN1MN7uXUq2wBjaR-Z62KuWeE3bMFrJ-7oWXBww@mail.gmail.com>
- <20150308081520.1a6e9fc7@free-electrons.com>
-Message-ID: <CAHkwnC9VfqeHc8SGqwJJu777npQ7brMi=B=Ck6rv6CQUyTHB2Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 08:33:11 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-03-06
+In-Reply-To: <CAGm1_kt_5oR3X4f7O5cbx8z5BS5Jeu_W2hQg+9oucnVgV+BWmw@mail.gmail.com>
+References: <20150307073020.C6D511011A8@stock.ovh.net>
+ <CAGm1_kt_5oR3X4f7O5cbx8z5BS5Jeu_W2hQg+9oucnVgV+BWmw@mail.gmail.com>
+Message-ID: <20150308083311.0bbb4d22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 8, 2015 at 8:15 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Sat, 7 Mar 2015 18:01:41 +0100, Fabio Porcedda wrote:
->
->> I don't know exactly but the libevas seems dead, the last change in
->> the git repository was made 15 months ago.
->
-> The EFL stuff in Buildroot needs a complete update: most of the
-> EFL libraries have been merged into one single project/tarball. So many
-> of the EFL related packages in Buildroot should be removed, and the
-> main EFL library bumped to a higher version.
->
->> https://git.enlightenment.org/legacy/evas.git/
->
-> See the "legacy" in this URL ?
+Dear Yegor Yefremov,
 
+On Sat, 7 Mar 2015 22:50:03 +0100, Yegor Yefremov wrote:
 
-I understand that is a legacy repository but because you talked about
-to send a patch upstream i was trying to understand if there is any
-chance that the patch will be accepted.
+> >      powerpc | can-utils-002f8eba8703e88cd... | NOK | http://autobuild.buildroot.net/results/8f52839127c2c9a6cda6fb9bd7a44ad4d1d19fd0/
+> >      powerpc | can-utils-002f8eba8703e88cd... | NOK | http://autobuild.buildroot.net/results/8f06dc86c698eff1e49c3c74b028b90c7eac51e1/
+> 
+> How old is powerpc toolchain? This symbol N_SLCAN is in
+> include/uapi/linux/tty.h since 2012 and perhaps even earlier before
+> uapi was introduced.
 
-So when you have talked about to send the patch upstream didn't know
-about the legacy status of this repository?
+This powerpc toolchain is quite old, and is kept in the autobuilders
+precisely for this reason. This define has been added in kernel commit
+cd05acfe65ed2cf2db683fa9a6adb8d35635263b, in December 2007. It was part
+of the 2.6.25 kernel release.
 
-Nevertheless the https://git.enlightenment.org/legacy/imlib2.git/
-repository gets updated even if it has the "legacy" word in the
-prefix, but it's the only one so maybe it's just an exception.
+This toolchain uses the 2.6.38 kernel headers, so this symbol should be
+here. Except that the <linux/tty.h> of this toolchain is basically
+empty:
 
-BR
+===
+
+#ifndef _LINUX_TTY_H
+#define _LINUX_TTY_H
+
+/*
+ * 'tty.h' defines some structures used by tty_io.c and some defines.
+ */
+
+#endif
+
+===
+
+So either I'm looking incorrectly, or those headers look broken.
+
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
