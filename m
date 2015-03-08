@@ -1,49 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 8 Mar 2015 11:53:18 +0200
-Subject: [Buildroot] [PATCH 1/4 v5] package/cmake: make ctest a target
- package too
-In-Reply-To: <1425808043-32292-2-git-send-email-s.martin49@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 8 Mar 2015 11:23:00 +0100
+Subject: [Buildroot] [PATCH 3/4] toolchainfile.cmake: only search the
+ sysroot for CMake module
+In-Reply-To: <1425808043-32292-4-git-send-email-s.martin49@gmail.com>
 References: <1425808043-32292-1-git-send-email-s.martin49@gmail.com>
- <1425808043-32292-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150308095318.GY2376@sapphire.tkos.co.il>
+ <1425808043-32292-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAGm1_ktXqrSqXRvCS4rAeGkfRDaVenPOeRXLTZk7sqaXpRfuSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel, Davide,
+On Sun, Mar 8, 2015 at 10:47 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+> This change prevents CMake from searching outside the sysroot location
+> for CMake modules when cross-compiling.
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-On Sun, Mar 08, 2015 at 10:47:20AM +0100, Samuel Martin wrote:
-> From: Davide Viti <zinosat@tiscali.it>
-> 
-> Useful for packages shipped with a testsuite which makes use of ctest
-> 
-> Since ctest is just a tool provided by the cmake sources, this change
-> introduces a hidden BR2_PACKAGE_CMAKE symbol which is automatically
-> selected by the BR2_PACKAGE_CMAKE_CTEST one.
-> This is like this mostly for consistency (cmake is the actual package,
-> not ctest).
-> 
-> CMake is a particular package:
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-peculiar ?
-
-> * CMake can be built using the generic infrastructure or the cmake one.
->   Since Buildroot has no requirement regarding the host system cmake
->   program presence, it uses the generic infrastructure to build the
->   host-cmake package, then the (target-)cmake package can be built
->   using the cmake infrastructure;
-> * CMake bundles its dependencies within its sources. This is the reason
->   why the host-cmake package only has host-pkgconf as (runtime)
->   dependency, whereas the (target-)cmake package has a lot of
->   dependencies, using only the system-wide libraries instead of
->   rebuilding and staitcally linking with the ones bundles into the CMake
->   sources.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> ---
+> This patch is a better fix to [1] wrt the Arnout's comment [2]
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117994.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2015-January/118154.html
+> ---
+>  support/misc/toolchainfile.cmake.in | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index 816af13..cd41254 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -21,6 +21,7 @@ set(CMAKE_INSTALL_SO_NO_EXE 0)
+>  set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
+>  set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+>  set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+> +set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+>  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+>  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+>  set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+> --
+> 2.3.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
