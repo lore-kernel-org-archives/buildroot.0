@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 08:33:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-03-06
-In-Reply-To: <CAGm1_kt_5oR3X4f7O5cbx8z5BS5Jeu_W2hQg+9oucnVgV+BWmw@mail.gmail.com>
-References: <20150307073020.C6D511011A8@stock.ovh.net>
- <CAGm1_kt_5oR3X4f7O5cbx8z5BS5Jeu_W2hQg+9oucnVgV+BWmw@mail.gmail.com>
-Message-ID: <20150308083311.0bbb4d22@free-electrons.com>
+Date: Sun, 8 Mar 2015 08:35:51 +0100
+Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
+ build on Xtensa for uClibc-ng 1.0.0
+In-Reply-To: <20150307175651.GJ3937@waldemar-brodkorb.de>
+References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150307144013.GE4186@free.fr>
+ <20150307154325.GH3937@waldemar-brodkorb.de>
+ <20150307173048.4652ee0c@free-electrons.com>
+ <20150307175651.GJ3937@waldemar-brodkorb.de>
+Message-ID: <20150308083551.4e3409fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Waldemar Brodkorb,
 
-On Sat, 7 Mar 2015 22:50:03 +0100, Yegor Yefremov wrote:
+On Sat, 7 Mar 2015 18:56:51 +0100, Waldemar Brodkorb wrote:
 
-> >      powerpc | can-utils-002f8eba8703e88cd... | NOK | http://autobuild.buildroot.net/results/8f52839127c2c9a6cda6fb9bd7a44ad4d1d19fd0/
-> >      powerpc | can-utils-002f8eba8703e88cd... | NOK | http://autobuild.buildroot.net/results/8f06dc86c698eff1e49c3c74b028b90c7eac51e1/
+> > No, I'm still not convinced we need separate packages at this point.
+> > Maybe in the future if uClibc and uClibc-ng diverge significantly, but
+> > it's not the case right now.
 > 
-> How old is powerpc toolchain? This symbol N_SLCAN is in
-> include/uapi/linux/tty.h since 2012 and perhaps even earlier before
-> uapi was introduced.
+> To clear things up, I am happy with the version stuff and we don't
+> need an extra package. I just thought whenever we get the situation
+> that uClibc 1.0.0 is released _and_ uClibc-ng is still using 1.0.x
+> ;)
 
-This powerpc toolchain is quite old, and is kept in the autobuilders
-precisely for this reason. This define has been added in kernel commit
-cd05acfe65ed2cf2db683fa9a6adb8d35635263b, in December 2007. It was part
-of the 2.6.25 kernel release.
+Ah, yes indeed. If/when this situation arises, having separate packages
+would be a solution.
 
-This toolchain uses the 2.6.38 kernel headers, so this symbol should be
-here. Except that the <linux/tty.h> of this toolchain is basically
-empty:
+Again, I guess it's too early to really draw a plan about what will
+happen between uClibc and uClibc-ng. It really all depends on how both
+projects will be maintained: if you continue to be active on uClibc-ng
+or not, if the original uClibc project moves again or not, etc. So
+let's not make too much plans, and see what happens :-)
 
-===
-
-#ifndef _LINUX_TTY_H
-#define _LINUX_TTY_H
-
-/*
- * 'tty.h' defines some structures used by tty_io.c and some defines.
- */
-
-#endif
-
-===
-
-So either I'm looking incorrectly, or those headers look broken.
+However, one plan I'd like to make is to make uClibc-ng the default
+uClibc version. Maybe for 2015.05, if not for 2015.08.
 
 Thomas
 -- 
