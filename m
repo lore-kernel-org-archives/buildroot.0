@@ -1,7 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun,  8 Mar 2015 22:37:07 +0100
-Subject: [Buildroot] [PATCH 1/3] Added new package 'mc' (Midnight Commander).
-Message-ID: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+Date: Sun,  8 Mar 2015 22:37:09 +0100
+Subject: [Buildroot] [PATCH 3/3] Added support for PHP/SQLite3 (non PDO).
+In-Reply-To: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+Message-ID: <1425850629-14725-3-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,73 +13,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in    |    1 +
- package/mc/Config.in |   10 ++++++++++
- package/mc/mc.mk     |   27 +++++++++++++++++++++++++++
- 3 files changed, 38 insertions(+)
- create mode 100644 package/mc/Config.in
- create mode 100644 package/mc/mc.mk
+ package/php/Config.ext |    6 ++++++
+ package/php/php.mk     |    4 ++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index cab9382..745426e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1351,6 +1351,7 @@ menu "Text editors and viewers"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/less/Config.in"
- endif
-+	source "package/mc/Config.in"
- 	source "package/nano/Config.in"
- 	source "package/uemacs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/mc/Config.in b/package/mc/Config.in
-new file mode 100644
-index 0000000..735523f
---- /dev/null
-+++ b/package/mc/Config.in
-@@ -0,0 +1,10 @@
-+# mc prefers slang, but can use ncurses too
-+config BR2_PACKAGE_MC
-+	bool "mc"
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index daf16c7..57685b2 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -120,6 +120,12 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	help
+ 	  MySQL Improved extension support
+ 
++config BR2_PACKAGE_PHP_EXT_SQLITE
++	bool "SQLite3"
++	select BR2_PACKAGE_SQLITE
 +	help
-+	  GNU Midnight Commander is a visual file manager, licensed under GNU General Public License.
-+	  It can use either SLang(preferred) or ncurses for screen handling; if neither is enabled SLang will be automatically chosen.
-+	  
-+	  https://www.midnight-commander.org/
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-new file mode 100644
-index 0000000..678e1f7
---- /dev/null
-+++ b/package/mc/mc.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# mc
-+#
-+################################################################################
++	  SQLite3 support
 +
-+MC_VERSION_MAJOR = 4.8
-+MC_VERSION = $(MC_VERSION_MAJOR).13
-+MC_SOURCE = mc-$(MC_VERSION).tar.bz2
-+MC_SITE = http://ftp.midnight-commander.org
-+MC_INSTALL_STAGING = YES
-+MC_INSTALL_TARGET = YES
-+MC_CONF_OPTS = --disable-shared
-+MC_DEPENDENCIES = libglib2 host-pkgconf
-+
-+# mc prefers slang, so use that if enabled, otherwise
-+# fallback to using ncurses.
-+# Either or both will be enabled, but we prefer slang.
-+ifeq ($(BR2_PACKAGE_SLANG),y)
-+MC_DEPENDENCIES += slang
-+MC_CONF_OPTS += --with-screen=slang
-+else
-+MC_DEPENDENCIES += ncurses
-+MC_CONF_OPTS += --with-screen=ncurses
+ config BR2_PACKAGE_PHP_EXT_PDO
+ 	bool "PDO"
+ 	help
+diff --git a/package/php/php.mk b/package/php/php.mk
+index dd52508..b5daeb6 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -154,6 +154,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+ 	PHP_CONF_OPTS += --with-mysqli=$(STAGING_DIR)/usr/bin/mysql_config
+ 	PHP_DEPENDENCIES += mysql
+ endif
++ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
++	PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
++	PHP_DEPENDENCIES += sqlite
 +endif
-+
-+$(eval $(autotools-package))
+ 
+ ### PDO
+ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO),y)
 -- 
 1.7.10.4
