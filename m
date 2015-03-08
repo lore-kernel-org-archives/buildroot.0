@@ -1,95 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 22:17:11 +0100
-Subject: [Buildroot] [git commit] graph-depends: display virtual package
-	with italic style
-Message-ID: <20150308211716.D0E8D80100@busybox.osuosl.org>
+Date: Sun, 8 Mar 2015 22:17:30 +0100
+Subject: [Buildroot] [V2 1/2] graph-depends: display virtual package
+ with italic style
+In-Reply-To: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150308221730.70135083@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef0b091ca458770412adfdcc05fc3893434551dc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-virtual packages are found by their version,
-so we retrieve the version of all packages
+On Sat,  3 Jan 2015 15:29:12 +0100, Francois Perrad wrote:
+> virtual packages are found by their version,
+> so we retrieve the version of all packages
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-generic.mk        |    3 +++
- support/scripts/graph-depends |   30 +++++++++++++++++++++++++++++-
- 2 files changed, 32 insertions(+), 1 deletions(-)
+Applied, thanks!
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1b09955..c1b379b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -565,6 +565,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
- $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
- endif
- 
-+$(1)-show-version:
-+			@echo $$($(2)_VERSION)
-+
- $(1)-show-depends:
- 			@echo $$($(2)_FINAL_DEPENDENCIES)
- 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 1ecfeda..28fe2f0 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -76,6 +76,28 @@ host_colour = colours[2]
- 
- allpkgs = []
- 
-+# Execute the "make <pkg>-show-version" command to get the version of a given
-+# list of packages, and return the version formatted as a Python dictionary.
-+def get_version(pkgs):
-+    sys.stderr.write("Getting version for %s\n" % pkgs)
-+    cmd = ["make", "-s", "--no-print-directory" ]
-+    for pkg in pkgs:
-+        cmd.append("%s-show-version" % pkg)
-+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
-+    output = p.communicate()[0]
-+    if p.returncode != 0:
-+        sys.stderr.write("Error getting version %s\n" % pkgs)
-+        sys.exit(1)
-+    output = output.split("\n")
-+    if len(output) != len(pkgs) + 1:
-+        sys.stderr.write("Error getting version\n")
-+        sys.exit(1)
-+    version = {}
-+    for i in range(0, len(pkgs)):
-+        pkg = pkgs[i]
-+        version[pkg] = output[i]
-+    return version
-+
- # Execute the "make show-targets" command to get the list of the main
- # Buildroot TARGETS and return it formatted as a Python list. This
- # list is used as the starting point for full dependency graphs
-@@ -257,6 +279,8 @@ def remove_extra_deps(deps):
-     return deps
- 
- dict_deps = remove_extra_deps(dict_deps)
-+dict_version = get_version([pkg for pkg in allpkgs
-+                                if pkg != "all" and not pkg.startswith("root")])
- 
- # Print the attributes of a node: label and fill-color
- def print_attrs(pkg):
-@@ -274,7 +298,11 @@ def print_attrs(pkg):
-             color = host_colour
-         else:
-             color = target_colour
--    print("%s [label = \"%s\"]" % (name, label))
-+    version = dict_version.get(pkg)
-+    if version == "virtual":
-+        print("%s [label = <<I>%s</I>>]" % (name, label))
-+    else:
-+        print("%s [label = \"%s\"]" % (name, label))
-     print("%s [color=%s,style=filled]" % (name, color))
- 
- # Print the dependency graph of a package
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
