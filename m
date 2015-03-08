@@ -1,48 +1,41 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Sun, 08 Mar 2015 15:22:57 +0100
-Subject: [Buildroot] [PATCH v3 2/2] wine: Add gettext dependency check for
-	host-wine
-Message-ID: <54FC5B41.5050004@dawncrow.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 8 Mar 2015 15:53:11 +0100
+Subject: [Buildroot] [RFC v3 21/30] lmbench: to be checked
+In-Reply-To: <20150303165607.GR15668@tarshish>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425374255-6827-22-git-send-email-fabio.porcedda@gmail.com>
+ <20150303165607.GR15668@tarshish>
+Message-ID: <CAHkwnC-v4MCD5OjWz4VgJvseoJyRREfpeufg5v6SjENpQ3YZKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
-v2: minor fixes
-v3: Add comment and only modify HOST variables
+On Tue, Mar 3, 2015 at 5:56 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> On Tue, Mar 03, 2015 at 10:17:26AM +0100, Fabio Porcedda wrote:
+>> ---
+>>  package/lmbench/lmbench.mk | 5 +----
+>>  1 file changed, 1 insertion(+), 4 deletions(-)
+>>
+>> diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+>> index 63a83fd..954f7eb 100644
+>> --- a/package/lmbench/lmbench.mk
+>> +++ b/package/lmbench/lmbench.mk
+>> @@ -10,9 +10,6 @@ LMBENCH_SITE = http://downloads.sourceforge.net/project/lmbench/development/lmbe
+>>  LMBENCH_LICENSE = lmbench license (based on GPLv2)
+>>  LMBENCH_LICENSE_FILES = COPYING COPYING-2
+>>
+>> -LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+>> -LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+>> -
+>
+> Please see http://patchwork.ozlabs.org/patch/442832/.
 
- package/wine/wine.mk | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+I will rebase this patch over your patch.
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 571606d..df13ef7 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -243,6 +243,15 @@ else
- WINE_CONF_OPTS += --without-zlib
- endif
- 
-+# selecting gettext also enables host-gettext which is
-+# essential for .po file support in wrc from host-wine
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-+HOST_WINE_DEPENDENCIES += host-gettext
-+else
-+HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
-+endif
-+
- # Wine needs to enable 64-bit build tools on 64-bit host
- ifeq ($(HOSTARCH),x86_64)
- HOST_WINE_CONF_OPTS += --enable-win64
-@@ -280,8 +289,6 @@ HOST_WINE_CONF_OPTS += \
- 	--without-curses \
- 	--without-dbus \
- 	--without-fontconfig \
--	--without-gettext \
--	--without-gettextpo \
- 	--without-gphoto \
- 	--without-glu \
- 	--without-gnutls \
+Thanks
+
+BR
+-- 
+Fabio Porcedda
