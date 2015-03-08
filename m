@@ -1,46 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2015 22:21:22 +0100
-Subject: [Buildroot] gcc-4.9.2 with c++ is broken without wchar
-In-Reply-To: <XnsA457790498159berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Sun, 08 Mar 2015 11:53:48 +0100")
-References: <XnsA457790498159berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <874mpvrxrh.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 22:21:36 +0100
+Subject: [Buildroot] [git commit] fs: Bail out on errors in fakeroot script
+Message-ID: <20150308212300.29B65807E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6b577b3c3adf7de2582985160ab2906c8dabf22c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi,
- > before sending a patch I would like to post my findings for discussion.
- > A build using this defconfig fails in host-gcc-final-4.9.2:
+Currently, the generated fakeroot script has no error checking causing
+make to continue building even if some of the fakeroot script commands
+have failed. This can cause e.g. using an invalid device tables to go
+unnoticed.
 
- > BR2_BINUTILS_VERSION_2_25=y
- > BR2_GCC_VERSION_4_9_X=y
- > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+So add a "set -e" to the start of the fakeroot script so it will exit
+with a failure code as soon as one of the script commands fails.
 
- > make[2]: Entering directory `/home/fli4l/br3/output/build/host-gcc-final-
- > 4.9.2/build/i586-buildroot-linux-uclibc/libcilkrts'
- > [...]
- > In file included from ../../../libcilkrts/runtime/c_reducers.c:55:0:
- > ../../../libcilkrts/include/cilk/reducer_min_max.h: In function 
- > ?cilk_c_reducer_max_identity_wchar_t?:
- > ../../../libcilkrts/include/cilk/reducer_min_max.h:3157:61: error: 
- > ?WCHAR_MIN? undeclared (first use in this function)
- >  CILK_C_REDUCER_MAX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
- > [...]
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/common.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- > Apparently c++ support depends on wchar now?
-
-Hmm, odd - What is your config exactly? I cannot reproduce the build
-failure here with:
-
-BR2_arm=y
-BR2_BINUTILS_VERSION_2_25=y
-BR2_GCC_VERSION_4_9_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-
--- 
-Bye, Peter Korsgaard
+diff --git a/fs/common.mk b/fs/common.mk
+index 13bf4ad..1d3926f 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -72,6 +72,7 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	rm -f $$(FAKEROOT_SCRIPT)
+ 	rm -f $$(TARGET_DIR_WARNING_FILE)
+ 	rm -f $$(USERS_TABLE)
++	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+ 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ ifneq ($$(ROOTFS_DEVICE_TABLES),)
+ 	cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
