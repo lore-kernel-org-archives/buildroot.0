@@ -1,55 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 15:57:30 +0100
-Subject: [Buildroot] [PATCH v3 2/2] wine: Add gettext dependency check
- for host-wine
-In-Reply-To: <54FC5B41.5050004@dawncrow.de>
-References: <54FC5B41.5050004@dawncrow.de>
-Message-ID: <20150308155730.11c74ecc@free-electrons.com>
+Date: Sun, 8 Mar 2015 15:58:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/readline: add host variant
+In-Reply-To: <1411835956-23735-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1411835956-23735-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150308155841.7875e9f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+Dear Bernd Kuhls,
 
-On Sun, 08 Mar 2015 15:22:57 +0100, Andr? Hentschel wrote:
+On Sat, 27 Sep 2014 18:39:15 +0200, Bernd Kuhls wrote:
+> Needed by SoftEther VPN.
+> 
+> host-readline will also be needed by host-pcre, which in turn will
+> be needed by the yet-to-be-released leafnode2 package.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> +# selecting gettext also enables host-gettext which is
-> +# essential for .po file support in wrc from host-wine
-> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
-> +HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-> +HOST_WINE_DEPENDENCIES += host-gettext
-> +else
-> +HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
-> +endif
-
-I'm sorry but this still doesn't make sense.
-
-BR2_PACKAGE_GETTEXT=y indicates that the gettext package is built for
-the *target*, i.e it installs stuff in $(TARGET_DIR) and
-$(STAGING_DIR), most notably the libintl library.
-
-So, using BR2_PACKAGE_GETTEXT=y as an indication to know whether
-gettext support is available for a *host* package (which looks only in
-$(HOST_DIR)) does not make sense.
-
-What are you trying to do here?
-
-If you're trying to have optional gettext support for the target Wine,
-then what you need is:
-
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+WINE_CONF_OPTS += --with-gettext --with-gettextpo
-+WINE_DEPENDENCIES += host-gettext
-+else
-+WINE_CONF_OPTS += --without-gettext --without-gettextpo
-+endif
-
-and of course, remove the unconditional --without-gettext
---without-gettextpo from WINE_CONF_OPTS.
-
-Best regards,
+Applied, thanks!
 
 Thomas
 -- 
