@@ -1,43 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 22:48:31 +0100
-Subject: [Buildroot] [PATCHv2] toolchain: fix installing gconv libs with
- multi-arch toolchain
-In-Reply-To: <1424643784-23210-1-git-send-email-yann.morin.1998@free.fr>
-References: <1424643784-23210-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150308224831.246ff970@free-electrons.com>
+Date: Sun, 8 Mar 2015 22:41:38 +0100
+Subject: [Buildroot] [git commit] package/thrift: force boost libdir to
+	staging/usr/lib/
+Message-ID: <20150308214853.1366A80431@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=9be52effc47acf9db9c5183c866bc2cd5dafb58d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Feb 2015 23:23:04 +0100, Yann E. MORIN wrote:
+Libtool append the sysroot path (lt_sysroot) with the libdir value found in
+the libstdc++.la file only with bfin toolchain.
 
-> diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-> index 3f9900b..51294c3 100644
-> --- a/toolchain/toolchain.mk
-> +++ b/toolchain/toolchain.mk
-> @@ -17,28 +17,39 @@ endif
->  ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
->  GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
->  define COPY_GCONV_LIBS
-> -	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
-> -		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
-> -				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
-> -		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
-> +	$(Q)machine=$$($(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -dumpmachine); \
+Path/to/sysroot/opt/uClinux/bfin-linux-uclibc/lib/gcc/bfin-linux-uclibc/4.3.5/libstdc++.so
 
-Unless I'm mistaken, this piece of code copying gconv libraries is used
-for both the internal and external toolchain backends, no? If that's
-the case, then using TOOLCHAIN_EXTERNAL_* here seems wrong, no?
+The issue disappears when --with-boost=$(STAGING_DIR) is removed.
+So instead of using --with-boost=$(STAGING_DIR), use
+--with-boost-libdir=$(STAGING_DIR)/usr/lib to give the path to boost's
+libraries.
 
-And indeed, the resulting code is not really nice. For sure not worse
-than the average toolchain-external.mk code :-/
+Fixes:
+http://autobuild.buildroot.net/results/ae2/ae274693b953dd569c3ff63c532e2fc9553b5002/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+And many more
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/thrift/thrift.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 559bd28..094f8d0 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -11,7 +11,8 @@ THRIFT_INSTALL_STAGING = YES
+ HOST_THRIFT_DEPENDENCIES = host-boost host-libevent host-openssl host-pkgconf \
+ 	host-zlib host-bison host-flex
+ THRIFT_CONF_OPTS = --with-sysroot=$(STAGING_DIR) \
+-	--with-boost=$(STAGING_DIR) \
++	--with-boost \
++	--with-boost-libdir=$(STAGING_DIR)/usr/lib \
+ 	--disable-tests \
+ 	--disable-tutorial
+ HOST_THRIFT_CONF_OPTS = --with-sysroot=$(HOST_DIR) \
