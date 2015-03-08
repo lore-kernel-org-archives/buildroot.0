@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 14:45:13 +0100
-Subject: [Buildroot] [PATCH] openldap: Make client binary install
- configurable
-In-Reply-To: <1424187838-739-1-git-send-email-stefan.sorensen@spectralink.com>
-References: <1424187838-739-1-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <20150308144513.18158de2@free-electrons.com>
+From: =?windows-1252?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 08 Mar 2015 15:22:11 +0100
+Subject: [Buildroot] [PATCH 1/2] wine: Add openldap dependency check
+Message-ID: <54FC5B13.90707@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan S?rensen,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
 
-On Tue, 17 Feb 2015 16:43:58 +0100, Stefan S?rensen wrote:
-> Some OpenLDAP deployment only need the client libraries and not the client
-> tools, so make the tool installation optional.
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+ package/wine/wine.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Thanks, I've applied, after rewriting the logic to use a make "foreach"
-loop rather than a shell "for" loop.
-
-See
-http://git.buildroot.net/buildroot/commit/?id=c6aa56e081bd31981a547d8f2db060fe05a75d57.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index e931c87..571606d 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -23,7 +23,6 @@ WINE_CONF_OPTS = \
+ 	--without-gphoto \
+ 	--without-gsm \
+ 	--without-hal \
+-	--without-ldap \
+ 	--without-netapi \
+ 	--without-openal \
+ 	--without-opencl \
+@@ -160,6 +159,13 @@ else
+ WINE_CONF_OPTS += --without-curses
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++WINE_CONF_OPTS += --with-ldap
++WINE_DEPENDENCIES += openldap
++else
++WINE_CONF_OPTS += --without-ldap
++endif
++
+ ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
+ WINE_CONF_OPTS += --with-sane
+ WINE_DEPENDENCIES += sane-backends
