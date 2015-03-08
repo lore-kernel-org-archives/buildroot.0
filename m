@@ -1,63 +1,123 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 22:27:54 +0100
-Subject: [Buildroot] [git commit] qt5base: fix the PostgreSQL detection patch
-Message-ID: <20150308212759.18281807E7@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 08 Mar 2015 22:39:54 +0100
+Subject: [Buildroot] [PATCH 1/2] openvmtools: add patch to use KVERS
+ instead of shell exec.
+In-Reply-To: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
+References: <1424902476-24448-1-git-send-email-kaszak@gmail.com>
+Message-ID: <54FCC1AA.8060804@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba6e085303f4368cbc2676061d87213752e19fb7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Karoly,
 
-The PostgreSQL detection patch added in commit
-1b54fbc925f419f740f4cbc8229cfbf40ce84895 ("qt5base: fix postgresql
-plugin compile") had a minor issue: it was still calling the host
-pg_config to decided whether or not PostgreSQL was available.
+Le 25/02/2015 23:14, Karoly Kasza a ?crit :
+> Add patch to use $(KVERS) instead of shell exec uname.
+> Originally from Debian.
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
 
-[Thomas: improve commit log.]
+This patch will be necessary once the kernel module support will be available in
+Buildroot.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0007-configure-add-psql_config-option.patch    |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+I have collected several patches which fix some build issues for latest stable
+3.2 kernel up to 3.14.
+But this requires some invasive fixes that I don't think we want to maintain in
+openvmtools package...
+At least, openvmtools kernel module build and works fine with 3.2 kernel.
 
-diff --git a/package/qt5/qt5base/0007-configure-add-psql_config-option.patch b/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
-index 7561314..8075fe4 100644
---- a/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
-+++ b/package/qt5/qt5base/0007-configure-add-psql_config-option.patch
-@@ -1,4 +1,4 @@
--From 95f2e4001f9c1721cbdb26d3f9c38511adae9c4b Mon Sep 17 00:00:00 2001
-+From f23a18de3c398c908c92b8cf8f20edc12435b9d1 Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Thu, 19 Feb 2015 22:41:02 +0100
- Subject: [PATCH] configure: add '-psql_config' option
-@@ -8,11 +8,11 @@ the same as for mysql_config).
- 
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-- configure | 10 ++++++++--
-- 1 file changed, 8 insertions(+), 2 deletions(-)
-+ configure | 12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
- 
- diff --git a/configure b/configure
--index 0c66ecf..a832ae3 100755
-+index 0c66ecf..491486a 100755
- --- a/configure
- +++ b/configure
- @@ -578,6 +578,7 @@ CFG_WIDGETS=yes
-@@ -47,9 +47,10 @@ index 0c66ecf..a832ae3 100755
-              if [ "$CFG_SQL_psql" != "no" ]; then
- +		[ -z "$CFG_PSQL_CONFIG" ] && CFG_PSQL_CONFIG=`"$WHICH" pg_config`
-                  # Be careful not to use native pg_config when cross building.
--                 if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
-+-                if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
- -                    QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null | filterIncludePath`
- -                    QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null | filterLibraryPath`
-++                if [ "$XPLATFORM_MINGW" != "yes" ] && [ -x "$CFG_PSQL_CONFIG" ]; then
- +                    QT_CFLAGS_PSQL=`$CFG_PSQL_CONFIG --includedir 2>/dev/null | filterIncludePath`
- +                    QT_LFLAGS_PSQL=`$CFG_PSQL_CONFIG --libdir 2>/dev/null | filterLibraryPath`
-                  fi
+I will do a runtime test with all patches I have and send them to the list.
+(probably next weekend)
+
+Best regards,
+Romain
+
+>  package/openvmtools/0008-kvers.patch |   75 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 package/openvmtools/0008-kvers.patch
+> 
+> diff --git a/package/openvmtools/0008-kvers.patch b/package/openvmtools/0008-kvers.patch
+> new file mode 100644
+> index 0000000..f432dbb
+> --- /dev/null
+> +++ b/package/openvmtools/0008-kvers.patch
+> @@ -0,0 +1,75 @@
+> +Use KVERS instead of shell exec uname.
+> +
+> +Patch from Debian.
+> +
+> +Original author: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>
+> +Original description: Replacing uname call with KVERS, overwriting seemed not to work.
+> +
+> +Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> +
+> +--- a/modules/linux/vmblock/Makefile
+> ++++ b/modules/linux/vmblock/Makefile
+> +@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
+> + endif
+> + 
+> + 
+> +-VM_UNAME = $(shell uname -r)
+> ++VM_UNAME = $(KVERS)
+> + 
+> + # Header directory for the running kernel
+> + ifdef LINUXINCLUDE
+> +--- a/modules/linux/vmci/Makefile
+> ++++ b/modules/linux/vmci/Makefile
+> +@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
+> + endif
+> + 
+> + 
+> +-VM_UNAME = $(shell uname -r)
+> ++VM_UNAME = $(KVERS)
+> + 
+> + # Header directory for the running kernel
+> + ifdef LINUXINCLUDE
+> +--- a/modules/linux/vmhgfs/Makefile
+> ++++ b/modules/linux/vmhgfs/Makefile
+> +@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
+> + endif
+> + 
+> + 
+> +-VM_UNAME = $(shell uname -r)
+> ++VM_UNAME = $(KVERS)
+> + 
+> + # Header directory for the running kernel
+> + ifdef LINUXINCLUDE
+> +--- a/modules/linux/vmsync/Makefile
+> ++++ b/modules/linux/vmsync/Makefile
+> +@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
+> + endif
+> + 
+> + 
+> +-VM_UNAME = $(shell uname -r)
+> ++VM_UNAME = $(KVERS)
+> + 
+> + # Header directory for the running kernel
+> + ifdef LINUXINCLUDE
+> +--- a/modules/linux/vmxnet/Makefile
+> ++++ b/modules/linux/vmxnet/Makefile
+> +@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
+> + endif
+> + 
+> + 
+> +-VM_UNAME = $(shell uname -r)
+> ++VM_UNAME = $(KVERS)
+> + 
+> + # Header directory for the running kernel
+> + ifdef LINUXINCLUDE
+> +--- a/modules/linux/vsock/Makefile
+> ++++ b/modules/linux/vsock/Makefile
+> +@@ -43,7 +43,7 @@ INCLUDE      += -I$(SRCROOT)/shared
+> + endif
+> + 
+> + 
+> +-VM_UNAME = $(shell uname -r)
+> ++VM_UNAME = $(KVERS)
+> + 
+> + # Header directory for the running kernel
+> + ifdef LINUXINCLUDE
+> 
