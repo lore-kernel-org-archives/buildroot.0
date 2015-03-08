@@ -1,73 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Mar 2015 16:22:53 +0100
-Subject: [Buildroot] [PATCH] boards/raspberrypi: update readme with RPi-2
-	specifics
-Message-ID: <1425828173-4026-1-git-send-email-yann.morin.1998@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 8 Mar 2015 16:30:59 +0100
+Subject: [Buildroot] [RFC v3 10/30] faifa: use TARGET_LDFLAGS
+In-Reply-To: <20150308151847.GC2518@tarshish>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425374255-6827-11-git-send-email-fabio.porcedda@gmail.com>
+ <20150303165708.GS15668@tarshish>
+ <CAHkwnC-AXpp3TSAm+4Vim=PJ9y2QNhEbVi5vEn7uSuYA-hDWEA@mail.gmail.com>
+ <20150308151847.GC2518@tarshish>
+Message-ID: <CAHkwnC8k+A8tDYJEdQ33Xz30DyV5PzcZFkLazM75-RNvMcrCuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The RPi-2 has its own DTB, so document it in the list of generated
-files.
+On Sun, Mar 8, 2015 at 4:18 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Fabio,
+>
+> On Sun, Mar 08, 2015 at 04:14:51PM +0100, Fabio Porcedda wrote:
+>> >> +diff --git a/Makefile.in b/Makefile.in
+>> >> +index b1b7c58..792ac82 100644
+>> >> +--- a/Makefile.in
+>> >> ++++ b/Makefile.in
+>> >> +@@ -14,6 +14,7 @@
+>> >> + CC  = @CC@
+>> >> + STRIP       ?= $(CROSS)strip
+>> >> + CFLAGS      = @CFLAGS@
+>> >> ++LDFLAGS     = @LDFLAGS@
+>> >> + INSTALL     = @INSTALL@
+>> >> + LIBS        = @LIBS@
+>> >> +
+>> >> +@@ -50,7 +51,7 @@ SIM_LIBS:=-levent
+>> >> + SIM_CFLAGS:=-Wno-unused
+>> >> +
+>> >> + ifeq ($(OS),DARWIN)
+>> >> +-LDFLAGS:=-dynamiclib -Wl,-dylib_install_name -Wl,$(LIB_SONAME)
+>> >> ++LDFLAGS+=-dynamiclib -Wl,-dylib_install_name -Wl,$(LIB_SONAME)
+>> >
+>> > Why do you need this hunk?
+>>
+>> Because without that the Makefile doesn't use the TARGET_LDFLAGS
+>> passed by buildroot to the configure script, so it doesn't find the
+>> libraries in the per-package staging directory, and i get this build
+>> failure:
+>>
+>> >>> faifa v0.1 Building
+>> sha2.c: In function 'SHA256_Last':
+>> sha2.c:492:2: warning: dereferencing type-punned pointer will break
+>> strict-aliasing rules [-Wstrict-aliasing]
+>> /home/tetsuya/buildroot/br2/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
+>> cannot find -lpcap
+>> collect2: error: ld returned 1 exit status
+>> Makefile:78: recipe for target 'libfaifa.so.0' failed
+>> make[1]: *** [libfaifa.so.0] Error 1
+>> package/pkg-generic.mk:182: recipe for target
+>> '/home/tetsuya/buildroot/br2/output/build/faifa-v0.1/.stamp_built'
+>> failed
+>
+> Does $(OS) really evaluates to "DARWIN" on your system? This looks quite
+> weird.
 
-Also, not all DTBs need to be present on the boot partition, so add a
-comment that identifies which should be copied for each model.
+So are you just speaking about the last line, not the whole patch?
+That line it's not useful on my system, but because the fafia project
+support the darwin os, I've added the change anyway, the change
+prevents that the LDFLAGS passed to the configure script will be
+overwritten.
+I've done that because I've sent the patch upstream.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/raspberrypi/readme.txt | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 9bab374..b513ca3 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -62,8 +62,9 @@ After building, you should obtain this tree:
-     output/images/
-     +-- rootfs.tar                              [0]
-     +-- rpi-firmware/
--    |   +-- bcm2708-rpi-b.dtb                   [1]
--    |   +-- bcm2708-rpi-b-plus.dtb              [1]
-+    |   +-- bcm2708-rpi-b.dtb
-+    |   +-- bcm2708-rpi-b-plus.dtb
-+    |   +-- bcm2709-rpi-2-b.dtb
-     |   +-- bootcode.bin
-     |   +-- config.txt
-     |   +-- fixup.dat
-@@ -73,10 +74,6 @@ After building, you should obtain this tree:
- [0] Note for Volatile: rootfs.tar will only be there if you kept
-     "tar the root filesystem" option selected in "Filesystem images".
- 
--[1] The DTBs (Device Tree Blobs) will only be present if you setup
--    Buildroot to install the DTBs from the rpi-firmware package, and
--    will only be used if your kernel has support for the Device Tree.
--
- Prepare you SDCard
- ==================
- 
-@@ -104,15 +101,18 @@ Install the binaries to the SDCard
- At the root of the boot partition, the Raspberry Pi must find the following
- files:
- 
--    * bcm2708-rpi-b.dtb         [2]
-+    * bcm2708-rpi-b.dtb         [1]
-     * bcm2708-rpi-b-plus.dtb    [2]
-+    * bcm2709-rpi-2-b.dtb       [3]
-     * bootcode.bin
-     * config.txt
-     * fixup.dat
-     * start.elf
-     * zImage
- 
--[2] Only needed if your kernel has support for the Device Tree.
-+[1] For models A and B
-+[2] For models A+ and B+
-+[3] For model 2
- 
- For example:
- 
+BR
 -- 
-1.9.1
+Fabio Porcedda
