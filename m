@@ -1,56 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 18:32:26 +0100
-Subject: [Buildroot] [git commit] perl-cross: bump to version 0.9.6
-Message-ID: <20150308173258.9CBB7807AD@busybox.osuosl.org>
+Date: Sun, 8 Mar 2015 18:32:13 +0100
+Subject: [Buildroot] [git commit] imlib2: imlib2-config: delete old
+	reference to @my_libs@
+Message-ID: <20150308173258.6C3BB807AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65e8a2e75dad56dbc27b577b21eeb64a45a116e8
+commit: http://git.buildroot.net/buildroot/commit/?id=76b55b9509bdb3f608e4a0a58388ccf396240691
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-this release contains a fix for yacc/bison issue,
-see http://github.com/arsv/perl-cross/issues/13
+The script "imlib2-config" returns "@my_libs@" that causes build failures
+on the programs that use it.
+This is a regression of version v1.4.6.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Add a upstream patch to fix it and reorder the patches to follow
+upstream branch order.
+
+Fixes:
+http://autobuild.buildroot.net/results/e1a7691a6528d635c308d7bf47a8be8aa0594190
+http://autobuild.buildroot.net/results/23fea2e4d668d69565d5f50493635fc834c54ce1
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl/perl.hash |    2 +-
- package/perl/perl.mk   |    5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ ...b2-config-delete-old-reference-to-my_libs.patch |   28 ++++++++++++++++++++
+ ...Y_MISSING-redefined-warnings-when-X-is-d.patch} |    4 +-
+ ...-not-link-with-X-libs-when-X-is-disabled.patch} |    4 +-
+ ...06-GIF-loader-Fix-for-libgif-version-5.1.patch} |    4 +-
+ 4 files changed, 34 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index ac7bafe..d28b5fd 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -4,4 +4,4 @@ sha1   63126c683b4c79c35008a47d56f7beae876c569f                         perl-5.2
- sha256 e5a4713bc65e1da98ebd833dce425c000768bfe84d17ec5183ec5ca249db71ab perl-5.20.2.tar.bz2
+diff --git a/package/imlib2/0003-imlib2-config-delete-old-reference-to-my_libs.patch b/package/imlib2/0003-imlib2-config-delete-old-reference-to-my_libs.patch
+new file mode 100644
+index 0000000..35babbb
+--- /dev/null
++++ b/package/imlib2/0003-imlib2-config-delete-old-reference-to-my_libs.patch
+@@ -0,0 +1,28 @@
++From 534e736e52b6be0da58397ef05f55d47f3794ea7 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Sat, 18 Jan 2014 13:56:54 -0500
++Subject: [PATCH 3/6] imlib2-config: delete old reference to @my_libs@
++
++This was cleaned up a while ago, but this file was missed.
++
++URL: https://bugs.gentoo.org/497894
++---
++ imlib2-config.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/imlib2-config.in b/imlib2-config.in
++index cf814c6..965f7c3 100644
++--- a/imlib2-config.in
+++++ b/imlib2-config.in
++@@ -46,7 +46,7 @@ while test $# -gt 0; do
++       ;;
++     --libs)
++       libdirs=-L at libdir@
++-      echo $libdirs -lImlib2 @my_libs@
+++      echo $libdirs -lImlib2
++       ;;
++     *)
++       echo "${usage}" 1>&2
++-- 
++2.3.1
++
+diff --git a/package/imlib2/0003-fix-X_DISPLAY_MISSING-redefined-warnings-when-X-is-d.patch b/package/imlib2/0004-fix-X_DISPLAY_MISSING-redefined-warnings-when-X-is-d.patch
+similarity index 92%
+rename from package/imlib2/0003-fix-X_DISPLAY_MISSING-redefined-warnings-when-X-is-d.patch
+rename to package/imlib2/0004-fix-X_DISPLAY_MISSING-redefined-warnings-when-X-is-d.patch
+index b5d451d..513c493 100644
+--- a/package/imlib2/0003-fix-X_DISPLAY_MISSING-redefined-warnings-when-X-is-d.patch
++++ b/package/imlib2/0004-fix-X_DISPLAY_MISSING-redefined-warnings-when-X-is-d.patch
+@@ -1,7 +1,7 @@
+-From aaf62d4c605726e6c5f6869bd6834eca03c50d9c Mon Sep 17 00:00:00 2001
++From 7fb1a4468b9d0314cffcdd1fd2a156e6f8c5101b Mon Sep 17 00:00:00 2001
+ From: Mike Frysinger <vapier@gentoo.org>
+ Date: Mon, 28 Jul 2014 22:59:35 -0400
+-Subject: [PATCH 3/5] fix X_DISPLAY_MISSING redefined warnings when X is
++Subject: [PATCH 4/6] fix X_DISPLAY_MISSING redefined warnings when X is
+  disabled
  
- # No upstream hashes for the following
--sha256 614f320d45042ca179a15ec88c6a15ff68e6f36fb004ee89efa71e42bda1dead perl-5.20.1-cross-0.9.4.tar.gz
-+sha256 e25c5d9289b98db8f9d6a27bda9de12028ffc37eeede2d2fbfb10590d36fbf8f perl-5.20.2-cross-0.9.6.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index cd4c286..133e8aa 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -12,8 +12,8 @@ PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+ This is set up in config.h by configure, so avoid defining it again.
+diff --git a/package/imlib2/0004-do-not-link-with-X-libs-when-X-is-disabled.patch b/package/imlib2/0005-do-not-link-with-X-libs-when-X-is-disabled.patch
+similarity index 84%
+rename from package/imlib2/0004-do-not-link-with-X-libs-when-X-is-disabled.patch
+rename to package/imlib2/0005-do-not-link-with-X-libs-when-X-is-disabled.patch
+index 11611eb..85da48d 100644
+--- a/package/imlib2/0004-do-not-link-with-X-libs-when-X-is-disabled.patch
++++ b/package/imlib2/0005-do-not-link-with-X-libs-when-X-is-disabled.patch
+@@ -1,7 +1,7 @@
+-From c7f6ae523bbe165e50c44c21744f56f6f4b575c5 Mon Sep 17 00:00:00 2001
++From 19d568d7a58e88a6e0a43500175d731fb43f97cd Mon Sep 17 00:00:00 2001
+ From: Mike Frysinger <vapier@gentoo.org>
+ Date: Mon, 28 Jul 2014 23:01:23 -0400
+-Subject: [PATCH 4/5] do not link with X libs when X is disabled
++Subject: [PATCH 5/6] do not link with X libs when X is disabled
  
--PERL_CROSS_VERSION = 0.9.4
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_CROSS_VERSION = 0.9.6
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
- PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-@@ -85,7 +85,6 @@ endif
- define PERL_CONFIGURE_CMDS
- 	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPTS))
- 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
--	touch $(@D)/x2p/a2p.c # prevents regen by yacc
- endef
+ URL: https://bugs.gentoo.org/517670
+ ---
+diff --git a/package/imlib2/0005-GIF-loader-Fix-for-libgif-version-5.1.patch b/package/imlib2/0006-GIF-loader-Fix-for-libgif-version-5.1.patch
+similarity index 89%
+rename from package/imlib2/0005-GIF-loader-Fix-for-libgif-version-5.1.patch
+rename to package/imlib2/0006-GIF-loader-Fix-for-libgif-version-5.1.patch
+index 63e0ef1..2f319d8 100644
+--- a/package/imlib2/0005-GIF-loader-Fix-for-libgif-version-5.1.patch
++++ b/package/imlib2/0006-GIF-loader-Fix-for-libgif-version-5.1.patch
+@@ -1,7 +1,7 @@
+-From 8531957235f8702f8bdafac31059812d66e95c23 Mon Sep 17 00:00:00 2001
++From aa16abfa6c0198668b6a4e101fde8b42ec9cdb68 Mon Sep 17 00:00:00 2001
+ From: Heiko Becker <heirecka@exherbo.org>
+ Date: Mon, 13 Oct 2014 17:41:25 +0200
+-Subject: [PATCH 5/5] GIF loader: Fix for libgif version 5.1
++Subject: [PATCH 6/6] GIF loader: Fix for libgif version 5.1
  
- define PERL_BUILD_CMDS
+ Summary:
+ From giflib-5.1.0's NEWS:
