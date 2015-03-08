@@ -1,24 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 08:47:52 +0100
-Subject: [Buildroot] [PATCH] git: bump version to 2.3.2
-In-Reply-To: <1425744868-48943-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1425744868-48943-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150308084752.00a581fe@free-electrons.com>
+Date: Sun, 8 Mar 2015 08:48:05 +0100
+Subject: [Buildroot] [PATCH 1/2] imlib2: bump to version 1.4.6
+In-Reply-To: <1425745574-2241-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1425745574-2241-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20150308084805.49a7f356@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Fabio Porcedda,
 
-On Sat, 7 Mar 2015 16:14:28 +0000, Vicente Olivert Riera wrote:
-> - Bump version to 2.3.2
-> - Update the hash file
+On Sat,  7 Mar 2015 17:26:13 +0100, Fabio Porcedda wrote:
+> Also add two upstream patch to fix a warning and a build failure of the
+> version 1.4.6.
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Also add AUTORECONF because one patch change the file
+> "src/lib/Makefile.am".
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Applied, thanks!
+Both patches applied, thanks!
 
 Thomas
 -- 
