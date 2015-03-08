@@ -1,82 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 23:02:16 +0100
-Subject: [Buildroot] [git commit] package/dosfstools: add missing symlinks
-Message-ID: <20150308220249.D05B88080B@busybox.osuosl.org>
+Date: Sun, 8 Mar 2015 23:04:30 +0100
+Subject: [Buildroot] [PATCH 06/16] package/dosfstools: add missing
+ symlinks
+In-Reply-To: <1421684056-5266-7-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-7-git-send-email-maxtram95@gmail.com>
+Message-ID: <20150308230430.5b8edb9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cef6a787cad4d5417b8672c8fd4c200bf29655ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxim Mikityanskiy,
 
-Install alternative symlinks for dosfstools mkfs.fat, fsck.fat and
-fatlabel. Those symlinks are generally installed by make install, but
-buildroot does not use make install for dosfstools, but symlinks should
-be installed anyway.
+On Mon, 19 Jan 2015 18:14:06 +0200, Maxim Mikityanskiy wrote:
+> Install alternative symlinks for dosfstools mkfs.fat, fsck.fat and
+> fatlabel. Those symlinks are generally installed by make install, but
+> buildroot does not use make install for dosfstools, but symlinks should
+> be installed anyway.
+> 
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
 
-[Thomas: rewrite the installation logic to use make style code rather
-than shell code.]
+Thanks, I've applied your patch, but I've basically rewritten entirely
+the installation logic to use makefile code instead of shell code. See
+http://git.buildroot.net/buildroot/commit/?id=cef6a787cad4d5417b8672c8fd4c200bf29655ac.
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dosfstools/dosfstools.mk |   37 +++++++++++++++++++++++++++----------
- 1 files changed, 27 insertions(+), 10 deletions(-)
+To be honest, I wonder why dosfstools provides such sub-options to
+select which binaries should be installed. The binaries are really
+small:
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index a9d8392..88c4fe8 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -20,23 +20,40 @@ DOSFSTOOLS_DEPENDENCIES += libiconv
- DOSFSTOOLS_LDLIBS += -liconv
- endif
- 
--FATLABEL_BINARY = fatlabel
--FSCK_FAT_BINARY = fsck.fat
--MKFS_FAT_BINARY = mkfs.fat
--
- define DOSFSTOOLS_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(DOSFSTOOLS_CFLAGS)" LDLIBS="$(DOSFSTOOLS_LDLIBS)" -C $(@D)
- endef
- 
--DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FATLABEL)+=$(FATLABEL_BINARY)
--DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT)+=$(FSCK_FAT_BINARY)
--DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT)+=$(MKFS_FAT_BINARY)
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
-+define DOSFSTOOLS_INSTALL_FATLABEL
-+	$(INSTALL) -D -m 755 $(@D)/fatlabel $(TARGET_DIR)/sbin/fatlabel
-+	ln -sf fatlabel $(TARGET_DIR)/sbin/dosfslabel
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),y)
-+define DOSFSTOOLS_INSTALL_FSCK_FAT
-+	$(INSTALL) -D -m 755 $(@D)/fsck.fat $(TARGET_DIR)/sbin/fsck.fat
-+	ln -fs fsck.fat $(TARGET_DIR)/sbin/dosfsck
-+	ln -fs fsck.fat $(TARGET_DIR)/sbin/fsck.msdos
-+	ln -fs fsck.fat $(TARGET_DIR)/sbin/fsck.vfat
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),y)
-+define DOSFSTOOLS_INSTALL_MKFS_FAT
-+	$(INSTALL) -D -m 755 $(@D)/mkfs.fat $(TARGET_DIR)/sbin/mkfs.fat
-+	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkdosfs
-+	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkfs.msdos
-+	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkfs.vfat
-+endef
-+endif
- 
- define DOSFSTOOLS_INSTALL_TARGET_CMDS
--	test -z "$(DOSFSTOOLS_INSTALL_BIN_FILES_y)" || \
--	$(INSTALL) -m 755 $(addprefix $(@D)/,$(DOSFSTOOLS_INSTALL_BIN_FILES_y)) \
--		$(TARGET_DIR)/sbin/
-+	$(DOSFSTOOLS_INSTALL_FATLABEL)
-+	$(DOSFSTOOLS_INSTALL_FSCK_FAT)
-+	$(DOSFSTOOLS_INSTALL_MKFS_FAT)
- endef
- 
- define HOST_DOSFSTOOLS_BUILD_CMDS
+-rwxr-xr-x 1 thomas thomas 40780 mars   8 22:59 fatlabel
+-rwxr-xr-x 1 thomas thomas 42816 mars   8 22:59 fsck.fat
+-rwxr-xr-x 1 thomas thomas 24432 mars   8 22:59 mkfs.fat
+
+So I believe we could probably just install all of them unconditionally.
+
+But oh, well, this is for another patch.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
