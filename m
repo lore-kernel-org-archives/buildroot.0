@@ -1,47 +1,66 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Sun, 08 Mar 2015 16:16:56 +0100
-Subject: [Buildroot] [PATCH v3 2/2] wine: Add gettext dependency check
- for host-wine
-In-Reply-To: <20150308155730.11c74ecc@free-electrons.com>
-References: <54FC5B41.5050004@dawncrow.de>
- <20150308155730.11c74ecc@free-electrons.com>
-Message-ID: <54FC67E8.7010004@dawncrow.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 8 Mar 2015 17:18:47 +0200
+Subject: [Buildroot] [RFC v3 10/30] faifa: use TARGET_LDFLAGS
+In-Reply-To: <CAHkwnC-AXpp3TSAm+4Vim=PJ9y2QNhEbVi5vEn7uSuYA-hDWEA@mail.gmail.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425374255-6827-11-git-send-email-fabio.porcedda@gmail.com>
+ <20150303165708.GS15668@tarshish>
+ <CAHkwnC-AXpp3TSAm+4Vim=PJ9y2QNhEbVi5vEn7uSuYA-hDWEA@mail.gmail.com>
+Message-ID: <20150308151847.GC2518@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 08.03.2015 um 15:57 schrieb Thomas Petazzoni:
-> Dear Andr? Hentschel,
-> 
-> On Sun, 08 Mar 2015 15:22:57 +0100, Andr? Hentschel wrote:
-> 
->> +# selecting gettext also enables host-gettext which is
->> +# essential for .po file support in wrc from host-wine
->> +ifeq ($(BR2_PACKAGE_GETTEXT),y)
->> +HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
->> +HOST_WINE_DEPENDENCIES += host-gettext
->> +else
->> +HOST_WINE_CONF_OPTS += --without-gettext --without-gettextpo
->> +endif
-> 
-> I'm sorry but this still doesn't make sense.
-> 
-> BR2_PACKAGE_GETTEXT=y indicates that the gettext package is built for
-> the *target*, i.e it installs stuff in $(TARGET_DIR) and
-> $(STAGING_DIR), most notably the libintl library.
-> 
-> So, using BR2_PACKAGE_GETTEXT=y as an indication to know whether
-> gettext support is available for a *host* package (which looks only in
-> $(HOST_DIR)) does not make sense.
-> 
-> What are you trying to do here?
-> 
-> If you're trying to have optional gettext support for the target Wine,
-> then what you need is:
+Hi Fabio,
 
-Wine is built using host-wine, so i need gettext support in host-wines wrt.
-For this i want to detect if host-gettext will be build, but the only way I see
-to do so is to query BR2_PACKAGE_GETTEXT which is obviously a target package, but also
-will build host-gettext
+On Sun, Mar 08, 2015 at 04:14:51PM +0100, Fabio Porcedda wrote:
+> >> +diff --git a/Makefile.in b/Makefile.in
+> >> +index b1b7c58..792ac82 100644
+> >> +--- a/Makefile.in
+> >> ++++ b/Makefile.in
+> >> +@@ -14,6 +14,7 @@
+> >> + CC  = @CC@
+> >> + STRIP       ?= $(CROSS)strip
+> >> + CFLAGS      = @CFLAGS@
+> >> ++LDFLAGS     = @LDFLAGS@
+> >> + INSTALL     = @INSTALL@
+> >> + LIBS        = @LIBS@
+> >> +
+> >> +@@ -50,7 +51,7 @@ SIM_LIBS:=-levent
+> >> + SIM_CFLAGS:=-Wno-unused
+> >> +
+> >> + ifeq ($(OS),DARWIN)
+> >> +-LDFLAGS:=-dynamiclib -Wl,-dylib_install_name -Wl,$(LIB_SONAME)
+> >> ++LDFLAGS+=-dynamiclib -Wl,-dylib_install_name -Wl,$(LIB_SONAME)
+> >
+> > Why do you need this hunk?
+> 
+> Because without that the Makefile doesn't use the TARGET_LDFLAGS
+> passed by buildroot to the configure script, so it doesn't find the
+> libraries in the per-package staging directory, and i get this build
+> failure:
+> 
+> >>> faifa v0.1 Building
+> sha2.c: In function 'SHA256_Last':
+> sha2.c:492:2: warning: dereferencing type-punned pointer will break
+> strict-aliasing rules [-Wstrict-aliasing]
+> /home/tetsuya/buildroot/br2/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
+> cannot find -lpcap
+> collect2: error: ld returned 1 exit status
+> Makefile:78: recipe for target 'libfaifa.so.0' failed
+> make[1]: *** [libfaifa.so.0] Error 1
+> package/pkg-generic.mk:182: recipe for target
+> '/home/tetsuya/buildroot/br2/output/build/faifa-v0.1/.stamp_built'
+> failed
+
+Does $(OS) really evaluates to "DARWIN" on your system? This looks quite 
+weird.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
