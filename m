@@ -1,51 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 22:52:13 +0100
-Subject: [Buildroot] [PATCH 09/16] package/minidlna: improve systemd
- support
-In-Reply-To: <1421684056-5266-10-git-send-email-maxtram95@gmail.com>
-References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
- <1421684056-5266-10-git-send-email-maxtram95@gmail.com>
-Message-ID: <20150308225213.79eb3468@free-electrons.com>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Sun,  8 Mar 2015 22:37:07 +0100
+Subject: [Buildroot] [PATCH 1/3] Added new package 'mc' (Midnight Commander).
+Message-ID: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxim Mikityanskiy,
 
-On Mon, 19 Jan 2015 18:14:09 +0200, Maxim Mikityanskiy wrote:
-> Support running minidlna in system-wide mode using systemd:
-> 
-> 1. Set --with-db-path and --with-log-path configure options to make
-> default minidlna directories comply with FHS.
-> 
-> 2. Install suitable minidlna.conf for system-wide mode.
-> 
-> 3. Install sysctl.d config file to increase inotify watches count.
-> 
-> 4. Install tmpfiles.d config file to mkdir and chmod necessary
-> directories for minidlna running in system-wide mode.
-> 
-> 5. Install sysusers.d config file to create minidlna user when using
-> systemd.
-> 
-> 6. Install minidlna.service for systemd.
-> 
-> Note: User=minidlna should be set in minidlna.service, not in
-> minidlna.conf, because minidlna is unable to drop privileges correctly
-> by itself: it does not get any privileges provided by groups of minidlna
-> user. Systemd drops privileges correctly in that case.
-> 
-> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ package/Config.in    |    1 +
+ package/mc/Config.in |   10 ++++++++++
+ package/mc/mc.mk     |   27 +++++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+)
+ create mode 100644 package/mc/Config.in
+ create mode 100644 package/mc/mc.mk
 
-I applied another patch adding a systemd service file for minidlna.
-Could you rebase this patch on top of the latest Buildroot Git tree?
-
-Thanks,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index cab9382..745426e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1351,6 +1351,7 @@ menu "Text editors and viewers"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/less/Config.in"
+ endif
++	source "package/mc/Config.in"
+ 	source "package/nano/Config.in"
+ 	source "package/uemacs/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/mc/Config.in b/package/mc/Config.in
+new file mode 100644
+index 0000000..735523f
+--- /dev/null
++++ b/package/mc/Config.in
+@@ -0,0 +1,10 @@
++# mc prefers slang, but can use ncurses too
++config BR2_PACKAGE_MC
++	bool "mc"
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
++	help
++	  GNU Midnight Commander is a visual file manager, licensed under GNU General Public License.
++	  It can use either SLang(preferred) or ncurses for screen handling; if neither is enabled SLang will be automatically chosen.
++	  
++	  https://www.midnight-commander.org/
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+new file mode 100644
+index 0000000..678e1f7
+--- /dev/null
++++ b/package/mc/mc.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# mc
++#
++################################################################################
++
++MC_VERSION_MAJOR = 4.8
++MC_VERSION = $(MC_VERSION_MAJOR).13
++MC_SOURCE = mc-$(MC_VERSION).tar.bz2
++MC_SITE = http://ftp.midnight-commander.org
++MC_INSTALL_STAGING = YES
++MC_INSTALL_TARGET = YES
++MC_CONF_OPTS = --disable-shared
++MC_DEPENDENCIES = libglib2 host-pkgconf
++
++# mc prefers slang, so use that if enabled, otherwise
++# fallback to using ncurses.
++# Either or both will be enabled, but we prefer slang.
++ifeq ($(BR2_PACKAGE_SLANG),y)
++MC_DEPENDENCIES += slang
++MC_CONF_OPTS += --with-screen=slang
++else
++MC_DEPENDENCIES += ncurses
++MC_CONF_OPTS += --with-screen=ncurses
++endif
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
