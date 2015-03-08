@@ -1,49 +1,39 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  8 Mar 2015 12:26:01 +0100
-Subject: [Buildroot] [PATCH v2 1/4] package/libftdi: bump to version 0.20
+Date: Sun,  8 Mar 2015 12:26:03 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
+	instead of libftdi
 In-Reply-To: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
 References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1425813964-5295-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add *.hash file.
-
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1->v2:
 - rebase
 ---
- package/libftdi/libftdi.hash | 2 ++
- package/libftdi/libftdi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/libftdi/libftdi.hash
+ package/avrdude/avrdude.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libftdi/libftdi.hash b/package/libftdi/libftdi.hash
-new file mode 100644
-index 0000000..5d9f876
---- /dev/null
-+++ b/package/libftdi/libftdi.hash
-@@ -0,0 +1,2 @@
-+# Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
-+sha256  3176d5b5986438f33f5208e690a8bfe90941be501cc0a72118ce3d338d4b838e  libftdi-0.20.tar.gz
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-index 22d2616..8370b0a 100644
---- a/package/libftdi/libftdi.mk
-+++ b/package/libftdi/libftdi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index 03d6490..a4e0ebd 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -17,8 +17,8 @@ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+ AVRDUDE_LICENSE = GPLv2+
+ AVRDUDE_LICENSE_FILES = avrdude/COPYING
  
--LIBFTDI_VERSION = 0.19
-+LIBFTDI_VERSION = 0.20
- LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download
- LIBFTDI_DEPENDENCIES = libusb-compat libusb
- LIBFTDI_INSTALL_STAGING = YES
+-ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+-AVRDUDE_DEPENDENCIES += libftdi
++ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
++AVRDUDE_DEPENDENCIES += libftdi1
+ endif
+ 
+ # if /etc/avrdude.conf exists, the installation process creates a
 -- 
 2.3.2
