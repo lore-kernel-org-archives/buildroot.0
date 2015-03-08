@@ -1,44 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 22:49:42 +0100
-Subject: [Buildroot] [PATCH] package/thrift: force boost libdir to
- staging/usr/lib/
-In-Reply-To: <1424734147-26811-1-git-send-email-romain.naour@openwide.fr>
-References: <1424734147-26811-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150308224942.1d258c2f@free-electrons.com>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Sun,  8 Mar 2015 22:37:08 +0100
+Subject: [Buildroot] [PATCH 2/3] Transformation of package 'at91bootstrap3'
+	to KConfig style.
+In-Reply-To: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+Message-ID: <1425850629-14725-2-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
 
-On Tue, 24 Feb 2015 00:29:07 +0100, Romain Naour wrote:
-> Libtool append the sysroot path (lt_sysroot) with the libdir value found in
-> the libstdc++.la file only with bfin toolchain.
-> 
-> Path/to/sysroot/opt/uClinux/bfin-linux-uclibc/lib/gcc/bfin-linux-uclibc/4.3.5/libstdc++.so
-> 
-> The issue disappears when --with-boost=$(STAGING_DIR) is removed.
-> So instead of using --with-boost=$(STAGING_DIR), use
-> --with-boost-libdir=$(STAGING_DIR)/usr/lib to give the path to boost's
-> libraries.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ae2/ae274693b953dd569c3ff63c532e2fc9553b5002/
-> 
-> And many more
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ boot/at91bootstrap3/at91bootstrap3.mk |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-The proposed solution is a little bit of a hack, but libtool is just a
-pain, and the solution you propose is not invasive at all, so I applied
-this.
-
-Thanks a lot for spending on this long standing issue!
-
-Thomas
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 098e7bf..37e1bdd 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -46,7 +46,14 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
+ endef
+ 
+-$(eval $(generic-package))
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
++AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(AT91BOOTSTRAP3_DEFCONFIG))
++else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
++AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
++endif
++AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
++AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
++$(eval $(kconfig-package))
+ 
+ # Checks to give errors that the user can understand
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
