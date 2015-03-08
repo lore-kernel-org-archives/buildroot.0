@@ -1,50 +1,40 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 8 Mar 2015 11:23:00 +0100
-Subject: [Buildroot] [PATCH 3/4] toolchainfile.cmake: only search the
- sysroot for CMake module
-In-Reply-To: <1425808043-32292-4-git-send-email-s.martin49@gmail.com>
-References: <1425808043-32292-1-git-send-email-s.martin49@gmail.com>
- <1425808043-32292-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAGm1_ktXqrSqXRvCS4rAeGkfRDaVenPOeRXLTZk7sqaXpRfuSw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 08 Mar 2015 11:53:48 +0100
+Subject: [Buildroot] gcc-4.9.2 with c++ is broken without wchar
+Message-ID: <XnsA457790498159berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 8, 2015 at 10:47 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> This change prevents CMake from searching outside the sysroot location
-> for CMake modules when cross-compiling.
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Hi,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+before sending a patch I would like to post my findings for discussion.
+A build using this defconfig fails in host-gcc-final-4.9.2:
 
-> ---
-> This patch is a better fix to [1] wrt the Arnout's comment [2]
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117994.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2015-January/118154.html
-> ---
->  support/misc/toolchainfile.cmake.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-> index 816af13..cd41254 100644
-> --- a/support/misc/toolchainfile.cmake.in
-> +++ b/support/misc/toolchainfile.cmake.in
-> @@ -21,6 +21,7 @@ set(CMAKE_INSTALL_SO_NO_EXE 0)
->  set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
->  set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
->  set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-> +set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
->  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
->  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
->  set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
-> --
-> 2.3.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+BR2_BINUTILS_VERSION_2_25=y
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+make[2]: Entering directory `/home/fli4l/br3/output/build/host-gcc-final-
+4.9.2/build/i586-buildroot-linux-uclibc/libcilkrts'
+[...]
+In file included from ../../../libcilkrts/runtime/c_reducers.c:55:0:
+../../../libcilkrts/include/cilk/reducer_min_max.h: In function 
+?cilk_c_reducer_max_identity_wchar_t?:
+../../../libcilkrts/include/cilk/reducer_min_max.h:3157:61: error: 
+?WCHAR_MIN? undeclared (first use in this function)
+ CILK_C_REDUCER_MAX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
+[...]
+
+Apparently c++ support depends on wchar now?
+
+A build with this defconfig succeeds:
+
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_BINUTILS_VERSION_2_25=y
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+Regards, Bernd
