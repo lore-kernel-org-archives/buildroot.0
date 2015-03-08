@@ -1,36 +1,55 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 8 Mar 2015 17:57:19 +0100
-Subject: [Buildroot] [git commit] imlib2: bump to version 1.4.6
-In-Reply-To: <20150308071605.778EE805E4@busybox.osuosl.org>
-References: <20150308071605.778EE805E4@busybox.osuosl.org>
-Message-ID: <CAHkwnC-3hB1juVU1TYQ8oEpq=TpEJruwiRQaXFrQwThKBtFQjw@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 8 Mar 2015 18:03:09 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
+ instead of libftdi
+In-Reply-To: <20150308114842.GB2518@tarshish>
+References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
+ <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
+ <20150308114842.GB2518@tarshish>
+Message-ID: <CAHXCMMJ30MEE33mytg4xy9pZePD0Z+ezH8pJE6wzhaqJWdkyGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 7, 2015 at 5:41 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=d8be6f7bbc26640519688e359f3802daa5abde7d
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Also add two upstream patch to fix a warning and a build failure of the
-> version 1.4.6.
->
-> Also add AUTORECONF because one patch change the file
-> "src/lib/Makefile.am".
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Hi Baruch,
 
-Unfortunately in the version 1.4.6 there is a regression in
-"imlib2-config" that is causing autobuild failures in directfb and
-giblib pacakges...
+On Sun, Mar 8, 2015 at 12:48 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Samuel,
+>
+> On Sun, Mar 08, 2015 at 12:26:03PM +0100, Samuel Martin wrote:
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>>
+>> ---
+>> changes v1->v2:
+>> - rebase
+>> ---
+>>  package/avrdude/avrdude.mk | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+>> index 03d6490..a4e0ebd 100644
+>> --- a/package/avrdude/avrdude.mk
+>> +++ b/package/avrdude/avrdude.mk
+>> @@ -17,8 +17,8 @@ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+>>  AVRDUDE_LICENSE = GPLv2+
+>>  AVRDUDE_LICENSE_FILES = avrdude/COPYING
+>>
+>> -ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+>> -AVRDUDE_DEPENDENCIES += libftdi
+>> +ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
+>> +AVRDUDE_DEPENDENCIES += libftdi1
+>
+> How do you tell avrdude to link with libftdi1 and not libftdi when both are
+> built? The same question goes for openocd.
 
-I've sent a patch to fix that:
-http://patchwork.ozlabs.org/patch/447800/
+Both avrdude and openocd first check for libftdi1, and use it if any,
+otherwise check for libftdi.
+So, unless I'm missing something this is ok; but that's true I forgot
+to mention this point in the commit log. :-/
 
-BR
+Regards,
+
 -- 
-Fabio Porcedda
+Samuel
