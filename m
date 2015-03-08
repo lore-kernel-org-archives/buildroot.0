@@ -1,97 +1,67 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun,  8 Mar 2015 11:56:16 +0100
-Subject: [Buildroot] [PATCH] lua: bump to version 5.2.4
-Message-ID: <1425812176-2184-1-git-send-email-francois.perrad@gadz.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 8 Mar 2015 13:59:58 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-03-06
+In-Reply-To: <20150308081737.3b35f001@free-electrons.com>
+References: <20150307073020.C6D511011A8@stock.ovh.net>
+ <CAMo8BfJo6EJG4SeU3=ZEBB=9gG+SF9pJ9N0fCHh567o-jpfr5Q@mail.gmail.com>
+ <20150307231115.GA2518@tarshish>
+ <CAMo8BfKYm-p4ETuX==DQbtz_s=4wpuwemfePnGaOz4G2YmsmYQ@mail.gmail.com>
+ <20150308081737.3b35f001@free-electrons.com>
+Message-ID: <CAMo8BfLeQdxJSNW9SdP+ACN1cgwnjE0sdavFR9=LxfLc0GYU3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/5.2.3/0012-fix-ephemeron-table.patch      | 19 -------------------
- package/lua/{5.2.3 => 5.2.4}/0001-root-path.patch     |  0
- .../{5.2.3 => 5.2.4}/0002-shared-libs-for-lua.patch   |  0
- package/lua/{5.2.3 => 5.2.4}/0004-lua-pc.patch        |  0
- package/lua/{5.2.3 => 5.2.4}/0011-linenoise.patch     |  0
- package/lua/lua.hash                                  |  4 ++--
- package/lua/lua.mk                                    |  2 +-
- 7 files changed, 3 insertions(+), 22 deletions(-)
- delete mode 100644 package/lua/5.2.3/0012-fix-ephemeron-table.patch
- rename package/lua/{5.2.3 => 5.2.4}/0001-root-path.patch (100%)
- rename package/lua/{5.2.3 => 5.2.4}/0002-shared-libs-for-lua.patch (100%)
- rename package/lua/{5.2.3 => 5.2.4}/0004-lua-pc.patch (100%)
- rename package/lua/{5.2.3 => 5.2.4}/0011-linenoise.patch (100%)
+On Sun, Mar 8, 2015 at 10:17 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Max Filippov,
+>
+> On Sun, 8 Mar 2015 02:39:34 +0300, Max Filippov wrote:
+>
+>> I couldn't find any written rule, so am wondering.
+>> It may not be a regression per se, but uClibc-ng became a default libc
+>> for xtensa, and
+>> broken default is arguably a regression.
+>
+> I posted a set of commits fixing this:
+> http://lists.busybox.net/pipermail/buildroot/2015-March/121200.html.
 
-diff --git a/package/lua/5.2.3/0012-fix-ephemeron-table.patch b/package/lua/5.2.3/0012-fix-ephemeron-table.patch
-deleted file mode 100644
-index f231016..0000000
---- a/package/lua/5.2.3/0012-fix-ephemeron-table.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Ephemeron table can wrongly collect entry with strong key.
--
--Fetch from: http://www.lua.org/bugs.html#5.2.3-2
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/src/lgc.c
--===================================================================
----- a/src/lgc.c
--+++ b/src/lgc.c
--@@ -403,7 +403,7 @@
--       reallymarkobject(g, gcvalue(gval(n)));  /* mark it now */
--     }
--   }
---  if (prop)
--+  if (g->gcstate != GCSatomic || prop)
--     linktable(h, &g->ephemeron);  /* have to propagate again */
--   else if (hasclears)  /* does table have white keys? */
--     linktable(h, &g->allweak);  /* may have to clean white keys */
-diff --git a/package/lua/5.2.3/0001-root-path.patch b/package/lua/5.2.4/0001-root-path.patch
-similarity index 100%
-rename from package/lua/5.2.3/0001-root-path.patch
-rename to package/lua/5.2.4/0001-root-path.patch
-diff --git a/package/lua/5.2.3/0002-shared-libs-for-lua.patch b/package/lua/5.2.4/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.2.3/0002-shared-libs-for-lua.patch
-rename to package/lua/5.2.4/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.2.3/0004-lua-pc.patch b/package/lua/5.2.4/0004-lua-pc.patch
-similarity index 100%
-rename from package/lua/5.2.3/0004-lua-pc.patch
-rename to package/lua/5.2.4/0004-lua-pc.patch
-diff --git a/package/lua/5.2.3/0011-linenoise.patch b/package/lua/5.2.4/0011-linenoise.patch
-similarity index 100%
-rename from package/lua/5.2.3/0011-linenoise.patch
-rename to package/lua/5.2.4/0011-linenoise.patch
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index b6ac026..fe36dcd 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -2,8 +2,8 @@
- md5 a1b0a7e92d0c85bbff7a8d27bf29f8af           lua-5.3.0.tar.gz
- sha1 1c46d1c78c44039939e820126b86a6ae12dadfba  lua-5.3.0.tar.gz
- 
--md5 dc7f94ec6ff15c985d2d6ad0f1b35654           lua-5.2.3.tar.gz
--sha1 926b7907bc8d274e063d42804666b40a3f3c124c  lua-5.2.3.tar.gz
-+md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
-+sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
- 
- md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
- sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index f008d34..bb5741d 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -8,7 +8,7 @@ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.0
- else
- ifeq ($(BR2_PACKAGE_LUA_5_2),y)
--LUA_VERSION = 5.2.3
-+LUA_VERSION = 5.2.4
- else
- LUA_VERSION = 5.1.5
- endif
+Thank you, Thomas.
+Still uclibc build fails for me with the following message:
+
+  GEN include/bits/sysnum.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelbarrier.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/pthread-pi-defines.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelbarrier.h
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/pthread-pi-defines.h
+In file included from ./libpthread/nptl/pthreadP.h:25:0,
+                 from <stdin>:2:
+./include/sys/syscall.h:24:25: fatal error: bits/sysnum.h: No such
+file or directory
+ #include <bits/sysnum.h>
+                         ^
+compilation terminated.
+  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
+make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h]
+Error 1
+make[1]: *** Waiting for unfinished jobs....
+
+Attached patch fixes it for me.
+
 -- 
-2.1.0
+Thanks.
+-- Max
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Makefile.in-add-missing-dependency-on-bits-sysnum.h-.patch
+Type: text/x-patch
+Size: 1891 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150308/c6fbceed/attachment.bin>
