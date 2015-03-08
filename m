@@ -1,41 +1,51 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun,  8 Mar 2015 22:37:08 +0100
-Subject: [Buildroot] [PATCH 2/3] Transformation of package 'at91bootstrap3'
-	to KConfig style.
-In-Reply-To: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
-References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1425850629-14725-2-git-send-email-mc5686@mclink.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 22:52:13 +0100
+Subject: [Buildroot] [PATCH 09/16] package/minidlna: improve systemd
+ support
+In-Reply-To: <1421684056-5266-10-git-send-email-maxtram95@gmail.com>
+References: <1421684056-5266-1-git-send-email-maxtram95@gmail.com>
+ <1421684056-5266-10-git-send-email-maxtram95@gmail.com>
+Message-ID: <20150308225213.79eb3468@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Maxim Mikityanskiy,
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- boot/at91bootstrap3/at91bootstrap3.mk |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+On Mon, 19 Jan 2015 18:14:09 +0200, Maxim Mikityanskiy wrote:
+> Support running minidlna in system-wide mode using systemd:
+> 
+> 1. Set --with-db-path and --with-log-path configure options to make
+> default minidlna directories comply with FHS.
+> 
+> 2. Install suitable minidlna.conf for system-wide mode.
+> 
+> 3. Install sysctl.d config file to increase inotify watches count.
+> 
+> 4. Install tmpfiles.d config file to mkdir and chmod necessary
+> directories for minidlna running in system-wide mode.
+> 
+> 5. Install sysusers.d config file to create minidlna user when using
+> systemd.
+> 
+> 6. Install minidlna.service for systemd.
+> 
+> Note: User=minidlna should be set in minidlna.service, not in
+> minidlna.conf, because minidlna is unable to drop privileges correctly
+> by itself: it does not get any privileges provided by groups of minidlna
+> user. Systemd drops privileges correctly in that case.
+> 
+> Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index 098e7bf..37e1bdd 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -46,7 +46,14 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
- 	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
- endef
- 
--$(eval $(generic-package))
-+ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
-+AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(AT91BOOTSTRAP3_DEFCONFIG))
-+else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
-+AT91BOOTSTRAP3_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE))
-+endif
-+AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
-+$(eval $(kconfig-package))
- 
- # Checks to give errors that the user can understand
- ifeq ($(filter source,$(MAKECMDGOALS)),)
+I applied another patch adding a systemd service file for minidlna.
+Could you rebase this patch on top of the latest Buildroot Git tree?
+
+Thanks,
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
