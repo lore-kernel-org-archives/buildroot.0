@@ -1,41 +1,41 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sun, 8 Mar 2015 15:53:11 +0100
-Subject: [Buildroot] [RFC v3 21/30] lmbench: to be checked
-In-Reply-To: <20150303165607.GR15668@tarshish>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <1425374255-6827-22-git-send-email-fabio.porcedda@gmail.com>
- <20150303165607.GR15668@tarshish>
-Message-ID: <CAHkwnC-v4MCD5OjWz4VgJvseoJyRREfpeufg5v6SjENpQ3YZKw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 15:32:34 +0100
+Subject: [Buildroot] [git commit] package/readline: add host variant
+Message-ID: <20150308145356.D425E8080B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 3, 2015 at 5:56 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> On Tue, Mar 03, 2015 at 10:17:26AM +0100, Fabio Porcedda wrote:
->> ---
->>  package/lmbench/lmbench.mk | 5 +----
->>  1 file changed, 1 insertion(+), 4 deletions(-)
->>
->> diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
->> index 63a83fd..954f7eb 100644
->> --- a/package/lmbench/lmbench.mk
->> +++ b/package/lmbench/lmbench.mk
->> @@ -10,9 +10,6 @@ LMBENCH_SITE = http://downloads.sourceforge.net/project/lmbench/development/lmbe
->>  LMBENCH_LICENSE = lmbench license (based on GPLv2)
->>  LMBENCH_LICENSE_FILES = COPYING COPYING-2
->>
->> -LMBENCH_CFLAGS = $(TARGET_CFLAGS)
->> -LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
->> -
->
-> Please see http://patchwork.ozlabs.org/patch/442832/.
+commit: http://git.buildroot.net/buildroot/commit/?id=063ff25f6aeb626da03c49d5216bdd3c6b4f0482
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I will rebase this patch over your patch.
+Needed by SoftEther VPN.
 
-Thanks
+host-readline will also be needed by host-pcre, which in turn will
+be needed by the yet-to-be-released leafnode2 package.
 
-BR
--- 
-Fabio Porcedda
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/readline/readline.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index d670a71..c004899 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -8,6 +8,7 @@ READLINE_VERSION = 6.3
+ READLINE_SITE = $(BR2_GNU_MIRROR)/readline
+ READLINE_INSTALL_STAGING = YES
+ READLINE_DEPENDENCIES = ncurses
++HOST_READLINE_DEPENDENCIES = host-ncurses
+ READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes \
+ 	bash_cv_wcwidth_broken=no
+ READLINE_LICENSE = GPLv3+
+@@ -20,3 +21,4 @@ endef
+ READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_PURGE_EXAMPLES
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
