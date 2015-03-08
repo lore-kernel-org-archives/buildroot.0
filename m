@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 18:33:07 +0100
-Subject: [Buildroot] [PATCH] boards/raspberrypi: update readme with
- RPi-2 specifics
-In-Reply-To: <1425828173-4026-1-git-send-email-yann.morin.1998@free.fr>
-References: <1425828173-4026-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150308183307.0fa868e6@free-electrons.com>
+Date: Sun, 8 Mar 2015 18:33:17 +0100
+Subject: [Buildroot] [PATCH] perl-cross: bump to version 0.9.6
+In-Reply-To: <1425828782-25604-1-git-send-email-francois.perrad@gadz.org>
+References: <1425828782-25604-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150308183317.2b64c1fe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Francois Perrad,
 
-On Sun,  8 Mar 2015 16:22:53 +0100, Yann E. MORIN wrote:
-> The RPi-2 has its own DTB, so document it in the list of generated
-> files.
+On Sun,  8 Mar 2015 16:33:02 +0100, Francois Perrad wrote:
+> this release contains a fix for yacc/bison issue,
+> see http://github.com/arsv/perl-cross/issues/13
 > 
-> Also, not all DTBs need to be present on the boot partition, so add a
-> comment that identifies which should be copied for each model.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl/perl.hash | 2 +-
+>  package/perl/perl.mk   | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
 
 Applied, thanks.
 
