@@ -1,45 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 08:35:51 +0100
-Subject: [Buildroot] [PATCH 3/3] uclibc: add patch fixing non-threaded
- build on Xtensa for uClibc-ng 1.0.0
-In-Reply-To: <20150307175651.GJ3937@waldemar-brodkorb.de>
+Date: Sun, 8 Mar 2015 08:40:44 +0100
+Subject: [Buildroot] [PATCH 1/3] uclibc: adapt thread implementation
+ selection to uClibc-ng
+In-Reply-To: <20150307173928.GH4186@free.fr>
 References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150307144013.GE4186@free.fr>
- <20150307154325.GH3937@waldemar-brodkorb.de>
- <20150307173048.4652ee0c@free-electrons.com>
- <20150307175651.GJ3937@waldemar-brodkorb.de>
-Message-ID: <20150308083551.4e3409fa@free-electrons.com>
+ <1425735600-16762-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150307173928.GH4186@free.fr>
+Message-ID: <20150308084044.4a135752@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Yann E. MORIN,
 
-On Sat, 7 Mar 2015 18:56:51 +0100, Waldemar Brodkorb wrote:
+On Sat, 7 Mar 2015 18:39:28 +0100, Yann E. MORIN wrote:
 
-> > No, I'm still not convinced we need separate packages at this point.
-> > Maybe in the future if uClibc and uClibc-ng diverge significantly, but
-> > it's not the case right now.
+> >  	config BR2_UCLIBC_NG_VERSION_1_0_0
+> >  		bool "uClibc-ng 1.0.0"
+> > +		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
+> > +		       if BR2_arc || BR2_m68k
+> > +		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+> > +		       if BR2_arc || BR2_bfin || BR2_m68k
+> > +		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+> > +		       if !BR2_arc && !BR2_bfin && !BR2_x86_i386
 > 
-> To clear things up, I am happy with the version stuff and we don't
-> need an extra package. I just thought whenever we get the situation
-> that uClibc 1.0.0 is released _and_ uClibc-ng is still using 1.0.x
-> ;)
+> From what I can see, uclibc-ng on branch 1.0 :
+> 
+>                 LT.old  LT      NPTL    Notes
+>     arc         -       -       Y
 
-Ah, yes indeed. If/when this situation arises, having separate packages
-would be a solution.
+Ah, right, I missed that. So it means that right now we can't build an
+ARC toolchain with uClibc-ng in Buildroot: the ARC compiler version we
+use does not have TLS support, which is required for NPTL. So ARC +
+uClibc-ng is not possible right now.
 
-Again, I guess it's too early to really draw a plan about what will
-happen between uClibc and uClibc-ng. It really all depends on how both
-projects will be maintained: if you continue to be active on uClibc-ng
-or not, if the original uClibc project moves again or not, etc. So
-let's not make too much plans, and see what happens :-)
+>     arm         Y       -       Y
 
-However, one plan I'd like to make is to make uClibc-ng the default
-uClibc version. Maybe for 2015.05, if not for 2015.08.
+Yes, but Waldemar's wish is basically to not use LT or LT.old when
+there is NPTL support available. Which I believe makes sense. See his
+patch at http://patchwork.ozlabs.org/patch/446288/ where he was making
+LT and LT.old not available on ARM and ARMeb.
+
+>     bfin        Y       Y       -
+
+Correct. That needs to be fixed in my patch.
+
+>     i386        -       -       -
+>     i?86        -       -       Y       except i386
+>     m68k        Y       Y       -
+>     microblaze  Y       Y       -       not used in BR
+>     mips        -       -       Y
+>     nios2       Y       Y       -       not used in BR
+>     powerpc     -       -       Y
+>     sh          -       -       Y
+>     sparc       -       -       Y
+>     x86_64      -       -       Y
+>     xtensa      -       -       Y
+>     
+> 
+> So, I guess your selection is incorrect, and you should have:
+> 
+>     select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
+>         if BR2_bfin || BR2_m68k
+>     select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+>         if BR2_bfin || BR2_m68k || BR2_arm || BR2_armeb
+>     select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+>         if !BR2_bfin && !BR2_m68k && !BR2_x86_i386
+
+Ok, except the ARM case where I disagree (see above), and handling the
+ARC situation, I'm OK with your proposal.
+
+Thanks,
 
 Thomas
 -- 
