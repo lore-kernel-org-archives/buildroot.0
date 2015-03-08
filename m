@@ -1,26 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2015 20:35:04 +0100
-Subject: [Buildroot] [PATCH] can-utils: bump version
-In-Reply-To: <1425839749-9067-1-git-send-email-yegorslists@googlemail.com>
- (Yegor Yefremov's message of "Sun, 8 Mar 2015 19:35:49 +0100")
-References: <1425839749-9067-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87fv9fs2on.fsf@dell.be.48ers.dk>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sun,  8 Mar 2015 20:39:44 +0100
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.0-10
+Message-ID: <1425843584-4786-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+Also update hash file.
 
- > Fixes following autobuild failure, via defining N_SLCAN, if not
- > already declared:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > http://autobuild.buildroot.net/results/799/799561c928d711ada4070ae5e09f4097dd4091e3/
-
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Committed, thanks.
-
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 7df1ade..16d5927 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256 4f680e1ccfa31e18a8ca829e7749ebd62f2f81dfdba943f9504a824176f51c76 ImageMagick-6.9.0-9.tar.xz
++sha256 d1f5dcd32a93130feb9e980a8a97517d3a2c814a8b608d139d4756516548748c ImageMagick-6.9.0-10.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9a10e93..f11ebf5 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.0-9
++IMAGEMAGICK_VERSION = 6.9.0-10
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-Bye, Peter Korsgaard
+1.9.1
