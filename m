@@ -1,96 +1,36 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Sun, 8 Mar 2015 17:57:38 +0100
-Subject: [Buildroot] [PATCH 1/1] fftw: add compile precision option
-In-Reply-To: <1425236772-13124-1-git-send-email-gwenj@trabucayre.com>
-References: <1425236772-13124-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150308175738.31288a51@x230.trabucayre.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 8 Mar 2015 17:57:19 +0100
+Subject: [Buildroot] [git commit] imlib2: bump to version 1.4.6
+In-Reply-To: <20150308071605.778EE805E4@busybox.osuosl.org>
+References: <20150308071605.778EE805E4@busybox.osuosl.org>
+Message-ID: <CAHkwnC-3hB1juVU1TYQ8oEpq=TpEJruwiRQaXFrQwThKBtFQjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-up
-Gwen
+On Sat, Mar 7, 2015 at 5:41 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=d8be6f7bbc26640519688e359f3802daa5abde7d
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Also add two upstream patch to fix a warning and a build failure of the
+> version 1.4.6.
+>
+> Also add AUTORECONF because one patch change the file
+> "src/lib/Makefile.am".
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Sun,  1 Mar 2015 20:06:12 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+Unfortunately in the version 1.4.6 there is a regression in
+"imlib2-config" that is causing autobuild failures in directfb and
+giblib pacakges...
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> fftw has options to select compile precision between single, long-double and
-> quad. These options are exclusives. This patch adds choice to select precision
-> option.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/fftw/Config.in | 32 ++++++++++++++++++++++++++++++++
->  package/fftw/fftw.mk   | 10 ++++++++++
->  2 files changed, 42 insertions(+)
-> 
-> diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-> index 36f849f..f35179b 100644
-> --- a/package/fftw/Config.in
-> +++ b/package/fftw/Config.in
-> @@ -9,3 +9,35 @@ config BR2_PACKAGE_FFTW
->  	  double precision.
->  
->  	  http://www.fftw.org
-> +
-> +if BR2_PACKAGE_FFTW
-> +
-> +choice
-> +	prompt "fftw precision"
-> +	default BR2_PACKAGE_FFTW_PRECISION_NONE
-> +	help
-> +	  Selects fftw precision
-> +
-> +config BR2_PACKAGE_FFTW_PRECISION_NONE
-> +	bool "none"
-> +	help
-> +	  no compile precision selected
-> +
-> +config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-> +	bool "single precision"
-> +	help
-> +	  compile fftw in single precision
-> +
-> +config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-> +	bool "long double precision"
-> +	help
-> +	  compile fftw in long-double precision
-> +
-> +config BR2_PACKAGE_FFTW_PRECISION_QUAD
-> +	bool "quad precision"
-> +	help
-> +	  compile fftw in quadruple precision if available
-> +
-> +endchoice
-> +
-> +endif
-> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-> index 3b302df..68ddc35 100644
-> --- a/package/fftw/fftw.mk
-> +++ b/package/fftw/fftw.mk
-> @@ -10,4 +10,14 @@ FFTW_INSTALL_STAGING = YES
->  FFTW_LICENSE = GPLv2+
->  FFTW_LICENSE_FILES = COPYING
->  
-> +ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-> +FFTW_CONFIGURE_OPTS += --enable-single
-> +endif
-> +ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
-> +FFTW_CONFIGURE_OPTS += --enable-long-double
-> +endif
-> +ifeq ($(BR2_PACKAGE_FFTW_PRECISION_QUAD),y)
-> +FFTW_CONFIGURE_OPTS += --enable-quad-precision
-> +endif
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I've sent a patch to fix that:
+http://patchwork.ozlabs.org/patch/447800/
+
+BR
+-- 
+Fabio Porcedda
