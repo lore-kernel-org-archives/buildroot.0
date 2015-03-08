@@ -1,54 +1,84 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun,  8 Mar 2015 16:33:02 +0100
-Subject: [Buildroot] [PATCH] perl-cross: bump to version 0.9.6
-Message-ID: <1425828782-25604-1-git-send-email-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 8 Mar 2015 18:28:12 +0200
+Subject: [Buildroot] [RFC v3 10/30] faifa: use TARGET_LDFLAGS
+In-Reply-To: <CAHkwnC8k+A8tDYJEdQ33Xz30DyV5PzcZFkLazM75-RNvMcrCuw@mail.gmail.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <1425374255-6827-11-git-send-email-fabio.porcedda@gmail.com>
+ <20150303165708.GS15668@tarshish>
+ <CAHkwnC-AXpp3TSAm+4Vim=PJ9y2QNhEbVi5vEn7uSuYA-hDWEA@mail.gmail.com>
+ <20150308151847.GC2518@tarshish>
+ <CAHkwnC8k+A8tDYJEdQ33Xz30DyV5PzcZFkLazM75-RNvMcrCuw@mail.gmail.com>
+Message-ID: <20150308162812.GD2518@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this release contains a fix for yacc/bison issue,
-see http://github.com/arsv/perl-cross/issues/13
+Hi Fabio,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 2 +-
- package/perl/perl.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+On Sun, Mar 08, 2015 at 04:30:59PM +0100, Fabio Porcedda wrote:
+> On Sun, Mar 8, 2015 at 4:18 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > On Sun, Mar 08, 2015 at 04:14:51PM +0100, Fabio Porcedda wrote:
+> >> >> +diff --git a/Makefile.in b/Makefile.in
+> >> >> +index b1b7c58..792ac82 100644
+> >> >> +--- a/Makefile.in
+> >> >> ++++ b/Makefile.in
+> >> >> +@@ -14,6 +14,7 @@
+> >> >> + CC  = @CC@
+> >> >> + STRIP       ?= $(CROSS)strip
+> >> >> + CFLAGS      = @CFLAGS@
+> >> >> ++LDFLAGS     = @LDFLAGS@
+> >> >> + INSTALL     = @INSTALL@
+> >> >> + LIBS        = @LIBS@
+> >> >> +
+> >> >> +@@ -50,7 +51,7 @@ SIM_LIBS:=-levent
+> >> >> + SIM_CFLAGS:=-Wno-unused
+> >> >> +
+> >> >> + ifeq ($(OS),DARWIN)
+> >> >> +-LDFLAGS:=-dynamiclib -Wl,-dylib_install_name -Wl,$(LIB_SONAME)
+> >> >> ++LDFLAGS+=-dynamiclib -Wl,-dylib_install_name -Wl,$(LIB_SONAME)
+> >> >
+> >> > Why do you need this hunk?
+> >>
+> >> Because without that the Makefile doesn't use the TARGET_LDFLAGS
+> >> passed by buildroot to the configure script, so it doesn't find the
+> >> libraries in the per-package staging directory, and i get this build
+> >> failure:
+> >>
+> >> >>> faifa v0.1 Building
+> >> sha2.c: In function 'SHA256_Last':
+> >> sha2.c:492:2: warning: dereferencing type-punned pointer will break
+> >> strict-aliasing rules [-Wstrict-aliasing]
+> >> /home/tetsuya/buildroot/br2/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld:
+> >> cannot find -lpcap
+> >> collect2: error: ld returned 1 exit status
+> >> Makefile:78: recipe for target 'libfaifa.so.0' failed
+> >> make[1]: *** [libfaifa.so.0] Error 1
+> >> package/pkg-generic.mk:182: recipe for target
+> >> '/home/tetsuya/buildroot/br2/output/build/faifa-v0.1/.stamp_built'
+> >> failed
+> >
+> > Does $(OS) really evaluates to "DARWIN" on your system? This looks quite
+> > weird.
+> 
+> So are you just speaking about the last line, not the whole patch?
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index ac7bafe..d28b5fd 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -4,4 +4,4 @@ sha1   63126c683b4c79c35008a47d56f7beae876c569f                         perl-5.2
- sha256 e5a4713bc65e1da98ebd833dce425c000768bfe84d17ec5183ec5ca249db71ab perl-5.20.2.tar.bz2
- 
- # No upstream hashes for the following
--sha256 614f320d45042ca179a15ec88c6a15ff68e6f36fb004ee89efa71e42bda1dead perl-5.20.1-cross-0.9.4.tar.gz
-+sha256 e25c5d9289b98db8f9d6a27bda9de12028ffc37eeede2d2fbfb10590d36fbf8f perl-5.20.2-cross-0.9.6.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index cd4c286..133e8aa 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -12,8 +12,8 @@ PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 0.9.4
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_CROSS_VERSION = 0.9.6
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
- PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-@@ -85,7 +85,6 @@ endif
- define PERL_CONFIGURE_CMDS
- 	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPTS))
- 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
--	touch $(@D)/x2p/a2p.c # prevents regen by yacc
- endef
- 
- define PERL_BUILD_CMDS
+Yes, I referred to that hunk (patch segment) specifically.
+
+> That line it's not useful on my system, but because the fafia project
+> support the darwin os, I've added the change anyway, the change
+> prevents that the LDFLAGS passed to the configure script will be
+> overwritten.
+> I've done that because I've sent the patch upstream.
+
+In this case, in my opinion, the patch description should also reference 
+upstream patch or pull request, in addition to the Buildroot commit log.
+
+Thanks,
+baruch
+
 -- 
-2.1.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
