@@ -1,53 +1,43 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 8 Mar 2015 10:13:02 +0100
-Subject: [Buildroot] [PATCH 1/3] uclibc: adapt thread implementation
- selection to uClibc-ng
-In-Reply-To: <20150308084516.GA4184@free.fr>
-References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150307173928.GH4186@free.fr>
- <20150308084044.4a135752@free-electrons.com>
- <20150308084516.GA4184@free.fr>
-Message-ID: <20150308091302.GL3937@waldemar-brodkorb.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  8 Mar 2015 10:47:19 +0100
+Subject: [Buildroot] [PATCH 0/4] CMake package and infra improvements
+Message-ID: <1425808043-32292-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Yann E. MORIN wrote,
-> 
-> OK. One more thing: since uClibc-ng supports microblaze and nios2, we
-> could enable uClibc (as in "uClibc in Buildroot") to build Buildroot
-> toolchains for those two archs, no?
+Hi all,
 
-No.
+Here is a short CMake related series.
 
-Unfortunately this is another can of worms in the uClibc world :(
+The first 2 patches improve the cmake package, and the last ones fix cmake infrastructure.
 
-Microblaze GNU libc and musl support is fine. uClibc does not
-support NPTL/TLS for this architecture. As one of the Microblaze 
-maintainers told me, the no-MMU microblaze stuff is seldom used
-nowadays. Gcc needs patching to find shared library loader with
-uClibc. So there is a lot of stuff todo, before Microblaze and
-uClibc can be used. At least there is good support for Qemu, so
-you can directly start to hack without buying expensive FPGA
-hardware :)
+Regards,
 
-NIOS2 GNU libc support was added recently and you can compile a
-toolchain with upstream gcc and binutils.
-NIOS2 in uClibc is really bad maintained. There is no TLS/NPTL
-support and you are getting some compile errors when trying to
-build with LT.old or no threads. I haven't found any usable external
-GIT repository with newer support. So if anyone know a working 
-version of uClibc/uClinux for NIOS2 I am happy to merge the needed
-changes. There is a patch set for Qemu here:
-https://lists.gnu.org/archive/html/qemu-devel/2012-09/msg01229.html
-But it is not in latest Qemu-Git.
+Samuel
+--
 
-I did not removed both architectures as I am planning to get them in
-a better shape.
+Davide Viti (1):
+  package/cmake: make ctest a target package too
 
-best regards
- Waldemar
+Samuel Martin (3):
+  package/cmake: only build what is necessary
+  toolchainfile.cmake: only search the sysroot for CMake module
+  toolchainfile.cmake: set CXX variables wrt BR2_INSTALL_LIBSTDCPP value
+
+ package/Config.in                                  |   1 +
+ package/cmake/0001-rename_cmake_rootfile.patch     |  23 ++
+ ...-allow-to-select-what-program-to-be-built.patch | 231 +++++++++++++++++++++
+ package/cmake/Config.in                            |  14 ++
+ package/cmake/cmake.mk                             |  36 ++++
+ package/pkg-cmake.mk                               |   1 +
+ support/misc/toolchainfile.cmake.in                |  34 ++-
+ 7 files changed, 334 insertions(+), 6 deletions(-)
+ create mode 100644 package/cmake/0001-rename_cmake_rootfile.patch
+ create mode 100644 package/cmake/0002-CMake-allow-to-select-what-program-to-be-built.patch
+ create mode 100644 package/cmake/Config.in
+
+--
+2.3.2
