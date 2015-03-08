@@ -1,55 +1,55 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 8 Mar 2015 18:03:09 +0100
-Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
- instead of libftdi
-In-Reply-To: <20150308114842.GB2518@tarshish>
-References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
- <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
- <20150308114842.GB2518@tarshish>
-Message-ID: <CAHXCMMJ30MEE33mytg4xy9pZePD0Z+ezH8pJE6wzhaqJWdkyGg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 18:30:23 +0100
+Subject: [Buildroot] [PATCH] openpgm: Blacklist Blackfin ADI 2014R1
+ toolchain
+In-Reply-To: <54FC7C44.1040707@openwide.fr>
+References: <1425754315-524-1-git-send-email-romain.naour@openwide.fr>
+ <20150308085356.11aae236@free-electrons.com>
+ <54FC7C44.1040707@openwide.fr>
+Message-ID: <20150308183023.06960971@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Dear Romain Naour,
 
-On Sun, Mar 8, 2015 at 12:48 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Samuel,
->
-> On Sun, Mar 08, 2015 at 12:26:03PM +0100, Samuel Martin wrote:
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>
->> ---
->> changes v1->v2:
->> - rebase
->> ---
->>  package/avrdude/avrdude.mk | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
->> index 03d6490..a4e0ebd 100644
->> --- a/package/avrdude/avrdude.mk
->> +++ b/package/avrdude/avrdude.mk
->> @@ -17,8 +17,8 @@ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
->>  AVRDUDE_LICENSE = GPLv2+
->>  AVRDUDE_LICENSE_FILES = avrdude/COPYING
->>
->> -ifeq ($(BR2_PACKAGE_LIBFTDI),y)
->> -AVRDUDE_DEPENDENCIES += libftdi
->> +ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
->> +AVRDUDE_DEPENDENCIES += libftdi1
->
-> How do you tell avrdude to link with libftdi1 and not libftdi when both are
-> built? The same question goes for openocd.
+On Sun, 08 Mar 2015 17:43:48 +0100, Romain Naour wrote:
 
-Both avrdude and openocd first check for libftdi1, and use it if any,
-otherwise check for libftdi.
-So, unless I'm missing something this is ok; but that's true I forgot
-to mention this point in the commit log. :-/
+> > Also, at some point, we will need to really on the ARCH_HAS_ATOMICS
+> > stuff for this.
+> really -> rely
 
-Regards,
+Right. But it's not a commit log, so do we care about typos ? :-)
 
+> You mean BR2_ARCH_HAS_ATOMICS ?
+> But it's set by default for bfin configs.
+
+Yes. Back when we introduced BR2_ARCH_HAS_ATOMICS, but wondered whether
+it should be BR2_ARCH_HAS_ATOMICS or BR2_TOOLCHAIN_HAS_ATOMICS, i.e
+whether we would have the case of an architecture that does support
+atomic intrinsics, but has certain toolchain versions for this
+architecture that do not.
+
+I don't remember if we carefully check whether Blackfin has atomic
+intrinsics or not.
+
+> config BR2_ARCH_HAS_ATOMICS
+>   	# The following toolchains lack required compiler intrinsics
+> 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+>   	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+>   	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+> 	default y
+
+Nope. We first need to find out whether the Blackfin architecture has
+what's needed to provide atomic intrinsics. Depending on that, we'll
+now if it's a toolchain limitation or not.
+
+Best regards,
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
