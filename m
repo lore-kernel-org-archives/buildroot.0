@@ -1,78 +1,73 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  8 Mar 2015 13:01:23 +0100
-Subject: [Buildroot] [PATCH 1/2] package/jsoncpp: new package
-Message-ID: <1425816084-5764-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun,  8 Mar 2015 13:01:24 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tinyxml2: new package
+In-Reply-To: <1425816084-5764-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1425816084-5764-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1425816084-5764-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for upcoming Kodi pctv/filmon PVR packages:
-
-https://github.com/kodi-pvr/pvr.pctv/blob/master/CMakeLists.txt#L11
-https://github.com/kodi-pvr/pvr.filmon/blob/master/CMakeLists.txt#L11
+Required for upcoming kodi-pvr-dvblink package:
+https://github.com/kodi-pvr/pvr.dvblink/blob/master/CMakeLists.txt#L11
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in          |    1 +
- package/jsoncpp/Config.in  |   13 +++++++++++++
- package/jsoncpp/jsoncpp.mk |   16 ++++++++++++++++
- 3 files changed, 30 insertions(+)
- create mode 100644 package/jsoncpp/Config.in
- create mode 100644 package/jsoncpp/jsoncpp.mk
+ package/Config.in            |    1 +
+ package/tinyxml2/Config.in   |   11 +++++++++++
+ package/tinyxml2/tinyxml2.mk |   13 +++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/tinyxml2/Config.in
+ create mode 100644 package/tinyxml2/tinyxml2.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 734b85d..5b4b639 100644
+index 5b4b639..6800027 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -805,6 +805,7 @@ menu "JSON/XML"
- 	source "package/jansson/Config.in"
- 	source "package/json-c/Config.in"
- 	source "package/json-glib/Config.in"
-+	source "package/jsoncpp/Config.in"
- 	source "package/libjson/Config.in"
- 	source "package/libroxml/Config.in"
- 	source "package/libxml2/Config.in"
-diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
+@@ -816,6 +816,7 @@ menu "JSON/XML"
+ 	source "package/mxml/Config.in"
+ 	source "package/rapidjson/Config.in"
+ 	source "package/tinyxml/Config.in"
++	source "package/tinyxml2/Config.in"
+ 	source "package/xerces/Config.in"
+ 	source "package/yajl/Config.in"
+ 	source "package/yaml-cpp/Config.in"
+diff --git a/package/tinyxml2/Config.in b/package/tinyxml2/Config.in
 new file mode 100644
-index 0000000..19a901e
+index 0000000..25bc594
 --- /dev/null
-+++ b/package/jsoncpp/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_JSONCPP
++++ b/package/tinyxml2/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_TINYXML2
++	bool "tinyxml2"
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	bool "jsoncpp"
 +	help
-+	  JsonCpp is a C++ library that allows manipulating JSON values,
-+	  including serialization and deserialization to and from strings.
-+	  It can also preserve existing comment in unserialization/serialization
-+	  steps, making it a convenient format to store user input files.
++	  TinyXML-2 is a simple, small, efficient, C++ XML parser that can be
++	  easily integrating into other programs.
 +
-+	  https://github.com/open-source-parsers/jsoncpp
++	  http://www.grinninglizard.com/tinyxml2/index.html
 +
-+comment "jsoncpp needs a toolchain w/ C++"
++comment "tinyxml2 needs a toolchain w/ C++"
 +	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
 new file mode 100644
-index 0000000..e0646f5
+index 0000000..370049b
 --- /dev/null
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -0,0 +1,16 @@
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# jsoncpp
++# tinyxml2
 +#
 +################################################################################
 +
-+JSONCPP_VERSION = 1.5.4
-+JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
-+JSONCPP_LICENSE = MIT
-+JSONCPP_LICENSE_FILES = LICENSE
-+JSONCPP_INSTALL_STAGING = YES
-+
-+JSONCPP_CONF_OPTS += \
-+	-DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF
++TINYXML2_VERSION = 2.2.0
++TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
++TINYXML2_LICENSE = zlib
++TINYXML2_LICENSE_FILES = readme.md
++TINYXML2_INSTALL_STAGING = YES
 +
 +$(eval $(cmake-package))
 -- 
