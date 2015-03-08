@@ -1,54 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Mar 2015 08:46:36 +0100
-Subject: [Buildroot] [PATCH 4/5] package/efl/libevas: Switch to giflib
-In-Reply-To: <CAHkwnC9VfqeHc8SGqwJJu777npQ7brMi=B=Ck6rv6CQUyTHB2Q@mail.gmail.com>
-References: <1422300260-5361-1-git-send-email-bernd.kuhls@t-online.de>
- <1422300260-5361-4-git-send-email-bernd.kuhls@t-online.de>
- <CAHkwnC-cVh1fKVKyR=RhWv+tQgRVeQomt0dL1Z0TW_cbnyQ_+w@mail.gmail.com>
- <20150307173234.57c8bf4f@free-electrons.com>
- <CAHkwnC_PjANbN1MN7uXUq2wBjaR-Z62KuWeE3bMFrJ-7oWXBww@mail.gmail.com>
- <20150308081520.1a6e9fc7@free-electrons.com>
- <CAHkwnC9VfqeHc8SGqwJJu777npQ7brMi=B=Ck6rv6CQUyTHB2Q@mail.gmail.com>
-Message-ID: <20150308084636.06f56bb6@free-electrons.com>
+Date: Sun, 8 Mar 2015 08:47:24 +0100
+Subject: [Buildroot] [git commit] linux: bump default to version 3.19.1
+Message-ID: <20150308074731.4D4BC804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+commit: http://git.buildroot.net/buildroot/commit/?id=23fed97a569eec2af9cf0294ec636595cdb1be45
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 8 Mar 2015 08:28:44 +0100, Fabio Porcedda wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> I understand that is a legacy repository but because you talked about
-> to send a patch upstream i was trying to understand if there is any
-> chance that the patch will be accepted.
-> 
-> So when you have talked about to send the patch upstream didn't know
-> about the legacy status of this repository?
-
-Well, when you want to send a patch upstream, then obviously you have
-to send the patch based on the latest upstream version. Which generally
-involves bumping the Buildroot package to use the latest stable version
-from upstream.
-
-In the case of EFL, it indeed involves quite a bit of work, because all
-the libraries that used to be split in separate tarballs are now
-provided as one single tarball by upstream.
-
-See https://phab.enlightenment.org/phame/live/3/post/efl_1_8/ :
-
-"""
-We have merged Ecore, Edje, Eet, Eeze, Efreet, Eina, Eio, Embryo,
-Emotion, Ethumb, Evas and Evil into a single EFL package (as you can
-see above these are no longer there, but inside the EFL distribution).
-We also added in Eldbus, EPhysics, and Escape.
-"""
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 36d7691..af22ab4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.19"
++	bool "3.19.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.19" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.19.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
