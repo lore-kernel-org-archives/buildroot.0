@@ -1,53 +1,82 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun,  8 Mar 2015 22:37:09 +0100
-Subject: [Buildroot] [PATCH 3/3] Added support for PHP/SQLite3 (non PDO).
-In-Reply-To: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
-References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1425850629-14725-3-git-send-email-mc5686@mclink.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Mar 2015 23:02:16 +0100
+Subject: [Buildroot] [git commit] package/dosfstools: add missing symlinks
+Message-ID: <20150308220249.D05B88080B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=cef6a787cad4d5417b8672c8fd4c200bf29655ac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Install alternative symlinks for dosfstools mkfs.fat, fsck.fat and
+fatlabel. Those symlinks are generally installed by make install, but
+buildroot does not use make install for dosfstools, but symlinks should
+be installed anyway.
+
+[Thomas: rewrite the installation logic to use make style code rather
+than shell code.]
+
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/Config.ext |    6 ++++++
- package/php/php.mk     |    4 ++++
- 2 files changed, 10 insertions(+)
+ package/dosfstools/dosfstools.mk |   37 +++++++++++++++++++++++++++----------
+ 1 files changed, 27 insertions(+), 10 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index daf16c7..57685b2 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -120,6 +120,12 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
- 	help
- 	  MySQL Improved extension support
- 
-+config BR2_PACKAGE_PHP_EXT_SQLITE
-+	bool "SQLite3"
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  SQLite3 support
-+
- config BR2_PACKAGE_PHP_EXT_PDO
- 	bool "PDO"
- 	help
-diff --git a/package/php/php.mk b/package/php/php.mk
-index dd52508..b5daeb6 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -154,6 +154,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
- 	PHP_CONF_OPTS += --with-mysqli=$(STAGING_DIR)/usr/bin/mysql_config
- 	PHP_DEPENDENCIES += mysql
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index a9d8392..88c4fe8 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -20,23 +20,40 @@ DOSFSTOOLS_DEPENDENCIES += libiconv
+ DOSFSTOOLS_LDLIBS += -liconv
  endif
-+ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
-+	PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
-+	PHP_DEPENDENCIES += sqlite
+ 
+-FATLABEL_BINARY = fatlabel
+-FSCK_FAT_BINARY = fsck.fat
+-MKFS_FAT_BINARY = mkfs.fat
+-
+ define DOSFSTOOLS_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(DOSFSTOOLS_CFLAGS)" LDLIBS="$(DOSFSTOOLS_LDLIBS)" -C $(@D)
+ endef
+ 
+-DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FATLABEL)+=$(FATLABEL_BINARY)
+-DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT)+=$(FSCK_FAT_BINARY)
+-DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT)+=$(MKFS_FAT_BINARY)
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
++define DOSFSTOOLS_INSTALL_FATLABEL
++	$(INSTALL) -D -m 755 $(@D)/fatlabel $(TARGET_DIR)/sbin/fatlabel
++	ln -sf fatlabel $(TARGET_DIR)/sbin/dosfslabel
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),y)
++define DOSFSTOOLS_INSTALL_FSCK_FAT
++	$(INSTALL) -D -m 755 $(@D)/fsck.fat $(TARGET_DIR)/sbin/fsck.fat
++	ln -fs fsck.fat $(TARGET_DIR)/sbin/dosfsck
++	ln -fs fsck.fat $(TARGET_DIR)/sbin/fsck.msdos
++	ln -fs fsck.fat $(TARGET_DIR)/sbin/fsck.vfat
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),y)
++define DOSFSTOOLS_INSTALL_MKFS_FAT
++	$(INSTALL) -D -m 755 $(@D)/mkfs.fat $(TARGET_DIR)/sbin/mkfs.fat
++	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkdosfs
++	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkfs.msdos
++	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkfs.vfat
++endef
 +endif
  
- ### PDO
- ifeq ($(BR2_PACKAGE_PHP_EXT_PDO),y)
--- 
-1.7.10.4
+ define DOSFSTOOLS_INSTALL_TARGET_CMDS
+-	test -z "$(DOSFSTOOLS_INSTALL_BIN_FILES_y)" || \
+-	$(INSTALL) -m 755 $(addprefix $(@D)/,$(DOSFSTOOLS_INSTALL_BIN_FILES_y)) \
+-		$(TARGET_DIR)/sbin/
++	$(DOSFSTOOLS_INSTALL_FATLABEL)
++	$(DOSFSTOOLS_INSTALL_FSCK_FAT)
++	$(DOSFSTOOLS_INSTALL_MKFS_FAT)
+ endef
+ 
+ define HOST_DOSFSTOOLS_BUILD_CMDS
