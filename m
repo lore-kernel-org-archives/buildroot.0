@@ -1,26 +1,33 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon,  9 Mar 2015 15:30:14 +0100
-Subject: [Buildroot] [PATCH 1/1] network-manager: add hash file
-Message-ID: <1425911414-31038-1-git-send-email-petr.vorel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Mar 2015 15:32:36 +0100
+Subject: [Buildroot] [PATCH V2] python: spidev: add spidev plugin to
+ manage spi from userspace
+In-Reply-To: <CAOf5uwmuH67Si+yEO9wz_E=PxUxN=TioxLcr58pfD2vf4U3xgA@mail.gmail.com>
+References: <1425803293-25109-1-git-send-email-michael@amarulasolutions.com>
+ <20150309143321.4355fa64@free-electrons.com>
+ <CAOf5uwmuH67Si+yEO9wz_E=PxUxN=TioxLcr58pfD2vf4U3xgA@mail.gmail.com>
+Message-ID: <20150309153236.0abb8476@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/network-manager/network-manager.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/network-manager/network-manager.hash
+Dear Michael Trimarchi,
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-new file mode 100644
-index 0000000..07513a9
---- /dev/null
-+++ b/package/network-manager/network-manager.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
+On Mon, 9 Mar 2015 14:53:17 +0100, Michael Trimarchi wrote:
+
+> Sorry, I will do better next time
+
+No problem at all. Your contributions are very welcome. I don't mind
+fixing minor issues like that one, especially when they are made by new
+contributors. There is obviously a learning curve to get all the
+details.
+
+Thanks again!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
