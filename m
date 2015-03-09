@@ -1,64 +1,26 @@
-From: Michael Trimarchi <michael@amarulasolutions.com>
-Date: Mon, 9 Mar 2015 14:53:17 +0100
-Subject: [Buildroot] [PATCH V2] python: spidev: add spidev plugin to
- manage spi from userspace
-In-Reply-To: <20150309143321.4355fa64@free-electrons.com>
-References: <1425803293-25109-1-git-send-email-michael@amarulasolutions.com>
- <20150309143321.4355fa64@free-electrons.com>
-Message-ID: <CAOf5uwmuH67Si+yEO9wz_E=PxUxN=TioxLcr58pfD2vf4U3xgA@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon,  9 Mar 2015 15:30:14 +0100
+Subject: [Buildroot] [PATCH 1/1] network-manager: add hash file
+Message-ID: <1425911414-31038-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/network-manager/network-manager.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/network-manager/network-manager.hash
 
-On Mon, Mar 9, 2015 at 2:33 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Michael Trimarchi,
->
-> On Sun,  8 Mar 2015 09:28:13 +0100, Michael Trimarchi wrote:
->
->> +PYTHON_SPIDEV_VERSION = 3.0
->> +PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
->> +PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
->> +PYTHON_SPIDEV_SETUP_TYPE = distutils
->> +PYTHON_SPIDEV_LICENSE = GPLv2
->> +PYTHON_SPIDEV_LICENSE_FILES = LICENSE
->
-> There is no file named "LICENSE" in the source code of python-spidev.
-> The file is named LICENSE.md.
->
-> Also, the commit title for new package should normally be:
->
->         <pkgname>: new package
->
-> so in this case:
->
->         python-spidev: new package
->
-> I've fixed those issues (especially the license file one), and applied
-> your patch.
->
-
-Sorry, I will do better next time
-
-Michael
-
-
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+new file mode 100644
+index 0000000..07513a9
+--- /dev/null
++++ b/package/network-manager/network-manager.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+2.1.4
