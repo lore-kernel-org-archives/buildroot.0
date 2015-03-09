@@ -1,95 +1,63 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  9 Mar 2015 22:26:24 +0100
-Subject: [Buildroot] [PATCH v1 2/2] libevdev: fix shared only build
-In-Reply-To: <1425936384-31801-1-git-send-email-ps.report@gmx.net>
-References: <1425936384-31801-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1425936384-31801-2-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 9 Mar 2015 22:27:24 +0100
+Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
+ new package
+In-Reply-To: <54FDF3C5.3010607@free.fr>
+References: <20150221234636.50616706@free-electrons.com>
+ <20150221225836.GB4246@free.fr>
+ <20150223124136.5fb4ea97@nserafini-N550JK>
+ <54F7898A.6090601@free.fr> <20150306231558.GE4220@free.fr>
+ <20150307090354.60c844a3@free-electrons.com>
+ <20150307130141.GB4186@free.fr>
+ <20150307141903.4a4c3b4f@free-electrons.com>
+ <20150307150424.GF4186@free.fr> <54FDF3C5.3010607@free.fr>
+Message-ID: <20150309212724.GD4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do not build test-static-link in case of shared only build,
-fixes the following compile failure:
+Laurent, All,
 
-libtool: link: [..]/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -o test-static-link test_static_link-test-link.o  ../libevdev/.libs/libevdev.so -Wl,-rpath -Wl,[...]/build/libevdev-1.4/libevdev/.libs
-[...]/arm-buildroot-linux-uclibcgnueabi/bin/ld: attempted static link of dynamic object `../libevdev/.libs/libevdev.so'
-collect2: error: ld returned 1 exit status
-Makefile:719: recipe for target 'test-static-link' failed
+On 2015-03-09 20:25 +0100, Laurent Colloud spake thusly:
+> On 07/03/15 16:04, Yann E. MORIN wrote:
+> >Thomas, All,
+> >
+> >On 2015-03-07 14:19 +0100, Thomas Petazzoni spake thusly:
+> >>On Sat, 7 Mar 2015 14:01:42 +0100, Yann E. MORIN wrote:
+> >>>Given the feedback from Bernd, I'll see at adding such a version choice.
+> >>>Let's say we go this route:
+> >>>   - add a version choice for 1.14.7 (for tegra-binaries) and 1.17.1 (the
+> >>>     current version), defaulting to 17.1;
+> >>>   - add hidden symbols for the driver ABI supported by each version;
+> >>>   - make nvidia-tegra23 depend on the appropriate ABI symbol.
+> >>Seems OK to me. Though it would be good if someone can actually test
+> >>the patches. I don't know when I'll have the time to test on the Tegra
+> >>3 platform.
+> >Well, we can at least go up to the point where it builds. From there,
+> >you can pick it up when you are available for run-time testing.
+> Sounds good to me too.
+> I confirm that I am using Buildroot (v2014.08) and that I just hand-picked
+> the version of X.org just like Bernd did and that all X libraries built
+> correctly. Hopefully this is a viable solution without entering the X.org
+> server <-> X libraries dependency nightmare that Thomas mentioned
+> previously.
+> I hope to find some time to test the patch once it's rolled out.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...t-static-link-in-case-of-shared-only-buil.patch | 48 ++++++++++++++++++++++
- package/libevdev/libevdev.mk                       |  3 ++
- 2 files changed, 51 insertions(+)
- create mode 100644 package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch
+I have a series locally that implements just that idea. It's only
+patches for now, I have to test them.
 
-diff --git a/package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch b/package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch
-new file mode 100644
-index 0000000..c1c2044
---- /dev/null
-+++ b/package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch
-@@ -0,0 +1,48 @@
-+From 8cef0e4a9e0412db6fa37f5fae30efa57e94136f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 9 Mar 2015 22:01:52 +0100
-+Subject: [PATCH] Disable test-static-link in case of shared only build.
-+
-+Fixes the following buildroot compile failure:
-+
-+libtool: link: [..]/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -o test-static-link test_static_link-test-link.o  ../libevdev/.libs/libevdev.so -Wl,-rpath -Wl,[...]/build/libevdev-1.4/libevdev/.libs
-+[...]/arm-buildroot-linux-uclibcgnueabi/bin/ld: attempted static link of dynamic object `../libevdev/.libs/libevdev.so'
-+collect2: error: ld returned 1 exit status
-+Makefile:719: recipe for target 'test-static-link' failed
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac     | 1 +
-+ test/Makefile.am | 7 ++++++-
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c25b36f..be2e157 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -75,6 +75,7 @@ else
-+ fi
-+ AM_CONDITIONAL(HAVE_VALGRIND, [test "x$VALGRIND" != "x"])
-+ AM_CONDITIONAL(ENABLE_RUNTIME_TESTS, [test "x$HAVE_CHECK" = "xyes"])
-++AM_CONDITIONAL(ENABLE_STATIC_LINK_TEST, [test "x$enable_static" = "xyes"])
-+ 
-+ with_cflags=""
-+ if test "x$GCC" = "xyes"; then
-+diff --git a/test/Makefile.am b/test/Makefile.am
-+index ab4752e..1fe1e7e 100644
-+--- a/test/Makefile.am
-++++ b/test/Makefile.am
-+@@ -1,4 +1,9 @@
-+-build_tests = test-compile-pedantic test-link test-static-link
-++build_tests = test-compile-pedantic test-link
-++
-++if ENABLE_STATIC_LINK_TEST
-++build_tests += test-static-link
-++endif
-++
-+ noinst_PROGRAMS = $(build_tests)
-+ 
-+ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_builddir)/libevdev
-+-- 
-+2.1.4
-+
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 52b2ac3..c4f0cbd 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -15,4 +15,7 @@ LIBEVDEV_DEPENDENCIES = host-pkgconf
- 
- LIBEVDEV_INSTALL_STAGING = YES
- 
-+# patched configure.ac
-+LIBEVDEV_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+Hopefully, I can do that by the end of the week. At worse, I have next
+week off, so I will be able to work on it.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
