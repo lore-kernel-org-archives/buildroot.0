@@ -1,36 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Mar 2015 22:06:00 +0100
-Subject: [Buildroot] [PATCH] fs/common: build host-xz when xz
-	compression is used
-In-Reply-To: <02D91C4C-A869-470B-A9CC-6C56DDEA03A4@gmail.com> (Thomas De
- Schampheleire's message of "Mon, 09 Mar 2015 20:44:01 +0100")
-References: <1425893653-9577-1-git-send-email-patrickdepinguin@gmail.com>
- <87r3syqpjn.fsf@dell.be.48ers.dk>
- <02D91C4C-A869-470B-A9CC-6C56DDEA03A4@gmail.com>
-Message-ID: <87mw3lridj.fsf@dell.be.48ers.dk>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  9 Mar 2015 16:09:33 -0500
+Subject: [Buildroot] [PATCH 1/1] ustr: fix license name
+Message-ID: <1425935373-43108-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/ustr/ustr.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi,
-
- > On March 9, 2015 2:16:28 PM CET, Peter Korsgaard <peter@korsgaard.com> wrote:
-
->> Isn't that already handled by support/dependencies/check-host-xzcat.mk?
-
- > No, that file handles xzcat, the decompression tool, but in fs/ we use
- >  compression (xz).
-
-While that is true, have you ever seen a distribution that provides one
-but not the other? They come from the same upstream package.
-
-And if there would be such an (odd) distribution somewhere we could
-probably extend check-host-xzcat.mk to check for both with little effort.
-
+diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+index ac1fa05..c2a819f 100644
+--- a/package/ustr/ustr.mk
++++ b/package/ustr/ustr.mk
+@@ -8,7 +8,7 @@ USTR_VERSION = 1.0.4
+ USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
+ USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)/
+ USTR_LICENSE = BSD-2c MIT LGPLv2+
+-USTR_LICENSE_FILES = LICENCE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
++USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
+ 
+ USTR_INSTALL_STAGING = YES
+ 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.9.1
