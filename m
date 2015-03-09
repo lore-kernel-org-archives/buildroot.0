@@ -1,53 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 17:39:46 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: install systemd service
- files
-In-Reply-To: <CANPyyuP2hrGF=UwKEY=NbAZDmyXdaVzd_osYvncbZbM+12-vvA@mail.gmail.com>
-References: <1425411738-3369-1-git-send-email-mike@mikebwilliams.com>
- <20150304213345.6c41d0e8@free-electrons.com>
- <CANPyyuP2hrGF=UwKEY=NbAZDmyXdaVzd_osYvncbZbM+12-vvA@mail.gmail.com>
-Message-ID: <20150309173946.75079320@free-electrons.com>
+From: Jan Heylen <heyleke@gmail.com>
+Date: Mon,  9 Mar 2015 18:11:07 +0100
+Subject: [Buildroot] [PATCH v2 1/1] docs/manual: add host package
+	documentation
+Message-ID: <1425921067-4130-1-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
++ rearrange the structure a bit by adding a new paragraph for the Config
+files
 
-On Mon, 9 Mar 2015 12:08:48 -0400, Mike Williams wrote:
+Signed-off-by: Jan Heylen <heyleke@gmail.com>
 
-> > Also, and sorry for being so ignorant about systemd, but most of our
-> > other packages set up a bunch of symbolic links when install systemd
-> > unit files. I'm surprised to not see the same thing here. Can you give
-> > some details about this?
-> 
-> Those symlinks enable starting those services during boot. These
-> services shouldn't be enabled by default, so no symlinks are
-> generated.
+---
+Changes v1 -> v2:
+* rewritten some sentences (suggested by Thomas)
+* reorganised the Config files paragraphs a bit
+---
+ docs/manual/adding-packages-directory.txt | 50 ++++++++++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 4 deletions(-)
 
-Ok, but right now our policy is that services select in the Buildroot
-configuration should be enabled at startup by default.
-
-I know this is not the proposal you made in
-http://lists.busybox.net/pipermail/buildroot/2015-March/121448.html,
-but the proposal you made on this specific topic is going completely in
-the opposite direction of what Buildroot is doing right now.
-
-The reason for the current policy is that we want a simple "out of the
-box" experience: you enable lighttpd or minidlna, you build, you boot
-the system, and those services start by default, with a sane minimal
-configuration. It's kind of the principle of "least surprise" I would
-say.
-
-Then if you want some services to have a more complex configuration, or
-to not start at boot time, it's up to you to do what's needed in your
-post-build script or rootfs overlay.
-
-Best regards,
-
-Thomas
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 8a88282..389c763 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -11,12 +11,18 @@ Some packages have been grouped by topic in a sub-directory:
+ one of these categories, then create your package directory in these.
+ New subdirectories are discouraged, however.
+ 
++=== Config files
+ 
+-=== +Config.in+ file
++For the package to be displayed in the configuration tool, you need to
++create a Config file in your package directory. There are two types:
+++Config.in+ and +Config.in.host+.
+ 
+-Then, create a file named +Config.in+. This file will contain the
+-option descriptions related to our +libfoo+ software that will be used
+-and displayed in the configuration tool. It should basically contain:
++==== +Config.in+ file
++
++For packages used on the target, create a file named +Config.in+. This
++file will contain the option descriptions related to our +libfoo+ software
++that will be used and displayed in the configuration tool. It should basically
++contain:
+ 
+ ---------------------------
+ config BR2_PACKAGE_LIBFOO
+@@ -49,6 +55,42 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
+ 
++
++==== +Config.in.host+ file
++
++Some packages also need to be built for the host system. There are two
++options here:
++
++* The host package is only required to satisfy build-time
++  dependencies of one or more target packages. In this case, add
++  +host-foo+ to the target package's +BAR_DEPENDENCIES+ variable. No
++  +Config.in.host+ file should be created.
++
++* The host package should be explicitly selectable by the user from
++  the configuration menu. In this case, create a +Config.in.host+ file
++  for that host package:
++	
++---------------------------
++config BR2_PACKAGE_HOST_FOO
++	bool "host foo"
++	help
++	  This is a comment that explains what foo for the host is.
++
++	  http://foosoftware.org/foo/
++---------------------------
++
++The same coding style and options as for the +Config.in+ file are valid.
++
++Finally you have to add your new +libfoo/Config.in.host+ to
+++package/Config.in.host+. The files included there are 'sorted alphabetically'
++and are 'NOT' supposed to contain anything but the 'bare' name of the package.
++
++--------------------------
++source "package/foo/Config.in.host"
++--------------------------
++
++The host package will then be available from the +Host utilities+ menu.
++
+ [[depends-on-vs-select]]
+ ==== Choosing +depends on+ or +select+
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
