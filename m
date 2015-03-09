@@ -1,26 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Mar 2015 14:16:28 +0100
-Subject: [Buildroot] [PATCH] fs/common: build host-xz when xz
-	compression is used
-In-Reply-To: <1425893653-9577-1-git-send-email-patrickdepinguin@gmail.com>
- (Thomas De Schampheleire's message of "Mon, 9 Mar 2015 10:34:13
- +0100")
-References: <1425893653-9577-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <87r3syqpjn.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Mar 2015 14:22:26 +0100
+Subject: [Buildroot] [git commit] python-spidev: new package
+Message-ID: <20150309132342.1F8938046C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6a3a9784db170ec05b300f228cf8a4bc48d838ec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > When a filesystem image is xz-compressed, the XZ variable is used to refer
- > to the xz compression tool, but it is not necessarily available. Add a
- > proper dependency to fix that.
+Python module for interfacing with SPI devices from user space via the
+spidev linux kernel driver.
 
-Isn't that already handled by support/dependencies/check-host-xzcat.mk?
+[Thomas: fix <pkg>_LICENSE_FILES.]
 
--- 
-Bye, Peter Korsgaard
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |    1 +
+ package/python-spidev/Config.in        |    7 +++++++
+ package/python-spidev/python-spidev.mk |   14 ++++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index cab9382..a37e519 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -577,6 +577,7 @@ menu "external python modules"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-six/Config.in"
++	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-twisted/Config.in"
+diff --git a/package/python-spidev/Config.in b/package/python-spidev/Config.in
+new file mode 100644
+index 0000000..8540d55
+--- /dev/null
++++ b/package/python-spidev/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SPIDEV
++	bool "python-spidev"
++	help
++	  Python module for interfacing with SPI devices from user
++	  space via the spidev linux kernel driver.
++
++	  https://pypi.python.org/pypi/spidev
+diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
+new file mode 100644
+index 0000000..14103f3
+--- /dev/null
++++ b/package/python-spidev/python-spidev.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-spidev
++#
++################################################################################
++
++PYTHON_SPIDEV_VERSION = 3.0
++PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
++PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
++PYTHON_SPIDEV_SETUP_TYPE = distutils
++PYTHON_SPIDEV_LICENSE = GPLv2
++PYTHON_SPIDEV_LICENSE_FILES = LICENSE.md
++
++$(eval $(python-package))
