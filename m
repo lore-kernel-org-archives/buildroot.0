@@ -1,43 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 9 Mar 2015 13:45:25 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] eudev: fix dependency on kernel
- headers version
-In-Reply-To: <1425901067-27699-1-git-send-email-swexru@gmail.com>
-References: <1425901067-27699-1-git-send-email-swexru@gmail.com>
-Message-ID: <20150309114525.GI2518@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 09 Mar 2015 09:26:59 -0300
+Subject: [Buildroot] [PATCH 3/3] Added support for PHP/SQLite3 (non PDO).
+In-Reply-To: <1425850629-14725-3-git-send-email-mc5686@mclink.it>
+References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
+ <1425850629-14725-3-git-send-email-mc5686@mclink.it>
+Message-ID: <54FD9193.40108@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+On 03/08/2015 06:37 PM, Mauro Condarelli wrote:
 
-On Mon, Mar 09, 2015 at 02:37:47PM +0300, Alexey Mednyy wrote:
-> a/package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch 
-> b/package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch
-> new file mode 100644
-> index 0000000..a749b08
-> --- /dev/null
-> +++ b/package/eudev/0001-configure.ac-don-t-die-on-missing-linux-btrfs.h-fixe.patch
-> @@ -0,0 +1,37 @@
-> +From 6740579367ddd2ce0b315863cdb92d34d1d693c7 Mon Sep 17 00:00:00 2001
-> +From: "Anthony G. Basile" <blueness@gentoo.org>
-> +Date: Sun, 16 Nov 2014 13:40:43 -0500
-> +Subject: [PATCH] configure.ac: don't die on missing linux/btrfs.h, fixes issue
-> + #100
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/php/Config.ext |    6 ++++++
+>  package/php/php.mk     |    4 ++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/package/php/Config.ext b/package/php/Config.ext
+> index daf16c7..57685b2 100644
+> --- a/package/php/Config.ext
+> +++ b/package/php/Config.ext
+> @@ -120,6 +120,12 @@ config BR2_PACKAGE_PHP_EXT_MYSQLI
+>  	help
+>  	  MySQL Improved extension support
+>  
+> +config BR2_PACKAGE_PHP_EXT_SQLITE
+> +	bool "SQLite3"
+> +	select BR2_PACKAGE_SQLITE
+> +	help
+> +	  SQLite3 support
 > +
-> +Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
 
-Since this patch seems to be backported from upstream, its description should 
-contain a reference to upstream. In this case saying something like "upstream 
-commit 6740579367d" should be enough.
+We normally sort entries in menu entries (inside categories of course).
+But given that PDO is a distinct class of database support within PHP:
 
-Sorry for not mentioning it previously.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
