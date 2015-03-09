@@ -1,64 +1,67 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Mon, 9 Mar 2015 12:25:20 +0100
-Subject: [Buildroot] [PATCH v4 3/3] GNURadio: new package
-In-Reply-To: <20150309113057.6076ebe5@free-electrons.com>
-References: <1425553401-27461-1-git-send-email-gwenj@trabucayre.com>
- <1425553401-27461-3-git-send-email-gwenj@trabucayre.com>
- <CAHXCMM+PYBAiuFXxBOHfXghPBW7x8P6ha_w1qb9eEe2wt_1WrQ@mail.gmail.com>
- <20150309112223.647f7c5a@x230.trabucayre.com>
- <20150309113057.6076ebe5@free-electrons.com>
-Message-ID: <20150309122520.7c9bfdc9@x230.trabucayre.com>
+From: Alexey Mednyy <swexru@gmail.com>
+Date: Mon, 09 Mar 2015 14:36:39 +0300
+Subject: [Buildroot] [PATCH 1/1 v2] eudev: fix dependency on kernel
+ headers version
+In-Reply-To: <20150309111733.GH2518@tarshish>
+References: <1425899411-30086-1-git-send-email-swexru@gmail.com>
+ <20150309111733.GH2518@tarshish>
+Message-ID: <54FD85C7.6040609@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 9 Mar 2015 11:30:57 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Hi Baruch,
+sorry need more experience with git.
+git reset --soft HEAD~1
+gives files both in Changes to be commited and Changes not staged for
+commit.
+Now I know need to git add those files again.
+Patch v3 on the way.
 
-> Hello,
-> 
-> (Please try to strip useless parts of an e-mail when replying, thanks!).
-> 
-Sorry
-> On Mon, 9 Mar 2015 11:22:23 +0100, gwenhael.goavec wrote:
-> 
-> > > > +GNURADIO_CONF_OPTS += -DENABLE_DEFAULT=OFF -DENABLE_TESTING=OFF
-> > > > +GNURADIO_CONF_OPTS += -DENABLE_VOLK=ON -DENABLE_GNURADIO_RUNTIME=ON
-> > > > +ifeq ($(BR2_arm),y)
-> > > > +ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_ARM_EABIHF),yy)
-> > > > +GNURADIO_MTUNE = $(call qstrip,$(BR2_GCC_TARGET_CPU))
-> > > > +GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="-mfloat-abi=hard -mfpu=neon -march=armv7-a -mtune=$(GNURADIO_MTUNE)"
-> > > Hum... Dubious! Enforcing these target flags won't play very well with
-> > > the toolchain wrapper!
-> > > Also, how about aarch64 targets?
-> > >
-> > Volk seems buggy on arm with hf, consequently this Work around is mandatory to
-> > avoid build failure... I'm agree it's not really good but it's the recommended
-> > solution... 
-> 
-> Can you be more specific about this? What bug?
-> 
-> Because what you're doing here with -mfloat-abi=hard is *precisely*
-> using EABIhf.
-> 
+Thanks.
 
-If I use -Dhave_mfpu_neon=1 or nothing in fact I have this :
+On 03/09/2015 02:17 PM, Baruch Siach wrote:
+> Hi Alexey,
+>
+> On Mon, Mar 09, 2015 at 02:10:11PM +0300, Alexey Mednyy wrote:
+>> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+>> index 2221966..eb266a1 100644
+>> --- a/package/eudev/eudev.mk
+>> +++ b/package/eudev/eudev.mk
+>> @@ -10,6 +10,7 @@ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+>>  EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+>>  EUDEV_LICENSE_FILES = COPYING
+>>  EUDEV_INSTALL_STAGING = YES
+>> +EUDEV_AUTORECONF = YES
+> Please add a comment here saying that we are patching configure.ac.
+>
+>>  # mq_getattr is in librt
+>>  EUDEV_CONF_ENV += LIBS=-lrt
+>> diff --git a/system/Config.in b/system/Config.in
+>> index 4d1c3d2..9e2b13f 100644
+>> --- a/system/Config.in
+>> +++ b/system/Config.in
+>> @@ -128,13 +128,12 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>>  	depends on BR2_USE_WCHAR
+>>  	depends on !BR2_STATIC_LIBS
+>>  	depends on BR2_USE_MMU # eudev
+>> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>> +#	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+> Please remove this line.
+>
+>>  	select BR2_PACKAGE_EUDEV
+>>  
+>> -comment "eudev needs a toolchain w/ largefile, wchar, dynamic library, headers >= 3.9"
+>> +comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
+>>  	depends on BR2_USE_MMU
+>> -	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+>> -		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+>> +	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> baruch
+>
 
-../lib/libvolk.so.0.0.0: undefined reference to `volk_16i_max_star_horizontal_16i_neonasm' 
-../lib/libvolk.so.0.0.0: undefined reference to `volk_32fc_x2_multiply_32fc_neonasm' 
-../lib/libvolk.so.0.0.0: undefined reference to `volk_32fc_32f_dot_prod_32fc_a_neonasm' 
-../lib/libvolk.so.0.0.0: undefined reference to `volk_32f_x2_dot_prod_32f_neonasm' 
-../lib/libvolk.so.0.0.0: undefined reference to `volk_32f_x2_dot_prod_32f_neonasm_opts' 
-../lib/libvolk.so.0.0.0: undefined reference to `volk_32fc_32f_dot_prod_32fc_a_neonpipeline' 
-collect2: error: ld returned 1 exit status
-make[3]: *** [volk/apps/volk-config-info] Error 1
-
-According to [1] and [2] the only solution to compile successfully gnuradio is
-to force all flags.
-
-Gwen
-
-[1] https://gnuradio.org/redmine/issues/692#note-12
-[2] http://gnuradio.org/redmine/projects/gnuradio/wiki/Embedded#Native-Compiling
+-- 
+_________________________________
+Best regards, Mednyy Alexey.
