@@ -1,36 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 9 Mar 2015 22:15:28 +0200
-Subject: [Buildroot] [PATCH v1 1/3] postgresql: enable uclibc build
-In-Reply-To: <1425930178-16084-1-git-send-email-ps.report@gmx.net>
-References: <1425930178-16084-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150309201527.GK2518@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Mar 2015 21:15:08 +0100
+Subject: [Buildroot] [V2 2/2] graph-depends: add an option
+ --stop-on-virtual
+In-Reply-To: <CAB0FRsvxotGUKRC2q7R_JKPCajZb68X3r2qnjciehP-cqXENBg@mail.gmail.com>
+References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+ <1420295353-8065-2-git-send-email-francois.perrad@gadz.org>
+ <20150308221843.2d6fbf7d@free-electrons.com>
+ <CAB0FRsvxotGUKRC2q7R_JKPCajZb68X3r2qnjciehP-cqXENBg@mail.gmail.com>
+Message-ID: <20150309211508.39c2a0ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Dear Fran?ois Perrad,
 
-On Mon, Mar 09, 2015 at 08:42:56PM +0100, Peter Seiderer wrote:
-> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-> index 3ef5e6c..519b2a1 100644
-> --- a/package/postgresql/Config.in
-> +++ b/package/postgresql/Config.in
-> @@ -1,9 +1,5 @@
->  config BR2_PACKAGE_POSTGRESQL
->  	bool "postgresql"
-> -	# PostgreSQL does not build against uClibc with locales
-> -	# enabled, due to an uClibc bug, see
-> -	# http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html.
-> -	depends on BR2_TOOLCHAIN_USES_GLIBC
+On Mon, 9 Mar 2015 20:32:16 +0100, Fran?ois Perrad wrote:
 
-Please also remove the BR2_TOOLCHAIN_USES_GLIBC dependency from packages 
-selecting BR2_PACKAGE_POSTGRESQL.
+> I agree with you.
+> The graphs become quickly too large.
+> The current option --depth seems to be only a workaround against an
+> infinite recursion when the graph has a cycle.
 
-baruch
+Well, I don't really think --depth is meant to avoid infinite
+recursion: I don't think it's possible to have infinite recursion since
+we can't have cyclic dependencies in Buildroot.
 
+> But at this time, we haven't found the good way (or the good use
+> cases) to limit the size of the graph.
+
+I believe being able to exclude certain packages (and their dependency
+tree) would be useful.
+
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
