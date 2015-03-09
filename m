@@ -1,94 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Mar 2015 23:04:37 +0100
-Subject: [Buildroot] [git commit] libevdev: fix shared only build
-Message-ID: <20150309220857.ED8CC7FDE4@busybox.osuosl.org>
+Date: Mon, 9 Mar 2015 22:53:55 +0100
+Subject: [Buildroot] [git commit] quagga: bump to version 0.99.24.1
+Message-ID: <20150309220857.D0ACF803FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53ac9230bc72b143c804423db5ccfe7125d03e11
+commit: http://git.buildroot.net/buildroot/commit/?id=842cc81a21784d246482fdbdcec8f270e0d93972
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do not build test-static-link in case of shared only build,
-fixes the following compile failure:
+Fixes the need to autoreconf and a zebra crash.
 
-libtool: link: [..]/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -o test-static-link test_static_link-test-link.o  ../libevdev/.libs/libevdev.so -Wl,-rpath -Wl,[...]/build/libevdev-1.4/libevdev/.libs
-[...]/arm-buildroot-linux-uclibcgnueabi/bin/ld: attempted static link of dynamic object `../libevdev/.libs/libevdev.so'
-collect2: error: ld returned 1 exit status
-Makefile:719: recipe for target 'test-static-link' failed
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-static-link-in-case-of-shared-only-buil.patch |   48 ++++++++++++++++++++
- package/libevdev/libevdev.mk                       |    3 +
- 2 files changed, 51 insertions(+), 0 deletions(-)
+ package/quagga/quagga.hash |    2 +-
+ package/quagga/quagga.mk   |    4 +---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch b/package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch
-new file mode 100644
-index 0000000..c1c2044
---- /dev/null
-+++ b/package/libevdev/0001-Disable-test-static-link-in-case-of-shared-only-buil.patch
-@@ -0,0 +1,48 @@
-+From 8cef0e4a9e0412db6fa37f5fae30efa57e94136f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 9 Mar 2015 22:01:52 +0100
-+Subject: [PATCH] Disable test-static-link in case of shared only build.
-+
-+Fixes the following buildroot compile failure:
-+
-+libtool: link: [..]/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -static -o test-static-link test_static_link-test-link.o  ../libevdev/.libs/libevdev.so -Wl,-rpath -Wl,[...]/build/libevdev-1.4/libevdev/.libs
-+[...]/arm-buildroot-linux-uclibcgnueabi/bin/ld: attempted static link of dynamic object `../libevdev/.libs/libevdev.so'
-+collect2: error: ld returned 1 exit status
-+Makefile:719: recipe for target 'test-static-link' failed
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac     | 1 +
-+ test/Makefile.am | 7 ++++++-
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index c25b36f..be2e157 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -75,6 +75,7 @@ else
-+ fi
-+ AM_CONDITIONAL(HAVE_VALGRIND, [test "x$VALGRIND" != "x"])
-+ AM_CONDITIONAL(ENABLE_RUNTIME_TESTS, [test "x$HAVE_CHECK" = "xyes"])
-++AM_CONDITIONAL(ENABLE_STATIC_LINK_TEST, [test "x$enable_static" = "xyes"])
-+ 
-+ with_cflags=""
-+ if test "x$GCC" = "xyes"; then
-+diff --git a/test/Makefile.am b/test/Makefile.am
-+index ab4752e..1fe1e7e 100644
-+--- a/test/Makefile.am
-++++ b/test/Makefile.am
-+@@ -1,4 +1,9 @@
-+-build_tests = test-compile-pedantic test-link test-static-link
-++build_tests = test-compile-pedantic test-link
-++
-++if ENABLE_STATIC_LINK_TEST
-++build_tests += test-static-link
-++endif
-++
-+ noinst_PROGRAMS = $(build_tests)
-+ 
-+ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/include -I$(top_builddir)/libevdev
-+-- 
-+2.1.4
-+
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 52b2ac3..c4f0cbd 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -15,4 +15,7 @@ LIBEVDEV_DEPENDENCIES = host-pkgconf
+diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
+index 172ff97..ba293c4 100644
+--- a/package/quagga/quagga.hash
++++ b/package/quagga/quagga.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	eca9eeb75005c8c403d48747c93456389e837e07dfc06ce08f70602c32dd4041	quagga-0.99.24.tar.xz
++sha256	6fd6baadb136a801c29c1dd72d0fe69da9f19ae498e87bff7057778361e43b14	quagga-0.99.24.1.tar.xz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 4a12ab3..2c0a6a9 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
  
- LIBEVDEV_INSTALL_STAGING = YES
+-QUAGGA_VERSION = 0.99.24
++QUAGGA_VERSION = 0.99.24.1
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+ QUAGGA_CONF_OPTS = --program-transform-name=''
+-# Upstream missed some bits when packaging it
+-QUAGGA_AUTORECONF = YES
  
-+# patched configure.ac
-+LIBEVDEV_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BABELD),--enable-babeld,--disable-babeld)
