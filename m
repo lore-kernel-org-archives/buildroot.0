@@ -1,38 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Mar 2015 22:59:17 +0100
-Subject: [Buildroot] [PATCH 1/1] ustr: fix license name
-In-Reply-To: <1425935373-43108-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Mon, 9 Mar 2015 16:09:33 -0500")
-References: <1425935373-43108-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <87egoxrfwq.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 9 Mar 2015 23:00:13 +0100
+Subject: [Buildroot] [PATCH 3/6] kodi: switch smb support to samba4
+In-Reply-To: <1425646234-22041-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
+ <1425646234-22041-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150309220013.GA10620@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+Gustavo, All,
 
- > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
- > ---
- >  package/ustr/ustr.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+On 2015-03-06 09:50 -0300, Gustavo Zacarias spake thusly:
+> samba3 is deprecated upstream.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
- > index ac1fa05..c2a819f 100644
- > --- a/package/ustr/ustr.mk
- > +++ b/package/ustr/ustr.mk
- > @@ -8,7 +8,7 @@ USTR_VERSION = 1.0.4
- >  USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
- >  USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)/
- >  USTR_LICENSE = BSD-2c MIT LGPLv2+
- > -USTR_LICENSE_FILES = LICENCE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
- > +USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[run-time tested on RPI-2 and played video via a SMB share]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It took me a few minutes of staring to see where the difference was
-(please consider writing a more complete commit message in the future).
+Regards,
+Yann E. MORIN.
 
-Committed, thanks.
+> ---
+>  package/kodi/Config.in | 7 +++++--
+>  package/kodi/kodi.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 1bc8b15..48e624f 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -203,10 +203,13 @@ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+>  comment "shairport support needs a toolchain w/ dynamic library"
+>  	depends on BR2_STATIC_LIBS
+>  
+> +comment "samba support needs an (e)glibc toolchain"
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> +
+>  config BR2_PACKAGE_KODI_LIBSMBCLIENT
+>  	bool "samba"
+> -	select BR2_PACKAGE_SAMBA
+> -	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	select BR2_PACKAGE_SAMBA4
+>  	help
+>  	  Enable Samba support
+>  
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index f40fc31..a975f70 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -140,7 +140,7 @@ KODI_CONF_OPTS += --disable-webserver
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_KODI_LIBSMBCLIENT),y)
+> -KODI_DEPENDENCIES += samba
+> +KODI_DEPENDENCIES += samba4
+>  KODI_CONF_OPTS += --enable-samba
+>  else
+>  KODI_CONF_OPTS += --disable-samba
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
