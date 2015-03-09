@@ -1,80 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Mar 2015 23:00:13 +0100
-Subject: [Buildroot] [PATCH 3/6] kodi: switch smb support to samba4
-In-Reply-To: <1425646234-22041-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1425646234-22041-1-git-send-email-gustavo@zacarias.com.ar>
- <1425646234-22041-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150309220013.GA10620@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  9 Mar 2015 23:08:07 +0100
+Subject: [Buildroot] [PATCH v2 2/5] postgresql: fix IPv6 detection for
+	uclibc compile
+In-Reply-To: <1425938890-454-1-git-send-email-ps.report@gmx.net>
+References: <1425938890-454-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1425938890-454-2-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Assist configure IPv6 support detection for uclibc,
+fixes the following uclibc compile failure:
 
-On 2015-03-06 09:50 -0300, Gustavo Zacarias spake thusly:
-> samba3 is deprecated upstream.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+auth.c: In function ?CheckRADIUSAuth?:
+auth.c:2379:24: error: ?in6addr_any? undeclared (first use in this function)
+  localaddr.sin6_addr = in6addr_any;
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[run-time tested on RPI-2 and played video via a SMB share]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Tested with the following buildroot defonfig:
 
-Regards,
-Yann E. MORIN.
+BR2_arm=y
+BR2_arm1176jzf_s=y
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="3.18"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="246530ff8a4f302b8666c6d9cf509407d8c1257a"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.18-rpi-dt.defconfig"
+BR2_LINUX_KERNEL_ZIMAGE=y
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+BR2_PACKAGE_POSTGRESQL=y
+---
+ package/postgresql/postgresql.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> ---
->  package/kodi/Config.in | 7 +++++--
->  package/kodi/kodi.mk   | 2 +-
->  2 files changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index 1bc8b15..48e624f 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -203,10 +203,13 @@ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
->  comment "shairport support needs a toolchain w/ dynamic library"
->  	depends on BR2_STATIC_LIBS
->  
-> +comment "samba support needs an (e)glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +
->  config BR2_PACKAGE_KODI_LIBSMBCLIENT
->  	bool "samba"
-> -	select BR2_PACKAGE_SAMBA
-> -	select BR2_PACKAGE_SAMBA_LIBSMBCLIENT
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	select BR2_PACKAGE_SAMBA4
->  	help
->  	  Enable Samba support
->  
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index f40fc31..a975f70 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -140,7 +140,7 @@ KODI_CONF_OPTS += --disable-webserver
->  endif
->  
->  ifeq ($(BR2_PACKAGE_KODI_LIBSMBCLIENT),y)
-> -KODI_DEPENDENCIES += samba
-> +KODI_DEPENDENCIES += samba4
->  KODI_CONF_OPTS += --enable-samba
->  else
->  KODI_CONF_OPTS += --disable-samba
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 03154af..7ebf795 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -14,6 +14,12 @@ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ 
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++# overwrite IPV6 detection
++ifeq ($(BR2_INET_IPV6),y)
++POSTGRESQL_CONF_ENV += ac_cv_type_struct_sockaddr_in6=yes
++else
++POSTGRESQL_CONF_ENV += ac_cv_type_struct_sockaddr_in6=no
++endif
+ # PostgreSQL does not build against uClibc with locales
+ # enabled, due to an uClibc bug, see
+ # http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
