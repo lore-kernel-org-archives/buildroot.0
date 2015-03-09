@@ -1,52 +1,44 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 9 Mar 2015 22:25:44 +0100
-Subject: [Buildroot] [PATCH v4 1/3] pkg-cmake: allow to build package in
-	a subdirectory
-In-Reply-To: <20150309220544.48fafdaa@free-electrons.com>
-References: <1425553401-27461-1-git-send-email-gwenj@trabucayre.com>
- <20150309220544.48fafdaa@free-electrons.com>
-Message-ID: <CAHXCMM+6hyCnsSJjoDmR1YBX+GkJz6RQ2TfMXR=pjeeWD1UPtQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  9 Mar 2015 22:26:23 +0100
+Subject: [Buildroot] [PATCH v1 1/2] libevdev: bump version to 1.4
+Message-ID: <1425936384-31801-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 9, 2015 at 10:05 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Gwenhael, Samuel,
->
-> On Thu,  5 Mar 2015 12:03:19 +0100, Gwenhael Goavec-Merou wrote:
->
->> +* +LIBFOO_BUILDDIR+ may overload the default build directory when a
->> +  package prevents from in-source-tree build. For example,
->> +  FOO_BUILDDIR = $(FOO_SRCDIR)/.build, will be used to compile foo
->> +  package in .build subdirectory.
->
-> Is it really useful to be able to define the path to the build
-> directory? I believe we could do something simpler that consists in
-> just a boolean variable saying that the package does not accept
-> in-source build, like:
->
-> LIBFOO_SUPPORTS_IN_SOURCE_BUILD = NO
->
-> (which would default to YES)
->
-> and then the CMake package infra takes care of doing the build in some
-> $(@D)/buildroot-build/ directory, or something like that.
->
-> Thoughts?
+See [1] for details.
 
-Sounds good too tm.
+[1] http://lists.freedesktop.org/archives/input-tools/2015-March/001151.html
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 83b5bdd..1708fb0 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2014-December/001132.html
+-sha256 a4317de9e818093dc131cc2bb96cdfc0cebd631e4be5c5244e1e373ce1536eed libevdev-1.3.2.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2015-March/001151.html
++sha256 3223378a5c2b4fea51a1601b0404700a6ddc1e2150eb9d5f62f001ffe21dfa06 libevdev-1.4.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 56247be..52b2ac3 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.3.2
++LIBEVDEV_VERSION = 1.4
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
 -- 
-Samuel
+2.1.4
