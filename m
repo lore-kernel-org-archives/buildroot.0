@@ -1,63 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Mar 2015 22:27:24 +0100
-Subject: [Buildroot] [PATCH 08/10 v7] package/nvidia-tegra23-binaries:
- new package
-In-Reply-To: <54FDF3C5.3010607@free.fr>
-References: <20150221234636.50616706@free-electrons.com>
- <20150221225836.GB4246@free.fr>
- <20150223124136.5fb4ea97@nserafini-N550JK>
- <54F7898A.6090601@free.fr> <20150306231558.GE4220@free.fr>
- <20150307090354.60c844a3@free-electrons.com>
- <20150307130141.GB4186@free.fr>
- <20150307141903.4a4c3b4f@free-electrons.com>
- <20150307150424.GF4186@free.fr> <54FDF3C5.3010607@free.fr>
-Message-ID: <20150309212724.GD4009@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 9 Mar 2015 22:30:02 +0100
+Subject: [Buildroot] [PATCH 1/2] target-finalize: generate all *.pyc
+In-Reply-To: <20150309185405.5f312f1b@free-electrons.com>
+References: <1425918264-1912-1-git-send-email-s.martin49@gmail.com>
+ <20150309185405.5f312f1b@free-electrons.com>
+Message-ID: <CAHXCMMLDX9MXeR19NDkkDwenvJVH3pguVSxaRt6sROGQ+kNb_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Laurent, All,
+Hi Thomas, all,
 
-On 2015-03-09 20:25 +0100, Laurent Colloud spake thusly:
-> On 07/03/15 16:04, Yann E. MORIN wrote:
-> >Thomas, All,
-> >
-> >On 2015-03-07 14:19 +0100, Thomas Petazzoni spake thusly:
-> >>On Sat, 7 Mar 2015 14:01:42 +0100, Yann E. MORIN wrote:
-> >>>Given the feedback from Bernd, I'll see at adding such a version choice.
-> >>>Let's say we go this route:
-> >>>   - add a version choice for 1.14.7 (for tegra-binaries) and 1.17.1 (the
-> >>>     current version), defaulting to 17.1;
-> >>>   - add hidden symbols for the driver ABI supported by each version;
-> >>>   - make nvidia-tegra23 depend on the appropriate ABI symbol.
-> >>Seems OK to me. Though it would be good if someone can actually test
-> >>the patches. I don't know when I'll have the time to test on the Tegra
-> >>3 platform.
-> >Well, we can at least go up to the point where it builds. From there,
-> >you can pick it up when you are available for run-time testing.
-> Sounds good to me too.
-> I confirm that I am using Buildroot (v2014.08) and that I just hand-picked
-> the version of X.org just like Bernd did and that all X libraries built
-> correctly. Hopefully this is a viable solution without entering the X.org
-> server <-> X libraries dependency nightmare that Thomas mentioned
-> previously.
-> I hope to find some time to test the patch once it's rolled out.
+On Mon, Mar 9, 2015 at 6:54 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Samuel Martin,
+>
+> On Mon,  9 Mar 2015 17:24:23 +0100, Samuel Martin wrote:
+>> This patch generates all *.pyc files from *.py located in
+>> <target>/usr/python*/site-packages, before stripping the rootfs.
+>>
+>> This prevents modules from packages that do not compile the *.py
+>> files from disappearing.
+>>
+>> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  Makefile | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index af043a3..ec0b923 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -564,6 +564,11 @@ $(TARGETS_ROOTFS): target-finalize
+>>
+>>  target-finalize: $(TARGETS)
+>>       @$(call MESSAGE,"Finalizing target directory")
+>> +ifneq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),)
+>> +     PYTHONPATH="$(PYTHON_PATH)" \
+>> +             $(HOST_DIR)/usr/bin/python -c "import compileall; \
+>> +                     compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
+>> +endif
+>
+> Why not, but then don't we want to do something in the Python package
+> infra, and in the Python 2/3 packages themselves to avoid spending time
+> biulding the .pyc files?
 
-I have a series locally that implements just that idea. It's only
-patches for now, I have to test them.
+Indeed, it'd be better to avoid  wasting time building *.pyc during
+per-package build, though it does not seem really easy to do at first
+glance.
+Well, after hacking around, it is not that hard to do it! :-)
+I cleanup my hacks and will submit them.
 
-Hopefully, I can do that by the end of the week. At worse, I have next
-week off, so I will be able to work on it.
+>
+> Also, using TARGET_FINALIZE_HOOKS would be nicer. But there is the
+> issue that the hook is the same between python and python3, so we
+> wouldn't know where to put it.
+
+The hook is simple enough to be moved in pkg-python.mk as a helper,
+then just being added to the PYTHON{,3}_TARGET_FINALIZE_HOOKS.
+
+However, if we decide to not go using a global TARGET_FINALIZE_HOOKS,
+but per-package target-install hook, the helper can be easily added to
+the packages that need it; the biggest remaining task being
+identifying and updating all packages not using the pkg-python infra
+but providing a python module.
+
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
