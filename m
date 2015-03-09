@@ -1,46 +1,47 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  9 Mar 2015 14:38:32 -0500
-Subject: [Buildroot] [PATCH 1/1] quagga: option for vtysh
-Message-ID: <1425929912-43526-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  9 Mar 2015 20:42:58 +0100
+Subject: [Buildroot] [PATCH v1 3/3] postgresql: enable bfin compile
+In-Reply-To: <1425930178-16084-1-git-send-email-ps.report@gmx.net>
+References: <1425930178-16084-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1425930178-16084-3-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/quagga/Config.in | 5 +++++
- package/quagga/quagga.mk | 1 +
- 2 files changed, 6 insertions(+)
+- overwrite platform support with linux template
+- disable spinlock support
 
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index d8b10f8..0b9275a 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -82,6 +82,11 @@ config BR2_PACKAGE_QUAGGA_WATCHQUAGGA
- 	help
- 	  Build and install watchquagga, a zebra/protocol daemon supervisor.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/postgresql/postgresql.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7ebf795..76b19d5 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -13,6 +13,11 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
  
-+config BR2_PACKAGE_QUAGGA_VTYSH
-+	bool "Build vtysh"
-+	help
-+	  Build and install vtysh, a vty shell for Quagga.
++# unsupported platform, overwrite manually
++ifeq ($(BR2_bfin),y)
++POSTGRESQL_CONF_OPTS += --with-template=linux
++endif
 +
- config BR2_PACKAGE_QUAGGA_SNMP
- 	bool "SNMP support"
- 	depends on BR2_USE_MMU # net-snmp
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 4a12ab3..e177841 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -27,6 +27,7 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--disable-opaque-lsa)
-+QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_VTYSH),--enable-vtysh,--disable-vtysh)
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # overwrite IPV6 detection
+ ifeq ($(BR2_INET_IPV6),y)
+@@ -31,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
+ endif
  
- ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
- QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2),y)
++ifeq ($(BR2_bfin)$(BR2_microblazebe)$(BR2_microblazeel)$(BR2_nios2),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
+ endif
+ 
 -- 
-1.9.1
+2.1.4
