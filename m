@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 14:05:18 +0100
-Subject: [Buildroot] [git commit] wget: bump to version 1.16.3
-Message-ID: <20150309130534.DB10F803D5@busybox.osuosl.org>
+Date: Mon, 9 Mar 2015 14:05:29 +0100
+Subject: [Buildroot] [git commit] patch: bump to version 2.7.5
+Message-ID: <20150309130534.E4E52803D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c3df14db89d8ce14a9f1181d572b11cc572d3d1f
+commit: http://git.buildroot.net/buildroot/commit/?id=1eaf45fc6cc2ac395c5f8dc5690bf4628cd25ecd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes a regression of quiet mode not being quiet.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wget/wget.hash |    2 +-
- package/wget/wget.mk   |    2 +-
+ package/patch/patch.hash |    2 +-
+ package/patch/patch.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index dffed4e..faab805 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
+diff --git a/package/patch/patch.hash b/package/patch/patch.hash
+index 7f1b024..d6e3a2d 100644
+--- a/package/patch/patch.hash
++++ b/package/patch/patch.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256  a7dfde1bcb0eb135addf587a649fd0e47c1a876edef359b9197cdffd1fdcd7d5  wget-1.16.2.tar.xz
-+sha256  67f7b7b0f5c14db633e3b18f53172786c001e153d545cfc85d82759c5c2ffb37  wget-1.16.3.tar.xz
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 382cdf7..742d81e 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
+-sha256	d09022de9d629561bf4dad44625ef4b1ead15178b210412113531730cdb6f19d	patch-2.7.3.tar.xz
++sha256	fd95153655d6b95567e623843a0e77b81612d502ecf78a489a4aed7867caa299	patch-2.7.5.tar.xz
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index 4fa0e41..765dfa9 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WGET_VERSION = 1.16.2
-+WGET_VERSION = 1.16.3
- WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-PATCH_VERSION = 2.7.3
++PATCH_VERSION = 2.7.5
+ PATCH_SOURCE = patch-$(PATCH_VERSION).tar.xz
+ PATCH_SITE = $(BR2_GNU_MIRROR)/patch
+ PATCH_LICENSE = GPLv3+
