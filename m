@@ -1,48 +1,53 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 9 Mar 2015 17:37:10 +0100
-Subject: [Buildroot] [PATCH 1/2] target-finalize: generate all *.pyc
-In-Reply-To: <1425918264-1912-1-git-send-email-s.martin49@gmail.com>
-References: <1425918264-1912-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAGm1_ksYjMJJyewxVevXz3LpF0-AsOdSeKOYktnC-EOCc09+RQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Mar 2015 17:39:46 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: install systemd service
+ files
+In-Reply-To: <CANPyyuP2hrGF=UwKEY=NbAZDmyXdaVzd_osYvncbZbM+12-vvA@mail.gmail.com>
+References: <1425411738-3369-1-git-send-email-mike@mikebwilliams.com>
+ <20150304213345.6c41d0e8@free-electrons.com>
+ <CANPyyuP2hrGF=UwKEY=NbAZDmyXdaVzd_osYvncbZbM+12-vvA@mail.gmail.com>
+Message-ID: <20150309173946.75079320@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 9, 2015 at 5:24 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> This patch generates all *.pyc files from *.py located in
-> <target>/usr/python*/site-packages, before stripping the rootfs.
->
-> This prevents modules from packages that do not compile the *.py
-> files from disappearing.
->
-> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Dear Mike Williams,
 
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Mon, 9 Mar 2015 12:08:48 -0400, Mike Williams wrote:
 
-> ---
->  Makefile | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index af043a3..ec0b923 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -564,6 +564,11 @@ $(TARGETS_ROOTFS): target-finalize
->
->  target-finalize: $(TARGETS)
->         @$(call MESSAGE,"Finalizing target directory")
-> +ifneq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),)
-> +       PYTHONPATH="$(PYTHON_PATH)" \
-> +               $(HOST_DIR)/usr/bin/python -c "import compileall; \
-> +                       compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
-> +endif
->         $(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
->         rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
->                 $(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-> --
-> 2.1.0
->
+> > Also, and sorry for being so ignorant about systemd, but most of our
+> > other packages set up a bunch of symbolic links when install systemd
+> > unit files. I'm surprised to not see the same thing here. Can you give
+> > some details about this?
+> 
+> Those symlinks enable starting those services during boot. These
+> services shouldn't be enabled by default, so no symlinks are
+> generated.
+
+Ok, but right now our policy is that services select in the Buildroot
+configuration should be enabled at startup by default.
+
+I know this is not the proposal you made in
+http://lists.busybox.net/pipermail/buildroot/2015-March/121448.html,
+but the proposal you made on this specific topic is going completely in
+the opposite direction of what Buildroot is doing right now.
+
+The reason for the current policy is that we want a simple "out of the
+box" experience: you enable lighttpd or minidlna, you build, you boot
+the system, and those services start by default, with a sane minimal
+configuration. It's kind of the principle of "least surprise" I would
+say.
+
+Then if you want some services to have a more complex configuration, or
+to not start at boot time, it's up to you to do what's needed in your
+post-build script or rootfs overlay.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
