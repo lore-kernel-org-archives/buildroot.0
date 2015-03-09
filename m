@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 14:08:55 +0100
-Subject: [Buildroot] [PATCH 3/3] Added support for PHP/SQLite3 (non PDO).
-In-Reply-To: <1425850629-14725-3-git-send-email-mc5686@mclink.it>
-References: <1425850629-14725-1-git-send-email-mc5686@mclink.it>
- <1425850629-14725-3-git-send-email-mc5686@mclink.it>
-Message-ID: <20150309140855.00deaa89@free-electrons.com>
+Date: Mon, 9 Mar 2015 14:10:13 +0100
+Subject: [Buildroot] [git commit] fs/common: build host-xz when xz
+	compression is used
+Message-ID: <20150309131023.81A778079B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mauro Condarelli,
+commit: http://git.buildroot.net/buildroot/commit/?id=26e0d500b58cb6ccfdb84426ba2f866ada3b01f3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  8 Mar 2015 22:37:09 +0100, Mauro Condarelli wrote:
-> 
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/php/Config.ext |    6 ++++++
->  package/php/php.mk     |    4 ++++
->  2 files changed, 10 insertions(+)
+When a filesystem image is xz-compressed, the XZ variable is used to refer
+to the xz compression tool, but it is not necessarily available. Add a
+proper dependency to fix that.
 
-Thanks, applied! And thanks Gustavo for the review/ack.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/common.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/fs/common.mk b/fs/common.mk
+index 1d3926f..5d07f00 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -62,6 +62,7 @@ ROOTFS_$(2)_COMPRESS_EXT = .lzo
+ ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) -9 -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
++ROOTFS_$(2)_DEPENDENCIES += host-xz
+ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+ endif
