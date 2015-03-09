@@ -1,56 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 10:46:48 +0100
-Subject: [Buildroot] [PATCH 1/3] uclibc: adapt thread implementation
- selection to uClibc-ng
-In-Reply-To: <1425889628.5234.11.camel@synopsys.com>
-References: <1425735600-16762-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425735600-16762-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150307172039.GI3937@waldemar-brodkorb.de>
- <20150308084147.4be140e3@free-electrons.com>
- <1425889628.5234.11.camel@synopsys.com>
-Message-ID: <20150309104648.2747fd11@free-electrons.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon,  9 Mar 2015 10:54:50 +0100
+Subject: [Buildroot] [PATCH] network-manager: bump version to 1.0.0
+Message-ID: <1425894890-31411-1-git-send-email-vorel@jablocom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+From: Petr Vorel <petr.vorel@gmail.com>
 
-On Mon, 9 Mar 2015 08:27:09 +0000, Alexey Brodkin wrote:
+Dropped 0001-NetworkManagerUtils-fix-build-with-toolchains-not-ex.patch
+(accepted upstream).
 
-> We're actively working on enabling TLS/NPTL support for ARC and our
-> current plan is to get it done by the next release of ARC tools -
-> sometime later this spring.
-> 
-> Even though most of things in TLS/NPTL tools for ARC work pretty well
-> there're still issues to be resolved. And because this all is still in
-> works we don't yet have particular branches in binutils and gcc repos I
-> may recommend you to try.
-> 
-> As for uClibc we tend to apply all changes to "arc-mainline-dev" branch
-> in "https://github.com/foss-for-synopsys-dwc-arc-processors/uClibc"
-> repo.
-> 
-> Still I'd propose to wait a bit until we get something that could be
-> labeled as RC and then if you're willing to start running build or
-> run-time tests I'll let you know.
-> 
-> Anyway once we enable TLS/NPTL in GNU tools for ARC I'll send patch that
-> enables TLS for ARC in Buildroot - we're looking forward to having TLS
-> as a default option for ARC (as most of other arches do) because of
-> known benefits of TLS threading compared to Linuxthreads.
-> 
-> So stay tuned.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ ...gerUtils-fix-build-with-toolchains-not-ex.patch | 38 ----------------------
+ package/network-manager/network-manager.mk         |  4 +--
+ 2 files changed, 2 insertions(+), 40 deletions(-)
+ delete mode 100644 package/network-manager/0001-NetworkManagerUtils-fix-build-with-toolchains-not-ex.patch
 
-Thanks Alexey for this summary of TLS support in ARC, very useful. As
-you suggest, we'll wait for the next release of the ARC tools to enable
-TLS by default on ARC.
-
-Thanks!
-
-Thomas
+diff --git a/package/network-manager/0001-NetworkManagerUtils-fix-build-with-toolchains-not-ex.patch b/package/network-manager/0001-NetworkManagerUtils-fix-build-with-toolchains-not-ex.patch
+deleted file mode 100644
+index 9286daa..0000000
+--- a/package/network-manager/0001-NetworkManagerUtils-fix-build-with-toolchains-not-ex.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From b8241447e2a910dde57bf5a44a4464d80c87ebca Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Mon, 11 Aug 2014 09:37:05 +0200
+-Subject: [PATCH] NetworkManagerUtils: fix build with toolchains not exporting
+- CLOCK_BOOTTIME
+-
+-E.G. uClibc 0.9.33 and earlier.
+-
+-Submitted upstream: https://bugzilla.gnome.org/show_bug.cgi?id=734599
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/NetworkManagerUtils.c | 9 +++++++++
+- 1 file changed, 9 insertions(+)
+-
+-diff --git a/src/NetworkManagerUtils.c b/src/NetworkManagerUtils.c
+-index aa689ce..fc85b00 100644
+---- a/src/NetworkManagerUtils.c
+-+++ b/src/NetworkManagerUtils.c
+-@@ -45,6 +45,15 @@
+- #include "nm-posix-signals.h"
+- 
+- /*
+-+ * Some toolchains (E.G. uClibc 0.9.33 and earlier) don't export
+-+ * CLOCK_BOOTTIME even though the kernel supports it, so provide a
+-+ * local definition
+-+ */
+-+#ifndef CLOCK_BOOTTIME
+-+#define CLOCK_BOOTTIME 7
+-+#endif
+-+
+-+/*
+-  * nm_ethernet_address_is_valid
+-  *
+-  * Compares an Ethernet address against known invalid addresses.
+--- 
+-2.0.0
+-
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 5540bc4..3615c89 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 0.9
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10.0
++NETWORK_MANAGER_VERSION_MAJOR = 1.0
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.0
