@@ -1,49 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 15:36:19 +0100
-Subject: [Buildroot] [PATCH v2] libdri2: new package
-In-Reply-To: <1425907428-16094-1-git-send-email-jerome.oufella@savoirfairelinux.com>
-References: <1425906775-31621-1-git-send-email-jerome.oufella@savoirfairelinux.com>
- <1425907428-16094-1-git-send-email-jerome.oufella@savoirfairelinux.com>
-Message-ID: <20150309153619.0f316d11@free-electrons.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Mon, 9 Mar 2015 11:19:58 -0400
+Subject: [Buildroot] SysV init script revamp (proposal)
+In-Reply-To: <20150307092737.GA28097@vostro>
+References: <54FA0173.60504@zacarias.com.ar>
+	<20150307092737.GA28097@vostro>
+Message-ID: <CANPyyuMsQOQRaHZZvwMeXn_he+uu0Z_1cDDtpjyn2dyi-RSpRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerome Oufella,
+All,
 
-On Mon,  9 Mar 2015 09:23:48 -0400, Jerome Oufella wrote:
+The general problem of buildroot packages enabling daemon startup on
+boot also impacts systemd; many packages enable services by default
+instead of just installing the service files. It seems like any
+standardization of behavior should be across init systems. My
+inclination is towards enabled packages installing init scripts and
+service files by default, but never enabling them, e.g. service files
+installed to /usr/lib/systemd/system/ but not symlinked to
+/etc/systemd/system/ and chmod a-x on the init scripts by default.
 
-> diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
-> new file mode 100644
-> index 0000000..d739206
-> --- /dev/null
-> +++ b/package/libdri2/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_LIBDRI2
-> +	bool "libdri2"
-> +	select BR2_PACKAGE_LIBDRM
-> +	select BR2_PACKAGE_XORG7
+For generating init scripts, many of the packages now have systemd
+service files, perhaps this tool could help you build them more
+quickly:
+https://github.com/akhilvij/systemd-to-sysvinit-converter
 
-We basically never "select" BR2_PACKAGE_XORG7. It should be a depends
-on. Users willing to use X.org stuff are expected to understand that
-they need to enable the X.org global option (BR2_PACKAGE_XORG7) to see
-all X.org related features.
+I've never tried it myself, so I have no idea if it works.
 
-You also need to add a Config.in "comment" about the thread and
-largefile dependencies.
+Mike
 
-> +LIBDRI2_SITE = https://github.com/robclark/libdri2.git
-
-Can you use the 'github' macro instead?
-
-Other than that, the rest of the patch looks good.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Sat, Mar 7, 2015 at 4:27 AM, Alex Suykov <alex.suykov@gmail.com> wrote:
+> Fri, Mar 06, 2015 at 04:35:15PM -0300, Gustavo Zacarias wrote:
+>
+>> Before going all crazy sending patches and possibly wasting a lot of
+>> time i'll write up my thoughts on how we could enhance/fix/clean the
+>> current scenario regarding initscript:
+>
+> A word of support, it's a mess at present.
+> And since I was doing something related I'll post it here too.
+>
+> My goal was to merge initscripts, systemd, scriptless sysv and my own init,
+> with focus mostly on foreground daemons.
+> The result, however, seems to be pretty close to your proposal,
+> with uniform (generated, in fact) initscripts, and possibly also
+> uniform pid file handling.
+>
+> https://github.com/arsv/br
+> long(ish) description of ideas behind this:
+> https://raw.githubusercontent.com/arsv/br/master/brinits
+>
+> Sysv-style configuration is missing atm, the plan was
+> to pick any variables from .run files (see netsnmp/snmpd.run)
+> and write them to relevant /etc/config.d/*.conf files.
+>
+> The limiting factor is that any non-trivial variable handling,
+> basically any conditions, are not going to work well with systemd
+> (example: package/tvheadend/S99tvheadend).
+> And I feel better about residing to simple ARGS=... vs dropping
+> systemd just because of this.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
