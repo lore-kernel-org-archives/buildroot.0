@@ -1,73 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 14:22:26 +0100
-Subject: [Buildroot] [git commit] python-spidev: new package
-Message-ID: <20150309132342.1F8938046C@busybox.osuosl.org>
+From: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+Date: Mon,  9 Mar 2015 09:23:48 -0400
+Subject: [Buildroot] [PATCH v2] libdri2: new package
+In-Reply-To: <1425906775-31621-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+References: <1425906775-31621-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+Message-ID: <1425907428-16094-1-git-send-email-jerome.oufella@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a3a9784db170ec05b300f228cf8a4bc48d838ec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
 
-Python module for interfacing with SPI devices from user space via the
-spidev linux kernel driver.
+libdri2 is a library for the DRI2 extension to the X Window System. This
+is the split out dri2 client side code from mesa, libva, libvdpau, etc..
 
-[Thomas: fix <pkg>_LICENSE_FILES.]
+It can be used by applications or user-space drivers to provide
+accelerated graphics.
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
 ---
- package/Config.in                      |    1 +
- package/python-spidev/Config.in        |    7 +++++++
- package/python-spidev/python-spidev.mk |   14 ++++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+Changes v1 -> v2:
+* Fix repository URL as it doesn't hosts archives [oops]
+---
+ package/Config.in          |  1 +
+ package/libdri2/Config.in  | 13 +++++++++++++
+ package/libdri2/libdri2.mk | 18 ++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/libdri2/Config.in
+ create mode 100644 package/libdri2/libdri2.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cab9382..a37e519 100644
+index ba45f32..3f344ca 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -577,6 +577,7 @@ menu "external python modules"
- 	source "package/python-setuptools/Config.in"
- 	source "package/python-simplejson/Config.in"
- 	source "package/python-six/Config.in"
-+	source "package/python-spidev/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-twisted/Config.in"
-diff --git a/package/python-spidev/Config.in b/package/python-spidev/Config.in
+@@ -707,6 +707,7 @@ menu "Graphics"
+ 	source "package/lesstif/Config.in"
+ 	source "package/libart/Config.in"
+ 	source "package/libdmtx/Config.in"
++	source "package/libdri2/Config.in"
+ 	source "package/libdrm/Config.in"
+ 	source "package/libexif/Config.in"
+ 	source "package/libgail/Config.in"
+diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
 new file mode 100644
-index 0000000..8540d55
+index 0000000..d739206
 --- /dev/null
-+++ b/package/python-spidev/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SPIDEV
-+	bool "python-spidev"
++++ b/package/libdri2/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBDRI2
++	bool "libdri2"
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XPROTO_DRI2PROTO
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	depends on BR2_LARGEFILE # libdrm
 +	help
-+	  Python module for interfacing with SPI devices from user
-+	  space via the spidev linux kernel driver.
++	  Library for the DRI2 extension to the X Window System.
 +
-+	  https://pypi.python.org/pypi/spidev
-diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
++	  https://github.com/robclark/libdri2
+diff --git a/package/libdri2/libdri2.mk b/package/libdri2/libdri2.mk
 new file mode 100644
-index 0000000..14103f3
+index 0000000..66b780f
 --- /dev/null
-+++ b/package/python-spidev/python-spidev.mk
-@@ -0,0 +1,14 @@
++++ b/package/libdri2/libdri2.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# python-spidev
++# libdri2
 +#
 +################################################################################
 +
-+PYTHON_SPIDEV_VERSION = 3.0
-+PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
-+PYTHON_SPIDEV_SITE = https://pypi.python.org/packages/source/s/spidev
-+PYTHON_SPIDEV_SETUP_TYPE = distutils
-+PYTHON_SPIDEV_LICENSE = GPLv2
-+PYTHON_SPIDEV_LICENSE_FILES = LICENSE.md
++LIBDRI2_VERSION = 4f1eef3183df2b270c3d5cbef07343ee5127a6a4
++LIBDRI2_SITE = https://github.com/robclark/libdri2.git
++LIBDRI2_SITE_METHOD = git
++LIBDRI2_DEPENDENCIES = xlib_libXext xproto_dri2proto xlib_libXdamage libdrm
++LIBDRI2_LICENSE = MIT
++LIBDRI2_LICENSE_FILES = COPYING
 +
-+$(eval $(python-package))
++LIBDRI2_INSTALL_STAGING = YES
++LIBDRI2_AUTORECONF = YES
++LIBDRI2_CONF_ENV = xorg_cv_malloc0_returns_null=true
++
++$(eval $(autotools-package))
+-- 
+2.1.0
