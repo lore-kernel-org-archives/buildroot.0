@@ -1,29 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 23:26:43 +0100
-Subject: [Buildroot] [PATCH 0/3] Cleanup trailing slashed from FOO_SITE
-In-Reply-To: <1425939292-14719-1-git-send-email-luca@lucaceresoli.net>
-References: <1425939292-14719-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150309232643.7c1e9495@free-electrons.com>
+Date: Mon, 9 Mar 2015 23:32:56 +0100
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: install systemd service
+ files
+In-Reply-To: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
+References: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
+Message-ID: <20150309233256.0b0e0550@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear Mike Williams,
 
-On Mon,  9 Mar 2015 23:14:49 +0100, Luca Ceresoli wrote:
+On Mon,  9 Mar 2015 12:03:31 -0400, Mike Williams wrote:
 
-> Luca Ceresoli (3):
->   manual: download: remove trailing slash from package FOO_SITE
->   Remove trailing slash from all package site URLs
->   Download: remove trailing slash cleanups for SITE URLs
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 682cb4c..242bea5 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -164,4 +164,15 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>  	$(WPA_SUPPLICANT_INSTALL_DBUS)
+>  endef
+>  
+> +define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant at .service
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
+> +endef
 
-Sounds good, but shouldn't we add a check to make sure that such
-trailing slashes don't get added again? Like a check in pkg-generic.mk
-that verifies that $($(2)_SITE) is the same as $($(2)_SITE:=/) ?
+Could you please add the symlinks needed to make sure that these
+services are started at boot by default?
 
-Best regards,
+I know this is not your opinion, but starting services by default is
+what we do in basically all packages in Buildroot today, and therefore
+something we should continue doing for consistency (and also because
+we believe that's a sane default).
+
+Thanks!
 
 Thomas
 -- 
