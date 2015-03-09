@@ -1,55 +1,38 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 9 Mar 2015 21:55:55 +0000
-Subject: [Buildroot] [PATCH] gdb: fix target gdb building from git
-In-Reply-To: <20150309185549.625180ba@free-electrons.com>
-References: <1424768600-10056-1-git-send-email-abrodkin@synopsys.com>
- <20150309185549.625180ba@free-electrons.com>
-Message-ID: <1425938155.2312.22.camel@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Mar 2015 22:59:17 +0100
+Subject: [Buildroot] [PATCH 1/1] ustr: fix license name
+In-Reply-To: <1425935373-43108-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Mon, 9 Mar 2015 16:09:33 -0500")
+References: <1425935373-43108-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87egoxrfwq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
-On Mon, 2015-03-09 at 18:55 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 24 Feb 2015 12:03:20 +0300, Alexey Brodkin wrote:
-> > Currently we only add "host-texinfo" dependency for host GDB built
-> > from git sources. But in case of target gdb texinfo won't be built
-> > and so gdb building will fail on attempt to build documentation.
-> > 
-> > Fix is trivial - add "host-texinfo" as a dependency for target gdb
-> > in the sme way as we disable documentation building via both
-> > GDB_CONF_ENV (for target) and HOST_GDB_CONF_ENV (host) GDB flavors.
-> > 
-> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > Cc: Anton Kolesov <akolesov@synopsys.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Peter Korsgaard <peter@korsgaard.com>
-> 
-> Do you have a failing configuration for this one? I've tried to build
-> the ARC target gdb today, without selecting cross-gdb (so that the
-> host-texinfo dependency is not pulled in), and I couldn't get a failure.
+ > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+ > ---
+ >  package/ustr/ustr.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Actually I discovered this issue when I tried to build target gdb with
-external tools.
+ > diff --git a/package/ustr/ustr.mk b/package/ustr/ustr.mk
+ > index ac1fa05..c2a819f 100644
+ > --- a/package/ustr/ustr.mk
+ > +++ b/package/ustr/ustr.mk
+ > @@ -8,7 +8,7 @@ USTR_VERSION = 1.0.4
+ >  USTR_SOURCE = ustr-$(USTR_VERSION).tar.bz2
+ >  USTR_SITE = http://www.and.org/ustr/$(USTR_VERSION)/
+ >  USTR_LICENSE = BSD-2c MIT LGPLv2+
+ > -USTR_LICENSE_FILES = LICENCE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
+ > +USTR_LICENSE_FILES = LICENSE LICENSE_BSD LICENSE_LGPL LICENSE_MIT
 
-So to reproduce this issue please apply
-http://patchwork.ozlabs.org/patch/448242/ to your local git tree, then
-select external tools for ARC and try to build target gdb.
+It took me a few minutes of staring to see where the difference was
+(please consider writing a more complete commit message in the future).
 
-And this is my defconfig to reproduce the issue:
- --->8---
- BR2_arcle=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_PACKAGE_GDB=y
- BR2_PACKAGE_GDB_DEBUGGER=y
- --->8---
+Committed, thanks.
 
-Indeed if you build toolchain yourself this issue won't happen because
-"host-texinfo" gets built during toolchain building.
-
--Alexey
+-- 
+Bye, Peter Korsgaard
