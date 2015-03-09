@@ -1,30 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 15:32:36 +0100
-Subject: [Buildroot] [PATCH V2] python: spidev: add spidev plugin to
- manage spi from userspace
-In-Reply-To: <CAOf5uwmuH67Si+yEO9wz_E=PxUxN=TioxLcr58pfD2vf4U3xgA@mail.gmail.com>
-References: <1425803293-25109-1-git-send-email-michael@amarulasolutions.com>
- <20150309143321.4355fa64@free-electrons.com>
- <CAOf5uwmuH67Si+yEO9wz_E=PxUxN=TioxLcr58pfD2vf4U3xgA@mail.gmail.com>
-Message-ID: <20150309153236.0abb8476@free-electrons.com>
+Date: Mon, 9 Mar 2015 15:36:19 +0100
+Subject: [Buildroot] [PATCH v2] libdri2: new package
+In-Reply-To: <1425907428-16094-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+References: <1425906775-31621-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+ <1425907428-16094-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+Message-ID: <20150309153619.0f316d11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Michael Trimarchi,
+Dear Jerome Oufella,
 
-On Mon, 9 Mar 2015 14:53:17 +0100, Michael Trimarchi wrote:
+On Mon,  9 Mar 2015 09:23:48 -0400, Jerome Oufella wrote:
 
-> Sorry, I will do better next time
+> diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
+> new file mode 100644
+> index 0000000..d739206
+> --- /dev/null
+> +++ b/package/libdri2/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_LIBDRI2
+> +	bool "libdri2"
+> +	select BR2_PACKAGE_LIBDRM
+> +	select BR2_PACKAGE_XORG7
 
-No problem at all. Your contributions are very welcome. I don't mind
-fixing minor issues like that one, especially when they are made by new
-contributors. There is obviously a learning curve to get all the
-details.
+We basically never "select" BR2_PACKAGE_XORG7. It should be a depends
+on. Users willing to use X.org stuff are expected to understand that
+they need to enable the X.org global option (BR2_PACKAGE_XORG7) to see
+all X.org related features.
 
-Thanks again!
+You also need to add a Config.in "comment" about the thread and
+largefile dependencies.
+
+> +LIBDRI2_SITE = https://github.com/robclark/libdri2.git
+
+Can you use the 'github' macro instead?
+
+Other than that, the rest of the patch looks good.
+
+Thanks,
 
 Thomas
 -- 
