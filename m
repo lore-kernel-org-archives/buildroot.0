@@ -1,40 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 9 Mar 2015 17:29:52 +0200
-Subject: [Buildroot] [PATCH 1/1] network-manager: add hash file
-In-Reply-To: <1425911414-31038-1-git-send-email-petr.vorel@gmail.com>
-References: <1425911414-31038-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20150309152952.GJ2518@tarshish>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Mon, 9 Mar 2015 12:08:48 -0400
+Subject: [Buildroot] [PATCH] wpa_supplicant: install systemd service
+	files
+In-Reply-To: <20150304213345.6c41d0e8@free-electrons.com>
+References: <1425411738-3369-1-git-send-email-mike@mikebwilliams.com>
+ <20150304213345.6c41d0e8@free-electrons.com>
+Message-ID: <CANPyyuP2hrGF=UwKEY=NbAZDmyXdaVzd_osYvncbZbM+12-vvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+Thomas,
 
-On Mon, Mar 09, 2015 at 03:30:14PM +0100, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/network-manager/network-manager.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/network-manager/network-manager.hash
-> 
-> diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-> new file mode 100644
-> index 0000000..07513a9
-> --- /dev/null
-> +++ b/package/network-manager/network-manager.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
+On Wed, Mar 4, 2015 at 3:33 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Mike Williams,
+>
+> On Tue,  3 Mar 2015 14:42:18 -0500, Mike Williams wrote:
+>
+>> +define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
+>> +             $(TARGET_DIR)/lib/systemd/system
+>
+> When using -D, the destination should be a full path, otherwise your
+> file will be named $(TARGET_DIR)/lib/systemd/system if
+> $(TARGET_DIR)/lib/systemd/system isn't an existing directory.
 
-No need. It is at 
-http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.0.sha256sum.
+Fixed in v2.
 
-> +sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
+>
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
+>> +             $(TARGET_DIR)/lib/systemd/system
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
+>> +             $(TARGET_DIR)/lib/systemd/system
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+>> +             $(TARGET_DIR)/lib/systemd/system
+>
+> Also, and sorry for being so ignorant about systemd, but most of our
+> other packages set up a bunch of symbolic links when install systemd
+> unit files. I'm surprised to not see the same thing here. Can you give
+> some details about this?
 
-baruch
+Those symlinks enable starting those services during boot. These
+services shouldn't be enabled by default, so no symlinks are
+generated.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+As an aside, I commented on Gustavo's discussion of our packages
+enabling startup by default in this thread:
+http://lists.busybox.net/pipermail/buildroot/2015-March/121448.html
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
