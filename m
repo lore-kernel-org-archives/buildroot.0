@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Mar 2015 22:42:57 +0100
-Subject: [Buildroot] [PATCH 1/1] bash: added option to disable locale
- support
-In-Reply-To: <1425935595-46330-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1425935595-46330-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20150309224257.2c985fbf@free-electrons.com>
+Date: Mon, 9 Mar 2015 22:44:49 +0100
+Subject: [Buildroot] [PATCH 1/2] target-finalize: generate all *.pyc
+In-Reply-To: <CAHXCMMLDX9MXeR19NDkkDwenvJVH3pguVSxaRt6sROGQ+kNb_A@mail.gmail.com>
+References: <1425918264-1912-1-git-send-email-s.martin49@gmail.com>
+ <20150309185405.5f312f1b@free-electrons.com>
+ <CAHXCMMLDX9MXeR19NDkkDwenvJVH3pguVSxaRt6sROGQ+kNb_A@mail.gmail.com>
+Message-ID: <20150309224449.730a5c99@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Dear Samuel Martin,
 
-On Mon,  9 Mar 2015 16:13:15 -0500, Matt Weber wrote:
+On Mon, 9 Mar 2015 22:30:02 +0100, Samuel Martin wrote:
 
-> +if BR2_PACKAGE_BASH
-> +
-> +config BR2_PACKAGE_BASH_NO_LOCALE
-> +	bool "disable locale support"
-> +	help
-> +	  Disable locale support for cases where toolchain has it
-> +	  but target isn't setup to use it.
-> +
-> +endif
+> Indeed, it'd be better to avoid  wasting time building *.pyc during
+> per-package build, though it does not seem really easy to do at first
+> glance.
+> Well, after hacking around, it is not that hard to do it! :-)
+> I cleanup my hacks and will submit them.
 
-To be honest, I'm not sure we want to support such cases. What does it
-mean for the target to not be setup to use locales?
+Ok, cool.
 
-What is the opinion of other Buildroot developers?
+> The hook is simple enough to be moved in pkg-python.mk as a helper,
+> then just being added to the PYTHON{,3}_TARGET_FINALIZE_HOOKS.
 
-Thanks,
+Indeed.
+
+> However, if we decide to not go using a global TARGET_FINALIZE_HOOKS,
+> but per-package target-install hook, the helper can be easily added to
+> the packages that need it; the biggest remaining task being
+> identifying and updating all packages not using the pkg-python infra
+> but providing a python module.
+
+Well, as it is currently implemented, the hook byte-compiles *all* .py
+files. So if you call this hook multiple times, you're going to
+byte-compile all .py files multiple times. Doesn't seem like the most
+efficient thing to do.
 
 Thomas
 -- 
