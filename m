@@ -1,38 +1,41 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Mon,  9 Mar 2015 13:38:38 +0100
-Subject: [Buildroot] [PATCH v2] package/kodi: fix a runtime bug (no text
-	displayed in GUI) when a glibc toolchain is used
-Message-ID: <1425904718-24193-1-git-send-email-julien.boibessot@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  9 Mar 2015 09:50:25 -0300
+Subject: [Buildroot] [PATCH] wget: bump to version 1.16.3
+Message-ID: <1425905425-15988-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Fixes a regression of quiet mode not being quiet.
 
-
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes since v1:
- * took Yann suggestion into account
- * smaller comment
- * problem also occurs on non external glibc toolchains
+ package/wget/wget.hash | 2 +-
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/kodi/Config.in |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 1bc8b15..91fca28 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -91,6 +91,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
- 	depends on BR2_INET_IPV6
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index dffed4e..faab805 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  a7dfde1bcb0eb135addf587a649fd0e47c1a876edef359b9197cdffd1fdcd7d5  wget-1.16.2.tar.xz
++sha256  67f7b7b0f5c14db633e3b18f53172786c001e153d545cfc85d82759c5c2ffb37  wget-1.16.3.tar.xz
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 382cdf7..742d81e 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WGET_VERSION = 1.16.2
++WGET_VERSION = 1.16.3
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 -- 
-1.7.9.5
+2.0.5
