@@ -1,56 +1,46 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 9 Mar 2015 20:32:16 +0100
-Subject: [Buildroot] [V2 2/2] graph-depends: add an option
-	--stop-on-virtual
-In-Reply-To: <20150308221843.2d6fbf7d@free-electrons.com>
-References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
- <1420295353-8065-2-git-send-email-francois.perrad@gadz.org>
- <20150308221843.2d6fbf7d@free-electrons.com>
-Message-ID: <CAB0FRsvxotGUKRC2q7R_JKPCajZb68X3r2qnjciehP-cqXENBg@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  9 Mar 2015 14:38:32 -0500
+Subject: [Buildroot] [PATCH 1/1] quagga: option for vtysh
+Message-ID: <1425929912-43526-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-03-08 22:18 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Sat,  3 Jan 2015 15:29:13 +0100, Francois Perrad wrote:
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  docs/manual/common-usage.txt  |  3 +++
->>  support/scripts/graph-depends | 11 +++++++++++
->>  2 files changed, 14 insertions(+)
->
-> I'm still not convinced by this one. Shouldn't we instead have a more
-> generic mechanism such as --exclude=<foo>,<bar>, which would allow to
-> exclude packages? And maybe one of the possible values would be a
-> magical value to exclude virtual packages?
->
-> There are some cases where ignoring host-pkgconf, or
-> host-automake/host-autoconf/host-libtool may be interesting, for
-> example.
->
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/quagga/Config.in | 5 +++++
+ package/quagga/quagga.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-I agree with you.
-The graphs become quickly too large.
-The current option --depth seems to be only a workaround against an
-infinite recursion when the graph has a cycle.
-But at this time, we haven't found the good way (or the good use
-cases) to limit the size of the graph.
-
-Fran?ois
-
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index d8b10f8..0b9275a 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -82,6 +82,11 @@ config BR2_PACKAGE_QUAGGA_WATCHQUAGGA
+ 	help
+ 	  Build and install watchquagga, a zebra/protocol daemon supervisor.
+ 
++config BR2_PACKAGE_QUAGGA_VTYSH
++	bool "Build vtysh"
++	help
++	  Build and install vtysh, a vty shell for Quagga.
++
+ config BR2_PACKAGE_QUAGGA_SNMP
+ 	bool "SNMP support"
+ 	depends on BR2_USE_MMU # net-snmp
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 4a12ab3..e177841 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -27,6 +27,7 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--disable-opaque-lsa)
++QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_VTYSH),--enable-vtysh,--disable-vtysh)
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+-- 
+1.9.1
