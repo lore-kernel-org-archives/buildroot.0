@@ -1,26 +1,39 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Tue, 10 Mar 2015 11:16:20 -0500
-Subject: [Buildroot] Obscure bug in Util-Linux umount?
-In-Reply-To: <54FE7E8E.20306@ou.edu>
-References: <54FE7E8E.20306@ou.edu>
-Message-ID: <54FF18D4.2030709@ou.edu>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue, 10 Mar 2015 19:24:33 +0100
+Subject: [Buildroot] [PATCH v5 2/3] python-cheetah: add host-package support
+In-Reply-To: <1426011874-11011-1-git-send-email-gwenj@trabucayre.com>
+References: <1426011874-11011-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1426011874-11011-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/2015 12:18 AM, Steve Kenton wrote:
-> I *think* this is an obscure bug in the util-linux version of umount, but I wonder if anyone else has run into it. It drove me nuts for a while. Here's a short description.
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Further testing revealed that it only occurs if the embedded root filesystem is read-only
-which I forgot to mention (blush) so it's probably an interaction with a stale /etc/mtab
-or something, but only for the root filesystem and only if the mount point directory names
-are the same, yada etc. Much less likely to bite anyone else so I guess a heads up is not needed.
+Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
 
-Any way, not really a bug but rather a feature with  undefined behaviour and most importantly
-a case of 'it hurts if I do this' soooo  'don't do that'!
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+Changes v3 -> v4:
+ * use HOST_PYTHON_CHEETAH_DEPENDENCIES instead of PYTHON_CHEETAH_DEPENDENCIES
+ * suppress '+' for dependency definition
+---
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sorry for the noise.
-
-Steve
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 08076b5..3155951 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
++HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+2.0.5
