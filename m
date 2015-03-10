@@ -1,42 +1,50 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Mar 2015 20:59:41 +0100
-Subject: [Buildroot] [PATCH v3 5/8] qt5base: remove postgresql introduced
-	uclibc dependency for the PostgresSQL plugin
+Date: Tue, 10 Mar 2015 20:59:39 +0100
+Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
 In-Reply-To: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
 References: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1426017584-6096-5-git-send-email-ps.report@gmx.net>
+Message-ID: <1426017584-6096-3-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- overwrite platform support with linux template
+- disable spinlock support
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 --> v2:
-  - added (thanks to Baruch Siach for the hint)
+Changes v1 --> v3:
+  - no changes
 ---
- package/qt5/qt5base/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/postgresql/postgresql.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 99e249f..17ed5db 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -60,14 +60,10 @@ config BR2_PACKAGE_QT5BASE_MYSQL
- config BR2_PACKAGE_QT5BASE_PSQL
- 	bool "PostgreSQL Plugin"
- 	select BR2_PACKAGE_POSTGRESQL
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Build PostgreSQL plugin
- 	  If unsure, say n.
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7ebf795..76b19d5 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -13,6 +13,11 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
  
--comment "PostgreSQL needs an (e)glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
--
- choice
- 	prompt "SQLite 3 support"
- 	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
++# unsupported platform, overwrite manually
++ifeq ($(BR2_bfin),y)
++POSTGRESQL_CONF_OPTS += --with-template=linux
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # overwrite IPV6 detection
+ ifeq ($(BR2_INET_IPV6),y)
+@@ -31,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
+ endif
+ 
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2),y)
++ifeq ($(BR2_bfin)$(BR2_microblazebe)$(BR2_microblazeel)$(BR2_nios2),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
+ endif
+ 
 -- 
 2.1.4
