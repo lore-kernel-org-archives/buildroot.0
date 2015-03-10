@@ -1,51 +1,63 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Mar 2015 07:49:21 +0200
-Subject: [Buildroot] [PATCH v1 1/3] postgresql: enable uclibc build
-In-Reply-To: <trinity-70d0e92e-e432-4b23-bc61-4b06fe6b5a14-1425939165451@3capp-gmx-bs32>
-References: <trinity-70d0e92e-e432-4b23-bc61-4b06fe6b5a14-1425939165451@3capp-gmx-bs32>
-Message-ID: <20150310054921.GM2518@tarshish>
+From: Jan Erichsen <jan@erichsen-web.de>
+Date: Tue, 10 Mar 2015 07:16:21 +0100
+Subject: [Buildroot] php-cgi not executing .php-file
+Message-ID: <4318ea066b1d4331be3d63f7f2357bad@webmail-alfa3071.alfahosting-server.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+ 
 
-On Mon, Mar 09, 2015 at 11:12:45PM +0100, Peter Seiderer wrote:
-> On Mon, Mar 09, 2015 at 10:15:28PM +0200, Baruch Siach wrote:
-> > Hi Peter,
-> > 
-> > On Mon, Mar 09, 2015 at 08:42:56PM +0100, Peter Seiderer wrote:
-> > > diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-> > > index 3ef5e6c..519b2a1 100644
-> > > --- a/package/postgresql/Config.in
-> > > +++ b/package/postgresql/Config.in
-> > > @@ -1,9 +1,5 @@
-> > >  config BR2_PACKAGE_POSTGRESQL
-> > >     bool "postgresql"
-> > > -   # PostgreSQL does not build against uClibc with locales
-> > > -   # enabled, due to an uClibc bug, see
-> > > -   # http://lists.uclibc.org/pipermail/uclibc/2014-April/048326.html.
-> > > -   depends on BR2_TOOLCHAIN_USES_GLIBC
-> > 
-> > Please also remove the BR2_TOOLCHAIN_USES_GLIBC dependency from packages 
-> > selecting BR2_PACKAGE_POSTGRESQL.
-> 
-> Thanks for the reminder, just send out a v2 patchset with the additonal
-> uclibc dependency removal from bandwidthd and qt5base/postgresql-plugin...
+Hi everyone, 
 
-Thanks.
+I have got a problem with my php-cgi. It is not executing the php-file,
+but echos out the source code instead. 
 
-My grep shows a few more:
+# php-cgi -T -f /var/www/index.php
+X-Powered-By: PHP/5.5.22
+Content-type: text/html
 
-BR2_PACKAGE_COLLECTD_POSTGRESQL
-BR2_PACKAGE_QT_PSQL
-BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
+<?php
 
-baruch
+echo "Hello from Nios II";
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+?>
+Elapsed time: 0.025940 sec
+
+I am running it on an Altera DE2-115 Board using Nios II as processor. I
+used an external toolchain to build the system (toolchain-mmu/x86-linux2
+from Nios II Linux Tarball @
+ftp://ftp.altera.com/outgoing/nios2-linux/20120802/). 
+
+My settings in buildroot are as follow: 
+
+[*] php
+ Extensions --->
+ [*] Session
+ [*] zlib
+ [*] JSON
+ [*] sockets
+ [*] Posix
+ Interface (CGI) --> 
+
+Using the same php-file on debian it is parsed correctly: 
+
+root at debian:/# php-cgi -T -f /media/sf_shared/index.php 
+X-Powered-By: PHP/5.4.36-0+deb7u3
+Content-type: text/html
+
+Hello from Nios II
+Elapsed time: 0.002488 sec
+
+What could be the problem here?
+If you need more information please let me know. 
+
+With best regards, 
+
+Jan 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150310/a643b019/attachment.html>
