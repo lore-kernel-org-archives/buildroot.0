@@ -1,50 +1,98 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Mar 2015 00:19:11 +0100
-Subject: [Buildroot] [PATCH v4 1/3] pkg-cmake: allow to build package in
- a subdirectory
-In-Reply-To: <20150309220544.48fafdaa@free-electrons.com>
-References: <1425553401-27461-1-git-send-email-gwenj@trabucayre.com>
- <20150309220544.48fafdaa@free-electrons.com>
-Message-ID: <54FE2A6F.7000207@mind.be>
+From: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
+Date: Mon,  9 Mar 2015 20:25:00 -0400
+Subject: [Buildroot] [PATCH 1/1] Makefile: add target to clean targetfs
+Message-ID: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/03/15 22:05, Thomas Petazzoni wrote:
-> Gwenhael, Samuel,
-> 
-> On Thu,  5 Mar 2015 12:03:19 +0100, Gwenhael Goavec-Merou wrote:
-> 
->> +* +LIBFOO_BUILDDIR+ may overload the default build directory when a
->> +  package prevents from in-source-tree build. For example,
->> +  FOO_BUILDDIR = $(FOO_SRCDIR)/.build, will be used to compile foo
->> +  package in .build subdirectory.
-> 
-> Is it really useful to be able to define the path to the build
-> directory? I believe we could do something simpler that consists in
-> just a boolean variable saying that the package does not accept
-> in-source build, like:
-> 
-> LIBFOO_SUPPORTS_IN_SOURCE_BUILD = NO
-> 
-> (which would default to YES)
-> 
-> and then the CMake package infra takes care of doing the build in some
-> $(@D)/buildroot-build/ directory, or something like that.
+If you had some files added to the targetfs (fs-overlay, new packages,
+...) and you no longer need them, buildroot does not offer a simple way
+to remove these items from the output/target directory. The rule added
+by this commit allows you to clean the targetfs. Issuing 'make'
+afterward will generate a new and clean targetfs.
 
- Or build in a subdirectory unconditionally...
+A section in the documentation is also added. It describes few examples
+when developers could need it.
 
+Signed-off-by: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
+---
+ Makefile                                |  5 +++++
+ docs/manual/advanced.txt                |  2 ++
+ docs/manual/clean-target-filesystem.txt | 37 +++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+ create mode 100644 docs/manual/clean-target-filesystem.txt
 
- Regards,
- Arnout
-
-
+diff --git a/Makefile b/Makefile
+index af043a3..eee2dbb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -679,6 +679,11 @@ graph-depends: graph-depends-requirements
+ 	|tee $(BASE_DIR)/graphs/$(@).dot \
+ 	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
+ 
++clean-target:
++	rm -rf $(TARGET_DIR) $(STAGING_DIR) $(BUILD_DIR)/.root \
++		$(BUILD_DIR)/*/.stamp_target_installed $(BUILD_DIR)/*/.stamp_staging_installed \
++		$(BUILD_DIR)/linux-*/.stamp_installed $(BUILD_DIR)/*/.built
++
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ all: menuconfig
+diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
+index b7bfc49..1cf0427 100644
+--- a/docs/manual/advanced.txt
++++ b/docs/manual/advanced.txt
+@@ -14,3 +14,5 @@ include::download-location.txt[]
+ include::package-make-target.txt[]
+ 
+ include::using-buildroot-development.txt[]
++
++include::clean-target-filesystem.txt[]
+diff --git a/docs/manual/clean-target-filesystem.txt b/docs/manual/clean-target-filesystem.txt
+new file mode 100644
+index 0000000..0274474
+--- /dev/null
++++ b/docs/manual/clean-target-filesystem.txt
+@@ -0,0 +1,37 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++==== Clean target filesystem
++
++There are various cases where you would like to clean the target
++filesystem. Especially once you understood that buildroot build system
++is kept simple, and does not allow to uninstall files. Let's take some
++examples:
++
++1. You enabled +PACKAGE_OPENSSH+ to have a SSH server running on your
++   board. But you figure out that +sshd+ does not run well on your
++   target's architecture. Thus you decide to disable +PACKAGE_OPENSSH+
++   and enable +PACKAGE_DROPBEAR+ instead. You run +make+, +openssh+
++   gets built and installed. Problem: +openssh+ files are still present
++   in +output/target+!
++
++2. You enabled +PACKAGE_NTPD+ and set the local timezone to
++   +America/Montreal+ with +BR2_TARGET_LOCALTIME+ config. Then you find
++   out that +Montreal+ local has been replaced by +Toronto+ (French
++   looks like a rogue language). You enter +make menuconfig+, make the
++   change, save, and run +make+ again. Problem:
++   +output/target/etc/timezone+ still has +America/Montreal+ content!
++
++Solution to this is either to identify which package to reconfigure, or
++remove files manually, or destroy the target filesystem and recreate it.
++This latter option is convenient: you don't have to care about which
++packages to rebuild, and it is fast. Here is how to recreate your
++target filesystem, and get rid of filesystem _stains_:
++
++------------------
++make clean-target
++make
++------------------
++
+++clean-target+ removes +output/target+, tells buildroot to recreate the
++target skeleton, and install each package again.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.1
