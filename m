@@ -1,29 +1,30 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 10 Mar 2015 11:25:03 +0000
-Subject: [Buildroot] [PATCH v3] toolchain-external: add Synopsys
- DesignWare tools for ARC cores
-In-Reply-To: <20150310121551.6cfefde4@free-electrons.com>
-References: <1425985279-6965-1-git-send-email-abrodkin@synopsys.com>
- <20150310121551.6cfefde4@free-electrons.com>
-Message-ID: <1425986702.4321.2.camel@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 10 Mar 2015 08:43:12 -0300
+Subject: [Buildroot] [PATCH v2 1/4] package/unixodbc: new package
+In-Reply-To: <1425660584-25189-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1425660584-25189-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <54FED8D0.5020406@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2015-03-10 at 12:15 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 10 Mar 2015 14:01:19 +0300, Alexey Brodkin wrote:
-> 
-> > In v3 as proposed by Thomas I combined selection of toolchain source in one
-> > section called BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12.
-> 
-> Thanks. However, what about the external toolchain wrapper change that
-> is needed to pass -EB ? See my review of your v2.
+On 03/06/2015 01:49 PM, Bernd Kuhls wrote:
 
-Oops. I missed that part. Sorry.
-v4 is coming :)
+> --- /dev/null
+> +++ b/package/unixodbc/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_UNIXODBC
+> +	bool "unixodbc"
+> +	help
+> +	  The unixODBC Project goals are to develop and promote unixODBC
+> +	  to be the definitive standard for ODBC on non MS Windows platforms.
+> +
+> +	  http://www.unixodbc.org
 
--Alexey
+Hi.
+According to my tests it needs threads, you'll need to propagate that
+dependency upwards to php-pdo-unixdobc as well.
+Other than that it looks good.
+Regards.
