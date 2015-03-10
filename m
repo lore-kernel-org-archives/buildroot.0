@@ -1,39 +1,48 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Mar 2015 17:17:37 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: add target to clean targetfs
-In-Reply-To: <54FF062D.8000307@savoirfairelinux.com>
-References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <20150310044529.GL2518@tarshish>
- <54FF062D.8000307@savoirfairelinux.com>
-Message-ID: <20150310151737.GA2177@tarshish>
+From: Waldemar Axt <exilit.w@gmail.com>
+Date: Tue, 10 Mar 2015 16:51:20 +0100
+Subject: [Buildroot] Migrate Buildroot based Eclipse project
+Message-ID: <CAL41q9u8_a1M9+RdFy0GaDcffoW8Hbd+zOEYt3GDRZg0VWnrqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Emeric,
+Hello,
 
-On Tue, Mar 10, 2015 at 10:56:45AM -0400, Emeric Vigier wrote:
-> On 15-03-10 12:45 AM, Baruch Siach wrote:
-> >On Mon, Mar 09, 2015 at 08:25:00PM -0400, Emeric Vigier wrote:
-> >>+clean-target:
-> >>+	rm -rf $(TARGET_DIR) $(STAGING_DIR) $(BUILD_DIR)/.root \
-> >>+		$(BUILD_DIR)/*/.stamp_target_installed $(BUILD_DIR)/*/.stamp_staging_installed \
-> >>+		$(BUILD_DIR)/linux-*/.stamp_installed $(BUILD_DIR)/*/.built
-> >
-> >.stamp_built ?
-> 
-> Yes, you are right.
+I am working on a project for an embedded Linux device based on Buildroot.
 
-But why? Isn't .stamp_*_installed removal enough for your needs?
+The project sources and the Buildroot sources/Framework are maintained and
+version controlled inside the same GIT repository.
+The sources are managed as Eclipse projects using the Buildroot plugin.
 
-> Also it seems that linux-*/.stamp_installed is deprecated. I only see
-> .stamp_target_installed files.
+So far everything works fine, but there is one big problem with this
+configuration, I am not able to solve. If the GIT repository
+(containing all the source code and Buildroot ...) is cloned by someone
+else, also the eclipse project settings
+(.project, .cproject) are cloned (intentionally, as I don't want to force
+everyone to setup the whole project settings) are cloned.
 
-baruch
+My understanding of the whole Eclipse plugin thing is, that it sets up the
+Buildroot specific paths for the projects. But as it turns out,
+it doesn't. The '.cproject' contains many setup/system specific entries.
+More specifically, the paths to the toolchain
+(Buildroot built-in toolchain) are included and many ids have user specific
+informations included. They seem to reflect the
+paths on the system somehow. If the Buildroot toolchain lies in
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+                * "/home/user/projectX/Buildroot/output/host/usr/bin" *
+
+for example, then the ids are something like
+
+                *
+"org.buildroot.home.user.projectX.buildroot.output......".*
+
+
+So what is an appropriate way to setup such a project structure? I have no
+Idea how to keep the project settings portable.
+
+Thank you in advance.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150310/b0c24026/attachment.html>
