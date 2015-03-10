@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Mar 2015 13:51:11 +0100
+Date: Tue, 10 Mar 2015 14:49:58 +0100
 Subject: [Buildroot] php-cgi not executing .php-file
-In-Reply-To: <4318ea066b1d4331be3d63f7f2357bad@webmail-alfa3071.alfahosting-server.de>
+In-Reply-To: <482796e5cb84cdce7db36b558eaadb38@webmail-alfa3071.alfahosting-server.de>
 References: <4318ea066b1d4331be3d63f7f2357bad@webmail-alfa3071.alfahosting-server.de>
-Message-ID: <20150310135111.7c67cad4@free-electrons.com>
+ <20150310135111.7c67cad4@free-electrons.com>
+ <482796e5cb84cdce7db36b558eaadb38@webmail-alfa3071.alfahosting-server.de>
+Message-ID: <20150310144958.1fe74b9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +14,20 @@ To: buildroot@busybox.net
 
 Dear Jan Erichsen,
 
-On Tue, 10 Mar 2015 07:16:21 +0100, Jan Erichsen wrote:
+Please do not reply to me directly, keep the list in Cc so that the
+discussion remains public. Thanks!
 
-> I am running it on an Altera DE2-115 Board using Nios II as processor. I
-> used an external toolchain to build the system (toolchain-mmu/x86-linux2
-> from Nios II Linux Tarball @
-> ftp://ftp.altera.com/outgoing/nios2-linux/20120802/). 
+On Tue, 10 Mar 2015 14:34:46 +0100, Jan Erichsen wrote:
 
-Just curious, which of these toolchains are you using exactly?
-
-> My settings in buildroot are as follow: 
+> Thank you Thomas for your response, 
 > 
-> [*] php
->  Extensions --->
->  [*] Session
->  [*] zlib
->  [*] JSON
->  [*] sockets
->  [*] Posix
->  Interface (CGI) --> 
+> i am using "nios2-linux-gnu-gcc" witch is prebuild and located at
+> "/nisos2-linux/toolchain-mmu/x86-linux2/bin" and comes from the Tarball.
 
-I just tested this here in ARM Qemu, with the same configuration as you
-for PHP, and it works just fine:
+Can you try with the CodeSourcery NIOS II toolchain that is
+pre-configured in Buildroot ? Just to rule out any toolchain issue.
 
-===
-
-# php-cgi -T -f test.php 
-X-Powered-By: PHP/5.5.22
-Content-type: text/html
-
-Hello from Nios II
-Elapsed time: 0.021249 sec
-
-===
-
-Can you provide your complete Buildroot .config, so that we can try to
-reproduce more precisely what's going on?
-
-However, I don't have NIOS II hardware myself, so I won't be able to
-reproduce on this specific architecture.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
