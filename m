@@ -1,223 +1,102 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 10 Mar 2015 19:24:34 +0100
-Subject: [Buildroot] [PATCH v5 3/3] GNURadio: new package
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 10 Mar 2015 18:35:21 +0100
+Subject: [Buildroot] [PATCH v5 1/3] pkg-cmake: allow to build package in
+	a subdirectory
 In-Reply-To: <1426011874-11011-1-git-send-email-gwenj@trabucayre.com>
 References: <1426011874-11011-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1426011874-11011-3-git-send-email-gwenj@trabucayre.com>
+Message-ID: <CAHXCMMK00FKgwO0iHs3J3kguRsFvMD5hfBgUUJ8dKcdKw0CDSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hi Gwenhael,
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v4 -> v5:
-* GNURadio -> gnuradio.
-* help for all options.
-* rename patch, add signed-off and a comment.
-* dependencies comment.
-* typo. 
-* better workaround to avoid compile fails when neon is enabled.
-* indentation.
-* better options handlings.
-Changes v2 -> v3:
-* move comment at the beginning of the file.
-* add a patch to suppress boost-test dependency.
-* move python dependencies in the specific option.
-* use stable archive instead of git.
-* add hook specific for ARM for using neon if available (without this hook volk
-  fails to build).
-Changes v1 -> v2:
-* overload _BUILDDIR variable to specify build directory
----
- package/Config.in                                  |  1 +
- .../0001-suppress-boost_unitest-detection.patch    | 32 ++++++++++++
- package/gnuradio/Config.in                         | 46 +++++++++++++++++
- package/gnuradio/gnuradio.hash                     |  2 +
- package/gnuradio/gnuradio.mk                       | 59 ++++++++++++++++++++++
- 5 files changed, 140 insertions(+)
- create mode 100644 package/gnuradio/0001-suppress-boost_unitest-detection.patch
- create mode 100644 package/gnuradio/Config.in
- create mode 100644 package/gnuradio/gnuradio.hash
- create mode 100644 package/gnuradio/gnuradio.mk
+On Tue, Mar 10, 2015 at 7:24 PM, Gwenhael Goavec-Merou
+<gwenj@trabucayre.com> wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>
+> For some cmake based packages, like GNURadio, it's forbidden to do the
+> compilation directly in the sources directory. This patch add a new
+> variable to specify, if needed, the name of a sub-directory used to compile.
+>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+> Changes v4 -> v5:
+>  * Instead of overloading BUILDDIR uses a variable to set if package is compiled
+>    in-source-tree or not
+>  * update again manual
+> Changes v2 -> v3:
+>  * Update docs to add detail about LIBFOO_BUILDDIR
+> Changes v1 -> v2:
+>  * Allow to overload $(2)_BUILDDIR instead of adding a new variable and test
+> ---
+>  docs/manual/adding-packages-cmake.txt |  3 +++
+>  package/pkg-cmake.mk                  | 11 +++++++++--
+>  2 files changed, 12 insertions(+), 2 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+> index d92b209..0d4f2fa 100644
+> --- a/docs/manual/adding-packages-cmake.txt
+> +++ b/docs/manual/adding-packages-cmake.txt
+> @@ -146,3 +146,6 @@ possible to customize what is done in any particular step:
+>    +LIBFOO_CONFIGURE_CMDS+ variable, it will be used instead of the
+>    default CMake one. However, using this method should be restricted
+>    to very specific cases. Do not use it in the general case.
+> +
+> +* By adding +LIBFOO_SUPPORTS_IN_SOURCE_BUILD = no+ when a package
+> +  prevents doing an in-source-tree build.
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 2404c40..9de21b5 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -61,7 +61,12 @@ $(2)_INSTALL_STAGING_OPTS    ?= DESTDIR=$$(STAGING_DIR) install
+>  $(2)_INSTALL_TARGET_OPTS               ?= DESTDIR=$$(TARGET_DIR) install
+>
+>  $(2)_SRCDIR                    = $$($(2)_DIR)/$$($(2)_SUBDIR)
+> +
+> +ifeq ($$($(2)_SUPPORTS_IN_SOURCE_BUILD), no)
+s/, no/,no/
 
-diff --git a/package/Config.in b/package/Config.in
-index cab9382..5d9e540 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1043,6 +1043,7 @@ menu "Miscellaneous"
- 	source "package/clamav/Config.in"
- 	source "package/collectd/Config.in"
- 	source "package/empty/Config.in"
-+	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
- 	source "package/haveged/Config.in"
- 	source "package/mcrypt/Config.in"
-diff --git a/package/gnuradio/0001-suppress-boost_unitest-detection.patch b/package/gnuradio/0001-suppress-boost_unitest-detection.patch
-new file mode 100644
-index 0000000..ab8411b
---- /dev/null
-+++ b/package/gnuradio/0001-suppress-boost_unitest-detection.patch
-@@ -0,0 +1,32 @@
-+By default, the boost test option is mandatory for build environment
-+detection. 
-+This patch suppress this dependency and allows the test part only if
-+build_test is enabled at the Buildroot level.
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+Index: gnuradio-3.7.5/volk/cmake/VolkBoost.cmake
-+===================================================================
-+--- gnuradio-3.7.5.orig/volk/cmake/VolkBoost.cmake
-++++ gnuradio-3.7.5/volk/cmake/VolkBoost.cmake
-+@@ -29,7 +29,6 @@ set(__INCLUDED_VOLK_BOOST_CMAKE TRUE)
-+ set(BOOST_REQUIRED_COMPONENTS
-+     filesystem
-+     system
-+-    unit_test_framework
-+     program_options
-+ )
-+ 
-+Index: gnuradio-3.7.5/volk/lib/CMakeLists.txt
-+===================================================================
-+--- gnuradio-3.7.5.orig/volk/lib/CMakeLists.txt
-++++ gnuradio-3.7.5/volk/lib/CMakeLists.txt
-+@@ -541,7 +541,7 @@ endif(ENABLE_STATIC_LIBS)
-+ ########################################################################
-+ 
-+ 
-+-if(Boost_FOUND)
-++if(Boost_FOUND AND BUILD_TEST)
-+ 
-+     set_source_files_properties(
-+         ${CMAKE_CURRENT_SOURCE_DIR}/testqa.cc PROPERTIES
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-new file mode 100644
-index 0000000..a95c704
---- /dev/null
-+++ b/package/gnuradio/Config.in
-@@ -0,0 +1,46 @@
-+comment "gnuradio needs a toolchain w/ C++, IPV6, threads, largefile, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+			!BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
-+			!BR2_INET_IPV6
-+
-+config BR2_PACKAGE_GNURADIO
-+	bool "gnuradio"
-+	depends on BR2_INET_IPV6 # boost
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE # boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # use fork()
-+	depends on BR2_USE_WCHAR # boost
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	help
-+	  GNU Radio is a free & open-source software development toolkit
-+	  that provides signal processing blocks to implement software
-+	  radios. It can be used with readily-available low-cost external
-+	  RF hardware to create software-defined radios, or without
-+	  hardware in a simulation-like environment. It is widely used in
-+	  hobbyist, academic and commercial environments to support both
-+	  wireless communications research and real-world radio systems.
-+
-+	  http://gnuradio.org/
-+
-+if BR2_PACKAGE_GNURADIO
-+
-+config BR2_PACKAGE_GNURADIO_BLOCKS
-+	bool "blocks support"
-+	help
-+	  GNU Radio basic block library
-+
-+config BR2_PACKAGE_GNURADIO_PYTHON
-+	bool "python support"
-+	select BR2_PACKAGE_BOOST_PYTHON
-+	select BR2_PACKAGE_PYTHON
-+	help
-+	  Enable python component
-+
-+endif
-diff --git a/package/gnuradio/gnuradio.hash b/package/gnuradio/gnuradio.hash
-new file mode 100644
-index 0000000..a25b466
---- /dev/null
-+++ b/package/gnuradio/gnuradio.hash
-@@ -0,0 +1,2 @@
-+# From http://gnuradio.org/redmine/projects/gnuradio/files
-+md5	b4a917a548f41ce25c6c88f9bc864bca	gnuradio-3.7.5.tar.gz
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-new file mode 100644
-index 0000000..e503911
---- /dev/null
-+++ b/package/gnuradio/gnuradio.mk
-@@ -0,0 +1,59 @@
-+################################################################################
-+#
-+# gnuradio
-+#
-+################################################################################
-+
-+GNURADIO_VERSION = 3.7.5
-+GNURADIO_SITE = http://gnuradio.org/redmine/attachments/download/792
-+GNURADIO_LICENSE = GPLv3+
-+GNURADIO_LICENSE_FILES = COPYING
-+
-+# gnuradio prevents doing an in-source-tree build
-+GNURADIO_SUPPORTS_IN_SOURCE_BUILD = no
-+
-+# host-python-cheetah is needed for volk to compile
-+GNURADIO_DEPENDENCIES = \
-+		host-python-cheetah \
-+		host-swig \
-+		boost
-+
-+GNURADIO_CONF_OPTS = \
-+		-DENABLE_DEFAULT=OFF \
-+		-DENABLE_VOLK=ON \
-+		-DENABLE_GNURADIO_RUNTIME=ON
-+
-+#For third-party blocks,  the gnuradio libraries are mandatory at 
-+# compile time.
-+GNURADIO_INSTALL_STAGING = YES
-+
-+# Yes, this is silly, because -march is already known by the compiler
-+# with the internal toolchain, and passed by the external wrapper for
-+# external toolchains. Nonetheless, gnuradio does some matching on the
-+# CFLAGS to decide whether to build the NEON functions or not, and
-+# wants to see the string 'armv7' in the CFLAGS.
-+ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-+GNURADIO_CONF_OPTS += -DCMAKE_C_FLAGS="-march=armv7-a"
-+endif
-+
-+# As soon as -mfpu=neon is supported by the compiler, gnuradio will try
-+# to use it. But having NEON support in the compiler doesn't necessarily
-+# mean we have NEON support in our CPU.
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),)
-+GNURADIO_CONF_OPTS += -Dhave_mfpu_neon=0
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNURADIO_BLOCKS),y)
-+GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
-+GNURADIO_DEPENDENCIES += python
-+GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
-+endif
-+
-+$(eval $(cmake-package))
+s/$(2)/$(3)/
+When in-srctree build is forbidden, it is for both target and host
+package, so there is no need for having
+HOST_FOO_SUPPORTS_IN_SOURCE_BUILD set when
+FOO_SUPPORTS_IN_SOURCE_BUILD is already set.
+
+> +$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/buildroot-build
+> +else
+>  $(2)_BUILDDIR                  = $$($(2)_SRCDIR)
+> +endif
+>
+>  #
+>  # Configure step. Only define it if not already defined by the package
+> @@ -73,7 +78,8 @@ ifeq ($(4),target)
+>
+>  # Configure package for target
+>  define $(2)_CONFIGURE_CMDS
+> -       (cd $$($$(PKG)_BUILDDIR) && \
+> +       (mkdir -p $$($$(PKG)_BUILDDIR) && \
+> +       cd $$($$(PKG)_BUILDDIR) && \
+>         rm -f CMakeCache.txt && \
+>         PATH=$$(BR_PATH) \
+>         $$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> @@ -98,7 +104,8 @@ else
+>
+>  # Configure package for host
+>  define $(2)_CONFIGURE_CMDS
+> -       (cd $$($$(PKG)_BUILDDIR) && \
+> +       (mkdir -p $$($$(PKG)_BUILDDIR) && \
+> +       cd $$($$(PKG)_BUILDDIR) && \
+>         rm -f CMakeCache.txt && \
+>         PATH=$$(BR_PATH) \
+>         $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> --
+> 2.0.5
+>
+
+Regards,
+
 -- 
-2.0.5
+Samuel
