@@ -1,58 +1,28 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 9 Mar 2015 20:31:51 -0500
-Subject: [Buildroot] [PATCH 1/1] bash: added option to disable locale
-	support
-In-Reply-To: <20150309224257.2c985fbf@free-electrons.com>
-References: <1425935595-46330-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20150309224257.2c985fbf@free-electrons.com>
-Message-ID: <CANQCQpbKmA6of1MQrBB1WY16rfApDYaA6J0uK8PEtHmxn96inA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Mar 2015 06:45:29 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: add target to clean targetfs
+In-Reply-To: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+Message-ID: <20150310044529.GL2518@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all.
+Hi Emeric,
 
-On Mon, Mar 9, 2015 at 4:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Matt Weber,
->
-> On Mon,  9 Mar 2015 16:13:15 -0500, Matt Weber wrote:
->
->> +if BR2_PACKAGE_BASH
->> +
->> +config BR2_PACKAGE_BASH_NO_LOCALE
->> +     bool "disable locale support"
->> +     help
->> +       Disable locale support for cases where toolchain has it
->> +       but target isn't setup to use it.
->> +
->> +endif
->
-> To be honest, I'm not sure we want to support such cases. What does it
-> mean for the target to not be setup to use locales?
+On Mon, Mar 09, 2015 at 08:25:00PM -0400, Emeric Vigier wrote:
+> +clean-target:
+> +	rm -rf $(TARGET_DIR) $(STAGING_DIR) $(BUILD_DIR)/.root \
+> +		$(BUILD_DIR)/*/.stamp_target_installed $(BUILD_DIR)/*/.stamp_staging_installed \
+> +		$(BUILD_DIR)/linux-*/.stamp_installed $(BUILD_DIR)/*/.built
 
-I should probably clarify, this disabled the runtime check of locale
-that bash did everytime a shell was invoked.  All packages where still
-built with locale support.  Busybox ash didn't perform this check so
-we never noticed it until we switched to bash.  (I believe, will have
-to double check)Bash is running  setlocale after checking for a env
-variable LC_xxxxx before the shell starts.  Currently we don't have
-our env setup to by default have LC_xxxxx set.  Instead we  set the
-LC_xxxxx as part of the service/app start rcS script. (There maybe
-better way's of handling this I'm sure).
+.stamp_built ?
 
-Thanks,
-Matt
+baruch
 
->
-> What is the opinion of other Buildroot developers?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
