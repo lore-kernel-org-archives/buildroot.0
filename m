@@ -1,61 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2015 22:53:53 +0100
-Subject: [Buildroot] [PATCH 2/2] samba4: bump to version 4.2.0
-In-Reply-To: <20150306123518.7a76d66c@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 6 Mar 2015 12:35:18 +0100")
-References: <1425588249-20942-1-git-send-email-gustavo@zacarias.com.ar>
- <1425588249-20942-2-git-send-email-gustavo@zacarias.com.ar>
- <20150305232946.3620697e@free-electrons.com>
- <54F8F0AC.8030707@zacarias.com.ar>
- <20150306094008.7baf8c91@free-electrons.com>
- <54F96D83.4010304@zacarias.com.ar>
- <20150306102632.20dff6f7@free-electrons.com>
- <54F974C3.2020509@zacarias.com.ar>
- <20150306104010.76c71f6b@free-electrons.com>
- <54F98235.7030509@zacarias.com.ar>
- <20150306123518.7a76d66c@free-electrons.com>
-Message-ID: <87a8zko6xa.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Mar 2015 22:54:19 +0100
+Subject: [Buildroot] [PATCH v5 1/3] pkg-cmake: allow to build package in
+ a subdirectory
+In-Reply-To: <54FF656E.1030400@mind.be>
+References: <1426011874-11011-1-git-send-email-gwenj@trabucayre.com>
+ <CAHXCMMK00FKgwO0iHs3J3kguRsFvMD5hfBgUUJ8dKcdKw0CDSQ@mail.gmail.com>
+ <20150310185612.10d9db1d@free-electrons.com>
+ <54FF656E.1030400@mind.be>
+Message-ID: <20150310225419.633df718@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Arnout Vandecappelle,
 
-Hi,
+On Tue, 10 Mar 2015 22:43:10 +0100, Arnout Vandecappelle wrote:
 
-> But for example, you almost never ever give a Reviewed-by or a
- > Tested-by tag on a patch submitted by another developer. Whenever there
- > is a patch touching a package you typically take care of (Samba, Squid,
- > etc.) submitted by another developer, I have to ping you to get your
- > feedback/input on the patch.
+>  I'm all for building in a subirectory by default and only do it directly in the
+> tree when necessary.
+> 
+>  And in fact, I would not even introduce the _REQUIRES_IN_SOURCE_BUILD variable
+> until it is proven to be necessary. BTW, Thomas, did you introduce something
+> like that in your out-of-source-build branch?
 
- > So if you feel there is inertia on a given topic, just help the topic
- > make progress by reviewing the patches, saying you tested the series,
- > etc. When a core developer like you gives his positive feedback on a
- > given patch, for me (and I believe for Peter as well) it's a very
- > strong sign that the patch is good to apply. I never build test your
- > patches because I fully trust you. You can use this trust to help other
- > patches go in.
+Yes, I did have a flag that allows a package to say "I support
+out-of-tree build". It defaulted to "NO" in generic-package, and to
+"YES" in autotools-package and cmake-package, but can be overridden by
+individual packages. For example, 'linux' can support out of tree build
+even though it's a generic-package (well, now a kconfig-package), or an
+autotools package may not support out of tree due to stupidities done
+by the upstream developer.
 
-Yes, exactly!
+However, this branch is now very old, and was far from being ready.
 
+I really would like to put the smallest amount of work on Gwenhael
+shoulders: I don't want to ask him, as a prerequisite of getting
+gnuradio merged, to do some major surgery work deep in our package
+infrastructure. So can we settle on a temporary solution that works for
+gnuradio and is acceptable, and implement the grand plan of doing full
+out of tree build at some later point?
 
-> I think we should really meet once in person one day so you can feel how
- > much I value the contributions done by all developers, and especially
- > yours.
+Cheers,
 
-Buildroot dev days in Argentina? I'm up for it if we can find a sponsor
-;)
-
-
- > Do you remember that I already yelled at Peter because he wasn't
- > posting to the list his patches before committing them ? So clearly,
- > this is nothing personal with you, you see ?
-
-And that is good, thanks. Open source (to me atleast) is very much about
-everyone playing according to the same rules.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
