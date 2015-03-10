@@ -1,98 +1,58 @@
-From: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
-Date: Mon,  9 Mar 2015 20:25:00 -0400
-Subject: [Buildroot] [PATCH 1/1] Makefile: add target to clean targetfs
-Message-ID: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 9 Mar 2015 20:31:51 -0500
+Subject: [Buildroot] [PATCH 1/1] bash: added option to disable locale
+	support
+In-Reply-To: <20150309224257.2c985fbf@free-electrons.com>
+References: <1425935595-46330-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20150309224257.2c985fbf@free-electrons.com>
+Message-ID: <CANQCQpbKmA6of1MQrBB1WY16rfApDYaA6J0uK8PEtHmxn96inA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If you had some files added to the targetfs (fs-overlay, new packages,
-...) and you no longer need them, buildroot does not offer a simple way
-to remove these items from the output/target directory. The rule added
-by this commit allows you to clean the targetfs. Issuing 'make'
-afterward will generate a new and clean targetfs.
+Thomas, all.
 
-A section in the documentation is also added. It describes few examples
-when developers could need it.
+On Mon, Mar 9, 2015 at 4:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Matt Weber,
+>
+> On Mon,  9 Mar 2015 16:13:15 -0500, Matt Weber wrote:
+>
+>> +if BR2_PACKAGE_BASH
+>> +
+>> +config BR2_PACKAGE_BASH_NO_LOCALE
+>> +     bool "disable locale support"
+>> +     help
+>> +       Disable locale support for cases where toolchain has it
+>> +       but target isn't setup to use it.
+>> +
+>> +endif
+>
+> To be honest, I'm not sure we want to support such cases. What does it
+> mean for the target to not be setup to use locales?
 
-Signed-off-by: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
----
- Makefile                                |  5 +++++
- docs/manual/advanced.txt                |  2 ++
- docs/manual/clean-target-filesystem.txt | 37 +++++++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
- create mode 100644 docs/manual/clean-target-filesystem.txt
+I should probably clarify, this disabled the runtime check of locale
+that bash did everytime a shell was invoked.  All packages where still
+built with locale support.  Busybox ash didn't perform this check so
+we never noticed it until we switched to bash.  (I believe, will have
+to double check)Bash is running  setlocale after checking for a env
+variable LC_xxxxx before the shell starts.  Currently we don't have
+our env setup to by default have LC_xxxxx set.  Instead we  set the
+LC_xxxxx as part of the service/app start rcS script. (There maybe
+better way's of handling this I'm sure).
 
-diff --git a/Makefile b/Makefile
-index af043a3..eee2dbb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -679,6 +679,11 @@ graph-depends: graph-depends-requirements
- 	|tee $(BASE_DIR)/graphs/$(@).dot \
- 	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
- 
-+clean-target:
-+	rm -rf $(TARGET_DIR) $(STAGING_DIR) $(BUILD_DIR)/.root \
-+		$(BUILD_DIR)/*/.stamp_target_installed $(BUILD_DIR)/*/.stamp_staging_installed \
-+		$(BUILD_DIR)/linux-*/.stamp_installed $(BUILD_DIR)/*/.built
-+
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
-diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
-index b7bfc49..1cf0427 100644
---- a/docs/manual/advanced.txt
-+++ b/docs/manual/advanced.txt
-@@ -14,3 +14,5 @@ include::download-location.txt[]
- include::package-make-target.txt[]
- 
- include::using-buildroot-development.txt[]
-+
-+include::clean-target-filesystem.txt[]
-diff --git a/docs/manual/clean-target-filesystem.txt b/docs/manual/clean-target-filesystem.txt
-new file mode 100644
-index 0000000..0274474
---- /dev/null
-+++ b/docs/manual/clean-target-filesystem.txt
-@@ -0,0 +1,37 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+==== Clean target filesystem
-+
-+There are various cases where you would like to clean the target
-+filesystem. Especially once you understood that buildroot build system
-+is kept simple, and does not allow to uninstall files. Let's take some
-+examples:
-+
-+1. You enabled +PACKAGE_OPENSSH+ to have a SSH server running on your
-+   board. But you figure out that +sshd+ does not run well on your
-+   target's architecture. Thus you decide to disable +PACKAGE_OPENSSH+
-+   and enable +PACKAGE_DROPBEAR+ instead. You run +make+, +openssh+
-+   gets built and installed. Problem: +openssh+ files are still present
-+   in +output/target+!
-+
-+2. You enabled +PACKAGE_NTPD+ and set the local timezone to
-+   +America/Montreal+ with +BR2_TARGET_LOCALTIME+ config. Then you find
-+   out that +Montreal+ local has been replaced by +Toronto+ (French
-+   looks like a rogue language). You enter +make menuconfig+, make the
-+   change, save, and run +make+ again. Problem:
-+   +output/target/etc/timezone+ still has +America/Montreal+ content!
-+
-+Solution to this is either to identify which package to reconfigure, or
-+remove files manually, or destroy the target filesystem and recreate it.
-+This latter option is convenient: you don't have to care about which
-+packages to rebuild, and it is fast. Here is how to recreate your
-+target filesystem, and get rid of filesystem _stains_:
-+
-+------------------
-+make clean-target
-+make
-+------------------
-+
-++clean-target+ removes +output/target+, tells buildroot to recreate the
-+target skeleton, and install each package again.
--- 
-1.9.1
+Thanks,
+Matt
+
+>
+> What is the opinion of other Buildroot developers?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
