@@ -1,7 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Mar 2015 21:07:09 +0100
-Subject: [Buildroot] [PATCH v1] qt: fix postgresql plugin compile
-Message-ID: <1426104429-26006-1-git-send-email-ps.report@gmx.net>
+Date: Wed, 11 Mar 2015 21:12:17 +0100
+Subject: [Buildroot] [PATCH v2] qt: fix postgresql plugin compile
+Message-ID: <1426104737-5140-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,8 +24,12 @@ make: *** [/ssd1/thomas/autobuild/instance-0/output/build/qt-4.8.6/.stamp_config
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
+Changes v1 --> v2:
+  - add missing changes to package/qt/qt.mk
+---
  .../qt/0007-configure-add-psql_config-option.patch | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ package/qt/qt.mk                                   |  3 +-
+ 2 files changed, 63 insertions(+), 2 deletions(-)
  create mode 100644 package/qt/0007-configure-add-psql_config-option.patch
 
 diff --git a/package/qt/0007-configure-add-psql_config-option.patch b/package/qt/0007-configure-add-psql_config-option.patch
@@ -96,5 +100,19 @@ index 0000000..3723afa
 +-- 
 +2.1.4
 +
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 3fb557f..53c487d 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -361,8 +361,7 @@ ifeq ($(BR2_PACKAGE_QT_ODBC),y)
+ QT_CONFIGURE_OPTS += -qt-sql-odbc
+ endif
+ ifeq ($(BR2_PACKAGE_QT_PSQL),y)
+-QT_CONFIGURE_OPTS += -qt-sql-psql
+-QT_CONFIGURE_ENV += PSQL_LIBS=-L$(STAGING_DIR)/usr/lib
++QT_CONFIGURE_OPTS += -qt-sql-psql -psql_config $(STAGING_DIR)/usr/bin/pg_config
+ QT_DEPENDENCIES += postgresql
+ endif
+ ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
 -- 
 2.1.4
