@@ -1,175 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Mar 2015 23:01:24 +0100
-Subject: [Buildroot] [PATCHv2 1/5] uclibc: adapt thread implementation
-	selection to uClibc-ng
+Date: Wed, 11 Mar 2015 23:01:26 +0100
+Subject: [Buildroot] [PATCHv2 3/5] uclibc: remove version from the uclibc-ng
+	config option
 In-Reply-To: <1426111288-20529-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1426111288-20529-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1426111288-20529-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1426111288-20529-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc-ng does not support linuxthreads or linuxthreads.old on
-architectures that have NPTL support. This creates another complicated
-dependency: dependeing on the uClibc version being used, not the same
-thread implementations are available.
+For the moment, we probably don't want to have several versions of
+uClibc-ng supported at the same time. In preparation to the bump of
+uClibc-ng to 1.0.1, this commit gets rid of the version number from
+the uclibc-ng config option so that we don't have to rename this
+option over and over again each time a new uClibc-ng release is
+made. This would be annoying in terms of Config.in.legacy handling.
 
-In order to handle this situation, this patch introduces three hidden
-booleans:
-
- - BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
- - BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
- - BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-
-They are selected by the different uClibc versions, depending on which
-thread implementation they support on the different architectures.
-
-Then, the choice of the thread implementation can rely on those
-booleans to know if a given thread implementation is available in the
-current architecture / uClibc version selection.
-
-This makes sure that unusable thread implementation do not get
-selected, therefore fixing build issues such as:
-
-  http://autobuild.buildroot.org/results/89e/89e423bee040cbce3e82cd89f1191efaac490c0d/
-
-The support table is as follows (only taking into account
-architectures that allow the selection of
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC, other architectures are not
-considered) :
-
-             ----uclibc----   uclibc-xtensa-   --uclibc-arc--  --uclibc-ng---
-             LT LT.old NPTL   LT LT.old NPTL   LT LT.old NPTL  LT LT.old NPTL
-arc(le|eb)                                      y   y     n    n    n     n (1)
-arm(eb)      y    y     y                                      n    y     y (2)
-bfin         n    y     n                                      y    y     n
-i386         y    y     y                                      n    n     y (3)
-m68k         y    y     y                                      y    y     n
-mips(64)(el) y    y     y                                      n    n     y
-powerpc      y    y     y                                      n    n     y
-sh           y    y     y                                      n    n     y
-sparc        y    y     y                                      n    n     y
-xtensa                        n    y     n                     n    n     y
-x86_64       y    y     y                                      n    n     y
-
-  (1) : uclibc-ng only has NPTL support for ARC but it requires a more
-        recent compiler version that hasn't been officially released
-        by Synopsys.
-
-  (2) : the general idea of uclibc-ng is to only support NPTL on
-        architectures where it is available. However, in order to
-        support ARM noMMU platforms, LT.old support has been kept on
-        ARM.
-
-  (3) : except i386 itself, which doesn't have what's needed for NPTL
-        support. i386 is simply not supported by uclibc-ng basically.
+Since the option BR2_UCLIBC_NG_VERSION_1_0_0 has never been part of
+any Buildroot release, we don't have to add anything to
+Config.in.legacy.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in | 43 +++++++++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 10 deletions(-)
+ package/uclibc/Config.in                                    | 8 ++++----
+ package/uclibc/{uClibc-ng-1.0.0.config => uClibc-ng.config} | 0
+ package/uclibc/uclibc.mk                                    | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+ rename package/uclibc/{uClibc-ng-1.0.0.config => uClibc-ng.config} (100%)
 
 diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 3a65752..18e02c2 100644
+index 329e1f1..c65277b 100644
 --- a/package/uclibc/Config.in
 +++ b/package/uclibc/Config.in
-@@ -7,6 +7,15 @@ config BR2_PACKAGE_UCLIBC
- 
- comment "uClibc Options"
- 
-+config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+       bool
-+
-+config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+       bool
-+
-+config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+       bool
-+
- choice
- 	prompt "uClibc C library Version"
- 	default BR2_UCLIBC_VERSION_0_9_33
-@@ -15,21 +24,39 @@ choice
- 
- 	config BR2_UCLIBC_VERSION_0_9_33
- 		bool "uClibc 0.9.33.x"
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
-+		       if !BR2_bfin
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-+		       if !BR2_bfin && !BR2_x86_i386
- 		depends on !(BR2_arc || BR2_xtensa)
- 
- 	config BR2_UCLIBC_VERSION_ARC_GIT
- 		bool "uClibc Git ARC"
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+@@ -37,8 +37,8 @@ choice
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
  		depends on BR2_arc
  
- 	config BR2_UCLIBC_NG_VERSION_1_0_0
- 		bool "uClibc-ng 1.0.0"
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
-+		       if BR2_bfin || BR2_m68k
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
-+		       if BR2_bfin || BR2_m68k || BR2_arm || BR2_armeb
-+		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-+		       if !BR2_arc && !BR2_bfin && !BR2_m68k && !BR2_x86_i386
+-	config BR2_UCLIBC_NG_VERSION_1_0_0
+-		bool "uClibc-ng 1.0.0"
++	config BR2_UCLIBC_VERSION_NG
++		bool "uClibc-ng"
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
+ 		       if BR2_bfin || BR2_m68k
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+@@ -72,14 +72,14 @@ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+ 	default "arc-2014.12" if BR2_UCLIBC_VERSION_ARC_GIT
+-	default 1.0.0		if BR2_UCLIBC_NG_VERSION_1_0_0
++	default 1.0.0		if BR2_UCLIBC_VERSION_NG
+ 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
- 	config BR2_UCLIBC_VERSION_XTENSA_GIT
- 		bool "uClibc Git Xtensa"
- 		depends on BR2_xtensa
-+		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+ 	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+-	default "package/uclibc/uClibc-ng-1.0.0.config" if BR2_UCLIBC_NG_VERSION_1_0_0
++	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_ARC_GIT
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_XTENSA_GIT
+diff --git a/package/uclibc/uClibc-ng-1.0.0.config b/package/uclibc/uClibc-ng.config
+similarity index 100%
+rename from package/uclibc/uClibc-ng-1.0.0.config
+rename to package/uclibc/uClibc-ng.config
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index feca77b..3a8f191 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -11,7 +11,7 @@ UCLIBC_LICENSE_FILES = COPYING.LIB
  
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
-+		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
-+		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
-+		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-+		       if !BR2_bfin && !BR2_x86_i386 && !BR2_xtensa
- 		depends on !(BR2_arc)
- 
- endchoice
-@@ -101,8 +128,9 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if !BR2_xtensa
--	default BR2_PTHREADS_OLD
-+	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
- 	help
- 	  Use this option to select the thread library implementation
- 	  that should be used in your toolchain. Not all thread
-@@ -115,24 +143,19 @@ choice
- 
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
--		depends on !BR2_bfin
--		depends on !BR2_xtensa
- 		select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
- 
- 	config BR2_PTHREADS_OLD
- 		bool "linuxthreads (stable/old)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
- 
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--		depends on !BR2_arc
--		depends on !BR2_bfin
--		# There is NPTL support for Xtensa in uClibc-ng, but
--		# not in the main uClibc repository.
--		depends on !BR2_xtensa || !BR2_UCLIBC_VERSION_XTENSA_GIT
--		depends on !BR2_x86_i386
-+		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
- endchoice
- 
- config BR2_PTHREAD_DEBUG
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
+-else ifeq ($(BR2_UCLIBC_NG_VERSION_1_0_0),y)
++else ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ else ifeq ($(BR2_UCLIBC_VERSION_ARC_GIT),y)
+@@ -482,7 +482,7 @@ endif
+ # interpreter, but since uClibc-ng version is 1.0.0, it generates
+ # ld{64,}-uClibc.so.1. In order to avoid changing gcc, we simply
+ # create the necessary symbolic links here.
+-ifeq ($(BR2_UCLIBC_NG_VERSION_1_0_0),y)
++ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+ define UCLIBC_INSTALL_LDSO_SYMLINKS
+ 	if [ -e $(TARGET_DIR)/lib/ld64-uClibc.so.1 ]; then \
+ 		(cd $(TARGET_DIR)/lib;ln -sf ld64-uClibc.so.1 ld64-uClibc.so.0) \
 -- 
 2.1.0
