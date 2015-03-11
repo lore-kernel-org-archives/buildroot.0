@@ -1,38 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Mar 2015 21:47:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/softether: Fix iconv-related
- compile error
-In-Reply-To: <1426105728-7827-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1426105728-7827-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150311214742.21ce3993@free-electrons.com>
+From: =?windows-1252?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
+Date: Wed, 11 Mar 2015 21:47:55 +0100
+Subject: [Buildroot] [PATCH] avahi: add hash file
+In-Reply-To: <1426101989-20525-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1426101989-20525-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5500A9FB.3090307@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Am 11.03.2015 um 20:26 schrieb Gustavo Zacarias:
+> Help counteract upstream website issues, fixes:
+> http://autobuild.buildroot.net/results/103/103e5a62d16ed22414cc407eff8a78d5e8d7503c/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/avahi/avahi.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/avahi/avahi.hash
+> 
+> diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
+> new file mode 100644
+> index 0000000..99bbd51
+> --- /dev/null
+> +++ b/package/avahi/avahi.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
+> 
 
-On Wed, 11 Mar 2015 21:28:48 +0100, Bernd Kuhls wrote:
+This fixes the issue, but we should take care if the website is not going back up again
 
-> -ifeq ($(BR2_ENABLE_LOCALE),)
-> +ifneq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),)
-
-Just make this:
-
-ifeq ($(BR2_PACKAGE_LIBICONV),y)
-
-the softether Config.in file has:
-
-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-
-so if there's no locale support, we're sure libiconv is selected in the
-configuration.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Tested-by: Andr? Hentschel <nerv@dawncrow.de>
+Reviewed-by: Andr? Hentschel <nerv@dawncrow.de>
+Acked-by: Andr? Hentschel <nerv@dawncrow.de>
