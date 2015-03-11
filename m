@@ -1,60 +1,55 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 11 Mar 2015 16:44:22 +0000
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Mar 2015 17:53:30 +0100
 Subject: [Buildroot] [PATCH] system: add option for standalone telnetd
 	on target
-In-Reply-To: <877funmrkw.fsf@dell.be.48ers.dk>
+In-Reply-To: <1426092262.2375.11.camel@synopsys.com> (Alexey Brodkin's message
+ of "Wed, 11 Mar 2015 16:44:22 +0000")
 References: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
  <877funmrkw.fsf@dell.be.48ers.dk>
-Message-ID: <1426092262.2375.11.camel@synopsys.com>
+ <1426092262.2375.11.camel@synopsys.com>
+Message-ID: <87pp8flblh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-On Wed, 2015-03-11 at 17:22 +0100, Peter Korsgaard wrote:
-> >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
-> 
->  > If target has connection to the network it might be pretty useful to
->  > have telnet connection to it instead of serial console or even in
->  > addition to serial console.
-> 
->  > Even though it's possible to add telnetd on target manually via:
->  >  [a] Busybox - with "make busybox-menuconfig" and in "Networking
->  > Utilities" select "telnetd"
->  >  [b] xinetd
-> 
->  > Still additional manual steps will be required to allow root login over
->  > telnet.
-> 
->  > With this change it will be possible to get telnetd built and installed
->  > on target with only enabling BR2_SYSTEM_STANDALONE_TELNETD option in
->  > Buildroot configuration utility or in boards defconfig.
-> 
->  > Note that telnetd won't auto-start on boot because of securilty concerns
->  > - until user manually starts telnetd while connected via serial console
->  > there's no chance for unexpected root access to the target (this is
->  > especially true if root has no password set - which is by defult).
-> 
-> Any specific reason why you don't just configure a root password and
-> enable dropbear instead?
+Hi,
 
-Well I though of telnet as an essential replacement of serial console
-especially for development boards.
+>> Any specific reason why you don't just configure a root password and
+ >> enable dropbear instead?
 
-So my main intention was to get the most convenient tool for wide range
-of developers. 
+ > Well I though of telnet as an essential replacement of serial console
+ > especially for development boards.
 
-For example in Windows if I'm not mistaken Telnet client is available
-right from MS, while SSH client is always 3rd-party program like Putty. 
+These days I would say ssh is much more common.
 
-Also ability to not set password is convenient here - because people
-will ask "what's the password" otherwise. Still in case of devboards we
-have limited access to the network for foreigners so we may not care
-much about paranoid safety.
+ > So my main intention was to get the most convenient tool for wide range
+ > of developers. 
 
-Indeed your proposal may work if my motivation is not convincing enough.
+ > For example in Windows if I'm not mistaken Telnet client is available
+ > right from MS, while SSH client is always 3rd-party program like Putty. 
 
--Alexey
+If I'm not mistaken Windows no longer comes with telnet out of the box.
+
+E.G. first Google hit:
+
+http://social.technet.microsoft.com/wiki/contents/articles/910.windows-7-enabling-telnet-client.aspx
+
+ > Also ability to not set password is convenient here - because people
+ > will ask "what's the password" otherwise. Still in case of devboards we
+ > have limited access to the network for foreigners so we may not care
+ > much about paranoid safety.
+
+Don't they ask the same about the serial login password?
+
+
+ > Indeed your proposal may work if my motivation is not convincing enough.
+
+I can still be convinced, but my initial thought is that it isn't
+really a common enough use case / we should promote ssh instead.
+
+-- 
+Bye, Peter Korsgaard 
