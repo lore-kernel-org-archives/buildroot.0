@@ -1,9 +1,8 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 11 Mar 2015 13:13:22 +0100
-Subject: [Buildroot] [PATCH v6 2/3] python-cheetah: add host-package support
-In-Reply-To: <1426076003-12088-1-git-send-email-gwenj@trabucayre.com>
-References: <1426076003-12088-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1426076003-12088-2-git-send-email-gwenj@trabucayre.com>
+Date: Wed, 11 Mar 2015 13:13:21 +0100
+Subject: [Buildroot] [PATCH v6 1/3] pkg-cmake: allow to build package in a
+	subdirectory
+Message-ID: <1426076003-12088-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +11,75 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
-
-HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown is needed to avoids
-setuptools downloads markdown if it can't be find it.
+For some cmake based packages, like GNURadio, it's forbidden to do the
+compilation directly in the sources directory. This patch add a new 
+variable to specify, if needed, the name of a sub-directory used to compile.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
-Changes v3 -> v4:
- * use HOST_PYTHON_CHEETAH_DEPENDENCIES instead of PYTHON_CHEETAH_DEPENDENCIES
- * suppress '+' for dependency definition
+Changes v5 -> v6:
+ * s/, no/,NO/
+ * s/$$($(2)_SUPPORTS_IN_SOURCE_BUILD)/$$($(3)_SUPPORTS_IN_SOURCE_BUILD)/
+Changes v4 -> v5:
+ * Instead of overloading BUILDDIR uses a variable to set if package is compiled
+   in-source-tree or not
+ * update again manual
+Changes v2 -> v3:
+ * Update docs to add detail about LIBFOO_BUILDDIR
+Changes v1 -> v2:
+ * Allow to overload $(2)_BUILDDIR instead of adding a new variable and test
 ---
- package/python-cheetah/python-cheetah.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ docs/manual/adding-packages-cmake.txt |  3 +++
+ package/pkg-cmake.mk                  | 11 +++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-index 08076b5..3155951 100644
---- a/package/python-cheetah/python-cheetah.mk
-+++ b/package/python-cheetah/python-cheetah.mk
-@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
- PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
- PYTHON_CHEETAH_LICENSE = MIT
- PYTHON_CHEETAH_SETUP_TYPE = setuptools
-+HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index d92b209..0d4f2fa 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -146,3 +146,6 @@ possible to customize what is done in any particular step:
+   +LIBFOO_CONFIGURE_CMDS+ variable, it will be used instead of the
+   default CMake one. However, using this method should be restricted
+   to very specific cases. Do not use it in the general case.
++
++* By adding +LIBFOO_SUPPORTS_IN_SOURCE_BUILD = NO+ when a package
++  prevents doing an in-source-tree build.
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2404c40..9de21b5 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -61,7 +61,12 @@ $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+ $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
  
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
++
++ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),NO)
++$(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
++else
+ $(2)_BUILDDIR			= $$($(2)_SRCDIR)
++endif
+ 
+ #
+ # Configure step. Only define it if not already defined by the package
+@@ -73,7 +78,8 @@ ifeq ($(4),target)
+ 
+ # Configure package for target
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_BUILDDIR) && \
++	(mkdir -p $$($$(PKG)_BUILDDIR) && \
++	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+@@ -98,7 +104,8 @@ else
+ 
+ # Configure package for host
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_BUILDDIR) && \
++	(mkdir -p $$($$(PKG)_BUILDDIR) && \
++	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
 -- 
 2.0.5
