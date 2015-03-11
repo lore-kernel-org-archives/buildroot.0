@@ -1,140 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 22:13:58 +0100
-Subject: [Buildroot] [git commit] vsftpd: add security fix for CVE-2015-1419
-Message-ID: <20150311213915.91F217FFD0@busybox.osuosl.org>
+Date: Wed, 11 Mar 2015 22:16:43 +0100
+Subject: [Buildroot] [git commit] avahi: add hash file
+Message-ID: <20150311213915.A9E8E7FFD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=93e1f24e302409c588de2addeb53305c9afbad10
+commit: http://git.buildroot.net/buildroot/commit/?id=4014c9102e71fc59f703013a4e9ee936cf59f6d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2015-1419 - config option deny_file is not handled correctly.
-
-Also add hash file.
+Help counteract upstream website issues, fixes:
+http://autobuild.buildroot.net/results/103/103e5a62d16ed22414cc407eff8a78d5e8d7503c/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Andr?? Hentschel <nerv@dawncrow.de>
+Reviewed-by: Andr?? Hentschel <nerv@dawncrow.de>
+Acked-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vsftpd/0003-fix-CVE-2015-1419.patch |  102 +++++++++++++++++++++++++++
- package/vsftpd/vsftpd.hash                  |    2 +
- 2 files changed, 104 insertions(+), 0 deletions(-)
+ package/avahi/avahi.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/vsftpd/0003-fix-CVE-2015-1419.patch b/package/vsftpd/0003-fix-CVE-2015-1419.patch
+diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
 new file mode 100644
-index 0000000..95ad017
+index 0000000..99bbd51
 --- /dev/null
-+++ b/package/vsftpd/0003-fix-CVE-2015-1419.patch
-@@ -0,0 +1,102 @@
-+Fix CVE-2015-1419 - config option deny_file is not handled correctly.
-+From SUSE: https://bugzilla.suse.com/show_bug.cgi?id=915522
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+Index: vsftpd-3.0.2/ls.c
-+===================================================================
-+--- vsftpd-3.0.2.orig/ls.c
-++++ vsftpd-3.0.2/ls.c
-+@@ -7,6 +7,7 @@
-+  * Would you believe, code to handle directory listing.
-+  */
-+ 
-++#include <stdlib.h>
-+ #include "ls.h"
-+ #include "access.h"
-+ #include "defs.h"
-+@@ -243,11 +244,42 @@ vsf_filename_passes_filter(const struct
-+   struct mystr temp_str = INIT_MYSTR;
-+   struct mystr brace_list_str = INIT_MYSTR;
-+   struct mystr new_filter_str = INIT_MYSTR;
-++  struct mystr normalize_filename_str = INIT_MYSTR;
-++  const char *normname;
-++  const char *path;
-+   int ret = 0;
-+   char last_token = 0;
-+   int must_match_at_current_pos = 1;
-++
-+   str_copy(&filter_remain_str, p_filter_str);
-+-  str_copy(&name_remain_str, p_filename_str);
-++
-++  /* normalize filepath */
-++  path = str_strdup(p_filename_str);
-++  normname = realpath(path, NULL);
-++  if (normname == NULL)
-++     goto out;
-++  str_alloc_text(&normalize_filename_str, normname);
-++
-++  if (!str_isempty (&filter_remain_str) && !str_isempty(&normalize_filename_str)) {
-++    if (str_get_char_at(p_filter_str, 0) == '/') {
-++      if (str_get_char_at(&normalize_filename_str, 0) != '/') {
-++        str_getcwd (&name_remain_str);
-++
-++        if (str_getlen(&name_remain_str) > 1) /* cwd != root dir */
-++          str_append_char (&name_remain_str, '/');
-++
-++        str_append_str (&name_remain_str, &normalize_filename_str);
-++      }
-++      else
-++       str_copy (&name_remain_str, &normalize_filename_str);
-++    } else {
-++      if (str_get_char_at(p_filter_str, 0) != '{')
-++        str_basename (&name_remain_str, &normalize_filename_str);
-++      else
-++        str_copy (&name_remain_str, &normalize_filename_str);
-++    }
-++  } else
-++    str_copy(&name_remain_str, &normalize_filename_str);
-+ 
-+   while (!str_isempty(&filter_remain_str) && *iters < VSFTP_MATCHITERS_MAX)
-+   {
-+@@ -360,6 +392,9 @@ vsf_filename_passes_filter(const struct
-+     ret = 0;
-+   }
-+ out:
-++  free(normname);
-++  free(path);
-++  str_free(&normalize_filename_str);
-+   str_free(&filter_remain_str);
-+   str_free(&name_remain_str);
-+   str_free(&temp_str);
-+Index: vsftpd-3.0.2/str.c
-+===================================================================
-+--- vsftpd-3.0.2.orig/str.c
-++++ vsftpd-3.0.2/str.c
-+@@ -770,3 +770,14 @@ str_replace_unprintable(struct mystr* p_
-+   }
-+ }
-+ 
-++void
-++str_basename (struct mystr* d_str, const struct mystr* path)
-++{
-++  static struct mystr tmp;
-++
-++  str_copy (&tmp, path);
-++  str_split_char_reverse(&tmp, d_str, '/');
-++
-++  if (str_isempty(d_str))
-++   str_copy (d_str, path);
-++}
-+Index: vsftpd-3.0.2/str.h
-+===================================================================
-+--- vsftpd-3.0.2.orig/str.h
-++++ vsftpd-3.0.2/str.h
-+@@ -101,6 +101,7 @@ void str_replace_unprintable(struct myst
-+ int str_atoi(const struct mystr* p_str);
-+ filesize_t str_a_to_filesize_t(const struct mystr* p_str);
-+ unsigned int str_octal_to_uint(const struct mystr* p_str);
-++void str_basename (struct mystr* d_str, const struct mystr* path);
-+ 
-+ /* PURPOSE: Extract a line of text (delimited by \n or EOF) from a string
-+  * buffer, starting@character position 'p_pos'. The extracted line will
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-new file mode 100644
-index 0000000..6b46e4b
---- /dev/null
-+++ b/package/vsftpd/vsftpd.hash
++++ b/package/avahi/avahi.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	be46f0e2c5528fe021fafc8dab1ecfea0c1f183063a06977f8537fcd0b195e56	vsftpd-3.0.2.tar.gz
++# Locally calculated
++sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
