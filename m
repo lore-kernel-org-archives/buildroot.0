@@ -1,92 +1,140 @@
-From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <nrubinstein@aldebaran.com>
-Date: Wed, 11 Mar 2015 19:00:05 +0100
-Subject: [Buildroot] [PATCH] boost: enable boost-atomic
-Message-ID: <1426096805-28072-1-git-send-email-nrubinstein@aldebaran.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Mar 2015 14:59:13 -0300
+Subject: [Buildroot] [PATCH] vsftpd: add security fix for CVE-2015-1419
+Message-ID: <1426096753-32723-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It was disabled in february 2013 by commit
-e5434583badf1abf4a4620efa76452638ad9e177
-because did not build correctly with ucLibc at the time.
+Fixes CVE-2015-1419 - config option deny_file is not handled correctly.
 
-It now builds correctly with both uClibc v0.9.33 and uClibc-ng.
+Also add hash file.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/boost/Config.in | 3 +++
- package/boost/boost.mk  | 4 ++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/vsftpd/0003-fix-CVE-2015-1419.patch | 102 ++++++++++++++++++++++++++++
+ package/vsftpd/vsftpd.hash                  |   2 +
+ 2 files changed, 104 insertions(+)
+ create mode 100644 package/vsftpd/0003-fix-CVE-2015-1419.patch
+ create mode 100644 package/vsftpd/vsftpd.hash
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index a15b849..574f51a 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -50,6 +50,9 @@ config BR2_PACKAGE_BOOST_LAYOUT
- 	default "tagged" if BR2_PACKAGE_BOOST_LAYOUT_TAGGED
- 	default "versioned" if BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
- 
-+config BR2_PACKAGE_BOOST_ATOMIC
-+	bool "boost-atomic"
+diff --git a/package/vsftpd/0003-fix-CVE-2015-1419.patch b/package/vsftpd/0003-fix-CVE-2015-1419.patch
+new file mode 100644
+index 0000000..95ad017
+--- /dev/null
++++ b/package/vsftpd/0003-fix-CVE-2015-1419.patch
+@@ -0,0 +1,102 @@
++Fix CVE-2015-1419 - config option deny_file is not handled correctly.
++From SUSE: https://bugzilla.suse.com/show_bug.cgi?id=915522
 +
- config BR2_PACKAGE_BOOST_CHRONO
- 	bool "boost-chrono"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 7b56827..70160da 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -23,11 +23,11 @@ HOST_BOOST_FLAGS = --without-icu \
- 	iostreams locale log math mpi program_options python random regex \
- 	serialization signals system test thread timer wave)
- 
--# atomic library compile only with upstream version, wait for next release
- # coroutine breaks on some weak toolchains and it's new for 1.54+
- # log breaks with some toolchain combinations and it's new for 1.54+
--BOOST_WITHOUT_FLAGS = atomic coroutine log
-+BOOST_WITHOUT_FLAGS = coroutine log
- 
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++Index: vsftpd-3.0.2/ls.c
++===================================================================
++--- vsftpd-3.0.2.orig/ls.c
+++++ vsftpd-3.0.2/ls.c
++@@ -7,6 +7,7 @@
++  * Would you believe, code to handle directory listing.
++  */
++ 
+++#include <stdlib.h>
++ #include "ls.h"
++ #include "access.h"
++ #include "defs.h"
++@@ -243,11 +244,42 @@ vsf_filename_passes_filter(const struct
++   struct mystr temp_str = INIT_MYSTR;
++   struct mystr brace_list_str = INIT_MYSTR;
++   struct mystr new_filter_str = INIT_MYSTR;
+++  struct mystr normalize_filename_str = INIT_MYSTR;
+++  const char *normname;
+++  const char *path;
++   int ret = 0;
++   char last_token = 0;
++   int must_match_at_current_pos = 1;
+++
++   str_copy(&filter_remain_str, p_filter_str);
++-  str_copy(&name_remain_str, p_filename_str);
+++
+++  /* normalize filepath */
+++  path = str_strdup(p_filename_str);
+++  normname = realpath(path, NULL);
+++  if (normname == NULL)
+++     goto out;
+++  str_alloc_text(&normalize_filename_str, normname);
+++
+++  if (!str_isempty (&filter_remain_str) && !str_isempty(&normalize_filename_str)) {
+++    if (str_get_char_at(p_filter_str, 0) == '/') {
+++      if (str_get_char_at(&normalize_filename_str, 0) != '/') {
+++        str_getcwd (&name_remain_str);
+++
+++        if (str_getlen(&name_remain_str) > 1) /* cwd != root dir */
+++          str_append_char (&name_remain_str, '/');
+++
+++        str_append_str (&name_remain_str, &normalize_filename_str);
+++      }
+++      else
+++       str_copy (&name_remain_str, &normalize_filename_str);
+++    } else {
+++      if (str_get_char_at(p_filter_str, 0) != '{')
+++        str_basename (&name_remain_str, &normalize_filename_str);
+++      else
+++        str_copy (&name_remain_str, &normalize_filename_str);
+++    }
+++  } else
+++    str_copy(&name_remain_str, &normalize_filename_str);
++ 
++   while (!str_isempty(&filter_remain_str) && *iters < VSFTP_MATCHITERS_MAX)
++   {
++@@ -360,6 +392,9 @@ vsf_filename_passes_filter(const struct
++     ret = 0;
++   }
++ out:
+++  free(normname);
+++  free(path);
+++  str_free(&normalize_filename_str);
++   str_free(&filter_remain_str);
++   str_free(&name_remain_str);
++   str_free(&temp_str);
++Index: vsftpd-3.0.2/str.c
++===================================================================
++--- vsftpd-3.0.2.orig/str.c
+++++ vsftpd-3.0.2/str.c
++@@ -770,3 +770,14 @@ str_replace_unprintable(struct mystr* p_
++   }
++ }
++ 
+++void
+++str_basename (struct mystr* d_str, const struct mystr* path)
+++{
+++  static struct mystr tmp;
+++
+++  str_copy (&tmp, path);
+++  str_split_char_reverse(&tmp, d_str, '/');
+++
+++  if (str_isempty(d_str))
+++   str_copy (d_str, path);
+++}
++Index: vsftpd-3.0.2/str.h
++===================================================================
++--- vsftpd-3.0.2.orig/str.h
+++++ vsftpd-3.0.2/str.h
++@@ -101,6 +101,7 @@ void str_replace_unprintable(struct myst
++ int str_atoi(const struct mystr* p_str);
++ filesize_t str_a_to_filesize_t(const struct mystr* p_str);
++ unsigned int str_octal_to_uint(const struct mystr* p_str);
+++void str_basename (struct mystr* d_str, const struct mystr* path);
++ 
++ /* PURPOSE: Extract a line of text (delimited by \n or EOF) from a string
++  * buffer, starting@character position 'p_pos'. The extracted line will
+diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
+new file mode 100644
+index 0000000..6b46e4b
+--- /dev/null
++++ b/package/vsftpd/vsftpd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	be46f0e2c5528fe021fafc8dab1ecfea0c1f183063a06977f8537fcd0b195e56	vsftpd-3.0.2.tar.gz
 -- 
-2.1.4
-
-
--- 
-
-
-
-
-*This email and any attachment thereto are confidential and intended solely 
-for the use of the individual or entity to whom they are addressed.If you 
-are not the intended recipient, please be advised that disclosing, copying, 
-distributing or taking any action in reliance on the contents of this email 
-is strictly prohibited. In such case, please immediately advise the sender, 
-and delete all copies and attachment from your system.This email shall not 
-be construed and is not tantamount to an offer, an acceptance of offer, or 
-an agreement by Aldebaran Robotics on any discussion or contractual 
-document whatsoever. No employee or agent is authorized to represent or 
-bind Aldebaran Robotics to third parties by email, or act on behalf of 
-Aldebaran Robotics by email, without express written confirmation by 
-Aldebaran Robotics' duly authorized representatives.*
-------------------------------
-
-*Ce message ?lectronique et ?ventuelles pi?ces jointes sont confidentiels, 
-et exclusivement destin?s ? la personne ou l'entit? ? qui ils sont 
-adress?s.*
-
-*Si vous n'?tes pas le destinataire vis?, vous ?tes pri? de ne pas 
-divulguer, copier, distribuer ou prendre toute d?cision sur la foi de ce 
-message ?lectronique. Merci d'en aviser imm?diatement l'exp?diteur et de 
-supprimer toutes les copies et ?ventuelles pi?ces jointes de votre syst?me.*
-
-*Ce message ?lectronique n'?quivaut pas ? une offre, ? une acceptation 
-d'offre, ou ? un accord d'Aldebaran Robotics sur toute discussion ou 
-document contractuel quel qu'il soit, et ne peut ?tre interpr?t? comme tel. 
-Aucun employ? ou agent d'Aldebaran Robotics n'est autoris? ? repr?senter ou 
-? engager la soci?t? par email, ou ? agir au nom et pour le compte de la 
-soci?t? par email, sans qu'une confirmation ?crite soit donn?e par le 
-repr?sentant l?gal d'Aldebaran Robotics ou par toute autre personne ayant 
-re?u d?l?gation de pouvoir appropri?e.*
+2.0.5
