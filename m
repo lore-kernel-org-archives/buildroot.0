@@ -1,96 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Mar 2015 23:30:18 +0100
-Subject: [Buildroot] [PATCH 0/7] [RFC] Introduce services as a (long-term)
-	replacement for _INSTALL_INIT_(SYSV|SYSTEMD) (branch yem/services)
-Message-ID: <cover.1426112628.git.yann.morin.1998@free.fr>
+Date: Wed, 11 Mar 2015 23:30:16 +0100
+Subject: [Buildroot] [PATCH 1/7] package infra: print the name of the
+	package being parsed
+In-Reply-To: <cover.1426112628.git.yann.morin.1998@free.fr>
+References: <cover.1426112628.git.yann.morin.1998@free.fr>
+Message-ID: <81a97adbcd73d9ddc9a232d59f8751996148889b.1426112628.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, our start-up time is far from being null. This is because we
+have 1500 packages that may each define or amend north of 60 variables
+(either directly in their .mk, as well as through the package macros).
 
-Following up on Gustavo's proposal [0] on a clean up on our init
-scripts (and eventually our systemd unit files), here is an *RFC*
-series that tries to implement Gustavo's idea.
+This is very harsh on make, which handles variables in hash tables.
 
-The series is split in four parts:
+So, our startup time can be up to a few seconds, and there is not much
+we can do about that.
 
-  - patches 1-3 are preparatory work, and not much interesting in the
-    Grand Scheme of Life;
+What's even not very encouraging, is that there is no feedback to the
+user that we are actually doing something.
 
-  - patches 4-5 introduce a generated kconfig snippet, that contains
-    the list of services for each enabled packages, that the user can
-    enable/disable at will, directly from the menuconfig (for now, the
-    default is that all services are disabled, that can be changed
-    later);
+Just print a message for each package we scan, so the user is aware
+something is going on.
 
-  - patch 6 is the guts that installs the service files:
-    - installs the service's startup script,
-    - enables/disables the service,
-    - installs the service's configuration, if it exists;
+From a clean, out-of-tree directory, prepare with:
+    make $(pwd)/build/buildroot-config/{,m}conf
 
-  - patch 7 is just an example (with empty scripts) of how to declare
-    services in a package.
+to have the configurators not impact the measurements. Then run in
+sequence:
 
-To be noted:
-  - the code will need some revamp; this is just meant to be an RFC!
-  - only sysv init is handled for now
-  - this is by far incomplete even for the sysv case
-  - the /etc/config/ part has been left out for now; it would anyway
-    most probably provided via a rootfs-overlay
-  - the manual part is missing
-  - there are typoes all over the place :-/
+                                before      after
+make help                        0.201       0.202
+make defconfig                   0.260       0.263
+make help                        2.976       0.984
+make oldconfig                   0.260       0.271
 
-As usual: on your mark, get set, comment! ;-)
+(rough average of ~4 runs each)
 
-[0] http://lists.busybox.net/pipermail/buildroot/2015-March/121086.html
+For the first 'make help', there's no .config, and hence we do not scan
+the packages' .mk, and we are 'fast'. For the second 'make help', there
+is a .config file, and we scann all packages' .mk file, and we are
+'slow'. This patch has no virtually impact on the time it takes to
+process the packages' .mk files.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile               | 6 ++++++
+ package/pkg-generic.mk | 3 +++
+ package/pkg-utils.mk   | 3 +++
+ 3 files changed, 12 insertions(+)
 
-
-The following changes since commit a4788aa6157d1496cdd32cb9802710d4e97bc550:
-
-  btrfs-progs: bump to version 3.19 (2015-03-11 22:38:36 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/services
-
-for you to fetch changes up to f2c8684c9a6cfa5cfe8d776ac8ce4693667c329f:
-
-  [NOT TO BE APPLIED] package/busybox: add afake services as example (2015-03-11 23:08:51 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (7):
-      package infra: print the name of the package being parsed
-      Makefile: always scan packages' .mk files, even with no .config
-      Makefile: introduce a intermediate rule before the configurators
-      packages: introduce a generated kconfig snippet in the menuconfig
-      packages: generate services sub-menu
-      [INCOMPLETE] pkg-generic: act on enabled services
-      [NOT TO BE APPLIED] package/busybox: add afake services as example
-
- Config.in                    |  4 +++
- Makefile                     | 67 ++++++++++++++++++++++++++++----------------
- package/Config.in            |  2 ++
- package/busybox/S98bar       |  0
- package/busybox/S99foo       |  0
- package/busybox/bar.defaults |  1 +
- package/busybox/busybox.mk   |  2 ++
- package/pkg-generic.mk       | 28 ++++++++++++++++++
- package/pkg-utils.mk         |  3 ++
- 9 files changed, 83 insertions(+), 24 deletions(-)
- create mode 100644 package/busybox/S98bar
- create mode 100644 package/busybox/S99foo
- create mode 100644 package/busybox/bar.defaults
-
+diff --git a/Makefile b/Makefile
+index af043a3..e816b26 100644
+--- a/Makefile
++++ b/Makefile
+@@ -372,6 +372,9 @@ ifneq ($(BR2_DEPRECATED),y)
+ include Makefile.legacy
+ endif
+ 
++# Just print one line, as scanning packages rewinds one line back
++$(info .)
++
+ include package/Makefile.in
+ include support/dependencies/dependencies.mk
+ 
+@@ -397,6 +400,9 @@ include fs/common.mk
+ 
+ include $(BR2_EXTERNAL)/external.mk
+ 
++# Clear last "Scanning package foo" line
++$(info $(TERM_UP_KILL)Done scanning packages.)
++
+ TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
+ TARGETS_DIRCLEAN := $(patsubst %,%-dirclean,$(TARGETS))
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c1b379b..ad4831b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -305,6 +305,9 @@ endef
+ 
+ define inner-generic-package
+ 
++# Inform user something is happening...
++$$(info $(TERM_UP_KILL)Scanning package $(1))
++
+ # Define default values for various package-related variables, if not
+ # already defined. For some variables (version, source, site and
+ # subdir), if they are undefined, we try to see if a variable without
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 7eddc47..bee314b 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -81,6 +81,9 @@ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$
+ TERM_BOLD := $(shell tput smso)
+ TERM_RESET := $(shell tput rmso)
+ 
++# Cursor one line up, start of line, erase line
++TERM_UP_KILL := $(shell printf "\033[1A\r\033[K")
++
+ # Utility functions for 'find'
+ # findfileclauses(filelist) => -name 'X' -o -name 'Y'
+ findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
