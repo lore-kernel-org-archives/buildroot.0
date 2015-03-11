@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Mar 2015 17:56:31 +0100
-Subject: [Buildroot] [PATCH] system: add option for standalone telnetd
-	on target
-In-Reply-To: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
-References: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150311175631.426a1445@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 11 Mar 2015 18:03:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/Makefile.in: Do not add
+	--enable-debug flag.
+Message-ID: <1426093401-23108-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Adding this flag when BR2_ENABLE_DEBUG is activated make several
+packages to produce binaries that do not work as expected (e.g., dhcp,
+lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
+say it is adding this flag. It is supposed to build packages with
+debugging symbols enabled. So, let it do that only.
 
-On Wed, 11 Mar 2015 12:35:27 +0300, Alexey Brodkin wrote:
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ package/Makefile.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> +config BR2_SYSTEM_STANDALONE_TELNETD
-> +	bool "Enable telnet daemon on target"
-> +	depends on BR2_PACKAGE_BUSYBOX
-> +	depends on !BR2_PACKAGE_XINETD
-
-In any case, this should not be a system/Config.in option, but a
-Busybox package sub-option.
-
-Or, since your system/Config.in option actually doesn't do anything
-about telnetd, it simply configures /etc/securetty, then the option
-should be named differently.
-
-Best regards,
-
-Thomas
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 803b162..2995222 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -387,9 +387,7 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TARGET_CONFIGURE_OPTS += CXX=false
+ endif
+ 
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-ENABLE_DEBUG := --enable-debug
+-else
++ifneq ($(BR2_ENABLE_DEBUG),y)
+ ENABLE_DEBUG := --disable-debug
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
