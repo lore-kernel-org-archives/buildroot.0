@@ -1,36 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 17:09:40 +0100
-Subject: [Buildroot] [PATCH 2/2] tcpdump: security bump to version 4.7.3
-In-Reply-To: <1426081428-32041-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 11 Mar 2015 10:43:48 -0300")
-References: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
- <1426081428-32041-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87oanzms6z.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Mar 2015 16:10:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 7921] New: uClibc fails building with minimal
+ config and TLS disabled
+Message-ID: <bug-7921-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+https://bugs.busybox.net/show_bug.cgi?id=7921
 
- > Fixes:
- > CVE-2015-0261 - issues with IPv6 mobility printer.
- > CVE-2015-2153 - issue with tcp printer.
- > CVE-2015-2154 - issue with ethernet printer.
- > CVE-2015-2155 - issue with force printer.
+           Summary: uClibc fails building with minimal config and TLS
+                    disabled
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: nrubinstein at aldebaran.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- > CVE-2014-9140 fix is upstream so patch dropped.
- > System libpcap upstream as well so dropped.
 
- > CVE-2014-8767, CVE-2014-8768 and CVE-2014-8769 don't seem to be upstream
- > so keep.
+The current version of Buildroot
+f57423064ef0c22717db370d126bff832e7e1fd5
+fails building with this minimal defconfig:
 
- > And add hash file.
+BR2_KERNEL_MIRROR="http://www.kernel.org/pub"
+BR2_LUAROCKS_MIRROR="http://luarocks.org/repositories/rocks"
+BR2_CPAN_MIRROR="http://search.cpan.org/CPAN"
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_BINUTILS_VERSION_2_22=y
+BR2_GCC_VERSION_4_7_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+# BR2_GCC_ENABLE_TLS is not set
+BR2_TARGET_OPTIMIZATION="-pipe"
+BR2_INIT_NONE=y
+# BR2_TARGET_GENERIC_GETTY is not set
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_BOOST=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
+When BR2_GCC_ENABLE_TLS is set, the configuration builds correctly.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
