@@ -1,83 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 22:38:18 +0100
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.19
-In-Reply-To: <1426103368-5611-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 11 Mar 2015 16:49:28 -0300")
-References: <1426103368-5611-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egovjjud.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Mar 2015 22:12:18 +0100
+Subject: [Buildroot] [git commit] python-netifaces: fix license file name
+Message-ID: <20150311213915.85AD47FFD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=139b427d70920dc838f77c1398e2a4944c61ba9b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Convert to autotools with a little help for static.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/btrfs-progs/btrfs-progs.hash |  2 +-
- >  package/btrfs-progs/btrfs-progs.mk   | 29 ++++++++---------------------
- >  2 files changed, 9 insertions(+), 22 deletions(-)
+License info is stored in README.rst, not README.
 
- > diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
- > index 655ef5f..7917bb0 100644
- > --- a/package/btrfs-progs/btrfs-progs.hash
- > +++ b/package/btrfs-progs/btrfs-progs.hash
- > @@ -1,2 +1,2 @@
- >  # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
- > -sha256	dd8ddb4d201e5ffd32a15ed0e1f33fbc2c8fb16383f1519a9fae136698c2dfec	btrfs-progs-v3.18.2.tar.xz
- > +sha256	b23965d7214ebc93937df658f18fefe020fc2fd2be4d591094ef1aae168a36c8	btrfs-progs-v3.19.tar.xz
- > diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
- > index 768660d..0b61e5f 100644
- > --- a/package/btrfs-progs/btrfs-progs.mk
- > +++ b/package/btrfs-progs/btrfs-progs.mk
- > @@ -4,35 +4,22 @@
- >  #
- >  ################################################################################
+[Peter: reword]
+Signed-off-by: David Graziano <david.graziano@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-netifaces/python-netifaces.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+index f748bc1..2c51ce0 100644
+--- a/package/python-netifaces/python-netifaces.mk
++++ b/package/python-netifaces/python-netifaces.mk
+@@ -8,7 +8,7 @@ PYTHON_NETIFACES_VERSION = 0.10.4
+ PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
+ PYTHON_NETIFACES_SITE = https://pypi.python.org/packages/source/n/netifaces
+ PYTHON_NETIFACES_LICENSE = MIT
+-PYTHON_NETIFACES_LICENSE_FILES = README
++PYTHON_NETIFACES_LICENSE_FILES = README.rst
+ PYTHON_NETIFACES_SETUP_TYPE = setuptools
  
- > -BTRFS_PROGS_VERSION = 3.18.2
- > +BTRFS_PROGS_VERSION = 3.19
- >  BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
- >  BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- > -BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
- > -BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1 DISABLE_BACKTRACE=1
- > +BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
- > +BTRFS_PROGS_CONF_OPTS = --disable-backtrace
- >  BTRFS_PROGS_LICENSE = GPLv2
- >  BTRFS_PROGS_LICENSE_FILES = COPYING
- 
- > -
- > +# Doesn't autodetect static-only and tries to build both
- >  ifeq ($(BR2_STATIC_LIBS),y)
- > -BTRFS_PROGS_MAKE_TARGET = static
- > -BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
- > -ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- > -# Add -lintl for libuuid
- > -BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lz -llzo2 -L. -lintl -pthread"
- > -endif
- > -else
- > -BTRFS_PROGS_MAKE_TARGET = all
- > -BTRFS_PROGS_MAKE_INSTALL_TARGET = install
- > -endif
- > -
- >  define BTRFS_PROGS_BUILD_CMDS
- > -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- > -		$(BTRFS_PROGS_MAKE_FLAGS) $(BTRFS_PROGS_MAKE_TARGET)
- > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) static
- >  endef
- > -
- >  define BTRFS_PROGS_INSTALL_TARGET_CMDS
- > -	$(MAKE) -C $(@D) prefix=/usr DESTDIR=$(TARGET_DIR) \
- > -		$(BTRFS_PROGS_MAKE_FLAGS) $(BTRFS_PROGS_MAKE_INSTALL_TARGET)
- > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-static
-
-As it is just about the make target it would be simpler to just set
-
-BTRFS_PROGS_MAKE_OPTS = static
-BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ $(eval $(python-package))
