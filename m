@@ -1,60 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Mar 2015 22:01:08 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/softether: Fix iconv-related
-	compile error
-Message-ID: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Mar 2015 22:10:06 +0100
+Subject: [Buildroot] [PATCH] ne10: bump to version 1.2.0
+In-Reply-To: <1426094134-48711-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ (Clayton Shotwell's message of "Wed, 11 Mar 2015 12:15:34 -0500")
+References: <1426094134-48711-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+Message-ID: <878uf3kzpt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libiconv can also be enabled, and compiled before softether, with
-BR2_ENABLE_LOCALE disabled, this patch improves libiconv detection.
+>>>>> "Clayton" == Clayton Shotwell <clayton.shotwell@rockwellcollins.com> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/f47/f473882cd35445cbe5b3b15635d555340183951a/
-http://autobuild.buildroot.net/results/72e/72eab3a6f162e3c5eac380f88b54d4f314d52445/
+ > Bump to version 1.2.0, fixup patch, and add ensure package is installed
+ > ot the staging directory.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: Simplify libiconv check (Thomas)
+ > Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ > ---
+ >  ...sts-don-t-hard-code-thumb-code-generation.patch | 26 ++++++++++++----------
+ >  package/ne10/ne10.mk                               |  3 ++-
+ >  2 files changed, 16 insertions(+), 13 deletions(-)
 
- package/softether/softether.mk |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ > diff --git a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
+ > index 3402b5a..3934587 100644
+ > --- a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
+ > +++ b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
+ > @@ -1,27 +1,29 @@
+ > -From 00995e0b8a66fbd0eabd206188120bfc1ecdac59 Mon Sep 17 00:00:00 2001
+ > -Message-Id: <00995e0b8a66fbd0eabd206188120bfc1ecdac59.1398245232.git.baruch@tkos.co.il>
+ > -From: Baruch Siach <baruch@tkos.co.il>
+ > -Date: Wed, 23 Apr 2014 12:21:37 +0300
+ > +From 9ff39800cec5f1dabba246b253794582d611bc6d Mon Sep 17 00:00:00 2001
+ > +From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 8f8734d..70b76b8 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
-@@ -14,14 +14,14 @@ SOFTETHER_LICENSE_FILES = LICENSE
- SOFTETHER_DEPENDENCIES = host-softether openssl readline
- SOFTETHER_AUTORECONF = YES
- 
--ifeq ($(BR2_ENABLE_LOCALE),)
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
- SOFTETHER_DEPENDENCIES += libiconv
--SOFTETHER_CONF_ENV = LIBS+=" -liconv"
-+SOFTETHER_LIBS += -liconv
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- # openssl needs zlib
--SOFTETHER_CONF_ENV += LIBS+=" -lz"
-+SOFTETHER_LIBS += -lz
- endif
- 
- SOFTETHER_CONF_OPTS = \
-@@ -31,7 +31,9 @@ SOFTETHER_CONF_OPTS = \
- # softether uses clock_gettime but forgets to link against -lrt
- # breaking the build against older libc's that don't provide this
- # symbol in libc
--SOFTETHER_CONF_ENV += LIBS+=" -lrt"
-+SOFTETHER_LIBS += -lrt
-+
-+SOFTETHER_CONF_ENV += LIBS="$(SOFTETHER_LIBS)"
- HOST_SOFTETHER_CONF_ENV += LIBS+=" -lrt"
- 
- # host-libiconv does not exist, therefore we need this extra line
+It's not really nice to change the authorship on the patch, so I Dropped
+the change to the From: line and committed, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
