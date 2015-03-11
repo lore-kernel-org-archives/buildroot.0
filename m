@@ -1,26 +1,41 @@
-From: drasko.draskovic at gmail.com <drasko.draskovic@gmail.com>
-Date: Wed, 11 Mar 2015 06:42:17 -0500
-Subject: [Buildroot] drasko.draskovic@gmail.com has indicated you are a
-	friend. Accept?
-Message-ID: <0.0.411.98B.1D05BEFA7A64A04.272B@mail9.flipmailer.com>
+From: Jan Erichsen <jan@erichsen-web.de>
+Date: Wed, 11 Mar 2015 13:07:26 +0100
+Subject: [Buildroot] php-cgi not executing .php-file
+In-Reply-To: <20150310144958.1fe74b9e@free-electrons.com>
+References: <4318ea066b1d4331be3d63f7f2357bad@webmail-alfa3071.alfahosting-server.de>
+ <20150310135111.7c67cad4@free-electrons.com>
+ <482796e5cb84cdce7db36b558eaadb38@webmail-alfa3071.alfahosting-server.de>
+ <20150310144958.1fe74b9e@free-electrons.com>
+Message-ID: <f2a639d9b693859984c7605aaf3f8f76@webmail-alfa3071.alfahosting-server.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+ 
 
-drasko.draskovic at gmail.com is now following you.
+Am 2015-03-10 14:49, schrieb Thomas Petazzoni: 
 
-View drasko.draskovic at gmail.com's profile
-http://invites.flipmailer.com/download.jsp?welcome=1&amp;email=buildroot at uclibc.org&amp;viral=true&amp;u=37100377&amp;inviterid=17473118&amp;token=66dc7982a0d102c3d3287052a9b6e8db&amp;ts=1425437742595&amp;userid=37100377&amp;inviter=Drasko.draskovic&amp;emailmasterid=7409a14e-c7b0-4572-b702-2f4812c45a34&amp;from=drasko.draskovic at gmail.com&src=bcbemailtxt
+> Dear Jan Erichsen,
+> 
+> Can you try with the CodeSourcery NIOS II toolchain that is
+> pre-configured in Buildroot ? Just to rule out any toolchain issue.
+> 
+> Thanks,
+> 
+> Thomas
 
+Thomes, you are a Hero! :)
 
+It?s perfectly running with that toolchain. 
 
+My settings now are: 
 
-Follow the link below to remove yourself from all such emails
-http://invites.flipmailer.com/uns_inviter.jsp?email=buildroot at uclibc.org&amp;iid=7409a14e-c7b0-4572-b702-2f4812c45a34&amp;from=drasko.draskovic at gmail.com
+Toolchain type (External toolchain)
+Toolchain (Sourcery CodeBench Nios-II 2013.05)
+Toolchain origin (Toolchain to be downloaded and installed) 
+ 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150311/767b0a0c/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150311/6748271b/attachment.html>
