@@ -1,97 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 11 Mar 2015 09:09:58 +0100
-Subject: [Buildroot] [PATCH v3] docs/manual: add documentation on
-	Config.in.host
-Message-ID: <1426061398-26254-1-git-send-email-patrickdepinguin@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 11 Mar 2015 11:11:11 +0300
+Subject: [Buildroot] [PATCH] busybox: remove actions that depend on removed
+	netkit* packages
+Message-ID: <1426061471-8321-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jan Heylen <heyleke@gmail.com>
+Both "netkitbase" and "netkittelnet"  packages were removed by this
+commit:
+http://git.buildroot.net/buildroot/commit/?id=560fe85bf7fb81956e80848c8bb28d7a6d00a2a2
 
-+ rearrange the structure a bit by adding a new paragraph for the Config
-files
+Now we may safely remove reminders in busybox.mk that depend on
+mentioned packages that are no longer in Buildroot.
 
-Signed-off-by: Jan Heylen <heyleke@gmail.com>
-[ThomasDS:
-  - clarify commit title
-  - add list continuations to fix indentation of Config.in.host details]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-directory.txt | 50 ++++++++++++++++++++++++++++---
- 1 file changed, 46 insertions(+), 4 deletions(-)
+ package/busybox/busybox.mk | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 8a88282..1ce9a3b 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -11,12 +11,18 @@ Some packages have been grouped by topic in a sub-directory:
- one of these categories, then create your package directory in these.
- New subdirectories are discouraged, however.
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 61f6a16..a3ac7e7 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -124,20 +124,6 @@ define BUSYBOX_PREFER_STATIC
+ endef
+ endif
  
-+=== Config files
- 
--=== +Config.in+ file
-+For the package to be displayed in the configuration tool, you need to
-+create a Config file in your package directory. There are two types:
-++Config.in+ and +Config.in.host+.
- 
--Then, create a file named +Config.in+. This file will contain the
--option descriptions related to our +libfoo+ software that will be used
--and displayed in the configuration tool. It should basically contain:
-+==== +Config.in+ file
-+
-+For packages used on the target, create a file named +Config.in+. This
-+file will contain the option descriptions related to our +libfoo+ software
-+that will be used and displayed in the configuration tool. It should basically
-+contain:
- 
- ---------------------------
- config BR2_PACKAGE_LIBFOO
-@@ -49,6 +55,42 @@ supposed to contain anything but the 'bare' name of the package.
- source "package/libfoo/Config.in"
- --------------------------
- 
-+
-+==== +Config.in.host+ file
-+
-+Some packages also need to be built for the host system. There are two
-+options here:
-+
-+* The host package is only required to satisfy build-time
-+  dependencies of one or more target packages. In this case, add
-+  +host-foo+ to the target package's +BAR_DEPENDENCIES+ variable. No
-+  +Config.in.host+ file should be created.
-+
-+* The host package should be explicitly selectable by the user from
-+  the configuration menu. In this case, create a +Config.in.host+ file
-+  for that host package:
-++
-+---------------------------
-+config BR2_PACKAGE_HOST_FOO
-+	bool "host foo"
-+	help
-+	  This is a comment that explains what foo for the host is.
-+
-+	  http://foosoftware.org/foo/
-+---------------------------
-++
-+The same coding style and options as for the +Config.in+ file are valid.
-++
-+Finally you have to add your new +libfoo/Config.in.host+ to
-++package/Config.in.host+. The files included there are 'sorted alphabetically'
-+and are 'NOT' supposed to contain anything but the 'bare' name of the package.
-++
-+--------------------------
-+source "package/foo/Config.in.host"
-+--------------------------
-++
-+The host package will then be available from the +Host utilities+ menu.
-+
- [[depends-on-vs-select]]
- ==== Choosing +depends on+ or +select+
- 
+-# Disable usage of inetd if netkit-base package is selected
+-ifeq ($(BR2_PACKAGE_NETKITBASE),y)
+-define BUSYBOX_NETKITBASE
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_INETD,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+-# Disable usage of telnetd if netkit-telnetd package is selected
+-ifeq ($(BR2_PACKAGE_NETKITTELNET),y)
+-define BUSYBOX_NETKITTELNET
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_TELNETD,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ # Disable shadow passwords support if unsupported by the C library
+ ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
+ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+@@ -193,8 +179,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_PREFER_STATIC)
+ 	$(BUSYBOX_SET_MDEV)
+ 	$(BUSYBOX_SET_CRYPT_SHA)
+-	$(BUSYBOX_NETKITBASE)
+-	$(BUSYBOX_NETKITTELNET)
+ 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
 -- 
-1.8.5.1
+2.1.0
