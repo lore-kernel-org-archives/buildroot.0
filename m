@@ -1,24 +1,29 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 15:27:27 -0300
-Subject: [Buildroot] Reduce toolchain options
-In-Reply-To: <87385bmrc8.fsf@dell.be.48ers.dk>
-References: <550069E9.5060403@zacarias.com.ar>
- <87385bmrc8.fsf@dell.be.48ers.dk>
-Message-ID: <5500890F.7030700@zacarias.com.ar>
+Date: Wed, 11 Mar 2015 16:26:29 -0300
+Subject: [Buildroot] [PATCH] avahi: add hash file
+Message-ID: <1426101989-20525-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/2015 01:28 PM, Peter Korsgaard wrote:
+Help counteract upstream website issues, fixes:
+http://autobuild.buildroot.net/results/103/103e5a62d16ed22414cc407eff8a78d5e8d7503c/
 
-> Yes, I agree.
-> 
-> I'm also somewhat scared of forcing IPv6 support but perhaps it will be
-> safe, people using !uClibc have probably noticed these issues already.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/avahi/avahi.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/avahi/avahi.hash
 
-I've found one downside of dropping non-IPv6: the codesourcery SH2A
-toolchains lack IPv6 support :-(
-We can still kill the LFS option though.
-Regards.
+diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
+new file mode 100644
+index 0000000..99bbd51
+--- /dev/null
++++ b/package/avahi/avahi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
+-- 
+2.0.5
