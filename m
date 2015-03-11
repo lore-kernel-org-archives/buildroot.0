@@ -1,84 +1,80 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 11 Mar 2015 12:15:34 -0500
-Subject: [Buildroot] [PATCH] ne10: bump to version 1.2.0
-Message-ID: <1426094134-48711-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 11 Mar 2015 18:29:35 +0100
+Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
+In-Reply-To: <20150303152121.408c2733@free-electrons.com>
+References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
+ <20150303142901.5998a72c@free-electrons.com>
+ <CAHkwnC94xHciiK2n8X0Gr7=PVTs_LWoqQ-bG1bg20jO1ygd0Gw@mail.gmail.com>
+ <20150303152121.408c2733@free-electrons.com>
+Message-ID: <CAHkwnC_tYQgKA1qY9_zS3Q8m1oNEjxBfZu5zA3xAcYSn+WY_Pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 1.2.0, fixup patch, and add ensure package is installed
-ot the staging directory.
+On Tue, Mar 3, 2015 at 3:21 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Fabio Porcedda,
+>
+> On Tue, 3 Mar 2015 15:03:46 +0100, Fabio Porcedda wrote:
+>
+>> > Could you give some hints about the performance impact of those copies
+>> > of the staging directory? Does it continue to make the top-level
+>> > parallel build thing useful?
+>>
+>> IMHO the per-package staging feature is useful even without taking in
+>> consideration the top-level parallel build, the unspecified optional
+>> dependency issue are not common, they can generate build faulres or
+>> just binary with unexpected behavior.
+>
+> Yes, correct, this is indeed another benefit of this approach.
+>
+>> > Preferably something with a fairly deep dependency tree, i.e lots of
+>> > small packages that depend on each other. A X.org stack + gtk2 would be
+>> > a good example.
+>>
+>> The most complete selection of package that i've tested is the
+>> defconfig + allyespacakgeconfig (693 targets), i've tried to enable a
+>> wider range of packages, defconfig + glibc + allyespackageconfig but
+>> even without using the pps they fail to build.
+>> So i will provide build times of the configuration defconfig +
+>> allyespackageconfig.
+>
+> Ok.
+>
+>> If you provide a defconfig on the release 2015.02, i can try to build that.
+>
+> Something like:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+> BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> BR2_PACKAGE_LIBGTK3=y
 
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
----
- ...sts-don-t-hard-code-thumb-code-generation.patch | 26 ++++++++++++----------
- package/ne10/ne10.mk                               |  3 ++-
- 2 files changed, 16 insertions(+), 13 deletions(-)
+I've used a system with: i5-3470 (4 core @ 3.2GHz); RAM: 8GB; SSD.
+Using you defconfig:
 
-diff --git a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
-index 3402b5a..3934587 100644
---- a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
-+++ b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
-@@ -1,27 +1,29 @@
--From 00995e0b8a66fbd0eabd206188120bfc1ecdac59 Mon Sep 17 00:00:00 2001
--Message-Id: <00995e0b8a66fbd0eabd206188120bfc1ecdac59.1398245232.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Wed, 23 Apr 2014 12:21:37 +0300
-+From 9ff39800cec5f1dabba246b253794582d611bc6d Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 20 Feb 2015 10:44:15 -0600
- Subject: [PATCH] CMakeLists: don't hard code thumb code generation
- 
-+Migrating to version 1.2.0
-+
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- ---
-  CMakeLists.txt | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 2c7f8d62a42b..cec614fba041 100644
-+index fdf01ec..34ae26e 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -77,7 +77,7 @@ if(ANDROID_PLATFORM)
--       add_subdirectory(android/NE10Demo/jni)
--     endif()
-+@@ -84,7 +84,7 @@ if(ANDROID_PLATFORM)
-+     ${ANDROID_TOOLCHAIN_PATH}/arm-linux-androideabi-ar
-+     ${ANDROID_TOOLCHAIN_PATH}/arm-linux-androideabi-ranlib")
-  elseif(GNULINUX_PLATFORM)
---    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
--+    set(CMAKE_C_FLAGS "-O2 -mthumb-interwork -march=armv7-a -mfpu=vfp3")
--     set(CMAKE_ASM_FLAGS "-mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
-+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
-++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -march=armv7-a -mfpu=vfp3")
-+     set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
-  elseif(IOS_PLATFORM)
-      #set minimal target ios version.If not provided this option, Xcode
- -- 
--1.9.2
-+1.9.1
- 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index b1897c8..aeaa041 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--NE10_VERSION = v1.0.0
-+NE10_VERSION = v1.2.0
- NE10_SITE = $(call github,projectNe10,Ne10,$(NE10_VERSION))
- NE10_LICENSE = BSD-3c or Apache-2.0
- NE10_LICENSE_FILES = doc/LICENSE
-+NE10_INSTALL_STAGING = YES
- 
- NE10_CONF_OPTS = -DGNULINUX_PLATFORM=ON
- 
+normal:                 20m
+with parallel:          13m
+with parallel & pps: 15m
+
+Using a defconfig + allyespacakgeconfig:
+normal:   85m
+parallel:  40m
+pps:       42m
+
+I've repeated the test few times and taken the minimum value, but i
+was still using the system so maybe the real values can change a bit.
+
+I was surprised that the pps doesn't affect too much the build times,
+but probably the ssd helps a lot.
+
+BR
 -- 
-1.9.1
+Fabio Porcedda
