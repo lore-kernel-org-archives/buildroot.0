@@ -1,125 +1,97 @@
-From: Jordi Montagne <jordi.montagne66@gmail.com>
-Date: Wed, 11 Mar 2015 08:57:10 +0100
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for Xilinx zc706
-Message-ID: <1426060630-13680-1-git-send-email-jordi.montagne66@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 11 Mar 2015 09:09:58 +0100
+Subject: [Buildroot] [PATCH v3] docs/manual: add documentation on
+	Config.in.host
+Message-ID: <1426061398-26254-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a Xilinx Zynq (xc7z045) development board, based on Xilinx Zynq
-(xc7z045).
+From: Jan Heylen <heyleke@gmail.com>
 
-This support is based on Avnet Zedboard defconfig/readme.
++ rearrange the structure a bit by adding a new paragraph for the Config
+files
 
-Signed-off-by: Jordi Montagne <jordi.montagne66@gmail.com>
+Signed-off-by: Jan Heylen <heyleke@gmail.com>
+[ThomasDS:
+  - clarify commit title
+  - add list continuations to fix indentation of Config.in.host details]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
-Changes since v1:
- * use EABIHF instead of EABI
- * some fix on readme.txt (thanks Thomas Petazzoni)
----
- board/xilinx/zc706/readme.txt | 57 +++++++++++++++++++++++++++++++++++++++++++
- configs/zc706_defconfig       | 27 ++++++++++++++++++++
- 2 files changed, 84 insertions(+)
- create mode 100644 board/xilinx/zc706/readme.txt
- create mode 100644 configs/zc706_defconfig
+ docs/manual/adding-packages-directory.txt | 50 ++++++++++++++++++++++++++++---
+ 1 file changed, 46 insertions(+), 4 deletions(-)
 
-diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
-new file mode 100644
-index 0000000..6ab5bc9
---- /dev/null
-+++ b/board/xilinx/zc706/readme.txt
-@@ -0,0 +1,57 @@
-+This is the Buildroot board support for the Xilinx ZC706. The ZC706 is
-+a development board based on the Xilinx Zynq-7000 based All-Programmable
-+System-On-Chip.
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 8a88282..1ce9a3b 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -11,12 +11,18 @@ Some packages have been grouped by topic in a sub-directory:
+ one of these categories, then create your package directory in these.
+ New subdirectories are discouraged, however.
+ 
++=== Config files
+ 
+-=== +Config.in+ file
++For the package to be displayed in the configuration tool, you need to
++create a Config file in your package directory. There are two types:
+++Config.in+ and +Config.in.host+.
+ 
+-Then, create a file named +Config.in+. This file will contain the
+-option descriptions related to our +libfoo+ software that will be used
+-and displayed in the configuration tool. It should basically contain:
++==== +Config.in+ file
 +
-+ZC706 information including schematics, reference designs, and manuals are
-+available from
-+http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
++For packages used on the target, create a file named +Config.in+. This
++file will contain the option descriptions related to our +libfoo+ software
++that will be used and displayed in the configuration tool. It should basically
++contain:
+ 
+ ---------------------------
+ config BR2_PACKAGE_LIBFOO
+@@ -49,6 +55,42 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
+ 
 +
-+uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
-+---------------------------------------------------
++==== +Config.in.host+ file
 +
-+Due to licensing issues, the files ps7_init.c/h are not able to be
-+distributed with the U-Boot source code.  These files are required to make a
-+boot.bin file.
++Some packages also need to be built for the host system. There are two
++options here:
 +
-+If you already have the Xilinx tools installed, the following sequence will
-+unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
++* The host package is only required to satisfy build-time
++  dependencies of one or more target packages. In this case, add
++  +host-foo+ to the target package's +BAR_DEPENDENCIES+ variable. No
++  +Config.in.host+ file should be created.
 +
-+make zc706_defconfig
-+make uboot-patch
-+cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
-+output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
++* The host package should be explicitly selectable by the user from
++  the configuration menu. In this case, create a +Config.in.host+ file
++  for that host package:
+++
++---------------------------
++config BR2_PACKAGE_HOST_FOO
++	bool "host foo"
++	help
++	  This is a comment that explains what foo for the host is.
 +
-+Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
++	  http://foosoftware.org/foo/
++---------------------------
+++
++The same coding style and options as for the +Config.in+ file are valid.
+++
++Finally you have to add your new +libfoo/Config.in.host+ to
+++package/Config.in.host+. The files included there are 'sorted alphabetically'
++and are 'NOT' supposed to contain anything but the 'bare' name of the package.
+++
++--------------------------
++source "package/foo/Config.in.host"
++--------------------------
+++
++The host package will then be available from the +Host utilities+ menu.
 +
-+After copying these files into the U-Boot source tree, you can
-+continue the build with:
-+
-+make
-+
-+*Notice*
-+While the build will successfully complete without the ps7_init.*
-+files, the uboot.bin file generated by this configuration will not
-+function properly on the ZC706. Therefore, it is imperative that
-+the ps7_init.* files be copied into the U-Boot source tree any time
-+the clean, or uboot-dirclean targets are executed.
-+
-+
-+Resulting system
-+----------------
-+
-+A FAT32 partition should be created at the beggining of the SD Card
-+and the following files should be installed:
-+	boot.bin
-+	devicetree.dtb
-+	uImage
-+	uramdisk.image.gz
-+	u-boot.img
-+
-+
-+All needed files can be taken from <output>/images/
-+
-+cp <output>/images/boot.bin /media/sdcard/
-+cp <output>/images/uImage /media/sdcard/
-+cp <output>/images/u-boot.img /media/sdcard/
-+cp <output>/images/zynq-zc706.dtb /media/sdcard/devicetree.dtb
-+cp <output>/images/rootfs.cpio.uboot /media/sdcard/uramdisk.image.gz
-diff --git a/configs/zc706_defconfig b/configs/zc706_defconfig
-new file mode 100644
-index 0000000..f7600b1
---- /dev/null
-+++ b/configs/zc706_defconfig
-@@ -0,0 +1,27 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.8"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
+ [[depends-on-vs-select]]
+ ==== Choosing +depends on+ or +select+
+ 
 -- 
-2.0.5
+1.8.5.1
