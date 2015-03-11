@@ -1,76 +1,100 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 16:49:28 -0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.19
-Message-ID: <1426103368-5611-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 11 Mar 2015 21:07:09 +0100
+Subject: [Buildroot] [PATCH v1] qt: fix postgresql plugin compile
+Message-ID: <1426104429-26006-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Convert to autotools with a little help for static.
+Add qt5base '-psql_config' configure option and use it to set
+pg_config path in configure step instead of legacy PSQL_LIBS
+enviornment variable.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes [1]:
+
+PostgreSQL support cannot be enabled due to functionality tests!
+ Turn on verbose messaging (-v) to ./configure to see the final report.
+ If you believe this message is in error you may use the continue
+ switch (-continue) to ./configure to continue.
+make: *** [/ssd1/thomas/autobuild/instance-0/output/build/qt-4.8.6/.stamp_configured] Error 101
+
+[1] http://autobuild.buildroot.net/results/1e9/1e949d4593836bc45a55e071cc54ff9c00fad8ae
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/btrfs-progs/btrfs-progs.hash |  2 +-
- package/btrfs-progs/btrfs-progs.mk   | 29 ++++++++---------------------
- 2 files changed, 9 insertions(+), 22 deletions(-)
+ .../qt/0007-configure-add-psql_config-option.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/qt/0007-configure-add-psql_config-option.patch
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 655ef5f..7917bb0 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	dd8ddb4d201e5ffd32a15ed0e1f33fbc2c8fb16383f1519a9fae136698c2dfec	btrfs-progs-v3.18.2.tar.xz
-+sha256	b23965d7214ebc93937df658f18fefe020fc2fd2be4d591094ef1aae168a36c8	btrfs-progs-v3.19.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 768660d..0b61e5f 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -4,35 +4,22 @@
- #
- ################################################################################
- 
--BTRFS_PROGS_VERSION = 3.18.2
-+BTRFS_PROGS_VERSION = 3.19
- BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
--BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
--BTRFS_PROGS_MAKE_FLAGS = DISABLE_DOCUMENTATION=1 DISABLE_BACKTRACE=1
-+BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
-+BTRFS_PROGS_CONF_OPTS = --disable-backtrace
- BTRFS_PROGS_LICENSE = GPLv2
- BTRFS_PROGS_LICENSE_FILES = COPYING
- 
--
-+# Doesn't autodetect static-only and tries to build both
- ifeq ($(BR2_STATIC_LIBS),y)
--BTRFS_PROGS_MAKE_TARGET = static
--BTRFS_PROGS_MAKE_INSTALL_TARGET = install-static
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--# Add -lintl for libuuid
--BTRFS_PROGS_MAKE_FLAGS += lib_LIBS="-luuid -lblkid -lz -llzo2 -L. -lintl -pthread"
--endif
--else
--BTRFS_PROGS_MAKE_TARGET = all
--BTRFS_PROGS_MAKE_INSTALL_TARGET = install
--endif
--
- define BTRFS_PROGS_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		$(BTRFS_PROGS_MAKE_FLAGS) $(BTRFS_PROGS_MAKE_TARGET)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) static
- endef
--
- define BTRFS_PROGS_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(@D) prefix=/usr DESTDIR=$(TARGET_DIR) \
--		$(BTRFS_PROGS_MAKE_FLAGS) $(BTRFS_PROGS_MAKE_INSTALL_TARGET)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-static
- endef
-+endif
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+diff --git a/package/qt/0007-configure-add-psql_config-option.patch b/package/qt/0007-configure-add-psql_config-option.patch
+new file mode 100644
+index 0000000..3723afa
+--- /dev/null
++++ b/package/qt/0007-configure-add-psql_config-option.patch
+@@ -0,0 +1,62 @@
++From c5f2c2d2b1e35606e38d5bf575bb6db74620c247 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Wed, 11 Mar 2015 20:55:42 +0100
++Subject: [PATCH] configure: add '-psql_config' option
++
++Allow setting of pg_config path for cross compilation (do
++the same as for mysql_config).
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure | 13 +++++++++----
++ 1 file changed, 9 insertions(+), 4 deletions(-)
++
++diff --git a/configure b/configure
++index c7d2cea..a3cde93 100755
++--- a/configure
+++++ b/configure
++@@ -741,6 +741,7 @@ CFG_INCREMENTAL=auto
++ CFG_QCONFIG=full
++ CFG_DEBUG=auto
++ CFG_MYSQL_CONFIG=
+++CFG_PSQL_CONFIG=
++ CFG_DEBUG_RELEASE=no
++ CFG_SHARED=yes
++ CFG_SM=auto
++@@ -1159,7 +1160,7 @@ while [ "$#" -gt 0 ]; do
++         shift
++         VAL=$1
++         ;;
++-    -prefix|-docdir|-headerdir|-plugindir|-importdir|-datadir|-libdir|-bindir|-translationdir|-sysconfdir|-examplesdir|-demosdir|-depths|-make|-nomake|-platform|-xplatform|-device-option|-buildkey|-sdk|-arch|-host-arch|-mysql_config|-sysroot)
+++    -prefix|-docdir|-headerdir|-plugindir|-importdir|-datadir|-libdir|-bindir|-translationdir|-sysconfdir|-examplesdir|-demosdir|-depths|-make|-nomake|-platform|-xplatform|-device-option|-buildkey|-sdk|-arch|-host-arch|-mysql_config|-psql_config|-sysroot)
++         VAR=`echo $1 | sed "s,^-\(.*\),\1,"`
++         shift
++         VAL="$1"
++@@ -1371,6 +1372,9 @@ while [ "$#" -gt 0 ]; do
++     mysql_config)
++ 	CFG_MYSQL_CONFIG="$VAL"
++ 	;;
+++    psql_config)
+++	CFG_PSQL_CONFIG="$VAL"
+++	;;
++     prefix)
++         QT_INSTALL_PREFIX="$VAL"
++         ;;
++@@ -5568,10 +5572,11 @@ for _SQLDR in $CFG_SQL_AVAILABLE; do
++             ;;
++         psql)
++             if [ "$CFG_SQL_psql" != "no" ]; then
+++                [ -z "$CFG_PSQL_CONFIG" ] && CFG_PSQL_CONFIG=`"$WHICH" pg_config`
++                 # Be careful not to use native pg_config when cross building.
++-                if [ "$XPLATFORM_MINGW" != "yes" ] && "$WHICH" pg_config >/dev/null 2>&1; then
++-                    QT_CFLAGS_PSQL=`pg_config --includedir 2>/dev/null`
++-                    QT_LFLAGS_PSQL=`pg_config --libdir 2>/dev/null`
+++                if [ "$XPLATFORM_MINGW" != "yes" ] && [ -x "$CFG_PSQL_CONFIG" ]; then
+++                    QT_CFLAGS_PSQL=`$CFG_PSQL_CONFIG --includedir 2>/dev/null | filterIncludePath`
+++                    QT_LFLAGS_PSQL=`$CFG_PSQL_CONFIG --libdir 2>/dev/null | filterLibraryPath`
++                 fi
++                 [ -z "$QT_CFLAGS_PSQL" ] || QT_CFLAGS_PSQL="-I$QT_CFLAGS_PSQL"
++                 [ -z "$QT_LFLAGS_PSQL" ] || QT_LFLAGS_PSQL="-L$QT_LFLAGS_PSQL"
++-- 
++2.1.4
++
 -- 
-2.0.5
+2.1.4
