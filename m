@@ -1,27 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 12:43:49 -0300
-Subject: [Buildroot] [PATCH 1/2] libpcap: bump to version 1.7.2
-In-Reply-To: <20150311143450.GG2177@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Mar 2015 17:09:40 +0100
+Subject: [Buildroot] [PATCH 2/2] tcpdump: security bump to version 4.7.3
+In-Reply-To: <1426081428-32041-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 11 Mar 2015 10:43:48 -0300")
 References: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
- <20150311143450.GG2177@tarshish>
-Message-ID: <550062B5.2080000@zacarias.com.ar>
+ <1426081428-32041-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87oanzms6z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/2015 11:34 AM, Baruch Siach wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Hi Gustavo,
-> 
-> That's disappointing. Upstream actually merged this patch (commit 
-> 157330dcac5), but another commit (ee3296275f) broke it in another way. Is it 
-> possible to pass --with-libnl=/dev/null so that ${incdir} and ${libnldir} 
-> point to a non-existing place? That should allow removing this patch.
+ > Fixes:
+ > CVE-2015-0261 - issues with IPv6 mobility printer.
+ > CVE-2015-2153 - issue with tcp printer.
+ > CVE-2015-2154 - issue with ethernet printer.
+ > CVE-2015-2155 - issue with force printer.
 
-Hi Baruch.
-I did find it odd as well, in fact missing CVE patches in the release
-made me twitch a little as well.
-I'll give it a shot.
-Regards.
+ > CVE-2014-9140 fix is upstream so patch dropped.
+ > System libpcap upstream as well so dropped.
+
+ > CVE-2014-8767, CVE-2014-8768 and CVE-2014-8769 don't seem to be upstream
+ > so keep.
+
+ > And add hash file.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
