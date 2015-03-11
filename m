@@ -1,35 +1,42 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 11 Mar 2015 10:44:21 +0100
-Subject: [Buildroot] [PATCH] website: add link to the release archive
-Message-ID: <1426067061-12275-1-git-send-email-luca@lucaceresoli.net>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed, 11 Mar 2015 13:13:22 +0100
+Subject: [Buildroot] [PATCH v6 2/3] python-cheetah: add host-package support
+In-Reply-To: <1426076003-12088-1-git-send-email-gwenj@trabucayre.com>
+References: <1426076003-12088-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1426076003-12088-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have them, let them be reachable.
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
+
+HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown is needed to avoids
+setuptools downloads markdown if it can't be find it.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- docs/website/download.html | 5 +++++
- 1 file changed, 5 insertions(+)
+Changes v3 -> v4:
+ * use HOST_PYTHON_CHEETAH_DEPENDENCIES instead of PYTHON_CHEETAH_DEPENDENCIES
+ * suppress '+' for dependency definition
+---
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index bfacd82..4462d3a 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -47,6 +47,11 @@ want to follow development, but cannot or do not wish to use Git.
- 	</li>
- </ul>
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 08076b5..3155951 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
++HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
  
-+<p>
-+Older versions can be downloaded from
-+<a href="http://buildroot.net/downloads/">the release archive</a>.
-+</p>
-+
- 
- <h2>Repository</h2>
- 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-1.9.1
+2.0.5
