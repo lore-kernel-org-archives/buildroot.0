@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Mar 2015 21:39:46 +0100
-Subject: [Buildroot] [PATCH] boost: enable boost-atomic
-In-Reply-To: <1426096805-28072-1-git-send-email-nrubinstein@aldebaran.com>
-References: <1426096805-28072-1-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <20150311213946.138bbc2f@free-electrons.com>
+Date: Wed, 11 Mar 2015 21:42:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/Makefile.in: Do not add
+ --enable-debug flag.
+In-Reply-To: <1426093401-23108-1-git-send-email-johan.oudinet@gmail.com>
+References: <1426093401-23108-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20150311214225.746fe0cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear No? Rubinstein,
+Dear Johan Oudinet,
 
-On Wed, 11 Mar 2015 19:00:05 +0100, No? Rubinstein wrote:
-> It was disabled in february 2013 by commit
-> e5434583badf1abf4a4620efa76452638ad9e177
-> because did not build correctly with ucLibc at the time.
+On Wed, 11 Mar 2015 18:03:21 +0100, Johan Oudinet wrote:
+> Adding this flag when BR2_ENABLE_DEBUG is activated make several
+> packages to produce binaries that do not work as expected (e.g., dhcp,
+> lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
+> say it is adding this flag. It is supposed to build packages with
+> debugging symbols enabled. So, let it do that only.
 > 
-> It now builds correctly with both uClibc v0.9.33 and uClibc-ng.
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
-Thanks. However we do require all patches to have a Signed-off-by line.
-Can you resend your patch with this line added?
+I am personally in favor of this change, so thanks for bringing it up.
 
-Thanks!
+> -ifeq ($(BR2_ENABLE_DEBUG),y)
+> -ENABLE_DEBUG := --enable-debug
+> -else
+> +ifneq ($(BR2_ENABLE_DEBUG),y)
+>  ENABLE_DEBUG := --disable-debug
+>  endif
+
+So if we have BR2_ENABLE_DEBUG enabled, then we don't pass
+--disable-debug. And when BR2_ENABLE_DEBUG is disabled, we're passing
+it. I'm not sure to understand the logic here.
+
+Shouldn't we simply unconditionally pass --disable-debug, or not pass
+anything at all?
+
+Also, a number of packages had workarounds in their specific .mk file
+to avoid --enable-debug. It would be good to get rid of such
+workarounds as well.
+
+Thanks,
 
 Thomas
 -- 
