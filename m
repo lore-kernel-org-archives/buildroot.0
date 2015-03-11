@@ -1,47 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 17:28:07 +0100
-Subject: [Buildroot] Reduce toolchain options
-In-Reply-To: <550069E9.5060403@zacarias.com.ar> (Gustavo Zacarias's message of
- "Wed, 11 Mar 2015 13:14:33 -0300")
-References: <550069E9.5060403@zacarias.com.ar>
-Message-ID: <87385bmrc8.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Mar 2015 17:32:22 +0100
+Subject: [Buildroot] [PATCH] website: add link to the release archive
+In-Reply-To: <1426067061-12275-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Wed, 11 Mar 2015 10:44:21 +0100")
+References: <1426067061-12275-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87y4n3lckp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > Hi.
- > How about we kill non-lfs and non-ipv6 toolchains?
- > It's 2015 after all, and the size delta is minor:
+ > We have them, let them be reachable.
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > ---
+ >  docs/website/download.html | 5 +++++
+ >  1 file changed, 5 insertions(+)
 
- > tar file delta, arm926 uclibc+busybox
- > =====================================
- > Threading (NPTL)        +153600 bytes
- > Largefile               +20480 bytes
- > IPv6                    +10240 bytes
- > RPC                     +61440 bytes
- > WCHAR                   +30720 bytes
+ > diff --git a/docs/website/download.html b/docs/website/download.html
+ > index bfacd82..4462d3a 100644
+ > --- a/docs/website/download.html
+ > +++ b/docs/website/download.html
+ > @@ -47,6 +47,11 @@ want to follow development, but cannot or do not wish to use Git.
+ >  	</li>
+ >  </ul>
+ 
+ > +<p>
+ > +Older versions can be downloaded from
+ > +<a href="http://buildroot.net/downloads/">the release archive</a>.
 
- > Benefits:
- > * Less toolchain options to test/care for in packages
- > * More bang for the buck for autobuilders with less combinations to test
+We have .org / .net and the webserver also listens on https, so I've
+changed it to simply be /downloads/ like elsewhere on the website.
 
- > Even though the size delta would be somewhat more (tiny though) when
- > adding packages/libraries that's generally offset by the added size of
- > said packages.
-
- > The only downside i can think of is badly designed packages that won't
- > work well on a non-ipv6 linux kernel. These should be very few, if any.
-
- > LFS is a no brainer IMO.
-
-Yes, I agree.
-
-I'm also somewhat scared of forcing IPv6 support but perhaps it will be
-safe, people using !uClibc have probably noticed these issues already.
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
