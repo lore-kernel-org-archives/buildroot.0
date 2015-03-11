@@ -1,122 +1,219 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 10:43:47 -0300
-Subject: [Buildroot] [PATCH 1/2] libpcap: bump to version 1.7.2
-Message-ID: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 11 Mar 2015 10:43:48 -0300
+Subject: [Buildroot] [PATCH 2/2] tcpdump: security bump to version 4.7.3
+In-Reply-To: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426081428-32041-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patch (uclinux), adapt libnl patch to new version.
+Fixes:
+
+CVE-2015-0261 - issues with IPv6 mobility printer.
+CVE-2015-2153 - issue with tcp printer.
+CVE-2015-2154 - issue with ethernet printer.
+CVE-2015-2155 - issue with force printer.
+
+CVE-2014-9140 fix is upstream so patch dropped.
+System libpcap upstream as well so dropped.
+
+CVE-2014-8767, CVE-2014-8768 and CVE-2014-8769 don't seem to be upstream
+so keep.
+
 And add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../libpcap/0001-remove-libnl-include-path.patch   | 17 ++++++----
- .../0002-configure.in-uclinux-is-also-linux.patch  | 39 ----------------------
- package/libpcap/libpcap.hash                       |  2 ++
- package/libpcap/libpcap.mk                         |  2 +-
- 4 files changed, 13 insertions(+), 47 deletions(-)
- delete mode 100644 package/libpcap/0002-configure.in-uclinux-is-also-linux.patch
- create mode 100644 package/libpcap/libpcap.hash
+ ...libpcap-when-configured-with-with-system-.patch | 78 ----------------------
+ package/tcpdump/0005-fix-CVE-2014-9140.patch       | 59 ----------------
+ package/tcpdump/tcpdump.hash                       |  2 +
+ package/tcpdump/tcpdump.mk                         |  4 +-
+ 4 files changed, 3 insertions(+), 140 deletions(-)
+ delete mode 100644 package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
+ delete mode 100644 package/tcpdump/0005-fix-CVE-2014-9140.patch
+ create mode 100644 package/tcpdump/tcpdump.hash
 
-diff --git a/package/libpcap/0001-remove-libnl-include-path.patch b/package/libpcap/0001-remove-libnl-include-path.patch
-index 7b7106b..a4039ef 100644
---- a/package/libpcap/0001-remove-libnl-include-path.patch
-+++ b/package/libpcap/0001-remove-libnl-include-path.patch
-@@ -1,16 +1,19 @@
- Remove hardcoded path to libnl3 include directory
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Gustavo: update for 1.7.2]
- 
--Index: b/configure.in
--===================================================================
----- a/configure.in
--+++ b/configure.in
--@@ -445,7 +445,6 @@
-+diff -Nura libpcap-1.7.2.orig/configure.in libpcap-1.7.2/configure.in
-+--- libpcap-1.7.2.orig/configure.in	2015-03-11 10:02:44.416189921 -0300
-++++ libpcap-1.7.2/configure.in	2015-03-11 10:03:03.967633673 -0300
-+@@ -466,9 +466,8 @@
-  			AC_DEFINE(HAVE_LIBNL_3_x,1,[if libnl exists and is version 3.x])
-  			AC_DEFINE(HAVE_LIBNL_NLE,1,[libnl has NLE_FAILURE])
-  			AC_DEFINE(HAVE_LIBNL_SOCKETS,1,[libnl has new-style socket api])
---			V_INCLS="$V_INCLS -I/usr/include/libnl3"
-+-			V_INCLS="$V_INCLS ${incdir}"
-  			have_any_nl="yes"
-- 		])
-+-		],[], ${incdir} ${libnldir} -lnl-genl-3 -lnl-3 )
-++		],[], ${libnldir} -lnl-genl-3 -lnl-3 )
-  
-+ 		if test x$have_any_nl = xno ; then
-+ 			#
-diff --git a/package/libpcap/0002-configure.in-uclinux-is-also-linux.patch b/package/libpcap/0002-configure.in-uclinux-is-also-linux.patch
+diff --git a/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch b/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
 deleted file mode 100644
-index 55be25e..0000000
---- a/package/libpcap/0002-configure.in-uclinux-is-also-linux.patch
+index 7f8b715..0000000
+--- a/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From a904d1e35be72d0821a6680a75060815bce86642 Mon Sep 17 00:00:00 2001
--Message-Id: <a904d1e35be72d0821a6680a75060815bce86642.1406266983.git.baruch@tkos.co.il>
+@@ -1,78 +0,0 @@
+-From 4289e62c7966e5abeb95307717cef30a51fcdccf Mon Sep 17 00:00:00 2001
 -From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 25 Jul 2014 07:28:47 +0300
--Subject: [PATCH] configure.in: uclinux is also linux
+-Date: Wed, 29 Oct 2014 13:21:05 +0200
+-Subject: [PATCH] Use system libpcap when configured with --with-system-pcap
 -
--Also we need -lpthread for the test to build for noMMU targets.
+-Don't force the local libpcap build when the system provides one. When
+---with-system-pcap is given to configure, don't try to locate a local libpcap
+-build. This help build systems like Buildroot that store build trees in the
+-same directory, but still prefer dynamically linking against system wide
+-libpcap.so to save space.
 -
 -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- configure.in | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
+-Status: sent upstream (https://github.com/the-tcpdump-group/tcpdump/pull/408)
 -
--diff --git a/configure.in b/configure.in
--index 4530aed3a7d0..63f708b9b855 100644
----- a/configure.in
--+++ b/configure.in
--@@ -1539,7 +1539,7 @@ AC_ARG_ENABLE([canusb],
-- if test "x$enable_canusb" != "xno" ; then
-- 	dnl check for canusb support
-- 	case "$host_os" in
---	linux*)
--+	linux*|uclinux*)
-- 		AC_CHECK_HEADER(libusb-1.0/libusb.h,
-- 		[
-- 		    AC_CHECK_LIB(usb-1.0, libusb_init,
--@@ -1549,7 +1549,8 @@ if test "x$enable_canusb" != "xno" ; then
-- 			LIBS="-lusb-1.0 -lpthread $LIBS"
-- 			ac_lbl_has_libusb=yes
-- 		    ],
---		    ac_lbl_has_libusb=no
--+		    ac_lbl_has_libusb=no,
--+		    -lpthread
-- 		    )
-- 		],
-- 		ac_lbl_has_libusb=no
+- aclocal.m4 | 46 +++++++++++++++++++++++++---------------------
+- 1 file changed, 25 insertions(+), 21 deletions(-)
+-
+-diff --git a/aclocal.m4 b/aclocal.m4
+-index 80614cf21050..cd0a94414bbf 100644
+---- a/aclocal.m4
+-+++ b/aclocal.m4
+-@@ -438,27 +438,31 @@ AC_DEFUN(AC_LBL_LIBPCAP,
+- 		    LIBS="$LIBS $pfopen"
+- 	    fi
+-     fi
+--    AC_MSG_CHECKING(for local pcap library)
+--    libpcap=FAIL
+--    lastdir=FAIL
+--    places=`ls $srcdir/.. | sed -e 's,/$,,' -e "s,^,$srcdir/../," | \
+--	egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
+--    places2=`ls .. | sed -e 's,/$,,' -e "s,^,../," | \
+--	egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
+--    for dir in $places $srcdir/../libpcap ../libpcap $srcdir/libpcap $places2 ; do
+--	    basedir=`echo $dir | sed -e 's/[[ab]][[0-9]]*$//' | \
+--	        sed -e 's/-PRE-GIT$//' `
+--	    if test $lastdir = $basedir ; then
+--		    dnl skip alphas when an actual release is present
+--		    continue;
+--	    fi
+--	    lastdir=$dir
+--	    if test -r $dir/libpcap.a ; then
+--		    libpcap=$dir/libpcap.a
+--		    d=$dir
+--		    dnl continue and select the last one that exists
+--	    fi
+--    done
+-+	libpcap=FAIL
+-+	AC_MSG_CHECKING(for local pcap library)
+-+	AC_ARG_WITH([system-libpcap],
+-+		[AS_HELP_STRING([--with-system-libpcap], [don't use local pcap library])])
+-+	if test "x$with_system_libpcap" != xyes ; then
+-+		lastdir=FAIL
+-+    	places=`ls $srcdir/.. | sed -e 's,/$,,' -e "s,^,$srcdir/../," | \
+-+		egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
+-+    	places2=`ls .. | sed -e 's,/$,,' -e "s,^,../," | \
+-+		egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
+-+    	for dir in $places $srcdir/../libpcap ../libpcap $srcdir/libpcap $places2 ; do
+-+	    	basedir=`echo $dir | sed -e 's/[[ab]][[0-9]]*$//' | \
+-+	        	sed -e 's/-PRE-GIT$//' `
+-+	    	if test $lastdir = $basedir ; then
+-+		    	dnl skip alphas when an actual release is present
+-+		    	continue;
+-+	    	fi
+-+	    	lastdir=$dir
+-+	    	if test -r $dir/libpcap.a ; then
+-+		    	libpcap=$dir/libpcap.a
+-+		    	d=$dir
+-+		    	dnl continue and select the last one that exists
+-+	    	fi
+-+		done
+-+	fi
+-     if test $libpcap = FAIL ; then
+- 	    AC_MSG_RESULT(not found)
+- 
 --- 
--2.0.1
+-2.1.1
 -
-diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+diff --git a/package/tcpdump/0005-fix-CVE-2014-9140.patch b/package/tcpdump/0005-fix-CVE-2014-9140.patch
+deleted file mode 100644
+index 86365d0..0000000
+--- a/package/tcpdump/0005-fix-CVE-2014-9140.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 0f95d441e4b5d7512cc5c326c8668a120e048eda Mon Sep 17 00:00:00 2001
+-From: Guy Harris <guy@alum.mit.edu>
+-Date: Wed, 22 Oct 2014 12:31:21 -0700
+-Subject: [PATCH] Do bounds checking when unescaping PPP.
+-
+-Clean up a const issue while we're at it.
+-
+-Upstream commit 0f95d441e4b5d.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- print-ppp.c | 16 ++++++++--------
+- 1 file changed, 8 insertions(+), 8 deletions(-)
+-
+-diff --git a/print-ppp.c b/print-ppp.c
+-index 8e098f05a953..9a983e6179cd 100644
+---- a/print-ppp.c
+-+++ b/print-ppp.c
+-@@ -1351,14 +1351,15 @@ static void
+- ppp_hdlc(netdissect_options *ndo,
+-          const u_char *p, int length)
+- {
+--	u_char *b, *s, *t, c;
+-+	u_char *b, *t, c;
+-+	const u_char *s;
+- 	int i, proto;
+- 	const void *se;
+- 
+-         if (length <= 0)
+-                 return;
+- 
+--	b = (uint8_t *)malloc(length);
+-+	b = (u_char *)malloc(length);
+- 	if (b == NULL)
+- 		return;
+- 
+-@@ -1367,14 +1368,13 @@ ppp_hdlc(netdissect_options *ndo,
+- 	 * Do this so that we dont overwrite the original packet
+- 	 * contents.
+- 	 */
+--	for (s = (u_char *)p, t = b, i = length; i > 0; i--) {
+-+	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
+- 		c = *s++;
+- 		if (c == 0x7d) {
+--			if (i > 1) {
+--				i--;
+--				c = *s++ ^ 0x20;
+--			} else
+--				continue;
+-+			if (i <= 1 || !ND_TTEST(*s))
+-+				break;
+-+			i--;
+-+			c = *s++ ^ 0x20;
+- 		}
+- 		*t++ = c;
+- 	}
+--- 
+-2.1.3
+-
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
 new file mode 100644
-index 0000000..967f2dd
+index 0000000..36e1c3b
 --- /dev/null
-+++ b/package/libpcap/libpcap.hash
++++ b/package/tcpdump/tcpdump.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated after checking pgp signature
-+sha256	1a4abc1f268b68f97e69a497f53695c9acc7a13f1d522a4d940dea276e6698ae	libpcap-1.7.2.tar.gz
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index bfcf19a..68d6614 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
++sha256	1f87fb652ce996d41e7a06c601bc6ea29b13fee922945b23770c29490f1d8ace	tcpdump-4.7.3.tar.gz
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 69eb717..71b844a 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPCAP_VERSION = 1.6.2
-+LIBPCAP_VERSION = 1.7.2
- LIBPCAP_SITE = http://www.tcpdump.org/release
- LIBPCAP_LICENSE = BSD-3c
- LIBPCAP_LICENSE_FILES = LICENSE
+-TCPDUMP_VERSION = 4.6.2
++TCPDUMP_VERSION = 4.7.3
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3c
+ TCPDUMP_LICENSE_FILES = LICENSE
+@@ -17,8 +17,6 @@ TCPDUMP_CONF_OPTS = \
+ 	--with-system-libpcap \
+ 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ TCPDUMP_DEPENDENCIES = zlib libpcap
+-# Patching aclocal.m4
+-TCPDUMP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ TCPDUMP_CONF_OPTS += LIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
 -- 
 2.0.5
