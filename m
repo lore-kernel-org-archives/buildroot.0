@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Mar 2015 21:44:45 +0100
+Date: Wed, 11 Mar 2015 21:45:43 +0100
 Subject: [Buildroot] Reduce toolchain options
-In-Reply-To: <5500890F.7030700@zacarias.com.ar>
+In-Reply-To: <550069E9.5060403@zacarias.com.ar>
 References: <550069E9.5060403@zacarias.com.ar>
- <87385bmrc8.fsf@dell.be.48ers.dk>
- <5500890F.7030700@zacarias.com.ar>
-Message-ID: <20150311214445.06b12508@free-electrons.com>
+Message-ID: <20150311214543.597e639b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +12,22 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 11 Mar 2015 15:27:27 -0300, Gustavo Zacarias wrote:
+On Wed, 11 Mar 2015 13:14:33 -0300, Gustavo Zacarias wrote:
 
-> I've found one downside of dropping non-IPv6: the codesourcery SH2A
-> toolchains lack IPv6 support :-(
+> How about we kill non-lfs and non-ipv6 toolchains?
 
-As you say, it's 2015, so maybe we should just drop this toolchain. Or
-at least deprecate it now so that we can get rid of it in the future.
+I fully support this idea.
 
-Best regards,
+> It's 2015 after all, and the size delta is minor:
+> 
+> tar file delta, arm926 uclibc+busybox
+> =====================================
+> Threading (NPTL)        +153600 bytes
+
+Ah, too bad. I was hoping to also suggest to remove the no-thread
+solution. The number of packages that need threads these days is really
+enormous, and I'm not really sure in practice how many people are doing
+no-thread based systems.
 
 Thomas
 -- 
