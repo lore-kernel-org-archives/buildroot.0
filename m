@@ -1,22 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 18:45:13 -0300
-Subject: [Buildroot] Reduce toolchain options
-In-Reply-To: <87a8zjjjqi.fsf@dell.be.48ers.dk>
-References: <550069E9.5060403@zacarias.com.ar>	<20150311214543.597e639b@free-electrons.com>
- <87a8zjjjqi.fsf@dell.be.48ers.dk>
-Message-ID: <5500B769.6060801@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Mar 2015 23:01:23 +0100
+Subject: [Buildroot] [PATCHv2 0/5] uClibc updates
+Message-ID: <1426111288-20529-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/2015 06:40 PM, Peter Korsgaard wrote:
-> Yeah, it is potentially useful for tiny initramfs'es with only busybox
-> and similar stuff, but not for anything bigger.
+Hello,
 
-I'll cook the non-LFS killer patchset and send it and wait for opinions
-on the others.
-Regarding toolchains i'll keep the check for external ones to avoid
-noise when an improper one is used.
-Regards.
+This is a v2 of the uClibc update patch series. Compared to the v1:
+
+ * Adjust the thread implementation selection according to the
+   comments made by Yann.
+
+ * Add a table in the commit log of the "uclibc: adapt thread
+   implementation selection to uClibc-ng" to help clarifying which
+   thread implementation is available in which situation.
+
+ * Add a commit renaming the uClibc-ng config option to remove the
+   version number from it.
+
+ * Add a patch that adds double quotes around the values of string
+   options.
+
+ * Integrate the patch from Waldemar bumping uClibc-ng to 1.0.1, after
+   updating it to take into account the previous changes.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (4):
+  uclibc: adapt thread implementation selection to uClibc-ng
+  uclibc: remove bogus comment about thread implementation selection
+  uclibc: remove version from the uclibc-ng config option
+  uclibc: double quote values of string options
+
+Waldemar Brodkorb (1):
+  uclibc: update to latest release 1.0.1
+
+ ...selection-better-do-it-in-your-build-syst.patch |  60 ++++++++++
+ package/uclibc/Config.in                           | 122 ++++++++++++---------
+ .../{uClibc-ng-1.0.0.config => uClibc-ng.config}   |   2 +-
+ package/uclibc/uclibc.mk                           |   4 +-
+ 4 files changed, 134 insertions(+), 54 deletions(-)
+ create mode 100644 package/uclibc/1.0.1/0001-remove-NAN-selection-better-do-it-in-your-build-syst.patch
+ rename package/uclibc/{uClibc-ng-1.0.0.config => uClibc-ng.config} (99%)
+
+-- 
+2.1.0
