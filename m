@@ -1,66 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Mar 2015 23:24:30 +0100
-Subject: [Buildroot] [PATCH v6 2/3] python-cheetah: add host-package
-	support
-In-Reply-To: <1426076003-12088-2-git-send-email-gwenj@trabucayre.com>
-References: <1426076003-12088-1-git-send-email-gwenj@trabucayre.com>
- <1426076003-12088-2-git-send-email-gwenj@trabucayre.com>
-Message-ID: <5500C09E.5010102@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Mar 2015 23:27:15 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/softether: Fix iconv-related
+	compile error
+In-Reply-To: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Wed, 11 Mar 2015 22:01:08 +0100")
+References: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <8761a7jhks.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/03/15 13:13, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
-> 
-> HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown is needed to avoids
-> setuptools downloads markdown if it can't be find it.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- If you do post a v7, please rephrase this:
+ > libiconv can also be enabled, and compiled before softether, with
+ > BR2_ENABLE_LOCALE disabled, this patch improves libiconv detection.
 
-The dependency on host-python-markdown is needed to avoid that setuptools
-downloads markdown if it is not installed yet.
+ > Fixes
+ > http://autobuild.buildroot.net/results/f47/f473882cd35445cbe5b3b15635d555340183951a/
+ > http://autobuild.buildroot.net/results/72e/72eab3a6f162e3c5eac380f88b54d4f314d52445/
 
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: Simplify libiconv check (Thomas)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >  package/softether/softether.mk |   10 ++++++----
+ >  1 file changed, 6 insertions(+), 4 deletions(-)
 
+ > diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+ > index 8f8734d..70b76b8 100644
+ > --- a/package/softether/softether.mk
+ > +++ b/package/softether/softether.mk
+ > @@ -14,14 +14,14 @@ SOFTETHER_LICENSE_FILES = LICENSE
+ >  SOFTETHER_DEPENDENCIES = host-softether openssl readline
+ >  SOFTETHER_AUTORECONF = YES
+ 
+ > -ifeq ($(BR2_ENABLE_LOCALE),)
+ > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
 
- Regards,
- Arnout
-
-> ---
-> Changes v3 -> v4:
->  * use HOST_PYTHON_CHEETAH_DEPENDENCIES instead of PYTHON_CHEETAH_DEPENDENCIES
->  * suppress '+' for dependency definition
-> ---
->  package/python-cheetah/python-cheetah.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-> index 08076b5..3155951 100644
-> --- a/package/python-cheetah/python-cheetah.mk
-> +++ b/package/python-cheetah/python-cheetah.mk
-> @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
->  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
->  PYTHON_CHEETAH_LICENSE = MIT
->  PYTHON_CHEETAH_SETUP_TYPE = setuptools
-> +HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
-> 
-
+Hmm, what does this really change? LIBICONV=y if !BR2_ENABLE_LOCALE, so
+these should be equivalent, right?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
