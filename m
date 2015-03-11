@@ -1,37 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 13:14:33 -0300
-Subject: [Buildroot] Reduce toolchain options
-Message-ID: <550069E9.5060403@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Mar 2015 17:21:29 +0100
+Subject: [Buildroot] [PATCH] graph-depends: remove absent targets from
+	TARGET_EXCEPTIONS
+In-Reply-To: <1426060397-4458-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Wed, 11 Mar 2015 10:53:17 +0300")
+References: <1426060397-4458-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87bnjzmrna.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Hi.
-How about we kill non-lfs and non-ipv6 toolchains?
-It's 2015 after all, and the size delta is minor:
+ > Most of targets listed in TARGET_EXCEPTIONS these days are long
+ > gone, so why still keep them?
 
-tar file delta, arm926 uclibc+busybox
-=====================================
-Threading (NPTL)        +153600 bytes
-Largefile               +20480 bytes
-IPv6                    +10240 bytes
-RPC                     +61440 bytes
-WCHAR                   +30720 bytes
+ > Most of those targets were removed in this commit:
+ > http://git.buildroot.net/buildroot/commit/?id=02b88600312554bf166f6cfd71f7f2ede783096a
 
-Benefits:
-* Less toolchain options to test/care for in packages
-* More bang for the buck for autobuilders with less combinations to test
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <jacmet@sunsite.dk>
 
-Even though the size delta would be somewhat more (tiny though) when
-adding packages/libraries that's generally offset by the added size of
-said packages.
+Committed, thanks.
 
-The only downside i can think of is badly designed packages that won't
-work well on a non-ipv6 linux kernel. These should be very few, if any.
-
-LFS is a no brainer IMO.
-
-Regards.
+-- 
+Bye, Peter Korsgaard
