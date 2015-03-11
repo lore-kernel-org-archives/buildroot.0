@@ -1,55 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 17:53:30 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Mar 2015 17:56:31 +0100
 Subject: [Buildroot] [PATCH] system: add option for standalone telnetd
 	on target
-In-Reply-To: <1426092262.2375.11.camel@synopsys.com> (Alexey Brodkin's message
- of "Wed, 11 Mar 2015 16:44:22 +0000")
+In-Reply-To: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
 References: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
- <877funmrkw.fsf@dell.be.48ers.dk>
- <1426092262.2375.11.camel@synopsys.com>
-Message-ID: <87pp8flblh.fsf@dell.be.48ers.dk>
+Message-ID: <20150311175631.426a1445@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+Dear Alexey Brodkin,
 
-Hi,
+On Wed, 11 Mar 2015 12:35:27 +0300, Alexey Brodkin wrote:
 
->> Any specific reason why you don't just configure a root password and
- >> enable dropbear instead?
+> +config BR2_SYSTEM_STANDALONE_TELNETD
+> +	bool "Enable telnet daemon on target"
+> +	depends on BR2_PACKAGE_BUSYBOX
+> +	depends on !BR2_PACKAGE_XINETD
 
- > Well I though of telnet as an essential replacement of serial console
- > especially for development boards.
+In any case, this should not be a system/Config.in option, but a
+Busybox package sub-option.
 
-These days I would say ssh is much more common.
+Or, since your system/Config.in option actually doesn't do anything
+about telnetd, it simply configures /etc/securetty, then the option
+should be named differently.
 
- > So my main intention was to get the most convenient tool for wide range
- > of developers. 
+Best regards,
 
- > For example in Windows if I'm not mistaken Telnet client is available
- > right from MS, while SSH client is always 3rd-party program like Putty. 
-
-If I'm not mistaken Windows no longer comes with telnet out of the box.
-
-E.G. first Google hit:
-
-http://social.technet.microsoft.com/wiki/contents/articles/910.windows-7-enabling-telnet-client.aspx
-
- > Also ability to not set password is convenient here - because people
- > will ask "what's the password" otherwise. Still in case of devboards we
- > have limited access to the network for foreigners so we may not care
- > much about paranoid safety.
-
-Don't they ask the same about the serial login password?
-
-
- > Indeed your proposal may work if my motivation is not convincing enough.
-
-I can still be convinced, but my initial thought is that it isn't
-really a common enough use case / we should promote ssh instead.
-
+Thomas
 -- 
-Bye, Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
