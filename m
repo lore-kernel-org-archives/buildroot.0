@@ -1,30 +1,30 @@
-From: drasko.draskovic at gmail.com <drasko.draskovic@gmail.com>
-Date: Tue, 10 Mar 2015 19:07:35 -0500
-Subject: [Buildroot] You have a new notification from
-	drasko.draskovic@gmail.com. View?
-Message-ID: <0.0.EE.F61.1D05B8E9B29106A.255F@mail6.infoaxe.net>
+From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
+Date: Tue, 10 Mar 2015 23:44:44 -0400
+Subject: [Buildroot] [PATCH] sunxi-mali: require fbset
+In-Reply-To: <20150310233513.5d7906a8@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 10 Mar 2015 23:35:13 +0100")
+References: <1426023433-24991-1-git-send-email-jerome.oufella@savoirfairelinux.com>
+ <20150310233513.5d7906a8@free-electrons.com>
+Message-ID: <8761a88afn.fsf@pcjo.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-drasko.draskovic at gmail.com wants to follow you.
+> Well, there is also a fbset applet in Busybox, which is enabled in our
+> default Busybox configuration. So normally, the out of the box user
+> experience should be just fine.
+>
+> Are you running without Busybox? Or with a custom Busybox configuration?
 
-****** Is drasko.draskovic at gmail.com you friend? ******
-If Yes please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=b2735f22-c9c9-416e-8c56-fea52c09dba2&amp;from=drasko.draskovic at gmail.com&src=txt_yes
+You are the voice of rightness Thomas :-) I had removed the fbset
+package executable without reinstalling busybox. As a result, no trace
+of fbset with my default config, which led to this patch.
 
-If No please follow the link below:
-http://invites.infoaxe.net/signup_e.html?fullname=&amp;email=buildroot at uclibc.org&amp;invitername=Drasko.draskovic&amp;inviterid=17473118&amp;userid=0&amp;token=0&amp;emailmasterid=b2735f22-c9c9-416e-8c56-fea52c09dba2&amp;from=drasko.draskovic at gmail.com&src=txt_no
+Sorry for the noise.
 
-
-Follow the link below to remove yourself from all such emails
-http://invites.infoaxe.net/uns_inviter.jsp?email=buildroot at uclibc.org&amp;iid=b2735f22-c9c9-416e-8c56-fea52c09dba2&amp;from=drasko.draskovic at gmail.com
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150310/e37b112b/attachment.html>
+-- 
+J?r?me Oufella
