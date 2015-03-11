@@ -1,219 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 10:43:48 -0300
-Subject: [Buildroot] [PATCH 2/2] tcpdump: security bump to version 4.7.3
-In-Reply-To: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426081428-32041-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426081428-32041-2-git-send-email-gustavo@zacarias.com.ar>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Wed, 11 Mar 2015 09:55:08 -0400
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: install systemd service
+	files
+In-Reply-To: <20150309233256.0b0e0550@free-electrons.com>
+References: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
+ <20150309233256.0b0e0550@free-electrons.com>
+Message-ID: <CANPyyuMi5xqCwn9R0PLLQ7EtEMqX7oHrxZeJPUxJhAqE=E2TvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Thomas,
 
-CVE-2015-0261 - issues with IPv6 mobility printer.
-CVE-2015-2153 - issue with tcp printer.
-CVE-2015-2154 - issue with ethernet printer.
-CVE-2015-2155 - issue with force printer.
+On Mon, Mar 9, 2015 at 6:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Mike Williams,
+>
+> On Mon,  9 Mar 2015 12:03:31 -0400, Mike Williams wrote:
+>
+>> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+>> index 682cb4c..242bea5 100644
+>> --- a/package/wpa_supplicant/wpa_supplicant.mk
+>> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+>> @@ -164,4 +164,15 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>>       $(WPA_SUPPLICANT_INSTALL_DBUS)
+>>  endef
+>>
+>> +define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
+>> +             $(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
+>> +             $(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant at .service
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
+>> +             $(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
+>> +     $(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+>> +             $(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
+>> +endef
+>
+> Could you please add the symlinks needed to make sure that these
+> services are started at boot by default?
 
-CVE-2014-9140 fix is upstream so patch dropped.
-System libpcap upstream as well so dropped.
+Yes, but it will take me a little while, maybe next week. Some of
+these appear to be mutually exclusive, some of them require specific
+configuration files for the interface or they will fail, and the
+wpa_supplicant.service file needs to be modified depending on build
+options set, etc. so it's not as simple as just enabling all of them.
 
-CVE-2014-8767, CVE-2014-8768 and CVE-2014-8769 don't seem to be upstream
-so keep.
-
-And add hash file.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...libpcap-when-configured-with-with-system-.patch | 78 ----------------------
- package/tcpdump/0005-fix-CVE-2014-9140.patch       | 59 ----------------
- package/tcpdump/tcpdump.hash                       |  2 +
- package/tcpdump/tcpdump.mk                         |  4 +-
- 4 files changed, 3 insertions(+), 140 deletions(-)
- delete mode 100644 package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
- delete mode 100644 package/tcpdump/0005-fix-CVE-2014-9140.patch
- create mode 100644 package/tcpdump/tcpdump.hash
-
-diff --git a/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch b/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
-deleted file mode 100644
-index 7f8b715..0000000
---- a/package/tcpdump/0001-Use-system-libpcap-when-configured-with-with-system-.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 4289e62c7966e5abeb95307717cef30a51fcdccf Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Wed, 29 Oct 2014 13:21:05 +0200
--Subject: [PATCH] Use system libpcap when configured with --with-system-pcap
--
--Don't force the local libpcap build when the system provides one. When
----with-system-pcap is given to configure, don't try to locate a local libpcap
--build. This help build systems like Buildroot that store build trees in the
--same directory, but still prefer dynamically linking against system wide
--libpcap.so to save space.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Status: sent upstream (https://github.com/the-tcpdump-group/tcpdump/pull/408)
--
-- aclocal.m4 | 46 +++++++++++++++++++++++++---------------------
-- 1 file changed, 25 insertions(+), 21 deletions(-)
--
--diff --git a/aclocal.m4 b/aclocal.m4
--index 80614cf21050..cd0a94414bbf 100644
----- a/aclocal.m4
--+++ b/aclocal.m4
--@@ -438,27 +438,31 @@ AC_DEFUN(AC_LBL_LIBPCAP,
-- 		    LIBS="$LIBS $pfopen"
-- 	    fi
--     fi
---    AC_MSG_CHECKING(for local pcap library)
---    libpcap=FAIL
---    lastdir=FAIL
---    places=`ls $srcdir/.. | sed -e 's,/$,,' -e "s,^,$srcdir/../," | \
---	egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
---    places2=`ls .. | sed -e 's,/$,,' -e "s,^,../," | \
---	egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
---    for dir in $places $srcdir/../libpcap ../libpcap $srcdir/libpcap $places2 ; do
---	    basedir=`echo $dir | sed -e 's/[[ab]][[0-9]]*$//' | \
---	        sed -e 's/-PRE-GIT$//' `
---	    if test $lastdir = $basedir ; then
---		    dnl skip alphas when an actual release is present
---		    continue;
---	    fi
---	    lastdir=$dir
---	    if test -r $dir/libpcap.a ; then
---		    libpcap=$dir/libpcap.a
---		    d=$dir
---		    dnl continue and select the last one that exists
---	    fi
---    done
--+	libpcap=FAIL
--+	AC_MSG_CHECKING(for local pcap library)
--+	AC_ARG_WITH([system-libpcap],
--+		[AS_HELP_STRING([--with-system-libpcap], [don't use local pcap library])])
--+	if test "x$with_system_libpcap" != xyes ; then
--+		lastdir=FAIL
--+    	places=`ls $srcdir/.. | sed -e 's,/$,,' -e "s,^,$srcdir/../," | \
--+		egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
--+    	places2=`ls .. | sed -e 's,/$,,' -e "s,^,../," | \
--+		egrep '/libpcap-[[0-9]]+\.[[0-9]]+(\.[[0-9]]*)?([[ab]][[0-9]]*|-PRE-GIT)?$'`
--+    	for dir in $places $srcdir/../libpcap ../libpcap $srcdir/libpcap $places2 ; do
--+	    	basedir=`echo $dir | sed -e 's/[[ab]][[0-9]]*$//' | \
--+	        	sed -e 's/-PRE-GIT$//' `
--+	    	if test $lastdir = $basedir ; then
--+		    	dnl skip alphas when an actual release is present
--+		    	continue;
--+	    	fi
--+	    	lastdir=$dir
--+	    	if test -r $dir/libpcap.a ; then
--+		    	libpcap=$dir/libpcap.a
--+		    	d=$dir
--+		    	dnl continue and select the last one that exists
--+	    	fi
--+		done
--+	fi
--     if test $libpcap = FAIL ; then
-- 	    AC_MSG_RESULT(not found)
-- 
---- 
--2.1.1
--
-diff --git a/package/tcpdump/0005-fix-CVE-2014-9140.patch b/package/tcpdump/0005-fix-CVE-2014-9140.patch
-deleted file mode 100644
-index 86365d0..0000000
---- a/package/tcpdump/0005-fix-CVE-2014-9140.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 0f95d441e4b5d7512cc5c326c8668a120e048eda Mon Sep 17 00:00:00 2001
--From: Guy Harris <guy@alum.mit.edu>
--Date: Wed, 22 Oct 2014 12:31:21 -0700
--Subject: [PATCH] Do bounds checking when unescaping PPP.
--
--Clean up a const issue while we're at it.
--
--Upstream commit 0f95d441e4b5d.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
-- print-ppp.c | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/print-ppp.c b/print-ppp.c
--index 8e098f05a953..9a983e6179cd 100644
----- a/print-ppp.c
--+++ b/print-ppp.c
--@@ -1351,14 +1351,15 @@ static void
-- ppp_hdlc(netdissect_options *ndo,
--          const u_char *p, int length)
-- {
---	u_char *b, *s, *t, c;
--+	u_char *b, *t, c;
--+	const u_char *s;
-- 	int i, proto;
-- 	const void *se;
-- 
--         if (length <= 0)
--                 return;
-- 
---	b = (uint8_t *)malloc(length);
--+	b = (u_char *)malloc(length);
-- 	if (b == NULL)
-- 		return;
-- 
--@@ -1367,14 +1368,13 @@ ppp_hdlc(netdissect_options *ndo,
-- 	 * Do this so that we dont overwrite the original packet
-- 	 * contents.
-- 	 */
---	for (s = (u_char *)p, t = b, i = length; i > 0; i--) {
--+	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
-- 		c = *s++;
-- 		if (c == 0x7d) {
---			if (i > 1) {
---				i--;
---				c = *s++ ^ 0x20;
---			} else
---				continue;
--+			if (i <= 1 || !ND_TTEST(*s))
--+				break;
--+			i--;
--+			c = *s++ ^ 0x20;
-- 		}
-- 		*t++ = c;
-- 	}
---- 
--2.1.3
--
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-new file mode 100644
-index 0000000..36e1c3b
---- /dev/null
-+++ b/package/tcpdump/tcpdump.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	1f87fb652ce996d41e7a06c601bc6ea29b13fee922945b23770c29490f1d8ace	tcpdump-4.7.3.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 69eb717..71b844a 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPDUMP_VERSION = 4.6.2
-+TCPDUMP_VERSION = 4.7.3
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
-@@ -17,8 +17,6 @@ TCPDUMP_CONF_OPTS = \
- 	--with-system-libpcap \
- 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
- TCPDUMP_DEPENDENCIES = zlib libpcap
--# Patching aclocal.m4
--TCPDUMP_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPDUMP_CONF_OPTS += LIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
--- 
-2.0.5
+>
+> I know this is not your opinion, but starting services by default is
+> what we do in basically all packages in Buildroot today, and therefore
+> something we should continue doing for consistency (and also because
+> we believe that's a sane default).
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
