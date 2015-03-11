@@ -1,37 +1,60 @@
-From: =?windows-1252?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 11 Mar 2015 21:47:55 +0100
-Subject: [Buildroot] [PATCH] avahi: add hash file
-In-Reply-To: <1426101989-20525-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426101989-20525-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5500A9FB.3090307@dawncrow.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 11 Mar 2015 22:01:08 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/softether: Fix iconv-related
+	compile error
+Message-ID: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 11.03.2015 um 20:26 schrieb Gustavo Zacarias:
-> Help counteract upstream website issues, fixes:
-> http://autobuild.buildroot.net/results/103/103e5a62d16ed22414cc407eff8a78d5e8d7503c/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/avahi/avahi.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/avahi/avahi.hash
-> 
-> diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
-> new file mode 100644
-> index 0000000..99bbd51
-> --- /dev/null
-> +++ b/package/avahi/avahi.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
-> 
+libiconv can also be enabled, and compiled before softether, with
+BR2_ENABLE_LOCALE disabled, this patch improves libiconv detection.
 
-This fixes the issue, but we should take care if the website is not going back up again
+Fixes
+http://autobuild.buildroot.net/results/f47/f473882cd35445cbe5b3b15635d555340183951a/
+http://autobuild.buildroot.net/results/72e/72eab3a6f162e3c5eac380f88b54d4f314d52445/
 
-Tested-by: Andr? Hentschel <nerv@dawncrow.de>
-Reviewed-by: Andr? Hentschel <nerv@dawncrow.de>
-Acked-by: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Simplify libiconv check (Thomas)
+
+ package/softether/softether.mk |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 8f8734d..70b76b8 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -14,14 +14,14 @@ SOFTETHER_LICENSE_FILES = LICENSE
+ SOFTETHER_DEPENDENCIES = host-softether openssl readline
+ SOFTETHER_AUTORECONF = YES
+ 
+-ifeq ($(BR2_ENABLE_LOCALE),)
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ SOFTETHER_DEPENDENCIES += libiconv
+-SOFTETHER_CONF_ENV = LIBS+=" -liconv"
++SOFTETHER_LIBS += -liconv
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # openssl needs zlib
+-SOFTETHER_CONF_ENV += LIBS+=" -lz"
++SOFTETHER_LIBS += -lz
+ endif
+ 
+ SOFTETHER_CONF_OPTS = \
+@@ -31,7 +31,9 @@ SOFTETHER_CONF_OPTS = \
+ # softether uses clock_gettime but forgets to link against -lrt
+ # breaking the build against older libc's that don't provide this
+ # symbol in libc
+-SOFTETHER_CONF_ENV += LIBS+=" -lrt"
++SOFTETHER_LIBS += -lrt
++
++SOFTETHER_CONF_ENV += LIBS="$(SOFTETHER_LIBS)"
+ HOST_SOFTETHER_CONF_ENV += LIBS+=" -lrt"
+ 
+ # host-libiconv does not exist, therefore we need this extra line
+-- 
+1.7.10.4
