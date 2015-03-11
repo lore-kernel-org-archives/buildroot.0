@@ -1,39 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Mar 2015 09:34:04 +0100
-Subject: [Buildroot] [PATCH v5 2/3] python-cheetah: add host-package
- support
-In-Reply-To: <54FF7805.4070701@mind.be>
-References: <1426011874-11011-1-git-send-email-gwenj@trabucayre.com>
- <1426011874-11011-2-git-send-email-gwenj@trabucayre.com>
- <54FF72A3.4040701@mind.be>
- <20150310234726.1b583693@free-electrons.com>
- <54FF7805.4070701@mind.be>
-Message-ID: <20150311093404.55b72eda@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 11 Mar 2015 10:58:50 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Makefile: add target to clean
+	targetfs
+In-Reply-To: <CA+TH9V=fN9Zo2+hpRt=M+=N+ZM2WASZo4j5DOzKbDneqhbLWJg@mail.gmail.com>
+References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+ <1426015688-24902-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+ <CAMQcK5Kz4_vyCVv3Xq9Sms7UWd2Qjew1c60bXZzkfn6f40QeNg@mail.gmail.com>
+ <20150311050652.GB2177@tarshish>
+ <CA+TH9V=fN9Zo2+hpRt=M+=N+ZM2WASZo4j5DOzKbDneqhbLWJg@mail.gmail.com>
+Message-ID: <20150311085850.GE2177@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hi Angelo,
 
-On Wed, 11 Mar 2015 00:02:29 +0100, Arnout Vandecappelle wrote:
+On Wed, Mar 11, 2015 at 09:22:49AM +0100, Angelo Compagnucci wrote:
+> I submitted a couple of patches some times ago, but they was rejected
+> because potentially dangerous for users[1][2].
+> So probably you will not have that much luck with this patch.
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2014-July/101963.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2014-July/103143.html
 
->  For me, the acid test is what the package declares itself.
-> Cheetah.egg-info/requires.txt says Markdown >= 2.0.1
-> For perl packages, we trust whatever dependencies the package declares. If we
-> would have a scancpan-like script for pypi, the dependency would be there.
+Well, it is not me suggesting this patch, it is Emeric Vigier. But yes, one of 
+our clients asked for this functionality, so I really want this patch applied.
 
-I actually did start such a script at some point :-)
+As for previous rejections, the response of ThomasP[1] and Arnout[2] seems to 
+indicate that they would be willing to accept this functional addition 
+provided that it is (1) properly documented[1], and (2) prints a "big fat 
+warning"[2]. Something like Thomas' scenario description[3] should be added to 
+the documentation part of this patch.
 
->  On the other hand, as long as the lack of dependency is not bothering anyone,
-> we can leave it as it is :-) The purpose of discussion is what should be the
-> guiding principle for future python packages. My proposal is: follow the egg info.
+Thanks for reminding us this previous discussion.
 
-I'm fine with that.
+[1] http://lists.busybox.net/pipermail/buildroot/2014-July/101966.html
 
-Thomas
+[2] http://lists.busybox.net/pipermail/buildroot/2014-July/102064.html
+
+[3] http://lists.busybox.net/pipermail/buildroot/2014-July/101941.html
+
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
