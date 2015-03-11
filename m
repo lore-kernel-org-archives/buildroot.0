@@ -1,29 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Mar 2015 16:26:29 -0300
-Subject: [Buildroot] [PATCH] avahi: add hash file
-Message-ID: <1426101989-20525-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?windows-1252?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
+Date: Wed, 11 Mar 2015 20:39:41 +0100
+Subject: [Buildroot] [PATCH] adwaita-icon-theme: Add hash file
+Message-ID: <550099FD.60606@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Help counteract upstream website issues, fixes:
-http://autobuild.buildroot.net/results/103/103e5a62d16ed22414cc407eff8a78d5e8d7503c/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/avahi/avahi.hash | 2 ++
+ package/adwaita-icon-theme/adwaita-icon-theme.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/avahi/avahi.hash
 
-diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
 new file mode 100644
-index 0000000..99bbd51
+index 0000000..1662ab9
 --- /dev/null
-+++ b/package/avahi/avahi.hash
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
--- 
-2.0.5
++# From ftp://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.14/adwaita-icon-theme-3.14.0.sha256sum
++sha256	afacb6025a18be007e33a9663b92cee9d2745279bb00107a68e09b2806f9541f  adwaita-icon-theme-3.14.0.tar.xz
