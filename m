@@ -1,27 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 22:13:42 +0100
-Subject: [Buildroot] [PATCH] python-netifaces: change license file name
-In-Reply-To: <1426093924-30591-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- (Clayton Shotwell's message of "Wed, 11 Mar 2015 12:12:04 -0500")
-References: <1426093924-30591-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <874mprkzjt.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Mar 2015 22:15:08 +0100
+Subject: [Buildroot] [PATCH] vsftpd: add security fix for CVE-2015-1419
+In-Reply-To: <1426096753-32723-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 11 Mar 2015 14:59:13 -0300")
+References: <1426096753-32723-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zj7jjkwz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Clayton" == Clayton Shotwell <clayton.shotwell@rockwellcollins.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > From: David Graziano <david.graziano@rockwellcollins.com>
- >     Change license file name from README to README.rst.
+ > Fixes CVE-2015-1419 - config option deny_file is not handled correctly.
+ > Also add hash file.
 
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-That's not really a good commit message. Commit messages should explain
-WHY a change is made, not just WHAT the change is.
-
-Committed with this reworded, thanks.
-
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
