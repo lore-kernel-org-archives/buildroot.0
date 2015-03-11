@@ -1,50 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2015 17:18:24 +0100
-Subject: [Buildroot] [git commit] graph-depends: remove absent targets from
-	TARGET_EXCEPTIONS
-Message-ID: <20150311162303.9DA178181E@busybox.osuosl.org>
+Date: Wed, 11 Mar 2015 17:28:07 +0100
+Subject: [Buildroot] Reduce toolchain options
+In-Reply-To: <550069E9.5060403@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Wed, 11 Mar 2015 13:14:33 -0300")
+References: <550069E9.5060403@zacarias.com.ar>
+Message-ID: <87385bmrc8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b32791f00764cd42650f6e675725107322f51f3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Most of targets listed in TARGET_EXCEPTIONS these days are long
-gone, so why still keep them?
+ > Hi.
+ > How about we kill non-lfs and non-ipv6 toolchains?
+ > It's 2015 after all, and the size delta is minor:
 
-Most of those targets were removed in this commit:
-http://git.buildroot.net/buildroot/commit/?id=02b88600312554bf166f6cfd71f7f2ede783096a
+ > tar file delta, arm926 uclibc+busybox
+ > =====================================
+ > Threading (NPTL)        +153600 bytes
+ > Largefile               +20480 bytes
+ > IPv6                    +10240 bytes
+ > RPC                     +61440 bytes
+ > WCHAR                   +30720 bytes
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/graph-depends |    9 ---------
- 1 files changed, 0 insertions(+), 9 deletions(-)
+ > Benefits:
+ > * Less toolchain options to test/care for in packages
+ > * More bang for the buck for autobuilders with less combinations to test
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 28fe2f0..5b9b195 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -186,17 +186,8 @@ def pkg_node_name(pkg):
-     return pkg.replace("-","")
- 
- TARGET_EXCEPTIONS = [
--    "target-generic-securetty",
--    "target-generic-issue",
--    "target-generic-getty-busybox",
--    "target-generic-do-remount-rw",
--    "target-generic-dont-remount-rw",
-     "target-finalize",
--    "erase-fakeroots",
--    "target-generic-hostname",
--    "target-root-passwd",
-     "target-post-image",
--    "target-purgelocales",
- ]
- 
- # In full mode, start with the result of get_targets() to get the main
+ > Even though the size delta would be somewhat more (tiny though) when
+ > adding packages/libraries that's generally offset by the added size of
+ > said packages.
+
+ > The only downside i can think of is badly designed packages that won't
+ > work well on a non-ipv6 linux kernel. These should be very few, if any.
+
+ > LFS is a no brainer IMO.
+
+Yes, I agree.
+
+I'm also somewhat scared of forcing IPv6 support but perhaps it will be
+safe, people using !uClibc have probably noticed these issues already.
+
+-- 
+Bye, Peter Korsgaard
