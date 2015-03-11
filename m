@@ -1,80 +1,92 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 11 Mar 2015 18:29:35 +0100
-Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
-In-Reply-To: <20150303152121.408c2733@free-electrons.com>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <20150303142901.5998a72c@free-electrons.com>
- <CAHkwnC94xHciiK2n8X0Gr7=PVTs_LWoqQ-bG1bg20jO1ygd0Gw@mail.gmail.com>
- <20150303152121.408c2733@free-electrons.com>
-Message-ID: <CAHkwnC_tYQgKA1qY9_zS3Q8m1oNEjxBfZu5zA3xAcYSn+WY_Pw@mail.gmail.com>
+From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <nrubinstein@aldebaran.com>
+Date: Wed, 11 Mar 2015 19:00:05 +0100
+Subject: [Buildroot] [PATCH] boost: enable boost-atomic
+Message-ID: <1426096805-28072-1-git-send-email-nrubinstein@aldebaran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 3, 2015 at 3:21 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Tue, 3 Mar 2015 15:03:46 +0100, Fabio Porcedda wrote:
->
->> > Could you give some hints about the performance impact of those copies
->> > of the staging directory? Does it continue to make the top-level
->> > parallel build thing useful?
->>
->> IMHO the per-package staging feature is useful even without taking in
->> consideration the top-level parallel build, the unspecified optional
->> dependency issue are not common, they can generate build faulres or
->> just binary with unexpected behavior.
->
-> Yes, correct, this is indeed another benefit of this approach.
->
->> > Preferably something with a fairly deep dependency tree, i.e lots of
->> > small packages that depend on each other. A X.org stack + gtk2 would be
->> > a good example.
->>
->> The most complete selection of package that i've tested is the
->> defconfig + allyespacakgeconfig (693 targets), i've tried to enable a
->> wider range of packages, defconfig + glibc + allyespackageconfig but
->> even without using the pps they fail to build.
->> So i will provide build times of the configuration defconfig +
->> allyespackageconfig.
->
-> Ok.
->
->> If you provide a defconfig on the release 2015.02, i can try to build that.
->
-> Something like:
->
-> BR2_arm=y
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-> BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XSERVER_XORG_SERVER=y
-> BR2_PACKAGE_LIBGTK3=y
+It was disabled in february 2013 by commit
+e5434583badf1abf4a4620efa76452638ad9e177
+because did not build correctly with ucLibc at the time.
 
-I've used a system with: i5-3470 (4 core @ 3.2GHz); RAM: 8GB; SSD.
-Using you defconfig:
+It now builds correctly with both uClibc v0.9.33 and uClibc-ng.
+---
+ package/boost/Config.in | 3 +++
+ package/boost/boost.mk  | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-normal:                 20m
-with parallel:          13m
-with parallel & pps: 15m
-
-Using a defconfig + allyespacakgeconfig:
-normal:   85m
-parallel:  40m
-pps:       42m
-
-I've repeated the test few times and taken the minimum value, but i
-was still using the system so maybe the real values can change a bit.
-
-I was surprised that the pps doesn't affect too much the build times,
-but probably the ssd helps a lot.
-
-BR
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index a15b849..574f51a 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -50,6 +50,9 @@ config BR2_PACKAGE_BOOST_LAYOUT
+ 	default "tagged" if BR2_PACKAGE_BOOST_LAYOUT_TAGGED
+ 	default "versioned" if BR2_PACKAGE_BOOST_LAYOUT_VERSIONED
+ 
++config BR2_PACKAGE_BOOST_ATOMIC
++	bool "boost-atomic"
++
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 7b56827..70160da 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -23,11 +23,11 @@ HOST_BOOST_FLAGS = --without-icu \
+ 	iostreams locale log math mpi program_options python random regex \
+ 	serialization signals system test thread timer wave)
+ 
+-# atomic library compile only with upstream version, wait for next release
+ # coroutine breaks on some weak toolchains and it's new for 1.54+
+ # log breaks with some toolchain combinations and it's new for 1.54+
+-BOOST_WITHOUT_FLAGS = atomic coroutine log
++BOOST_WITHOUT_FLAGS = coroutine log
+ 
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
 -- 
-Fabio Porcedda
+2.1.4
+
+
+-- 
+
+
+
+
+*This email and any attachment thereto are confidential and intended solely 
+for the use of the individual or entity to whom they are addressed.If you 
+are not the intended recipient, please be advised that disclosing, copying, 
+distributing or taking any action in reliance on the contents of this email 
+is strictly prohibited. In such case, please immediately advise the sender, 
+and delete all copies and attachment from your system.This email shall not 
+be construed and is not tantamount to an offer, an acceptance of offer, or 
+an agreement by Aldebaran Robotics on any discussion or contractual 
+document whatsoever. No employee or agent is authorized to represent or 
+bind Aldebaran Robotics to third parties by email, or act on behalf of 
+Aldebaran Robotics by email, without express written confirmation by 
+Aldebaran Robotics' duly authorized representatives.*
+------------------------------
+
+*Ce message ?lectronique et ?ventuelles pi?ces jointes sont confidentiels, 
+et exclusivement destin?s ? la personne ou l'entit? ? qui ils sont 
+adress?s.*
+
+*Si vous n'?tes pas le destinataire vis?, vous ?tes pri? de ne pas 
+divulguer, copier, distribuer ou prendre toute d?cision sur la foi de ce 
+message ?lectronique. Merci d'en aviser imm?diatement l'exp?diteur et de 
+supprimer toutes les copies et ?ventuelles pi?ces jointes de votre syst?me.*
+
+*Ce message ?lectronique n'?quivaut pas ? une offre, ? une acceptation 
+d'offre, ou ? un accord d'Aldebaran Robotics sur toute discussion ou 
+document contractuel quel qu'il soit, et ne peut ?tre interpr?t? comme tel. 
+Aucun employ? ou agent d'Aldebaran Robotics n'est autoris? ? repr?senter ou 
+? engager la soci?t? par email, ou ? agir au nom et pour le compte de la 
+soci?t? par email, sans qu'une confirmation ?crite soit donn?e par le 
+repr?sentant l?gal d'Aldebaran Robotics ou par toute autre personne ayant 
+re?u d?l?gation de pouvoir appropri?e.*
