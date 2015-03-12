@@ -1,47 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Mar 2015 16:10:13 +0100
-Subject: [Buildroot] [PATCH] system: add option for standalone telnetd
- on target
-In-Reply-To: <1426170908.2639.25.camel@synopsys.com>
-References: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
- <877funmrkw.fsf@dell.be.48ers.dk>
- <1426092262.2375.11.camel@synopsys.com>
- <87pp8flblh.fsf@dell.be.48ers.dk>
- <1426147462.2639.11.camel@synopsys.com>
- <CANPyyuOMod=OMEtv184PQ+tUFW8Gpqj8wpsB9k3cVg43eOMO9w@mail.gmail.com>
- <1426170908.2639.25.camel@synopsys.com>
-Message-ID: <20150312161013.4b73baff@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Thu, 12 Mar 2015 16:12:25 +0100
+Subject: [Buildroot] [PATCH v2 1/3] Remove --{enable,
+	disable}-debug configure flags.
+Message-ID: <1426173147-27755-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Adding this flag when BR2_ENABLE_DEBUG is activated make several
+packages to produce binaries that do not work as expected (e.g., dhcp,
+lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
+say it is adding this flag. It is supposed to build packages with
+debugging symbols enabled. So, let it do that only.
 
-On Thu, 12 Mar 2015 14:35:08 +0000, Alexey Brodkin wrote:
+* package/Makefile.in: Do not add --{enable,disable}-debug flags.
+* package/pkg-autotools.mk: Remove ENABLE_DEBUG as it is not set
+  anymore.
 
-> Even though I may use this hint myself locally I'm afraid it's not the
-> best solution if others want to use the same Buildroot configuration. 
-> 
-> Because to make their life easier I'll need to push those SSH keys in
-> public repository - and this won't work for upstreaming the board
-> support in Buildroot.
-> 
-> So at least for now SSH doesn't look as an equally simple option as
-> Telnet.
-> 
-> Once again - this is because my particular corner-case when rootfs is
-> built in kernel image. If there is some real non-volatile storage on
-> target SSH might be a good option still.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+Changes v1 -> v2:
+  - Do not pass --disable-debug neither.
+---
+ package/Makefile.in      | 6 ------
+ package/pkg-autotools.mk | 1 -
+ 2 files changed, 7 deletions(-)
 
-FWIW, I also do kernel development only with an initramfs, and I still
-use SSH. I simply remove the key from my system using ssh-keygen -R, as
-suggested by modern OpenSSH versions when you connect to a host for
-which you have an invalid key locally.
-
-Thomas
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 803b162..049c89b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -387,12 +387,6 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TARGET_CONFIGURE_OPTS += CXX=false
+ endif
+ 
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-ENABLE_DEBUG := --enable-debug
+-else
+-ENABLE_DEBUG := --disable-debug
+-endif
+-
+ ifeq ($(BR2_STATIC_LIBS),y)
+ SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
+ TARGET_CFLAGS += -static
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index d2f15fa..11bc643 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -203,7 +203,6 @@ define $(2)_CONFIGURE_CMDS
+ 		$$(DISABLE_NLS) \
+ 		$$(DISABLE_LARGEFILE) \
+ 		$$(DISABLE_IPV6) \
+-		$$(ENABLE_DEBUG) \
+ 		$$(SHARED_STATIC_LIBS_OPTS) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
+ 	)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
