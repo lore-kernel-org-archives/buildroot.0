@@ -1,63 +1,121 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 12 Mar 2015 14:35:08 +0000
-Subject: [Buildroot] [PATCH] system: add option for standalone telnetd
- on target
-In-Reply-To: <CANPyyuOMod=OMEtv184PQ+tUFW8Gpqj8wpsB9k3cVg43eOMO9w@mail.gmail.com>
-References: <1426066527-23021-1-git-send-email-abrodkin@synopsys.com>
- <877funmrkw.fsf@dell.be.48ers.dk> <1426092262.2375.11.camel@synopsys.com>
- <87pp8flblh.fsf@dell.be.48ers.dk> <1426147462.2639.11.camel@synopsys.com>
- <CANPyyuOMod=OMEtv184PQ+tUFW8Gpqj8wpsB9k3cVg43eOMO9w@mail.gmail.com>
-Message-ID: <1426170908.2639.25.camel@synopsys.com>
+From: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
+Date: Thu, 12 Mar 2015 10:44:07 -0400
+Subject: [Buildroot] [PATCH v2 1/1] Makefile: add target to clean
+	targetfs
+In-Reply-To: <CAMQcK5Kz4_vyCVv3Xq9Sms7UWd2Qjew1c60bXZzkfn6f40QeNg@mail.gmail.com>
+References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>	<1426015688-24902-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+ <CAMQcK5Kz4_vyCVv3Xq9Sms7UWd2Qjew1c60bXZzkfn6f40QeNg@mail.gmail.com>
+Message-ID: <5501A637.8050502@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mike,
+On 15-03-10 07:41 PM, Ryan Barnett wrote:
+> Emeric,
+>
+> In the future - could you put a version - such as 'v2' - into the
+> title utilizing the -'-subject-prefix' parameter of git-send-email?
 
-On Thu, 2015-03-12 at 08:59 -0400, Mike Williams wrote:
-> > Another inconvenience I discovered with SSH - every time I boot my
-> > target it gets new fingerprint and then on attempt to ssh to the target
-> > I see:
-> >  --->8---
-> >  $ ssh root at 192.168.218.2
-> >  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-> >  @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
-> >  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-> >  IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
-> >  Someone could be eavesdropping on you right now (man-in-the-middle
-> > attack)!
-> >  It is also possible that a host key has just been changed.
-> >  The fingerprint for the ECDSA key sent by the remote host is
-> >  82:b8:c2:cf:88:d6:19:77:60:23:ff:9b:cc:3e:3d:2c.
-> >  Please contact your system administrator.
-> >  Add correct host key in /home/abrodkin/.ssh/known_hosts to get rid of
-> > this message.
-> >  Offending ECDSA key in /home/abrodkin/.ssh/known_hosts:49
-> >  ECDSA host key for 192.168.218.2 has changed and you have requested
-> > strict checking.
-> >  Host key verification failed.
-> 
-> I solved this by copying the SSH keys in /etc to the filesystem
-> overlay. SSH won't regenerate them every boot if they already exist,
-> so it will speed up your boot time and get rid of this warning. I'm
-> not sure you'd want to do that for your production builds though.
+I did, using git format-patch:
 
-Thanks for this hint.
+   $ git format-patch -M -n -s --subject-prefix="PATCH v2" -o outgoing 
+buildroot/master
 
-Even though I may use this hint myself locally I'm afraid it's not the
-best solution if others want to use the same Buildroot configuration. 
+And I see [PATCH v2 1/1] in the title. Did you miss something?
 
-Because to make their life easier I'll need to push those SSH keys in
-public repository - and this won't work for upstreaming the board
-support in Buildroot.
+>
+> For details and an example see the buildroot manual and section 21.5.2:
+>
+> http://nightly.buildroot.org/manual.html#submitting-patches
+>
 
-So at least for now SSH doesn't look as an equally simple option as
-Telnet.
+[...]
 
-Once again - this is because my particular corner-case when rootfs is
-built in kernel image. If there is some real non-volatile storage on
-target SSH might be a good option still.
+>
+> Would it make sense to also update the section of the manual that
+> talks about understand when a full-rebuild is necessary? You could
+> also update that section to reference this advance usage section.
+>
+> http://nightly.buildroot.org/manual.html#full-rebuild
 
--Alexey
+I believe so, yes. I'll add a brief scenario in this chapter and see how 
+I can warn users about package dependencies.
+
+>
+>> @@ -0,0 +1,37 @@
+>> +// -*- mode:doc; -*-
+>> +// vim: set syntax=asciidoc:
+>> +
+>> +==== Clean target filesystem
+>> +
+>> +There are various cases where you would like to clean the target
+>> +filesystem. Especially once you understood that buildroot build system
+>> +is kept simple, and does not allow to uninstall files. Let's take some
+>> +examples:
+>> +
+>> +1. You enabled +PACKAGE_OPENSSH+ to have a SSH server running on your
+>> +   board. But you figure out that +sshd+ does not run well on your
+>> +   target's architecture. Thus you decide to disable +PACKAGE_OPENSSH+
+>> +   and enable +PACKAGE_DROPBEAR+ instead. You run +make+, +openssh+
+
+Oops, small typo here:
+-and enable +PACKAGE_DROPBEAR+ instead. You run +make+, +openssh+
++and enable +PACKAGE_DROPBEAR+ instead. You run +make+, +dropbear+
+
+>> +   gets built and installed. Problem: +openssh+ files are still present
+>> +   in +output/target+!
+>
+> One case that comes to mind here is that will this ensure that
+> packages are installed in the correct order with dependencies? I am
+> not exactly sure how the dependencies for packages works, but if you
+> remove all the '.stamp_target_install' will that ensure that all the
+> packages get installed in the correct order?
+>
+> Busybox is the package that comes to my mind first that we need to
+> ensure the installation order. From testing your scenario outlined
+> above it appears that busybox gets installed before even dropbear
+> would get built which would ensure that any full version of busybox
+> would get install correctly over the symlinks to busybox.
+>
+>> +2. You enabled +PACKAGE_NTPD+ and set the local timezone to
+>> +   +America/Montreal+ with +BR2_TARGET_LOCALTIME+ config. Then you find
+>> +   out that +Montreal+ local has been replaced by +Toronto+ (French
+>> +   looks like a rogue language). You enter +make menuconfig+, make the
+>> +   change, save, and run +make+ again. Problem:
+>> +   +output/target/etc/timezone+ still has +America/Montreal+ content!
+>> +
+>> +Solution to this is either to identify which package to reconfigure, or
+>
+> I believe this first 'or' should be removed so that the sentence would read:
+>
+> The solution to this is to either identify which package to
+> reconfigure, remove files manually, or destroy the target filesystem
+> and recreate it.
+
+Ok, I'll fix that.
+
+>
+>> +remove files manually, or destroy the target filesystem and recreate it.
+>> +This latter option is convenient: you don't have to care about which
+>> +packages to rebuild, and it is fast. Here is how to recreate your
+>> +target filesystem, and get rid of filesystem _stains_:
+>> +
+>> +------------------
+>> +make clean-target
+>> +make
+>> +------------------
+>> +
+>> ++clean-target+ removes +output/target+, tells buildroot to recreate the
+>> +target skeleton, and install each package again.
+>
+> This is a rather simple solution to the issue of recreating a 'clean'
+> target filesystem so it will be interesting to hear what the
+> maintainers (Peter/Thomas P) opinions are on this patch.
+>
+> Thanks,
+> -Ryan
+>
+
+Emeric
