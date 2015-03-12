@@ -1,7 +1,7 @@
 From: =?ISO-8859-15?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 12 Mar 2015 21:07:16 +0100
-Subject: [Buildroot] [PATCH] axel: Add hash file
-Message-ID: <5501F1F4.5020705@dawncrow.de>
+Date: Thu, 12 Mar 2015 21:07:22 +0100
+Subject: [Buildroot] [PATCH] at: Add hash file
+Message-ID: <5501F1FA.1030301@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +10,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/axel/axel.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/axel/axel.hash
+ package/at/at.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 package/at/at.hash
 
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
+diff --git a/package/at/at.hash b/package/at/at.hash
 new file mode 100644
-index 0000000..8957670
+index 0000000..481c937
 --- /dev/null
-+++ b/package/axel/axel.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	359a57ab4e354bcb6075430d977c59d33eb3e2f1415a811948fa8ae657ca8036  axel-2.4.tar.gz
++++ b/package/at/at.hash
+@@ -0,0 +1,4 @@
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/at/at_3.1.13-2%2Bdeb7u1.dsc
++sha1	9873e0c38403ef58364912d0b505fd20798fd400  at_3.1.13.orig.tar.gz
++sha256	3a8b90868d615d21a92f4986ea9a823886329af8fae8dd7ab4eed9b273bca072  at_3.1.13.orig.tar.gz
++md5	1da61af6c29e323abaaf13ee1a8dad79  at_3.1.13.orig.tar.gz
 -- 
 1.9.1
