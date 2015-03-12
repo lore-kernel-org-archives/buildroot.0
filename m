@@ -1,27 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Mar 2015 23:50:08 +0100
-Subject: [Buildroot] [git commit] alsamixergui: Add hash file
-Message-ID: <20150312225243.0548C8040C@busybox.osuosl.org>
+Date: Fri, 13 Mar 2015 00:01:28 +0100
+Subject: [Buildroot] [PATCH] move random-seed from /etc to /var/lib
+In-Reply-To: <20150312002013.GA11018@vostro> (Alex Suykov's message of "Thu,
+ 12 Mar 2015 02:20:13 +0200")
+References: <20150312002013.GA11018@vostro>
+Message-ID: <8761a5hlbr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=645bf5d3d252319127184fe6eb7523a22440d758
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/alsamixergui/alsamixergui.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ > In case / is mounted read-only, /etc is likely to be read-only
+ > as well, so the seed will not be saved.
 
-diff --git a/package/alsamixergui/alsamixergui.hash b/package/alsamixergui/alsamixergui.hash
-new file mode 100644
-index 0000000..5cea490
---- /dev/null
-+++ b/package/alsamixergui/alsamixergui.hash
-@@ -0,0 +1,2 @@
-+# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/a/alsamixergui/alsamixergui_0.9.0rc2-1-9.dsc
-+md5	af942a41b81ba27e2e4d0a1e1ab0decb  alsamixergui_0.9.0rc2-1.orig.tar.gz
+But if rootfs is RO, so will /var/lib then?
+
+I would rather get rid of the static random_seed file instead. Seeding
+all Buildroot based devices with a RO rootfs from the same 512 bytes of
+data can hardly be helpful for security.
+
+For a R/W rootfs, why would /var/lib be any better than /etc?
+
+-- 
+Bye, Peter Korsgaard
