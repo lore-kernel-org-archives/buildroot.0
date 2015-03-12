@@ -1,44 +1,38 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 12 Mar 2015 23:13:53 +0100
-Subject: [Buildroot] [PATCH] package/gdb: disable shared build for host-gdb
-Message-ID: <1426198433-26427-1-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Mar 2015 23:41:54 +0100
+Subject: [Buildroot] [PATCH v3] qt: fix postgresql plugin compile
+In-Reply-To: <1426109011-14124-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Wed, 11 Mar 2015 22:23:31 +0100")
+References: <1426109011-14124-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87fv99j0st.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shared libraries build have been enabled with the
-ARV32 removal. But it's still useful for arc gdb.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/204/2043888410baaf9d22338b48b4caab4a4363f777/
+ > Add qt4 '-psql_config' configure option and use it to set
+ > pg_config path in configure step instead of legacy PSQL_LIBS
+ > enviornment variable.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
-"Should fixe" the issue.
-I'm not able to reproduce the issue.
----
- package/gdb/gdb.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ > Fixes [1]:
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 6a192fb..2a6b3d4 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -125,9 +125,12 @@ endif
- #  * --target, because we're doing a cross build rather than a real
- #    host build.
- #  * --enable-static because gdb really wants to use libbfd.a
-+#  * --disable-shared, otherwise the gdb-2014.12 version specific to ARC
-+#    doesn't build because it wants to link a shared libbfd.so against
-+#    non-PIC liberty.a.
- HOST_GDB_CONF_OPTS = \
- 	--target=$(GNU_TARGET_NAME) \
--	--enable-static \
-+	--enable-static --disable-shared \
- 	--without-uiout \
- 	--disable-gdbtk \
- 	--without-x \
+ > PostgreSQL support cannot be enabled due to functionality tests!
+ >  Turn on verbose messaging (-v) to ./configure to see the final report.
+ >  If you believe this message is in error you may use the continue
+ >  switch (-continue) to ./configure to continue.
+ > make: *** [/ssd1/thomas/autobuild/instance-0/output/build/qt-4.8.6/.stamp_configured] Error 101
+
+ > Patch suggested upstream ([2]).
+
+ > [1] http://autobuild.buildroot.net/results/1e9/1e949d4593836bc45a55e071cc54ff9c00fad8ae
+ > [2] https://codereview.qt-project.org/108345
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
 -- 
-1.9.3
+Bye, Peter Korsgaard
