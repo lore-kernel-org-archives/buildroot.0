@@ -1,33 +1,53 @@
-From: Gurumani, Swapna <Swapna.Gurumani@atmel.com>
-Date: Thu, 12 Mar 2015 21:47:25 +0000
-Subject: [Buildroot] Support for Atmel SAMA5D4 EK
-Message-ID: <2FB1B3AE3B157348A234DA96A19CAB72DC300418@DVRMBX01.corp.atmel.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 12 Mar 2015 23:00:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: Enable support for
+	log to debug file
+Message-ID: <1426197654-8183-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I made modifications to sama5d3_defconfig to support atmel's sama5d4-EK Evaluation kit.
-Here is a link to Atmel's buildroot github where youc an find sama5d3_defconfig:
-https://github.com/linux4sam/buildroot-at91
+Enables the '-f' option (log output to debug file instead of stdout) for
+wpa_supplicant.
 
-Please find attached the defconfig file for sama5d4.
-I am trying to follow instructions provided her to create a patch:
-http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/wpa_supplicant/Config.in         | 5 +++++
+ package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-But this won't create a patch. Please let me know how to provide a patch. Basically when I type "git format-patch -M -n -s -o outgoing origin/master", nothing happens.
-Regards
-Swapna
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150312/868aa360/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: sama5d4_defconfig
-Type: application/octet-stream
-Size: 53230 bytes
-Desc: sama5d4_defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150312/868aa360/attachment.obj>
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index f32a867..7c213a2 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -32,6 +32,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG
+ 	help
+ 	  Enable support for sending debug messages to syslog.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_FILE
++	bool "Enable log output to debug file"
++	help
++	  Enable support for log output to debug file instead of stdout.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_WPS
+ 	bool "Enable WPS"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 682cb4c..4f9dff0 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -107,6 +107,10 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
+ 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_SYSLOG
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_FILE
++endif
++
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += readline
+ 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+-- 
+2.3.2
