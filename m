@@ -1,19 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Mar 2015 23:51:34 +0100
-Subject: [Buildroot] [PATCH] autoconf: Add hash file
-In-Reply-To: <5501F218.3060805@dawncrow.de> (=?utf-8?Q?=22Andr=C3=A9?=
- Hentschel"'s message of "Thu, 12 Mar 2015 21:07:52 +0100")
-References: <5501F218.3060805@dawncrow.de>
-Message-ID: <87egothls9.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Mar 2015 23:52:21 +0100
+Subject: [Buildroot] [PATCH] busybox: enable arp applet
+In-Reply-To: <1426177825-410-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 12 Mar 2015 13:30:25 -0300")
+References: <1426177825-410-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a8zhhlqy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+ > It's pretty common, small and useful, specially since busybox ip doesn't
+ > do neigh (and looking at /proc/net/arp is all fine but not very
+ > friendly).
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
