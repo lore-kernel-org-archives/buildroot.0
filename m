@@ -1,28 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2015 00:01:28 +0100
-Subject: [Buildroot] [PATCH] move random-seed from /etc to /var/lib
-In-Reply-To: <20150312002013.GA11018@vostro> (Alex Suykov's message of "Thu,
- 12 Mar 2015 02:20:13 +0200")
-References: <20150312002013.GA11018@vostro>
-Message-ID: <8761a5hlbr.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-15?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
+Date: Fri, 13 Mar 2015 00:08:53 +0100
+Subject: [Buildroot] [PATCH] argp-standalone: Add hash file
+Message-ID: <55021C85.9030500@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/argp-standalone/argp-standalone.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/argp-standalone/argp-standalone.hash
 
- > In case / is mounted read-only, /etc is likely to be read-only
- > as well, so the seed will not be saved.
-
-But if rootfs is RO, so will /var/lib then?
-
-I would rather get rid of the static random_seed file instead. Seeding
-all Buildroot based devices with a RO rootfs from the same 512 bytes of
-data can hardly be helpful for security.
-
-For a R/W rootfs, why would /var/lib be any better than /etc?
-
+diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
+new file mode 100644
+index 0000000..5798214
+--- /dev/null
++++ b/package/argp-standalone/argp-standalone.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
 -- 
-Bye, Peter Korsgaard
+1.9.1
