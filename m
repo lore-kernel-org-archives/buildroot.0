@@ -1,53 +1,44 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 12 Mar 2015 23:00:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: Enable support for
-	log to debug file
-Message-ID: <1426197654-8183-1-git-send-email-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 12 Mar 2015 23:13:53 +0100
+Subject: [Buildroot] [PATCH] package/gdb: disable shared build for host-gdb
+Message-ID: <1426198433-26427-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enables the '-f' option (log output to debug file instead of stdout) for
-wpa_supplicant.
+Shared libraries build have been enabled with the
+ARV32 removal. But it's still useful for arc gdb.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Fixes:
+http://autobuild.buildroot.net/results/204/2043888410baaf9d22338b48b4caab4a4363f777/
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/wpa_supplicant/Config.in         | 5 +++++
- package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
- 2 files changed, 9 insertions(+)
+"Should fixe" the issue.
+I'm not able to reproduce the issue.
+---
+ package/gdb/gdb.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index f32a867..7c213a2 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -32,6 +32,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG
- 	help
- 	  Enable support for sending debug messages to syslog.
- 
-+config BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_FILE
-+	bool "Enable log output to debug file"
-+	help
-+	  Enable support for log output to debug file instead of stdout.
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_WPS
- 	bool "Enable WPS"
- 	help
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 682cb4c..4f9dff0 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -107,6 +107,10 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
- 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_SYSLOG
- endif
- 
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_FILE
-+endif
-+
- ifeq ($(BR2_PACKAGE_READLINE),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += readline
- 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 6a192fb..2a6b3d4 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -125,9 +125,12 @@ endif
+ #  * --target, because we're doing a cross build rather than a real
+ #    host build.
+ #  * --enable-static because gdb really wants to use libbfd.a
++#  * --disable-shared, otherwise the gdb-2014.12 version specific to ARC
++#    doesn't build because it wants to link a shared libbfd.so against
++#    non-PIC liberty.a.
+ HOST_GDB_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+-	--enable-static \
++	--enable-static --disable-shared \
+ 	--without-uiout \
+ 	--disable-gdbtk \
+ 	--without-x \
 -- 
-2.3.2
+1.9.3
