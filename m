@@ -1,57 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Mar 2015 21:32:00 +0100
-Subject: [Buildroot] Changing permission recursively
-In-Reply-To: <20150312175527.GO2177@tarshish>
-References: <CA+TH9VmbEdw=Zx3C1_fHcnK=FDum+6C6UbsVVad12yR3gmK7AA@mail.gmail.com>
- <20150312175527.GO2177@tarshish>
-Message-ID: <5501F7C0.5050309@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 12 Mar 2015 22:03:58 +0100
+Subject: [Buildroot] [PATCH] package/gdb: fix build with glibc 2.20
+Message-ID: <1426194238-622-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/03/15 18:55, Baruch Siach wrote:
-> Hi Angelo,
-> 
-> On Thu, Mar 12, 2015 at 10:08:10AM +0100, Angelo Compagnucci wrote:
->> I'm in the process of building a rootfs for a custom application and
->> wondering the best way to change permissions recursively for a
->> directory.
->>
->> What I'm trying to achieve is to add some files via an overlay, but
->> files should have a specific owner/permission which should be read
->> from the buildroot's users table.
->>
->> I cannot find something like that in the documentation. Instead, the
->> documentation specifies how to add single files and change
->> owner/permission accordingly.
->>
->> If I understand correctly, I should create a new user (if necessary)
->> with a specific UDI/GID and than use a POST_INSTALL_TARGET to change
->> permission using that UID/GID.
->> Alternatively, I can use FOO_PERMISSIONS with a per file granularity.
->>
->> Is this correct?
-> 
-> How about running the following from a post build script (untested):
-> 
-> 	${HOST_DIR}/usr/bin/fakeroot -- chown -R UID:GID ${1}/path/to/directory
-> 
-> baruch
-> 
+Backport a patch from gdb 7.8.
 
- I think it would be easier to extend package/makedevs/makedevs.c to support
-recursive operation.
+Fixes:
+http://autobuild.buildroot.net/results/3d5/3d5cb8bea0964f0d46733e47d04a053021e63643/
 
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...lude-asm-ptrace.h-for-linux-aarch64-low.c.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch
 
- Regards,
- Arnout
-
+diff --git a/package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch b/package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch
+new file mode 100644
+index 0000000..89e34be
+--- /dev/null
++++ b/package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch
+@@ -0,0 +1,36 @@
++From cbc39812c1721d7edd20285134fdf748d0f26127 Mon Sep 17 00:00:00 2001
++From: Ramana Radhakrishnan <ramana.radhakrishnan@arm.com>
++Date: Fri, 23 May 2014 09:01:14 +0100
++Subject: [PATCH] Include asm/ptrace.h for linux-aarch64-low.c
++
++A recent change to glibc removed asm/ptrace.h from user.h for AArch64.
++This meant that cross-native builds of gdbserver using trunk glibc broke
++because linux-aarch64-low.c because user_hwdebug_state couldn't be found.
++
++This is like commit #036cd38182bde32d8297b630cd5c861d53b8949e
++
++2014-05-23  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
++
++        * linux-aarch64-low.c (asm/ptrace.h): Include.
++[Romain:
++  - rebase on top of 7.7.1]
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ gdb/gdbserver/linux-aarch64-low.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gdb/gdbserver/linux-aarch64-low.c b/gdb/gdbserver/linux-aarch64-low.c
++index 1b0da6c..ba66bc8 100644
++--- a/gdb/gdbserver/linux-aarch64-low.c
+++++ b/gdb/gdbserver/linux-aarch64-low.c
++@@ -26,6 +26,7 @@
++ #include <signal.h>
++ #include <sys/user.h>
++ #include <sys/ptrace.h>
+++#include <asm/ptrace.h>
++ #include <sys/uio.h>
++ 
++ #include "gdb_proc_service.h"
++-- 
++1.9.3
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
