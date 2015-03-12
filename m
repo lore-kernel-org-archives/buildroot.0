@@ -1,25 +1,34 @@
-From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
-Date: Thu, 12 Mar 2015 11:59:37 -0400
-Subject: [Buildroot] [PATCH v2 1/1] Makefile: add target to clean
-	targetfs
-In-Reply-To: <1426015688-24902-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- (Emeric Vigier's message of "Tue, 10 Mar 2015 15:28:08 -0400")
-References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <1426015688-24902-1-git-send-email-emeric.vigier@savoirfairelinux.com>
-Message-ID: <87385ai4uu.fsf@pcjo.localdomain>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 12 Mar 2015 13:30:25 -0300
+Subject: [Buildroot] [PATCH] busybox: enable arp applet
+Message-ID: <1426177825-410-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It's pretty common, small and useful, specially since busybox ip doesn't
+do neigh (and looking at /proc/net/arp is all fine but not very
+friendly).
 
-Emeric Vigier <emeric.vigier@savoirfairelinux.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +make clean-target
-
-Wouldn't it make more sense to name it target-dirclean or
-target-clean-something, to comply with Buildroot's usual semantics ?
-
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 20b8c1d..9d930d1 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -767,7 +767,7 @@ CONFIG_FEATURE_FANCY_PING=y
+ # CONFIG_FEATURE_UNIX_LOCAL is not set
+ # CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
+ # CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
+-# CONFIG_ARP is not set
++CONFIG_ARP=y
+ CONFIG_ARPING=y
+ # CONFIG_BRCTL is not set
+ # CONFIG_FEATURE_BRCTL_FANCY is not set
 -- 
-J?r?me Oufella
+2.0.5
