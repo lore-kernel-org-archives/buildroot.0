@@ -1,75 +1,55 @@
-From: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
-Date: Thu, 12 Mar 2015 10:56:15 -0400
-Subject: [Buildroot] [PATCH v2 1/1] Makefile: add target to clean
-	targetfs
-In-Reply-To: <CA+TH9VkgCo3n_SKFiSZt7Q2h5nYhMa-G25bqzto6C0op__TZxA@mail.gmail.com>
-References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <1426015688-24902-1-git-send-email-emeric.vigier@savoirfairelinux.com>
- <CAMQcK5Kz4_vyCVv3Xq9Sms7UWd2Qjew1c60bXZzkfn6f40QeNg@mail.gmail.com>
- <20150311050652.GB2177@tarshish>
- <CA+TH9V=fN9Zo2+hpRt=M+=N+ZM2WASZo4j5DOzKbDneqhbLWJg@mail.gmail.com>
- <20150311085850.GE2177@tarshish>
- <CA+TH9VkgCo3n_SKFiSZt7Q2h5nYhMa-G25bqzto6C0op__TZxA@mail.gmail.com>
-Message-ID: <5501A90F.5040505@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 12 Mar 2015 15:59:02 +0100
+Subject: [Buildroot] [PATCH 0/7] [RFC] Introduce services as a
+ (long-term) replacement for _INSTALL_INIT_(SYSV|SYSTEMD) (branch
+ yem/services)
+In-Reply-To: <cover.1426112628.git.yann.morin.1998@free.fr>
+References: <cover.1426112628.git.yann.morin.1998@free.fr>
+Message-ID: <20150312155902.2ff7e30d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15-03-12 04:32 AM, Angelo Compagnucci wrote:
-> Hi Baruch,
->
-> 2015-03-11 9:58 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
->> Hi Angelo,
->>
->> On Wed, Mar 11, 2015 at 09:22:49AM +0100, Angelo Compagnucci wrote:
->>> I submitted a couple of patches some times ago, but they was rejected
->>> because potentially dangerous for users[1][2].
->>> So probably you will not have that much luck with this patch.
->>>
->>> [1] http://lists.busybox.net/pipermail/buildroot/2014-July/101963.html
->>> [2] http://lists.busybox.net/pipermail/buildroot/2014-July/103143.html
->>
->> Well, it is not me suggesting this patch, it is Emeric Vigier. But yes, one of
->> our clients asked for this functionality, so I really want this patch applied.
->>
->> As for previous rejections, the response of ThomasP[1] and Arnout[2] seems to
->> indicate that they would be willing to accept this functional addition
->> provided that it is (1) properly documented[1], and (2) prints a "big fat
->> warning"[2]. Something like Thomas' scenario description[3] should be added to
->> the documentation part of this patch.
->>
->> Thanks for reminding us this previous discussion.
->>
->> [1] http://lists.busybox.net/pipermail/buildroot/2014-July/101966.html
->>
->> [2] http://lists.busybox.net/pipermail/buildroot/2014-July/102064.html
->>
->> [3] http://lists.busybox.net/pipermail/buildroot/2014-July/101941.html
->
-> I have my patch on top of my git rebase everytime I pull from master,
-> so I will be veeeeery glad if you can have it upstreamed!
-> I love so much the option to clean the target that I use it everyday!
+Dear Yann E. MORIN,
 
-Indeed, it seems I had the same scenario in mind as you when you 
-submitted your patch. Let me add your signed-off to my patch, and we'll 
-both push strong to have it upstreamed!
+On Wed, 11 Mar 2015 23:30:18 +0100, Yann E. MORIN wrote:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Following up on Gustavo's proposal [0] on a clean up on our init
+> scripts (and eventually our systemd unit files), here is an *RFC*
+> series that tries to implement Gustavo's idea.
 
-I'll send a v3 soon.
+I am personally not in favor of an approach where kconfig options are
+used to enable/disable services, because it's a slippery slope. I very
+much prefer Gustavo's proposal of /etc/{default,config}/ files, that
+users can override in their rootfs overlays or post-build script.
 
->
-> Sincerely, Angelo
->
->>
->> baruch
->>
->> --
->>       http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
->> =}------------------------------------------------ooO--U--Ooo------------{=
->>     - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
+Why do I have this opinion?
 
-Emeric
+Simply because your proposal is limited to just enabling/disabling
+services. But then people will want kconfig options to set the TFTP
+server root directory, to set the lighttpd server options foo or bar,
+to configure the NTP configuration options, and so on. This is clearly
+not a direction we want to take I believe as it will simply require
+more and more and more kconfig options.
+
+Instead, let's have some /etc/default/<service> files, which allow to
+both define whether <service> is enabled or not, but also allow to set
+various other service-specific configuration options.
+
+I think Buildroot is a toolbox to generate your system, but you *must*
+do some additional customization to have a system tailored to your
+needs. What I believe is great in Buildroot is that is basically just
+builds the upstream source code, and installs it. It doesn't try to be
+a distro that imposes its own Web interface, its own organization of
+the filesystems, etc. We just build and install everything, and provide
+minimal sane defaults, and let users customize everything else.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
