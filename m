@@ -1,67 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Mar 2015 23:44:26 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: fix use of extensions
-In-Reply-To: <20150313214751.2df5307c@free-electrons.com>
-References: <cover.1426272973.git.yann.morin.1998@free.fr>
- <7a6b64928c074474e7577f762550fe60916ed052.1426272973.git.yann.morin.1998@free.fr>
- <20150313214751.2df5307c@free-electrons.com>
-Message-ID: <20150313224426.GB4391@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Mar 2015 23:44:58 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/softether: Fix iconv-related
+	compile error
+In-Reply-To: <87h9toftj3.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 13 Mar 2015 22:59:28 +0100")
+References: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de>
+ <8761a7jhks.fsf@dell.be.48ers.dk> <E1YWVYR-0003aC-Bb@fli4l.lan.fli4l>
+ <87h9toftj3.fsf@dell.be.48ers.dk>
+Message-ID: <87d24cfrf9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> [posted and mailed]
 
-On 2015-03-13 21:47 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 13 Mar 2015 19:57:29 +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > This is because dependencies are only acted on at configure time, which
-> > is a step further after the kconfig stage. This probably was not an
-> > issue before we switched to the kconfig infra for the kernel, but that
-> > use-case was completely missed at the time (blame me!).
-> 
-> Hum, I am not sure to see why the switch to the kconfig-package
-> infrastructure would have modified this behavior. So I'd like to
-> understand how it used to work, if it ever worked (but I believe it
-> did, no?).
+ >> Peter Korsgaard <peter-+2lRwdCCLRT2eFz/2MeuCQ@public.gmane.org> wrote in 
+ >> news:8761a7jhks.fsf at dell.be.48ers.dk:
 
-OK, so I think I know what happened when we migrated linux over to the
-kconfig-package infra, and what we loose then.
+ >>> > -ifeq ($(BR2_ENABLE_LOCALE),)
+ >>> > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ >>> 
+ >>> Hmm, what does this really change? LIBICONV=y if !BR2_ENABLE_LOCALE, so
+ >>> these should be equivalent, right?
 
-Back before we used the kconfig-package infra, linux-menuconfig (as well
-as the other configurators) was written as custom rules, that were
-basically something like:
+ >> Hi,
 
-    linux-menuconfig: linux-configure
-        $(MAKE) -C $(LINUX_DIR) menuconfig
+ >> I am not sure if I understood your question correctly. Currently libiconv is 
+ >> only taken into account as dependency if BR2_ENABLE_LOCALE=y, but it is also 
+ >> possible to have BR2_PACKAGE_LIBICONV=y if !BR2_ENABLE_LOCALE, just as you 
+ >> said.
 
-And there we had our dependency on a previously configured linux tree,
-and *that* was kicking-in our dependency on extensions.
+Ehh, no - libiconv can only be enabled if !BR2_ENABLE_LOCALE, and
+softether selects it (if !BR2_ENABLE_LOCALE), so BR2_PACKAGE_LIBICONV is
+guanteed to be =y if !BR2_ENABLE_LOCALE, so the two checks are identical
+(notice it checks for !locale, not for locale).
 
-Fast forward post 2015.02, and we now have linux use the kconfig-package infra,
-which completely decorrelates the kconfig-part of the configuration,
-from the actual package-part of the configuration, as it introduces an
-intermediate 'kconfig-fixup' step:
+ >> But the current code in buildroot git and my patched code do not 
+ >> function the same because the current git code ignores libiconv and leads to 
+ >> autobuild errors like these from today:
 
-    linux-configure -------> kconfig-fixup --> .config --> $(LINUX_CONFIG_FILE)
-                        /
-    linux-menuconfig --'
+ >> http://autobuild.buildroot.net/results/182/182e658723d654d45c683dc2bc0b959c82
+ >> c37826/
+ >> http://autobuild.buildroot.net/results/1e4/1e4af4642691ea9681b39eb1ce4f8107e8
+ >> c3ff5f/
 
-So, linux-menuconfig now no longer depends on the linux tree to be
-configured. Hence the extensions breaking...
+So I guess that is about the LIBS+= changes instead?
 
-And this, I hope, concludes the nalaysis and is enough to convince you
-this is a new problem, caused by the kconfig-package infra. Hehe! :-)
-
-Regards,
-Yann E. MORIN.
+From a quick test I don't seem to be able to reproduce these build
+issues though :/
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
