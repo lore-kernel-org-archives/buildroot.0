@@ -1,46 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Mar 2015 07:27:56 +0100
-Subject: [Buildroot] Support for Atmel SAMA5D4 EK
-In-Reply-To: <2FB1B3AE3B157348A234DA96A19CAB72DC300418@DVRMBX01.corp.atmel.com>
-References: <2FB1B3AE3B157348A234DA96A19CAB72DC300418@DVRMBX01.corp.atmel.com>
-Message-ID: <20150313072756.1a28cd2e@free-electrons.com>
+Date: Fri, 13 Mar 2015 07:31:31 +0100
+Subject: [Buildroot] Changing permission recursively
+In-Reply-To: <20150312175527.GO2177@tarshish>
+References: <CA+TH9VmbEdw=Zx3C1_fHcnK=FDum+6C6UbsVVad12yR3gmK7AA@mail.gmail.com>
+ <20150312175527.GO2177@tarshish>
+Message-ID: <20150313073131.7a16aeb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Baruch Siach,
 
-On Thu, 12 Mar 2015 21:47:25 +0000, Gurumani, Swapna wrote:
+On Thu, 12 Mar 2015 19:55:28 +0200, Baruch Siach wrote:
 
-> I made modifications to sama5d3_defconfig to support atmel's sama5d4-EK Evaluation kit.
-> Here is a link to Atmel's buildroot github where youc an find sama5d3_defconfig:
-> https://github.com/linux4sam/buildroot-at91
+> How about running the following from a post build script (untested):
 > 
-> Please find attached the defconfig file for sama5d4.
-> I am trying to follow instructions provided her to create a patch:
-> http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot
-> 
-> But this won't create a patch. Please let me know how to provide a patch. Basically when I type "git format-patch -M -n -s -o outgoing origin/master", nothing happens.
+> 	${HOST_DIR}/usr/bin/fakeroot -- chown -R UID:GID ${1}/path/to/directory
 
-Because you didn't do a git commit.
+Does this actually works ?
 
-Also, your file is a full .config file, while defconfig have to be
-minimal configuration files.
-
-So basically, you have do:
-
-  1/ make savedefconfig
-  2/ mv defconfig configs/sama5d4ek_defconfig
-  3/ git add configs/sama5d4ek_defconfig
-  4/ git commit -s
-  5/ git format-patch ...
-
-Note that my colleague Alexandre Belloni has anyway planned to do a
-refresh of all the Atmel defconfig in Buildroot.
-
-Best regards,
+My understanding of fakeroot is that you have to execute all the
+fakeroot'ed commands under the same fakeroot invocation for the changes
+made by these commands to actually have an effect.
 
 Thomas
 -- 
