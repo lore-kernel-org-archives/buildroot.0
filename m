@@ -1,115 +1,37 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 13 Mar 2015 09:20:41 +0100
-Subject: [Buildroot] [PATCH v7 1/3] pkg-cmake: allow to build package in
-	a subdirectory
-In-Reply-To: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
-References: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <CA+TH9Vk4qz4g55RRSYNJFWgdM_fjGGmTP5ukpPWLPP3F5PAMow@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 13 Mar 2015 09:00:34 +0000
+Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
+In-Reply-To: <03223383-0BA2-4CEE-8B8C-DF1F0F224C38@openwide.fr>
+References: <1422879584-18485-1-git-send-email-abrodkin@synopsys.com>
+ <20150304120358.591484a9@free-electrons.com>
+ <1426231128.2836.13.camel@synopsys.com>
+ <03223383-0BA2-4CEE-8B8C-DF1F0F224C38@openwide.fr>
+Message-ID: <1426237234.2836.25.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-03-13 9:24 GMT+01:00 Gwenhael Goavec-Merou <gwenj@trabucayre.com>:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->
-> For some cmake based packages, like GNURadio, it's forbidden to do the
-> compilation directly in the sources directory. This patch add a new
-> variable to specify, if needed, the name of a sub-directory used to compile.
->
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> Changes v6 -> v7:
->  * move and reformulate LIBFOO_SUPPORTS_IN_SOURCE_BUILD description.
->  * adds default value to YES and test if _SUPPORT_IN_SOURCE_BUILD is equal to
->    YES instead of NO
-> Changes v5 -> v6:
->  * s/, no/,NO/
->  * s/$$($(2)_SUPPORTS_IN_SOURCE_BUILD)/$$($(3)_SUPPORTS_IN_SOURCE_BUILD)/
-> Changes v4 -> v5:
->  * Instead of overloading BUILDDIR uses a variable to set if package is compiled
->    in-source-tree or not
->  * update again manual
-> Changes v2 -> v3:
->  * Update docs to add detail about LIBFOO_BUILDDIR
-> Changes v1 -> v2:
->  * Allow to overload $(2)_BUILDDIR instead of adding a new variable and test
-> ---
->  docs/manual/adding-packages-cmake.txt |  4 ++++
->  package/pkg-cmake.mk                  | 14 ++++++++++++--
->  2 files changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-> index d92b209..87c51a8 100644
-> --- a/docs/manual/adding-packages-cmake.txt
-> +++ b/docs/manual/adding-packages-cmake.txt
-> @@ -100,6 +100,10 @@ typical packages will therefore only use a few of them.
->    necessary to set them in the package's +*.mk+ file unless you want
->    to override them:
->
-> +* +LIBFOO_SUPPORTS_IN_SOURCE_BUILD = NO+ should be set when the package
-> +  cannot be built inside the source tree but needs a separate build
-> +  directory.
-> +
->  ** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
->  ** +CMAKE_INSTALL_PREFIX+;
->  ** +BUILD_SHARED_LIBS+ is driven by +BR2_STATIC_LIBS+;
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 2404c40..2262012 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -61,7 +61,15 @@ $(2)_INSTALL_STAGING_OPTS    ?= DESTDIR=$$(STAGING_DIR) install
->  $(2)_INSTALL_TARGET_OPTS               ?= DESTDIR=$$(TARGET_DIR) install
->
->  $(2)_SRCDIR                    = $$($(2)_DIR)/$$($(2)_SUBDIR)
-> +
-> +$(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
-> +
-> +
-> +ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
->  $(2)_BUILDDIR                  = $$($(2)_SRCDIR)
-> +else
-> +$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/buildroot-build
-> +endif
->
->  #
->  # Configure step. Only define it if not already defined by the package
-> @@ -73,7 +81,8 @@ ifeq ($(4),target)
->
->  # Configure package for target
->  define $(2)_CONFIGURE_CMDS
-> -       (cd $$($$(PKG)_BUILDDIR) && \
-> +       (mkdir -p $$($$(PKG)_BUILDDIR) && \
-> +       cd $$($$(PKG)_BUILDDIR) && \
->         rm -f CMakeCache.txt && \
->         PATH=$$(BR_PATH) \
->         $$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> @@ -98,7 +107,8 @@ else
->
->  # Configure package for host
->  define $(2)_CONFIGURE_CMDS
-> -       (cd $$($$(PKG)_BUILDDIR) && \
-> +       (mkdir -p $$($$(PKG)_BUILDDIR) && \
-> +       cd $$($$(PKG)_BUILDDIR) && \
->         rm -f CMakeCache.txt && \
->         PATH=$$(BR_PATH) \
->         $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> --
-> 2.0.5
+On Fri, 2015-03-13 at 09:19 +0100, Romain Naour wrote:
+> Hi Alexey,
+> Can you have a look at this patch:
+> https://patchwork.ozlabs.org/patch/449686/
+> 
+> The issue seem to be related to avr32 removal.
 
-Patch works for me and it's really appreciated cause I have several
-packages that doesn't build in source directory.
+Strange enough I got everything built even from the same git snapshot as
+it was in autobuilder.
 
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+That means I cannot really test proposed patch - it won't fix anything
+for me because everything works already.
 
+The only reason I may think of for that difference in behavior is host
+gcc version. I'm on 64-bit Fedora 21 with gcc 4.9.2:
+ --->8---
+ gcc version 4.9.2 20150212 (Red Hat 4.9.2-6) (GCC)
+ --->8---
 
+Romain, Thomas what host gcc you/autobuilder use?
 
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+-Alexey
