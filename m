@@ -1,58 +1,61 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Mar 2015 15:22:05 -0300
-Subject: [Buildroot] [PATCH 06/15] package infra: drop non-lfs support
+Date: Fri, 13 Mar 2015 15:22:06 -0300
+Subject: [Buildroot] [PATCH 07/15] package/uclibc: drop non-largefile support
 In-Reply-To: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426270934-15499-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426270934-15499-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Force LFS builds for uClibc and drop the menu option.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Makefile.in      | 7 -------
- package/pkg-autotools.mk | 1 -
- 2 files changed, 8 deletions(-)
+ package/uclibc/Config.in | 7 -------
+ package/uclibc/uclibc.mk | 7 -------
+ 2 files changed, 14 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 803b162..fc57427 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -136,10 +136,7 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 3a65752..912872a 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -62,13 +62,6 @@ config BR2_UCLIBC_CONFIG
+ 	  See also docs/README in this package.
+ 	  If unsure, use the default.
  
--ifeq ($(BR2_LARGEFILE),y)
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--endif
+-config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
+-	bool "Enable large file (files > 2 GB) support"
+-	select BR2_LARGEFILE
+-	help
+-	  Enable this option if you want your toolchain to support
+-	  files bigger than 2 GB.
 -
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
-@@ -373,10 +370,6 @@ else
- DISABLE_NLS :=--disable-nls
- endif
+ config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
+ 	bool "Enable IPv6 support"
+ 	select BR2_INET_IPV6
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index feca77b..5a57a16 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -229,16 +229,9 @@ endif
+ # Largefile
+ #
  
--ifneq ($(BR2_LARGEFILE),y)
--DISABLE_LARGEFILE = --disable-largefile
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
+ define UCLIBC_LARGEFILE_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
+ endef
+-else
+-define UCLIBC_LARGEFILE_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_FOPEN_LARGEFILE_MODE,$(@D)/.config)
+-endef
 -endif
--
- ifeq ($(BR2_INET_IPV6),y)
- DISABLE_IPV6 = --enable-ipv6
- else
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index d2f15fa..2ecf7d8 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -201,7 +201,6 @@ define $(2)_CONFIGURE_CMDS
- 		--with-fop=no \
- 		--disable-dependency-tracking \
- 		$$(DISABLE_NLS) \
--		$$(DISABLE_LARGEFILE) \
- 		$$(DISABLE_IPV6) \
- 		$$(ENABLE_DEBUG) \
- 		$$(SHARED_STATIC_LIBS_OPTS) \
+ 
+ #
+ # MMU
 -- 
 2.0.5
