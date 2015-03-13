@@ -1,27 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Mar 2015 22:55:08 +0100
-Subject: [Buildroot] [PATCH] gptfdisk: bump to version 0.8.10
-In-Reply-To: <1426282384-16194-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426282384-16194-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150313225508.10f179e9@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 13 Mar 2015 19:08:55 -0300
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: Enable support
+ for log to debug file
+In-Reply-To: <1426197654-8183-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1426197654-8183-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <55035FF7.2070503@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 03/12/2015 07:00 PM, J?rg Krause wrote:
 
-On Fri, 13 Mar 2015 18:33:04 -0300, Gustavo Zacarias wrote:
-> Drop the ICU patch and ICU support since it's no longer necessary.
-> Use original hashes from sourceforge.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Enables the '-f' option (log output to debug file instead of stdout) for
+> wpa_supplicant.
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Just force enable it, binary size +8 bytes for an ARM target, it doesn't
+make sense to make it an option (specially since it must be used and
+doesn't affect anything by default).
+Regards.
