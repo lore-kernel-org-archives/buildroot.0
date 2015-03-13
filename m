@@ -1,60 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Mar 2015 07:25:24 +0100
-Subject: [Buildroot] [PATCH] openpgm: Blacklist Blackfin ADI 2014R1
- toolchain
-In-Reply-To: <5502098A.6030909@openwide.fr>
-References: <1425754315-524-1-git-send-email-romain.naour@openwide.fr>
- <20150308085356.11aae236@free-electrons.com>
- <54FC7C44.1040707@openwide.fr>
- <20150308183023.06960971@free-electrons.com>
- <5502098A.6030909@openwide.fr>
-Message-ID: <20150313072524.4933137d@free-electrons.com>
+Date: Fri, 13 Mar 2015 07:27:56 +0100
+Subject: [Buildroot] Support for Atmel SAMA5D4 EK
+In-Reply-To: <2FB1B3AE3B157348A234DA96A19CAB72DC300418@DVRMBX01.corp.atmel.com>
+References: <2FB1B3AE3B157348A234DA96A19CAB72DC300418@DVRMBX01.corp.atmel.com>
+Message-ID: <20150313072756.1a28cd2e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hello,
 
-On Thu, 12 Mar 2015 22:47:54 +0100, Romain Naour wrote:
+On Thu, 12 Mar 2015 21:47:25 +0000, Gurumani, Swapna wrote:
 
-> Yann said in the commit log:
-> "The fact that atomic operations are available is not really a
-> specificity of the toolchain, but rather of the architecture."
-
-That is correct, but you could imagine, on an architecture that does
-have atomic operations, a compiler version that does not implement the
-corresponding compiler intrinsics.
-
-Back then, we decided to not support such situations, because it was
-making the handling of this atomic operation support too complicated.
-
-> >> config BR2_ARCH_HAS_ATOMICS
-> >>   	# The following toolchains lack required compiler intrinsics
-> >> 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-> >>   	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-> >>   	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
-> >> 	default y
-> > 
-> > Nope. We first need to find out whether the Blackfin architecture has
-> > what's needed to provide atomic intrinsics. Depending on that, we'll
-> > now if it's a toolchain limitation or not.
+> I made modifications to sama5d3_defconfig to support atmel's sama5d4-EK Evaluation kit.
+> Here is a link to Atmel's buildroot github where youc an find sama5d3_defconfig:
+> https://github.com/linux4sam/buildroot-at91
 > 
-> I'm not sure but blackfin seems to have some (one?) atomic instruction(s):
+> Please find attached the defconfig file for sama5d4.
+> I am trying to follow instructions provided her to create a patch:
+> http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot
 > 
-> http://www.analog.com/media/en/dsp-documentation/processor-manuals/ADSP-BF539_HRM_rev03.pdf
-> "The processor provides a single atomic operation: TESTSET"
-> 
-> http://blackfin.uclinux.org/doku.php?id=toolchain:application_binary_interface
-> "The Blackfin does not have an atomic 64 bit load/store instruction"
+> But this won't create a patch. Please let me know how to provide a patch. Basically when I type "git format-patch -M -n -s -o outgoing origin/master", nothing happens.
 
-What we need to check is if more recent versions of gcc on Blackfin do
-have the atomic intrinsics available. If not, when we can simply decide
-to set BR2_ARCH_HAS_ATOMICS to false on Blackfin. If however some more
-recent gcc versions for Blackfin do have those instructions, then we
-will have to handle a toolchain-level criteria to decide whether atomic
-operations are available or not.
+Because you didn't do a git commit.
+
+Also, your file is a full .config file, while defconfig have to be
+minimal configuration files.
+
+So basically, you have do:
+
+  1/ make savedefconfig
+  2/ mv defconfig configs/sama5d4ek_defconfig
+  3/ git add configs/sama5d4ek_defconfig
+  4/ git commit -s
+  5/ git format-patch ...
+
+Note that my colleague Alexandre Belloni has anyway planned to do a
+refresh of all the Atmel defconfig in Buildroot.
 
 Best regards,
 
