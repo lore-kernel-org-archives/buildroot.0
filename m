@@ -1,127 +1,86 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Mar 2015 18:33:04 -0300
-Subject: [Buildroot] [PATCH] gptfdisk: bump to version 0.8.10
-Message-ID: <1426282384-16194-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Mar 2015 22:34:43 +0100
+Subject: [Buildroot] [git commit] pkg-cmake: allow to build package in a
+	subdirectory
+Message-ID: <20150313214018.BAFB88186A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop the ICU patch and ICU support since it's no longer necessary.
-Use original hashes from sourceforge.
+commit: http://git.buildroot.net/buildroot/commit/?id=604c92043bf0e40a8eb23aa54f57d0e49ca6fbe2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+For some cmake based packages, like GNURadio, it's forbidden to do the
+compilation directly in the sources directory. This patch add a new
+variable to specify, if needed, the name of a sub-directory used to compile.
+
+[Thomas: put the documentation at the right place in the manual, not
+in the middle of the <pkg>_CONF_OPTS description.]
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gptfdisk/0001-configurable-utf16-support.patch | 50 ----------------------
- package/gptfdisk/Config.in                         |  1 +
- package/gptfdisk/gptfdisk.hash                     |  5 ++-
- package/gptfdisk/gptfdisk.mk                       |  7 +--
- 4 files changed, 5 insertions(+), 58 deletions(-)
- delete mode 100644 package/gptfdisk/0001-configurable-utf16-support.patch
+ docs/manual/adding-packages-cmake.txt |    4 ++++
+ package/pkg-cmake.mk                  |   14 ++++++++++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/package/gptfdisk/0001-configurable-utf16-support.patch b/package/gptfdisk/0001-configurable-utf16-support.patch
-deleted file mode 100644
-index 6d54cea..0000000
---- a/package/gptfdisk/0001-configurable-utf16-support.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--[PATCH] Make the UTF16 support configurable
--
--libicu is quite large, and unicode partition names are uncommon, so we
--may not necessarily want to have UTF16 support unconditionnally. This
--patch adds a USE_UTF16 environment variable to tell whether we want
--the UTF16 support or not.
--
--Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[baruch: add $(LDLIBS)]
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -1,8 +1,11 @@
-- CC=gcc
-- CXX=g++
-- CFLAGS+=-D_FILE_OFFSET_BITS=64
---CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64 -D USE_UTF16
---#CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64
--+CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64
--+ifeq ($(USE_UTF16),y)
--+CXXFLAGS+=-D USE_UTF16
--+UTF16_LIBS=-licuio -licuuc
--+endif
-- LDFLAGS+=
-- LIB_NAMES=crc32 support guid gptpart mbrpart basicmbr mbr gpt bsd parttypes attributes diskio diskio-unix
-- MBR_LIBS=support diskio diskio-unix basicmbr mbrpart
--@@ -14,16 +17,13 @@
-- all:	cgdisk gdisk sgdisk fixparts
-- 
-- gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
---#	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
---	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
--+	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) $(UTF16_LIBS) -luuid $(LDLIBS) -o gdisk
-- 
-- cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
---#	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses -o cgdisk
---	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
--+	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) $(UTF16_LIBS) -luuid -lncurses $(LDLIBS) -o cgdisk
-- 
-- sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
---#	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
---	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
--+	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) $(UTF16_LIBS) -luuid -lpopt $(LDLIBS) -o sgdisk
-- 
-- fixparts: $(MBR_LIB_OBJS) fixparts.o
-- 	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
-diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
-index 264b4d7..61692f6 100644
---- a/package/gptfdisk/Config.in
-+++ b/package/gptfdisk/Config.in
-@@ -37,6 +37,7 @@ config BR2_PACKAGE_GPTFDISK_SGDISK
- config BR2_PACKAGE_GPTFDISK_CGDISK
- 	bool "ncurses cgdisk"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR # needed because of UTF-16
- 	help
- 	  Install the ncurses-based GUID partition table (GPT)
- 	  manipulator /usr/sbin/cgdisk.
-diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
-index d254263..93f7b36 100644
---- a/package/gptfdisk/gptfdisk.hash
-+++ b/package/gptfdisk/gptfdisk.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  4579cd54842459699970e24720dda7fb0aa217027818623089c321bc62a647b2  gptfdisk-0.8.6.tar.gz
-+# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/0.8.10/
-+md5	9cf4246c181c324bdbd553fe9b348373	gptfdisk-0.8.10.tar.gz
-+sha1	1708e232220236b6bdf299b315e9bc2205c01ba5	gptfdisk-0.8.10.tar.gz
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index 075af57..c11b1d9 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -4,7 +4,7 @@
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index d92b209..6ccf390 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -107,6 +107,10 @@ typical packages will therefore only use a few of them.
+ ** +BUILD_EXAMPLE+, +BUILD_EXAMPLES+ are disabled;
+ ** +BUILD_TEST+, +BUILD_TESTS+, +BUILD_TESTING+ are disabled.
+ 
++* +LIBFOO_SUPPORTS_IN_SOURCE_BUILD = NO+ should be set when the package
++  cannot be built inside the source tree but needs a separate build
++  directory.
++
+ * +LIBFOO_MAKE+, to specify an alternate +make+ command. This is
+   typically useful when parallel make is enabled in the configuration
+   (using +BR2_JLEVEL+) but that this feature should be disabled for
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 2404c40..2262012 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -61,7 +61,15 @@ $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install
+ $(2)_INSTALL_TARGET_OPTS		?= DESTDIR=$$(TARGET_DIR) install
+ 
+ $(2)_SRCDIR			= $$($(2)_DIR)/$$($(2)_SUBDIR)
++
++$(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
++
++
++ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+ $(2)_BUILDDIR			= $$($(2)_SRCDIR)
++else
++$(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
++endif
+ 
  #
- ################################################################################
+ # Configure step. Only define it if not already defined by the package
+@@ -73,7 +81,8 @@ ifeq ($(4),target)
  
--GPTFDISK_VERSION = 0.8.6
-+GPTFDISK_VERSION = 0.8.10
- GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
- GPTFDISK_LICENSE = GPLv2+
- GPTFDISK_LICENSE_FILES = COPYING
-@@ -21,11 +21,6 @@ ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
- GPTFDISK_DEPENDENCIES += ncurses
- endif
+ # Configure package for target
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_BUILDDIR) && \
++	(mkdir -p $$($$(PKG)_BUILDDIR) && \
++	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+@@ -98,7 +107,8 @@ else
  
--ifeq ($(BR2_PACKAGE_ICU),y)
--GPTFDISK_DEPENDENCIES += icu
--GPTFDISK_MAKE_OPTS += USE_UTF16=y
--endif
--
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_STATIC_LIBS),yy)
- GPTFDISK_MAKE_OPTS += LDLIBS=-lintl
- endif
--- 
-2.0.5
+ # Configure package for host
+ define $(2)_CONFIGURE_CMDS
+-	(cd $$($$(PKG)_BUILDDIR) && \
++	(mkdir -p $$($$(PKG)_BUILDDIR) && \
++	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
