@@ -1,39 +1,25 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 13 Mar 2015 20:47:32 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/softether: Fix iconv-related
-	compile error
-References: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de>
- <8761a7jhks.fsf@dell.be.48ers.dk>
-Message-ID: <XnsA45CD3828E448berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Gurumani, Swapna <Swapna.Gurumani@atmel.com>
+Date: Fri, 13 Mar 2015 19:58:01 +0000
+Subject: [Buildroot] Support for SAMA5D4
+Message-ID: <2FB1B3AE3B157348A234DA96A19CAB72DC300E5C@DVRMBX01.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
-
-Peter Korsgaard <peter@korsgaard.com> wrote in 
-news:8761a7jhks.fsf at dell.be.48ers.dk:
-
-> > -ifeq ($(BR2_ENABLE_LOCALE),)
-> > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> 
-> Hmm, what does this really change? LIBICONV=y if !BR2_ENABLE_LOCALE, so
-> these should be equivalent, right?
-
 Hi,
-
-I am not sure if I understood your question correctly. Currently libiconv is 
-only taken into account as dependency if BR2_ENABLE_LOCALE=y, but it is also 
-possible to have BR2_PACKAGE_LIBICONV=y if !BR2_ENABLE_LOCALE, just as you 
-said. But the current code in buildroot git and my patched code do not 
-function the same because the current git code ignores libiconv and leads to 
-autobuild errors like these from today:
-
-http://autobuild.buildroot.net/results/182/182e658723d654d45c683dc2bc0b959c82
-c37826/
-http://autobuild.buildroot.net/results/1e4/1e4af4642691ea9681b39eb1ce4f8107e8
-c3ff5f/
-
-Regards, Bernd
+THanks to Olivier Schonken, I was able to build a patch to support SAMA5D4 on buildroot. Please find attached the patch.
+Thanks,
+Regards
+Swapna
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150313/abf6f610/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Support-for-SAMA5D4.patch
+Type: text/x-patch
+Size: 55490 bytes
+Desc: 0001-Support-for-SAMA5D4.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150313/abf6f610/attachment.bin>
