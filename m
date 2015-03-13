@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Mar 2015 22:51:34 +0100
-Subject: [Buildroot] [PATCH v7 2/3] python-cheetah: add host-package
- support
-In-Reply-To: <1426235050-3482-2-git-send-email-gwenj@trabucayre.com>
+Date: Fri, 13 Mar 2015 22:53:38 +0100
+Subject: [Buildroot] [PATCH v7 3/3] GNURadio: new package
+In-Reply-To: <1426235050-3482-3-git-send-email-gwenj@trabucayre.com>
 References: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
- <1426235050-3482-2-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150313225134.66e12e42@free-electrons.com>
+ <1426235050-3482-3-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20150313225338.3f2c4796@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,68 @@ To: buildroot@busybox.net
 
 Dear Gwenhael Goavec-Merou,
 
-On Fri, 13 Mar 2015 09:24:09 +0100, Gwenhael Goavec-Merou wrote:
+On Fri, 13 Mar 2015 09:24:10 +0100, Gwenhael Goavec-Merou wrote:
 
-> diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-> index 08076b5..3155951 100644
-> --- a/package/python-cheetah/python-cheetah.mk
-> +++ b/package/python-cheetah/python-cheetah.mk
-> @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
->  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
->  PYTHON_CHEETAH_LICENSE = MIT
->  PYTHON_CHEETAH_SETUP_TYPE = setuptools
-> +HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+> +Index: gnuradio-3.7.5/volk/cmake/VolkBoost.cmake
+> +===================================================================
+> +--- gnuradio-3.7.5.orig/volk/cmake/VolkBoost.cmake
+> ++++ gnuradio-3.7.5/volk/cmake/VolkBoost.cmake
+> +@@ -29,7 +29,6 @@ set(__INCLUDED_VOLK_BOOST_CMAKE TRUE)
+> + set(BOOST_REQUIRED_COMPONENTS
+> +     filesystem
+> +     system
+> +-    unit_test_framework
 
-I've added a comment in the .mk file above this line to explain this
-dependency (taken from your commit log), and applied, thanks!
+It will probably be needed to re-add this unit_test_framework
+dependency, but maybe only if BUILD_TEST is enabled, or something like
+that.
+
+> +     program_options
+> + )
+> + 
+> +Index: gnuradio-3.7.5/volk/lib/CMakeLists.txt
+> +===================================================================
+> +--- gnuradio-3.7.5.orig/volk/lib/CMakeLists.txt
+> ++++ gnuradio-3.7.5/volk/lib/CMakeLists.txt
+> +@@ -540,8 +540,9 @@ endif(ENABLE_STATIC_LIBS)
+> + # Build the QA test application
+> + ########################################################################
+> + 
+> ++find_package(Boost "1.35" COMPONENTS "unit_test_framework")
+> + 
+> +-if(Boost_FOUND)
+> ++if(Boost_FOUND AND BUILD_TEST)
+> + 
+> +     set_source_files_properties(
+> +         ${CMAKE_CURRENT_SOURCE_DIR}/testqa.cc PROPERTIES
+> +@@ -558,4 +559,4 @@ if(Boost_FOUND)
+> +     target_link_libraries(test_all volk ${Boost_LIBRARIES})
+> +     add_test(qa_volk_test_all test_all)
+> + 
+> +-endif(Boost_FOUND)
+> ++endif(Boost_FOUND AND BUILD_TEST)
+
+Can you please work with upstream to get this patch merged?
+
+
+> +# host-python-cheetah is needed for volk to compile
+> +GNURADIO_DEPENDENCIES = \
+> +		host-python-cheetah \
+> +		host-swig \
+> +		boost
+
+Indentation should be only one tab.
+
+> +GNURADIO_CONF_OPTS = \
+> +		-DENABLE_DEFAULT=OFF \
+> +		-DENABLE_VOLK=ON \
+> +		-DENABLE_GNURADIO_RUNTIME=ON
+
+Ditto.
+
+Committed with the indentation fixed.
+
+Thanks!
 
 Thomas
 -- 
