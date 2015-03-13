@@ -1,39 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2015 07:20:33 +0100
-Subject: [Buildroot] [PATCH] move random-seed from /etc to /var/lib
-In-Reply-To: <20150313002017.GA11581@vostro> (Alex Suykov's message of "Fri,
- 13 Mar 2015 02:20:17 +0200")
-References: <20150312002013.GA11018@vostro> <8761a5hlbr.fsf@dell.be.48ers.dk>
- <20150313002017.GA11581@vostro>
-Message-ID: <87wq2lfmfi.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Mar 2015 07:25:24 +0100
+Subject: [Buildroot] [PATCH] openpgm: Blacklist Blackfin ADI 2014R1
+ toolchain
+In-Reply-To: <5502098A.6030909@openwide.fr>
+References: <1425754315-524-1-git-send-email-romain.naour@openwide.fr>
+ <20150308085356.11aae236@free-electrons.com>
+ <54FC7C44.1040707@openwide.fr>
+ <20150308183023.06960971@free-electrons.com>
+ <5502098A.6030909@openwide.fr>
+Message-ID: <20150313072524.4933137d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
+Dear Romain Naour,
 
- >> > In case / is mounted read-only, /etc is likely to be read-only
- >> > as well, so the seed will not be saved.
- >> 
- >> But if rootfs is RO, so will /var/lib then?
- > Common (I think?) setup is to have ro / and rw /var on some
- > kind of persistent storage. This way /etc typically remains
- > a part of read-only root.
+On Thu, 12 Mar 2015 22:47:54 +0100, Romain Naour wrote:
 
-I don't know how common this is. Projects I've worked with have done the
-opposite (RO rootfs with a R/W overlay on top of /etc).
+> Yann said in the commit log:
+> "The fact that atomic operations are available is not really a
+> specificity of the toolchain, but rather of the architecture."
 
- >> I would rather get rid of the static random_seed file instead. Seeding
- >> all Buildroot based devices with a RO rootfs from the same 512 bytes of
- >> data can hardly be helpful for security.
+That is correct, but you could imagine, on an architecture that does
+have atomic operations, a compiler version that does not implement the
+corresponding compiler intrinsics.
 
-> Agreed. Currently the initial file is only used to check for rw filesystem.
- > That's not necessary, and easy to fix. Sending a patch.
+Back then, we decided to not support such situations, because it was
+making the handling of this atomic operation support too complicated.
 
-Not only that - If you have a RO /etc then the system gets initialized
-with the "our" seed on every boot.
+> >> config BR2_ARCH_HAS_ATOMICS
+> >>   	# The following toolchains lack required compiler intrinsics
+> >> 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+> >>   	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+> >>   	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+> >> 	default y
+> > 
+> > Nope. We first need to find out whether the Blackfin architecture has
+> > what's needed to provide atomic intrinsics. Depending on that, we'll
+> > now if it's a toolchain limitation or not.
+> 
+> I'm not sure but blackfin seems to have some (one?) atomic instruction(s):
+> 
+> http://www.analog.com/media/en/dsp-documentation/processor-manuals/ADSP-BF539_HRM_rev03.pdf
+> "The processor provides a single atomic operation: TESTSET"
+> 
+> http://blackfin.uclinux.org/doku.php?id=toolchain:application_binary_interface
+> "The Blackfin does not have an atomic 64 bit load/store instruction"
 
+What we need to check is if more recent versions of gcc on Blackfin do
+have the atomic intrinsics available. If not, when we can simply decide
+to set BR2_ARCH_HAS_ATOMICS to false on Blackfin. If however some more
+recent gcc versions for Blackfin do have those instructions, then we
+will have to handle a toolchain-level criteria to decide whether atomic
+operations are available or not.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
