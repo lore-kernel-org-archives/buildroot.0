@@ -1,61 +1,60 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Mar 2015 15:22:06 -0300
-Subject: [Buildroot] [PATCH 07/15] package/uclibc: drop non-largefile support
+Date: Fri, 13 Mar 2015 15:22:07 -0300
+Subject: [Buildroot] [PATCH 08/15] configs: drop largefile option
 In-Reply-To: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426270934-15499-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426270934-15499-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Force LFS builds for uClibc and drop the menu option.
+Drop the buildroot toolchain largefile support option since it's been
+removed and pointless.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/uclibc/Config.in | 7 -------
- package/uclibc/uclibc.mk | 7 -------
- 2 files changed, 14 deletions(-)
+ configs/armadeus_apf9328_defconfig | 1 -
+ configs/raspberrypi2_defconfig     | 1 -
+ configs/raspberrypi_defconfig      | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 3a65752..912872a 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -62,13 +62,6 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
+diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
+index 3600199..3ad8feb 100644
+--- a/configs/armadeus_apf9328_defconfig
++++ b/configs/armadeus_apf9328_defconfig
+@@ -6,7 +6,6 @@ BR2_arm920t=y
+ BR2_PACKAGE_GDB=y
+ BR2_PACKAGE_HOST_GDB=y
+ BR2_ENABLE_LOCALE_PURGE=y
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+ BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+ BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index b523a4a..4d4944f 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -3,7 +3,6 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
--config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
--	bool "Enable large file (files > 2 GB) support"
--	select BR2_LARGEFILE
--	help
--	  Enable this option if you want your toolchain to support
--	  files bigger than 2 GB.
--
- config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
- 	bool "Enable IPv6 support"
- 	select BR2_INET_IPV6
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index feca77b..5a57a16 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -229,16 +229,9 @@ endif
- # Largefile
- #
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
- define UCLIBC_LARGEFILE_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
- endef
--else
--define UCLIBC_LARGEFILE_CONFIG
--	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
--	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_FOPEN_LARGEFILE_MODE,$(@D)/.config)
--endef
--endif
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 835657c..f9b8a1c 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -1,7 +1,6 @@
+ BR2_arm=y
+ BR2_arm1176jzf_s=y
  
- #
- # MMU
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
 -- 
 2.0.5
