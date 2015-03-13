@@ -1,56 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2015 23:44:58 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/softether: Fix iconv-related
-	compile error
-In-Reply-To: <87h9toftj3.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Fri, 13 Mar 2015 22:59:28 +0100")
-References: <1426107668-9110-1-git-send-email-bernd.kuhls@t-online.de>
- <8761a7jhks.fsf@dell.be.48ers.dk> <E1YWVYR-0003aC-Bb@fli4l.lan.fli4l>
- <87h9toftj3.fsf@dell.be.48ers.dk>
-Message-ID: <87d24cfrf9.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Mar 2015 00:44:52 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: fix use of extensions
+In-Reply-To: <20150313214751.2df5307c@free-electrons.com>
+References: <cover.1426272973.git.yann.morin.1998@free.fr>
+ <7a6b64928c074474e7577f762550fe60916ed052.1426272973.git.yann.morin.1998@free.fr>
+ <20150313214751.2df5307c@free-electrons.com>
+Message-ID: <20150313234452.GC4391@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> [posted and mailed]
+Thomas, All,
 
- >> Peter Korsgaard <peter-+2lRwdCCLRT2eFz/2MeuCQ@public.gmane.org> wrote in 
- >> news:8761a7jhks.fsf at dell.be.48ers.dk:
+On 2015-03-13 21:47 +0100, Thomas Petazzoni spake thusly:
+> On Fri, 13 Mar 2015 19:57:29 +0100, Yann E. MORIN wrote:
+[--SNIP--]
+> > Fix that:
+> > 
+> >   - first, the dependency on extensions is moved to a dependency of the
+> >     patch step;
+> 
+> This is a bit problematic because then the dependency is unknown to the
+> package infrastructure. Which means that things like 'make
+> graph-depends' will no longer display this dependency.
+> 
+> To solve this, we would have to add a <pkg>_PATCH_DEPENDENCIES variable
+> in pkg-generic, or something like that.
 
- >>> > -ifeq ($(BR2_ENABLE_LOCALE),)
- >>> > +ifeq ($(BR2_PACKAGE_LIBICONV),y)
- >>> 
- >>> Hmm, what does this really change? LIBICONV=y if !BR2_ENABLE_LOCALE, so
- >>> these should be equivalent, right?
+OK, so I tried to implement your proposal, but I stumbled against
+various issues:
 
- >> Hi,
+ 1- what should be done with a patch-dependency: must it be handled like
+    a normal dependency, i.e. be fully built and installed? Or should it
+    just be extracted and patched itself?
 
- >> I am not sure if I understood your question correctly. Currently libiconv is 
- >> only taken into account as dependency if BR2_ENABLE_LOCALE=y, but it is also 
- >> possible to have BR2_PACKAGE_LIBICONV=y if !BR2_ENABLE_LOCALE, just as you 
- >> said.
+    We're trying to introduce this new type of dependency to solve the
+    linux extension case. So, we do not really require the extension to
+    be built in the first place; we only need their files so we can
+    vampirise them, so simply extracting and patching is all we currently
+    need. The RTAI extension so far goes as far as explicitly adding a
+    dependency on "rtai-patch" instead of just "rtai", as rtai depends
+    on linux. So, to use this new feature for linux extensions, we
+    really want *not* to build the extension.
 
-Ehh, no - libiconv can only be enabled if !BR2_ENABLE_LOCALE, and
-softether selects it (if !BR2_ENABLE_LOCALE), so BR2_PACKAGE_LIBICONV is
-guanteed to be =y if !BR2_ENABLE_LOCALE, so the two checks are identical
-(notice it checks for !locale, not for locale).
+    However, introducing this new feature in the pkg-generic infra means
+    it is available to other packages as well, and we can not predict
+    what packages could use it for. Would there be packages that
+    want/need a built patch-dependency?
 
- >> But the current code in buildroot git and my patched code do not 
- >> function the same because the current git code ignores libiconv and leads to 
- >> autobuild errors like these from today:
+    There's a kind of discrepancy in there, as normal dependencies are
+    dependencies to be built, while patch-dependencies are dependencies
+    that only need to be, well, patched...  (I find it odd.)
 
- >> http://autobuild.buildroot.net/results/182/182e658723d654d45c683dc2bc0b959c82
- >> c37826/
- >> http://autobuild.buildroot.net/results/1e4/1e4af4642691ea9681b39eb1ce4f8107e8
- >> c3ff5f/
+ 2- extensions are really not supported for _OVERRIDE_SRCDIR, since they
+    are handled as pre-patch hooks, and _OVERRIDE_SRCDIR does not do
+    patches.
 
-So I guess that is about the LIBS+= changes instead?
+    Is that something we want to live by, or do we want to support
+    extensions even in the _OVERRIDE_SRCDIR?
 
-From a quick test I don't seem to be able to reproduce these build
-issues though :/
+    Note that this is not a new issue: it has always been the case so
+    far, even before the migration to kconfig-package.
+
+[Though this be madness, yet there is method in't.]
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
