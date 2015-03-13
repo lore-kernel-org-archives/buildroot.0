@@ -1,51 +1,35 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 13 Mar 2015 11:50:05 +0100
-Subject: [Buildroot] [PATCH 2/2] docs/manual: documentation for recursive
-	makedevs syntax
-In-Reply-To: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1426243805-8317-3-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Mar 2015 11:53:58 +0100
+Subject: [Buildroot] Changing permission recursively
+In-Reply-To: <20150313102741.GQ2177@tarshish>
+References: <CA+TH9VmbEdw=Zx3C1_fHcnK=FDum+6C6UbsVVad12yR3gmK7AA@mail.gmail.com>
+ <20150312175527.GO2177@tarshish>
+ <20150313073131.7a16aeb6@free-electrons.com>
+ <CA+TH9V=b-5KdMKQVWkZRZDh31qkKqBTqy+6MdqU3Sr+7wuGFkA@mail.gmail.com>
+ <20150313102741.GQ2177@tarshish>
+Message-ID: <20150313115358.3241b6a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the necessary documentation for the new makedevs
-recursive syntax.
+Dear Baruch Siach,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- docs/manual/makedev-syntax.txt | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+On Fri, 13 Mar 2015 12:27:41 +0200, Baruch Siach wrote:
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index e02b79d..afb4ae2 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -24,6 +24,7 @@ There are a few non-trivial blocks:
- - +type+ is the type of the file, being one of:
-   * f: a regular file
-   * d: a directory
-+  * r: a directory recursively
-   * c: a character device file
-   * b: a block device file
-   * p: a named pipe
-@@ -38,7 +39,14 @@ Let's say you want to change the permissions of a given file; using
- this syntax, you will need to put:
- 
- ----
--/usr/bin/foobar f 644 0 0 - - -	- -
-+/usr/bin/foobar f 644 0 0 - - - - -
-+----
-+
-+Alternatively, if you want to change owner/permission of a folder
-+recursively, you can put:
-+
-+----
-+/usr/share/myapp r 750 myuser myuser - - - - -
- ----
- 
- On the other hand, if you want to create the device file +/dev/hda+
+> Another options is to simply cat a user provided script into 
+> $(FAKEROOT_SCRIPT) as part of the rootfs image generation at fs/common.mk.
+
+Yes, this is something that has been proposed in the past.
+
+Back then I think our thinking was: maybe it's a bit complicated for
+normal users to understand the details of the fakeroot thing, and what
+they should put in the custom fakeroot scripts vs. normal post-build
+scripts.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
