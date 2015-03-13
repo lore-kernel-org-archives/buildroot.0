@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Mar 2015 22:38:27 +0100
-Subject: [Buildroot] [git commit] python-cheetah: add host-package support
-Message-ID: <20150313214018.C3B468186E@busybox.osuosl.org>
+Date: Fri, 13 Mar 2015 22:49:28 +0100
+Subject: [Buildroot] [PATCH v7 1/3] pkg-cmake: allow to build package in
+ a subdirectory
+In-Reply-To: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
+References: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20150313224928.6e5a6e22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dbdb8512fb6c86537bc54bd5333a463d0163a0be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gwenhael Goavec-Merou,
 
-Some packages, like GNURadio for VOLK, needs cheetah on host at buildtime.
+On Fri, 13 Mar 2015 09:24:08 +0100, Gwenhael Goavec-Merou wrote:
 
-The dependency on host-python-markdown is needed to avoid that setuptools
-downloads markdown if it is not installed yet.
+> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+> index d92b209..87c51a8 100644
+> --- a/docs/manual/adding-packages-cmake.txt
+> +++ b/docs/manual/adding-packages-cmake.txt
+> @@ -100,6 +100,10 @@ typical packages will therefore only use a few of them.
+>    necessary to set them in the package's +*.mk+ file unless you want
+>    to override them:
+>  
+> +* +LIBFOO_SUPPORTS_IN_SOURCE_BUILD = NO+ should be set when the package
+> +  cannot be built inside the source tree but needs a separate build
+> +  directory.
 
-[Thomas: add comment in the .mk file.]
+Did you generate the documentation to review what you did? This chunk
+was added right in the middle of the documentation of <pkg>_CONF_OPTS.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-cheetah/python-cheetah.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+> +
+>  ** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
+>  ** +CMAKE_INSTALL_PREFIX+;
+>  ** +BUILD_SHARED_LIBS+ is driven by +BR2_STATIC_LIBS+;
 
-diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-index 08076b5..7354190 100644
---- a/package/python-cheetah/python-cheetah.mk
-+++ b/package/python-cheetah/python-cheetah.mk
-@@ -10,4 +10,9 @@ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
- PYTHON_CHEETAH_LICENSE = MIT
- PYTHON_CHEETAH_SETUP_TYPE = setuptools
- 
-+# The dependency on host-python-markdown is needed to prevent
-+# setuptools from downloading markdown if it is not installed yet.
-+HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
-+
- $(eval $(python-package))
-+$(eval $(host-python-package))
+I.e, this part must be right after <pkg>_CONF_OPTS.
+
+I've fixed that and applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
