@@ -1,42 +1,32 @@
-From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
-Date: Fri, 13 Mar 2015 00:23:02 +0100
-Subject: [Buildroot] [PATCH] am335x-pru-package: Add hash file
-In-Reply-To: <87twxphlxf.fsf@dell.be.48ers.dk>
-References: <5501F210.6020600@dawncrow.de> <87twxphlxf.fsf@dell.be.48ers.dk>
-Message-ID: <55021FD6.1080104@dawncrow.de>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Fri, 13 Mar 2015 02:20:17 +0200
+Subject: [Buildroot] [PATCH] move random-seed from /etc to /var/lib
+In-Reply-To: <8761a5hlbr.fsf@dell.be.48ers.dk>
+References: <20150312002013.GA11018@vostro> <8761a5hlbr.fsf@dell.be.48ers.dk>
+Message-ID: <20150313002017.GA11581@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 12.03.2015 um 23:48 schrieb Peter Korsgaard:
->>>>>> "Andr?" == Andr? Hentschel <nerv@dawncrow.de> writes:
-> 
->  > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
->  > ---
->  >  package/am335x-pru-package/am335x-pru-package.hash | 2 ++
->  >  1 file changed, 2 insertions(+)
->  >  create mode 100644 package/am335x-pru-package/am335x-pru-package.hash
-> 
->  > diff --git a/package/am335x-pru-package/am335x-pru-package.hash
->  > b/package/am335x-pru-package/am335x-pru-package.hash
->  > new file mode 100644
->  > index 0000000..dcb15f6
->  > --- /dev/null
->  > +++ b/package/am335x-pru-package/am335x-pru-package.hash
->  > @@ -0,0 +1,2 @@
->  > +# Locally computed:
->  > +sha256
->  > e3d712c90070e2d4d2fceb798a3a916c375640f5614415bbe1b2a786f18af956
->  > am335x-pru-package-506e074859891a2b350eb4f5fcb451c4961410ea.tar.gz
-> 
-> am335x-pru-package comes from git through the github helper, and I'm not
-> sure we can expect to always get the exact same hash from future
-> downloads.
-> 
+Fri, Mar 13, 2015 at 12:01:28AM +0100, Peter Korsgaard wrote:
 
-Hi,
+> >>>>> "Alex" == Alex Suykov <alex.suykov@gmail.com> writes:
+> 
+>  > In case / is mounted read-only, /etc is likely to be read-only
+>  > as well, so the seed will not be saved.
+> 
+> But if rootfs is RO, so will /var/lib then?
+Common (I think?) setup is to have ro / and rw /var on some
+kind of persistent storage. This way /etc typically remains
+a part of read-only root.
 
-I tried multiple times, but thinking twice you are right, maybe even adding a branch might change something.
-Be free to remove this and the avrdude patch from the tracker.
+Buildroot does not support such layout at present but with /etc/mtab
+and /etc/resolv.conf already out of /etc, it's one step away.
+
+> I would rather get rid of the static random_seed file instead. Seeding
+> all Buildroot based devices with a RO rootfs from the same 512 bytes of
+> data can hardly be helpful for security.
+Agreed. Currently the initial file is only used to check for rw filesystem.
+That's not necessary, and easy to fix. Sending a patch.
