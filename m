@@ -1,77 +1,51 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 13 Mar 2015 11:50:04 +0100
-Subject: [Buildroot] [PATCH 1/2] package/makedevs: add recursive option
+Date: Fri, 13 Mar 2015 11:50:05 +0100
+Subject: [Buildroot] [PATCH 2/2] docs/manual: documentation for recursive
+	makedevs syntax
 In-Reply-To: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
 References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1426243805-8317-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1426243805-8317-3-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the possibilty to change owner/permission
-of a folder recursively.
+This patch adds the necessary documentation for the new makedevs
+recursive syntax.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/makedevs/makedevs.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ docs/manual/makedev-syntax.txt | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index ab90b93..e575427 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -34,6 +34,8 @@
- #ifndef __APPLE__
- #include <sys/sysmacros.h>     /* major() and minor() */
- #endif
-+#include <ftw.h>
-+
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index e02b79d..afb4ae2 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -24,6 +24,7 @@ There are a few non-trivial blocks:
+ - +type+ is the type of the file, being one of:
+   * f: a regular file
+   * d: a directory
++  * r: a directory recursively
+   * c: a character device file
+   * b: a block device file
+   * p: a named pipe
+@@ -38,7 +39,14 @@ Let's say you want to change the permissions of a given file; using
+ this syntax, you will need to put:
  
- const char *bb_applet_name;
+ ----
+-/usr/bin/foobar f 644 0 0 - - -	- -
++/usr/bin/foobar f 644 0 0 - - - - -
++----
++
++Alternatively, if you want to change owner/permission of a folder
++recursively, you can put:
++
++----
++/usr/share/myapp r 750 myuser myuser - - - - -
+ ----
  
-@@ -332,6 +334,7 @@ void bb_show_usage(void)
- 	fprintf(stderr, "Where name is the file name,  type can be one of:\n");
- 	fprintf(stderr, "      f       A regular file\n");
- 	fprintf(stderr, "      d       Directory\n");
-+	fprintf(stderr, "      r       Directory recursively\n");
- 	fprintf(stderr, "      c       Character special device file\n");
- 	fprintf(stderr, "      b       Block special device file\n");
- 	fprintf(stderr, "      p       Fifo (named pipe)\n");
-@@ -364,6 +367,20 @@ void bb_show_usage(void)
- 	exit(1);
- }
- 
-+bb_recursive(const char *full_name, uid_t uid, gid_t gid, unsigned int mode){
-+
-+	int chmod_chown(const char *fpath, const struct stat *sb,
-+		int tflag, struct FTW *ftwbuf) {
-+		if (chown(fpath, uid, gid) == -1) return -1;
-+		if ((mode != -1)) {
-+			if (chmod(fpath, mode) < 0) return -1;
-+		}
-+		return 0;
-+	}
-+
-+	return nftw(full_name, chmod_chown, 20, FTW_MOUNT | FTW_PHYS);
-+}
-+
- int main(int argc, char **argv)
- {
- 	int opt;
-@@ -474,6 +491,12 @@ int main(int argc, char **argv)
- 				ret = EXIT_FAILURE;
- 				goto loop;
- 			}
-+		} else if (type == 'r') {
-+			if (bb_recursive(full_name, uid, gid, mode) < 0) {
-+				bb_perror_msg("line %d: recursive failed for %s", linenum, full_name);
-+				ret = EXIT_FAILURE;
-+				goto loop;
-+			}
- 		} else
- 		{
- 			dev_t rdev;
+ On the other hand, if you want to create the device file +/dev/hda+
 -- 
 1.9.1
