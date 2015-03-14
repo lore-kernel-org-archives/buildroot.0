@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 23:36:21 +0100
-Subject: [Buildroot] [PATCH 04/15] toolchain: remove LARGEFILE selects
-In-Reply-To: <1426270934-15499-5-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Mar 2015 23:46:13 +0100
+Subject: [Buildroot] [PATCH 06/15] package infra: drop non-lfs support
+In-Reply-To: <1426270934-15499-7-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
- <1426270934-15499-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150314223621.GI4009@free.fr>
+ <1426270934-15499-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314224613.GJ4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,101 +14,65 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
-> There's no need for toolchains or the user to declare largefile support
-> since it's now mandatory.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-With the new patch I suggested you had before patch 3, do not forget to
-also remove the select from BR2_TOOLCHAIN_BUILDROOT_LARGEFILE in this
-patch.
+Review for both pathes 5 and 6: I think you should do it that way:
+
+  - patch 5: the hunk of Makefile.in from this patch, alone
+
+  - patch 6: remove use of $(DISABLE_LARGEFILE)
+
+Granted, your proposal would work (with the additional patch I
+suggested) because BR2_LARGEFILE is now always 'y'.
+
+Still, I think it's better to get rid of DISABLE_LARGEFILE consistently.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  toolchain/Config.in                    |  2 --
->  toolchain/toolchain-external/Config.in | 13 -------------
->  2 files changed, 15 deletions(-)
+>  package/Makefile.in      | 7 -------
+>  package/pkg-autotools.mk | 1 -
+>  2 files changed, 8 deletions(-)
 > 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index b039ee2..291db94 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -9,7 +9,6 @@ config BR2_TOOLCHAIN
->  # Should be selected for glibc or eglibc
->  config BR2_TOOLCHAIN_USES_GLIBC
->  	bool
-> -	select BR2_LARGEFILE
->  	select BR2_INET_IPV6
->  	select BR2_USE_WCHAR
->  	select BR2_ENABLE_LOCALE
-> @@ -24,7 +23,6 @@ config BR2_TOOLCHAIN_USES_UCLIBC
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 803b162..fc57427 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -136,10 +136,7 @@ ifeq ($(BR2_DEBUG_3),y)
+>  TARGET_DEBUGGING = -g3
+>  endif
 >  
->  config BR2_TOOLCHAIN_USES_MUSL
->  	bool
-> -	select BR2_LARGEFILE
->  	select BR2_INET_IPV6
->  	select BR2_USE_WCHAR
->  	select BR2_ENABLE_LOCALE
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index d29bf43..0c3340a 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -635,7 +635,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
->  	depends on BR2_sh2a
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> -	select BR2_LARGEFILE
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_USE_WCHAR
->  	select BR2_TOOLCHAIN_HAS_THREADS
-> @@ -655,7 +654,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
->  	depends on BR2_sh2a
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> -	select BR2_LARGEFILE
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_USE_WCHAR
->  	select BR2_TOOLCHAIN_HAS_THREADS
-> @@ -782,7 +780,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
->  	select BR2_INSTALL_LIBSTDCPP
-> -	select BR2_LARGEFILE
->  	select BR2_INET_IPV6
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_USE_WCHAR
-> @@ -800,7 +797,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
->  	select BR2_INSTALL_LIBSTDCPP
-> -	select BR2_LARGEFILE
->  	select BR2_INET_IPV6
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_USE_WCHAR
-> @@ -818,7 +814,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
->  	select BR2_INSTALL_LIBSTDCPP
-> -	select BR2_LARGEFILE
->  	select BR2_INET_IPV6
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_USE_WCHAR
-> @@ -1132,14 +1127,6 @@ endchoice
->  
->  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_LARGEFILE
-> -	bool "Toolchain has large file support?"
-> -	select BR2_LARGEFILE
-> -	help
-> -	  Select this option if your external toolchain supports
-> -	  largefile. If you don't know, leave the default value,
-> -	  Buildroot will tell you if it's correct or not.
+> -ifeq ($(BR2_LARGEFILE),y)
+>  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -endif
 > -
->  config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
->  	bool "Toolchain has IPv6 support?"
->  	select BR2_INET_IPV6
+>  TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+>  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+>  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+> @@ -373,10 +370,6 @@ else
+>  DISABLE_NLS :=--disable-nls
+>  endif
+>  
+> -ifneq ($(BR2_LARGEFILE),y)
+> -DISABLE_LARGEFILE = --disable-largefile
+> -endif
+> -
+>  ifeq ($(BR2_INET_IPV6),y)
+>  DISABLE_IPV6 = --enable-ipv6
+>  else
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index d2f15fa..2ecf7d8 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -201,7 +201,6 @@ define $(2)_CONFIGURE_CMDS
+>  		--with-fop=no \
+>  		--disable-dependency-tracking \
+>  		$$(DISABLE_NLS) \
+> -		$$(DISABLE_LARGEFILE) \
+>  		$$(DISABLE_IPV6) \
+>  		$$(ENABLE_DEBUG) \
+>  		$$(SHARED_STATIC_LIBS_OPTS) \
 > -- 
 > 2.0.5
 > 
