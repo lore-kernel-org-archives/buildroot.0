@@ -1,55 +1,65 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Sat, 14 Mar 2015 14:20:55 +0100
-Subject: [Buildroot] [PATCH] system/system.mk: modify fstab according to
-	GENERIC_REMOUNT_ROOTFS_RW
-Message-ID: <1426339255-72888-1-git-send-email-kaszak@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Mar 2015 15:25:17 +0100
+Subject: [Buildroot] [PATCH 0/5 v2] linux: fix using extensions (branch
+	yem/kernel-ext)
+Message-ID: <cover.1426342904.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, if BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is set
-/etc/inittab will run a remount on / to make it writable.
-But in /etc/fstab the /dev/root entry is always mounted as rw, so the above
-command is useless, BR will always mount /dev/root writable.
+Hello All!
 
-This patch adds a modification to /etc/fstab based on the value of
-BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW, making BR once again to
-enable readonly root builds OOB.
+This small series is an attempt at fixing the use of extensions, which
+broke unnoticeably since we switched to using the kconfig-package
+infrastructure for the linux package.
 
-Also, remounting in either case seems mainingless, if /etc/fstab is not
-setting /dev/root readonly by default - which can be an alternative solution.
+  - patches 1-2: introduce patch-dependencies (code and manual)
+  - patch 3    : actually fix the extensions
+  - patches 4-5: simplify adding new extensions
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
----
- system/system.mk |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - introduce patch-dependencies  (Thomas P.)
+  - use that instead of custom-written rules on .stamp_patched
+  - split out the 'extensions infra' from the actual extensions fix
 
-diff --git a/system/system.mk b/system/system.mk
-index 4a1eb4a..a390b6e 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -106,14 +106,18 @@ TARGET_FINALIZE_HOOKS += SYSTEM_GETTY
- endif
- 
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
--# Find commented line, if any, and remove leading '#'s
-+# Find commented line in inittab, if any, and remove leading '#'s
-+# Rewrite fstab to mount /dev/root rw if set to ro
- define SYSTEM_REMOUNT_RW
- 	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
-+	$(SED) '/^\/dev\/root.*ro,.*/s~ro,~rw,~' $(TARGET_DIR)/etc/fstab
- endef
- else
--# Find uncommented line, if any, and add a leading '#'
-+# Find uncommented line in inittab, if any, and add a leading '#'
-+# Rewrite fstab to mount /dev/root ro if set to rw
- define SYSTEM_REMOUNT_RW
- 	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
-+	$(SED) '/^\/dev\/root.*rw,.*/s~rw,~ro,~' $(TARGET_DIR)/etc/fstab
- endef
- endif
- TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 3fd2c4d25f727c5364e52abf65c37f19fe461433:
+
+  iotop: new package (2015-03-13 23:16:38 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/kernel-ext
+
+for you to fetch changes up to 724c084b0e9f1d98670184ab5e77a2381e04d67c:
+
+  linux: migrate extensions to use the new infrastructure (2015-03-14 15:19:31 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package infra: add patch-dependencies
+      docs/manual: add _PATCH_DEPENDENCIES
+      linux: fix extensions
+      linux: simplify adding new extensions
+      linux: migrate extensions to use the new infrastructure
+
+ docs/manual/adding-packages-generic.txt | 9 +++++++++
+ linux/linux-ext-fbtft.mk                | 8 +-------
+ linux/linux-ext-rtai.mk                 | 8 +-------
+ linux/linux-ext-xenomai.mk              | 8 +-------
+ linux/linux.mk                          | 7 +++++++
+ package/pkg-generic.mk                  | 9 ++++++++-
+ 6 files changed, 27 insertions(+), 22 deletions(-)
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
