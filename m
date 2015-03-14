@@ -1,54 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 23:52:10 +0100
-Subject: [Buildroot] [PATCH 11/15] boot/gummiboot: drop largefile depends
-In-Reply-To: <1426270934-15499-12-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Mar 2015 23:53:02 +0100
+Subject: [Buildroot] [PATCH 13/15] toolchain-common: drop BR2_LARGEFILE
+In-Reply-To: <1426270934-15499-14-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
- <1426270934-15499-12-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150314225210.GO4009@free.fr>
+ <1426270934-15499-14-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314225302.GP4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
-
 On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
+> It's now unused so remove it.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Ditto comment about the commit log:  BR2_LARGEFILE=y always...
-
-Otherwise:
-
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  boot/gummiboot/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  toolchain/toolchain-common.in | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
-> index 8d70680..ad49793 100644
-> --- a/boot/gummiboot/Config.in
-> +++ b/boot/gummiboot/Config.in
-> @@ -4,7 +4,6 @@ config BR2_TARGET_GUMMIBOOT
->  	select BR2_PACKAGE_GNU_EFI
->  	select BR2_PACKAGE_UTIL_LINUX
->  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> -	depends on BR2_LARGEFILE # util-linux
->  	depends on BR2_USE_WCHAR # util-linux
->  	help
->  	  gummiboot is a simple UEFI boot manager which executes
-> @@ -24,5 +23,5 @@ config BR2_TARGET_GUMMIBOOT
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index 7eb22ce..13c684d 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -5,10 +5,6 @@
+>  # so put it here instead
+>  source "package/gdb/Config.in.host"
 >  
->  	  http://freedesktop.org/wiki/Software/gummiboot/
+> -config BR2_LARGEFILE
+> -	bool
+> -	default y
+> -
+>  config BR2_INET_IPV6
+>  	bool
 >  
-> -comment "gummiboot needs a toolchain w/ largefile, wchar"
-> -	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-> +comment "gummiboot needs a toolchain w/ wchar"
-> +	depends on !BR2_USE_WCHAR
 > -- 
 > 2.0.5
 > 
