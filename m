@@ -1,92 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 15:25:21 +0100
-Subject: [Buildroot] [PATCH 5/5 v2] linux: migrate extensions to use the new
-	infrastructure
-In-Reply-To: <cover.1426342904.git.yann.morin.1998@free.fr>
-References: <cover.1426342904.git.yann.morin.1998@free.fr>
-Message-ID: <724c084b0e9f1d98670184ab5e77a2381e04d67c.1426342904.git.yann.morin.1998@free.fr>
+From: Carlos A. M. dos Santos <unixmania@gmail.com>
+Date: Sat, 14 Mar 2015 12:14:29 -0300
+Subject: [Buildroot] kodi: build errors
+In-Reply-To: <20150312112559.627104ad@free-electrons.com>
+References: <CAJ4jsacVyYjMJXaQ=AzWKV+wxT5kh_MswyvaP5KUmmKpngjouQ@mail.gmail.com>
+ <20150312112559.627104ad@free-electrons.com>
+Message-ID: <CAJ4jsad4Lqma5_CjCeXZ6JtPWMsrWZpr9a672VLW-K7b9d-BcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux-ext-fbtft.mk   | 8 +-------
- linux/linux-ext-rtai.mk    | 8 +-------
- linux/linux-ext-xenomai.mk | 8 +-------
- 3 files changed, 3 insertions(+), 21 deletions(-)
+OK, I restored the kodi configuration files to the original ones. I'm
+sending the .config file.
+--
+"Quando dou comida aos pobres, me chamam de Santo. Quando pergunto por
+que s?o pobres, me chamam de Comunista."
+-- D H?lder C?mara
 
-diff --git a/linux/linux-ext-fbtft.mk b/linux/linux-ext-fbtft.mk
-index 6892c89..3e6a3cc 100644
---- a/linux/linux-ext-fbtft.mk
-+++ b/linux/linux-ext-fbtft.mk
-@@ -4,9 +4,7 @@
- # Patch the linux kernel with fbtft extension
- ################################################################################
- 
--ifeq ($(BR2_LINUX_KERNEL_EXT_FBTFT),y)
--# Add dependency to fbtft package (download helper for the fbtft source)
--LINUX_PATCH_DEPENDENCIES += fbtft
-+LINUX_EXTENSIONS += fbtft
- 
- # for linux >= 3.15 install to drivers/video/fbdev/fbtft
- # for linux < 3.15 install to drivers/video/fbtft
-@@ -22,7 +20,3 @@ define FBTFT_PREPARE_KERNEL
- 		>> $${dest}/Kconfig ; \
- 	echo 'obj-y += fbtft/' >> $${dest}/Makefile
- endef
--
--LINUX_PRE_PATCH_HOOKS += FBTFT_PREPARE_KERNEL
--
--endif #BR2_LINUX_KERNEL_EXT_FBTFT
-diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-index 942b430..07e7a19 100644
---- a/linux/linux-ext-rtai.mk
-+++ b/linux/linux-ext-rtai.mk
-@@ -4,9 +4,7 @@
- # Patch the linux kernel with RTAI extension
- ################################################################################
- 
--ifeq ($(BR2_LINUX_KERNEL_EXT_RTAI),y)
--# Add dependency to RTAI (user-space) which provide kernel patches
--LINUX_PATCH_DEPENDENCIES += rtai
-+LINUX_EXTENSIONS += rtai
- 
- RTAI_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_RTAI_PATCH))
- 
-@@ -41,7 +39,3 @@ define RTAI_PREPARE_KERNEL
- 		$(notdir $(RTAI_PATCH))
- endef
- endif
--
--LINUX_PRE_PATCH_HOOKS += RTAI_PREPARE_KERNEL
--
--endif #BR2_LINUX_EXT_RTAI
-diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-index f6a5ffd..76a9786 100644
---- a/linux/linux-ext-xenomai.mk
-+++ b/linux/linux-ext-xenomai.mk
-@@ -4,9 +4,7 @@
- # Patch the linux kernel with xenomai extension
- ################################################################################
- 
--ifeq ($(BR2_LINUX_KERNEL_EXT_XENOMAI),y)
--# Add dependency to xenomai (user-space) which provide ksrc part
--LINUX_PATCH_DEPENDENCIES += xenomai
-+LINUX_EXTENSIONS += xenomai
- 
- # Adeos patch version
- XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
-@@ -24,7 +22,3 @@ define XENOMAI_PREPARE_KERNEL
- 		$(XENOMAI_ADEOS_OPTS) \
- 		--verbose
- endef
--
--LINUX_PRE_PATCH_HOOKS += XENOMAI_PREPARE_KERNEL
--
--endif #BR2_LINUX_EXT_XENOMAI
--- 
-1.9.1
+
+On Thu, Mar 12, 2015 at 7:25 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Carlos A. M. dos Santos,
+>
+> On Wed, 11 Mar 2015 22:49:48 -0300, Carlos A. M. dos Santos wrote:
+>> Hello,
+>>
+>> I'm facing some errors trying to build kodi using the buildroot
+>> (commit a4788aa6157d1496cdd32cb9802710d4e97bc550)
+>>
+>> The first problem is that kodi requires "libjpeg" to build, not
+>> "jpeg". I solved the problem applying the following patch:
+>>
+>> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+>> index 1bc8b15..f6e95e2 100644
+>> --- a/package/kodi/Config.in
+>> +++ b/package/kodi/Config.in
+>> @@ -42,7 +42,7 @@ menuconfig BR2_PACKAGE_KODI
+>>      select BR2_PACKAGE_FONTCONFIG
+>>      select BR2_PACKAGE_FREETYPE
+>>      select BR2_PACKAGE_JASPER
+>> -    select BR2_PACKAGE_JPEG
+>> +    select BR2_PACKAGE_LIBJPEG
+>>      select BR2_PACKAGE_LIBASS
+>>      select BR2_PACKAGE_LIBCDIO
+>>      select BR2_PACKAGE_LIBCURL
+>> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+>> index f40fc31..fd6fbfe 100644
+>> --- a/package/kodi/kodi.mk
+>> +++ b/package/kodi/kodi.mk
+>> @@ -16,7 +16,7 @@ KODI_INSTALL_STAGING = YES
+>>  # http://wiki.xbmc.org/index.php?title=TexturePacker
+>>  KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo \
+>>      host-nasm host-sdl_image host-swig
+>> -KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype jasper jpeg \
+>> +KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype
+>> jasper libjpeg \
+>>      libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+>>      libogg libplist libpng libsamplerate libungif libvorbis libxml2
+>> libxslt lzo ncurses \
+>>      openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+>
+> This change is not correct: selecting BR2_PACKAGE_JPEG and having
+> 'jpeg' in KODI_DEPENDENCIES is the right thing to do. The 'jpeg'
+> package is a virtual package: it will itself depend on 'libjpeg' or
+> 'jpeg-turbo' depending on the selected jpeg implementation.
+>
+> Can you be more specific about which problems you have seen in relation
+> to jpeg support?
+>
+>> (sorry, the copy/paste converted tabs to spaces)
+>>
+>> The error in build/kodi-14.1-Helix/config.log is
+>>
+>> configure:26554: checking for main in -lSDL_image
+>> configure:26573:
+>> /work/br-master-glibc/host/usr/bin/i686-buildroot-linux-gnu-gcc -o
+>> conftest -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> -D_FILE_OFFSET_BITS=64   -Os  -fPIC -DPIC -D_REENTRANT
+>> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DNDEBUG=1
+>> -D_LARGEFILE_SOURCE -D
+>> /work/br-master-glibc/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/libtag.so:
+>> undefined reference to `std::__throw_out_of_range_fmt(char const*,
+>> ...)@GLIBCXX_3.4.20'
+>> collect2: error: ld returned 1 exit status
+>>
+>> Have anybody seen this before?
+>
+> It's trying to use the C compiler to link with C++ libraries. Can you
+> share your Buildroot .config that exhibits the problem ?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 65744 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150314/c4aa59d7/attachment.obj>
