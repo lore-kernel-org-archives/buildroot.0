@@ -1,44 +1,156 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 23:53:02 +0100
-Subject: [Buildroot] [PATCH 13/15] toolchain-common: drop BR2_LARGEFILE
-In-Reply-To: <1426270934-15499-14-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Mar 2015 23:56:13 +0100
+Subject: [Buildroot] [PATCH 15/15] docs/manual: remove references to
+ largefile
+In-Reply-To: <1426270934-15499-16-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
- <1426270934-15499-14-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150314225302.GP4009@free.fr>
+ <1426270934-15499-16-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314225613.GQ4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Gustavo, All,
+
 On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
-> It's now unused so remove it.
-> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Commit log should state why you switched to using rrdtool as example.
+
+otherwise:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  toolchain/toolchain-common.in | 4 ----
->  1 file changed, 4 deletions(-)
+>  docs/manual/adding-packages-directory.txt | 37 ++++++++++++++-----------------
+>  docs/manual/configure.txt                 | 31 +++++++++++++-------------
+>  2 files changed, 32 insertions(+), 36 deletions(-)
 > 
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 7eb22ce..13c684d 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -5,10 +5,6 @@
->  # so put it here instead
->  source "package/gdb/Config.in.host"
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index 8a88282..bb49dd5 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -82,20 +82,21 @@ is not met.
+>  An example illustrates both the usage of +select+ and +depends on+.
 >  
-> -config BR2_LARGEFILE
-> -	bool
-> -	default y
+>  --------------------------
+> -config BR2_PACKAGE_ACL
+> -        bool "acl"
+> -        select BR2_PACKAGE_ATTR
+> -        depends on BR2_LARGEFILE
+> +config BR2_PACKAGE_RRDTOOL
+> +	bool "rrdtool"
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_FREETYPE
+> +	select BR2_PACKAGE_LIBART
+> +	select BR2_PACKAGE_LIBPNG
+> +	select BR2_PACKAGE_ZLIB
+>          help
+> -          POSIX Access Control Lists, which are used to define more
+> -          fine-grained discretionary access rights for files and
+> -          directories.
+> -          This package also provides libacl.
+> +	  RRDtool is the OpenSource industry standard, high performance
+> +	  data logging and graphing system for time series data.
+>  
+> -          http://savannah.nongnu.org/projects/acl
+> +	  http://oss.oetiker.ch/rrdtool/
+>  
+> -comment "acl needs a toolchain w/ largefile"
+> -        depends on !BR2_LARGEFILE
+> +comment "rrdtool needs a toolchain w/ wchar"
+> +	depends on !BR2_USE_WCHAR
+>  --------------------------
+>  
+>  
+> @@ -164,10 +165,10 @@ coding style].
+>  ==== Dependencies on target and toolchain options
+>  
+>  Many packages depend on certain options of the toolchain: the choice of
+> -C library, C++ support, largefile support, thread support, RPC support,
+> -IPv6 support, wchar support, or dynamic library support. Some packages
+> -can only be built on certain target architectures, or if an MMU is
+> -available in the processor.
+> +C library, C++ support, thread support, RPC support, IPv6 support,
+> +wchar support, or dynamic library support. Some packages can only be
+> +built on certain target architectures, or if an MMU is available in the
+> +processor.
+>  
+>  These dependencies have to be expressed with the appropriate 'depends
+>  on' statements in the Config.in file. Additionally, for dependencies on
+> @@ -199,7 +200,7 @@ foo needs a toolchain w/ featA, featB, featC
+>  for example:
+>  
+>  --------------------------
+> -aircrack-ng needs a toolchain w/ largefile, threads
+> +mpd needs a toolchain w/ C++, threads, wchar
+>  --------------------------
+>  
+>  or
+> @@ -245,10 +246,6 @@ use in the comment.
+>  ** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
+>  ** Comment string: `C++`
+>  
+> -* largefile support
+> -** Dependency symbol: +BR2_LARGEFILE+
+> -** Comment string: +largefile+
 > -
->  config BR2_INET_IPV6
->  	bool
+>  * thread support
+>  ** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
+>  ** Comment string: +threads+ (unless +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
+> diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+> index bd235f0..c06182b 100644
+> --- a/docs/manual/configure.txt
+> +++ b/docs/manual/configure.txt
+> @@ -109,20 +109,19 @@ most important ones allow to:
+>   * Change the version of the GCC compiler, binutils and the C library.
+>  
+>   * Select a number of toolchain options (uClibc only): whether the
+> -   toolchain should have largefile support (i.e. support for files
+> -   larger than 2 GB on 32 bits systems), IPv6 support, RPC support
+> -   (used mainly for NFS), wide-char support, locale support (for
+> -   internationalization), C++ support or thread support. Depending on
+> -   which options you choose, the number of userspace applications and
+> -   libraries visible in Buildroot menus will change: many applications
+> -   and libraries require certain toolchain options to be enabled. Most
+> -   packages show a comment when a certain toolchain option is required
+> -   to be able to enable those packages. If needed, you can further
+> -   refine the uClibc configuration by running +make
+> -   uclibc-menuconfig+. Note however that all packages in Buildroot are
+> -   tested against the default uClibc configuration bundled in
+> -   Buildroot: if you deviate from this configuration by removing
+> -   features from uClibc, some packages may no longer build.
+> +   toolchain should have IPv6 support, RPC support (used mainly for
+> +   NFS), wide-char support, locale support (for internationalization),
+> +   C++ support or thread support. Depending on which options you choose,
+> +   the number of userspace applications and libraries visible in
+> +   Buildroot menus will change: many applications and libraries require
+> +   certain toolchain options to be enabled. Most packages show a comment
+> +   when a certain toolchain option is required to be able to enable
+> +   those packages. If needed, you can further refine the uClibc
+> +   configuration by running +make uclibc-menuconfig+. Note however that
+> +   all packages in Buildroot are tested against the default uClibc
+> +   configuration bundled in Buildroot: if you deviate from this
+> +   configuration by removing features from uClibc, some packages may no
+> +   longer build.
+>  
+>  It is worth noting that whenever one of those options is modified,
+>  then the entire toolchain and system must be rebuilt. See
+> @@ -178,8 +177,8 @@ Then, you have three solutions to use an external toolchain:
+>    external toolchain uses the 'glibc' library, you only have to tell
+>    whether your toolchain supports C\++ or not and whether it has
+>    built-in RPC support. If your external toolchain uses the 'uClibc'
+> -  library, then you have to tell Buildroot if it supports largefile,
+> -  IPv6, RPC, wide-char, locale, program invocation, threads and
+> +  library, then you have to tell Buildroot if it supports IPv6,
+> +  RPC, wide-char, locale, program invocation, threads and
+>    C++. At the beginning of the execution, Buildroot will tell you if
+>    the selected options do not match the toolchain configuration.
 >  
 > -- 
 > 2.0.5
