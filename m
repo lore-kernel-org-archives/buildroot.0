@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 23:49:41 +0100
-Subject: [Buildroot] [PATCH 09/15] busybox: force lfs build
-In-Reply-To: <1426270934-15499-10-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Mar 2015 23:50:50 +0100
+Subject: [Buildroot] [PATCH 10/15] system: drop largefile depends
+In-Reply-To: <1426270934-15499-11-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
- <1426270934-15499-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150314224941.GM4009@free.fr>
+ <1426270934-15499-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314225050.GN4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +14,54 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
+> Drop the largefile conditional for eudev and systemd.
+
+Drop the largefile conditional for eudev and systemd, since it's now
+always 'y' anyway.
+
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Otherwise:
 
-However, I think your commit logs are a bit terse. Maybe add just this
-blurb:
-
-    BR2_LARGEFILE is now always 'y' so the conditional is now
-    meaningless.
-
-(comment valid for other patches as well...)
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/busybox/busybox.mk | 7 -------
->  1 file changed, 7 deletions(-)
+>  system/Config.in | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index a3ac7e7..7ab7f84 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -92,17 +92,10 @@ define BUSYBOX_SET_MMU
->  endef
->  endif
+> diff --git a/system/Config.in b/system/Config.in
+> index 9973cc2..3516056 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -89,7 +89,6 @@ config BR2_INIT_SYSTEMD
+>  	bool "systemd"
+>  	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+> -	depends on BR2_LARGEFILE
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_INET_IPV6
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> @@ -124,15 +123,14 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
 >  
-> -ifeq ($(BR2_LARGEFILE),y)
->  define BUSYBOX_SET_LARGEFILE
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_FDISK_SUPPORT_LARGE_DISKS,$(BUSYBOX_BUILD_CONFIG))
->  endef
-> -else
-> -define BUSYBOX_SET_LARGEFILE
-> -	$(call KCONFIG_DISABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
-> -	$(call KCONFIG_DISABLE_OPT,CONFIG_FDISK_SUPPORT_LARGE_DISKS,$(BUSYBOX_BUILD_CONFIG))
-> -endef
-> -endif
+>  config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+>  	bool "Dynamic using eudev"
+> -	depends on BR2_LARGEFILE
+>  	depends on BR2_USE_WCHAR
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_USE_MMU # eudev
+>  	select BR2_PACKAGE_EUDEV
 >  
->  # If IPv6 is enabled then enable basic ifupdown support for it
->  ifeq ($(BR2_INET_IPV6),y)
+> -comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
+> +comment "eudev needs a toolchain w/ wchar, dynamic library"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+>  
+>  endchoice
+>  
 > -- 
 > 2.0.5
 > 
