@@ -1,49 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 20:09:43 +0100
-Subject: [Buildroot] [PATCH 3/8 v8] package/xserver_xorg-server: add blind
-	options to specify driver ABI
+Date: Sat, 14 Mar 2015 20:09:45 +0100
+Subject: [Buildroot] [PATCH 5/8 v8] package/xserver_xorg-server: add version
+	1.14.7
 In-Reply-To: <cover.1426360000.git.yann.morin.1998@free.fr>
 References: <cover.1426360000.git.yann.morin.1998@free.fr>
-Message-ID: <9ab90196ea39888222d1678040373433e6a10e01.1426360000.git.yann.morin.1998@free.fr>
+Message-ID: <a20a5a8091f49d8e0c54d8ae60d5d3c7736e8d05.1426360000.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The upcoming NVidia Tegra2/3 binary blobs only work with a certain
-VIDEODRV ABI (namely up to 14), so we must have a way to represent that
-ABI so that such packages can not be enabled with a too recent/old ABI.
+Some old binary blobs drivers, like the NVidia Tegra2/3 blobs, only
+implement an old VIDEODRV ABI.
+
+Since VIDEODRV ABIs are not backward compatible [0], lets introduce an
+older Xserver version that supports such an old ABI.
+
+[0] http://www.x.org/wiki/XorgModuleABIVersions/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/x11r7/xserver_xorg-server/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/x11r7/xserver_xorg-server/Config.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 6c48070..d26329d 100644
+index 252ab7e..d41d7ac 100644
 --- a/package/x11r7/xserver_xorg-server/Config.in
 +++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -56,11 +56,19 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+@@ -55,11 +55,15 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
  
  if BR2_PACKAGE_XSERVER_XORG_SERVER
  
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
++config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
 +	bool
 +
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
-+	int
-+	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
-+
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+ 	bool
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
+ 	int
++	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+ 	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+ 
  choice
- 	bool "X Window System server version"
+@@ -70,11 +74,16 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17_1
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17_1
- 	bool "1.17.1"
-+	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
- 
++config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14_7
++	bool "1.14.7"
++	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
++
  endchoice
  
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+ 	default "1.17.1" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17_1
++	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14_7
+ 
+ choice
+ 	prompt "X Window System server type"
 -- 
 1.9.1
