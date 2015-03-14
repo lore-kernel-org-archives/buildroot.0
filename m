@@ -1,90 +1,38 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sat, 14 Mar 2015 16:29:52 +0100
-Subject: [Buildroot] [PATCH v3 1/1] fftw: add compile precision option
-Message-ID: <1426346992-24724-1-git-send-email-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Mar 2015 17:04:39 +0100
+Subject: [Buildroot] kodi: build errors
+In-Reply-To: <CAJ4jsad4Lqma5_CjCeXZ6JtPWMsrWZpr9a672VLW-K7b9d-BcQ@mail.gmail.com>
+References: <CAJ4jsacVyYjMJXaQ=AzWKV+wxT5kh_MswyvaP5KUmmKpngjouQ@mail.gmail.com>
+ <20150312112559.627104ad@free-electrons.com>
+ <CAJ4jsad4Lqma5_CjCeXZ6JtPWMsrWZpr9a672VLW-K7b9d-BcQ@mail.gmail.com>
+Message-ID: <20150314170439.5d110dc9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Dear Carlos A. M. dos Santos,
 
-fftw has options to select compile precision between single, long-double and
-quad. These options are exclusives. This patch adds choice to select precision
-option.
+On Sat, 14 Mar 2015 12:14:29 -0300, Carlos A. M. dos Santos wrote:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v2 -> v3:
- * add depends instruction for quad-precision. This option needs to have a
-   toolchain with libquadmath enabled (only x86, x86_64 and Itanium).
-Changes v1 -> v2:
- * FFTW_CONFIGURE_OPTS -> FFTW_CONF_OPTS
----
- package/fftw/Config.in | 34 ++++++++++++++++++++++++++++++++++
- package/fftw/fftw.mk   |  9 +++++++++
- 2 files changed, 43 insertions(+)
+> OK, I restored the kodi configuration files to the original ones. I'm
+> sending the .config file.
 
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index 36f849f..03acb56 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -9,3 +9,37 @@ config BR2_PACKAGE_FFTW
- 	  double precision.
- 
- 	  http://www.fftw.org
-+
-+if BR2_PACKAGE_FFTW
-+
-+choice
-+	prompt "fftw precision"
-+	default BR2_PACKAGE_FFTW_PRECISION_NONE
-+	help
-+	  Selects fftw precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_NONE
-+	bool "none"
-+	help
-+	  no compile precision selected
-+
-+config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	bool "single precision"
-+	help
-+	  compile fftw in single precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-+	bool "long double precision"
-+	help
-+	  compile fftw in long-double precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_QUAD
-+	bool "quad precision"
-+	# quad-precision needs to have a gcc with libquadmath
-+	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-+	help
-+	  compile fftw in quadruple precision if available
-+
-+endchoice
-+
-+endif
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 3b302df..80cc0dc 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -10,4 +10,13 @@ FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPLv2+
- FFTW_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-+FFTW_CONF_OPTS = --enable-single
-+endif
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
-+FFTW_CONF_OPTS = --enable-long-double
-+endif
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_QUAD),y)
-+FFTW_CONF_OPTS = --enable-quad-precision
-+endif
- $(eval $(autotools-package))
+Your configuration file indicates:
+
+  Buildroot 2015.05-git-00354-gf574230-dirty Configuration
+
+Which means you have some uncommitted changes to Buildroot. Since I
+don't know which changes you've made, how can I be sure that the
+changes you've made are not the reason for the problem?
+
+But anyway, I will start a build with your configuration.
+
+Thanks!
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
