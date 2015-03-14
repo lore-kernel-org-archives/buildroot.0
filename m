@@ -1,174 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Mar 2015 13:49:03 +0100
-Subject: [Buildroot] [git commit] uclibc: adapt thread implementation
-	selection to uClibc-ng
-Message-ID: <20150314124926.7CAD380756@busybox.osuosl.org>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Sat, 14 Mar 2015 14:20:55 +0100
+Subject: [Buildroot] [PATCH] system/system.mk: modify fstab according to
+	GENERIC_REMOUNT_ROOTFS_RW
+Message-ID: <1426339255-72888-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65473afee42819a5ce4569855d7e064a85c6e005
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, if BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is set
+/etc/inittab will run a remount on / to make it writable.
+But in /etc/fstab the /dev/root entry is always mounted as rw, so the above
+command is useless, BR will always mount /dev/root writable.
 
-uClibc-ng does not support linuxthreads or linuxthreads.old on
-architectures that have NPTL support. This creates another complicated
-dependency: dependeing on the uClibc version being used, not the same
-thread implementations are available.
+This patch adds a modification to /etc/fstab based on the value of
+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW, making BR once again to
+enable readonly root builds OOB.
 
-In order to handle this situation, this patch introduces three hidden
-booleans:
+Also, remounting in either case seems mainingless, if /etc/fstab is not
+setting /dev/root readonly by default - which can be an alternative solution.
 
- - BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
- - BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
- - BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-
-They are selected by the different uClibc versions, depending on which
-thread implementation they support on the different architectures.
-
-Then, the choice of the thread implementation can rely on those
-booleans to know if a given thread implementation is available in the
-current architecture / uClibc version selection.
-
-This makes sure that unusable thread implementation do not get
-selected, therefore fixing build issues such as:
-
-  http://autobuild.buildroot.org/results/89e/89e423bee040cbce3e82cd89f1191efaac490c0d/
-
-The support table is as follows (only taking into account
-architectures that allow the selection of
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC, other architectures are not
-considered) :
-
-             ----uclibc----   uclibc-xtensa-   --uclibc-arc--  --uclibc-ng---
-             LT LT.old NPTL   LT LT.old NPTL   LT LT.old NPTL  LT LT.old NPTL
-arc(le|eb)                                      y   y     n    n    n     n (1)
-arm(eb)      y    y     y                                      n    y     y (2)
-bfin         n    y     n                                      y    y     n
-i386         y    y     y                                      n    n     y (3)
-m68k         y    y     y                                      y    y     n
-mips(64)(el) y    y     y                                      n    n     y
-powerpc      y    y     y                                      n    n     y
-sh           y    y     y                                      n    n     y
-sparc        y    y     y                                      n    n     y
-xtensa                        n    y     n                     n    n     y
-x86_64       y    y     y                                      n    n     y
-
-  (1) : uclibc-ng only has NPTL support for ARC but it requires a more
-        recent compiler version that hasn't been officially released
-        by Synopsys.
-
-  (2) : the general idea of uclibc-ng is to only support NPTL on
-        architectures where it is available. However, in order to
-        support ARM noMMU platforms, LT.old support has been kept on
-        ARM.
-
-  (3) : except i386 itself, which doesn't have what's needed for NPTL
-        support. i386 is simply not supported by uclibc-ng basically.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 ---
- package/uclibc/Config.in |   43 +++++++++++++++++++++++++++++++++----------
- 1 files changed, 33 insertions(+), 10 deletions(-)
+ system/system.mk |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 3a65752..18e02c2 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -7,6 +7,15 @@ config BR2_PACKAGE_UCLIBC
+diff --git a/system/system.mk b/system/system.mk
+index 4a1eb4a..a390b6e 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -106,14 +106,18 @@ TARGET_FINALIZE_HOOKS += SYSTEM_GETTY
+ endif
  
- comment "uClibc Options"
- 
-+config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+       bool
-+
-+config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+       bool
-+
-+config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+       bool
-+
- choice
- 	prompt "uClibc C library Version"
- 	default BR2_UCLIBC_VERSION_0_9_33
-@@ -15,21 +24,39 @@ choice
- 
- 	config BR2_UCLIBC_VERSION_0_9_33
- 		bool "uClibc 0.9.33.x"
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
-+		       if !BR2_bfin
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-+		       if !BR2_bfin && !BR2_x86_i386
- 		depends on !(BR2_arc || BR2_xtensa)
- 
- 	config BR2_UCLIBC_VERSION_ARC_GIT
- 		bool "uClibc Git ARC"
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
- 		depends on BR2_arc
- 
- 	config BR2_UCLIBC_NG_VERSION_1_0_0
- 		bool "uClibc-ng 1.0.0"
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
-+		       if BR2_bfin || BR2_m68k
-+		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
-+		       if BR2_bfin || BR2_m68k || BR2_arm || BR2_armeb
-+		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-+		       if !BR2_arc && !BR2_bfin && !BR2_m68k && !BR2_x86_i386
- 
- 	config BR2_UCLIBC_VERSION_XTENSA_GIT
- 		bool "uClibc Git Xtensa"
- 		depends on BR2_xtensa
-+		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
- 
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
-+		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
-+		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
-+		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
-+		       if !BR2_bfin && !BR2_x86_i386 && !BR2_xtensa
- 		depends on !(BR2_arc)
- 
- endchoice
-@@ -101,8 +128,9 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if !BR2_xtensa
--	default BR2_PTHREADS_OLD
-+	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
- 	help
- 	  Use this option to select the thread library implementation
- 	  that should be used in your toolchain. Not all thread
-@@ -115,24 +143,19 @@ choice
- 
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
--		depends on !BR2_bfin
--		depends on !BR2_xtensa
- 		select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
- 
- 	config BR2_PTHREADS_OLD
- 		bool "linuxthreads (stable/old)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
- 
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--		depends on !BR2_arc
--		depends on !BR2_bfin
--		# There is NPTL support for Xtensa in uClibc-ng, but
--		# not in the main uClibc repository.
--		depends on !BR2_xtensa || !BR2_UCLIBC_VERSION_XTENSA_GIT
--		depends on !BR2_x86_i386
-+		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
- endchoice
- 
- config BR2_PTHREAD_DEBUG
+ ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+-# Find commented line, if any, and remove leading '#'s
++# Find commented line in inittab, if any, and remove leading '#'s
++# Rewrite fstab to mount /dev/root rw if set to ro
+ define SYSTEM_REMOUNT_RW
+ 	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
++	$(SED) '/^\/dev\/root.*ro,.*/s~ro,~rw,~' $(TARGET_DIR)/etc/fstab
+ endef
+ else
+-# Find uncommented line, if any, and add a leading '#'
++# Find uncommented line in inittab, if any, and add a leading '#'
++# Rewrite fstab to mount /dev/root ro if set to rw
+ define SYSTEM_REMOUNT_RW
+ 	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
++	$(SED) '/^\/dev\/root.*rw,.*/s~rw,~ro,~' $(TARGET_DIR)/etc/fstab
+ endef
+ endif
+ TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
+-- 
+1.7.10.4
