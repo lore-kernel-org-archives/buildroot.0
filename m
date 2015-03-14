@@ -1,66 +1,134 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 18:44:18 +0100
-Subject: [Buildroot] [PATCH v3 2/2] wine: Add gettext dependency check
- for host-wine
-In-Reply-To: <54FC8C44.2050907@dawncrow.de>
-References: <54FC5B41.5050004@dawncrow.de>
- <20150308155730.11c74ecc@free-electrons.com>
- <54FC67E8.7010004@dawncrow.de>
- <20150308183122.308f9227@free-electrons.com>
- <54FC8C44.2050907@dawncrow.de>
-Message-ID: <20150314174418.GD4009@free.fr>
+Date: Sat, 14 Mar 2015 20:09:43 +0100
+Subject: [Buildroot] [PATCH 0/8 v8] NVidia GPU binary blobs for Tegra2/3
+	(branch yem/gfx2)
+Message-ID: <cover.1426360000.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
+Hello All!
 
-On 2015-03-08 18:52 +0100, Andr? Hentschel spake thusly:
-> Am 08.03.2015 um 18:31 schrieb Thomas Petazzoni:
-> > Dear Andr? Hentschel,
-> > 
-> > On Sun, 08 Mar 2015 16:16:56 +0100, Andr? Hentschel wrote:
-> > 
-> >> Wine is built using host-wine, so i need gettext support in host-wines wrt.
-> > 
-> > In which cases do you need gettext support in host-wine?
-> > 
-> > Always ? Only when the target wine is going to be built with gettext
-> > support (which your patch does not do) ?
-> 
-> When host-gettext is built, then we could use it, otherwise target wine will be english only.
-> I don't think this diserves a hard dependency, do you?
-> 
-> > Why in the first place would we want to have gettext support in
-> > host-wine ?
-> 
-> Wine has a tool called wrc which transforms dialogs/strings and such into a windows like resource file.
-> With the help of the gettext library wrc merges the translations from wines po-files into that resource file.
-> As the wrc tool from host-wine is used, we need the gettext support there.
-> Further there are no runtime requirements, so in fact it doesn't matter to wine(or even host-wine) if the target
-> gettext is built.
+This series adds support for NVidia's binary blob, the driver to its
+family of GPUs, for and Tegra2 and Tegra3, initially submitted by
+Nicolas.
 
-So, from what I understand:
-  - we need the host gettext tools to be able to produce the resource
-    files
-  - the resource files are used at runtime, but that's handled by Wine
-    itself, without the need for any help from gettext
+Since those binary blobs require the old X11 driver ABI 14, we can not
+use them for now, as the version of X11 we have implements ABI 19; X11
+ABIs are not backward compatible.
 
-If that is so, then all you need is to just depend on host-gettext:
+So, we need to introduce a choice for the version of X11, so as to
+provide whatever was the latest X11 vbersion to provide ABI 14; this
+would be X11 version 1.14.7.
 
-HOST_WINE_DEPENDENCIES += host-gettext
-HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
+Fortunately, Gustavo was kind enough to suggest and test that building
+an old X11 server with newer X11 libs was still possible, so that we
+only really need the old server, not all the old libs. Pfewww... ;-)
 
-That does not have to be condional on the package gettext at all.
+So, this series in split in two main parts:
 
-What is maybe misleading is that there is no BR2_PACKAGE_HOST_GETTEXT to
-depend on. That's not necessary to depend on a host package, whether
-from a target package or another host package.
+  - patches 1-5 introduce the possibility to choose an old X11 version
+    for the server,
+
+  - patches 6-8 add new packages for the NVidia Tegra blobs.
+
+Thanks go to Nicolas, Laurent and Gustavo for their input and testing!
+
+
+Changes v7 -> v8:
+  - introduce use of an old X11 server to provide the ABI expected by
+    the NVidia blobs
+  - drop the x86 drivers, applied
+
+Changes v6 -> v7:
+  - drop all Khronos Registries packages in favour of mesa3d-headers
+  - adapt the NVidia driver packages to use mesa3d-headers
+
+Changes v5 -> v6:
+  - make python-lxml a target package too  (Yegor)
+  - rename the packages and move one directory up  (J?r?me)
+  - use mesa3d to provide additional headers, don't bundle them
+  - install extra GLES platform headers  (Nicolas)
+  - x86 nvidia driver installs a gl.pc file  (J?r?me)
+  - drop JPEG HW acceleration for Tegra2/3, since we do not have
+    the headers  (Nicolas)
+
+Changes v4 -> v5:
+  - fix env vars when building opengl-registry
+
+Changes v3 -> v4:
+  - integrate the Tegra2/3 driver from Nicolas
+  - lots of cleanups in the packages for Tegra2/3
+  - further fixes after Thomas comments
+  - introduce more of the Khronos registry (OpenMAX, OpenKode...)
+
+Changes v2 -> v3:
+  - some rewrite after Thomas comments
+
+Changes v1 -> v2:
+  - bump opengl-registry
+  - drop i915, applied  (Peter)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit d4f7cfe1855cefa35322891e887636c3b82a6aea:
+
+  uclibc: double quote values of string options (2015-03-14 13:49:20 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/gfx2
+
+for you to fetch changes up to 36fab880ae7a6eb8dfd32c217307eac9db0d878e:
+
+  package/nvidia-tegra23-codecs: new package (2015-03-14 20:01:13 +0100)
+
+----------------------------------------------------------------
+Nicolas Serafini (3):
+      package/nvidia-tegra23-binaries: new package
+      package.nvidia-tegra23-binaries: add gstreamer plugins
+      package/nvidia-tegra23-codecs: new package
+
+Yann E. MORIN (5):
+      package/xserver_xorg-server: prepare for multiple supported versions
+      package/xserver_xorg-server: make the version a choice
+      package/xserver_xorg-server: add blind options to specify driver ABI
+      package/xserver_xorg-server: not all versions need all dependencies
+      package/xserver_xorg-server: add version 1.14.7
+
+ package/Config.in                                  |   1 +
+ package/nvidia-tegra23/Config.in                   |  38 ++++++
+ .../nvidia-tegra23-binaries/Config.in              |  42 +++++++
+ .../nvidia-tegra23/nvidia-tegra23-binaries/egl.pc  |  10 ++
+ .../nvidia-tegra23/nvidia-tegra23-binaries/gles.pc |  10 ++
+ .../nvidia-tegra23-binaries/glesv2.pc              |  10 ++
+ .../nvidia-tegra23-binaries.hash                   |   3 +
+ .../nvidia-tegra23-binaries.mk                     | 128 +++++++++++++++++++++
+ .../nvidia-tegra23/nvidia-tegra23-codecs/Config.in |   7 ++
+ .../nvidia-tegra23-codecs.hash                     |   3 +
+ .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk |  41 +++++++
+ package/nvidia-tegra23/nvidia-tegra23.mk           |  18 +++
+ ...1-backtrace.c-Fix-word-cast-to-a-pointer.patch} |   0
+ package/x11r7/xserver_xorg-server/Config.in        |  31 ++++-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   9 +-
+ 15 files changed, 348 insertions(+), 3 deletions(-)
+ create mode 100644 package/nvidia-tegra23/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+ create mode 100644 package/nvidia-tegra23/nvidia-tegra23.mk
+ rename package/x11r7/xserver_xorg-server/{0004-backtrace.c-Fix-word-cast-to-a-pointer.patch => 1.17.1/0001-backtrace.c-Fix-word-cast-to-a-pointer.patch} (100%)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
