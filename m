@@ -1,78 +1,64 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sat, 14 Mar 2015 17:15:03 +0100
-Subject: [Buildroot] [RFC v3 00/30] Add per-package staging feature
-In-Reply-To: <54F8DD53.3060000@mind.be>
-References: <1425374255-6827-1-git-send-email-fabio.porcedda@gmail.com>
- <20150303142901.5998a72c@free-electrons.com> <54F8DD53.3060000@mind.be>
-Message-ID: <CAHkwnC9wQZj6YxexYEt2fuZaeK_GD-S_BTg45wTcr9ZiLyKeKg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Mar 2015 17:26:57 +0100
+Subject: [Buildroot] [V2 2/2] graph-depends: add an option
+ --stop-on-virtual
+In-Reply-To: <20150309211508.39c2a0ac@free-electrons.com>
+References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
+ <1420295353-8065-2-git-send-email-francois.perrad@gadz.org>
+ <20150308221843.2d6fbf7d@free-electrons.com>
+ <CAB0FRsvxotGUKRC2q7R_JKPCajZb68X3r2qnjciehP-cqXENBg@mail.gmail.com>
+ <20150309211508.39c2a0ac@free-electrons.com>
+Message-ID: <20150314162657.GA4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 5, 2015 at 11:48 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 03/03/15 14:29, Thomas Petazzoni wrote:
->> Dear Fabio Porcedda,
->>
->> On Tue,  3 Mar 2015 10:17:05 +0100, Fabio Porcedda wrote:
->>
->>> > this patch set aims to improve build reproducibility by using a
->>> > per-package staging directory.
->>> > Also this feature aims to enable as default the top-level parallel make.
->> Interesting! I must say I'm a bit worried about the implications of
->> having to pass custom -I and -L flags all the time: we did arrange the
->> compiler do not require those (by configuration for the internal
->> toolchain case, and using the wrapper for the external toolchain case).
->
->  I also like this feature very much!
->
->  However, I don't like at all the approach of passing the custom -I and -L
-> flags. I think it's much better to start with something that was suggested
-> before in the BR developer meeting: use the toolchain wrapper also for the
-> internal toolchain. Then we can pass the per-package staging dir through the
-> environment, and use it in the --sysroot argument of the compiler.
->
->  We'll also have to do something about ccache then - that could be a problem.
-> Perhaps ccache should be called from within the wrapper as well, that may solve
-> a bunch of other ccache problems.
+Thomas, Fran?ois, All,
 
-Using an internal wrapper we can also pass pass the -I and -L
-automatically like the --sysroot option?
+On 2015-03-09 21:15 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 9 Mar 2015 20:32:16 +0100, Fran?ois Perrad wrote:
+> > The current option --depth seems to be only a workaround against an
+> > infinite recursion when the graph has a cycle.
+> 
+> Well, I don't really think --depth is meant to avoid infinite
+> recursion: I don't think it's possible to have infinite recursion since
+> we can't have cyclic dependencies in Buildroot.
 
-If we use a per-package sysroot we need to copy the sysroot directory
-too, because the size of a uclibc sysroot is at least 11MB (if i
-remember correctly the size of a glibc sysroot is something like
-40MB), so if we copy without using hard links, it will take at least
-10MB up to 40MB for every package.
+No, -depth was never meant to be a stop-gap for recursion: we can *not*
+have recursive depedencies.
 
-The size of the output directory of a defconfig + allyespackageconfig is 11GB.
-IMHO we have the following choices:
-a) common sysroot & per-package staging & without hard links
-  - the -I -L options are passed trough the toolchain wrapper
-  - output size is 16GB (11GB+5GB)
-  - no side effects to fear, because hard links are not used
-b) per-package sysroot & without hard links
-  - sysroot are passed trough the toolchain wrapper
-  - output size will be 16GB plus 11MB * 694 = 16GB + 7GB = 23 GB
-  - no side effects to fear, because hard links are not used
-c) per-package sysroot & with hard links for toolchain
- - sysroot are passed trough the toolchain wrapper
-  - output size will be 16GB
-  - side effects to fear for the toolchain files because hard links
-are used for them
-d) per-package sysroot & with hard links for all files
- - sysroot are passed trough the toolchain wrapper
-  - output size will be 11GB, so no increased size
-  - side effects to fear because hard links are used
+What I introduced --depth for, is because often only the first few level
+of dependencies of a given package are of interest. --depth is
+essentially meant for use when graphing the dependencies of a single
+package, like so:
 
-The cheaper one with almost no size and speed penalization is d) but
-if some file is overwritten other package sysroot could be affected.
-Maybe we can prevent the overwriting by removing the write permission
-on staging files?
+    BR2_GRAPH_DEPS_OPTS='--depth 2' make foo-graph-depends
 
-Which solution is most suited for  buildroot?
+that would limit graphinh the dependencies of 'foo' down to two levels.
 
-Thanks and my BR
+> > But at this time, we haven't found the good way (or the good use
+> > cases) to limit the size of the graph.
+> 
+> I believe being able to exclude certain packages (and their dependency
+> tree) would be useful.
+
+What about something like:
+
+    BR2_GRAPH_DEPS_OPTS='--stop-on PKGS' make graph-depends
+
+where 'PKGS' would be a comma-separated list of packages, possibly a
+glob or regexp, or even the keyword 'virtual' to stop on virtual
+packages?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Fabio Porcedda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
