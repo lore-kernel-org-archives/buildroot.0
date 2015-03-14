@@ -1,80 +1,103 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Mar 2015 23:01:37 +0100
-Subject: [Buildroot] [PATCH 1/2] package/zmqpp: switch to the official
- git
-In-Reply-To: <20150314214537.GE4009@free.fr>
-References: <1426352489-19916-1-git-send-email-romain.naour@openwide.fr>
- <20150314214537.GE4009@free.fr>
-Message-ID: <5504AFC1.4050409@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Mar 2015 23:18:50 +0100
+Subject: [Buildroot] [PATCH 01/15] toolchain/helpers: add mandatory
+ check for uclibc toolchain options
+In-Reply-To: <1426270934-15499-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
+ <1426270934-15499-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314221850.GF4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+Gustavo, All,
 
-Le 14/03/2015 22:45, Yann E. MORIN a ?crit :
-> Romain, All,
-> 
-> On 2015-03-14 18:01 +0100, Romain Naour spake thusly:
->> The git hash 36413487f05b165dfc82ad307a5a1c36a795e607 no
->> longer refers to any commit id, even in the previous git tree.
->>
->> By reading the Makefile and CHANGELOG.md the last know
->> release is 3.2.0.
->>
->> Switch to the official git tree and use the 3.2.0 release tag.
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Some comment, however...
-> 
->> ---
->>  package/zmqpp/zmqpp.mk | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
->> index fbb0260..7efd04b 100644
->> --- a/package/zmqpp/zmqpp.mk
->> +++ b/package/zmqpp/zmqpp.mk
->> @@ -4,8 +4,8 @@
->>  #
->>  ################################################################################
->>  
->> -ZMQPP_VERSION = 36413487f05b165dfc82ad307a5a1c36a795e607
->> -ZMQPP_SITE = $(call github,benjamg,zmqpp,$(ZMQPP_VERSION))
->> +ZMQPP_VERSION = 3.2.0
-> 
-> 3.2.0 is 1.5-year old, and there has been quite some changes in the
-> repository since then. Would it make sense to use a more recent commit?
+On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
+> Take 'm' as parameter in $2 (buildroot option name) in
+> check_uclibc_feature to indicate that a toolchain option is mandatory,
+> and bail out with an appropiate message if that's the case.
 
-There is a patch from Maxime to bump to 4.1.1 but this tag appear only on the
-unofficial git repository.
-http://patchwork.ozlabs.org/patch/403314/
+I had a hard time figuring out what you were doing here...
 
-For now, master branch is at 3.2.0 and the develop branch is at 4.1.1
+What about:
 
-Thanks for the review.
+    toolchain/helpers: add check for mandatory uClibc options
 
-Best regards,
-Romain
+    We currently only check that the Buildroot configuration matches
+    what is available in the toolchain.
 
+    Since we're going to remove the check for LFS and make it a
+    mandatory feature, we will lose the corresponding Buildroot
+    option, so we won't be able to use check_uclibc_feature as-is.
+
+    Introduce a special, magic value passed as the Buildroot option
+    name to recognise checks for mandatory uClibc options that do not
+    have a corresponding option in Buldroot.
+
+    If the Buildroot option name is 'm', then the check is against
+    a mandatory uClibc option.
+
+    If a mandatory uClibc option is missing, we reject the toolchain
+    as being unusable by Buildroot.
+
+However, I don't think 'm' is the most appropriate. That's what somehow
+confused me: wtf are we concerned about tristates? What about making
+the check against an empty Buildroot option name, instead? No Buildroot
+option name means there's no correlation to be made, and hence is a
+mandatory uClibc option...
+
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  toolchain/helpers.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Regards,
-> Yann E. MORIN.
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 3121da4..ef657ee 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -238,6 +238,7 @@ check_musl = \
+>  # Check the conformity of Buildroot configuration with regard to the
+>  # uClibc configuration of the external toolchain, for a particular
+>  # feature.
+> +# If 'Buildroot option name' ($2) = 'm' it means a mandatory option.
+>  #
+>  # $1: uClibc macro name
+>  # $2: Buildroot option name
+> @@ -246,6 +247,10 @@ check_musl = \
+>  #
+>  check_uclibc_feature = \
+>  	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
+> +	if [ "$(2)" = "m" -a "$${IS_IN_LIBC}" != "y" ] ; then \
+
+With my proposal, that'd read:
+
+    if [ -z "$(2)" -a "$${IS_IN_LIBC}" != "y" ] ; then \
+
+Otherwise, code looks good. :-)
+
+Regards,
+Yann E. MORIN.
+
+> +		echo "$(4) not available in C library, toolchain unsuitable for Buildroot" ; \
+> +		exit 1 ; \
+> +	fi ; \
+>  	if [ "$($(2))" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
+>  		echo "$(4) available in C library, please enable $(2)" ; \
+>  		exit 1 ; \
+> -- 
+> 2.0.5
 > 
->> +ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
->>  ZMQPP_INSTALL_STAGING = YES
->>  ZMQPP_DEPENDENCIES = zeromq
->>  ZMQPP_LICENSE = LGPLv3+ with exceptions
->> -- 
->> 1.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
