@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 23:22:25 +0100
-Subject: [Buildroot] [PATCH 02/15] toolchain/helpers: make LFS mandatory
- for uclibc
-In-Reply-To: <1426270934-15499-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Mar 2015 23:34:23 +0100
+Subject: [Buildroot] [PATCH 03/15] toolchain-common: default to Y for
+ LARGEFILE
+In-Reply-To: <1426270934-15499-4-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
- <1426270934-15499-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150314222225.GG4009@free.fr>
+ <1426270934-15499-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314223423.GH4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +15,41 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
-> As discussed on the mailing list drop the non-largefile option for
-> toolchains.
-> The size delta is minimal and it just complicates package dependencies.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> This will allow us to remove largefile handling in the tree without
+> breaking things while doing so.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This means that, with this patch applied, it is still possible to build
+an internal uClibc toolchain without LFS, and packages would believe LFS
+is available...
 
-(you can keep my rev-tag is you decide to go with my proposal in patch
-1, to make the empty option name mean mandatory.)
+Please add a patch just before this one, that turns
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE into a promptless option that defaults
+to 'y'.
+
+Afterward, you can add my:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  toolchain/helpers.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  toolchain/toolchain-common.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index ef657ee..c11e1d7 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -278,7 +278,7 @@ check_uclibc = \
->  	fi; \
->  	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
->  	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
-> -	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
-> +	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,m,$${UCLIBC_CONFIG_FILE},Large file support) ;\
->  	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
->  	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
->  	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index 304afe4..7eb22ce 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
+>  
+>  config BR2_LARGEFILE
+>  	bool
+> +	default y
+>  
+>  config BR2_INET_IPV6
+>  	bool
 > -- 
 > 2.0.5
 > 
