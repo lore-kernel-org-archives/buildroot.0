@@ -1,117 +1,255 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 20:09:47 +0100
-Subject: [Buildroot] [PATCH 7/8 v8] package.nvidia-tegra23-binaries: add
-	gstreamer plugins
-In-Reply-To: <cover.1426360000.git.yann.morin.1998@free.fr>
-References: <cover.1426360000.git.yann.morin.1998@free.fr>
-Message-ID: <83c43ef304facedf4982364dccc151d36e4f35ef.1426360000.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 14 Mar 2015 22:32:05 +0100
+Subject: [Buildroot] [PATCH] package/czmq: fix discovery of libzmq for
+	static build
+Message-ID: <1426368725-27750-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Backport and rebase a patch from upstream:
+https://github.com/zeromq/czmq/commit/313714f8b73c23d68b1216bc2df3d0ccc6ab1ffd
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-[yann.morin.1998 at free.fr: split out into their own patch]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Also, remove the fix in czmq.mk for static build.
+
+Fixes:
+http://autobuild.buildroot.net/results/ec4/ec414b52f9cdd8d7d365283e21479519e63c7d97/
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- .../nvidia-tegra23-binaries/Config.in              | 15 +++++++++++
- .../nvidia-tegra23-binaries.mk                     | 30 ++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+ ...igure.ac-to-prevent-contradictory-discove.patch | 206 +++++++++++++++++++++
+ package/czmq/czmq.mk                               |   4 -
+ 2 files changed, 206 insertions(+), 4 deletions(-)
+ create mode 100644 package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch
 
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-index 8c384b8..00c35b7 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-@@ -24,4 +24,19 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- config BR2_PACKAGE_PROVIDES_LIBOPENMAX
- 	default "nvidia-tegra23-binaries"
- 
-+config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
-+	bool "GStreamer 0.10.x plugins"
-+	depends on BR2_PACKAGE_GSTREAMER # Run-time only
-+	help
-+	  GStreamer 0.10.x plugins
+diff --git a/package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch b/package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch
+new file mode 100644
+index 0000000..556a8df
+--- /dev/null
++++ b/package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch
+@@ -0,0 +1,206 @@
++From 23591404610b1eeffb69712d93c77c2327b9ef7a Mon Sep 17 00:00:00 2001
++From: Phillip Mienk <mienkphi@gmail.com>
++Date: Fri, 31 Oct 2014 00:55:35 -0700
++Subject: [PATCH] Simply configure.ac to prevent contradictory discovery of
++ libzmq.
 +
-+config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS
-+	bool "NVIDIA multimedia sample apps"
-+	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS
-+	help
-+	  nvgstplayer and nvgstcapture multimedia test applications.
++[Romain: rebase on top of 3.0.0]
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.am                   |  3 ++-
++ addons/Makefile.am.supplement |  3 ++-
++ configure.ac                  | 46 ++-----------------------------------------
++ model/build-autoconf.gsl      | 28 ++++++++++++++++++++++++++
++ model/project.xml             |  3 +++
++ src/Makefile.am.supplement    | 12 ++++++++++-
++ 6 files changed, 48 insertions(+), 47 deletions(-)
 +
-+comment "GStreamer 0.10.x plugins need GStreamer 0.10"
-+	depends on !BR2_PACKAGE_GSTREAMER
++diff --git a/Makefile.am b/Makefile.am
++index 10f21fb..187c62b 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,7 +1,8 @@
++ ACLOCAL_AMFLAGS = -I config
++ 
++ AM_CPPFLAGS = \
++-    -I$(srcdir)/include
+++	${zmq_CFLAGS} \
+++	-I$(srcdir)/include
++ 
++ EXTRA_DIST = \
++ 	version.sh \
++diff --git a/addons/Makefile.am.supplement b/addons/Makefile.am.supplement
++index 8800db4..74f0c60 100644
++--- a/addons/Makefile.am.supplement
+++++ b/addons/Makefile.am.supplement
++@@ -4,7 +4,8 @@ EXTRA_DIST += \
++ bin_PROGRAMS += makecert
++ 
++ makecert_LDADD = \
++-    libczmq.la
+++    libczmq.la \
+++    ${zmq_LIBS}
++ 
++ makecert_SOURCES = \
++     addons/makecert.c
++diff --git a/configure.ac b/configure.ac
++index 1a4667e..1ccae06 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -74,50 +74,8 @@ if test "x${CZMQ_GCOV}" == "xyes"; then
++     fi
++ fi
++ 
++-# Check for libzmq library
++-libzmq_prefix=detect
++-AC_ARG_WITH([libzmq], 
++-    [AS_HELP_STRING([--with-libzmq=PREFIX], 
++-        [build with ZeroMQ library installed in PREFIX [default=autodetect]])],
++-    [case "x$withval" in
++-        xno)
++-            AC_MSG_ERROR([CZMQ requires the ZeroMQ library])
++-            ;;
++-        xyes|x)
++-            ;;
++-        *)
++-            CPPFLAGS="$CPPFLAGS -I${withval}/include"
++-            LDFLAGS="$LDFLAGS -L${withval}/lib"
++-            zeromq_prefix=${withval}
++-            ;;
++-    esac ]
++-)
++-if test "x$libzmq_prefix" = "xdetect"; then
++-    PKG_CHECK_MODULES(
++-        [ZeroMQ], [libzmq], [libzmq_prefix=pkgconfig], [libzmq_prefix=])
++-        if test "x$libzmq_prefix" = "xpkgconfig"; then
++-            CPPFLAGS="$CPPFLAGS ${ZeroMQ_CFLAGS}"
++-            LDFLAGS="$LDFLAGS ${ZeroMQ_LIBS}"
++-        fi
++-fi
++-
++-if test "x$czmq_search_libzmq" = "xyes"; then
++-    if test -r "${with_libzmq}/include/zmq.h"; then
++-        CFLAGS="-I${with_libzmq}/include ${CFLAGS}"
++-        LDFLAGS="-L${with_libzmq}/lib ${LDFLAGS}"
++-    fi
++-fi
++-
++-AC_CHECK_HEADER([zmq.h], [], [AC_MSG_ERROR([cannot find zmq.h])])
++-
++-AC_CHECK_LIB(zmq, zmq_init, ,[AC_MSG_ERROR([cannot link with -lzmq, install libzmq.])])
++-
++-AC_MSG_CHECKING([whether libzmq installation works])
++-AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <zmq.h>],
++-                                [zmq_init(1);])
++-               ],
++-               [AC_MSG_RESULT([yes])],
++-               [AC_MSG_ERROR([no. Please specify libzmq installation prefix using --with-libzmq])])
+++# Check for libzmq
+++PKG_CHECK_MODULES([zmq], [libzmq])
++ 
++ # Platform specific checks
++ czmq_on_mingw32="no"
++diff --git a/model/build-autoconf.gsl b/model/build-autoconf.gsl
++index d012a3c..30aff14 100644
++--- a/model/build-autoconf.gsl
+++++ b/model/build-autoconf.gsl
++@@ -46,12 +46,39 @@ lib$(project.name)_la_SOURCES = \\
++ 
++ bin_PROGRAMS = $(project.name)_selftest
++ 
+++$(project.name)_selftest_CPPFLAGS = \\
+++.for package_dependency where defined (package_dependency.for_test)
+++    \${$(package_dependency.name)_CFLAGS} \\
+++.endfor
+++    \${lib$(project.name)_la_CFLAGS}
+++
++ $(project.name)_selftest_LDADD = \\
+++.if count (package_dependency, defined (count.for_lib) | defined (count.for_test) | defined (count.for_all)) > 0
+++    lib$(project.name).la \\
+++.else
++     lib$(project.name).la
+++.endif
+++.for package_dependency where defined (package_dependency.for_lib) | defined (package_dependency.for_test) | defined (package_dependency.for_all)
+++.   if last()
+++    \${$(package_dependency.name)_LIBS}
+++.   else
+++    \${$(package_dependency.name)_LIBS} \\
+++.endif
+++.endfor
++ 
++ $(project.name)_selftest_SOURCES = \\
++     src/$(project.name)_selftest.c
++ 
+++lib$(project.name)_la_CPPFLAGS = \\
+++.for package_dependency where defined (package_dependency.for_lib)
+++.   if last()
+++    \${$(package_dependency.name)_CFLAGS}
+++.   else
+++    \${$(package_dependency.name)_CFLAGS} \\
+++.   endif
+++.endfor
+++    ${AM_CPPFLAGS}
+++
++ lib$(project.name)_la_LDFLAGS = \\
++     -version-info @LTVER@
++ 
++@@ -62,6 +89,7 @@ lib$(project.name)_la_LDFLAGS += \\
++ endif
++ 
++ TESTS = $(project.name)_selftest
+++
++ .for model
++ .   if first ()
++ 
++diff --git a/model/project.xml b/model/project.xml
++index 91306cf..b7bab4a 100644
++--- a/model/project.xml
+++++ b/model/project.xml
++@@ -2,6 +2,9 @@
++     name = "czmq"
++     script = "project.gsl"
++     >
+++
+++    <package_dependency name="zmq" pkg_name="libzmq" for_all="1" />
+++
++     <header name = "czmq" />
++     <header name = "czmq_prelude" />
++ 
++diff --git a/src/Makefile.am.supplement b/src/Makefile.am.supplement
++index 91e5b62..929aa07 100644
++--- a/src/Makefile.am.supplement
+++++ b/src/Makefile.am.supplement
++@@ -95,12 +95,19 @@ libczmq_la_SOURCES = \
++ 
++ bin_PROGRAMS = czmq_selftest
++ 
+++czmq_selftest_CPPFLAGS = \
+++    ${src_libczmq_la_CFLAGS}
+++
++ czmq_selftest_LDADD = \
++-    libczmq.la
+++    libczmq.la \
+++    ${zmq_LIBS}
++ 
++ czmq_selftest_SOURCES = \
++     src/czmq_selftest.c
++ 
+++libczmq_la_CPPFLAGS = \
+++    ${AM_CPPFLAGS}
+++
++ libczmq_la_LDFLAGS = \
++     -version-info @LTVER@
++ 
++@@ -112,6 +119,9 @@ endif
++ 
++ TESTS = czmq_selftest
++ 
+++# define custom target for all products of /src
+++src: src/libczmq.la src/czmq_selftest
+++
++ # Produce generated models; do this manually in src directory
++ code:
++ 	gsl -q src/sockopts.xml
++-- 
++1.9.3
 +
- endif
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-index 6e41764..fb27700 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-@@ -10,6 +10,10 @@ NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARI
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index b585c94..d25bf01 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -18,10 +18,6 @@ CZMQ_LICENSE_FILES = LICENSE
+ # host-python, so disable asciidoc entirely.
+ CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
  
- NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
- NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+NVIDIA_TEGRA23_BINARIES_LICENSE += LGPLv2.1
-+NVIDIA_TEGRA23_BINARIES_LICENSE_FILES += nv_tegra/nv_sample_apps/LICENSE.gst-openmax
-+endif
- 
- NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
- NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET = YES
-@@ -49,6 +53,11 @@ NVIDIA_TEGRA23_BINARIES_LIBRARIES = \
- NVIDIA_TEGRA23_BINARIES_DRV = \
- 	nv_tegra/nvidia_drivers/usr/lib/xorg/modules/drivers/tegra_drv.abi$(BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI).so
- 
-+NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS = \
-+	libgstnv4l2.so libgstnvvidconv.so libgstnvxvimagesink.so libgstomx.so
-+
-+NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS = nvgstplayer nvgstcapture
-+
- NVIDIA_TEGRA23_BINARIES_PKGCONFIG = egl.pc gles.pc glesv2.pc
- 
- define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
-@@ -75,12 +84,31 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
- 	)
+-ifeq ($(BR2_STATIC_LIBS),y)
+-CZMQ_CONF_OPTS += LIBS="-lstdc++ -lm"
+-endif
+-
+ define CZMQ_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
  endef
- 
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),y)
-+define NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS
-+	$(foreach gst_plug,$(NVIDIA_TEGRA23_BINARIES_GSTREAMER_PLUGINS),
-+		$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/lib/gstreamer-0.10/$(gst_plug) \
-+			$(1)/usr/lib/gstreamer-0.10/$(gst_plug); \
-+	)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES_NV_SAMPLE_APPS),y)
-+define NVIDIA_TEGRA23_BINARIES_INSTALL_APPS
-+	$(foreach apps,$(NVIDIA_TEGRA23_BINARIES_MULTIMEDIA_APPS),
-+		$(INSTALL) -D -m 0755 $(@D)/nv_tegra/nv_sample_apps/nvgstapps/usr/bin/$(apps) \
-+			$(TARGET_DIR)/usr/bin/$(apps); \
-+	)
-+endef
-+endif
-+
- define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
- 	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
- 	$(foreach pkgconfig,$(NVIDIA_TEGRA23_BINARIES_PKGCONFIG),
- 		$(INSTALL) -D -m 0644 package/nvidia-tegra23/nvidia-tegra23-binaries/$(pkgconfig) \
- 			$(STAGING_DIR)/usr/lib/pkgconfig/$(pkgconfig); \
- 	)
-+	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(STAGING_DIR))
- endef
- 
- define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
-@@ -93,6 +121,8 @@ define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/etc/nv_tegra_release
- 	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
- 		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
-+	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_GST_PLUGINS,$(TARGET_DIR))
-+	$(NVIDIA_TEGRA23_BINARIES_INSTALL_APPS)
- endef
- 
- $(eval $(generic-package))
 -- 
-1.9.1
+1.9.3
