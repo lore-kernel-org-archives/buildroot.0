@@ -1,65 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sat, 14 Mar 2015 15:25:17 +0100
-Subject: [Buildroot] [PATCH 0/5 v2] linux: fix using extensions (branch
-	yem/kernel-ext)
-Message-ID: <cover.1426342904.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/5 v2] package infra: add patch-dependencies
+In-Reply-To: <cover.1426342904.git.yann.morin.1998@free.fr>
+References: <cover.1426342904.git.yann.morin.1998@free.fr>
+Message-ID: <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Some packages need to vampirise files from one or more other packages.
+This is the case, for example, of the Linux kernel and its /extensions/.
 
-This small series is an attempt at fixing the use of extensions, which
-broke unnoticeably since we switched to using the kconfig-package
-infrastructure for the linux package.
+Add a new type of dependencies, that are guaranteed to be extracted and
+patched before a package is patched.
 
-  - patches 1-2: introduce patch-dependencies (code and manual)
-  - patch 3    : actually fix the extensions
-  - patches 4-5: simplify adding new extensions
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - introduce patch-dependencies  (Thomas P.)
-  - use that instead of custom-written rules on .stamp_patched
-  - split out the 'extensions infra' from the actual extensions fix
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 3fd2c4d25f727c5364e52abf65c37f19fe461433:
-
-  iotop: new package (2015-03-13 23:16:38 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/kernel-ext
-
-for you to fetch changes up to 724c084b0e9f1d98670184ab5e77a2381e04d67c:
-
-  linux: migrate extensions to use the new infrastructure (2015-03-14 15:19:31 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      package infra: add patch-dependencies
-      docs/manual: add _PATCH_DEPENDENCIES
-      linux: fix extensions
-      linux: simplify adding new extensions
-      linux: migrate extensions to use the new infrastructure
-
- docs/manual/adding-packages-generic.txt | 9 +++++++++
- linux/linux-ext-fbtft.mk                | 8 +-------
- linux/linux-ext-rtai.mk                 | 8 +-------
- linux/linux-ext-xenomai.mk              | 8 +-------
- linux/linux.mk                          | 7 +++++++
- package/pkg-generic.mk                  | 9 ++++++++-
- 6 files changed, 27 insertions(+), 22 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c1b379b..018f048 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -427,6 +427,7 @@ endif
+ 
+ # Eliminate duplicates in dependencies
+ $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
++$(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
+ 
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+@@ -538,6 +539,8 @@ $$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
+ 
+ $(1)-patch:		$$($(2)_TARGET_PATCH)
+ $$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
++# Order-only dependency
++$$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
+ 
+ $(1)-extract:			$$($(2)_TARGET_EXTRACT)
+ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+@@ -568,8 +571,12 @@ endif
+ $(1)-show-version:
+ 			@echo $$($(2)_VERSION)
+ 
+-$(1)-show-depends:
++$(1)-show-build-depends:
+ 			@echo $$($(2)_FINAL_DEPENDENCIES)
++$(1)-show-patch-depends:
++			@echo $$($(2)_FINAL_PATCH_DEPENDENCIES)
++$(1)-show-depends:
++			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
+ 
+ $(1)-graph-depends: graph-depends-requirements
+ 			@$$(INSTALL) -d $$(O)/graphs
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
