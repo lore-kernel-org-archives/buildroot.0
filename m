@@ -1,37 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Mar 2015 18:00:15 +0100
-Subject: [Buildroot] [V2 2/2] graph-depends: add an option
- --stop-on-virtual
-In-Reply-To: <20150314162657.GA4009@free.fr>
-References: <1420295353-8065-1-git-send-email-francois.perrad@gadz.org>
- <1420295353-8065-2-git-send-email-francois.perrad@gadz.org>
- <20150308221843.2d6fbf7d@free-electrons.com>
- <CAB0FRsvxotGUKRC2q7R_JKPCajZb68X3r2qnjciehP-cqXENBg@mail.gmail.com>
- <20150309211508.39c2a0ac@free-electrons.com>
- <20150314162657.GA4009@free.fr>
-Message-ID: <20150314180015.50705689@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 14 Mar 2015 18:01:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zmqpp: switch to the official git
+Message-ID: <1426352489-19916-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+The git hash 36413487f05b165dfc82ad307a5a1c36a795e607 no
+longer refers to any commit id, even in the previous git tree.
 
-On Sat, 14 Mar 2015 17:26:57 +0100, Yann E. MORIN wrote:
+By reading the Makefile and CHANGELOG.md the last know
+release is 3.2.0.
 
-> What about something like:
-> 
->     BR2_GRAPH_DEPS_OPTS='--stop-on PKGS' make graph-depends
-> 
-> where 'PKGS' would be a comma-separated list of packages, possibly a
-> glob or regexp, or even the keyword 'virtual' to stop on virtual
-> packages?
+Switch to the official git tree and use the 3.2.0 release tag.
 
-Sounds like a good idea to me.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/zmqpp/zmqpp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
+index fbb0260..7efd04b 100644
+--- a/package/zmqpp/zmqpp.mk
++++ b/package/zmqpp/zmqpp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ZMQPP_VERSION = 36413487f05b165dfc82ad307a5a1c36a795e607
+-ZMQPP_SITE = $(call github,benjamg,zmqpp,$(ZMQPP_VERSION))
++ZMQPP_VERSION = 3.2.0
++ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
+ ZMQPP_INSTALL_STAGING = YES
+ ZMQPP_DEPENDENCIES = zeromq
+ ZMQPP_LICENSE = LGPLv3+ with exceptions
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
