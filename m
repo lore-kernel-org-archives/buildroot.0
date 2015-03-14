@@ -1,40 +1,50 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 14 Mar 2015 18:01:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/zmqpp: switch to the official git
-Message-ID: <1426352489-19916-1-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 14 Mar 2015 18:01:29 +0100
+Subject: [Buildroot] [PATCH 2/2] package/zmqpp: Blacklist Blackfin ADI
+	toolchains
+In-Reply-To: <1426352489-19916-1-git-send-email-romain.naour@openwide.fr>
+References: <1426352489-19916-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1426352489-19916-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The git hash 36413487f05b165dfc82ad307a5a1c36a795e607 no
-longer refers to any commit id, even in the previous git tree.
+zmqpp recommand at least a c++ compiler g++ >= 4.7
+[1] for c++11 support and won't be backward compatible
+whith older compliler for the next release (4.x)
+due to harcoded -std=c++11 flag [2]
 
-By reading the Makefile and CHANGELOG.md the last know
-release is 3.2.0.
+Blackfin ADI toolchains use a g++ 4.3 which use an
+experimental c++11 support (c++0x) has not enough c++11
+support to build zmqpp.
 
-Switch to the official git tree and use the 3.2.0 release tag.
+Fixes:
+http://autobuild.buildroot.net/results/4c3/4c34ce881e3eab47994cc893898cbc9129ce67b5/
+
+And many more.
+
+[1] https://github.com/zeromq/zmqpp
+[2] https://github.com/zeromq/zmqpp/commit/f078fe9a5a775aff5c74dedbdc869f8158ddf123
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/zmqpp/zmqpp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/zmqpp/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index fbb0260..7efd04b 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--ZMQPP_VERSION = 36413487f05b165dfc82ad307a5a1c36a795e607
--ZMQPP_SITE = $(call github,benjamg,zmqpp,$(ZMQPP_VERSION))
-+ZMQPP_VERSION = 3.2.0
-+ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
- ZMQPP_INSTALL_STAGING = YES
- ZMQPP_DEPENDENCIES = zeromq
- ZMQPP_LICENSE = LGPLv3+ with exceptions
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 88973db..881877a 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_ZMQPP
+ 	bool "zmqpp"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Too old gcc
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # c++0x support
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # c++0x support
+ 	depends on BR2_INSTALL_LIBSTDCPP
 -- 
 1.9.3
