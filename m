@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2015 23:34:23 +0100
-Subject: [Buildroot] [PATCH 03/15] toolchain-common: default to Y for
- LARGEFILE
-In-Reply-To: <1426270934-15499-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Mar 2015 23:36:21 +0100
+Subject: [Buildroot] [PATCH 04/15] toolchain: remove LARGEFILE selects
+In-Reply-To: <1426270934-15499-5-git-send-email-gustavo@zacarias.com.ar>
 References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
- <1426270934-15499-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150314223423.GH4009@free.fr>
+ <1426270934-15499-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150314223621.GI4009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +14,101 @@ To: buildroot@busybox.net
 Gustavo, All,
 
 On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
-> This will allow us to remove largefile handling in the tree without
-> breaking things while doing so.
+> There's no need for toolchains or the user to declare largefile support
+> since it's now mandatory.
 
-This means that, with this patch applied, it is still possible to build
-an internal uClibc toolchain without LFS, and packages would believe LFS
-is available...
-
-Please add a patch just before this one, that turns
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE into a promptless option that defaults
-to 'y'.
-
-Afterward, you can add my:
-
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+With the new patch I suggested you had before patch 3, do not forget to
+also remove the select from BR2_TOOLCHAIN_BUILDROOT_LARGEFILE in this
+patch.
 
 Regards,
 Yann E. MORIN.
 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  toolchain/toolchain-common.in | 1 +
->  1 file changed, 1 insertion(+)
+>  toolchain/Config.in                    |  2 --
+>  toolchain/toolchain-external/Config.in | 13 -------------
+>  2 files changed, 15 deletions(-)
 > 
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 304afe4..7eb22ce 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -7,6 +7,7 @@ source "package/gdb/Config.in.host"
->  
->  config BR2_LARGEFILE
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index b039ee2..291db94 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -9,7 +9,6 @@ config BR2_TOOLCHAIN
+>  # Should be selected for glibc or eglibc
+>  config BR2_TOOLCHAIN_USES_GLIBC
 >  	bool
-> +	default y
+> -	select BR2_LARGEFILE
+>  	select BR2_INET_IPV6
+>  	select BR2_USE_WCHAR
+>  	select BR2_ENABLE_LOCALE
+> @@ -24,7 +23,6 @@ config BR2_TOOLCHAIN_USES_UCLIBC
 >  
->  config BR2_INET_IPV6
+>  config BR2_TOOLCHAIN_USES_MUSL
 >  	bool
+> -	select BR2_LARGEFILE
+>  	select BR2_INET_IPV6
+>  	select BR2_USE_WCHAR
+>  	select BR2_ENABLE_LOCALE
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index d29bf43..0c3340a 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -635,7 +635,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+>  	depends on BR2_sh2a
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> -	select BR2_LARGEFILE
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_USE_WCHAR
+>  	select BR2_TOOLCHAIN_HAS_THREADS
+> @@ -655,7 +654,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+>  	depends on BR2_sh2a
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> -	select BR2_LARGEFILE
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_USE_WCHAR
+>  	select BR2_TOOLCHAIN_HAS_THREADS
+> @@ -782,7 +780,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+>  	select BR2_INSTALL_LIBSTDCPP
+> -	select BR2_LARGEFILE
+>  	select BR2_INET_IPV6
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_USE_WCHAR
+> @@ -800,7 +797,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+>  	select BR2_INSTALL_LIBSTDCPP
+> -	select BR2_LARGEFILE
+>  	select BR2_INET_IPV6
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_USE_WCHAR
+> @@ -818,7 +814,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+>  	select BR2_INSTALL_LIBSTDCPP
+> -	select BR2_LARGEFILE
+>  	select BR2_INET_IPV6
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	select BR2_USE_WCHAR
+> @@ -1132,14 +1127,6 @@ endchoice
+>  
+>  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+>  
+> -config BR2_TOOLCHAIN_EXTERNAL_LARGEFILE
+> -	bool "Toolchain has large file support?"
+> -	select BR2_LARGEFILE
+> -	help
+> -	  Select this option if your external toolchain supports
+> -	  largefile. If you don't know, leave the default value,
+> -	  Buildroot will tell you if it's correct or not.
+> -
+>  config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
+>  	bool "Toolchain has IPv6 support?"
+>  	select BR2_INET_IPV6
 > -- 
 > 2.0.5
 > 
