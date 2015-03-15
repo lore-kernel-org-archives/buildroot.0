@@ -1,48 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2015 23:54:56 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
-	compile error
-In-Reply-To: <20150315125324.39a11265@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 15 Mar 2015 12:53:24 +0100")
-References: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
- <20150315125324.39a11265@free-electrons.com>
-Message-ID: <874mplg9bz.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Mar 2015 00:41:35 +0100
+Subject: [Buildroot] FFTW optimized for ARM and NEON FPU
+In-Reply-To: <54EBF694.6090705@gmail.com>
+References: <54EBF694.6090705@gmail.com>
+Message-ID: <20150315234135.GF4104@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Guillaume, All,
 
- > Dear Bernd Kuhls,
- > On Sun, 15 Mar 2015 09:29:19 +0100, Bernd Kuhls wrote:
+Sorry for the delay in the response...
 
- >> BR2_arm=y
- >> BR2_arm1176jzf_s=y
- >> BR2_COMPILER_PARANOID_UNSAFE_PATH=y
- >> BR2_TOOLCHAIN_EXTERNAL=y
- >> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- >> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
- >> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"
- >> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-ctng-linux-uclibcgnueabi"
- >> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
- >> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
- >> BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
- >> BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
- >> BR2_TOOLCHAIN_EXTERNAL_CXX=y
- >> BR2_PACKAGE_SOFTETHER=y
+On 2015-02-23 20:57 -0700, guillaume william brs spake thusly:
+> I am working on a cortex-a9 (zynq SoC, mainly zc706)
+> I faced fairly slow computations of FFT using this library with the default
+> configuration (20MFlops).
+> 
+> I modified package/fftw.mk to optimize the library compilation as long as an
+> FPU is available,
+> NEON in this case: this increased the number of MFlops to 500-600.
 
- > I tried to build this defconfig, and the build went fine here. Tested
- > at commit d4f7cfe1855cefa35322891e887636c3b82a6aea, full config at
- > http://code.bulix.org/u9uhwi-88083?raw, log file at
- > http://code.bulix.org/5wyyws-88084?raw.
+There's recently been another attempt at making fftw more efficient:
+    http://patchwork.ozlabs.org/patch/450317/
 
- > Indeed, the LIBS += handling is fixed by your patch, but I'm wondering
- > why I'm not seeing the problem.
+So, I've decided to have a look if we had other patches for fftw. And it
+turned out there's yours! ;-)
 
-I'm not sure either. As I mentioned earlier, I am also not able to
-reproduce the issue.
+So, I've hada look and have some comments, see below...
+
+> -- 
+> guillaume william bres-saix
+> software engineer
+> NIST - Time & Frequency div.
+> 325 Broadway, Boulder, CO 80305.
+> 
+
+> --- fftw.mk	2015-02-23 19:20:04.849545269 -0700
+> +++ fftw_fpu.mk	2015-02-23 19:26:47.598136607 -0700
+> @@ -10,4 +10,17 @@
+>  FFTW_LICENSE = GPLv2+
+>  FFTW_LICENSE_FILES = COPYING
+>  
+> +ifeq ($(BR2_ARM_ENABLE_NEON),y)
+> +FFTW_CONF_OPTS+= --enable-threads 
+
+This should be conditional on BR2_TOOLCHAIN_HAS_THREADS; it has nothing
+to do with NEON.
+
+> +FFTW_CONF_OPTS+= --with-cpu=cortex-a9 
+> +FFTW_CONF_OPTS+= --with-mode=arm 
+> +FFTW_CONF_OPTS+= --enable-languages=c,c++ 
+
+fftw does not seem to have such options...
+
+> +FFTW_CONF_OPTS+= ARM_CPU_TYPE=cortex-a9 
+> +FFTW_CONF_OPTS+= ARM_FLOAT_ABI=softfp
+
+Those two variables are nowhere to be used in fftw either...
+
+> +FFTW_CONF_OPTS+= --disable-fortran 
+
+OK.
+
+> +FFTW_CONF_OPTS+= --enable-single
+
+This one is handled in the patch I pointed to earlier.
+
+> +FFTW_CONF_OPTS+= --enable-neon
+> +FFTW_CONF_OPTS+= CFLAGS="$(TARGET_CFLAGS)-Ofast -mfpu=neon -mfloat-abi=softfp"
+
+Hmm... -mfpu and -mfloat-abi should not be needed, since they are
+already taken care of:
+  - for internal toolchains, they are set as the defaults for gcc;
+  - for external toolchains, they are automatically added by our wrapper.
+
+Also, specifying them could be conflicting with the defaults.
+
+I'll see to get this in order and will resubmit...
+
+Regards,
+Yann E. MORIN.
+
+> +endif
+> +
+>  $(eval $(autotools-package))
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
