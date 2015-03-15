@@ -1,85 +1,172 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2015 22:48:38 +0100
-Subject: [Buildroot] [git commit] gcc: fix 4.9.2 build with C++ and !wchar
-Message-ID: <20150315215245.F33F4807CD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Mar 2015 23:04:59 +0100
+Subject: [Buildroot] [PATCH 1/1] Add dvd+rw-tools as package dvdrw-tools
+In-Reply-To: <1424553133-5501-1-git-send-email-skenton@ou.edu>
+References: <1424553133-5501-1-git-send-email-skenton@ou.edu>
+Message-ID: <20150315230459.657411d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c129606f4c7fb017a03fb265652b8ed7ed39003e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Steve Kenton,
 
-The libcilk library (used on x86/x86-64 when building with C++ support)
-unconditionally uses WCHAR_MIN / WCHAR_MAX, causing build issues with uClibc
-when configured without wchar support.
+On Sat, 21 Feb 2015 15:12:13 -0600, Steve Kenton wrote:
+> Signed-off-by: Steve Kenton <skenton@ou.edu>
+> ---
+>  package/dvdrw-tools/0001-limits.h.patch | 19 ++++++++++++
+>  package/dvdrw-tools/Config.in           | 53 +++++++++++++++++++++++++++++++++
+>  package/dvdrw-tools/dvdrw-tools.hash    |  3 ++
+>  package/dvdrw-tools/dvdrw-tools.mk      | 38 +++++++++++++++++++++++
+>  4 files changed, 113 insertions(+)
+>  create mode 100644 package/dvdrw-tools/0001-limits.h.patch
+>  create mode 100644 package/dvdrw-tools/Config.in
+>  create mode 100644 package/dvdrw-tools/dvdrw-tools.hash
+>  create mode 100644 package/dvdrw-tools/dvdrw-tools.mk
 
-Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/4.9.2/860-cilk-wchar.patch |   56 ++++++++++++++++++++++++++++++++
- 1 files changed, 56 insertions(+), 0 deletions(-)
+Thanks for this patch, and sorry for the slow response time. However, I
+have a number of comments, see below.
 
-diff --git a/package/gcc/4.9.2/860-cilk-wchar.patch b/package/gcc/4.9.2/860-cilk-wchar.patch
-new file mode 100644
-index 0000000..1837405
---- /dev/null
-+++ b/package/gcc/4.9.2/860-cilk-wchar.patch
-@@ -0,0 +1,56 @@
-+[PATCH] cilk: fix build without wchar
-+
-+When building against uClibc with wchar support disabled, WCHAR_MIN and
-+WCHAR_MAX are not defined leading to compilation errors.
-+
-+Fix it by only including the wchar code if available.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ libcilkrts/include/cilk/reducer_min_max.h |    8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+Index: host-gcc-final-4.9.2/libcilkrts/include/cilk/reducer_min_max.h
-+===================================================================
-+--- host-gcc-final-4.9.2.orig/libcilkrts/include/cilk/reducer_min_max.h
-++++ host-gcc-final-4.9.2/libcilkrts/include/cilk/reducer_min_max.h
-+@@ -3154,7 +3154,9 @@
-+ CILK_C_REDUCER_MAX_INSTANCE(char,               char,       CHAR_MIN)
-+ CILK_C_REDUCER_MAX_INSTANCE(unsigned char,      uchar,      0)
-+ CILK_C_REDUCER_MAX_INSTANCE(signed char,        schar,      SCHAR_MIN)
-++#ifdef WCHAR_MIN
-+ CILK_C_REDUCER_MAX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
-++#endif
-+ CILK_C_REDUCER_MAX_INSTANCE(short,              short,      SHRT_MIN)
-+ CILK_C_REDUCER_MAX_INSTANCE(unsigned short,     ushort,     0)
-+ CILK_C_REDUCER_MAX_INSTANCE(int,                int,        INT_MIN)
-+@@ -3306,7 +3308,9 @@
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(char,               char,       CHAR_MIN)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(unsigned char,      uchar,      0)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(signed char,        schar,      SCHAR_MIN)
-++#ifdef WCHAR_MIN
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
-++#endif
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(short,              short,      SHRT_MIN)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(unsigned short,     ushort,     0)
-+ CILK_C_REDUCER_MAX_INDEX_INSTANCE(int,                int,        INT_MIN)
-+@@ -3432,7 +3436,9 @@
-+ CILK_C_REDUCER_MIN_INSTANCE(char,               char,       CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(unsigned char,      uchar,      CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(signed char,        schar,      SCHAR_MAX)
-++#ifdef WCHAR_MAX
-+ CILK_C_REDUCER_MIN_INSTANCE(wchar_t,            wchar_t,    WCHAR_MAX)
-++#endif
-+ CILK_C_REDUCER_MIN_INSTANCE(short,              short,      SHRT_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(unsigned short,     ushort,     USHRT_MAX)
-+ CILK_C_REDUCER_MIN_INSTANCE(int,                int,        INT_MAX)
-+@@ -3584,7 +3590,9 @@
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(char,               char,       CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(unsigned char,      uchar,      CHAR_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(signed char,        schar,      SCHAR_MAX)
-++#ifdef WCHAR_MAX
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MAX)
-++#endif
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(short,              short,      SHRT_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(unsigned short,     ushort,     USHRT_MAX)
-+ CILK_C_REDUCER_MIN_INDEX_INSTANCE(int,                int,        INT_MAX)
+> diff --git a/package/dvdrw-tools/0001-limits.h.patch b/package/dvdrw-tools/0001-limits.h.patch
+> new file mode 100644
+> index 0000000..a5c7484
+> --- /dev/null
+> +++ b/package/dvdrw-tools/0001-limits.h.patch
+
+All patches need a description + a Signed-off-by line. See
+http://buildroot.uclibc.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+
+> diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
+> new file mode 100644
+> index 0000000..48254b3
+> --- /dev/null
+> +++ b/package/dvdrw-tools/Config.in
+> @@ -0,0 +1,53 @@
+> +config BR2_PACKAGE_DVDRW_TOOLS
+> +	bool "dvdrw-tools"
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_LARGEFILE
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_MMU # fork()
+> +	help
+> +	  The dvd+rw-tools are used to master Blu-ray Disc
+> +	  and DVD Disc media, both +RW/+R and -RW/-R. The
+> +	  +RW in the name is a historical artifact. This
+> +	  package contains the widely used growisofs program.
+> +
+> +	  Buildroot does not support packages with a '+' sign
+> +	  in their name, which explains why it is named
+> +	  dvdrw-tools and not dvd+rw-tools.
+> +
+> +	  Because dvd+rw-tools does not directly interact with
+> +	  disc media it uses a separate media backend program.
+> +	  The usual backend is mkisofs from the cdrtools package.
+> +	  However, cdrtools is not currently part of buildroot.
+> +
+> +	  The Linux From Scratch project uses uses xorriso for the
+> +	  media backend and Ubuntu uses cdrkit for the backend.
+> +	  Choose the one which seems most appropriate for your use.
+> +	  NOTE: xorriso does not currently support UDF.
+> +	  
+> +	  http://fy.chalmers.se/~appro/linux/DVD+RW/tools
+> +
+> +comment "dvdrw-tools needs a toolchain w/ wchar, largefile"
+> +	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE \
+> +		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_MMU
+
+This is not properly written. It should be:
+
+comment "dvdrw-tools needs a toolchain w/ wchar, largefile, threads"
+	depends on BR2_USE_MMU
+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || \
+		!BR2_TOOLCHAIN_HAS_THREADS
+
+The two issues with your proposal was:
+ 
+ - The thread dependency was not mentioned in the comment.
+
+ - The BR2_USE_MMU dependency must be handled specially: we don't want
+   to see the comment if BR2_USE_MMU is disabled.
+
+Also, since there is some C++ code, you probably need a dependency on
+BR2_INSTALL_LIBSTDCPP and the corresponding comment update.
+
+> +
+> +if BR2_PACKAGE_DVDRW_TOOLS && !BR2_PACKAGE_CDRTOOLS
+
+BR2_PACKAGE_CDRTOOLS does not exist in Buildroot, so why do we have a
+reference to this non exiting variable?
+
+> +config BR2_PACKAGE_DVDRW_CDRKIT
+
+All Config.in variables of a package must start with the Config.in
+option of the package itself. I.e, this should be:
+
+   BR2_PACKAGE_DVDRW_TOOLS_CDRKIT
+
+or maybe even better:
+
+   BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND
+
+> +define DVDRW_TOOLS_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+> +endef
+
+How can this even cross-compile? You're not specifying the
+cross-compiler path. Most likely, it at least needs to be:
+
+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+
+> +BACKEND =
+
+Not needed, variables are empty by default.
+
+And BACKEND is not a proper variable name: the namespace of variables
+in Buildroot is global. So all variables defined by a package must be
+prefixed by the package name, to avoid conflicts with variables defined
+by other packages.
+
+> +ifneq ($(BR2_PACKAGE_CDRTOOLS),y)
+
+Not needed, BR2_PACKAGE_CDRTOOLS does not exist in Buildroot.
+
+> +ifeq ($(BR2_PACKAGE_DVDRW_CDRKIT),y)
+> +	BACKEND = genisoimage
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DVDRW_XORRISO),y)
+> +	BACKEND = xorrisofs
+> +endif
+> +endif
+
+This should probably be:
+
+ifeq ($(BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND),y)
+DVDRW_TOOLS_BACKEND = genisoimage
+else ifeq ($(BR2_PACKAGE_DVDRW_TOOLS_XORRISO_BACKEND),y)
+DVDRW_TOOLS_BACKEND = xorrisofs
+endif
+
+> +
+> +define DVDRW_TOOLS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 -D $(@D)/dvd-ram-control $(TARGET_DIR)/usr/bin/dvd-ram-control
+> +	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-booktype $(TARGET_DIR)/usr/bin/dvd+rw-booktype
+> +	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-format $(TARGET_DIR)/usr/bin/dvd+rw-format
+> +	$(INSTALL) -m 0755 -D $(@D)/dvd+rw-mediainfo $(TARGET_DIR)/usr/bin/dvd+rw-mediainfo
+> +	$(INSTALL) -m 0755 -D $(@D)/growisofs $(TARGET_DIR)/usr/bin/growisofs
+> +	test -z "$(BACKEND)" || ln -s -f /usr/bin/$(BACKEND) $(TARGET_DIR)/usr/bin/mkisofs
+
+No need for the test -z test, since you're using a choice for the
+backend, there is no way the BACKEND variable can be empty.
+
+I've marked your patch as Changes Requested in our patch tracking
+system, so please resubmit an updated version of your patch!
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
