@@ -1,81 +1,26 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 15 Mar 2015 15:30:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: Glamor
-	depends on dri3
-Message-ID: <1426429839-6908-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Mar 2015 15:56:20 +0100
+Subject: [Buildroot] Buildroot BoF at the Embedded Linux Conference
+Message-ID: <20150315155620.045e7747@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
+Hello,
 
-../../../glamor/glamor_egl.c:603:25: error: unknown type name 'RRProviderPtr'
-                         RRProviderPtr provider,
-                         ^
-../../../glamor/glamor_egl.c:650:1: error: unknown type name 'dri3_screen_info_rec'
- static dri3_screen_info_rec glamor_dri3_info = {
- ^
+For those of you attending the Embedded Linux Conference in San Jose,
+California on March 23-25, I am organizing a Buildroot BoF (discussion
+session) on March 24 from 1 PM to 2 PM in room Guadalupe.
 
-using this defconfig
+If you're a Buildroot user and/or developer attending the conference,
+it'd be great to take this opportunity to meet each other.
 
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
+Best regards,
 
-RRProviderPtr is defined in dri3/dri3.h, so make sure glamor is enabled only
-if dri3 is enabled, too.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index bb5381c..483b9ac 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -173,17 +173,21 @@ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
- ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
-+else
-+XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2
- endif
- ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
--endif
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
- endif
- else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2 --disable-dri3
-+XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri3 --disable-glamor
-+endif
-+else
-+XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2 --disable-dri3 --disable-glamor
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
