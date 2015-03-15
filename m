@@ -1,71 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2015 17:05:58 +0100
-Subject: [Buildroot] [PATCH v4] wine: Add gettext dependency for
-	host-wine
-In-Reply-To: <55056E86.5020109@dawncrow.de>
-References: <55056E86.5020109@dawncrow.de>
-Message-ID: <20150315160558.GC4104@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 15 Mar 2015 17:10:02 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d-headers: bump version to
+	10.5.1
+In-Reply-To: <1426435802-14030-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1426435802-14030-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1426435802-14030-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And?, All,
 
-On 2015-03-15 12:35 +0100, Andr? Hentschel spake thusly:
-> Mostly based on a comment by Yann E. MORIN
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/wine/wine.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> index aa474f9..a699fff 100644
-> --- a/package/wine/wine.mk
-> +++ b/package/wine/wine.mk
-> @@ -243,6 +243,10 @@ else
->  WINE_CONF_OPTS += --without-zlib
->  endif
->  
-> +# host-gettext is essential for .po file support in host-wine wrc
-> +HOST_WINE_DEPENDENCIES += host-gettext
-> +HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
 
-How can I test that?
+ package/mesa3d-headers/mesa3d-headers.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I mean, I have no x86 target (for now), so how can I check that this
-patch does produce the expected output?
-
-Regards,
-Yann E. MORIN.
-
->  # Wine needs to enable 64-bit build tools on 64-bit host
->  ifeq ($(HOSTARCH),x86_64)
->  HOST_WINE_CONF_OPTS += --enable-win64
-> @@ -280,8 +284,6 @@ HOST_WINE_CONF_OPTS += \
->  	--without-curses \
->  	--without-dbus \
->  	--without-fontconfig \
-> -	--without-gettext \
-> -	--without-gettextpo \
->  	--without-gphoto \
->  	--without-glu \
->  	--without-gnutls \
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 5e113ce..0708a0f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,8 +12,8 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.4.6
+-MESA3D_HEADERS_SOURCE = MesaLib-$(MESA3D_HEADERS_VERSION).tar.bz2
++MESA3D_HEADERS_VERSION = 10.5.1
++MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+ MESA3D_HEADERS_LICENSE_FILES = docs/license.html
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
