@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 19:13:20 +0100
-Subject: [Buildroot] [git commit] bandwidthd: remove postgresql introduced
-	uclibc dependency
-Message-ID: <20150315181408.47AC980799@busybox.osuosl.org>
+Date: Sun, 15 Mar 2015 19:13:46 +0100
+Subject: [Buildroot] [git commit] collectd: remove postgresql introduced
+	uclibc dependency for the PostgresSQL support
+Message-ID: <20150315181408.5E5FD8073F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64af4e243cfc1c42c8aacc5f3609f5c340a2f3c9
+commit: http://git.buildroot.net/buildroot/commit/?id=a09ed7b758c6d7dc184448bfba8f4d045cb24746
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bandwidthd/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/collectd/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index c1f0ee1..0d51f5e 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -32,7 +32,6 @@ if BR2_PACKAGE_BANDWIDTHD
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 94c4acd..c65fc65 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -314,12 +314,8 @@ config BR2_PACKAGE_COLLECTD_PING
+ 	help
+ 	  Mesures network latency using ICMP "echo requests".
  
- config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	bool "enable postgresql log target support"
--	depends on BR2_TOOLCHAIN_USES_GLIBC # postgresql
+-comment "postgresql needs a toolchain w/ glibc"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-
+ config BR2_PACKAGE_COLLECTD_POSTGRESQL
+ 	bool "postgresql"
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
  	select BR2_PACKAGE_POSTGRESQL
  	help
- 	  Enable support for logging the bandwidthd data to a remote
+ 	  Connects to and executes SQL statements on a PostgreSQL
