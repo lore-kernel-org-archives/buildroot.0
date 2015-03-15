@@ -1,33 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 14:37:26 +0100
-Subject: [Buildroot] [PATCH] package/czmq: fix discovery of libzmq for
- static build
-In-Reply-To: <1426368725-27750-1-git-send-email-romain.naour@openwide.fr>
-References: <1426368725-27750-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150315143726.6e9f5777@free-electrons.com>
+Date: Sun, 15 Mar 2015 14:38:25 +0100
+Subject: [Buildroot] [git commit] package/zmqpp: Blacklist Blackfin ADI
+	toolchains
+Message-ID: <20150315133918.A812A8081A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=7ecd241db1319f61efb3862bb3e25f00d254dc4e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Mar 2015 22:32:05 +0100, Romain Naour wrote:
-> Backport and rebase a patch from upstream:
-> https://github.com/zeromq/czmq/commit/313714f8b73c23d68b1216bc2df3d0ccc6ab1ffd
-> 
-> Also, remove the fix in czmq.mk for static build.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ec4/ec414b52f9cdd8d7d365283e21479519e63c7d97/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+zmqpp recommand at least a c++ compiler g++ >= 4.7
+[1] for c++11 support and won't be backward compatible
+whith older compliler for the next release (4.x)
+due to harcoded -std=c++11 flag [2]
 
-Applied, thanks!
+Blackfin ADI toolchains use a g++ 4.3 which use an
+experimental c++11 support (c++0x) has not enough c++11
+support to build zmqpp.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+http://autobuild.buildroot.net/results/4c3/4c34ce881e3eab47994cc893898cbc9129ce67b5/
+
+And many more.
+
+[1] https://github.com/zeromq/zmqpp
+[2] https://github.com/zeromq/zmqpp/commit/f078fe9a5a775aff5c74dedbdc869f8158ddf123
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zmqpp/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 88973db..881877a 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_ZMQPP
+ 	bool "zmqpp"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Too old gcc
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # c++0x support
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # c++0x support
+ 	depends on BR2_INSTALL_LIBSTDCPP
