@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 15 Mar 2015 12:19:19 +0100
-Subject: [Buildroot] [PATCH 10/14] package/x11r7/xlib_libXvMC: bump version
-	to 1.0.9, add hash
+Date: Sun, 15 Mar 2015 12:19:20 +0100
+Subject: [Buildroot] [PATCH 11/14] package/x11r7/xlib_libXxf86vm: bump
+	version to 1.1.4, add hash
 In-Reply-To: <1426418363-22738-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1426418363-22738-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1426418363-22738-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1426418363-22738-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXvMC/xlib_libXvMC.hash |    3 +++
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk   |    2 +-
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash |    3 +++
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |    2 +-
  2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
+ create mode 100644 package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash
 
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
+diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash
 new file mode 100644
-index 0000000..f0fcd2d
+index 0000000..cece6b5
 --- /dev/null
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.hash
++++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.hash
 @@ -0,0 +1,3 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-March/002548.html
-+sha1	6fc54831734e781b2848b6f7e3bcc4f752665f21				libXvMC-1.0.9.tar.bz2
-+sha256	0703d7dff6ffc184f1735ca5d4eb9dbb402b522e08e008f2f96aee16c40a5756	libXvMC-1.0.9.tar.bz2
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-index cc6b130..101c15d 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
++# From http://lists.x.org/archives/xorg-announce/2015-February/002539.html
++sha1	78ef18ca2be157131899e01c62679e247409a13f				libXxf86vm-1.1.4.tar.bz2
++sha256	afee27f93c5f31c0ad582852c0fb36d50e4de7cd585fcf655e278a633d85cd57	libXxf86vm-1.1.4.tar.bz2
+diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
+index caa37ac..f650fe4 100644
+--- a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
++++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXVMC_VERSION = 1.0.7
-+XLIB_LIBXVMC_VERSION = 1.0.9
- XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.bz2
- XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXVMC_LICENSE = MIT
+-XLIB_LIBXXF86VM_VERSION = 1.1.3
++XLIB_LIBXXF86VM_VERSION = 1.1.4
+ XLIB_LIBXXF86VM_SOURCE = libXxf86vm-$(XLIB_LIBXXF86VM_VERSION).tar.bz2
+ XLIB_LIBXXF86VM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXXF86VM_LICENSE = MIT
 -- 
 1.7.10.4
