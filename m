@@ -1,79 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 15 Mar 2015 09:29:19 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
-	compile error
-Message-ID: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 15 Mar 2015 12:19:13 +0100
+Subject: [Buildroot] [PATCH 04/14] package/x11r7/xapp_xedit: bump version to
+	1.2.2, add hash
+In-Reply-To: <1426418363-22738-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1426418363-22738-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1426418363-22738-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/72e/72eab3a6f162e3c5eac380f88b54d4f314d52445/
-http://autobuild.buildroot.net/results/f47/f473882cd35445cbe5b3b15635d555340183951a/
-http://autobuild.buildroot.net/results/45b/45b54b59935c3994c526593836ad433b82148f12/
-http://autobuild.buildroot.net/results/1e4/1e4af4642691ea9681b39eb1ce4f8107e8c3ff5f/
-http://autobuild.buildroot.net/results/182/182e658723d654d45c683dc2bc0b959c82c37826/
-http://autobuild.buildroot.net/results/446/4467fd6aad86bf176625fdc74f5802f35519f157/
-http://autobuild.buildroot.net/results/4a2/4a2cafabe048c5255b21cf25f149542561f60935/
-http://autobuild.buildroot.net/results/12a/12a9de3d946b1379ed8bc772e556f163af758e6b/
-http://autobuild.buildroot.net/results/795/795b02b656e3a6f265a5182140f4be62cf22ae7f/
-
-To reproduce the build error I used this defconfig
-
-BR2_arm=y
-BR2_arm1176jzf_s=y
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-ctng-linux-uclibcgnueabi"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
-BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_SOFTETHER=y
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: The real problem seemed to be LIBS+= (Peter)
-v2: Simplify libiconv check (Thomas)
+ package/x11r7/xapp_xedit/xapp_xedit.hash |    3 +++
+ package/x11r7/xapp_xedit/xapp_xedit.mk   |    6 ++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+ create mode 100644 package/x11r7/xapp_xedit/xapp_xedit.hash
 
- package/softether/softether.mk |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 8f8734d..1c219b8 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
-@@ -16,12 +16,12 @@ SOFTETHER_AUTORECONF = YES
+diff --git a/package/x11r7/xapp_xedit/xapp_xedit.hash b/package/x11r7/xapp_xedit/xapp_xedit.hash
+new file mode 100644
+index 0000000..5aedfb7
+--- /dev/null
++++ b/package/x11r7/xapp_xedit/xapp_xedit.hash
+@@ -0,0 +1,3 @@
++# From http://lists.x.org/archives/xorg-announce/2015-February/002535.html
++sha1	f37b5d0f8ec461955f0419dbb1890d8cf63d179d				xedit-1.2.2.tar.bz2
++sha256	69aa42885dfc06332ca22eb01cc7187e49206e6d65b74113a8ee4cc345fc2927	xedit-1.2.2.tar.bz2
+diff --git a/package/x11r7/xapp_xedit/xapp_xedit.mk b/package/x11r7/xapp_xedit/xapp_xedit.mk
+index f180ad2..0f42e2c 100644
+--- a/package/x11r7/xapp_xedit/xapp_xedit.mk
++++ b/package/x11r7/xapp_xedit/xapp_xedit.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_ENABLE_LOCALE),)
- SOFTETHER_DEPENDENCIES += libiconv
--SOFTETHER_CONF_ENV = LIBS+=" -liconv"
-+SOFTETHER_LIBS += -liconv
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- # openssl needs zlib
--SOFTETHER_CONF_ENV += LIBS+=" -lz"
-+SOFTETHER_LIBS += -lz
- endif
- 
- SOFTETHER_CONF_OPTS = \
-@@ -31,7 +31,9 @@ SOFTETHER_CONF_OPTS = \
- # softether uses clock_gettime but forgets to link against -lrt
- # breaking the build against older libc's that don't provide this
- # symbol in libc
--SOFTETHER_CONF_ENV += LIBS+=" -lrt"
-+SOFTETHER_LIBS += -lrt
+-XAPP_XEDIT_VERSION = 1.2.0
++XAPP_XEDIT_VERSION = 1.2.2
+ XAPP_XEDIT_SOURCE = xedit-$(XAPP_XEDIT_VERSION).tar.bz2
+ XAPP_XEDIT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XEDIT_LICENSE = MIT
+ XAPP_XEDIT_LICENSE_FILES = COPYING
+-XAPP_XEDIT_DEPENDENCIES = xlib_libXaw 
++XAPP_XEDIT_DEPENDENCIES = xlib_libXaw
 +
-+SOFTETHER_CONF_ENV += LIBS="$(SOFTETHER_LIBS)"
- HOST_SOFTETHER_CONF_ENV += LIBS+=" -lrt"
++XAPP_XEDIT_CONF_OPTS = --disable-selective-werror
  
- # host-libiconv does not exist, therefore we need this extra line
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
