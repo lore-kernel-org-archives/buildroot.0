@@ -1,59 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 14:34:48 +0100
-Subject: [Buildroot] [PATCH v5 00/11] autobuild-run improvements
-In-Reply-To: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150315143448.72b386dc@free-electrons.com>
+Date: Sun, 15 Mar 2015 14:36:41 +0100
+Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
+ misc improvements
+In-Reply-To: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
+Message-ID: <20150315143641.3cd7a528@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Andr? Erdmann,
 
-On Fri, 12 Dec 2014 21:04:45 +0100, Thomas De Schampheleire wrote:
+On Wed, 25 Feb 2015 22:17:17 +0100, Andr? Erdmann wrote:
 
-> Thomas De Schampheleire (11):
->   scripts: add python module docopt
->   autobuild-run: use docopt for argument parsing
->   autobuild-run: add option --make-opts for custom Buildroot options
->   autobuild-run: use **kwargs to avoid explicit parameter passthroughs
->   autobuild-run: check-requirements does not need to know the login
->     details
->   autobuild-run: set LC_ALL=C to not use locale settings of host machine
->   autobuild-run: improve the logic to generate build-end.log
->   autobuild-run: save config.log files for failed package
->   autobuild-run: extend TODO list
->   autobuild-run: kill all children on SIGTERM
->   autobuild-run: catch KeyboardInterrupt in the same way as SIGTERM
+> Andr? Erdmann (13):
+>   autobuild-run, python3: print is a function
+>   autobuild-run, python3: urllib.request<>urllib2
+>   autobuild-run, python3: bytes<>str, decode()
+>   autobuild-run, python3: configparser<>ConfigParser
+>   autobuild-run: remove unneeded vars
+>   autobuild-run: explicitly close web file handles
+>   autobuild-run: get host arch once
+>   autobuild-run: sort imports alphabetically
+>   autobuild-run: unify "which <prog>" code
+>   autobuild-run: use a built-in has_prog() implementation
 
-I've applied your patch series. A few comments, though:
+I've applied these patches, after making some minor adjustments needed
+to make them apply on top of Thomas DS patch series.
 
- 1/ I also applied your two follow-up patches
-    http://patchwork.ozlabs.org/patch/444865/ and
-    http://patchwork.ozlabs.org/patch/444866/. As requested in the
-    commit log, the second patch was squashed into the patch adding the
-    support for killing subprocesses.
+>   autobuild-run: move check_requirements() to SystemInfo
+>   autobuild-run: encapsulate subprocess calls
+>   autobuild-run: set locale to en_US or C
 
- 2/ I had to rework patch http://patchwork.ozlabs.org/patch/444866/
-    because subprocess.check_output() doesn't exist in Python 2.6. So
-    I've used a different construct.
+Those ones were conflicting a bit too much. Could you rework them on
+top of the latest buildroot-test repository, and resend an updated
+version?
 
- 3/ Killing all subprocesses apparently still doesn't work completely
-    correctly, I got the backtrace of the attached file once when
-    interrupting the autobuild-run script with Ctrl+C, on a system that
-    uses Python 2.6. And the child processes (timeout processes) were
-    still running.
-
-Thanks a lot, and sorry for the huge delay!
+Thanks a lot!
 
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: backtrace.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150315/4339d329/attachment.txt>
