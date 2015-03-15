@@ -1,54 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 22:45:11 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-02-13
-In-Reply-To: <20150315213644.GC28815@waldemar-brodkorb.de>
-References: <20150214073013.E7748101008@stock.ovh.net>
- <20150214224243.47b77b67@free-electrons.com>
- <20150215173009.GK32479@waldemar-brodkorb.de>
- <20150315142822.2e018813@free-electrons.com>
- <20150315213644.GC28815@waldemar-brodkorb.de>
-Message-ID: <20150315224511.3406c1d9@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Mar 2015 22:48:38 +0100
+Subject: [Buildroot] [git commit] gcc: fix 4.9.2 build with C++ and !wchar
+Message-ID: <20150315215245.F33F4807CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+commit: http://git.buildroot.net/buildroot/commit/?id=c129606f4c7fb017a03fb265652b8ed7ed39003e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 15 Mar 2015 22:36:45 +0100, Waldemar Brodkorb wrote:
+The libcilk library (used on x86/x86-64 when building with C++ support)
+unconditionally uses WCHAR_MIN / WCHAR_MAX, causing build issues with uClibc
+when configured without wchar support.
 
-> If you want to create a sh4 toolchain, which is usable to compile a
-> Linux Kernel you need to enable multilib support so that the
-> toolchain can be used to compile fpu/non-fpu code.
-> If you use make qemu_sh4_r2d_defconfig, then following option is
-> enabled:
-> BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
-> This works fine and the result boots up fine in Qemu.
+Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/4.9.2/860-cilk-wchar.patch |   56 ++++++++++++++++++++++++++++++++
+ 1 files changed, 56 insertions(+), 0 deletions(-)
 
-Yes, and it's not great that we have to pass such a custom gcc option
-to get a toolchain that is capable of building the Linux kernel.
-
-> Your defconfig does not generate a multilib toolchain.
-> The compiler still generates
-> br-sh4-full-2015.02/usr/sh4-buildroot-linux-uclibc/lib/!m4/libgcc_s.so
-> which is not matched by your globbing in
-> package/gcc/gcc-final/gcc-final.mk ->
-> $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libgcc_s*
-> 
-> The sh4 stuff was already discussed last year by you:
-> http://lists.busybox.net/pipermail/buildroot/2014-March/091385.html
-> 
-> The patch will work fine.
-
-But does this patch works when yuo have
---with-multilib-list=m4,m4-nofpu? Then I guess you have two libgcc in
-two different directories, so with this patch, we're going to pick one
-of them, no?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/4.9.2/860-cilk-wchar.patch b/package/gcc/4.9.2/860-cilk-wchar.patch
+new file mode 100644
+index 0000000..1837405
+--- /dev/null
++++ b/package/gcc/4.9.2/860-cilk-wchar.patch
+@@ -0,0 +1,56 @@
++[PATCH] cilk: fix build without wchar
++
++When building against uClibc with wchar support disabled, WCHAR_MIN and
++WCHAR_MAX are not defined leading to compilation errors.
++
++Fix it by only including the wchar code if available.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libcilkrts/include/cilk/reducer_min_max.h |    8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++Index: host-gcc-final-4.9.2/libcilkrts/include/cilk/reducer_min_max.h
++===================================================================
++--- host-gcc-final-4.9.2.orig/libcilkrts/include/cilk/reducer_min_max.h
+++++ host-gcc-final-4.9.2/libcilkrts/include/cilk/reducer_min_max.h
++@@ -3154,7 +3154,9 @@
++ CILK_C_REDUCER_MAX_INSTANCE(char,               char,       CHAR_MIN)
++ CILK_C_REDUCER_MAX_INSTANCE(unsigned char,      uchar,      0)
++ CILK_C_REDUCER_MAX_INSTANCE(signed char,        schar,      SCHAR_MIN)
+++#ifdef WCHAR_MIN
++ CILK_C_REDUCER_MAX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
+++#endif
++ CILK_C_REDUCER_MAX_INSTANCE(short,              short,      SHRT_MIN)
++ CILK_C_REDUCER_MAX_INSTANCE(unsigned short,     ushort,     0)
++ CILK_C_REDUCER_MAX_INSTANCE(int,                int,        INT_MIN)
++@@ -3306,7 +3308,9 @@
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(char,               char,       CHAR_MIN)
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(unsigned char,      uchar,      0)
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(signed char,        schar,      SCHAR_MIN)
+++#ifdef WCHAR_MIN
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MIN)
+++#endif
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(short,              short,      SHRT_MIN)
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(unsigned short,     ushort,     0)
++ CILK_C_REDUCER_MAX_INDEX_INSTANCE(int,                int,        INT_MIN)
++@@ -3432,7 +3436,9 @@
++ CILK_C_REDUCER_MIN_INSTANCE(char,               char,       CHAR_MAX)
++ CILK_C_REDUCER_MIN_INSTANCE(unsigned char,      uchar,      CHAR_MAX)
++ CILK_C_REDUCER_MIN_INSTANCE(signed char,        schar,      SCHAR_MAX)
+++#ifdef WCHAR_MAX
++ CILK_C_REDUCER_MIN_INSTANCE(wchar_t,            wchar_t,    WCHAR_MAX)
+++#endif
++ CILK_C_REDUCER_MIN_INSTANCE(short,              short,      SHRT_MAX)
++ CILK_C_REDUCER_MIN_INSTANCE(unsigned short,     ushort,     USHRT_MAX)
++ CILK_C_REDUCER_MIN_INSTANCE(int,                int,        INT_MAX)
++@@ -3584,7 +3590,9 @@
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(char,               char,       CHAR_MAX)
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(unsigned char,      uchar,      CHAR_MAX)
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(signed char,        schar,      SCHAR_MAX)
+++#ifdef WCHAR_MAX
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(wchar_t,            wchar_t,    WCHAR_MAX)
+++#endif
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(short,              short,      SHRT_MAX)
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(unsigned short,     ushort,     USHRT_MAX)
++ CILK_C_REDUCER_MIN_INDEX_INSTANCE(int,                int,        INT_MAX)
