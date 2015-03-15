@@ -1,54 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 23:06:51 +0100
-Subject: [Buildroot] [PATCH 41/51] zmqpp: bump version
-In-Reply-To: <1414349157-22749-41-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1414349157-22749-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1414349157-22749-41-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150315230651.3ec64964@free-electrons.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Sun, 15 Mar 2015 23:09:52 +0100
+Subject: [Buildroot] [PATCH 1/1] python-cheetah: fix python host dependency
+Message-ID: <1426457392-22585-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On Sun, 26 Oct 2014 19:45:47 +0100, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/zmqpp/zmqpp.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-> index fbb0260..4323401 100644
-> --- a/package/zmqpp/zmqpp.mk
-> +++ b/package/zmqpp/zmqpp.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ZMQPP_VERSION = 36413487f05b165dfc82ad307a5a1c36a795e607
-> +ZMQPP_VERSION = 4.1.1
->  ZMQPP_SITE = $(call github,benjamg,zmqpp,$(ZMQPP_VERSION))
->  ZMQPP_INSTALL_STAGING = YES
->  ZMQPP_DEPENDENCIES = zeromq
+python-cheetah can't be used with python3. host-python-cheetah has the same
+limitation.
 
-Romain Naour said:
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/python-cheetah/python-cheetah.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-==
-There is a patch from Maxime to bump to 4.1.1 but this tag appear only on the
-unofficial git repository.
-http://patchwork.ozlabs.org/patch/403314/
-
-For now, master branch is at 3.2.0 and the develop branch is at 4.1.1
-==
-
-So I've marked your zmqpp bump patch as Rejected.
-
-Thanks,
-
-Thomas
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index 7354190..af7d1f5 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -10,6 +10,8 @@ PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+ PYTHON_CHEETAH_LICENSE = MIT
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
+ 
++HOST_PYTHON_CHEETAH_NEEDS_HOST_PYTHON = python2
++
+ # The dependency on host-python-markdown is needed to prevent
+ # setuptools from downloading markdown if it is not installed yet.
+ HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.5
