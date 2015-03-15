@@ -1,83 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 18:09:13 +0100
-Subject: [Buildroot] [git commit] libnl: use the backported patch for poll.h
-	issue
-Message-ID: <20150315170932.D15A680481@busybox.osuosl.org>
+Date: Sun, 15 Mar 2015 18:09:25 +0100
+Subject: [Buildroot] [git commit] iw: simplify static linking handling
+Message-ID: <20150315170933.06F9C7FA73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25c3fe8d1c37bee8619b3e50f2102da35e76fc08
+commit: http://git.buildroot.net/buildroot/commit/?id=466a3aa661efb1e90d9ab06a2c83a22b7f1c8b76
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that J??rg's patch has been merged upstream, let's use the
-backported version, in a git format.
+Now that libnl pkg-config file is correct, there is no need to have
+special handling for static linking in the iw package: it already uses
+pkg-config to get the necessary flags to link with libnl.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...etlink-h-use-poll-h-instead-of-sys-poll-h.patch |   18 ------------
- ...link.h-fix-build-including-poll.h-with-th.patch |   30 ++++++++++++++++++++
- 2 files changed, 30 insertions(+), 18 deletions(-)
+ package/iw/iw.mk |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/package/libnl/0001-netlink-netlink-h-use-poll-h-instead-of-sys-poll-h.patch b/package/libnl/0001-netlink-netlink-h-use-poll-h-instead-of-sys-poll-h.patch
-deleted file mode 100644
-index dd55cd4..0000000
---- a/package/libnl/0001-netlink-netlink-h-use-poll-h-instead-of-sys-poll-h.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--netlink/netlink.h: As the poll() man page recommends include the <poll.h>
--instead of <sys/poll.h>. This removes an error when building libdl against 
--the musl C library.
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index df6e257..1286915 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -14,12 +14,6 @@ IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+ IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+ 	GIT_DIR=$(IW_DIR)
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-# libnl needs pthread/m, so we need to explicitly with them when static
+-# these need to added AFTER libnl, so we have to override LIBS completely
+-IW_MAKE_OPTS += LIBS='-lnl-genl-3 -lnl-3 -lpthread -lm'
+-endif
 -
--Signed-off-by: J??rg Krause <jkrause@posteo.de>
--
--diff -purN libnl-3.2.25.orig/include/netlink/netlink.h libnl-3.2.25/include/netlink/netlink.h
----- libnl-3.2.25.orig/include/netlink/netlink.h	2014-09-01 11:42:37.254724124 +0200
--+++ libnl-3.2.25/include/netlink/netlink.h	2014-09-01 11:42:58.254724255 +0200
--@@ -16,7 +16,7 @@
-- #include <stdint.h>
-- #include <string.h>
-- #include <stdlib.h>
---#include <sys/poll.h>
--+#include <poll.h>
-- #include <sys/socket.h>
-- #include <sys/types.h>
-- #include <sys/time.h>
-diff --git a/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch b/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
-new file mode 100644
-index 0000000..53a299b
---- /dev/null
-+++ b/package/libnl/0001-netlink-netlink.h-fix-build-including-poll.h-with-th.patch
-@@ -0,0 +1,30 @@
-+From 14128766e80823f79a3b2c97573da1aea5c16ea8 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-+Date: Mon, 1 Sep 2014 12:38:10 +0200
-+Subject: [PATCH 1/2] netlink/netlink.h: fix build including <poll.h> with the
-+ musl C library
-+
-+https://github.com/thom311/libnl/pull/64
-+
-+Signed-off-by: Thomas Haller <thaller@redhat.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/netlink/netlink.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/netlink/netlink.h b/include/netlink/netlink.h
-+index 28dba06..61656b3 100644
-+--- a/include/netlink/netlink.h
-++++ b/include/netlink/netlink.h
-+@@ -16,7 +16,7 @@
-+ #include <stdint.h>
-+ #include <string.h>
-+ #include <stdlib.h>
-+-#include <sys/poll.h>
-++#include <poll.h>
-+ #include <sys/socket.h>
-+ #include <sys/types.h>
-+ #include <sys/time.h>
-+-- 
-+2.1.0
-+
+ define IW_BUILD_CMDS
+ 	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPTS) -C $(@D)
+ endef
