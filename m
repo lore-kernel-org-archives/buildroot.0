@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 18:41:32 +0100
-Subject: [Buildroot] [PATCH 1/4 v5] package/cmake: make ctest a target
- package too
-In-Reply-To: <1425808043-32292-2-git-send-email-s.martin49@gmail.com>
+Date: Sun, 15 Mar 2015 18:52:22 +0100
+Subject: [Buildroot] [PATCH 2/4 v2] package/cmake: only build what is
+ necessary
+In-Reply-To: <1425808043-32292-3-git-send-email-s.martin49@gmail.com>
 References: <1425808043-32292-1-git-send-email-s.martin49@gmail.com>
- <1425808043-32292-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150315184132.141ba2d9@free-electrons.com>
+ <1425808043-32292-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150315185222.5850b048@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +14,22 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sun,  8 Mar 2015 10:47:20 +0100, Samuel Martin wrote:
+On Sun,  8 Mar 2015 10:47:21 +0100, Samuel Martin wrote:
+> Add a patch allowing to select the binaries to be built.
+> 
+> After applying this change, the time to build host-cmake is roughly
+> 25% shorter.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+> Tested-by: Romain Naour <romain.naour@openwide.fr>
 
-> diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-> new file mode 100644
-> index 0000000..3d31d7a
-> --- /dev/null
-> +++ b/package/cmake/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_CMAKE
-> +	bool
-> +
-> +config BR2_PACKAGE_CMAKE_CTEST
-> +	bool "ctest"
-> +	select BR2_PACKAGE_CMAKE
+To be honest, I am not sure if we should apply such a large patch just
+for the sake of build speed. Can you submit the patch upstream and see
+what they think about it? If it gets merged upstream, then we have a
+better case for backporting it until upstream makes a new release.
 
-There was a missing dependency on C++ (CMake is written entirely in
-C++), and also you forgot to 'select' all the libraries you have in
-CMAKE_DEPENDENCIES. And one of them, libarchive, has a dependency on
-wchar, that had to be propagated here.
-
-Committed with those issues fixed.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
