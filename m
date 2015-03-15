@@ -1,62 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 15:10:09 +0100
-Subject: [Buildroot] [PATCH v5 00/11] autobuild-run improvements
-In-Reply-To: <CAAXf6LVtbsFWBLooB2tN8OzjuR3VK7=QKLf0LdNHDpHz+zRtmg@mail.gmail.com>
-References: <1418414696-32584-1-git-send-email-patrickdepinguin@gmail.com>
- <20150315143448.72b386dc@free-electrons.com>
- <CAAXf6LVtbsFWBLooB2tN8OzjuR3VK7=QKLf0LdNHDpHz+zRtmg@mail.gmail.com>
-Message-ID: <20150315151009.2c61d5a1@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 15 Mar 2015 15:30:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: Glamor
+	depends on dri3
+Message-ID: <1426429839-6908-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Fixes
 
-On Sun, 15 Mar 2015 14:51:38 +0100, Thomas De Schampheleire wrote:
+../../../glamor/glamor_egl.c:603:25: error: unknown type name 'RRProviderPtr'
+                         RRProviderPtr provider,
+                         ^
+../../../glamor/glamor_egl.c:650:1: error: unknown type name 'dri3_screen_info_rec'
+ static dri3_screen_info_rec glamor_dri3_info = {
+ ^
 
-> To understand better, some questions:
-> - you saw this situation once, with Python 2.6, but have been able to
-> successfully stop autobuild run with Ctrl-C with Python 2.6 on other
-> occasions?
+using this defconfig
 
-I just tried again, and same behavior. Here are the processes that
-remain:
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
 
-22897 pts/2    S      0:00 timeout 14400 make O=/ssd1/thomas/autobuild/instance-0/output -C instance-0/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-0/dl BR2_JLEVEL=4
-22898 pts/2    S      0:15  \_ make O=/ssd1/thomas/autobuild/instance-0/output -C instance-0/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-0/dl BR2_JLEVEL=4
-15337 pts/2    S      0:00      \_ /usr/bin/make -j4 -C /ssd1/thomas/autobuild/instance-0/output/build/host-nodejs-0.10.36 PATH=/ssd1/thomas/autobuild/instance-0/output/host/bin:/ssd1/th
-[...]
-25240 pts/2    S      0:00 timeout 14400 make O=/ssd1/thomas/autobuild/instance-3/output -C instance-3/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-3/dl BR2_JLEVEL=4
-25242 pts/2    S      0:14  \_ make O=/ssd1/thomas/autobuild/instance-3/output -C instance-3/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-3/dl BR2_JLEVEL=4
-25512 pts/2    S      0:00      \_ /usr/bin/make -j4 -C /ssd1/thomas/autobuild/instance-3/output/build/samba4-4.2.0 DESTDIR=/ssd1/thomas/autobuild/instance-3/output/host/usr/i686-buildro
-[...]
- 2853 pts/2    S      0:00 timeout 14400 make O=/ssd1/thomas/autobuild/instance-2/output -C instance-2/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-2/dl BR2_JLEVEL=4
- 2854 pts/2    S      0:08  \_ make O=/ssd1/thomas/autobuild/instance-2/output -C instance-2/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-2/dl BR2_JLEVEL=4
-25772 pts/2    S      0:00      \_ /bin/bash -c cd /ssd1/thomas/autobuild/instance-2/output/build/host-heimdal-1.5.3/ &&  PATH="/ssd1/thomas/autobuild/instance-2/output/host/bin:/ssd1/th
-[...]
- 7028 pts/2    S      0:00 timeout 14400 make O=/ssd1/thomas/autobuild/instance-1/output -C instance-1/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-1/dl BR2_JLEVEL=4
- 7029 pts/2    S      0:06  \_ make O=/ssd1/thomas/autobuild/instance-1/output -C instance-1/buildroot BR2_DL_DIR=/ssd1/thomas/autobuild/instance-1/dl BR2_JLEVEL=4
-19878 pts/2    S      0:00      \_ /bin/bash -c (cd /ssd1/thomas/autobuild/instance-1/output/build/host-cmake-3.1.3; LDFLAGS="-L/ssd1/thomas/autobuild/instance-1/output/host/lib -L/ssd1/
+RRProviderPtr is defined in dri3/dri3.h, so make sure glamor is enabled only
+if dri3 is enabled, too.
 
-> - did you happen to use Python 2.7 with these patches on a certain
-> machine? Did you see issues?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-No, I have been testing them only on gcc75 for now, which uses Python 2.6.
-
-I'm planning on deploying them on the Free Electrons build server as
-well, but it also has Python 2.6.
-
-> In my testing I have been using Python 2.7.
-> It could be that there is something different in Python 2.6, not sure.
-> I would need to look into this deeper, unless Andr? who seems to be
-> much more knowledgeable about Python has an idea?
-
-That would be nice :-)
-
-Thomas
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index bb5381c..483b9ac 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -173,17 +173,21 @@ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2
+ endif
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+-endif
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
+ endif
+ else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2 --disable-dri3
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri3 --disable-glamor
++endif
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri2 --disable-dri3 --disable-glamor
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
