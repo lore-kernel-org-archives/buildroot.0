@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 16:33:13 +0100
-Subject: [Buildroot] Update of toolchains for autobuild.b.o
-Message-ID: <20150315163313.65d413e5@free-electrons.com>
+Date: Sun, 15 Mar 2015 15:40:30 +0100
+Subject: [Buildroot] [git commit] toolchain-external: fix support for
+	non-ADI Blackfin external toolchains
+Message-ID: <20150315153355.92EAA80780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=23ecfd04e6987879b5b4fce8f89b1e6501d011f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have just done a round of update in the Buildroot toolchain
-configurations used on autobuild.b.o:
+The computation of TOOLCHAIN_EXTERNAL_BIN has a special case for
+Blackfin, where it's set to
+$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
+instead of $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin for other
+architectures.
 
- * All pre-built Buildroot toolchains have been rebuilt with Buildroot
-   2015.02 (except the SH4 toolchain, since it doesn't build in recent
-   Buildroot)
+However, this is actually only true for Analog Devices pre-built
+toolchains. Other Blackfin external toolchains (such as ones built by
+Buildroot) do not have this special organization.
 
- * Added an ARC external toolchain. The intent here is mainly to have
-   an easily available pre-built ARC toolchain.
+Therefore, in order to make those non-ADI Blackfin toolchains work, we
+need to change the condition from BR2_bfin to testing specifically for
+the ADI toolchains.
 
- * Added a Xtensa external toolchain. Same idea.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- * Added a Buildroot external toolchain built by Buildroot.
-
- * Added an ARM Musl based toolchain. This is probably the biggest
-   change, and will most likely cause a fairly significant number of
-   build failures.
-
- * Changed the ARM internal Buildroot toolchain configuration to use
-   uClibc-ng instead of uClibc 0.9.33.
-
-If you see other useful updates to be done in the autobuilder
-configurations, please let me know.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 44b8c83..9aa8123 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -141,7 +141,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
+ TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
+ endif
+ else
+-ifeq ($(BR2_bfin),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
+ else
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
