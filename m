@@ -1,72 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2015 23:47:56 +0100
-Subject: [Buildroot] [PATCH v4] wine: Add gettext dependency for
-	host-wine
-In-Reply-To: <55056E86.5020109@dawncrow.de>
-References: <55056E86.5020109@dawncrow.de>
-Message-ID: <20150315224756.GE4104@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Mar 2015 23:54:56 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
+	compile error
+In-Reply-To: <20150315125324.39a11265@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 15 Mar 2015 12:53:24 +0100")
+References: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150315125324.39a11265@free-electrons.com>
+Message-ID: <874mplg9bz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2015-03-15 12:35 +0100, Andr? Hentschel spake thusly:
-> Mostly based on a comment by Yann E. MORIN
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Dear Bernd Kuhls,
+ > On Sun, 15 Mar 2015 09:29:19 +0100, Bernd Kuhls wrote:
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[tested by running readelf on 'wrc' and checking it is now linked
- with libgettextpo.so.0]
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> BR2_arm=y
+ >> BR2_arm1176jzf_s=y
+ >> BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+ >> BR2_TOOLCHAIN_EXTERNAL=y
+ >> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+ >> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+ >> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv6-ctng-linux-uclibcgnueabi.tar.xz"
+ >> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv6-ctng-linux-uclibcgnueabi"
+ >> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+ >> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
+ >> BR2_TOOLCHAIN_EXTERNAL_WCHAR=y
+ >> BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+ >> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+ >> BR2_PACKAGE_SOFTETHER=y
 
-Regards,
-Yann E. MORIN.
+ > I tried to build this defconfig, and the build went fine here. Tested
+ > at commit d4f7cfe1855cefa35322891e887636c3b82a6aea, full config at
+ > http://code.bulix.org/u9uhwi-88083?raw, log file at
+ > http://code.bulix.org/5wyyws-88084?raw.
 
-> ---
->  package/wine/wine.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> index aa474f9..a699fff 100644
-> --- a/package/wine/wine.mk
-> +++ b/package/wine/wine.mk
-> @@ -243,6 +243,10 @@ else
->  WINE_CONF_OPTS += --without-zlib
->  endif
->  
-> +# host-gettext is essential for .po file support in host-wine wrc
-> +HOST_WINE_DEPENDENCIES += host-gettext
-> +HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-> +
->  # Wine needs to enable 64-bit build tools on 64-bit host
->  ifeq ($(HOSTARCH),x86_64)
->  HOST_WINE_CONF_OPTS += --enable-win64
-> @@ -280,8 +284,6 @@ HOST_WINE_CONF_OPTS += \
->  	--without-curses \
->  	--without-dbus \
->  	--without-fontconfig \
-> -	--without-gettext \
-> -	--without-gettextpo \
->  	--without-gphoto \
->  	--without-glu \
->  	--without-gnutls \
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Indeed, the LIBS += handling is fixed by your patch, but I'm wondering
+ > why I'm not seeing the problem.
+
+I'm not sure either. As I mentioned earlier, I am also not able to
+reproduce the issue.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
