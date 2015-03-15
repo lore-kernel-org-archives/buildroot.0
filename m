@@ -1,40 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 22:15:35 +0100
-Subject: [Buildroot] [PATCH v7 2/3] python-cheetah: add host-package
- support
-In-Reply-To: <1426235050-3482-2-git-send-email-gwenj@trabucayre.com>
-References: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
- <1426235050-3482-2-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150315221535.462cdbf6@free-electrons.com>
+Date: Sun, 15 Mar 2015 22:17:22 +0100
+Subject: [Buildroot] Blackfin Buildroot toolchain issue
+Message-ID: <20150315221722.3645eb35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gwenhael Goavec-Merou,
+Hello Gustavo,
 
-On Fri, 13 Mar 2015 09:24:09 +0100, Gwenhael Goavec-Merou wrote:
+I believe you originally added the support to build a Blackfin
+toolchain with the Buildroot internal toolchain backend. Today, I've
+added an external Blackfin toolchain built by Buildroot in the
+autobuilder, and one build failure occurred with this toolchain, on the
+Bellagio package:
 
-> diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
-> index 08076b5..3155951 100644
-> --- a/package/python-cheetah/python-cheetah.mk
-> +++ b/package/python-cheetah/python-cheetah.mk
-> @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
->  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
->  PYTHON_CHEETAH_LICENSE = MIT
->  PYTHON_CHEETAH_SETUP_TYPE = setuptools
-> +HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
+  http://autobuild.buildroot.org/results/05f/05fa9cb522514e9e5b9e81893f145aab00abd803/build-end.log
 
-host-python-cheetah is causing some build failures:
-http://autobuild.buildroot.org/results/a1f/a1f0666b8c7e390b7edc99ab69af200bde9f5796/build-end.log.
+I reproduced the build issue here, and the config.log contains:
 
-Could you have a look?
+configure:3298: checking whether the C++ compiler works
+configure:3320: /home/thomas/projets/buildroot/output/host/usr/bin/bfin-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_O
+FFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.cpp  >&5
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/4.5.4/../../../../bfin-buildr
+oot-linux-uclibc/bin/ld: a.out: hidden symbol `___udivdi3' in /home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib
+/gcc/bfin-buildroot-linux-uclibc/4.5.4/libgcc.a(_udivdi3.o) is referenced by DSO
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/4.5.4/../../../../bfin-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
+collect2: ld returned 1 exit status
 
-Thanks!
+If you have an idea on how to fix this, it would be useful.
+
+Thanks a lot!
 
 Thomas
 -- 
