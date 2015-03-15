@@ -1,44 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 14:36:41 +0100
-Subject: [Buildroot] [PATCH 00/13] autobuild-run: python3 compat and
- misc improvements
-In-Reply-To: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
-References: <1424899050-24932-1-git-send-email-dywi@mailerd.de>
-Message-ID: <20150315143641.3cd7a528@free-electrons.com>
+Date: Sun, 15 Mar 2015 14:37:26 +0100
+Subject: [Buildroot] [PATCH] package/czmq: fix discovery of libzmq for
+ static build
+In-Reply-To: <1426368725-27750-1-git-send-email-romain.naour@openwide.fr>
+References: <1426368725-27750-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150315143726.6e9f5777@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Erdmann,
+Dear Romain Naour,
 
-On Wed, 25 Feb 2015 22:17:17 +0100, Andr? Erdmann wrote:
+On Sat, 14 Mar 2015 22:32:05 +0100, Romain Naour wrote:
+> Backport and rebase a patch from upstream:
+> https://github.com/zeromq/czmq/commit/313714f8b73c23d68b1216bc2df3d0ccc6ab1ffd
+> 
+> Also, remove the fix in czmq.mk for static build.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/ec4/ec414b52f9cdd8d7d365283e21479519e63c7d97/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-> Andr? Erdmann (13):
->   autobuild-run, python3: print is a function
->   autobuild-run, python3: urllib.request<>urllib2
->   autobuild-run, python3: bytes<>str, decode()
->   autobuild-run, python3: configparser<>ConfigParser
->   autobuild-run: remove unneeded vars
->   autobuild-run: explicitly close web file handles
->   autobuild-run: get host arch once
->   autobuild-run: sort imports alphabetically
->   autobuild-run: unify "which <prog>" code
->   autobuild-run: use a built-in has_prog() implementation
-
-I've applied these patches, after making some minor adjustments needed
-to make them apply on top of Thomas DS patch series.
-
->   autobuild-run: move check_requirements() to SystemInfo
->   autobuild-run: encapsulate subprocess calls
->   autobuild-run: set locale to en_US or C
-
-Those ones were conflicting a bit too much. Could you rework them on
-top of the latest buildroot-test repository, and resend an updated
-version?
-
-Thanks a lot!
+Applied, thanks!
 
 Thomas
 -- 
