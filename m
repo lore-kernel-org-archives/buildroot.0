@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 21:17:40 +0100
-Subject: [Buildroot] [git commit] gnuradio: needs NPTL threads
-Message-ID: <20150315201813.57C2E80455@busybox.osuosl.org>
+Date: Sun, 15 Mar 2015 22:15:35 +0100
+Subject: [Buildroot] [PATCH v7 2/3] python-cheetah: add host-package
+ support
+In-Reply-To: <1426235050-3482-2-git-send-email-gwenj@trabucayre.com>
+References: <1426235050-3482-1-git-send-email-gwenj@trabucayre.com>
+ <1426235050-3482-2-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20150315221535.462cdbf6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=917d11bae4822b149a0b04d121df5dc4904436df
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gwenhael Goavec-Merou,
 
-Fixes:
+On Fri, 13 Mar 2015 09:24:09 +0100, Gwenhael Goavec-Merou wrote:
 
-  http://autobuild.buildroot.org/results/699/6994610a3283975064fae98e965954b3825ce694/
+> diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+> index 08076b5..3155951 100644
+> --- a/package/python-cheetah/python-cheetah.mk
+> +++ b/package/python-cheetah/python-cheetah.mk
+> @@ -9,5 +9,7 @@ PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+>  PYTHON_CHEETAH_SITE = http://pypi.python.org/packages/source/C/Cheetah
+>  PYTHON_CHEETAH_LICENSE = MIT
+>  PYTHON_CHEETAH_SETUP_TYPE = setuptools
+> +HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+>  
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gnuradio/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+host-python-cheetah is causing some build failures:
+http://autobuild.buildroot.org/results/a1f/a1f0666b8c7e390b7edc99ab69af200bde9f5796/build-end.log.
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 0bdc108..274afaa 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -1,7 +1,7 @@
--comment "gnuradio needs a toolchain w/ C++, IPV6, threads, largefile, wchar"
-+comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_LARGEFILE || \
- 		!BR2_INET_IPV6
- 
- config BR2_PACKAGE_GNURADIO
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_GNURADIO
- 	depends on BR2_INET_IPV6 # boost
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # boost
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
- 	select BR2_PACKAGE_BOOST
+Could you have a look?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
