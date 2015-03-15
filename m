@@ -1,53 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 15 Mar 2015 18:02:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 7931] New: Default configuration for Cubieboard v1
-	is outdated
-Message-ID: <bug-7931-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Mar 2015 19:13:38 +0100
+Subject: [Buildroot] [git commit] qt5base: remove postgresql introduced
+	uclibc dependency for the PostgresSQL plugin
+Message-ID: <20150315181408.5441E8073F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7931
+commit: http://git.buildroot.net/buildroot/commit/?id=8aacd982613a07045c7e4d8461a50383095d0bc2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           Summary: Default configuration for Cubieboard v1 is outdated
-           Product: buildroot
-           Version: 2015.02
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mfld.fr at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-
-The cubieboard_defconfig uses the linux-sunxi kernel v3.0.y, that fails early
-during boot on a Cubieboard v1 (final revision).
-
-The boot succeeds after switching to linux-sunxi v3.4.y kernel, as recommended
-by this community on its wiki:
-http://linux-sunxi.org/Linux_Kernel#Kernel_versions
-
-Change proposal:
-
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux-sunxi/linux-sunxi.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
-BR2_LINUX_KERNEL_VERSION="9a1cd034181af628d4145202289e1993c1687db6"
-BR2_LINUX_KERNEL_PATCH=""
-
-The commit 9a1cd03 is the latest (2014) of the v3.4.y branch.
-
-I did not try the mainline kernel, because it is explicitly stated by Free
-Electrons guys that the A10 NAND or multimedia caps are not yet supported.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 99e249f..17ed5db 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -60,14 +60,10 @@ config BR2_PACKAGE_QT5BASE_MYSQL
+ config BR2_PACKAGE_QT5BASE_PSQL
+ 	bool "PostgreSQL Plugin"
+ 	select BR2_PACKAGE_POSTGRESQL
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  Build PostgreSQL plugin
+ 	  If unsure, say n.
+ 
+-comment "PostgreSQL needs an (e)glibc toolchain"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-
+ choice
+ 	prompt "SQLite 3 support"
+ 	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
