@@ -1,26 +1,27 @@
-From: =?ISO-8859-15?Q?Andr=E9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 15 Mar 2015 14:09:08 +0100
-Subject: [Buildroot] [PATCH v2] bsdiff: Add hash file
-Message-ID: <55058474.2010704@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Mar 2015 14:13:50 +0100
+Subject: [Buildroot] [git commit] bonnie: Add hash file
+Message-ID: <20150315131423.7082B805EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/bsdiff/bsdiff.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/bsdiff/bsdiff.hash
+commit: http://git.buildroot.net/buildroot/commit/?id=cab8385db96077e5605d80ca3035cdcf97b763d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/bsdiff/bsdiff.hash b/package/bsdiff/bsdiff.hash
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bonnie/bonnie.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/bonnie/bonnie.hash b/package/bonnie/bonnie.hash
 new file mode 100644
-index 0000000..989fcf1
+index 0000000..acf00fd
 --- /dev/null
-+++ b/package/bsdiff/bsdiff.hash
++++ b/package/bonnie/bonnie.hash
 @@ -0,0 +1,2 @@
-+# From http://www.daemonology.net/bsdiff/:
-+md5	e6d812394f0e0ecc8d5df255aa1db22a  bsdiff-4.3.tar.gz
--- 
-1.9.1
++# Locally calculated
++sha256	cb3866116634bf65760b6806be4afa7e24a1cad6f145c876df8721f01ba2e2cb  bonnie++-1.03e.tgz
