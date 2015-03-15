@@ -1,46 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 15:40:30 +0100
-Subject: [Buildroot] [git commit] toolchain-external: fix support for
-	non-ADI Blackfin external toolchains
-Message-ID: <20150315153355.92EAA80780@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 15 Mar 2015 17:51:20 +0200
+Subject: [Buildroot] [PATCH 1/3] package/ffmpeg: bump version to 2.6
+In-Reply-To: <1426428048-25586-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1426428048-25586-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150315155120.GD2415@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23ecfd04e6987879b5b4fce8f89b1e6501d011f8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd,
 
-The computation of TOOLCHAIN_EXTERNAL_BIN has a special case for
-Blackfin, where it's set to
-$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
-instead of $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin for other
-architectures.
+On Sun, Mar 15, 2015 at 03:00:46PM +0100, Bernd Kuhls wrote:
+> Dump two Kodi-specific patches according to
+> https://github.com/xbmc/xbmc/pull/6636
+> and update two new patches to improve hevc handling with Kodi Isengard.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/ffmpeg/0002-asf-hacks.patch                |   42 -------
+>  ...add-public-version-of-ff_read_frame_flush.patch |   54 --------
+>  package/ffmpeg/0013-fix-ff-thread-get-format.patch |  131 ++++++++++++++++++++
+>  .../ffmpeg/0014-hevc-avoid-unnecessary-calls.patch |   69 +++++++++++
+>  package/ffmpeg/ffmpeg.mk                           |    2 +-
+>  5 files changed, 201 insertions(+), 97 deletions(-)
+>  delete mode 100644 package/ffmpeg/0002-asf-hacks.patch
+>  delete mode 100644 package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
+>  create mode 100644 package/ffmpeg/0013-fix-ff-thread-get-format.patch
+>  create mode 100644 package/ffmpeg/0014-hevc-avoid-unnecessary-calls.patch
 
-However, this is actually only true for Analog Devices pre-built
-toolchains. Other Blackfin external toolchains (such as ones built by
-Buildroot) do not have this special organization.
+Please update the .hash file as well. Same goes for mesa3d.
 
-Therefore, in order to make those non-ADI Blackfin toolchains work, we
-need to change the condition from BR2_bfin to testing specifically for
-the ADI toolchains.
+barch
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/toolchain-external.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 44b8c83..9aa8123 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -141,7 +141,7 @@ ifneq ($(TOOLCHAIN_EXTERNAL_PREFIX),)
- TOOLCHAIN_EXTERNAL_BIN := $(shell dirname $(shell which $(TOOLCHAIN_EXTERNAL_PREFIX)-gcc))
- endif
- else
--ifeq ($(BR2_bfin),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
- else
- TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
