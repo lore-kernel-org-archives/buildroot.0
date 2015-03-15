@@ -1,37 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 15 Mar 2015 18:39:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 7931] Default configuration for Cubieboard v1 is
-	outdated
-In-Reply-To: <bug-7931-163@https.bugs.busybox.net/>
-References: <bug-7931-163@https.bugs.busybox.net/>
-Message-ID: <20150315183953.B426380795@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Mar 2015 19:47:02 +0100
+Subject: [Buildroot] [PATCH v3 1/8] postgresql: enable uclibc build
+In-Reply-To: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
+References: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150315194702.03e49125@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7931
+Dear Peter Seiderer,
 
---- Comment #2 from mfld.fr at gmail.com 2015-03-15 18:39:53 UTC ---
-Hello Thomas, first I would like to thank you for all the work you did on
-BuildRoot, because it helped me a lot to run my BBB and now my CB1.
+On Tue, 10 Mar 2015 20:59:37 +0100, Peter Seiderer wrote:
+> Build with uclibc and locale support failes with the following error
+> message:
+> 
+> regc_pg_locale.c: In function ?pg_wc_isdigit?:
+> regc_pg_locale.c:312:6: error: dereferencing pointer to incomplete type
+>       isdigit_l((unsigned char) c, pg_regex_locale));
+> 
+> This can be fixed by overwriting the HAVE_LOCALE_T detection (thanks
+> to Alex Potapenko <opotapenko@gmail.com> for the hint [1]).
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/121088.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Back to the problem reported here:
+I've applied patches 1, 2 and 4 to 8 in this patch series. I haven't
+applied patch 3 since I have comments on it, which I'll make as a reply
+to the patch itself.
 
-I used a fresh new v2015.02, and the commit that was in the defconfig is the
-following:
-https://github.com/linux-sunxi/linux-sunxi/commit/274a66a7bfcbaabb88d63e4eba161965383cc416
-
-As you can see, this commit is commented as 'Merge branch 'reference-3.0' into
-sunxi-3.0', and referenced in the branch 'sunxi-3.0'.
-
-In the serial console, I also saw that the linux kernel version was 3.0.y, not
-3.4.y in the very first lines before the panic. This is why I stopped to test
-that config and updated to latest linux-sunxi v3.4.y branch, that works very
-well.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
