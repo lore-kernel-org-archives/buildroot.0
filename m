@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Mar 2015 14:17:40 +0100
-Subject: [Buildroot] [PATCH] botan: Add hash file
-In-Reply-To: <550580A6.8050106@dawncrow.de>
-References: <550580A6.8050106@dawncrow.de>
-Message-ID: <20150315141740.2a44fee2@free-electrons.com>
+Date: Sun, 15 Mar 2015 14:17:48 +0100
+Subject: [Buildroot] [PATCH] berkeleydb: Add hash file
+In-Reply-To: <550580C1.9070305@dawncrow.de>
+References: <550580C1.9070305@dawncrow.de>
+Message-ID: <20150315141748.6682ea3f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Dear Andr? Hentschel,
 
-On Sun, 15 Mar 2015 13:52:54 +0100, Andr? Hentschel wrote:
+On Sun, 15 Mar 2015 13:53:21 +0100, Andr? Hentschel wrote:
 > Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 > ---
->  package/botan/botan.hash | 2 ++
+>  package/berkeleydb/berkeleydb.hash | 2 ++
 >  1 file changed, 2 insertions(+)
->  create mode 100644 package/botan/botan.hash
+>  create mode 100644 package/berkeleydb/berkeleydb.hash
 
 Applied, thanks.
 
