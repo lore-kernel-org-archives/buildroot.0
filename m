@@ -1,97 +1,59 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sun, 15 Mar 2015 17:15:26 +0100
-Subject: [Buildroot] [PATCH v4 1/1] fftw: add compile precision option
-Message-ID: <1426436126-23486-1-git-send-email-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Mar 2015 17:36:40 +0100
+Subject: [Buildroot] [git commit] package/boost: enable building of boost_log
+Message-ID: <20150315163717.D311880E25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=0f3f0adec652b9b8f0acb4fe905f2101693000ec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fftw has options to select compile precision between single, long-double and
-quad. These options are exclusives. This patch adds choice to select precision
-option.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yannick Kiekens <yannickkiekens@gmail.com>
+[Thomas: tested on ARM uClibc, and AArch64 glibc, the latter being the
+case that used to fail building, and was the reason why boost log had
+been disabled.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v3 -> v4:
- * add depends instruction for long-double procession. This option needs to
-   have a toolchain with long-double trigonometric routines.
-Changes v2 -> v3:
- * add depends instruction for quad-precision. This option needs to have a
-   toolchain with libquadmath enabled (only x86, x86_64 and Itanium).
-Changes v1 -> v2:
- * FFTW_CONFIGURE_OPTS -> FFTW_CONF_OPTS
----
- package/fftw/Config.in | 38 ++++++++++++++++++++++++++++++++++++++
- package/fftw/fftw.mk   |  9 +++++++++
- 2 files changed, 47 insertions(+)
+ package/boost/Config.in |    3 +++
+ package/boost/boost.mk  |    4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index 36f849f..7fa2c4c 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -9,3 +9,41 @@ config BR2_PACKAGE_FFTW
- 	  double precision.
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 574f51a..7085c05 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -88,6 +88,9 @@ config BR2_PACKAGE_BOOST_LOCALE
+ comment "boost-locale needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
  
- 	  http://www.fftw.org
++config BR2_PACKAGE_BOOST_LOG
++        bool "boost-log"
 +
-+if BR2_PACKAGE_FFTW
-+
-+choice
-+	prompt "fftw precision"
-+	default BR2_PACKAGE_FFTW_PRECISION_NONE
-+	help
-+	  Selects fftw precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_NONE
-+	bool "none"
-+	help
-+	  no compile precision selected
-+
-+config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	bool "single precision"
-+	help
-+	  compile fftw in single precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-+	bool "long double precision"
-+	# long-double precision require long-double trigonometric routines
-+	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
-+		(BR2_arm || BR2_mips || BR2_mipsel))
-+
-+	help
-+	  compile fftw in long-double precision
-+
-+config BR2_PACKAGE_FFTW_PRECISION_QUAD
-+	bool "quad precision"
-+	# quad-precision needs to have a gcc with libquadmath
-+	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-+	help
-+	  compile fftw in quadruple precision if available
-+
-+endchoice
-+
-+endif
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 3b302df..80cc0dc 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -10,4 +10,13 @@ FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPLv2+
- FFTW_LICENSE_FILES = COPYING
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
  
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_SINGLE),y)
-+FFTW_CONF_OPTS = --enable-single
-+endif
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),y)
-+FFTW_CONF_OPTS = --enable-long-double
-+endif
-+ifeq ($(BR2_PACKAGE_FFTW_PRECISION_QUAD),y)
-+FFTW_CONF_OPTS = --enable-quad-precision
-+endif
- $(eval $(autotools-package))
--- 
-2.0.5
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 70160da..56a6c34 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -24,8 +24,7 @@ HOST_BOOST_FLAGS = --without-icu \
+ 	serialization signals system test thread timer wave)
+ 
+ # coroutine breaks on some weak toolchains and it's new for 1.54+
+-# log breaks with some toolchain combinations and it's new for 1.54+
+-BOOST_WITHOUT_FLAGS = coroutine log
++BOOST_WITHOUT_FLAGS = coroutine
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+@@ -37,6 +36,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_IOSTREAMS),,iostreams)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
