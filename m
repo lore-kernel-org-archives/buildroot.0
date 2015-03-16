@@ -1,48 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:07:30 +0100
-Subject: [Buildroot] [git commit] wine: Add gettext dependency for host-wine
-Message-ID: <20150316210816.EC1C080409@busybox.osuosl.org>
+Date: Mon, 16 Mar 2015 22:07:06 +0100
+Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
+In-Reply-To: <1426017584-6096-3-git-send-email-ps.report@gmx.net>
+References: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
+ <1426017584-6096-3-git-send-email-ps.report@gmx.net>
+Message-ID: <20150316220706.632857af@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=164ac197fef763dfa61154ad41588b6701baca86
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-Mostly based on a comment by Yann E. MORIN
+On Tue, 10 Mar 2015 20:59:39 +0100, Peter Seiderer wrote:
+> - overwrite platform support with linux template
+> - disable spinlock support
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wine/wine.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Applied, after making --with-template=linux used unconditionally, as we
+discussed.
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index aa474f9..a699fff 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -243,6 +243,10 @@ else
- WINE_CONF_OPTS += --without-zlib
- endif
- 
-+# host-gettext is essential for .po file support in host-wine wrc
-+HOST_WINE_DEPENDENCIES += host-gettext
-+HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
-+
- # Wine needs to enable 64-bit build tools on 64-bit host
- ifeq ($(HOSTARCH),x86_64)
- HOST_WINE_CONF_OPTS += --enable-win64
-@@ -280,8 +284,6 @@ HOST_WINE_CONF_OPTS += \
- 	--without-curses \
- 	--without-dbus \
- 	--without-fontconfig \
--	--without-gettext \
--	--without-gettextpo \
- 	--without-gphoto \
- 	--without-glu \
- 	--without-gnutls \
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
