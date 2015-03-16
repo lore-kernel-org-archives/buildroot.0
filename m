@@ -1,25 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Mar 2015 09:40:58 +0100
-Subject: [Buildroot] [PATCH 2/2] ofono: bump to version 1.16
-In-Reply-To: <1426494498-17405-1-git-send-email-petr.vorel@gmail.com> (Petr
- Vorel's message of "Mon, 16 Mar 2015 09:28:18 +0100")
-References: <1426494498-17405-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <87lhixe3mt.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 16 Mar 2015 10:46:05 +0200
+Subject: [Buildroot] [PATCH] ofono: refer to explicit hash source
+Message-ID: <72c9f91f2ac4b01e001e80736144ce61a51fb483.1426495565.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ofono/ofono.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-
-Sorry, I've already committed your previous version.
-
-For ease of reviewing, please clearly mark the version info of your
-patches (PATCHv2 or similar in header and a short changelog after the
---- line).
-
+diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
+index ddf9bf017e6e..e83ce1a9f0b3 100644
+--- a/package/ofono/ofono.hash
++++ b/package/ofono/ofono.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
++# From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
+ sha256	403b98dadece8bc804c0bd16b96d3db5a3bb0f84af64b3d67924da2d1a754b07  ofono-1.16.tar.xz
 -- 
-Bye, Peter Korsgaard
+2.1.4
