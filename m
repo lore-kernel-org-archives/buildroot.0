@@ -1,49 +1,37 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 17 Mar 2015 00:02:03 +0300
-Subject: [Buildroot] [PATCH] toolchain-external: fix gdbserver copying for
-	ARC GNU tools
-Message-ID: <1426539723-4010-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Mar 2015 22:00:14 +0100
+Subject: [Buildroot] [git commit] postgresql: disable spinlock for xtensa
+Message-ID: <20150316210303.0E307817E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Historically in pre-built ARC GNU tools gdbserver is located in
-top-level "target-bin" folder.
+commit: http://git.buildroot.net/buildroot/commit/?id=7ebbf2e5c55fb11a7c828ffc7a93c9ef7a800c6b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
-selected Buildroot won't find gdbserver (it looks within
-SYSROOT/ARCH_SYSROOT folder).
+Fixes:
+http://autobuild.buildroot.net/results/fbf/fbf601af8b194effcad21a431ca447cb69c2bbd9/
+http://autobuild.buildroot.net/results/822/822bd05bcb7384c671bfe13125db3a818982781a/
+http://autobuild.buildroot.net/results/4ae/4ae938730a74f2be0f74fef8a99622f8f42742af/
 
-Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
-everything from "target-bin" foler into SYSROOT/usr/bin.
-
-Reason to copy everything from "target-bin" is to enable possibility in
-the future to copy more pre-built target binaries onto target.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/postgresql/postgresql.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index c0429bb..d55b6de 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -396,6 +396,11 @@ else
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7ebf795..7dc3f0b 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -31,7 +31,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
  endif
- TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
-+define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
-+	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-+	mkdir -p $${SYSROOT_DIR}/usr/bin ; \
-+	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/* $${SYSROOT_DIR}/usr/bin
-+endef
- else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
--- 
-2.1.0
+ 
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2),y)
++ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
+ endif
+ 
