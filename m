@@ -1,54 +1,76 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 17 Mar 2015 01:56:38 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-03-15
-In-Reply-To: <CAMo8BfKdwq_AA4neTCJyuHMuA7ZES3L+wJJa2at-MHUCPwTfxw@mail.gmail.com>
-References: <20150316073020.6611C100E85@stock.ovh.net>
- <CAMo8BfKuPTASXR9JEx=aGctfNxNcr2PDewyS+GGt6jcbeY8dbw@mail.gmail.com>
- <20150316231703.329d6f87@free-electrons.com>
- <CAMo8BfKdwq_AA4neTCJyuHMuA7ZES3L+wJJa2at-MHUCPwTfxw@mail.gmail.com>
-Message-ID: <CAMo8BfJeV6Li_KOd20go_4f4nHJLfNeGH8+oBpttHioQOwUXdg@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 16 Mar 2015 23:58:18 +0100
+Subject: [Buildroot] [PATCH 1/3] support/download: return different exit
+ codes for different failures
+In-Reply-To: <5aa56104e6c37f9c06a0b7c1b927a00f973e1ca4.1426545571.git.yann.morin.1998@free.fr>
+References: <cover.1426545571.git.yann.morin.1998@free.fr>
+ <5aa56104e6c37f9c06a0b7c1b927a00f973e1ca4.1426545571.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKddGw5Uj+4F9Cec1=WvXVTQFhXVgaRb41ide-COXbLpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 17, 2015 at 1:29 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> On Tue, Mar 17, 2015 at 1:17 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Max Filippov,
->>
->> On Tue, 17 Mar 2015 01:02:28 +0300, Max Filippov wrote:
->>> On Mon, Mar 16, 2015 at 10:30 AM, Thomas Petazzoni
->>> <thomas.petazzoni@free-electrons.com> wrote:
->>> >       xtensa |                   libnl-3.2.25 | NOK | http://autobuild.buildroot.net/results/90c318e3a9ef5e626d0a80e36695d34eda21f97e/
->>> >       xtensa |               memcached-1.4.22 | NOK | http://autobuild.buildroot.net/results/cd8e9d9a5f454c321071c21192958aeee9c39e73/
->>>
->>> Caused by disabled UCLIBC_HAS_GNU_GETSUBOPT option in the uclibc config.
->>> Also reproducible with other architectures that use uclibc.
->>> I guess we can just enable it in the config, additional code is really small.
->>
->> On libnl, the error only happened twice, and only on xtensa:
->> http://autobuild.buildroot.org/?reason=libnl-3.2.25. What's weird is
->> that in uClibc-0.9.33.config, which we use on other architectures, we
->> also have UCLIBC_HAS_GNU_GETSUBOPT disabled. But still there is a
->> getsubopt symbol in the generated uClibc .so file.
->>
->> Needs more investigation, it seems.
+Yann,
+
+Just few typos ;)
+
+On Mon, Mar 16, 2015 at 11:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> Ok, will look at it some more...
+> Return different exit codes depending on the error that occured:
+>
+>   0: no error (hash file missing, or all hashes match)
+>   1: hash file exists, but at least one hash in error
+>   3: hash file exists, but no hash for file to check
+s/3/2/
 
-It's a bug in uclibc-0.9.33.2 fixed in commits
-1b3025b7352f5e432ffa1c7adc57085ac9092b77,
-b222a04ae768080121458d28bff743b4afade9ba and
-067637375658047d70c296606ae17ef0bc86499d
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/download/check-hash | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index 4c07274..4cc62f3 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -9,6 +9,13 @@ set -e
+>  #   $3: the final basename of the file, to which it will be ultimately
+>  #       saved as, to be able to match it to the corresponding hashes
+>  #       in the .hash file
+> +#
+> +# Exits with:
+> +#   0: the hash file exists and the file to check matches all its hashes,
+> +#      or the hash file does not exist
+> +#   1: the hash file exists and the file to check does not match at least
+> +#      of its hashes
+> +#   2: the hash file exists and there was no hash to check the fiel against
+s/fiel/file/
 
-Doesn't look like an easy backport, as these commits depend on
-major Makefile style change. Probably easier to reimplement.
-The patch enabling UCLIBC_HAS_GNU_GETSUBOPT in uclibc
-config is still valid after fixing that.
+>
+>  while getopts :q OPT; do
+>      case "${OPT}" in
+> @@ -83,7 +90,7 @@ done <"${h_file}"
+>  if [ ${nb_checks} -eq 0 ]; then
+>      if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+>          printf "ERROR: No hash found for %s\n" "${base}" >&2
+> -        exit 1
+> +        exit 2
+>      else
+>          printf "WARNING: No hash found for %s\n" "${base}" >&2
+>      fi
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+Regards,
 
 -- 
-Thanks.
--- Max
+Samuel
