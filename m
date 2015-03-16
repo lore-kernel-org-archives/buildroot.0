@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:07:06 +0100
-Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
-In-Reply-To: <1426017584-6096-3-git-send-email-ps.report@gmx.net>
-References: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
- <1426017584-6096-3-git-send-email-ps.report@gmx.net>
-Message-ID: <20150316220706.632857af@free-electrons.com>
+Date: Mon, 16 Mar 2015 22:08:29 +0100
+Subject: [Buildroot] [PATCH v4] wine: Add gettext dependency for
+ host-wine
+In-Reply-To: <55056E86.5020109@dawncrow.de>
+References: <55056E86.5020109@dawncrow.de>
+Message-ID: <20150316220829.06c20071@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Andr? Hentschel,
 
-On Tue, 10 Mar 2015 20:59:39 +0100, Peter Seiderer wrote:
-> - overwrite platform support with linux template
-> - disable spinlock support
+On Sun, 15 Mar 2015 12:35:34 +0100, Andr? Hentschel wrote:
+> Mostly based on a comment by Yann E. MORIN
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Applied, after making --with-template=linux used unconditionally, as we
-discussed.
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
