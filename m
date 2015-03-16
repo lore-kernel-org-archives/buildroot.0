@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:02:37 +0100
-Subject: [Buildroot] [git commit] postgresql: enable bfin compile
-Message-ID: <20150316210303.1526E7FE69@busybox.osuosl.org>
+Date: Mon, 16 Mar 2015 22:07:30 +0100
+Subject: [Buildroot] [git commit] wine: Add gettext dependency for host-wine
+Message-ID: <20150316210816.EC1C080409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f177dac73a289db28772fb3e20347aba5cd5e67
+commit: http://git.buildroot.net/buildroot/commit/?id=164ac197fef763dfa61154ad41588b6701baca86
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- overwrite platform support with linux template
-- disable spinlock support
+Mostly based on a comment by Yann E. MORIN
 
-[Thomas: use the --with-template=linux option unconditionally.]
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/postgresql.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/wine/wine.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 7dc3f0b..d426093 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -13,6 +13,11 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index aa474f9..a699fff 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -243,6 +243,10 @@ else
+ WINE_CONF_OPTS += --without-zlib
+ endif
  
-+# In most cases, postgresql configure script is able to guess the
-+# platform, except for noMMU platforms that use the 'uclinux' host
-+# qualifier, as is the case on Blackfin
-+POSTGRESQL_CONF_OPTS = --with-template=linux
++# host-gettext is essential for .po file support in host-wine wrc
++HOST_WINE_DEPENDENCIES += host-gettext
++HOST_WINE_CONF_OPTS += --with-gettext --with-gettextpo
 +
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- # overwrite IPV6 detection
- ifeq ($(BR2_INET_IPV6),y)
-@@ -31,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
-+ifeq ($(BR2_bfin)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
- 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
+ # Wine needs to enable 64-bit build tools on 64-bit host
+ ifeq ($(HOSTARCH),x86_64)
+ HOST_WINE_CONF_OPTS += --enable-win64
+@@ -280,8 +284,6 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-curses \
+ 	--without-dbus \
+ 	--without-fontconfig \
+-	--without-gettext \
+-	--without-gettextpo \
+ 	--without-gphoto \
+ 	--without-glu \
+ 	--without-gnutls \
