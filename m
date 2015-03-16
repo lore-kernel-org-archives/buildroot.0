@@ -1,9 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 16 Mar 2015 11:54:59 +0100
-Subject: [Buildroot] [PATCH 2/2] package/hostapd: bump to version 2.4
-In-Reply-To: <1426503299-17058-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1426503299-17058-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <1426503299-17058-2-git-send-email-joerg.krause@embedded.rocks>
+Date: Mon, 16 Mar 2015 11:54:58 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wpa_supplicant: bump to version 2.4
+Message-ID: <1426503299-17058-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +14,69 @@ Also:
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...01-use-correct-include-path-for-libnl-3.0.patch | 26 ----------------------
- package/hostapd/hostapd.hash                       |  4 ++--
- package/hostapd/hostapd.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 29 deletions(-)
- delete mode 100644 package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
+ .../wpa_supplicant/0001-fix-musl-build-error.patch | 45 ----------------------
+ ...02-use-correct-include-path-for-libnl-3.0.patch | 26 -------------
+ package/wpa_supplicant/wpa_supplicant.hash         |  4 +-
+ package/wpa_supplicant/wpa_supplicant.mk           |  2 +-
+ 4 files changed, 3 insertions(+), 74 deletions(-)
+ delete mode 100644 package/wpa_supplicant/0001-fix-musl-build-error.patch
+ delete mode 100644 package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
 
-diff --git a/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch b/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
+diff --git a/package/wpa_supplicant/0001-fix-musl-build-error.patch b/package/wpa_supplicant/0001-fix-musl-build-error.patch
+deleted file mode 100644
+index 08f63df..0000000
+--- a/package/wpa_supplicant/0001-fix-musl-build-error.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From ccc079dc16e70844bb28e84d00bd26b61ecc755c Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+-Date: Wed, 3 Dec 2014 22:29:29 +0100
+-Subject: [PATCH 1/1] fix musl build error
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Building wpa_supplicant with the musl C library fails since musl does not
+-define type names such as '__uint32_t'. To support building wpa_supplicant
+-with the musl C library use the integer types declared in the ISO C standard
+-header file <stdint.h>.
+-
+-Signed-off-by: J?rg Krause <jkrause@posteo.de>
+----
+- src/drivers/linux_wext.h | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/drivers/linux_wext.h b/src/drivers/linux_wext.h
+-index 55cf955..e7c7001 100644
+---- a/src/drivers/linux_wext.h
+-+++ b/src/drivers/linux_wext.h
+-@@ -19,13 +19,13 @@
+- #define _LINUX_SOCKET_H
+- #define _LINUX_IF_H
+- 
+--#include <sys/types.h>
+-+#include <stdint.h>
+- #include <net/if.h>
+--typedef __uint32_t __u32;
+--typedef __int32_t __s32;
+--typedef __uint16_t __u16;
+--typedef __int16_t __s16;
+--typedef __uint8_t __u8;
+-+typedef uint32_t __u32;
+-+typedef int32_t __s32;
+-+typedef uint16_t __u16;
+-+typedef int16_t __s16;
+-+typedef uint8_t __u8;
+- #ifndef __user
+- #define __user
+- #endif /* __user */
+--- 
+-2.1.3
+-
+diff --git a/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch b/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
 deleted file mode 100644
 index 6ed0eed..0000000
---- a/package/hostapd/0001-use-correct-include-path-for-libnl-3.0.patch
+--- a/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
 +++ /dev/null
 @@ -1,26 +0,0 @@
 -From 4426de35f0e5dd5b0152474ce6a885b73de60656 Mon Sep 17 00:00:00 2001
@@ -54,27 +105,27 @@ index 6ed0eed..0000000
 --- 
 -1.9.3
 -
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index 5aefa14..f18201c 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index 947ae23..37a9fee 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
 @@ -1,2 +1,2 @@
 -# Locally calculated
--sha256	c94c2b76876fad4c80a1063a06f958a2189ba5003475016fa7658a1ca49bb4df	hostapd-2.3.tar.gz
-+# Locally calculated with: sha256sum hostapd-2.4.tar.gz
-+sha256	6fe0eb6bd1c9cbd24952ece8586b6f7bd14ab358edfda99794e79b9b9dbd657f  hostapd-2.4.tar.gz
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 72305fa..8927dbf 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
+-sha256	eaaa5bf3055270e521b2dff64f2d203ec8040f71958b8588269a82c00c9d7b6a	wpa_supplicant-2.3.tar.gz
++# Locally calculated with: sha256sum wpa_supplicant-2.4.tar.gz
++sha256	058dc832c096139a059e6df814080f50251a8d313c21b13364c54a1e70109122  wpa_supplicant-2.4.tar.gz
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 682cb4c..3ab8e05 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HOSTAPD_VERSION = 2.3
-+HOSTAPD_VERSION = 2.4
- HOSTAPD_SITE = http://hostap.epitest.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+-WPA_SUPPLICANT_VERSION = 2.3
++WPA_SUPPLICANT_VERSION = 2.4
+ WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+ WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
+ WPA_SUPPLICANT_LICENSE_FILES = README
 -- 
 2.3.3
