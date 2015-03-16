@@ -1,40 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 16 Mar 2015 09:40:57 +0200
-Subject: [Buildroot] [PATCH 1/2] connman: bump to version 1.28
-In-Reply-To: <1426491225-12515-1-git-send-email-petr.vorel@gmail.com>
-References: <1426491225-12515-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20150316074057.GE2415@tarshish>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Mon, 16 Mar 2015 08:51:16 +0100
+Subject: [Buildroot] [PATCH 3/7 v5] package/fftw: add ARM optimisations
+In-Reply-To: <571d54234d6782550cbf3ecfe3df20d886ec9d01.1426465664.git.yann.morin.1998@free.fr>
+References: <cover.1426465664.git.yann.morin.1998@free.fr>
+ <571d54234d6782550cbf3ecfe3df20d886ec9d01.1426465664.git.yann.morin.1998@free.fr>
+Message-ID: <20150316085116.640f0ffc@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Petr,
+Dear Yann E. MORIN
+On Mon, 16 Mar 2015 01:31:43 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On Mon, Mar 16, 2015 at 08:33:44AM +0100, Petr Vorel wrote:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/connman/connman.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index 4d9b03e..4b55392 100644
-> --- a/package/connman/connman.mk
-> +++ b/package/connman/connman.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+[SNIP
 >  
-> -CONNMAN_VERSION = 1.27
-> +CONNMAN_VERSION = 1.28
+> +# ARM optimisations
+> +FFTW_CONF_OPTS += $(if $(BR2_ARM_CPU_HAS_NEON),--enable,--disable)-neon
+> +
+>  $(eval $(autotools-package))
 
-Please update the connman.hash file. Adding a .hash to ofono while bumping 
-would also be nice.
+--enable-neon must be enabled only if --enable-single is enabled. Without this,
+configure fails.
 
-baruch
+Something like :
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
+FFTW_CONF_OPTS += --enable-neon
+else
+FFTW_CONF_OPTS += --disable-neon
+endif
+must be used 
+
+Regards.
+Gwenhael Goavec-Merou
