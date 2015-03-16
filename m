@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:14:54 +0100
-Subject: [Buildroot] [PATCH 1/1] quagga: option for vtysh
-In-Reply-To: <1425929912-43526-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1425929912-43526-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20150316221454.65957bb9@free-electrons.com>
+Date: Mon, 16 Mar 2015 22:16:20 +0100
+Subject: [Buildroot] [PATCH buildroot-test] autobuild-run: do not build
+ weston using an incompatible toolchain
+In-Reply-To: <1425754144-37492-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1425754144-37492-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150316221620.58c5b2b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Dear Vicente Olivert Riera,
 
-On Mon,  9 Mar 2015 14:38:32 -0500, Matt Weber wrote:
+On Sat, 7 Mar 2015 18:49:04 +0000, Vicente Olivert Riera wrote:
+> This external MIPS toolchain uses an old version of uClibc which doesn't
+> include this patch:
+> 
+>   http://git.uclibc.org/uClibc/commit/libc/sysdeps/linux?id=3d1b82c7d9dce11c733fe23a85df7f975c7e2486
+> 
+> Because of that, weston package fails to build with this error message:
+> 
+> src/compositor.c: In function
+> 'weston_compositor_set_presentation_clock_software':
+> src/compositor.c:4283:3: error: 'CLOCK_MONOTONIC_RAW' undeclared (first
+> use in this function)
+>    CLOCK_MONOTONIC_RAW, /* no jumps, no crawling */
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/d36/d367eda8b549b6facd624d0b44cfdc6eb0486c72/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-> +config BR2_PACKAGE_QUAGGA_VTYSH
-> +	bool "Build vtysh"
-> +	help
-> +	  Build and install vtysh, a vty shell for Quagga.
-
-When I look at quagga's configure.ac script, I see:
-
-         if test $ac_cv_lib_readline_main = no; then
-           AC_MSG_ERROR([vtysh needs libreadline but was not found and usable on your system.])
-         fi
-
-So I believe you need some more code than what you did: a select on
-BR2_PACKAGE_READLINE, and an addition to QUAGGA_DEPENDENCIES in the .mk
-file.
-
-I've marked your patch as Changes Requested in patchwork, so please
-send an updated version with this issue fixed.
-
-Thanks!
+Applied to buildroot-test, thanks.
 
 Thomas
 -- 
