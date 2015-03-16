@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 23:07:25 +0100
-Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
-In-Reply-To: <1426017584-6096-3-git-send-email-ps.report@gmx.net>
-References: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
- <1426017584-6096-3-git-send-email-ps.report@gmx.net>
-Message-ID: <20150316230725.6f8cbd9d@free-electrons.com>
+Date: Mon, 16 Mar 2015 23:10:07 +0100
+Subject: [Buildroot] Printing-related packages deprecated: cups,
+ foomatic-filters, gutenprint and hplip
+In-Reply-To: <CALdGskK42Eip5j5LqwT9dV_ZCTkierQ7q050G9YjnGizfAOtbw@mail.gmail.com>
+References: <20150316223054.587aa86a@free-electrons.com>
+ <CALdGskK42Eip5j5LqwT9dV_ZCTkierQ7q050G9YjnGizfAOtbw@mail.gmail.com>
+Message-ID: <20150316231007.6bc493b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Olivier Schonken,
 
-On Tue, 10 Mar 2015 20:59:39 +0100, Peter Seiderer wrote:
-> - overwrite platform support with linux template
-> - disable spinlock support
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Please keep the list in Cc, thanks!
 
-postgresql uses fork(), which is not available on Blackfin:
-http://autobuild.buildroot.org/results/c9c/c9c93156fe64e89f35627aa592c47d8c5181ed7d/build-end.log.
+On Tue, 17 Mar 2015 00:05:08 +0200, Olivier Schonken wrote:
 
-So what was the point of enabling postgresql on Blackfin ?
+> Will look into it. Newer versions has a different structure with cups
+> filters and other additional  dependencies, but I have a working 1.7
+> running. Will do work to update to 2.0.2 and push to buildroot.
+
+Awesome, thanks a lot!
 
 Thomas
 -- 
