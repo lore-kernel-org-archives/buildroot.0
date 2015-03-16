@@ -1,60 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Mar 2015 14:51:40 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: stop if one linux patches
- doesn't apply
-In-Reply-To: <1426499837-14540-1-git-send-email-sebastien.szymanski@armadeus.com>
-References: <1426499837-14540-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <20150316135140.GB4271@free.fr>
+Date: Mon, 16 Mar 2015 14:54:01 +0100
+Subject: [Buildroot] [PATCH 0/7 v6] package/fftw: add a bunch of
+	optimisations (branch yem/fftw)
+Message-ID: <cover.1426513949.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-S?bastien, All,
+Hello All!
 
-On 2015-03-16 10:57 +0100, S?bastien Szymanski spake thusly:
-> If you have several linux patches directories, Buildroot does not stop
-> if one patches of the first directories don't apply. This patch fixes
-> this.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+This series aggregates misc optimisation patches for out fftw package,
+based on work by Gwenhael and Guillaume.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thanks to both for their previous work! :-)
+
+
+Changes v5 -> v6:
+  - architecture optimisations are not available for all precisions
+    (Thomas, Gwenhael)
+
+Changes v4 -> v5:
+  - use --disable-XXX in first patch
+  - add architecture optimisations for x86 and ARM
+  - add other optimisations (threads, openMP, fast maths)
+
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  linux/linux.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 78e589e..4a69e49 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -158,11 +158,11 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
->  define LINUX_APPLY_PATCHES
->  	for p in $(LINUX_PATCHES) ; do \
->  		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
-> -			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
-> +			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` || exit 1; \
->  		elif test -d $$p ; then \
-> -			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
-> +			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch || exit 1; \
->  		else \
-> -			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` ; \
-> +			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
->  		fi \
->  	done
->  endef
-> -- 
-> 2.0.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+The following changes since commit c511ca937d4627df7d601a999945faa20fe4cc8d:
+
+  network-manager: add hash file (2015-03-16 14:19:30 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/fftw
+
+for you to fetch changes up to 0842316b8be377f09daf4c2f6a8d05fd303237d8:
+
+  package/fftw: add option for fast maths (2015-03-16 14:37:43 +0100)
+
+----------------------------------------------------------------
+Gwenhael Goavec-Merou (1):
+      fftw: add compile precision option
+
+Yann E. MORIN (6):
+      package/fftw: add x86 optimisations
+      package/fftw: add ARM optimisations
+      package/fftw: disable fortran
+      package/fftw: enable threads when the tooclhain has them
+      package/fftw: enable OpenMP if the compiler has that
+      package/fftw: add option for fast maths
+
+ package/fftw/Config.in | 63 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ package/fftw/fftw.mk   | 21 +++++++++++++++++
+ 2 files changed, 84 insertions(+)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
