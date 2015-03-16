@@ -1,32 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 19:45:51 +0100
-Subject: [Buildroot] [PATCH 0/7 v7] package/fftw: add a bunch of
- optimisations (branch yem/fftw)
-In-Reply-To: <cover.1426523417.git.yann.morin.1998@free.fr>
-References: <cover.1426523417.git.yann.morin.1998@free.fr>
-Message-ID: <20150316194551.32d2d4a9@free-electrons.com>
+Date: Mon, 16 Mar 2015 19:46:33 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: stop if one linux patches
+ doesn't apply
+In-Reply-To: <1426499837-14540-1-git-send-email-sebastien.szymanski@armadeus.com>
+References: <1426499837-14540-1-git-send-email-sebastien.szymanski@armadeus.com>
+Message-ID: <20150316194633.5c12d6bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear S?bastien Szymanski,
 
-On Mon, 16 Mar 2015 17:31:20 +0100, Yann E. MORIN wrote:
-
-> Gwenhael Goavec-Merou (1):
->       fftw: add compile precision option
+On Mon, 16 Mar 2015 10:57:17 +0100, S?bastien Szymanski wrote:
+> If you have several linux patches directories, Buildroot does not stop
+> if one patches of the first directories don't apply. This patch fixes
+> this.
 > 
-> Yann E. MORIN (6):
->       package/fftw: add option for fast maths
->       package/fftw: add x86 optimisations
->       package/fftw: add ARM optimisations
->       package/fftw: disable fortran
->       package/fftw: enable threads when the toolchain has them
->       package/fftw: enable OpenMP if the compiler has that
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-Series applied, thanks!
+Applied, thanks!
 
 Thomas
 -- 
