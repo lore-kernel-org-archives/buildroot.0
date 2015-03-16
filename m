@@ -1,70 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 19:44:02 +0100
-Subject: [Buildroot] [git commit] package/fftw: add x86 optimisations
-Message-ID: <20150316184431.8F7BD7FA25@busybox.osuosl.org>
+Date: Mon, 16 Mar 2015 19:46:10 +0100
+Subject: [Buildroot] [git commit] linux: stop if one linux patches doesn't
+	apply
+Message-ID: <20150316184626.15930817EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20b741da4cf90a321ce51fa0c48c07d7b5ae574e
+commit: http://git.buildroot.net/buildroot/commit/?id=540e14a81c9caae52adb8482b6d73c7f716694ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Cc: guillaume william brs <guillaume.bressaix@gmail.com>
+If you have several linux patches directories, Buildroot does not stop
+if one patches of the first directories don't apply. This patch fixes
+this.
+
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fftw/Config.in |    9 +++++++++
- package/fftw/fftw.mk   |    4 ++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+ linux/linux.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index 4a0706a..7feadd8 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -12,6 +12,12 @@ config BR2_PACKAGE_FFTW
- 
- if BR2_PACKAGE_FFTW
- 
-+config BR2_PACKAGE_FFTW_USE_SSE
-+	bool
-+
-+config BR2_PACKAGE_FFTW_USE_SSE2
-+	bool
-+
- choice
- 	prompt "fftw precision"
- 	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
-@@ -20,12 +26,15 @@ choice
- 
- config BR2_PACKAGE_FFTW_PRECISION_SINGLE
- 	bool "single"
-+	select BR2_PACKAGE_FFTW_USE_SSE if BR2_X86_CPU_HAS_SSE
-+	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
- 	help
- 	  Compile fftw in single precision, i.e. use 'float' for floating
- 	  point type.
- 
- config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
- 	bool "double"
-+	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
- 	help
- 	  Compile fftw in double precision (the default), i.e. use 'double'
- 	  for floating point type.
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index c05012a..daa3cc2 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -19,6 +19,10 @@ ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
- FFTW_CFLAGS += -Ofast
- endif
- 
-+# x86 optimisations
-+FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE),--enable,--disable)-sse
-+FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_SSE2),--enable,--disable)-sse2
-+
- FFTW_CONF_OPTS += CFLAGS="$(FFTW_CFLAGS)"
- 
- $(eval $(autotools-package))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b1aca41..5a0ba01 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -162,11 +162,11 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+ define LINUX_APPLY_PATCHES
+ 	for p in $(LINUX_PATCHES) ; do \
+ 		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
+-			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
++			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` || exit 1; \
+ 		elif test -d $$p ; then \
+-			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
++			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch || exit 1; \
+ 		else \
+-			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` ; \
++			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
+ 		fi \
+ 	done
+ endef
