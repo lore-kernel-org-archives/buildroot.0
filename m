@@ -1,92 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Mar 2015 17:31:20 +0100
-Subject: [Buildroot] [PATCH 1/7 v7] fftw: add compile precision option
+Date: Mon, 16 Mar 2015 17:31:21 +0100
+Subject: [Buildroot] [PATCH 2/7 v7] package/fftw: add option for fast maths
 In-Reply-To: <cover.1426523417.git.yann.morin.1998@free.fr>
 References: <cover.1426523417.git.yann.morin.1998@free.fr>
-Message-ID: <fa791a69e2ed0bd0099ec1d66875ceace566baa3.1426523417.git.yann.morin.1998@free.fr>
+Message-ID: <a7f2136328e2beb43f96d9511dc39c80cd9f8b27.1426523417.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Use FFTW_CFLAGS as intermediate variable, since we're going to need it
+in a later patch (about NEON optimisations).
 
-fftw has options to select compile precision between single, long-double
-and quad. These options are exclusives. This patch adds choice to select
-precision option.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-[yann.morin.1998 at free.fr: use --disable-XXX when not enabled; reword
- prompts (default is not 'none' but 'double')
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[based on a patch by Guillaume]
 Cc: guillaume william brs <guillaume.bressaix@gmail.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
 ---
- package/fftw/Config.in | 41 +++++++++++++++++++++++++++++++++++++++++
- package/fftw/fftw.mk   |  4 ++++
- 2 files changed, 45 insertions(+)
+Changes v6 -> v7:
+  - use intermediate FFTW_CFLAGS
+  - reorder patch
+---
+ package/fftw/Config.in | 13 +++++++++++++
+ package/fftw/fftw.mk   |  7 +++++++
+ 2 files changed, 20 insertions(+)
 
 diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index 36f849f..4cefa28 100644
+index 4cefa28..4a0706a 100644
 --- a/package/fftw/Config.in
 +++ b/package/fftw/Config.in
-@@ -9,3 +9,44 @@ config BR2_PACKAGE_FFTW
- 	  double precision.
+@@ -49,4 +49,17 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
  
- 	  http://www.fftw.org
-+
-+if BR2_PACKAGE_FFTW
-+
-+choice
-+	prompt "fftw precision"
-+	default BR2_PACKAGE_FFTW_PRECISION_DOUBLE
+ endchoice
+ 
++config BR2_PACKAGE_FFTW_FAST
++	bool "optimise for speed over accuracy"
 +	help
-+	  Selects fftw precision
++	  Optimise for fast math functions, at the expense of accuracy.
 +
-+config BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+	bool "single"
-+	help
-+	  Compile fftw in single precision, i.e. use 'float' for floating
-+	  point type.
++	  Say 'y' if you need speed and can live with inaccuracies in
++	  the results. Say 'n' (the default) if accuracy is of utmost
++	  importance.
 +
-+config BR2_PACKAGE_FFTW_PRECISION_DOUBLE
-+	bool "double"
-+	help
-+	  Compile fftw in double precision (the default), i.e. use 'double'
-+	  for floating point type.
++	  This basically uses gcc's -Ofast optimisation level, which in
++	  turn is basically using gcc's -ffast-math. See the gcc manual
++	  for what this means.
 +
-+config BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE
-+	bool "long double"
-+	# long-double precision require long-double trigonometric routines
-+	depends on !(BR2_TOOLCHAIN_BUILDROOT_UCLIBC && \
-+		(BR2_arm || BR2_mips || BR2_mipsel))
-+	help
-+	  Compile fftw in long double precision, i.e. use 'long double'
-+	  for floating point type.
-+
-+config BR2_PACKAGE_FFTW_PRECISION_QUAD
-+	bool "quad"
-+	# quad-precision needs to have a gcc with libquadmath
-+	depends on (BR2_i386 || BR2_x86_64) && BR2_USE_WCHAR
-+	help
-+	  Compile fftw in quadruple precision, i.e. use '__float128' for
-+	  floating point type.
-+
-+endchoice
-+
-+endif
+ endif
 diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 3b302df..78d36e9 100644
+index 78d36e9..c05012a 100644
 --- a/package/fftw/fftw.mk
 +++ b/package/fftw/fftw.mk
-@@ -10,4 +10,8 @@ FFTW_INSTALL_STAGING = YES
- FFTW_LICENSE = GPLv2+
- FFTW_LICENSE_FILES = COPYING
+@@ -14,4 +14,11 @@ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-
+ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double
+ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision
  
-+FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single
-+FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double
-+FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision
++FFTW_CFLAGS = $(TARGET_CFLAGS)
++ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
++FFTW_CFLAGS += -Ofast
++endif
++
++FFTW_CONF_OPTS += CFLAGS="$(FFTW_CFLAGS)"
 +
  $(eval $(autotools-package))
 -- 
