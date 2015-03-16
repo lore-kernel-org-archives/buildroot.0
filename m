@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 09:05:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
- feature flags
-In-Reply-To: <CAKAx1cjF8Q9ZTJXg4yxHkqQFFkzAEEKzU5V852XZtQMw=59LPw@mail.gmail.com>
-References: <1423214752-29779-1-git-send-email-lionel.orry@gmail.com>
- <20150315232850.21412e3a@free-electrons.com>
- <CAKAx1cjF8Q9ZTJXg4yxHkqQFFkzAEEKzU5V852XZtQMw=59LPw@mail.gmail.com>
-Message-ID: <20150316090508.6616c119@free-electrons.com>
+Date: Mon, 16 Mar 2015 09:12:35 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
+ compile error
+In-Reply-To: <874mplg9bz.fsf@dell.be.48ers.dk>
+References: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150315125324.39a11265@free-electrons.com>
+ <874mplg9bz.fsf@dell.be.48ers.dk>
+Message-ID: <20150316091235.7c77634c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lionel Orry,
+Dear Peter Korsgaard,
 
-On Mon, 16 Mar 2015 07:43:11 +0100, Lionel Orry wrote:
+On Sun, 15 Mar 2015 23:54:56 +0100, Peter Korsgaard wrote:
 
-> > So, replace AC_TRY_RUN with AC_TRY_LINK or something like that. Or
-> > maybe there's even a simpler autoconf macro to test if a definition
-> > exists or not.
+>  > Indeed, the LIBS += handling is fixed by your patch, but I'm wondering
+>  > why I'm not seeing the problem.
 > 
-> the fact is, I was asked by Arnout to do it that way, and his opinion
-> was that it was needed to run the snippet on the target to be sure of
-> the resut. See:
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/106055
-> 
-> Is there something I misunderstood ? Who has the final call about this ?
+> I'm not sure either. As I mentioned earlier, I am also not able to
+> reproduce the issue.
 
-I am not sure I agree with Arnout suggestion, but...
+Yann suggested it might be a dash vs. bash issue where bash would
+accept multiple LIBS += on the command line, but not dash. But I
+changed /bin/sh to point to /bin/dash on my system, and I still
+couldn't reproduce the problem.
 
-> > Also, did you submit your patch upstream?
-> 
-> Yes I did, it has been merged into the next branch of zeromq, v4.1.x.
+Still the problem is real as it appears on the autobuilders, but it'd
+be great to understand fully what's going on.
 
-... since your patch has been merged upstream, I'm just fine with using
-it as is.
-
-Thanks!
+I'll try to run Bernd's minimal failing config in one of the
+autobuilders.
 
 Thomas
 -- 
