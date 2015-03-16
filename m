@@ -1,97 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:09:34 +0100
-Subject: [Buildroot] [git commit] docs/manual: add documentation on
-	Config.in.host
-Message-ID: <20150316212645.C7F278015F@busybox.osuosl.org>
+Date: Mon, 16 Mar 2015 22:24:58 +0100
+Subject: [Buildroot] [PATCH 4/4] toolchainfile.cmake: set CXX variables
+ wrt BR2_INSTALL_LIBSTDCPP value
+In-Reply-To: <1425808043-32292-5-git-send-email-s.martin49@gmail.com>
+References: <1425808043-32292-1-git-send-email-s.martin49@gmail.com>
+ <1425808043-32292-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150316222458.4616098c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b3ac72d0f821f858baba052287e29878f1fa062
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-+ rearrange the structure a bit by adding a new paragraph for the Config
-files
+On Sun,  8 Mar 2015 10:47:23 +0100, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Jan Heylen <heyleke@gmail.com>
-[ThomasDS:
-  - clarify commit title
-  - add list continuations to fix indentation of Config.in.host details]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-directory.txt |   50 ++++++++++++++++++++++++++--
- 1 files changed, 46 insertions(+), 4 deletions(-)
+This is a non-trivial patch, and the commit log is empty. Why?
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 8a88282..1ce9a3b 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -11,12 +11,18 @@ Some packages have been grouped by topic in a sub-directory:
- one of these categories, then create your package directory in these.
- New subdirectories are discouraged, however.
- 
-+=== Config files
- 
--=== +Config.in+ file
-+For the package to be displayed in the configuration tool, you need to
-+create a Config file in your package directory. There are two types:
-++Config.in+ and +Config.in.host+.
- 
--Then, create a file named +Config.in+. This file will contain the
--option descriptions related to our +libfoo+ software that will be used
--and displayed in the configuration tool. It should basically contain:
-+==== +Config.in+ file
-+
-+For packages used on the target, create a file named +Config.in+. This
-+file will contain the option descriptions related to our +libfoo+ software
-+that will be used and displayed in the configuration tool. It should basically
-+contain:
- 
- ---------------------------
- config BR2_PACKAGE_LIBFOO
-@@ -49,6 +55,42 @@ supposed to contain anything but the 'bare' name of the package.
- source "package/libfoo/Config.in"
- --------------------------
- 
-+
-+==== +Config.in.host+ file
-+
-+Some packages also need to be built for the host system. There are two
-+options here:
-+
-+* The host package is only required to satisfy build-time
-+  dependencies of one or more target packages. In this case, add
-+  +host-foo+ to the target package's +BAR_DEPENDENCIES+ variable. No
-+  +Config.in.host+ file should be created.
-+
-+* The host package should be explicitly selectable by the user from
-+  the configuration menu. In this case, create a +Config.in.host+ file
-+  for that host package:
-++
-+---------------------------
-+config BR2_PACKAGE_HOST_FOO
-+	bool "host foo"
-+	help
-+	  This is a comment that explains what foo for the host is.
-+
-+	  http://foosoftware.org/foo/
-+---------------------------
-++
-+The same coding style and options as for the +Config.in+ file are valid.
-++
-+Finally you have to add your new +libfoo/Config.in.host+ to
-++package/Config.in.host+. The files included there are 'sorted alphabetically'
-+and are 'NOT' supposed to contain anything but the 'bare' name of the package.
-++
-+--------------------------
-+source "package/foo/Config.in.host"
-+--------------------------
-++
-+The host package will then be available from the +Host utilities+ menu.
-+
- [[depends-on-vs-select]]
- ==== Choosing +depends on+ or +select+
- 
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index cd41254..395cf3f 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -17,6 +17,7 @@ set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot C
+>  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
+>  set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
+>  set(CMAKE_INSTALL_SO_NO_EXE 0)
+> +set(TARGET_HAS_LIBSTDCXX @@TARGET_HAS_LIBSTDCXX@@)
+>  
+>  set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
+>  set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+> @@ -35,25 +36,45 @@ if(DEFINED USE_CCACHE)
+>  	if(USE_CCACHE)
+>  		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+>  		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+> -		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+>  		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		if(TARGET_HAS_LIBSTDCXX)
+> +			set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+> +			set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		else()
+> +			message(STATUS "Disabling C++ compiler because libstdc++ is not installed in the target filsystem")
+> +			set(CMAKE_CXX_COMPILER "CMAKE_CXX_COMPILER-NOTFOUND")
+> +		endif()
+>  	else()
+>  		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		if(TARGET_HAS_LIBSTDCXX)
+> +			set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		else()
+> +			message(STATUS "Disabling C++ compiler because libstdc++ is not installed in the target filsystem")
+> +			set(CMAKE_CXX_COMPILER "CMAKE_CXX_COMPILER-NOTFOUND")
+> +		endif()
+>  	endif()
+>  else()
+>  	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
+>  	if(CCACHE)
+>  		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+>  		set(CMAKE_C_COMPILER "${CCACHE}")
+> -		set(CMAKE_CXX_COMPILER "${CCACHE}")
+>  		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		if(TARGET_HAS_LIBSTDCXX)
+> +			set(CMAKE_CXX_COMPILER "${CCACHE}")
+> +			set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		else()
+> +			message(STATUS "Disabling C++ compiler because libstdc++ is not installed in the target filsystem")
+> +			set(CMAKE_CXX_COMPILER "CMAKE_CXX_COMPILER-NOTFOUND")
+> +		endif()
+>  		message(STATUS "ccache program has been found and will be used for the build.")
+>  		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
+>  	else()
+>  		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		if(TARGET_HAS_LIBSTDCXX)
+> +			set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> +		else()
+> +			message(STATUS "Disabling C++ compiler because libstdc++ is not installed in the target filsystem")
+> +			set(CMAKE_CXX_COMPILER "CMAKE_CXX_COMPILER-NOTFOUND")
+> +		endif()
+>  	endif()
+>  endif()
+
+This is doing multiple times the same thing.
+
+First of all, why do we have those two cases for the ccache support:
+
+if(DEFINED USE_CCACHE)
+        if(USE_CCACHE)
+	...
+	else()
+	...
+	endif()
+else()
+	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
+	if(CCACHE)
+	...
+	else()
+	...
+	endif()
+endif()
+
+The first case is when the toolchain file is used by Buildroot itself,
+the second case when it's used outside of Buildroot. But why don't we
+use the find_program() trick in both cases ?
+
+Shouldn't we instead do:
+
+find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
+if (CCACHE and USE_CCACHE)
+	...
+else()
+
+	...
+endif()
+
+Regarding the C++ stuff, the non-C++ case is the same between having
+ccache and not having ccache, so you could factorize that a bit.
+
+Could you rework this a bit?
+
+Thanks a lot,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
