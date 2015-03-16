@@ -1,43 +1,32 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 16 Mar 2015 14:14:03 +0000
-Subject: [Buildroot] [PATCH v4] toolchain-external: add Synopsys
- DesignWare tools for ARC cores
-In-Reply-To: <20150316150151.2e6db3b6@free-electrons.com>
-References: <1425988224-18780-1-git-send-email-abrodkin@synopsys.com>
- <20150316150151.2e6db3b6@free-electrons.com>
-Message-ID: <1426515243.2662.10.camel@synopsys.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Mon, 16 Mar 2015 15:30:50 +0100
+Subject: [Buildroot] [PATCH 3/7 v6] package/fftw: add ARM optimisations
+In-Reply-To: <930765fdc259da928cc44c19eb191f71d5132eef.1426513949.git.yann.morin.1998@free.fr>
+References: <cover.1426513949.git.yann.morin.1998@free.fr>
+ <930765fdc259da928cc44c19eb191f71d5132eef.1426513949.git.yann.morin.1998@free.fr>
+Message-ID: <20150316153050.68ab2d76@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Yann E. MORIN
+On Mon, 16 Mar 2015 14:54:01 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+[SNIP]
+>  choice
+>  	prompt "fftw precision"
+>  	default BR2_PACKAGE_FFTW_PRECISION_NONE
+> @@ -33,6 +36,7 @@ config BR2_PACKAGE_FFTW_PRECISION_SINGLE
+>  	bool "single precision"
+>  	select BR2_PACKAGE_FFTW_USE_SSE if BR2_X86_CPU_HAS_SSE
+>  	select BR2_PACKAGE_FFTW_USE_SSE2 if BR2_X86_CPU_HAS_SSE2
+> +	select BR2_PACKAGE_FFTW_USE_NEON if BR2_ARM_FPU_NEON
+>  	help
+[SNIP]
+s/BR2_ARM_FPU_NEON/BR2_ARM_CPU_HAS_NEON/
 
-On Mon, 2015-03-16 at 15:01 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 10 Mar 2015 14:50:24 +0300, Alexey Brodkin wrote:
-> > With this change we add pre-built external toolachins for DesignWare ARC
-> > cores. All currently existed flavours are supported:
-> >  * ARC 700 and ARC HS cores
-> >  * Little- and big-endian configurations
-> > 
-> > These pre-built tools are built with build scripts available here
-> > (https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/tree/arc-2014.12)
-> > and correspond to arc-2014.12 release of sources.
-> > 
-> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Anton Kolesov <akolesov@synopsys.com>
-> > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Applied, thanks!
+Regards
 
-Thanks a lot for taking care!
-
-Please apply http://patchwork.ozlabs.org/patch/442877/ (gdb: fix target
-gdb building from git) as well so we escape gdb build failures with
-prebuit tools for ARC.
-
--Alexey
+Gwen
