@@ -1,51 +1,41 @@
-From: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Mon, 16 Mar 2015 18:00:11 +0800
-Subject: [Buildroot] [PATCH 3/5] aarch64: ilp32: add ilp32 compiler and
-	linker flags
-In-Reply-To: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
-References: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
-Message-ID: <1426500013-1276-4-git-send-email-bamvor.zhangjian@huawei.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Mon, 16 Mar 2015 10:57:17 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: stop if one linux patches doesn't
+	apply
+Message-ID: <1426499837-14540-1-git-send-email-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In aarch64, lp64 is the default ABI. Need pass the special flags if
-the user want to compile and link ilp32 application.
+If you have several linux patches directories, Buildroot does not stop
+if one patches of the first directories don't apply. This patch fixes
+this.
 
-Signed-off-by: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
- package/Makefile.in | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ linux/linux.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 803b162..23f376f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -106,6 +106,14 @@ ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
- TARGET_ABI += -matomic
- endif
- 
-+ifeq ($(BR2_AARCH64_ILP32)$(BR2_aarch64),yy)
-+TARGET_ABI += -mabi=ilp32 -Xlinker -maarch64linux32
-+endif
-+
-+ifeq ($(BR2_AARCH64_ILP32)$(BR2_aarch64_be),yy)
-+TARGET_ABI += -mabi=ilp32 -Xlinker -EB -Xlinker -maarch64linux32b
-+endif
-+
- STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
- STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
- 
-@@ -142,7 +150,7 @@ endif
- 
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
--TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
-+TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS)) $(TARGET_ABI)
- 
- ifeq ($(BR2_BINFMT_FLAT),y)
- TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 78e589e..4a69e49 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -158,11 +158,11 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+ define LINUX_APPLY_PATCHES
+ 	for p in $(LINUX_PATCHES) ; do \
+ 		if echo $$p | grep -q -E "^ftp://|^http://|^https://" ; then \
+-			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
++			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` || exit 1; \
+ 		elif test -d $$p ; then \
+-			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
++			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch || exit 1; \
+ 		else \
+-			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` ; \
++			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
+ 		fi \
+ 	done
+ endef
 -- 
-1.8.4.5
+2.0.5
