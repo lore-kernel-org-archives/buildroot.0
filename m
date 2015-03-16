@@ -1,58 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Mar 2015 23:41:41 +0100
-Subject: [Buildroot] [PATCH 0/3] support/download: be more aggressive on
-	missing hashes (branch yem/dl-hash)
-Message-ID: <cover.1426545571.git.yann.morin.1998@free.fr>
+Date: Mon, 16 Mar 2015 23:41:47 +0100
+Subject: [Buildroot] [PATCH 1/3] support/download: return different exit
+	codes for different failures
+In-Reply-To: <cover.1426545571.git.yann.morin.1998@free.fr>
+References: <cover.1426545571.git.yann.morin.1998@free.fr>
+Message-ID: <5aa56104e6c37f9c06a0b7c1b927a00f973e1ca4.1426545571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Return different exit codes depending on the error that occured:
 
-This series makes hashes mandatory when a .hash file exists.
+  0: no error (hash file missing, or all hashes match)
+  1: hash file exists, but at least one hash in error
+  3: hash file exists, but no hash for file to check
 
-Currently, we treat missing hashes as a mere warning. Unfortunately,
-that often goes un-noticed by most users, and thus we get a lot of
-package bumps that are missing the new hashes corresponding to the new
-version.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/check-hash | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-We now make that a hard error, so users really notice something is
-wrong.
-
-Of course, if no .hash file exists, the behaviour is as yet unchanged.
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 2d05afa42792193fa392c9f5417e8effc73d1e38:
-
-  cups: deprecate package due to security issues (2015-03-16 22:26:30 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash
-
-for you to fetch changes up to e443dfcec4c084f823c718aa4c7740eddb3b628e:
-
-  support/download: always fail when there's no hash (2015-03-16 23:33:48 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      support/download: return different exit codes for different failures
-      support/download: properly catch missing hashes
-      support/download: always fail when there's no hash
-
- support/download/check-hash | 15 +++++++++------
- support/download/dl-wrapper | 11 ++++++++++-
- 2 files changed, 19 insertions(+), 7 deletions(-)
-
+diff --git a/support/download/check-hash b/support/download/check-hash
+index 4c07274..4cc62f3 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -9,6 +9,13 @@ set -e
+ #   $3: the final basename of the file, to which it will be ultimately
+ #       saved as, to be able to match it to the corresponding hashes
+ #       in the .hash file
++#
++# Exits with:
++#   0: the hash file exists and the file to check matches all its hashes,
++#      or the hash file does not exist
++#   1: the hash file exists and the file to check does not match at least
++#      of its hashes
++#   2: the hash file exists and there was no hash to check the fiel against
+ 
+ while getopts :q OPT; do
+     case "${OPT}" in
+@@ -83,7 +90,7 @@ done <"${h_file}"
+ if [ ${nb_checks} -eq 0 ]; then
+     if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+         printf "ERROR: No hash found for %s\n" "${base}" >&2
+-        exit 1
++        exit 2
+     else
+         printf "WARNING: No hash found for %s\n" "${base}" >&2
+     fi
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
