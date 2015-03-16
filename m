@@ -1,76 +1,80 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 16 Mar 2015 23:58:18 +0100
-Subject: [Buildroot] [PATCH 1/3] support/download: return different exit
- codes for different failures
-In-Reply-To: <5aa56104e6c37f9c06a0b7c1b927a00f973e1ca4.1426545571.git.yann.morin.1998@free.fr>
-References: <cover.1426545571.git.yann.morin.1998@free.fr>
- <5aa56104e6c37f9c06a0b7c1b927a00f973e1ca4.1426545571.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMKddGw5Uj+4F9Cec1=WvXVTQFhXVgaRb41ide-COXbLpQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 17 Mar 2015 00:01:55 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: fix gdbserver copying
+ for ARC GNU tools
+In-Reply-To: <1426539723-4010-1-git-send-email-abrodkin@synopsys.com>
+References: <1426539723-4010-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20150316230155.GF4271@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Alexey, All,
 
-Just few typos ;)
-
-On Mon, Mar 16, 2015 at 11:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Return different exit codes depending on the error that occured:
->
->   0: no error (hash file missing, or all hashes match)
->   1: hash file exists, but at least one hash in error
->   3: hash file exists, but no hash for file to check
-s/3/2/
-
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2015-03-17 00:02 +0300, Alexey Brodkin spake thusly:
+> Historically in pre-built ARC GNU tools gdbserver is located in
+> top-level "target-bin" folder.
+> 
+> Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
+> selected Buildroot won't find gdbserver (it looks within
+> SYSROOT/ARCH_SYSROOT folder).
+> 
+> Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
+> everything from "target-bin" foler into SYSROOT/usr/bin.
+> 
+> Reason to copy everything from "target-bin" is to enable possibility in
+> the future to copy more pre-built target binaries onto target.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+However, a small suggestion (more of a question, in fact) below...
+
 > ---
->  support/download/check-hash | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index 4c07274..4cc62f3 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -9,6 +9,13 @@ set -e
->  #   $3: the final basename of the file, to which it will be ultimately
->  #       saved as, to be able to match it to the corresponding hashes
->  #       in the .hash file
-> +#
-> +# Exits with:
-> +#   0: the hash file exists and the file to check matches all its hashes,
-> +#      or the hash file does not exist
-> +#   1: the hash file exists and the file to check does not match at least
-> +#      of its hashes
-> +#   2: the hash file exists and there was no hash to check the fiel against
-s/fiel/file/
+>  toolchain/toolchain-external/toolchain-external.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index c0429bb..d55b6de 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -396,6 +396,11 @@ else
+>  TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+>  endif
+>  TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
+> +define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+> +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+> +	mkdir -p $${SYSROOT_DIR}/usr/bin ; \
+> +	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/* $${SYSROOT_DIR}/usr/bin
 
->
->  while getopts :q OPT; do
->      case "${OPT}" in
-> @@ -83,7 +90,7 @@ done <"${h_file}"
->  if [ ${nb_checks} -eq 0 ]; then
->      if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
->          printf "ERROR: No hash found for %s\n" "${base}" >&2
-> -        exit 1
-> +        exit 2
->      else
->          printf "WARNING: No hash found for %s\n" "${base}" >&2
->      fi
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Waht about using 'cp -l' instead? That would create hardlinks instead of
+actual copies.
 
+I guess we do not really support building on a filesystem that does not
+support hard links, do we?
+
+Still, this should not be a blocker for inclusion.
 
 Regards,
+Yann E. MORIN.
+
+> +endef
+>  else
+>  # Custom toolchain
+>  TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+> -- 
+> 2.1.0
+> 
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
