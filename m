@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 21:24:23 +0100
-Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
-In-Reply-To: <trinity-2a19cf41-f081-4123-a978-ca29ae5d3ed0-1426534803053@3capp-gmx-bs11>
-References: <trinity-2a19cf41-f081-4123-a978-ca29ae5d3ed0-1426534803053@3capp-gmx-bs11>
-Message-ID: <20150316212423.63208b8d@free-electrons.com>
+Date: Mon, 16 Mar 2015 21:30:06 +0100
+Subject: [Buildroot] [git commit] collectd: add configure hint for pg_config
+Message-ID: <20150316210002.CC6EA80799@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=79e0eac99b937d54ca53a5c4ea928a723ff7059d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 16 Mar 2015 20:40:03 +0100, Peter Seiderer wrote:
+Fixes [1] in case postgresql-devel package is installed on the host:
 
-> Did take a look at postgresql-9.4.1/configure.in, the decision is made on
-> a variable called $host_os, but used for (what I would call) $target_os:
-> 
-> - for the bfin test case:
-> checking build system type... x86_64-unknown-linux-gnu
-> checking host system type... bfin-buildroot-uclinux-uclibc
-> 
-> - for a buildroot toolchain:
-> checking build system type... x86_64-unknown-linux-gnu
-> checking host system type... arm-buildroot-linux-uclibcgnueabi
+    libpq . . . . . . . . no (libpq-fe.h not found)
+    postgresql  . . . . . no (dependency error)
+    configure: error: "Some plugins are missing dependencies - see the summary above for details"
 
-Yes, the "linux" OS is recognized, but not "uclinux", I saw that. But
-it means that passing --with-template=linux unconditionally is fine.
+Otherwise fixes the following configure warning:
 
-> > If that's OK for you, I can adjust this when applying.
-> 
-> Yes, thats fine with me...
+	configure: WARNING: pg_config returned with status 127
 
-Ok, thanks.
+[1] http://autobuild.buildroot.net/results/336/336b3e932be245faa04969af960702af672916dc
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/collectd/collectd.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index d5802d6..a4b91d6 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -139,6 +139,9 @@ endif
+ ifeq ($(BR2_PACKAGE_NETSNMP),y)
+ 	COLLECTD_CONF_OPTS += --with-libnetsnmp=$(STAGING_DIR)/usr/bin/net-snmp-config
+ endif
++ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++	COLLECTD_CONF_OPTS += --with-libpq=$(STAGING_DIR)/usr/bin/pg_config
++endif
+ ifeq ($(BR2_PACKAGE_YAJL),y)
+ 	COLLECTD_CONF_OPTS += --with-yajl=$(STAGING_DIR)/usr
+ endif
