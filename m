@@ -1,30 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 14:19:30 +0100
-Subject: [Buildroot] [git commit] network-manager: add hash file
-Message-ID: <20150316132003.162CC817DF@busybox.osuosl.org>
+Date: Mon, 16 Mar 2015 14:20:30 +0100
+Subject: [Buildroot] [PATCH 1/1] network-manager: add hash file
+In-Reply-To: <1425911414-31038-1-git-send-email-petr.vorel@gmail.com>
+References: <1425911414-31038-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <20150316142030.5a3109cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c511ca937d4627df7d601a999945faa20fe4cc8d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Petr Vorel,
 
-[Thomas: fix hash origin, as noted by Baruch, upstream publishes a
-hash file so there's no need to compute it locally.]
+On Mon,  9 Mar 2015 15:30:14 +0100, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  package/network-manager/network-manager.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/network-manager/network-manager.hash
+> 
+> diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+> new file mode 100644
+> index 0000000..07513a9
+> --- /dev/null
+> +++ b/package/network-manager/network-manager.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/network-manager/network-manager.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+I've changed this to
+http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.0.sha256sum,
+as noted by Baruch, and committed. Thanks.
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-new file mode 100644
-index 0000000..07513a9
---- /dev/null
-+++ b/package/network-manager/network-manager.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
