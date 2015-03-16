@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 14:15:56 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/openocd: depends on libftdi1
- instead of libftdi
-In-Reply-To: <1425813964-5295-5-git-send-email-s.martin49@gmail.com>
-References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
- <1425813964-5295-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20150316141556.32cbb501@free-electrons.com>
+Date: Mon, 16 Mar 2015 14:19:30 +0100
+Subject: [Buildroot] [git commit] network-manager: add hash file
+Message-ID: <20150316132003.162CC817DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=c511ca937d4627df7d601a999945faa20fe4cc8d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  8 Mar 2015 12:26:04 +0100, Samuel Martin wrote:
+[Thomas: fix hash origin, as noted by Baruch, upstream publishes a
+hash file so there's no need to compute it locally.]
 
->  OPENOCD_DEPENDENCIES = \
-> -	$(if $(BR2_PACKAGE_LIBFTDI),libftdi) \
-> +	$(if $(BR2_PACKAGE_LIBFTDI),libftdi1) \
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/network-manager/network-manager.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Again, untested patch. This should be:
-
-	$(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
-
-Please fix and resend.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+new file mode 100644
+index 0000000..07513a9
+--- /dev/null
++++ b/package/network-manager/network-manager.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
