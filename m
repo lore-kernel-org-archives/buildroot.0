@@ -1,50 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Mar 2015 23:41:48 +0100
-Subject: [Buildroot] [PATCH 2/3] support/download: properly catch missing
-	hashes
+Date: Mon, 16 Mar 2015 23:41:49 +0100
+Subject: [Buildroot] [PATCH 3/3] support/download: always fail when there's
+	no hash
 In-Reply-To: <cover.1426545571.git.yann.morin.1998@free.fr>
 References: <cover.1426545571.git.yann.morin.1998@free.fr>
-Message-ID: <1ffedecafa0488c4ca81978623f331ea68279975.1426545571.git.yann.morin.1998@free.fr>
+Message-ID: <e443dfcec4c084f823c718aa4c7740eddb3b628e.1426545571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When checking hashes reports no hash for a file, and this is treated as
-an error (now: because BR2_ENFORCE_CHECK_HASH is set; later: becasue
-that will be the new and only behaviour), exit promptly in error.
+At the time we introduced hashes, we did not want to be too harsh in the
+beginning, and give people some time to adapt and accept to hashes. So
+we so far only whined^Wwarned about a missing hash file.
+
+Some time has passed now, and people are still missing updating hashes
+when bumping packages.
+
+Let's make that warning a little bit more annoying...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/download/dl-wrapper | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ support/download/check-hash | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 3b30840..d93a159 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -48,10 +48,19 @@ main() {
-         error "no hash-file specified, use -H\n"
-     fi
+diff --git a/support/download/check-hash b/support/download/check-hash
+index 4cc62f3..7971c38 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -88,10 +88,6 @@ while read t h f; do
+ done <"${h_file}"
  
--    # If the output file already exists, do not download it again
-+    # If the output file already exists and:
-+    # - there's no .hash file: do not download it again and exit promptly
-+    # - matches all its hashes: do not download it again and exit promptly
-+    # - fails at least one of its hashes: force a re-download
-+    # - there's no hash (but a .hash file): consider it a hard error
-     if [ -e "${output}" ]; then
-         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
-             exit 0
-+        elif [ ${?} -eq 2 ]; then
-+            # Do not remove the file, otherwise it might get re-downloaded
-+            # from a later location (i.e. primary -> upstream -> mirror).
-+            # Do not print a message, check-hash already did
-+            exit 2
-         fi
-         rm -f "${output}"
-         warn "Re-downloading '%s'...\n" "${output##*/}"
+ if [ ${nb_checks} -eq 0 ]; then
+-    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+-        printf "ERROR: No hash found for %s\n" "${base}" >&2
+-        exit 2
+-    else
+-        printf "WARNING: No hash found for %s\n" "${base}" >&2
+-    fi
++    printf "ERROR: No hash found for %s\n" "${base}" >&2
++    exit 2
+ fi
 -- 
 1.9.1
