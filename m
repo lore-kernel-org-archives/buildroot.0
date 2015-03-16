@@ -1,38 +1,46 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Mon, 16 Mar 2015 08:51:16 +0100
-Subject: [Buildroot] [PATCH 3/7 v5] package/fftw: add ARM optimisations
-In-Reply-To: <571d54234d6782550cbf3ecfe3df20d886ec9d01.1426465664.git.yann.morin.1998@free.fr>
-References: <cover.1426465664.git.yann.morin.1998@free.fr>
- <571d54234d6782550cbf3ecfe3df20d886ec9d01.1426465664.git.yann.morin.1998@free.fr>
-Message-ID: <20150316085116.640f0ffc@x230.trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Mar 2015 09:05:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: enable kernel-based
+ feature flags
+In-Reply-To: <CAKAx1cjF8Q9ZTJXg4yxHkqQFFkzAEEKzU5V852XZtQMw=59LPw@mail.gmail.com>
+References: <1423214752-29779-1-git-send-email-lionel.orry@gmail.com>
+ <20150315232850.21412e3a@free-electrons.com>
+ <CAKAx1cjF8Q9ZTJXg4yxHkqQFFkzAEEKzU5V852XZtQMw=59LPw@mail.gmail.com>
+Message-ID: <20150316090508.6616c119@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN
-On Mon, 16 Mar 2015 01:31:43 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Dear Lionel Orry,
 
-[SNIP
->  
-> +# ARM optimisations
-> +FFTW_CONF_OPTS += $(if $(BR2_ARM_CPU_HAS_NEON),--enable,--disable)-neon
-> +
->  $(eval $(autotools-package))
+On Mon, 16 Mar 2015 07:43:11 +0100, Lionel Orry wrote:
 
---enable-neon must be enabled only if --enable-single is enabled. Without this,
-configure fails.
+> > So, replace AC_TRY_RUN with AC_TRY_LINK or something like that. Or
+> > maybe there's even a simpler autoconf macro to test if a definition
+> > exists or not.
+> 
+> the fact is, I was asked by Arnout to do it that way, and his opinion
+> was that it was needed to run the snippet on the target to be sure of
+> the resut. See:
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/106055
+> 
+> Is there something I misunderstood ? Who has the final call about this ?
 
-Something like :
+I am not sure I agree with Arnout suggestion, but...
 
-ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_PACKAGE_FFTW_PRECISION_SINGLE),yy)
-FFTW_CONF_OPTS += --enable-neon
-else
-FFTW_CONF_OPTS += --disable-neon
-endif
-must be used 
+> > Also, did you submit your patch upstream?
+> 
+> Yes I did, it has been merged into the next branch of zeromq, v4.1.x.
 
-Regards.
-Gwenhael Goavec-Merou
+... since your patch has been merged upstream, I'm just fine with using
+it as is.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
