@@ -1,85 +1,67 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 16 Mar 2015 10:43:34 +0100
-Subject: [Buildroot] [PATCH] package/sysdig: New package
-Message-ID: <1426499014-15851-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
+Date: Mon, 16 Mar 2015 18:00:09 +0800
+Subject: [Buildroot] [PATCH 1/5] aarch64: add big endian(aarch64_be) support
+In-Reply-To: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
+References: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
+Message-ID: <1426500013-1276-2-git-send-email-bamvor.zhangjian@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sysdig is open source, system-level exploration:
-capture system state and activity from a running Linux
-instance, then save, filter and analyze.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
 ---
- package/Config.in        |  1 +
- package/sysdig/Config.in | 14 ++++++++++++++
- package/sysdig/sysdig.mk | 22 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/sysdig/Config.in
- create mode 100644 package/sysdig/sysdig.mk
+ arch/Config.in         | 12 ++++++++++--
+ arch/Config.in.aarch64 |  5 ++++-
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e221deb..019d40b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -94,6 +94,7 @@ endif
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/sysprof/Config.in"
-+	source "package/sysdig/Config.in"
- 	source "package/tinymembench/Config.in"
- 	source "package/trace-cmd/Config.in"
- 	source "package/trinity/Config.in"
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-new file mode 100644
-index 0000000..ff873a8
---- /dev/null
-+++ b/package/sysdig/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_SYSDIG
-+	bool "sysdig"
-+	depends on BR2_PACKAGE_ZLIB
-+	depends on BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_LIBJSON
-+	depends on BR2_LINUX_KERNEL
+diff --git a/arch/Config.in b/arch/Config.in
+index 16ad8be..4e4ab37 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -46,7 +46,15 @@ config BR2_armeb
+ 	  http://en.wikipedia.org/wiki/ARM
+ 
+ config BR2_aarch64
+-	bool "AArch64"
++	bool "AArch64 (little endian)"
++	select BR2_ARCH_IS_64
 +	help
-+	  Sysdig is open source, system-level exploration:
-+	  capture system state and activity from a running Linux instance,
-+	  then save, filter and analyze.
-+	  Think of it as strace + tcpdump + lsof + awesome sauce.
-+	  With a little Lua cherry on top.
++	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
++	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
++	  http://en.wikipedia.org/wiki/ARM
 +
-+	  http://sysdig.org
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-new file mode 100644
-index 0000000..62b9344
---- /dev/null
-+++ b/package/sysdig/sysdig.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# sysdig
-+#
-+#############################################################
++config BR2_aarch64_be
++	bool "AArch64 (big endian)"
+ 	select BR2_ARCH_IS_64
+ 	help
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+@@ -309,7 +317,7 @@ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
+ 
+-if BR2_aarch64
++if BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.aarch64"
+ endif
+ 
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+index 2e79870..9830302 100644
+--- a/arch/Config.in.aarch64
++++ b/arch/Config.in.aarch64
+@@ -1,8 +1,11 @@
+ config BR2_ARCH
+ 	default "aarch64"	if BR2_aarch64
++	default "aarch64_be"	if BR2_aarch64_be
+ 
+ config BR2_ENDIAN
+-	default "LITTLE"
++	default "LITTLE" if BR2_aarch64
++	default "BIG"	 if BR2_aarch64_be
+ 
+ config BR2_ARCH_HAS_ATOMICS
+ 	default y
 +
-+SYSDIG_VERSION = 0.1.98
-+SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
-+SYSDIG_LICENSE = GPLv2
-+SYSDIG_LICENSE_FILES = COPYING
-+SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF
-+SYSDIG_DEPENDENCIES += zlib luajit libjson linux
-+SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+define SYSDIG_INSTALL_DRIVER
-+	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules
-+	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules_install
-+endef
-+
-+SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
-+
-+$(eval $(cmake-package))
 -- 
-1.9.1
+1.8.4.5
