@@ -1,131 +1,137 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 16 Mar 2015 11:54:58 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wpa_supplicant: bump to version 2.4
-Message-ID: <1426503299-17058-1-git-send-email-joerg.krause@embedded.rocks>
+From: jordi montagne <jordi.montagne66@gmail.com>
+Date: Mon, 16 Mar 2015 12:15:42 +0100
+Subject: [Buildroot] [PATCH v2 1/1] board: add support for Xilinx zc706
+In-Reply-To: <20150315132115.54623df5@free-electrons.com>
+References: <1426060630-13680-1-git-send-email-jordi.montagne66@gmail.com>
+ <CAAf1diJCR=L7Dre9v9C++FjkH7QS4sEi=JFA-d5g=CUwOMW8hQ@mail.gmail.com>
+ <20150315132115.54623df5@free-electrons.com>
+Message-ID: <CAAf1diJM7egVKAvs3OYYWgVz-Jepr19Fn974uHWYLJ-0MzPx=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also:
-- remove patches: merged upstream
-- update hash
+Sorry for the noise. I fear I do not have the level required to review ...
+Regards.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- .../wpa_supplicant/0001-fix-musl-build-error.patch | 45 ----------------------
- ...02-use-correct-include-path-for-libnl-3.0.patch | 26 -------------
- package/wpa_supplicant/wpa_supplicant.hash         |  4 +-
- package/wpa_supplicant/wpa_supplicant.mk           |  2 +-
- 4 files changed, 3 insertions(+), 74 deletions(-)
- delete mode 100644 package/wpa_supplicant/0001-fix-musl-build-error.patch
- delete mode 100644 package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
+Jordi
 
-diff --git a/package/wpa_supplicant/0001-fix-musl-build-error.patch b/package/wpa_supplicant/0001-fix-musl-build-error.patch
-deleted file mode 100644
-index 08f63df..0000000
---- a/package/wpa_supplicant/0001-fix-musl-build-error.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From ccc079dc16e70844bb28e84d00bd26b61ecc755c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
--Date: Wed, 3 Dec 2014 22:29:29 +0100
--Subject: [PATCH 1/1] fix musl build error
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Building wpa_supplicant with the musl C library fails since musl does not
--define type names such as '__uint32_t'. To support building wpa_supplicant
--with the musl C library use the integer types declared in the ISO C standard
--header file <stdint.h>.
--
--Signed-off-by: J?rg Krause <jkrause@posteo.de>
-----
-- src/drivers/linux_wext.h | 12 ++++++------
-- 1 file changed, 6 insertions(+), 6 deletions(-)
--
--diff --git a/src/drivers/linux_wext.h b/src/drivers/linux_wext.h
--index 55cf955..e7c7001 100644
----- a/src/drivers/linux_wext.h
--+++ b/src/drivers/linux_wext.h
--@@ -19,13 +19,13 @@
-- #define _LINUX_SOCKET_H
-- #define _LINUX_IF_H
-- 
---#include <sys/types.h>
--+#include <stdint.h>
-- #include <net/if.h>
---typedef __uint32_t __u32;
---typedef __int32_t __s32;
---typedef __uint16_t __u16;
---typedef __int16_t __s16;
---typedef __uint8_t __u8;
--+typedef uint32_t __u32;
--+typedef int32_t __s32;
--+typedef uint16_t __u16;
--+typedef int16_t __s16;
--+typedef uint8_t __u8;
-- #ifndef __user
-- #define __user
-- #endif /* __user */
---- 
--2.1.3
--
-diff --git a/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch b/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
-deleted file mode 100644
-index 6ed0eed..0000000
---- a/package/wpa_supplicant/0002-use-correct-include-path-for-libnl-3.0.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 4426de35f0e5dd5b0152474ce6a885b73de60656 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Tue, 16 Dec 2014 23:50:33 +0100
--Subject: [PATCH 2/2] use correct include path for libnl-3.0
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- src/drivers/drivers.mak | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/drivers/drivers.mak b/src/drivers/drivers.mak
--index cdb913e..e9fc83c 100644
----- a/src/drivers/drivers.mak
--+++ b/src/drivers/drivers.mak
--@@ -35,7 +35,7 @@ NEED_RFKILL=y
-- ifdef CONFIG_LIBNL32
--   DRV_LIBS += -lnl-3
--   DRV_LIBS += -lnl-genl-3
---  DRV_CFLAGS += -DCONFIG_LIBNL20 -I/usr/include/libnl3
--+  DRV_CFLAGS += -DCONFIG_LIBNL20 `pkg-config --cflags libnl-3.0`
-- ifdef CONFIG_LIBNL3_ROUTE
--   DRV_LIBS += -lnl-route-3
--   DRV_CFLAGS += -DCONFIG_LIBNL3_ROUTE
---- 
--1.9.3
--
-diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
-index 947ae23..37a9fee 100644
---- a/package/wpa_supplicant/wpa_supplicant.hash
-+++ b/package/wpa_supplicant/wpa_supplicant.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	eaaa5bf3055270e521b2dff64f2d203ec8040f71958b8588269a82c00c9d7b6a	wpa_supplicant-2.3.tar.gz
-+# Locally calculated with: sha256sum wpa_supplicant-2.4.tar.gz
-+sha256	058dc832c096139a059e6df814080f50251a8d313c21b13364c54a1e70109122  wpa_supplicant-2.4.tar.gz
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 682cb4c..3ab8e05 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPA_SUPPLICANT_VERSION = 2.3
-+WPA_SUPPLICANT_VERSION = 2.4
- WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
- WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
- WPA_SUPPLICANT_LICENSE_FILES = README
--- 
-2.3.3
+On Wed, Mar 11, 2015 at 8:57 AM, Jordi Montagne
+<jordi.montagne66@gmail.com> wrote:
+> This is a Xilinx Zynq (xc7z045) development board, based on Xilinx Zynq
+> (xc7z045).
+>
+> This support is based on Avnet Zedboard defconfig/readme.
+>
+> Signed-off-by: Jordi Montagne <jordi.montagne66@gmail.com>
+> ---
+> Changes since v1:
+>  * use EABIHF instead of EABI
+>  * some fix on readme.txt (thanks Thomas Petazzoni)
+> ---
+>  board/xilinx/zc706/readme.txt | 57 +++++++++++++++++++++++++++++++++++++++++++
+>  configs/zc706_defconfig       | 27 ++++++++++++++++++++
+>  2 files changed, 84 insertions(+)
+>  create mode 100644 board/xilinx/zc706/readme.txt
+>  create mode 100644 configs/zc706_defconfig
+>
+> diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
+> new file mode 100644
+> index 0000000..6ab5bc9
+> --- /dev/null
+> +++ b/board/xilinx/zc706/readme.txt
+> @@ -0,0 +1,57 @@
+> +This is the Buildroot board support for the Xilinx ZC706. The ZC706 is
+> +a development board based on the Xilinx Zynq-7000 based All-Programmable
+> +System-On-Chip.
+> +
+> +ZC706 information including schematics, reference designs, and manuals are
+> +available from
+> +http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
+> +
+> +uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+> +---------------------------------------------------
+> +
+> +Due to licensing issues, the files ps7_init.c/h are not able to be
+> +distributed with the U-Boot source code.  These files are required to make a
+> +boot.bin file.
+> +
+> +If you already have the Xilinx tools installed, the following sequence will
+> +unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+> +
+> +make zc706_defconfig
+> +make uboot-patch
+> +cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
+> +output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+> +
+> +Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
+> +
+> +After copying these files into the U-Boot source tree, you can
+> +continue the build with:
+> +
+> +make
+> +
+> +*Notice*
+> +While the build will successfully complete without the ps7_init.*
+> +files, the uboot.bin file generated by this configuration will not
+> +function properly on the ZC706. Therefore, it is imperative that
+> +the ps7_init.* files be copied into the U-Boot source tree any time
+> +the clean, or uboot-dirclean targets are executed.
+> +
+> +
+> +Resulting system
+> +----------------
+> +
+> +A FAT32 partition should be created at the beggining of the SD Card
+> +and the following files should be installed:
+> +       boot.bin
+> +       devicetree.dtb
+> +       uImage
+> +       uramdisk.image.gz
+> +       u-boot.img
+> +
+> +
+> +All needed files can be taken from <output>/images/
+> +
+> +cp <output>/images/boot.bin /media/sdcard/
+> +cp <output>/images/uImage /media/sdcard/
+> +cp <output>/images/u-boot.img /media/sdcard/
+> +cp <output>/images/zynq-zc706.dtb /media/sdcard/devicetree.dtb
+> +cp <output>/images/rootfs.cpio.uboot /media/sdcard/uramdisk.image.gz
+> diff --git a/configs/zc706_defconfig b/configs/zc706_defconfig
+> new file mode 100644
+> index 0000000..f7600b1
+> --- /dev/null
+> +++ b/configs/zc706_defconfig
+> @@ -0,0 +1,27 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_ARM_EABIHF=y
+> +BR2_ARM_ENABLE_NEON=y
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="3.8"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
+> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
+> +BR2_TARGET_ROOTFS_CPIO=y
+> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
+> +BR2_TARGET_UBOOT_FORMAT_IMG=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
+> --
+> 2.0.5
+>
