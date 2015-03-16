@@ -1,37 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 16 Mar 2015 20:59:25 +0100
-Subject: [Buildroot] [PATCH v1] postgresql: disable spinlock support for
-	xtensa
-Message-ID: <1426535965-13596-1-git-send-email-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Mar 2015 21:24:23 +0100
+Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
+In-Reply-To: <trinity-2a19cf41-f081-4123-a978-ca29ae5d3ed0-1426534803053@3capp-gmx-bs11>
+References: <trinity-2a19cf41-f081-4123-a978-ca29ae5d3ed0-1426534803053@3capp-gmx-bs11>
+Message-ID: <20150316212423.63208b8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/4ae/4ae938730a74f2be0f74fef8a99622f8f42742af
+Dear Peter Seiderer,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Patch depends on [v3,3/8] postgresql: enable bfin compile
-https://patchwork.ozlabs.org/patch/448690/
----
- package/postgresql/postgresql.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 16 Mar 2015 20:40:03 +0100, Peter Seiderer wrote:
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 76b19d5..7d4bb58 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -36,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_bfin)$(BR2_microblazebe)$(BR2_microblazeel)$(BR2_nios2),y)
-+ifeq ($(BR2_bfin)$(BR2_microblazebe)$(BR2_microblazeel)$(BR2_nios2)$(BR2_xtensa),y)
- 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
+> Did take a look at postgresql-9.4.1/configure.in, the decision is made on
+> a variable called $host_os, but used for (what I would call) $target_os:
+> 
+> - for the bfin test case:
+> checking build system type... x86_64-unknown-linux-gnu
+> checking host system type... bfin-buildroot-uclinux-uclibc
+> 
+> - for a buildroot toolchain:
+> checking build system type... x86_64-unknown-linux-gnu
+> checking host system type... arm-buildroot-linux-uclibcgnueabi
+
+Yes, the "linux" OS is recognized, but not "uclinux", I saw that. But
+it means that passing --with-template=linux unconditionally is fine.
+
+> > If that's OK for you, I can adjust this when applying.
+> 
+> Yes, thats fine with me...
+
+Ok, thanks.
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
