@@ -1,58 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Mar 2015 14:54:05 +0100
-Subject: [Buildroot] [PATCH 7/7 v6] package/fftw: add option for fast maths
-In-Reply-To: <cover.1426513949.git.yann.morin.1998@free.fr>
-References: <cover.1426513949.git.yann.morin.1998@free.fr>
-Message-ID: <0842316b8be377f09daf4c2f6a8d05fd303237d8.1426513949.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Mar 2015 15:01:51 +0100
+Subject: [Buildroot] [PATCH v4] toolchain-external: add Synopsys
+ DesignWare tools for ARC cores
+In-Reply-To: <1425988224-18780-1-git-send-email-abrodkin@synopsys.com>
+References: <1425988224-18780-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20150316150151.2e6db3b6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[based on a patch by Guillaume]
-Cc: guillaume william brs <guillaume.bressaix@gmail.com>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/fftw/Config.in | 13 +++++++++++++
- package/fftw/fftw.mk   |  4 ++++
- 2 files changed, 17 insertions(+)
+Dear Alexey Brodkin,
 
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-index a0f353c..f088b4c 100644
---- a/package/fftw/Config.in
-+++ b/package/fftw/Config.in
-@@ -58,4 +58,17 @@ config BR2_PACKAGE_FFTW_PRECISION_QUAD
- 
- endchoice
- 
-+config BR2_PACKAGE_FFTW_FAST
-+	bool "optimise for speed over accuracy"
-+	help
-+	  Optimise for fast math functions, at the expense of accuracy.
-+
-+	  Say 'y' if you need speed and can live with inaccuracies in
-+	  the results. Say 'n' (the default) if accuracy is of utmost
-+	  importance.
-+
-+	  This basically uses gcc's -Ofast optimisation level, which in
-+	  turn is basically using gcc's -ffast-math. See the gcc manual
-+	  for what this means.
-+
- endif
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index c6fe6f0..6ba4806 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -27,4 +27,8 @@ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),--enable,--disable)-neon
- FFTW_CONF_OPTS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable,--disable)-threads
- FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable-openmp,--disable-openmp)
- 
-+ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
-+FFTW_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -Ofast"
-+endif
-+
- $(eval $(autotools-package))
+On Tue, 10 Mar 2015 14:50:24 +0300, Alexey Brodkin wrote:
+> With this change we add pre-built external toolachins for DesignWare ARC
+> cores. All currently existed flavours are supported:
+>  * ARC 700 and ARC HS cores
+>  * Little- and big-endian configurations
+> 
+> These pre-built tools are built with build scripts available here
+> (https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/tree/arc-2014.12)
+> and correspond to arc-2014.12 release of sources.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Applied, thanks!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
