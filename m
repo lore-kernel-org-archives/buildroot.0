@@ -1,23 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:08:29 +0100
-Subject: [Buildroot] [PATCH v4] wine: Add gettext dependency for
- host-wine
-In-Reply-To: <55056E86.5020109@dawncrow.de>
-References: <55056E86.5020109@dawncrow.de>
-Message-ID: <20150316220829.06c20071@free-electrons.com>
+Date: Mon, 16 Mar 2015 22:09:50 +0100
+Subject: [Buildroot] [PATCH v3] docs/manual: add documentation on
+ Config.in.host
+In-Reply-To: <1426061398-26254-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1426061398-26254-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150316220950.65e2f67c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+Dear Thomas De Schampheleire,
 
-On Sun, 15 Mar 2015 12:35:34 +0100, Andr? Hentschel wrote:
-> Mostly based on a comment by Yann E. MORIN
+On Wed, 11 Mar 2015 09:09:58 +0100, Thomas De Schampheleire wrote:
+> From: Jan Heylen <heyleke@gmail.com>
 > 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> + rearrange the structure a bit by adding a new paragraph for the Config
+> files
+> 
+> Signed-off-by: Jan Heylen <heyleke@gmail.com>
+> [ThomasDS:
+>   - clarify commit title
+>   - add list continuations to fix indentation of Config.in.host details]
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 Applied, thanks.
 
