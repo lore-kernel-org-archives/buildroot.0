@@ -1,80 +1,51 @@
 From: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Mon, 16 Mar 2015 18:00:13 +0800
-Subject: [Buildroot] [PATCH 5/5] aarch64: ilp32 defconfig examples
+Date: Mon, 16 Mar 2015 18:00:11 +0800
+Subject: [Buildroot] [PATCH 3/5] aarch64: ilp32: add ilp32 compiler and
+	linker flags
 In-Reply-To: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
 References: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
-Message-ID: <1426500013-1276-6-git-send-email-bamvor.zhangjian@huawei.com>
+Message-ID: <1426500013-1276-4-git-send-email-bamvor.zhangjian@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DO NOT APPLY.
-
-Here is the examples about how do I test my patches.
+In aarch64, lp64 is the default ABI. Need pass the special flags if
+the user want to compile and link ilp32 application.
 
 Signed-off-by: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
 ---
- configs/aarch64_be_defconfig       | 10 ++++++++++
- configs/aarch64_be_ilp32_defconfig | 12 ++++++++++++
- configs/aarch64_ilp32_defconfig    | 12 ++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 configs/aarch64_be_defconfig
- create mode 100644 configs/aarch64_be_ilp32_defconfig
- create mode 100644 configs/aarch64_ilp32_defconfig
+ package/Makefile.in | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/configs/aarch64_be_defconfig b/configs/aarch64_be_defconfig
-new file mode 100644
-index 0000000..0d1119d
---- /dev/null
-+++ b/configs/aarch64_be_defconfig
-@@ -0,0 +1,10 @@
-+# Architecture
-+BR2_aarch64_be=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
-+BR2_TOOLCHAIN_EXTERNAL_PATH="/path/to/toolchain/"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnu"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/configs/aarch64_be_ilp32_defconfig b/configs/aarch64_be_ilp32_defconfig
-new file mode 100644
-index 0000000..1a228df
---- /dev/null
-+++ b/configs/aarch64_be_ilp32_defconfig
-@@ -0,0 +1,12 @@
-+# Architecture
-+BR2_aarch64_be=y
-+BR2_AARCH64_ILP32=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
-+BR2_TOOLCHAIN_EXTERNAL_PATH="/path/to/toolchain/"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnu"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/configs/aarch64_ilp32_defconfig b/configs/aarch64_ilp32_defconfig
-new file mode 100644
-index 0000000..c6841c5
---- /dev/null
-+++ b/configs/aarch64_ilp32_defconfig
-@@ -0,0 +1,12 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_AARCH64_ILP32=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED=y
-+BR2_TOOLCHAIN_EXTERNAL_PATH="/path/to/toolchain/"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnu"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 803b162..23f376f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -106,6 +106,14 @@ ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
+ TARGET_ABI += -matomic
+ endif
+ 
++ifeq ($(BR2_AARCH64_ILP32)$(BR2_aarch64),yy)
++TARGET_ABI += -mabi=ilp32 -Xlinker -maarch64linux32
++endif
++
++ifeq ($(BR2_AARCH64_ILP32)$(BR2_aarch64_be),yy)
++TARGET_ABI += -mabi=ilp32 -Xlinker -EB -Xlinker -maarch64linux32b
++endif
++
+ STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+ STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
+ 
+@@ -142,7 +150,7 @@ endif
+ 
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+-TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
++TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS)) $(TARGET_ABI)
+ 
+ ifeq ($(BR2_BINFMT_FLAT),y)
+ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
 -- 
 1.8.4.5
