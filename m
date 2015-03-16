@@ -1,7 +1,9 @@
 From: Steve Kenton <skenton@ou.edu>
-Date: Mon, 16 Mar 2015 11:31:50 -0500
+Date: Mon, 16 Mar 2015 11:31:51 -0500
 Subject: [Buildroot] [PATCH 1/1] dvdrw-tools: new package
-Message-ID: <1426523511-32711-1-git-send-email-skenton@ou.edu>
+In-Reply-To: <1426523511-32711-1-git-send-email-skenton@ou.edu>
+References: <1426523511-32711-1-git-send-email-skenton@ou.edu>
+Message-ID: <1426523511-32711-2-git-send-email-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +11,12 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 The dvd+rw-tools are used to master Blu-ray Disc
-and DVD Disc media, both +RW/+R and -RW/-R. Note
-the +RW in the name is a historical artifact. This
+and DVD Disc media, both +RW/+R and -RW/-R. The
++RW in the name is a historical artifact. This
 package contains the widely used growisofs program.
 
 Signed-off-by: Steve Kenton <skenton@ou.edu>
 ---
-Thank you for all your kind feedback. I have made
-all the changes you suggested. I even understood
-most of them :-) so I guess I'm learning how to
-fish. I also removed the LARGEFILE references to
-mirror the changes going into tip. 
-
-However, the line:
-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-is still monkey see, monkey copy/paste so treat accordingly
-
-I'm still trying
-to get CDRTOOLS worked up for submission but it's
-going to be a while. I'll deal with that interaction
-if/when it's acceptable for inclusion.
-
  package/Config.in                       |  1 +
  package/dvdrw-tools/0001-limits.h.patch | 19 ++++++++++++
  package/dvdrw-tools/Config.in           | 54 +++++++++++++++++++++++++++++++++
