@@ -1,37 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:00:14 +0100
-Subject: [Buildroot] [git commit] postgresql: disable spinlock for xtensa
-Message-ID: <20150316210303.0E307817E5@busybox.osuosl.org>
+Date: Mon, 16 Mar 2015 22:02:37 +0100
+Subject: [Buildroot] [git commit] postgresql: enable bfin compile
+Message-ID: <20150316210303.1526E7FE69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ebbf2e5c55fb11a7c828ffc7a93c9ef7a800c6b
+commit: http://git.buildroot.net/buildroot/commit/?id=6f177dac73a289db28772fb3e20347aba5cd5e67
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/fbf/fbf601af8b194effcad21a431ca447cb69c2bbd9/
-http://autobuild.buildroot.net/results/822/822bd05bcb7384c671bfe13125db3a818982781a/
-http://autobuild.buildroot.net/results/4ae/4ae938730a74f2be0f74fef8a99622f8f42742af/
+- overwrite platform support with linux template
+- disable spinlock support
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Thomas: use the --with-template=linux option unconditionally.]
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/postgresql.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/postgresql/postgresql.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
 diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 7ebf795..7dc3f0b 100644
+index 7dc3f0b..d426093 100644
 --- a/package/postgresql/postgresql.mk
 +++ b/package/postgresql/postgresql.mk
-@@ -31,7 +31,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+@@ -13,6 +13,11 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ 
++# In most cases, postgresql configure script is able to guess the
++# platform, except for noMMU platforms that use the 'uclinux' host
++# qualifier, as is the case on Blackfin
++POSTGRESQL_CONF_OPTS = --with-template=linux
++
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # overwrite IPV6 detection
+ ifeq ($(BR2_INET_IPV6),y)
+@@ -31,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
  	POSTGRESQL_CONF_OPTS += --disable-thread-safety
  endif
  
--ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2),y)
-+ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
++ifeq ($(BR2_bfin)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
  	POSTGRESQL_CONF_OPTS += --disable-spinlocks
  endif
  
