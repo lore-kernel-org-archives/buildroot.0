@@ -1,162 +1,74 @@
 From: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Mon, 16 Mar 2015 18:00:10 +0800
-Subject: [Buildroot] [PATCH 2/5] aarch64: ilp32: handle special file name
-In-Reply-To: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
-References: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
-Message-ID: <1426500013-1276-3-git-send-email-bamvor.zhangjian@huawei.com>
+Date: Mon, 16 Mar 2015 18:00:08 +0800
+Subject: [Buildroot] [PATCH 0/5] Add ILP32 support in aarch64
+Message-ID: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In aarch64 ilp32, the directory of library is libilp32 and the linker is
-ld-linux-aarch64_ilp32.so.1 or ld-linux-aarch64_be_ilp32.so.1.
+ILP32 is very useful when the user want to migrate from arm 32bit to 64bit
+with minimal risk. There is no code changes and almost no footprint changes
+after migration. ILP32 could get the better performance compare with arm 32bit
+(use 64bit register and instruction instead of 32bit one) and aarch64 LP64
+(aarch64 default ABI).
 
-Signed-off-by: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
----
+Our test show that the performance of ILP32 is roughly 10% better than arm64
+LP64 while the footprint is 86% of LP64. Because of these, It is useful for
+both embedded and enterprise system.
+
+Here is the details definition of ILP32:
+ILP32 is elf32 with aarch64 assembly and is compiled by 64bit compiler.
+Refer the following table:
+
+  \-            |  arm 32bit  | arm64 ILP32 | arm64 LP64
+----------------|-------------|-------------|-------------
+instruction set |   armv7-a   |   armv8-a   |   armv8-a
+int             |   32bit     |   32bit     |   32bit
+long            |   32bit     | **32bit**   |   64bit
+pointer         |   32bit     | **32bit**   |   64bit
+
+LP64 is the default ABI on arm64(Implies -mabi=lp64 while compiling), and the
+kernel remains in LP64 no matter ILP32 enables or not.
+
+These series patches introduce the big endian support in aarch64 and then add
+ILP32 special filename and menuconfig step by step.
+
+The test of build is based on linaro kernel [1] and toolchain built by linaro
+ABE environment[2].
+
+This is my first time I try to contribute the buildroot, feedback is very
+appreciated. Sorry if there are some coding style issues.
+
+regards
+
+bamvor
+
+[1] https://git.linaro.org/kernel/linux-linaro-tracking.git
+[2] https://wiki.linaro.org/ABE
+
+
+Zhang Jian(Bamvor) (5):
+  aarch64: add big endian(aarch64_be) support
+  aarch64: ilp32: handle special file name
+  aarch64: ilp32: add ilp32 compiler and linker flags
+  aarch64: ilp32: add ilp32 menuconfig
+  aarch64: ilp32 defconfig examples
+
  Makefile                                           |  9 +++++
+ arch/Config.in                                     | 12 +++++--
+ arch/Config.in.aarch64                             | 40 ++++++++++++++++++++-
+ configs/aarch64_be_defconfig                       | 10 ++++++
+ configs/aarch64_be_ilp32_defconfig                 | 12 +++++++
+ configs/aarch64_ilp32_defconfig                    | 12 +++++++
+ package/Makefile.in                                | 10 +++++-
  toolchain/helpers.mk                               |  4 +--
  toolchain/toolchain-external/toolchain-external.mk | 41 ++++++++++++++++++++--
- 3 files changed, 50 insertions(+), 4 deletions(-)
+ 9 files changed, 142 insertions(+), 8 deletions(-)
+ create mode 100644 configs/aarch64_be_defconfig
+ create mode 100644 configs/aarch64_be_ilp32_defconfig
+ create mode 100644 configs/aarch64_ilp32_defconfig
 
-diff --git a/Makefile b/Makefile
-index af043a3..96816c3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -456,6 +456,15 @@ LIB_SYMLINK = lib64
- else
- LIB_SYMLINK = lib32
- endif
-+ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
-+# Leave extension for x32 on x86_64
-+ifeq ($(BR2_aarch64), y)
-+LIB_SYMLINK = libilp32
-+endif
-+ifeq ($(BR2_aarch64_be), y)
-+LIB_SYMLINK = libilp32
-+endif
-+endif
- 
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)/bin
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3121da4..ffb5c72 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -38,7 +38,7 @@
- #
- # $1: arch specific sysroot directory
- # $2: support libraries directory (can be empty)
--# $3: library directory ('lib' or 'lib64') from which libraries must be copied
-+# $3: library directory ('lib', 'lib64' or 'libilp32') from which libraries must be copied
- # $4: library name
- # $5: destination directory of the libary, relative to $(TARGET_DIR)
- #
-@@ -140,7 +140,7 @@ copy_toolchain_sysroot = \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
- 			rsync -au --chmod=Du+w --exclude 'usr/lib/locale' \
--				--exclude lib --exclude lib32 --exclude lib64 \
-+				--exclude lib --exclude lib32 --exclude lib64 --exclude libilp32 \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
- 	done ; \
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 9aa8123..ed10d5c 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -85,6 +85,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
- LIB_EXTERNAL_LIBS += libc.so libgcc_s.so.*
- endif
- 
-+ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
-+LIB_EXTERNAL_LIBS += ld*.so
-+endif
-+
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
- endif
-@@ -248,6 +252,19 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- 	ln -sf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
- endef
- 
-+ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
-+ifeq ($(BR2_ENDIAN), "LITTLE")
-+define TOOLCHAIN_EXTERNAL_ILP32_SYMLINK
-+	ln -sf ld*.so $(TARGET_DIR)/lib/ld-linux-aarch64_ilp32.so.1
-+endef
-+endif
-+ifeq ($(BR2_ENDIAN), "BIG")
-+define TOOLCHAIN_EXTERNAL_ILP32_SYMLINK
-+	ln -sf ld*.so $(TARGET_DIR)/lib/ld-linux-aarch64_be_ilp32.so.1
-+endef
-+endif
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -382,6 +399,7 @@ else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
- TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_ILP32_SYMLINK
- endif
- 
- # In fact, we don't need to download the toolchain, since it is already
-@@ -426,13 +444,13 @@ endef
- 
- # Returns the sysroot location for the given compiler + flags
- define toolchain_find_sysroot
--$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::')
-+$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64|ilp32)?/([^/]*/)?libc\.a::')
- endef
- 
- # Returns the lib subdirectory for the given compiler + flags (i.e
- # typically lib32 or lib64 for some toolchains)
- define toolchain_find_libdir
--$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:')
-+$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64|ilp32)?)/([^/]*/)?libc.a:\2:')
- endef
- 
- # Checks for an already installed toolchain: check the toolchain
-@@ -698,10 +716,28 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
- 	fi
- endef
- 
-+ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
-+ifeq ($(BR2_ENDIAN), "LITTLE")
-+ILP32_SYM = ld-linux-aarch64_ilp32.so.1
-+else
-+ILP32_SYM = ld-linux-aarch64_be_ilp32.so.1
-+endif
-+define TOOLCHAIN_EXTERNAL_INSTALL_ILP32_LINK
-+	LD_ILP32=`basename $(STAGING_DIR)/lib/ld*.so`; \
-+	ln -sf $${LD_ILP32} $(STAGING_DIR)/lib/${ILP32_SYM}
-+endef
-+
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_ILP32_LINK
-+	LD_ILP32=`basename $(TARGET_DIR)/lib/ld*.so`; \
-+	ln -sf $${LD_ILP32} $(TARGET_DIR)/lib/${ILP32_SYM}
-+endef
-+endif
-+
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_ILP32_LINK)
- endef
- 
- # Even though we're installing things in both the staging, the host
-@@ -711,6 +747,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_ILP32_LINK)
- endef
- 
- $(eval $(generic-package))
 -- 
 1.8.4.5
