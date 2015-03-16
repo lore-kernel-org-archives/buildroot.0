@@ -1,25 +1,31 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 17 Mar 2015 01:02:28 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-03-15
-In-Reply-To: <20150316073020.6611C100E85@stock.ovh.net>
-References: <20150316073020.6611C100E85@stock.ovh.net>
-Message-ID: <CAMo8BfKuPTASXR9JEx=aGctfNxNcr2PDewyS+GGt6jcbeY8dbw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Mar 2015 23:07:25 +0100
+Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
+In-Reply-To: <1426017584-6096-3-git-send-email-ps.report@gmx.net>
+References: <1426017584-6096-1-git-send-email-ps.report@gmx.net>
+ <1426017584-6096-3-git-send-email-ps.report@gmx.net>
+Message-ID: <20150316230725.6f8cbd9d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 16, 2015 at 10:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->       xtensa |                   libnl-3.2.25 | NOK | http://autobuild.buildroot.net/results/90c318e3a9ef5e626d0a80e36695d34eda21f97e/
->       xtensa |               memcached-1.4.22 | NOK | http://autobuild.buildroot.net/results/cd8e9d9a5f454c321071c21192958aeee9c39e73/
+Dear Peter Seiderer,
 
-Caused by disabled UCLIBC_HAS_GNU_GETSUBOPT option in the uclibc config.
-Also reproducible with other architectures that use uclibc.
-I guess we can just enable it in the config, additional code is really small.
+On Tue, 10 Mar 2015 20:59:39 +0100, Peter Seiderer wrote:
+> - overwrite platform support with linux template
+> - disable spinlock support
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
+postgresql uses fork(), which is not available on Blackfin:
+http://autobuild.buildroot.org/results/c9c/c9c93156fe64e89f35627aa592c47d8c5181ed7d/build-end.log.
+
+So what was the point of enabling postgresql on Blackfin ?
+
+Thomas
 -- 
-Thanks.
--- Max
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
