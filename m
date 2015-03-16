@@ -1,30 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Mar 2015 22:00:41 +0100
-Subject: [Buildroot] [PATCH v1] postgresql: disable spinlock support for
- xtensa
-In-Reply-To: <1426535965-13596-1-git-send-email-ps.report@gmx.net>
-References: <1426535965-13596-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20150316220041.0c9f0572@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 17 Mar 2015 00:02:03 +0300
+Subject: [Buildroot] [PATCH] toolchain-external: fix gdbserver copying for
+	ARC GNU tools
+Message-ID: <1426539723-4010-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Historically in pre-built ARC GNU tools gdbserver is located in
+top-level "target-bin" folder.
 
-On Mon, 16 Mar 2015 20:59:25 +0100, Peter Seiderer wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/4ae/4ae938730a74f2be0f74fef8a99622f8f42742af
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
+selected Buildroot won't find gdbserver (it looks within
+SYSROOT/ARCH_SYSROOT folder).
 
-Baruch patch was sent 4 minutes earlier, so I applied his patch.
+Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
+everything from "target-bin" foler into SYSROOT/usr/bin.
 
-Thanks!
+Reason to copy everything from "target-bin" is to enable possibility in
+the future to copy more pre-built target binaries onto target.
 
-Thomas
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c0429bb..d55b6de 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -396,6 +396,11 @@ else
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+ endif
+ TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
++define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
++	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
++	mkdir -p $${SYSROOT_DIR}/usr/bin ; \
++	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/* $${SYSROOT_DIR}/usr/bin
++endef
+ else
+ # Custom toolchain
+ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
