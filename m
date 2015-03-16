@@ -1,51 +1,28 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Mon, 16 Mar 2015 16:46:41 +0100
-Subject: [Buildroot] [PATCH 4/7 v6] package/fftw: disable fortran
-In-Reply-To: <b7de0f033f8d333ecd936181ddf075bd407a03af.1426513949.git.yann.morin.1998@free.fr>
-References: <cover.1426513949.git.yann.morin.1998@free.fr>
- <b7de0f033f8d333ecd936181ddf075bd407a03af.1426513949.git.yann.morin.1998@free.fr>
-Message-ID: <20150316164641.6293c9f6@x230.trabucayre.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 16 Mar 2015 15:45:22 +0000
+Subject: [Buildroot] gdbserver located outside *SYSROOT
+Message-ID: <1426520722.19530.26.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Mar 2015 14:54:02 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hi Thomas,
 
-> We do not have any fortran package and we do not build a fortran
-> compiler.
-> 
-> Still, an external toolchain may have a fortran compiler and that is
-> totally useless to us, since we anyway have no fortran package...
-> 
-> So, entirely disable fortran support; that will at least slightly speed
-> up the build in case an external toolchain has a fortran compiler.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [based on a patch by Guillaume]
-> Cc: guillaume william brs <guillaume.bressaix@gmail.com>
-> Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Reviewed-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/fftw/fftw.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-> index be99210..333e13b 100644
-> --- a/package/fftw/fftw.mk
-> +++ b/package/fftw/fftw.mk
-> @@ -10,6 +10,8 @@ FFTW_INSTALL_STAGING = YES
->  FFTW_LICENSE = GPLv2+
->  FFTW_LICENSE_FILES = COPYING
->  
-> +FFTW_CONF_OPTS = --disable-fortran
-> +
->  FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single
->  FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double
->  FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_QUAD),--enable,--disable)-quad-precision
-> -- 
-> 1.9.1
-> 
+I just realized that in pre-built ARC GNU tools gdbserver resides
+outside of SYSROOT_DIR/ARCH_SYSROOT_DIR.
+
+Historically we put gdbserver in top-level "target-bin" folder.
+
+And I'm wondering how to deal with it to get proper copy of it onto
+target if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is selected.
+
+ [1] Do we really need to re-consider placement of gdbserver for our
+next release of GNU tools for ARC? Then what could be the best location?
+
+ [2] Will setup of TOOLCHAIN_EXTERNAL_FIXUP_CMDS to cp gdbserver to some
+related location be a good solution of the problem (if so then maybe
+forget about [1] at least until we have multilibbed tools for ARC)?
+
+-Alexey
