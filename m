@@ -1,42 +1,58 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 17 Mar 2015 01:29:06 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-03-15
-In-Reply-To: <20150316231703.329d6f87@free-electrons.com>
-References: <20150316073020.6611C100E85@stock.ovh.net>
- <CAMo8BfKuPTASXR9JEx=aGctfNxNcr2PDewyS+GGt6jcbeY8dbw@mail.gmail.com>
- <20150316231703.329d6f87@free-electrons.com>
-Message-ID: <CAMo8BfKdwq_AA4neTCJyuHMuA7ZES3L+wJJa2at-MHUCPwTfxw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Mar 2015 23:41:41 +0100
+Subject: [Buildroot] [PATCH 0/3] support/download: be more aggressive on
+	missing hashes (branch yem/dl-hash)
+Message-ID: <cover.1426545571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 17, 2015 at 1:17 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Max Filippov,
->
-> On Tue, 17 Mar 2015 01:02:28 +0300, Max Filippov wrote:
->> On Mon, Mar 16, 2015 at 10:30 AM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> >       xtensa |                   libnl-3.2.25 | NOK | http://autobuild.buildroot.net/results/90c318e3a9ef5e626d0a80e36695d34eda21f97e/
->> >       xtensa |               memcached-1.4.22 | NOK | http://autobuild.buildroot.net/results/cd8e9d9a5f454c321071c21192958aeee9c39e73/
->>
->> Caused by disabled UCLIBC_HAS_GNU_GETSUBOPT option in the uclibc config.
->> Also reproducible with other architectures that use uclibc.
->> I guess we can just enable it in the config, additional code is really small.
->
-> On libnl, the error only happened twice, and only on xtensa:
-> http://autobuild.buildroot.org/?reason=libnl-3.2.25. What's weird is
-> that in uClibc-0.9.33.config, which we use on other architectures, we
-> also have UCLIBC_HAS_GNU_GETSUBOPT disabled. But still there is a
-> getsubopt symbol in the generated uClibc .so file.
->
-> Needs more investigation, it seems.
+Hello All!
 
-Ok, will look at it some more...
+This series makes hashes mandatory when a .hash file exists.
+
+Currently, we treat missing hashes as a mere warning. Unfortunately,
+that often goes un-noticed by most users, and thus we get a lot of
+package bumps that are missing the new hashes corresponding to the new
+version.
+
+We now make that a hard error, so users really notice something is
+wrong.
+
+Of course, if no .hash file exists, the behaviour is as yet unchanged.
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2d05afa42792193fa392c9f5417e8effc73d1e38:
+
+  cups: deprecate package due to security issues (2015-03-16 22:26:30 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/dl-hash
+
+for you to fetch changes up to e443dfcec4c084f823c718aa4c7740eddb3b628e:
+
+  support/download: always fail when there's no hash (2015-03-16 23:33:48 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      support/download: return different exit codes for different failures
+      support/download: properly catch missing hashes
+      support/download: always fail when there's no hash
+
+ support/download/check-hash | 15 +++++++++------
+ support/download/dl-wrapper | 11 ++++++++++-
+ 2 files changed, 19 insertions(+), 7 deletions(-)
 
 -- 
-Thanks.
--- Max
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
