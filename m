@@ -1,61 +1,163 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2015 15:08:12 +0100
-Subject: [Buildroot] [PATCHv2] toolchain: fix installing gconv libs with
- multi-arch toolchain
-In-Reply-To: <20150308224831.246ff970@free-electrons.com>
-References: <1424643784-23210-1-git-send-email-yann.morin.1998@free.fr>
- <20150308224831.246ff970@free-electrons.com>
-Message-ID: <20150317140812.GC4729@free.fr>
+From: ir. Tjeerd Pinkert <t.j.pinkert@vu.nl>
+Date: Tue, 17 Mar 2015 15:12:16 +0100
+Subject: [Buildroot] [Patch] Added package python-smbus
+In-Reply-To: <550811EC.1010908@gmail.com>
+References: <5503198F.6070804@vu.nl>
+ <CAGm1_kuM-ZPCdjcSpd_wK-20WZ2+hYOro2DjRZ3dNibTsbLHPg@mail.gmail.com>
+ <CAGm1_kuCMhPbFWXdtHSOnGf6ryi2baW59iMEJUrtHA1OW_94JA@mail.gmail.com>
+ <5507244E.2080009@vu.nl> <55080BF0.1020108@vu.nl>
+ <550811EC.1010908@gmail.com>
+Message-ID: <55083640.9080405@vu.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Zoltan,
 
-On 2015-03-08 22:48 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 22 Feb 2015 23:23:04 +0100, Yann E. MORIN wrote:
-> 
-> > diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-> > index 3f9900b..51294c3 100644
-> > --- a/toolchain/toolchain.mk
-> > +++ b/toolchain/toolchain.mk
-> > @@ -17,28 +17,39 @@ endif
-> >  ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
-> >  GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
-> >  define COPY_GCONV_LIBS
-> > -	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
-> > -		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
-> > -				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
-> > -		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
-> > +	$(Q)machine=$$($(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -dumpmachine); \
-> 
-> Unless I'm mistaken, this piece of code copying gconv libraries is used
-> for both the internal and external toolchain backends, no? If that's
-> the case, then using TOOLCHAIN_EXTERNAL_* here seems wrong, no?
+I missed your patch as well, so don't worry. It probably depends on the 
+fact if adding to the TARGET_CFLAGS is considered sane, in that case no 
+extra file/file modification is needed which might make things less 
+prone to error? I would be fine with both approaches.
 
-Absolutely.
+I think your way of handling the source definitions is preferable, since 
+that gives only one place where the source is defined.
 
-In the meantime, I found out that I could re-use an existing variable,
-TOOLCHAIN_EXTERNAL_PREFIX which contains exactly what I expected
-"gcc -dumpmachine" to return. So I've switched to using that, and it
-"fixes" the use-case for internal toolchains as well as a side effect.
+Best regards,
 
-I'll resubmit later today...
 
-> And indeed, the resulting code is not really nice. For sure not worse
-> than the average toolchain-external.mk code :-/
+Tjeerd Pinkert
 
-Meh... :-]
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On 17-03-15 12:37, Zoltan Gyarmati wrote:
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA1
+>
+> Dear Tjeerd,
+>
+> sorry, i didn't spot your thread yesterday, actually I just posted a
+> python-smbus patch a couple of weeks back, see here:
+> http://patchwork.ozlabs.org/patch/435345/
+>
+> Right now i can't test your patch, but for first sight it seems to be
+> OK. I also considered to integrate it into the i2c-tools package, but
+> imho it's reasonable to handle it as an external python module, as you
+> did as well.
+>
+> Regards
+> zgyarmati
+>
+> On 17.03.2015 12:11, ir. Tjeerd Pinkert wrote:
+>> Hi all,
+>>
+>> I managed to add a package python-smbus that installs the
+>> i2c-tools py-smbus extension so that i2c can be used under python.
+>>
+>> Most probably it is better to integrate this somehow into the
+>> i2c-tools scripts but this is the first onset of getting it
+>> working. Hints on how to best integrate, if regarded necessary, are
+>> welcome.
+>>
+>> Best regards,
+>>
+>>
+>> Tjeerd Pinkert
+>>
+>>
+>> buildroot$ git diff 6bf057b0f2ba188397a691f74877a4a30aaea3f9 --
+>> diff --git a/package/Config.in b/package/Config.in index
+>> 262a7fb..7ef7149 100644 --- a/package/Config.in +++
+>> b/package/Config.in @@ -525,6 +525,7 @@ menu "external python
+>> modules" source "package/python-flup/Config.in" source
+>> "package/python-gobject/Config.in" source
+>> "package/python-httplib2/Config.in" +       source
+>> "package/python-smbus/Config.in" source
+>> "package/python-id3/Config.in" source
+>> "package/python-ipaddr/Config.in" source
+>> "package/python-ipy/Config.in" diff --git
+>> a/package/python-smbus/Config.in b/package/python-smbus/Config.in
+>> new file mode 100644 index 0000000..d53b0af --- /dev/null +++
+>> b/package/python-smbus/Config.in @@ -0,0 +1,9 @@ +config
+>> BR2_PACKAGE_PYTHON_SMBUS +       bool "python-smbus" +
+>> depends on BR2_PACKAGE_I2C_TOOLS +       help +         Python
+>> bindings to smbus from the i2c-tools package + +
+>> http://www.lm-sensors.org/wiki/I2CTools + +         pyhton-smbus
+>> needs i2c-tools diff --git a/package/python-smbus/python-smbus.mk
+>> b/package/python-smbus/python-smbus.mk new file mode 100644 index
+>> 0000000..1673e6a --- /dev/null +++
+>> b/package/python-smbus/python-smbus.mk @@ -0,0 +1,18 @@
+>> +################################################################################
+>>
+>>   +# +# python-smbus (i2c-tools python bindings) +#
+>> +################################################################################
+>>
+>>   + +PYTHON_SMBUS_VERSION = 3.1.1 +PYTHON_SMBUS_SOURCE =
+>> i2c-tools-$(PYTHON_SMBUS_VERSION).tar.bz2 +PYTHON_SMBUS_SITE =
+>> http://dl.lm-sensors.org/i2c-tools/releases
+>> +PYTHON_SMBUS_SETUP_TYPE = distutils +PYTHON_SMBUS_LICENSE = GPLv2
+>> +PYTHON_SMBUS_LICENSE_FILES = COPYING +PYTHON_SMBUS_DEPENDENCIES =
+>> i2c-tools +PYTHON_SMBUS_SUBDIR=py-smbus + +TARGET_CFLAGS +=
+>> -I../include + +$(eval $(python-package))
+>>
+>>
+>>
+>>
+>> On 16-03-15 19:43, ir. Tjeerd Pinkert wrote:
+>>> Since I'm quite new to Buildroot, I am trying to understand how
+>>> to do things and how this thing works by reading the manual and
+>>> source code.
+>>>
+>>> I have been trying further on the python-smbus-cffi today, but
+>>> python-cffi seems to be fundamentally broken according to the
+>>> internet. Since my host machine does not yet have the python-cffi
+>>> package (Debian Stable), I could not pursue that path further.
+>>>
+>>> Next I tried to get the py-smbus from the i2c-tools package
+>>> compiled. Unfortunately unsuccessful. To compile the py-smbus
+>>> package one normally adds the EXTRA=py-smbus to the make command.
+>>> I did that by adding an option to the configuration menu and then
+>>> trying to compile via a modified makefile, but that goes wrong.
+>>>
+>>> I figured I needed a python-package makefile. Simply adding one
+>>> to the package directory then seems to be logical, but somehow
+>>> does not work because
+>>>
+>>> 1. I need to call 'make' from the subdirectory py-smbus. 2. I get
+>>> a funny error, probably I don't understand the make system good
+>>> enough yet.
+>>>
+>>> I get the following compilation error, I attached the scripts to
+>>> this email, but, what would be the correct approach for this type
+>>> of (sub)package compilation? Help is highly appreciated.
+>>>
+>>> error: package/i2c-tools/i2c-tools-python.mk:17: ***
+>>> "I2C_TOOLS_SETUP_TYPE must be set".  Stop.
+>>>
+>>> Best regards,
+>>>
+>>>
+>>> Tjeerd Pinkert
+>> _______________________________________________ buildroot mailing
+>> list buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> - --
+> Bests,
+> Zoltan Gyarmati
+> IRC freenode: zgyarmati
+> -----BEGIN PGP SIGNATURE-----
+> Version: GnuPG v1
+>
+> iQEcBAEBAgAGBQJVCBHsAAoJEAGmEeeR8iVhbEMH/0VVl37kKph96e5fdErI7ssF
+> trBbexvhSNMeLCsaD41k6s02p3rHxRsoU7/YNXyTZYBWatPfdvtWHhbxkakP8h1x
+> 8cLvjyp4BanZLHrIPFeM/wRVWRd7mAV8DNnl58EfyE7NdGco4krQreXhi22y+eYz
+> zmLcAd7gQsvuR7hm/8wp89U9ORVTfQN9YXH8U5SaiL5gKxtwH19v/egkW1d0M033
+> kQE6qvIP+zvcB8ROjrybkTnP0lS4PliKEmaR8uqjHPy405nl6nfOLCCQNIVxNDVy
+> HpXzFz14brfYAFMrsz8qBgeyy/Sl4ZMw9shzuXCHPYrAwxr3I4loQd4V1Lgt9hg=
+> =xzEs
+> -----END PGP SIGNATURE-----
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
