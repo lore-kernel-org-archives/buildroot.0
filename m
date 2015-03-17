@@ -1,94 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 23:16:29 +0100
-Subject: [Buildroot] [git commit] postgresql: uses fork(), needs mmu
-Message-ID: <20150317221703.BC8358182C@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Mar 2015 23:17:04 +0100
+Subject: [Buildroot] [PATCH v1] collectd: fix postgresql library
+ detection
+In-Reply-To: <20150317225808.3c2af021@free-electrons.com>
+References: <1426628645-26181-1-git-send-email-ps.report@gmx.net>,
+ <20150317225808.3c2af021@free-electrons.com>
+Message-ID: <trinity-7eabbdff-c2e6-4caa-b52a-096bcb8a8845-1426630624690@3capp-gmx-bs37>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98689e11f5b64c18f92510cff922eeee0bf262d0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Additional revert 'postgresql: enable bfin compile' ([2]) which
-is now useless (Blackfin is a noMMU architecture).
+Hello Thomas,
 
-Fixes ([1]):
-  postmaster/fork_process.o: In function `_fork_process':
-  fork_process.c:(.text+0x22): undefined reference to `_fork'
+> Gesendet: Dienstag, 17. M?rz 2015 um 22:58 Uhr
+> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: buildroot at busybox.net
+> Betreff: Re: [Buildroot] [PATCH v1] collectd: fix postgresql library detection
+>
+> Dear Peter Seiderer,
+> 
+> On Tue, 17 Mar 2015 22:44:05 +0100, Peter Seiderer wrote:
+> 
+> >  ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+> >  	COLLECTD_CONF_OPTS += --with-libpq=$(STAGING_DIR)/usr/bin/pg_config
+> > +	COLLECTD_CONF_ENV = LIBS="-lpthread -lm"
+> 
+> If they are needed, why isn't pg_config returning those linker flags?
+> 
 
-[1] http://autobuild.buildroot.org/results/c9c/c9c93156fe64e89f35627aa592c47d8c5181ed7d
-[2] http://git.buildroot.net/buildroot/commit/?id=6f177dac73a289db28772fb3e20347aba5cd5e67
+Because pg_config only implements --includedir and --libdir:
+    $ cat host/usr/sh4-buildroot-linux-uclibc/sysroot/usr/bin/pg_config
+#!/bin/sh
 
-[Thomas: propagate to the appropriate reverse dependencies.]
+#
+# Minimal pg_config implementation as replacement for the native pg_config application
+# Only implements --includedir and --libdir
+#
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/Config.ext           |    1 +
- package/postgresql/Config.in     |    1 +
- package/postgresql/postgresql.mk |    7 +------
- package/qt5/qt5base/Config.in    |    1 +
- 4 files changed, 4 insertions(+), 6 deletions(-)
+prefix=/home/seiderer/BUildroot/build_sh_postgresql_collectd/host/usr/sh4-buildroot-linux-uclibc/sysroot/usr
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 935f966..1d9c2fe 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -149,6 +149,7 @@ comment "MySQL drivers need a toolchain w/ C++, threads"
- config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
- 	bool "PostgreSQL"
- 	select BR2_PACKAGE_POSTGRESQL
-+	depends on BR2_USE_MMU # postgresql
- 	help
- 	  PDO driver for PostgreSQL
- 
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 519b2a1..4c53703 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_POSTGRESQL
- 	bool "postgresql"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  PostgreSQL is a powerful, open source object-relational
- 	  database system.
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index d426093..7dc3f0b 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -13,11 +13,6 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- 
--# In most cases, postgresql configure script is able to guess the
--# platform, except for noMMU platforms that use the 'uclinux' host
--# qualifier, as is the case on Blackfin
--POSTGRESQL_CONF_OPTS = --with-template=linux
--
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- # overwrite IPV6 detection
- ifeq ($(BR2_INET_IPV6),y)
-@@ -36,7 +31,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_bfin)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
-+ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
- 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 17ed5db..20fd905 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -60,6 +60,7 @@ config BR2_PACKAGE_QT5BASE_MYSQL
- config BR2_PACKAGE_QT5BASE_PSQL
- 	bool "PostgreSQL Plugin"
- 	select BR2_PACKAGE_POSTGRESQL
-+	depends on BR2_USE_MMU # postgresql
- 	help
- 	  Build PostgreSQL plugin
- 	  If unsure, say n.
+case "$1" in
+  --includedir)
+        echo "$prefix/include"
+        ;;
+  --libdir)
+        echo "$prefix/lib"
+        ;;
+  *)
+        echo "Usage: $0 {--includedir|--libdir}"
+esac
+
+
+And collectd configure uses only this two options...
+
+> I'm sorry to be annoying, but I really don't like adding LIBS variables
+> all over the place, because they tend to become wrong/unneeded, and we
+> never notice.
+
+...suspected this argument, I am open for other suggestions, but I think
+this aproach is the least invasive...
+
+Regards,
+Peter
+
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
