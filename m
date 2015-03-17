@@ -1,74 +1,61 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:48:30 -0300
-Subject: [Buildroot] [PATCH v2 06/15] package infra: drop non-lfs support
+Date: Tue, 17 Mar 2015 13:48:31 -0300
+Subject: [Buildroot] [PATCH v2 07/15] configs: drop largefile option
 In-Reply-To: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426610919-11901-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426610919-11901-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that largefile is mandatory remove support for non-lfs
-tweaks/variables in the package infra and the gcc build.
+Drop the buildroot toolchain non-largefile support option since it's
+being removed.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Makefile.in                | 7 -------
- package/gcc/gcc-final/gcc-final.mk | 1 -
- package/pkg-autotools.mk           | 1 -
- 3 files changed, 9 deletions(-)
+ configs/armadeus_apf9328_defconfig | 1 -
+ configs/raspberrypi2_defconfig     | 1 -
+ configs/raspberrypi_defconfig      | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 803b162..fc57427 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -136,10 +136,7 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
+diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
+index 3600199..3ad8feb 100644
+--- a/configs/armadeus_apf9328_defconfig
++++ b/configs/armadeus_apf9328_defconfig
+@@ -6,7 +6,6 @@ BR2_arm920t=y
+ BR2_PACKAGE_GDB=y
+ BR2_PACKAGE_HOST_GDB=y
+ BR2_ENABLE_LOCALE_PURGE=y
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+ BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+ BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index b523a4a..4d4944f 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -3,7 +3,6 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
--ifeq ($(BR2_LARGEFILE),y)
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--endif
--
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
-@@ -373,10 +370,6 @@ else
- DISABLE_NLS :=--disable-nls
- endif
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
--ifneq ($(BR2_LARGEFILE),y)
--DISABLE_LARGEFILE = --disable-largefile
--endif
--
- ifeq ($(BR2_INET_IPV6),y)
- DISABLE_IPV6 = --enable-ipv6
- else
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index c014bc5..d76eb31 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -49,7 +49,6 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
- HOST_GCC_FINAL_CONF_OPTS = \
- 	$(HOST_GCC_COMMON_CONF_OPTS) \
- 	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
--	$(DISABLE_LARGEFILE) \
- 	--enable-poison-system-directories \
- 	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 835657c..f9b8a1c 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -1,7 +1,6 @@
+ BR2_arm=y
+ BR2_arm1176jzf_s=y
  
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index d2f15fa..2ecf7d8 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -201,7 +201,6 @@ define $(2)_CONFIGURE_CMDS
- 		--with-fop=no \
- 		--disable-dependency-tracking \
- 		$$(DISABLE_NLS) \
--		$$(DISABLE_LARGEFILE) \
- 		$$(DISABLE_IPV6) \
- 		$$(ENABLE_DEBUG) \
- 		$$(SHARED_STATIC_LIBS_OPTS) \
+-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
 -- 
 2.0.5
