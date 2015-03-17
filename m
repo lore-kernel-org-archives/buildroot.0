@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Mar 2015 21:47:38 +0000 (UTC)
+Date: Tue, 17 Mar 2015 21:50:33 +0000 (UTC)
 Subject: [Buildroot] [Bug 7941] glibc-2.20 fails to build for
 	sparc-buildroot-linux-gnu
 In-Reply-To: <bug-7941-163@https.bugs.busybox.net/>
 References: <bug-7941-163@https.bugs.busybox.net/>
-Message-ID: <20150317214738.471CA81827@busybox.osuosl.org>
+Message-ID: <20150317215033.48B6E807B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,21 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=7941
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+--- Comment #2 from mail at waldemar-brodkorb.de 2015-03-17 21:50:33 UTC ---
+You could also apply this simple patch:
+diff -Nur glibc-2.20.orig/sysdeps/sparc/sparc32/sem_trywait.c
+glibc-2.20/sysdeps/sparc/sparc32/sem_trywait.c
+--- glibc-2.20.orig/sysdeps/sparc/sparc32/sem_trywait.c 2014-09-07
+10:09:09.000000000 +0200
++++ glibc-2.20/sysdeps/sparc/sparc32/sem_trywait.c      2014-09-13
+10:21:44.000000000 +0200
+@@ -22,6 +22,7 @@
+ #include <lowlevellock.h>
+ #include <internaltypes.h>
+ #include <semaphore.h>
++#include <sparc-nptl.h>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-03-17 21:47:38 UTC ---
-Thanks for the headsup, just sent a patch to the list to disable 2.20 for sparc
-which leaves 2.21 (tested working with qemu).
+ #include <shlib-compat.h>
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
