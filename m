@@ -1,43 +1,41 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 17 Mar 2015 10:08:19 +0100
-Subject: [Buildroot] [PATCH 2/2] package/cmake: not available on static-only
-	build
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Mar 2015 10:13:53 +0100
+Subject: [Buildroot] [PATCH 1/2] package/cmake: disable on unsupported
+ architectures
 In-Reply-To: <1426583299-21207-1-git-send-email-s.martin49@gmail.com>
 References: <1426583299-21207-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1426583299-21207-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150317101353.4db3fda2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/9f7/9f7c8d5078cd1f3cd493f9ae8e95c8ee728f98fd/
+Dear Samuel Martin,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/cmake/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Tue, 17 Mar 2015 10:08:18 +0100, Samuel Martin wrote:
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index eee2461..3165572 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	depends on !BR2_xtensa
- 	depends on BR2_USE_WCHAR # libarchive
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  CTest is a testing tool distributed as a part of CMake. It
- 	  can be used to automate updating (using CVS for example),
-@@ -27,5 +28,5 @@ config BR2_PACKAGE_CMAKE_CTEST
- 
- 	  http://www.cmake.org/
- 
--comment "ctest needs a toolchain w/ C++, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+comment "ctest needs a toolchain w/ C++, wchar, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+> index 0b5bba9..eee2461 100644
+> --- a/package/cmake/Config.in
+> +++ b/package/cmake/Config.in
+> @@ -10,6 +10,12 @@ config BR2_PACKAGE_CMAKE_CTEST
+>  	select BR2_PACKAGE_EXPAT
+>  	select BR2_PACKAGE_BZIP2
+>  	select BR2_PACKAGE_XZ
+> +	depends on !BR2_arcle && !BR2_arceb
+> +	depends on !BR2_bfin
+> +	depends on !BR2_microblazeel && !BR2_microblazebe
+> +	depends on !BR2_nios2
+> +	depends on !BR2_sh && !BR2_sh64
+> +	depends on !BR2_xtensa
+
+So maybe we should have a positive test instead?
+
+	depends on BR2_arm || BR2_armeb || BR2_...
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
