@@ -1,38 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:48:26 -0300
-Subject: [Buildroot] [PATCH v2 02/15] toolchain/helpers: make LFS mandatory
-	for uclibc toolchains
+Date: Tue, 17 Mar 2015 13:48:27 -0300
+Subject: [Buildroot] [PATCH v2 03/15] package/uclibc: default to Y for
+	LARGEFILE
 In-Reply-To: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426610919-11901-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426610919-11901-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed on the mailing list drop the non-largefile option for
-toolchains.
-The size delta is minimal and it just complicates package dependencies.
+This will allow us to remove largefile handling in the tree without
+breaking things while doing so.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/uclibc/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 5d6390e..2e6b500 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -281,7 +281,7 @@ check_uclibc = \
- 	fi; \
- 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
- 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 56fea8a..a180227 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -90,11 +90,9 @@ config BR2_UCLIBC_CONFIG
+ 	  If unsure, use the default.
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
+-	bool "Enable large file (files > 2 GB) support"
++	bool
+ 	select BR2_LARGEFILE
+-	help
+-	  Enable this option if you want your toolchain to support
+-	  files bigger than 2 GB.
++	default y
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
+ 	bool "Enable IPv6 support"
 -- 
 2.0.5
