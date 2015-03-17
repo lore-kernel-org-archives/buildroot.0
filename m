@@ -1,110 +1,74 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:48:29 -0300
-Subject: [Buildroot] [PATCH v2 05/15] toolchain: remove LARGEFILE selects
+Date: Tue, 17 Mar 2015 13:48:30 -0300
+Subject: [Buildroot] [PATCH v2 06/15] package infra: drop non-lfs support
 In-Reply-To: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426610919-11901-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426610919-11901-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's no need for toolchains or the user to declare largefile support
-since it's now mandatory.
+Now that largefile is mandatory remove support for non-lfs
+tweaks/variables in the package infra and the gcc build.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/Config.in                    |  2 --
- toolchain/toolchain-external/Config.in | 14 --------------
- 2 files changed, 16 deletions(-)
+ package/Makefile.in                | 7 -------
+ package/gcc/gcc-final/gcc-final.mk | 1 -
+ package/pkg-autotools.mk           | 1 -
+ 3 files changed, 9 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index b039ee2..291db94 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -9,7 +9,6 @@ config BR2_TOOLCHAIN
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
--	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
-@@ -24,7 +23,6 @@ config BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 803b162..fc57427 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -136,10 +136,7 @@ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING = -g3
+ endif
  
- config BR2_TOOLCHAIN_USES_MUSL
- 	bool
--	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 8b0f09b..3b7f40b 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -635,7 +635,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	depends on BR2_sh2a
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_LARGEFILE
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -655,7 +654,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	depends on BR2_sh2a
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	select BR2_LARGEFILE
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -782,7 +780,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
-@@ -800,7 +797,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
-@@ -818,7 +814,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
-@@ -885,7 +880,6 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12
- 	depends on BR2_HOSTARCH = "x86_64"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_LARGEFILE
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
-@@ -1151,14 +1145,6 @@ endchoice
- 
- if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
--config BR2_TOOLCHAIN_EXTERNAL_LARGEFILE
--	bool "Toolchain has large file support?"
--	select BR2_LARGEFILE
--	help
--	  Select this option if your external toolchain supports
--	  largefile. If you don't know, leave the default value,
--	  Buildroot will tell you if it's correct or not.
+-ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-endif
 -
- config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
- 	bool "Toolchain has IPv6 support?"
- 	select BR2_INET_IPV6
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+@@ -373,10 +370,6 @@ else
+ DISABLE_NLS :=--disable-nls
+ endif
+ 
+-ifneq ($(BR2_LARGEFILE),y)
+-DISABLE_LARGEFILE = --disable-largefile
+-endif
+-
+ ifeq ($(BR2_INET_IPV6),y)
+ DISABLE_IPV6 = --enable-ipv6
+ else
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index c014bc5..d76eb31 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -49,7 +49,6 @@ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGE
+ HOST_GCC_FINAL_CONF_OPTS = \
+ 	$(HOST_GCC_COMMON_CONF_OPTS) \
+ 	--enable-languages=$(GCC_FINAL_CROSS_LANGUAGES) \
+-	$(DISABLE_LARGEFILE) \
+ 	--enable-poison-system-directories \
+ 	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
+ 
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index d2f15fa..2ecf7d8 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -201,7 +201,6 @@ define $(2)_CONFIGURE_CMDS
+ 		--with-fop=no \
+ 		--disable-dependency-tracking \
+ 		$$(DISABLE_NLS) \
+-		$$(DISABLE_LARGEFILE) \
+ 		$$(DISABLE_IPV6) \
+ 		$$(ENABLE_DEBUG) \
+ 		$$(SHARED_STATIC_LIBS_OPTS) \
 -- 
 2.0.5
