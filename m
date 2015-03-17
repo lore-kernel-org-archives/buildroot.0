@@ -1,58 +1,34 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 17 Mar 2015 22:45:03 +0100
-Subject: [Buildroot] [PATCH 3/3] ljsyscall: refactor with
-	BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-In-Reply-To: <1426622689-31844-3-git-send-email-francois.perrad@gadz.org>
-References: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
- <1426622689-31844-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CA+TH9VnqVH6iL73C9T=74gZaGfz71=h2xOPAgUMdrf_cN6s-NQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Mar 2015 18:46:43 -0300
+Subject: [Buildroot] [PATCH] glibc: disable 2.20 for sparc
+Message-ID: <1426628803-17401-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Disable glibc 2.20 for sparc, it's broken, that leaves 2.21 as the
+default in this case.
+Fixes bug #7941.
 
-2015-03-17 21:04 GMT+01:00 Francois Perrad <fperrad@gmail.com>:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/glibc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reviewed-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
-
-Patch is fine for me. Nothing to add.
-
->  package/ljsyscall/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
-> index dcbd521..b9ff04d 100644
-> --- a/package/ljsyscall/Config.in
-> +++ b/package/ljsyscall/Config.in
-> @@ -3,12 +3,12 @@ config BR2_PACKAGE_LJSYSCALL
->         # ljsyscall is specifically for LuaJIT, not Lua.
->         depends on BR2_PACKAGE_LUAJIT
->         # ljsyscall is only available for some target architectures
-> -       depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
-> +       depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->         help
->           An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
->
->           http://github.com/justincormack/ljsyscall
->
->  comment "ljsyscall needs LuaJIT"
-> -       depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
-> +       depends on !BR2_PACKAGE_LUAJIT && !BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->
-> --
-> 2.1.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 1dd22c9..53cd958 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -34,6 +34,8 @@ choice
+ 
+ config BR2_GLIBC_VERSION_2_20
+ 	depends on !BR2_nios2
++	# Broken see https://bugs.busybox.net/show_bug.cgi?id=7941
++	depends on !BR2_sparc
+ 	bool "2.20"
+ 
+ config BR2_GLIBC_VERSION_2_21
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.0.5
