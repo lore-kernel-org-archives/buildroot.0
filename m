@@ -1,42 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 14:12:37 +0100
-Subject: [Buildroot] [PATCH v2] package/sysdig: New package
-In-Reply-To: <CA+TH9Vkmn68BhLSWiv7rgcfR7ZPq4uqYBHcCU7qUjHAHUWcCPg@mail.gmail.com>
-References: <1426589808-568-1-git-send-email-angelo.compagnucci@gmail.com>
- <20150317112339.GM2415@tarshish>
- <CA+TH9VnhBOe+KSV+6nsgF_sUD9SX8WtfQpY2oxG_=5h-=nSniA@mail.gmail.com>
- <20150317114816.GN2415@tarshish>
- <CA+TH9Vkmn68BhLSWiv7rgcfR7ZPq4uqYBHcCU7qUjHAHUWcCPg@mail.gmail.com>
-Message-ID: <20150317141237.10b2f0cd@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 17 Mar 2015 14:20:48 +0100
+Subject: [Buildroot] [PATCH] lua-periphery: disable for MIPS
+	architectures
+In-Reply-To: <20150317130949.56e4d0c3@free-electrons.com>
+References: <1426592859-46907-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150317130949.56e4d0c3@free-electrons.com>
+Message-ID: <55082A30.9070809@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Dear Thomas Petazzoni,
 
-On Tue, 17 Mar 2015 12:59:11 +0100, Angelo Compagnucci wrote:
-
-> > You are right, I missed that. It's just that I'm used to see these comments
-> > below the main 'config' section. Putting the comment above is also fine,
-> > though. Don't forget to update this comment when adding indirect dependencies.
+On 17/03/15 13:09, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
 > 
-> I think that if I use select, the dependencies of this package will
-> explode. I think I can use select for simple, non problematic
-> packages, and use depends on for others.
+> On Tue, 17 Mar 2015 11:47:39 +0000, Vicente Olivert Riera wrote:
+>> c_ispeed and c_ospeed are not available for MIPS:
+>>
+>> src/serial.c:191:25: error: 'struct termios' has no member named 'c_ispeed'
+>>          termios_settings.c_ispeed = baudrate;
+>>
+>> src/serial.c:192:25: error: 'struct termios' has no member named 'c_ospeed'
+>>          termios_settings.c_ospeed = baudrate;
+>>
+>> Fixes:
+>>
+>>   http://autobuild.buildroot.net/results/ca7146661c8135568be90dd53b6ee569ebff270d/
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> I think disabling on MIPS is not the right fix. The right fix is to use
+> the C library cfsetispeed() and cfsetospeed() instead of directly
+> accessing the termios structure members, which are not guaranteed to
+> exist.
 
-No. Please follow what Baruch said: use 'select' for BR2_PACKAGE_ZLIB,
-BR2_PACKAGE_LUAJIT and BR2_PACKAGE_LIBJSON, and a 'depends on' for
-BR2_LINUX_KERNEL.
+thanks for the advice. I have sent a pull request after testing it fixes
+the problem. Let's see what happens :-)
 
-Also, are you sure sysdig only works with LuaJIT, or does it also work
-with the "normal" Lua interpreter?
+https://github.com/vsergeev/c-periphery/pull/1
 
-Thanks,
+Best regards,
+--
+Vincent
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thomas
+> 
