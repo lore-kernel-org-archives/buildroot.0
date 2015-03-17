@@ -1,42 +1,69 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Mar 2015 12:13:05 +0200
-Subject: [Buildroot] [PATCH] package/sysdig: New package
-In-Reply-To: <1426499014-15851-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1426499014-15851-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150317101305.GL2415@tarshish>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 17 Mar 2015 11:20:23 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/cmake: disable on unsupported
+	architectures
+Message-ID: <1426587624-24938-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+Supported architectures are listed at [1].
 
-On Mon, Mar 16, 2015 at 10:43:34AM +0100, Angelo Compagnucci wrote:
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> new file mode 100644
-> index 0000000..ff873a8
-> --- /dev/null
-> +++ b/package/sysdig/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_SYSDIG
-> +	bool "sysdig"
-> +	depends on BR2_PACKAGE_ZLIB
-> +	depends on BR2_PACKAGE_LUAJIT
-> +	depends on BR2_PACKAGE_LIBJSON
+Fixes:
+  http://autobuild.buildroot.net/results/de9/de9021fdc63600536ffa91e4b8718584e3e5702c/
+  http://autobuild.buildroot.net/results/0f1/0f1afc62e91ab798fa65685af3dea3caac663f11/
 
-We generally 'select' packages that are mandatory dependencies, and copy their 
-dependencies here. See 
-http://nightly.buildroot.org/manual.html#depends-on-vs-select.
+[1] https://github.com/Kitware/CMake/blob/master/Utilities/KWIML/ABI.h.in#L339
 
-> +	depends on BR2_LINUX_KERNEL
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This is OK, though. But please also add a comment as described in 
-http://nightly.buildroot.org/manual.html#_dependencies_on_a_linux_kernel_built_by_buildroot.
+---
+changes v2->v3
+- introduce BR2_PACKAGE_CMAKE_ARCH_SUPPORTS (ThomasP)
 
-baruch
+changes v1->v2:
+- use positive logic (ThomasP)
+- add depends on statement to the comment (Baruch)
+---
+ package/cmake/Config.in | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 0b5bba9..36c5413 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -1,3 +1,14 @@
++config BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_arm || BR2_armeb || \
++		BR2_aarch64 || \
++		BR2_m68k || \
++		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
++		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
++		BR2_sparc || \
++		BR2_i386 || BR2_x86_64
++
+ config BR2_PACKAGE_CMAKE
+ 	bool
+ 
+@@ -10,6 +21,7 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_XZ
++	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+@@ -22,4 +34,5 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	  http://www.cmake.org/
+ 
+ comment "ctest needs a toolchain w/ C++, wchar"
++	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.0
