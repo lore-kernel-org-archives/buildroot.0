@@ -1,39 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 17 Mar 2015 21:45:48 +0100
-Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
-Message-ID: <trinity-4d99cda4-12a7-4ccd-a2d9-648264125705-1426625148665@3capp-gmx-bs04>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 17 Mar 2015 22:30:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: Enable support
+ for log to debug file
+In-Reply-To: <55035FF7.2070503@zacarias.com.ar>
+References: <1426197654-8183-1-git-send-email-joerg.krause@embedded.rocks>
+ <55035FF7.2070503@zacarias.com.ar>
+Message-ID: <1426627803.6281.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On Tue, Mar 17, 2015 at 09:29:39PM +0100, Thomas Petazzoni wrote:
-> Dear Peter Seiderer,
+On Fr, 2015-03-13 at 19:08 -0300, Gustavo Zacarias wrote:
+> On 03/12/2015 07:00 PM, J?rg Krause wrote:
 > 
-> On Tue, 17 Mar 2015 21:26:02 +0100, Peter Seiderer wrote:
+> > Enables the '-f' option (log output to debug file instead of stdout) for
+> > wpa_supplicant.
 > 
-> > The only minor purpose leftover is as gcc ICE exampel for 'bfin-uclinux-gcc (ADI-2014R1-RC2) 4.3.5' (see [1])...
+> Just force enable it, binary size +8 bytes for an ARM target, it doesn't
+> make sense to make it an option (specially since it must be used and
+> doesn't affect anything by default).
+> Regards.
 > 
-> I don't understand, why do you say it's the "only minor purpose
-> leftover" ? 
-> 
-> If PostgreSQL uses fork(), it *cannot* work on noMMU architecture, so
-> there is no way to build PostgreSQL on Blackfin.
->
 
-...should have added 'until Blackfin compile is disabled because of noMMU' as a footnote ;-)
+Sorry, there is an error in the patch:
 
-But the remaining question: Revert the patch? Should I send a revert-patch?
-Or can you revert/commit directly? Or leave as is?
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
++       WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_FILE
++endif
 
-Regards,
-Peter
+Should be of course:
 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_FILE),y)
++       WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_FILE
++endif
+
+For me it's +963 bytes. Force enable it anyway?
