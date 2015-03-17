@@ -1,40 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 13:09:49 +0100
-Subject: [Buildroot] [PATCH] lua-periphery: disable for MIPS
- architectures
-In-Reply-To: <1426592859-46907-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1426592859-46907-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150317130949.56e4d0c3@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Mar 2015 09:18:01 -0300
+Subject: [Buildroot] [PATCH 01/15] toolchain/helpers: add mandatory
+ check for uclibc toolchain options
+In-Reply-To: <20150314221850.GF4009@free.fr>
+References: <1426270934-15499-1-git-send-email-gustavo@zacarias.com.ar>
+ <1426270934-15499-2-git-send-email-gustavo@zacarias.com.ar>
+ <20150314221850.GF4009@free.fr>
+Message-ID: <55081B79.5040603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+On 03/14/2015 07:18 PM, Yann E. MORIN wrote:
 
-On Tue, 17 Mar 2015 11:47:39 +0000, Vicente Olivert Riera wrote:
-> c_ispeed and c_ospeed are not available for MIPS:
+> Gustavo, All,
 > 
-> src/serial.c:191:25: error: 'struct termios' has no member named 'c_ispeed'
->          termios_settings.c_ispeed = baudrate;
+> On 2015-03-13 15:22 -0300, Gustavo Zacarias spake thusly:
+>> Take 'm' as parameter in $2 (buildroot option name) in
+>> check_uclibc_feature to indicate that a toolchain option is mandatory,
+>> and bail out with an appropiate message if that's the case.
 > 
-> src/serial.c:192:25: error: 'struct termios' has no member named 'c_ospeed'
->          termios_settings.c_ospeed = baudrate;
+> I had a hard time figuring out what you were doing here...
 > 
-> Fixes:
+> What about:
 > 
->   http://autobuild.buildroot.net/results/ca7146661c8135568be90dd53b6ee569ebff270d/
+>     toolchain/helpers: add check for mandatory uClibc options
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>     We currently only check that the Buildroot configuration matches
+>     what is available in the toolchain.
+> 
+>     Since we're going to remove the check for LFS and make it a
+>     mandatory feature, we will lose the corresponding Buildroot
+>     option, so we won't be able to use check_uclibc_feature as-is.
+> 
+>     Introduce a special, magic value passed as the Buildroot option
+>     name to recognise checks for mandatory uClibc options that do not
+>     have a corresponding option in Buldroot.
+> 
+>     If the Buildroot option name is 'm', then the check is against
+>     a mandatory uClibc option.
+> 
+>     If a mandatory uClibc option is missing, we reject the toolchain
+>     as being unusable by Buildroot.
+> 
+> However, I don't think 'm' is the most appropriate. That's what somehow
+> confused me: wtf are we concerned about tristates? What about making
+> the check against an empty Buildroot option name, instead? No Buildroot
+> option name means there's no correlation to be made, and hence is a
+> mandatory uClibc option...
 
-I think disabling on MIPS is not the right fix. The right fix is to use
-the C library cfsetispeed() and cfsetospeed() instead of directly
-accessing the termios structure members, which are not guaranteed to
-exist.
+Actually i used 'm' as shortcut for 'mandatory', it's purely casual that
+it matches tristate.
+Initially i was going to duplicate functionality (make another function)
+for mandatory toolchain options, used like:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+$(call
+check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU
+support) ;\
+
+(original)
+
+$(call
+check_uclibc_feature_mandatory,__UCLIBC_HAS_LFS__,$${UCLIBC_CONFIG_FILE},Large
+file support) ;\
+
+I'm not a big friend of magical strings but decided to throw the 'm' and
+see what other said.
+Still, i'd prefer the extra function for clarity.
+Regards.
