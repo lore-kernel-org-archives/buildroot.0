@@ -1,42 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Mar 2015 11:14:39 +0200
-Subject: [Buildroot] [PATCH] cmake/ctest: disable for xtensa
-Message-ID: <72c37ea53cc585074aac8fc68a6a817048224597.1426583679.git.baruch@tkos.co.il>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 17 Mar 2015 10:14:44 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-03-16
+In-Reply-To: <20150317073020.29948100F72@stock.ovh.net>
+References: <20150317073020.29948100F72@stock.ovh.net>
+Message-ID: <CAHXCMMKi1Ac=KBbEYGR-mhPR-O0JHGy_q0uzYyRDnsk5Ct+Q4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cmake is missing endianness configuration for xtensa.
+On Tue, Mar 17, 2015 at 8:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2015-03-16
+[...]
 
-Fixes:
-http://autobuild.buildroot.net/results/bdf/bdfce8f6aa238ed59331f051cdaff1f60e273c3e/
-http://autobuild.buildroot.net/results/de9/de9021fdc63600536ffa91e4b8718584e3e5702c/
-http://autobuild.buildroot.net/results/0f1/0f1afc62e91ab798fa65685af3dea3caac663f11/
+>       mipsel |                    cmake-3.1.3 | NOK | http://autobuild.buildroot.net/results/f8b0a4a5fb76a902a052855bd0b2454dcf9019a5/
+incidentally fixed by:
+http://patchwork.ozlabs.org/patch/450901/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/cmake/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+>         bfin |                    cmake-3.1.3 | NOK | http://autobuild.buildroot.net/results/9f7c8d5078cd1f3cd493f9ae8e95c8ee728f98fd/
+fix in patchwork:
+http://patchwork.ozlabs.org/patch/450901/
 
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 0b5bba975403..f39f79467dd0 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	select BR2_PACKAGE_XZ
- 	depends on BR2_USE_WCHAR # libarchive
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_xtensa
- 	help
- 	  CTest is a testing tool distributed as a part of CMake. It
- 	  can be used to automate updating (using CVS for example),
-@@ -22,4 +23,5 @@ config BR2_PACKAGE_CMAKE_CTEST
- 	  http://www.cmake.org/
- 
- comment "ctest needs a toolchain w/ C++, wchar"
-+	depends on !BR2_xtensa
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+>       xtensa |                    cmake-3.1.3 | NOK | http://autobuild.buildroot.net/results/0f1afc62e91ab798fa65685af3dea3caac663f11/
+>       xtensa |                    cmake-3.1.3 | NOK | http://autobuild.buildroot.net/results/de9021fdc63600536ffa91e4b8718584e3e5702c/
+fix in patchwork:
+http://patchwork.ozlabs.org/patch/450900/
+
+
+Regards,
+
 -- 
-2.1.4
+Samuel
