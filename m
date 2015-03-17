@@ -1,80 +1,47 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 17 Mar 2015 23:37:25 +0100
-Subject: [Buildroot] [PATCH 3/3] ljsyscall: refactor with
-	BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-In-Reply-To: <CA+TH9VnqVH6iL73C9T=74gZaGfz71=h2xOPAgUMdrf_cN6s-NQ@mail.gmail.com>
-References: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
- <1426622689-31844-3-git-send-email-francois.perrad@gadz.org>
- <CA+TH9VnqVH6iL73C9T=74gZaGfz71=h2xOPAgUMdrf_cN6s-NQ@mail.gmail.com>
-Message-ID: <CA+TH9VnTYcPxhi2XD9HcK3wtQ7Nsm5b=ktZnEyJj_sstFrWY=g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Mar 2015 23:38:23 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
+	compile error
+In-Reply-To: <XnsA45FBD041150DberndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
+ Kuhls's message of "Mon, 16 Mar 2015 18:34:52 +0100")
+References: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150315125324.39a11265@free-electrons.com>
+ <874mplg9bz.fsf@dell.be.48ers.dk>
+ <20150316091235.7c77634c@free-electrons.com>
+ <XnsA45FBD041150DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <87iodzl068.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
+ > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+ > @public.gmane.org> wrote in news:20150316091235.7c77634c at free-electrons.com:
 
-2015-03-17 22:45 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Dear Francois Perrad,
->
-> 2015-03-17 21:04 GMT+01:00 Francois Perrad <fperrad@gmail.com>:
->
-> Reviewed-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->
-> Patch is fine for me. Nothing to add.
->
->>  package/ljsyscall/Config.in | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
->> index dcbd521..b9ff04d 100644
->> --- a/package/ljsyscall/Config.in
->> +++ b/package/ljsyscall/Config.in
->> @@ -3,12 +3,12 @@ config BR2_PACKAGE_LJSYSCALL
->>         # ljsyscall is specifically for LuaJIT, not Lua.
->>         depends on BR2_PACKAGE_LUAJIT
->>         # ljsyscall is only available for some target architectures
->> -       depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
->> +       depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ >> Yann suggested it might be a dash vs. bash issue where bash would
+ >> accept multiple LIBS += on the command line, but not dash. But I
+ >> changed /bin/sh to point to /bin/dash on my system, and I still
+ >> couldn't reproduce the problem.
 
-Sorry for not having spotted before but
+ > Hi,
 
-BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS != BR2_i386 || BR2_x86_64 ||
-BR2_powerpc || BR2_arm || BR2_armeb
+ > FYI
 
-Actually, BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is BR2_i386 has this condition more
+ > $ dpkg -l | grep dash
+ > ii  dash        0.5.7-3              amd64        POSIX-compliant shell
 
-((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT)
+ > $ ls -la /bin/sh
+ > lrwxrwxrwx 1 root root 4 Mr  1  2012 /bin/sh -> dash
 
-Are you sure LJSYSCALL package works on mips?
+My setup is almost the same, except:
 
->>         help
->>           An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
->>
->>           http://github.com/justincormack/ljsyscall
->>
->>  comment "ljsyscall needs LuaJIT"
->> -       depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
->> +       depends on !BR2_PACKAGE_LUAJIT && !BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->>
->> --
->> 2.1.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
+dpkg -l dash | grep ii
+ii  dash           0.5.7-4+b1   amd64        POSIX-compliant shell
 
-
+So I don't think that is the reason.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
