@@ -1,77 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:48:25 -0300
-Subject: [Buildroot] [PATCH v2 01/15] toolchain/helpers: add check for
-	mandatory uClibc options
+Date: Tue, 17 Mar 2015 13:48:26 -0300
+Subject: [Buildroot] [PATCH v2 02/15] toolchain/helpers: make LFS mandatory
+	for uclibc toolchains
 In-Reply-To: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426610919-11901-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426610919-11901-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently only check that the Buildroot configuration matches what is
-available in the toolchain.
-
-Since we're going to remove the check for LFS and make it a mandatory
-feature, we will lose the corresponding buildroot option, so we won't be
-able to use check_uclibc_feature as-is.
-
-Introduce a magic value passed as the buildroot option name to recognise
-checks for mandatory uclibc options that do not have a corresponding
-option in buildroot.
-
-If the buildroot option name is empty then the check is against a
-mandatory uclibc option.
-
-If a mandatory uclibc option is missing we reject the toolchain as being
-unusable by buildroot.
+As discussed on the mailing list drop the non-largefile option for
+toolchains.
+The size delta is minimal and it just complicates package dependencies.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- toolchain/helpers.mk | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3121da4..5d6390e 100644
+index 5d6390e..2e6b500 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -238,6 +238,7 @@ check_musl = \
- # Check the conformity of Buildroot configuration with regard to the
- # uClibc configuration of the external toolchain, for a particular
- # feature.
-+# If 'Buildroot option name' ($2) is empty it means a mandatory option.
- #
- # $1: uClibc macro name
- # $2: Buildroot option name
-@@ -246,13 +247,20 @@ check_musl = \
- #
- check_uclibc_feature = \
- 	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
--	if [ "$($(2))" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
--		echo "$(4) available in C library, please enable $(2)" ; \
--		exit 1 ; \
--	fi ; \
--	if [ "$($(2))" = "y" -a "$${IS_IN_LIBC}" != "y" ] ; then \
--		echo "$(4) not available in C library, please disable $(2)" ; \
--		exit 1 ; \
-+	if [ -z "$(2)" ] ; then \
-+		if [ "$${IS_IN_LIBC}" != "y" ] ; then \
-+			echo "$(4) not available in C library, toolchain unsuitable for Buildroot" ; \
-+			exit 1 ; \
-+		fi ; \
-+	else \
-+		if [ "$($(2))" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
-+			echo "$(4) available in C library, please enable $(2)" ; \
-+			exit 1 ; \
-+		fi ; \
-+		if [ "$($(2))" = "y" -a "$${IS_IN_LIBC}" != "y" ] ; then \
-+			echo "$(4) not available in C library, please disable $(2)" ; \
-+			exit 1 ; \
-+ 		fi ; \
- 	fi
- 
- #
+@@ -281,7 +281,7 @@ check_uclibc = \
+ 	fi; \
+ 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
+ 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
 -- 
 2.0.5
