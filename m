@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 23:18:31 +0100
-Subject: [Buildroot] [git commit] glibc: disable 2.20 for sparc
-Message-ID: <20150317221840.2304D8182C@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Mar 2015 22:20:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 7941] glibc-2.20 fails to build for
+	sparc-buildroot-linux-gnu
+In-Reply-To: <bug-7941-163@https.bugs.busybox.net/>
+References: <bug-7941-163@https.bugs.busybox.net/>
+Message-ID: <20150317222000.09BC681835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dbf7da63188d461e738dcfcaa436b84baa23143c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7941
 
-Disable glibc 2.20 for sparc, it's broken, that leaves 2.21 as the
-default in this case.
-Fixes bug #7941.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/glibc/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 1dd22c9..53cd958 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -34,6 +34,8 @@ choice
- 
- config BR2_GLIBC_VERSION_2_20
- 	depends on !BR2_nios2
-+	# Broken see https://bugs.busybox.net/show_bug.cgi?id=7941
-+	depends on !BR2_sparc
- 	bool "2.20"
- 
- config BR2_GLIBC_VERSION_2_21
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-03-17 22:19:59 UTC ---
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=dbf7da63188d461e738dcfcaa436b84baa23143c,
+which basically disallows glibc 2.20 on SPARC.
+
+Waldemar, I noticed your proposal, but since glibc 2.21 just builds/works out
+of the box on SPARC, there isn't much point in carrying a build fix for glibc
+2.20.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
