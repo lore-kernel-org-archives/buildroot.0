@@ -1,64 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 17 Mar 2015 21:21:42 +0100
-Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
- instead of libftdi
-In-Reply-To: <20150317210651.11bf1534@free-electrons.com>
-References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
- <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
- <20150308114842.GB2518@tarshish>
- <CAHXCMMJ30MEE33mytg4xy9pZePD0Z+ezH8pJE6wzhaqJWdkyGg@mail.gmail.com>
- <20150316141523.2561f737@free-electrons.com>
- <CAHXCMM+52vee+K8p=KOonr=d+F4M7bk-5zWMG2Q2ghmGyWTKLA@mail.gmail.com>
- <20150317174836.6384db5a@free-electrons.com>
- <CAHXCMMJWtxrVB2nai6V7y_-5ijr5zpXpNBS=G9LbtbBfDrLd4g@mail.gmail.com>
- <20150317210651.11bf1534@free-electrons.com>
-Message-ID: <CAHXCMM+WFkwdr_T7TuFMn+JNKytNmP3i5Lh6U6Z8VRwjzZfS5Q@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Mar 2015 21:26:02 +0100
+Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
+Message-ID: <trinity-d7a2b402-806b-4ff1-8f3e-69ce39c68b1c-1426623962608@3capp-gmx-bs62>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello Thomas,
 
-On Tue, Mar 17, 2015 at 9:06 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Samuel Martin,
+On Tue, Mar 17, 2015 at 08:59:23PM +0100, Thomas Petazzoni wrote:
+> Dear Peter Seiderer,
+> 
+> On Tue, 17 Mar 2015 20:52:03 +0100, Peter Seiderer wrote:
+> 
+> > Will provide a patch for postgresql to check for fork/BR2_USE_MMU, is there any special string
+> > for the comment besides 'needs threads'?
+> 
+> No there is no comment about a BR2_USE_MMU dependency, because it's not
+> something the user can "fix" : if your architecture doesn't have a MMU,
+> it's like this, there's nothing you can do about it.
+> 
+> > No special point, had the build environment still from [1] around...
+> > 
+> > In retrospect (in case bfin is disabled because of fork) the patch subject should
+> > have been something different...
+> 
+> Well, the patch by itself is then completely useless, because Blackfin
+> is a noMMU architecture, so postgresql will never work on it.
 >
-> On Tue, 17 Mar 2015 18:25:52 +0100, Samuel Martin wrote:
->
->> Nope, the behavior is not undefined: if libftdi gets built before
->> arvdude, libftdi1 will also be built before avrdude (because it's one
->> of its deps,)
->
-> Hum, I don't follow you here. I don't see where libftdi depends on
-> libftdi1.
 
-doh! i think we are misunderstanding each others... :-|
+You are right (did not know that the 'uclinux' in 'bfin-buildroot-uclinux-uclibc' stands
+for microcontroller Linux/noMMU)...
 
->
-> What prevents from doing a configuration that has libftdi and avrdude
-> enabled, and not libftdi1 ?
+The only minor purpose leftover is as gcc ICE exampel for 'bfin-uclinux-gcc (ADI-2014R1-RC2) 4.3.5' (see [1])...
 
-nothing at all, this still is a legit config.
+Revert the patch or keep it?
 
->
-> Apparently nothing:
->
-> $ grep -E "(LIBFTDI|LIBFTDI1|AVRDUDE)" .config
-> BR2_PACKAGE_AVRDUDE=y
-> BR2_PACKAGE_LIBFTDI=y
-> # BR2_PACKAGE_LIBFTDI1 is not set
->
-> Best regards,
->
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-March/121094.html
+
 > Thomas
-> --
+> -- 
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
-
-Regards,
-
--- 
-Samuel
