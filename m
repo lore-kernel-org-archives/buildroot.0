@@ -1,94 +1,122 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 17 Mar 2015 11:56:48 +0100
-Subject: [Buildroot] [PATCH v2] package/sysdig: New package
-Message-ID: <1426589808-568-1-git-send-email-angelo.compagnucci@gmail.com>
+From: ir. Tjeerd Pinkert <t.j.pinkert@vu.nl>
+Date: Tue, 17 Mar 2015 12:11:44 +0100
+Subject: [Buildroot] [Patch] Added package python-smbus
+In-Reply-To: <5507244E.2080009@vu.nl>
+References: <5503198F.6070804@vu.nl>
+ <CAGm1_kuM-ZPCdjcSpd_wK-20WZ2+hYOro2DjRZ3dNibTsbLHPg@mail.gmail.com>
+ <CAGm1_kuCMhPbFWXdtHSOnGf6ryi2baW59iMEJUrtHA1OW_94JA@mail.gmail.com>
+ <5507244E.2080009@vu.nl>
+Message-ID: <55080BF0.1020108@vu.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sysdig is open source, system-level exploration:
-capture system state and activity from a running Linux
-instance, then save, filter and analyze.
+Hi all,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
+I managed to add a package python-smbus that installs the i2c-tools 
+py-smbus extension so that i2c can be used under python.
 
-Changes v1 -> v2:
-  - Changed "depends on" with "select" for dependencies (suggested by Baruch)
-  - Added comment "sysdig needs a Linux kernel to be built" (suggested by Baruch)
-  - Upgreded to recently released 0.1.99
+Most probably it is better to integrate this somehow into the i2c-tools 
+scripts but this is the first onset of getting it working. Hints on how 
+to best integrate, if regarded necessary, are welcome.
 
- package/Config.in        |  1 +
- package/sysdig/Config.in | 17 +++++++++++++++++
- package/sysdig/sysdig.mk | 22 ++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 package/sysdig/Config.in
- create mode 100644 package/sysdig/sysdig.mk
+Best regards,
 
+
+Tjeerd Pinkert
+
+
+buildroot$ git diff 6bf057b0f2ba188397a691f74877a4a30aaea3f9 --
 diff --git a/package/Config.in b/package/Config.in
-index e221deb..019d40b 100644
+index 262a7fb..7ef7149 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -94,6 +94,7 @@ endif
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/sysprof/Config.in"
-+	source "package/sysdig/Config.in"
- 	source "package/tinymembench/Config.in"
- 	source "package/trace-cmd/Config.in"
- 	source "package/trinity/Config.in"
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+@@ -525,6 +525,7 @@ menu "external python modules"
+         source "package/python-flup/Config.in"
+         source "package/python-gobject/Config.in"
+         source "package/python-httplib2/Config.in"
++       source "package/python-smbus/Config.in"
+         source "package/python-id3/Config.in"
+         source "package/python-ipaddr/Config.in"
+         source "package/python-ipy/Config.in"
+diff --git a/package/python-smbus/Config.in b/package/python-smbus/Config.in
 new file mode 100644
-index 0000000..94b088f
+index 0000000..d53b0af
 --- /dev/null
-+++ b/package/sysdig/Config.in
-@@ -0,0 +1,17 @@
-+comment "sysdig needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
++++ b/package/python-smbus/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_SMBUS
++       bool "python-smbus"
++       depends on BR2_PACKAGE_I2C_TOOLS
++       help
++         Python bindings to smbus from the i2c-tools package
 +
-+config BR2_PACKAGE_SYSDIG
-+	bool "sysdig"
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_LIBJSON
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Sysdig is open source, system-level exploration:
-+	  capture system state and activity from a running Linux instance,
-+	  then save, filter and analyze.
-+	  Think of it as strace + tcpdump + lsof + awesome sauce.
-+	  With a little Lua cherry on top.
++         http://www.lm-sensors.org/wiki/I2CTools
 +
-+	  http://sysdig.org
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
++         pyhton-smbus needs i2c-tools
+diff --git a/package/python-smbus/python-smbus.mk 
+b/package/python-smbus/python-smbus.mk
 new file mode 100644
-index 0000000..62b9344
+index 0000000..1673e6a
 --- /dev/null
-+++ b/package/sysdig/sysdig.mk
-@@ -0,0 +1,22 @@
-+#############################################################
++++ b/package/python-smbus/python-smbus.mk
+@@ -0,0 +1,18 @@
++################################################################################
 +#
-+# sysdig
++# python-smbus (i2c-tools python bindings)
 +#
-+#############################################################
++################################################################################
 +
-+SYSDIG_VERSION = 0.1.99
-+SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
-+SYSDIG_LICENSE = GPLv2
-+SYSDIG_LICENSE_FILES = COPYING
-+SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF
-+SYSDIG_DEPENDENCIES += zlib luajit libjson linux
-+SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
++PYTHON_SMBUS_VERSION = 3.1.1
++PYTHON_SMBUS_SOURCE = i2c-tools-$(PYTHON_SMBUS_VERSION).tar.bz2
++PYTHON_SMBUS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
++PYTHON_SMBUS_SETUP_TYPE = distutils
++PYTHON_SMBUS_LICENSE = GPLv2
++PYTHON_SMBUS_LICENSE_FILES = COPYING
++PYTHON_SMBUS_DEPENDENCIES = i2c-tools
++PYTHON_SMBUS_SUBDIR=py-smbus
 +
-+define SYSDIG_INSTALL_DRIVER
-+	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules
-+	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules_install
-+endef
++TARGET_CFLAGS += -I../include
 +
-+SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
-+
-+$(eval $(cmake-package))
--- 
-1.9.1
++$(eval $(python-package))
+
+
+
+
+On 16-03-15 19:43, ir. Tjeerd Pinkert wrote:
+> Since I'm quite new to Buildroot, I am trying to understand how to do
+> things and how this thing works by reading the manual and source code.
+>
+> I have been trying further on the python-smbus-cffi today, but
+> python-cffi seems to be fundamentally broken according to the internet.
+> Since my host machine does not yet have the python-cffi package (Debian
+> Stable), I could not pursue that path further.
+>
+> Next I tried to get the py-smbus from the i2c-tools package compiled.
+> Unfortunately unsuccessful. To compile the py-smbus package one normally
+> adds the EXTRA=py-smbus to the make command. I did that by adding an
+> option to the configuration menu and then trying to compile via a
+> modified makefile, but that goes wrong.
+>
+> I figured I needed a python-package makefile. Simply adding one to the
+> package directory then seems to be logical, but somehow does not work
+> because
+>
+> 1. I need to call 'make' from the subdirectory py-smbus.
+> 2. I get a funny error, probably I don't understand the make system good
+> enough yet.
+>
+> I get the following compilation error, I attached the scripts to this
+> email, but, what would be the correct approach for this type of
+> (sub)package compilation? Help is highly appreciated.
+>
+> error:
+> package/i2c-tools/i2c-tools-python.mk:17: *** "I2C_TOOLS_SETUP_TYPE must
+> be set".  Stop.
+>
+> Best regards,
+>
+>
+> Tjeerd Pinkert
