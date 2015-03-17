@@ -1,42 +1,48 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 17 Mar 2015 11:47:39 +0000
-Subject: [Buildroot] [PATCH] lua-periphery: disable for MIPS architectures
-Message-ID: <1426592859-46907-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Mar 2015 13:48:16 +0200
+Subject: [Buildroot] [PATCH v2] package/sysdig: New package
+In-Reply-To: <CA+TH9VnhBOe+KSV+6nsgF_sUD9SX8WtfQpY2oxG_=5h-=nSniA@mail.gmail.com>
+References: <1426589808-568-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20150317112339.GM2415@tarshish>
+ <CA+TH9VnhBOe+KSV+6nsgF_sUD9SX8WtfQpY2oxG_=5h-=nSniA@mail.gmail.com>
+Message-ID: <20150317114816.GN2415@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-c_ispeed and c_ospeed are not available for MIPS:
+Hi Angelo,
 
-src/serial.c:191:25: error: 'struct termios' has no member named 'c_ispeed'
-         termios_settings.c_ispeed = baudrate;
+On Tue, Mar 17, 2015 at 12:31:48PM +0100, Angelo Compagnucci wrote:
+> 2015-03-17 12:23 GMT+01:00 Baruch Siach <baruch@tkos.co.il>:
+> > On Tue, Mar 17, 2015 at 11:56:48AM +0100, Angelo Compagnucci wrote:
+> >> +     depends on BR2_LINUX_KERNEL
+> >> +     help
+> >> +       Sysdig is open source, system-level exploration:
+> >> +       capture system state and activity from a running Linux instance,
+> >> +       then save, filter and analyze.
+> >> +       Think of it as strace + tcpdump + lsof + awesome sauce.
+> >> +       With a little Lua cherry on top.
+> >> +
+> >> +       http://sysdig.org
+> >
+> > A dependencies comment is still missing here
+> > (http://nightly.buildroot.org/manual.html#_dependencies_on_a_linux_kernel_built_by_buildroot).
+> 
+> The comment is there:
+> 
+> @@ -0,0 +1,17 @@
+> +comment "sysdig needs a Linux kernel to be built"
+> + depends on !BR2_LINUX_KERNEL
 
-src/serial.c:192:25: error: 'struct termios' has no member named 'c_ospeed'
-         termios_settings.c_ospeed = baudrate;
+You are right, I missed that. It's just that I'm used to see these comments 
+below the main 'config' section. Putting the comment above is also fine, 
+though. Don't forget to update this comment when adding indirect dependencies.
 
-Fixes:
+baruch
 
-  http://autobuild.buildroot.net/results/ca7146661c8135568be90dd53b6ee569ebff270d/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lua-periphery/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/lua-periphery/Config.in b/package/lua-periphery/Config.in
-index de5a716..0ccb05c 100644
---- a/package/lua-periphery/Config.in
-+++ b/package/lua-periphery/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_LUA_PERIPHERY
- 	bool "lua-periphery"
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	# c_ispeed and c_ospeed are not available for MIPS
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	help
- 	  A library for GPIO, SPI, I2C, MMIO, and Serial peripheral I/O
- 	  interface access in userspace Linux with Lua.
 -- 
-1.7.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
