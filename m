@@ -1,147 +1,489 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:48:36 -0300
-Subject: [Buildroot] [PATCH v2 12/15] docs/manual: remove references to
-	largefile
+Date: Tue, 17 Mar 2015 13:48:37 -0300
+Subject: [Buildroot] [PATCH v2 13/15] packages: remove non-lfs enabler
+	patches
 In-Reply-To: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426610919-11901-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426610919-11901-13-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426610919-11901-14-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch from the ACL package example to RRDTOOL since ACL has no dual
-(depends + select) dependencies any more and doesn't fit the example
-scenario.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-directory.txt | 37 ++++++++++++++-----------------
- docs/manual/configure.txt                 | 31 +++++++++++++-------------
- 2 files changed, 32 insertions(+), 36 deletions(-)
+ package/kexec/0001-largefile.patch                 | 22 -------
+ package/links/0001-no-largefile.patch              | 26 --------
+ .../mdadm/0020-uclibc-dont-force-largefile.patch   | 27 --------
+ ...redefine-off64_t-as-off_t-if-no-largefile.patch | 27 --------
+ package/opus-tools/0001-largefile.patch            | 37 -----------
+ package/qt/0006-uClibc-lfs-fix.patch               | 41 -------------
+ package/qt5/qt5base/0003-uclibc-no-lfs.patch       | 36 -----------
+ package/rpm/0001-uclibc-no-lfs-fix.patch           | 22 -------
+ package/stress/0001-Remove-largefile.patch         | 22 -------
+ ...e-largefile-support-unconditionally-on-uC.patch | 71 ----------------------
+ package/vsftpd/0002-dont-force-largefile.patch     | 27 --------
+ package/wipe/0001-dont-force-lfs.patch             | 16 -----
+ 12 files changed, 374 deletions(-)
+ delete mode 100644 package/kexec/0001-largefile.patch
+ delete mode 100644 package/links/0001-no-largefile.patch
+ delete mode 100644 package/mdadm/0020-uclibc-dont-force-largefile.patch
+ delete mode 100644 package/mdadm/0030-uclibc-redefine-off64_t-as-off_t-if-no-largefile.patch
+ delete mode 100644 package/opus-tools/0001-largefile.patch
+ delete mode 100644 package/qt/0006-uClibc-lfs-fix.patch
+ delete mode 100644 package/qt5/qt5base/0003-uclibc-no-lfs.patch
+ delete mode 100644 package/rpm/0001-uclibc-no-lfs-fix.patch
+ delete mode 100644 package/stress/0001-Remove-largefile.patch
+ delete mode 100644 package/valgrind/0002-don-t-enable-largefile-support-unconditionally-on-uC.patch
+ delete mode 100644 package/vsftpd/0002-dont-force-largefile.patch
+ delete mode 100644 package/wipe/0001-dont-force-lfs.patch
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 1ce9a3b..1b34b41 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -124,20 +124,21 @@ is not met.
- An example illustrates both the usage of +select+ and +depends on+.
- 
- --------------------------
--config BR2_PACKAGE_ACL
--        bool "acl"
--        select BR2_PACKAGE_ATTR
--        depends on BR2_LARGEFILE
-+config BR2_PACKAGE_RRDTOOL
-+	bool "rrdtool"
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_LIBART
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_ZLIB
-         help
--          POSIX Access Control Lists, which are used to define more
--          fine-grained discretionary access rights for files and
--          directories.
--          This package also provides libacl.
-+	  RRDtool is the OpenSource industry standard, high performance
-+	  data logging and graphing system for time series data.
- 
--          http://savannah.nongnu.org/projects/acl
-+	  http://oss.oetiker.ch/rrdtool/
- 
--comment "acl needs a toolchain w/ largefile"
--        depends on !BR2_LARGEFILE
-+comment "rrdtool needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
- --------------------------
- 
- 
-@@ -206,10 +207,10 @@ coding style].
- ==== Dependencies on target and toolchain options
- 
- Many packages depend on certain options of the toolchain: the choice of
--C library, C++ support, largefile support, thread support, RPC support,
--IPv6 support, wchar support, or dynamic library support. Some packages
--can only be built on certain target architectures, or if an MMU is
--available in the processor.
-+C library, C++ support, thread support, RPC support, IPv6 support,
-+wchar support, or dynamic library support. Some packages can only be
-+built on certain target architectures, or if an MMU is available in the
-+processor.
- 
- These dependencies have to be expressed with the appropriate 'depends
- on' statements in the Config.in file. Additionally, for dependencies on
-@@ -241,7 +242,7 @@ foo needs a toolchain w/ featA, featB, featC
- for example:
- 
- --------------------------
--aircrack-ng needs a toolchain w/ largefile, threads
-+mpd needs a toolchain w/ C++, threads, wchar
- --------------------------
- 
- or
-@@ -287,10 +288,6 @@ use in the comment.
- ** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
- ** Comment string: `C++`
- 
--* largefile support
--** Dependency symbol: +BR2_LARGEFILE+
--** Comment string: +largefile+
+diff --git a/package/kexec/0001-largefile.patch b/package/kexec/0001-largefile.patch
+deleted file mode 100644
+index 74dd8e2..0000000
+--- a/package/kexec/0001-largefile.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] vmcore-dmesg: don't enforce largefile handling
 -
- * thread support
- ** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
- ** Comment string: +threads+ (unless +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index bd235f0..c06182b 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -109,20 +109,19 @@ most important ones allow to:
-  * Change the version of the GCC compiler, binutils and the C library.
- 
-  * Select a number of toolchain options (uClibc only): whether the
--   toolchain should have largefile support (i.e. support for files
--   larger than 2 GB on 32 bits systems), IPv6 support, RPC support
--   (used mainly for NFS), wide-char support, locale support (for
--   internationalization), C++ support or thread support. Depending on
--   which options you choose, the number of userspace applications and
--   libraries visible in Buildroot menus will change: many applications
--   and libraries require certain toolchain options to be enabled. Most
--   packages show a comment when a certain toolchain option is required
--   to be able to enable those packages. If needed, you can further
--   refine the uClibc configuration by running +make
--   uclibc-menuconfig+. Note however that all packages in Buildroot are
--   tested against the default uClibc configuration bundled in
--   Buildroot: if you deviate from this configuration by removing
--   features from uClibc, some packages may no longer build.
-+   toolchain should have IPv6 support, RPC support (used mainly for
-+   NFS), wide-char support, locale support (for internationalization),
-+   C++ support or thread support. Depending on which options you choose,
-+   the number of userspace applications and libraries visible in
-+   Buildroot menus will change: many applications and libraries require
-+   certain toolchain options to be enabled. Most packages show a comment
-+   when a certain toolchain option is required to be able to enable
-+   those packages. If needed, you can further refine the uClibc
-+   configuration by running +make uclibc-menuconfig+. Note however that
-+   all packages in Buildroot are tested against the default uClibc
-+   configuration bundled in Buildroot: if you deviate from this
-+   configuration by removing features from uClibc, some packages may no
-+   longer build.
- 
- It is worth noting that whenever one of those options is modified,
- then the entire toolchain and system must be rebuilt. See
-@@ -178,8 +177,8 @@ Then, you have three solutions to use an external toolchain:
-   external toolchain uses the 'glibc' library, you only have to tell
-   whether your toolchain supports C\++ or not and whether it has
-   built-in RPC support. If your external toolchain uses the 'uClibc'
--  library, then you have to tell Buildroot if it supports largefile,
--  IPv6, RPC, wide-char, locale, program invocation, threads and
-+  library, then you have to tell Buildroot if it supports IPv6,
-+  RPC, wide-char, locale, program invocation, threads and
-   C++. At the beginning of the execution, Buildroot will tell you if
-   the selected options do not match the toolchain configuration.
- 
+-Breaks build on !largefile toolchains.
+-
+-Instead simply use whatever mode is selected by toolchain / CFLAGS.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- vmcore-dmesg/vmcore-dmesg.c |    2 --
+- 1 file changed, 2 deletions(-)
+-
+-Index: kexec-tools-2.0.3/vmcore-dmesg/vmcore-dmesg.c
+-===================================================================
+---- kexec-tools-2.0.3.orig/vmcore-dmesg/vmcore-dmesg.c
+-+++ kexec-tools-2.0.3/vmcore-dmesg/vmcore-dmesg.c
+-@@ -1,6 +1,4 @@
+- #define _XOPEN_SOURCE 600
+--#define _LARGEFILE_SOURCE 1
+--#define _FILE_OFFSET_BITS 64
+- #include <endian.h>
+- #include <byteswap.h>
+- #include <stdio.h>
+diff --git a/package/links/0001-no-largefile.patch b/package/links/0001-no-largefile.patch
+deleted file mode 100644
+index 782a25a..0000000
+--- a/package/links/0001-no-largefile.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Make links buildable without LFS support.
+-Author/status: unknown.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura links-2.8/com-defs.h links-2.8.nonlfs/com-defs.h
+---- links-2.8/com-defs.h	2013-07-31 20:45:30.000000000 -0300
+-+++ links-2.8.nonlfs/com-defs.h	2014-12-28 08:42:47.352237462 -0300
+-@@ -5,6 +5,9 @@
+- #define __EXTENSIONS__
+- #endif
+- 
+-+#include <features.h>
+-+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
+- #ifndef _LARGEFILE_SOURCE
+- #define _LARGEFILE_SOURCE	1
+- #endif
+-@@ -20,6 +23,7 @@
+- #ifndef _FILE_OFFSET_BITS
+- #define _FILE_OFFSET_BITS	64
+- #endif
+-+#endif /* UCLIBC !LFS */
+- 
+- #if defined(vax) && !defined(__vax)
+- #define __vax	vax
+diff --git a/package/mdadm/0020-uclibc-dont-force-largefile.patch b/package/mdadm/0020-uclibc-dont-force-largefile.patch
+deleted file mode 100644
+index fe3ab47..0000000
+--- a/package/mdadm/0020-uclibc-dont-force-largefile.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-[PATCH] mdadm: don't enable largefile support unconditionally on uClibc
+-
+-uClibc can be compiled without largefile support (and errors out if
+-_FILE_OFFSET_BITS is set to 64), so don't define it if that combination
+-is detected.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- mdadm.h |    4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-Index: mdadm-3.2.6/mdadm.h
+-===================================================================
+---- mdadm-3.2.6.orig/mdadm.h
+-+++ mdadm-3.2.6/mdadm.h
+-@@ -23,7 +23,11 @@
+-  */
+- 
+- #define	_GNU_SOURCE
+-+#include <features.h>
+-+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
+- #define _FILE_OFFSET_BITS 64
+-+#endif
+- #include	<unistd.h>
+- #if !defined(__dietlibc__) && !defined(__KLIBC__)
+- extern __off64_t lseek64 __P ((int __fd, __off64_t __offset, int __whence));
+diff --git a/package/mdadm/0030-uclibc-redefine-off64_t-as-off_t-if-no-largefile.patch b/package/mdadm/0030-uclibc-redefine-off64_t-as-off_t-if-no-largefile.patch
+deleted file mode 100644
+index d958ab8..0000000
+--- a/package/mdadm/0030-uclibc-redefine-off64_t-as-off_t-if-no-largefile.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 9c63360a2db71882cc548305774ce87af5f52b6e Mon Sep 17 00:00:00 2001
+-From: Christophe Vu-Brugier <cvubrugier@lacie.com>
+-Date: Thu, 7 Mar 2013 10:37:09 +0100
+-Subject: [PATCH] uClibc: redefine off64_t as off_t if largefile support is
+- disabled
+-
+-
+-Signed-off-by: Christophe Vu-Brugier <cvubrugier@lacie.com>
+----
+- mdadm.h |    1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/mdadm.h b/mdadm.h
+-index 216c31d..1c72cc4 100644
+---- a/mdadm.h
+-+++ b/mdadm.h
+-@@ -1008,6 +1008,7 @@ struct stat64;
+- # include <features.h>
+- # ifndef __UCLIBC_HAS_LFS__
+- #  define lseek64 lseek
+-+#  define off64_t off_t
+- # endif
+- # ifndef  __UCLIBC_HAS_FTW__
+- #  undef HAVE_FTW
+--- 
+-1.7.10.4
+-
+diff --git a/package/opus-tools/0001-largefile.patch b/package/opus-tools/0001-largefile.patch
+deleted file mode 100644
+index a10fcbc..0000000
+--- a/package/opus-tools/0001-largefile.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From f1d9376b383f4ee7ec2d7c5a1728d38cdb692df6 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Sat, 15 Dec 2012 00:05:41 +0100
+-Subject: [PATCH] audio-in.c: Don't force largefile support
+-
+-Buildroot ensures the correct defines are enabled depending on toolchain
+-configuration, so don't hard code largefile support here.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/audio-in.c |   10 ----------
+- 1 file changed, 10 deletions(-)
+-
+-diff --git a/src/audio-in.c b/src/audio-in.c
+-index 9bf4f6f..e404629 100644
+---- a/src/audio-in.c
+-+++ b/src/audio-in.c
+-@@ -32,16 +32,6 @@
+- # include <config.h>
+- #endif
+- 
+--#if !defined(_LARGEFILE_SOURCE)
+--# define _LARGEFILE_SOURCE
+--#endif
+--#if !defined(_LARGEFILE64_SOURCE)
+--# define _LARGEFILE64_SOURCE
+--#endif
+--#if !defined(_FILE_OFFSET_BITS)
+--# define _FILE_OFFSET_BITS 64
+--#endif
+--
+- #include <stdlib.h>
+- #include <stdio.h>
+- #include <string.h>
+--- 
+-1.7.10.4
+-
+diff --git a/package/qt/0006-uClibc-lfs-fix.patch b/package/qt/0006-uClibc-lfs-fix.patch
+deleted file mode 100644
+index ea04a60..0000000
+--- a/package/qt/0006-uClibc-lfs-fix.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6f88b27de256266947a7f6a3e70e18510754aab2 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Sat, 14 Apr 2012 20:36:07 +0200
+-Subject: [PATCH] mkspecs/common/posix: fix !largefile builds on uClibc
+-
+-uClibc doesn't even define O_LARGEFILE when not configured with large file
+-support, so ensure this define is only used when Qt is built with
+--largefile, otherwise the build fails with:
+-
+-io/qtemporaryfile.cpp: In function 'bool createFileFromTemplate(
+-	NativeFileHandle&, QFileSystemEntry::NativePath&, size_t, size_t,
+-	QSystemError&)':
+-io/qtemporaryfile.cpp:197:57: error: 'O_LARGEFILE' was not declared in
+-	this scope
+-
+-Reported-Upstream: https://bugreports.qt-project.org/browse/QTBUG-25321
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- mkspecs/common/posix/qplatformdefs.h |    5 +++++
+- 1 files changed, 5 insertions(+), 0 deletions(-)
+-
+-diff --git a/mkspecs/common/posix/qplatformdefs.h b/mkspecs/common/posix/qplatformdefs.h
+-index daecc00..8a796cf 100644
+---- a/mkspecs/common/posix/qplatformdefs.h
+-+++ b/mkspecs/common/posix/qplatformdefs.h
+-@@ -123,7 +123,12 @@
+- #define QT_READ                 ::read
+- #define QT_WRITE                ::write
+- 
+-+#ifdef QT_LARGEFILE_SUPPORT
+- #define QT_OPEN_LARGEFILE       O_LARGEFILE
+-+#else
+-+#define QT_OPEN_LARGEFILE       0
+-+#endif
+-+
+- #define QT_OPEN_RDONLY          O_RDONLY
+- #define QT_OPEN_WRONLY          O_WRONLY
+- #define QT_OPEN_RDWR            O_RDWR
+--- 
+-1.7.8.3
+-
+diff --git a/package/qt5/qt5base/0003-uclibc-no-lfs.patch b/package/qt5/qt5base/0003-uclibc-no-lfs.patch
+deleted file mode 100644
+index 9772d49..0000000
+--- a/package/qt5/qt5base/0003-uclibc-no-lfs.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 6f88b27de256266947a7f6a3e70e18510754aab2 Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Sat, 14 Apr 2012 20:36:07 +0200
+-Subject: [PATCH] mkspecs/common/posix: fix !largefile builds on uClibc
+-
+-uClibc doesn't even define O_LARGEFILE when not configured with large file
+-support, so ensure this define is only used when Qt is built with
+--largefile, otherwise the build fails with:
+-
+-io/qtemporaryfile.cpp: In function 'bool createFileFromTemplate(
+-        NativeFileHandle&, QFileSystemEntry::NativePath&, size_t, size_t,
+-        QSystemError&)':
+-io/qtemporaryfile.cpp:197:57: error: 'O_LARGEFILE' was not declared in
+-        this scope
+-
+-Moved to qt5 by Thomas Petazzoni.
+-
+-Reported-Upstream: https://bugreports.qt-project.org/browse/QTBUG-25321
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-
+-Index: b/mkspecs/common/posix/qplatformdefs.h
+-===================================================================
+---- a/mkspecs/common/posix/qplatformdefs.h
+-+++ b/mkspecs/common/posix/qplatformdefs.h
+-@@ -123,7 +123,11 @@
+- #define QT_READ                 ::read
+- #define QT_WRITE                ::write
+- 
+-+#ifdef QT_LARGEFILE_SUPPORT
+- #define QT_OPEN_LARGEFILE       O_LARGEFILE
+-+#else
+-+#define QT_OPEN_LARGEFILE       0
+-+#endif
+- #define QT_OPEN_RDONLY          O_RDONLY
+- #define QT_OPEN_WRONLY          O_WRONLY
+- #define QT_OPEN_RDWR            O_RDWR
+diff --git a/package/rpm/0001-uclibc-no-lfs-fix.patch b/package/rpm/0001-uclibc-no-lfs-fix.patch
+deleted file mode 100644
+index 00d0579..0000000
+--- a/package/rpm/0001-uclibc-no-lfs-fix.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] rpm: fix build on uClibc with !LFS
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- rpmio/fts.c |    4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-Index: rpm-5.2.0/rpmio/fts.c
+-===================================================================
+---- rpm-5.2.0.orig/rpmio/fts.c
+-+++ rpm-5.2.0/rpmio/fts.c
+-@@ -47,6 +47,10 @@ static char sccsid[] = "@(#)fts.c	8.6 (B
+- #else
+- #if defined(__UCLIBC__)
+- #   define __fxstat64(_stat_ver, _fd, _sbp)    fstat((_fd), (_sbp))
+-+#   include <features.h>
+-+#   ifndef __UCLIBC_HAS_LFS__
+-+#     define stat64 stat
+-+#   endif
+- #endif
+- #if defined(hpux) || defined(__hpux)
+- # define        _INCLUDE_POSIX_SOURCE
+diff --git a/package/stress/0001-Remove-largefile.patch b/package/stress/0001-Remove-largefile.patch
+deleted file mode 100644
+index bf894bc..0000000
+--- a/package/stress/0001-Remove-largefile.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Remove largefile
+-
+-Otherwise it doesn't compile in uClibc without largefile.
+-
+-If the toolchain does support largefile, it will still work on large files
+-anyway.
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+-Upstream status: mail sent to apw at rossby.metr.ou.edu
+----
+-diff -rup stress-1.0.4.orig/src/Makefile.am stress-1.0.4/src/Makefile.am
+---- stress-1.0.4.orig/src/Makefile.am	2009-12-03 02:04:05.000000000 +0100
+-+++ stress-1.0.4/src/Makefile.am	2012-05-04 23:09:48.229842463 +0200
+-@@ -1,7 +1,5 @@
+- MAINTAINERCLEANFILES = Makefile.in
+- 
+--AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
+--
+- bin_PROGRAMS = stress
+- stress_SOURCES = stress.c
+- stress_MANS = stress.1
+diff --git a/package/valgrind/0002-don-t-enable-largefile-support-unconditionally-on-uC.patch b/package/valgrind/0002-don-t-enable-largefile-support-unconditionally-on-uC.patch
+deleted file mode 100644
+index 57ab2c3..0000000
+--- a/package/valgrind/0002-don-t-enable-largefile-support-unconditionally-on-uC.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 6bb94d51e25b394bc9c52699f744a7cc06ffca15 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+-Date: Thu, 2 Jan 2014 16:00:06 +0100
+-Subject: [PATCH 2/2] don't enable largefile support unconditionally on uClibc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-uClibc can be compiled without largefile support (and errors out if
+-_FILE_OFFSET_BITS is set to 64), so don't define it if that combination
+-is detected.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+----
+- coregrind/m_initimg/initimg-linux.c | 4 ++++
+- coregrind/m_main.c                  | 4 ++++
+- coregrind/m_ume/elf.c               | 4 ++++
+- 3 files changed, 12 insertions(+)
+-
+-diff --git a/coregrind/m_initimg/initimg-linux.c b/coregrind/m_initimg/initimg-linux.c
+-index a8e7d27..fa670cb 100644
+---- a/coregrind/m_initimg/initimg-linux.c
+-+++ b/coregrind/m_initimg/initimg-linux.c
+-@@ -55,7 +55,11 @@
+- 
+- /* --- !!! --- EXTERNAL HEADERS start --- !!! --- */
+- #define _GNU_SOURCE
+-+#include <features.h>
+-+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
+- #define _FILE_OFFSET_BITS 64
+-+#endif
+- /* This is for ELF types etc, and also the AT_ constants. */
+- #include <elf.h>
+- /* --- !!! --- EXTERNAL HEADERS end --- !!! --- */
+-diff --git a/coregrind/m_main.c b/coregrind/m_main.c
+-index e7159a8..4371a1f 100644
+---- a/coregrind/m_main.c
+-+++ b/coregrind/m_main.c
+-@@ -3143,7 +3143,11 @@ asm(
+- 
+- /* --- !!! --- EXTERNAL HEADERS start --- !!! --- */
+- #define _GNU_SOURCE
+-+#include <features.h>
+-+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
+- #define _FILE_OFFSET_BITS 64
+-+#endif
+- /* This is in order to get AT_NULL and AT_PAGESIZE. */
+- #include <elf.h>
+- /* --- !!! --- EXTERNAL HEADERS end --- !!! --- */
+-diff --git a/coregrind/m_ume/elf.c b/coregrind/m_ume/elf.c
+-index 4615da3..06992a4 100644
+---- a/coregrind/m_ume/elf.c
+-+++ b/coregrind/m_ume/elf.c
+-@@ -48,7 +48,11 @@
+- 
+- /* --- !!! --- EXTERNAL HEADERS start --- !!! --- */
+- #define _GNU_SOURCE
+-+#include <features.h>
+-+/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+-+#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
+- #define _FILE_OFFSET_BITS 64
+-+#endif
+- /* This is for ELF types etc, and also the AT_ constants. */
+- #include <elf.h>
+- /* --- !!! --- EXTERNAL HEADERS end --- !!! --- */
+--- 
+-1.9.1
+-
+diff --git a/package/vsftpd/0002-dont-force-largefile.patch b/package/vsftpd/0002-dont-force-largefile.patch
+deleted file mode 100644
+index b66c25e..0000000
+--- a/package/vsftpd/0002-dont-force-largefile.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-[PATCH] vsftpd: don't enforce largefile support
+-
+-In Buildroot we enable/disable largefile support globally, and pass the
+-correct defines in CFLAGS, so don't enforce it unconditionally.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- sysutil.c |    6 ------
+- 1 file changed, 6 deletions(-)
+-
+-Index: vsftpd-2.3.2/sysutil.c
+-===================================================================
+---- vsftpd-2.3.2.orig/sysutil.c
+-+++ vsftpd-2.3.2/sysutil.c
+-@@ -17,12 +17,6 @@
+- #include "tunables.h"
+- #include "sysdeputil.h"
+- 
+--/* Activate 64-bit file support on Linux/32bit plus others */
+--#define _FILE_OFFSET_BITS 64
+--#define _LARGEFILE_SOURCE 1
+--#define _LARGEFILE64_SOURCE 1
+--#define _LARGE_FILES 1
+--
+- /* For Linux, this adds nothing :-) */
+- #include "port/porting_junk.h"
+- 
+diff --git a/package/wipe/0001-dont-force-lfs.patch b/package/wipe/0001-dont-force-lfs.patch
+deleted file mode 100644
+index 08916e2..0000000
+--- a/package/wipe/0001-dont-force-lfs.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-LARGEFILE support shouldn't be forced into CFLAGS
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura wipe-2.3.1/configure.in wipe-2.3.1-lfs/configure.in
+---- wipe-2.3.1/configure.in	2009-06-15 22:55:11.000000000 -0300
+-+++ wipe-2.3.1-lfs/configure.in	2012-03-05 11:25:30.463221948 -0300
+-@@ -91,7 +91,7 @@
+- test "$with_efence" = "yes" && temp2CFLAGS="$debugCFLAGS" && LIBS="-lefence"
+- 
+- DEBUG="$debugCFLAGS $fullCFLAGS"
+--fullCFLAGS="$temp2CFLAGS $fullCFLAGS -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64"
+-+fullCFLAGS="$temp2CFLAGS $fullCFLAGS"
+- CFLAGS="$checkCFLAGS -D__USE_BSD -D_BSD_SOURCE -D__USE_POSIX -D_POSIX_SOURCE -D_POSIX_MAPPED_FILES"
+- 
+- dnl Checks for libraries.
 -- 
 2.0.5
