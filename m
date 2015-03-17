@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 22:54:57 +0100
-Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
-In-Reply-To: <trinity-4d99cda4-12a7-4ccd-a2d9-648264125705-1426625148665@3capp-gmx-bs04>
-References: <trinity-4d99cda4-12a7-4ccd-a2d9-648264125705-1426625148665@3capp-gmx-bs04>
-Message-ID: <20150317225457.5625e376@free-electrons.com>
+Date: Tue, 17 Mar 2015 22:55:59 +0100
+Subject: [Buildroot] Blackfin Buildroot toolchain issue
+In-Reply-To: <20150317213403.GC21001@waldemar-brodkorb.de>
+References: <20150315221722.3645eb35@free-electrons.com>
+ <20150315221813.173a36e2@free-electrons.com>
+ <5508382D.7080008@zacarias.com.ar>
+ <20150317153028.66788805@free-electrons.com>
+ <55084360.1070405@zacarias.com.ar>
+ <20150317161320.50559502@free-electrons.com>
+ <55086A77.6060907@zacarias.com.ar>
+ <20150317213403.GC21001@waldemar-brodkorb.de>
+Message-ID: <20150317225559.4e539db9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Waldemar Brodkorb,
 
-On Tue, 17 Mar 2015 21:45:48 +0100, Peter Seiderer wrote:
+On Tue, 17 Mar 2015 22:34:03 +0100, Waldemar Brodkorb wrote:
 
-> ...should have added 'until Blackfin compile is disabled because of noMMU' as a footnote ;-)
-> 
-> But the remaining question: Revert the patch? Should I send a revert-patch?
-> Or can you revert/commit directly? Or leave as is?
+> My opinion on this is, that there are systems supporting threads
+> with uClibc, which do not have TLS support. Linuxthreads.old does
+> not make use of TLS. When you build for coldfire or ARM noMMU, tls 
+> is not available and it should be disabled while configuring gcc.
 
-Well, please send a patch that adds the BR2_USE_MMU dependency, and as
-part of it, removes the attempts at supporting Blackfin.
+Sure, but we don't have to make this an option. The plan is to enable
+TLS only when available.
 
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
