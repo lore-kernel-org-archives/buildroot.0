@@ -1,59 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2015 13:59:36 +0100
-Subject: [Buildroot] [PATCH 3/5 v2] support/download: return different exit
-	codes for different failures
+Date: Tue, 17 Mar 2015 13:59:37 +0100
+Subject: [Buildroot] [PATCH 4/5 v2] support/download: properly catch missing
+	hashes
 In-Reply-To: <cover.1426597114.git.yann.morin.1998@free.fr>
 References: <cover.1426597114.git.yann.morin.1998@free.fr>
-Message-ID: <7bea586c0c9b134a62cb006371c9e5442a9d010d.1426597114.git.yann.morin.1998@free.fr>
+Message-ID: <635ccce48b7a43df2f151481b72e6e46f2aae1a0.1426597114.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Return different exit codes depending on the error that occured:
-
-  0: no error (hash file missing, or all hashes match)
-  1: hash file exists, but at least one hash in error
-  2: hash file exists, but no hash for file to check
+When checking hashes reports no hash for a file, and this is treated as
+an error (now: because BR2_ENFORCE_CHECK_HASH is set; later: because
+that will be the new and only behaviour), exit promptly in error.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
 
 ---
 Changes v1 -> v2:
-  - typoes in script and commit  (Samuel)
+  - typo in commit
 ---
- support/download/check-hash | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ support/download/dl-wrapper | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index cee64ef..9c62d7f 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -9,6 +9,13 @@ set -e
- #   $3: the final basename of the file, to which it will be ultimately
- #       saved as, to be able to match it to the corresponding hashes
- #       in the .hash file
-+#
-+# Exits with:
-+#   0: the hash file exists and the file to check matches all its hashes,
-+#      or the hash file does not exist
-+#   1: the hash file exists and the file to check does not match at least
-+#      of its hashes
-+#   2: the hash file exists and there was no hash to check the file against
- 
- while getopts :q OPT; do
-     case "${OPT}" in
-@@ -83,7 +90,7 @@ done <"${h_file}"
- if [ ${nb_checks} -eq 0 ]; then
-     if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
-         printf "ERROR: No hash found for %s\n" "${base}" >&2
--        exit 1
-+        exit 2
-     else
-         printf "WARNING: No hash found for %s\n" "${base}" >&2
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 514118c..c5eb582 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -45,10 +45,19 @@ main() {
+         error "no output specified, use -o\n"
      fi
+ 
+-    # If the output file already exists, do not download it again
++    # If the output file already exists and:
++    # - there's no .hash file: do not download it again and exit promptly
++    # - matches all its hashes: do not download it again and exit promptly
++    # - fails at least one of its hashes: force a re-download
++    # - there's no hash (but a .hash file): consider it a hard error
+     if [ -e "${output}" ]; then
+         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
+             exit 0
++        elif [ ${?} -eq 2 ]; then
++            # Do not remove the file, otherwise it might get re-downloaded
++            # from a later location (i.e. primary -> upstream -> mirror).
++            # Do not print a message, check-hash already did
++            exit 2
+         fi
+         rm -f "${output}"
+         warn "Re-downloading '%s'...\n" "${output##*/}"
 -- 
 1.9.1
