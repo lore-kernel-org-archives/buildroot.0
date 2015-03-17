@@ -1,35 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Mar 2015 21:50:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 7941] glibc-2.20 fails to build for
-	sparc-buildroot-linux-gnu
-In-Reply-To: <bug-7941-163@https.bugs.busybox.net/>
-References: <bug-7941-163@https.bugs.busybox.net/>
-Message-ID: <20150317215033.48B6E807B7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Mar 2015 22:52:37 +0100
+Subject: [Buildroot] [git commit] sox: disable ssp when unavailable
+Message-ID: <20150317215244.A97D08181B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7941
+commit: http://git.buildroot.net/buildroot/commit/?id=e62bf3c0a91e6ae8e66d8d51d1d3955ce69a0421
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #2 from mail at waldemar-brodkorb.de 2015-03-17 21:50:33 UTC ---
-You could also apply this simple patch:
-diff -Nur glibc-2.20.orig/sysdeps/sparc/sparc32/sem_trywait.c
-glibc-2.20/sysdeps/sparc/sparc32/sem_trywait.c
---- glibc-2.20.orig/sysdeps/sparc/sparc32/sem_trywait.c 2014-09-07
-10:09:09.000000000 +0200
-+++ glibc-2.20/sysdeps/sparc/sparc32/sem_trywait.c      2014-09-13
-10:21:44.000000000 +0200
-@@ -22,6 +22,7 @@
- #include <lowlevellock.h>
- #include <internaltypes.h>
- #include <semaphore.h>
-+#include <sparc-nptl.h>
+It seems autodetection isn't good. Fixes:
+http://autobuild.buildroot.net/results/885/885c7daec7b727d8a7cf47c7576f0e79d4a5ddf8/
 
- #include <shlib-compat.h>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sox/sox.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index cd5fbb6..f4d1608 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -8,7 +8,8 @@ SOX_VERSION = 14.4.2
+ SOX_SITE = http://downloads.sourceforge.net/project/sox/sox/$(SOX_VERSION)
+ SOX_SOURCE = sox-$(SOX_VERSION).tar.bz2
+ SOX_DEPENDENCIES = host-pkgconf
+-SOX_CONF_OPTS = --with-distro="Buildroot" --without-ffmpeg --disable-gomp
++SOX_CONF_OPTS = --with-distro="Buildroot" --without-ffmpeg --disable-gomp \
++	$(if $(BR2_TOOLCHAIN_HAS_SSP),,--disable-stack-protector)
+ SOX_LICENSE = GPLv2+ (sox binary), LGPLv2.1+ (libraries)
+ SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
+ 
