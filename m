@@ -1,66 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2015 13:59:38 +0100
-Subject: [Buildroot] [PATCH 5/5 v2] support/download: always fail when
-	there's no hash
-In-Reply-To: <cover.1426597114.git.yann.morin.1998@free.fr>
-References: <cover.1426597114.git.yann.morin.1998@free.fr>
-Message-ID: <b9c42017c424fae04a5bae3d8a74c3b21de65370.1426597114.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Mar 2015 14:12:37 +0100
+Subject: [Buildroot] [PATCH v2] package/sysdig: New package
+In-Reply-To: <CA+TH9Vkmn68BhLSWiv7rgcfR7ZPq4uqYBHcCU7qUjHAHUWcCPg@mail.gmail.com>
+References: <1426589808-568-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20150317112339.GM2415@tarshish>
+ <CA+TH9VnhBOe+KSV+6nsgF_sUD9SX8WtfQpY2oxG_=5h-=nSniA@mail.gmail.com>
+ <20150317114816.GN2415@tarshish>
+ <CA+TH9Vkmn68BhLSWiv7rgcfR7ZPq4uqYBHcCU7qUjHAHUWcCPg@mail.gmail.com>
+Message-ID: <20150317141237.10b2f0cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the time we introduced hashes, we did not want to be too harsh in the
-beginning, and give people some time to adapt and accept the hashes. So
-we so far only whined^Wwarned about a missing hash (when the .hash file
-exists).
+Dear Angelo Compagnucci,
 
-Some time has passed now, and people are still missing updating hashes
-when bumping packages.
+On Tue, 17 Mar 2015 12:59:11 +0100, Angelo Compagnucci wrote:
 
-Let's make that warning a little bit more annoying...
+> > You are right, I missed that. It's just that I'm used to see these comments
+> > below the main 'config' section. Putting the comment above is also fine,
+> > though. Don't forget to update this comment when adding indirect dependencies.
+> 
+> I think that if I use select, the dependencies of this package will
+> explode. I think I can use select for simple, non problematic
+> packages, and use depends on for others.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- docs/manual/adding-packages-directory.txt | 6 ++----
- support/download/check-hash               | 8 ++------
- 2 files changed, 4 insertions(+), 10 deletions(-)
+No. Please follow what Baruch said: use 'select' for BR2_PACKAGE_ZLIB,
+BR2_PACKAGE_LUAJIT and BR2_PACKAGE_LIBJSON, and a 'depends on' for
+BR2_LINUX_KERNEL.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 1ce9a3b..febb33c 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -469,9 +469,7 @@ not match, Buildroot considers this an error, deletes the downloaded file,
- and aborts.
- 
- If the +.hash+ file is present, but it does not contain a hash for a
--downloaded file, no check is done for that file. If you set the
--environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
--there is no hash for a downloaded file, Buildroot considers this an
--error, deletes the downloaded file, and aborts.
-+downloaded file, Buildroot considers this an error and aborts (but leaves
-+the downloaded file in place).
- 
- If the +.hash+ file is missing, then no check is done at all.
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 9c62d7f..0caa619 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -88,10 +88,6 @@ while read t h f; do
- done <"${h_file}"
- 
- if [ ${nb_checks} -eq 0 ]; then
--    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
--        printf "ERROR: No hash found for %s\n" "${base}" >&2
--        exit 2
--    else
--        printf "WARNING: No hash found for %s\n" "${base}" >&2
--    fi
-+    printf "ERROR: No hash found for %s\n" "${base}" >&2
-+    exit 2
- fi
+Also, are you sure sysdig only works with LuaJIT, or does it also work
+with the "normal" Lua interpreter?
+
+Thanks,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
