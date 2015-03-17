@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 17 Mar 2015 21:04:48 +0100
-Subject: [Buildroot] [PATCH 2/3] ljlinenoise: refactor with
+Date: Tue, 17 Mar 2015 21:04:49 +0100
+Subject: [Buildroot] [PATCH 3/3] ljsyscall: refactor with
 	BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 In-Reply-To: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
 References: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1426622689-31844-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1426622689-31844-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ljlinenoise/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/ljsyscall/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
-index 17be1be..ce1a156 100644
---- a/package/ljlinenoise/Config.in
-+++ b/package/ljlinenoise/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LJLINENOISE
+diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
+index dcbd521..b9ff04d 100644
+--- a/package/ljsyscall/Config.in
++++ b/package/ljsyscall/Config.in
+@@ -3,12 +3,12 @@ config BR2_PACKAGE_LJSYSCALL
  	# ljsyscall is specifically for LuaJIT, not Lua.
  	depends on BR2_PACKAGE_LUAJIT
  	# ljsyscall is only available for some target architectures
 -	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
 +	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
  	help
- 	  ljlinenoise is a pure LuaJIT port of linenoise,
- 	  a small alternative to readline and libedit.
-@@ -13,5 +13,4 @@ config BR2_PACKAGE_LJLINENOISE
- 	  http://fperrad.github.io/ljlinenoise/
+ 	  An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
  
- comment "ljlinenoise needs LuaJIT"
--	depends on !BR2_PACKAGE_LUAJIT
--	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
+ 	  http://github.com/justincormack/ljsyscall
+ 
+ comment "ljsyscall needs LuaJIT"
+-	depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
 +	depends on !BR2_PACKAGE_LUAJIT && !BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 
 -- 
 2.1.0
