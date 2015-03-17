@@ -1,34 +1,27 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:41:00 -0300
-Subject: [Buildroot] [PATCH] toolchain: disable internal for blackfin
-Message-ID: <1426610460-11691-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Mar 2015 13:41:26 -0300
+Subject: [Buildroot] Blackfin Buildroot toolchain issue
+In-Reply-To: <20150317154354.34f4d39d@free-electrons.com>
+References: <20150315221722.3645eb35@free-electrons.com>	<55082FFD.30305@zacarias.com.ar>	<20150317144923.7e9b7fbb@free-electrons.com>	<55083CDE.7040007@zacarias.com.ar>
+ <20150317154354.34f4d39d@free-electrons.com>
+Message-ID: <55085936.8040401@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The internal toolchain was a "best effort" approach - we strived to make
-it build properly and all but it's mostly untested.
-Since it's got issues disable it until it's properly fixed and tested
-and leave the official ADI toolchain instead.
+On 03/17/2015 11:43 AM, Thomas Petazzoni wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+>> So it's probably best to just disable it, after all if someone wants to
+>> throw some time into fixing it, it's just a line away from re-enabling
+>> it and doing so.
+> 
+> Yes, I believe it's the sanest / easiest solution. Can you send a patch
+> to disable Blackfin in the internal toolchain backend ?
+> 
+> I'll remove the Buildroot generated Blackfin external toolchain from
+> the autobuilders.
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 291db94..32a00a9 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -41,6 +41,7 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
-+	depends on !BR2_bfin
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
--- 
-2.0.5
+Sent, thanks.
+Regards.
