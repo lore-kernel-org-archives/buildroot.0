@@ -1,53 +1,45 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 17 Mar 2015 18:15:43 -0500
-Subject: [Buildroot] [PATCH v2 1/1] quagga: option for vtysh
-Message-ID: <1426634143-31245-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Mar 2015 23:35:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 7946] New: libglib2-2.42.2 fails to build for
+ sparc-buildroot-linux-gnu
+Message-ID: <bug-7946-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
+https://bugs.busybox.net/show_bug.cgi?id=7946
 
-  Changes v1 -> v2
-  - Added readline dependency (Suggested by Thomas P)
+              Host: x86_64
+            Target: sparc-buildroot-linux-gnu
+           Summary: libglib2-2.42.2 fails to build for
+                    sparc-buildroot-linux-gnu
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: uwe at hermann-uwe.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- package/quagga/Config.in | 6 ++++++
- package/quagga/quagga.mk | 5 +++++
- 2 files changed, 11 insertions(+)
 
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index d8b10f8..4a9f8bb 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -82,6 +82,12 @@ config BR2_PACKAGE_QUAGGA_WATCHQUAGGA
- 	help
- 	  Build and install watchquagga, a zebra/protocol daemon supervisor.
- 
-+config BR2_PACKAGE_QUAGGA_VTYSH
-+	bool "Build vtysh"
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Build and install vtysh, a vty shell for Quagga.
-+
- config BR2_PACKAGE_QUAGGA_SNMP
- 	bool "SNMP support"
- 	depends on BR2_USE_MMU # net-snmp
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 2c0a6a9..55f925f 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -32,4 +32,9 @@ QUAGGA_CONF_OPTS += --enable-snmp=agentx
- QUAGGA_DEPENDENCIES += netsnmp
- endif
- 
-+ifeq ($(BR2_PACKAGE_QUAGGA_VTYSH),y)
-+QUAGGA_CONF_OPTS += --enable-vtysh
-+QUAGGA_DEPENDENCIES += readline
-+endif
-+
- $(eval $(autotools-package))
+This is buildroot git HEAD as of today, with glibc 2.21 and gcc-4.8.
+
+make[5]: Entering directory
+'/home/jenkins_slave/buildroot-sparc-buildroot-linux-gnu/output/build/libglib2-2.42.2/glib'
+  CCLD     gtester
+./.libs/libglib-2.0.so: undefined reference to `__atomic_compare_exchange_4'
+collect2: error: ld returned 1 exit status
+Makefile:1446: recipe for target 'gtester' failed
+make[5]: *** [gtester] Error 1
+
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
