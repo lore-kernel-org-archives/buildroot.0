@@ -1,20 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Mar 2015 13:58:21 -0300
-Subject: [Buildroot] [PATCH] toolchain: disable internal for blackfin
-In-Reply-To: <20150317175630.6eeb2043@free-electrons.com>
-References: <1426610460-11691-1-git-send-email-gustavo@zacarias.com.ar>
- <20150317175630.6eeb2043@free-electrons.com>
-Message-ID: <55085D2D.9010501@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Mar 2015 18:01:35 +0100
+Subject: [Buildroot] Autobuild news: config.log files now available
+Message-ID: <20150317180135.2d377f1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/17/2015 01:56 PM, Thomas Petazzoni wrote:
+Hello,
 
-> Maybe some follow-up patches are possible, in binutils/Config.in.host
-> and gcc/Config.in.host in the selection of versions?
+This WE, I've finally taken the time to review, test and merge the
+patches from Thomas DS on the autobuild-run script.
 
-Do we want to completely remove traces about it?
-Regards.
+One of the cool new feature brought by his patches is that now the
+config.log file(s) from the failed package are automatically uploaded
+as part of the build results. Those files typically contain a lot of
+useful information to diagnose the reason of the build failure, at
+least for autoconf based packages.
+
+See
+http://autobuild.buildroot.org/results/31d/31d332cf2c043b50f2e4bb0b358c28e3701a6547//php-5.5.22/config.log
+for an example.
+
+Right now, this is only done for the build results coming from my
+autobuilders, but I've asked Peter, Julien and Richard to update their
+autobuilder scripts as well, so the results coming from their machine
+should soon get this additional info as well.
+
+Thanks to Thomas DS for implementing this feature!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
