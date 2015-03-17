@@ -1,39 +1,48 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 17 Mar 2015 21:04:49 +0100
-Subject: [Buildroot] [PATCH 3/3] ljsyscall: refactor with
-	BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-In-Reply-To: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
-References: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1426622689-31844-3-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Mar 2015 21:06:51 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
+ instead of libftdi
+In-Reply-To: <CAHXCMMJWtxrVB2nai6V7y_-5ijr5zpXpNBS=G9LbtbBfDrLd4g@mail.gmail.com>
+References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
+ <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
+ <20150308114842.GB2518@tarshish>
+ <CAHXCMMJ30MEE33mytg4xy9pZePD0Z+ezH8pJE6wzhaqJWdkyGg@mail.gmail.com>
+ <20150316141523.2561f737@free-electrons.com>
+ <CAHXCMM+52vee+K8p=KOonr=d+F4M7bk-5zWMG2Q2ghmGyWTKLA@mail.gmail.com>
+ <20150317174836.6384db5a@free-electrons.com>
+ <CAHXCMMJWtxrVB2nai6V7y_-5ijr5zpXpNBS=G9LbtbBfDrLd4g@mail.gmail.com>
+Message-ID: <20150317210651.11bf1534@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/ljsyscall/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear Samuel Martin,
 
-diff --git a/package/ljsyscall/Config.in b/package/ljsyscall/Config.in
-index dcbd521..b9ff04d 100644
---- a/package/ljsyscall/Config.in
-+++ b/package/ljsyscall/Config.in
-@@ -3,12 +3,12 @@ config BR2_PACKAGE_LJSYSCALL
- 	# ljsyscall is specifically for LuaJIT, not Lua.
- 	depends on BR2_PACKAGE_LUAJIT
- 	# ljsyscall is only available for some target architectures
--	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	help
- 	  An FFI implementation of the Linux and NetBSD kernel ABIs for LuaJIT.
- 
- 	  http://github.com/justincormack/ljsyscall
- 
- comment "ljsyscall needs LuaJIT"
--	depends on !BR2_PACKAGE_LUAJIT && (BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb)
-+	depends on !BR2_PACKAGE_LUAJIT && !BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 
+On Tue, 17 Mar 2015 18:25:52 +0100, Samuel Martin wrote:
+
+> Nope, the behavior is not undefined: if libftdi gets built before
+> arvdude, libftdi1 will also be built before avrdude (because it's one
+> of its deps,)
+
+Hum, I don't follow you here. I don't see where libftdi depends on
+libftdi1.
+
+What prevents from doing a configuration that has libftdi and avrdude
+enabled, and not libftdi1 ?
+
+Apparently nothing:
+
+$ grep -E "(LIBFTDI|LIBFTDI1|AVRDUDE)" .config
+BR2_PACKAGE_AVRDUDE=y
+BR2_PACKAGE_LIBFTDI=y
+# BR2_PACKAGE_LIBFTDI1 is not set
+
+Best regards,
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
