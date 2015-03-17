@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 21:31:01 +0100
-Subject: [Buildroot] [git commit] luarocks: bump to version 2.2.1
-Message-ID: <20150317203210.423C3803D8@busybox.osuosl.org>
+Date: Tue, 17 Mar 2015 21:32:50 +0100
+Subject: [Buildroot] [PATCH 2/3] ljlinenoise: refactor with
+ BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+In-Reply-To: <1426622689-31844-2-git-send-email-francois.perrad@gadz.org>
+References: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
+ <1426622689-31844-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150317213250.6ed620c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48634552d6cadc42added9e740c2608885df2a5e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luarocks/luarocks.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, 17 Mar 2015 21:04:48 +0100, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/ljlinenoise/Config.in | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/ljlinenoise/Config.in b/package/ljlinenoise/Config.in
+> index 17be1be..ce1a156 100644
+> --- a/package/ljlinenoise/Config.in
+> +++ b/package/ljlinenoise/Config.in
+> @@ -5,7 +5,7 @@ config BR2_PACKAGE_LJLINENOISE
+>  	# ljsyscall is specifically for LuaJIT, not Lua.
+>  	depends on BR2_PACKAGE_LUAJIT
+>  	# ljsyscall is only available for some target architectures
+> -	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb
+> +	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 40fdc91..12a1f08 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 2.2.0
-+LUAROCKS_VERSION = 2.2.1
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+Are you sure?
+
+BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is clearly not the same as "BR2_i386
+|| BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb". For example,
+mips/mipsel are supported in LuaJIT, but not in the current condition
+of ljlinenoise.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
