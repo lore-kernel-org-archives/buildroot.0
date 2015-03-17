@@ -1,27 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 23:30:36 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d-headers: bump version
- to 10.5.1
-In-Reply-To: <1426435802-14030-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1426435802-14030-1-git-send-email-bernd.kuhls@t-online.de>
- <1426435802-14030-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150317233036.174c9898@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Mar 2015 23:35:51 +0100
+Subject: [Buildroot] Autobuild news: config.log files now available
+In-Reply-To: <20150317180135.2d377f1e@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 17 Mar 2015 18:01:35 +0100")
+References: <20150317180135.2d377f1e@free-electrons.com>
+Message-ID: <87mw3bl0ag.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 15 Mar 2015 17:10:02 +0100, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Hi,
 
-Applied, thanks.
+> Right now, this is only done for the build results coming from my
+ > autobuilders, but I've asked Peter, Julien and Richard to update their
+ > autobuilder scripts as well, so the results coming from their machine
+ > should soon get this additional info as well.
 
-Thomas
+ > Thanks to Thomas DS for implementing this feature!
+
+Yes, thanks!
+
+I've updated "my" builders.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
