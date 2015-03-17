@@ -1,61 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2015 16:14:51 +0100
-Subject: [Buildroot] [PATCH 0/2 v3] toolchain: misc fixes (branch
-	yem/toolchain-fixes)
-Message-ID: <cover.1426604262.git.yann.morin.1998@free.fr>
+Date: Tue, 17 Mar 2015 16:14:56 +0100
+Subject: [Buildroot] [PATCH 2/2 v3] toolchain: fix installing gconv libs
+	with multi-arch toolchain
+In-Reply-To: <cover.1426604262.git.yann.morin.1998@free.fr>
+References: <cover.1426604262.git.yann.morin.1998@free.fr>
+Message-ID: <1d2730901d20f1f9bfcfde77883a385b49c73b00.1426604262.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+For a multi-arch toolchain, gconv modules are in a sub-directory named
+after the machine gcc targets. This is the case, for example, for the
+Linaro ARM 2014.09 toolchain, which has the gconv modules in (relative
+to the sysroot):
+    /usr/lib/arm-linux-gnueabihf/gconv
 
-This series introduces two fixes in the external toolchain handling:
+while the Sourcery CodeBench ARM 2014.05 (non-multi-arch) has them in:
+    /usr/lib/gconv
 
-  - reject "distro-class" toolchains, i.e. the  cross-oolchains packaged
-    in Debian and its derivatives, since those toolchains are both
-    non-relocatable and tainted with a lot of crap (i.e. non-libc
-    libraries) which make them unfit for use by Buildroot;
+So, to catter for both cases, search both paths. We want to favour the
+machine-specific gconv modules over potentially existing "generic" ones,
+so we first search that (if it exists) and fallback to looking in the
+generic location.
 
-  - try harder to find the gconv modules for those multi-arch
-    toolchains, since there may be gconv modules for each variant, and
-    thus would be located out-side the main sysroot.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+---
 Changes v2 -> v3:
-  - update comment for distro-class toolchains  (Thomas, Arnout)
-  - use TOOLCHAIN_EXTERNAL_PREFIX instead of asking gcc  (Thomas)
+  - use TOOLCHAIN_EXTERNAL_PREFIX instead of computing it again
 
+Changes v1 -> v2:
+  - also handle the case where the gconv modules list is specified
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 9b8481671e9d0c6abc90d669f99c6925eda86c96:
-
-  package/dovecot: bump version to 2.2.16 (2015-03-17 13:03:02 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/toolchain-fixes
-
-for you to fetch changes up to 1d2730901d20f1f9bfcfde77883a385b49c73b00:
-
-  toolchain: fix installing gconv libs with multi-arch toolchain (2015-03-17 15:04:23 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      toolchain/external: do not accept distro-class toolchains
-      toolchain: fix installing gconv libs with multi-arch toolchain
-
- toolchain/helpers.mk   |  8 ++++++++
+---
+Notes: I'm not too happy about the use of "gcc -dumpmachine", but
+that's the only solution I found that worked on my use-case. I tried
+duplicating the ARCH_SUBDIR trick from toolchain-external, but that
+did not work...
+---
  toolchain/toolchain.mk | 26 ++++++++++++++++++--------
- 2 files changed, 26 insertions(+), 8 deletions(-)
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
+diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
+index 3f9900b..0a35909 100644
+--- a/toolchain/toolchain.mk
++++ b/toolchain/toolchain.mk
+@@ -17,28 +17,38 @@ endif
+ ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
+ GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
+ define COPY_GCONV_LIBS
+-	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
+-		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
+-				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+-		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
++	$(Q)found_gconv=no; \
++	for d in $(TOOLCHAIN_EXTERNAL_PREFIX) ''; do \
++		[ -d "$(STAGING_DIR)/usr/lib/$${d}/gconv" ] || continue; \
++		found_gconv=yes; \
++		break; \
++	done; \
++	if [ "$${found_gconv}" = "no" ]; then \
++		printf "Unable to find gconv modules\n" >&2; \
++		exit 1; \
++	fi; \
++	if [ -z "$(GCONV_LIBS)" ]; then \
++		$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
++				      $(TARGET_DIR)/usr/lib/gconv/gconv-modules && \
++		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/$${d}/gconv/*.so \
+ 				   $(TARGET_DIR)/usr/lib/gconv \
+ 		|| exit 1; \
+ 	else \
+ 		for l in $(GCONV_LIBS); do \
+-			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
++			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so \
+ 					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so \
+ 			|| exit 1; \
+-			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/gconv/$${l}.so |\
++			$(TARGET_READELF) -d $(STAGING_DIR)/usr/lib/$${d}/gconv/$${l}.so |\
+ 			sort -u |\
+ 			sed -e '/.*(NEEDED).*\[\(.*\.so\)\]$$/!d; s//\1/;' |\
+ 			while read lib; do \
+-				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${lib} \
++				 $(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/$${d}/gconv/$${lib} \
+ 						       $(TARGET_DIR)/usr/lib/gconv/$${lib} \
+ 				 || exit 1; \
+ 			done; \
+ 		done; \
+ 		./support/scripts/expunge-gconv-modules "$(GCONV_LIBS)" \
+-			<$(STAGING_DIR)/usr/lib/gconv/gconv-modules \
++			<$(STAGING_DIR)/usr/lib/$${d}/gconv/gconv-modules \
+ 			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
+ 	fi
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
