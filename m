@@ -1,70 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2015 13:59:35 +0100
-Subject: [Buildroot] [PATCH 2/5 v2] package infra: do not check hashes when
-	downloading from a repository
+Date: Tue, 17 Mar 2015 13:59:36 +0100
+Subject: [Buildroot] [PATCH 3/5 v2] support/download: return different exit
+	codes for different failures
 In-Reply-To: <cover.1426597114.git.yann.morin.1998@free.fr>
 References: <cover.1426597114.git.yann.morin.1998@free.fr>
-Message-ID: <39f9a41523a7e1f35e423bdabb722633f7dde494.1426597114.git.yann.morin.1998@free.fr>
+Message-ID: <7bea586c0c9b134a62cb006371c9e5442a9d010d.1426597114.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When downloading from a repository, we have no way to ensure the
-reproducibility of the generated archives, so we can't check the hashes.
+Return different exit codes depending on the error that occured:
 
-Do not specifiy a hash file in those cases.
+  0: no error (hash file missing, or all hashes match)
+  1: hash file exists, but at least one hash in error
+  2: hash file exists, but no hash for file to check
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-download.mk | 5 -----
- 1 file changed, 5 deletions(-)
+Cc: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 5e74519..e274712 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -87,7 +87,6 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
- define DOWNLOAD_GIT
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
-@@ -109,7 +108,6 @@ endef
- define DOWNLOAD_BZR
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
-@@ -128,7 +126,6 @@ endef
- define DOWNLOAD_CVS
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
-@@ -149,7 +146,6 @@ endef
- define DOWNLOAD_SVN
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
-@@ -189,7 +185,6 @@ endef
- define DOWNLOAD_HG
- 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
- 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
--		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_SITE) \
+---
+Changes v1 -> v2:
+  - typoes in script and commit  (Samuel)
+---
+ support/download/check-hash | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/support/download/check-hash b/support/download/check-hash
+index cee64ef..9c62d7f 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -9,6 +9,13 @@ set -e
+ #   $3: the final basename of the file, to which it will be ultimately
+ #       saved as, to be able to match it to the corresponding hashes
+ #       in the .hash file
++#
++# Exits with:
++#   0: the hash file exists and the file to check matches all its hashes,
++#      or the hash file does not exist
++#   1: the hash file exists and the file to check does not match at least
++#      of its hashes
++#   2: the hash file exists and there was no hash to check the file against
+ 
+ while getopts :q OPT; do
+     case "${OPT}" in
+@@ -83,7 +90,7 @@ done <"${h_file}"
+ if [ ${nb_checks} -eq 0 ]; then
+     if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+         printf "ERROR: No hash found for %s\n" "${base}" >&2
+-        exit 1
++        exit 2
+     else
+         printf "WARNING: No hash found for %s\n" "${base}" >&2
+     fi
 -- 
 1.9.1
