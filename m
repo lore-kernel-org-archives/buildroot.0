@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 17:53:36 +0100
+Date: Tue, 17 Mar 2015 17:56:30 +0100
 Subject: [Buildroot] [PATCH] toolchain: disable internal for blackfin
 In-Reply-To: <1426610460-11691-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426610460-11691-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150317175336.1dda6f72@free-electrons.com>
+Message-ID: <20150317175630.6eeb2043@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,10 @@ On Tue, 17 Mar 2015 13:41:00 -0300, Gustavo Zacarias wrote:
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Applied, thanks!
+Maybe some follow-up patches are possible, in binutils/Config.in.host
+and gcc/Config.in.host in the selection of versions?
+
+Thanks,
 
 Thomas
 -- 
