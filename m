@@ -1,40 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 21:14:14 +0100
-Subject: [Buildroot] [PATCH] toolchain: disable internal for blackfin
-In-Reply-To: <55085D2D.9010501@zacarias.com.ar>
-References: <1426610460-11691-1-git-send-email-gustavo@zacarias.com.ar>
- <20150317175630.6eeb2043@free-electrons.com>
- <55085D2D.9010501@zacarias.com.ar>
-Message-ID: <20150317211414.0b856147@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 17 Mar 2015 21:21:42 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/avrdude: depends on libftdi1
+ instead of libftdi
+In-Reply-To: <20150317210651.11bf1534@free-electrons.com>
+References: <1425813964-5295-1-git-send-email-s.martin49@gmail.com>
+ <1425813964-5295-4-git-send-email-s.martin49@gmail.com>
+ <20150308114842.GB2518@tarshish>
+ <CAHXCMMJ30MEE33mytg4xy9pZePD0Z+ezH8pJE6wzhaqJWdkyGg@mail.gmail.com>
+ <20150316141523.2561f737@free-electrons.com>
+ <CAHXCMM+52vee+K8p=KOonr=d+F4M7bk-5zWMG2Q2ghmGyWTKLA@mail.gmail.com>
+ <20150317174836.6384db5a@free-electrons.com>
+ <CAHXCMMJWtxrVB2nai6V7y_-5ijr5zpXpNBS=G9LbtbBfDrLd4g@mail.gmail.com>
+ <20150317210651.11bf1534@free-electrons.com>
+Message-ID: <CAHXCMM+WFkwdr_T7TuFMn+JNKytNmP3i5Lh6U6Z8VRwjzZfS5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Thomas,
 
-On Tue, 17 Mar 2015 13:58:21 -0300, Gustavo Zacarias wrote:
+On Tue, Mar 17, 2015 at 9:06 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Samuel Martin,
+>
+> On Tue, 17 Mar 2015 18:25:52 +0100, Samuel Martin wrote:
+>
+>> Nope, the behavior is not undefined: if libftdi gets built before
+>> arvdude, libftdi1 will also be built before avrdude (because it's one
+>> of its deps,)
+>
+> Hum, I don't follow you here. I don't see where libftdi depends on
+> libftdi1.
 
-> > Maybe some follow-up patches are possible, in binutils/Config.in.host
-> > and gcc/Config.in.host in the selection of versions?
-> 
-> Do we want to completely remove traces about it?
+doh! i think we are misunderstanding each others... :-|
 
-Well to be honest, seeing how little contributions the Blackfin people
-are doing to upstream projects, I am not really hoping a radical
-improvement in the upstream support for Blackfin in the coming months
-(years?). So I'd prefer to remove the traces of Blackfin support.
+>
+> What prevents from doing a configuration that has libftdi and avrdude
+> enabled, and not libftdi1 ?
 
-Another option of course, would be to introduce support for the ADI
-specific gcc and binutils versions at
-http://sourceforge.net/p/adi-toolchain/blackfin/ci/master/tree/. But
-it's one Git repository with everything, so not easy to package.
+nothing at all, this still is a legit config.
 
-Best regards,
+>
+> Apparently nothing:
+>
+> $ grep -E "(LIBFTDI|LIBFTDI1|AVRDUDE)" .config
+> BR2_PACKAGE_AVRDUDE=y
+> BR2_PACKAGE_LIBFTDI=y
+> # BR2_PACKAGE_LIBFTDI1 is not set
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Thomas
+Regards,
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
