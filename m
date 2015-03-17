@@ -1,25 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 22:59:28 +0100
-Subject: [Buildroot] [PATCH] sox: disable ssp when unavailable
-In-Reply-To: <1425664385-24497-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1425664385-24497-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150317225928.1ef7d626@free-electrons.com>
+Date: Tue, 17 Mar 2015 22:59:58 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/wpa_supplicant: Enable
+ support for log to debug file
+In-Reply-To: <1426628469-3535-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1426628469-3535-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150317225958.0dcdf6ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear J?rg Krause,
 
-On Fri,  6 Mar 2015 14:53:05 -0300, Gustavo Zacarias wrote:
-> It seems autodetection isn't good. Fixes:
-> http://autobuild.buildroot.net/results/885/885c7daec7b727d8a7cf47c7576f0e79d4a5ddf8/
+On Tue, 17 Mar 2015 22:41:09 +0100, J?rg Krause wrote:
+> Enable the '-f' option (log output to debug file instead of stdout). Force
+> enable it, binary size +963 bytes for an ARM target.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/sox/sox.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Applied, thanks!
 
