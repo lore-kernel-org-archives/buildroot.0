@@ -1,72 +1,86 @@
 From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Tue, 17 Mar 2015 18:51:54 -0400
-Subject: [Buildroot] [PATCH 0/5] media image generation
-Message-ID: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Date: Tue, 17 Mar 2015 18:51:59 -0400
+Subject: [Buildroot] [PATCH 5/5] board/wandboard: add a genimage config
+In-Reply-To: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <1426632719-4807-6-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset adds a minimal support to generate final images for a medium
-(such as SD card or flash), by providing paths to some genimage config files in
-a board directory.
+This patch adds a "genimage.cfg" genimage config file for the Wandboard.
+The final generated "sdcard.img" image is ready to use and contains the
+setup explained in the board readme.txt file: U-Boot, its environment,
+and an Ext4 rootfs partition.
 
-The rationale behind using genimage as the first medium image generation tool,
-is that while its configuration syntax is simple, it requires a small overhead
-to use, like temporary directories, host dependencies, and images path, that
-Buildroot is all aware of.
+The defconfig and readme file have been slightly changed to enable this
+feature.
 
-The first patch explains the convenience of this host tool, and adds the
-mechanism to wrap and call genimage against optional config file(s) specified
-in the board configuration, as well as the appropriate documentation.
+Tested on a Wandboard Solo.
 
-The subsequent patches adds genimage config files for the following platforms:
-all Raspberry Pi models, BeagleBone Black, and the Wandboard.
-
-They give good examples to show how Buildroot can be used to create a fully
-functional SD card image with a bootloader, some firmware files and a
-persistent rootfs, without the need to mount any partition.
-
-Finally, this support simplifies the user experience by providing ready-to-use
-boot medium images, and lightening board documentation with self documented
-configuration files.
-
-Note: if we happen to include other media image generation tools, the
-BR2_TARGET_MEDIA_GENIMAGE_CFG and future options can then simply be moved to a
-"Media image generation --->" top-level menu.
-
-Vivien Didelot (5):
-  Makefile: add media image generation
-  board/raspberrypi: install Device Tree
-  board/raspberrypi: add a genimage config
-  board/beaglebone: add a genimage config
-  board/wandboard: add a genimage config
-
- Makefile                              |  9 +++++++--
- board/beaglebone/genimage.cfg         | 30 +++++++++++++++++++++++++++++
- board/beaglebone/readme.txt           |  4 ++++
- board/raspberrypi/genimage.cfg        | 32 +++++++++++++++++++++++++++++++
- board/raspberrypi/post-image.sh       |  7 +++++++
- board/raspberrypi/readme.txt          |  9 +++++++--
- board/wandboard/genimage.cfg          | 22 +++++++++++++++++++++
- board/wandboard/readme.txt            |  3 ++-
- configs/beaglebone_defconfig          |  3 +++
- configs/raspberrypi2_defconfig        |  6 ++++++
- configs/raspberrypi_defconfig         |  5 +++++
- configs/raspberrypi_dt_defconfig      |  6 ++++++
- configs/wandboard_defconfig           |  1 +
- docs/manual/customize-media-image.txt | 36 +++++++++++++++++++++++++++++++++++
- docs/manual/customize.txt             |  4 ++++
- support/media/genimage                | 23 ++++++++++++++++++++++
- system/Config.in                      | 26 +++++++++++++++++++++++++
- 17 files changed, 221 insertions(+), 5 deletions(-)
- create mode 100644 board/beaglebone/genimage.cfg
- create mode 100644 board/raspberrypi/genimage.cfg
- create mode 100755 board/raspberrypi/post-image.sh
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+---
+ board/wandboard/genimage.cfg | 22 ++++++++++++++++++++++
+ board/wandboard/readme.txt   |  3 ++-
+ configs/wandboard_defconfig  |  1 +
+ 3 files changed, 25 insertions(+), 1 deletion(-)
  create mode 100644 board/wandboard/genimage.cfg
- create mode 100644 docs/manual/customize-media-image.txt
- create mode 100755 support/media/genimage
 
+diff --git a/board/wandboard/genimage.cfg b/board/wandboard/genimage.cfg
+new file mode 100644
+index 0000000..15783f0
+--- /dev/null
++++ b/board/wandboard/genimage.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "u-boot.imx"
++    offset = 1024
++  }
++
++  partition u-boot-env {
++    in-partition-table = "no"
++    image = "uboot-env.bin"
++    offset = 393216
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++    size = 512M
++  }
++}
+diff --git a/board/wandboard/readme.txt b/board/wandboard/readme.txt
+index 4dd9c2c..88842b0 100644
+--- a/board/wandboard/readme.txt
++++ b/board/wandboard/readme.txt
+@@ -2,7 +2,8 @@ Minimal board support for the Wandboard
+ 
+ Wandboard's homepage is here: http://www.wandboard.org/
+ 
+-This config is only tested with the dual core wandboard.
++Note: Buildroot already prepared an "sdcard.img" image ready to boot, but this 
++document explains how to do it manually.
+ 
+ Installing:
+ 
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 0a6ba50..c0da795 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -4,6 +4,7 @@ BR2_KERNEL_HEADERS_VERSION=y
+ BR2_DEFAULT_KERNEL_VERSION="3.0.101"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_TARGET_MEDIA_GENIMAGE_CFG="board/wandboard/genimage.cfg"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
 -- 
 2.3.3
