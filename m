@@ -1,28 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 21:34:50 +0100
-Subject: [Buildroot] [PATCH] package/ltrace: add support for xtensa
-In-Reply-To: <1426623961-2817-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1426623961-2817-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20150317213450.67439ac9@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Mar 2015 21:34:56 +0100
+Subject: [Buildroot] [PATCH v1] postgresql: uses fork(), needs mmu
+Message-ID: <1426624496-16217-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+Fixes ([1]):
+  postmaster/fork_process.o: In function `_fork_process':
+  fork_process.c:(.text+0x22): undefined reference to `_fork'
 
-On Tue, 17 Mar 2015 23:26:01 +0300, Max Filippov wrote:
-> Backported from: 05143c95e4609e5592775fae5facbf77b7bfa694
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+[1] http://autobuild.buildroot.org/results/c9c/c9c93156fe64e89f35627aa592c47d8c5181ed7d
 
-Applied, thanks. I guess the big patch you've added is already upstream
-and it's only a backport, right?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/postgresql/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-
-Thomas
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index 519b2a1..4c53703 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_POSTGRESQL
+ 	bool "postgresql"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  PostgreSQL is a powerful, open source object-relational
+ 	  database system.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
