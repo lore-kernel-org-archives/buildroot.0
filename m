@@ -1,39 +1,32 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 18 Mar 2015 00:00:03 +0100
-Subject: [Buildroot] Blackfin Buildroot toolchain issue
-In-Reply-To: <20150317225559.4e539db9@free-electrons.com>
-References: <20150315221722.3645eb35@free-electrons.com>
- <20150315221813.173a36e2@free-electrons.com>
- <5508382D.7080008@zacarias.com.ar>
- <20150317153028.66788805@free-electrons.com>
- <55084360.1070405@zacarias.com.ar>
- <20150317161320.50559502@free-electrons.com>
- <55086A77.6060907@zacarias.com.ar>
- <20150317213403.GC21001@waldemar-brodkorb.de>
- <20150317225559.4e539db9@free-electrons.com>
-Message-ID: <20150317230002.GE21001@waldemar-brodkorb.de>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 18 Mar 2015 00:05:04 +0100
+Subject: [Buildroot] [PATCH] package/mcelog: bump version to v111
+Message-ID: <1426633504-3190-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
+Since v110, mcelog detect Atom's cpuids.
 
-> Dear Waldemar Brodkorb,
-> 
-> On Tue, 17 Mar 2015 22:34:03 +0100, Waldemar Brodkorb wrote:
-> 
-> > My opinion on this is, that there are systems supporting threads
-> > with uClibc, which do not have TLS support. Linuxthreads.old does
-> > not make use of TLS. When you build for coldfire or ARM noMMU, tls 
-> > is not available and it should be disabled while configuring gcc.
-> 
-> Sure, but we don't have to make this an option. The plan is to enable
-> TLS only when available.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/mcelog/mcelog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah, that would be very good.
-
-best regards
- Waldemar
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index 5857403..1290e34 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MCELOG_VERSION = v109
++MCELOG_VERSION = v111
+ MCELOG_SITE = $(BR2_KERNEL_MIRROR)/scm/utils/cpu/mce/mcelog.git
+ MCELOG_SITE_METHOD = git
+ MCELOG_LICENSE = GPLv2
+-- 
+1.9.3
