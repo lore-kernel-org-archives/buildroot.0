@@ -1,36 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 20:59:23 +0100
-Subject: [Buildroot] [PATCH v3 3/8] postgresql: enable bfin compile
-In-Reply-To: <trinity-557da2b4-73c3-45a5-ad2a-8d47aa198916-1426621923742@3capp-gmx-bs26>
-References: <trinity-557da2b4-73c3-45a5-ad2a-8d47aa198916-1426621923742@3capp-gmx-bs26>
-Message-ID: <20150317205923.437f4a42@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 17 Mar 2015 21:04:47 +0100
+Subject: [Buildroot] [PATCH 1/3] luarocks: bump to version 2.2.1
+Message-ID: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luarocks/luarocks.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 17 Mar 2015 20:52:03 +0100, Peter Seiderer wrote:
-
-> Will provide a patch for postgresql to check for fork/BR2_USE_MMU, is there any special string
-> for the comment besides 'needs threads'?
-
-No there is no comment about a BR2_USE_MMU dependency, because it's not
-something the user can "fix" : if your architecture doesn't have a MMU,
-it's like this, there's nothing you can do about it.
-
-> No special point, had the build environment still from [1] around...
-> 
-> In retrospect (in case bfin is disabled because of fork) the patch subject should
-> have been something different...
-
-Well, the patch by itself is then completely useless, because Blackfin
-is a noMMU architecture, so postgresql will never work on it.
-
-Thomas
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 40fdc91..12a1f08 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 2.2.0
++LUAROCKS_VERSION = 2.2.1
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
