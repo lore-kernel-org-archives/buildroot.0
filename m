@@ -1,35 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Mar 2015 22:20:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 7941] glibc-2.20 fails to build for
-	sparc-buildroot-linux-gnu
-In-Reply-To: <bug-7941-163@https.bugs.busybox.net/>
-References: <bug-7941-163@https.bugs.busybox.net/>
-Message-ID: <20150317222000.09BC681835@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Mar 2015 19:21:00 -0300
+Subject: [Buildroot] [PATCH] glibc: disable eglibc 2.18 for sparc
+Message-ID: <1426630860-2813-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7941
+It's broken as well, wants to emit v9 asm.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/glibc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-03-17 22:19:59 UTC ---
-Fixed by
-http://git.buildroot.net/buildroot/commit/?id=dbf7da63188d461e738dcfcaa436b84baa23143c,
-which basically disallows glibc 2.20 on SPARC.
-
-Waldemar, I noticed your proposal, but since glibc 2.21 just builds/works out
-of the box on SPARC, there isn't much point in carrying a build fix for glibc
-2.20.
-
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 53cd958..8cc8cce 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -11,6 +11,8 @@ choice
+ 
+ config BR2_EGLIBC_VERSION_2_18
+ 	bool "2.18-svnr23787"
++	# Build breakage
++	depends on !BR2_sparc
+ 
+ config BR2_EGLIBC_VERSION_2_19
+ 	bool "2.19-svnr25243"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.0.5
