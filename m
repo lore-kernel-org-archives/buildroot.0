@@ -1,47 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Mar 2015 23:38:23 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/softether: Fix iconv-related
-	compile error
-In-Reply-To: <XnsA45FBD041150DberndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Mon, 16 Mar 2015 18:34:52 +0100")
-References: <1426408159-24817-1-git-send-email-bernd.kuhls@t-online.de>
- <20150315125324.39a11265@free-electrons.com>
- <874mplg9bz.fsf@dell.be.48ers.dk>
- <20150316091235.7c77634c@free-electrons.com>
- <XnsA45FBD041150DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <87iodzl068.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Mar 2015 19:44:16 -0300
+Subject: [Buildroot] [PATCH 1/4] binutils: remove blackfin conditionals
+Message-ID: <1426632259-1972-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Now that we don't support the internal blackfin toolchain any more
+remove unnecessary conditionals.
 
- > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
- > @public.gmane.org> wrote in news:20150316091235.7c77634c at free-electrons.com:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/binutils/Config.in.host | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
- >> Yann suggested it might be a dash vs. bash issue where bash would
- >> accept multiple LIBS += on the command line, but not dash. But I
- >> changed /bin/sh to point to /bin/dash on my system, and I still
- >> couldn't reproduce the problem.
-
- > Hi,
-
- > FYI
-
- > $ dpkg -l | grep dash
- > ii  dash        0.5.7-3              amd64        POSIX-compliant shell
-
- > $ ls -la /bin/sh
- > lrwxrwxrwx 1 root root 4 Mr  1  2012 /bin/sh -> dash
-
-My setup is almost the same, except:
-
-dpkg -l dash | grep ii
-ii  dash           0.5.7-4+b1   amd64        POSIX-compliant shell
-
-So I don't think that is the reason.
-
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 4049cf6..ec1bd17 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -12,20 +12,16 @@ choice
+ 			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.22"
+ 
+-	# bfin disabled for newer binutils due to
+-	# https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_aarch64 && !BR2_bfin && !BR2_microblaze && \
++		depends on !BR2_aarch64 && !BR2_microblaze && \
+ 			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+-		depends on !BR2_bfin
+ 		depends on !BR2_nios2 # supported, but broken on Nios-II
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25
+-		depends on !BR2_bfin
+ 		bool "binutils 2.25"
+ 
+ endchoice
 -- 
-Bye, Peter Korsgaard
+2.0.5
