@@ -1,57 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Mar 2015 19:08:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 7941] New: glibc-2.20 fails to build for
- sparc-buildroot-linux-gnu
-Message-ID: <bug-7941-163@https.bugs.busybox.net/>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 17 Mar 2015 22:13:15 +0300
+Subject: [Buildroot] [PATCH] package/cmake: add support for xtensa
+Message-ID: <1426619595-25519-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7941
+Backported from: ded79a976e2b63bbfd7a63f27ec00bd071410e27
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...IML-Teach-ABI.h-about-Xtensa-architecture.patch | 30 ++++++++++++++++++++++
+ package/cmake/Config.in                            |  2 +-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
+ create mode 100644 package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
 
-              Host: x86_64
-            Target: sparc-buildroot-linux-gnu
-           Summary: glibc-2.20 fails to build for
-                    sparc-buildroot-linux-gnu
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: uwe at hermann-uwe.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created attachment 5926
-  --> https://bugs.busybox.net/attachment.cgi?id=5926
-build log
-
-I've tried to build glibc for in git HEAD as of today.
-
-Here's the first error message, full log as attachment.
-
-../sysdeps/sparc/sparc32/sem_trywait.c: In function '__new_sem_trywait':
-../sysdeps/sparc/sparc32/sem_trywait.c:35:11: error: dereferencing pointer to
-incomplete type
-   if (isem->value > 0)
-           ^
-In file included from ../include/list.h:45:0,
-                 from ../sysdeps/sparc/nptl/tls.h:28,
-                 from ../include/errno.h:27,
-                 from ../sysdeps/sparc/sparc32/sem_trywait.c:20:
-../sysdeps/sparc/sparc32/sem_trywait.c:38:43: error: dereferencing pointer to
-incomplete type
-  val = atomic_decrement_if_positive (&isem->value);
-                                           ^
-
+diff --git a/package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch b/package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
+new file mode 100644
+index 0000000..1e1d6a3
+--- /dev/null
++++ b/package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
+@@ -0,0 +1,30 @@
++From ded79a976e2b63bbfd7a63f27ec00bd071410e27 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 17 Mar 2015 15:51:04 +0300
++Subject: [PATCH] KWIML: Teach ABI.h about Xtensa architecture
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ ABI.h.in | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/ABI.h.in b/ABI.h.in
++index 21c9139..6300ada 100644
++--- a/ABI.h.in
+++++ b/ABI.h.in
++@@ -432,6 +432,12 @@ suppression macro @KWIML at _ABI_NO_VERIFY was defined.
++ #  define @KWIML at _ABI_ENDIAN_ID @KWIML at _ABI_ENDIAN_ID_BIG
++ # endif
++ 
+++/* Xtensa */
+++#elif defined(__XTENSA_EB__)
+++# define @KWIML at _ABI_ENDIAN_ID @KWIML at _ABI_ENDIAN_ID_BIG
+++#elif defined(__XTENSA_EL__)
+++# define @KWIML at _ABI_ENDIAN_ID @KWIML at _ABI_ENDIAN_ID_LITTLE
+++
++ /* Unknown CPU */
++ #elif !defined(@KWIML at _ABI_NO_ERROR_ENDIAN)
++ # error "Byte order of target CPU unknown."
++-- 
++1.8.1.4
++
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index dbc7d01..f3f0f85 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 		BR2_m68k      || BR2_mips        || BR2_mips64   || \
+ 		BR2_mipsel    || BR2_mips64el    || BR2_powerpc  || \
+ 		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc    || \
+-		BR2_i386      || BR2_x86_64
++		BR2_i386      || BR2_x86_64      || BR2_xtensa
+ 
+ config BR2_PACKAGE_CMAKE
+ 	bool
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.4
