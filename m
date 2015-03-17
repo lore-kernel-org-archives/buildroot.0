@@ -1,35 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Mar 2015 22:55:59 +0100
-Subject: [Buildroot] Blackfin Buildroot toolchain issue
-In-Reply-To: <20150317213403.GC21001@waldemar-brodkorb.de>
-References: <20150315221722.3645eb35@free-electrons.com>
- <20150315221813.173a36e2@free-electrons.com>
- <5508382D.7080008@zacarias.com.ar>
- <20150317153028.66788805@free-electrons.com>
- <55084360.1070405@zacarias.com.ar>
- <20150317161320.50559502@free-electrons.com>
- <55086A77.6060907@zacarias.com.ar>
- <20150317213403.GC21001@waldemar-brodkorb.de>
-Message-ID: <20150317225559.4e539db9@free-electrons.com>
+Date: Tue, 17 Mar 2015 22:58:08 +0100
+Subject: [Buildroot] [PATCH v1] collectd: fix postgresql library
+ detection
+In-Reply-To: <1426628645-26181-1-git-send-email-ps.report@gmx.net>
+References: <1426628645-26181-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150317225808.3c2af021@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Peter Seiderer,
 
-On Tue, 17 Mar 2015 22:34:03 +0100, Waldemar Brodkorb wrote:
+On Tue, 17 Mar 2015 22:44:05 +0100, Peter Seiderer wrote:
 
-> My opinion on this is, that there are systems supporting threads
-> with uClibc, which do not have TLS support. Linuxthreads.old does
-> not make use of TLS. When you build for coldfire or ARM noMMU, tls 
-> is not available and it should be disabled while configuring gcc.
+>  ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+>  	COLLECTD_CONF_OPTS += --with-libpq=$(STAGING_DIR)/usr/bin/pg_config
+> +	COLLECTD_CONF_ENV = LIBS="-lpthread -lm"
 
-Sure, but we don't have to make this an option. The plan is to enable
-TLS only when available.
+If they are needed, why isn't pg_config returning those linker flags?
 
-Best regards,
+I'm sorry to be annoying, but I really don't like adding LIBS variables
+all over the place, because they tend to become wrong/unneeded, and we
+never notice.
 
 Thomas
 -- 
