@@ -1,33 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2015 10:15:43 +0100
-Subject: [Buildroot] [PATCH 0/3] support/download: be more aggressive on
- missing hashes (branch yem/dl-hash)
-In-Reply-To: <cover.1426545571.git.yann.morin.1998@free.fr>
-References: <cover.1426545571.git.yann.morin.1998@free.fr>
-Message-ID: <20150317091543.GA4729@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Mar 2015 11:17:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/cmake: disable on unsupported
+ architectures
+In-Reply-To: <1426583299-21207-1-git-send-email-s.martin49@gmail.com>
+References: <1426583299-21207-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20150317091759.GK2415@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Samuel,
 
-On 2015-03-16 23:41 +0100, Yann E. MORIN spake thusly:
-> This series makes hashes mandatory when a .hash file exists.
+On Tue, Mar 17, 2015 at 10:08:18AM +0100, Samuel Martin wrote:
+> Supported architectures are listed at [1].
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/de9/de9021fdc63600536ffa91e4b8718584e3e5702c/
+>   http://autobuild.buildroot.net/results/0f1/0f1afc62e91ab798fa65685af3dea3caac663f11/
+> 
+> [1] https://github.com/Kitware/CMake/blob/master/Utilities/KWIML/ABI.h.in#L339
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/cmake/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+> index 0b5bba9..eee2461 100644
+> --- a/package/cmake/Config.in
+> +++ b/package/cmake/Config.in
+> @@ -10,6 +10,12 @@ config BR2_PACKAGE_CMAKE_CTEST
+>  	select BR2_PACKAGE_EXPAT
+>  	select BR2_PACKAGE_BZIP2
+>  	select BR2_PACKAGE_XZ
+> +	depends on !BR2_arcle && !BR2_arceb
+> +	depends on !BR2_bfin
+> +	depends on !BR2_microblazeel && !BR2_microblazebe
+> +	depends on !BR2_nios2
+> +	depends on !BR2_sh && !BR2_sh64
+> +	depends on !BR2_xtensa
 
-Forget this series: it is broken for git downloads, and potentially for
-all non-tarball downloads as well...
+Please update the dependencies comment below.
 
-Sorry...
-
-Regards,
-Yann E. MORIN.
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
