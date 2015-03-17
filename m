@@ -1,98 +1,106 @@
-From: Bamvor Zhang <bamv2005@gmail.com>
-Date: Tue, 17 Mar 2015 22:44:54 +0800
-Subject: [Buildroot] [PATCH 0/5] Add ILP32 support in aarch64
-In-Reply-To: <55082C5E.1070906@zacarias.com.ar>
-References: <1426500013-1276-1-git-send-email-bamvor.zhangjian@huawei.com>
- <55082C5E.1070906@zacarias.com.ar>
-Message-ID: <CAOijeYJLdrDiOnYJ2fvPWi2peT56rTALryg7jgB-gJ_X0J5UBA@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 17 Mar 2015 15:48:47 +0100
+Subject: [Buildroot] [PATCH v4] package/sysdig: New package
+Message-ID: <1426603727-4895-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-3-17 21:30  "Gustavo Zacarias" <gustavo@zacarias.com.ar> wrote:
->
-> On 03/16/2015 07:00 AM, Zhang Jian(Bamvor) wrote:
-> > LP64 is the default ABI on arm64(Implies -mabi=lp64 while compiling),
-and the
-> > kernel remains in LP64 no matter ILP32 enables or not.
-> >
-> > These series patches introduce the big endian support in aarch64 and
-then add
-> > ILP32 special filename and menuconfig step by step.
-> >
-> > The test of build is based on linaro kernel [1] and toolchain built by
-linaro
-> > ABE environment[2].
-> >
-> > This is my first time I try to contribute the buildroot, feedback is
-very
-> > appreciated. Sorry if there are some coding style issues.
->
-> Hi.
-> A couple of issues i've discovered with this patchset are:
->
-Hi, Gustavo
+Sysdig is open source, system-level exploration:
+capture system state and activity from a running Linux
+instance, then save, filter and analyze.
 
-> 1) You're using -mabi unconditionally.
-> Current default gcc is 4.8.x which doesn't understand -mabi for aarch64.
-Yes.
->
-> 2) You're not taking care of the internal toolchain backend for ILP32.
-> Currently we default to gcc 4.8.x which doesn't handle ilp32 at all
-> hence errors out for aarch64 in that configuration (doesn't understand
-> -mabi, point 1).
-> The proper action would be to lock down available versions in
-> package/gcc/Config.in.host via "depends on !BR2_AARCH64_ILP32"
-> (basically just for 4.8.x since previous versions are already locked out
-> for aarch64 in general).
-I will do it in next version.
-> This will only fix the ILP32 problem, doesn't help for -mabi=lp64 though
-> (point 1).
-Well, do you mean I should handle -mabi=lp64 as well? It is the default api
-in aarch64 gcc 4.9.x. It may be useful when build the kernel.
-> 3) ILP32 little endian doesn't build with gcc 4.9.x/binutils 2.25/glibc
-> 2.20: it results in an internal compiler error while building glibc, so
-> very likely gcc's fault. This should be handled as well, by fixing it or
-> disabling the internal toolchain backend for this combination.
-I guess linaro has the patch in it while I hope I could deal with it after
-the external toolchain patches is accept. Do you comfortable with only
-external toolchain support at this time?
->
-> 3) Big endian support is broken for the internal toolchain.
-> The glibc package isn't enabled for aarch64 BE, so basically it builds a
-> toolchain without a libc, not nice.
-> Fix in toolchain/toolchain-buildroot/Config.in - add appropiate
-> BR2_aarch64_be depends.
-Ok,  i will do it.
->
-> 4) We don't know/have any external toolchains to test this.
-> Suggestions? :)
-We could test it with linaro gcc built from linaro abe system.
->
-> 5) You're not setting KERNEL_ARCH appropiately for big endian, right now
-> the regex is: -e s/aarch64/arm64/
-> It should be: -e s/aarch64.*/arm64/
-> Otherwise we end up with KERNEL_ARCH being arm64_be which obviously
-> fails badly, not only for kernel builds, but also for internal
-> toolchains builds (headers), possibly some packages and linux extensions.
-> Fix in top Makefile.
-Ok.
->
-> There are probably other details missing, these are the quick/big ones i
-> could see.
-maybe I should add RFC for my next verion of patches.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changes v3 -> v4:
+  - Changed "depends on" to "select" and fixed selected packages
+    dependencies.
+  - moved "comment" section to the bottom
 
-regards
+Changes v2 -> v3:
+  - Changed "depends on" and "select" to simplify package
 
-bamvor
->
-> Regards.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150317/7cfdc158/attachment.html>
+Changes v1 -> v2:
+  - Changed "depends on" with "select" for dependencies (suggested by Baruch)
+  - Added comment "sysdig needs a Linux kernel to be built" (suggested by Baruch)
+  - Upgreded to recently released 0.1.99
+
+ package/Config.in        |  1 +
+ package/sysdig/Config.in | 22 ++++++++++++++++++++++
+ package/sysdig/sysdig.mk | 22 ++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 package/sysdig/Config.in
+ create mode 100644 package/sysdig/sysdig.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e221deb..019d40b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -94,6 +94,7 @@ endif
+ 	source "package/strace/Config.in"
+ 	source "package/stress/Config.in"
+ 	source "package/sysprof/Config.in"
++	source "package/sysdig/Config.in"
+ 	source "package/tinymembench/Config.in"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+new file mode 100644
+index 0000000..52c3703
+--- /dev/null
++++ b/package/sysdig/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_SYSDIG
++	bool "sysdig"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LUAJIT
++	select BR2_PACKAGE_LIBJSON
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_INSTALL_LIBSTDCPP #Libjson
++	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') \
++		|| BR2_powerpc || BR2_arm || BR2_armeb \
++		|| ((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT) #Luajit
++	help
++	  Sysdig is open source, system-level exploration:
++	  capture system state and activity from a running Linux instance,
++	  then save, filter and analyze.
++	  Think of it as strace + tcpdump + lsof + awesome sauce.
++	  With a little Lua cherry on top.
++
++	  http://sysdig.org
++
++comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+new file mode 100644
+index 0000000..1bed0c0
+--- /dev/null
++++ b/package/sysdig/sysdig.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# sysdig
++#
++#############################################################
++
++SYSDIG_VERSION = 0.1.99
++SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
++SYSDIG_LICENSE = GPLv2
++SYSDIG_LICENSE_FILES = COPYING
++SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF
++SYSDIG_DEPENDENCIES += zlib luajit libjson linux
++SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
++
++define SYSDIG_INSTALL_DRIVER
++	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules
++	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules_install
++endef
++
++SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
++
++$(eval $(cmake-package))
+-- 
+1.9.1
