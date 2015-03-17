@@ -1,58 +1,72 @@
 From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Tue, 17 Mar 2015 18:51:56 -0400
-Subject: [Buildroot] [PATCH 2/5] board/raspberrypi: install Device Tree
-In-Reply-To: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <1426632719-4807-3-git-send-email-vivien.didelot@savoirfairelinux.com>
+Date: Tue, 17 Mar 2015 18:51:54 -0400
+Subject: [Buildroot] [PATCH 0/5] media image generation
+Message-ID: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a post-image script to Raspberry Pi configs with a Device Tree
-(raspberrypi_dt and raspberrypi2), which calls the mkknlimg tool on the
-resulting zImage kernel, in order to install the Device Tree as
-described in the board readme file.
+This patchset adds a minimal support to generate final images for a medium
+(such as SD card or flash), by providing paths to some genimage config files in
+a board directory.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- board/raspberrypi/post-image.sh  | 7 +++++++
- configs/raspberrypi2_defconfig   | 1 +
- configs/raspberrypi_dt_defconfig | 1 +
- 3 files changed, 9 insertions(+)
+The rationale behind using genimage as the first medium image generation tool,
+is that while its configuration syntax is simple, it requires a small overhead
+to use, like temporary directories, host dependencies, and images path, that
+Buildroot is all aware of.
+
+The first patch explains the convenience of this host tool, and adds the
+mechanism to wrap and call genimage against optional config file(s) specified
+in the board configuration, as well as the appropriate documentation.
+
+The subsequent patches adds genimage config files for the following platforms:
+all Raspberry Pi models, BeagleBone Black, and the Wandboard.
+
+They give good examples to show how Buildroot can be used to create a fully
+functional SD card image with a bootloader, some firmware files and a
+persistent rootfs, without the need to mount any partition.
+
+Finally, this support simplifies the user experience by providing ready-to-use
+boot medium images, and lightening board documentation with self documented
+configuration files.
+
+Note: if we happen to include other media image generation tools, the
+BR2_TARGET_MEDIA_GENIMAGE_CFG and future options can then simply be moved to a
+"Media image generation --->" top-level menu.
+
+Vivien Didelot (5):
+  Makefile: add media image generation
+  board/raspberrypi: install Device Tree
+  board/raspberrypi: add a genimage config
+  board/beaglebone: add a genimage config
+  board/wandboard: add a genimage config
+
+ Makefile                              |  9 +++++++--
+ board/beaglebone/genimage.cfg         | 30 +++++++++++++++++++++++++++++
+ board/beaglebone/readme.txt           |  4 ++++
+ board/raspberrypi/genimage.cfg        | 32 +++++++++++++++++++++++++++++++
+ board/raspberrypi/post-image.sh       |  7 +++++++
+ board/raspberrypi/readme.txt          |  9 +++++++--
+ board/wandboard/genimage.cfg          | 22 +++++++++++++++++++++
+ board/wandboard/readme.txt            |  3 ++-
+ configs/beaglebone_defconfig          |  3 +++
+ configs/raspberrypi2_defconfig        |  6 ++++++
+ configs/raspberrypi_defconfig         |  5 +++++
+ configs/raspberrypi_dt_defconfig      |  6 ++++++
+ configs/wandboard_defconfig           |  1 +
+ docs/manual/customize-media-image.txt | 36 +++++++++++++++++++++++++++++++++++
+ docs/manual/customize.txt             |  4 ++++
+ support/media/genimage                | 23 ++++++++++++++++++++++
+ system/Config.in                      | 26 +++++++++++++++++++++++++
+ 17 files changed, 221 insertions(+), 5 deletions(-)
+ create mode 100644 board/beaglebone/genimage.cfg
+ create mode 100644 board/raspberrypi/genimage.cfg
  create mode 100755 board/raspberrypi/post-image.sh
+ create mode 100644 board/wandboard/genimage.cfg
+ create mode 100644 docs/manual/customize-media-image.txt
+ create mode 100755 support/media/genimage
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-new file mode 100755
-index 0000000..0d6f265
---- /dev/null
-+++ b/board/raspberrypi/post-image.sh
-@@ -0,0 +1,7 @@
-+#!/bin/bash
-+
-+set -e
-+
-+# Call mkknlimg to install the Device Tree
-+"${HOST_DIR}/usr/bin/mkknlimg" "${BINARIES_DIR}/zImage" "${BINARIES_DIR}/zImage-dt"
-+mv "${BINARIES_DIR}/zImage-dt" "${BINARIES_DIR}/zImage"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index b523a4a..3543307 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -23,3 +23,4 @@ BR2_LINUX_KERNEL_ZIMAGE=y
- # Install the DTB files, as the RPi2 uses the Device Tree
- BR2_PACKAGE_RPI_FIRMWARE=y
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
-diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
-index ca62084..0c203bf 100644
---- a/configs/raspberrypi_dt_defconfig
-+++ b/configs/raspberrypi_dt_defconfig
-@@ -20,3 +20,4 @@ BR2_LINUX_KERNEL_ZIMAGE=y
- # Install the DTB files
- BR2_PACKAGE_RPI_FIRMWARE=y
- BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi/post-image.sh"
 -- 
 2.3.3
