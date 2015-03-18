@@ -1,32 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Mar 2015 23:45:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] board: add support for Xilinx zc706
-In-Reply-To: <CAAf1diJM7egVKAvs3OYYWgVz-Jepr19Fn974uHWYLJ-0MzPx=w@mail.gmail.com>
-References: <1426060630-13680-1-git-send-email-jordi.montagne66@gmail.com>
- <CAAf1diJCR=L7Dre9v9C++FjkH7QS4sEi=JFA-d5g=CUwOMW8hQ@mail.gmail.com>
- <20150315132115.54623df5@free-electrons.com>
- <CAAf1diJM7egVKAvs3OYYWgVz-Jepr19Fn974uHWYLJ-0MzPx=w@mail.gmail.com>
-Message-ID: <550A0012.6070908@mind.be>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Wed, 18 Mar 2015 19:05:28 -0400 (EDT)
+Subject: [Buildroot] [PATCH 2/5] board/raspberrypi: install Device Tree
+In-Reply-To: <20150318224438.GB4578@free.fr>
+References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1426632719-4807-3-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <20150318224438.GB4578@free.fr>
+Message-ID: <1106715418.1139219.1426719928308.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/03/15 12:15, jordi montagne wrote:
-> Sorry for the noise. I fear I do not have the level required to review ...
+Hi Yann,
 
- It's not just reviewing, also testing patches is very useful! See
-http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
+> > Add a post-image script to Raspberry Pi configs with a Device Tree
+> > (raspberrypi_dt and raspberrypi2), which calls the mkknlimg tool on the
+> > resulting zImage kernel, in order to install the Device Tree as
+> > described in the board readme file.
+> 
+> No, it is not "installing" the device tree. It merely appends a marker
+> at the end of the kernel image.
+> 
+> That marker instructs the RPi bootloader that the kernel is Device Tree
+> aware, and thus the bootloader will load the device tree blobs; if the
+> marker is missing, the bootloader will not load a device tree blob, and
+> will pass ATAGS.
 
+Indeed, I misunderstood the statement from the readme file. Depending on
+how this patchset goes, I'll add this comment to the post-image script
+in a follow-up patch or in a new version.
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks for the explanation,
+-v
