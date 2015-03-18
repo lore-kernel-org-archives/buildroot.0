@@ -1,23 +1,41 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 14:38:33 -0700
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14,
-	19}.x series
-In-Reply-To: <1426692984-27024-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426692984-27024-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CAKbGBLhHgMC7LuwBVoqvF5J4az4K9EujJD4i+go+qAuJAQhiyA@mail.gmail.com>
+Date: Wed, 18 Mar 2015 14:37:25 -0700
+Subject: [Buildroot] [PATCH] kernels: bump 3.10.x 3.14.x,
+	3.19.x to new stable kernel releases
+In-Reply-To: <1426714443-22832-1-git-send-email-steven@uplinklabs.net>
+References: <1426714443-22832-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <CAKbGBLiJzv-A8C6eePEeZa-u2JmMjFXKRegH94GoC83FnAdPUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 18, 2015 at 8:36 AM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Oops, I see someone else beat me to it, although they missed the
+BR2_LINUX_KERNEL_LATEST_VERSION definition.
+
+http://patchwork.ozlabs.org/patch/451499/
+
+On Wed, Mar 18, 2015 at 2:34 PM, Steven Noonan <steven@uplinklabs.net> wrote:
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 > ---
+>  linux/Config.in                      | 2 +-
 >  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 >
+> diff --git a/linux/Config.in b/linux/Config.in
+> index af22ab4..f24d58e 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -21,7 +21,7 @@ choice
+>         prompt "Kernel version"
+>
+>  config BR2_LINUX_KERNEL_LATEST_VERSION
+> -       bool "3.19.1"
+> +       bool "3.19.2"
+>
+>  config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+>         bool "Same as toolchain kernel headers"
 > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
 > index e6764e0..2d32168 100644
 > --- a/package/linux-headers/Config.in.host
@@ -40,5 +58,6 @@ On Wed, Mar 18, 2015 at 8:36 AM, Gustavo Zacarias
 > -       default "3.19.1"        if BR2_KERNEL_HEADERS_3_19
 > +       default "3.19.2"        if BR2_KERNEL_HEADERS_3_19
 >         default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-
-What about BR2_LINUX_KERNEL_LATEST_VERSION in linux/Config.in?
+> --
+> 2.3.3
+>
