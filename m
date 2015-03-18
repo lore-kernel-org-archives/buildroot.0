@@ -1,58 +1,83 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Mar 2015 00:15:39 +0100
-Subject: [Buildroot] [PATCH 3/3] support/download: always fail when
- there's no hash
-In-Reply-To: <e443dfcec4c084f823c718aa4c7740eddb3b628e.1426545571.git.yann.morin.1998@free.fr>
-References: <cover.1426545571.git.yann.morin.1998@free.fr>
- <e443dfcec4c084f823c718aa4c7740eddb3b628e.1426545571.git.yann.morin.1998@free.fr>
-Message-ID: <550A071B.7000000@mind.be>
+Date: Thu, 19 Mar 2015 00:32:09 +0100
+Subject: [Buildroot] [PATCH] configs: add defconfig for Freescale i.MX31
+	PDK
+In-Reply-To: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
+References: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <550A0AF9.5050101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/03/15 23:41, Yann E. MORIN wrote:
-> At the time we introduced hashes, we did not want to be too harsh in the
-> beginning, and give people some time to adapt and accept to hashes. So
-> we so far only whined^Wwarned about a missing hash file.
+On 17/03/15 10:43, Vincent Stehl? wrote:
+> The i.MX31 Product Development Kit (or PDK) is Freescale development board
+> based on the i.MX31 application processor.
 > 
-> Some time has passed now, and people are still missing updating hashes
-> when bumping packages.
-> 
-> Let's make that warning a little bit more annoying...
+> This defconfig is based on Freescale kernel 2.6.28 5.1.0, and is aimed at a PDK
+> in "3 stack" configuration, with CPU engine board, personality board and debug
+> board.
 
- If you ever revive this series (which I think would be a good idea), don't
-forget to remove the reference to BR2_ENFORCE_CHECK_HASH from the manual as well.
+ Doesn't the upstream MACH_MX31_3DS work? 2.6.28 is extremely old...
+
+> 
+> Note that we have a patch to reconciliate the recent GNU make with the "old"
+> Makefile in the Linux kernel this configuration refers to.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+
+[snip]
+> diff --git a/configs/freescale_imx31_3stack_defconfig b/configs/freescale_imx31_3stack_defconfig
+> new file mode 100644
+> index 0000000..96c9eb0
+> --- /dev/null
+> +++ b/configs/freescale_imx31_3stack_defconfig
+> @@ -0,0 +1,23 @@
+> +# architecture
+> +BR2_arm=y
+> +BR2_arm1136jf_s_r0=y
+> +BR2_ARM_EABIHF=y
+> +
+> +# toolchain
+> +BR2_KERNEL_HEADERS_3_2=y
+
+ That doesn't sound like a good idea when the kernel is 2.6.28...
+
+> +BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+ Why not uClibc and why C++?
+
+> +
+> +# system
+> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+
+ With a more recent kernel we don't need this crappy option...
+
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> +# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+
+ Why?
+
+> +
+> +# kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_2.6.28_5.1.0"
+> +BR2_LINUX_KERNEL_PATCH="board/freescale/imx31_3stack/"
+> +BR2_LINUX_KERNEL_DEFCONFIG="imx31_3stack"
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+
+ If network boot is really the only option, then perhaps it would be nicer to
+use an initramfs linked into the kernel? Or doesn't the board have enough memory
+to support that?
 
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/download/check-hash | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index 4cc62f3..7971c38 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -88,10 +88,6 @@ while read t h f; do
->  done <"${h_file}"
->  
->  if [ ${nb_checks} -eq 0 ]; then
-> -    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
-> -        printf "ERROR: No hash found for %s\n" "${base}" >&2
-> -        exit 2
-> -    else
-> -        printf "WARNING: No hash found for %s\n" "${base}" >&2
-> -    fi
-> +    printf "ERROR: No hash found for %s\n" "${base}" >&2
-> +    exit 2
->  fi
 > 
 
 
