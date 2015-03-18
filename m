@@ -1,28 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 11:29:15 -0300
-Subject: [Buildroot] [PATCH 6/6] speex: add hash file
-In-Reply-To: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426688955-23233-6-git-send-email-gustavo@zacarias.com.ar>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Wed, 18 Mar 2015 11:02:28 -0400
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: install systemd service
+	files
+In-Reply-To: <20150311154917.18e3aaec@free-electrons.com>
+References: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
+ <20150309233256.0b0e0550@free-electrons.com>
+ <CANPyyuMi5xqCwn9R0PLLQ7EtEMqX7oHrxZeJPUxJhAqE=E2TvA@mail.gmail.com>
+ <20150311154917.18e3aaec@free-electrons.com>
+Message-ID: <CANPyyuNphAU9kGjMW1CPsRxZNhQgp+NTJjjjfBRTXY7tsiJJTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/speex/speex.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/speex/speex.hash
+Thomas,
 
-diff --git a/package/speex/speex.hash b/package/speex/speex.hash
-new file mode 100644
-index 0000000..c38a0a7
---- /dev/null
-+++ b/package/speex/speex.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/speex/SHA256SUMS.txt
-+sha256	342f30dc57bd4a6dad41398365baaa690429660b10d866b7d508e8f1179cb7a6	speex-1.2rc1.tar.gz
--- 
-2.0.5
+On Wed, Mar 11, 2015 at 10:49 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Mike Williams,
+>
+> On Wed, 11 Mar 2015 09:55:08 -0400, Mike Williams wrote:
+>
+>> Yes, but it will take me a little while, maybe next week. Some of
+>> these appear to be mutually exclusive, some of them require specific
+>> configuration files for the interface or they will fail, and the
+>> wpa_supplicant.service file needs to be modified depending on build
+>> options set, etc. so it's not as simple as just enabling all of them.
+>
+> Well, we had some discussion on IRC, and Arnout pointed out that
+> wpa_supplicant may be used for example by connman, and in this case,
+> you don't need to have the wpa_supplicant service started at boot.
+>
+> So maybe in the end, what you propose is the good solution, and leave
+> it to the user to actually enable the service at boot if needed.
+>
+> Arnout?
+
+Did you guys ever decide what you want done here?
+
+Thanks,
+Mike
