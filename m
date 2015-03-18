@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 11:29:13 -0300
-Subject: [Buildroot] [PATCH 4/6] kbd: add hash file
+Date: Wed, 18 Mar 2015 11:29:14 -0300
+Subject: [Buildroot] [PATCH 5/6] opus-tools: add hash file
 In-Reply-To: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426688955-23233-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426688955-23233-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/kbd/kbd.hash | 2 ++
+ package/opus-tools/opus-tools.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/kbd/kbd.hash
+ create mode 100644 package/opus-tools/opus-tools.hash
 
-diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
+diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
 new file mode 100644
-index 0000000..c4dfd23
+index 0000000..486384c
 --- /dev/null
-+++ b/package/kbd/kbd.hash
++++ b/package/opus-tools/opus-tools.hash
 @@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
-+sha256	400196f5f51f1900ad2df2c02b61945a72e5ccadd7fb7e1f72b3d89bd33debef	kbd-1.15.5.tar.xz
++# From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
++sha256	b1873dd78c7fbc98cf65d6e10cfddb5c2c03b3af93f922139a2104baedb4643a	opus-tools-0.1.9.tar.gz
 -- 
 2.0.5
