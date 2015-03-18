@@ -1,39 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 10:47:37 -0300
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.03.13
-Message-ID: <1426686457-24360-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Wed, 18 Mar 2015 06:49:07 -0700
+Subject: [Buildroot] [PATCH v3] gst1-imx: add package
+In-Reply-To: <55094E57.8080706@lucaceresoli.net>
+References: <1426614168.3279.10.camel@jablotron.cz>
+ <55094E57.8080706@lucaceresoli.net>
+Message-ID: <55098253.4030501@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Luca,
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index c755efd..d44391a 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	438d7f3d62686bc997098d17fe1aff95c6f6ec061aaab90ab7c2c17e8451ce85	wireless-regdb-2015.01.30.tar.xz
-+sha256	5e6f00b8e23391de9b068b2400ac3172324e5f590fc424018bb5a1389ffe6f84	wireless-regdb-2015.03.13.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index a4ca41b..ce6f1d5 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2015.01.30
-+WIRELESS_REGDB_VERSION = 2015.03.13
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
--- 
-2.0.5
+On 03/18/2015 03:07 AM, Luca Ceresoli wrote:
+> Dear Rostislav,
+> 
+> Rostislav Lisovy wrote:
+>> Hello everyone;
+>> Is there any chance the patch (in $subject)
+>> https://www.marc.info/?l=buildroot&m=141550615919434
+>> will be merged into the mainline Buildroot?
+>>
+>> After changing the GST1_IMX_VERSION to the newest 0.10.1
+>> everything compiles fine (the patch applies to the master as well).
+> 
+> I agree it should be merged. Or rejected, it there's a reason to do so.
+> 
+> Did you run-test it? Please specify what you tested, and formally add
+> your Tested-by tag. This makes it more likely for a patch to be merged.
+> See the manual [1] for details about reviewers tags.
+> 
+> Then Gary or you could resend the patch with the version updated.
+> 
+
+I believe Gary is out of pocket this week.
+
+Regards,
+
+
+Eric
