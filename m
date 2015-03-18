@@ -1,42 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Mar 2015 23:42:12 +0100
-Subject: [Buildroot] graphics
-In-Reply-To: <CAKKWdtd-OY+ws4oVtFC6uXGaK38L7Bt=swwRfOVvsE0QqwJCcQ@mail.gmail.com>
-References: <CAKKWdtd-OY+ws4oVtFC6uXGaK38L7Bt=swwRfOVvsE0QqwJCcQ@mail.gmail.com>
-Message-ID: <5509FF44.7080403@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 18 Mar 2015 23:44:38 +0100
+Subject: [Buildroot] [PATCH 2/5] board/raspberrypi: install Device Tree
+In-Reply-To: <1426632719-4807-3-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1426632719-4807-3-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20150318224438.GB4578@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/03/15 11:01, ali hagigat wrote:
-> Buildroot has built a correct image for wandboard-quad and I can log
-> in and see the output by the serial port, ttymxc0
-> But i want to enable graphics for wandboard. Now getty listens for
-> ttymxc0, how can i change it to use HDMI monitor and keyboard/mouse?
-> I have enabled some X11 components and some drivers but i can only see
-> the output on the serial console. HDMI monitor was not drived
-> I will be much appreciate for any answer
+Vivien, All,
 
- getty will only give you a console. If you want to get a console on HDMI, you
-need CONFIG_VT and CONFIG_FB in the kernel, but I'm not sure if the latter is
-even available for the Wandboard. If you have a framebuffer, you can start a
-getty on tty1 instead of ttymxc0.
+On 2015-03-17 18:51 -0400, Vivien Didelot spake thusly:
+> Add a post-image script to Raspberry Pi configs with a Device Tree
+> (raspberrypi_dt and raspberrypi2), which calls the mkknlimg tool on the
+> resulting zImage kernel, in order to install the Device Tree as
+> described in the board readme file.
 
- But if it is X that you want, you should start it. For testing, you can just
-type X after logging in on the console.
+No, it is not "installing" the device tree. It merely appends a marker
+at the end of the kernel image.
 
- I think we should start writing a FAQ on how to use X on buildroot...
+That marker instructs the RPi bootloader that the kernel is Device Tree
+aware, and thus the bootloader will load the device tree blobs; if the
+marker is missing, the bootloader will not load a device tree blob, and
+will pass ATAGS.
 
+Regards,
+Yann E. MORIN.
 
- Regards,
- Arnout
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  board/raspberrypi/post-image.sh  | 7 +++++++
+>  configs/raspberrypi2_defconfig   | 1 +
+>  configs/raspberrypi_dt_defconfig | 1 +
+>  3 files changed, 9 insertions(+)
+>  create mode 100755 board/raspberrypi/post-image.sh
+> 
+> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+> new file mode 100755
+> index 0000000..0d6f265
+> --- /dev/null
+> +++ b/board/raspberrypi/post-image.sh
+> @@ -0,0 +1,7 @@
+> +#!/bin/bash
+> +
+> +set -e
+> +
+> +# Call mkknlimg to install the Device Tree
+> +"${HOST_DIR}/usr/bin/mkknlimg" "${BINARIES_DIR}/zImage" "${BINARIES_DIR}/zImage-dt"
+> +mv "${BINARIES_DIR}/zImage-dt" "${BINARIES_DIR}/zImage"
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> index b523a4a..3543307 100644
+> --- a/configs/raspberrypi2_defconfig
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -23,3 +23,4 @@ BR2_LINUX_KERNEL_ZIMAGE=y
+>  # Install the DTB files, as the RPi2 uses the Device Tree
+>  BR2_PACKAGE_RPI_FIRMWARE=y
+>  BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
+> diff --git a/configs/raspberrypi_dt_defconfig b/configs/raspberrypi_dt_defconfig
+> index ca62084..0c203bf 100644
+> --- a/configs/raspberrypi_dt_defconfig
+> +++ b/configs/raspberrypi_dt_defconfig
+> @@ -20,3 +20,4 @@ BR2_LINUX_KERNEL_ZIMAGE=y
+>  # Install the DTB files
+>  BR2_PACKAGE_RPI_FIRMWARE=y
+>  BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi/post-image.sh"
+> -- 
+> 2.3.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
