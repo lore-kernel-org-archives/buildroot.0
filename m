@@ -1,97 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 18 Mar 2015 00:09:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 7956] New: glibc 2.20 and 2.21 fail to build for
- sh64-buildroot-linux-gnu
-Message-ID: <bug-7956-163@https.bugs.busybox.net/>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed, 18 Mar 2015 03:19:30 +0300
+Subject: [Buildroot] [PATCH] package/uclibc: fix linuxthreads symbol typos
+Message-ID: <1426637970-27436-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7956
+BR2_UCLIBC_VERSION_XTENSA_GIT and BR2_UCLIBC_VERSION_SNAPSHOT select
+BR2_UCLIBC_SUPPORTS_* instead of new BR2_UCLIBC_VERSION_SUPPORTS_*.
 
-              Host: x86_64
-            Target: sh64-buildroot-linux-gnu
-           Summary: glibc 2.20 and 2.21 fail to build for
-                    sh64-buildroot-linux-gnu
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: uwe at hermann-uwe.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/uclibc/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-This is with git HEAD as of today, glibc 2.20, gcc 4.9.x.
-
-checking build system type... x86_64-unknown-linux-gnu
-checking host system type... sh64-buildroot-linux-gnu
-checking for sh64-buildroot-linux-gnu-gcc...
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-gcc
-checking for suffix of object files... o
-checking whether we are using the GNU C compiler... yes
-checking whether
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-gcc
-accepts -g... yes
-checking for gcc... gcc
-checking whether we are using the GNU C++ compiler... no
-checking whether
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-g++
-accepts -g... no
-checking for sh64-buildroot-linux-gnu-readelf...
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-readelf
-checking for sysdeps preconfigure fragments... aarch64 alpha arm hppa i386 m68k
-microblaze mips powerpc s390 sh sparc tile x86_64 
-configure: running configure fragment for add-on libidn
-checking for assembler and linker STT_GNU_IFUNC support... no
-checking whether .text pseudo-op must be used... yes
-checking sysdep dirs... configure: error: The sh64 is not supported.
-package/pkg-generic.mk:172: recipe for target
-'/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/build/glibc-2.20/.stamp_configured'
-failed
-make: ***
-[/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/build/glibc-2.20/.stamp_configured]
-Error 1
-
-
-
-checking build system type... x86_64-unknown-linux-gnu
-checking host system type... sh64-buildroot-linux-gnu
-checking for sh64-buildroot-linux-gnu-gcc...
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-gcc
-checking for suffix of object files... o
-checking whether we are using the GNU C compiler... yes
-checking whether
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-gcc
-accepts -g... yes
-checking for gcc... gcc
-checking whether we are using the GNU C++ compiler... no
-checking whether
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-g++
-accepts -g... no
-checking for sh64-buildroot-linux-gnu-readelf...
-/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/host/usr/bin/sh64-buildroot-linux-gnu-readelf
-checking for sysdeps preconfigure fragments... aarch64 alpha arm hppa i386 m68k
-microblaze mips nios2 powerpc s390 sh sparc tile x86_64 
-configure: running configure fragment for add-on libidn
-checking for assembler and linker STT_GNU_IFUNC support... no
-checking whether .text pseudo-op must be used... yes
-checking sysdep dirs... configure: error: The sh64 is not supported.
-package/pkg-generic.mk:172: recipe for target
-'/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/build/glibc-2.21/.stamp_configured'
-failed
-make: ***
-[/home/jenkins_slave/buildroot-sh64-buildroot-linux-gnu/output/build/glibc-2.21/.stamp_configured]
-Error 1
-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 56fea8a..3a6525b 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -49,12 +49,12 @@ choice
+ 	config BR2_UCLIBC_VERSION_XTENSA_GIT
+ 		bool "uClibc Git Xtensa"
+ 		depends on BR2_xtensa
+-		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
++		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+ 
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
+-		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
+-		select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
++		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
++		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+ 		       if !BR2_bfin && !BR2_x86_i386 && !BR2_xtensa
+ 		depends on !(BR2_arc)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.1.4
