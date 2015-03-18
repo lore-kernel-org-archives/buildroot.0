@@ -1,135 +1,72 @@
-From: Steve Kenton <skenton@ou.edu>
-Date: Wed, 18 Mar 2015 13:00:12 -0500
-Subject: [Buildroot] [PATCH v4 1/1] tovid: new package
-Message-ID: <1426701612-14785-1-git-send-email-skenton@ou.edu>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
+Date: Wed, 18 Mar 2015 19:06:00 +0100
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: add support for i.MX28 SD format
+Message-ID: <1426701961-2619-1-git-send-email-vincent.stehle@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tovid suite, also known simply as tovid, is a collection of shell
-and Python scripts for creating DVDs and (S)VCDs. It is pronounced
-"to vid" (because it converts to video disc formats).
+Allow to generate u-boot.sd, Freescale i.MX28 SB format with a header for
+booting from an SD card.
 
-Signed-off-by: Steve Kenton <skenton@ou.edu>
+U-boot includes an mxsboot tool to generate this format, starting from
+v2011.12.
+
+See u-boot doc/README.mxs.
+
+Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
 ---
-V4 added comments and fixed nits, changed to:
-   TOVID_SETUP_TYPE = distutils
-   $(eval $(python-package))
+ boot/uboot/Config.in | 12 ++++++++++++
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 17 insertions(+)
 
-V3 delete hash file since download is from SVN
-
- package/Config.in                |  1 +
- package/tovid/0001-manpage.patch | 26 ++++++++++++++++++++++++++
- package/tovid/Config.in          | 31 +++++++++++++++++++++++++++++++
- package/tovid/tovid.mk           | 15 +++++++++++++++
- 4 files changed, 73 insertions(+)
- create mode 100644 package/tovid/0001-manpage.patch
- create mode 100644 package/tovid/Config.in
- create mode 100644 package/tovid/tovid.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 96e373a..44ccfe4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -33,6 +33,7 @@ menu "Audio and video applications"
- 	source "package/pulseaudio/Config.in"
- 	source "package/sox/Config.in"
- 	source "package/tidsp-binaries/Config.in"
-+	source "package/tovid/Config.in"
- 	source "package/tstools/Config.in"
- 	source "package/twolame/Config.in"
- 	source "package/upmpdcli/Config.in"
-diff --git a/package/tovid/0001-manpage.patch b/package/tovid/0001-manpage.patch
-new file mode 100644
-index 0000000..4f73831
---- /dev/null
-+++ b/package/tovid/0001-manpage.patch
-@@ -0,0 +1,26 @@
-+setup.py: disable man page to kill txt2tags SVN checkout dependency
-+
-+Signed-off-by: Steve Kenton <skenton@ou.edu>
-+
-+--- tovid-3534/setup.py.ori	2015-02-20 22:08:18.590122839 -0600
-++++ tovid-3534/setup.py	2015-02-20 22:06:05.290120282 -0600
-+@@ -186,7 +186,7 @@ class BuildTovidInit (Command):
-+ 
-+ # Build tovid-init with regular 'build' command
-+ build.sub_commands.append(('build_tovid_init', None))
-+-build.sub_commands.append(('build_docs', None))
-++#build.sub_commands.append(('build_docs', None))
-+ 
-+ # The actual setup
-+ setup(
-+@@ -244,8 +244,8 @@ setup(
-+             'src/tovid.ini',
-+         ]),
-+         # Manual page
-+-        ('share/man/man1',
-+-         ['docs/man/tovid.1']),
-++#        ('share/man/man1',
-++#         ['docs/man/tovid.1']),
-+         # Desktop shortcut
-+         ('share/applications',
-+          ['tovidgui.desktop',
-diff --git a/package/tovid/Config.in b/package/tovid/Config.in
-new file mode 100644
-index 0000000..bb80c99
---- /dev/null
-+++ b/package/tovid/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_TOVID
-+	bool "tovid"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INET_IPV6 # ffmpeg
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
-+	select BR2_PACKAGE_DVDAUTHOR
-+	select BR2_PACKAGE_DVDRW_TOOLS
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_IMAGEMAGICK
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_MJPEGTOOLS
-+	select BR2_PACKAGE_MPLAYER
-+	select BR2_PACKAGE_PROCPS_NG # pgrep and pkill
-+	select BR2_PACKAGE_PYTHON # this is the only build time dependency
-+	select BR2_PACKAGE_SOX
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 03e6acc..cea993a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -117,6 +117,18 @@ config BR2_TARGET_UBOOT_FORMAT_SB
+ 	depends on BR2_arm
+ 	bool "u-boot.sb"
+ 
++config BR2_TARGET_UBOOT_FORMAT_SD
++	depends on BR2_arm
++	bool "u-boot.sd"
 +	help
-+	  The tovid suite, also known simply as tovid, is a collection of shell 
-+	  and Python scripts for creating DVDs and (S)VCDs. It is pronounced 
-+	  "to vid" (because it converts to video disc formats). 
++	  This is Freescale i.MX28 SB format, with a header for booting from an
++	  SD card.
 +
-+	  http://tovid.wikia.com/wiki/Installing_tovid
++	  U-boot includes an mxsboot tool to generate this format, starting
++	  from v2011.12.
 +
-+comment "tovid needs a toolchain w/ threads, ipv6, C++, wchar, largefile"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_USE_WCHAR || !BR2_LARGEFILE
-diff --git a/package/tovid/tovid.mk b/package/tovid/tovid.mk
-new file mode 100644
-index 0000000..259dd90
---- /dev/null
-+++ b/package/tovid/tovid.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# tovid
-+#
-+################################################################################
++	  See doc/README.mxs.
 +
-+TOVID_SITE = http://tovid.googlecode.com/svn/trunk/tovid
-+TOVID_SITE_METHOD = svn
-+TOVID_VERSION = 3534
-+TOVID_LICENSE = GPLv2
-+TOVID_LICENSE_FILES = COPYING
-+TOVID_DEPENDENCIES = python
-+TOVID_SETUP_TYPE = distutils
-+
-+$(eval $(python-package))
+ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	bool "Custom (specify below)"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a9ba054..8fad5b4 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -49,6 +49,9 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
+ UBOOT_BIN = u-boot.sb
+ UBOOT_MAKE_TARGET = $(UBOOT_BIN)
+ UBOOT_DEPENDENCIES += host-elftosb
++else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
++UBOOT_BIN = u-boot.sd
++UBOOT_MAKE_TARGET = u-boot.sb
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
+ UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
+ else
+@@ -116,6 +119,8 @@ define UBOOT_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+ 		$(UBOOT_MAKE_TARGET)
++	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
++		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+ endef
+ 
+ define UBOOT_BUILD_OMAP_IFT
 -- 
-2.1.0
+2.1.4
