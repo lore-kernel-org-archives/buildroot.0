@@ -1,20 +1,19 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Mar 2015 23:35:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 7946] New: libglib2-2.42.2 fails to build for
+Date: Wed, 18 Mar 2015 00:03:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 7951] New: gcc 4.9.2 fails to build for
  sparc-buildroot-linux-gnu
-Message-ID: <bug-7946-163@https.bugs.busybox.net/>
+Message-ID: <bug-7951-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7946
+https://bugs.busybox.net/show_bug.cgi?id=7951
 
               Host: x86_64
             Target: sparc-buildroot-linux-gnu
-           Summary: libglib2-2.42.2 fails to build for
-                    sparc-buildroot-linux-gnu
+           Summary: gcc 4.9.2 fails to build for sparc-buildroot-linux-gnu
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -29,15 +28,21 @@ https://bugs.busybox.net/show_bug.cgi?id=7946
    Estimated Hours: 0.0
 
 
-This is buildroot git HEAD as of today, with glibc 2.21 and gcc-4.8.
+Created attachment 5931
+  --> https://bugs.busybox.net/attachment.cgi?id=5931
+build log
 
-make[5]: Entering directory
-'/home/jenkins_slave/buildroot-sparc-buildroot-linux-gnu/output/build/libglib2-2.42.2/glib'
-  CCLD     gtester
-./.libs/libglib-2.0.so: undefined reference to `__atomic_compare_exchange_4'
-collect2: error: ld returned 1 exit status
-Makefile:1446: recipe for target 'gtester' failed
-make[5]: *** [gtester] Error 1
+gcc 4.9.2 fails to build for sparc-buildroot-linux-gnu (buildroot git HEAD as
+of today).
+
+In file included from
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:17:0:
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:257:72:
+error: size of array ???assertion_failed__865??? is negative
+     typedef char IMPL_PASTE(assertion_failed_##_, line)[2*(int)(pred)-1]
+                                                                        ^
+
+Full log attached.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
