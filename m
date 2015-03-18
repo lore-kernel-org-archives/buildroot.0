@@ -1,33 +1,36 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 14:42:57 -0700
-Subject: [Buildroot] [PATCH 1/7] package/perf: if slang is enabled,
-	depend on it
-Message-ID: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
+Date: Wed, 18 Mar 2015 14:44:44 -0700
+Subject: [Buildroot] [PATCH 3/3] package/procps-ng: enable UTF-8 support
+In-Reply-To: <1426715084-24894-1-git-send-email-steven@uplinklabs.net>
+References: <1426715084-24894-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <1426715084-24894-3-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For an example of why to enable this: https://bugs.archlinux.org/task/38614
+
 Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 ---
- package/perf/perf.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/procps-ng/procps-ng.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index f6591a6..2b0702c 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -34,6 +34,10 @@ ifeq ($(BR2_arc),y)
- 	PERF_MAKE_FLAGS += NO_BACKTRACE=1
- endif
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index f7e3e3c..90289e2 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -39,4 +39,10 @@ PROCPS_NG_CONF_OPTS += \
+ 	--bindir=/usr/bin \
+ 	--sbindir=/usr/sbin
  
-+ifeq ($(BR2_PACKAGE_SLANG),y)
-+	PERF_DEPENDENCIES += slang
++# Allows unicode characters to show in 'watch'
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++PROCPS_NG_CONF_OPTS += \
++	--enable-watch8bit
 +endif
 +
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- 	PERF_DEPENDENCIES += elfutils
- else
+ $(eval $(autotools-package))
 -- 
 2.3.3
