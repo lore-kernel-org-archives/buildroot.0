@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 07:45:14 -0300
-Subject: [Buildroot] [PATCH 05/10] libnetfilter_queue: add hash file
+Date: Wed, 18 Mar 2015 07:45:15 -0300
+Subject: [Buildroot] [PATCH 06/10] conntrack-tools: add hash file
 In-Reply-To: <1426675519-21481-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426675519-21481-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426675519-21481-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426675519-21481-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libnetfilter_queue/libnetfilter_queue.hash | 3 +++
+ package/conntrack-tools/conntrack-tools.hash | 3 +++
  1 file changed, 3 insertions(+)
- create mode 100644 package/libnetfilter_queue/libnetfilter_queue.hash
+ create mode 100644 package/conntrack-tools/conntrack-tools.hash
 
-diff --git a/package/libnetfilter_queue/libnetfilter_queue.hash b/package/libnetfilter_queue/libnetfilter_queue.hash
+diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
 new file mode 100644
-index 0000000..4ea3721
+index 0000000..ecb0811
 --- /dev/null
-+++ b/package/libnetfilter_queue/libnetfilter_queue.hash
++++ b/package/conntrack-tools/conntrack-tools.hash
 @@ -0,0 +1,3 @@
-+# From ftp://ftp.netfilter.org/pub/libnetfilter_queue/libnetfilter_queue-1.0.2.tar.bz2.{md5sum,sha1sum}
-+md5	df09befac35cb215865b39a36c96a3fa	libnetfilter_queue-1.0.2.tar.bz2
-+sha1	8cc0b8ed33162281bc9fa8bcfa8c9dcb08848ff9	libnetfilter_queue-1.0.2.tar.bz2
++# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.2.tar.bz2.{md5sum,sha1sum}
++md5	b1f9d006e7bf000a77395ff7cd3fac16	conntrack-tools-1.4.2.tar.bz2
++sha1	50b89305bb689973d42a163c480dc77a5c0f6fe0	conntrack-tools-1.4.2.tar.bz2
 -- 
 2.0.5
