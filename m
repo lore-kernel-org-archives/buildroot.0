@@ -1,63 +1,39 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Wed, 18 Mar 2015 13:29:41 +0100
-Subject: [Buildroot] [PATCH 2/3] ljlinenoise: refactor with
-	BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-In-Reply-To: <20150317213250.6ed620c9@free-electrons.com>
-References: <1426622689-31844-1-git-send-email-francois.perrad@gadz.org>
- <1426622689-31844-2-git-send-email-francois.perrad@gadz.org>
- <20150317213250.6ed620c9@free-electrons.com>
-Message-ID: <CAGhdn55VhHAamXavOjK3m2UMg8+JaHLbprsrePZ_cn+AhA-LEQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Mar 2015 09:46:50 -0300
+Subject: [Buildroot] [PATCH] iw: bump to version 4.0
+Message-ID: <1426682810-16339-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-03-17 21:32 GMT+01:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iw/iw.hash | 2 +-
+ package/iw/iw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Dear Francois Perrad,
->
-> On Tue, 17 Mar 2015 21:04:48 +0100, Francois Perrad wrote:
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> > ---
-> >  package/ljlinenoise/Config.in | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/ljlinenoise/Config.in
-> b/package/ljlinenoise/Config.in
-> > index 17be1be..ce1a156 100644
-> > --- a/package/ljlinenoise/Config.in
-> > +++ b/package/ljlinenoise/Config.in
-> > @@ -5,7 +5,7 @@ config BR2_PACKAGE_LJLINENOISE
-> >       # ljsyscall is specifically for LuaJIT, not Lua.
-> >       depends on BR2_PACKAGE_LUAJIT
-> >       # ljsyscall is only available for some target architectures
-> > -     depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm ||
-> BR2_armeb
-> > +     depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->
-> Are you sure?
->
-> BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS is clearly not the same as "BR2_i386
-> || BR2_x86_64 || BR2_powerpc || BR2_arm || BR2_armeb". For example,
-> mips/mipsel are supported in LuaJIT, but not in the current condition
-> of ljlinenoise.
->
->
-This package is based on ljsyscall, so see the discussion in [patch 3/3]
-ljsyscall
-
-Fran?ois
-
-
-
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150318/1bd185ba/attachment.html>
+diff --git a/package/iw/iw.hash b/package/iw/iw.hash
+index 118a22c..be0428c 100644
+--- a/package/iw/iw.hash
++++ b/package/iw/iw.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
+-sha256	48a62eb5cd8e757c9617749df96b01f133c184f6c107f18be660ee08f155fa93	iw-3.17.tar.xz
++sha256	2b4b7906d5ce89ce0ab523e5de8b619cddcc18fee7a2bfd6f9c62efab2d3bed6	iw-4.0.tar.xz
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 1286915..4fd18ac 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IW_VERSION = 3.17
++IW_VERSION = 4.0
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = iw license
+-- 
+2.0.5
