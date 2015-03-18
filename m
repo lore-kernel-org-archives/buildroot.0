@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Mar 2015 17:59:22 +0100
-Subject: [Buildroot] [git commit] speex: add hash file
-Message-ID: <20150318170028.A9BCF7F8FC@busybox.osuosl.org>
+Date: Wed, 18 Mar 2015 18:01:25 +0100
+Subject: [Buildroot] [PATCH 1/6] fontconfig: add hash file
+In-Reply-To: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150318180125.7ec27008@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=308b23996c8ca01281ccf4355dc65269a7da7c27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/speex/speex.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Wed, 18 Mar 2015 11:29:10 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/fontconfig/fontconfig.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/fontconfig/fontconfig.hash
 
-diff --git a/package/speex/speex.hash b/package/speex/speex.hash
-new file mode 100644
-index 0000000..c38a0a7
---- /dev/null
-+++ b/package/speex/speex.hash
-@@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/speex/SHA256SUMS.txt
-+sha256	342f30dc57bd4a6dad41398365baaa690429660b10d866b7d508e8f1179cb7a6	speex-1.2rc1.tar.gz
+All 6 patches applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
