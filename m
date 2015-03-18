@@ -1,25 +1,38 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 14:43:29 -0700
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14,
-	19}.x series
-In-Reply-To: <5509F109.4030808@zacarias.com.ar>
-References: <1426692984-27024-1-git-send-email-gustavo@zacarias.com.ar>
- <CAKbGBLhHgMC7LuwBVoqvF5J4az4K9EujJD4i+go+qAuJAQhiyA@mail.gmail.com>
- <5509F109.4030808@zacarias.com.ar>
-Message-ID: <CAKbGBLjTwWwUqF6sNToxGq6xuhH+atq-bN69c+YGMAQGXaJskQ@mail.gmail.com>
+Date: Wed, 18 Mar 2015 14:43:02 -0700
+Subject: [Buildroot] [PATCH 6/7] package/perf: add patch to prevent crash on
+	empty history buffer
+In-Reply-To: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
+References: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <1426714983-24803-6-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 18, 2015 at 2:41 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
-> On 03/18/2015 06:38 PM, Steven Noonan wrote:
->
->> What about BR2_LINUX_KERNEL_LATEST_VERSION in linux/Config.in?
->
-> What about patch 2/2 ?
-> Regards.
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+---
+ package/perf/0002-fix-crash-on-empty-buffer.patch | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/perf/0002-fix-crash-on-empty-buffer.patch
 
-Ah, missed it. Sorry for the noise.
+diff --git a/package/perf/0002-fix-crash-on-empty-buffer.patch b/package/perf/0002-fix-crash-on-empty-buffer.patch
+new file mode 100644
+index 0000000..b8383cf
+--- /dev/null
++++ b/package/perf/0002-fix-crash-on-empty-buffer.patch
+@@ -0,0 +1,11 @@
++--- a/tools/perf/ui/browsers/hists.c
+++++ b/tools/perf/ui/browsers/hists.c
++@@ -1059,7 +1059,7 @@ do_offset:
++			}
++			first = false;
++		}
++-	} else {
+++	} else if (nd) {
++		browser->top = nd;
++		h = rb_entry(nd, struct hist_entry, rb_node);
++		h->row_offset = 0;
+-- 
+2.3.3
