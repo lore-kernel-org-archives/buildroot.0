@@ -1,8 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Wed, 18 Mar 2015 17:00:51 +0800
-Subject: [Buildroot] [PATCH 1/2] bfin: remove the dependency of flat shared
-	mode to shared library
-Message-ID: <1426669251-24304-1-git-send-email-sonic.adi@gmail.com>
+Date: Wed, 18 Mar 2015 16:59:16 +0800
+Subject: [Buildroot] [PATCH 2/2] bfin: put the libc link path of the flat
+	shared and sep data formats before the sysroot link path
+In-Reply-To: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
+References: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +13,33 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
-Blackfin flat shared library isn't generated and linked in the same way
-as the ELF shared library. So, mark it depend on the static library only.
+The libc of the shared flat and sep data formats are different from the
+standard flat libc in the sysroot lib path. In order to make application
+link with proper libc, put their path before the sysroot link path.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- arch/Config.in |    1 -
- 1 file changed, 1 deletion(-)
+ package/Makefile.in |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 16ad8be..6179960 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -295,7 +295,6 @@ config BR2_BINFMT_FLAT_SEP_DATA
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 803b162..e88d1ad 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -153,12 +153,12 @@ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSI
+ endif
  
- config BR2_BINFMT_FLAT_SHARED
- 	bool "Shared binary"
--	select BR2_BINFMT_SUPPORTS_SHARED
- 	help
- 	  Allow to load and link indiviual FLAT binaries at run time.
- 
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+-TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
++TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0 -L$(STAGING_DIR)/usr/lib/mid-shared-library
+ TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+ TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+ endif
+ ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
+-TARGET_LDFLAGS += -msep-data
++TARGET_LDFLAGS += -msep-data -L$(STAGING_DIR)/usr/lib/msep-data
+ TARGET_CFLAGS += -msep-data
+ TARGET_CXXFLAGS += -msep-data
+ endif
 -- 
 1.7.9.5
