@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 11:29:14 -0300
-Subject: [Buildroot] [PATCH 5/6] opus-tools: add hash file
+Date: Wed, 18 Mar 2015 11:29:15 -0300
+Subject: [Buildroot] [PATCH 6/6] speex: add hash file
 In-Reply-To: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426688955-23233-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426688955-23233-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426688955-23233-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opus-tools/opus-tools.hash | 2 ++
+ package/speex/speex.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/opus-tools/opus-tools.hash
+ create mode 100644 package/speex/speex.hash
 
-diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
+diff --git a/package/speex/speex.hash b/package/speex/speex.hash
 new file mode 100644
-index 0000000..486384c
+index 0000000..c38a0a7
 --- /dev/null
-+++ b/package/opus-tools/opus-tools.hash
++++ b/package/speex/speex.hash
 @@ -0,0 +1,2 @@
-+# From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
-+sha256	b1873dd78c7fbc98cf65d6e10cfddb5c2c03b3af93f922139a2104baedb4643a	opus-tools-0.1.9.tar.gz
++# From http://downloads.xiph.org/releases/speex/SHA256SUMS.txt
++sha256	342f30dc57bd4a6dad41398365baaa690429660b10d866b7d508e8f1179cb7a6	speex-1.2rc1.tar.gz
 -- 
 2.0.5
