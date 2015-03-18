@@ -1,50 +1,135 @@
-From: andrewp at carallon.com <andrewp@carallon.com>
-Date: Wed, 18 Mar 2015 15:10:29 +0000
-Subject: [Buildroot] [PATCH 1/1] target-finalize: Use NULL deliminators when
-	stripping the target directory.
-Message-ID: <1426691429-38936-1-git-send-email-andrewp@carallon.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 18 Mar 2015 10:15:41 -0500
+Subject: [Buildroot] [PATCH v3 1/1] tovid: new package
+Message-ID: <1426691741-3961-1-git-send-email-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Andrew Parlane <andrewp@carallon.com>
+The tovid suite, also known simply as tovid, is a collection of shell
+and Python scripts for creating DVDs and (S)VCDs. It is pronounced
+"to vid" (because it converts to video disc formats).
 
-Special characters in files or directories in the rootfs can cause problems when stripping files.
-For example "target/some song.mp3" gets treated as two entries. "target/some" and "song.mp3" are both passed to $(STRIPCMD). This then errors saying files don't exist.
-
-Additionally a ' and possibly other special characters in a file path causes xargs to give the error: "xargs: unmatched single quote; by default quotes are special to xargs unless you use the -0 option". This also has the effect of removing this entry and further entries from the list of files to strip.
-This can be demonstrated by having a test directory with the files: "cat" "rabbit's" "elephant". then running the command: "find -name "*" -print | xargs"
-
-To fix this we pass -print0 to find which seperates entries with a NULL character, and we pass -0 to xargs to tell it to only use NULL characters as the deliminator.
-
-Signed-off-by: Andrew Parlane <andrewp@carallon.com>
+Signed-off-by: Steve Kenton <skenton@ou.edu>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+V3 delete hash file since download is from SVN
 
-diff --git a/Makefile b/Makefile
-index af043a3..33a89b1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -500,7 +500,7 @@ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
- #   applications and libraries. Normally kernel modules are already excluded
- #   by the executable permission check above, so the explicit exclusion is only
- #   done for kernel modules with incorrect permissions.
--STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-+STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
- 
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
- define TOOLCHAIN_ECLIPSE_REGISTER
-@@ -579,7 +579,7 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
--	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
- 	if test -d $(TARGET_DIR)/lib/modules; then \
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD); fi
+ package/Config.in                |  1 +
+ package/tovid/0001-manpage.patch | 26 ++++++++++++++++++++++++++
+ package/tovid/Config.in          | 31 +++++++++++++++++++++++++++++++
+ package/tovid/tovid.mk           | 19 +++++++++++++++++++
+ 4 files changed, 77 insertions(+)
+ create mode 100644 package/tovid/0001-manpage.patch
+ create mode 100644 package/tovid/Config.in
+ create mode 100644 package/tovid/tovid.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 96e373a..44ccfe4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -33,6 +33,7 @@ menu "Audio and video applications"
+ 	source "package/pulseaudio/Config.in"
+ 	source "package/sox/Config.in"
+ 	source "package/tidsp-binaries/Config.in"
++	source "package/tovid/Config.in"
+ 	source "package/tstools/Config.in"
+ 	source "package/twolame/Config.in"
+ 	source "package/upmpdcli/Config.in"
+diff --git a/package/tovid/0001-manpage.patch b/package/tovid/0001-manpage.patch
+new file mode 100644
+index 0000000..c742b64
+--- /dev/null
++++ b/package/tovid/0001-manpage.patch
+@@ -0,0 +1,26 @@
++setup.py: disable documentation build
++
++Signed-off-by: Steve Kenton <skenton@ou.edu>
++
++--- tovid-3534/setup.py.ori	2015-02-20 22:08:18.590122839 -0600
+++++ tovid-3534/setup.py	2015-02-20 22:06:05.290120282 -0600
++@@ -186,7 +186,7 @@ class BuildTovidInit (Command):
++ 
++ # Build tovid-init with regular 'build' command
++ build.sub_commands.append(('build_tovid_init', None))
++-build.sub_commands.append(('build_docs', None))
+++#build.sub_commands.append(('build_docs', None))
++ 
++ # The actual setup
++ setup(
++@@ -244,8 +244,8 @@ setup(
++             'src/tovid.ini',
++         ]),
++         # Manual page
++-        ('share/man/man1',
++-         ['docs/man/tovid.1']),
+++#        ('share/man/man1',
+++#         ['docs/man/tovid.1']),
++         # Desktop shortcut
++         ('share/applications',
++          ['tovidgui.desktop',
+diff --git a/package/tovid/Config.in b/package/tovid/Config.in
+new file mode 100644
+index 0000000..180e6d1
+--- /dev/null
++++ b/package/tovid/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_TOVID
++	bool "tovid"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INET_IPV6 # ffmpeg
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
++	select BR2_PACKAGE_DVDAUTHOR
++	select BR2_PACKAGE_DVDRW_TOOLS
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_IMAGEMAGICK
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_MJPEGTOOLS
++	select BR2_PACKAGE_MPLAYER
++	select BR2_PACKAGE_PROCPS_NG
++	select BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_SOX
++	help
++	  The tovid suite, also known simply as tovid, is a collection of shell 
++	  and Python scripts for creating DVDs and (S)VCDs. It is pronounced 
++	  "to vid" (because it converts to video disc formats). 
++
++	  http://tovid.wikia.com/wiki/Installing_tovid
++
++comment "tovid needs a toolchain w/ threads, ipv6, C++, wchar, largefile"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_USE_WCHAR || !BR2_LARGEFILE
+diff --git a/package/tovid/tovid.mk b/package/tovid/tovid.mk
+new file mode 100644
+index 0000000..9e474fb
+--- /dev/null
++++ b/package/tovid/tovid.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# tovid
++#
++################################################################################
++
++TOVID_SITE = http://tovid.googlecode.com/svn/trunk/tovid
++TOVID_SITE_METHOD = svn
++TOVID_VERSION = 3534
++TOVID_LICENSE = GPLv2.0
++TOVID_LICENSE_FILES = COPYING
++TOVID_DEPENDENCIES += python
++
++# Must be run in source directory to avoid "error: package directory 'libtovid' does not exist"
++define TOVID_INSTALL_TARGET_CMDS
++	bash -c "cd $(@D); ./setup.py install --root=$(TARGET_DIR) --prefix=/usr"
++endef
++
++$(eval $(generic-package))
 -- 
-2.1.4
+2.1.0
