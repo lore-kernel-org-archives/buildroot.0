@@ -1,73 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 18 Mar 2015 23:41:11 +0100
-Subject: [Buildroot] [PATCH] package/dvdrw-tools: fix incorrect default
- choiche
-In-Reply-To: <1426631327-15489-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1426631327-15489-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150318224111.GA4578@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 Mar 2015 23:42:12 +0100
+Subject: [Buildroot] graphics
+In-Reply-To: <CAKKWdtd-OY+ws4oVtFC6uXGaK38L7Bt=swwRfOVvsE0QqwJCcQ@mail.gmail.com>
+References: <CAKKWdtd-OY+ws4oVtFC6uXGaK38L7Bt=swwRfOVvsE0QqwJCcQ@mail.gmail.com>
+Message-ID: <5509FF44.7080007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+On 16/03/15 11:01, ali hagigat wrote:
+> Buildroot has built a correct image for wandboard-quad and I can log
+> in and see the output by the serial port, ttymxc0
+> But i want to enable graphics for wandboard. Now getty listens for
+> ttymxc0, how can i change it to use HDMI monitor and keyboard/mouse?
+> I have enabled some X11 components and some drivers but i can only see
+> the output on the serial console. HDMI monitor was not drived
+> I will be much appreciate for any answer
 
-On 2015-03-17 23:28 +0100, Angelo Compagnucci spake thusly:
-> This pathc fixes default choiche BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/dvdrw-tools/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
-> index 6787b66..fb4d4c2 100644
-> --- a/package/dvdrw-tools/Config.in
-> +++ b/package/dvdrw-tools/Config.in
-> @@ -35,7 +35,7 @@ config BR2_PACKAGE_DVDRW_TOOLS
->  if BR2_PACKAGE_DVDRW_TOOLS
->  choice
->  	prompt "Media Backend"
-> -	default BR2_PACKAGE_DVDRW_CDRKIT_BACKEND
-> +	default BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND
+ getty will only give you a console. If you want to get a console on HDMI, you
+need CONFIG_VT and CONFIG_FB in the kernel, but I'm not sure if the latter is
+even available for the Wandboard. If you have a framebuffer, you can start a
+getty on tty1 instead of ttymxc0.
 
-In fact that's not needed since cdrkit is the first entry.
+ But if it is X that you want, you should start it. For testing, you can just
+type X after logging in on the console.
 
-Besides, and I missed it durign the review too, we can't force cdrkit as
-the default sicne it has a dependency which is not reported here; it
-should have been (options elided for readability):
+ I think we should start writing a FAQ on how to use X on buildroot...
 
-    choice
-        bool "backend"
-        default CDRKIT if HEADERS_AT_LEAST_3_0
 
-But really, there's no reason to have a default in the first place, so I
-suggest we just get rid of it:
-
-  - if kernel headers >= 3.0, cdrkit will be used by default as it is
-    the first entry in the choice;
-
-  - otherwise, cdrkit will be unavailable, and xorriso will be used.
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  Choose which media backend program to use.
->  
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
