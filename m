@@ -1,24 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 18 Mar 2015 10:05:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 7951] gcc 4.9.2 fails to build for
-	sparc-buildroot-linux-gnu
-In-Reply-To: <bug-7951-163@https.bugs.busybox.net/>
-References: <bug-7951-163@https.bugs.busybox.net/>
-Message-ID: <20150318100544.3C5EE8185D@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 18 Mar 2015 11:07:19 +0100
+Subject: [Buildroot] [PATCH v3] gst1-imx: add package
+In-Reply-To: <1426614168.3279.10.camel@jablotron.cz>
+References: <1426614168.3279.10.camel@jablotron.cz>
+Message-ID: <55094E57.8080706@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7951
+Dear Rostislav,
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-03-18 10:05:41 UTC ---
-Care to provide a config?
-I was able to build qemu_sparc_ss10_defconfig switching to gcc 4.9.2 just fine
-and it even boots.
+Rostislav Lisovy wrote:
+> Hello everyone;
+> Is there any chance the patch (in $subject)
+> https://www.marc.info/?l=buildroot&m=141550615919434
+> will be merged into the mainline Buildroot?
+>
+> After changing the GST1_IMX_VERSION to the newest 0.10.1
+> everything compiles fine (the patch applies to the master as well).
+
+I agree it should be merged. Or rejected, it there's a reason to do so.
+
+Did you run-test it? Please specify what you tested, and formally add
+your Tested-by tag. This makes it more likely for a patch to be merged.
+See the manual [1] for details about reviewers tags.
+
+Then Gary or you could resend the patch with the version updated.
+
+[1] 
+http://buildroot.net/downloads/manual/manual.html#_reviewing_and_testing_patches
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Luca
