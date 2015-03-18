@@ -1,10 +1,8 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 15:01:11 -0700
-Subject: [Buildroot] [PATCH 3/3] packages: add AVX/AVX2 support to
-	ffmpeg/opencv
-In-Reply-To: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
-References: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <1426716071-27570-4-git-send-email-steven@uplinklabs.net>
+Date: Wed, 18 Mar 2015 14:34:03 -0700
+Subject: [Buildroot] [PATCH] kernels: bump 3.10.x 3.14.x,
+	3.19.x to new stable kernel releases
+Message-ID: <1426714443-22832-1-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +11,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 ---
- package/ffmpeg/ffmpeg.mk | 12 ++++++++++++
- package/opencv/opencv.mk |  2 ++
- 2 files changed, 14 insertions(+)
+ linux/Config.in                      | 2 +-
+ package/linux-headers/Config.in.host | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 68a28a2..47372df 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -301,6 +301,18 @@ else
- FFMPEG_CONF_OPTS += --disable-sse42
- endif
+diff --git a/linux/Config.in b/linux/Config.in
+index af22ab4..f24d58e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
-+ifeq ($(BR2_X86_CPU_HAS_AVX),y)
-+FFMPEG_CONF_OPTS += --enable-avx
-+else
-+FFMPEG_CONF_OPTS += --disable-avx
-+endif
-+
-+ifeq ($(BR2_X86_CPU_HAS_AVX2),y)
-+FFMPEG_CONF_OPTS += --enable-avx2
-+else
-+FFMPEG_CONF_OPTS += --disable-avx2
-+endif
-+
- # Explicitly disable everything that doesn't match for ARM
- # FFMPEG "autodetects" by compiling an extended instruction via AS
- # This works on compilers that aren't built for generic by default
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 61f529e..ee84312 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -77,6 +77,8 @@ OPENCV_CONF_OPTS += \
- 	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
- 	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF)  \
- 	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
-+	-DENABLE_AVX=$(if $(BR2_X86_CPU_HAS_AVX),ON,OFF) \
-+	-DENABLE_AVX2=$(if $(BR2_X86_CPU_HAS_AVX2),ON,OFF) \
- 	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.19.1"
++	bool "3.19.2"
  
- # Cuda stuff
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e6764e0..2d32168 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -192,14 +192,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.68"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.71"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.72"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.38"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.35"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.36"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.9"	if BR2_KERNEL_HEADERS_3_18
+-	default "3.19.1"	if BR2_KERNEL_HEADERS_3_19
++	default "3.19.2"	if BR2_KERNEL_HEADERS_3_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.3.3
