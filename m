@@ -1,35 +1,65 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed, 18 Mar 2015 19:05:28 -0400 (EDT)
-Subject: [Buildroot] [PATCH 2/5] board/raspberrypi: install Device Tree
-In-Reply-To: <20150318224438.GB4578@free.fr>
-References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1426632719-4807-3-git-send-email-vivien.didelot@savoirfairelinux.com>
- <20150318224438.GB4578@free.fr>
-Message-ID: <1106715418.1139219.1426719928308.JavaMail.zimbra@savoirfairelinux.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 Mar 2015 00:15:39 +0100
+Subject: [Buildroot] [PATCH 3/3] support/download: always fail when
+ there's no hash
+In-Reply-To: <e443dfcec4c084f823c718aa4c7740eddb3b628e.1426545571.git.yann.morin.1998@free.fr>
+References: <cover.1426545571.git.yann.morin.1998@free.fr>
+ <e443dfcec4c084f823c718aa4c7740eddb3b628e.1426545571.git.yann.morin.1998@free.fr>
+Message-ID: <550A071B.7000000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-> > Add a post-image script to Raspberry Pi configs with a Device Tree
-> > (raspberrypi_dt and raspberrypi2), which calls the mkknlimg tool on the
-> > resulting zImage kernel, in order to install the Device Tree as
-> > described in the board readme file.
+On 16/03/15 23:41, Yann E. MORIN wrote:
+> At the time we introduced hashes, we did not want to be too harsh in the
+> beginning, and give people some time to adapt and accept to hashes. So
+> we so far only whined^Wwarned about a missing hash file.
 > 
-> No, it is not "installing" the device tree. It merely appends a marker
-> at the end of the kernel image.
+> Some time has passed now, and people are still missing updating hashes
+> when bumping packages.
 > 
-> That marker instructs the RPi bootloader that the kernel is Device Tree
-> aware, and thus the bootloader will load the device tree blobs; if the
-> marker is missing, the bootloader will not load a device tree blob, and
-> will pass ATAGS.
+> Let's make that warning a little bit more annoying...
 
-Indeed, I misunderstood the statement from the readme file. Depending on
-how this patchset goes, I'll add this comment to the post-image script
-in a follow-up patch or in a new version.
+ If you ever revive this series (which I think would be a good idea), don't
+forget to remove the reference to BR2_ENFORCE_CHECK_HASH from the manual as well.
 
-Thanks for the explanation,
--v
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  support/download/check-hash | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index 4cc62f3..7971c38 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -88,10 +88,6 @@ while read t h f; do
+>  done <"${h_file}"
+>  
+>  if [ ${nb_checks} -eq 0 ]; then
+> -    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+> -        printf "ERROR: No hash found for %s\n" "${base}" >&2
+> -        exit 2
+> -    else
+> -        printf "WARNING: No hash found for %s\n" "${base}" >&2
+> -    fi
+> +    printf "ERROR: No hash found for %s\n" "${base}" >&2
+> +    exit 2
+>  fi
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
