@@ -1,39 +1,65 @@
-From: ir. Tjeerd Pinkert <t.j.pinkert@vu.nl>
-Date: Wed, 18 Mar 2015 17:40:46 +0100
-Subject: [Buildroot] ipython segfaults on history when no SQLite available
-In-Reply-To: <1426695479-12524-1-git-send-email-gwenj@trabucayre.com>
-References: <1426695479-12524-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <5509AA8E.6000409@vu.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Mar 2015 17:47:14 +0100
+Subject: [Buildroot] [PATCH v3 1/1] tovid: new package
+In-Reply-To: <5509A386.1030107@ou.edu>
+References: <1426691741-3961-1-git-send-email-skenton@ou.edu>
+ <20150318164628.3a84b974@free-electrons.com>
+ <5509A386.1030107@ou.edu>
+Message-ID: <20150318174714.2e552220@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I notice that ipython segfaults on the following conditions:
-- no SQLite
-- a command is not found in the history list when arrow-up is pressed.
+Dear Steve Kenton,
 
-The following snapshots apply:
-------------------------------
-# ipython
-WARNING: IPython History requires SQLite, your history will not be saved
-Python 2.7.9 (default, Mar 17 2015, 11:45:11)
+On Wed, 18 Mar 2015 11:10:46 -0500, Steve Kenton wrote:
 
+> > Why is this patch needed? Does the documentation build requires
+> > additional dependencies?
+> Yes, with an SVN checkout it is required to get txt2tags to build the man page
+> "To build the manpage, you will need txt2tags:
+>     http://txt2tags.sourceforge.net"
 
+Ok, please indicate this in the patch description then.
 
-It crashes in this case nothing with "rela" is found in the history:
---------------------------------------------------------------------
-In [17]: relapython[1380]: unhandled signal 11 at 00000000 nip b6b10940 
-lr b6b10934 code 30001
-Segmentation fault
-#
+> >> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
+> > 
+> > Can you comment on why specifically procps_ng is needed?
+> pgrep and IIRC pkill
+> "todisc:assert_dep pgrep "You need the pgrep program to use todisc"
 
+Ok. Then please indicate this as well in a comment above the "select
+BR2_PACKAGE_PROCPS_NG" line.
 
-System is MPC8313E, powerpc
-This might be an upstream issue.
+> > Amongst those dependencies, it would be great to denote which ones are
+> > actual build dependencies, and which ones are only runtime dependencies.
+> I think python is the only build dependency - the rest are runtime
+> assuming we kill the man page
 
-Best regards,
+Ok, then please say so in a comment in the Config.in file.
 
+Essentially, anything that isn't obvious generally needs a comment
+somewhere :-)
 
-Tjeerd
+> >> +TOVID_SITE = http://tovid.googlecode.com/svn/trunk/tovid
+> > 
+> > Google Code is closing. Is there a better location for this project? Or
+> > is the project planning to move to some other place in the near future ?
+> Did not know that, will investigate.
+
+Well, I think it's fine for now, the source URL can always be changed
+later when the project moves elsewhere. There have been some changes
+recently (today, yesterday, etc.) so the project seems to be maintained.
+
+BTW, I don't remember if I asked: why would you want to run something
+such as tovid on an embedded system? What's the final use case?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
