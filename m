@@ -1,83 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Mar 2015 00:32:09 +0100
-Subject: [Buildroot] [PATCH] configs: add defconfig for Freescale i.MX31
-	PDK
-In-Reply-To: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
-References: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <550A0AF9.5050101@mind.be>
+Date: Thu, 19 Mar 2015 00:54:40 +0100
+Subject: [Buildroot] [git commit] package/luajit: introducing luajit
+ arch supports.
+In-Reply-To: <20150317170322.4A9F981829@busybox.osuosl.org>
+References: <20150317170322.4A9F981829@busybox.osuosl.org>
+Message-ID: <550A1040.9070503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/03/15 10:43, Vincent Stehl? wrote:
-> The i.MX31 Product Development Kit (or PDK) is Freescale development board
-> based on the i.MX31 application processor.
+On 17/03/15 18:03, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=4a107f43486150c255d6ca5143609c788297c6ad
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> This defconfig is based on Freescale kernel 2.6.28 5.1.0, and is aimed at a PDK
-> in "3 stack" configuration, with CPU engine board, personality board and debug
-> board.
-
- Doesn't the upstream MACH_MX31_3DS work? 2.6.28 is extremely old...
-
+> This patch introduces BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS for luajit.
 > 
-> Note that we have a patch to reconciliate the recent GNU make with the "old"
-> Makefile in the Linux kernel this configuration refers to.
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/luajit/Config.in |   10 ++++++++--
+>  1 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-
-[snip]
-> diff --git a/configs/freescale_imx31_3stack_defconfig b/configs/freescale_imx31_3stack_defconfig
-> new file mode 100644
-> index 0000000..96c9eb0
-> --- /dev/null
-> +++ b/configs/freescale_imx31_3stack_defconfig
-> @@ -0,0 +1,23 @@
-> +# architecture
-> +BR2_arm=y
-> +BR2_arm1136jf_s_r0=y
-> +BR2_ARM_EABIHF=y
+> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+> index c505f6a..f6995e2 100644
+> --- a/package/luajit/Config.in
+> +++ b/package/luajit/Config.in
+> @@ -1,10 +1,16 @@
+> +config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_i386 || \
+> +		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
+> +		BR2_powerpc || BR2_arm || BR2_armeb || \
+> +		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT)
 > +
-> +# toolchain
-> +BR2_KERNEL_HEADERS_3_2=y
+>  config BR2_PACKAGE_LUAJIT
+>  	bool "luajit"
+>  	select BR2_PACKAGE_HAS_LUAINTERPRETER
+>  	# Luajit is only available for some target architectures, and
+>  	# has some complexity wrt 32/64. See luajit.mk for details.
 
- That doesn't sound like a good idea when the kernel is 2.6.28...
+ Shouldn't the comment also have moved?
 
-> +BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
-
- Why not uClibc and why C++?
-
-> +
-> +# system
-> +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-
- With a more recent kernel we don't need this crappy option...
-
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> +# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-
- Why?
-
-> +
-> +# kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_2.6.28_5.1.0"
-> +BR2_LINUX_KERNEL_PATCH="board/freescale/imx31_3stack/"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imx31_3stack"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-
- If network boot is really the only option, then perhaps it would be nicer to
-use an initramfs linked into the kernel? Or doesn't the board have enough memory
-to support that?
+ Also, ljlinenoise and ljsyscall should probably use it.
 
 
  Regards,
  Arnout
 
+> -	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb \
+> -		|| ((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT)
+> +	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>  	# luajit.mk uses the "-m32" compiler option to build 32bit
+>  	# binaries, so check if that option is supported. See
+>  	# luajit.mk for details.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > 
 
 
