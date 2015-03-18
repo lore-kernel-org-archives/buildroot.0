@@ -1,43 +1,64 @@
 From: =?UTF-8?q?Andr=C3=A9=20Erdmann?= <dywi@mailerd.de>
-Date: Wed, 18 Mar 2015 16:50:36 +0100
-Subject: [Buildroot] [PATCH v2 03/10] autobuild-run,
-	python3: decode subprocess output
+Date: Wed, 18 Mar 2015 16:50:37 +0100
+Subject: [Buildroot] [PATCH v2 04/10] autobuild-run,
+	python3: encode/decode mmap data
 In-Reply-To: <1426693843-28792-1-git-send-email-dywi@mailerd.de>
 References: <1426693843-28792-1-git-send-email-dywi@mailerd.de>
-Message-ID: <1426693843-28792-4-git-send-email-dywi@mailerd.de>
+Message-ID: <1426693843-28792-5-git-send-email-dywi@mailerd.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-subprocess.check_output() and its py 2.6 compat variant,
-subprocess.Popen().communicate()[0], return a bytes object in Python 3,
-but regexp.search() in get_failure_reason() wants a str:
+mmap objects return bytes in Python 3,
+which leads to errors when used in str context, for example:
 
-  >>> re.search(r'.', b'a')
-  TypeError: can't use a string pattern on a bytes-like object
+  >>> fh      = open("file", "r")
+  >>> fh_mmap = mmap.mmap(fh.fileno(), 0, access=ACCESS_READ)
+  >>> fh_mmap.find("word")
+  TypeError: 'str' does not support the buffer interface
+
+Adds a new compat function, encode_str(), which is a no-op in Python 2.
 
 Signed-off-by: Andr? Erdmann <dywi@mailerd.de>
 ---
- scripts/autobuild-run | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ scripts/autobuild-run | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 1edffc1..e536289 100755
+index e536289..40bd657 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -576,8 +576,9 @@ def send_results(result, **kwargs):
+@@ -139,12 +139,16 @@ if sys.hexversion >= 0x3000000:
  
-     def get_failure_reason():
-         # Output is a tuple (package, version), or None.
--        lastlines = subprocess.Popen(["tail", "-n", "3",
--                                      os.path.join(outputdir, "logfile")], stdout=subprocess.PIPE).communicate()[0].splitlines()
-+        lastlines = decode_bytes(subprocess.Popen(
-+            ["tail", "-n", "3", os.path.join(outputdir, "logfile")],
-+            stdout=subprocess.PIPE).communicate()[0]).splitlines()
+     def decode_byte_list(bl):
+         return [b.decode() for b in bl]
++
++    def encode_str(s):
++        return s.encode()
+ else:
+     def _identity(e):
+         return e
  
-         import re
-         regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
+     decode_bytes = _identity
+     decode_byte_list = _identity
++    encode_str = _identity
+ 
+ MAX_DURATION = 60 * 60 * 4
+ VERSION = 1
+@@ -607,10 +611,10 @@ def send_results(result, **kwargs):
+             mf = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+             mf.seek(0)
+             # Search for first action on the failed package
+-            offset = mf.find('>>> %s' % ' '.join(reason))
++            offset = mf.find(encode_str('>>> %s' % ' '.join(reason)))
+             if offset != -1:
+                 with open(resultfile, "w") as endlog:
+-                    endlog.write(mf[offset:])
++                    endlog.write(decode_bytes(mf[offset:]))
+             else:
+                 # not found, use last 500 lines as fallback
+                 extract_last_500_lines()
 -- 
 2.3.2
