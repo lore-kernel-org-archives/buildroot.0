@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 07:45:15 -0300
-Subject: [Buildroot] [PATCH 06/10] conntrack-tools: add hash file
+Date: Wed, 18 Mar 2015 07:45:16 -0300
+Subject: [Buildroot] [PATCH 07/10] libmnl: add hash file
 In-Reply-To: <1426675519-21481-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1426675519-21481-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1426675519-21481-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1426675519-21481-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/conntrack-tools/conntrack-tools.hash | 3 +++
+ package/libmnl/libmnl.hash | 3 +++
  1 file changed, 3 insertions(+)
- create mode 100644 package/conntrack-tools/conntrack-tools.hash
+ create mode 100644 package/libmnl/libmnl.hash
 
-diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
+diff --git a/package/libmnl/libmnl.hash b/package/libmnl/libmnl.hash
 new file mode 100644
-index 0000000..ecb0811
+index 0000000..c16dfe7
 --- /dev/null
-+++ b/package/conntrack-tools/conntrack-tools.hash
++++ b/package/libmnl/libmnl.hash
 @@ -0,0 +1,3 @@
-+# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.2.tar.bz2.{md5sum,sha1sum}
-+md5	b1f9d006e7bf000a77395ff7cd3fac16	conntrack-tools-1.4.2.tar.bz2
-+sha1	50b89305bb689973d42a163c480dc77a5c0f6fe0	conntrack-tools-1.4.2.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libmnl/libmnl-1.0.3.tar.bz2.{md5sum,sha1sum}
++md5	7d95fc3bea3365bc03c48e484224f65f	libmnl-1.0.3.tar.bz2
++sha1	c27e25f67c6422ebf893fc3a844af8085a1c5b63	libmnl-1.0.3.tar.bz2
 -- 
 2.0.5
