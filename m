@@ -1,50 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 16:00:39 -0300
-Subject: [Buildroot] [PATCH] gawk: bump to version 4.1.1
-Message-ID: <1426705239-9636-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 18 Mar 2015 20:16:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont: security
+	version bump to 1.5.1
+Message-ID: <1426706172-11127-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes CVE-2015-1802, CVE-2015-1803, CVE-2015-1804
+http://lists.x.org/archives/xorg-announce/2015-March/002551.html
+http://lists.x.org/archives/xorg-announce/2015-March/002550.html
+
 Also add hash file.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gawk/gawk.hash | 2 ++
- package/gawk/gawk.mk   | 5 ++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
- create mode 100644 package/gawk/gawk.hash
+ package/x11r7/xlib_libXfont/xlib_libXfont.hash |    2 ++
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/x11r7/xlib_libXfont/xlib_libXfont.hash
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
 new file mode 100644
-index 0000000..72d3cdc
+index 0000000..9543637
 --- /dev/null
-+++ b/package/gawk/gawk.hash
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	efd4c6aafb1ce996309fc903ceb625e7012221c464eb72483dbb23adef1ee8db	gawk-4.1.1.tar.xz
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index af486c4..bf136fa 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -4,12 +4,15 @@
++# From http://lists.x.org/archives/xorg-announce/2015-March/002551.html
++sha256	b70898527c73f9758f551bbab612af611b8a0962202829568d94f3edf4d86098	libXfont-1.5.1.tar.bz2
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index 7686550..5b6de1f 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GAWK_VERSION = 4.1.0
-+GAWK_VERSION = 4.1.1
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
- GAWK_LICENSE = GPLv3+
- GAWK_LICENSE_FILES = COPYING
-+# beta libtool version
-+GAWK_AUTORECONF = YES
-+GAWK_GETTEXTIZE = YES
- 
- # Prefer full-blown gawk over busybox awk
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-XLIB_LIBXFONT_VERSION = 1.5.0
++XLIB_LIBXFONT_VERSION = 1.5.1
+ XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
+ XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT_LICENSE = MIT
 -- 
-2.0.5
+1.7.10.4
