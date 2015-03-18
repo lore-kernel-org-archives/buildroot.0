@@ -1,9 +1,10 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 15:01:10 -0700
-Subject: [Buildroot] [PATCH 2/3] arch: add core-avx2
+Date: Wed, 18 Mar 2015 15:01:11 -0700
+Subject: [Buildroot] [PATCH 3/3] packages: add AVX/AVX2 support to
+	ffmpeg/opencv
 In-Reply-To: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
 References: <1426716071-27570-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <1426716071-27570-3-git-send-email-steven@uplinklabs.net>
+Message-ID: <1426716071-27570-4-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +13,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 ---
- arch/Config.in.x86 | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/ffmpeg/ffmpeg.mk | 12 ++++++++++++
+ package/opencv/opencv.mk |  2 ++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 9767bc1..43f6abc 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -15,6 +15,8 @@ config BR2_X86_CPU_HAS_SSE42
- 	bool
- config BR2_X86_CPU_HAS_AVX
- 	bool
-+config BR2_X86_CPU_HAS_AVX2
-+	bool
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 68a28a2..47372df 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -301,6 +301,18 @@ else
+ FFMPEG_CONF_OPTS += --disable-sse42
+ endif
  
- choice
- 	prompt "Target Architecture Variant"
-@@ -101,6 +103,17 @@ config BR2_x86_corei7_avx
- 	select BR2_X86_CPU_HAS_SSE4
- 	select BR2_X86_CPU_HAS_SSE42
- 	select BR2_X86_CPU_HAS_AVX
-+config BR2_x86_core_avx2
-+	bool "core-avx2"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_SSE2
-+	select BR2_X86_CPU_HAS_SSE3
-+	select BR2_X86_CPU_HAS_SSSE3
-+	select BR2_X86_CPU_HAS_SSE4
-+	select BR2_X86_CPU_HAS_SSE42
-+	select BR2_X86_CPU_HAS_AVX
-+	select BR2_X86_CPU_HAS_AVX2
- config BR2_x86_atom
- 	bool "atom"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -239,6 +252,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "core2"		if BR2_x86_core2
- 	default "corei7"	if BR2_x86_corei7
- 	default "corei7-avx"	if BR2_x86_corei7_avx
-+	default "core-avx2"	if BR2_x86_core_avx2
- 	default "atom"		if BR2_x86_atom
- 	default "k8"		if BR2_x86_opteron
- 	default "k8-sse3"	if BR2_x86_opteron_sse3
++ifeq ($(BR2_X86_CPU_HAS_AVX),y)
++FFMPEG_CONF_OPTS += --enable-avx
++else
++FFMPEG_CONF_OPTS += --disable-avx
++endif
++
++ifeq ($(BR2_X86_CPU_HAS_AVX2),y)
++FFMPEG_CONF_OPTS += --enable-avx2
++else
++FFMPEG_CONF_OPTS += --disable-avx2
++endif
++
+ # Explicitly disable everything that doesn't match for ARM
+ # FFMPEG "autodetects" by compiling an extended instruction via AS
+ # This works on compilers that aren't built for generic by default
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 61f529e..ee84312 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -77,6 +77,8 @@ OPENCV_CONF_OPTS += \
+ 	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
+ 	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE4),ON,OFF)  \
+ 	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
++	-DENABLE_AVX=$(if $(BR2_X86_CPU_HAS_AVX),ON,OFF) \
++	-DENABLE_AVX2=$(if $(BR2_X86_CPU_HAS_AVX2),ON,OFF) \
+ 	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
+ 
+ # Cuda stuff
 -- 
 2.3.3
