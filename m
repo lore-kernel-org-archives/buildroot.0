@@ -1,42 +1,39 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Wed, 18 Mar 2015 06:49:07 -0700
-Subject: [Buildroot] [PATCH v3] gst1-imx: add package
-In-Reply-To: <55094E57.8080706@lucaceresoli.net>
-References: <1426614168.3279.10.camel@jablotron.cz>
- <55094E57.8080706@lucaceresoli.net>
-Message-ID: <55098253.4030501@boundarydevices.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Mar 2015 11:00:42 -0300
+Subject: [Buildroot] [PATCH] dhcpcd: bump to version 6.7.1
+Message-ID: <1426687242-19188-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dhcpcd/dhcpcd.hash | 2 +-
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 03/18/2015 03:07 AM, Luca Ceresoli wrote:
-> Dear Rostislav,
-> 
-> Rostislav Lisovy wrote:
->> Hello everyone;
->> Is there any chance the patch (in $subject)
->> https://www.marc.info/?l=buildroot&m=141550615919434
->> will be merged into the mainline Buildroot?
->>
->> After changing the GST1_IMX_VERSION to the newest 0.10.1
->> everything compiles fine (the patch applies to the master as well).
-> 
-> I agree it should be merged. Or rejected, it there's a reason to do so.
-> 
-> Did you run-test it? Please specify what you tested, and formally add
-> your Tested-by tag. This makes it more likely for a patch to be merged.
-> See the manual [1] for details about reviewers tags.
-> 
-> Then Gary or you could resend the patch with the version updated.
-> 
-
-I believe Gary is out of pocket this week.
-
-Regards,
-
-
-Eric
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index ac927ae..b66244d 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	43f93a0a536b93e26e4c7733582df7595d73aff9acfef298323e59dd8db8cdab	dhcpcd-6.6.7.tar.bz2
++sha256	cb65d3e783fa5484ed095bb940c3274a5a91d3ed4a9d9ae66a49d9637165bd98	dhcpcd-6.7.1.tar.bz2
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 9c65826..5a3405a 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCPCD_VERSION = 6.6.7
++DHCPCD_VERSION = 6.7.1
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.bz2
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+-- 
+2.0.5
