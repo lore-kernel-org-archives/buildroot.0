@@ -1,8 +1,8 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Wed, 18 Mar 2015 16:59:15 +0800
+Date: Wed, 18 Mar 2015 17:00:51 +0800
 Subject: [Buildroot] [PATCH 1/2] bfin: remove the dependency of flat shared
 	mode to shared library
-Message-ID: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1426669251-24304-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,7 @@ To: buildroot@busybox.net
 From: Sonic Zhang <sonic.zhang@analog.com>
 
 Blackfin flat shared library isn't generated and linked in the same way
-as the ELF shared library. So, don't mark it depend on the static library
-only.
+as the ELF shared library. So, mark it depend on the static library only.
 
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
