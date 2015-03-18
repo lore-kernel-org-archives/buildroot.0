@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Mar 2015 17:59:21 +0100
-Subject: [Buildroot] [git commit] libnfnetlink: add hash file
-Message-ID: <20150318170028.5E0798186E@busybox.osuosl.org>
+Date: Wed, 18 Mar 2015 17:59:22 +0100
+Subject: [Buildroot] [git commit] opus-tools: add hash file
+Message-ID: <20150318170028.9DBB77F8FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3e5d99553b21729a6b3cb0d0be13974a3253968
+commit: http://git.buildroot.net/buildroot/commit/?id=ea6413d8ba192395e2fc93e632219414fe223587
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnfnetlink/libnfnetlink.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/opus-tools/opus-tools.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnfnetlink/libnfnetlink.hash b/package/libnfnetlink/libnfnetlink.hash
+diff --git a/package/opus-tools/opus-tools.hash b/package/opus-tools/opus-tools.hash
 new file mode 100644
-index 0000000..93844f2
+index 0000000..486384c
 --- /dev/null
-+++ b/package/libnfnetlink/libnfnetlink.hash
-@@ -0,0 +1,3 @@
-+# From ftp://ftp.netfilter.org/pub/libnfnetlink/libnfnetlink-1.0.1.tar.bz2.{md5sum,sha1sum}
-+md5	98927583d2016a9fb1936fed992e2c5e	libnfnetlink-1.0.1.tar.bz2
-+sha1	27ae2dfbd976e28cb7a417f9e946c901f512dd9a	libnfnetlink-1.0.1.tar.bz2
++++ b/package/opus-tools/opus-tools.hash
+@@ -0,0 +1,2 @@
++# From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
++sha256	b1873dd78c7fbc98cf65d6e10cfddb5c2c03b3af93f922139a2104baedb4643a	opus-tools-0.1.9.tar.gz
