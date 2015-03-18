@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Mar 2015 07:37:20 -0300
-Subject: [Buildroot] [PATCH] openssh: bump to version 6.8p1
-Message-ID: <1426675040-3662-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 18 Mar 2015 07:42:34 -0300
+Subject: [Buildroot] [PATCH v2] openssh: bump to version 6.8p1
+Message-ID: <1426675354-16691-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -101,7 +101,7 @@ index 21675bf..7a2a8e3 100644
   
   #include "includes.h"
 diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 2fcdabe..92781d0 100644
+index 2fcdabe..3af72ff 100644
 --- a/package/openssh/openssh.hash
 +++ b/package/openssh/openssh.hash
 @@ -1,4 +1,3 @@
@@ -110,7 +110,7 @@ index 2fcdabe..92781d0 100644
 -sha1	14e5fbed710ade334d65925e080d1aaeb9c85bf6	openssh-6.7p1.tar.gz
 -sha256	b2f8394eae858dabbdef7dac10b99aec00c95462753e80342e530bbb6f725507	openssh-6.7p1.tar.gz
 +# Also from http://www.openssh.com/txt/release-6.8 (sha256 is base64 encoded)
-+sha256	3ff64ce73ee124480b5bf767b9830d7d3c03bbcb6abe716b78f0192c37ce160e	openssh-6.7p1.tar.gz
++sha256	3ff64ce73ee124480b5bf767b9830d7d3c03bbcb6abe716b78f0192c37ce160e	openssh-6.8p1.tar.gz
 diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
 index be471b6..08f3fa0 100644
 --- a/package/openssh/openssh.mk
