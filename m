@@ -1,24 +1,25 @@
-From: Chris Rodley <carlighting@yahoo.co.nz>
-Date: Wed, 18 Mar 2015 02:52:21 +0000 (UTC)
-Subject: [Buildroot] Buildroot fails with: mkusers: user already exists with
- group 'nogroup'
-Message-ID: <1349450149.2228539.1426647141409.JavaMail.yahoo@mail.yahoo.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 18 Mar 2015 00:03:02 -0500
+Subject: [Buildroot] [PATCH] package/dvdrw-tools: fix incorrect default
+ choiche
+In-Reply-To: <1426631327-15489-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1426631327-15489-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <55090706.9060600@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot fails with: mkusers: user already exists with group 'nogroup'
+On 03/17/2015 05:28 PM, Angelo Compagnucci wrote:
+> This pathc fixes default choiche BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND.
 
-PATH="/home/user/buildroot/output/host/bin:/home/user/buildroot/output/host/sbin:/home/user/buildroot/output/host/usr/bin:/home/user/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games" /home/user/buildroot/support/scripts/mkusers /home/user/buildroot/output/build/_users_table.txt /home/user/buildroot/output/target >> /home/user/buildroot/output/build/_fakeroot.fs
-mkusers: user already exists with group 'nogroup'
-fs/tar/tar.mk:13: recipe for target '/home/user/buildroot/output/images/rootfs.tar' failed
-make: *** [/home/user/buildroot/output/images/rootfs.tar] Error 1
+>  if BR2_PACKAGE_DVDRW_TOOLS
+>  choice
+>  	prompt "Media Backend"
+> -	default BR2_PACKAGE_DVDRW_CDRKIT_BACKEND
+> +	default BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND
 
+Arg! I can't I let that slip through. Thanks for catching it.
 
-This happens after make clean and make.
-Any ideas?
-
-Cheers,
-CJ
+Steve
