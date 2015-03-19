@@ -1,105 +1,47 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Thu, 19 Mar 2015 11:08:28 +0100
-Subject: [Buildroot] [PATCH v2] pulseview: new package
-Message-ID: <1426759708-4920-1-git-send-email-bgolaszewski@baylibre.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 19 Mar 2015 11:17:57 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-03-18
+In-Reply-To: <20150319073018.35B45100D3A@stock.ovh.net>
+References: <20150319073018.35B45100D3A@stock.ovh.net>
+Message-ID: <550AA255.3060206@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
-Version 2:
-- select BR2_PACKAGE_QT5BASE_PNG in Config.in - this is needed for
-  pulseview to properly display .png icons
-- don't select libserial port
+Dear all,
 
-Version 1:
-http://patchwork.ozlabs.org/patch/445288/
+On 19/03/15 08:30, Thomas Petazzoni wrote:
+> Build statistics for 2015-03-18
+> ===============================
+>       mipsel |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/901c2d922ea4d126bf6cb1f4e36324601e3a4664/
+>     mips64el |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/4d795b723facfde23792e5e2a0c170902d89c621/
+>     mips64el |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/a97d1bda93b5fa9ce975145b82a752c957c24cab/
+>       mipsel |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/f01e4aa07856db6b7bb63ca07eac1ed0987f3e7f/
 
- package/Config.in              |  1 +
- package/pulseview/Config.in    | 28 ++++++++++++++++++++++++++++
- package/pulseview/pulseview.mk | 24 ++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/pulseview/Config.in
- create mode 100644 package/pulseview/pulseview.mk
+The failure is actually in c-periphery. I have fixed it upstream...
 
-diff --git a/package/Config.in b/package/Config.in
-index a37e519..0cfb365 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -363,6 +363,7 @@ endif
- 	source "package/picocom/Config.in"
- 	source "package/pifmrds/Config.in"
- 	source "package/pps-tools/Config.in"
-+	source "package/pulseview/Config.in"
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rpi-userland/Config.in"
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-new file mode 100644
-index 0000000..52c9310
---- /dev/null
-+++ b/package/pulseview/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_PULSEVIEW
-+	bool "pulseview"
-+	select BR2_PACKAGE_LIBSIGROK
-+	select BR2_PACKAGE_LIBSIGROKCXX
-+	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5BASE_PNG
-+	select BR2_PACKAGE_QT5SVG
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	# libsigrok->libglib2:
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
-+	help
-+	  PulseView is a Qt based logic analyzer, oscilloscope
-+	  and MSO GUI for sigrok.
-+
-+	  http://sigrok.org/wiki/PulseView
-+
-+comment "pulseview needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PACKAGE_QT5
-+	depends on !BR2_TOOLCHAIN_BUILDROOT_CXX
-diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
-new file mode 100644
-index 0000000..923459d
---- /dev/null
-+++ b/package/pulseview/pulseview.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# pulseview
-+#
-+################################################################################
-+
-+# TODO Pulseview can be built and linked against Qt4 as well.
-+
-+# No https access on upstream git
-+PULSEVIEW_SITE = git://sigrok.org/pulseview
-+PULSEVIEW_VERSION = 19be0af16af83ca10f7ce69cb64f0b0c6f6a0d81
-+PULSEVIEW_LICENSE = GPLv3+
-+PULSEVIEW_LICENSE_FILES = COPYING
-+PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
-+PULSEVIEW_CONF_OPTS = -DDISABLE_WERROR=y
-+
-+ifeq ($(BR2_PACKAGE_LIBSIGROKDECODE),y)
-+PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=TRUE
-+PULSEVIEW_DEPENDENCIES += libsigrokdecode
-+else
-+PULSEVIEW_CONF_OPTS += -DENABLE_DECODE=FALSE
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.1.4
+https://github.com/vsergeev/c-periphery/commit/0fdfac3264f1dce32991f4ec30d084e34b35181d
+
+...and since c-periphery is "git-cloned" into lua-periphery...
+
+$ grep clone output/build/lua-periphery-1.0.4-1/lua-periphery/Makefile
+	git clone git://github.com/vsergeev/c-periphery --depth 1 --branch v1.0.1
+
+...then this problem is automatically fixed in Buildroot! :-)
+
+>       mipsel | trinity-c8c41f99500b5854c20... | NOK | http://autobuild.buildroot.net/results/f9ef222ce1eee07406a7d2ce44412bf7ca017220/
+
+I have fixed this upstream...
+
+https://github.com/kernelslacker/trinity/commit/fb4a1adc4540f0702b84aa900f2b8ebed004885d
+
+...and then in Buildroot...
+
+https://patchwork.ozlabs.org/patch/451807/
+
+Best regards,
+--
+Vincent
