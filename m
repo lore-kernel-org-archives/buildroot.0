@@ -1,46 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Mar 2015 01:06:06 +0100
-Subject: [Buildroot] [PATCH 3/3] support/download: always fail when
- there's no hash
-In-Reply-To: <550A071B.7000000@mind.be>
-References: <cover.1426545571.git.yann.morin.1998@free.fr>
- <e443dfcec4c084f823c718aa4c7740eddb3b628e.1426545571.git.yann.morin.1998@free.fr>
- <550A071B.7000000@mind.be>
-Message-ID: <20150319000606.GE4578@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 Mar 2015 01:27:37 +0100
+Subject: [Buildroot] Buildroot fails with: mkusers: user already exists
+ with group 'nogroup'
+In-Reply-To: <1349450149.2228539.1426647141409.JavaMail.yahoo@mail.yahoo.com>
+References: <1349450149.2228539.1426647141409.JavaMail.yahoo@mail.yahoo.com>
+Message-ID: <550A17F9.9010801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2015-03-19 00:15 +0100, Arnout Vandecappelle spake thusly:
-> On 16/03/15 23:41, Yann E. MORIN wrote:
-> > At the time we introduced hashes, we did not want to be too harsh in the
-> > beginning, and give people some time to adapt and accept to hashes. So
-> > we so far only whined^Wwarned about a missing hash file.
-> > 
-> > Some time has passed now, and people are still missing updating hashes
-> > when bumping packages.
-> > 
-> > Let's make that warning a little bit more annoying...
+On 18/03/15 03:52, Chris Rodley wrote:
+> Buildroot fails with: mkusers: user already exists with group 'nogroup'
 > 
->  If you ever revive this series (which I think would be a good idea), don't
-> forget to remove the reference to BR2_ENFORCE_CHECK_HASH from the manual as well.
+> PATH="/home/user/buildroot/output/host/bin:/home/user/buildroot/output/host/sbin:/home/user/buildroot/output/host/usr/bin:/home/user/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games" /home/user/buildroot/support/scripts/mkusers /home/user/buildroot/output/build/_users_table.txt /home/user/buildroot/output/target >> /home/user/buildroot/output/build/_fakeroot.fs
+> mkusers: user already exists with group 'nogroup'
+> fs/tar/tar.mk:13: recipe for target '/home/user/buildroot/output/images/rootfs.tar' failed
+> make: *** [/home/user/buildroot/output/images/rootfs.tar] Error 1
 
-Already done in v2:
-    http://patchwork.ozlabs.org/patch/450979/
+ Can you post your defconfig? Sounds like two competing USERS definitions with
+different group, but then it's surprising that the autobuilders didn't detect it...
 
-;-)
 
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
+
+> 
+> 
+> This happens after make clean and make.
+> Any ideas?
+> 
+> Cheers,
+> CJ
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
