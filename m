@@ -1,118 +1,37 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Thu, 19 Mar 2015 13:02:47 -0700
-Subject: [Buildroot] [PATCH 15/15] systemd: change install path to
-	/usr/lib
-In-Reply-To: <1426787807-29510-16-git-send-email-mike@mikebwilliams.com>
-References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-16-git-send-email-mike@mikebwilliams.com>
-Message-ID: <CAKbGBLjpN_bQ6o_J2g5Buz+toh8fyMZGvN+X42c0mEF1GmCfRQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 19 Mar 2015 21:25:23 +0100
+Subject: [Buildroot] [PATCH v1] postgresql: disable spinlock support for
+	arcle/arcbe
+Message-ID: <1426796723-8325-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2015 at 10:56 AM, Mike Williams <mike@mikebwilliams.com> wrote:
-> /usr/lib is the default path for upstream systemd.
->
-> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+Fixes:
+  http://autobuild.buildroot.net/results/9b2/9b20513253fa68a3eb5588464a206092bb45e82d
+  http://autobuild.buildroot.net/results/8ea/8ea59872bd68d302a11681426a47c70d9aa1475f
+  http://autobuild.buildroot.net/results/4a1/4a1cf5721af631e15e076a5bcdd8676839c2a98d
+  http://autobuild.buildroot.net/results/050/050a799f2e9e864e02cf75b2a5697ece215ab0a2
 
-Reviewed-by: Steven Noonan <steven@uplinklabs.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/postgresql/postgresql.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  package/systemd/systemd.mk | 26 ++++++++++++--------------
->  1 file changed, 12 insertions(+), 14 deletions(-)
->
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 98bda02..3ec124c 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -27,8 +27,6 @@ SYSTEMD_DEPENDENCIES += busybox
->  endif
->
->  SYSTEMD_CONF_OPTS += \
-> -       --with-rootprefix= \
-> -       --with-rootlibdir=/lib \
->         --enable-static=no \
->         --disable-manpages \
->         --disable-selinux \
-> @@ -100,16 +98,16 @@ endif
->  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
->  SYSTEMD_CONF_OPTS += --enable-networkd
->  define SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> -       ln -sf ../run/systemd/resolve/resolv.conf \
-> +       ln -sf /run/systemd/resolve/resolv.conf \
->                 $(TARGET_DIR)/etc/resolv.conf
->  endef
->  else
->  SYSTEMD_CONF_OPTS += --disable-networkd
->  define SYSTEMD_INSTALL_SERVICE_NETWORK
->         $(INSTALL) -D -m 644 package/systemd/network.service \
-> -               $(TARGET_DIR)/etc/systemd/system/network.service
-> +               $(TARGET_DIR)/usr/lib/systemd/system/network.service
->         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> -       ln -fs ../network.service \
-> +       ln -fs /usr/lib/systemd/system/network.service \
->                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
->  endef
->  endif
-> @@ -118,7 +116,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
->  SYSTEMD_CONF_OPTS += --enable-timesyncd
->  define SYSTEMD_INSTALL_SERVICE_TIMESYNC
->         mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
-> -       ln -sf ../../../../lib/systemd/system/systemd-timesyncd.service \
-> +       ln -sf /usr/lib/systemd/system/systemd-timesyncd.service \
->                 $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service
->  endef
->  else
-> @@ -144,12 +142,12 @@ SYSTEMD_MAKE_OPTS += LIBS=-lrt
->  SYSTEMD_MAKE_OPTS += LDFLAGS+=-ldl
->
->  define SYSTEMD_INSTALL_INIT_HOOK
-> -       ln -fs ../lib/systemd/systemd $(TARGET_DIR)/sbin/init
-> -       ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/halt
-> -       ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
-> -       ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
-> +       ln -fs /usr/lib/systemd/systemd $(TARGET_DIR)/sbin/init
-> +       ln -fs /usr/bin/systemctl $(TARGET_DIR)/sbin/halt
-> +       ln -fs /usr/bin/systemctl $(TARGET_DIR)/sbin/poweroff
-> +       ln -fs /usr/bin/systemctl $(TARGET_DIR)/sbin/reboot
->
-> -       ln -fs ../../../lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
-> +       ln -fs /usr/lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
->  endef
->
->  define SYSTEMD_INSTALL_MACHINEID_HOOK
-> @@ -157,14 +155,14 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
->  endef
->
->  define SYSTEMD_SANITIZE_PATH_IN_UNITS
-> -       find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
-> +       find $(TARGET_DIR)/usr/lib/systemd/system -name '*.service' \
->                 -exec $(SED) 's,$(HOST_DIR),,g' {} \;
->  endef
->
->  # Disable ldconfig.service, as /sbin/ldconfig is not available when the
->  # target is built with a glibc-based toolchain.
->  define SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK
-> -       rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/ldconfig.service
-> +       rm -f $(TARGET_DIR)/usr/lib/systemd/system/sysinit.target.wants/ldconfig.service
->  endef
->
->  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
-> @@ -199,7 +197,7 @@ define SYSTEMD_INSTALL_SERVICE_TTY
->         else \
->                 SERVICE="serial-getty"; \
->         fi; \
-> -       ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
-> +       ln -fs /usr/lib/systemd/system/$${SERVICE}@.service \
->                 $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
->  endef
->  endif
-> --
-> 2.1.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7dc3f0b..7bb1678 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -31,7 +31,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
+ endif
+ 
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
++ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
+ 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
+ endif
+ 
+-- 
+2.1.4
