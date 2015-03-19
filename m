@@ -1,50 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Mar 2015 22:44:12 +0100
-Subject: [Buildroot] RFC: systemd and service files cleanup
-In-Reply-To: <CAKbGBLhc8Wftu8pSVM8jNvRRpoSV=e0p5eomh4=+u8wg1VxVxA@mail.gmail.com>
-References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <CAKbGBLj66AmB6kxrp1utLmZ+AhWN+-0aDERdD=4FtAi=UHT_ig@mail.gmail.com>
- <CANPyyuO9hfyObgWWPjh7m=oghSs=qWWvsG28q+P=7F8W4NQnYg@mail.gmail.com>
- <CAKbGBLhc8Wftu8pSVM8jNvRRpoSV=e0p5eomh4=+u8wg1VxVxA@mail.gmail.com>
-Message-ID: <550B432C.9060100@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 19 Mar 2015 22:59:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.60
+Message-ID: <1426802348-18962-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/03/15 20:50, Steven Noonan wrote:
-> On Thu, Mar 19, 2015 at 12:43 PM, Mike Williams <mike@mikebwilliams.com> wrote:
->>> I come from the Arch Linux world, so I made a new skeleton that
->>> matches the Arch base filesystem layout: with /bin, /sbin, /usr/bin,
->>> and /usr/sbin all unified (likewise with /lib and /usr/lib). I haven't
->>> convinced myself to post the series because I can't think of a
->>> particularly good justification for it in the Buildroot context.
->>
->> I'm working that way myself, I don't know what use cases in Buildroot
->> still require the split.
-> 
-> We could consider offering it as an experimental alternative to the
-> default skeleton (just add another "choice" in kconfig, as I did in my
-> patch series). And open a discussion about unifying the directory
-> structure. It's certainly possible to support both use cases, though
-> it does require more testing.
 
- I've also started using a unified /bin /sbin /usr/bin /usr/sbin and unified
-/lib /usr/lib /lib64 /usr/lib64, and it really simplifies things a lot. I yet
-have to find a disadvantage.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.hash |    4 ++--
+ package/libdrm/libdrm.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- Make it it a choice sounds like a great idea! Please Cc me on the patch :-)
-
-
- Regards,
- Arnout
-
-
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index c893e76..42675bb 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/dri-devel/2015-January/075921.html
+-sha256	68d26e1fd85582f4243d66864f9b43ca4ee93662825de32b5506fc8e181ea41b	libdrm-2.4.59.tar.bz2
++# From http://lists.freedesktop.org/archives/dri-devel/2015-March/079617.html
++sha256	99575fc6c8e31f59193f5320fd4db7a5478e2641b5266147caab9aa875b59889	libdrm-2.4.60.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 737a33b..a804ee8 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.59
++LIBDRM_VERSION = 2.4.60
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
