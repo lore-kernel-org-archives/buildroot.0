@@ -1,29 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 19 Mar 2015 17:15:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 7724] Startx is not installed in the target
-In-Reply-To: <bug-7724-163@https.bugs.busybox.net/>
-References: <bug-7724-163@https.bugs.busybox.net/>
-Message-ID: <20150319171550.1552D807C8@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 19 Mar 2015 14:29:46 -0300
+Subject: [Buildroot] [PATCH] gpsd: add hash file
+Message-ID: <1426786186-12621-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7724
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gpsd/gpsd.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/gpsd/gpsd.hash
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-03-19 17:15:49 UTC ---
-startx is part of the xinit package, you just need to add it to your target
-configuration.
-
+diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+new file mode 100644
+index 0000000..80703c1
+--- /dev/null
++++ b/package/gpsd/gpsd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	ed66c6b6b1e2b4951de2c0b2399c22f77fe9f5927ef6b948dd8eb023ff53b7ee	gpsd-3.11.tar.gz
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.0.5
