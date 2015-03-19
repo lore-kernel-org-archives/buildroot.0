@@ -1,115 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Mar 2015 21:50:58 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2a
-Message-ID: <20150319205125.0D8EC8185E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 Mar 2015 21:51:54 +0100
+Subject: [Buildroot] [PATCH 5/5 v2] support/download: always fail when
+ there's no hash
+In-Reply-To: <b9c42017c424fae04a5bae3d8a74c3b21de65370.1426597114.git.yann.morin.1998@free.fr>
+References: <cover.1426597114.git.yann.morin.1998@free.fr>
+ <b9c42017c424fae04a5bae3d8a74c3b21de65370.1426597114.git.yann.morin.1998@free.fr>
+Message-ID: <550B36EA.2060700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85e7efff1afd1f00c2e83e7f71a80375824f42d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 17/03/15 13:59, Yann E. MORIN wrote:
+> At the time we introduced hashes, we did not want to be too harsh in the
+> beginning, and give people some time to adapt and accept the hashes. So
+> we so far only whined^Wwarned about a missing hash (when the .hash file
+> exists).
+> 
+> Some time has passed now, and people are still missing updating hashes
+> when bumping packages.
+> 
+> Let's make that warning a little bit more annoying...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  docs/manual/adding-packages-directory.txt | 6 ++----
+>  support/download/check-hash               | 8 ++------
+>  2 files changed, 4 insertions(+), 10 deletions(-)
+> 
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index 1ce9a3b..febb33c 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -469,9 +469,7 @@ not match, Buildroot considers this an error, deletes the downloaded file,
+>  and aborts.
+>  
+>  If the +.hash+ file is present, but it does not contain a hash for a
+> -downloaded file, no check is done for that file. If you set the
+> -environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
+> -there is no hash for a downloaded file, Buildroot considers this an
+> -error, deletes the downloaded file, and aborts.
+> +downloaded file, Buildroot considers this an error and aborts (but leaves
+> +the downloaded file in place).
 
-Fixes:
-CVE-2015-0291 - ClientHello sigalgs DoS
-CVE-2015-0290 - Multiblock corrupted pointer
-CVE-2015-0207 - Segmentation fault in DTLSv1_listen
-CVE-2015-0286 - Segmentation fault in ASN1_TYPE_cmp
-CVE-2015-0208 - Segmentation fault for invalid PSS parameters
-CVE-2015-0287 - ASN.1 structure reuse memory corruption
-CVE-2015-0289 - PKCS7 NULL pointer dereferences
-CVE-2015-0293 - DoS via reachable assert in SSLv2 servers
-CVE-2015-1787 - Empty CKE with client auth and DHE
-CVE-2015-0285 - Handshake with unseeded PRNG
-CVE-2015-0209 - Use After Free following d2i_ECPrivatekey error
-CVE-2015-0288 - X509_to_X509_REQ NULL pointer deref
+ This should be updated to mention the VCS downloads. Also it would be good to
+explain why it behaves like this. E.g.:
 
-musl patch removed since it's no longer necessary.
+If the +.hash+ file is present, but it does not contain a hash for a
+downloaded file, Buildroot considers this an error and aborts. However,
+the downloaded file is left in the download directory since this
+typically indicates that the +.hash+ file is wrong but the downloaded
+file is OK.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/004-musl-termios.patch |   46 --------------------------------
- package/openssl/openssl.hash           |    8 +++---
- package/openssl/openssl.mk             |    2 +-
- 3 files changed, 5 insertions(+), 51 deletions(-)
+Sources that are downloaded from a version control system (git, subversion,
+...) can not have a hash, because the version control system and tar do not
+create exactly the same file, so the hash could be wrong even for a valid
+download. Therefore, the hash check is skipped for such sources.
 
-diff --git a/package/openssl/004-musl-termios.patch b/package/openssl/004-musl-termios.patch
-deleted file mode 100644
-index 66631d1..0000000
---- a/package/openssl/004-musl-termios.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--http://rt.openssl.org/Ticket/Display.html?id=3123
--
--From:	 Kevin Bortis <pkgs@bortis.ch>
--
--The attached patch fixes issues with musl libc on linux. musl does
--implement the POSIX 2008 standard termios.h on linux and does not
--include the non standard interface termio.h.
--
--The problem with dlinfo does no longer exists, since musl has
--implemented the required interface.
--
--This closes #2823 for me.
--
--Tested version:
--musl libc: 0.9.13
--openssl git: 1769dfab06dcf93a1c310ca7ea9531afcc448d0a
--
--Comparison of termios.h implementation on linux:
--
--glibc 2.17: does implement termios.h, passes make test
--musl 0.9.13: does implement termios.h, passes make test
--uClibc 0.9.33.2: does implement termios.h, not tested
--dietlibc 0.33: does implement termios.h, not tested
--
--I don't know the reason why termio.h is prefered on linux, since
--termios.h is generally prefered and implemented by all major libc
--implementations.
--
--Regards
--Kevin
--
----- a/crypto/ui/ui_openssl.c	2013-09-08 11:00:10.130572803 +0200
--+++ b/crypto/ui/ui_openssl.c	2013-09-08 11:29:35.806580447 +0200
--@@ -190,9 +190,9 @@
-- # undef  SGTTY
-- #endif
-- 
---#if defined(linux) && !defined(TERMIO)
---# undef  TERMIOS
---# define TERMIO
--+#if defined(linux)
--+# define TERMIOS
--+# undef  TERMIO
-- # undef  SGTTY
-- #endif
-- 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index a8cb172..c9987fc 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.2.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.2.tar.gz.sha1
--md5 38373013fc85c790aabf8837969c5eba openssl-1.0.2.tar.gz
--sha1 2f264f7f6bb973af444cd9fc6ee65c8588f610cc openssl-1.0.2.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.sha1
-+md5	a06c547dac9044161a477211049f60ef	openssl-1.0.2a.tar.gz
-+sha1	46ecd325b8e587fa491f6bb02ad4a9fb9f382f5f	openssl-1.0.2a.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 48f287e..5ed59c0 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2
-+OPENSSL_VERSION = 1.0.2a
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+
+ Regards,
+ Arnout
+
+
+>  
+>  If the +.hash+ file is missing, then no check is done at all.
+> diff --git a/support/download/check-hash b/support/download/check-hash
+> index 9c62d7f..0caa619 100755
+> --- a/support/download/check-hash
+> +++ b/support/download/check-hash
+> @@ -88,10 +88,6 @@ while read t h f; do
+>  done <"${h_file}"
+>  
+>  if [ ${nb_checks} -eq 0 ]; then
+> -    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+> -        printf "ERROR: No hash found for %s\n" "${base}" >&2
+> -        exit 2
+> -    else
+> -        printf "WARNING: No hash found for %s\n" "${base}" >&2
+> -    fi
+> +    printf "ERROR: No hash found for %s\n" "${base}" >&2
+> +    exit 2
+>  fi
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
