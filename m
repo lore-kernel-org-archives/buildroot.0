@@ -1,55 +1,29 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 19 Mar 2015 18:08:25 +0100
-Subject: [Buildroot] [PATCH v1 1/1] dvdrw-tools: delete explicit default
- for backend
-In-Reply-To: <CA+TH9Vmtf8Ht6_kwb=ZLK0hucn6Hi9MY4q7vKBBcC_D4kNg3tQ@mail.gmail.com>
-References: <1426782276-5069-1-git-send-email-skenton@ou.edu>
- <CA+TH9Vmtf8Ht6_kwb=ZLK0hucn6Hi9MY4q7vKBBcC_D4kNg3tQ@mail.gmail.com>
-Message-ID: <CA+TH9Vm89FwRzDAhJ2nnbWe5_QehWvgVk_bbfbe9ZK85Ak8tCg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Mar 2015 17:15:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 7724] Startx is not installed in the target
+In-Reply-To: <bug-7724-163@https.bugs.busybox.net/>
+References: <bug-7724-163@https.bugs.busybox.net/>
+Message-ID: <20150319171550.1552D807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-03-19 17:26 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> 2015-03-19 17:24 GMT+01:00 Steve Kenton <skenton@ou.edu>:
->> Signed-off-by: Steve Kenton <skenton@ou.edu>
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Acked-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->> As suggested by Yann E. MORIN, just delete the default choice
->> to simplify things
->>
->>  package/dvdrw-tools/Config.in | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
->> index 6787b66..47835d8 100644
->> --- a/package/dvdrw-tools/Config.in
->> +++ b/package/dvdrw-tools/Config.in
->> @@ -35,7 +35,6 @@ config BR2_PACKAGE_DVDRW_TOOLS
->>  if BR2_PACKAGE_DVDRW_TOOLS
->>  choice
->>         prompt "Media Backend"
->> -       default BR2_PACKAGE_DVDRW_CDRKIT_BACKEND
->>         help
->>           Choose which media backend program to use.
->>
->> --
->> 2.1.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
+https://bugs.busybox.net/show_bug.cgi?id=7724
 
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
+
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2015-03-19 17:15:49 UTC ---
+startx is part of the xinit package, you just need to add it to your target
+configuration.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
