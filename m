@@ -1,43 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Mar 2015 22:03:13 +0100
-Subject: [Buildroot] [PATCH 1/5 v2] support/download: make hash file
- optional
-In-Reply-To: <26bebad3dca4191b35ddb2dae535b15de9a883c2.1426597114.git.yann.morin.1998@free.fr>
-References: <cover.1426597114.git.yann.morin.1998@free.fr>
- <26bebad3dca4191b35ddb2dae535b15de9a883c2.1426597114.git.yann.morin.1998@free.fr>
-Message-ID: <550B3991.8090509@mind.be>
+Date: Thu, 19 Mar 2015 22:11:18 +0100
+Subject: [Buildroot] Buildroot on OSX
+In-Reply-To: <CA+-urNQQ9gSwRtmkNq0FBTDqaBuc5bZSS3LQYgsNGB3aEa4sHw@mail.gmail.com>
+References: <CA+-urNQQ9gSwRtmkNq0FBTDqaBuc5bZSS3LQYgsNGB3aEa4sHw@mail.gmail.com>
+Message-ID: <550B3B76.6090504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/03/15 13:59, Yann E. MORIN wrote:
-> Currently, specifying a hash file for our download wrapper is mandatory.
+On 19/03/15 14:21, Frank Hunleth wrote:
+> Hi,
 > 
-> However, when we download a git, svn, bzr, hg or cvs tree, there's by
-> design no hash to check the download against.
-> 
-> Since we're going to have hash checking mandatory when a hash file
-> exists, this would break those downloads from a repository.
-> 
-> So, make specifying a hash file optional when calling our download
-> wrapper and bail out early from the check-hash script if no hash file is
-> specified.
+> I was just asked if it was possible to use Buildroot natively on a
+> Mac. I recommended that he just build in a Linux VM. However, after
+> playing around at command line and learning about Homebrew, it looked
+> like it may not be too far off especially since Buildroot builds so
+> much itself. Ignoring external toolchains which I would assume
+> wouldn't work, has anyone done this?
 
- An alternative approach would be to allow an empty hash in the hash file, e.g.
+ IIRC there have been some patches to improve the OSX support, but I don't think
+it's really been followed up so probably some scripts have bitrotted.
 
-# From git => no hash
-none xxx avrdude-eabe067c4527bc2eedc5db9288ef5cf1818ec720.tar.gz
+ Also bash is a hard dependency, but that shouldn't be an issue I suppose.
 
-
- This has the advantage that we don't have to revert this patch in the future
-when we _do_ make reproducible tarballs (which is not rocket science, the
-reproducible builds people in Debian and Fedora do it). Of course, we'll be
-stuck with a s*tload of hash files that have this empty hash...
 
  Regards,
  Arnout
+
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
