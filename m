@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 13:40:13 +0100
-Subject: [Buildroot] [git commit] gawk: bump to version 4.1.1
-Message-ID: <20150319124128.48CAA818A4@busybox.osuosl.org>
+Date: Thu, 19 Mar 2015 13:41:15 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 14, 19}.x series
+Message-ID: <20150319124128.533FB818A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb256466f67e5841010a753612d0a2e4db3e8279
+commit: http://git.buildroot.net/buildroot/commit/?id=66ce17c76cfe0526e5f3df62de467aa6cf4e583a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gawk/gawk.hash |    2 ++
- package/gawk/gawk.mk   |    5 ++++-
- 2 files changed, 6 insertions(+), 1 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-new file mode 100644
-index 0000000..72d3cdc
---- /dev/null
-+++ b/package/gawk/gawk.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	efd4c6aafb1ce996309fc903ceb625e7012221c464eb72483dbb23adef1ee8db	gawk-4.1.1.tar.xz
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index af486c4..bf136fa 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--GAWK_VERSION = 4.1.0
-+GAWK_VERSION = 4.1.1
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
- GAWK_LICENSE = GPLv3+
- GAWK_LICENSE_FILES = COPYING
-+# beta libtool version
-+GAWK_AUTORECONF = YES
-+GAWK_GETTEXTIZE = YES
- 
- # Prefer full-blown gawk over busybox awk
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e6764e0..2d32168 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -192,14 +192,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.68"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.106"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.71"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.72"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.38"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.35"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.36"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.9"	if BR2_KERNEL_HEADERS_3_18
+-	default "3.19.1"	if BR2_KERNEL_HEADERS_3_19
++	default "3.19.2"	if BR2_KERNEL_HEADERS_3_19
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
