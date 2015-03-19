@@ -1,84 +1,108 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Mar 2015 23:18:18 +0100
-Subject: [Buildroot] [PATCH v1] evtest: fix program_invocation_short_name
-	undeclared
-Message-ID: <1426803498-18890-1-git-send-email-ps.report@gmx.net>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 19 Mar 2015 23:27:22 +0100
+Subject: [Buildroot] Worried about patches not being merged?
+In-Reply-To: <20150319120923.65bda6ab@free-electrons.com>
+References: <20150304232101.437af48f@free-electrons.com>
+ <1426708866.1395.8.camel@embedded.rocks>
+ <CA+TH9VmRWPdidNHSLArTek4Pxxtw+viOy7_tMbMYturnq0-VaQ@mail.gmail.com>
+ <20150319101643.6a4eeed3@free-electrons.com>
+ <CA+TH9Vm9myq5YS_3+CsvT5-SZXcGyug3KDUO0Ai8f+daMf6BYg@mail.gmail.com>
+ <20150319112638.6e5fc986@free-electrons.com>
+ <CA+TH9VnnocY3CWhuiDOL6mZMSCZj+5GXTJpE5yna5pnGqKj8Lg@mail.gmail.com>
+ <20150319120923.65bda6ab@free-electrons.com>
+Message-ID: <CA+TH9V=wUa6Sh+uszjndiy-FaHsxzbVuvjAFcQWVxTg=qEeJTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add fallback in case program_invocation_short_name is undeclared,
-e.g. in case of some uclibc configurations.
+Dear Thomas,
 
-Fixes [1]:
-  evtest.c:730:20: error: 'program_invocation_short_name' undeclared (first use in this function)
-    printf("%s %s\n", program_invocation_short_name, PACKAGE_VERSION);
+2015-03-19 12:09 GMT+01:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Thu, 19 Mar 2015 11:45:02 +0100, Angelo Compagnucci wrote:
+>
+>> > It's written in Django, and the code base is small as I said, so should
+>> > be easy to get involved. And the maintainer is also very nice, so
+>> > contributing shouldn't be a problem. patchwork's maintainer is even
+>> > using Buildroot himself, and he has contributed a number of patches, so
+>> > the project is definitely not unknown to him.
+>>
+>> I'm already looking at the code!
+>
+> Cool!
 
-[1] http://autobuild.buildroot.net/results/0fd/0fd36a0d79c4d82aedebb5aca8d3ce4214b1ed61
+I have more or less done, I think in the WE I can push a patch to have
+tags attached to patches.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...-program_invocation_short_name-undeclared.patch | 50 ++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/evtest/0001-fix-program_invocation_short_name-undeclared.patch
+>> > This is definitely not the workflow we use today, and probably not the
+>> > one we would like to use.
+>>
+>> Yes, it is out of the box. But changing that workwflow is really easy.
+>> From my experiments, you can adapt it to buildroot workflow, in which
+>> a patch can be applied only after a severe review.
+>
+> Ah, really? Could you describe a bit the workflow / how it would work ?
 
-diff --git a/package/evtest/0001-fix-program_invocation_short_name-undeclared.patch b/package/evtest/0001-fix-program_invocation_short_name-undeclared.patch
-new file mode 100644
-index 0000000..17f0fb3
---- /dev/null
-+++ b/package/evtest/0001-fix-program_invocation_short_name-undeclared.patch
-@@ -0,0 +1,50 @@
-+From c124b50e13aaff46e7928d66b329644bf9b6dae7 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 19 Mar 2015 23:08:34 +0100
-+Subject: [PATCH] fix program_invocation_short_name undeclared
-+
-+Add fallback in case program_invocation_short_name is undeclared,
-+e.g. in case of some uclibc configurations.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac | 8 ++++++++
-+ evtest.c     | 5 +++++
-+ 2 files changed, 13 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8dabc81..c13b05e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -22,4 +22,12 @@ if test "x$XMLTO" = "x" || test "x$ASCIIDOC" = "x"; then
-+ 	AC_MSG_WARN([xmlto or asciidoc not found - cannot create man pages without it])
-+ fi
-+ 
-++AC_MSG_CHECKING([for program_invocation_short_name])
-++AC_TRY_COMPILE([#define _GNU_SOURCE
-++		#include <errno.h>], 
-++	[strlen(program_invocation_short_name)],
-++	AC_DEFINE(HAVE_PROGRAM_INVOCATION_SHORT_NAME, 1,
-++		[Defined if program_invocation_short_name is defined])
-++	AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
-++
-+ AC_OUTPUT([Makefile])
-+diff --git a/evtest.c b/evtest.c
-+index 40bc82b..d601889 100644
-+--- a/evtest.c
-++++ b/evtest.c
-+@@ -86,6 +86,11 @@
-+ 
-+ #define NAME_ELEMENT(element) [element] = #element
-+ 
-++/* fallback to canonical name */
-++#ifndef HAVE_PROGRAM_INVOCATION_SHORT_NAME
-++static char *program_invocation_short_name = "evtest";
-++#endif
-++
-+ enum evtest_mode {
-+ 	MODE_CAPTURE,
-+ 	MODE_QUERY,
-+-- 
-+2.1.4
-+
+I have to find more time to elaborate if that software could be bended
+to buildroot needs. I have only a superficially view right now. I
+promise to look better at it.
+
+>> Yes, I know, and that's unfortunate. Btw I think this is a ckicken egg
+>> problem, if user patches get reviewed after month, users lose interest
+>> and then tend to contribute less.
+>
+> Yes, I fully agree on this. And that's why I spending *all* my
+> Buildroot time on reviewing/merging patches from others.
+>
+>> Count on me and please delegate to me patches you think I can help
+>> review, I'm learning but I want to contribute more!
+>
+> When, just pick whatever patches in the queue you believe you are
+> competent to review / test / ack.
+>
+>> Yes, can understand and I think the problem is not with this patches,
+>> but the pile of new packages / medium level patches / newbie patches.
+>
+> Well, is there really such a huge pile of new packages / medium level
+> patches / newbie patches ? We tend to apply them fairly quickly, in
+> general.
+
+Yes, but I have the impression that patches tends to accumulate in a
+stack fashion, so the patches served are the last arrived. If a patch
+slips out of scope, it takes some time to get reviewed/committed. This
+is wouldn't be a critic to your great work nor the work of the other
+great reviewer/committers!
+
+> If there are so many "easy" patches, then please review / test / ack
+> them. Look at the A/R/T column at
+> http://patchwork.ozlabs.org/project/buildroot/list/. It indicates the
+> number of Acked-by, Reviewed-by and Tested-by tags. As you can see,
+> it's almost 0 0 0 for all patches. Which means nobody reviewed, tested
+> or acked the patches.
+>
+> Also, if you think one patch is ready, has been given some
+> Acked/Reviewed/Tested tags and still doesn't get applied, please ping
+> me on IRC with a link to this patch.
+
+
+Thank you all for the great work!
+
+Sincerely, Angelo.
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
 -- 
-2.1.4
+Profile: http://it.linkedin.com/in/compagnucciangelo
