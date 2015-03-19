@@ -1,42 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Mar 2015 01:27:37 +0100
-Subject: [Buildroot] Buildroot fails with: mkusers: user already exists
- with group 'nogroup'
-In-Reply-To: <1349450149.2228539.1426647141409.JavaMail.yahoo@mail.yahoo.com>
-References: <1349450149.2228539.1426647141409.JavaMail.yahoo@mail.yahoo.com>
-Message-ID: <550A17F9.9010801@mind.be>
+Date: Thu, 19 Mar 2015 01:41:49 +0100
+Subject: [Buildroot] [PATCH v2] wpa_supplicant: install systemd service
+ files
+In-Reply-To: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
+References: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
+Message-ID: <550A1B4D.7000108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/03/15 03:52, Chris Rodley wrote:
-> Buildroot fails with: mkusers: user already exists with group 'nogroup'
-> 
-> PATH="/home/user/buildroot/output/host/bin:/home/user/buildroot/output/host/sbin:/home/user/buildroot/output/host/usr/bin:/home/user/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games" /home/user/buildroot/support/scripts/mkusers /home/user/buildroot/output/build/_users_table.txt /home/user/buildroot/output/target >> /home/user/buildroot/output/build/_fakeroot.fs
-> mkusers: user already exists with group 'nogroup'
-> fs/tar/tar.mk:13: recipe for target '/home/user/buildroot/output/images/rootfs.tar' failed
-> make: *** [/home/user/buildroot/output/images/rootfs.tar] Error 1
+On 09/03/15 17:03, Mike Williams wrote:
+> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 
- Can you post your defconfig? Sounds like two competing USERS definitions with
-different group, but then it's surprising that the autobuilders didn't detect it...
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ As discussed on IRC, adding symlinks to actually start those services is not
+such a great idea because
+- you probably don't want all of them;
+- also other things are needed, like hostapd config and ifup wlan0;
+- you may have something to manage these services, like network-manager or networkd.
+
+ Could be good to add that in a comment though.
 
  Regards,
  Arnout
 
+> ---
+>  package/wpa_supplicant/wpa_supplicant.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> 
-> This happens after make clean and make.
-> Any ideas?
-> 
-> Cheers,
-> CJ
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 682cb4c..242bea5 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -164,4 +164,15 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>  	$(WPA_SUPPLICANT_INSTALL_DBUS)
+>  endef
+>  
+> +define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant at .service
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
+> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
+> +endef
+> +
+>  $(eval $(generic-package))
 > 
 
 
