@@ -1,66 +1,63 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 20 Mar 2015 00:22:45 +0100
-Subject: [Buildroot] [PATCH] package/gdb: fix build with glibc 2.20 (2)
-Message-ID: <1426807365-22372-1-git-send-email-romain.naour@openwide.fr>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 20 Mar 2015 02:30:39 +0300
+Subject: [Buildroot] [PATCH v1] postgresql: fix xtensa pthread linking
+	flags
+In-Reply-To: <trinity-59332ebf-eb06-4f81-92d0-32a69ebae436-1426807047264@3capp-gmx-bs38>
+References: <trinity-59332ebf-eb06-4f81-92d0-32a69ebae436-1426807047264@3capp-gmx-bs38>
+Message-ID: <CAMo8BfLmKCxzwfys4KUrDeA1X514XM=KDfNkcA8GCYWG2JAB4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport a second patch from gdb 7.8 for aarch64.
+On Fri, Mar 20, 2015 at 2:17 AM, Peter Seiderer <ps.report@gmx.net> wrote:
+> Hello Max,
+>
+> On Fri, Mar 20, 2015 at 01:50:22AM +0300, Max Filippov wrote:
+>> On Fri, Mar 20, 2015 at 12:42 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+>> > On Fri, Mar 20, 2015 at 12:29 AM, Peter Seiderer <ps.report@gmx.net> wrote:
+>> >> Caused by pthread flags autodetection failure while configure (from config.log):
+>> >> configure:12436: checking whether pthreads work with -pthread
+>> >> configure:12521: host/usr/bin/xtensa-linux-gcc -o conftest -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -fexcess-precision=standard -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals  -Os   -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE    conftest.c   -lssl -lcrypto -lz -lrt -lcrypt -ldl -lm  >&5
+>> >> conftest.c: In function 'main':
+>> >> conftest.c:140:27: warning: 'th' is used uninitialized in this function [-Wuninitialized]
+>> >>  pthread_t th; pthread_join(th, 0);
+>> >>                            ^
+>> >> host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so: warning: gethostbyname is obsolescent, use getnameinfo() instead.
+>> >> configure:12521: $? = 0
+>> >
+>> > But the test has actually succeeded according to the exit code.
+>> > Maybe we'd better fix configure?
+>>
+>> I see the issue comes from config/acx_pthread.m4:146
+>>     # Check both linking and compiling, because they might tolerate
+>> different options.
+>>     if test "`(eval $ac_link 2>&1 1>&5)`" = "" && test "`(eval
+>> $ac_compile 2>&1 1>&5)`" = ""; then
+>>
+>> where non-empty stdout + stderr output of the linker and compiler
+>> fail the test. And the linker gives the following warning during that test:
+>>
+>>     libcrypto.so: warning: gethostbyname is obsolescent, use
+>> getnameinfo() instead.' = ''
+>>
+>
+> Thanks for taking a look at it, you are rigth with your problem description (I
+> suspected the warning output too), any suggestions how to fix it?
+> Or file a bugreport upstream?
 
-Fixes:
-http://autobuild.buildroot.net/results/2fc/2fcf1a40a08baf881fdbccd070b1a1a6c89127e1/
+The attached patch fixes it for me, but I'm curious why it was
+done that way at all. Looking at postgres repository doesn't
+reveal much...
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...clude-asm-ptrace.h-in-aarch64-linux-nat.c.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch
-
-diff --git a/package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch b/package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch
-new file mode 100644
-index 0000000..ccca8cb
---- /dev/null
-+++ b/package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch
-@@ -0,0 +1,37 @@
-+From 9c45794265a9dc9aebfbdc520d378dfc8fb7b694 Mon Sep 17 00:00:00 2001
-+From: Ramana Radhakrishnan <ramana.radhakrishnan@arm.com>
-+Date: Thu, 22 May 2014 16:07:20 +0100
-+Subject: [PATCH] Include asm/ptrace.h in aarch64-linux-nat.c
-+
-+A recent change to glibc removed asm/ptrace.h from user.h for
-+AArch64. This meant that cross-native builds of gdb using trunk
-+glibc broke because aarch64-linux-nat.c because user_hwdebug_state
-+couldn't be found.
-+
-+Fixed by including asm/ptrace.h like other ports.
-+
-+2014-05-22  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
-+
-+       * aarch64-linux-nat.c (asm/ptrace.h): Include.
-+
-+[Romain: rebase on top of 7.7.1]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ gdb/aarch64-linux-nat.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gdb/aarch64-linux-nat.c b/gdb/aarch64-linux-nat.c
-+index 31c26c6..710aa9b 100644
-+--- a/gdb/aarch64-linux-nat.c
-++++ b/gdb/aarch64-linux-nat.c
-+@@ -33,6 +33,7 @@
-+ 
-+ #include <sys/ptrace.h>
-+ #include <sys/utsname.h>
-++#include <asm/ptrace.h>
-+ 
-+ #include "gregset.h"
-+ 
-+-- 
-+1.9.3
-+
 -- 
-1.9.3
+Thanks.
+-- Max
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-package-postgresql-fix-pthread-flags-detection.patch
+Type: text/x-patch
+Size: 2493 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150320/f3a76cd6/attachment.bin>
