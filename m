@@ -1,7 +1,9 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 20:48:03 -0700
-Subject: [Buildroot] [PATCH] package: add hwloc 1.10.1
-Message-ID: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
+Date: Wed, 18 Mar 2015 20:48:04 -0700
+Subject: [Buildroot] [PATCH] package: add powertop 2.7
+In-Reply-To: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
+References: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <1426736888-29437-2-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,67 +12,85 @@ To: buildroot@busybox.net
 
 Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 ---
- package/Config.in        |  1 +
- package/hwloc/Config.in  |  8 ++++++++
- package/hwloc/hwloc.hash |  2 ++
- package/hwloc/hwloc.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/hwloc/Config.in
- create mode 100644 package/hwloc/hwloc.hash
- create mode 100644 package/hwloc/hwloc.mk
+ package/Config.in                        |  1 +
+ package/powertop/Config.in               |  9 +++++++++
+ package/powertop/powertop-autotune.patch |  9 +++++++++
+ package/powertop/powertop.hash           |  2 ++
+ package/powertop/powertop.mk             | 14 ++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/powertop/Config.in
+ create mode 100644 package/powertop/powertop-autotune.patch
+ create mode 100644 package/powertop/powertop.hash
+ create mode 100644 package/powertop/powertop.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 96e373a..4ee489c 100644
+index 4ee489c..c938326 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -331,6 +331,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/hdparm/Config.in"
- endif
- 	source "package/hwdata/Config.in"
-+	source "package/hwloc/Config.in"
- 	source "package/i2c-tools/Config.in"
- 	source "package/input-event-daemon/Config.in"
- 	source "package/input-tools/Config.in"
-diff --git a/package/hwloc/Config.in b/package/hwloc/Config.in
+@@ -365,6 +365,7 @@ endif
+ 	source "package/pciutils/Config.in"
+ 	source "package/picocom/Config.in"
+ 	source "package/pifmrds/Config.in"
++	source "package/powertop/Config.in"
+ 	source "package/pps-tools/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+diff --git a/package/powertop/Config.in b/package/powertop/Config.in
 new file mode 100644
-index 0000000..069bc8b
+index 0000000..0e83c8f
 --- /dev/null
-+++ b/package/hwloc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HWLOC
-+	bool "hwloc"
-+	select BR2_PACKAGE_LIBPCIACCESS
-+	select BR2_PACKAGE_NUMACTL
++++ b/package/powertop/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_POWERTOP
++	bool "powertop"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_PCIUTILS
++	select BR2_PACKAGE_LIBNL
 +	help
-+	  Portable Hrdware Locality
++	  A tool to diagnose issues with power consumption and power management
 +
-+	  http://www.open-mpi.org/projects/hwloc/
-diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
++	  https://01.org/powertop/
+diff --git a/package/powertop/powertop-autotune.patch b/package/powertop/powertop-autotune.patch
 new file mode 100644
-index 0000000..8d25904
+index 0000000..23d6433
 --- /dev/null
-+++ b/package/hwloc/hwloc.hash
++++ b/package/powertop/powertop-autotune.patch
+@@ -0,0 +1,9 @@
++--- a/src/devices/devfreq.cpp
+++++ b/src/devices/devfreq.cpp
++@@ -247,6 +247,7 @@ void create_all_devfreq_devices(void)
++		fprintf(stderr, "Devfreq not enabled\n");
++		is_enabled = false;
++		closedir(dir);
+++		dir = NULL;
++		return;
++	}
+diff --git a/package/powertop/powertop.hash b/package/powertop/powertop.hash
+new file mode 100644
+index 0000000..b26ae80
+--- /dev/null
++++ b/package/powertop/powertop.hash
 @@ -0,0 +1,2 @@
-+# From http://www.open-mpi.org/software/hwloc/v1.10/downloads/hwloc-1.10.1.tar.bz2
-+sha1	76291124e4638b2fbd4deb4cc3cd680e153077b5	hwloc-1.10.1.tar.bz2
-diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
++# From https://01.org/sites/default/files/downloads/powertop/powertop-2.7.tar.gz
++sha256	8d4b1490e2baad4467c0ded3c423db4472dcbf7b2dd8f8f2a928f54047c678ca	powertop-2.7.tar.gz
+diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
 new file mode 100644
-index 0000000..ced3627
+index 0000000..337688a
 --- /dev/null
-+++ b/package/hwloc/hwloc.mk
++++ b/package/powertop/powertop.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# hwloc
++# powertop
 +#
 +################################################################################
 +
-+HWLOC_VERSION = 1.10.1
-+HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
-+HWLOC_SITE = http://www.open-mpi.org/software/hwloc/v1.10/downloads
-+HWLOC_DEPENDENCIES = libpciaccess numactl
-+HWLOC_LICENSE = BSD-3c
-+HWLOC_LICENSE_FILES = COPYING
++POWERTOP_VERSION = 2.7
++POWERTOP_SOURCE = powertop-$(POWERTOP_VERSION).tar.gz
++POWERTOP_SITE = https://01.org/sites/default/files/downloads/powertop/
++POWERTOP_DEPENDENCIES = pciutils ncurses libnl
++POWERTOP_LICENSE = GPLv2
++POWERTOP_LICENSE_FILES = COPYING
 +
 +$(eval $(autotools-package))
 -- 
