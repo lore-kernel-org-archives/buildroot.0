@@ -1,92 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 11:26:38 +0100
-Subject: [Buildroot] Worried about patches not being merged?
-In-Reply-To: <CA+TH9Vm9myq5YS_3+CsvT5-SZXcGyug3KDUO0Ai8f+daMf6BYg@mail.gmail.com>
-References: <20150304232101.437af48f@free-electrons.com>
- <1426708866.1395.8.camel@embedded.rocks>
- <CA+TH9VmRWPdidNHSLArTek4Pxxtw+viOy7_tMbMYturnq0-VaQ@mail.gmail.com>
- <20150319101643.6a4eeed3@free-electrons.com>
- <CA+TH9Vm9myq5YS_3+CsvT5-SZXcGyug3KDUO0Ai8f+daMf6BYg@mail.gmail.com>
-Message-ID: <20150319112638.6e5fc986@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 19 Mar 2015 12:30:12 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-03-18
+In-Reply-To: <550AA255.3060206@imgtec.com>
+References: <20150319073018.35B45100D3A@stock.ovh.net>
+ <550AA255.3060206@imgtec.com>
+Message-ID: <20150319103012.GC2415@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+Hi Vicente,
 
-On Thu, 19 Mar 2015 10:34:47 +0100, Angelo Compagnucci wrote:
-
-> > Patchwork is an open-source project, the code base is pretty small and
-> > easy, so feel free to contribute improvements!
+On Thu, Mar 19, 2015 at 11:17:57AM +0100, Vicente Olivert Riera wrote:
+> On 19/03/15 08:30, Thomas Petazzoni wrote:
+> > Build statistics for 2015-03-18
+> > ===============================
+> >       mipsel |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/901c2d922ea4d126bf6cb1f4e36324601e3a4664/
+> >     mips64el |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/4d795b723facfde23792e5e2a0c170902d89c621/
+> >     mips64el |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/a97d1bda93b5fa9ce975145b82a752c957c24cab/
+> >       mipsel |          lua-periphery-1.0.4-1 | NOK | http://autobuild.buildroot.net/results/f01e4aa07856db6b7bb63ca07eac1ed0987f3e7f/
 > 
-> Why not, I will try to take a look, I'm really acquainted to web
-> programming with various web frameworks.
-
-It's written in Django, and the code base is small as I said, so should
-be easy to get involved. And the maintainer is also very nice, so
-contributing shouldn't be a problem. patchwork's maintainer is even
-using Buildroot himself, and he has contributed a number of patches, so
-the project is definitely not unknown to him.
-
-> > What you could do however, since patchwork has the complete e-mails, is
-> > create a "Reply" button next to each patch in patchwork, that would
-> > open up the patch and format a reply to it so that you can review the
-> > patch.
+> The failure is actually in c-periphery. I have fixed it upstream...
 > 
-> Yes, this is exactly what I'm thinking. I'm making some experiments
-> with http://getbarkeep.org, it's email based and has really a nice
-> review system, get a look at the video. Patchworks should offer
-> something similar.
-
-I had a quick look at barkeep, but it seems that the workflow they have
-is completely different than the one we want and use in the Buildroot
-community. From
-https://github.com/ooyala/barkeep/wiki/Comparing-Barkeep-to-other-code-review-tools,
-it says:
-
-  Barkeep was built at Ooyala, where we usually prefer a post-commit
-  code review workflow for our products. This is where developers push
-  to master as soon as their code is ready (i.e. looks nice, tests are
-  written and pass) so other developers can begin integrating it. Code
-  review happens when it's convenient for the team (within 1-2 days),
-  and any comments are addressed in future commits.
-
-This is definitely not the workflow we use today, and probably not the
-one we would like to use.
-
-> > Also, often people complaining about e-mail and wanting to use
-> > web-based stuff instead is because their e-mail client or e-mail setup
-> > in general sucks. Do you have a good and efficient e-mail client? If
-> > you don't, then the issue might be here.
+> https://github.com/vsergeev/c-periphery/commit/0fdfac3264f1dce32991f4ec30d084e34b35181d
 > 
-> Gmail is a good email client, no problems here. But if our mail
-> clients are easy to use, why there are patches as old as February
-> 2014?
+> ...and since c-periphery is "git-cloned" into lua-periphery...
+> 
+> $ grep clone output/build/lua-periphery-1.0.4-1/lua-periphery/Makefile
+> 	git clone git://github.com/vsergeev/c-periphery --depth 1 --branch v1.0.1
+> 
+> ...then this problem is automatically fixed in Buildroot! :-)
 
-Because the problem is not tools, but time. We've got more and more
-patches contributing, but not enough people helping with
-reviewing/testing. So far, it's almost only Arnout, Yann, Peter, Baruch
-and me doing regularly code reviews. Vicente is also helping by testing
-patches. We need more people involved in the review process.
+That is nice for this bug fix, but IMO it is bad for reproducibility. That is, 
+lua-periphery build different source code every time this external repo 
+updates.
 
-Also, on a number of pending patches, the reason they get stuck is
-because they raise some questions/challenges that need to be discussed.
-Something like just new package or a package bump that does not do
-anything fancy is easy to review and merge. But something like the
-per-package sysroot directory from Fabio, or some other big series,
-require a lot more discussion / review because it's changing a lot of
-things.
+baruch
 
-But indeed, having a way to categorize patches in patchwork would be
-good. Maybe a simple tag system, so that we can associate random tags
-to patches, and classify using that.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
