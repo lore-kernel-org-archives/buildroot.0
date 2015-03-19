@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 16:58:44 +0100
-Subject: [Buildroot] [PATCH] configs: add defconfig for Freescale i.MX31
- PDK
-In-Reply-To: <550AED3F.4070606@freescale.com>
-References: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
- <550A0AF9.5050101@mind.be> <550AED3F.4070606@freescale.com>
-Message-ID: <20150319165844.63a1fe52@free-electrons.com>
+From: Steve Kenton <skenton@ou.edu>
+Date: Thu, 19 Mar 2015 11:24:36 -0500
+Subject: [Buildroot] [PATCH v1 1/1] dvdrw-tools: delete explicit default for
+	backend
+Message-ID: <1426782276-5069-1-git-send-email-skenton@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent Stehl?,
+Signed-off-by: Steve Kenton <skenton@ou.edu>
+---
+As suggested by Yann E. MORIN, just delete the default choice
+to simplify things
 
-On Thu, 19 Mar 2015 16:37:35 +0100, Vincent Stehl? wrote:
+ package/dvdrw-tools/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-> >> +BR2_KERNEL_HEADERS_3_2=y
-> >  That doesn't sound like a good idea when the kernel is 2.6.28...
-> 
-> Granted, this is not optimal. Those are the kernel headers
-> closest to 2.6.28, "easily" available in buildroot.
-> 
-> It is indeed possible to manually specify the 2.6.28 kernel
-> headers version, but this necessitates two patches to fix the
-> linux-headers "build".
->   Do you prefer this solution?
-
-It is not a preference at all: running userspace binaries and C
-libraries built with kernel headers more recent than the running is a
-very good recipe for disaster. Your userspace and C library will
-believe that certain system calls exist while it's not the case.
-
-Best regards,
-
-Thomas
+diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
+index 6787b66..47835d8 100644
+--- a/package/dvdrw-tools/Config.in
++++ b/package/dvdrw-tools/Config.in
+@@ -35,7 +35,6 @@ config BR2_PACKAGE_DVDRW_TOOLS
+ if BR2_PACKAGE_DVDRW_TOOLS
+ choice
+ 	prompt "Media Backend"
+-	default BR2_PACKAGE_DVDRW_CDRKIT_BACKEND
+ 	help
+ 	  Choose which media backend program to use.
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
