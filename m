@@ -1,11 +1,11 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Thu, 19 Mar 2015 12:58:28 -0700
-Subject: [Buildroot] [PATCH 08/15] openssh: move systemd service files
-	to /usr/lib
-In-Reply-To: <1426787807-29510-9-git-send-email-mike@mikebwilliams.com>
+Date: Thu, 19 Mar 2015 12:59:22 -0700
+Subject: [Buildroot] [PATCH 09/15] rsyslog: move systemd service file to
+	/usr/lib
+In-Reply-To: <1426787807-29510-10-git-send-email-mike@mikebwilliams.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-9-git-send-email-mike@mikebwilliams.com>
-Message-ID: <CAKbGBLgDdTe+jwE3ihq8U-T+0dVumJOWjs0WsUKL3tt7RE4pDw@mail.gmail.com>
+ <1426787807-29510-10-git-send-email-mike@mikebwilliams.com>
+Message-ID: <CAKbGBLj_gfG-RkPLm9zTb-SZ0Xu5rvML8MdnC_xhBtYqvvLCNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,26 @@ To: buildroot@busybox.net
 
 On Thu, Mar 19, 2015 at 10:56 AM, Mike Williams <mike@mikebwilliams.com> wrote:
 > Signed-off-by: Mike Williams <mike@mikebwilliams.com>
-
-Reviewed-by: Steven Noonan <steven@uplinklabs.net>
-
 > ---
->  package/openssh/openssh.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/rsyslog/rsyslog.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 08f3fa0..eccfad1 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -36,10 +36,10 @@ endif
->
->  define OPENSSH_INSTALL_INIT_SYSTEMD
->         $(INSTALL) -D -m 644 package/openssh/sshd.service \
-> -               $(TARGET_DIR)/etc/systemd/system/sshd.service
-> +               $(TARGET_DIR)/usr/lib/systemd/system/sshd.service
->         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> -       ln -fs ../sshd.service \
-> -               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshd.service
-> +       ln -fs /usr/lib/systemd/system/sshd.service \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/multi-user.target.wants/sshd.service
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index c6758eb..7bc6a67 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -65,7 +65,7 @@ define RSYSLOG_INSTALL_INIT_SYSV
 >  endef
 >
->  define OPENSSH_INSTALL_INIT_SYSV
+>  define RSYSLOG_INSTALL_INIT_SYSTEMD
+> -       ln -sf /lib/systemd/system/rsyslog.service \
+> +       ln -sf /usr/lib/systemd/system/rsyslog.service \
+>                 $(TARGET_DIR)/etc/systemd/system/syslog.service
+
+Nothing needs to change in rsyslog to make it install the unit to this location?
+
+>         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+>         ln -sf ../syslog.service \
 > --
 > 2.1.0
 >
