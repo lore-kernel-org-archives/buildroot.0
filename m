@@ -1,53 +1,39 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Thu, 19 Mar 2015 00:49:56 -0700
-Subject: [Buildroot] [PATCH v3] package/numactl: upgrade to 2.0.10
-Message-ID: <1426751396-5465-1-git-send-email-steven@uplinklabs.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Mar 2015 09:16:24 +0100
+Subject: [Buildroot] [git commit] package/luajit: introducing luajit
+ arch supports.
+In-Reply-To: <550A1040.9070503@mind.be>
+References: <20150317170322.4A9F981829@busybox.osuosl.org>
+ <550A1040.9070503@mind.be>
+Message-ID: <20150319091624.41079fe9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package now uses autotools, although it's missing a pregenerated configure
-script.
+Dear Arnout Vandecappelle,
 
-Signed-off-by: Steven Noonan <steven@uplinklabs.net>
----
+On Thu, 19 Mar 2015 00:54:40 +0100, Arnout Vandecappelle wrote:
 
-v2:
-  - Added comment about rationale for NUMACTL_AUTORECONF=YES
+> >  config BR2_PACKAGE_LUAJIT
+> >  	bool "luajit"
+> >  	select BR2_PACKAGE_HAS_LUAINTERPRETER
+> >  	# Luajit is only available for some target architectures, and
+> >  	# has some complexity wrt 32/64. See luajit.mk for details.
+> 
+>  Shouldn't the comment also have moved?
 
-v3:
-  - Adding comment in commit message about numactl's move to using autotools.
+Absolutely, good point.
 
- package/numactl/numactl.mk | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+>  Also, ljlinenoise and ljsyscall should probably use it.
 
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index f36a1b3..18da047 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -4,17 +4,12 @@
- #
- ################################################################################
- 
--NUMACTL_VERSION = 2.0.9
-+NUMACTL_VERSION = 2.0.10
- NUMACTL_SITE = ftp://oss.sgi.com/www/projects/libnuma/download
- NUMACTL_LICENSE = LGPLv2.1 (libnuma), GPLv2 (programs)
- NUMACTL_LICENSE_FILES = README
- 
--define NUMACTL_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
--endef
-+# numactl tarball doesn't contain a pregenerated configure script.
-+NUMACTL_AUTORECONF = YES
- 
--define NUMACTL_INSTALL_TARGET_CMDS
--	$(MAKE) prefix=$(TARGET_DIR) libdir=$(TARGET_DIR)/lib -C $(@D) install
--endef
--
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+There are patches already sent to do this, but since they were not
+changing to the same set of architectures, I did not apply them before
+having some more explanations.
+
+Thomas
 -- 
-2.3.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
