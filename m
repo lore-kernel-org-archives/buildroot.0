@@ -1,52 +1,93 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 19 Mar 2015 07:26:22 +0200
-Subject: [Buildroot] [PATCH] package/numactl: upgrade to 2.0.10
-In-Reply-To: <1426736888-29437-4-git-send-email-steven@uplinklabs.net>
-References: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
- <1426736888-29437-4-git-send-email-steven@uplinklabs.net>
-Message-ID: <20150319052622.GT2415@tarshish>
+From: Steven Noonan <steven@uplinklabs.net>
+Date: Wed, 18 Mar 2015 22:29:19 -0700
+Subject: [Buildroot] [PATCH v3] package: add hwloc 1.10.1
+Message-ID: <1426742959-1220-1-git-send-email-steven@uplinklabs.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Steven,
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+---
+v2
+  - Fixed description in Config.in.
+v3
+  - Fixed source URL for hwloc.hash entries.
+  - Copied dependencies from libpciaccess/numactl.
+ 
+ package/Config.in        |  1 +
+ package/hwloc/Config.in  | 18 ++++++++++++++++++
+ package/hwloc/hwloc.hash |  2 ++
+ package/hwloc/hwloc.mk   | 14 ++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/hwloc/Config.in
+ create mode 100644 package/hwloc/hwloc.hash
+ create mode 100644 package/hwloc/hwloc.mk
 
-On Wed, Mar 18, 2015 at 08:48:06PM -0700, Steven Noonan wrote:
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-
-This is a non trivial version bump. Please explain here that the package now 
-uses the autotools infrastructure.
-
-> ---
->  package/numactl/numactl.mk | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-> index f36a1b3..042f2d8 100644
-> --- a/package/numactl/numactl.mk
-> +++ b/package/numactl/numactl.mk
-> @@ -4,17 +4,11 @@
->  #
->  ################################################################################
->  
-> -NUMACTL_VERSION = 2.0.9
-> +NUMACTL_VERSION = 2.0.10
->  NUMACTL_SITE = ftp://oss.sgi.com/www/projects/libnuma/download
->  NUMACTL_LICENSE = LGPLv2.1 (libnuma), GPLv2 (programs)
->  NUMACTL_LICENSE_FILES = README
->  
-> -define NUMACTL_BUILD_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> -endef
-> +NUMACTL_AUTORECONF = YES
-
-Why? Please add inline comment clarifying that.
-
-baruch
-
+diff --git a/package/Config.in b/package/Config.in
+index 96e373a..4ee489c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -331,6 +331,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/hdparm/Config.in"
+ endif
+ 	source "package/hwdata/Config.in"
++	source "package/hwloc/Config.in"
+ 	source "package/i2c-tools/Config.in"
+ 	source "package/input-event-daemon/Config.in"
+ 	source "package/input-tools/Config.in"
+diff --git a/package/hwloc/Config.in b/package/hwloc/Config.in
+new file mode 100644
+index 0000000..332536b
+--- /dev/null
++++ b/package/hwloc/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_HWLOC
++	bool "hwloc"
++	# libpciaccess dependency
++	depends on BR2_LARGEFILE
++	# numactl dependency
++	depends on BR2_i386 || BR2_mips || BR2_mipsel || \
++	    BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_x86_64
++	select BR2_PACKAGE_LIBPCIACCESS
++	select BR2_PACKAGE_NUMACTL
++	help
++	  Portable Hardware Locality
++
++	  Provides a portable abstraction (across OS, versions, architectures, ...)
++	  of the hierarchical topology of modern architectures, including NUMA
++	  memory nodes, sockets, shared caches, cores and simultaneous
++	  multithreading.
++
++	  http://www.open-mpi.org/projects/hwloc/
+diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
+new file mode 100644
+index 0000000..53563dd
+--- /dev/null
++++ b/package/hwloc/hwloc.hash
+@@ -0,0 +1,2 @@
++# From http://www.open-mpi.org/software/hwloc/v1.10/
++sha1	76291124e4638b2fbd4deb4cc3cd680e153077b5	hwloc-1.10.1.tar.bz2
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+new file mode 100644
+index 0000000..ced3627
+--- /dev/null
++++ b/package/hwloc/hwloc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# hwloc
++#
++################################################################################
++
++HWLOC_VERSION = 1.10.1
++HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
++HWLOC_SITE = http://www.open-mpi.org/software/hwloc/v1.10/downloads
++HWLOC_DEPENDENCIES = libpciaccess numactl
++HWLOC_LICENSE = BSD-3c
++HWLOC_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.3.3
