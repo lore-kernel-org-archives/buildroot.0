@@ -1,38 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 09:20:42 +0100
-Subject: [Buildroot] Worried about patches not being merged?
-In-Reply-To: <1426708866.1395.8.camel@embedded.rocks>
-References: <20150304232101.437af48f@free-electrons.com>
- <1426708866.1395.8.camel@embedded.rocks>
-Message-ID: <20150319092042.2875d9e1@free-electrons.com>
+Date: Thu, 19 Mar 2015 09:27:41 +0100
+Subject: [Buildroot] [PATCH 1/5] Makefile: add media image generation
+In-Reply-To: <20150319000445.GD4578@free.fr>
+References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1426632719-4807-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <20150319000445.GD4578@free.fr>
+Message-ID: <20150319092741.31bddb93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg,
+Dear Yann E. MORIN,
 
-On Wed, 18 Mar 2015 21:01:06 +0100, J?rg Krause wrote:
+On Thu, 19 Mar 2015 01:04:45 +0100, Yann E. MORIN wrote:
 
-> Are there any guidelines for reviewing?
+> I've had a quick look at the examples you provide in later patches,
+> especially the RPi ones. You laways only have a single rootfs partition,
+> and there is no setup where you'd have (Rpi for example):
+> 
+>     /dev/mmcblk0p1  -->  fat       -->  -
+>     /dev/mmcblk0p2  -->  squashfs  -->  /
+>     /dev/mmcblk0p3  -->  ext4      -->  /usr/
 
-Not really. Just pick patches touching things you are a bit comfortable
-with, give them some testing, and do some comments if needed. On the
-other hand, if you think the patch is fine, simply reply with a
-Reviewed-by tag.
-
-Of course, reviewing simple package bumps or hash file additions is not
-very useful, since I tend to apply such patches quickly: there is not
-much potential trouble with such patches.
-
-> It's a pitty that GSoC did not accepted Buildroot this year. The
-> testing scripts would be a nice feature.
-
-Yes, it is a pitty, but hopefully someone will pick up the task and
-work on improving our QA tooling :)
-
-Best regards,
+Well, the examples are "defconfig" style examples, so in the spirit of
+Buildroot, they should implement the simplest case possible. It's then
+up to the user to further refine the configuration to adapt the
+filesystem layout to his needs.
 
 Thomas
 -- 
