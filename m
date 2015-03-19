@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 13:41:43 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14,
- 19}.x series
-In-Reply-To: <1426692984-27024-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426692984-27024-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150319134143.29623731@free-electrons.com>
+Date: Thu, 19 Mar 2015 13:41:55 +0100
+Subject: [Buildroot] [git commit] readline: add hash file
+Message-ID: <20150319124301.B5125818A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=1ebf39412bc75042032863f79e1a5263e3556f96
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Mar 2015 12:36:23 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/readline/readline.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Both patches applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/readline/readline.hash b/package/readline/readline.hash
+new file mode 100644
+index 0000000..d8833e9
+--- /dev/null
++++ b/package/readline/readline.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	56ba6071b9462f980c5a72ab0023893b65ba6debb4eeb475d7a563dc65cafd43	readline-6.3.tar.gz
