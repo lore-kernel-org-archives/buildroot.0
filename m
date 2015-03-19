@@ -1,80 +1,36 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Thu, 19 Mar 2015 13:56:38 -0400
-Subject: [Buildroot] [PATCH 06/15] avahi: systemd cleanups
+Date: Thu, 19 Mar 2015 13:56:39 -0400
+Subject: [Buildroot] [PATCH 07/15] irqbalance: move systemd service file to
+	/usr/lib
 In-Reply-To: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1426787807-29510-7-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1426787807-29510-8-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Move service files to /usr/lib/systemd/system/
-* Only disable systemd support on non-systemd systems
-
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/avahi/0002-disable-systemd-support.patch | 22 ----------------------
- package/avahi/avahi.mk                           |  8 ++++++--
- 2 files changed, 6 insertions(+), 24 deletions(-)
- delete mode 100644 package/avahi/0002-disable-systemd-support.patch
+ package/irqbalance/irqbalance.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/avahi/0002-disable-systemd-support.patch b/package/avahi/0002-disable-systemd-support.patch
-deleted file mode 100644
-index 909795a..0000000
---- a/package/avahi/0002-disable-systemd-support.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--[PATCH] avahi-daemon: disable systemd support
--
--Disable systemd support as it isn't needed for BR, and uses SOCK_CLOEXEC
--which isn't available on uClibc.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- avahi-daemon/sd-daemon.h |    1 +
-- 1 file changed, 1 insertion(+)
--
--Index: avahi-0.6.27/avahi-daemon/sd-daemon.h
--===================================================================
----- avahi-0.6.27.orig/avahi-daemon/sd-daemon.h
--+++ avahi-0.6.27/avahi-daemon/sd-daemon.h
--@@ -66,6 +66,7 @@ extern "C" {
-- 
--   See sd-daemon(7) for more information.
-- */
--+#define DISABLE_SYSTEMD /* no systemd support in BR */
-- 
-- #if __GNUC__ >= 4
-- #define _sd_printf_attr_(a,b) __attribute__ ((format (printf, a, b)))
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 10c9915..3f0cbe9 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -88,6 +88,10 @@ AVAHI_DEPENDENCIES = \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool \
- 	host-pkgconf host-gettext
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index e3ef0bb..536d0e0 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -26,9 +26,9 @@ endef
  
-+ifneq ($(BR2_PACKAGE_SYSTEMD),y)
-+AVAHI_EXTRA_CFLAGS += -DDISABLE_SYSTEMD
-+endif
-+
- ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
- AVAHI_DEPENDENCIES += libdaemon
- else
-@@ -185,10 +189,10 @@ ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
- define AVAHI_INSTALL_INIT_SYSTEMD
+ define IRQBALANCE_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/irqbalance/irqbalance.service \
+-		$(TARGET_DIR)/etc/systemd/system/irqbalance.service
++		$(TARGET_DIR)/usr/lib/systemd/system/irqbalance.service
  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../irqbalance.service \
++	ln -fs /usr/lib/systemd/system/irqbalance.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/irqbalance.service
+ endef
  
--	ln -fs /lib/systemd/system/avahi-daemon.service \
-+	ln -fs /usr/lib/systemd/system/avahi-daemon.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
- 
--	ln -fs /lib/systemd/system/avahi-dnsconfd.service \
-+	ln -fs /usr/lib/systemd/system/avahi-dnsconfd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-dnsconfd.service
- 
- 	$(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
 -- 
 2.1.0
