@@ -1,96 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 13:37:51 +0100
-Subject: [Buildroot] [git commit] trinity: fix building with uClibc
-Message-ID: <20150319123820.1A2888189E@busybox.osuosl.org>
+Date: Thu, 19 Mar 2015 13:37:30 +0100
+Subject: [Buildroot] [git commit] trinity: bump version to v1.5
+Message-ID: <20150319123820.117AB8189E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aabfbd6139e1c180aed2a49c34992b6a332aefd2
+commit: http://git.buildroot.net/buildroot/commit/?id=f0e9e311e8a6c8e8e0961a38a5dc46c1d213315d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-"#include <linux/serial.h>" is needed in order to build trinity
-successfully with uClibc. Otherwise it would fail displaying an error
-message like this one:
-
------------------------------------------
-ioctls/vt.c:152:8: error: invalid application of 'sizeof' to incomplete
-type 'struct serial_rs485'
-  IOCTL(TIOCGRS485),
-
-ioctls/vt.c:155:8: error: invalid application of 'sizeof' to incomplete
-type 'struct serial_rs485'
-  IOCTL(TIOCSRS485),
------------------------------------------
-
-Backporting an upstream patch to fix this problem.
-
-Upstream commit:
-
-  https://github.com/kernelslacker/trinity/commit/fb4a1adc4540f0702b84aa900f2b8ebed004885d
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ca1/ca18c7d19ac2870d6b973923c8225509a12f831a/
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ssing-include-to-fix-building-with-uClibc.patch |   47 ++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
+ package/trinity/trinity.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch b/package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch
-new file mode 100644
-index 0000000..e1d23cd
---- /dev/null
-+++ b/package/trinity/0001-vt.c-add-missing-include-to-fix-building-with-uClibc.patch
-@@ -0,0 +1,47 @@
-+vt.c: add missing include to fix building with uClibc
-+
-+Backporting an upstream patch to fix a building issue with uClibc.
-+
-+Upstream commit:
-+
-+  https://github.com/kernelslacker/trinity/commit/fb4a1adc4540f0702b84aa900f2b8ebed004885d
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From fb4a1adc4540f0702b84aa900f2b8ebed004885d Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Wed, 18 Mar 2015 09:58:46 +0000
-+Subject: [PATCH] vt.c: add missing include to fix building with uClibc
-+
-+"#include <linux/serial.h>" is needed in order to build trinity
-+successfully with uClibc. Otherwise it would fail displaying an error
-+message like this one:
-+
-+ioctls/vt.c:152:8: error: invalid application of 'sizeof' to incomplete
-+type 'struct serial_rs485'
-+  IOCTL(TIOCGRS485),
-+
-+ioctls/vt.c:155:8: error: invalid application of 'sizeof' to incomplete
-+type 'struct serial_rs485'
-+  IOCTL(TIOCSRS485),
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ ioctls/vt.c |    1 +
-+ 1 files changed, 1 insertions(+), 0 deletions(-)
-+
-+diff --git a/ioctls/vt.c b/ioctls/vt.c
-+index 5e7e7d7..a4a7e0c 100644
-+--- a/ioctls/vt.c
-++++ b/ioctls/vt.c
-+@@ -1,6 +1,7 @@
-+ #include <sys/vt.h>
-+ #include <sys/ioctl.h>
-+ #include <linux/kd.h>
-++#include <linux/serial.h>
-+ 
-+ #include "utils.h"
-+ #include "ioctls.h"
-+-- 
-+1.7.1
-+
+diff --git a/package/trinity/trinity.mk b/package/trinity/trinity.mk
+index 5f8a707..ecd82f8 100644
+--- a/package/trinity/trinity.mk
++++ b/package/trinity/trinity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRINITY_VERSION = c8c41f99500b5854c2061a08962b8908c872d852
++TRINITY_VERSION = v1.5
+ TRINITY_SITE = $(call github,kernelslacker,trinity,$(TRINITY_VERSION))
+ TRINITY_LICENSE = GPLv2
+ TRINITY_LICENSE_FILES = COPYING
