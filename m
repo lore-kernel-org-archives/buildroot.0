@@ -1,51 +1,46 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Thu, 19 Mar 2015 15:57:54 -0400
-Subject: [Buildroot] [PATCH] thttpd: add systemd service file
-Message-ID: <1426795074-9129-1-git-send-email-mike@mikebwilliams.com>
+From: Steven Noonan <steven@uplinklabs.net>
+Date: Thu, 19 Mar 2015 12:58:04 -0700
+Subject: [Buildroot] [PATCH 07/15] irqbalance: move systemd service file
+ to /usr/lib
+In-Reply-To: <1426787807-29510-8-git-send-email-mike@mikebwilliams.com>
+References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
+ <1426787807-29510-8-git-send-email-mike@mikebwilliams.com>
+Message-ID: <CAKbGBLiBNQ7Xarb1Q9S=uDi8wnV0BUquRk=g9AGPfLm-8sUgkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on Arch service file, adjust to point to /usr/sbin.
+On Thu, Mar 19, 2015 at 10:56 AM, Mike Williams <mike@mikebwilliams.com> wrote:
+> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 
-Signed-off-by: Mike Williams <mike@mikebwilliams.com>
----
- package/thttpd/thttpd.mk      |  5 +++++
- package/thttpd/thttpd.service | 10 ++++++++++
- 2 files changed, 15 insertions(+)
- create mode 100644 package/thttpd/thttpd.service
+Reviewed-by: Steven Noonan <steven@uplinklabs.net>
 
-diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
-index 1a028c8..565ade6 100644
---- a/package/thttpd/thttpd.mk
-+++ b/package/thttpd/thttpd.mk
-@@ -44,4 +44,9 @@ define THTTPD_INSTALL_INIT_SYSV
- 	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
- endef
- 
-+define THTTPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/thttpd/thttpd.service $(TARGET_DIR)/usr/lib/systemd/system/thttpd.service
-+	ln -fs /usr/lib/systemd/system/thttpd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/thttpd.service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/thttpd/thttpd.service b/package/thttpd/thttpd.service
-new file mode 100644
-index 0000000..e3c93e7
---- /dev/null
-+++ b/package/thttpd/thttpd.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Tiny HTTP Daemon
-+
-+[Service]
-+PIDFile=/run/thttpd.pid
-+ExecStart=/usr/sbin/thttpd -D -C /etc/thttpd.conf
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
--- 
-2.1.0
+> ---
+>  package/irqbalance/irqbalance.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+> index e3ef0bb..536d0e0 100644
+> --- a/package/irqbalance/irqbalance.mk
+> +++ b/package/irqbalance/irqbalance.mk
+> @@ -26,9 +26,9 @@ endef
+>
+>  define IRQBALANCE_INSTALL_INIT_SYSTEMD
+>         $(INSTALL) -D -m 644 package/irqbalance/irqbalance.service \
+> -               $(TARGET_DIR)/etc/systemd/system/irqbalance.service
+> +               $(TARGET_DIR)/usr/lib/systemd/system/irqbalance.service
+>         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> -       ln -fs ../irqbalance.service \
+> +       ln -fs /usr/lib/systemd/system/irqbalance.service \
+>                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/irqbalance.service
+>  endef
+>
+> --
+> 2.1.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
