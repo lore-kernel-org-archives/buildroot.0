@@ -1,29 +1,39 @@
 From: Steven Noonan <steven@uplinklabs.net>
-Date: Thu, 19 Mar 2015 12:50:54 -0700
-Subject: [Buildroot] RFC: systemd and service files cleanup
-In-Reply-To: <CANPyyuO9hfyObgWWPjh7m=oghSs=qWWvsG28q+P=7F8W4NQnYg@mail.gmail.com>
+Date: Thu, 19 Mar 2015 12:53:38 -0700
+Subject: [Buildroot] [PATCH 01/15] ntp: move systemd service file to
+	/usr/lib
+In-Reply-To: <1426787807-29510-2-git-send-email-mike@mikebwilliams.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <CAKbGBLj66AmB6kxrp1utLmZ+AhWN+-0aDERdD=4FtAi=UHT_ig@mail.gmail.com>
- <CANPyyuO9hfyObgWWPjh7m=oghSs=qWWvsG28q+P=7F8W4NQnYg@mail.gmail.com>
-Message-ID: <CAKbGBLhc8Wftu8pSVM8jNvRRpoSV=e0p5eomh4=+u8wg1VxVxA@mail.gmail.com>
+ <1426787807-29510-2-git-send-email-mike@mikebwilliams.com>
+Message-ID: <CAKbGBLjNgPitwXZR=DD=L1SCqNqzihEBYCyd=fJ4YqtmiWsCtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2015 at 12:43 PM, Mike Williams <mike@mikebwilliams.com> wrote:
->> I come from the Arch Linux world, so I made a new skeleton that
->> matches the Arch base filesystem layout: with /bin, /sbin, /usr/bin,
->> and /usr/sbin all unified (likewise with /lib and /usr/lib). I haven't
->> convinced myself to post the series because I can't think of a
->> particularly good justification for it in the Buildroot context.
->
-> I'm working that way myself, I don't know what use cases in Buildroot
-> still require the split.
+On Thu, Mar 19, 2015 at 10:56 AM, Mike Williams <mike@mikebwilliams.com> wrote:
+> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 
-We could consider offering it as an experimental alternative to the
-default skeleton (just add another "choice" in kconfig, as I did in my
-patch series). And open a discussion about unifying the directory
-structure. It's certainly possible to support both use cases, though
-it does require more testing.
+Reviewed-by: Steven Noonan <steven@uplinklabs.net>
+
+> ---
+>  package/ntp/ntp.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+> index 7d5644a..0e42f15 100644
+> --- a/package/ntp/ntp.mk
+> +++ b/package/ntp/ntp.mk
+> @@ -71,9 +71,9 @@ define NTP_INSTALL_INIT_SYSV
+>  endef
+>
+>  define NTP_INSTALL_INIT_SYSTEMD
+> -       $(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/etc/systemd/system/ntpd.service
+> +       $(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
+>         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> -       ln -fs ../ntpd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
+> +       ln -fs /usr/lib/systemd/system/ntpd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
+>  endef
+>  endif
+>
