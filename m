@@ -1,58 +1,25 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Mar 2015 01:41:49 +0100
-Subject: [Buildroot] [PATCH v2] wpa_supplicant: install systemd service
- files
-In-Reply-To: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
-References: <1425917011-16598-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <550A1B4D.7000108@mind.be>
+Date: Thu, 19 Mar 2015 01:41:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: new package
+In-Reply-To: <CANPyyuNfpSydrgvmLhXQ9qcpN6FWz3xn8zz-QhgHcyLWX8CkWw@mail.gmail.com>
+References: <1420465735-5573-1-git-send-email-jkrause@posteo.de>
+ <CANPyyuPNdvQm8rkTL79GEAR-SkO1_FhKm6=i2aBzLv1m=c6nZQ@mail.gmail.com>
+ <CANPyyuNfpSydrgvmLhXQ9qcpN6FWz3xn8zz-QhgHcyLWX8CkWw@mail.gmail.com>
+Message-ID: <550A1B51.8040409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/03/15 17:03, Mike Williams wrote:
-> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+On 18/03/15 16:03, Mike Williams wrote:
+> Any update on merging this? Just trying to reduce my patch set.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- As discussed on IRC, adding symlinks to actually start those services is not
-such a great idea because
-- you probably don't want all of them;
-- also other things are needed, like hostapd config and ifup wlan0;
-- you may have something to manage these services, like network-manager or networkd.
-
- Could be good to add that in a comment though.
+ Could you repost it with the bumped version, including your Tested-by and SoB?
+But make sure to keep the original author of course.
 
  Regards,
  Arnout
-
-> ---
->  package/wpa_supplicant/wpa_supplicant.mk | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index 682cb4c..242bea5 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -164,4 +164,15 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
->  	$(WPA_SUPPLICANT_INSTALL_DBUS)
->  endef
->  
-> +define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant at .service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant at .service
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-nl80211 at .service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
-> +	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
-> +endef
-> +
->  $(eval $(generic-package))
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
