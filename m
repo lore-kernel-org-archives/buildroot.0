@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 13:15:51 +0100
-Subject: [Buildroot] [PATCH v2] package/perf: build outside kernel tree
-In-Reply-To: <1426762651-7734-1-git-send-email-steven@uplinklabs.net>
-References: <1426762651-7734-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <20150319131551.320a7189@free-electrons.com>
+Date: Thu, 19 Mar 2015 13:23:09 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-03-18
+In-Reply-To: <550AB83E.5050400@imgtec.com>
+References: <20150319073018.35B45100D3A@stock.ovh.net>
+ <550AA255.3060206@imgtec.com> <20150319103012.GC2415@tarshish>
+ <550AB83E.5050400@imgtec.com>
+Message-ID: <20150319132309.285f72de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steven Noonan,
+Dear Vicente Olivert Riera,
 
-On Thu, 19 Mar 2015 03:57:31 -0700, Steven Noonan wrote:
-> This is necessary for introducing patches.
-> 
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+On Thu, 19 Mar 2015 12:51:26 +0100, Vicente Olivert Riera wrote:
 
-Can you describe a little bit more what is happening here, and why we
-are doing this?
+> Yes, I agree with that. Perhaps you could ask lua-periphery upstream and
+> tell them to not do that :P
 
-In some cases, the current dependency of the perf package on building a
-Linux kernel is a bit annoying: when I do kernel development, I tend to
-build my kernel outside of Buildroot. But I still would like to be able
-to use Buildroot to build tools like perf. So in some sense, what
-you're proposing here makes some sense.
+Well, you can create a c-periphery package, which lua-periphery depends
+on, and then pass the appropriate C_PERIPHERY / C_PERIPHERY_LIB values
+when building lua-periphery.
 
-But it is not very efficient to extract twice the entire kernel source
-code, and there is the issue of code duplication pointed out by Baruch.
+Maybe Fran?ois could have a look into this?
 
 Thanks,
 
