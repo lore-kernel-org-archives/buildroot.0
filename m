@@ -1,52 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 20 Mar 2015 00:17:27 +0100
-Subject: [Buildroot] [PATCH v1] postgresql: fix xtensa pthread linking
- flags
-Message-ID: <trinity-59332ebf-eb06-4f81-92d0-32a69ebae436-1426807047264@3capp-gmx-bs38>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 20 Mar 2015 00:21:51 +0100
+Subject: [Buildroot] [PATCH 4/7] package/perf: build outside kernel tree
+In-Reply-To: <1426714983-24803-4-git-send-email-steven@uplinklabs.net>
+References: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
+ <1426714983-24803-4-git-send-email-steven@uplinklabs.net>
+Message-ID: <550B5A0F.7080904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Max,
+On 18/03/15 22:43, Steven Noonan wrote:
+> This is necessary for introducing patches.
 
-On Fri, Mar 20, 2015 at 01:50:22AM +0300, Max Filippov wrote:
-> On Fri, Mar 20, 2015 at 12:42 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> > On Fri, Mar 20, 2015 at 12:29 AM, Peter Seiderer <ps.report@gmx.net> wrote:
-> >> Caused by pthread flags autodetection failure while configure (from config.log):
-> >> configure:12436: checking whether pthreads work with -pthread
-> >> configure:12521: host/usr/bin/xtensa-linux-gcc -o conftest -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -fexcess-precision=standard -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals  -Os   -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE    conftest.c   -lssl -lcrypto -lz -lrt -lcrypt -ldl -lm  >&5
-> >> conftest.c: In function 'main':
-> >> conftest.c:140:27: warning: 'th' is used uninitialized in this function [-Wuninitialized]
-> >>  pthread_t th; pthread_join(th, 0);
-> >>                            ^
-> >> host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so: warning: gethostbyname is obsolescent, use getnameinfo() instead.
-> >> configure:12521: $? = 0
-> >
-> > But the test has actually succeeded according to the exit code.
-> > Maybe we'd better fix configure?
-> 
-> I see the issue comes from config/acx_pthread.m4:146
->     # Check both linking and compiling, because they might tolerate
-> different options.
->     if test "`(eval $ac_link 2>&1 1>&5)`" = "" && test "`(eval
-> $ac_compile 2>&1 1>&5)`" = ""; then
-> 
-> where non-empty stdout + stderr output of the linker and compiler
-> fail the test. And the linker gives the following warning during that test:
-> 
->     libcrypto.so: warning: gethostbyname is obsolescent, use
-> getnameinfo() instead.' = ''
->
+ Although I think it's really messy to build perf within the the linux source
+like we do now, your proposed approach has some showstopper drawbacks.
 
-Thanks for taking a look at it, you are rigth with your problem description (I
-suspected the warning output too), any suggestions how to fix it?
-Or file a bugreport upstream?
+- It doesn't work for LINUX_OVERRIDE_SRCDIR or BR2_LINUX_KERNEL_CUSTOM_LOCAL.
 
-Regards,
-Peter
- 
-> -- 
-> Thanks.
-> -- Max
+- Any custom patches to the kernel are not taken into account, and I believe
+perf uses the private headers so there's a risk there.
+
+- It requires an expensive second extract of the entire kernel.
+
+
+ As an alternative, you could copy in just the perf stuff from the linux source
+as a POST_EXTRACT_HOOK.
+
+ Or you could apply the patches on the kernel sources instead of on the perf
+directory. But that would be a bit more complicated.
+
+ Or you could add a LINUX_POST_PATCH_HOOK to apply the perf patches. I'm not
+entirely sure if that would work though.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
