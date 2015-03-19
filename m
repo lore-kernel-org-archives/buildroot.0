@@ -1,114 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Mar 2015 11:34:40 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2a
-Message-ID: <1426775680-12864-1-git-send-email-gustavo@zacarias.com.ar>
+From: Steve Kenton <skenton@ou.edu>
+Date: Thu, 19 Mar 2015 10:29:32 -0500
+Subject: [Buildroot] [PATCH v3 1/1] tovid: new package
+In-Reply-To: <20150319091719.0dddb2e4@free-electrons.com>
+References: <1426691741-3961-1-git-send-email-skenton@ou.edu>	<20150318164628.3a84b974@free-electrons.com>	<5509A386.1030107@ou.edu>	<20150318174714.2e552220@free-electrons.com>	<5509B41D.8040300@ou.edu>
+ <20150319091719.0dddb2e4@free-electrons.com>
+Message-ID: <550AEB5C.4090606@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-0291 - ClientHello sigalgs DoS
-CVE-2015-0290 - Multiblock corrupted pointer
-CVE-2015-0207 - Segmentation fault in DTLSv1_listen
-CVE-2015-0286 - Segmentation fault in ASN1_TYPE_cmp
-CVE-2015-0208 - Segmentation fault for invalid PSS parameters
-CVE-2015-0287 - ASN.1 structure reuse memory corruption
-CVE-2015-0289 - PKCS7 NULL pointer dereferences
-CVE-2015-0293 - DoS via reachable assert in SSLv2 servers
-CVE-2015-1787 - Empty CKE with client auth and DHE
-CVE-2015-0285 - Handshake with unseeded PRNG
-CVE-2015-0209 - Use After Free following d2i_ECPrivatekey error
-CVE-2015-0288 - X509_to_X509_REQ NULL pointer deref
+On 03/19/2015 03:17 AM, Thomas Petazzoni wrote:
+> Dear Steve Kenton,
+> 
+> On Wed, 18 Mar 2015 12:21:33 -0500, Steve Kenton wrote:
+> 
+>>> Well, I think it's fine for now, the source URL can always be changed
+>>> later when the project moves elsewhere. There have been some changes
+>>> recently (today, yesterday, etc.) so the project seems to be maintained.
+>> Here's what the maintainer had to say in a post yesterday:
+>>
+>> "As well google code is shutting down, so I am in process of moving to a
+>> new repo. More news to follow re this."
+> 
+> Ok, good. So we can use Google Code for now, and we'll switch to the
+> new location once it becomes available.
+> 
+>>> BTW, I don't remember if I asked: why would you want to run something
+>>> such as tovid on an embedded system? What's the final use case?
+>> Rack mount video system, records and burns dvds on the fly.
+> 
+> Cool! Is this some public product? Or will it be public at some point?
+Well, since you asked .... http://bcdusa.com/bcd-dvd-1150/hdi-250
+Several pre-production units have gone out to users of previous generation equipment.
+This is our first GPL based product - it ships will full source to the buildroot
+based "BCD Linux Distribution" (which we refer to as bcdist) along with scripts to
+download and build from scratch too. The hardware can do 4K video and 24-bit 16
+channel audio so we have plans for a number of enhanced versions - later :-) I've
+been trying to push stuff back upstream so we don't have to carry many (any?) patches
+to the GPL components of the system.
 
-musl patched removed since it's no longer necessary.
+Steve
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/004-musl-termios.patch | 46 ----------------------------------
- package/openssl/openssl.hash           |  8 +++---
- package/openssl/openssl.mk             |  2 +-
- 3 files changed, 5 insertions(+), 51 deletions(-)
- delete mode 100644 package/openssl/004-musl-termios.patch
 
-diff --git a/package/openssl/004-musl-termios.patch b/package/openssl/004-musl-termios.patch
-deleted file mode 100644
-index 66631d1..0000000
---- a/package/openssl/004-musl-termios.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--http://rt.openssl.org/Ticket/Display.html?id=3123
--
--From:	 Kevin Bortis <pkgs@bortis.ch>
--
--The attached patch fixes issues with musl libc on linux. musl does
--implement the POSIX 2008 standard termios.h on linux and does not
--include the non standard interface termio.h.
--
--The problem with dlinfo does no longer exists, since musl has
--implemented the required interface.
--
--This closes #2823 for me.
--
--Tested version:
--musl libc: 0.9.13
--openssl git: 1769dfab06dcf93a1c310ca7ea9531afcc448d0a
--
--Comparison of termios.h implementation on linux:
--
--glibc 2.17: does implement termios.h, passes make test
--musl 0.9.13: does implement termios.h, passes make test
--uClibc 0.9.33.2: does implement termios.h, not tested
--dietlibc 0.33: does implement termios.h, not tested
--
--I don't know the reason why termio.h is prefered on linux, since
--termios.h is generally prefered and implemented by all major libc
--implementations.
--
--Regards
--Kevin
--
----- a/crypto/ui/ui_openssl.c	2013-09-08 11:00:10.130572803 +0200
--+++ b/crypto/ui/ui_openssl.c	2013-09-08 11:29:35.806580447 +0200
--@@ -190,9 +190,9 @@
-- # undef  SGTTY
-- #endif
-- 
---#if defined(linux) && !defined(TERMIO)
---# undef  TERMIOS
---# define TERMIO
--+#if defined(linux)
--+# define TERMIOS
--+# undef  TERMIO
-- # undef  SGTTY
-- #endif
-- 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index a8cb172..c9987fc 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssl.org/source/openssl-1.0.2.tar.gz.md5
--# From https://www.openssl.org/source/openssl-1.0.2.tar.gz.sha1
--md5 38373013fc85c790aabf8837969c5eba openssl-1.0.2.tar.gz
--sha1 2f264f7f6bb973af444cd9fc6ee65c8588f610cc openssl-1.0.2.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.md5
-+# From https://www.openssl.org/source/openssl-1.0.2a.tar.gz.sha1
-+md5	a06c547dac9044161a477211049f60ef	openssl-1.0.2a.tar.gz
-+sha1	46ecd325b8e587fa491f6bb02ad4a9fb9f382f5f	openssl-1.0.2a.tar.gz
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 48f287e..5ed59c0 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.2
-+OPENSSL_VERSION = 1.0.2a
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
--- 
-2.0.5
+>  
+> Best regards,
+> 
+> Thomas
+> 
