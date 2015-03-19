@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Mar 2015 09:17:19 +0100
-Subject: [Buildroot] [PATCH v3 1/1] tovid: new package
-In-Reply-To: <5509B41D.8040300@ou.edu>
-References: <1426691741-3961-1-git-send-email-skenton@ou.edu>
- <20150318164628.3a84b974@free-electrons.com>
- <5509A386.1030107@ou.edu>
- <20150318174714.2e552220@free-electrons.com>
- <5509B41D.8040300@ou.edu>
-Message-ID: <20150319091719.0dddb2e4@free-electrons.com>
+Date: Thu, 19 Mar 2015 09:20:42 +0100
+Subject: [Buildroot] Worried about patches not being merged?
+In-Reply-To: <1426708866.1395.8.camel@embedded.rocks>
+References: <20150304232101.437af48f@free-electrons.com>
+ <1426708866.1395.8.camel@embedded.rocks>
+Message-ID: <20150319092042.2875d9e1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Kenton,
+J?rg,
 
-On Wed, 18 Mar 2015 12:21:33 -0500, Steve Kenton wrote:
+On Wed, 18 Mar 2015 21:01:06 +0100, J?rg Krause wrote:
 
-> > Well, I think it's fine for now, the source URL can always be changed
-> > later when the project moves elsewhere. There have been some changes
-> > recently (today, yesterday, etc.) so the project seems to be maintained.
-> Here's what the maintainer had to say in a post yesterday:
-> 
-> "As well google code is shutting down, so I am in process of moving to a
-> new repo. More news to follow re this."
+> Are there any guidelines for reviewing?
 
-Ok, good. So we can use Google Code for now, and we'll switch to the
-new location once it becomes available.
+Not really. Just pick patches touching things you are a bit comfortable
+with, give them some testing, and do some comments if needed. On the
+other hand, if you think the patch is fine, simply reply with a
+Reviewed-by tag.
 
-> > BTW, I don't remember if I asked: why would you want to run something
-> > such as tovid on an embedded system? What's the final use case?
-> Rack mount video system, records and burns dvds on the fly.
+Of course, reviewing simple package bumps or hash file additions is not
+very useful, since I tend to apply such patches quickly: there is not
+much potential trouble with such patches.
 
-Cool! Is this some public product? Or will it be public at some point?
+> It's a pitty that GSoC did not accepted Buildroot this year. The
+> testing scripts would be a nice feature.
+
+Yes, it is a pitty, but hopefully someone will pick up the task and
+work on improving our QA tooling :)
 
 Best regards,
 
