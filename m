@@ -1,85 +1,64 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Wed, 18 Mar 2015 20:50:33 -0700
-Subject: [Buildroot] [PATCH v2] package: add hwloc 1.10.1
-Message-ID: <1426737033-31135-1-git-send-email-steven@uplinklabs.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 19 Mar 2015 07:21:49 +0200
+Subject: [Buildroot] [PATCH] package: add hwloc 1.10.1
+In-Reply-To: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
+References: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <20150319052149.GS2415@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Steven Noonan <steven@uplinklabs.net>
----
+HI Steven,
 
-v2: Fixing typo in Config.in description, adding more detail to it.
+On Wed, Mar 18, 2015 at 08:48:03PM -0700, Steven Noonan wrote:
+> diff --git a/package/hwloc/Config.in b/package/hwloc/Config.in
+> new file mode 100644
+> index 0000000..069bc8b
+> --- /dev/null
+> +++ b/package/hwloc/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HWLOC
+> +	bool "hwloc"
+> +	select BR2_PACKAGE_LIBPCIACCESS
+> +	select BR2_PACKAGE_NUMACTL
 
- package/Config.in        |  1 +
- package/hwloc/Config.in  | 13 +++++++++++++
- package/hwloc/hwloc.hash |  2 ++
- package/hwloc/hwloc.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/hwloc/Config.in
- create mode 100644 package/hwloc/hwloc.hash
- create mode 100644 package/hwloc/hwloc.mk
+Please propagate the dependencies of libpciaccess (largefile), and numactl 
+(largefile, arches).
 
-diff --git a/package/Config.in b/package/Config.in
-index 96e373a..4ee489c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -331,6 +331,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/hdparm/Config.in"
- endif
- 	source "package/hwdata/Config.in"
-+	source "package/hwloc/Config.in"
- 	source "package/i2c-tools/Config.in"
- 	source "package/input-event-daemon/Config.in"
- 	source "package/input-tools/Config.in"
-diff --git a/package/hwloc/Config.in b/package/hwloc/Config.in
-new file mode 100644
-index 0000000..9923911
---- /dev/null
-+++ b/package/hwloc/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_HWLOC
-+	bool "hwloc"
-+	select BR2_PACKAGE_LIBPCIACCESS
-+	select BR2_PACKAGE_NUMACTL
-+	help
-+	  Portable Hardware Locality
-+
-+	  Provides a portable abstraction (across OS, versions, architectures, ...)
-+	  of the hierarchical topology of modern architectures, including NUMA
-+	  memory nodes, sockets, shared caches, cores and simultaneous
-+	  multithreading.
-+
-+	  http://www.open-mpi.org/projects/hwloc/
-diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
-new file mode 100644
-index 0000000..8d25904
---- /dev/null
-+++ b/package/hwloc/hwloc.hash
-@@ -0,0 +1,2 @@
-+# From http://www.open-mpi.org/software/hwloc/v1.10/downloads/hwloc-1.10.1.tar.bz2
-+sha1	76291124e4638b2fbd4deb4cc3cd680e153077b5	hwloc-1.10.1.tar.bz2
-diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
-new file mode 100644
-index 0000000..ced3627
---- /dev/null
-+++ b/package/hwloc/hwloc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# hwloc
-+#
-+################################################################################
-+
-+HWLOC_VERSION = 1.10.1
-+HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
-+HWLOC_SITE = http://www.open-mpi.org/software/hwloc/v1.10/downloads
-+HWLOC_DEPENDENCIES = libpciaccess numactl
-+HWLOC_LICENSE = BSD-3c
-+HWLOC_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+> +	help
+> +	  Portable Hrdware Locality
+
+Typo: "Hardware". Also, this description is not very helpful. Please add 
+something like (from the website):
+
+	The Portable Hardware Locality (hwloc) software package provides a 
+	portable abstraction (across OS, versions, architectures, ...) of the 
+	hierarchical topology of modern architectures, including NUMA memory 
+	nodes, sockets, shared caches, cores and simultaneous multithreading.
+
+baruch
+
+> +
+> +	  http://www.open-mpi.org/projects/hwloc/
+> diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
+> new file mode 100644
+> index 0000000..8d25904
+> --- /dev/null
+> +++ b/package/hwloc/hwloc.hash
+> @@ -0,0 +1,2 @@
+> +# From http://www.open-mpi.org/software/hwloc/v1.10/downloads/hwloc-1.10.1.tar.bz2
+
+This line should contain the origin of the hash value below, so that the user 
+can verify the hash independently. If upstream does not provide that, just say 
+"Locally computed".
+
+> +sha1	76291124e4638b2fbd4deb4cc3cd680e153077b5	hwloc-1.10.1.tar.bz2
+
+baruch
+
 -- 
-2.3.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
