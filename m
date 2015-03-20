@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 21:47:39 +0100
-Subject: [Buildroot] [PATCH] package/mcelog: bump version to v111
-In-Reply-To: <1426633504-3190-1-git-send-email-romain.naour@openwide.fr>
-References: <1426633504-3190-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150320214739.2eca9706@free-electrons.com>
+Date: Fri, 20 Mar 2015 21:50:22 +0100
+Subject: [Buildroot] [PATCH] glibc: disable eglibc 2.18 for sparc
+In-Reply-To: <1426630860-2813-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1426630860-2813-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150320215022.7df3b2f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Gustavo Zacarias,
 
-On Wed, 18 Mar 2015 00:05:04 +0100, Romain Naour wrote:
-> Since v110, mcelog detect Atom's cpuids.
+On Tue, 17 Mar 2015 19:21:00 -0300, Gustavo Zacarias wrote:
+> It's broken as well, wants to emit v9 asm.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/mcelog/mcelog.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/glibc/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied, thanks.
+Applied, but shouldn't we simply deprecated eglibc ? The latest eglibc
+release was 2.19, and glibc has already made two releases (2.20 and
+2.21) since then.
 
 Thomas
 -- 
