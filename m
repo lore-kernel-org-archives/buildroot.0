@@ -1,26 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 21:47:30 +0100
-Subject: [Buildroot] [PATCH] jhead: bump to version 3.00
-In-Reply-To: <1426687584-21163-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426687584-21163-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150320214730.5fa221b5@free-electrons.com>
+Date: Fri, 20 Mar 2015 21:47:39 +0100
+Subject: [Buildroot] [PATCH] package/mcelog: bump version to v111
+In-Reply-To: <1426633504-3190-1-git-send-email-romain.naour@openwide.fr>
+References: <1426633504-3190-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150320214739.2eca9706@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Romain Naour,
 
-On Wed, 18 Mar 2015 11:06:24 -0300, Gustavo Zacarias wrote:
-> Also add hash file.
+On Wed, 18 Mar 2015 00:05:04 +0100, Romain Naour wrote:
+> Since v110, mcelog detect Atom's cpuids.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/jhead/jhead.hash | 2 ++
->  package/jhead/jhead.mk   | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 package/jhead/jhead.hash
+>  package/mcelog/mcelog.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
