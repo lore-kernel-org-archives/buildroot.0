@@ -1,43 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:35:37 +0100
-Subject: [Buildroot] RFC: systemd and service files cleanup
-In-Reply-To: <CANPyyuPobYDV9qWG5u0OzrVy9WtCy0KmfrQUBCHPvqqJEa4kMg@mail.gmail.com>
-References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <20150320142055.5ba1af4c@free-electrons.com>
- <CANPyyuPobYDV9qWG5u0OzrVy9WtCy0KmfrQUBCHPvqqJEa4kMg@mail.gmail.com>
-Message-ID: <20150320143537.33c68032@free-electrons.com>
+From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
+Date: Fri, 20 Mar 2015 15:53:14 +0100
+Subject: [Buildroot] [PATCH] configs: add defconfig for Freescale i.MX31
+ PDK
+In-Reply-To: <550B3F16.60600@mind.be>
+References: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
+ <550A0AF9.5050101@mind.be> <550AED3F.4070606@freescale.com>
+ <550B3F16.60600@mind.be>
+Message-ID: <550C345A.9070307@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+On 03/19/2015 10:26 PM, Arnout Vandecappelle wrote:
+..
+> It doesn't look like it's using DT, but there's a mach-mx31_3ds.c that uses the
+> old platform approach. Of course your bootloader has to set the correct machine
+> ID (1151) in that case.
 
-On Fri, 20 Mar 2015 09:27:51 -0400, Mike Williams wrote:
+Hi Arnout,
 
-> > Is there any strong reason for switching to absolute symbolic links?
-> 
-> No, they were just relative to the files that used to be in /etc and I
-> used absolute because it was easier for me to not screw them up when
-> changing them :). How about you or one of the other buildroot core
-> team tell me how you want it done, and I'll re-roll the patch series.
+Thanks for pointing that out; it helped a lot.
 
-Ok, then I believe staying with relative symlinks is probably the
-safest option, since that's generally what we're doing in the rest of
-Buildroot.
+After some experiments, it seems that sadly, mainline kernel will
+not boot anymore on i.MX31 PDK, starting with v3.16 and up to
+current v4.0-rc4.
 
-> Will do. I think after the next series of this patch, and a couple new
-> spins of other patches, we should be able to send you a large list of
-> patches to commit.
+Now for the good news: I have a working buildroot defconfig based
+on mainline kernel v3.15.10, with zero patch.
+  I will post a patch v4 right away; could you please maybe
+forget about the patch v3 I posted, and look at this v4 instead?
 
-Ok, good. If some of the patches need a bit of rework, don't hesitate
-to pick them up and resend an updated version as needed.
+Thank you for your help all along!
 
-Thanks a lot!
+Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+V.
