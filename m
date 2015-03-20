@@ -1,10 +1,10 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri, 20 Mar 2015 15:13:57 -0400
-Subject: [Buildroot] [PATCH v2 06/25] dbus: move systemd service files to
-	/usr/lib
+Date: Fri, 20 Mar 2015 15:13:58 -0400
+Subject: [Buildroot] [PATCH v2 07/25] irqbalance: move systemd service file
+	to /usr/lib
 In-Reply-To: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
 References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1426878856-15747-7-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1426878856-15747-8-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/dbus/dbus.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/irqbalance/irqbalance.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 200084f..c810800 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -54,7 +54,7 @@ endif
- ifeq ($(BR2_INIT_SYSTEMD),y)
- DBUS_CONF_OPTS += \
- 	--enable-systemd \
--	--with-systemdsystemunitdir=/lib/systemd/system
-+	--with-systemdsystemunitdir=/usr/lib/systemd/system
- DBUS_DEPENDENCIES += systemd
- else
- DBUS_CONF_OPTS += --disable-systemd
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index e3ef0bb..4e6b181 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -26,9 +26,9 @@ endef
+ 
+ define IRQBALANCE_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/irqbalance/irqbalance.service \
+-		$(TARGET_DIR)/etc/systemd/system/irqbalance.service
++		$(TARGET_DIR)/usr/lib/systemd/system/irqbalance.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../irqbalance.service \
++	ln -fs ../../../../usr/lib/systemd/system/irqbalance.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/irqbalance.service
+ endef
+ 
 -- 
 2.1.0
