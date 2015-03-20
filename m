@@ -1,87 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:05:51 +0100
-Subject: [Buildroot] [git commit] package/gcc: fix ICE building QT5 on xtensa
-Message-ID: <20150320130606.7AF4F818B0@busybox.osuosl.org>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Fri, 20 Mar 2015 09:06:14 -0400
+Subject: [Buildroot] [PATCH] package/haveged: add systemd units
+In-Reply-To: <1426798923-13980-1-git-send-email-steven@uplinklabs.net>
+References: <1426798923-13980-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <CANPyyuO-L5V_XJCxfm0XbmCoQE00EnDFV4c4-TG5CfXmWZ2d+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=395141d0dbf05c1e7d4682c1a30a91a9307ed5fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Reviewed-by: Mike Williams <mike@mikebwilliams.com>
 
-Add fix for GCC PR 64896 from the gcc-4_9-branch of gcc.
-This fixes bugzilla bug 7961.
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/4.9.2/110-pr64896.patch |   59 +++++++++++++++++++++++++++++++++++
- 1 files changed, 59 insertions(+), 0 deletions(-)
-
-diff --git a/package/gcc/4.9.2/110-pr64896.patch b/package/gcc/4.9.2/110-pr64896.patch
-new file mode 100644
-index 0000000..92b6cb8
---- /dev/null
-+++ b/package/gcc/4.9.2/110-pr64896.patch
-@@ -0,0 +1,59 @@
-+From fc39d7d6f0ac90086814306a43de38ad65c13f13 Mon Sep 17 00:00:00 2001
-+From: yroux <yroux@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 10 Mar 2015 19:20:30 +0000
-+Subject: [PATCH] gcc/ 2015-03-10  Yvan Roux  <yvan.roux@linaro.org>
-+
-+	Backport from trunk r220489.
-+	2015-02-06  Jakub Jelinek  <jakub@redhat.com>
-+
-+	PR ipa/64896
-+	* cgraphunit.c (cgraph_node::expand_thunk): If
-+	restype is not is_gimple_reg_type nor the thunk_fndecl
-+	returns aggregate_value_p, set restmp to a temporary variable
-+	instead of resdecl.
-+
-+gcc/testsuite/
-+2015-03-10  Yvan Roux  <yvan.roux@linaro.org>
-+
-+	Backport from trunk r220489.
-+	2015-02-06  Jakub Jelinek  <jakub@redhat.com>
-+
-+	PR ipa/64896
-+	* g++.dg/ipa/pr64896.C: New test.
-+
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch at 221333 138bc75d-0d04-0410-961f-82ee72b054a4
-+---
-+ gcc/ChangeLog                      | 11 +++++++++++
-+ gcc/cgraphunit.c                   | 11 ++++++++---
-+ gcc/testsuite/ChangeLog            |  8 ++++++++
-+ gcc/testsuite/g++.dg/ipa/pr64896.C | 29 +++++++++++++++++++++++++++++
-+ 4 files changed, 56 insertions(+), 3 deletions(-)
-+ create mode 100644 gcc/testsuite/g++.dg/ipa/pr64896.C
-+
-+diff --git a/gcc/cgraphunit.c b/gcc/cgraphunit.c
-+index 8f57607..130fc0d 100644
-+--- a/gcc/cgraphunit.c
-++++ b/gcc/cgraphunit.c
-+@@ -1572,9 +1572,14 @@ expand_thunk (struct cgraph_node *node, bool output_asm_thunks)
-+ 	    restmp = gimple_fold_indirect_ref (resdecl);
-+ 	  else if (!is_gimple_reg_type (restype))
-+ 	    {
-+-	      restmp = resdecl;
-+-	      add_local_decl (cfun, restmp);
-+-	      BLOCK_VARS (DECL_INITIAL (current_function_decl)) = restmp;
-++	      if (aggregate_value_p (resdecl, TREE_TYPE (thunk_fndecl)))
-++		{
-++		  restmp = resdecl;
-++		  add_local_decl (cfun, restmp);
-++		  BLOCK_VARS (DECL_INITIAL (current_function_decl)) = restmp;
-++		}
-++	      else
-++		restmp = create_tmp_var (restype, "retval");
-+ 	    }
-+ 	  else
-+ 	    restmp = create_tmp_reg (restype, "retval");
-+-- 
-+1.8.1.4
-+
+On Thu, Mar 19, 2015 at 5:02 PM, Steven Noonan <steven@uplinklabs.net> wrote:
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+> ---
+>  package/haveged/haveged.mk      |  8 ++++++++
+>  package/haveged/haveged.service | 10 ++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/haveged/haveged.service
+>
+> diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+> index 88d85cd..c68f766 100644
+> --- a/package/haveged/haveged.mk
+> +++ b/package/haveged/haveged.mk
+> @@ -14,4 +14,12 @@ define HAVEGED_INSTALL_INIT_SYSV
+>                 $(TARGET_DIR)/etc/init.d/S21haveged
+>  endef
+>
+> +define HAVEGED_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -D -m 644 package/haveged/haveged.service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/haveged.service
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +       ln -fs /usr/lib/systemd/system/haveged.service \
+> +               $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/haveged.service
+> +endef
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
+> new file mode 100644
+> index 0000000..d87fe5b
+> --- /dev/null
+> +++ b/package/haveged/haveged.service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=Entropy Harvesting Daemon
+> +Documentation=man:haveged(8)
+> +
+> +[Service]
+> +ExecStart=/usr/bin/haveged -F -w 1024 -v 1
+> +SuccessExitStatus=143
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> --
+> 2.3.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
