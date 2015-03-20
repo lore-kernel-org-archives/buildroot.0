@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 20:38:52 +0100
-Subject: [Buildroot] [PATCH v2 09/25] rsyslog: fix systemd service
- installation
-In-Reply-To: <1426878856-15747-10-git-send-email-mike@mikebwilliams.com>
+Date: Fri, 20 Mar 2015 20:41:50 +0100
+Subject: [Buildroot] [PATCH v2 23/25] avahi: systemd cleanups
+In-Reply-To: <1426878856-15747-24-git-send-email-mike@mikebwilliams.com>
 References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
- <1426878856-15747-10-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20150320203852.5f23a9ff@free-electrons.com>
+ <1426878856-15747-24-git-send-email-mike@mikebwilliams.com>
+Message-ID: <20150320204150.4169961f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,20 @@ To: buildroot@busybox.net
 
 Dear Mike Williams,
 
-On Fri, 20 Mar 2015 15:14:00 -0400, Mike Williams wrote:
+On Fri, 20 Mar 2015 15:14:14 -0400, Mike Williams wrote:
 
->  define RSYSLOG_INSTALL_INIT_SYSTEMD
-> -	ln -sf /lib/systemd/system/rsyslog.service \
-> +	ln -fs ../../../usr/lib/systemd/system/rsyslog.service \
->  		$(TARGET_DIR)/etc/systemd/system/syslog.service
+> +ifneq ($(BR2_PACKAGE_SYSTEMD),y)
+> +AVAHI_CFLAGS += -DDISABLE_SYSTEMD
+> +endif
 
-Are you sure?
+Seriously, do you test the patches you send? I really value the
+contributions you're making around systemd support: it's great to have
+someone finally picking up this topic and doing some
+cleanup/refactoring. But please, test your patches at least minimally.
 
-Isn't the syslog.service -> rsyslog.service symbolic link meant to have
-kind of a "compatibility" service name? If so, shouldn't this symlink
-be in /usr/lib/systemd/system/ instead ?
+The <pkg>_CFLAGS variable does not exist and has no effect.
+
+Best regards,
 
 Thomas
 -- 
