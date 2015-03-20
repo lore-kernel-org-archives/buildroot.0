@@ -1,48 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 20:54:10 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXfont: security
-	version bump to 1.5.1
-Message-ID: <20150320195415.4A93D7FEDC@busybox.osuosl.org>
+Date: Fri, 20 Mar 2015 20:53:12 +0100
+Subject: [Buildroot] [git commit] m4: add hash file
+Message-ID: <20150320195415.3FD4D7FEDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ac646450123530a78081b1b81da14053ac9d30d
+commit: http://git.buildroot.net/buildroot/commit/?id=5b68ea35a645e8188198dbc43e20aa3f9bcd06e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2015-1802, CVE-2015-1803, CVE-2015-1804
-http://lists.x.org/archives/xorg-announce/2015-March/002551.html
-http://lists.x.org/archives/xorg-announce/2015-March/002550.html
-
-Also add hash file.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.hash |    2 ++
- package/x11r7/xlib_libXfont/xlib_libXfont.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/m4/m4.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.hash b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
+diff --git a/package/m4/m4.hash b/package/m4/m4.hash
 new file mode 100644
-index 0000000..9543637
+index 0000000..38214dc
 --- /dev/null
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.hash
++++ b/package/m4/m4.hash
 @@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-March/002551.html
-+sha256	b70898527c73f9758f551bbab612af611b8a0962202829568d94f3edf4d86098	libXfont-1.5.1.tar.bz2
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 7686550..5b6de1f 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXFONT_VERSION = 1.5.0
-+XLIB_LIBXFONT_VERSION = 1.5.1
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
++# Locally calculated after checking pgp signature
++sha256	f0543c3beb51fa6b3337d8025331591e0e18d8ec2886ed391f1aade43477d508	m4-1.4.17.tar.xz
