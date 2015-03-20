@@ -1,39 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:22:19 +0100
-Subject: [Buildroot] [git commit] postgresql: disable spinlock support for
-	arcle/arcbe
-Message-ID: <20150320132231.D4E09818AB@busybox.osuosl.org>
+Date: Fri, 20 Mar 2015 14:11:39 +0100
+Subject: [Buildroot] [git commit] package/haveged: add systemd units
+Message-ID: <20150320132231.CB1F8818AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b1d20221e820a20faafa00bbcf0a79761e0f5aa3
+commit: http://git.buildroot.net/buildroot/commit/?id=99d30f1fafcfe0a146151fbc5d25b57551ee3a4f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  http://autobuild.buildroot.net/results/9b2/9b20513253fa68a3eb5588464a206092bb45e82d
-  http://autobuild.buildroot.net/results/8ea/8ea59872bd68d302a11681426a47c70d9aa1475f
-  http://autobuild.buildroot.net/results/4a1/4a1cf5721af631e15e076a5bcdd8676839c2a98d
-  http://autobuild.buildroot.net/results/050/050a799f2e9e864e02cf75b2a5697ece215ab0a2
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+Reviewed-by: Mike Williams <mike@mikebwilliams.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/postgresql.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/haveged/haveged.mk      |    8 ++++++++
+ package/haveged/haveged.service |   10 ++++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 7dc3f0b..7bb1678 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -31,7 +31,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index 88d85cd..c68f766 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -14,4 +14,12 @@ define HAVEGED_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S21haveged
+ endef
  
--ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
-+ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2)$(BR2_xtensa),y)
- 	POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
++define HAVEGED_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/haveged/haveged.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/haveged.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs /usr/lib/systemd/system/haveged.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/haveged.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
+new file mode 100644
+index 0000000..d87fe5b
+--- /dev/null
++++ b/package/haveged/haveged.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Entropy Harvesting Daemon
++Documentation=man:haveged(8)
++
++[Service]
++ExecStart=/usr/bin/haveged -F -w 1024 -v 1
++SuccessExitStatus=143
++
++[Install]
++WantedBy=multi-user.target
