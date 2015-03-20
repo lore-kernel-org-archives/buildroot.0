@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 20:41:50 +0100
-Subject: [Buildroot] [PATCH v2 23/25] avahi: systemd cleanups
-In-Reply-To: <1426878856-15747-24-git-send-email-mike@mikebwilliams.com>
-References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
- <1426878856-15747-24-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20150320204150.4169961f@free-electrons.com>
+Date: Fri, 20 Mar 2015 20:36:57 +0100
+Subject: [Buildroot] [git commit] dbus: move systemd service files to
+	/usr/lib
+Message-ID: <20150320194323.552A48181B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+commit: http://git.buildroot.net/buildroot/commit/?id=40f0d87374aea8371f1612fca3ed12b4b152f1b7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Mar 2015 15:14:14 -0400, Mike Williams wrote:
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dbus/dbus.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +ifneq ($(BR2_PACKAGE_SYSTEMD),y)
-> +AVAHI_CFLAGS += -DDISABLE_SYSTEMD
-> +endif
-
-Seriously, do you test the patches you send? I really value the
-contributions you're making around systemd support: it's great to have
-someone finally picking up this topic and doing some
-cleanup/refactoring. But please, test your patches at least minimally.
-
-The <pkg>_CFLAGS variable does not exist and has no effect.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 200084f..c810800 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -54,7 +54,7 @@ endif
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ DBUS_CONF_OPTS += \
+ 	--enable-systemd \
+-	--with-systemdsystemunitdir=/lib/systemd/system
++	--with-systemdsystemunitdir=/usr/lib/systemd/system
+ DBUS_DEPENDENCIES += systemd
+ else
+ DBUS_CONF_OPTS += --disable-systemd
