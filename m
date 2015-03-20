@@ -1,41 +1,24 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 20 Mar 2015 11:28:20 +0100
-Subject: [Buildroot] [PATCH 09/15] rsyslog: move systemd service file to
-	/usr/lib
-In-Reply-To: <1426787807-29510-10-git-send-email-mike@mikebwilliams.com>
-References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-10-git-send-email-mike@mikebwilliams.com>
-Message-ID: <CAHXCMMKxrcETDZcuPToX4psafYGywyMv04xwLMdo_iur81oAsw@mail.gmail.com>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Fri, 20 Mar 2015 11:20:36 +0000
+Subject: [Buildroot] Trouble with cron / crontab
+Message-ID: <DB3PR04MB1086BDBABB62A2E19D61F0CEA0E0@DB3PR04MB108.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mike,
+Hi all,
 
-On Thu, Mar 19, 2015 at 6:56 PM, Mike Williams <mike@mikebwilliams.com> wrote:
-> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
-> ---
->  package/rsyslog/rsyslog.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-> index c6758eb..7bc6a67 100644
-> --- a/package/rsyslog/rsyslog.mk
-> +++ b/package/rsyslog/rsyslog.mk
-> @@ -65,7 +65,7 @@ define RSYSLOG_INSTALL_INIT_SYSV
->  endef
->
->  define RSYSLOG_INSTALL_INIT_SYSTEMD
-> -       ln -sf /lib/systemd/system/rsyslog.service \
-> +       ln -sf /usr/lib/systemd/system/rsyslog.service \
->                 $(TARGET_DIR)/etc/systemd/system/syslog.service
->         mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->         ln -sf ../syslog.service \
-You also need to update the symlink target here.
+I am facing a strange issue with Buildroot 2015.02. I am using cron/crontab from Busybox but can't start/define any cronjob because /var/spool/cron/crontabs didn't exist on my rootfs.
+On my rootfs there is no /var/spool/cron but this exist on output/target.
 
-Regards,
+I haven't found anything in documentation about cron...
+Is there something I have missed?
 
--- 
-Samuel
+Kind regards
+
+Fabrice Mousset
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150320/2d915306/attachment.html>
