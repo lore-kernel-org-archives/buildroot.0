@@ -1,39 +1,50 @@
-From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
-Date: Fri, 20 Mar 2015 15:53:14 +0100
-Subject: [Buildroot] [PATCH] configs: add defconfig for Freescale i.MX31
- PDK
-In-Reply-To: <550B3F16.60600@mind.be>
-References: <1426585422-22441-1-git-send-email-vincent.stehle@freescale.com>
- <550A0AF9.5050101@mind.be> <550AED3F.4070606@freescale.com>
- <550B3F16.60600@mind.be>
-Message-ID: <550C345A.9070307@freescale.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 20 Mar 2015 17:54:29 +0300
+Subject: [Buildroot] [PATCH] package/uclibc: fix linuxthreads symbol
+	typos
+In-Reply-To: <1426637970-27436-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1426637970-27436-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <CAMo8Bf+AGU0RdHZDYSo+08rQjNux_XjjvXvbBpFTyfUr2GgT5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/19/2015 10:26 PM, Arnout Vandecappelle wrote:
-..
-> It doesn't look like it's using DT, but there's a mach-mx31_3ds.c that uses the
-> old platform approach. Of course your bootloader has to set the correct machine
-> ID (1151) in that case.
+On Wed, Mar 18, 2015 at 3:19 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> BR2_UCLIBC_VERSION_XTENSA_GIT and BR2_UCLIBC_VERSION_SNAPSHOT select
+> BR2_UCLIBC_SUPPORTS_* instead of new BR2_UCLIBC_VERSION_SUPPORTS_*.
 
-Hi Arnout,
+Ping? This is a trivial typo fix.
 
-Thanks for pointing that out; it helped a lot.
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/uclibc/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index 56fea8a..3a6525b 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -49,12 +49,12 @@ choice
+>         config BR2_UCLIBC_VERSION_XTENSA_GIT
+>                 bool "uClibc Git Xtensa"
+>                 depends on BR2_xtensa
+> -               select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
+> +               select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+>
+>         config BR2_UCLIBC_VERSION_SNAPSHOT
+>                 bool "daily snapshot"
+> -               select BR2_UCLIBC_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
+> -               select BR2_UCLIBC_SUPPORTS_LINUXTHREADS_OLD
+> +               select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
+> +               select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+>                 select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+>                        if !BR2_bfin && !BR2_x86_i386 && !BR2_xtensa
+>                 depends on !(BR2_arc)
+> --
+> 1.8.1.4
 
-After some experiments, it seems that sadly, mainline kernel will
-not boot anymore on i.MX31 PDK, starting with v3.16 and up to
-current v4.0-rc4.
-
-Now for the good news: I have a working buildroot defconfig based
-on mainline kernel v3.15.10, with zero patch.
-  I will post a patch v4 right away; could you please maybe
-forget about the patch v3 I posted, and look at this v4 instead?
-
-Thank you for your help all along!
-
-Best regards,
-
-V.
+-- 
+Thanks.
+-- Max
