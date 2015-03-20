@@ -1,78 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 23:30:08 +0100
-Subject: [Buildroot] [git commit] package/openocd: depends on libftdi1
-	instead of libftdi
-Message-ID: <20150320224445.C205C81885@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 20 Mar 2015 20:00:57 -0300
+Subject: [Buildroot] [PATCH] glibc: disable eglibc 2.18 for sparc
+In-Reply-To: <20150320221033.13c88518@free-electrons.com>
+References: <1426630860-2813-1-git-send-email-gustavo@zacarias.com.ar>	<20150320215022.7df3b2f1@free-electrons.com>	<550C8979.9030803@zacarias.com.ar>
+ <20150320221033.13c88518@free-electrons.com>
+Message-ID: <550CA6A9.6070409@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bdf592654164ec7331c4e377b079302ed6da0e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/20/2015 06:10 PM, Thomas Petazzoni wrote:
 
-Note that, if both libftdi and libftdi1 are available, openocd will
-prefer libftdi1, so does Buildroot. ;-)
+> Well if nobody cares about powerpc SPE in upstream glibc, using uClibc
+> will be the only solution.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openocd/Config.in  |    8 ++++----
- package/openocd/openocd.mk |    2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index 7c140c7..2db17fa 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -121,7 +121,7 @@ config BR2_PACKAGE_OPENOCD_PARPORT
- 
- config BR2_PACKAGE_OPENOCD_FT2XXX
- 	bool "FT2232 based devices (DEPRECATED)"
--	select BR2_PACKAGE_LIBFTDI
-+	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	depends on BR2_ARCH_HAS_ATOMICS
- 	help
-@@ -135,7 +135,7 @@ config BR2_PACKAGE_OPENOCD_VPI
- 
- config BR2_PACKAGE_OPENOCD_UBLASTER
- 	bool "Altera USB-Blaster"
--	select BR2_PACKAGE_LIBFTDI
-+	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	depends on BR2_ARCH_HAS_ATOMICS
- 	help
-@@ -176,7 +176,7 @@ config BR2_PACKAGE_OPENOCD_GW16012
- 
- config BR2_PACKAGE_OPENOCD_PRESTO
- 	bool "ASIX Presto Programmer"
--	select BR2_PACKAGE_LIBFTDI
-+	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	depends on BR2_ARCH_HAS_ATOMICS
- 	help
-@@ -185,7 +185,7 @@ config BR2_PACKAGE_OPENOCD_PRESTO
- 
- config BR2_PACKAGE_OPENOCD_OPENJTAG
- 	bool "OpenJTAG Programmer"
--	select BR2_PACKAGE_LIBFTDI
-+	select BR2_PACKAGE_LIBFTDI1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
- 	depends on BR2_ARCH_HAS_ATOMICS
- 	help
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index fd7e09f..3b76850 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -23,7 +23,7 @@ OPENOCD_CONF_OPTS = \
- # the dependencies they need.
- 
- OPENOCD_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_LIBFTDI),libftdi) \
-+	$(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
- 	$(if $(BR2_PACKAGE_LIBUSB),libusb) \
- 	$(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
- 	$(if $(BR2_PACKAGE_LIBHID),libhid)
+From what i've read there was a effort to get soft-fp going for that
+which makes sense because E500v1 is only single-precision and E500v2 is
+double, to make them ABI compatible.
+I'll dig and get back on it since keeping eglibc around might not be a
+good idea long-term.
+Regards.
