@@ -1,12 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 20 Mar 2015 14:07:37 +0100
-Subject: [Buildroot] [PATCH 13/15] dhcp: move systemd service file to
+Date: Fri, 20 Mar 2015 14:07:38 +0100
+Subject: [Buildroot] [PATCH 14/15] kodi: move systemd service file to
 	/usr/lib
-In-Reply-To: <CAKbGBLh8u9rC5qEvnMf9aD6q4Hybd_6KHcUdVODAG8uks39Hug@mail.gmail.com>
+In-Reply-To: <CAKbGBLg_2UPF=Ka+Z=p18sGNdozne4pyYqdkDpm1x+MdGDjc9A@mail.gmail.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-14-git-send-email-mike@mikebwilliams.com>
- <CAKbGBLh8u9rC5qEvnMf9aD6q4Hybd_6KHcUdVODAG8uks39Hug@mail.gmail.com>
-Message-ID: <CAHXCMMJ4H_-nX5v3OB83dTO=4sfa2mMPtZvs=cz7F8F4d39EoA@mail.gmail.com>
+ <1426787807-29510-15-git-send-email-mike@mikebwilliams.com>
+ <CAKbGBLg_2UPF=Ka+Z=p18sGNdozne4pyYqdkDpm1x+MdGDjc9A@mail.gmail.com>
+Message-ID: <CAHXCMM+Dm2ePXzE_gLrSBMzOnijcVqqhRLTfWA1-nO3xHB3b1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,6 +21,7 @@ On Thu, Mar 19, 2015 at 9:00 PM, Steven Noonan <steven@uplinklabs.net> wrote:
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 Regards,
+
 
 
 -- 
