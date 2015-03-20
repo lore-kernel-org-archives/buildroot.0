@@ -1,36 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:04:28 +0100
-Subject: [Buildroot] [PATCH] powerpc-utils: security bump to 1.2.24
-In-Reply-To: <e946beb5967011b90d37a733a83575de9fdf3607.1426830947.git.baruch@tkos.co.il>
-References: <e946beb5967011b90d37a733a83575de9fdf3607.1426830947.git.baruch@tkos.co.il>
-Message-ID: <20150320140428.7c0c0bff@free-electrons.com>
+Date: Fri, 20 Mar 2015 14:05:51 +0100
+Subject: [Buildroot] [git commit] package/gcc: fix ICE building QT5 on xtensa
+Message-ID: <20150320130606.7AF4F818B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=395141d0dbf05c1e7d4682c1a30a91a9307ed5fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Mar 2015 07:55:47 +0200, Baruch Siach wrote:
-> Fixes CVE-2014-4040: A local attacker could obtain sensitive information from
-> the generated archive such as plain text passwords.
-> 
-> Yes, version 1.2.24 seems to be newer than 1.4, which is equivalent to 1.2.20.
-> 
-> Also, switch from git clone to tarball download , and add a .hash file.
-> 
-> The configure script seems to misdetect stack smashing protection support in
-> the toolchain. gcc accepts -fstack_protector_all, but the linker complains:
-> "ld: cannot find -lssp".
-> 
-> Cc: Jeremy Kerr <jk@ozlabs.org>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Add fix for GCC PR 64896 from the gcc-4_9-branch of gcc.
+This fixes bugzilla bug 7961.
 
-Applied, thanks.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/4.9.2/110-pr64896.patch |   59 +++++++++++++++++++++++++++++++++++
+ 1 files changed, 59 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/4.9.2/110-pr64896.patch b/package/gcc/4.9.2/110-pr64896.patch
+new file mode 100644
+index 0000000..92b6cb8
+--- /dev/null
++++ b/package/gcc/4.9.2/110-pr64896.patch
+@@ -0,0 +1,59 @@
++From fc39d7d6f0ac90086814306a43de38ad65c13f13 Mon Sep 17 00:00:00 2001
++From: yroux <yroux@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Tue, 10 Mar 2015 19:20:30 +0000
++Subject: [PATCH] gcc/ 2015-03-10  Yvan Roux  <yvan.roux@linaro.org>
++
++	Backport from trunk r220489.
++	2015-02-06  Jakub Jelinek  <jakub@redhat.com>
++
++	PR ipa/64896
++	* cgraphunit.c (cgraph_node::expand_thunk): If
++	restype is not is_gimple_reg_type nor the thunk_fndecl
++	returns aggregate_value_p, set restmp to a temporary variable
++	instead of resdecl.
++
++gcc/testsuite/
++2015-03-10  Yvan Roux  <yvan.roux@linaro.org>
++
++	Backport from trunk r220489.
++	2015-02-06  Jakub Jelinek  <jakub@redhat.com>
++
++	PR ipa/64896
++	* g++.dg/ipa/pr64896.C: New test.
++
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch at 221333 138bc75d-0d04-0410-961f-82ee72b054a4
++---
++ gcc/ChangeLog                      | 11 +++++++++++
++ gcc/cgraphunit.c                   | 11 ++++++++---
++ gcc/testsuite/ChangeLog            |  8 ++++++++
++ gcc/testsuite/g++.dg/ipa/pr64896.C | 29 +++++++++++++++++++++++++++++
++ 4 files changed, 56 insertions(+), 3 deletions(-)
++ create mode 100644 gcc/testsuite/g++.dg/ipa/pr64896.C
++
++diff --git a/gcc/cgraphunit.c b/gcc/cgraphunit.c
++index 8f57607..130fc0d 100644
++--- a/gcc/cgraphunit.c
+++++ b/gcc/cgraphunit.c
++@@ -1572,9 +1572,14 @@ expand_thunk (struct cgraph_node *node, bool output_asm_thunks)
++ 	    restmp = gimple_fold_indirect_ref (resdecl);
++ 	  else if (!is_gimple_reg_type (restype))
++ 	    {
++-	      restmp = resdecl;
++-	      add_local_decl (cfun, restmp);
++-	      BLOCK_VARS (DECL_INITIAL (current_function_decl)) = restmp;
+++	      if (aggregate_value_p (resdecl, TREE_TYPE (thunk_fndecl)))
+++		{
+++		  restmp = resdecl;
+++		  add_local_decl (cfun, restmp);
+++		  BLOCK_VARS (DECL_INITIAL (current_function_decl)) = restmp;
+++		}
+++	      else
+++		restmp = create_tmp_var (restype, "retval");
++ 	    }
++ 	  else
++ 	    restmp = create_tmp_reg (restype, "retval");
++-- 
++1.8.1.4
++
