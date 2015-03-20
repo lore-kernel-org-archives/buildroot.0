@@ -1,27 +1,34 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 20 Mar 2015 17:59:14 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-03-19
-In-Reply-To: <20150320073020.5F0D6101265@stock.ovh.net>
-References: <20150320073020.5F0D6101265@stock.ovh.net>
-Message-ID: <CAMo8Bf++YR-WRZ+6hpdVN+jLRMdPrx4Oo84=ENswEf4byhy0MQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Mar 2015 14:31:08 +0100
+Subject: [Buildroot] [git commit] dvdrw-tools: delete explicit default for
+	backend
+Message-ID: <20150320152859.7FBDB8186A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 20, 2015 at 10:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->       xtensa |                   libnl-3.2.25 | NOK | http://autobuild.buildroot.net/results/96a3180caca2f8755f07fa53fe67c491f8d3492c/
->          arm |                   libnl-3.2.25 | NOK | http://autobuild.buildroot.net/results/5299e86c73fb7f0c1250e180883e34b3e8097778/
+commit: http://git.buildroot.net/buildroot/commit/?id=4c6bc6f2cdce3eaf51d6529dd7b493857b4b20e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now it fails not only on xtensa.
+Signed-off-by: Steve Kenton <skenton@ou.edu>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Acked-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dvdrw-tools/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-The series that fixes that is in patchwork:
-https://patchwork.ozlabs.org/patch/450807/
-https://patchwork.ozlabs.org/patch/450808/
-
--- 
-Thanks.
--- Max
+diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
+index 6787b66..47835d8 100644
+--- a/package/dvdrw-tools/Config.in
++++ b/package/dvdrw-tools/Config.in
+@@ -35,7 +35,6 @@ config BR2_PACKAGE_DVDRW_TOOLS
+ if BR2_PACKAGE_DVDRW_TOOLS
+ choice
+ 	prompt "Media Backend"
+-	default BR2_PACKAGE_DVDRW_CDRKIT_BACKEND
+ 	help
+ 	  Choose which media backend program to use.
+ 
