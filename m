@@ -1,26 +1,29 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 20 Mar 2015 14:07:33 +0100
-Subject: [Buildroot] [PATCH 10/15] dropbear: move systemd service file
-	to /usr/lib
-In-Reply-To: <CAKbGBLi83AZM-bQHdi+eyUkNQz9_iUi4dQdwWL-hQFqh2bQULA@mail.gmail.com>
-References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-11-git-send-email-mike@mikebwilliams.com>
- <CAKbGBLi83AZM-bQHdi+eyUkNQz9_iUi4dQdwWL-hQFqh2bQULA@mail.gmail.com>
-Message-ID: <CAHXCMM+rxAPr=GzKf=ZKkF68VM7CBzXFWd0vReVXWTo0O+pR9g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Mar 2015 14:07:54 +0100
+Subject: [Buildroot] [PATCH] package/gdb: fix build with glibc 2.20 (2)
+In-Reply-To: <1426807365-22372-1-git-send-email-romain.naour@openwide.fr>
+References: <1426807365-22372-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150320140754.6b0a79d7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2015 at 8:59 PM, Steven Noonan <steven@uplinklabs.net> wrote:
-> On Thu, Mar 19, 2015 at 10:56 AM, Mike Williams <mike@mikebwilliams.com> wrote:
->> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
->
-> Reviewed-by: Steven Noonan <steven@uplinklabs.net>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Dear Romain Naour,
 
-Regards,
+On Fri, 20 Mar 2015 00:22:45 +0100, Romain Naour wrote:
+> Backport a second patch from gdb 7.8 for aarch64.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/2fc/2fcf1a40a08baf881fdbccd070b1a1a6c89127e1/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
+Applied, thanks.
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
