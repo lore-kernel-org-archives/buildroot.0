@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2015 00:22:06 +0100
-Subject: [Buildroot] [PATCH 4/5] uclibc: add option to specify config
+Date: Sat, 21 Mar 2015 00:23:20 +0100
+Subject: [Buildroot] [PATCH 5/5] barebox: add option to specify config
  fragments
-In-Reply-To: <1424003638-21689-4-git-send-email-bos@je-eigen-domein.nl>
+In-Reply-To: <1424003638-21689-5-git-send-email-bos@je-eigen-domein.nl>
 References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
- <1424003638-21689-4-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150320232206.GI3979@free.fr>
+ <1424003638-21689-5-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20150320232320.GJ3979@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,24 +17,24 @@ Floris, All,
 On 2015-02-15 13:33 +0100, Floris Bos spake thusly:
 > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 > ---
->  package/uclibc/Config.in | 6 ++++++
->  package/uclibc/uclibc.mk | 1 +
+>  boot/barebox/Config.in  | 6 ++++++
+>  boot/barebox/barebox.mk | 1 +
 >  2 files changed, 7 insertions(+)
 > 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index aa99a6f..1be9195 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -53,6 +53,12 @@ config BR2_UCLIBC_CONFIG
->  	  See also docs/README in this package.
->  	  If unsure, use the default.
+> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+> index 48431bd..64e3196 100644
+> --- a/boot/barebox/Config.in
+> +++ b/boot/barebox/Config.in
+> @@ -91,6 +91,12 @@ config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
+>  	help
+>  	  Path to the barebox configuration file
 >  
-> +config BR2_UCLIBC_CONFIG_FRAGMENT_FILES
-> +	string "Additional uClibc configuration fragment files"
+> +config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
+> +	string "Additional configuration fragment files"
 > +	help
 > +	  A space-seperated list of configuration fragment files,
 
-separated     Well... you know the tune, now. ;-)
+separated   (lotta copy-paste, eh?)
 
 Otherwise, OK:
 
@@ -43,23 +43,23 @@ Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Regards,
 Yann E. MORIN.
 
-> +	  that will be merged to the main uClibc configuration file.
+> +	  that will be merged to the main Barebox configuration file.
 > +
->  config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
->  	bool "Enable large file (files > 2 GB) support"
->  	select BR2_LARGEFILE
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 40e6c6c..9d73b39 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -38,6 +38,7 @@ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
+>  config BR2_TARGET_BAREBOX_BAREBOXENV
+>  	bool "bareboxenv tool in target"
+>  	help
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index b829ae7..41f487b 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -59,6 +59,7 @@ BAREBOX_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
 >  endif
 >  
->  UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
-> +UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
+>  BAREBOX_KCONFIG_FILE = $(BAREBOX_SOURCE_CONFIG)
+> +BAREBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES))
+>  BAREBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+>  BAREBOX_KCONFIG_OPTS = $(BAREBOX_MAKE_FLAGS)
 >  
->  UCLIBC_KCONFIG_OPTS = \
->  	$(UCLIBC_MAKE_FLAGS) \
 > -- 
 > 1.9.1
 > 
