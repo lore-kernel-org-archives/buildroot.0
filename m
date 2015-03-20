@@ -1,9 +1,10 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri, 20 Mar 2015 15:14:07 -0400
-Subject: [Buildroot] [PATCH v2 16/25] usbmount: move udev rules to /usr/lib
+Date: Fri, 20 Mar 2015 15:14:08 -0400
+Subject: [Buildroot] [PATCH v2 17/25] bcache-tools: move udev rules to
+	/usr/lib
 In-Reply-To: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
 References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1426878856-15747-17-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1426878856-15747-18-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/usbmount/usbmount.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bcache-tools/bcache-tools.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
-index 9e893c8..54fcffe 100644
---- a/package/usbmount/usbmount.mk
-+++ b/package/usbmount/usbmount.mk
-@@ -19,7 +19,7 @@ define USBMOUNT_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/00_remove_model_symlink 	\
- 		$(TARGET_DIR)/etc/usbmount/usbmount.d/00_remove_model_symlink
+diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+index 666a02f..7f11528 100644
+--- a/package/bcache-tools/bcache-tools.mk
++++ b/package/bcache-tools/bcache-tools.mk
+@@ -17,10 +17,10 @@ define BCACHE_TOOLS_BUILD_CMDS
+ endef
  
--	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d/usbmount.rules
-+	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/usr/lib/udev/rules.d/usbmount.rules
- 	$(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf
+ # The bcache-tools Makefile expects the man8 directory to exist
+-# expects the /lib/udev/rules.d directory to exist.
++# expects the /usr/lib/udev/rules.d directory to exist.
+ define BCACHE_TOOLS_CREATE_MISSING_DIRS
+ 	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
+-	$(INSTALL) -m 0755 -d $(TARGET_DIR)/lib/udev/rules.d
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/lib/udev/rules.d
+ endef
  
- 	mkdir -p $(addprefix $(TARGET_DIR)/media/usb,0 1 2 3 4 5 6 7)
+ BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_CREATE_MISSING_DIRS
 -- 
 2.1.0
