@@ -1,95 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 23:44:04 +0100
-Subject: [Buildroot] [git commit] uclibc: Fix getopt implementations
-	conditional compilation
-Message-ID: <20150320224445.CC9CA81885@busybox.osuosl.org>
+Date: Fri, 20 Mar 2015 23:30:08 +0100
+Subject: [Buildroot] [git commit] package/openocd: depends on libftdi1
+	instead of libftdi
+Message-ID: <20150320224445.C205C81885@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1919d3c287fda2eab4373c5b4ef26f0ea3dc4f8a
+commit: http://git.buildroot.net/buildroot/commit/?id=9bdf592654164ec7331c4e377b079302ed6da0e9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There's no way to disable getsubopt in uClibc 0.9.33.2: either GNU or
-SUSv3 getsubopt is always built.
+Note that, if both libftdi and libftdi1 are available, openocd will
+prefer libftdi1, so does Buildroot. ;-)
 
-Properly exclude SUSv3 getsubopt implementation when GNU getopt is
-selected.
-Exclude GNU getsubopt when SUSv3 getopt is selected. Honor getopt_long
-configuration.
-
-This brings UCLIBC_HAS_GNU_GETOPT, UCLIBC_HAS_GNU_GETSUBOPT and
-UCLIBC_HAS_GETOPT_LONG handling in sync with uClibc and uClibc-ng tips.
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...t-implementations-conditional-compilation.patch |   58 ++++++++++++++++++++
- 1 files changed, 58 insertions(+), 0 deletions(-)
+ package/openocd/Config.in  |    8 ++++----
+ package/openocd/openocd.mk |    2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc/0.9.33.2/0068-Fix-getopt-implementations-conditional-compilation.patch b/package/uclibc/0.9.33.2/0068-Fix-getopt-implementations-conditional-compilation.patch
-new file mode 100644
-index 0000000..18f6a9f
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/0068-Fix-getopt-implementations-conditional-compilation.patch
-@@ -0,0 +1,58 @@
-+From 5184289b9f453b1e160fbfd2f0922e5ed586d910 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 17 Mar 2015 02:06:52 +0300
-+Subject: [PATCH] Fix getopt implementations conditional compilation
-+
-+Currently there's no way to disable getsubopt: either GNU or SUSv3
-+getsubopt is always built.
-+
-+Properly exclude SUSv3 getsubopt implementation when GNU getopt is
-+selected.
-+Exclude GNU getsubopt when SUSv3 getopt is selected. Honor getopt_long
-+configuration.
-+
-+This brings UCLIBC_HAS_GNU_GETOPT, UCLIBC_HAS_GNU_GETSUBOPT and
-+UCLIBC_HAS_GETOPT_LONG handling in sync with uClibc and uClibc-ng tips.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ libc/unistd/Makefile.in | 22 +++++++++++-----------
-+ 1 file changed, 11 insertions(+), 11 deletions(-)
-+
-+diff --git a/libc/unistd/Makefile.in b/libc/unistd/Makefile.in
-+index 2704177..ec51631 100644
-+--- a/libc/unistd/Makefile.in
-++++ b/libc/unistd/Makefile.in
-+@@ -19,18 +19,18 @@ CSRC := $(filter-out __exec_alloc.c,$(CSRC))
-+ endif
-+ 
-+ ifeq ($(UCLIBC_HAS_GNU_GETOPT),y)
-+-CSRC := $(filter-out getopt-susv3.c getopt_long-simple.c,$(CSRC))
-++  CSRC := $(filter-out getopt-susv3.c getsubopt-susv3.c getopt_long-simple.c,$(CSRC))
-++  ifneq ($(UCLIBC_HAS_GNU_GETSUBOPT),y)
-++    CSRC := $(filter-out getsubopt.c,$(CSRC))
-++  endif
-+ else
-+-CSRC := $(filter-out getopt.c,$(CSRC))
-+-ifneq ($(UCLIBC_HAS_GETOPT_LONG),y)
-+-CSRC := $(filter-out getopt_long-simple.c,$(CSRC))
-+-endif
-+-endif
-+-
-+-ifeq ($(UCLIBC_HAS_GNU_GETSUBOPT),y)
-+-CSRC := $(filter-out getsubopt-susv3.c,$(CSRC))
-+-else
-+-CSRC := $(filter-out getsubopt.c,$(CSRC))
-++  CSRC := $(filter-out getopt.c getsubopt.c,$(CSRC))
-++  ifneq ($(UCLIBC_HAS_GETOPT_LONG),y)
-++    CSRC := $(filter-out getopt_long-simple.c,$(CSRC))
-++  endif
-++  ifneq ($(UCLIBC_HAS_GNU_GETSUBOPT),y)
-++    CSRC := $(filter-out getsubopt-susv3.c,$(CSRC))
-++  endif
-+ endif
-+ 
-+ ifneq ($(UCLIBC_SUSV3_LEGACY),y)
-+-- 
-+1.8.1.4
-+
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index 7c140c7..2db17fa 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -121,7 +121,7 @@ config BR2_PACKAGE_OPENOCD_PARPORT
+ 
+ config BR2_PACKAGE_OPENOCD_FT2XXX
+ 	bool "FT2232 based devices (DEPRECATED)"
+-	select BR2_PACKAGE_LIBFTDI
++	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+@@ -135,7 +135,7 @@ config BR2_PACKAGE_OPENOCD_VPI
+ 
+ config BR2_PACKAGE_OPENOCD_UBLASTER
+ 	bool "Altera USB-Blaster"
+-	select BR2_PACKAGE_LIBFTDI
++	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+@@ -176,7 +176,7 @@ config BR2_PACKAGE_OPENOCD_GW16012
+ 
+ config BR2_PACKAGE_OPENOCD_PRESTO
+ 	bool "ASIX Presto Programmer"
+-	select BR2_PACKAGE_LIBFTDI
++	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+@@ -185,7 +185,7 @@ config BR2_PACKAGE_OPENOCD_PRESTO
+ 
+ config BR2_PACKAGE_OPENOCD_OPENJTAG
+ 	bool "OpenJTAG Programmer"
+-	select BR2_PACKAGE_LIBFTDI
++	select BR2_PACKAGE_LIBFTDI1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi -> libusb
+ 	depends on BR2_ARCH_HAS_ATOMICS
+ 	help
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index fd7e09f..3b76850 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -23,7 +23,7 @@ OPENOCD_CONF_OPTS = \
+ # the dependencies they need.
+ 
+ OPENOCD_DEPENDENCIES = \
+-	$(if $(BR2_PACKAGE_LIBFTDI),libftdi) \
++	$(if $(BR2_PACKAGE_LIBFTDI1),libftdi1) \
+ 	$(if $(BR2_PACKAGE_LIBUSB),libusb) \
+ 	$(if $(BR2_PACKAGE_LIBUSB_COMPAT),libusb-compat) \
+ 	$(if $(BR2_PACKAGE_LIBHID),libhid)
