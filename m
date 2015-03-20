@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2015 00:14:14 +0100
-Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
+Date: Sat, 21 Mar 2015 00:15:24 +0100
+Subject: [Buildroot] [PATCH 2/5] linux: add option to specify config
  fragments
-In-Reply-To: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
+In-Reply-To: <1424003638-21689-2-git-send-email-bos@je-eigen-domein.nl>
 References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150320231414.GF3979@free.fr>
+ <1424003638-21689-2-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <20150320231524.GG3979@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,76 +15,50 @@ To: buildroot@busybox.net
 Floris, All,
 
 On 2015-02-15 13:33 +0100, Floris Bos spake thusly:
-> Adds functionality to the kconfig infrastructure to merge additional
-> configuration fragment files to the main configuration file of
-> kconfig packages, using support/kconfig/merge_config.sh
+> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> ---
+>  linux/Config.in | 6 ++++++
+>  linux/linux.mk  | 1 +
+>  2 files changed, 7 insertions(+)
 > 
-> Typical use-case is when you want your configuration to be
-> kept in sync with an upstream (def)config file, but do require
-> some minor local modifications.
-> 
-> Disables -update-config and -update-defconfig targets when
-> fragment files are set.
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 95c847b..15dc3b4 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -161,6 +161,12 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+>  	help
+>  	  Path to the kernel configuration file
+>  
+> +config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
+> +	string "Additional configuration fragment files"
+> +	help
+> +	  A space-seperated list of kernel configuration fragment files,
 
-BTW, you forgot to document that in the manual, see:
-    docs/manual/adding-packages-kconfig.txt
+separated
+
+Otherwise, OK:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  package/pkg-kconfig.mk | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 04ac37d..18eee76 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -35,6 +35,7 @@ $(call inner-generic-package,$(1),$(2),$(3),$(4))
->  $(2)_KCONFIG_EDITORS ?= menuconfig
->  $(2)_KCONFIG_OPTS ?=
->  $(2)_KCONFIG_FIXUP_CMDS ?=
-> +$(2)_KCONFIG_FRAGMENT_FILES ?=
+> +	  that will be merged to the main kernel configuration file.
+> +
+>  #
+>  # Binary format
+>  #
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index fc90fc5..f564530 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -175,6 +175,7 @@ KERNEL_SOURCE_CONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+>  endif
 >  
->  # FOO_KCONFIG_FILE is required
->  ifndef $(2)_KCONFIG_FILE
-> @@ -45,13 +46,14 @@ endif
->  # be extracted (and patched) first
->  $$($(2)_KCONFIG_FILE): | $(1)-patch
->  
-> -# The .config file is obtained by copying it from the specified source
-> -# configuration file, after the package has been patched.
-> +# The specified source configuration file and any additional configuration file
-> +# fragments are merged together to .config, after the package has been patched.
->  # Since the file could be a defconfig file it needs to be expanded to a
->  # full .config first. We use 'make oldconfig' because this can be safely
->  # done even when the package does not support defconfigs.
-> -$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE)
-> -	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
-> +$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-> +	support/kconfig/merge_config.sh -m -O $$(@D) \
-> +		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
->  	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
->  		$$($(2)_KCONFIG_OPTS) oldconfig
->  
-> @@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  # Even though we could use 'cp --preserve-timestamps' here, the separate
->  # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
->  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
-> +		$$(error Unable to perform $(1)-update-config when fragment files are set))
->  	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
->  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
->  
-> @@ -95,6 +99,8 @@ $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  # $(1)-update-config, the reference for 'touch' is _not_ the file from which
->  # we copy.
->  $(1)-update-defconfig: $(1)-savedefconfig
-> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
-> +		$$(error Unable to perform $(1)-update-defconfig when fragment files are set))
->  	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
->  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
+>  LINUX_KCONFIG_FILE = $(KERNEL_SOURCE_CONFIG)
+> +LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+>  LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+>  LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
 >  
 > -- 
 > 1.9.1
