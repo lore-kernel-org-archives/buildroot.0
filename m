@@ -1,34 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 22:10:33 +0100
-Subject: [Buildroot] [PATCH] glibc: disable eglibc 2.18 for sparc
-In-Reply-To: <550C8979.9030803@zacarias.com.ar>
-References: <1426630860-2813-1-git-send-email-gustavo@zacarias.com.ar>
- <20150320215022.7df3b2f1@free-electrons.com>
- <550C8979.9030803@zacarias.com.ar>
-Message-ID: <20150320221033.13c88518@free-electrons.com>
+Date: Fri, 20 Mar 2015 22:12:16 +0100
+Subject: [Buildroot] [git commit] uclibc: remove blackfin bits
+Message-ID: <20150320211258.4F7777FA52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=6b0baf14cefd19d3902b43db0ab58709ef70e641
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Mar 2015 17:56:25 -0300, Gustavo Zacarias wrote:
+Now that we don't support the internal blackfin toolchain any more
+remove unnecessary bits, conditionals and tweaks.
 
-> > Applied, but shouldn't we simply deprecated eglibc ? The latest eglibc
-> > release was 2.19, and glibc has already made two releases (2.20 and
-> > 2.21) since then.
-> 
-> Unfortunately eglibc 2.18 is the only (e)glibc that's good for powerpc
-> SPE at the moment (that does hard-float), so that would mean leaving
-> only uClibc for that scenario.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/Config.in |   19 +++++++------------
+ package/uclibc/uclibc.mk |   40 ----------------------------------------
+ 2 files changed, 7 insertions(+), 52 deletions(-)
 
-Well if nobody cares about powerpc SPE in upstream glibc, using uClibc
-will be the only solution.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 3a6525b..3fb9b4d 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -24,11 +24,9 @@ choice
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_33
+ 		bool "uClibc 0.9.33.x"
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
+-		       if !BR2_bfin
++		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+-		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+-		       if !BR2_bfin && !BR2_x86_i386
++		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL if !BR2_x86_i386
+ 		depends on !(BR2_arc || BR2_xtensa)
+ 
+ 	config BR2_UCLIBC_VERSION_ARC_GIT
+@@ -39,12 +37,11 @@ choice
+ 
+ 	config BR2_UCLIBC_VERSION_NG
+ 		bool "uClibc-ng"
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS \
+-		       if BR2_bfin || BR2_m68k
++		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+-		       if BR2_bfin || BR2_m68k || BR2_arm || BR2_armeb
++		       if BR2_m68k || BR2_arm || BR2_armeb
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+-		       if !BR2_arc && !BR2_bfin && !BR2_m68k && !BR2_x86_i386
++		       if !BR2_arc && !BR2_m68k && !BR2_x86_i386
+ 
+ 	config BR2_UCLIBC_VERSION_XTENSA_GIT
+ 		bool "uClibc Git Xtensa"
+@@ -53,10 +50,10 @@ choice
+ 
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if !BR2_bfin && !BR2_xtensa
++		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if !BR2_xtensa
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+-		       if !BR2_bfin && !BR2_x86_i386 && !BR2_xtensa
++		       if !BR2_x86_i386 && !BR2_xtensa
+ 		depends on !(BR2_arc)
+ 
+ endchoice
+@@ -174,7 +171,6 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 
+ config BR2_UCLIBC_INSTALL_UTILS
+ 	bool "Compile and install uClibc utilities"
+-	depends on !BR2_bfin
+ 	default y
+ 	help
+ 	  Enabling this option will compile and install the getconf,
+@@ -207,7 +203,6 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	string
+ 	default "arc"	   if BR2_arcle || BR2_arceb
+ 	default "arm"	   if BR2_arm	|| BR2_armeb
+-	default "bfin"	   if BR2_bfin
+ 	default "m68k"	   if BR2_m68k
+ 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default "powerpc"  if BR2_powerpc
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3a8f191..2b5a642 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -157,45 +157,6 @@ endef
+ endif # powerpc
+ 
+ #
+-# Blackfin definitions
+-#
+-
+-ifeq ($(UCLIBC_TARGET_ARCH),bfin)
+-ifeq ($(BR2_BINFMT_FDPIC),y)
+-define UCLIBC_BFIN_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+-endef
+-endif
+-ifeq ($(BR2_BINFMT_FLAT_ONE),y)
+-define UCLIBC_BFIN_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+-endef
+-endif
+-ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
+-define UCLIBC_BFIN_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+-endef
+-endif
+-ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+-define UCLIBC_BFIN_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
+-	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
+-endef
+-endif
+-endif # bfin
+-
+-#
+ # x86 definitions
+ #
+ ifeq ($(UCLIBC_TARGET_ARCH),i386)
+@@ -425,7 +386,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SH_TYPE_CONFIG)
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
+-	$(UCLIBC_BFIN_CONFIG)
+ 	$(UCLIBC_X86_TYPE_CONFIG)
+ 	$(UCLIBC_ENDIAN_CONFIG)
+ 	$(UCLIBC_LARGEFILE_CONFIG)
