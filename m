@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 20:39:09 +0100
-Subject: [Buildroot] [git commit] dropbear: move systemd service file to
-	/usr/lib
-Message-ID: <20150320194323.75ABF8181B@busybox.osuosl.org>
+Date: Fri, 20 Mar 2015 20:33:12 +0100
+Subject: [Buildroot] [git commit] ntp: move systemd service file to /usr/lib
+Message-ID: <20150320194323.2F9758181B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3aa96c1e5ad51c9dfb3a50af8ef1fc958d7f655f
+commit: http://git.buildroot.net/buildroot/commit/?id=7afccf677621c557d0db100117833b1dfdf4d071
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dropbear/dropbear.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/ntp.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index f2ae403..bc65d69 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -53,9 +53,9 @@ endef
- 
- define DROPBEAR_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
--		$(TARGET_DIR)/lib/systemd/system/dropbear.service
-+		$(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs /lib/systemd/system/dropbear.service \
-+	ln -fs ../../../../usr/lib/systemd/system/dropbear.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dropbear.service
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 7d5644a..36dea79 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -71,9 +71,10 @@ define NTP_INSTALL_INIT_SYSV
  endef
+ 
+ define NTP_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/etc/systemd/system/ntpd.service
++	$(INSTALL) -D -m 644 package/ntp/ntpd.service $(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../ntpd.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
++	ln -fs ../../../../usr/lib/systemd/system/ntpd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
+ endef
+ endif
  
