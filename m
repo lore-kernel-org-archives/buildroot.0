@@ -1,12 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 20 Mar 2015 14:07:36 +0100
-Subject: [Buildroot] [PATCH 12/15] libiio: move systemd service file to
+Date: Fri, 20 Mar 2015 14:07:37 +0100
+Subject: [Buildroot] [PATCH 13/15] dhcp: move systemd service file to
 	/usr/lib
-In-Reply-To: <CAKbGBLjpsbrxKJuwvE2q2apnt2O_D_wL-s=iaerLyHHUAHe6uQ@mail.gmail.com>
+In-Reply-To: <CAKbGBLh8u9rC5qEvnMf9aD6q4Hybd_6KHcUdVODAG8uks39Hug@mail.gmail.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-13-git-send-email-mike@mikebwilliams.com>
- <CAKbGBLjpsbrxKJuwvE2q2apnt2O_D_wL-s=iaerLyHHUAHe6uQ@mail.gmail.com>
-Message-ID: <CAHXCMMLY73X9bRDqhgnVAGzY4zApPvaqDC343qkvXu1ew8mfhg@mail.gmail.com>
+ <1426787807-29510-14-git-send-email-mike@mikebwilliams.com>
+ <CAKbGBLh8u9rC5qEvnMf9aD6q4Hybd_6KHcUdVODAG8uks39Hug@mail.gmail.com>
+Message-ID: <CAHXCMMJ4H_-nX5v3OB83dTO=4sfa2mMPtZvs=cz7F8F4d39EoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
