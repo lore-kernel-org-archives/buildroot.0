@@ -1,10 +1,10 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri, 20 Mar 2015 15:14:05 -0400
-Subject: [Buildroot] [PATCH v2 14/25] kodi: move systemd service file to
+Date: Fri, 20 Mar 2015 15:14:06 -0400
+Subject: [Buildroot] [PATCH v2 15/25] modem-manager: move udev rules to
 	/usr/lib
 In-Reply-To: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
 References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1426878856-15747-15-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1426878856-15747-16-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/kodi/kodi.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/modem-manager/modem-manager.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index f40fc31..e0d49e6 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -256,11 +256,11 @@ endef
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a6e1b36..ce282b0 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -12,6 +12,8 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
+ MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
+ MODEM_MANAGER_INSTALL_STAGING = YES
  
- define KODI_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/kodi/kodi.service \
--		$(TARGET_DIR)/etc/systemd/system/kodi.service
-+		$(TARGET_DIR)/usr/lib/systemd/system/kodi.service
- 
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 
--	ln -fs ../kodi.service \
-+	ln -fs ../../../../usr/lib/systemd/system/kodi.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/kodi.service
- endef
- 
++MODEM_MANAGER_CONF_OPTS += --with-udev-base-dir=/usr/lib/udev/
++
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+ 	MODEM_MANAGER_DEPENDENCIES += libqmi
+ 	MODEM_MANAGER_CONF_OPTS += --with-qmi
 -- 
 2.1.0
