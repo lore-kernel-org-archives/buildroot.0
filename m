@@ -1,71 +1,57 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Fri, 20 Mar 2015 13:28:03 -0700
-Subject: [Buildroot] [PATCH] package: add powertop 2.7
-In-Reply-To: <20150320163316.695aa4ed@free-electrons.com>
-References: <1426743621-1652-1-git-send-email-steven@uplinklabs.net>
- <20150320163316.695aa4ed@free-electrons.com>
-Message-ID: <CAKbGBLiMuNMLZp+7pbPYrS4XZTzge-+gB4a331sCU33yW53BUA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Mar 2015 21:24:02 +0100
+Subject: [Buildroot] [PATCH v2 23/25] avahi: systemd cleanups
+In-Reply-To: <CANPyyuPHqnwtSFKBcf=Qk2os+Oz6DYtPc12e2Ak6c_GbJgHqtw@mail.gmail.com>
+References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
+ <1426878856-15747-24-git-send-email-mike@mikebwilliams.com>
+ <20150320204150.4169961f@free-electrons.com>
+ <CANPyyuPHqnwtSFKBcf=Qk2os+Oz6DYtPc12e2Ak6c_GbJgHqtw@mail.gmail.com>
+Message-ID: <20150320212402.11565fcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 20, 2015 at 8:33 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Steven Noonan,
->
-> On Wed, 18 Mar 2015 22:40:21 -0700, Steven Noonan wrote:
->> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
->
-> I've applied, but to be honest, I found that they were too many trivial
-> issues that should have been discovered before the patch was submitted.
-> Here is the list of things that I had to change:
->
->     [Thomas:
->       - fix commit title
->       - powertop wants libintl unconditionally, so make sure
->         BR2_PACKAGE_GETTEXT is selected when BR2_NEEDS_GETTEXT is set,
->         and add gettext to the dependencies.
->       - add missing comment about thread dependency.
->       - add missing dependency on host-pkgconf, without which powertop
->         cannot find libnl.
->       - patch src/Makefile.am to not pass -fstack-protector, which fails
->         to build if the toolchain does not have SSP support.
->       - rename patch powertop-autotune.patch to confirm to the patch
->         naming convention.]
+Dear Mike Williams,
 
-Yes, I agree, that number of issues is ridiculous.
+On Fri, 20 Mar 2015 16:10:16 -0400, Mike Williams wrote:
 
-> Commit title: we normally expect "<foo>: new package" for package
-> additions. I agree, this is pure nitpicking :-)
->
-> The libintl issue was trivially found by using a uClibc toolchain,
-> which is the default in Buildroot. You can for example use
-> http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config as
-> a base configuration file to quickly test things against uClibc.
->
-> The missing thread comment was trivial, it's documented in the section
-> "17.2.2. Dependencies on target and toolchain options" in the Buildroot
-> manual.
->
-> The missing dependency on host-pkgconf is seen when you do a build with
-> just powertop. Whenever you submit a new package, make sure you do a
-> build from scratch with just this package enabled, so that you have
-> some minimal verification that the dependencies are correct.
->
-> The -fstack-protector issue was also seen because I'm using a standard
-> uClibc toolchain, which do not have SSP enabled by default.
->
-> The patch naming convention is also documented in the Buildroot manual.
->
-> In the light of those comments, could you have a second look at your
-> other "new package" submissions and retest them with a uClibc
-> toolchain, and with a Buildroot build having just each new package
-> enabled, in order to discover missing dependencies?
->
-> Thanks a lot!
+> > Seriously, do you test the patches you send? I really value the
+> > contributions you're making around systemd support: it's great to have
+> > someone finally picking up this topic and doing some
+> > cleanup/refactoring. But please, test your patches at least minimally.
+> 
+> Yes, I built, booted it, and verified that systemd started it without
+> error. I mistakenly assumed that meant it the patch was working
+> correctly; I don't use avahi for anything and have no experience with
+> it.
 
-I appreciate the feedback. I had only been testing with x86_64 and x32
-glibc builds, and hadn't thought of uClibc issues. I'll be sure to try
-and test that in the future.
+Right, I also assumed you tested the systemd case. But here it's the
+non-systemd case that can be problematic.
+
+> > The <pkg>_CFLAGS variable does not exist and has no effect.
+> 
+> I see that now. I fgrep'd for _CFLAGS initially to find out how other
+> packages were doing it, and didn't realize this common convention
+> wasn't part of buildroot.
+
+Right, the <pkg>_CFLAGS variable doesn't mean anything for the
+Buildroot package infrastructure. You have to do something like:
+
+<pkg>_CFLAGS = $(TARGET_CFLAGS)
+...
+<pkg>_CFLAGS += -something
+...
+<pkg>_CONF_ENV += CFLAGS="$(<pkg>_CFLAGS)"
+
+The default value of CFLAGS being $(TARGET_CFLAGS), this allows to add
+some more flags in a correct fashion.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
