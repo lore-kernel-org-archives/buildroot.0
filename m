@@ -1,58 +1,62 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Thu, 19 Mar 2015 20:08:52 -0700
-Subject: [Buildroot] [PATCH 4/7] package/perf: build outside kernel tree
-In-Reply-To: <550B5A0F.7080904@mind.be>
-References: <1426714983-24803-1-git-send-email-steven@uplinklabs.net>
- <1426714983-24803-4-git-send-email-steven@uplinklabs.net>
- <550B5A0F.7080904@mind.be>
-Message-ID: <CAKbGBLiqc2ZYQxNgbVefp_aoi-P=3J=uDz0BFDu7QBev7VAqUw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 20 Mar 2015 07:55:47 +0200
+Subject: [Buildroot] [PATCH] powerpc-utils: security bump to 1.2.24
+Message-ID: <e946beb5967011b90d37a733a83575de9fdf3607.1426830947.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2015 at 4:21 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 18/03/15 22:43, Steven Noonan wrote:
->> This is necessary for introducing patches.
->
->  Although I think it's really messy to build perf within the the linux source
-> like we do now, your proposed approach has some showstopper drawbacks.
->
-> - It doesn't work for LINUX_OVERRIDE_SRCDIR or BR2_LINUX_KERNEL_CUSTOM_LOCAL.
+Fixes CVE-2014-4040: A local attacker could obtain sensitive information from
+the generated archive such as plain text passwords.
 
-Indeed.
+Yes, version 1.2.24 seems to be newer than 1.4, which is equivalent to 1.2.20.
 
-> - Any custom patches to the kernel are not taken into account, and I believe
-> perf uses the private headers so there's a risk there.
+Also, switch from git clone to tarball download , and add a .hash file.
 
-Quite possibly so.
+The configure script seems to misdetect stack smashing protection support in
+the toolchain. gcc accepts -fstack_protector_all, but the linker complains:
+"ld: cannot find -lssp".
 
->
-> - It requires an expensive second extract of the entire kernel.
+Cc: Jeremy Kerr <jk@ozlabs.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/powerpc-utils/powerpc-utils.hash | 3 +++
+ package/powerpc-utils/powerpc-utils.mk   | 7 ++++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+ create mode 100644 package/powerpc-utils/powerpc-utils.hash
 
-Expensive on what? Isn't everyone using SSDs these days? ;)
-
->
->  As an alternative, you could copy in just the perf stuff from the linux source
-> as a POST_EXTRACT_HOOK.
->
->  Or you could apply the patches on the kernel sources instead of on the perf
-> directory. But that would be a bit more complicated.
-
-I think this is probably the path to take, but I'm not entirely a fan of it.
-
->  Or you could add a LINUX_POST_PATCH_HOOK to apply the perf patches. I'm not
-> entirely sure if that would work though.
->
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
+new file mode 100644
+index 000000000000..d02f16ad6ba7
+--- /dev/null
++++ b/package/powerpc-utils/powerpc-utils.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/powerpc-utils/files/powerpc-utils/
++sha1	975c668e8eaedd5222a7870e82ce295d06dfe649	powerpc-utils-1.2.24.tar.gz
++md5	f492a72f2d4522eba5d9b329c84b3ed3	powerpc-utils-1.2.24.tar.gz
+diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+index eae58d513e7a..3b30458d3be3 100644
+--- a/package/powerpc-utils/powerpc-utils.mk
++++ b/package/powerpc-utils/powerpc-utils.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-POWERPC_UTILS_VERSION = v1.4
+-POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
+-POWERPC_UTILS_AUTORECONF = YES
++POWERPC_UTILS_VERSION = 1.2.24
++POWERPC_UTILS_SITE = http://downloads.sourceforge.net/project/powerpc-utils/powerpc-utils
+ POWERPC_UTILS_DEPENDENCIES = zlib
+ POWERPC_UTILS_LICENSE = Common Public License Version 1.0
+ POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
+ 
+ POWERPC_UTILS_CONF_OPTS = --without-librtas
++POWERPC_UTILS_CONF_ENV = \
++	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+ 
+ $(eval $(autotools-package))
+-- 
+2.1.4
