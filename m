@@ -1,65 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 16:33:16 +0100
-Subject: [Buildroot] [PATCH] package: add powertop 2.7
-In-Reply-To: <1426743621-1652-1-git-send-email-steven@uplinklabs.net>
-References: <1426743621-1652-1-git-send-email-steven@uplinklabs.net>
-Message-ID: <20150320163316.695aa4ed@free-electrons.com>
+Date: Fri, 20 Mar 2015 16:37:50 +0100
+Subject: [Buildroot] Worried about patches not being merged?
+In-Reply-To: <1426865596.27254.23.camel@embedded.rocks>
+References: <20150304232101.437af48f@free-electrons.com>
+ <1426708866.1395.8.camel@embedded.rocks>
+ <20150319092042.2875d9e1@free-electrons.com>
+ <1426865596.27254.23.camel@embedded.rocks>
+Message-ID: <20150320163750.745ba46c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steven Noonan,
+J?rg,
 
-On Wed, 18 Mar 2015 22:40:21 -0700, Steven Noonan wrote:
-> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+On Fri, 20 Mar 2015 16:33:16 +0100, J?rg Krause wrote:
 
-I've applied, but to be honest, I found that they were too many trivial
-issues that should have been discovered before the patch was submitted.
-Here is the list of things that I had to change:
+> To be honest, I'm only looking for packages I'm currently using or which
+> seems to be interesting to me. I must confess I don't have the time to
+> review/test patches I don't care about or which looks to complex.
 
-    [Thomas:
-      - fix commit title
-      - powertop wants libintl unconditionally, so make sure
-        BR2_PACKAGE_GETTEXT is selected when BR2_NEEDS_GETTEXT is set,
-        and add gettext to the dependencies.
-      - add missing comment about thread dependency.
-      - add missing dependency on host-pkgconf, without which powertop
-        cannot find libnl.
-      - patch src/Makefile.am to not pass -fstack-protector, which fails
-        to build if the toolchain does not have SSP support.
-      - rename patch powertop-autotune.patch to confirm to the patch
-        naming convention.]
+Yes, this is fine: if everyone takes care of patches touching packages
+he is interested in, it would already help a lot.
 
-Commit title: we normally expect "<foo>: new package" for package
-additions. I agree, this is pure nitpicking :-)
+For example, there are many systemd patches waiting for someone
+knowledgeable in systemd stuff to look at them. We used to have Eric Le
+Bihan taking care of such patches, but he is no longer active.
+Fortunately, Mike Williams and Steven Noonan have appeared and seem to
+be interested in systemd, which is great!
 
-The libintl issue was trivially found by using a uClibc toolchain,
-which is the default in Buildroot. You can for example use
-http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config as
-a base configuration file to quickly test things against uClibc.
+> Following the mailing list for some months now I noticed that there is a
+> team of five to ten main contributers which do the most reviews and
+> tests.
 
-The missing thread comment was trivial, it's documented in the section
-"17.2.2. Dependencies on target and toolchain options" in the Buildroot
-manual.
+Correct, but as you can see by looking at the patch queue, it's not
+enough.
 
-The missing dependency on host-pkgconf is seen when you do a build with
-just powertop. Whenever you submit a new package, make sure you do a
-build from scratch with just this package enabled, so that you have
-some minimal verification that the dependencies are correct.
+> Maybe a section in the documentation  
 
-The -fstack-protector issue was also seen because I'm using a standard
-uClibc toolchain, which do not have SSP enabled by default.
+Incomplete sentence?
 
-The patch naming convention is also documented in the Buildroot manual.
+> I think patches should be classified as you mentioned in another mail. I
+> like the idea have having tags like "infrastructure", "new package",
+> "version bump", ..., to get a quick overview.
 
-In the light of those comments, could you have a second look at your
-other "new package" submissions and retest them with a uClibc
-toolchain, and with a Buildroot build having just each new package
-enabled, in order to discover missing dependencies?
+True, but on the other hand, someone will have to add those tags
+manually for each patch.
 
-Thanks a lot!
+Thanks,
 
 Thomas
 -- 
