@@ -1,51 +1,68 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 20 Mar 2015 16:33:16 +0100
-Subject: [Buildroot] Worried about patches not being merged?
-In-Reply-To: <20150319092042.2875d9e1@free-electrons.com>
-References: <20150304232101.437af48f@free-electrons.com>
- <1426708866.1395.8.camel@embedded.rocks>
- <20150319092042.2875d9e1@free-electrons.com>
-Message-ID: <1426865596.27254.23.camel@embedded.rocks>
+Subject: [Buildroot] [PATCH] package: add powertop 2.7
+In-Reply-To: <1426743621-1652-1-git-send-email-steven@uplinklabs.net>
+References: <1426743621-1652-1-git-send-email-steven@uplinklabs.net>
+Message-ID: <20150320163316.695aa4ed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Steven Noonan,
 
-On Do, 2015-03-19 at 09:20 +0100, Thomas Petazzoni wrote:
-> J?rg,
-> 
-> On Wed, 18 Mar 2015 21:01:06 +0100, J?rg Krause wrote:
-> 
-> > Are there any guidelines for reviewing?
-> 
-> Not really. Just pick patches touching things you are a bit comfortable
-> with, give them some testing, and do some comments if needed. On the
-> other hand, if you think the patch is fine, simply reply with a
-> Reviewed-by tag.
+On Wed, 18 Mar 2015 22:40:21 -0700, Steven Noonan wrote:
+> Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 
-To be honest, I'm only looking for packages I'm currently using or which
-seems to be interesting to me. I must confess I don't have the time to
-review/test patches I don't care about or which looks to complex.
+I've applied, but to be honest, I found that they were too many trivial
+issues that should have been discovered before the patch was submitted.
+Here is the list of things that I had to change:
 
-Following the mailing list for some months now I noticed that there is a
-team of five to ten main contributers which do the most reviews and
-tests. Maybe a section in the documentation  
+    [Thomas:
+      - fix commit title
+      - powertop wants libintl unconditionally, so make sure
+        BR2_PACKAGE_GETTEXT is selected when BR2_NEEDS_GETTEXT is set,
+        and add gettext to the dependencies.
+      - add missing comment about thread dependency.
+      - add missing dependency on host-pkgconf, without which powertop
+        cannot find libnl.
+      - patch src/Makefile.am to not pass -fstack-protector, which fails
+        to build if the toolchain does not have SSP support.
+      - rename patch powertop-autotune.patch to confirm to the patch
+        naming convention.]
 
-I think patches should be classified as you mentioned in another mail. I
-like the idea have having tags like "infrastructure", "new package",
-"version bump", ..., to get a quick overview.
+Commit title: we normally expect "<foo>: new package" for package
+additions. I agree, this is pure nitpicking :-)
 
-> Of course, reviewing simple package bumps or hash file additions is not
-> very useful, since I tend to apply such patches quickly: there is not
-> much potential trouble with such patches.
-> 
-> > It's a pitty that GSoC did not accepted Buildroot this year. The
-> > testing scripts would be a nice feature.
-> 
-> Yes, it is a pitty, but hopefully someone will pick up the task and
-> work on improving our QA tooling :)
+The libintl issue was trivially found by using a uClibc toolchain,
+which is the default in Buildroot. You can for example use
+http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config as
+a base configuration file to quickly test things against uClibc.
 
-Hopefully!
+The missing thread comment was trivial, it's documented in the section
+"17.2.2. Dependencies on target and toolchain options" in the Buildroot
+manual.
+
+The missing dependency on host-pkgconf is seen when you do a build with
+just powertop. Whenever you submit a new package, make sure you do a
+build from scratch with just this package enabled, so that you have
+some minimal verification that the dependencies are correct.
+
+The -fstack-protector issue was also seen because I'm using a standard
+uClibc toolchain, which do not have SSP enabled by default.
+
+The patch naming convention is also documented in the Buildroot manual.
+
+In the light of those comments, could you have a second look at your
+other "new package" submissions and retest them with a uClibc
+toolchain, and with a Buildroot build having just each new package
+enabled, in order to discover missing dependencies?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
