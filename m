@@ -1,38 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:24:07 +0100
-Subject: [Buildroot] [PATCH] thttpd: add systemd service file
-In-Reply-To: <1426795074-9129-1-git-send-email-mike@mikebwilliams.com>
-References: <1426795074-9129-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20150320142407.29be59ba@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 20 Mar 2015 14:25:06 +0100
+Subject: [Buildroot] [PATCH 06/15] avahi: systemd cleanups
+In-Reply-To: <20150320141546.702ace0c@free-electrons.com>
+References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
+ <1426787807-29510-7-git-send-email-mike@mikebwilliams.com>
+ <20150320141546.702ace0c@free-electrons.com>
+Message-ID: <CAHXCMM+F+JFRftpfREL8dEa5D0sL_SdecDrrD+9Yzrv9jgf6Gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+On Fri, Mar 20, 2015 at 2:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Mike Williams,
+>
+> On Thu, 19 Mar 2015 13:56:38 -0400, Mike Williams wrote:
+>
+>> +ifneq ($(BR2_PACKAGE_SYSTEMD),y)
+>> +AVAHI_EXTRA_CFLAGS += -DDISABLE_SYSTEMD
+>> +endif
+>
+> This cannot work, since AVAHI_EXTRA_CFLAGS is not used by anything.
+>
+> I'm surprised you got a Reviewed-by from Samuel and Steven with this
+> big issue.
 
-On Thu, 19 Mar 2015 15:57:54 -0400, Mike Williams wrote:
-> Based on Arch service file, adjust to point to /usr/sbin.
-> 
-> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
-> ---
->  package/thttpd/thttpd.mk      |  5 +++++
->  package/thttpd/thttpd.service | 10 ++++++++++
->  2 files changed, 15 insertions(+)
->  create mode 100644 package/thttpd/thttpd.service
+argh! right! I missed that :-s
 
-Since this assumes we install systemd unit files in /usr/lib, could you
-take this patch as part of your "RFC: systemd and service files
-cleanup" series?
 
-See my question about this series related to symbolic links (absolute
-vs. relative), and adapt this patch as well accordingly.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
