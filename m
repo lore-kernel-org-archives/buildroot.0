@@ -1,33 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:15:46 +0100
-Subject: [Buildroot] [PATCH 06/15] avahi: systemd cleanups
-In-Reply-To: <1426787807-29510-7-git-send-email-mike@mikebwilliams.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 20 Mar 2015 14:18:39 +0100
+Subject: [Buildroot] RFC: systemd and service files cleanup
+In-Reply-To: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-7-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20150320141546.702ace0c@free-electrons.com>
+Message-ID: <CAHXCMMJBdnDBSqdqCL1Hbx9dmUQ2obxD-kDBTpPuoO=pkTgYvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+Hi Mike, all,
 
-On Thu, 19 Mar 2015 13:56:38 -0400, Mike Williams wrote:
+On Thu, Mar 19, 2015 at 6:56 PM, Mike Williams <mike@mikebwilliams.com> wrote:
+> All,
+>
+> Currently, package service files for systemd are installed by buildroot in a variety of locations: /etc, /lib, and /usr/lib. For systemd, split /lib is deprecated and only checked if a split /lib and /usr/lib is enabled. /etc is meant for local customizations to the default service files. It is my opinion that buildroot should install all upstream package and buildroot-provided service files in /usr/lib, and this series cleans up our packages to do exactly that. Enabling them by default by linking them to /etc/systemd/system/multi-user.target.wants has been preserved.
+>
+> Upstream systemd's standard installation directory for its binaries is /usr/lib. It appears that historically, buildroot's systemd installation location has been switched between /lib and /usr/lib multiple times. I couldn't find any particular reason for this, so I've moved it back to /usr/lib along with its service files.
+>
+> Anyway, please send comments :).
 
-> +ifneq ($(BR2_PACKAGE_SYSTEMD),y)
-> +AVAHI_EXTRA_CFLAGS += -DDISABLE_SYSTEMD
-> +endif
+Thanks for helping improving this point. :)
 
-This cannot work, since AVAHI_EXTRA_CFLAGS is not used by anything.
+Just one global comment:
+In the series, you change all relative symlink with absolute one.
+We use to use relative symlink to avoid confusing people looking at
+the target tree because they are still right.
 
-I'm surprised you got a Reviewed-by from Samuel and Steven with this
-big issue.
+I don't have strong opinion about this, so let's see what others think about it.
 
-Best regards,
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
