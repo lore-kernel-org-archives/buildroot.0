@@ -1,12 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 20 Mar 2015 14:07:23 +0100
-Subject: [Buildroot] [PATCH 04/15] openntpd: move systemd service files
-	to /usr/lib
-In-Reply-To: <CAKbGBLh7+9zyeZ+Aj6upKt54biWhy4R6nw8nbn_1vPRtX07oYg@mail.gmail.com>
+Date: Fri, 20 Mar 2015 14:07:25 +0100
+Subject: [Buildroot] [PATCH 05/15] dbus: move systemd service files to
+	/usr/lib
+In-Reply-To: <CAKbGBLgeHf9_4j6o0wV9XF_2gQN7oUg7yRLbpoZYGtiTvkgrrg@mail.gmail.com>
 References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
- <1426787807-29510-5-git-send-email-mike@mikebwilliams.com>
- <CAKbGBLh7+9zyeZ+Aj6upKt54biWhy4R6nw8nbn_1vPRtX07oYg@mail.gmail.com>
-Message-ID: <CAHXCMMLfKHtW5U6FidBO-4=QJi6DPZmdEapvhvKbgVxBDDHp+Q@mail.gmail.com>
+ <1426787807-29510-6-git-send-email-mike@mikebwilliams.com>
+ <CAKbGBLgeHf9_4j6o0wV9XF_2gQN7oUg7yRLbpoZYGtiTvkgrrg@mail.gmail.com>
+Message-ID: <CAHXCMMLAAjwZed1qEAnb9bqYDRPbtrr469L6wSuFGb+OXiyjag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
