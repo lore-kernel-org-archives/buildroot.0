@@ -1,10 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 20 Mar 2015 08:12:08 +0200
-Subject: [Buildroot] [PATCH] package: add mosh 1.2.4
-In-Reply-To: <1426736888-29437-6-git-send-email-steven@uplinklabs.net>
+Date: Fri, 20 Mar 2015 08:15:53 +0200
+Subject: [Buildroot] [PATCH] package: add pacman 4.2.1
+In-Reply-To: <1426736888-29437-5-git-send-email-steven@uplinklabs.net>
 References: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
- <1426736888-29437-6-git-send-email-steven@uplinklabs.net>
-Message-ID: <20150320061208.GD25388@tarshish>
+ <1426736888-29437-5-git-send-email-steven@uplinklabs.net>
+Message-ID: <20150320061553.GE25388@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +13,62 @@ To: buildroot@busybox.net
 
 Hi Steven,
 
-On Wed, Mar 18, 2015 at 08:48:08PM -0700, Steven Noonan wrote:
-> diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+On Wed, Mar 18, 2015 at 08:48:07PM -0700, Steven Noonan wrote:
+> diff --git a/package/pacman/Config.in b/package/pacman/Config.in
 > new file mode 100644
-> index 0000000..a05c711
+> index 0000000..9c4ca66
 > --- /dev/null
-> +++ b/package/mosh/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_MOSH
-> +	bool "mosh"
-> +	select BR2_PACKAGE_OPENSSH
-> +	select BR2_PACKAGE_PERL
-> +	select BR2_PACKAGE_PROTOBUF
-> +	select BR2_PACKAGE_NCURSES
-> +	select BR2_PACKAGE_PERL
+> +++ b/package/pacman/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_PACMAN
+> +	bool "pacman"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 
-Duplicate.
+Why? Please explain in the commit log.
 
-> +	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_LIBGPGME
+> +	select BR2_PACKAGE_LIBARCHIVE
+> +	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_OPENSSL
 
 Please propagate dependencies.
 
 > +	help
-> +	  Remote terminal application that allows roaming, supports intermittent
-> +	  connectivity, and provides intelligent local echo and line editing of
-> +	  user keystrokes.
+> +	  Pacman is the package manager used by the Arch distribution. It is a
+> +	  frontend for the ALPM (Arch Linux Package Management) library.
 > +
-> +	  Mosh is a replacement for SSH. It's more robust and responsive,
-> +	  especially over Wi-Fi, cellular, and long-distance links.
-> diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+> +	  Pacman does not strive to "do everything." It will add, remove and
+> +	  upgrade packages in the system, and it will allow you to query the
+> +	  package database for installed packages, files and owners. It also
+> +	  attempts to handle dependencies automatically and can download
+> +	  packages from a remote server. Arch packages are simple archives, with
+> +	  .pkg.tar.gz extension for binary packages and .src.tar.gz for source
+> +	  packages.
+> diff --git a/package/pacman/pacman.mk b/package/pacman/pacman.mk
 > new file mode 100644
-> index 0000000..c4f2c07
+> index 0000000..e979adb
 > --- /dev/null
-> +++ b/package/mosh/mosh.mk
+> +++ b/package/pacman/pacman.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# mosh
+> +# pacman
 > +#
 > +################################################################################
 > +
-> +MOSH_VERSION = 1.2.4
-> +MOSH_SITE = http://mosh.mit.edu
-> +MOSH_SOURCES = mosh-$(MOSH_VERSION).tar.gz
+> +PACMAN_VERSION = 4.2.1
+> +PACMAN_SITE = https://sources.archlinux.org/other/pacman
+> +PACMAN_SOURCES = pacman-$(PACMAN_VERSION).tar.gz
 
-That's the default.
+Default.
 
-> +MOSH_DEPENDENCIES = host-protobuf-c ncurses openssh openssl perl protobuf zlib
+> +PACMAN_DEPENDENCIES = glibc libarchive libcurl libgpgme openssl
 
-You missed selecting BR2_PACKAGE_OPENSSL in Config.in.
+No need to explicitly depend on 'glibc'. glibc is part of the toolchain that 
+is an implicit dependency of everything.
 
-> +MOSH_LICENSE = GPLv3+
-> +MOSH_LICENSE_FILES = COPYING
+> +PACMAN_LICENSE = GPLv2
+> +PACMAN_LICENSE_FILES = COPYING
 > +
 > +$(eval $(autotools-package))
 
