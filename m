@@ -1,35 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:02:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package: normalize separator size to 80
-In-Reply-To: <1426854919-8244-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1426854919-8244-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20150320140220.1648e431@free-electrons.com>
+Date: Fri, 20 Mar 2015 14:02:40 +0100
+Subject: [Buildroot] [git commit] php: security bump to version 5.5.23
+Message-ID: <20150320130300.858DB817AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=2c88be8ef755c8714ad05821c66555f6544f4794
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 20 Mar 2015 13:35:19 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/dvdauthor/dvdauthor.mk     | 4 ++--
->  package/memtest86/memtest86.mk     | 4 ++--
->  package/mjpegtools/mjpegtools.mk   | 4 ++--
->  package/mono/mono.mk               | 4 ++--
->  package/monolite/monolite.mk       | 4 ++--
->  package/tinyalsa/tinyalsa.mk       | 4 ++--
->  package/x11r7/libepoxy/libepoxy.mk | 2 +-
->  package/x264/x264.mk               | 4 ++--
->  package/xorriso/xorriso.mk         | 4 ++--
->  9 files changed, 17 insertions(+), 17 deletions(-)
+Fixes:
+CVE-2015-0231 - Use After Free Vulnerability in unserialize()
+CVE-2015-2305 - heap overflow vulnerability in regcomp.c
+CVE-2015-2331 - ZIP Integer Overflow leads to writing past heap boundary
 
-Applied, thanks!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/php/php.hash |    2 +-
+ package/php/php.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/php/php.hash b/package/php/php.hash
+index f8a1715..0794db8 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-md5	fb1704131d495f5b3e6ab3b087a8dbe6	php-5.5.22.tar.xz
++md5	692f9bc5649806f2053eee1e7323b7ea	php-5.5.23.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index b5daeb6..055bc0b 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.5.22
++PHP_VERSION = 5.5.23
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
