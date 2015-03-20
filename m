@@ -1,39 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 22:51:16 +0100
-Subject: [Buildroot] [PATCH 1/1] target-finalize: Use NULL deliminators
- when stripping the target directory.
-In-Reply-To: <1426691429-38936-1-git-send-email-andrewp@carallon.com>
-References: <1426691429-38936-1-git-send-email-andrewp@carallon.com>
-Message-ID: <20150320225116.0fb49a30@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Mar 2015 23:07:00 +0100
+Subject: [Buildroot] [PATCH v4 3/3] linux: install dtc only in case
+ package host dtc is not selected
+In-Reply-To: <1421793790-32237-3-git-send-email-ps.report@gmx.net>
+References: <1421793790-32237-1-git-send-email-ps.report@gmx.net>
+ <1421793790-32237-3-git-send-email-ps.report@gmx.net>
+Message-ID: <20150320220700.GB3979@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andrew,
+Peter, All,
 
-On Wed, 18 Mar 2015 15:10:29 +0000, andrewp at carallon.com wrote:
-> From: Andrew Parlane <andrewp@carallon.com>
+Sorry for the delay...
+
+On 2015-01-20 23:43 +0100, Peter Seiderer spake thusly:
+> Suggested by Matthew Weber (see [1]) to avoid double installation
+> of host dtc.
 > 
-> Special characters in files or directories in the rootfs can cause problems when stripping files.
-> For example "target/some song.mp3" gets treated as two entries. "target/some" and "song.mp3" are both passed to $(STRIPCMD). This then errors saying files don't exist.
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-January/117121.html
 > 
-> Additionally a ' and possibly other special characters in a file path causes xargs to give the error: "xargs: unmatched single quote; by default quotes are special to xargs unless you use the -0 option". This also has the effect of removing this entry and further entries from the list of files to strip.
-> This can be demonstrated by having a test directory with the files: "cat" "rabbit's" "elephant". then running the command: "find -name "*" -print | xargs"
-> 
-> To fix this we pass -print0 to find which seperates entries with a NULL character, and we pass -0 to xargs to tell it to only use NULL characters as the deliminator.
-> 
-> Signed-off-by: Andrew Parlane <andrewp@carallon.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  linux/linux.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 29f59e8..d598b44 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -292,13 +292,14 @@ endef
+>  endif
+>  
+>  
+> +ifeq ($BR2_PACKAGE_HOST_DTC,)
 
-I rewraped the lines of your commit log that were way too long, and
-applied your patch. Thanks a lot!
+We usually put variables between parenthesis:
 
-Thomas
+    ifeq ($(BR2_PACKAGE_HOST_DTC),)
+
+Also, this should have been squashed into the first patch.
+
+Otherwise, looks good:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+>  define LINUX_INSTALL_HOST_TOOLS
+>  	# Installing dtc (device tree compiler) as host tool, if selected
+>  	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
+>  		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ;	\
+>  	fi
+>  endef
+> -
+> +endif
+>  
+>  define LINUX_INSTALL_IMAGES_CMDS
+>  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+> -- 
+> 2.1.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
