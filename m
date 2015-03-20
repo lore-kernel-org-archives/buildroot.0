@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 23:44:37 +0100
-Subject: [Buildroot] [PATCH 1/2] uclibc: Fix getopt implementations
- conditional compilation
-In-Reply-To: <1426548628-29644-2-git-send-email-jcmvbkbc@gmail.com>
-References: <1426548628-29644-1-git-send-email-jcmvbkbc@gmail.com>
- <1426548628-29644-2-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20150320234437.3c93faaf@free-electrons.com>
+Date: Fri, 20 Mar 2015 23:29:49 +0100
+Subject: [Buildroot] [git commit] package/avrdude: optionally depends on
+	libftdi or libftdi1
+Message-ID: <20150320224445.B62F481885@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+commit: http://git.buildroot.net/buildroot/commit/?id=772dbcd797879f56919d0cd026c2aa882af21f71
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Mar 2015 02:30:27 +0300, Max Filippov wrote:
-> There's no way to disable getsubopt in uClibc 0.9.33.2: either GNU or
-> SUSv3 getsubopt is always built.
-> 
-> Properly exclude SUSv3 getsubopt implementation when GNU getopt is
-> selected.
-> Exclude GNU getsubopt when SUSv3 getopt is selected. Honor getopt_long
-> configuration.
-> 
-> This brings UCLIBC_HAS_GNU_GETOPT, UCLIBC_HAS_GNU_GETSUBOPT and
-> UCLIBC_HAS_GETOPT_LONG handling in sync with uClibc and uClibc-ng tips.
-> 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Avrdude supports both libftdi and libftdi1.
 
-Both patches applied, thanks!
+Because libftdi is already an optional dependency, this patch adds
+libftdi1 as optional dependency as well, but privileges libftdi1 over
+libftdi (accdording to what is done in  avrdude's configure script).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/avrdude/avrdude.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index 03d6490..1811893 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -17,7 +17,9 @@ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+ AVRDUDE_LICENSE = GPLv2+
+ AVRDUDE_LICENSE_FILES = avrdude/COPYING
+ 
+-ifeq ($(BR2_PACKAGE_LIBFTDI),y)
++ifeq ($(BR2_PACKAGE_LIBFTDI1),y)
++AVRDUDE_DEPENDENCIES += libftdi1
++else ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+ AVRDUDE_DEPENDENCIES += libftdi
+ endif
+ 
