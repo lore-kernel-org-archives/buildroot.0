@@ -1,63 +1,65 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 20 Mar 2015 02:30:39 +0300
-Subject: [Buildroot] [PATCH v1] postgresql: fix xtensa pthread linking
-	flags
-In-Reply-To: <trinity-59332ebf-eb06-4f81-92d0-32a69ebae436-1426807047264@3capp-gmx-bs38>
-References: <trinity-59332ebf-eb06-4f81-92d0-32a69ebae436-1426807047264@3capp-gmx-bs38>
-Message-ID: <CAMo8BfLmKCxzwfys4KUrDeA1X514XM=KDfNkcA8GCYWG2JAB4A@mail.gmail.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Thu, 19 Mar 2015 20:52:41 -0400 (EDT)
+Subject: [Buildroot] [PATCH 0/5] media image generation
+In-Reply-To: <550B5452.8080401@mind.be>
+References: <1426632719-4807-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <550B5452.8080401@mind.be>
+Message-ID: <922372444.1716533.1426812761607.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 20, 2015 at 2:17 AM, Peter Seiderer <ps.report@gmx.net> wrote:
-> Hello Max,
->
-> On Fri, Mar 20, 2015 at 01:50:22AM +0300, Max Filippov wrote:
->> On Fri, Mar 20, 2015 at 12:42 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
->> > On Fri, Mar 20, 2015 at 12:29 AM, Peter Seiderer <ps.report@gmx.net> wrote:
->> >> Caused by pthread flags autodetection failure while configure (from config.log):
->> >> configure:12436: checking whether pthreads work with -pthread
->> >> configure:12521: host/usr/bin/xtensa-linux-gcc -o conftest -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Wendif-labels -Wmissing-format-attribute -Wformat-security -fno-strict-aliasing -fwrapv -fexcess-precision=standard -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mtext-section-literals  -Os   -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE    conftest.c   -lssl -lcrypto -lz -lrt -lcrypt -ldl -lm  >&5
->> >> conftest.c: In function 'main':
->> >> conftest.c:140:27: warning: 'th' is used uninitialized in this function [-Wuninitialized]
->> >>  pthread_t th; pthread_join(th, 0);
->> >>                            ^
->> >> host/usr/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so: warning: gethostbyname is obsolescent, use getnameinfo() instead.
->> >> configure:12521: $? = 0
->> >
->> > But the test has actually succeeded according to the exit code.
->> > Maybe we'd better fix configure?
->>
->> I see the issue comes from config/acx_pthread.m4:146
->>     # Check both linking and compiling, because they might tolerate
->> different options.
->>     if test "`(eval $ac_link 2>&1 1>&5)`" = "" && test "`(eval
->> $ac_compile 2>&1 1>&5)`" = ""; then
->>
->> where non-empty stdout + stderr output of the linker and compiler
->> fail the test. And the linker gives the following warning during that test:
->>
->>     libcrypto.so: warning: gethostbyname is obsolescent, use
->> getnameinfo() instead.' = ''
->>
->
-> Thanks for taking a look at it, you are rigth with your problem description (I
-> suspected the warning output too), any suggestions how to fix it?
-> Or file a bugreport upstream?
+Hi Arnout,
 
-The attached patch fixes it for me, but I'm curious why it was
-done that way at all. Looking at postgres repository doesn't
-reveal much...
+> > This patchset adds a minimal support to generate final images for a
+> > medium (such as SD card or flash), by providing paths to some
+> > genimage config files in a board directory.
+> 
+>  I agree with this idea, but I think the proposed implementation is
+>  still a bit too ambitious.
+> 
+> 
+> > The rationale behind using genimage as the first medium image
+> > generation tool, is that while its configuration syntax is simple,
+> > it requires a small overhead to use, like temporary directories,
+> > host dependencies, and images path, that Buildroot is all aware of.
+> > 
+> > The first patch explains the convenience of this host tool, and adds
+> > the mechanism to wrap and call genimage against optional config
+> > file(s) specified in the board configuration, as well as the
+> > appropriate documentation.
+> > 
+> > The subsequent patches adds genimage config files for the following
+> > platforms: all Raspberry Pi models, BeagleBone Black, and the
+> > Wandboard.
+> 
+>  I think this would be the first thing to do: add genimage config
+>  files for these boards, and use them in their respective post-build
+>  script.
+> 
+>  Then we can see if adding infrastructure to further support it is
+>  worthwhile. A less invasive second step could be to put a genimage
+>  wrapper script in support/scripts so that you don't need a new copy
+>  for every board.
+> 
+> > They give good examples to show how Buildroot can be used to create
+> > a fully functional SD card image with a bootloader, some firmware
+> > files and a persistent rootfs, without the need to mount any
+> > partition.
+> > 
+> > Finally, this support simplifies the user experience by providing
+> > ready-to-use boot medium images, and lightening board documentation
+> > with self documented configuration files.
+> 
+>  As part of that plan, I would remove the documentation from the
+>  readme (just keep the reference to the website that explains it), and
+>  instead move it to the configuration file.
 
--- 
-Thanks.
--- Max
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-package-postgresql-fix-pthread-flags-detection.patch
-Type: text/x-patch
-Size: 2493 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150320/f3a76cd6/attachment.bin>
+I totally agree with your approach. I'll start the other way around with
+one or two boards then we'll see how it goes. As long as the boards 
+documentation and support are simplified, I'm happy :-)
+
+Best,
+-v
