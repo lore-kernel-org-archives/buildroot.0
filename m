@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 20:36:57 +0100
-Subject: [Buildroot] [git commit] dbus: move systemd service files to
+Date: Fri, 20 Mar 2015 20:39:26 +0100
+Subject: [Buildroot] [git commit] postgresql: move systemd service file to
 	/usr/lib
-Message-ID: <20150320194323.552A48181B@busybox.osuosl.org>
+Message-ID: <20150320194323.811478181B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40f0d87374aea8371f1612fca3ed12b4b152f1b7
+commit: http://git.buildroot.net/buildroot/commit/?id=173f15e62b4539e670690a03e3a1f59a83923656
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/postgresql/postgresql.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 200084f..c810800 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -54,7 +54,7 @@ endif
- ifeq ($(BR2_INIT_SYSTEMD),y)
- DBUS_CONF_OPTS += \
- 	--enable-systemd \
--	--with-systemdsystemunitdir=/lib/systemd/system
-+	--with-systemdsystemunitdir=/usr/lib/systemd/system
- DBUS_DEPENDENCIES += systemd
- else
- DBUS_CONF_OPTS += --disable-systemd
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 7bb1678..bc382ce 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -85,9 +85,9 @@ endef
+ 
+ define POSTGRESQL_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/postgresql/postgresql.service \
+-		$(TARGET_DIR)/etc/systemd/system/postgresql.service
++		$(TARGET_DIR)/usr/lib/systemd/system/postgresql.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../postgresql.service \
++	ln -fs ../../../../usr/lib/systemd/system/postgresql.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
+ endef
+ 
