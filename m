@@ -1,139 +1,59 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 20 Mar 2015 22:49:45 +0100
-Subject: [Buildroot] [PATCH v5] package/sysdig: New package
-In-Reply-To: <1426856189-8223-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1426856189-8223-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <CAHXCMMK4ZLyB6XvSGAx5H64EdK3MwNc3J5hLMh+D7LkmhP2CDA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Mar 2015 22:46:02 +0100
+Subject: [Buildroot] [git commit] target-finalize: Use NULL deliminators
+	when stripping the target directory.
+Message-ID: <20150320215042.3F36181883@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+commit: http://git.buildroot.net/buildroot/commit/?id=26f215d13756b0356c2aaa6d6bfc71ae99d6c1e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Mar 20, 2015 at 1:56 PM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> Sysdig is open source, system-level exploration:
-> capture system state and activity from a running Linux
-> instance, then save, filter and analyze.
->
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> Changes v4 -> v5:
->   - Adjusted to 80 columns for sysdig.mk header
->
-> Changes v3 -> v4:
->   - Changed "depends on" to "select" and fixed selected packages
->     dependencies.
->   - moved "comment" section to the bottom
->
-> Changes v2 -> v3:
->   - Changed "depends on" and "select" to simplify package
->
-> Changes v1 -> v2:
->   - Changed "depends on" with "select" for dependencies (suggested by Baruch)
->   - Added comment "sysdig needs a Linux kernel to be built" (suggested by Baruch)
->   - Upgreded to recently released 0.1.99
->
->
->  package/Config.in        |  1 +
->  package/sysdig/Config.in | 21 +++++++++++++++++++++
->  package/sysdig/sysdig.mk | 22 ++++++++++++++++++++++
->  3 files changed, 44 insertions(+)
->  create mode 100644 package/sysdig/Config.in
->  create mode 100644 package/sysdig/sysdig.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index fce92a8..6596292 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -95,6 +95,7 @@ endif
->         source "package/strace/Config.in"
->         source "package/stress/Config.in"
->         source "package/sysprof/Config.in"
-> +       source "package/sysdig/Config.in"
->         source "package/tinymembench/Config.in"
->         source "package/trace-cmd/Config.in"
->         source "package/trinity/Config.in"
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> new file mode 100644
-> index 0000000..5c2b070
-> --- /dev/null
-> +++ b/package/sysdig/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_SYSDIG
-> +       bool "sysdig"
-> +       select BR2_PACKAGE_ZLIB
-> +       select BR2_PACKAGE_LUAJIT
-> +       select BR2_PACKAGE_LIBJSON
-> +       depends on BR2_LINUX_KERNEL
-> +       depends on BR2_INSTALL_LIBSTDCPP # libjson
-> +       depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> +       help
-> +         Sysdig is open source, system-level exploration:
-> +         capture system state and activity from a running Linux instance,
-> +         then save, filter and analyze.
-> +         Think of it as strace + tcpdump + lsof + awesome sauce.
-> +         With a little Lua cherry on top.
-> +
-> +         http://sysdig.org
-> +
-> +comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
-> +       depends on !BR2_LINUX_KERNEL
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-> new file mode 100644
-> index 0000000..8fea399
-> --- /dev/null
-> +++ b/package/sysdig/sysdig.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# sysdig
-> +#
-> +################################################################################
-> +
-> +SYSDIG_VERSION = 0.1.99
-> +SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
-> +SYSDIG_LICENSE = GPLv2
-> +SYSDIG_LICENSE_FILES = COPYING
-> +SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF
-You may also want to set USE_BUNDLED_JSONCPP here.
+Special characters in files or directories in the rootfs can cause
+problems when stripping files.  For example "target/some song.mp3"
+gets treated as two entries. "target/some" and "song.mp3" are both
+passed to $(STRIPCMD). This then errors saying files don't exist.
 
-> +SYSDIG_DEPENDENCIES = zlib luajit libjson linux
-> +SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
-> +
-> +define SYSDIG_INSTALL_DRIVER
-> +       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules
-This command actually build the kernel module, so should be in a _BUILD_HOOK ;-)
+Additionally a ' and possibly other special characters in a file path
+causes xargs to give the error: "xargs: unmatched single quote; by
+default quotes are special to xargs unless you use the -0
+option". This also has the effect of removing this entry and further
+entries from the list of files to strip.  This can be demonstrated by
+having a test directory with the files: "cat" "rabbit's"
+"elephant". then running the command: "find -name "*" -print | xargs"
 
-> +       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D)/driver modules_install
-> +endef
-> +
-> +SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
+To fix this we pass -print0 to find which seperates entries with a
+NULL character, and we pass -0 to xargs to tell it to only use NULL
+characters as the deliminator.
 
-The weird thing here is that you manually build/install the kernel
-module, whereas AFAICS it should be automatically done by the
-build-system (the driver directory is always scan in the Buildroot
-context (see [1]), and BUILD_DRIVER is ON by default ([2])).
-I suggest to disable BUILD_DRIVER in the conf. options.
+Signed-off-by: Andrew Parlane <andrewp@carallon.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-> +
-> +$(eval $(cmake-package))
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-[1] https://github.com/draios/sysdig/blob/dev/CMakeLists.txt#L50
-[2] https://github.com/draios/sysdig/blob/dev/driver/CMakeLists.txt#L1
-
-Regards,
-
--- 
-Samuel
+diff --git a/Makefile b/Makefile
+index af043a3..33a89b1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -500,7 +500,7 @@ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+ #   applications and libraries. Normally kernel modules are already excluded
+ #   by the executable permission check above, so the explicit exclusion is only
+ #   done for kernel modules with incorrect permissions.
+-STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
++STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
+ 
+ ifeq ($(BR2_ECLIPSE_REGISTER),y)
+ define TOOLCHAIN_ECLIPSE_REGISTER
+@@ -579,7 +579,7 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
+-	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
++	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+ 	if test -d $(TARGET_DIR)/lib/modules; then \
+ 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(KSTRIPCMD); fi
