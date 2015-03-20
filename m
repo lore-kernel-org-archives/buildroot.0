@@ -1,10 +1,10 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri, 20 Mar 2015 15:13:56 -0400
-Subject: [Buildroot] [PATCH v2 05/25] openntpd: move systemd service files
-	to /usr/lib
+Date: Fri, 20 Mar 2015 15:13:57 -0400
+Subject: [Buildroot] [PATCH v2 06/25] dbus: move systemd service files to
+	/usr/lib
 In-Reply-To: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
 References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1426878856-15747-6-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1426878856-15747-7-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/openntpd/openntpd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index 60f025c..41e3399 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -11,9 +11,9 @@ OPENNTPD_LICENSE_FILES = COPYING
- 
- define OPENNTPD_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 package/openntpd/ntpd.service \
--		$(TARGET_DIR)/etc/systemd/system/ntpd.service
-+		$(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -fs ../ntpd.service \
-+	ln -fs ../../../../usr/lib/systemd/system/ntpd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ntpd.service
- endef
- 
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 200084f..c810800 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -54,7 +54,7 @@ endif
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ DBUS_CONF_OPTS += \
+ 	--enable-systemd \
+-	--with-systemdsystemunitdir=/lib/systemd/system
++	--with-systemdsystemunitdir=/usr/lib/systemd/system
+ DBUS_DEPENDENCIES += systemd
+ else
+ DBUS_CONF_OPTS += --disable-systemd
 -- 
 2.1.0
