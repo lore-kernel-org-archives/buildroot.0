@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 22:42:07 +0100
-Subject: [Buildroot] [PATCH 2/2] bfin: put the libc link path of the
- flat shared and sep data formats before the sysroot link path
-In-Reply-To: <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
+Date: Fri, 20 Mar 2015 22:45:08 +0100
+Subject: [Buildroot] [PATCH 1/2] bfin: remove the dependency of flat
+ shared mode to shared library
+In-Reply-To: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
 References: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
- <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20150320224207.7b3334b9@free-electrons.com>
+Message-ID: <20150320224508.73c0c84b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,55 +13,43 @@ To: buildroot@busybox.net
 
 Dear Sonic Zhang,
 
-On Wed, 18 Mar 2015 16:59:16 +0800, Sonic Zhang wrote:
+On Wed, 18 Mar 2015 16:59:15 +0800, Sonic Zhang wrote:
 > From: Sonic Zhang <sonic.zhang@analog.com>
 > 
-> The libc of the shared flat and sep data formats are different from the
-> standard flat libc in the sysroot lib path. In order to make application
-> link with proper libc, put their path before the sysroot link path.
+> Blackfin flat shared library isn't generated and linked in the same way
+> as the ELF shared library. So, don't mark it depend on the static library
+> only.
 > 
 > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 > ---
->  package/Makefile.in |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/Config.in |    1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 803b162..e88d1ad 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -153,12 +153,12 @@ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSI
->  endif
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 16ad8be..6179960 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -295,7 +295,6 @@ config BR2_BINFMT_FLAT_SEP_DATA
 >  
->  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
-> -TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-> +TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0 -L$(STAGING_DIR)/usr/lib/mid-shared-library
->  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
->  TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
->  endif
->  ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
-> -TARGET_LDFLAGS += -msep-data
-> +TARGET_LDFLAGS += -msep-data -L$(STAGING_DIR)/usr/lib/msep-data
->  TARGET_CFLAGS += -msep-data
->  TARGET_CXXFLAGS += -msep-data
->  endif
+>  config BR2_BINFMT_FLAT_SHARED
+>  	bool "Shared binary"
+> -	select BR2_BINFMT_SUPPORTS_SHARED
 
-Thanks for this patch. I did some quick testing with
-BR2_BINFMT_FLAT_SHARED with and without your patch, and I do not see a
-difference. For example, I've built strace with and without your patch
-applied, and the resulting binary has the same size. Looking at
-strace.gdb using readelf, I can see that the C library functions are
-not inside the strace binary itself, while with a BR2_BINFMT_FLAT_ONE
-build, the strace binary is definitely bigger and a readelf on
-strace.gdb shows that the C library functions have been copied into the
-binary.
+If you don't select BR2_BINFMT_SUPPORTS_SHARED, then the only available
+option amongst: static libs, static libs + shared libs, shared libs is
+"static libs", which means that the "-static" flag is always passed. If
+that's OK, then I'm fine with the patch.
 
-So, could you give us an example of what this patch is fixing?
+The second sentence of your commit log is confusing however. You say
+"don't mark it depend on the static library only". But it is exactly
+what your patch is doing: since it's no longer select
+BR2_BINFMT_SUPPORTS_SHARED, it means that after your patch is applied,
+when BR2_BINFMT_FLAT_SHARED is used, the *only* possibility is static
+library only.
 
-I'm sorry to ask such questions, but while the Blackfin architecture is
-probably well known to you, it isn't to most of us, so some additional
-details are always useful.
+Could you clarify?
 
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
