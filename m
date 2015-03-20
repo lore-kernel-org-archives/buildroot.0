@@ -1,10 +1,10 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri, 20 Mar 2015 15:14:00 -0400
-Subject: [Buildroot] [PATCH v2 09/25] rsyslog: fix systemd service
-	installation
+Date: Fri, 20 Mar 2015 15:14:01 -0400
+Subject: [Buildroot] [PATCH v2 10/25] dropbear: move systemd service file to
+	/usr/lib
 In-Reply-To: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
 References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1426878856-15747-10-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1426878856-15747-11-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- package/rsyslog/rsyslog.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/dropbear/dropbear.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index c6758eb..e3c9d1a 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -65,11 +65,11 @@ define RSYSLOG_INSTALL_INIT_SYSV
- endef
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index f2ae403..bc65d69 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -53,9 +53,9 @@ endef
  
- define RSYSLOG_INSTALL_INIT_SYSTEMD
--	ln -sf /lib/systemd/system/rsyslog.service \
-+	ln -fs ../../../usr/lib/systemd/system/rsyslog.service \
- 		$(TARGET_DIR)/etc/systemd/system/syslog.service
+ define DROPBEAR_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
+-		$(TARGET_DIR)/lib/systemd/system/dropbear.service
++		$(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
  	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
--	ln -sf ../syslog.service \
--		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog.service
-+	ln -fs ../../../../usr/lib/systemd/system/rsyslog.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rsyslog.service
+-	ln -fs /lib/systemd/system/dropbear.service \
++	ln -fs ../../../../usr/lib/systemd/system/dropbear.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dropbear.service
  endef
  
- define RSYSLOG_INSTALL_CONF
 -- 
 2.1.0
