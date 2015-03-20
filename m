@@ -1,67 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 17:02:29 +0100
-Subject: [Buildroot] Worried about patches not being merged?
-In-Reply-To: <CA+TH9V=wUa6Sh+uszjndiy-FaHsxzbVuvjAFcQWVxTg=qEeJTw@mail.gmail.com>
-References: <20150304232101.437af48f@free-electrons.com>
- <1426708866.1395.8.camel@embedded.rocks>
- <CA+TH9VmRWPdidNHSLArTek4Pxxtw+viOy7_tMbMYturnq0-VaQ@mail.gmail.com>
- <20150319101643.6a4eeed3@free-electrons.com>
- <CA+TH9Vm9myq5YS_3+CsvT5-SZXcGyug3KDUO0Ai8f+daMf6BYg@mail.gmail.com>
- <20150319112638.6e5fc986@free-electrons.com>
- <CA+TH9VnnocY3CWhuiDOL6mZMSCZj+5GXTJpE5yna5pnGqKj8Lg@mail.gmail.com>
- <20150319120923.65bda6ab@free-electrons.com>
- <CA+TH9V=wUa6Sh+uszjndiy-FaHsxzbVuvjAFcQWVxTg=qEeJTw@mail.gmail.com>
-Message-ID: <20150320170229.16a1de9b@free-electrons.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Fri, 20 Mar 2015 12:21:21 -0400
+Subject: [Buildroot] RFC: systemd and service files cleanup
+In-Reply-To: <550B432C.9060100@mind.be>
+References: <1426787807-29510-1-git-send-email-mike@mikebwilliams.com>
+ <CAKbGBLj66AmB6kxrp1utLmZ+AhWN+-0aDERdD=4FtAi=UHT_ig@mail.gmail.com>
+ <CANPyyuO9hfyObgWWPjh7m=oghSs=qWWvsG28q+P=7F8W4NQnYg@mail.gmail.com>
+ <CAKbGBLhc8Wftu8pSVM8jNvRRpoSV=e0p5eomh4=+u8wg1VxVxA@mail.gmail.com>
+ <550B432C.9060100@mind.be>
+Message-ID: <CANPyyuMaisU0v1m1LUkoOnd+o2oYzG1aen9RBWyvVhU0n8x32A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+All,
 
-On Thu, 19 Mar 2015 23:27:22 +0100, Angelo Compagnucci wrote:
+On Thu, Mar 19, 2015 at 5:44 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 19/03/15 20:50, Steven Noonan wrote:
+>> On Thu, Mar 19, 2015 at 12:43 PM, Mike Williams <mike@mikebwilliams.com> wrote:
+>>>> I come from the Arch Linux world, so I made a new skeleton that
+>>>> matches the Arch base filesystem layout: with /bin, /sbin, /usr/bin,
+>>>> and /usr/sbin all unified (likewise with /lib and /usr/lib). I haven't
+>>>> convinced myself to post the series because I can't think of a
+>>>> particularly good justification for it in the Buildroot context.
+>>>
+>>> I'm working that way myself, I don't know what use cases in Buildroot
+>>> still require the split.
+>>
+>> We could consider offering it as an experimental alternative to the
+>> default skeleton (just add another "choice" in kconfig, as I did in my
+>> patch series). And open a discussion about unifying the directory
+>> structure. It's certainly possible to support both use cases, though
+>> it does require more testing.
+>
+>  I've also started using a unified /bin /sbin /usr/bin /usr/sbin and unified
+> /lib /usr/lib /lib64 /usr/lib64, and it really simplifies things a lot. I yet
+> have to find a disadvantage.
 
-> I have more or less done, I think in the WE I can push a patch to have
-> tags attached to patches.
+Working through this systemd cleanup, I'm now finding that some
+packages install udev rules to /lib/udev/rules.d by default. The udev
+documentation states that:
 
-Awesome. Another thing that would be great in the long term is to make
-the patchwork UI a bit reactive (Ajax stuff, etc.).
+"The udev rules are read from the files located in the system rules
+directory /usr/lib/udev/rules.d, the volatile runtime directory
+/run/udev/rules.d and the local administration directory
+/etc/udev/rules.d." I can verify that systemd's udev does not check
+/lib/udev/rules.d, even with --enable-split-usr (our current setup).
+I'm not sure what eudev does.
 
-> > Ah, really? Could you describe a bit the workflow / how it would work ?
-> 
-> I have to find more time to elaborate if that software could be bended
-> to buildroot needs. I have only a superficially view right now. I
-> promise to look better at it.
+https://www.kernel.org/pub/linux/utils/kernel/hotplug/udev/udev.html
 
-Ok, thanks.
+It makes me wonder how many upstream developers are already using a
+merged /usr system, and are not noticing the technically wrong
+defaults for split systems. Likewise, apparently many of buildroot's
+systemd users have merged /usr already, they won't notice this
+breakage in their testing either.
 
-> > Well, is there really such a huge pile of new packages / medium level
-> > patches / newbie patches ? We tend to apply them fairly quickly, in
-> > general.
-> 
-> Yes, but I have the impression that patches tends to accumulate in a
-> stack fashion, so the patches served are the last arrived. If a patch
-> slips out of scope, it takes some time to get reviewed/committed. This
-> is wouldn't be a critic to your great work nor the work of the other
-> great reviewer/committers!
-
-Yes, I agree this is what happens, but there is more or less a reason
-for it. When a new patch arrives, if it's a fairly trivial package
-bump, hash addition, or new package addition not raising any particular
-question, then it's just good to apply it quickly so that it gets out
-of the way.
-
-Then, what happens is that what remains from this quick effort are the
-more complicated patches, that tend to pile up.
-
-Whenever I spend an evening applying patches, I generally try to work
-in two passes: first a quick pass on all the trivial stuff of the day
-(or past few days), and then a second pass during which I try to handle
-a few older patches.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Mike
