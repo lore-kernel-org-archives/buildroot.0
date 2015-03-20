@@ -1,74 +1,71 @@
-From: Steven Noonan <steven@uplinklabs.net>
-Date: Fri, 20 Mar 2015 14:19:25 -0700
-Subject: [Buildroot] [PATCH] package: add pacman 4.2.1
-In-Reply-To: <20150320213443.7dcf4817@free-electrons.com>
-References: <1426736888-29437-1-git-send-email-steven@uplinklabs.net>
- <1426736888-29437-5-git-send-email-steven@uplinklabs.net>
- <20150320205209.2830b9bc@free-electrons.com>
- <CAKbGBLiyLf4JgiTrgN=w8YQu5xAgYHmt0UWysRGYxhjNWJjZeg@mail.gmail.com>
- <20150320213443.7dcf4817@free-electrons.com>
-Message-ID: <CAKbGBLjGVfC0WneHefdVoGUsshFtDfAk_ReRtvp4tU-7uF+vyw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 20 Mar 2015 22:42:07 +0100
+Subject: [Buildroot] [PATCH 2/2] bfin: put the libc link path of the
+ flat shared and sep data formats before the sysroot link path
+In-Reply-To: <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
+References: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
+ <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20150320224207.7b3334b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 20, 2015 at 1:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Steven Noonan,
->
-> On Fri, 20 Mar 2015 13:18:46 -0700, Steven Noonan wrote:
->
->> > In addition to the comments made by Baruch, could you also include in
->> > the commit log a motivation for adding this package in Buildroot?
->> >
->> > It seems a bit weird to package the package manager of another distro.
->>
->> Why do we have RPM then? :)
->
-> Well, to be honest I don't know how rpm compares to pacman. I believe
-> the reason we have rpm and opkg is because some people might build
-> their own binary packages (outside of Buildroot, since Buildroot
-> doesn't allow building binary packages), and install them inside a
-> Buildroot system.
->
->> If we don't want it in there I have no problem maintaining it in my
->> own tree.
->
-> Well, it's that we don't want it, the package seems pretty simple, so
-> it's not that a big issue. It's just that it's a bit unusual, and some
-> explanations about the use case would be useful.
->
+Dear Sonic Zhang,
 
-OK, fair enough. Pacman is fairly generally applicable and could work
-fine for Buildroot (just as RPM could).
+On Wed, 18 Mar 2015 16:59:16 +0800, Sonic Zhang wrote:
+> From: Sonic Zhang <sonic.zhang@analog.com>
+> 
+> The libc of the shared flat and sep data formats are different from the
+> standard flat libc in the sysroot lib path. In order to make application
+> link with proper libc, put their path before the sysroot link path.
+> 
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  package/Makefile.in |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 803b162..e88d1ad 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -153,12 +153,12 @@ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSI
+>  endif
+>  
+>  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+> -TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+> +TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0 -L$(STAGING_DIR)/usr/lib/mid-shared-library
+>  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+>  TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+>  endif
+>  ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
+> -TARGET_LDFLAGS += -msep-data
+> +TARGET_LDFLAGS += -msep-data -L$(STAGING_DIR)/usr/lib/msep-data
+>  TARGET_CFLAGS += -msep-data
+>  TARGET_CXXFLAGS += -msep-data
+>  endif
 
-I have two distinct use cases:
+Thanks for this patch. I did some quick testing with
+BR2_BINFMT_FLAT_SHARED with and without your patch, and I do not see a
+difference. For example, I've built strace with and without your patch
+applied, and the resulting binary has the same size. Looking at
+strace.gdb using readelf, I can see that the C library functions are
+not inside the strace binary itself, while with a BR2_BINFMT_FLAT_ONE
+build, the strace binary is definitely bigger and a readelf on
+strace.gdb shows that the C library functions have been copied into the
+binary.
 
-- PXE Arch Linux installer ramdisks (ArchISO is a bit too big for my tastes)
-- Minimalistic virtualization hosts
+So, could you give us an example of what this patch is fixing?
 
-First, I'd like to use Buildroot to create a minimal PXE booted
-ramdisk to do automated Arch Linux installs -- in order to do that, I
-need pacman + the arch-install-scripts.
+I'm sorry to ask such questions, but while the Blackfin architecture is
+probably well known to you, it isn't to most of us, so some additional
+details are always useful.
 
-And second, which may be part of a larger discussion to have: I also
-envision Buildroot being used to create very stripped down Linux
-installs for virtualization hosts, i.e. kernel + bare minimum
-userspace + xen/kvm/lxc. Most Xen/KVM/LXC admins seem to use full
-desktop/server Linux installs on their virtualization hosts, but this
-is really unnecessary and often is disruptive to guest operating
-systems. I would contend people should really treat the privileged
-domain (host) as an embedded system, especially to avoid contention
-between guests and the host. For example, why would you want mandb or
-updatedb running via cron on your host when you'll never use the
-fruits of their labor there? All those do is consume resources that
-could otherwise be used by a guest, and introduce observable latencies
-in the guest environments. As for how this relates to Pacman: in order
-to act as a minimal LXC host, the various Linux distribution package
-managers are needed for 'lxc-create' with a template (e.g. Fedora has
-the Debian and Arch package managers available in their repositories,
-as odd as that may seem at first glance). In the case of KVM and Xen,
-you're just dealing with disk images, so it's not necessary to have
-the other distros' package managers.
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
