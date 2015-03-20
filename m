@@ -1,25 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Mar 2015 14:30:09 +0100
-Subject: [Buildroot] [PATCH] gpsd: add hash file
-In-Reply-To: <1426786186-12621-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1426786186-12621-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150320143009.35031957@free-electrons.com>
+Date: Fri, 20 Mar 2015 14:31:26 +0100
+Subject: [Buildroot] [PATCH v1 1/1] dvdrw-tools: delete explicit default
+ for backend
+In-Reply-To: <1426782276-5069-1-git-send-email-skenton@ou.edu>
+References: <1426782276-5069-1-git-send-email-skenton@ou.edu>
+Message-ID: <20150320143126.3c53e4f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Steve Kenton,
 
-On Thu, 19 Mar 2015 14:29:46 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gpsd/gpsd.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/gpsd/gpsd.hash
+On Thu, 19 Mar 2015 11:24:36 -0500, Steve Kenton wrote:
+> Signed-off-by: Steve Kenton <skenton@ou.edu>
 
-Applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
