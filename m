@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2015 00:11:17 +0100
+Date: Sat, 21 Mar 2015 00:14:14 +0100
 Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
  fragments
 In-Reply-To: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
 References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20150320231117.GE3979@free.fr>
+Message-ID: <20150320231414.GF3979@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,7 +24,13 @@ On 2015-02-15 13:33 +0100, Floris Bos spake thusly:
 > 
 > Disables -update-config and -update-defconfig targets when
 > fragment files are set.
-> 
+
+BTW, you forgot to document that in the manual, see:
+    docs/manual/adding-packages-kconfig.txt
+
+Regards,
+Yann E. MORIN.
+
 > Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 > ---
 >  package/pkg-kconfig.mk | 14 ++++++++++----
@@ -67,13 +73,6 @@ On 2015-02-15 13:33 +0100, Floris Bos spake thusly:
 >  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
 > +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
 > +		$$(error Unable to perform $(1)-update-config when fragment files are set))
-
-$(error ...) is Makefile syntax, while this is a shell. I'd prefer we
-use a shell construct here, like:
-
-    $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
-        echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
-
 >  	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
 >  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
 >  
@@ -83,14 +82,6 @@ use a shell construct here, like:
 >  $(1)-update-defconfig: $(1)-savedefconfig
 > +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
 > +		$$(error Unable to perform $(1)-update-defconfig when fragment files are set))
-
-Ditto.
-
-Otherwise, looks good.
-
-Regards,
-Yann E. MORIN.
-
 >  	cp -f $$($(2)_DIR)/defconfig $$($(2)_KCONFIG_FILE)
 >  	touch --reference $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
 >  
