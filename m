@@ -1,55 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Mar 2015 18:34:09 +0100
-Subject: [Buildroot] [PATCH 4/4] wine: more hostarch
-In-Reply-To: <550D907F.5000106@dawncrow.de>
-References: <550D907F.5000106@dawncrow.de>
-Message-ID: <550DAB91.6080603@mind.be>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sat, 21 Mar 2015 20:26:54 +0200
+Subject: [Buildroot] [RFC 00/11] common init infrastructure
+Message-ID: <cover.1426960081.git.alex.suykov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/03/15 16:38, Andr? Hentschel wrote:
-> The tools from host-wine build on those architectures.
-> 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+This series is intended to clean up buildroot init system somewhat,
+removing the need for extensive sysv and systemd handling code
+in every package that installs init bits, and allowing alternative
+init systems to be implemented with reasonable amount of effort.
 
- Do you also volunteer to provide an autobuilder on arm and aarch64? :-)
+Overview of the changes:
 
-> ---
->  package/wine/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/wine/Config.in b/package/wine/Config.in
-> index 26de143..d1510e1 100644
-> --- a/package/wine/Config.in
-> +++ b/package/wine/Config.in
-> @@ -2,7 +2,9 @@ config BR2_PACKAGE_WINE
->  	bool "wine"
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	# Wine only builds on certain architectures
-> -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" || \
-> +	           BR2_HOSTARCH = "powerpc" || BR2_HOSTARCH = "arm" || \
+* drop per-package sysv and systemd files, introduce common format
+  used to generate files for both of them, use a script to do
+  the conversion from common format to sysv or systemd.
 
- powerpc but not powerpc64?
+* remove sysv and systemd installation code from package .mk files,
+  let pkg-generic handle it.
+
+* remove sysv-specific files from skeleton, and sysv-specific hacks
+  from system/system.mk. Use a dedicated script to write inittab,
+  handling global conditionals (root rw/ro, serial getty and so on)
+
+* remove user definitions from package .mk files, and mkdirs from
+  per-package sysv initscript, use per-package .users and .files
+  instead in a way similar to .hash files.
+
+Expected benefits:
+
+* (almost) all packages get both sysv and systemd files at the same
+  time and without the need to support them separately.
+
+* init-related changes can be introduced without patching
+  all 70+ individual packages that install startup files.
+
+* new init systems can be introduced with only minor effort,
+  including lightweight ones with controlled (foreground) daemons.
+
+This series includes the infrastructure changes, and a couple of
+package patches to show how it looks like. Complete set of package
+patches uploaded here: https://github.com/arsv/br/
 
 
- Regards,
- Arnout
-
-> +	           BR2_HOSTARCH = "aarch64"
->  	# Wine has much CPU specific code and mostly makes sense on x86
->  	depends on BR2_i386
->  	help
-> 
-
+This series is for reviewing, not for merging.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.3
