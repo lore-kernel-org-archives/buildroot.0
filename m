@@ -1,38 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Mar 2015 18:28:52 +0100
-Subject: [Buildroot] [PATCH 1/5 v2] support/download: make hash file
- optional
-In-Reply-To: <20150321170041.GC4201@free.fr>
-References: <cover.1426597114.git.yann.morin.1998@free.fr>
- <26bebad3dca4191b35ddb2dae535b15de9a883c2.1426597114.git.yann.morin.1998@free.fr>
- <550B3991.8090509@mind.be> <20150321170041.GC4201@free.fr>
-Message-ID: <550DAA54.4060908@mind.be>
+Date: Sat, 21 Mar 2015 18:34:09 +0100
+Subject: [Buildroot] [PATCH 4/4] wine: more hostarch
+In-Reply-To: <550D907F.5000106@dawncrow.de>
+References: <550D907F.5000106@dawncrow.de>
+Message-ID: <550DAB91.6080603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/03/15 18:00, Yann E. MORIN wrote:
-[snip]
-> But for git/hg/svn/bzr/cvs
-> clones/checkouts/... there is intrisically no reason to have a hash, by
-> design.
+On 21/03/15 16:38, Andr? Hentschel wrote:
+> The tools from host-wine build on those architectures.
+> 
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 
- Why is there no reason to have a hash? The download helpers will indeed detect
-failed clones/checkouts/..., but they won't detect a failed download from the
-PRIMARY or SECONDARY site, e.g. if a user configures a bad PRIMARY site that
-always gives you a landing page rather than a 404.
+ Do you also volunteer to provide an autobuilder on arm and aarch64? :-)
 
- Also, a second reason to have the hash is for "security", to protect against
-MITM attacks. git with a sha1 will protect against that, but not if you give it
-a tag. And svn, well, I'll leave that as an exercise for the reader :-)
+> ---
+>  package/wine/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/wine/Config.in b/package/wine/Config.in
+> index 26de143..d1510e1 100644
+> --- a/package/wine/Config.in
+> +++ b/package/wine/Config.in
+> @@ -2,7 +2,9 @@ config BR2_PACKAGE_WINE
+>  	bool "wine"
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>  	# Wine only builds on certain architectures
+> -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" || \
+> +	           BR2_HOSTARCH = "powerpc" || BR2_HOSTARCH = "arm" || \
+
+ powerpc but not powerpc64?
 
 
  Regards,
  Arnout
 
-[snip]
+> +	           BR2_HOSTARCH = "aarch64"
+>  	# Wine has much CPU specific code and mostly makes sense on x86
+>  	depends on BR2_i386
+>  	help
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
