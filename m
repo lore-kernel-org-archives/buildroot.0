@@ -1,56 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Mar 2015 12:11:14 +0100
-Subject: [Buildroot] [PATCH 1/3] package/tvheadend: Fix inclusion of
-	dtv-scan-tables files
-Message-ID: <1426936276-23649-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 21 Mar 2015 12:11:16 +0100
+Subject: [Buildroot] [PATCH 3/3] package/dtv-scan-tables: bump version
+In-Reply-To: <1426936276-23649-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1426936276-23649-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1426936276-23649-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---enable-dvbscan forces downloading the tables from upstream which is
-not needed because we provide these files through TVHEADEND_BUILD_CMDS.
-So --disable-dvbscan fixes the autobuild errors. But doing so prevents
-the inclusion of the dtv-scan-tables files in the bundled binary
-usr/bin/tvheadend. Therefore we force .config.mk to enable the dvbscan
-support again after the configure script finished.
-To verify the bundled contents have a look at build.linux/bundle.d.
-Also fix a comment typo.
-
-Fixes
-http://autobuild.buildroot.net/results/25f/25fc657dbc37228483eeefb3618be9df2ee13832/
-http://autobuild.buildroot.net/results/37a/37abb5d2ec62ac59897d019e6ca85c8eb0e69786/
-http://autobuild.buildroot.net/results/e86/e860e501f904d94bbab6a765aad4d19947135513/
-http://autobuild.buildroot.net/results/a55/a55ab4fc34bebda14236d6a0efe893aa75374ed2/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tvheadend/tvheadend.mk |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/dtv-scan-tables/dtv-scan-tables.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index d6b77da..96c040d 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -50,15 +50,16 @@ define TVHEADEND_CONFIGURE_CMDS
- 			--arch="$(ARCH)"			\
- 			--cpu="$(BR2_GCC_TARGET_CPU)"		\
- 			--python="$(HOST_DIR)/usr/bin/python"	\
--			--enable-dvbscan			\
-+			--disable-dvbscan			\
- 			--enable-bundle				\
- 			--disable-libffmpeg_static		\
- 			$(TVHEADEND_CONF_OPTS)			\
-+		&& $(SED) 's%^CONFIG_DVBSCAN =.*%CONFIG_DVBSCAN = yes%' .config.mk \
- 	)
- endef
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index 9d85325..fa90697 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # The tvheadend build system expects the transponder data to be present inside
--# its source tree. To prevent a downloaded initiated by the build system just
-+# its source tree. To prevent a download initiated by the build system just
- # copy the data files in the right place and add the corresponding stamp file.
- define TVHEADEND_BUILD_CMDS
- 	$(INSTALL) -d $(@D)/data/dvb-scan
+-DTV_SCAN_TABLES_VERSION = 1246b27f8b45f84c1824925060ad931530542f2e
++DTV_SCAN_TABLES_VERSION = 2d181a8f9cecb6d5ad2577ba5e34c3ca698a2eda
+ DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
 -- 
 1.7.10.4
