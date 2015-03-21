@@ -1,29 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 00:58:52 +0100
-Subject: [Buildroot] [PATCH] sh4: fix toolchain creation
-In-Reply-To: <20150321225245.GL21001@waldemar-brodkorb.de>
-References: <20150320182214.GA3086@waldemar-brodkorb.de>
- <550D884B.5030107@mind.be> <20150321225245.GL21001@waldemar-brodkorb.de>
-Message-ID: <550E05BC.3000906@mind.be>
+From: Rhys Williams <github@wilberforce.co.nz>
+Date: Sat, 21 Mar 2015 22:06:24 +1300
+Subject: [Buildroot] [PATCH 1/2] Add lirc-tools
+Message-ID: <1426928785-806-1-git-send-email-github@wilberforce.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/03/15 23:52, Waldemar Brodkorb wrote:
-> I made a short test of a static linked bash produced by this
-> toolchain on my SNAPGear SME575:
+Signed-off-by: Rhys Williams <github@wilberforce.co.nz>
+---
+ package/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- That's what I meant!
-
- Regards,
- Arnout
-
+diff --git a/package/Config.in b/package/Config.in
+index 93fde92..f97ea6e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -342,6 +342,7 @@ endif
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+ 	source "package/lcdproc/Config.in"
++	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+ 	source "package/lshw/Config.in"
+ 	source "package/lsuio/Config.in"
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.3.2
