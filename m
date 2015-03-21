@@ -1,57 +1,101 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Mar 2015 15:57:24 +0100
-Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
- fragments
-In-Reply-To: <20150320231117.GE3979@free.fr>
-References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
- <20150320231117.GE3979@free.fr>
-Message-ID: <550D86D4.7060808@mind.be>
+Date: Sat, 21 Mar 2015 16:03:39 +0100
+Subject: [Buildroot] [PATCH] sh4: fix toolchain creation
+In-Reply-To: <20150320182214.GA3086@waldemar-brodkorb.de>
+References: <20150320182214.GA3086@waldemar-brodkorb.de>
+Message-ID: <550D884B.5030107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/03/15 00:11, Yann E. MORIN wrote:
-> Floris, All,
-> 
-> On 2015-02-15 13:33 +0100, Floris Bos spake thusly:
->> Adds functionality to the kconfig infrastructure to merge additional
->> configuration fragment files to the main configuration file of
->> kconfig packages, using support/kconfig/merge_config.sh
->>
->> Typical use-case is when you want your configuration to be
->> kept in sync with an upstream (def)config file, but do require
->> some minor local modifications.
->>
->> Disables -update-config and -update-defconfig targets when
->> fragment files are set.
->>
->> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
->> ---
-[snip]
->> @@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
->>  # Even though we could use 'cp --preserve-timestamps' here, the separate
->>  # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
->>  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
->> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
->> +		$$(error Unable to perform $(1)-update-config when fragment files are set))
-> 
-> $(error ...) is Makefile syntax, while this is a shell. I'd prefer we
-> use a shell construct here, like:
-> 
->     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
->         echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
+ Hi Waldemar,
 
- Or perhaps it's better to simply disable the update targets when fragments are set:
+On 20/03/15 19:22, Waldemar Brodkorb wrote:
+> The Linux kernel does force compile with -m4-nofpu, which is only
+> available when building a multilib toolchain.
+> The interesting part here is, that buildroot use --disable-multilib for
+> gcc configure, but enables --with-multilib-list=m4,m4-nofpu in
+> the default configuration for Qemu targeting r2d emulation.
+> This results in a toolchain, which can be used for the kernel and
+> for userland without creating a multilib toolchain with different
+> kinds of libgcc version. In the multilib case there would be some
+> subdirectories created like !m4 or m4-nofpu. As buildroot uses a
+> short version of toolchain creation, a multilib enabled gcc build
+> fails when creating libgcc.
 
-# Cannot update (def)config with fragments
-ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
-$(1)-update-config: ...
-...
-endif
+ To be honest, I still don't understand what's going on here despite all this
+explanation...
 
-[snip]
+
+> So the best solution is to just keep multilib disabled, but always
+> add --with-multilib-list=m4,m4-nofpu when sh4/sh4eb is choosen.
+
+ But this sounds sane.
+
+ However:
+
+> Tested with sh4 minimal toolchain build and qemu defconfig with
+> gcc 4.8.x and uClibc.
+
+ If I understand correctly, you applied your patch and tested that
+qemu_sh4_r2d_defconfig still works, right? Well, that should come as no surprise
+since it just moves the --with-multilib-list option from one place to the other,
+so you'll end up with exactly the same toolchain.
+
+ The real question is: does it also work for other SH targets? Does it work on
+real hardware? Or rather, is there anything that used to work that breaks now?
+
+
+ Regards,
+ Arnout
+
+
+> 
+> To sum up, compiling gcc with disabled multilib, but with a mulitlib-list
+> provides a working toolchain which can create sh4 nofpu code without trying to
+> create a libgcc for every variant.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  configs/qemu_sh4_r2d_defconfig     |    4 ----
+>  package/gcc/gcc-final/gcc-final.mk |    6 ++++++
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+> index 88bf914..586c400 100644
+> --- a/configs/qemu_sh4_r2d_defconfig
+> +++ b/configs/qemu_sh4_r2d_defconfig
+> @@ -10,10 +10,6 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  
+> -# The kernel wants to use the -m4-nofpu option to make sure that it
+> -# doesn't use floating point operations.
+> -BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+> -
+>  # Lock to 3.19 headers to avoid breaking with newer kernels
+>  BR2_KERNEL_HEADERS_VERSION=y
+>  BR2_DEFAULT_KERNEL_VERSION="3.19"
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index c014bc5..607e850 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -53,6 +53,12 @@ HOST_GCC_FINAL_CONF_OPTS = \
+>  	--enable-poison-system-directories \
+>  	--with-build-time-tools=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin
+>  
+> +# The kernel wants to use the -m4-nofpu option to make sure that it
+> +# doesn't use floating point operations.
+> +ifeq ($(BR2_sh4)$(BR2_sh4eb),y)
+> +HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4,m4-nofpu"
+> +endif
+> +
+>  # Disable shared libs like libstdc++ if we do static since it confuses linking
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  HOST_GCC_FINAL_CONF_OPTS += --disable-shared
+> 
 
 
 -- 
