@@ -1,110 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Mar 2015 11:39:57 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libva-intel-driver: bump version to
-	1.5.1
-In-Reply-To: <1426934397-8598-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1426934397-8598-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1426934397-8598-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 21 Mar 2015 11:39:15 +0100
+Subject: [Buildroot] [PATCH v2 2/3] package/mesa3d: bump version to
+	10.5.1
+References: <1426435802-14030-1-git-send-email-bernd.kuhls@t-online.de>
+ <1426435802-14030-2-git-send-email-bernd.kuhls@t-online.de>
+ <20150321095905.0e24d32c@free-electrons.com>
+Message-ID: <XnsA464768CCAFDBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed 0002-wayland.patch, fixed upstream
-http://cgit.freedesktop.org/vaapi/intel-driver/commit/?id=bf324e3440246a487997a1624ac862e3e4027f9e
-Therefore autoreconf is not necessary anymore.
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-intel-driver/0001-wayland.patch      |   50 --------------------
- package/libva-intel-driver/libva-intel-driver.hash |    4 +-
- package/libva-intel-driver/libva-intel-driver.mk   |    3 +-
- 3 files changed, 3 insertions(+), 54 deletions(-)
- delete mode 100644 package/libva-intel-driver/0001-wayland.patch
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20150321095905.0e24d32c at free-electrons.com: 
 
-diff --git a/package/libva-intel-driver/0001-wayland.patch b/package/libva-intel-driver/0001-wayland.patch
-deleted file mode 100644
-index 2f8c859..0000000
---- a/package/libva-intel-driver/0001-wayland.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--Fixes various wayland-related compile errors:
--
--i965_output_wayland.c:31:41: fatal error: wayland-drm-client-protocol.h:
-- No such file or directory
--
--i965_output_wayland.h:31:26: error: unknown type name 'VADriverContextP'
--
--make[4]: *** No rule to make target `wayland-drm-client-protocol.h', needed by
-- `i965_output_wayland.c'.  Stop.
--
--Patch sent upstream:
--http://lists.freedesktop.org/archives/libva/2014-July/002520.html
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr libva-intel-driver-1.3.2.org/src/i965_output_wayland.c libva-intel-driver-1.3.2/src/i965_output_wayland.c
----- libva-intel-driver-1.3.2.org/src/i965_output_wayland.c	2014-06-03 02:36:44.000000000 +0200
--+++ libva-intel-driver-1.3.2/src/i965_output_wayland.c	2014-07-19 11:48:31.329043292 +0200
--@@ -28,7 +28,7 @@
-- #include <va/va_backend.h>
-- #include <va/va_backend_wayland.h>
-- #include <wayland-client.h>
---#include <wayland-drm-client-protocol.h>
--+#include <va/wayland-drm-client-protocol.h>
-- #include "intel_driver.h"
-- #include "i965_output_wayland.h"
-- #include "i965_drv_video.h"
--diff -uNr libva-intel-driver-1.3.2.org/src/i965_output_wayland.h libva-intel-driver-1.3.2/src/i965_output_wayland.h
----- libva-intel-driver-1.3.2.org/src/i965_output_wayland.h	2014-05-19 10:19:39.000000000 +0200
--+++ libva-intel-driver-1.3.2/src/i965_output_wayland.h	2014-07-19 11:48:09.201321881 +0200
--@@ -26,6 +26,7 @@
-- #define I965_OUTPUT_WAYLAND_H
-- 
-- #include <stdbool.h>
--+#include <va/va_backend.h>
-- 
-- bool
-- i965_output_wayland_init(VADriverContextP ctx);
--diff -uNr libva-intel-driver-1.3.2.org/src/Makefile.am libva-intel-driver-1.3.2/src/Makefile.am
----- libva-intel-driver-1.3.2.org/src/Makefile.am	2014-06-16 04:13:12.000000000 +0200
--+++ libva-intel-driver-1.3.2/src/Makefile.am	2014-07-19 11:53:02.885627916 +0200
--@@ -146,7 +146,7 @@
-- endif
-- 
-- # Wayland protocol
---protocol_source_h = wayland-drm-client-protocol.h
--+#protocol_source_h = wayland-drm-client-protocol.h
-- i965_output_wayland.c: $(protocol_source_h)
-- @wayland_scanner_rules@
-- 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 837a40e..b03bb1d 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
-@@ -1,2 +1,2 @@
--# http://lists.freedesktop.org/archives/libva/2014-December/002982.html
--sha1	9f8dc82879d1cf6cbbe7ef49b5d659ccdf45acd7	libva-intel-driver-1.5.0.tar.bz2
-+# From http://lists.freedesktop.org/archives/libva/2015-March/003250.html
-+sha1	98b670517cbd2d0e5e2ef3f171b805815dff9057	libva-intel-driver-1.5.1.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index 0d1a0a7..5755207 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
- 
--LIBVA_INTEL_DRIVER_VERSION = 1.5.0
-+LIBVA_INTEL_DRIVER_VERSION = 1.5.1
- LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
- LIBVA_INTEL_DRIVER_LICENSE = MIT
- LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
--LIBVA_INTEL_DRIVER_AUTORECONF = YES
- LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
--- 
-1.7.10.4
+> This is apparently not working well in some cases, see
+> http://autobuild.buildroot.net/results/1ce/1ce2509c8abb7483397c7d0f21c299
+> 095e94a254/. 
+
+Hi Thomas,
+
+this seems to be a python2 <-> python3 problem:
+
+$ grep -i "ge_python \|ge_python3=" .config
+# BR2_PACKAGE_PYTHON is not set
+BR2_PACKAGE_PYTHON3=y
+
+host-python is compiled as
+
+$ ls -la output/build/ | grep host-py
+drwxr-xr-x 17 fli4l fli4l  4096 M?r 21 10:48 host-python3-3.4.2
+drwxr-xr-x  9 fli4l fli4l  4096 M?r 21 10:48 host-python-mako-1.0.1
+
+but mesa3d checks for python2 first which picks up /usr/bin/python on my
+machine 
+
+$ grep PYTHON2 output/build/mesa3d-10.5.1/config.log
+ac_cv_prog_PYTHON2=python2
+PYTHON2='python2'
+
+due to "AC_CHECK_PROGS([PYTHON2], [python2 python])" in
+mesa3d/configure.ac 
+
+Adding
+
+MESA3D_CONF_ENV += ac_cv_prog_PYTHON2=$(HOST_DIR)/usr/bin/python
+
+to mesa3d.mk forcing the usage of host-python3 does not help either:
+
+checking if module mako in python is installed... Traceback (most recent
+call last): 
+  File "<stdin>", line 10, in <module>
+TypeError: unorderable types: map() > map()
+configure: error: mako 0.3.4 or later is required.
+make: *** [/home/fli4l/br3/output/build/mesa3d-10.5.1/.stamp_configured]
+Fehler 1 
+
+Please note that mesa3d does not need the target version of python, only
+host-python 2.x. 
+
+Is it possible to compile host-python2 parallel to host-python3 or should
+I add a "depends on !BR2_PACKAGE_PYTHON3" to mesa3d/Config.in? 
+
+Regards, Bernd
