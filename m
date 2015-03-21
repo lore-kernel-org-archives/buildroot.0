@@ -1,61 +1,98 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 21 Mar 2015 20:49:47 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: help: add package-specific targets
+Date: Sat, 21 Mar 2015 20:49:48 +0100
+Subject: [Buildroot] [PATCH 4/4] README: reduce it to a single page and
+	refer to other documentation
 In-Reply-To: <1426967388-559-1-git-send-email-arnout@mind.be>
 References: <1426967388-559-1-git-send-email-arnout@mind.be>
-Message-ID: <1426967388-559-4-git-send-email-arnout@mind.be>
+Message-ID: <1426967388-559-5-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The documentation of the package-specific targets is heavily inspired by
-the earlier patch by Thomas Petazzoni [1], but the <pkg>-install*
-targets were left out since they're not useful for the developer IMHO.
-
-The *-menuconfig target's help text is moved to the package-specific
-targets.
-
-[1] http://patchwork.ozlabs.org/patch/433692
+As discussed on the BR developer meeting at FOSDEM, the README should be
+very short and instead refer to other documentation: the manual, the
+website, the mailing list, the IRC channel.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-I wasn't sure about putting a condition on BR2_HAVE_DOT_CONFIG around
-the package-specific targets. Obviously they only make sense when you
-do have a configuration, but I don't see why we would change the help
-text based on that.
+ README | 59 ++++++++++-------------------------------------------------
+ 1 file changed, 10 insertions(+), 49 deletions(-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Makefile | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/Makefile b/Makefile
-index ea08e6a..50fb5cf 100644
---- a/Makefile
-+++ b/Makefile
-@@ -871,6 +871,21 @@ help:
- 	@echo '  randpackageconfig      - New config with random answer to package options'
- 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
- 	@echo '  allnopackageconfig     - New config where package options are answered with no'
-+	@echo
-+	@echo 'Package-specific:'
-+	@echo '  <pkg>                  - Build and install <pkg> and all its dependencies'
-+	@echo '  <pkg>-source           - Only download the source files for <pkg>'
-+	@echo '  <pkg>-extract          - Extract <pkg> sources'
-+	@echo '  <pkg>-patch            - Apply patches to <pkg>'
-+	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
-+	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
-+	@echo '  <pkg>-build            - Build <pkg> up to the build step'
-+	@echo '  <pkg>-graph-depends    - Display <pkg>'\''s dependencies'
-+	@echo '  <pkg>-graph-depends    - Generate a graph of <pkg>'\''s dependencies'
-+	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
-+	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
-+	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-+	@echo '  <pkg>-legal-info       - Generate license information for <pkg>'
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
- endif
+diff --git a/README b/README
+index 944347d..a7dae24 100644
+--- a/README
++++ b/README
+@@ -1,59 +1,20 @@
++Buildroot is a simple, efficient and easy-to-use tool to generate embedded
++Linux systems through cross-compilation.
++
++The documentation can be found in docs/manual. You can generate a text
++document with 'make manual-text' and read output/docs/manual/manual.text.
++Online documentation can be found at http://buildroot.org/docs.html
++
+ To build and use the buildroot stuff, do the following:
+ 
+ 1) run 'make menuconfig'
+-2) select the packages you wish to compile
++2) select the target architecture and the packages you wish to compile
+ 3) run 'make'
+ 4) wait while it compiles
+-5) Use your shiny new root filesystem. Depending on which sort of
+-    root filesystem you selected, you may want to loop mount it,
+-    chroot into it, nfs mount it on your target device, burn it
+-    to flash, or whatever is appropriate for your target system.
++5) find the kernel, bootloader, root filesystem, etc. in output/images
+ 
+ You do not need to be root to build or run buildroot.  Have fun!
+ 
+-Offline build:
+-==============
+-
+-In order to do an offline-build (not connected to the net), fetch all
+-selected source by issuing a
+-$ make source
+-
+-before you disconnect.
+-If your build-host is never connected, then you have to copy buildroot
+-and your toplevel .config to a machine that has an internet-connection
+-and issue "make source" there, then copy the content of your dl/ dir to
+-the build-host.
+-
+-Building out-of-tree:
+-=====================
+-
+-Buildroot supports building out of tree with a syntax similar
+-to the Linux kernel. To use it, add O=<directory> to the
+-make command line, E.G.:
+-
+-$ make O=/tmp/build
+-
+-And all the output files (including .config) will be located under /tmp/build.
+-
+-More finegrained configuration:
+-===============================
+-
+-You can specify a config-file for uClibc:
+-$ make UCLIBC_CONFIG_FILE=/my/uClibc.config
+-
+-And you can specify a config-file for busybox:
+-$ make BUSYBOX_CONFIG_FILE=/my/busybox.config
+-
+-To use a non-standard host-compiler (if you do not have 'gcc'),
+-make sure that the compiler is in your PATH and that the library paths are
+-setup properly, if your compiler is built dynamically:
+-$ make HOSTCC=gcc-4.3.orig HOSTCXX=gcc-4.3-mine
+-
+-Depending on your configuration, there are some targets you can use to
+-use menuconfig of certain packages. This includes:
+-$ make HOSTCC=gcc-4.3 linux-menuconfig
+-$ make HOSTCC=gcc-4.3 uclibc-menuconfig
+-$ make HOSTCC=gcc-4.3 busybox-menuconfig
+-
+ Please feed suggestions, bug reports, insults, and bribes back to the
+ buildroot mailing list: buildroot at buildroot.org
++You can also find us on #buildroot on Freenode IRC.
 -- 
 2.1.4
