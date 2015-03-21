@@ -1,49 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Mar 2015 15:52:02 +0100
-Subject: [Buildroot] The C++11 issue
-In-Reply-To: <20150321102858.5e13ec41@free-electrons.com>
-References: <20150321102858.5e13ec41@free-electrons.com>
-Message-ID: <550D8592.5040300@mind.be>
+Date: Sat, 21 Mar 2015 15:57:24 +0100
+Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
+ fragments
+In-Reply-To: <20150320231117.GE3979@free.fr>
+References: <1424003638-21689-1-git-send-email-bos@je-eigen-domein.nl>
+ <20150320231117.GE3979@free.fr>
+Message-ID: <550D86D4.7060808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/03/15 10:28, Thomas Petazzoni wrote:
-> Hello,
+On 21/03/15 00:11, Yann E. MORIN wrote:
+> Floris, All,
 > 
-> A number of packages start to depend on C++11 features, which are not
-> available in all toolchains: toolchains using old compiler versions
-> (such as the Blackfin one), but also some older Crosstool-NG generated
-> toolchains.
+> On 2015-02-15 13:33 +0100, Floris Bos spake thusly:
+>> Adds functionality to the kconfig infrastructure to merge additional
+>> configuration fragment files to the main configuration file of
+>> kconfig packages, using support/kconfig/merge_config.sh
+>>
+>> Typical use-case is when you want your configuration to be
+>> kept in sync with an upstream (def)config file, but do require
+>> some minor local modifications.
+>>
+>> Disables -update-config and -update-defconfig targets when
+>> fragment files are set.
+>>
+>> Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+>> ---
+[snip]
+>> @@ -87,6 +89,8 @@ $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>>  # Even though we could use 'cp --preserve-timestamps' here, the separate
+>>  # cp and 'touch --reference' is used for symmetry with $(1)-update-defconfig.
+>>  $(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>> +	$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+>> +		$$(error Unable to perform $(1)-update-config when fragment files are set))
+> 
+> $(error ...) is Makefile syntax, while this is a shell. I'd prefer we
+> use a shell construct here, like:
+> 
+>     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+>         echo "Unable to perform $(1)-update-config when fragment files are set"; exit 1)
+
+ Or perhaps it's better to simply disable the update targets when fragments are set:
+
+# Cannot update (def)config with fragments
+ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
+$(1)-update-config: ...
+...
+endif
 
 [snip]
-
-> So how do we decide whether a particular toolchain has C++11 support ?
-> Do we simply decide that gcc >= 4.8 have sufficient C++11 support for
-> now, and we'll adjust things later if needed ?
-
- Given that:
-
-- even gcc 4.9 could still have some missing libstdc++ features;
-- C++14 is on the way;
-- we only support gcc as a compiler,
-
-I would say that instead of BR2_TOOLCHAIN_HAS_CXX11, we could use
-BR2_GCC_AT_LEAST_4_X similar to the headers. That, at least, is unambiguous. It
-has the additional advantage that sometimes we may need the version for some
-things unrelated to C++, e.g. support for some compiler flags.
-
- It does require more Config.in symbols, but at the moment 4.8 and 4.9 are
-probably sufficient. But then again, adding an additional symbol is not that
-much work so I'd include 4.7 as well.
-
-
- BTW, now that bfin internal compiler is gone, can we deprecate 4.5?
-
- Regards,
- Arnout
 
 
 -- 
