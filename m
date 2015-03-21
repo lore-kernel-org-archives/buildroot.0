@@ -1,50 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Mar 2015 10:28:58 +0100
-Subject: [Buildroot] The C++11 issue
-Message-ID: <20150321102858.5e13ec41@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 Mar 2015 11:39:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 1.5.1
+Message-ID: <1426934397-8598-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Removed 0002-wayland.patch, patch is not necessary anymore.
 
-A number of packages start to depend on C++11 features, which are not
-available in all toolchains: toolchains using old compiler versions
-(such as the Blackfin one), but also some older Crosstool-NG generated
-toolchains.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libva/0002-wayland.patch |   26 --------------------------
+ package/libva/libva.hash         |    4 ++--
+ package/libva/libva.mk           |    2 +-
+ 3 files changed, 3 insertions(+), 29 deletions(-)
+ delete mode 100644 package/libva/0002-wayland.patch
 
-This is causing a number of build failures these days, such as:
-
-        bfin |                  jsoncpp-1.6.0 | NOK | http://autobuild.buildroot.net/results/7fac9e4b3aa0746c860fd032a4b7b8663fb46fc8/
-        bfin |                  jsoncpp-1.6.0 | NOK | http://autobuild.buildroot.net/results/20b3f33e61286891a7804352c25326ea9faccfbb/
-        bfin |                  jsoncpp-1.6.0 | NOK | http://autobuild.buildroot.net/results/e482ba1d06c7fe2736ab3e79796297db8fbea187/
-         arm |                  jsoncpp-1.6.0 | NOK | http://autobuild.buildroot.net/results/1bf20d204042810bedad58dd2466bde9ae7b3fd6/
-
-(std::snprintf is a C++11 feature)
-
-So, it looks like we need to add a BR2_TOOLCHAIN_HAS_CXX11 option, with
-the usual handling.
-
-However, it is not very clear-cut what is a C++11 supporting toolchain,
-and what is not: C++11 was added progressively in gcc, and there are
-still a few things missing apparently. According to
-https://gcc.gnu.org/projects/cxx0x.html, most of the compiler related
-features have been merged by gcc 4.8. But in terms of libstdc++
-support, the page
-https://gcc.gnu.org/onlinedocs/libstdc++/manual/status.html#status.iso.200x
-is a lot less clear, as it only indicates the mainline gcc status, and
-not the gcc releases.
-
-So how do we decide whether a particular toolchain has C++11 support ?
-Do we simply decide that gcc >= 4.8 have sufficient C++11 support for
-now, and we'll adjust things later if needed ?
-
-What do you think ?
-
-Thomas
+diff --git a/package/libva/0002-wayland.patch b/package/libva/0002-wayland.patch
+deleted file mode 100644
+index e309096..0000000
+--- a/package/libva/0002-wayland.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Fixes compile error in libva-intel-driver
+-
+-make[4]: Entering directory `/home/br/br/output/build/libva-intel-driver-1.3.2/src'
+-  CC       i965_drv_video_la-i965_output_wayland.lo
+-i965_output_wayland.c:31:41: fatal error: wayland-drm-client-protocol.h: No such file or directory
+-compilation terminated.
+-
+-Patch sent upstream:
+-http://lists.freedesktop.org/archives/libva/2014-July/002519.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr libva-1.3.1.org/va/wayland/Makefile.am libva-1.3.1/va/wayland/Makefile.am
+---- libva-1.3.1.org/va/wayland/Makefile.am	2014-05-09 06:28:15.000000000 +0200
+-+++ libva-1.3.1/va/wayland/Makefile.am	2014-07-19 11:46:01.126931242 +0200
+-@@ -54,8 +54,8 @@
+- 
+- noinst_LTLIBRARIES		= libva_wayland.la
+- libva_waylandincludedir		= ${includedir}/va
+--libva_waylandinclude_HEADERS	= $(source_h)
+--libva_wayland_la_SOURCES	= $(source_c) $(protocol_source_h)
+-+libva_waylandinclude_HEADERS	= $(source_h) $(protocol_source_h)
+-+libva_wayland_la_SOURCES	= $(source_c)
+- noinst_HEADERS			= $(source_h_priv)
+- 
+- # Wayland protocol
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index ec87e26..eaec0af 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,2 +1,2 @@
+-# http://lists.freedesktop.org/archives/libva/2014-December/002981.html
+-sha1	f83cc0d1dd42701ec79d943d9462f092d32c51fa	libva-1.5.0.tar.bz2
++# From http://lists.freedesktop.org/archives/libva/2015-March/003249.html
++sha1	b315a86fcd3bd1e073e2c1b62416550885cd7420	libva-1.5.1.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 176c498..d3b58ae 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_VERSION = 1.5.0
++LIBVA_VERSION = 1.5.1
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
