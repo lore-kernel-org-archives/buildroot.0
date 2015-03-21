@@ -1,62 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2015 23:17:27 +0100
-Subject: [Buildroot] Buildroot on OSX
-In-Reply-To: <87a8z6husr.fsf@dell.be.48ers.dk>
-References: <CA+-urNQQ9gSwRtmkNq0FBTDqaBuc5bZSS3LQYgsNGB3aEa4sHw@mail.gmail.com>
- <20150320180814.GH21001@waldemar-brodkorb.de>
- <87a8z6husr.fsf@dell.be.48ers.dk>
-Message-ID: <20150321221727.GD4201@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 21 Mar 2015 23:52:45 +0100
+Subject: [Buildroot] [PATCH] sh4: fix toolchain creation
+In-Reply-To: <550D884B.5030107@mind.be>
+References: <20150320182214.GA3086@waldemar-brodkorb.de>
+ <550D884B.5030107@mind.be>
+Message-ID: <20150321225245.GL21001@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi Arnout,
+Arnout Vandecappelle wrote,
 
-On 2015-03-21 23:04 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
-> >> I was just asked if it was possible to use Buildroot natively on a
->  >> Mac. I recommended that he just build in a Linux VM. However, after
->  >> playing around at command line and learning about Homebrew, it looked
->  >> like it may not be too far off especially since Buildroot builds so
->  >> much itself. Ignoring external toolchains which I would assume
->  >> wouldn't work, has anyone done this?
+>  Hi Waldemar,
 > 
->  > Once I tried to do this, but there wasn't much interest to carry
->  > needed patches in buildroot. It is hard to get these Darwin-to-Linux
->  > cross-compile patches into upstream projects.
->  > Recently I discussed some of the patches I am using in OpenADK with
->  > a friend and we will try to reduce them and do it in a better way,
->  > which might even be usable for buildroot.
+> On 20/03/15 19:22, Waldemar Brodkorb wrote:
+> > The Linux kernel does force compile with -m4-nofpu, which is only
+> > available when building a multilib toolchain.
+> > The interesting part here is, that buildroot use --disable-multilib for
+> > gcc configure, but enables --with-multilib-list=m4,m4-nofpu in
+> > the default configuration for Qemu targeting r2d emulation.
+> > This results in a toolchain, which can be used for the kernel and
+> > for userland without creating a multilib toolchain with different
+> > kinds of libgcc version. In the multilib case there would be some
+> > subdirectories created like !m4 or m4-nofpu. As buildroot uses a
+> > short version of toolchain creation, a multilib enabled gcc build
+> > fails when creating libgcc.
 > 
-> In general, using anything else than a Linux system to build Linux
-> systems is bound to cause extra issues. To my knowledge, nobody uses
-> Buildroot with a !Linux host on any regular schedule.
+>  To be honest, I still don't understand what's going on here despite all this
+> explanation...
+
+Thomas wants to update the external toolchain for sh4, but build
+fails.
+ 
+> > So the best solution is to just keep multilib disabled, but always
+> > add --with-multilib-list=m4,m4-nofpu when sh4/sh4eb is choosen.
 > 
-> I don't mind simple fixes, but users on !Linux should not expect full
-> functionality, and I am not interested in carrying any big / feature
-> patches for it.
+>  But this sounds sane.
+> 
+>  However:
+> 
+> > Tested with sh4 minimal toolchain build and qemu defconfig with
+> > gcc 4.8.x and uClibc.
+> 
+>  If I understand correctly, you applied your patch and tested that
+> qemu_sh4_r2d_defconfig still works, right? Well, that should come as no surprise
+> since it just moves the --with-multilib-list option from one place to the other,
+> so you'll end up with exactly the same toolchain.
 
-Fully agreed.
+Yes. No regression so far :)
+ 
+>  The real question is: does it also work for other SH targets? Does it work on
+> real hardware? Or rather, is there anything that used to work that breaks now?
 
-Patches that are "portability cleanups", like changing '#!/bin/sh' to
-'#!/usr/bin/env bash' for example, are probably acceptable.
+Producing a sh4 toolchain with buidroot works after this patch,
+which did not work before.
+I made a short test of a static linked bash produced by this
+toolchain on my SNAPGear SME575:
+/tmp/bash --version
+GNU bash, version 4.3.33(1)-release (sh4-buildroot-linux-uclibc)
+# uname -a
+Linux SG575 2.4.31-uc0 #1 Thu Feb 7 21:35:20 EST 2008 sh4 unknown
+# cat /proc/cpuinfo 
+cpu family      : SH-4
+cache size      : 8K-byte/16K-byte
+bogomips        : 239.20
 
-Anything that adds complexity and/or different code-paths are probably
-to be avoided. And patches to packages to make them build on MacOS are
-to be banned (unless upstream accepts them first).
+Machine: SnapGear
+CPU clock: 239.98MHz
+Bus clock: 119.99MHz
+Peripheral module clock: 119.99MHz
 
-Seriously, there's no better platform for doing Linux development than a
-Linux box. At worst, a VM would do the trick.
+Looks okay. Still need to get a newer kernel and libc on the box:
+uClibc 0.9.27 preinstalled ;)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+best regards
+ Waldemar 
