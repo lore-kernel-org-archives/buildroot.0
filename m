@@ -1,101 +1,423 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2015 12:28:07 +0100
-Subject: [Buildroot] [RFC 00/11] common init infrastructure
-In-Reply-To: <cover.1426960081.git.alex.suykov@gmail.com>
-References: <cover.1426960081.git.alex.suykov@gmail.com>
-Message-ID: <20150322112807.GA4724@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Mar 2015 12:29:08 +0100
+Subject: [Buildroot] [[PATCH v2] 1/1] package/swupdate: new package
+In-Reply-To: <1426750417-23107-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1426750417-23107-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <550EA784.9060609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, All,
+ Hi Joerg,
 
-On 2015-03-21 20:26 +0200, Alex Suykov spake thusly:
-> This series is intended to clean up buildroot init system somewhat,
-> removing the need for extensive sysv and systemd handling code
-> in every package that installs init bits, and allowing alternative
-> init systems to be implemented with reasonable amount of effort.
+On 19/03/15 08:33, J?rg Krause wrote:
+> From: J?rg Krause <jkrause@posteo.de>
+
+ Perhaps you should reset the author as well? Pass --reset-author to git commit
+--amend.
+
+
+> This patch is based on an WIP version submitted by Romain Naour, commented by
+> Arnout Vandecappelle:
+> https://patchwork.ozlabs.org/patch/401270/
 > 
-> Overview of the changes:
+> The package provides a default configuration which let the user initiate an
+                                                     ^^^lets
+
+> update by using an update URL by using libcurl. The embedded webserver (a
+> customized version of mongoose) and Lua support are both disabled by default.
 > 
-> * drop per-package sysv and systemd files, introduce common format
->   used to generate files for both of them, use a script to do
->   the conversion from common format to sysv or systemd.
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-I have not delve too deep in the implementation (because, Python! ;-) ),
-but from the examples, it seems it would still be possible to start more
-than one "daemon" for a service, like is done by samba, right?
+ Since the original is from Romain, please add:
 
-> * remove sysv and systemd installation code from package .mk files,
->   let pkg-generic handle it.
+Cc: Romain Naour <romain.naour@openwide.fr>
+
+> Tested-by: Mike Williams <mike@mikebwilliams.com>
+> ---
+> Changes v1 -> v2:
+>   - bump to latest commit d9f58b5a3263b1b00c6d011cd8cdd65e69890b46
+>   - update Sob email address
+> ---
+>  package/Config.in                                  |   1 +
+>  package/swupdate/Config.in                         |  93 +++++++++++++++
+>  ...wupdate-0001-Add-missing-header-for-off_t.patch |  25 ++++
+>  package/swupdate/swupdate.config                   |  82 +++++++++++++
+>  package/swupdate/swupdate.mk                       | 127 +++++++++++++++++++++
+>  5 files changed, 328 insertions(+)
+>  create mode 100644 package/swupdate/Config.in
+>  create mode 100644 package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
+>  create mode 100644 package/swupdate/swupdate.config
+>  create mode 100644 package/swupdate/swupdate.mk
 > 
-> * remove sysv-specific files from skeleton, and sysv-specific hacks
->   from system/system.mk. Use a dedicated script to write inittab,
->   handling global conditionals (root rw/ro, serial getty and so on)
+> diff --git a/package/Config.in b/package/Config.in
+> index 96e373a..f37fba4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1344,6 +1344,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/start-stop-daemon/Config.in"
+>  endif
+>  	source "package/supervisor/Config.in"
+> +	source "package/swupdate/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/sysklogd/Config.in"
+>  endif
+> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+> new file mode 100644
+> index 0000000..f8489dc
+> --- /dev/null
+> +++ b/package/swupdate/Config.in
+> @@ -0,0 +1,93 @@
+> +config BR2_PACKAGE_SWUPDATE
+> +	bool "swupdate"
+> +	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_MTD
+> +	help
+> +	  swupdate provides a reliable way to update the software on an embedded
+> +	  system.
+> +
+> +	  https://github.com/sbabic/swupdate.git
+> +
+> +if BR2_PACKAGE_SWUPDATE
+> +
+> +config BR2_PACKAGE_SWUPDATE_CONFIG
+> +	string "swupdate configuration file to use?"
+
+ Remove the "to use?" bit.
+
+> +	default "package/swupdate/swupdate.config"
+> +	help
+> +	  Some people may wish to use their own modified swupdate configuration
+> +	  file, and will specify their config file location with this option.
+> +
+> +	  Most people will just use the default swupdate configuration file.
+> +	  This will enable swupdate with an image downloader, as well as image
+> +	  handlers for UBI volumes, raw NAND or NOR flash, SD cards, shell
+> +	  scripts, and the U-Boot bootloader environment.
+> +
+> +config BR2_PACKAGE_SWUPDATE_LIBCURL
+> +	bool "Enable image downloading"
+
+ All these options that update the .config file... The user can just make
+swupdate-menuconfig, no? And IMHO it's very confusing for the user that they do
+
+make swupdate-menuconfig
+select libcurl
+make
+-> curl has vanished
+
+ On the other hand, it's also annoying for the user that they have to manually
+enable all these dependencies... Hm, now I'm not so sure anymore :-(
+
+ If you would work this way, then the help text should clearly specify which
+other packages are "interesting" for swupdate.
+
+
+> +	select BR2_PACKAGE_LIBCURL
+> +	default y
+> +	help
+> +	  Enable update from image URL using libcurl. Files are downloaded                                                                    ?
+> +	  completely before installation begins.
+> +
+> +config BR2_PACKAGE_SWUPDATE_WEBSERVER
+> +	bool "Enable embedded webserver"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  Enable firmware update from a remote device using an embedded
+> +	  webserver on the target.
+> +
+> +comment "Webserver support needs toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +if BR2_PACKAGE_SWUPDATE_WEBSERVER
+> +
+> +config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_IPV6
+> +	depends on BR2_INET_IPV6
+> +	bool "Webserver with IPv6 support"
+> +	help
+> +	  Enable IPv6 support for the webserver.
+> +
+> +comment "IPv6 support for the webserver needs toolchain w/ IPv6"
+> +	depends on !BR2_INET_IPV6
+> +
+> +config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SQL
+> +	bool "Webserver with SQL support"
+> +	depends on BR2_LARGEFILE
+> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+
+ Is SQL implemented in lua? Oh, yes, now I see it is. But shouldn't you select
+BR2_PACKAGE_LUASQL_SQLITE3 then?
+
+
+> +	depends on !BR2_PACKAGE_LUA_5_1
+> +	help
+> +	  Enable SQL support for the webserver.
+> +
+> +comment "Webservers Lua support needs a toolchain w/ largefile and a Lua 5.2 interpreter"
+> +	depends on !BR2_LARGEFILE || BR2_PACKAGE_LUA_5_1 || !BR2_PACKAGE_HAS_LUAINTERPRETER
+> +
+> +config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SSL
+> +	bool "Webserver with SSL support"
+> +	help
+> +	  Enable SSL support for the webserver.
+
+ Missing select? IIRC mongoose works with openssl and polarssl.
+
+> +
+> +endif
+> +
+> +config BR2_PACKAGE_SWUPDATE_LIBCONFIG
+> +	bool "Enable libconfig parser"
+> +	select BR2_PACKAGE_LIBCONFIG
+> +	default y
+> +	help
+> +	  Use libconfig to parse the configuration file.
+> +	  This is the default parser. Unless you don't use your own
+> +	  external parser written in Lua you'll need to say Y here.
+> +
+> +config BR2_PACKAGE_SWUPDATE_LUA_SUPPORT
+> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> +	depends on !BR2_PACKAGE_LUA_5_1
+> +	bool "Enable Lua support"
+> +	help
+> +	  Enable Lua support.
+> +	  Select this for using custom scripts written in Lua.
+> +
+> +comment "Lua support needs a Lua 5.2 interpreter"
+> +	depends on BR2_PACKAGE_LUA_5_1 || !BR2_PACKAGE_HAS_LUAINTERPRETER
+> +
+> +endif
+> diff --git a/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch b/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
+> new file mode 100644
+> index 0000000..4be0f7b
+> --- /dev/null
+> +++ b/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
+> @@ -0,0 +1,25 @@
+> +From 4e382373cad64ca7e183336e33b72c53cfeed340 Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@openwide.fr>
+> +Date: Sun, 7 Sep 2014 17:31:09 +0200
+> +Subject: [PATCH 1/1] Add missing header for off_t
+> +
+> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+
+ Romain, what's the upstream status for this patch?
+
+> +---
+> + include/swupdate.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/include/swupdate.h b/include/swupdate.h
+> +index 78b7f85..c193397 100644
+> +--- a/include/swupdate.h
+> ++++ b/include/swupdate.h
+> +@@ -23,6 +23,7 @@
+> + #ifndef _SWUPDATE_H
+> + #define _SWUPDATE_H
+> + 
+> ++#include <sys/types.h>
+> + #include <sys/queue.h>
+> + #include "flash.h"
+> + #include "globals.h"
+> +-- 
+> +1.9.3
+> +
+> diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
+> new file mode 100644
+> index 0000000..788f949
+> --- /dev/null
+> +++ b/package/swupdate/swupdate.config
+> @@ -0,0 +1,82 @@
+> +#
+> +# Automatically generated make config: don't edit
+
+ Maybe convince upstream to add a savedefconfig target :-)
+
+> +# swupdate version: 2014.07.0
+> +# Thu Dec 18 10:00:56 2014
+
+[snip]
+> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> new file mode 100644
+> index 0000000..83af6db
+> --- /dev/null
+> +++ b/package/swupdate/swupdate.mk
+> @@ -0,0 +1,127 @@
+> +################################################################################
+> +#
+> +# swupdate
+> +#
+> +################################################################################
+> +
+> +# Choose latest commit instead of release 2014.07 for getting bug fixes and
+> +# image downloading feature
+> +SWUPDATE_VERSION = d9f58b5a3263b1b00c6d011cd8cdd65e69890b46
+> +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+> +SWUPDATE_LICENSE = GPLv2+
+> +SWUPDATE_LICENSE_FILES = COPYING
+> +SWUPDATE_DEPENDENCIES = zlib mtd
+> +
+> +SWUPDATE_BUILD_CONFIG = $(SWUPDATE_DIR)/.config
+> +
+> +SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+> +SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig
+> +
+> +SWUPDATE_CFLAGS = \
+> +	$(TARGET_CFLAGS)
+> +
+> +SWUPDATE_LDFLAGS = \
+> +	$(TARGET_LDFLAGS)
+> +
+> +SWUPDATE_LDLIBS =
+> +
+> +# If we're using static libs do the same for swupdate
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +define SWUPDATE_PREFER_STATIC
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +endif
+> +
+> +define SWUPDATE_BUILD_OPTIONS
+> +	$(call KCONFIG_SET_OPT,CONFIG_CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_SET_OPT,CONFIG_SYSROOT,"$(SYSROOT_DIR)",$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(SWUPDATE_CFLAGS)",$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(SWUPDATE_LDFLAGS)",$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDLIBS,"$(SWUPDATE_LDLIBS)",$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_LIBCURL),y)
+> +SWUPDATE_DEPENDENCIES += libcurl
+> +else
+> +define SWUPDATE_DOWNLOAD
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_DOWNLOAD,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+
+ One way to handle this better is to convince upstream to add config options
+passed through the environment that specify which dependencies are available.
+Then we could specify
+
+ifeq ($(BR2_PACKAGE_LIBCURL),y)
+SWUPDATE_DEPENDENCIES += libcurl
+SWUPDATE_MAKE_ENV += LIBCURL_AVAILABLE=y
+else
+SWUPDATE_MAKE_ENV += LIBCURL_AVAILABLE=
+endif
+
+(note that kconfig-package takes into account $(2)_MAKE_ENV).
+
+ This way, the user can use swupdate's configure and he'll only see the options
+that are really available.
+
+> +endif
+> +
+> +# swupate bundles its own customized version of Mongoose with a Lua licence.
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
+> +SWUPDATE_DEPENDENCIES += openssl
+
+ Even if no SSL is selected it needs openssl?
+
+> +SWUPDATE_LDLIBS += pthread crypto
+> +define SWUPDATE_WEBSERVER_MONGOOSE
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER,$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSE,$(SWUPDATE_BUILD_CONFIG))
+> +	$(SWUPDATE_WEBSERVER_MONGOOSE_IPV6)
+> +	$(SWUPDATE_WEBSERVER_MONGOOSE_LUA)
+> +	$(SWUPDATE_WEBSERVER_MONGOOSE_SQL)
+> +	$(SWUPDATE_WEBSERVER_MONGOOSE_SSL)
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_IPV6),y)
+
+ This could just be ifeq ($(BR2_INET_IPV6),y). The impact of IPv6 is really minor.
+
+> +SWUPDATE_CFLAGS += -DUSE_IPV6
+> +define SWUPDATE_WEBSERVER_MONGOOSE_IPV6
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSEIPV6,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SQL),y)
+> +SWUPDATE_CFLAGS += -DUSE_LUA_SQLITE3
+
+ _DEPENDENCIES?
+
+> +define SWUPDATE_WEBSERVER_MONGOOSE_SQL
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSESQL,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SSL),y)
+> +SWUPDATE_CFLAGS += -DNO_SSL_DL
+> +SWUPDATE_LDLIBS += ssl
+> +define SWUPDATE_WEBSERVER_MONGOOSE_SSL
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSESSL,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +else
+> +SWUPDATE_CFLAGS += -DNO_SSL
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_LIBCONFIG),y)
+> +SWUPDATE_DEPENDENCIES += libconfig
+> +else
+> +define SWUPDATE_LIBCONFIG_PARSER
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_LIBCONFIG,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_LUA_SUPPORT),y)
+> +SWUPDATE_DEPENDENCIES += lua
+> +SWUPDATE_CFLAGS += -DUSE_LUA
+> +SWUPDATE_LDLIBS += dl
+> +define SWUPDATE_LUA
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_LUA,$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_LUASCRIPTHANDLER,$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HANDLER_IN_LUA,$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_LUAEXTERNAL,$(SWUPDATE_BUILD_CONFIG))
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSELUA,$(SWUPDATE_BUILD_CONFIG))
+> +endef
+> +endif
+> +
+> +define SWUPDATE_KCONFIG_FIXUP_CMDS
+> +	$(SWUPDATE_PREFER_STATIC)
+> +	$(SWUPDATE_BUILD_OPTIONS)
+> +	$(SWUPDATE_DOWNLOAD)
+> +	$(SWUPDATE_WEBSERVER_MONGOOSE)
+> +	$(SWUPDATE_LIBCONFIG_PARSER)
+> +	$(SWUPDATE_LUA)
+> +endef
+
+ To make all this configuration complexity a bit easier to grok, I propose to
+start with a patch that adds swupdate with all of its dependencies enabled. So
+select openssl, lua, and libconfig. That gives the user complete freedom to
+configure things the way he likes. The next step would be to make the lua
+dependency optional, preferably by patching upstream to pass the availability of
+lua through the environment.
+
+
+ Regards,
+ Arnout
+
+-
+> +
+> +define SWUPDATE_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+> +endef
+> +
+> +define SWUPDATE_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
+> +endef
+> +
+> +$(eval $(kconfig-package))
 > 
-> * remove user definitions from package .mk files, and mkdirs from
->   per-package sysv initscript, use per-package .users and .files
->   instead in a way similar to .hash files.
 
-How do you handle conditional creation of users/groups? Let's take a
-supposed package that can install a server and/or a client (like a SQL
-related package, for example). The server (sqld) needs a specific
-user+group, but the client (sql-cli) does not. Currently, this is easily
-done by emclosing the user defintion between a 'if server' block.
-
-> Expected benefits:
-> 
-> * (almost) all packages get both sysv and systemd files at the same
->   time and without the need to support them separately.
-> 
-> * init-related changes can be introduced without patching
->   all 70+ individual packages that install startup files.
-> 
-> * new init systems can be introduced with only minor effort,
->   including lightweight ones with controlled (foreground) daemons.
-> 
-> This series includes the infrastructure changes, and a couple of
-> package patches to show how it looks like. Complete set of package
-> patches uploaded here: https://github.com/arsv/br/
-
-It would be much nicer if you were to push your branch there, rather
-than a set of patches. Having a branch would mean we could fetch from
-it.
-
-> This series is for reviewing, not for merging.
-
-One thing that is wrong throughout the series, is that you hard-code the
-path to "outoput/" and this breaks out-of-tree builds [0]. You should use
-$(BASE_DIR) instead.
-
-[0] http://buildroot.net/downloads/manual/manual.html#_building_out_of_tree
-
-Also, I think this series is changing a lot of different things at the
-same time. For example, there is infra changes to handle:
-  - init script,
-  - users/groups,
-  - skeleton /etc/ stuff
-
-This series should be split in simpler sub-series, or at least into much
-simpler patches. For example, patch 4/11 that adds help entries to init
-systems could probably sent first (after a bit of rewording to remove
-references to the new init infra), because it is a valuable addition,
-and it does not really depend on the new infra.
-
-Otherwise, I have a feeling this is pushing things a bit too far. I'm
-usually very happy with "abstraction" and I more than once have pushed
-for such changes. However, in this area, I'm a bit sceptic as to whether
-we should introduce our own "initscript" format (the '.run' files).
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
