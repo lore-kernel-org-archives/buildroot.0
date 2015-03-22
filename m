@@ -1,90 +1,109 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sun, 22 Mar 2015 14:39:14 +0200
-Subject: [Buildroot] [RFC 01/11] common service startup files
-In-Reply-To: <550E057E.2030605@mind.be>
-References: <cover.1426960081.git.alex.suykov@gmail.com>
- <3116b4122f3e3ea776ce2739c11ee36ea967297f.1426960081.git.alex.suykov@gmail.com>
- <550E057E.2030605@mind.be>
-Message-ID: <20150322123914.GB21403@vostro>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Mar 2015 14:02:29 +0100
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: add support for i.MX28 SD
+ format
+In-Reply-To: <1426701961-2619-1-git-send-email-vincent.stehle@freescale.com>
+References: <1426701961-2619-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <550EBD65.80102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sun, Mar 22, 2015 at 12:57:50AM +0100, Arnout Vandecappelle wrote:
-
-Thanks for extensive review, a lot of good points which I skip in
-this reply because they should go directly into the code.
-
-> Missing SoB, but perhaps that's intentional because it's not ready for inclusion?
-Well, partially, and partially I just forgot -s when re-splitting commits.
-
-> > files may set $(PKG)_INIT = KEY:value KEY:value ..., which will be
-> > handled by install-run. The substitutions will be applied to sysv
-> > and systemd files.
+On 18/03/15 19:06, Vincent Stehl? wrote:
+> Allow to generate u-boot.sd, Freescale i.MX28 SB format with a header for
+> booting from an SD card.
 > 
->  I don't see why this is needed, and it probably makes the install-run script
-> more complicated.
+> U-boot includes an mxsboot tool to generate this format, starting from
+> v2011.12.
 > 
-BR2_PACKAGE_GPSD_DEVICES, and keeping it a variable in the resulting initscript.
-Or maybe in /etc/default.
-If sed substitutiions are ok, this can be done much simplier of course:
-
-    sed s!DEVICES!/dev/ttyS1! package/gpsd/gpsd.run > build/gpsd-.../gpsd.run
-    support/init/install-run build/gpsd-.../gpsd.run
-
-> BTW, shouldn't tmpdirs be handled for sysv as well? Typically, the init script
-> will create the tmpdir...
-I saw this as systemd-specific.
-Looking at the packages, yes, makes sense to have some kind of generic tmpdir
-variable.
-
->  - The script should only handle cases that are actually used. So start with
-> something extremely simple that covers a few interesting cases, and leave the
-> others to use the old initscripts system.
-Why I was trying handle as many packages as possible: I'm pretty sure something
-like 80% of them will work immediately with only the basic support,
-but it would be really bad to find a show-stopper among the remaining 20%.
-Something that would require changing the way the whole thing works.
-
-Perhaps it's ok to drop bad cases for now, leave them as initscripts-only
-and expect the users do something about the unsupported cases themselves.
-
->  - Use existing infrastructure where possible. For instance, you could change
-> the .run format into .ini format and use configparser, or you could use the
-> shlex module for parsing.
-Regarding ini files, I was thinking about using a kind of extended/simplified
-.service format. Systemd being systemd, it would cover all cases, and it's got
-some documentation already.
-
-The problem is that there are pretty long shell scripts that do not fit well
-within .ini files. Examples: sunxi-mali, ti-gfx, am33-cm3 and maybe some others.
-That's why I tried to keep .run files looking somewhat like shell scripts.
-
-Well, that and I don't like systemd documentation all that much.
-
-> This bypass syntax is hard to understand IMHO. Can you find something
-> simpler/clearer and more verbose? If you would switch to ini format, it could be
-> something like
+> See u-boot doc/README.mxs.
 > 
-> [initscripts]
-> cp = package/foo/S10start
->      /etc/init.d/S10start
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> ---
+>  boot/uboot/Config.in | 12 ++++++++++++
+>  boot/uboot/uboot.mk  |  5 +++++
+>  2 files changed, 17 insertions(+)
 > 
-> [systemd]
-> cp-ln = package/foo/foo.service
->         /usr/lib/systemd/system/foo.service
->         /etc/systemd/system/multi-user.target.wants
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 03e6acc..cea993a 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -117,6 +117,18 @@ config BR2_TARGET_UBOOT_FORMAT_SB
+>  	depends on BR2_arm
+>  	bool "u-boot.sb"
+>  
+> +config BR2_TARGET_UBOOT_FORMAT_SD
+> +	depends on BR2_arm
+> +	bool "u-boot.sd"
+> +	help
+> +	  This is Freescale i.MX28 SB format, with a header for booting from an
 
-The primary goal of the whole changeset is to separate package-specific
-and init-system-specific things, moving the latter out of packages,
-so that a change in systemd directory layout (for instance) would not require
-patching all the packages.
+ Lines should wrap at 72 columns.
 
-This is why I try to specify startup ordering (priority 10 or multi-user.target
-in this case) indirectly, and why I try to avoid explicit paths.
-I see this as a part of init config format, not a part of service configuration.
+> +	  SD card.
+> +
+> +	  U-boot includes an mxsboot tool to generate this format, starting
+> +	  from v2011.12.
 
-The package does not need to know where to put those and how to name them.
-All it needs is to have its process started, at some point.
+ U-Boot doesn't use v in its version specifiers.
+
+> +
+> +	  See doc/README.mxs.
+
+ Before 2013.07, it was called README.mx28_common
+
+ Before 2014.01, you needed elftosb to generate the BootStream image.
+Unfortunately we can't automatically add that dependency because we can't detect
+the U-Boot version. So, add this dependency unconditionally like is done for the
+SB format.
+
+> +
+>  config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+>  	bool "Custom (specify below)"
+>  	help
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index a9ba054..8fad5b4 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -49,6 +49,9 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
+>  UBOOT_BIN = u-boot.sb
+>  UBOOT_MAKE_TARGET = $(UBOOT_BIN)
+>  UBOOT_DEPENDENCIES += host-elftosb
+> +else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
+> +UBOOT_BIN = u-boot.sd
+> +UBOOT_MAKE_TARGET = u-boot.sb
+
+ Since sb and sd are visually so similar, I think it's worthwhile to add a small
+comment here to say which is which. E.g.
+
+# BootStream (.sb) file is built by U-Boot, we convert it to SD file
+
+ I'll send an updated series with these changes.
+
+ Regards,
+ Arnout
+
+>  else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
+>  UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
+>  else
+> @@ -116,6 +119,8 @@ define UBOOT_BUILD_CMDS
+>  	$(TARGET_CONFIGURE_OPTS) 	\
+>  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
+>  		$(UBOOT_MAKE_TARGET)
+> +	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+> +		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+>  endef
+>  
+>  define UBOOT_BUILD_OMAP_IFT
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
