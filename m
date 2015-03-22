@@ -1,9 +1,9 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sun, 22 Mar 2015 16:10:45 +0200
-Subject: [Buildroot] [PATCH 4/8] package/poppler: bump version to 0.32.0
+Date: Sun, 22 Mar 2015 16:10:46 +0200
+Subject: [Buildroot] [PATCH 5/8] package/openjpeg: New package openjpeg 1.5.2
 In-Reply-To: <1427033449-20179-1-git-send-email-olivier.schonken@gmail.com>
 References: <1427033449-20179-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1427033449-20179-4-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1427033449-20179-5-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/poppler/poppler.hash | 2 +-
- package/poppler/poppler.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/Config.in              |  1 +
+ package/openjpeg/Config.in     |  6 ++++++
+ package/openjpeg/openjpeg.hash |  2 ++
+ package/openjpeg/openjpeg.mk   | 17 +++++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/openjpeg/Config.in
+ create mode 100644 package/openjpeg/openjpeg.hash
+ create mode 100644 package/openjpeg/openjpeg.mk
 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index f3225bc..c4c7f66 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a2654910100c923c44e366242495e226db2798254f2fa2781138867348759f84	poppler-0.24.5.tar.xz
-+sha256	4963e31ba5e17530a87b16588e22928bc044e8d28d02303dded981bff6725b98	poppler-0.32.0.tar.xz
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 2ac7e64..bb18a0b 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -4,14 +4,15 @@
- #
- ################################################################################
- 
--POPPLER_VERSION = 0.24.5
-+POPPLER_VERSION = 0.32.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = http://poppler.freedesktop.org
--POPPLER_DEPENDENCIES = fontconfig
-+POPPLER_DEPENDENCIES = fontconfig openjpeg
- POPPLER_LICENSE = GPLv2+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_INSTALL_STAGING = YES
--POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
-+POPPLER_CONF_OPTS = 	--with-font-configuration=fontconfig \
-+			--enable-xpdf-headers
- 
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- 	POPPLER_CONF_OPTS += --enable-cms=lcms2
+diff --git a/package/Config.in b/package/Config.in
+index 93fde92..e9f362d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -739,6 +739,7 @@ menu "Graphics"
+ 	source "package/libvips/Config.in"
+ 	source "package/opencv/Config.in"
+ 	source "package/opengl/Config.in"
++	source "package/openjpeg/Config.in"
+ 	source "package/pango/Config.in"
+ 	source "package/pixman/Config.in"
+ 	source "package/poppler/Config.in"
+diff --git a/package/openjpeg/Config.in b/package/openjpeg/Config.in
+new file mode 100644
+index 0000000..3fa7553
+--- /dev/null
++++ b/package/openjpeg/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_OPENJPEG
++	bool "openjpeg"
++	help
++	  The OpenJPEG library is an open-source JPEG 2000 codec written in C
++
++          http://www.openjpeg.org
+diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
+new file mode 100644
+index 0000000..5ac8a00
+--- /dev/null
++++ b/package/openjpeg/openjpeg.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++md5	c41772c30fb1c272358b3707233134a1  openjpeg-1.5.2.tar.gz
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+new file mode 100644
+index 0000000..8cb3c80
+--- /dev/null
++++ b/package/openjpeg/openjpeg.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# openjpeg
++#
++################################################################################
++
++OPENJPEG_VERSION = 1.5.2
++OPENJPEG_SITE = http://downloads.sourceforge.net/project/openjpeg
++OPENJPEG_LICENSE = MIT
++OPENJPEG_LICENSE_FILES = COPYING
++OPENJPEG_AUTORECONF = YES
++OPENJPEG_SOURCE = openjpeg-$(OPENJPEG_VERSION).tar.gz
++OPENJPEG_INSTALL_STAGING = YES
++
++OPENJPEG_CONF_OPTS = \
++
++$(eval $(autotools-package))
 -- 
 1.9.1
