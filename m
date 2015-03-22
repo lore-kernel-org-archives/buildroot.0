@@ -1,68 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 17:05:57 +0100
-Subject: [Buildroot] [PATCH 3/7 v3] support/download: add explicit
-	no-hash support
-In-Reply-To: <93d0033f46edcbeeb4de1e7bfad36e7970fb24b4.1427037564.git.yann.morin.1998@free.fr>
-References: <cover.1427037564.git.yann.morin.1998@free.fr>
- <93d0033f46edcbeeb4de1e7bfad36e7970fb24b4.1427037564.git.yann.morin.1998@free.fr>
-Message-ID: <550EE865.6040302@mind.be>
+Date: Sun, 22 Mar 2015 17:14:54 +0100
+Subject: [Buildroot] Proposed patch: allow setting an hashed root
+	password
+In-Reply-To: <20150322160022.GC4724@free.fr>
+References: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
+ <20150322160022.GC4724@free.fr>
+Message-ID: <550EEA7E.8000207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/03/15 16:21, Yann E. MORIN wrote:
-> Add support to explicitly state that an archive has no hash.
+On 22/03/15 17:00, Yann E. MORIN wrote:
+> Lorenzo, All,
 > 
-> This can be used for archives downloaded from a repository, like a
-> git-clone or a subversion checkout, or using the github helper.
+> On 2015-03-22 16:09 +0100, Lorenzo Catucci spake thusly:
+>> Please find enclosed my proposed patch. I've posted the patch to a GH fork of
+>> the main repository too: look at the ?hashed_root_pw? branch of
+>>
+>> 	https://github.com/lmctv/buildroot
+>>
+>> The reason I've enabled the new ?BR2_TARGET_GENERIC_ROOT_PASSWD_HASH?
+>> configuration option is being able to set a "*" password hash for the root
+>> user without being forced to put a static /etc/shadow inside BR2_ROOTFS_OVERLAY.
+>>
+>> Even if setting a "real" password, I think the option to put a sha256 or
+>> sha512 hash in the .config is a lot less scary than putting a plaintext
+>> password, especially in the case of sha512 .
+>>
+>> Thank you very much, yours
+>>
+>> 	lorenzo m catucci
+>>
 > 
-> This will come in handy when we'll eventually make hashes mandatory as
-> soon as a .hash file exists: for some packages, like gcc, some versions
-> are downloaded as archives from upstream, while other versions may come
-> from a GitHub repository (via the github herlper).
+> NAK.
+
+ What Yann wants to say is:
+
+ Thank you, Lorenzo, for your patch. However, you have not followed the patch
+submission guidelines. Patches should be submitted in-line, preferably using git
+send-email. Any "personal" comments can be added below a --- line after your
+Signed-off-by.
+
+
 > 
-> In this case, a .hash file would exist, that contains hashes for the
-> downloaded tarballs, but archives downloaded from the repository would
-> not have a hash (since it is currently not possible to have reproducible
-> such archives). So, we'd need a way to explicitly state there is no
-> hash, on purpose, for those archives.
+> First, the commit log should only explain the technical reasons for the
+> change, and not contain "personal" messages:
 > 
-> So, add 'none' as a new type of hash.
+>     first line, short explanation
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+>     One (or more) paragraph explainging the current situation and why
+>     you believe it is incorrect.
+> 
+>     One (or more) paragraph explaining what you changed.
+> 
+>     Signed-ogg-by: Your Real Name <your-email@somehwere.net>
+> 
+> Second, there's something odd: clearly the patch prefers the hashed
+> password over the clear-text one, but does not prevent the user to set
+> both.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Therefore, perhaps a better approach is to detect the $-pattern of an
+already-encrypted password in package/mkpasswd/mkpasswd.c and skip the hashing
+in that case.
 
-with a small nit:
+> 
+> Third, if you want to do tricky password handling like this, I think it
+> would be better if you passed a "user table" (BR2_ROOTFS_USERS_TABLES)
+> that defines the root user and its password, like documented in the
+> mkuser infra:
+>     http://buildroot.net/downloads/manual/manual.html#makeuser-syntax
 
-[snip]
-> diff --git a/support/download/check-hash b/support/download/check-hash
-> index cee64ef..d0a4ab9 100755
-> --- a/support/download/check-hash
-> +++ b/support/download/check-hash
-> @@ -38,7 +38,9 @@ check_one_hash() {
->      # Note: md5 is supported, but undocumented on purpose.
->      # Note: sha3 is not supported, since there is currently no implementation
->      #       (the NIST has yet to publish the parameters).
-> +    # Note: 'none' means there is explicitly no hash for that file.
->      case "${_h}" in
-> +        none) return 0;;
+ +1 to that.
 
- I'd put the return 0 on a separate line.
-
- Perhaps we should also consider combining none with another hash an error.
-Although the complexity of checking for that is probably not worth it.
+ So perhaps a better idea is to add that to the help text of
+BR2_TARGET_GENERIC_ROOT_PASSWD.
 
  Regards,
  Arnout
 
->          md5|sha1)                       ;;
->          sha224|sha256|sha384|sha512)    ;;
->          *) # Unknown hash, exit with error
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 
