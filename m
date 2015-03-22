@@ -1,68 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2015 17:00:22 +0100
-Subject: [Buildroot] Proposed patch: allow setting an hashed root
-	password
-In-Reply-To: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
-References: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
-Message-ID: <20150322160022.GC4724@free.fr>
+From: Christopher Stone <chris@sombrio.com>
+Date: Sun, 22 Mar 2015 12:02:55 -0400
+Subject: [Buildroot] [PATCH] Busybox libselinux dependency.
+Message-ID: <CAJ9_1op-4Ztin9kfON97ktjEiXaCXUaNiDwqzmu6gr_=xDBk8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lorenzo, All,
+If you select the selinux applets when configuring busybox then the busybox
+build fails due to a missing selinux.h file. This is because there is no
+dependency on libselinux in the busybox make. The lack of dependency is
+completely understandable, since there is no such dependency when a user
+does not configure in the selinux applets. The attached patch adds a
+libselinux dependency to the busybox make when the libselinux package has
+been selected for the target. It is not unreasonable to assume that if a
+user selects libselinux, then he may also select the busybox selinux
+applets. Additionally, if the user has already selected libselinux for the
+target, then adding a dependency to libselinx to busybox does no harm, even
+if the user does not configure in the selinux applet, yet the build will
+not fail if the user does select those applets.
 
-On 2015-03-22 16:09 +0100, Lorenzo Catucci spake thusly:
-> Please find enclosed my proposed patch. I've posted the patch to a GH fork of
-> the main repository too: look at the ?hashed_root_pw? branch of
-> 
-> 	https://github.com/lmctv/buildroot
-> 
-> The reason I've enabled the new ?BR2_TARGET_GENERIC_ROOT_PASSWD_HASH?
-> configuration option is being able to set a "*" password hash for the root
-> user without being forced to put a static /etc/shadow inside BR2_ROOTFS_OVERLAY.
-> 
-> Even if setting a "real" password, I think the option to put a sha256 or
-> sha512 hash in the .config is a lot less scary than putting a plaintext
-> password, especially in the case of sha512 .
-> 
-> Thank you very much, yours
-> 
-> 	lorenzo m catucci
-> 
+Thus, I submit the attached patch for your consideration.
 
-NAK.
-
-First, the commit log should only explain the technical reasons for the
-change, and not contain "personal" messages:
-
-    first line, short explanation
-
-    One (or more) paragraph explainging the current situation and why
-    you believe it is incorrect.
-
-    One (or more) paragraph explaining what you changed.
-
-    Signed-ogg-by: Your Real Name <your-email@somehwere.net>
-
-Second, there's something odd: clearly the patch prefers the hashed
-password over the clear-text one, but does not prevent the user to set
-both.
-
-Third, if you want to do tricky password handling like this, I think it
-would be better if you passed a "user table" (BR2_ROOTFS_USERS_TABLES)
-that defines the root user and its password, like documented in the
-mkuser infra:
-    http://buildroot.net/downloads/manual/manual.html#makeuser-syntax
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Cheers,
+   Chris Stone.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150322/2789b1b5/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: busybox-libselinux-dependency.patch
+Type: text/x-patch
+Size: 1076 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150322/2789b1b5/attachment.bin>
