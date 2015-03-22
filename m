@@ -1,332 +1,64 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sun, 22 Mar 2015 23:12:45 +0200
-Subject: [Buildroot] [PATCH v2 1/8] package/cups: Un-deprecate,
-	and update CUPS to 2.0.2
+Date: Sun, 22 Mar 2015 23:12:46 +0200
+Subject: [Buildroot] [PATCH v2 2/8] package/hplip: Un-deprecate and bump
+	version to 3.15.2
 In-Reply-To: <1427058772-1105-1-git-send-email-olivier.schonken@gmail.com>
 References: <1427058772-1105-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1427058772-1105-2-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1427058772-1105-3-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove 0001-fix-static.patch - Fixed upstream
-Remove 0002-fix-stack-protector-check.patch - Fixed upstream
-Remove 0003-mantohtml.patch - Replaced by 0001-Remove-building-html-from-man-
-makefile.patch
-Add 0002-Do-not-use-genstrings.patch
-
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- ...01-Remove-building-html-from-man-makefile.patch | 28 ++++++++++
- package/cups/0001-fix-static.patch                 | 28 ----------
- package/cups/0002-Do-not-use-genstrings.patch      | 27 +++++++++
- package/cups/0002-fix-stack-protector-check.patch  | 25 ---------
- package/cups/0003-mantohtml.patch                  | 11 ----
- package/cups/Config.in                             | 18 +++---
- package/cups/cups.hash                             |  2 +
- package/cups/cups.mk                               | 64 ++++++++++++++--------
- 8 files changed, 107 insertions(+), 96 deletions(-)
- create mode 100644 package/cups/0001-Remove-building-html-from-man-makefile.patch
- delete mode 100644 package/cups/0001-fix-static.patch
- create mode 100644 package/cups/0002-Do-not-use-genstrings.patch
- delete mode 100644 package/cups/0002-fix-stack-protector-check.patch
- delete mode 100644 package/cups/0003-mantohtml.patch
- create mode 100644 package/cups/cups.hash
+ package/hplip/Config.in  | 1 -
+ package/hplip/hplip.hash | 2 +-
+ package/hplip/hplip.mk   | 4 +++-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups/0001-Remove-building-html-from-man-makefile.patch b/package/cups/0001-Remove-building-html-from-man-makefile.patch
-new file mode 100644
-index 0000000..05e8a54
---- /dev/null
-+++ b/package/cups/0001-Remove-building-html-from-man-makefile.patch
-@@ -0,0 +1,28 @@
-+From da960a1384625d2550ffbf5765a10fe9b3aa5a51 Mon Sep 17 00:00:00 2001
-+From: Olivier Schonken <olivier.schonken@gmail.com>
-+Date: Wed, 18 Mar 2015 20:30:39 +0200
-+Subject: [PATCH 1/2] Remove building html from man makefile
-+
-+Building and using mantohtml causes problems for cross-compiling
-+
-+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-+---
-+ man/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/man/Makefile b/man/Makefile
-+index dc1a8c0..0ad42a1 100644
-+--- a/man/Makefile
-++++ b/man/Makefile
-+@@ -73,7 +73,7 @@ MAN8	=	cupsaccept.$(MAN8EXT) \
-+ # Make everything...
-+ #
-+ 
-+-all:	$(MAN1) $(MAN5) $(MAN7) $(MAN8) html
-++all:	$(MAN1) $(MAN5) $(MAN7) $(MAN8)
-+ 
-+ 
-+ #
-+-- 
-+1.9.1
-+
-diff --git a/package/cups/0001-fix-static.patch b/package/cups/0001-fix-static.patch
-deleted file mode 100644
-index 4c9d0d4..0000000
---- a/package/cups/0001-fix-static.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--cups: fix static linking
--
--Append -lz to the cups linking libs to fix a problem like this one:
--
--../cups/libcups.a(file.o): In function `cupsFileSeek':
--/home/test/test/1/output/build/cups-1.3.11/cups/file.c:1444: undefined 
--reference to `inflateEnd'
--collect2: error: ld returned 1 exit status
--make[2]: *** [ipp] Error 1
--make[2]: *** Waiting for unfinished jobs....
--
--This solution is the same used upstream in newer versions.
--
--Fixes:
--   http://autobuild.buildroot.net/results/f3d/f3d4f67ce7ee1d54f5bd4c87dfddb7417db614e5/
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----- cups-1.3.11/Makedefs.in.orig	2014-03-05 13:28:10.175437880 +0000
--+++ cups-1.3.11/Makedefs.in	2014-03-05 13:28:35.398845162 +0000
--@@ -132,7 +132,7 @@ LDFLAGS		=	-L../cups -L../filter @LDARCH
-- LEGACY_BACKENDS	=	@LEGACY_BACKENDS@
-- LIBCUPSORDER	=	@LIBCUPSORDER@
-- LIBCUPSIMAGEORDER =	@LIBCUPSIMAGEORDER@
---LINKCUPS	=	@LINKCUPS@ $(SSLLIBS)
--+LINKCUPS	=	@LINKCUPS@ $(SSLLIBS) $(LIBZ)
-- LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
-- LIBS		=	$(LINKCUPS) $(COMMONLIBS)
-- OPTIM		=	@OPTIM@
-diff --git a/package/cups/0002-Do-not-use-genstrings.patch b/package/cups/0002-Do-not-use-genstrings.patch
-new file mode 100644
-index 0000000..e5b2de3
---- /dev/null
-+++ b/package/cups/0002-Do-not-use-genstrings.patch
-@@ -0,0 +1,27 @@
-+From a863814f6dadda054c964897210789eafff6f605 Mon Sep 17 00:00:00 2001
-+From: Olivier Schonken <olivier.schonken@gmail.com>
-+Date: Wed, 18 Mar 2015 20:33:41 +0200
-+Subject: [PATCH 2/2] Do not use genstrings
-+
-+Using cross compiled genstrings while cross-compiling will break compilation.
-+
-+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-+---
-+ ppdc/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/ppdc/Makefile b/ppdc/Makefile
-+index bc8bb64..f6bae25 100644
-+--- a/ppdc/Makefile
-++++ b/ppdc/Makefile
-+@@ -243,7 +243,7 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
-+		libcupsppdc.a ../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) \
-+		$(DNSSDLIBS) $(COMMONLIBS) $(LIBZ)
-+	echo Generating localization strings...
-+-	./genstrings >sample.c
-++	#./genstrings >sample.c
-+
-+
-+ #
-+--
-+1.9.1
-diff --git a/package/cups/0002-fix-stack-protector-check.patch b/package/cups/0002-fix-stack-protector-check.patch
-deleted file mode 100644
-index 1db35ff..0000000
---- a/package/cups/0002-fix-stack-protector-check.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--[PATCH]: use AC_TRY_LINK for stack protector check
--
--Actually try to link an executable to test for stack protector support,
--as gcc seems to accept the -fstack-protector argument even when it's
--compiled with --disable-libssp (but linking fails with a error
--finding -lssp_nonshared).
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- config-scripts/cups-compiler.m4 |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: cups-1.3.9/config-scripts/cups-compiler.m4
--===================================================================
----- cups-1.3.9.orig/config-scripts/cups-compiler.m4
--+++ cups-1.3.9/config-scripts/cups-compiler.m4
--@@ -109,7 +109,7 @@ if test -n "$GCC"; then
-- 	AC_MSG_CHECKING(if GCC supports -fstack-protector)
-- 	OLDCFLAGS="$CFLAGS"
-- 	CFLAGS="$CFLAGS -fstack-protector"
---	AC_TRY_COMPILE(,,
--+	AC_TRY_LINK(,,
-- 		OPTIM="$OPTIM -fstack-protector"
-- 		AC_MSG_RESULT(yes),
-- 		AC_MSG_RESULT(no))
-diff --git a/package/cups/0003-mantohtml.patch b/package/cups/0003-mantohtml.patch
-deleted file mode 100644
-index e6a10b0..0000000
---- a/package/cups/0003-mantohtml.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- cups-1.3.5/man/Makefile	2007-07-12 21:01:14.000000000 -0400
--+++ cups-1.3.5/man/Makefile	2008-02-11 08:55:24.000000000 -0500
--@@ -173,7 +173,7 @@ html:	$(MAN1) $(MAN5) $(MAN7) $(MAN8) ma
-- 	done
-- 
-- mantohtml:	mantohtml.o
---	$(CC) $(LDFLAGS) -o $@ mantohtml.o
--+	gcc -I/usr/include -I../ -L/usr/lib mantohtml.c -o mantohtml
-- 
-- 
-- #
-diff --git a/package/cups/Config.in b/package/cups/Config.in
-index 8e60221..e1d3c68 100644
---- a/package/cups/Config.in
-+++ b/package/cups/Config.in
+diff --git a/package/hplip/Config.in b/package/hplip/Config.in
+index a8a5f69..780c69e 100644
+--- a/package/hplip/Config.in
++++ b/package/hplip/Config.in
 @@ -1,7 +1,6 @@
- config BR2_PACKAGE_CUPS
- 	bool "cups"
--	# serious security issues, needs upgrading
+ config BR2_PACKAGE_HPLIP
+ 	bool "hplip"
+ 	# because of cups security issues
 -	depends on BR2_DEPRECATED_SINCE_2015_05
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	# needs fork()
- 	depends on BR2_USE_MMU
- 	help
-@@ -11,13 +10,14 @@ config BR2_PACKAGE_CUPS
- 
- if BR2_PACKAGE_CUPS
- 
--config BR2_PACKAGE_CUPS_PDFTOPS
--	bool "pdftops support"
--	depends on BR2_INSTALL_LIBSTDCPP
-+config BR2_PACKAGE_CUPS_AVAHI
-+	bool "avahi support"
-+	depends on !BR2_STATIC_LIBS # avahi
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS # avahi
-+	select BR2_PACKAGE_AVAHI
-+	select BR2_PACKAGE_AVAHI_DAEMON
- 	help
--	  Enable pdftops support
--
--comment "pdftops support needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+	  Enable Avahi support.
-+	  Select this if you want cups to support Bonjour protocol.
- 
- endif
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-new file mode 100644
-index 0000000..8e99ea8
---- /dev/null
-+++ b/package/cups/cups.hash
-@@ -0,0 +1,2 @@
-+# From https://www.cups.org/
-+md5	6e0ea72dbafcf5baaa1cf4178e71096d	cups-2.0.2-source.tar.bz2
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index b6a0663..e1d79e9 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_CUPS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
+index fb7d4e7..a179b1d 100644
+--- a/package/hplip/hplip.hash
++++ b/package/hplip/hplip.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  a8122cd824398ac6374154f86152e24fdf5c0100b5c1d6518e853308362e627d  hplip-3.13.10.tar.gz
++sha256  5f02eca743d85240db07ed2fc6551e1dce0dedc85ad4a0e90417e4d5b630f67c	hplip-3.15.2.tar.gz
+diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+index 99c5930..e78eb8f 100644
+--- a/package/hplip/hplip.mk
++++ b/package/hplip/hplip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_VERSION = 1.3.11
-+CUPS_VERSION = 2.0.2
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
- CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
- CUPS_LICENSE = GPLv2 LGPLv2
-@@ -16,47 +16,65 @@ CUPS_CONF_OPTS = \
- 	--without-perl \
- 	--without-java \
- 	--without-php \
--	--disable-gnutls \
- 	--disable-gssapi \
- 	--libdir=/usr/lib
- CUPS_CONFIG_SCRIPTS = cups-config
+-HPLIP_VERSION = 3.13.10
++HPLIP_VERSION = 3.15.2
+ HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
+ HPLIP_AUTORECONF = YES
+ HPLIP_DEPENDENCIES = cups libusb jpeg
+@@ -29,6 +29,8 @@ HPLIP_CONF_OPTS = \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--includedir=$(STAGING_DIR)/usr/include
  
- CUPS_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_ZLIB),zlib) \
--	$(if $(BR2_PACKAGE_LIBPNG),libpng) \
--	$(if $(BR2_PACKAGE_JPEG),jpeg) \
--	$(if $(BR2_PACKAGE_TIFF),tiff)
-+	cups-filters
++HPLIP_MAKE_OPTS += LDFLAGS+=-lpthread
 +
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+CUPS_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
-+CUPS_DEPENDENCIES += systemd
-+endif
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+CUPS_CONF_OPTS += --enable-static \
-+	--disable-shared
-+else
-+CUPS_CONF_OPTS += --enable-shared
-+endif
- 
  ifeq ($(BR2_PACKAGE_DBUS),y)
--	CUPS_CONF_OPTS += --enable-dbus
--	CUPS_DEPENDENCIES += dbus
-+CUPS_CONF_OPTS += --enable-dbus
-+CUPS_DEPENDENCIES += dbus
- else
--	CUPS_CONF_OPTS += --disable-dbus
-+CUPS_CONF_OPTS += --disable-dbus
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--	CUPS_DEPENDENCIES += xlib_libX11
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+CUPS_CONF_OPTS += --enable-gnutls
-+CUPS_DEPENDENCIES += gnutls
-+else
-+CUPS_CONF_OPTS += --disable-gnutls
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON),y)
--	CUPS_CONF_OPTS += --with-python
--	CUPS_DEPENDENCIES += python
-+CUPS_CONF_OPTS += --with-python
-+CUPS_DEPENDENCIES += python
- else
--	CUPS_CONF_OPTS += --without-python
-+CUPS_CONF_OPTS += --without-python
- endif
- 
--ifeq ($(BR2_PACKAGE_CUPS_PDFTOPS),y)
--	CUPS_CONF_OPTS += --enable-pdftops
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+CUPS_CONF_OPTS += --enable-libusb
-+CUPS_DEPENDENCIES += libusb
- else
--	CUPS_CONF_OPTS += --disable-pdftops
-+CUPS_CONF_OPTS += --disable-libusb
- endif
- 
--# standard autoreconf fails with autoheader failures
--define CUPS_FIXUP_AUTOCONF
--	cd $(@D) && $(AUTOCONF)
--endef
--CUPS_DEPENDENCIES += host-autoconf
-+ifeq ($(BR2_PACKAGE_LIBPAPER),y)
-+CUPS_CONF_OPTS += --enable-libpaper
-+CUPS_DEPENDENCIES += libpaper
-+else
-+CUPS_CONF_OPTS += --disable-libpaper
-+endif
- 
--CUPS_PRE_CONFIGURE_HOOKS += CUPS_FIXUP_AUTOCONF
-+ifeq ($(BR2_PACKAGE_CUPS_FILTERS_AVAHI),y)
-+CUPS_DEPENDENCIES += avahi
-+CUPS_CONF_OPTS += --enable-avahi
-+else
-+CUPS_CONF_OPTS += --disable-avahi
-+endif
- 
- $(eval $(autotools-package))
+ 	HPLIP_CONF_OPTS += --enable-dbus-build
+ 	HPLIP_DEPENDENCIES += dbus
 -- 
 1.9.1
