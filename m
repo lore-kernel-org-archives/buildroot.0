@@ -1,34 +1,66 @@
-From: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
-Date: Sun, 22 Mar 2015 16:09:30 +0100
-Subject: [Buildroot] Proposed patch: allow setting an hashed root password
-Message-ID: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 22 Mar 2015 16:16:26 +0100
+Subject: [Buildroot] [PATCH 1/7] linux: use the package infrastructure
+ to download patches
+In-Reply-To: <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <550EDCCA.7000607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please find enclosed my proposed patch. I've posted the patch to a GH fork of
-the main repository too: look at the ?hashed_root_pw? branch of
+On 28/02/15 19:15, Thomas Petazzoni wrote:
+> The linux package has a special handling of patches, with quite a bit
+> of legacy in it. A problem caused by this special handling is that the
+> linux package calls directly the DOWNLOAD_WGET macro, which means that
+> the package infrastructure isn't aware of which patches get
+> downloaded, and it prevents doing changes inside the package download
+> infrastructure.
+> 
+> This commit changes the handling of patches in the linux package in
+> the following way:
+> 
+>  * The LINUX_PATCHES variable is kept as is: it lists all the patches
+>    mentionned in the Config.in option BR2_LINUX_KERNEL_PATCH. This
+>    option can contain http://, ftp://, https:// URLs, path to local
+>    files or local directories.
+> 
+>    This variable is *not* used by the generic package infrastructure,
+>    so it is purely internal to the Linux package.
+> 
+>  * The LINUX_PATCH variable is now filled in with the list of patches
+>    that should be downloaded. It is derived from LINUX_PATCHES by
+>    filtering the patches that have http://, ftp:// or https:// in
+>    their path. Since <pkg>_PATCH is handled by the package
+>    infrastructure, it means that those patches are now automatically
+>    downloaded and applied by the package infrastructure.
+> 
+>  * The LINUX_APPLY_PATCHES hook is renamed to
+>    LINUX_APPLY_LOCAL_PATCHES, because it is now only responsible of
+>    applying local patches: remote patches are handled by
+>    LINUX_PATCH. The implementation of the hook is changed to filter
+>    out the patches that have already taken care of by LINUX_PATCH, so
+>    that we only iterate through the list of local patches or local
+>    patch directories.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-	https://github.com/lmctv/buildroot
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The reason I've enabled the new ?BR2_TARGET_GENERIC_ROOT_PASSWD_HASH?
-configuration option is being able to set a "*" password hash for the root
-user without being forced to put a static /etc/shadow inside BR2_ROOTFS_OVERLAY.
+ It's time for this one to be applied. There are of course the two spelling
+corrections noted by Romain and Baruch, but I'm sure you can fix those while
+applying.
 
-Even if setting a "real" password, I think the option to put a sha256 or
-sha512 hash in the .config is a lot less scary than putting a plaintext
-password, especially in the case of sha512 .
+ Regards,
+ Arnout
 
-Thank you very much, yours
-
-	lorenzo m catucci
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Allow-setting-an-already-encrypted-root-password.patch
-Type: text/x-patch
-Size: 3044 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150322/733f6eed/attachment.bin>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
