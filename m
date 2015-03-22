@@ -1,90 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2015 12:45:07 +0100
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Sun, 22 Mar 2015 14:39:14 +0200
 Subject: [Buildroot] [RFC 01/11] common service startup files
-In-Reply-To: <3116b4122f3e3ea776ce2739c11ee36ea967297f.1426960081.git.alex.suykov@gmail.com>
+In-Reply-To: <550E057E.2030605@mind.be>
 References: <cover.1426960081.git.alex.suykov@gmail.com>
  <3116b4122f3e3ea776ce2739c11ee36ea967297f.1426960081.git.alex.suykov@gmail.com>
-Message-ID: <20150322114507.GB4724@free.fr>
+ <550E057E.2030605@mind.be>
+Message-ID: <20150322123914.GB21403@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, All,
+Sun, Mar 22, 2015 at 12:57:50AM +0100, Arnout Vandecappelle wrote:
 
-On 2015-03-21 20:27 +0200, Alex Suykov spake thusly:
-> This patch introduces support infrastructure for per-project .run files.
+Thanks for extensive review, a lot of good points which I skip in
+this reply because they should go directly into the code.
+
+> Missing SoB, but perhaps that's intentional because it's not ready for inclusion?
+Well, partially, and partially I just forgot -s when re-splitting commits.
+
+> > files may set $(PKG)_INIT = KEY:value KEY:value ..., which will be
+> > handled by install-run. The substitutions will be applied to sysv
+> > and systemd files.
 > 
-> Any .run files in package directory are picked up by pkg-generic code,
-> fed to support/init/install-run script which converts them into either
-> sysv initscripts or systemd unit files and installs those into predefined
-> locations. The package itself provides only the .run files, no code
-> in package .mk file is necessary.
+>  I don't see why this is needed, and it probably makes the install-run script
+> more complicated.
 > 
-> Packages that install some of their services conditionally may set
-> $(PKG)_INIT = list of run files to install. As a side effect, this
-> removes the need to handle S99foo S99bar vs foo.service bar.service
-> with the package .mk file.
+BR2_PACKAGE_GPSD_DEVICES, and keeping it a variable in the resulting initscript.
+Or maybe in /etc/default.
+If sed substitutiions are ok, this can be done much simplier of course:
 
-I think this shoule be always set in the .mk, even if not conditional,
-and that pkg-generic only handles what's been explicitly declared by the
-package.
+    sed s!DEVICES!/dev/ttyS1! package/gpsd/gpsd.run > build/gpsd-.../gpsd.run
+    support/init/install-run build/gpsd-.../gpsd.run
 
-> Packages that need to substititue some values within their service
-> files may set $(PKG)_INIT = KEY:value KEY:value ..., which will be
-> handled by install-run. The substitutions will be applied to sysv
-> and systemd files.
+> BTW, shouldn't tmpdirs be handled for sysv as well? Typically, the init script
+> will create the tmpdir...
+I saw this as systemd-specific.
+Looking at the packages, yes, makes sense to have some kind of generic tmpdir
+variable.
 
-What we previously discussed was something like the following (for
-sysv-init):
+>  - The script should only handle cases that are actually used. So start with
+> something extremely simple that covers a few interesting cases, and leave the
+> others to use the old initscripts system.
+Why I was trying handle as many packages as possible: I'm pretty sure something
+like 80% of them will work immediately with only the basic support,
+but it would be really bad to find a show-stopper among the remaining 20%.
+Something that would require changing the way the whole thing works.
 
-    /etc/init.d/S??foo  <- startup script for package 'foo'
+Perhaps it's ok to drop bad cases for now, leave them as initscripts-only
+and expect the users do something about the unsupported cases themselves.
 
-    /etc/defaults/foo   <- contains default configuration of package
-                           'foo', as installed by Buildroot.
+>  - Use existing infrastructure where possible. For instance, you could change
+> the .run format into .ini format and use configparser, or you could use the
+> shlex module for parsing.
+Regarding ini files, I was thinking about using a kind of extended/simplified
+.service format. Systemd being systemd, it would cover all cases, and it's got
+some documentation already.
 
-    /etc/config/foo     <- optional file, contains the user-supplied
-                           override configuration for package 'foo'
+The problem is that there are pretty long shell scripts that do not fit well
+within .ini files. Examples: sunxi-mali, ti-gfx, am33-cm3 and maybe some others.
+That's why I tried to keep .run files looking somewhat like shell scripts.
 
-Then, the "startup script" would read those files, starting with the one
-in /etc/defaults/ and then, if present, the one in /etc/config/ . This
-would allow /etc to be read-only, and /etc/config to be a read-write
-mountpoint.
+Well, that and I don't like systemd documentation all that much.
 
-Those files would be provided by the packages, like is done for now.
+> This bypass syntax is hard to understand IMHO. Can you find something
+> simpler/clearer and more verbose? If you would switch to ini format, it could be
+> something like
+> 
+> [initscripts]
+> cp = package/foo/S10start
+>      /etc/init.d/S10start
+> 
+> [systemd]
+> cp-ln = package/foo/foo.service
+>         /usr/lib/systemd/system/foo.service
+>         /etc/systemd/system/multi-user.target.wants
 
-And similarly for systemd, except a lot of packages are now providing
-systemd unit files, and there is no reason we would provide our own
-instead, since that would probably bit-rot in the long term, so we
-probably would prefer to use whatever upstream provides.
+The primary goal of the whole changeset is to separate package-specific
+and init-system-specific things, moving the latter out of packages,
+so that a change in systemd directory layout (for instance) would not require
+patching all the packages.
 
-So, what we really care about are sysv initscripts, since they are in a
-very bad shape:
-  - upstream-provided scripts are too ugly, and often tied to a
-    particular distro;
-  - our own scripts are mot very clean either, for some have been around
-    for a looong time.
+This is why I try to specify startup ordering (priority 10 or multi-user.target
+in this case) indirectly, and why I try to avoid explicit paths.
+I see this as a part of init config format, not a part of service configuration.
 
-> In case particular init system needs hand-crafted startup files
-> or cannot handle certain services at all, install-run may be told
-> so using special lines in the .run file.
-
-I'm afraid this would be abused in the long run, becasue .run syntax is
-too specific to Buildroot.
-
-> This patch does not remove existing BR2_INIT_{SYSV,SYSTEMD} hooks.
-> Each package should either provide .run files or define hooks, but not both.
-
-Right.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+The package does not need to know where to put those and how to name them.
+All it needs is to have its process started, at some point.
