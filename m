@@ -1,46 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 16:19:18 +0100
-Subject: [Buildroot] [PATCH 2/7] pkg-generic: fix the logic showing the
- "Downloading" message
-In-Reply-To: <1425147313-17380-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425147313-17380-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <550EDD76.90600@mind.be>
+From: =?UTF-8?B?QW5kcsOpIEhlbnRzY2hlbA==?= <nerv@dawncrow.de>
+Date: Sun, 22 Mar 2015 16:19:36 +0100
+Subject: [Buildroot] [PATCH 4/4] wine: more hostarch
+In-Reply-To: <550DAB91.6080603@mind.be>
+References: <550D907F.5000106@dawncrow.de> <550DAB91.6080603@mind.be>
+Message-ID: <550EDD88.7010607@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/02/15 19:15, Thomas Petazzoni wrote:
-> Even though the .stamp_downloaded target is executed for each package
-> being built, the pkg-generic tries to not display the "Downloading"
-> message when there is in fact nothing to download.
+Am 21.03.2015 um 18:34 schrieb Arnout Vandecappelle:
+> On 21/03/15 16:38, Andr? Hentschel wrote:
+>> The tools from host-wine build on those architectures.
+>>
+>> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 > 
-> Unfortunately, the logic was incorrect for the patch download: it
-> forgot the fact that <pkg>_PATCH can contain either file names (in
-> which case we assume the patch should be downloaded from <pkg>_SITE),
-> or full URLs. The latter case was not properly handled, as we were
-> checking if $(DL_DIR)/<full URL> existed, while we should be testing
-> if $(DL_DIR)/`basename <full URL>` exists.
+>  Do you also volunteer to provide an autobuilder on arm and aarch64? :-)
+
+if someone guides me to set one up I?ll do it for ARM on an cubox-i4pro, but i'm not sure about how many packages would support that.
+would that be useful?
+
+>> ---
+>>  package/wine/Config.in | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/wine/Config.in b/package/wine/Config.in
+>> index 26de143..d1510e1 100644
+>> --- a/package/wine/Config.in
+>> +++ b/package/wine/Config.in
+>> @@ -2,7 +2,9 @@ config BR2_PACKAGE_WINE
+>>  	bool "wine"
+>>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+>>  	# Wine only builds on certain architectures
+>> -	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" || \
+>> +	           BR2_HOSTARCH = "powerpc" || BR2_HOSTARCH = "arm" || \
 > 
-> This patch fixes that, which makes sure the "Downloading" message is
-> displayed only when necessary.
+>  powerpc but not powerpc64?
+
+yes, powerpc64 is not supported yet
+
+>  Regards,
+>  Arnout
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-[snip]
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>> +	           BR2_HOSTARCH = "aarch64"
+>>  	# Wine has much CPU specific code and mostly makes sense on x86
+>>  	depends on BR2_i386
+>>  	help
+>>
+> 
+> 
