@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 14:02:29 +0100
-Subject: [Buildroot] [PATCH 1/2] boot/uboot: add support for i.MX28 SD
- format
-In-Reply-To: <1426701961-2619-1-git-send-email-vincent.stehle@freescale.com>
+Date: Sun, 22 Mar 2015 14:12:02 +0100
+Subject: [Buildroot] [PATCH 2/2] config: Add defconfig for Freescale
+ i.MX28 EVK
+In-Reply-To: <1426701961-2619-2-git-send-email-vincent.stehle@freescale.com>
 References: <1426701961-2619-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <550EBD65.80102@mind.be>
+ <1426701961-2619-2-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <550EBFA2.7000103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,91 +13,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 18/03/15 19:06, Vincent Stehl? wrote:
-> Allow to generate u-boot.sd, Freescale i.MX28 SB format with a header for
-> booting from an SD card.
+> The i.MX28 Evaluation Kit (or EVK) is Freescale's evaluation board based on the
+> i.MX287 Applications Processor.
 > 
-> U-boot includes an mxsboot tool to generate this format, starting from
-> v2011.12.
+> This defconfig is based on mainline u-boot and Linux kernel.
 > 
-> See u-boot doc/README.mxs.
+> Also, we add an SD card creation script and documentation, shamelessly based on
+> the ones for i.MX5/6 by Luca Ceresoli.
 > 
 > Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  boot/uboot/Config.in | 12 ++++++++++++
->  boot/uboot/uboot.mk  |  5 +++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 03e6acc..cea993a 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -117,6 +117,18 @@ config BR2_TARGET_UBOOT_FORMAT_SB
->  	depends on BR2_arm
->  	bool "u-boot.sb"
->  
-> +config BR2_TARGET_UBOOT_FORMAT_SD
-> +	depends on BR2_arm
-> +	bool "u-boot.sd"
-> +	help
-> +	  This is Freescale i.MX28 SB format, with a header for booting from an
-
- Lines should wrap at 72 columns.
-
-> +	  SD card.
+[snip]
+> diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+> new file mode 100644
+> index 0000000..15cedeb
+> --- /dev/null
+> +++ b/configs/freescale_imx28evk_defconfig
+> @@ -0,0 +1,18 @@
+> +# architecture
+> +BR2_arm=y
+> +BR2_arm926t=y
 > +
-> +	  U-boot includes an mxsboot tool to generate this format, starting
-> +	  from v2011.12.
-
- U-Boot doesn't use v in its version specifiers.
-
+> +# system
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
 > +
-> +	  See doc/README.mxs.
+> +# kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
 
- Before 2013.07, it was called README.mx28_common
+ For reproducible builds, the kernel and bootloader versions should be fixed to
+something that you tested.
 
- Before 2014.01, you needed elftosb to generate the BootStream image.
-Unfortunately we can't automatically add that dependency because we can't detect
-the U-Boot version. So, add this dependency unconditionally like is done for the
-SB format.
-
-> +
->  config BR2_TARGET_UBOOT_FORMAT_CUSTOM
->  	bool "Custom (specify below)"
->  	help
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a9ba054..8fad5b4 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -49,6 +49,9 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
->  UBOOT_BIN = u-boot.sb
->  UBOOT_MAKE_TARGET = $(UBOOT_BIN)
->  UBOOT_DEPENDENCIES += host-elftosb
-> +else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
-> +UBOOT_BIN = u-boot.sd
-> +UBOOT_MAKE_TARGET = u-boot.sb
-
- Since sb and sd are visually so similar, I think it's worthwhile to add a small
-comment here to say which is which. E.g.
-
-# BootStream (.sb) file is built by U-Boot, we convert it to SD file
-
- I'll send an updated series with these changes.
+ I'll assume that that's 3.19.2 and 2015.01 and resubmit.
 
  Regards,
  Arnout
 
->  else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
->  UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
->  else
-> @@ -116,6 +119,8 @@ define UBOOT_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) 	\
->  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
->  		$(UBOOT_MAKE_TARGET)
-> +	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
-> +		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
->  endef
->  
->  define UBOOT_BUILD_OMAP_IFT
+> +
+> +# bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="mx28evk"
+> +BR2_TARGET_UBOOT_FORMAT_SD=y
 > 
 
 
