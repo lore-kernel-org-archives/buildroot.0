@@ -1,423 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 12:29:08 +0100
-Subject: [Buildroot] [[PATCH v2] 1/1] package/swupdate: new package
-In-Reply-To: <1426750417-23107-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1426750417-23107-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <550EA784.9060609@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2015 12:45:07 +0100
+Subject: [Buildroot] [RFC 01/11] common service startup files
+In-Reply-To: <3116b4122f3e3ea776ce2739c11ee36ea967297f.1426960081.git.alex.suykov@gmail.com>
+References: <cover.1426960081.git.alex.suykov@gmail.com>
+ <3116b4122f3e3ea776ce2739c11ee36ea967297f.1426960081.git.alex.suykov@gmail.com>
+Message-ID: <20150322114507.GB4724@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Joerg,
+Alex, All,
 
-On 19/03/15 08:33, J?rg Krause wrote:
-> From: J?rg Krause <jkrause@posteo.de>
-
- Perhaps you should reset the author as well? Pass --reset-author to git commit
---amend.
-
-
-> This patch is based on an WIP version submitted by Romain Naour, commented by
-> Arnout Vandecappelle:
-> https://patchwork.ozlabs.org/patch/401270/
+On 2015-03-21 20:27 +0200, Alex Suykov spake thusly:
+> This patch introduces support infrastructure for per-project .run files.
 > 
-> The package provides a default configuration which let the user initiate an
-                                                     ^^^lets
-
-> update by using an update URL by using libcurl. The embedded webserver (a
-> customized version of mongoose) and Lua support are both disabled by default.
+> Any .run files in package directory are picked up by pkg-generic code,
+> fed to support/init/install-run script which converts them into either
+> sysv initscripts or systemd unit files and installs those into predefined
+> locations. The package itself provides only the .run files, no code
+> in package .mk file is necessary.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Packages that install some of their services conditionally may set
+> $(PKG)_INIT = list of run files to install. As a side effect, this
+> removes the need to handle S99foo S99bar vs foo.service bar.service
+> with the package .mk file.
 
- Since the original is from Romain, please add:
+I think this shoule be always set in the .mk, even if not conditional,
+and that pkg-generic only handles what's been explicitly declared by the
+package.
 
-Cc: Romain Naour <romain.naour@openwide.fr>
+> Packages that need to substititue some values within their service
+> files may set $(PKG)_INIT = KEY:value KEY:value ..., which will be
+> handled by install-run. The substitutions will be applied to sysv
+> and systemd files.
 
-> Tested-by: Mike Williams <mike@mikebwilliams.com>
-> ---
-> Changes v1 -> v2:
->   - bump to latest commit d9f58b5a3263b1b00c6d011cd8cdd65e69890b46
->   - update Sob email address
-> ---
->  package/Config.in                                  |   1 +
->  package/swupdate/Config.in                         |  93 +++++++++++++++
->  ...wupdate-0001-Add-missing-header-for-off_t.patch |  25 ++++
->  package/swupdate/swupdate.config                   |  82 +++++++++++++
->  package/swupdate/swupdate.mk                       | 127 +++++++++++++++++++++
->  5 files changed, 328 insertions(+)
->  create mode 100644 package/swupdate/Config.in
->  create mode 100644 package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
->  create mode 100644 package/swupdate/swupdate.config
->  create mode 100644 package/swupdate/swupdate.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 96e373a..f37fba4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1344,6 +1344,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/start-stop-daemon/Config.in"
->  endif
->  	source "package/supervisor/Config.in"
-> +	source "package/swupdate/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/sysklogd/Config.in"
->  endif
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> new file mode 100644
-> index 0000000..f8489dc
-> --- /dev/null
-> +++ b/package/swupdate/Config.in
-> @@ -0,0 +1,93 @@
-> +config BR2_PACKAGE_SWUPDATE
-> +	bool "swupdate"
-> +	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_MTD
-> +	help
-> +	  swupdate provides a reliable way to update the software on an embedded
-> +	  system.
-> +
-> +	  https://github.com/sbabic/swupdate.git
-> +
-> +if BR2_PACKAGE_SWUPDATE
-> +
-> +config BR2_PACKAGE_SWUPDATE_CONFIG
-> +	string "swupdate configuration file to use?"
+What we previously discussed was something like the following (for
+sysv-init):
 
- Remove the "to use?" bit.
+    /etc/init.d/S??foo  <- startup script for package 'foo'
 
-> +	default "package/swupdate/swupdate.config"
-> +	help
-> +	  Some people may wish to use their own modified swupdate configuration
-> +	  file, and will specify their config file location with this option.
-> +
-> +	  Most people will just use the default swupdate configuration file.
-> +	  This will enable swupdate with an image downloader, as well as image
-> +	  handlers for UBI volumes, raw NAND or NOR flash, SD cards, shell
-> +	  scripts, and the U-Boot bootloader environment.
-> +
-> +config BR2_PACKAGE_SWUPDATE_LIBCURL
-> +	bool "Enable image downloading"
+    /etc/defaults/foo   <- contains default configuration of package
+                           'foo', as installed by Buildroot.
 
- All these options that update the .config file... The user can just make
-swupdate-menuconfig, no? And IMHO it's very confusing for the user that they do
+    /etc/config/foo     <- optional file, contains the user-supplied
+                           override configuration for package 'foo'
 
-make swupdate-menuconfig
-select libcurl
-make
--> curl has vanished
+Then, the "startup script" would read those files, starting with the one
+in /etc/defaults/ and then, if present, the one in /etc/config/ . This
+would allow /etc to be read-only, and /etc/config to be a read-write
+mountpoint.
 
- On the other hand, it's also annoying for the user that they have to manually
-enable all these dependencies... Hm, now I'm not so sure anymore :-(
+Those files would be provided by the packages, like is done for now.
 
- If you would work this way, then the help text should clearly specify which
-other packages are "interesting" for swupdate.
+And similarly for systemd, except a lot of packages are now providing
+systemd unit files, and there is no reason we would provide our own
+instead, since that would probably bit-rot in the long term, so we
+probably would prefer to use whatever upstream provides.
 
+So, what we really care about are sysv initscripts, since they are in a
+very bad shape:
+  - upstream-provided scripts are too ugly, and often tied to a
+    particular distro;
+  - our own scripts are mot very clean either, for some have been around
+    for a looong time.
 
-> +	select BR2_PACKAGE_LIBCURL
-> +	default y
-> +	help
-> +	  Enable update from image URL using libcurl. Files are downloaded                                                                    ?
-> +	  completely before installation begins.
-> +
-> +config BR2_PACKAGE_SWUPDATE_WEBSERVER
-> +	bool "Enable embedded webserver"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  Enable firmware update from a remote device using an embedded
-> +	  webserver on the target.
-> +
-> +comment "Webserver support needs toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +if BR2_PACKAGE_SWUPDATE_WEBSERVER
-> +
-> +config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_IPV6
-> +	depends on BR2_INET_IPV6
-> +	bool "Webserver with IPv6 support"
-> +	help
-> +	  Enable IPv6 support for the webserver.
-> +
-> +comment "IPv6 support for the webserver needs toolchain w/ IPv6"
-> +	depends on !BR2_INET_IPV6
-> +
-> +config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SQL
-> +	bool "Webserver with SQL support"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> In case particular init system needs hand-crafted startup files
+> or cannot handle certain services at all, install-run may be told
+> so using special lines in the .run file.
 
- Is SQL implemented in lua? Oh, yes, now I see it is. But shouldn't you select
-BR2_PACKAGE_LUASQL_SQLITE3 then?
+I'm afraid this would be abused in the long run, becasue .run syntax is
+too specific to Buildroot.
 
+> This patch does not remove existing BR2_INIT_{SYSV,SYSTEMD} hooks.
+> Each package should either provide .run files or define hooks, but not both.
 
-> +	depends on !BR2_PACKAGE_LUA_5_1
-> +	help
-> +	  Enable SQL support for the webserver.
-> +
-> +comment "Webservers Lua support needs a toolchain w/ largefile and a Lua 5.2 interpreter"
-> +	depends on !BR2_LARGEFILE || BR2_PACKAGE_LUA_5_1 || !BR2_PACKAGE_HAS_LUAINTERPRETER
-> +
-> +config BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SSL
-> +	bool "Webserver with SSL support"
-> +	help
-> +	  Enable SSL support for the webserver.
+Right.
 
- Missing select? IIRC mongoose works with openssl and polarssl.
-
-> +
-> +endif
-> +
-> +config BR2_PACKAGE_SWUPDATE_LIBCONFIG
-> +	bool "Enable libconfig parser"
-> +	select BR2_PACKAGE_LIBCONFIG
-> +	default y
-> +	help
-> +	  Use libconfig to parse the configuration file.
-> +	  This is the default parser. Unless you don't use your own
-> +	  external parser written in Lua you'll need to say Y here.
-> +
-> +config BR2_PACKAGE_SWUPDATE_LUA_SUPPORT
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-> +	depends on !BR2_PACKAGE_LUA_5_1
-> +	bool "Enable Lua support"
-> +	help
-> +	  Enable Lua support.
-> +	  Select this for using custom scripts written in Lua.
-> +
-> +comment "Lua support needs a Lua 5.2 interpreter"
-> +	depends on BR2_PACKAGE_LUA_5_1 || !BR2_PACKAGE_HAS_LUAINTERPRETER
-> +
-> +endif
-> diff --git a/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch b/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
-> new file mode 100644
-> index 0000000..4be0f7b
-> --- /dev/null
-> +++ b/package/swupdate/swupdate-0001-Add-missing-header-for-off_t.patch
-> @@ -0,0 +1,25 @@
-> +From 4e382373cad64ca7e183336e33b72c53cfeed340 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@openwide.fr>
-> +Date: Sun, 7 Sep 2014 17:31:09 +0200
-> +Subject: [PATCH 1/1] Add missing header for off_t
-> +
-> +Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-
- Romain, what's the upstream status for this patch?
-
-> +---
-> + include/swupdate.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/include/swupdate.h b/include/swupdate.h
-> +index 78b7f85..c193397 100644
-> +--- a/include/swupdate.h
-> ++++ b/include/swupdate.h
-> +@@ -23,6 +23,7 @@
-> + #ifndef _SWUPDATE_H
-> + #define _SWUPDATE_H
-> + 
-> ++#include <sys/types.h>
-> + #include <sys/queue.h>
-> + #include "flash.h"
-> + #include "globals.h"
-> +-- 
-> +1.9.3
-> +
-> diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-> new file mode 100644
-> index 0000000..788f949
-> --- /dev/null
-> +++ b/package/swupdate/swupdate.config
-> @@ -0,0 +1,82 @@
-> +#
-> +# Automatically generated make config: don't edit
-
- Maybe convince upstream to add a savedefconfig target :-)
-
-> +# swupdate version: 2014.07.0
-> +# Thu Dec 18 10:00:56 2014
-
-[snip]
-> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-> new file mode 100644
-> index 0000000..83af6db
-> --- /dev/null
-> +++ b/package/swupdate/swupdate.mk
-> @@ -0,0 +1,127 @@
-> +################################################################################
-> +#
-> +# swupdate
-> +#
-> +################################################################################
-> +
-> +# Choose latest commit instead of release 2014.07 for getting bug fixes and
-> +# image downloading feature
-> +SWUPDATE_VERSION = d9f58b5a3263b1b00c6d011cd8cdd65e69890b46
-> +SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
-> +SWUPDATE_LICENSE = GPLv2+
-> +SWUPDATE_LICENSE_FILES = COPYING
-> +SWUPDATE_DEPENDENCIES = zlib mtd
-> +
-> +SWUPDATE_BUILD_CONFIG = $(SWUPDATE_DIR)/.config
-> +
-> +SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
-> +SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig
-> +
-> +SWUPDATE_CFLAGS = \
-> +	$(TARGET_CFLAGS)
-> +
-> +SWUPDATE_LDFLAGS = \
-> +	$(TARGET_LDFLAGS)
-> +
-> +SWUPDATE_LDLIBS =
-> +
-> +# If we're using static libs do the same for swupdate
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +define SWUPDATE_PREFER_STATIC
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +endif
-> +
-> +define SWUPDATE_BUILD_OPTIONS
-> +	$(call KCONFIG_SET_OPT,CONFIG_CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_SET_OPT,CONFIG_SYSROOT,"$(SYSROOT_DIR)",$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(SWUPDATE_CFLAGS)",$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(SWUPDATE_LDFLAGS)",$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDLIBS,"$(SWUPDATE_LDLIBS)",$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_LIBCURL),y)
-> +SWUPDATE_DEPENDENCIES += libcurl
-> +else
-> +define SWUPDATE_DOWNLOAD
-> +	$(call KCONFIG_DISABLE_OPT,CONFIG_DOWNLOAD,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-
- One way to handle this better is to convince upstream to add config options
-passed through the environment that specify which dependencies are available.
-Then we could specify
-
-ifeq ($(BR2_PACKAGE_LIBCURL),y)
-SWUPDATE_DEPENDENCIES += libcurl
-SWUPDATE_MAKE_ENV += LIBCURL_AVAILABLE=y
-else
-SWUPDATE_MAKE_ENV += LIBCURL_AVAILABLE=
-endif
-
-(note that kconfig-package takes into account $(2)_MAKE_ENV).
-
- This way, the user can use swupdate's configure and he'll only see the options
-that are really available.
-
-> +endif
-> +
-> +# swupate bundles its own customized version of Mongoose with a Lua licence.
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER),y)
-> +SWUPDATE_DEPENDENCIES += openssl
-
- Even if no SSL is selected it needs openssl?
-
-> +SWUPDATE_LDLIBS += pthread crypto
-> +define SWUPDATE_WEBSERVER_MONGOOSE
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_WEBSERVER,$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSE,$(SWUPDATE_BUILD_CONFIG))
-> +	$(SWUPDATE_WEBSERVER_MONGOOSE_IPV6)
-> +	$(SWUPDATE_WEBSERVER_MONGOOSE_LUA)
-> +	$(SWUPDATE_WEBSERVER_MONGOOSE_SQL)
-> +	$(SWUPDATE_WEBSERVER_MONGOOSE_SSL)
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_IPV6),y)
-
- This could just be ifeq ($(BR2_INET_IPV6),y). The impact of IPv6 is really minor.
-
-> +SWUPDATE_CFLAGS += -DUSE_IPV6
-> +define SWUPDATE_WEBSERVER_MONGOOSE_IPV6
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSEIPV6,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SQL),y)
-> +SWUPDATE_CFLAGS += -DUSE_LUA_SQLITE3
-
- _DEPENDENCIES?
-
-> +define SWUPDATE_WEBSERVER_MONGOOSE_SQL
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSESQL,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_WEBSERVER_MONGOOSE_SSL),y)
-> +SWUPDATE_CFLAGS += -DNO_SSL_DL
-> +SWUPDATE_LDLIBS += ssl
-> +define SWUPDATE_WEBSERVER_MONGOOSE_SSL
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSESSL,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +else
-> +SWUPDATE_CFLAGS += -DNO_SSL
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_LIBCONFIG),y)
-> +SWUPDATE_DEPENDENCIES += libconfig
-> +else
-> +define SWUPDATE_LIBCONFIG_PARSER
-> +	$(call KCONFIG_DISABLE_OPT,CONFIG_LIBCONFIG,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SWUPDATE_LUA_SUPPORT),y)
-> +SWUPDATE_DEPENDENCIES += lua
-> +SWUPDATE_CFLAGS += -DUSE_LUA
-> +SWUPDATE_LDLIBS += dl
-> +define SWUPDATE_LUA
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_LUA,$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_LUASCRIPTHANDLER,$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HANDLER_IN_LUA,$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_LUAEXTERNAL,$(SWUPDATE_BUILD_CONFIG))
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_MONGOOSELUA,$(SWUPDATE_BUILD_CONFIG))
-> +endef
-> +endif
-> +
-> +define SWUPDATE_KCONFIG_FIXUP_CMDS
-> +	$(SWUPDATE_PREFER_STATIC)
-> +	$(SWUPDATE_BUILD_OPTIONS)
-> +	$(SWUPDATE_DOWNLOAD)
-> +	$(SWUPDATE_WEBSERVER_MONGOOSE)
-> +	$(SWUPDATE_LIBCONFIG_PARSER)
-> +	$(SWUPDATE_LUA)
-> +endef
-
- To make all this configuration complexity a bit easier to grok, I propose to
-start with a patch that adds swupdate with all of its dependencies enabled. So
-select openssl, lua, and libconfig. That gives the user complete freedom to
-configure things the way he likes. The next step would be to make the lua
-dependency optional, preferably by patching upstream to pass the availability of
-lua through the environment.
-
-
- Regards,
- Arnout
-
--
-> +
-> +define SWUPDATE_BUILD_CMDS
-> +	$(MAKE) -C $(@D)
-> +endef
-> +
-> +define SWUPDATE_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/swupdate $(TARGET_DIR)/usr/bin/swupdate
-> +endef
-> +
-> +$(eval $(kconfig-package))
-> 
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
