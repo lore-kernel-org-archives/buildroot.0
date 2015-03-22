@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 16:16:26 +0100
-Subject: [Buildroot] [PATCH 1/7] linux: use the package infrastructure
- to download patches
-In-Reply-To: <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Mar 2015 16:19:18 +0100
+Subject: [Buildroot] [PATCH 2/7] pkg-generic: fix the logic showing the
+ "Downloading" message
+In-Reply-To: <1425147313-17380-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425147313-17380-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <550EDCCA.7000607@mind.be>
+ <1425147313-17380-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <550EDD76.90600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +13,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 28/02/15 19:15, Thomas Petazzoni wrote:
-> The linux package has a special handling of patches, with quite a bit
-> of legacy in it. A problem caused by this special handling is that the
-> linux package calls directly the DOWNLOAD_WGET macro, which means that
-> the package infrastructure isn't aware of which patches get
-> downloaded, and it prevents doing changes inside the package download
-> infrastructure.
+> Even though the .stamp_downloaded target is executed for each package
+> being built, the pkg-generic tries to not display the "Downloading"
+> message when there is in fact nothing to download.
 > 
-> This commit changes the handling of patches in the linux package in
-> the following way:
+> Unfortunately, the logic was incorrect for the patch download: it
+> forgot the fact that <pkg>_PATCH can contain either file names (in
+> which case we assume the patch should be downloaded from <pkg>_SITE),
+> or full URLs. The latter case was not properly handled, as we were
+> checking if $(DL_DIR)/<full URL> existed, while we should be testing
+> if $(DL_DIR)/`basename <full URL>` exists.
 > 
->  * The LINUX_PATCHES variable is kept as is: it lists all the patches
->    mentionned in the Config.in option BR2_LINUX_KERNEL_PATCH. This
->    option can contain http://, ftp://, https:// URLs, path to local
->    files or local directories.
-> 
->    This variable is *not* used by the generic package infrastructure,
->    so it is purely internal to the Linux package.
-> 
->  * The LINUX_PATCH variable is now filled in with the list of patches
->    that should be downloaded. It is derived from LINUX_PATCHES by
->    filtering the patches that have http://, ftp:// or https:// in
->    their path. Since <pkg>_PATCH is handled by the package
->    infrastructure, it means that those patches are now automatically
->    downloaded and applied by the package infrastructure.
-> 
->  * The LINUX_APPLY_PATCHES hook is renamed to
->    LINUX_APPLY_LOCAL_PATCHES, because it is now only responsible of
->    applying local patches: remote patches are handled by
->    LINUX_PATCH. The implementation of the hook is changed to filter
->    out the patches that have already taken care of by LINUX_PATCH, so
->    that we only iterate through the list of local patches or local
->    patch directories.
+> This patch fixes that, which makes sure the "Downloading" message is
+> displayed only when necessary.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- It's time for this one to be applied. There are of course the two spelling
-corrections noted by Romain and Baruch, but I'm sure you can fix those while
-applying.
 
  Regards,
  Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
