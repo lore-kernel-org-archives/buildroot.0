@@ -1,76 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 16:59:56 +0100
-Subject: [Buildroot] [PATCH 7/7] perl: use <pkg>_EXTRA_DOWNLOADS
-In-Reply-To: <1425147313-17380-8-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425147313-17380-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <550EE6FC.4020601@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2015 17:00:22 +0100
+Subject: [Buildroot] Proposed patch: allow setting an hashed root
+	password
+In-Reply-To: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
+References: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
+Message-ID: <20150322160022.GC4724@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/02/15 19:15, Thomas Petazzoni wrote:
-> Instead of manually using the DOWNLOAD macro (which should remain an
-> internal macro), this commit converts the Perl package to use
-> <pkg>_EXTRA_DOWNLOADS, now that it has been extended to allow full
-> URLs.
+Lorenzo, All,
+
+On 2015-03-22 16:09 +0100, Lorenzo Catucci spake thusly:
+> Please find enclosed my proposed patch. I've posted the patch to a GH fork of
+> the main repository too: look at the ?hashed_root_pw? branch of
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/perl/perl.mk | 15 ++++++---------
->  1 file changed, 6 insertions(+), 9 deletions(-)
+> 	https://github.com/lmctv/buildroot
 > 
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index 0636aba..cb99a98 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -12,6 +12,11 @@ PERL_LICENSE = Artistic or GPLv1+
->  PERL_LICENSE_FILES = Artistic Copying README
->  PERL_INSTALL_STAGING = YES
->  
-> +# We use the perlcross hack to cross-compile perl. It should
-> +# be extracted over the perl sources, so we don't define that
-> +# as a separate package. Instead, it is downloaded and extracted
-> +# together with perl
-> +
->  PERL_CROSS_VERSION = 0.9.4
->  PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
->  # DO NOT refactor with the github helper (the result is not the same)
-> @@ -20,15 +25,7 @@ PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).
->  PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
->  PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
->  
-> -# We use the perlcross hack to cross-compile perl. It should
-> -# be extracted over the perl sources, so we don't define that
-> -# as a separate package. Instead, it is downloaded and extracted
-> -# together with perl
-> -
-> -define PERL_CROSS_DOWNLOAD
-> -	$(call DOWNLOAD,$(PERL_CROSS_SITE:/=)/$(PERL_CROSS_SOURCE))
-> -endef
-> -PERL_POST_DOWNLOAD_HOOKS += PERL_CROSS_DOWNLOAD
-> +PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
-
- It makes more sense to me to put this just below the definition of
-PERL_CROSS_SOURCE, so before the _POD definitions.
-
- Otherwise, looks good to me.
-
- Regards,
- Arnout
-
->  
->  define PERL_CROSS_EXTRACT
->  	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
+> The reason I've enabled the new ?BR2_TARGET_GENERIC_ROOT_PASSWD_HASH?
+> configuration option is being able to set a "*" password hash for the root
+> user without being forced to put a static /etc/shadow inside BR2_ROOTFS_OVERLAY.
+> 
+> Even if setting a "real" password, I think the option to put a sha256 or
+> sha512 hash in the .config is a lot less scary than putting a plaintext
+> password, especially in the case of sha512 .
+> 
+> Thank you very much, yours
+> 
+> 	lorenzo m catucci
 > 
 
+NAK.
+
+First, the commit log should only explain the technical reasons for the
+change, and not contain "personal" messages:
+
+    first line, short explanation
+
+    One (or more) paragraph explainging the current situation and why
+    you believe it is incorrect.
+
+    One (or more) paragraph explaining what you changed.
+
+    Signed-ogg-by: Your Real Name <your-email@somehwere.net>
+
+Second, there's something odd: clearly the patch prefers the hashed
+password over the clear-text one, but does not prevent the user to set
+both.
+
+Third, if you want to do tricky password handling like this, I think it
+would be better if you passed a "user table" (BR2_ROOTFS_USERS_TABLES)
+that defines the root user and its password, like documented in the
+mkuser infra:
+    http://buildroot.net/downloads/manual/manual.html#makeuser-syntax
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
