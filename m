@@ -1,61 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2015 16:21:00 +0100
-Subject: [Buildroot] [PATCH 1/7 v3] support/download: make hash file optional
+Date: Sun, 22 Mar 2015 16:21:01 +0100
+Subject: [Buildroot] [PATCH 2/7 v3] package infra: do not check hashes when
+	downloading from a repository
 In-Reply-To: <cover.1427037564.git.yann.morin.1998@free.fr>
 References: <cover.1427037564.git.yann.morin.1998@free.fr>
-Message-ID: <5f50190fe62d33438bfe4c68ab566698c63d5102.1427037564.git.yann.morin.1998@free.fr>
+Message-ID: <cb1bbce764c2269fda3da97e99161ad376fc6a89.1427037564.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, specifying a hash file for our download wrapper is mandatory.
+When downloading from a repository, we have no way to ensure the
+reproducibility of the generated archives, so we can't check the hashes.
 
-However, when we download a git, svn, bzr, hg or cvs tree, there's by
-design no hash to check the download against.
-
-Since we're going to have hash checking mandatory when a hash file
-exists, this would break those downloads from a repository.
-
-So, make specifying a hash file optional when calling our download
-wrapper and bail out early from the check-hash script if no hash file is
-specified.
+Do not specifiy a hash file in those cases.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/download/check-hash | 2 +-
- support/download/dl-wrapper | 3 ---
- 2 files changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 4c07274..cee64ef 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -23,7 +23,7 @@ file="${2}"
- base="${3}"
+---
+Changes v2 -> v3:
+  - add blurb in the manual  (Arnout)
+---
+ docs/manual/adding-packages-directory.txt | 6 ++++++
+ package/pkg-download.mk                   | 5 -----
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 1ce9a3b..132c702 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -474,4 +474,10 @@ environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
+ there is no hash for a downloaded file, Buildroot considers this an
+ error, deletes the downloaded file, and aborts.
  
- # Does the hash-file exist?
--if [ ! -f "${h_file}" ]; then
-+if [ -z "${h_file}" -o ! -f "${h_file}" ]; then
-     exit 0
- fi
- 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 3b30840..514118c 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -44,9 +44,6 @@ main() {
-     if [ -z "${output}" ]; then
-         error "no output specified, use -o\n"
-     fi
--    if [ -z "${hfile}" ]; then
--        error "no hash-file specified, use -H\n"
--    fi
- 
-     # If the output file already exists, do not download it again
-     if [ -e "${output}" ]; then
++Sources that are downloaded from a version control system (git, subversion,
++etc...) can not have a hash, because the version control system and tar
++may not create exactly the same file (dates, files ordering...), so the
++hash could be wrong even for a valid download. Therefore, the hash check
++is entirely skipped for such sources.
++
+ If the +.hash+ file is missing, then no check is done at all.
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 5e74519..e274712 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -87,7 +87,6 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ define DOWNLOAD_GIT
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b git \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+ 		$($(PKG)_SITE) \
+@@ -109,7 +108,6 @@ endef
+ define DOWNLOAD_BZR
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+ 		$($(PKG)_SITE) \
+@@ -128,7 +126,6 @@ endef
+ define DOWNLOAD_CVS
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+ 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+@@ -149,7 +146,6 @@ endef
+ define DOWNLOAD_SVN
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+ 		$($(PKG)_SITE) \
+@@ -189,7 +185,6 @@ endef
+ define DOWNLOAD_HG
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+-		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+ 		$(QUIET) \
+ 		-- \
+ 		$($(PKG)_SITE) \
 -- 
 1.9.1
