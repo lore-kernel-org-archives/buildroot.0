@@ -1,80 +1,89 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Sun, 22 Mar 2015 23:12:49 +0200
-Subject: [Buildroot] [PATCH v2 5/8] package/openjpeg: New package openjpeg
-	1.5.2
+Date: Sun, 22 Mar 2015 23:12:50 +0200
+Subject: [Buildroot] [PATCH v2 6/8] package/qpdf: New package qpdf 5.1.2
 In-Reply-To: <1427058772-1105-1-git-send-email-olivier.schonken@gmail.com>
 References: <1427058772-1105-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1427058772-1105-6-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1427058772-1105-7-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is needed by Poppler.
-
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/Config.in              |  1 +
- package/openjpeg/Config.in     |  6 ++++++
- package/openjpeg/openjpeg.hash |  2 ++
- package/openjpeg/openjpeg.mk   | 15 +++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/openjpeg/Config.in
- create mode 100644 package/openjpeg/openjpeg.hash
- create mode 100644 package/openjpeg/openjpeg.mk
+ package/Config.in      |  1 +
+ package/qpdf/Config.in | 17 +++++++++++++++++
+ package/qpdf/qpdf.hash |  2 ++
+ package/qpdf/qpdf.mk   | 16 ++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/qpdf/Config.in
+ create mode 100644 package/qpdf/qpdf.hash
+ create mode 100644 package/qpdf/qpdf.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 93fde92..e9f362d 100644
+index e9f362d..c12a098 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -739,6 +739,7 @@ menu "Graphics"
- 	source "package/libvips/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opengl/Config.in"
-+	source "package/openjpeg/Config.in"
- 	source "package/pango/Config.in"
- 	source "package/pixman/Config.in"
- 	source "package/poppler/Config.in"
-diff --git a/package/openjpeg/Config.in b/package/openjpeg/Config.in
+@@ -1059,6 +1059,7 @@ menu "Miscellaneous"
+ 	source "package/haveged/Config.in"
+ 	source "package/mcrypt/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
++	source "package/qpdf/Config.in"
+ 	source "package/qemu/Config.in"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/snowball-init/Config.in"
+diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
 new file mode 100644
-index 0000000..3fa7553
+index 0000000..8c08431
 --- /dev/null
-+++ b/package/openjpeg/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_OPENJPEG
-+	bool "openjpeg"
++++ b/package/qpdf/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_QPDF
++	bool "qpdf"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PCRE
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  The OpenJPEG library is an open-source JPEG 2000 codec written in C
++	  QPDF is a command-line program that does structural, content-
++	  preserving transformations on PDF files. It could have been called
++	  something like pdf-to-pdf. It also provides many useful capabilities
++	  to developers of PDF-producing software or for people who just want
++	  to look at the innards of a PDF file to learn more about how they
++	  work.
 +
-+          http://www.openjpeg.org
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
++	  http://qpdf.sourceforge.net/
++
++comment "qpdf requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
 new file mode 100644
-index 0000000..a8695c1
+index 0000000..c6c6ebe
 --- /dev/null
-+++ b/package/openjpeg/openjpeg.hash
++++ b/package/qpdf/qpdf.hash
 @@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	15df7b194a5d8dba0052cd21c17a4dc761149a770a907d73fffb972078c28a87  openjpeg-1.5.2.tar.gz
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
++# Downloaded from http://sourceforge.net/projects/qpdf/files/qpdf/5.1.2/
++md5	0bd15ef5eea5f628951ab456c84e78ec  qpdf-5.1.2.tar.gz
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
 new file mode 100644
-index 0000000..195a80b
+index 0000000..f38503c
 --- /dev/null
-+++ b/package/openjpeg/openjpeg.mk
-@@ -0,0 +1,15 @@
-+################################################################################
++++ b/package/qpdf/qpdf.mk
+@@ -0,0 +1,16 @@
++#############################################################
 +#
-+# openjpeg
++# qpdf
 +#
-+################################################################################
++#############################################################
 +
-+OPENJPEG_VERSION = 1.5.2
-+OPENJPEG_SITE = http://downloads.sourceforge.net/project/openjpeg
-+OPENJPEG_LICENSE = BSD-2c
-+OPENJPEG_LICENSE_FILES = LICENSE
-+#Autoreconf needed to create configure
-+OPENJPEG_AUTORECONF = YES
-+OPENJPEG_INSTALL_STAGING = YES
++QPDF_VERSION = 5.1.2
++QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
++QPDF_INSTALL_STAGING = YES
++QPDF_LICENSE = Artistic License 2.0
++QPDF_LICENSE_FILES = Artistic-2.0
++QPDF_DEPENDENCIES = pcre zlib
++
++QPDF_CONF_OPTS = --without-random
 +
 +$(eval $(autotools-package))
 -- 
