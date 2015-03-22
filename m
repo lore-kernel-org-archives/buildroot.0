@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Mar 2015 16:58:12 +0100
-Subject: [Buildroot] [PATCH 6/7] docs/manual: update documentation about
- <pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS
-In-Reply-To: <1425147313-17380-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Mar 2015 16:59:56 +0100
+Subject: [Buildroot] [PATCH 7/7] perl: use <pkg>_EXTRA_DOWNLOADS
+In-Reply-To: <1425147313-17380-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1425147313-17380-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1425147313-17380-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <550EE694.5030508@mind.be>
+ <1425147313-17380-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <550EE6FC.4020601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +12,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 28/02/15 19:15, Thomas Petazzoni wrote:
-> This commit updates the Buildroot manual for the variables used to
-> indicate where to download the source code from:
-> 
->  - It updates the description of <pkg>_SOURCE to make it clear that
->    Buildroot assume that the tarball is hosted at <pkg>_SITE.
-> 
->  - It updates the description of <pkg>_PATCH to indicate that not only
->    file names (assumed to be hosted at <pkg>_SITE) can be used, but
->    also full URLs. This allows to match with what the current code is
->    doing.
-> 
->  - It updates the description of <pkg>_EXTRA_DOWNLOADS to also
->    indicate that full URLs are now accepted, following the change made
->    in the previous commit.
+> Instead of manually using the DOWNLOAD macro (which should remain an
+> internal macro), this commit converts the Perl package to use
+> <pkg>_EXTRA_DOWNLOADS, now that it has been extended to allow full
+> URLs.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  docs/manual/adding-packages-generic.txt | 32 ++++++++++++++++++--------------
->  1 file changed, 18 insertions(+), 14 deletions(-)
+>  package/perl/perl.mk | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
 > 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index e3029ed..2e46d55 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -204,18 +204,20 @@ information is (assuming the package name is +libfoo+) :
->      +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+ +
->      +LIBFOO_VERSION = stable+
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index 0636aba..cb99a98 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -12,6 +12,11 @@ PERL_LICENSE = Artistic or GPLv1+
+>  PERL_LICENSE_FILES = Artistic Copying README
+>  PERL_INSTALL_STAGING = YES
 >  
-> -* +LIBFOO_SOURCE+ may contain the name of the tarball of
-> -  the package. If +HOST_LIBFOO_SOURCE+ is not specified, it
-> -  defaults to +LIBFOO_SOURCE+. If none are specified, then
-> -  the value is assumed to be
-> -  +libfoo-$(LIBFOO_VERSION).tar.gz+. +
-> -  Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
-> +* +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
-> +  which Buildroot will use to download the tarball from
-> +  +LIBFOO_SITE+. If +HOST_LIBFOO_SOURCE+ is not specified, it defaults
-> +  to +LIBFOO_SOURCE+. If none are specified, then the value is assumed
-> +  to be +libfoo-$(LIBFOO_VERSION).tar.gz+. + Example: +LIBFOO_SOURCE =
+> +# We use the perlcross hack to cross-compile perl. It should
+> +# be extracted over the perl sources, so we don't define that
+> +# as a separate package. Instead, it is downloaded and extracted
+> +# together with perl
+> +
+>  PERL_CROSS_VERSION = 0.9.4
+>  PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
+>  # DO NOT refactor with the github helper (the result is not the same)
+> @@ -20,15 +25,7 @@ PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).
+>  PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
+>  PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
+>  
+> -# We use the perlcross hack to cross-compile perl. It should
+> -# be extracted over the perl sources, so we don't define that
+> -# as a separate package. Instead, it is downloaded and extracted
+> -# together with perl
+> -
+> -define PERL_CROSS_DOWNLOAD
+> -	$(call DOWNLOAD,$(PERL_CROSS_SITE:/=)/$(PERL_CROSS_SOURCE))
+> -endef
+> -PERL_POST_DOWNLOAD_HOOKS += PERL_CROSS_DOWNLOAD
+> +PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
 
- The + was there to mark a line split, so there should be a newline after the +.
+ It makes more sense to me to put this just below the definition of
+PERL_CROSS_SOURCE, so before the _POD definitions.
 
  Otherwise, looks good to me.
 
  Regards,
  Arnout
 
-> +  foobar-$(LIBFOO_VERSION).tar.bz2+
 >  
->  * +LIBFOO_PATCH+ may contain a space-separated list of patch file
-> -  names, that will be downloaded from the same location as the tarball
-> -  indicated in +LIBFOO_SOURCE+, and then applied to the package source
-> -  code. If +HOST_LIBFOO_PATCH+ is not specified, it defaults to
-> -  +LIBFOO_PATCH+. Note that patches that are included in Buildroot
-> +  names, that Buildroot will download and apply to the package source
-> +  code. If an entry contains +://+, then Buildroot will assume it is a
-> +  full URL and download the patch from this location. Otherwise,
-> +  Buildroot will assume that the patch should be downloaded from
-> +  +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
-> +  to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
->    itself use a different mechanism: all files of the form
->    +<packagename>-*.patch+ present in the package directory inside
->    Buildroot will be applied to the package after extraction (see
-> @@ -246,10 +248,12 @@ information is (assuming the package name is +libfoo+) :
->      +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
->      +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
->  
-> -* +LIBFOO_EXTRA_DOWNLOADS+ lists a number of additional files that
-> -  Buildroot should download from +LIBFOO_SITE+ in addition to the main
-> -  +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
-> -  anything with those additional files, except download files: it will
-> +* +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
-> +  files that Buildroot should download. If an entry contains +://+
-> +  then Buildroot will assume it is a complete URL and will download
-> +  the file using this URL. Otherwise, Buildroot will assume the file
-> +  to be downloaded is located at +LIBFOO_SITE+. Buildroot will not do
-> +  anything with those additional files, except download them: it will
->    be up to the package recipe to use them from +$(BR2_DL_DIR)+.
->  
->  * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+>  define PERL_CROSS_EXTRACT
+>  	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
 > 
 
 
