@@ -1,47 +1,64 @@
-From: Chris Stone <chris@sombrio.com>
-Date: Sun, 22 Mar 2015 13:08:58 -0400
-Subject: [Buildroot] [PATCH 1/1] busybox: add conditional dependency on
-	libselinux (v2)
-Message-ID: <1427044138-10848-1-git-send-email-chris@sombrio.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2015 18:18:18 +0100
+Subject: [Buildroot] [PATCH 0/3] introduce maintainers (branch
+	yem/maintainers)
+Message-ID: <cover.1427044305.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If you select the selinux applets when configuring
-busybox then the busybox build fails due to a missing selinux.h file. This is
-because there is no dependency on libselinux in the busybox make. The lack of
-dependency is completely understandable, since there is no such dependency
-when a user does not configure in the selinux applets. The attached patch
-adds a conditional libselinux dependency to the busybox make when the
-libselinux package has been selected for the target. It is not unreasonable
-to assume that if a user selects libselinux, then he may also select the
-busybox selinux applets. Additionally, if the user has already selected
-libselinux for the target, then adding a dependency to libselinx to busybox
-does no harm, even if the user does not configure in the selinux applet.
+Hello All!
 
-Signed-off-by: Chris Stone <chris@sombrio.com>
----
- package/busybox/busybox.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+This small series introduces the notion of maintainers.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index a3ac7e7..4a57521 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -25,6 +25,12 @@ BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
- # the non-final link of modules as well.
- BUSYBOX_CFLAGS_busybox += -ltirpc
- endif
-+# The user may select the selinux support applets.
-+# We'll assume he's smart enough to select libselinux in that case.
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+BUSYBOX_DEPENDENCIES += libselinux
-+BUSYBOX_LDFLAGS += -lselinux
-+endif
- 
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
- # Allows the build system to tweak CFLAGS
+We introduce a top-level MAINTAINERS file, not unlike the Linux kernel,
+but sorted by people rather than topics; more than one person may
+register as maintainer for a specific topic. Topics are patterns that
+refer to any file or directory in the tree; see the first patch and the
+content of MAINTAINERS for how it is formatted.
+
+We also introduce a script to help find a maintainer for a pacakge or an
+architecutre, which can get its input via:
+  - command-line arguments '-p PKG' or '-a ARCH',
+  - an autobuild result "-b SHA1" or "-b URL",
+  - a patch on stdin.
+
+And I added myself as a maintainer for some stuff.
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit e16796942a6f68391e69961e5045ce20b56063e2:
+
+  attr: backport upstream patches to fix build on musl (2015-03-21 10:13:51 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/maintainers
+
+for you to fetch changes up to cb8b3fc6e8a055d56c8fbedccace7adc5b700f2a:
+
+  maintainers: add myself to a bit more stuff (2015-03-22 18:06:11 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      support: add script to find maintainers
+      support/maintainers: add support for autobuild results
+      maintainers: add myself to a bit more stuff
+
+ MAINTAINERS                      |  49 ++++++++++
+ support/scripts/check-maintainer | 191 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 240 insertions(+)
+ create mode 100644 MAINTAINERS
+ create mode 100755 support/scripts/check-maintainer
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
