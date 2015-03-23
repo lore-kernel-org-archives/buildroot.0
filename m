@@ -1,29 +1,28 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 23 Mar 2015 14:10:41 +0100
-Subject: [Buildroot] [PATCH 7/7 v3] support/download: warn when there's
- no .hash file
-In-Reply-To: <a30751a9b30f9cc2b22bacffa659ef311622e180.1427037564.git.yann.morin.1998@free.fr>
-References: <cover.1427037564.git.yann.morin.1998@free.fr>
- <a30751a9b30f9cc2b22bacffa659ef311622e180.1427037564.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMM+25U7JaXST=5mh_F2rK8Wtg3bvePRYsnyd-vbWszdsew@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 23 Mar 2015 14:43:17 +0100
+Subject: [Buildroot] [PATCH v3 3/3] boot/uboot: Add uboot-menuconfig and
+ friends
+In-Reply-To: <CAGm1_ktibDOCMvQqb4qAKGGM9SQvNnAX+Fbo0E-zq7ASW=NLyw@mail.gmail.com>
+References: <1423088981-13255-1-git-send-email-joerg.krause@embedded.rocks>
+ <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
+ <CAGm1_ktibDOCMvQqb4qAKGGM9SQvNnAX+Fbo0E-zq7ASW=NLyw@mail.gmail.com>
+Message-ID: <1427118197.10031.2.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 22, 2015 at 4:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Instead of silently accepting a missing .hash file, print a warning.
->
-> This can be grepped from a build log, to find packages that still have
-> no hash, with the long-term goal of adding hashes for all packages.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Hi Yegor,
 
-Regards,
+On Mo, 2015-03-23 at 11:28 +0100, Yegor Yefremov wrote:
+> 
+> could you please rework your patches to reflect the newest U-Boot
+> Kconfig changes?
+> 
+> kconfig: switch to single .config configuration
+> (http://permalink.gmane.org/gmane.comp.boot-loaders.u-boot/212547)
 
-
--- 
-Samuel
+I hope these upstream changes make it easier to use the kconfig-package
+infrastructure. I will submit the reworked patches if U-Boot 2015.04 is
+released.
