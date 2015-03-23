@@ -1,59 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Mar 2015 23:56:29 +0100
-Subject: [Buildroot] [pull request] misc graph-depends enhancements
-Message-ID: <cover.1427150990.git.yann.morin.1998@free.fr>
+Date: Mon, 23 Mar 2015 23:56:30 +0100
+Subject: [Buildroot] [PATCH 1/4] support/graph-depends: add option to stop
+	on specific packages
+In-Reply-To: <cover.1427150990.git.yann.morin.1998@free.fr>
+References: <cover.1427150990.git.yann.morin.1998@free.fr>
+Message-ID: <73b4c7d6899ce923db27c91bff33087f2ce379db.1427150990.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Add a new option to graph-depends, that users can set to stop the graph
+on a specific (set of) package(s).
 
-This series introduces a few enhancements to graph-depends, with two new
-options:
-  - --stop-on/-s PKG: to stop graphing on package PKG;
-  - --exclude/-x PKG: like --stop-on, but also omit PKG from the graph.
+This accepts any actual package name, or the 'virtual' keyword to stop
+on virtual packages.
 
-PKG can be one of an actual package name, a glob or the keyword
-'virtual' (to stop on / exclude virtual packages). Stoping on, or
-excluding host packages can easily be done by using the glob 'host-*'
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Francois Perrad <fperrad@gmail.com>
+---
+ support/scripts/graph-depends | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Note: I did not introduce the keyword 'host' because 'host' is an
-existing package, and even though we do not package it so far, it
-would have clashed, should we eventually have it.
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 22014e038047dfa2a303fecce0a22d1c5811b6a5:
-
-  mongoose: bump to version 5.6 (2015-03-23 23:17:32 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/graph-depends
-
-for you to fetch changes up to f9b988d14b88cd502a3ae47739597e45882bf1f3:
-
-  docs/manual: document new graph-depends options (2015-03-23 23:44:21 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      support/graph-depends: add option to stop on specific packages
-      support/graph-depends: accepts globs to stop on package
-      support/graph-depends: add option to completely exclude a package
-      docs/manual: document new graph-depends options
-
- docs/manual/common-usage.txt  |  8 ++++++++
- support/scripts/graph-depends | 34 +++++++++++++++++++++++++++++++---
- 2 files changed, 39 insertions(+), 3 deletions(-)
-
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 5b9b195..a2310c0 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -36,11 +36,14 @@ max_depth = 0
+ # Whether to draw the transitive dependencies
+ transitive = True
+ 
+-parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
++parser = argparse.ArgumentParser(description="Graph packages dependencies")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
++parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
++                    help="do not graph past this package (can be given multiple times)." \
++                       + " 'virtual' to stop on virtual packages.")
+ parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
+                     default="lightblue,grey,gainsboro",
+                     help="Comma-separated list of the three colours to use" \
+@@ -61,6 +64,11 @@ else:
+ 
+ max_depth = args.depth
+ 
++if args.stop_list is None:
++    stop_list = []
++else:
++    stop_list = args.stop_list
++
+ transitive = args.transitive
+ 
+ # Get the colours: we need exactly three colours,
+@@ -304,6 +312,10 @@ def print_pkg_deps(depth, pkg):
+     print_attrs(pkg)
+     if pkg not in dict_deps:
+         return
++    if pkg in stop_list:
++        return
++    if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
++        return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+             print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
