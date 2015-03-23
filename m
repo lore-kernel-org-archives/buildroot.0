@@ -1,82 +1,138 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Mar 2015 19:48:31 +0100
-Subject: [Buildroot] Proposed patch: allow setting an hashed root
-	password
-In-Reply-To: <CAJtjsKZU3p5ScRQH2b+pLPLqP6z82BHeWizHu43EAzBR1N-KXA@mail.gmail.com>
-References: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
- <20150322160022.GC4724@free.fr> <550EEA7E.8000207@mind.be>
- <20150322173132.GA5387@free.fr> <550F3EDE.8090106@ccd.uniroma2.it>
- <20150322225625.GB26325@free.fr>
- <CAJtjsKZU3p5ScRQH2b+pLPLqP6z82BHeWizHu43EAzBR1N-KXA@mail.gmail.com>
-Message-ID: <20150323184831.GC4214@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 23 Mar 2015 20:27:11 +0100
+Subject: [Buildroot] [PATCH] package/postgresql: fix pthread flags
+	detection
+Message-ID: <trinity-9a731e4d-56ce-4c43-a8b6-dd46cde7f626-1427138831575@3capp-gmx-bs31>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+Hello Max,
 
-On 2015-03-23 12:05 +0100, Johan Oudinet spake thusly:
-> On Sun, Mar 22, 2015 at 11:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Alternatively, you could also tweak the root password from a post-build
-> > script, see BR2_ROOTFS_POST_BUILD_SCRIPT:
-> >     http://buildroot.net/downloads/manual/manual.html#rootfs-custom
-> >
-> > script which could look something like:
-> >
-> >     #!/bin/sh
-> >     PASSWD='your-encoded-password'
-> >     sed -r -i -e "s/^root:[^:]+:/root:${PASSWD}:/" "${TARGET_DIR}/etc/passwd"
-> >
-> > And in the end, I wonder if that would not be the best option...
-> >
+On Mon, Mar 23, 2015 at 08:23:30PM +0300, Max Filippov wrote:
+> PostgreSQL configure may not correctly determine flags for compiling and
+> linking with pthreads support when compiler or linker give irrelevant
+> warnings.
 > 
-> This is the solution we do internally. I'm not sure how hard it is for
-> us to send it upstream as it implies several changes. I'll look into
-> it this week.
-> Basically, we have a script to ease the access to BR2_* variables
-> inside post_build scripts, then we have a post_build script that looks
-> to BR2_TARGET_GENERIC_ROOT_PASSWD and:
-> - if it's empty, it does nothing;
-> - if it starts by $1$, $5$, or $6$, it assumes it is already
-> encrypted, and skip the encoding part
-> - otherwise, first it encodes it by calling mkpasswd with the
-> BR2_TARGET_GENERIC_PASSWD_METHOD method, then it replaces the second
-> field of the root user in the /etc/shadow file
+> Record default compiler and linker output and see if adding pthread
+> option changes that, instead of assuming that linker and compiler are
+> silent by default.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/916487aae929c181d4e3f471c6c7508552f0b683/
+>   http://autobuild.buildroot.net/results/921a94d1a489d81b362c5b6a403a156b4691effd/
+>   http://autobuild.buildroot.net/results/dbcdc58ad32b7b811ea47b6fc0f926a477e30786/
+>   http://autobuild.buildroot.net/results/68b582f4caec223a646f095487263353f273156d/
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+> Upstream status: patch submitted.
+> 
+>  ...ker-compiler-output-with-their-default-ou.patch |   56 ++++++++++++++++++++
+>  package/postgresql/postgresql.mk                   |    1 +
+>  2 files changed, 57 insertions(+), 0 deletions(-)
+>  create mode 100644 package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
+> 
+> diff --git a/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch b/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
+> new file mode 100644
+> index 0000000..3eca82f
+> --- /dev/null
+> +++ b/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
+> @@ -0,0 +1,56 @@
+> +From 58d05b2a57802345f43e628bc0807dbf0116cdcc Mon Sep 17 00:00:00 2001
+> +From: Max Filippov <jcmvbkbc@gmail.com>
+> +Date: Fri, 20 Mar 2015 16:37:51 +0300
+> +Subject: [PATCH] Compare linker/compiler output with their default output
+> +
+> +linker and compiler may have noisy output by default, making
+> +acx_pthread.m4 believe that pthread options that it tries are ignored
+> +as invalid.
+> +
+> +Record default compiler and linker output and see if adding pthread
+> +option changes that, instead of assuming that linker and compiler are
+> +silent by default.
+> +
+> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> +---
+> + config/acx_pthread.m4 | 18 +++++++++++++++++-
+> + 1 file changed, 17 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/config/acx_pthread.m4 b/config/acx_pthread.m4
+> +index 581164b..d254612 100644
+> +--- a/config/acx_pthread.m4
+> ++++ b/config/acx_pthread.m4
+> +@@ -80,6 +80,22 @@
+> + esac
+> + 
+> + if test x"$acx_pthread_ok" = xno; then
+> ++
+> ++cat >conftest.$ac_ext <<_ACEOF
+> ++int
+> ++main (int argc, char **argv)
+> ++{
+> ++  (void) argc;
+> ++  (void) argv;
+> ++  return 0;
+> ++}
+> ++_ACEOF
+> ++rm -f conftest.$ac_objext conftest$ac_exeext
+> ++
+> ++# Record the default linker and compiler output
+> ++ld_default_output="`(eval $ac_link 2>&1 1>&5)`"
+> ++cc_default_output="`(eval $ac_compile 2>&1 1>&5)`"
+> ++
+> + for flag in $acx_pthread_flags; do
+> + 
+> + 
+> +         tryPTHREAD_CFLAGS=""
+> +@@ -143,7 +159,7 @@
+> + _ACEOF
+> +             rm -f conftest.$ac_objext conftest$ac_exeext
+> +             # Check both linking and compiling, because they might tolerate different options.
+> +-            if test "`(eval $ac_link 2>&1 1>&5)`" = "" && test "`(eval $ac_compile 2>&1 1>&5)`" = ""; then
+> ++            if test "`(eval $ac_link 2>&1 1>&5)`" = "$ld_default_output" && test "`(eval $ac_compile 2>&1 1>&5)`" = "$cc_default_output"; then
+> +                 # we continue with more flags because Linux needs -lpthread
+> +                 # for libpq builds on PostgreSQL.  The test above only
+> +                 # tests for building binaries, not shared libraries.
+> +-- 
+> +1.8.1.4
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index 7dc3f0b..fc3bb1d 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -12,6 +12,7 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+>  
+>  POSTGRESQL_INSTALL_STAGING = YES
+>  POSTGRESQL_CONFIG_SCRIPTS = pg_config
+> +POSTGRESQL_AUTORECONF = YES
+>  
+>  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>  # overwrite IPV6 detection
+> -- 
+> 1.7.7.6
+> 
 
-Well, recognising an md5, sha256 or sha512 hashed password from a
-plain-text one is pretty trivial.
+Thanks for suggested patch (and many thanks for upstream suggestion
+[1][2], first reactions where not over enthusiastic), both of your
+suggestions are much better than my first try...
 
-What's not so trivial is recognising:
-  - a DES-encoded password
-  - a disabled password, marked with a leading '!'
-  - a no-login password, marked with just a single '*'
+Tested with two different toolchains:
 
-Detecting a DES-encoded password is not easy because the accepted chars
-are in a sub-set as those accepted for a plain-text password.
+- http://autobuild.buildroot.org/toolchains/tarballs/br-xtensa-full-2015.02.tar.bz2
 
-However, maybe we could deprecate DES-encoding altogether, then we
-could handle those cases:
+  Failure without patch, compiles with patch applied.
 
-  - password is '*'                 --> login not allowed; stop
-  - password starts with '!'        --> login disabled, skip the '!'; continue
-  - password starts with ${1,5,6}$  --> treat it as an encoded password; stop
-  - anything else                   --> treat it as a plain-text password
+- https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-2014.12/arc_gnu_2014.12_prebuilt_uclibc_le_archs_linux_install.tar.gz
 
-That way, the existing option can be re-used for all cases, and we would
-not need anything more, just adapting the current code in system/system.mk.
+  Compiles without patch, compiles with patch applied.
 
-Thoughts?
+You can add my
+
+Tested-by: Peter Seiderer <ps.report@gmx.net>
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[1] https://www.mail-archive.com/pgsql-hackers at postgresql.org/msg257941.html
+[2] https://www.mail-archive.com/pgsql-hackers at postgresql.org/msg257999.html
