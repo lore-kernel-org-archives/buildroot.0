@@ -1,44 +1,73 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 Mar 2015 21:58:19 +0100
-Subject: [Buildroot] [PATCH v2] mc: new package
-References: <1427143360-26369-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <XnsA466DF82DB83BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 23 Mar 2015 22:04:23 +0100
+Subject: [Buildroot] [PATCH] mc: new package
+In-Reply-To: <1427142983-26051-1-git-send-email-yegorslists@googlemail.com>
+References: <1427142983-26051-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <CAHXCMM+U2GnW5Bb6rhgCyc__nRsTGd0KzzQRHUhz62ihrONLFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Yegor,
 
-Yegor Yefremov <yegorslists@googlemail.com> wrote
-in news:1427143360-26369-1-git-send-email-yegorslists at googlemail.com: 
+On Mon, Mar 23, 2015 at 9:36 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> From: Mauro Condarelli <mc5686@mclink.it>
+>
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Since you did the below changes, you should add your SoB line.
+Also, don't forget the -v2 on git format-patch ;-)
 
+> ---
+> Changes since original patch from Mauro Condarelli
+>         - add mc.hash
+>         - bump to 4.8.14
+>         - implement comments from Baruch Siach and Thomas Petazzoni
+>
+>  package/Config.in    |  1 +
+>  package/mc/Config.in | 15 +++++++++++++++
+>  package/mc/mc.hash   |  2 ++
+>  package/mc/mc.mk     | 26 ++++++++++++++++++++++++++
+>  4 files changed, 44 insertions(+)
+>  create mode 100644 package/mc/Config.in
+>  create mode 100644 package/mc/mc.hash
+>  create mode 100644 package/mc/mc.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 93fde92..a013db6 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1363,6 +1363,7 @@ menu "Text editors and viewers"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>         source "package/less/Config.in"
+>  endif
+> +       source "package/mc/Config.in"
+>         source "package/nano/Config.in"
+>         source "package/uemacs/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> diff --git a/package/mc/Config.in b/package/mc/Config.in
+> new file mode 100644
+> index 0000000..b2bb8ea
 > --- /dev/null
 > +++ b/package/mc/Config.in
 > @@ -0,0 +1,15 @@
 > +config BR2_PACKAGE_MC
-> +     bool "mc"
-> +     depends on BR2_USE_WCHAR # libglib2
-> +     depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +     depends on BR2_USE_MMU # libglib2, slang
-> +     select BR2_PACKAGE_LIBGLIB2
-> +     # mc prefers slang, but can use ncurses too
-> +     select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
-> +     help
-> +       GNU Midnight Commander is a visual file manager, licensed under
-> +       GNU General Public License. It can use either SLang(preferred)
-> +       or ncurses for screen handling; if neither is enabled SLang
-> +       will be automatically chosen.
+> +       bool "mc"
+> +       depends on BR2_USE_WCHAR # libglib2
+> +        depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +        depends on BR2_USE_MMU # libglib2, slang
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       # mc prefers slang, but can use ncurses too
+> +       select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
+> +       help
+> +         GNU Midnight Commander is a visual file manager, licensed under
+> +         GNU General Public License. It can use either SLang(preferred)
+> +         or ncurses for screen handling; if neither is enabled SLang
+> +         will be automatically chosen.
 > +
-> +       https://www.midnight-commander.org/
-
-please drop the trailing slash in the URL and add
-
-comment "mc needs a toolchain w/ threads, wchar"
-        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-        depends on BR2_USE_MMU
-
+> +         https://www.midnight-commander.org/
 > diff --git a/package/mc/mc.hash b/package/mc/mc.hash
 > new file mode 100644
 > index 0000000..5d14f5a
@@ -46,45 +75,52 @@ comment "mc needs a toolchain w/ threads, wchar"
 > +++ b/package/mc/mc.hash
 > @@ -0,0 +1,2 @@
 > +# Locally computed:
+> +sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
+Please use those provided upstream [1].
 
-please refer to this upstream file:
-http://ftp.midnight-commander.org/mc-4.8.14.sha256
-
-> +sha256 
-> 61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5 
-> mc-4.8.14.tar.bz2 diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
 > new file mode 100644
 > index 0000000..dd74d0c
 > --- /dev/null
 > +++ b/package/mc/mc.mk
 > @@ -0,0 +1,26 @@
-> +########################################################################
-> ######## +#
+> +################################################################################
+> +#
 > +# mc
 > +#
-> +########################################################################
-> ######## +
+> +################################################################################
+> +
 > +MC_VERSION = 4.8.14
 > +MC_SOURCE = mc-$(MC_VERSION).tar.bz2
 > +MC_SITE = http://ftp.midnight-commander.org
 > +MC_LICENSE =  GPLv3
 > +MC_LICENSE_FILES = COPYING
 > +MC_INSTALL_STAGING = YES
+> +MC_DEPENDENCIES = libglib2 host-pkgconf
+> +
+> +# mc prefers slang, so use that if enabled, otherwise
+> +# fallback to using ncurses.
+> +# Either or both will be enabled, but we prefer slang.
+> +ifeq ($(BR2_PACKAGE_SLANG),y)
+> +MC_DEPENDENCIES += slang
+> +MC_CONF_OPTS += --with-screen=slang
+> +else
+> +MC_DEPENDENCIES += ncurses
+> +MC_CONF_OPTS += --with-screen=ncurses
+> +endif
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.1.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Which package needs files installed by mc in staging? Imho you can drop
-that line. The rest looks good, but I did not yet compile your package. 
+[1] http://ftp.midnight-commander.org/mc-4.8.14.sha256
 
-Therefore the rest should be seen as a comment for your inspiration ;) The
-fli4l (fli4l.de) project, which is based on buildroot, also contains its
-own mc package which I am using pretty often. It uses additional
-CONF_OPTS: --without-gpm-mouse --without-subshell --without-x 
+Regards,
 
-and some CONV_ENV magic: fu_cv_sys_stat_statfs2_bsize=yes
-ac_cv_func_mmap_fixed_mapped=yes ac_cv_func_strcoll_works=yes 
-
-and these depends:
-host-bison
-$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-$(if $(BR2_NEEDS_GETTEXT),gettext)
-
-Regards, Bernd
+-- 
+Samuel
