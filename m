@@ -1,38 +1,106 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 Mar 2015 21:40:39 +0100
-Subject: [Buildroot] [PATCH v2 2/3] package/mesa3d: bump version to
-	10.5.1
-References: <1426435802-14030-1-git-send-email-bernd.kuhls@t-online.de>
- <1426435802-14030-2-git-send-email-bernd.kuhls@t-online.de>
- <20150317233027.1aee93ce@free-electrons.com>
-Message-ID: <XnsA466DC83D57B9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 23 Mar 2015 21:42:40 +0100
+Subject: [Buildroot] [PATCH v2] mc: new package
+Message-ID: <1427143360-26369-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150317233027.1aee93ce at free-electrons.com:
+From: Mauro Condarelli <mc5686@mclink.it>
 
-> Thanks for the additional explanation, makes a lot more sense now. I've
-> applied your patch. I however have a comment:
-> 
->> ++#ifdef __UCLIBC__
->> ++float fmaxf(float a, float b)
-> 
-> This is really a crappy solution. I know we use it in various places,
-> but it simply does not work properly: if a new version of uClibc is
-> released with an implementation of fmaxf(), then __UCLIBC__ will still
-> be true, but we'll have a duplicated implementation of fmaxf().
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v2: fix indentation
+Changes since original patch from Mauro Condarelli
+        - add mc.hash
+        - bump to 4.8.14
+        - implement comments from Baruch Siach and Thomas Petazzoni
 
-Hi,
+ package/Config.in    |  1 +
+ package/mc/Config.in | 15 +++++++++++++++
+ package/mc/mc.hash   |  2 ++
+ package/mc/mc.mk     | 26 ++++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/mc/Config.in
+ create mode 100644 package/mc/mc.hash
+ create mode 100644 package/mc/mc.mk
 
-uclibc added fmaxf upstream: http://git.uclibc.org/uClibc/commit/?id=
-6c4538905e65ceb203f59aaa9a61728e81c6bc0a
-
-mesa3d/0002-Fix-runtime-error-with-uClibc.patch can be removed when the 
-forementioned patch is used in buildroot, a local run-time test was positive.
-Let?s hope uclibc will make a new release soon ;)
-
-Regards, Bernd
+diff --git a/package/Config.in b/package/Config.in
+index 93fde92..a013db6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1363,6 +1363,7 @@ menu "Text editors and viewers"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/less/Config.in"
+ endif
++	source "package/mc/Config.in"
+ 	source "package/nano/Config.in"
+ 	source "package/uemacs/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/mc/Config.in b/package/mc/Config.in
+new file mode 100644
+index 0000000..e146a9f
+--- /dev/null
++++ b/package/mc/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_MC
++	bool "mc"
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2, slang
++	select BR2_PACKAGE_LIBGLIB2
++	# mc prefers slang, but can use ncurses too
++	select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
++	help
++	  GNU Midnight Commander is a visual file manager, licensed under
++	  GNU General Public License. It can use either SLang(preferred)
++	  or ncurses for screen handling; if neither is enabled SLang
++	  will be automatically chosen.
++
++	  https://www.midnight-commander.org/
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+new file mode 100644
+index 0000000..5d14f5a
+--- /dev/null
++++ b/package/mc/mc.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+new file mode 100644
+index 0000000..dd74d0c
+--- /dev/null
++++ b/package/mc/mc.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# mc
++#
++################################################################################
++
++MC_VERSION = 4.8.14
++MC_SOURCE = mc-$(MC_VERSION).tar.bz2
++MC_SITE = http://ftp.midnight-commander.org
++MC_LICENSE =  GPLv3
++MC_LICENSE_FILES = COPYING
++MC_INSTALL_STAGING = YES
++MC_DEPENDENCIES = libglib2 host-pkgconf
++
++# mc prefers slang, so use that if enabled, otherwise
++# fallback to using ncurses.
++# Either or both will be enabled, but we prefer slang.
++ifeq ($(BR2_PACKAGE_SLANG),y)
++MC_DEPENDENCIES += slang
++MC_CONF_OPTS += --with-screen=slang
++else
++MC_DEPENDENCIES += ncurses
++MC_CONF_OPTS += --with-screen=ncurses
++endif
++
++$(eval $(autotools-package))
+-- 
+2.1.0
