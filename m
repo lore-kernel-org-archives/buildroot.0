@@ -1,107 +1,157 @@
 From: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
-Date: Tue, 24 Mar 2015 01:03:00 +0100
-Subject: [Buildroot] Proposed patch: allow setting an hashed root
-	password
+Date: Tue, 24 Mar 2015 00:30:35 +0100
+Subject: [Buildroot] [PATCH v2] Restructure root password handling
 In-Reply-To: <20150323184831.GC4214@free.fr>
-References: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
- <20150322160022.GC4724@free.fr> <550EEA7E.8000207@mind.be>
- <20150322173132.GA5387@free.fr> <550F3EDE.8090106@ccd.uniroma2.it>
- <20150322225625.GB26325@free.fr>
- <CAJtjsKZU3p5ScRQH2b+pLPLqP6z82BHeWizHu43EAzBR1N-KXA@mail.gmail.com>
- <20150323184831.GC4214@free.fr>
-Message-ID: <5510A9B4.70605@sancho.ccd.uniroma2.it>
+References: <20150323184831.GC4214@free.fr>
+Message-ID: <1427153435-31605-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've just sent another proposed patch; this time I've put in an explicit
-choice to disable root login (that was my original need), and a separate
-choice for hashed or cleartext input format.
+Created a top level boolean entry to enable/disable root login
 
-In my opinion, if the project chooses to handle password setting from a script
-instead than from the makefile, the input format should be the same used in
-the usermap, even though this would then force to change the semantics of
-BR2_TARGET_GENERIC_ROOT_PASSWD...
+Allow choosing the root password input format only if root login
+is enabled.
 
-Thank you very much, yours
+Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+---
+ system/Config.in | 66 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ system/system.mk | 25 +++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
 
-	lorenzo
-
-On 23/03/2015 19:48, Yann E. MORIN wrote:
-> Johan, All,
-> 
-> On 2015-03-23 12:05 +0100, Johan Oudinet spake thusly:
->> On Sun, Mar 22, 2015 at 11:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->>>
->>> Alternatively, you could also tweak the root password from a post-build
->>> script, see BR2_ROOTFS_POST_BUILD_SCRIPT:
->>>     http://buildroot.net/downloads/manual/manual.html#rootfs-custom
->>>
->>> script which could look something like:
->>>
->>>     #!/bin/sh
->>>     PASSWD='your-encoded-password'
->>>     sed -r -i -e "s/^root:[^:]+:/root:${PASSWD}:/" "${TARGET_DIR}/etc/passwd"
->>>
->>> And in the end, I wonder if that would not be the best option...
->>>
->>
->> This is the solution we do internally. I'm not sure how hard it is for
->> us to send it upstream as it implies several changes. I'll look into
->> it this week.
->> Basically, we have a script to ease the access to BR2_* variables
->> inside post_build scripts, then we have a post_build script that looks
->> to BR2_TARGET_GENERIC_ROOT_PASSWD and:
->> - if it's empty, it does nothing;
->> - if it starts by $1$, $5$, or $6$, it assumes it is already
->> encrypted, and skip the encoding part
->> - otherwise, first it encodes it by calling mkpasswd with the
->> BR2_TARGET_GENERIC_PASSWD_METHOD method, then it replaces the second
->> field of the root user in the /etc/shadow file
-> 
-> Well, recognising an md5, sha256 or sha512 hashed password from a
-> plain-text one is pretty trivial.
-> 
-> What's not so trivial is recognising:
->   - a DES-encoded password
->   - a disabled password, marked with a leading '!'
->   - a no-login password, marked with just a single '*'
-> 
-> Detecting a DES-encoded password is not easy because the accepted chars
-> are in a sub-set as those accepted for a plain-text password.
-> 
-> However, maybe we could deprecate DES-encoding altogether, then we
-> could handle those cases:
-> 
->   - password is '*'                 --> login not allowed; stop
->   - password starts with '!'        --> login disabled, skip the '!'; continue
->   - password starts with ${1,5,6}$  --> treat it as an encoded password; stop
->   - anything else                   --> treat it as a plain-text password
-> 
-> That way, the existing option can be re-used for all cases, and we would
-> not need anything more, just adapting the current code in system/system.mk.
-> 
-> Thoughts?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
-
+diff --git a/system/Config.in b/system/Config.in
+index 9973cc2..f3d67ed 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -188,6 +188,44 @@ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
++config BR2_TARGET_ENABLE_ROOT_LOGIN
++	bool "Enable root login"
++        default "y"
++	help
++	  Enable root login password
++
++if BR2_TARGET_ENABLE_ROOT_LOGIN
++
++choice
++	prompt "Root password input"
++
++config BR2_TARGET_PLAINTEXT_ROOT_PASSWORD
++	bool "cleartext format"
++	help
++	  Set the root password from plaintext input
++
++	  WARNING! WARNING!
++	  The password appears in clear in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either the
++	  .config file or the build log may be distributed!
++
++config BR2_TARGET_HASHED_ROOT_PASSWORD
++	bool "hashed format"
++	help
++	  Set the root password from prehashed input
++
++	  WARNING! WARNING!
++	  The password's hash appears in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either
++	  the .config file or the build log may be distributed, or at the
++	  very least use a strong cryptographic hash for your password!
++
++endchoice
++
++endif
++
++if BR2_TARGET_PLAINTEXT_ROOT_PASSWORD
++
+ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	string "Root password"
+ 	default ""
+@@ -208,6 +246,34 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	  The password appears in clear in the .config file, and may appear
+ 	  in the build log! Avoid using a valuable password if either the
+ 	  .config file or the build log may be distributed!
++endif
++
++if BR2_TARGET_HASHED_ROOT_PASSWORD
++
++config BR2_TARGET_GENERIC_ROOT_PASSWD_HASH
++	string "Hashed root password"
++	default ""
++	help
++	  Set the crypt(3) encoded root password hash.
++
++	  If set to empty (the default), then no root password will be set,
++	  and root will need no password to log in.
++
++	  An hashed root password of "*" will disable root logins.
++
++	  "$" signs in the hashed password must be doubled.
++
++	  For example, the MD5 hash for the password "mypass" salted with
++	  the string "longsalt" is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
++	  which must be written as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
++
++	  WARNING! WARNING!
++	  The password's hash appears in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either
++	  the .config file or the build log may be distributed, or at the
++	  very least use a strong cryptographic hash for your password!
++
++endif
+ 
+ choice
+ 	bool "/bin/sh"
+diff --git a/system/system.mk b/system/system.mk
+index 4a1eb4a..5cf3faf 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -1,6 +1,10 @@
+ TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
++TARGET_ENABLE_ROOT_LOGIN = $(call qstrip, $(BR2_TARGET_ENABLE_ROOT_LOGIN))
++TARGET_PLAINTEXT_ROOT_PASSWORD = $(call qstrip, $(BR2_TARGET_PLAINTEXT_ROOT_PASSWORD))
++TARGET_HASHED_ROOT_PASSWORD = $(call qstrip, $(BR2_TARGET_HASHED_ROOT_PASSWORD))
+ TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
++TARGET_GENERIC_ROOT_PASSWD_HASH = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD_HASH))
+ TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+ TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+ TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+@@ -69,11 +73,32 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
+ 
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
++ifeq ($(TARGET_ENABLE_ROOT_LOGIN),y)
++
++ifeq ($(BR2_TARGET_PLAINTEXT_ROOT_PASSWORD),y)
++
+ define SYSTEM_ROOT_PASSWD
+ 	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
+ 		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
+ 	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
+ endef
++
++else ifeq ($(BR2_TARGET_HASHED_ROOT_PASSWORD),y)
++
++define SYSTEM_ROOT_PASSWD
++	$(SED) 's,^root:[^:]*:,root:$(TARGET_GENERIC_ROOT_PASSWD_HASH):,' $(TARGET_DIR)/etc/shadow
++endef
++
++endif
++
++else
++
++define SYSTEM_ROOT_PASSWD
++	$(SED) 's,^root:[^:]*:,root:*:,' $(TARGET_DIR)/etc/shadow
++endef
++
++endif
++
+ TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
+ 
+ ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
 -- 
-+-------------------------+----------------------------------------------+
-| Lorenzo M. Catucci      | Centro di Calcolo e Documentazione           |
-| catucci at ccd.uniroma2.it | Universit? degli Studi di Roma "Tor Vergata" |
-|                         | Via O. Raimondo 18 ** I-00173 ROMA ** ITALY  |
-| Tel. +39 06 7259 2255   | Fax. +39 06 7259 2125                        |
-+-------------------------+----------------------------------------------+
-
--- 
-+-------------------------+----------------------------------------------+
-| Lorenzo M. Catucci      | Centro di Calcolo e Documentazione           |
-| catucci at ccd.uniroma2.it | Universit? degli Studi di Roma "Tor Vergata" |
-|                         | Via O. Raimondo 18 ** I-00173 ROMA ** ITALY  |
-| Tel. +39 06 7259 2255   | Fax. +39 06 7259 2125                        |
-+-------------------------+----------------------------------------------+
+2.1.4
