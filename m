@@ -1,11 +1,12 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Mon, 23 Mar 2015 10:43:51 +0800
-Subject: [Buildroot] [PATCH 1/2] bfin: remove the dependency of flat
- shared mode to shared library
-In-Reply-To: <20150320224508.73c0c84b@free-electrons.com>
+Date: Mon, 23 Mar 2015 10:57:50 +0800
+Subject: [Buildroot] [PATCH 2/2] bfin: put the libc link path of the
+ flat shared and sep data formats before the sysroot link path
+In-Reply-To: <20150320224207.7b3334b9@free-electrons.com>
 References: <1426669156-24250-1-git-send-email-sonic.adi@gmail.com>
- <20150320224508.73c0c84b@free-electrons.com>
-Message-ID: <CAJxxZ0OGa0OcPUXSJapo51ft0juQVWPYOJxM5Xx0aTCxFriVqQ@mail.gmail.com>
+ <1426669156-24250-2-git-send-email-sonic.adi@gmail.com>
+ <20150320224207.7b3334b9@free-electrons.com>
+Message-ID: <CAJxxZ0N7L-zcfFWUxe3Epgk8us4aPmYJuk42QgYzwHP+e3Ytzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +15,96 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Sat, Mar 21, 2015 at 5:45 AM, Thomas Petazzoni
+On Sat, Mar 21, 2015 at 5:42 AM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Sonic Zhang,
 >
-> On Wed, 18 Mar 2015 16:59:15 +0800, Sonic Zhang wrote:
+> On Wed, 18 Mar 2015 16:59:16 +0800, Sonic Zhang wrote:
 >> From: Sonic Zhang <sonic.zhang@analog.com>
 >>
->> Blackfin flat shared library isn't generated and linked in the same way
->> as the ELF shared library. So, don't mark it depend on the static library
->> only.
+>> The libc of the shared flat and sep data formats are different from the
+>> standard flat libc in the sysroot lib path. In order to make application
+>> link with proper libc, put their path before the sysroot link path.
 >>
 >> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 >> ---
->>  arch/Config.in |    1 -
->>  1 file changed, 1 deletion(-)
+>>  package/Makefile.in |    4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
 >>
->> diff --git a/arch/Config.in b/arch/Config.in
->> index 16ad8be..6179960 100644
->> --- a/arch/Config.in
->> +++ b/arch/Config.in
->> @@ -295,7 +295,6 @@ config BR2_BINFMT_FLAT_SEP_DATA
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> index 803b162..e88d1ad 100644
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -153,12 +153,12 @@ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSI
+>>  endif
 >>
->>  config BR2_BINFMT_FLAT_SHARED
->>       bool "Shared binary"
->> -     select BR2_BINFMT_SUPPORTS_SHARED
+>>  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+>> -TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+>> +TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0 -L$(STAGING_DIR)/usr/lib/mid-shared-library
+>>  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+>>  TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+>>  endif
+>>  ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
+>> -TARGET_LDFLAGS += -msep-data
+>> +TARGET_LDFLAGS += -msep-data -L$(STAGING_DIR)/usr/lib/msep-data
+>>  TARGET_CFLAGS += -msep-data
+>>  TARGET_CXXFLAGS += -msep-data
+>>  endif
 >
-> If you don't select BR2_BINFMT_SUPPORTS_SHARED, then the only available
-> option amongst: static libs, static libs + shared libs, shared libs is
-> "static libs", which means that the "-static" flag is always passed. If
-> that's OK, then I'm fine with the patch.
+> Thanks for this patch. I did some quick testing with
+> BR2_BINFMT_FLAT_SHARED with and without your patch, and I do not see a
+> difference. For example, I've built strace with and without your patch
+> applied, and the resulting binary has the same size. Looking at
+> strace.gdb using readelf, I can see that the C library functions are
+> not inside the strace binary itself, while with a BR2_BINFMT_FLAT_ONE
+> build, the strace binary is definitely bigger and a readelf on
+> strace.gdb shows that the C library functions have been copied into the
+> binary.
 >
-Yes, -static is OK in the link flag for FLAT shared mode.
+> So, could you give us an example of what this patch is fixing?
+>
 
-> The second sentence of your commit log is confusing however. You say
-> "don't mark it depend on the static library only". But it is exactly
-> what your patch is doing: since it's no longer select
-> BR2_BINFMT_SUPPORTS_SHARED, it means that after your patch is applied,
-> when BR2_BINFMT_FLAT_SHARED is used, the *only* possibility is static
-> library only.
+If you build libgcrypt-1.6.3 without this patch, you will get following error.
 
-Sorry for the typo error. Should be "mark it depend on the static
-library only"".
+
+libtool: link: ( cd ".libs" && rm -f "libgcrypt.la" && ln -s
+"../libgcrypt.la" "libgcrypt.la" )
+/bin/bash ../libtool  --tag=CC   --mode=link
+/home/sonic/projects/buildroot/output/host/usr/bin/bfin-uclinux-gcc
+-I/home/sonic/projects/buildroot/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/include
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+-Wl,-elf2flt -mid-shared-library -mshared-library-id=0 -D__NOMMU__
+-D__uClinux__ -static -fvisibility=hidden -Wall  -elf2flt
+-mid-shared-library -mshared-library-id=0 -static -o mpicalc
+mpicalc-mpicalc.o libgcrypt.la
+-L/home/sonic/projects/buildroot/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib
+-lgpg-error
+libtool: link: /home/sonic/projects/buildroot/output/host/usr/bin/bfin-uclinux-gcc
+-I/home/sonic/projects/buildroot/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/include
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+-Wl,-elf2flt -mid-shared-library -mshared-library-id=0 -D__NOMMU__
+-D__uClinux__ -static -fvisibility=hidden -Wall -elf2flt
+-mid-shared-library -mshared-library-id=0 -static -o mpicalc
+mpicalc-mpicalc.o  ./.libs/libgcrypt.a
+-L/home/sonic/projects/buildroot/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib
+/home/sonic/projects/buildroot/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/libgpg-error.a
+/home/sonic/projects/buildroot/output/host/usr/bfin-buildroot-uclinux-uclibc/sysroot/usr/lib/mid-shared-library/crt1.o:
+In function `__start':
+/home/test/workspace/src/toolchain/uClibc/libc/sysdeps/linux/bfin/crt1.S:92:
+undefined reference to `___shared_flat_add_library'
+collect2: ld returned 1 exit status
+make[3]: *** [mpicalc] Error 1
+make[3]: Leaving directory
+`/home/sonic/projects/buildroot/output/build/libgcrypt-1.6.3/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/sonic/projects/buildroot/output/build/libgcrypt-1.6.3'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/sonic/projects/buildroot/output/build/libgcrypt-1.6.3'
+make: *** [/home/sonic/projects/buildroot/output/build/libgcrypt-1.6.3/.stamp_built]
+Error 2
+
 
 Regards,
 
