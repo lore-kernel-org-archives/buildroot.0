@@ -1,58 +1,34 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 23 Mar 2015 09:09:17 +0100 (CET)
-Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
- fragments
-In-Reply-To: <550D86D4.7060808@mind.be>
-Message-ID: <495352807.1720289.1427098157544.JavaMail.root@openwide.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 23 Mar 2015 11:00:08 +0100
+Subject: [Buildroot] [PATCH 0/2] Makedevs: add recursive option
+In-Reply-To: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1426243805-8317-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CA+TH9VkNj6LOCLCc8mHpj_i7QR84fHQUzLs+MjAEomhYwY73Qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Buildroot Developers,
+
+2015-03-13 11:50 GMT+01:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
+> This patch series add the recursive option to makedevs.
+>
+> With recursive option will be possible to apply owner/permission
+> recursively to folders.
+>
+> Angelo Compagnucci (2):
+>   package/makedevs: add recursive option
+>   docs/manual: documentation for recursive makedevs syntax
+
+Please give this patch series some love! I think that it iss very
+important to have an option to set permission recursively. Think of
+all that people that wants to serve html or any server side language
+content in a secure manner, they can't actually!
+
+Sincerely, Angelo.
 
 
------ Mail original -----
-> On 21/03/15 00:11, Yann E. MORIN wrote:
-> > Floris, All,
-> > 
-[...]
-> > use a shell construct here, like:
-> > 
-> >     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
-> >         echo "Unable to perform $(1)-update-config when fragment
-> >         files are set"; exit 1)
-> 
->  Or perhaps it's better to simply disable the update targets when
->  fragments are set:
-> 
-> # Cannot update (def)config with fragments
-> ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
-> $(1)-update-config: ...
-> ...
-> endif
-> 
-> [snip]
-> 
-
-
-I'm not sure... we are in a case where the user knows that the target
-is supposed to exist. an unknown target message would be more
-confusing than the OP's proposed error message. I would not be 
-suprised if someone reported the missing target as a bug here...
-
-
-> 
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
