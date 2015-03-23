@@ -1,41 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Mar 2015 23:56:33 +0100
-Subject: [Buildroot] [PATCH 4/4] docs/manual: document new graph-depends
-	options
-In-Reply-To: <cover.1427150990.git.yann.morin.1998@free.fr>
-References: <cover.1427150990.git.yann.morin.1998@free.fr>
-Message-ID: <f9b988d14b88cd502a3ae47739597e45882bf1f3.1427150990.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Mar 2015 00:26:32 +0100
+Subject: [Buildroot] [PATCH v1] evtest: fix
+	program_invocation_short_name undeclared
+In-Reply-To: <87bnjjgx9n.fsf@dell.be.48ers.dk>
+References: <1426803498-18890-1-git-send-email-ps.report@gmx.net>
+ <20150320140947.38980613@free-electrons.com>
+ <1426881775.2897.10.camel@synopsys.com>
+ <20150320212213.21f2881e@free-electrons.com>
+ <87bnjjgx9n.fsf@dell.be.48ers.dk>
+Message-ID: <20150324002632.3aeef6e7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Francois Perrad <fperrad@gmail.com>
----
- docs/manual/common-usage.txt | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Dear Peter Korsgaard,
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 89cd9fe..5b27b1f 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -208,6 +208,14 @@ The +graph-depends+ behaviour can be controlled by setting options in the
- * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
-   default, +0+, means no limit.
- 
-+* +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
-+  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
-+  (to stop on virtual packages). The package is still present on the
-+  graph, but its dependencies are not.
-+
-+* +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-+  the graph.
-+
- * +--transitive+, +--no-transitive+, to draw (or not) the transitive
-   dependencies. The default is to not draw transitive dependencies.
- 
+On Mon, 23 Mar 2015 23:32:52 +0100, Peter Korsgaard wrote:
+
+>  > Yes, it works. In the mean time, there is a way to avoid the build
+>  > errors: add an exception to the autobuilder script. See
+>  > http://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run#n346
+>  > for a bunch of examples.
+> 
+> Or simply make the packages depend on
+> !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12. Peter will you send
+> patches to do that for evtest and libevdev?
+
+This is indeed OK for packages such as evtest that don't have, or don't
+have many, reverse dependencies. But this is hardly a sustainable
+solution in general, especially for packages that have a high number of
+reverse dependencies.
+
+We simply can't handle all the little possible variations of uClibc
+configurations that exist in every external toolchain, it's not
+workable in a general fashion.
+
+I know we're already doing it to some extent, but I'd like to avoid
+doing it when possible, especially when we have a good cooperation with
+the upstream developers (in this case, the Synopsys folks).
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
