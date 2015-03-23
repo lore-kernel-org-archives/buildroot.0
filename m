@@ -1,90 +1,53 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 23 Mar 2015 11:28:49 +0100
-Subject: [Buildroot] [PATCH v3 3/3] boot/uboot: Add uboot-menuconfig and
-	friends
-In-Reply-To: <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
-References: <1423088981-13255-1-git-send-email-joerg.krause@embedded.rocks>
- <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <CAGm1_ktibDOCMvQqb4qAKGGM9SQvNnAX+Fbo0E-zq7ASW=NLyw@mail.gmail.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 23 Mar 2015 12:05:37 +0100
+Subject: [Buildroot] Proposed patch: allow setting an hashed root
+	password
+In-Reply-To: <20150322225625.GB26325@free.fr>
+References: <550EDB2A.9030107@sancho.ccd.uniroma2.it>
+ <20150322160022.GC4724@free.fr>
+ <550EEA7E.8000207@mind.be> <20150322173132.GA5387@free.fr>
+ <550F3EDE.8090106@ccd.uniroma2.it> <20150322225625.GB26325@free.fr>
+Message-ID: <CAJtjsKZU3p5ScRQH2b+pLPLqP6z82BHeWizHu43EAzBR1N-KXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Lorenze, Yann, All,
 
-On Wed, Feb 4, 2015 at 11:29 PM, J?rg Krause
-<joerg.krause@embedded.rocks> wrote:
-> Add uboot-menuconfig, uboot-spl/menuconfig, uboot-tpl/menuconfig and their
-> friends as make targets.
+On Sun, Mar 22, 2015 at 11:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> The Kconfig configuration in U-Boot is different from Linux. The biggest
-> difference is that U-Boot has to configure multiple boot images per board:
-> Normal, SPL, TPL. The Kconfig functions are expanded for U-Boot to handle
-> multiple images.
+> Alternatively, you could also tweak the root password from a post-build
+> script, see BR2_ROOTFS_POST_BUILD_SCRIPT:
+>     http://buildroot.net/downloads/manual/manual.html#rootfs-custom
 >
-> menuconfig and friends are used to configure Normal and create (or modify)
-> the .config file. For SPL configuration, the configutation targets are
-> prefixed with "spl/", for example "make spl/config", "make spl/menuconfig",
-> etc. Those targets create or modify the spl/.config file. Likewise, run
-> "make tpl/config", "make tpl/menuconfig", etc. for TPL.
+> script which could look something like:
 >
-> The target "<board>_defconfig" is used to create the .config, spl/.config
-> (if CONFIG_SPL is defined) and tpl/.config (if CONFIG_TPL is defined) based
-> on the file configs/<board>_defconfig.
+>     #!/bin/sh
+>     PASSWD='your-encoded-password'
+>     sed -r -i -e "s/^root:[^:]+:/root:${PASSWD}:/" "${TARGET_DIR}/etc/passwd"
 >
-> savedefconfig creates a minimal set of config based on the .config and saves
-> it into the "defconfig" file. If CONFIG_SPL (and CONFIG_TPL) is defined, the
-> common lines among .config, spl/.config (and tpl/.config) are coalesced
-> together with a special syntax where each line has a "<condition>:" prefix.
+> And in the end, I wonder if that would not be the best option...
 >
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> Changes v2 -> v3:
->   - Add spl/menuconfig and tpl/menuconfig and their friends
->   - Rewrite commit log
-> Changes v1 -> v2:
->   - Retain backward compatibility (Thomas)
-> ---
->  boot/uboot/uboot.mk | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 2ea9c86..2c39435 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -185,6 +185,26 @@ endif
->  $(eval $(generic-package))
->
->  ifeq ($(BR2_TARGET_UBOOT),y)
-> +ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-> +uboot-menuconfig uboot-xconfig uboot-gconfig uboot-nconfig: uboot-configure
-> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> +       rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
-> +uboot-spl/menuconfig uboot-spl/xconfig uboot-spl/gconfig uboot-spl/nconfig: uboot-configure
-> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> +       rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
-> +uboot-tpl/menuconfig uboot-tpl/xconfig uboot-tpl/gconfig uboot-tpl/nconfig: uboot-configure
-> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> +       rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
-> +uboot-savedefconfig: uboot-configure
-> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
-> +ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG_USE_CUSTOM_DEFCONFIG),y)
-> +uboot-update-defconfig: uboot-savedefconfig
-> +       cp -f $(UBOOT_DIR)/defconfig $(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG_CUSTOM_DEFCONFIG_FILE)
-> +else
-> +uboot-update-defconfig: ;
-> +endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG_USE_CUSTOM_CONFIG
-> +endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-> +
->  # we NEED a board name unless we're at make source
->  ifeq ($(filter source,$(MAKECMDGOALS)),)
 
-could you please rework your patches to reflect the newest U-Boot
-Kconfig changes?
+This is the solution we do internally. I'm not sure how hard it is for
+us to send it upstream as it implies several changes. I'll look into
+it this week.
+Basically, we have a script to ease the access to BR2_* variables
+inside post_build scripts, then we have a post_build script that looks
+to BR2_TARGET_GENERIC_ROOT_PASSWD and:
+- if it's empty, it does nothing;
+- if it starts by $1$, $5$, or $6$, it assumes it is already
+encrypted, and skip the encoding part
+- otherwise, first it encodes it by calling mkpasswd with the
+BR2_TARGET_GENERIC_PASSWD_METHOD method, then it replaces the second
+field of the root user in the /etc/shadow file
 
-kconfig: switch to single .config configuration
-(http://permalink.gmane.org/gmane.comp.boot-loaders.u-boot/212547)
+So, one can either put a password in clear text in the .config or an
+already encrypted password, which allows us to share a defconfig with
+a non-empty password for root.
 
-Yegor
+Best regards,
+-- 
+Johan
