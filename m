@@ -1,37 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 23 Mar 2015 14:47:27 +0100
-Subject: [Buildroot] [PATCH v3 3/3] boot/uboot: Add uboot-menuconfig and
-	friends
-In-Reply-To: <1427118197.10031.2.camel@embedded.rocks>
-References: <1423088981-13255-1-git-send-email-joerg.krause@embedded.rocks>
- <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
- <CAGm1_ktibDOCMvQqb4qAKGGM9SQvNnAX+Fbo0E-zq7ASW=NLyw@mail.gmail.com>
- <1427118197.10031.2.camel@embedded.rocks>
-Message-ID: <CAGm1_ksNKC75KFhE5m2YfKOv6Qb+6oHKTjVs-Rk7Aer8gf9CLg@mail.gmail.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Mon, 23 Mar 2015 11:08:38 -0400
+Subject: [Buildroot] [PATCH v2 09/25] rsyslog: fix systemd service
+	installation
+In-Reply-To: <20150320203852.5f23a9ff@free-electrons.com>
+References: <1426878856-15747-1-git-send-email-mike@mikebwilliams.com>
+ <1426878856-15747-10-git-send-email-mike@mikebwilliams.com>
+ <20150320203852.5f23a9ff@free-electrons.com>
+Message-ID: <CANPyyuMnP=ooXV-EcBhPNm1z2HdH7iZZMa+bEupD7-fQRCJR-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 23, 2015 at 2:43 PM, J?rg Krause
-<joerg.krause@embedded.rocks> wrote:
-> Hi Yegor,
+Thomas,
+
+On Fri, Mar 20, 2015 at 3:38 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Mike Williams,
 >
-> On Mo, 2015-03-23 at 11:28 +0100, Yegor Yefremov wrote:
->>
->> could you please rework your patches to reflect the newest U-Boot
->> Kconfig changes?
->>
->> kconfig: switch to single .config configuration
->> (http://permalink.gmane.org/gmane.comp.boot-loaders.u-boot/212547)
+> On Fri, 20 Mar 2015 15:14:00 -0400, Mike Williams wrote:
 >
-> I hope these upstream changes make it easier to use the kconfig-package
-> infrastructure. I will submit the reworked patches if U-Boot 2015.04 is
-> released.
+>>  define RSYSLOG_INSTALL_INIT_SYSTEMD
+>> -     ln -sf /lib/systemd/system/rsyslog.service \
+>> +     ln -fs ../../../usr/lib/systemd/system/rsyslog.service \
+>>               $(TARGET_DIR)/etc/systemd/system/syslog.service
+>
+> Are you sure?
+>
+> Isn't the syslog.service -> rsyslog.service symbolic link meant to have
+> kind of a "compatibility" service name? If so, shouldn't this symlink
+> be in /usr/lib/systemd/system/ instead ?
 
-So do I.
+I enabled it on the target with 'systemctl enable' and duplicated the
+steps in the .mk file
 
-What board are you working with?
+# systemctl enable rsyslog.service
+Created symlink from /etc/systemd/system/syslog.service to
+/usr/lib/systemd/system/rsyslog.service.
+Created symlink from
+/etc/systemd/system/multi-user.target.wants/rsyslog.service to
+/usr/lib/systemd/system/rsyslog.service.
 
-Yegor
+However, we should add a mkdir -p /etc/systemd/system before. Would
+you like me to send a new patch?
+
+Mike
