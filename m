@@ -1,126 +1,70 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 23 Mar 2015 22:04:23 +0100
-Subject: [Buildroot] [PATCH] mc: new package
-In-Reply-To: <1427142983-26051-1-git-send-email-yegorslists@googlemail.com>
-References: <1427142983-26051-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAHXCMM+U2GnW5Bb6rhgCyc__nRsTGd0KzzQRHUhz62ihrONLFg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Mar 2015 22:41:39 +0100
+Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
+ fragments
+In-Reply-To: <20150323183116.GA4214@free.fr>
+References: <550D86D4.7060808@mind.be>
+ <495352807.1720289.1427098157544.JavaMail.root@openwide.fr>
+ <20150323183116.GA4214@free.fr>
+Message-ID: <55108893.2060003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+On 23/03/15 19:31, Yann E. MORIN wrote:
+> J?r?my, All,
+> 
+> On 2015-03-23 09:09 +0100, Jeremy Rosen spake thusly:
+>> ----- Mail original -----
+>>> On 21/03/15 00:11, Yann E. MORIN wrote:
+>>>> Floris, All,
+>>>>
+>> [...]
+>>>> use a shell construct here, like:
+>>>>
+>>>>     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
+>>>>         echo "Unable to perform $(1)-update-config when fragment
+>>>>         files are set"; exit 1)
+>>>
+>>>  Or perhaps it's better to simply disable the update targets when
+>>>  fragments are set:
+>>>
+>>> # Cannot update (def)config with fragments
+>>> ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
+>>> $(1)-update-config: ...
+>>> ...
+>>> endif
+>>>
+>>> [snip]
+>>
+>> I'm not sure... we are in a case where the user knows that the target
+>> is supposed to exist. an unknown target message would be more
+>> confusing than the OP's proposed error message. I would not be 
+>> suprised if someone reported the missing target as a bug here...
+> 
+> Agred, But I guess that what Arnout suggested would be something like:
+> 
+>     $(1)-update-config:
+>     ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
+>         ...
+>     else
+>         echo ERROR.
+>     enfi
 
-On Mon, Mar 23, 2015 at 9:36 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> From: Mauro Condarelli <mc5686@mclink.it>
->
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-Since you did the below changes, you should add your SoB line.
-Also, don't forget the -v2 on git format-patch ;-)
+ Actually I did mean what I said, but I also agree with Jeremy that it could be
+confusing. So +1 to Yann's suggestion.
 
-> ---
-> Changes since original patch from Mauro Condarelli
->         - add mc.hash
->         - bump to 4.8.14
->         - implement comments from Baruch Siach and Thomas Petazzoni
->
->  package/Config.in    |  1 +
->  package/mc/Config.in | 15 +++++++++++++++
->  package/mc/mc.hash   |  2 ++
->  package/mc/mc.mk     | 26 ++++++++++++++++++++++++++
->  4 files changed, 44 insertions(+)
->  create mode 100644 package/mc/Config.in
->  create mode 100644 package/mc/mc.hash
->  create mode 100644 package/mc/mc.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 93fde92..a013db6 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1363,6 +1363,7 @@ menu "Text editors and viewers"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->         source "package/less/Config.in"
->  endif
-> +       source "package/mc/Config.in"
->         source "package/nano/Config.in"
->         source "package/uemacs/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> diff --git a/package/mc/Config.in b/package/mc/Config.in
-> new file mode 100644
-> index 0000000..b2bb8ea
-> --- /dev/null
-> +++ b/package/mc/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_MC
-> +       bool "mc"
-> +       depends on BR2_USE_WCHAR # libglib2
-> +        depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +        depends on BR2_USE_MMU # libglib2, slang
-> +       select BR2_PACKAGE_LIBGLIB2
-> +       # mc prefers slang, but can use ncurses too
-> +       select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
-> +       help
-> +         GNU Midnight Commander is a visual file manager, licensed under
-> +         GNU General Public License. It can use either SLang(preferred)
-> +         or ncurses for screen handling; if neither is enabled SLang
-> +         will be automatically chosen.
-> +
-> +         https://www.midnight-commander.org/
-> diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-> new file mode 100644
-> index 0000000..5d14f5a
-> --- /dev/null
-> +++ b/package/mc/mc.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
-Please use those provided upstream [1].
 
-> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-> new file mode 100644
-> index 0000000..dd74d0c
-> --- /dev/null
-> +++ b/package/mc/mc.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# mc
-> +#
-> +################################################################################
-> +
-> +MC_VERSION = 4.8.14
-> +MC_SOURCE = mc-$(MC_VERSION).tar.bz2
-> +MC_SITE = http://ftp.midnight-commander.org
-> +MC_LICENSE =  GPLv3
-> +MC_LICENSE_FILES = COPYING
-> +MC_INSTALL_STAGING = YES
-> +MC_DEPENDENCIES = libglib2 host-pkgconf
-> +
-> +# mc prefers slang, so use that if enabled, otherwise
-> +# fallback to using ncurses.
-> +# Either or both will be enabled, but we prefer slang.
-> +ifeq ($(BR2_PACKAGE_SLANG),y)
-> +MC_DEPENDENCIES += slang
-> +MC_CONF_OPTS += --with-screen=slang
-> +else
-> +MC_DEPENDENCIES += ncurses
-> +MC_CONF_OPTS += --with-screen=ncurses
-> +endif
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.1.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Regards,
+ Arnout
 
-[1] http://ftp.midnight-commander.org/mc-4.8.14.sha256
-
-Regards,
 
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
