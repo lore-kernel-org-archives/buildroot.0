@@ -1,55 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Mar 2015 19:31:16 +0100
-Subject: [Buildroot] [PATCH 1/5] kconfig-package: add support for config
- fragments
-In-Reply-To: <495352807.1720289.1427098157544.JavaMail.root@openwide.fr>
-References: <550D86D4.7060808@mind.be>
- <495352807.1720289.1427098157544.JavaMail.root@openwide.fr>
-Message-ID: <20150323183116.GA4214@free.fr>
+Date: Mon, 23 Mar 2015 19:37:05 +0100
+Subject: [Buildroot] [PATCH 4/7 v3] support/download: return different
+ exit codes for different failures
+In-Reply-To: <CAHXCMMKsdKNtBrDcbXSEOCiBt_NzdcGAC_=G=ROppmJo5y8fCw@mail.gmail.com>
+References: <cover.1427037564.git.yann.morin.1998@free.fr>
+ <b74adb73680d401a14a0841f4e09aa8a0b888116.1427037564.git.yann.morin.1998@free.fr>
+ <CAHXCMMKsdKNtBrDcbXSEOCiBt_NzdcGAC_=G=ROppmJo5y8fCw@mail.gmail.com>
+Message-ID: <20150323183705.GB4214@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?my, All,
+Samuel, All,
 
-On 2015-03-23 09:09 +0100, Jeremy Rosen spake thusly:
-> ----- Mail original -----
-> > On 21/03/15 00:11, Yann E. MORIN wrote:
-> > > Floris, All,
-> > > 
-> [...]
-> > > use a shell construct here, like:
-> > > 
-> > >     $$(if $$($(2)_KCONFIG_FRAGMENT_FILES), \
-> > >         echo "Unable to perform $(1)-update-config when fragment
-> > >         files are set"; exit 1)
-> > 
-> >  Or perhaps it's better to simply disable the update targets when
-> >  fragments are set:
-> > 
-> > # Cannot update (def)config with fragments
-> > ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
-> > $(1)-update-config: ...
-> > ...
-> > endif
-> > 
-> > [snip]
-> 
-> I'm not sure... we are in a case where the user knows that the target
-> is supposed to exist. an unknown target message would be more
-> confusing than the OP's proposed error message. I would not be 
-> suprised if someone reported the missing target as a bug here...
+On 2015-03-23 14:03 +0100, Samuel Martin spake thusly:
+> On Sun, Mar 22, 2015 at 4:21 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > diff --git a/support/download/check-hash b/support/download/check-hash
+> > index d0a4ab9..0234ab0 100755
+> > --- a/support/download/check-hash
+> > +++ b/support/download/check-hash
+> > @@ -9,6 +9,15 @@ set -e
+> >  #   $3: the final basename of the file, to which it will be ultimately
+> >  #       saved as, to be able to match it to the corresponding hashes
+> >  #       in the .hash file
+> > +#
+> > +# Exit codes:
+> > +#   0:  the hash file exists and the file to check matches all its hashes,
+> > +#       or the hash file does not exist
+> > +#   1:  unknown command-line option
+> > +#   2:  the hash file exists and the file to check does not match at least
+> > +#       of its hashes
+> maybe s/of its hashes/one of its hashes/
 
-Agred, But I guess that what Arnout suggested would be something like:
-
-    $(1)-update-config:
-    ifneq ($$($(2)_KCONFIG_FRAGMENT_FILES),)
-        ...
-    else
-        echo ERROR.
-    enfi
+Yes, good catch! I'll fix before resubmitting.
 
 Regards,
 Yann E. MORIN.
