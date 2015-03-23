@@ -1,178 +1,90 @@
-From: Arthur Lambert <lambertarthur22@gmail.com>
-Date: Mon, 23 Mar 2015 11:05:50 +0100
-Subject: [Buildroot] Running hdf5 on ARM target
-Message-ID: <CAGpqJgrDfmzUmzGLY=tpdEGB2rgU7JYjvXVReZWpRESW9Lrsrg@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 23 Mar 2015 11:28:49 +0100
+Subject: [Buildroot] [PATCH v3 3/3] boot/uboot: Add uboot-menuconfig and
+	friends
+In-Reply-To: <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
+References: <1423088981-13255-1-git-send-email-joerg.krause@embedded.rocks>
+ <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <CAGm1_ktibDOCMvQqb4qAKGGM9SQvNnAX+Fbo0E-zq7ASW=NLyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi J?rg,
 
-I found some patches which allow to cross compile and install hdf5
-with buildroot on ARM target. I found patches here :
-https://patchwork.ozlabs.org/patch/425217/
-I am able to compile hdf5 but I am not able to run software which
-using hdf5 with success.
+On Wed, Feb 4, 2015 at 11:29 PM, J?rg Krause
+<joerg.krause@embedded.rocks> wrote:
+> Add uboot-menuconfig, uboot-spl/menuconfig, uboot-tpl/menuconfig and their
+> friends as make targets.
+>
+> The Kconfig configuration in U-Boot is different from Linux. The biggest
+> difference is that U-Boot has to configure multiple boot images per board:
+> Normal, SPL, TPL. The Kconfig functions are expanded for U-Boot to handle
+> multiple images.
+>
+> menuconfig and friends are used to configure Normal and create (or modify)
+> the .config file. For SPL configuration, the configutation targets are
+> prefixed with "spl/", for example "make spl/config", "make spl/menuconfig",
+> etc. Those targets create or modify the spl/.config file. Likewise, run
+> "make tpl/config", "make tpl/menuconfig", etc. for TPL.
+>
+> The target "<board>_defconfig" is used to create the .config, spl/.config
+> (if CONFIG_SPL is defined) and tpl/.config (if CONFIG_TPL is defined) based
+> on the file configs/<board>_defconfig.
+>
+> savedefconfig creates a minimal set of config based on the .config and saves
+> it into the "defconfig" file. If CONFIG_SPL (and CONFIG_TPL) is defined, the
+> common lines among .config, spl/.config (and tpl/.config) are coalesced
+> together with a special syntax where each line has a "<condition>:" prefix.
+>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+> Changes v2 -> v3:
+>   - Add spl/menuconfig and tpl/menuconfig and their friends
+>   - Rewrite commit log
+> Changes v1 -> v2:
+>   - Retain backward compatibility (Thomas)
+> ---
+>  boot/uboot/uboot.mk | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 2ea9c86..2c39435 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -185,6 +185,26 @@ endif
+>  $(eval $(generic-package))
+>
+>  ifeq ($(BR2_TARGET_UBOOT),y)
+> +ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+> +uboot-menuconfig uboot-xconfig uboot-gconfig uboot-nconfig: uboot-configure
+> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
+> +       rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
+> +uboot-spl/menuconfig uboot-spl/xconfig uboot-spl/gconfig uboot-spl/nconfig: uboot-configure
+> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
+> +       rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
+> +uboot-tpl/menuconfig uboot-tpl/xconfig uboot-tpl/gconfig uboot-tpl/nconfig: uboot-configure
+> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
+> +       rm -f $(UBOOT_DIR)/.stamp_{built,target_installed,images_installed}
+> +uboot-savedefconfig: uboot-configure
+> +       $(TARGET_MAKE_ENV) $(MAKE) $(UBOOT_MAKE_OPTS) -C $(UBOOT_DIR) $(subst uboot-,,$@)
+> +ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG_USE_CUSTOM_DEFCONFIG),y)
+> +uboot-update-defconfig: uboot-savedefconfig
+> +       cp -f $(UBOOT_DIR)/defconfig $(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG_CUSTOM_DEFCONFIG_FILE)
+> +else
+> +uboot-update-defconfig: ;
+> +endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG_USE_CUSTOM_CONFIG
+> +endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> +
+>  # we NEED a board name unless we're at make source
+>  ifeq ($(filter source,$(MAKECMDGOALS)),)
 
-simple test :
-**************************************************
-# include <hdf5.h>
-# include <hdf5_hl.h>
+could you please rework your patches to reflect the newest U-Boot
+Kconfig changes?
 
-int main(void)
-{
-hid_t file = H5Fcreate("/tmp/test.h5", H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-H5Fclose (file);
+kconfig: switch to single .config configuration
+(http://permalink.gmane.org/gmane.comp.boot-loaders.u-boot/212547)
 
-return 0;
-}
-**************************************************
-
-Result :
-
-***********************************************
-HDF5-DIAG: Error detected in HDF5 (1.8.14) thread 0:
-  #000: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #001: H5Tconv.c line 7726 in H5T__conv_long_float(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #002: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #003: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #004: H5Tconv.c line 7700 in H5T__conv_uint_ldouble(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #005: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #006: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #007: H5Tconv.c line 7623 in H5T__conv_int_ldouble(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #008: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #009: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #010: H5Tconv.c line 7546 in H5T__conv_ushort_ldouble():
-disagreement about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #011: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #012: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #013: H5Tconv.c line 7469 in H5T__conv_short_ldouble(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #014: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #015: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #016: H5Tconv.c line 7392 in H5T__conv_uchar_ldouble(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #017: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #018: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #019: H5Tconv.c line 7315 in H5T__conv_schar_ldouble(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #020: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #021: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #022: H5Tconv.c line 7238 in H5T__conv_ldouble_double():
-disagreement about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #023: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #024: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #025: H5Tconv.c line 7211 in H5T__conv_ldouble_float(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #026: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #027: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #028: H5Tconv.c line 7184 in H5T__conv_double_ldouble():
-disagreement about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-  #029: H5T.c line 2337 in H5T_register(): unable to locate/allocate
-conversion path
-    major: Datatype
-    minor: Unable to initialize object
-  #030: H5T.c line 4492 in H5T_path_find(): unable to initialize
-conversion function
-    major: Datatype
-    minor: Unable to initialize object
-  #031: H5Tconv.c line 7123 in H5T__conv_float_ldouble(): disagreement
-about datatype size
-    major: Datatype
-    minor: Unable to initialize object
-test2
-HDF5-DIAG: Error detected in HDF5 (1.8.14) thread 0:
-  #000: H5F.c line 774 in H5Fclose(): not a file ID
-    major: Invalid arguments to routine
-    minor: Inappropriate type
-test3
-./test_h5: H5Eint.c: 719: H5E_printf_stack: Assertion `cls_id > 0' failed.
-Aborted
-***********************************************
-
-Someone here was able to run hdf5  on ARM target thanks to these patches ?
-
-Thanks,
-Arthur.
+Yegor
