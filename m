@@ -1,127 +1,256 @@
-From: Rhys Williams <github@wilberforce.co.nz>
-Date: Wed, 25 Mar 2015 09:34:48 +1300
-Subject: [Buildroot] [PATCH v4] lirc-tools: new package
-Message-ID: <1427229288-13440-1-git-send-email-github@wilberforce.co.nz>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 24 Mar 2015 21:36:55 +0100
+Subject: [Buildroot] [PATCH] libiio: Bump version to 0.5
+In-Reply-To: <1427200819-15713-1-git-send-email-paul.cercueil@analog.com>
+References: <1427200819-15713-1-git-send-email-paul.cercueil@analog.com>
+Message-ID: <CAHXCMMKoYpJK2VjC2zMbBqH2VkC9vUiLRg6Werhm4K7Crut_xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package adds the userspace tools and daemons LIRC -
-Linux remote control
+Hi Paul,
 
-Signed-off-by: Rhys Williams <github@wilberforce.co.nz>
----
- package/lirc-tools/Config.in       | 17 +++++++++++++++++
- package/lirc-tools/S25lircd        | 38 ++++++++++++++++++++++++++++++++++++++
- package/lirc-tools/lirc-tools.hash |  2 ++
- package/lirc-tools/lirc-tools.mk   | 19 +++++++++++++++++++
- 4 files changed, 76 insertions(+)
- create mode 100644 package/lirc-tools/Config.in
- create mode 100755 package/lirc-tools/S25lircd
- create mode 100644 package/lirc-tools/lirc-tools.hash
- create mode 100644 package/lirc-tools/lirc-tools.mk
+On Tue, Mar 24, 2015 at 1:40 PM, Paul Cercueil <paul.cercueil@analog.com> wrote:
+> The package now offers the possibility to install Python and/or C#
+> bindings if the Python and Mono packages are detected.
+>
+> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+> ---
+>  ...UILD_SHARED_LIBS-drive-the-type-of-librar.patch | 29 ---------------
+>  ...l2-detection-try-first-the-CMake-module-f.patch | 42 ++++++++++++++++++++++
+>  ...l2-detection-try-first-the-CMake-module-f.patch | 42 ----------------------
+Please use 'git format-patch -M' or set 'diff.renames = copy' in your gitconfig.
 
-diff --git a/package/lirc-tools/Config.in b/package/lirc-tools/Config.in
-new file mode 100644
-index 0000000..f29724b
---- /dev/null
-+++ b/package/lirc-tools/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIRC_TOOLS
-+	bool "lirc-tools"
-+	help
-+	  Linux Infrared Remote Control IR receiver/transmitter Daemon and tools
-+	  LIRC is a package that supports receiving and sending IR
-+	  signals of the most common IR remote controls. It contains a
-+	  daemon that decodes and sends IR signals, a mouse daemon
-+	  that translates IR signals to mouse movements and a couple
-+	  of user programs that allow to control your computer with a
-+	  remote control.
-+          
-+	  lircd, irw, irrecord, mode2 etc
-+	  
-+	  http://www.lirc.org/
-+	 
-+	  Requires the kernel LIRC interface driver , add modules to support
-+	  your hardware.
-diff --git a/package/lirc-tools/S25lircd b/package/lirc-tools/S25lircd
-new file mode 100755
-index 0000000..e4d98f5
---- /dev/null
-+++ b/package/lirc-tools/S25lircd
-@@ -0,0 +1,38 @@
-+#!/bin/sh
-+#
-+# Start lirc
-+#
-+# Support for remotes - Add remotes to /etc/lirc/lircd.conf.d/
-+#
-+
-+start() {
-+	echo -n "Starting lirc: "
-+	mkdir /var/run/lirc
-+	ln -s /var/run/lirc/lircd /dev/lircd
-+	start-stop-daemon -b -S -q -m -p /var/run/lirc.pid --exec /usr/sbin/lircd -- -O /etc/lirc/lirc_options.conf
-+	echo "OK"
-+}
-+
-+stop() {
-+	echo -n "Stopping lirc: "
-+	start-stop-daemon -K -q -p /var/run/lirc.pid
-+	echo "OK"
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	stop
-+	start
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/lirc-tools/lirc-tools.hash b/package/lirc-tools/lirc-tools.hash
-new file mode 100644
-index 0000000..3986767
---- /dev/null
-+++ b/package/lirc-tools/lirc-tools.hash
-@@ -0,0 +1,2 @@
-+#hash from http://sourceforge.net/projects/lirc/files/LIRC/0.9.2/
-+sha1 585daed1eaa169b9683a507e26b1331a947a4dcd lirc-0.9.2.tar.bz2
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-new file mode 100644
-index 0000000..44e1848
---- /dev/null
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# lirc-tools
-+#
-+################################################################################
-+
-+LIRC_TOOLS_VERSION = 0.9.2
-+LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
-+LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
-+LIRC_TOOLS_LICENSE = GPLv2
-+LIRC_TOOLS_LICENSE_FILES = COPYING
-+
-+LIRC_TOOLS_CONF_OPTS = --without-x --enable-sandboxed --with-driver=userspace
-+
-+define LIRC_TOOLS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/lirc-tools/S25lircd $(TARGET_DIR)/etc/init.d/
-+endef
-+
-+$(eval $(autotools-package))
+>  package/libiio/Config.in                           | 12 +++++++
+>  package/libiio/libiio.mk                           | 32 +++++++++++++++--
+>  5 files changed, 83 insertions(+), 74 deletions(-)
+>  delete mode 100644 package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
+>  create mode 100644 package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+>  delete mode 100644 package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+>
+> diff --git a/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch b/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
+> deleted file mode 100644
+> index 9ee0299..0000000
+> --- a/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -From 4d036f3708f1f427bf91c5925394d39ef76ad96a Mon Sep 17 00:00:00 2001
+> -From: Samuel Martin <s.martin49@gmail.com>
+> -Date: Sat, 27 Dec 2014 16:36:50 +0100
+> -Subject: [PATCH] cmake: let BUILD_SHARED_LIBS drive the type of library built
+> -
+> -Do not force the type of library because some architectures (such as
+> -BlackFin from AnalogDevice) do not support shared object.
+> -
+> -Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ----
+> - CMakeLists.txt | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index cd82a96..393fee3 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -115,7 +115,7 @@ install(FILES ${LIBIIO_PC} DESTINATION "${INSTALL_PKGCONFIG_DIR}")
+> - #set(SETUP_PY ${CMAKE_CURRENT_SOURCE_DIR}/bindings/python/setup.py)
+> - #configure_file(python/setup.py.in ${SETUP_PY} @ONLY)
+> -
+> --add_library(iio SHARED ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
+> -+add_library(iio ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
+> - set_target_properties(iio PROPERTIES VERSION ${VERSION} SOVERSION ${LIBIIO_VERSION_MAJOR})
+> - target_link_libraries(iio LINK_PRIVATE ${LIBS_TO_LINK})
+> -
+> ---
+> -2.2.1
+> -
+> diff --git a/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+> new file mode 100644
+> index 0000000..9f44169
+> --- /dev/null
+> +++ b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+> @@ -0,0 +1,42 @@
+> +From 4f849e1d2287206cfb7ff0fdeca96c22383b0d53 Mon Sep 17 00:00:00 2001
+> +From: Samuel Martin <s.martin49@gmail.com>
+> +Date: Mon, 29 Dec 2014 19:05:13 +0100
+> +Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
+> + libxml2
+> +
+> +Libxml2 >=2.9.2 provides its own CMake module, so check for it before
+> +falling back on the CMake's module FindLibXml2.cmake.
+> +
+> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> +---
+> + CMakeLists.txt | 14 +++++++++++++-
+> + 1 file changed, 13 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 393fee3..b4f1d26 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -38,7 +38,19 @@ endif()
+> + find_library(AVAHI_CLIENT_LIBRARIES avahi-client)
+> + find_library(AVAHI_COMMON_LIBRARIES avahi-common)
+> + find_library(PTHREAD_LIBRARIES pthread)
+> +-include(FindLibXml2)
+> ++
+> ++# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+> ++# variables correctly set.
+> ++# So, try first to find the CMake module provided by libxml2 package, then fallback
+> ++# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+> ++# in static build case).
+> ++find_package(LibXml2 QUIET NO_MODULE)
+> ++if(DEFINED LIBXML2_VERSION_STRING)
+> ++  set(LIBXML2_FOUND ON)
+> ++  set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+> ++else()
+> ++  include(FindLibXml2)
+> ++endif()
+> +
+> + set(LIBIIO_CFILES channel.c device.c context.c buffer.c utilities.c)
+> + set(LIBIIO_HEADERS iio.h)
+> +--
+> +2.2.1
+> +
+> diff --git a/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+> deleted file mode 100644
+> index 9f44169..0000000
+> --- a/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+> +++ /dev/null
+> @@ -1,42 +0,0 @@
+> -From 4f849e1d2287206cfb7ff0fdeca96c22383b0d53 Mon Sep 17 00:00:00 2001
+> -From: Samuel Martin <s.martin49@gmail.com>
+> -Date: Mon, 29 Dec 2014 19:05:13 +0100
+> -Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
+> - libxml2
+> -
+> -Libxml2 >=2.9.2 provides its own CMake module, so check for it before
+> -falling back on the CMake's module FindLibXml2.cmake.
+> -
+> -Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ----
+> - CMakeLists.txt | 14 +++++++++++++-
+> - 1 file changed, 13 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index 393fee3..b4f1d26 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -38,7 +38,19 @@ endif()
+> - find_library(AVAHI_CLIENT_LIBRARIES avahi-client)
+> - find_library(AVAHI_COMMON_LIBRARIES avahi-common)
+> - find_library(PTHREAD_LIBRARIES pthread)
+> --include(FindLibXml2)
+> -+
+> -+# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+> -+# variables correctly set.
+> -+# So, try first to find the CMake module provided by libxml2 package, then fallback
+> -+# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+> -+# in static build case).
+> -+find_package(LibXml2 QUIET NO_MODULE)
+> -+if(DEFINED LIBXML2_VERSION_STRING)
+> -+  set(LIBXML2_FOUND ON)
+> -+  set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+> -+else()
+> -+  include(FindLibXml2)
+> -+endif()
+> -
+> - set(LIBIIO_CFILES channel.c device.c context.c buffer.c utilities.c)
+> - set(LIBIIO_HEADERS iio.h)
+> ---
+> -2.2.1
+> -
+> diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+> index 680d5dc..21496ed 100644
+> --- a/package/libiio/Config.in
+> +++ b/package/libiio/Config.in
+> @@ -40,4 +40,16 @@ config BR2_PACKAGE_LIBIIO_TESTS
+>         help
+>           Install the test programs (iio_info, iio_genxml, iio_readdev).
+>
+> +config BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP
+> +       bool "Install C# bindings"
+> +       depends on BR2_PACKAGE_MONO
+> +       help
+> +         Install the C# bindings.
+> +
+> +config BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON
+> +       bool "Install Python bindings"
+> +       depends on BR2_PACKAGE_PYTHON
+> +       help
+> +         Install the Python bindings.
+> +
+>  endif
+> diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+> index 7082e89..3b6d290 100644
+> --- a/package/libiio/libiio.mk
+> +++ b/package/libiio/libiio.mk
+> @@ -4,15 +4,16 @@
+>  #
+>  ################################################################################
+>
+> -LIBIIO_VERSION = v0.3
+> -LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
+> +LIBIIO_VERSION = 0.5
+> +LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+>  LIBIIO_INSTALL_STAGING = YES
+>  LIBIIO_LICENSE = LGPLv2.1+
+>  LIBIIO_LICENSE_FILES = COPYING
+>
+>  LIBIIO_CONF_OPTS = -DENABLE_IPV6=$(if $(BR2_INET_IPV6),ON,OFF) \
+>         -DWITH_LOCAL_BACKEND=$(if $(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),ON,OFF) \
+> -       -DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF)
+> +       -DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF) \
+> +       -DWITH_DOC=OFF
+>
+>  ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
+>  LIBIIO_DEPENDENCIES += libxml2
+> @@ -33,6 +34,31 @@ ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
+>  LIBIIO_DEPENDENCIES += avahi
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON),y)
+> +LIBIIO_DEPENDENCIES += python
+> +LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=ON
+> +else
+> +LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP),y)
+> +define LIBIIO_INSTALL_CSHARP_BINDINGS_TO_TARGET
+> +rm $(TARGET_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll.mdb
+> +$(HOST_DIR)/usr/bin/gacutil -root $(TARGET_DIR)/usr/lib -i \
+> +       $(TARGET_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll
+Please indent with 1 tab the commands.
+
+> +endef
+> +define LIBIIO_INSTALL_CSHARP_BINDINGS_TO_STAGING
+> +$(HOST_DIR)/usr/bin/gacutil -root $(STAGING_DIR)/usr/lib -i \
+> +       $(STAGING_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll
+ditto
+
+> +endef
+> +LIBIIO_POST_INSTALL_TARGET_HOOKS += LIBIIO_INSTALL_CSHARP_BINDINGS_TO_TARGET
+> +LIBIIO_POST_INSTALL_STAGING_HOOKS += LIBIIO_INSTALL_CSHARP_BINDINGS_TO_STAGING
+> +LIBIIO_DEPENDENCIES += mono
+> +LIBIIO_CONF_OPTS += -DCSHARP_BINDINGS=ON
+> +else
+> +LIBIIO_CONF_OPTS += -DCSHARP_BINDINGS=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
+>  define LIBIIO_INSTALL_INIT_SYSV
+>         $(INSTALL) -D -m 0755 package/libiio/S99iiod \
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
+
 -- 
-2.3.2
+Samuel
