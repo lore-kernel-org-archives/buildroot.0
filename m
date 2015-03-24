@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2015 23:16:49 +0100
-Subject: [Buildroot] [PATCH 2/4 v2] support/graph-depends: accepts globs to
-	stop on package
+Date: Tue, 24 Mar 2015 23:16:51 +0100
+Subject: [Buildroot] [PATCH 4/4 v2] docs/manual: document new graph-depends
+	options
 In-Reply-To: <cover.1427235377.git.yann.morin.1998@free.fr>
 References: <cover.1427235377.git.yann.morin.1998@free.fr>
-Message-ID: <3115290280b14974e753ff0271b3a815895a29ef.1427235377.git.yann.morin.1998@free.fr>
+Message-ID: <8a743ff9947bda250791bb5032d62e288c30f7c5.1427235377.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,28 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Francois Perrad <fperrad@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Changes v1 -> v2:
-  - code format  (Samuel)
----
- support/scripts/graph-depends | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ docs/manual/common-usage.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 93844c7..b0202e6 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -24,6 +24,7 @@
- import sys
- import subprocess
- import argparse
-+from fnmatch import fnmatch
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 89cd9fe..5b27b1f 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -208,6 +208,14 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+ * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
+   default, +0+, means no limit.
  
- # Modes of operation:
- MODE_FULL = 1   # draw full dependency graph for all selected packages
-@@ -43,6 +44,7 @@ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, de
-                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
- parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
-                     help="Do not graph past this package (can be given multiple times)." \
-+                       + " Can be a package name or a glob, or" \
-                        + " 'virtual' to stop on virtual packages.")
- parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
-                     default="lightblue,grey,gainsboro",
-@@ -312,8 +314,9 @@ def print_pkg_deps(depth, pkg):
-     print_attrs(pkg)
-     if pkg not in dict_deps:
-         return
--    if pkg in stop_list:
--        return
-+    for p in stop_list:
-+        if fnmatch(pkg, p):
-+            return
-     if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
-         return
-     if max_depth == 0 or depth < max_depth:
++* +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
++  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
++  (to stop on virtual packages). The package is still present on the
++  graph, but its dependencies are not.
++
++* +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
++  the graph.
++
+ * +--transitive+, +--no-transitive+, to draw (or not) the transitive
+   dependencies. The default is to not draw transitive dependencies.
+ 
 -- 
 1.9.1
