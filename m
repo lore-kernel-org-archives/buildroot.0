@@ -1,50 +1,43 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 24 Mar 2015 22:54:02 +0100
-Subject: [Buildroot] [PATCH 4/4] docs/manual: document new graph-depends
-	options
-In-Reply-To: <f9b988d14b88cd502a3ae47739597e45882bf1f3.1427150990.git.yann.morin.1998@free.fr>
-References: <cover.1427150990.git.yann.morin.1998@free.fr>
- <f9b988d14b88cd502a3ae47739597e45882bf1f3.1427150990.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMM+_aXDsFSEYTha9-wO0MJJ5-yptKLFggf+o=tctJ=3uFQ@mail.gmail.com>
+Date: Tue, 24 Mar 2015 22:56:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump
+ version to 0.4.7
+In-Reply-To: <1427232867-1030-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1427232867-1030-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAHXCMM+MuO0y3g4JYFbeEd0ubPmwxg6=07Bhq=oE3ajfmv-E3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, all,
+Hi Bernd,
 
-On Mon, Mar 23, 2015 at 11:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Francois Perrad <fperrad@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
+On Tue, Mar 24, 2015 at 10:34 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  docs/manual/common-usage.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  package/dovecot-pigeonhole/dovecot-pigeonhole.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index 89cd9fe..5b27b1f 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -208,6 +208,14 @@ The +graph-depends+ behaviour can be controlled by setting options in the
->  * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
->    default, +0+, means no limit.
+> diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+> index e4a2dff..fde95e8 100644
+> --- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+> +++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+
+Could you add the *.hash file as well?
+
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
-> +* +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
-> +  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
-> +  (to stop on virtual packages). The package is still present on the
-> +  graph, but its dependencies are not.
-> +
-> +* +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-> +  the graph.
-> +
->  * +--transitive+, +--no-transitive+, to draw (or not) the transitive
->    dependencies. The default is to not draw transitive dependencies.
->
+> -DOVECOT_PIGEONHOLE_VERSION = 0.4.6
+> +DOVECOT_PIGEONHOLE_VERSION = 0.4.7
+>  DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+>  DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+>  DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
 > --
-> 1.9.1
+> 1.7.10.4
 >
 > _______________________________________________
 > buildroot mailing list
@@ -52,7 +45,6 @@ Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
 Regards,
-
 
 -- 
 Samuel
