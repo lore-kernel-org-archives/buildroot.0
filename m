@@ -1,57 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2015 19:54:12 +0100
-Subject: [Buildroot] [PATCH 0/2 v4] enhance root password (branch yem/passwd)
-Message-ID: <cover.1427223149.git.yann.morin.1998@free.fr>
+Date: Tue, 24 Mar 2015 19:54:15 +0100
+Subject: [Buildroot] [PATCH 1/2 v4] system: remove DES password encoding
+In-Reply-To: <cover.1427223149.git.yann.morin.1998@free.fr>
+References: <cover.1427223149.git.yann.morin.1998@free.fr>
+Message-ID: <840cc743b5a06c6b600d067bfb11d2eafe373b45.1427223149.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+DES is long dead, it is insecure as hell, and virtually all known
+crypt(3) implementations now all support at least md5.
 
-This series allows setting analready-ecoded root pasword. See the commit
-log of patch 2/2 for the whole explanation.
+Besides, the character-space of DES-encoded passwords are a sub-set
+of the character-space for a clear-text password, so we can't easily
+differentiate between the two. Since we're going to change the root
+password prompt to support settign encoded passwords (as well as
+clear-text passwords), we can't keep DES or we'd be unable to decide
+whether we'd need to encode the password or not.
 
+Remove DES encoding altogether (and add a legacy entry). The default is
+still md5, and thus there's no backward-compatibility 'select' to add.
 
-Changes v3 -> v4:
-  - ditch support for DES-encoded passwords  (Yann)
-  - use a single kconfig option to set both encoded and clear-text
-    password  (Yann)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
+---
+ Config.in.legacy | 7 +++++++
+ system/Config.in | 9 ---------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 22014e038047dfa2a303fecce0a22d1c5811b6a5:
-
-  mongoose: bump to version 5.6 (2015-03-23 23:17:32 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/passwd
-
-for you to fetch changes up to a13aae8e9670b5cb069379dee94735deb3663f21:
-
-  system: allow/disallow root login, accept encoded passwords (2015-03-24 19:48:42 +0100)
-
-----------------------------------------------------------------
-Lorenzo Catucci (1):
-      system: allow/disallow root login, accept encoded passwords
-
-Yann E. MORIN (1):
-      system: remove DES password encoding
-
- Config.in.legacy |  7 +++++++
- system/Config.in | 37 +++++++++++++++++++------------------
- system/system.mk | 24 ++++++++++++++++++++----
- 3 files changed, 46 insertions(+), 22 deletions(-)
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1f57671..2fad28f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -101,6 +101,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.05"
+ 
++config BR2_TARGET_GENERIC_PASSWD_DES
++	bool "Encoding passwords with DES has been removed"
++	select BR2_LEGACY
++	help
++	  Paswords can now only be encoded with either of md5, sha256 or sha512.
++	  The default is md5, which is stronger that DES (but still pretty weak).
++
+ config BR2_PACKAGE_VALGRIND_PTRCHECK
+ 	bool "valgrind's PTRCheck was renamed to SGCheck"
+ 	select BR2_LEGACY
+diff --git a/system/Config.in b/system/Config.in
+index 9973cc2..8621def 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -27,14 +27,6 @@ choice
+ 
+ 	  Note: this is used at build-time, and *not* at runtime.
+ 
+-config BR2_TARGET_GENERIC_PASSWD_DES
+-	bool "des"
+-	help
+-	  Use standard 56-bit DES-based crypt(3) to encode passwords.
+-
+-	  Old, wildly available, but also the weakest, very susceptible to
+-	  brute-force attacks.
+-
+ config BR2_TARGET_GENERIC_PASSWD_MD5
+ 	bool "md5"
+ 	help
+@@ -67,7 +59,6 @@ endchoice # Passwd encoding
+ 
+ config BR2_TARGET_GENERIC_PASSWD_METHOD
+ 	string
+-	default "des"       if BR2_TARGET_GENERIC_PASSWD_DES
+ 	default "md5"       if BR2_TARGET_GENERIC_PASSWD_MD5
+ 	default "sha-256"   if BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	default "sha-512"   if BR2_TARGET_GENERIC_PASSWD_SHA512
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
