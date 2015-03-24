@@ -1,72 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2015 22:53:34 +0100
-Subject: [Buildroot] [PATCH v2] package/libxml2: add optional LZMA
-	support
-In-Reply-To: <1427233787-8456-1-git-send-email-yann.morin.1998@free.fr>
-References: <1427233787-8456-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150324215334.GD4023@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 24 Mar 2015 22:54:02 +0100
+Subject: [Buildroot] [PATCH 4/4] docs/manual: document new graph-depends
+	options
+In-Reply-To: <f9b988d14b88cd502a3ae47739597e45882bf1f3.1427150990.git.yann.morin.1998@free.fr>
+References: <cover.1427150990.git.yann.morin.1998@free.fr>
+ <f9b988d14b88cd502a3ae47739597e45882bf1f3.1427150990.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+_aXDsFSEYTha9-wO0MJJ5-yptKLFggf+o=tctJ=3uFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Yann, all,
 
-On 2015-03-24 22:49 +0100, Yann E. MORIN spake thusly:
-> LZMA support is provided by xz, since liblzma is long dead.
-> 
-> Contrary to zlib, liblzma uses pkg-config, so we do not need to add the
-> full path to libzma.
-> 
-> Reported-by: vdm on IRC
+On Mon, Mar 23, 2015 at 11:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/libxml2/libxml2.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-> index 354c178..6bd73a4 100644
-> --- a/package/libxml2/libxml2.mk
-> +++ b/package/libxml2/libxml2.mk
-> @@ -16,7 +16,7 @@ ifneq ($(BR2_LARGEFILE),y)
->  LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
->  endif
->  
-> -LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug --without-lzma
-> +LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
->  
->  HOST_LIBXML2_DEPENDENCIES = host-pkgconf
->  LIBXML2_DEPENDENCIES = host-pkgconf
-> @@ -30,6 +30,13 @@ else
->  LIBXML2_CONF_OPTS += --without-zlib
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_XZ),y)
-> +LIBXML2_DEPENDENCIES += xz
-> +LIBXML2_CONF_OPTS += --with-lzma=$(STAGING_DIR)/usr
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Francois Perrad <fperrad@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Grr... I once again forgot to commit before I sent the patch...
-Sorry for the noise... :-/
+> ---
+>  docs/manual/common-usage.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+> index 89cd9fe..5b27b1f 100644
+> --- a/docs/manual/common-usage.txt
+> +++ b/docs/manual/common-usage.txt
+> @@ -208,6 +208,14 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+>  * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
+>    default, +0+, means no limit.
+>
+> +* +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
+> +  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
+> +  (to stop on virtual packages). The package is still present on the
+> +  graph, but its dependencies are not.
+> +
+> +* +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
+> +  the graph.
+> +
+>  * +--transitive+, +--no-transitive+, to draw (or not) the transitive
+>    dependencies. The default is to not draw transitive dependencies.
+>
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 Regards,
-Yann E. MORIN.
 
-> +else
-> +LIBXML2_CONF_OPTS += --without-lzma
-> +endif
-> +
->  LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  
->  ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
-> -- 
-> 1.9.1
-> 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
