@@ -1,50 +1,65 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 24 Mar 2015 22:56:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump
- version to 0.4.7
-In-Reply-To: <1427232867-1030-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427232867-1030-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAHXCMM+MuO0y3g4JYFbeEd0ubPmwxg6=07Bhq=oE3ajfmv-E3Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Mar 2015 23:16:47 +0100
+Subject: [Buildroot] [PATCH 0/4 v2] misc graph-depends enhancements (branch
+	yem/graph-depends)
+Message-ID: <cover.1427235377.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hello All!
 
-On Tue, Mar 24, 2015 at 10:34 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/dovecot-pigeonhole/dovecot-pigeonhole.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-> index e4a2dff..fde95e8 100644
-> --- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-> +++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+This series introduces a few enhancements to graph-depends, with two new
+options:
+  - --stop-on/-s PKG: to stop graphing on package PKG;
+  - --exclude/-x PKG: like --stop-on, but also omit PKG from the graph.
 
-Could you add the *.hash file as well?
+PKG can be one of an actual package name, a glob or the keyword
+'virtual' (to stop on / exclude virtual packages). Stoping on, or
+excluding host packages can easily be done by using the glob 'host-*'
 
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -DOVECOT_PIGEONHOLE_VERSION = 0.4.6
-> +DOVECOT_PIGEONHOLE_VERSION = 0.4.7
->  DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
->  DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
->  DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
-> --
-> 1.7.10.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Note: I did not introduce the keyword 'host' because 'host' is an
+existing package, and even though we do not package it so far, it
+would have clashed, should we eventually have it.
+
+
+Changes v1 -> v2:
+  - small eye-candy fixes  (Samuel)
+
 
 Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 22014e038047dfa2a303fecce0a22d1c5811b6a5:
+
+  mongoose: bump to version 5.6 (2015-03-23 23:17:32 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/graph-depends
+
+for you to fetch changes up to 8a743ff9947bda250791bb5032d62e288c30f7c5:
+
+  docs/manual: document new graph-depends options (2015-03-24 23:13:37 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/graph-depends: add option to stop on specific packages
+      support/graph-depends: accepts globs to stop on package
+      support/graph-depends: add option to completely exclude a package
+      docs/manual: document new graph-depends options
+
+ docs/manual/common-usage.txt  |  8 ++++++++
+ support/scripts/graph-depends | 34 +++++++++++++++++++++++++++++++---
+ 2 files changed, 39 insertions(+), 3 deletions(-)
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
