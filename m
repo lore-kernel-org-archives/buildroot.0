@@ -1,47 +1,39 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 24 Mar 2015 13:47:46 +0100
-Subject: [Buildroot] package/erlang: OpenSSL is configured for kerberos
-	but no krb5.h found
-In-Reply-To: <CAJtjsKZajs_97abb1Nr=WzKoAQeuMokS0CzUF2bs-1U1nuKM_Q@mail.gmail.com>
-References: <CAJtjsKZajs_97abb1Nr=WzKoAQeuMokS0CzUF2bs-1U1nuKM_Q@mail.gmail.com>
-Message-ID: <CAJtjsKaHd35k+F7Y2XyDWcDN4KdCxFONB-n6iD2S1Z1ftN4NBQ@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 24 Mar 2015 13:59:07 +0100
+Subject: [Buildroot] [PATCH v3 3/3] boot/uboot: Add uboot-menuconfig and
+ friends
+In-Reply-To: <CAGm1_ksNKC75KFhE5m2YfKOv6Qb+6oHKTjVs-Rk7Aer8gf9CLg@mail.gmail.com>
+References: <1423088981-13255-1-git-send-email-joerg.krause@embedded.rocks>
+ <1423088981-13255-3-git-send-email-joerg.krause@embedded.rocks>
+ <CAGm1_ktibDOCMvQqb4qAKGGM9SQvNnAX+Fbo0E-zq7ASW=NLyw@mail.gmail.com>
+ <1427118197.10031.2.camel@embedded.rocks>
+ <CAGm1_ksNKC75KFhE5m2YfKOv6Qb+6oHKTjVs-Rk7Aer8gf9CLg@mail.gmail.com>
+Message-ID: <1427201947.31226.0.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
+On Mo, 2015-03-23 at 14:47 +0100, Yegor Yefremov wrote:
+> On Mon, Mar 23, 2015 at 2:43 PM, J?rg Krause
+> <joerg.krause@embedded.rocks> wrote:
+> > Hi Yegor,
+> >
+> > On Mo, 2015-03-23 at 11:28 +0100, Yegor Yefremov wrote:
+> >>
+> >> could you please rework your patches to reflect the newest U-Boot
+> >> Kconfig changes?
+> >>
+> >> kconfig: switch to single .config configuration
+> >> (http://permalink.gmane.org/gmane.comp.boot-loaders.u-boot/212547)
+> >
+> > I hope these upstream changes make it easier to use the kconfig-package
+> > infrastructure. I will submit the reworked patches if U-Boot 2015.04 is
+> > released.
+> 
+> So do I.
+> 
+> What board are you working with?
 
-On Tue, Mar 24, 2015 at 11:39 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
-> I'm having trouble to get the ssl.app from Erlang installed on my target.
-> Since BR2_ERLANG_OPENSSL is activated, it does configure Erlang with
-> --with-ssl but there is a test for krb5.h that fails in
-> $BUILD_DIR/erlang-17.4/erts/configure.in
->
-> Actually, I don't even understand why it's trying to look for krb5.h
-> since opensslconf.h defines OPENSSL_NO_KRB5. So, the test for kerberos
-> support should fail.
-
->
-> The configure.in test that should fail is as follows:
-> -----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
-> if test "x$SSL_APP" != "x" ; then
->     dnl We found openssl, now check if we use kerberos 5 support
->     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
->     old_CPPFLAGS=$CPPFLAGS
->     CPPFLAGS=$SSL_INCLUDE
->     AC_EGREP_CPP(yes,[
-> #include <openssl/opensslconf.h>
-> #ifndef OPENSSL_NO_KRB5
->   yes
-> #endif
-> -----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
-
-I found out why the test doesn't fail. it uses AC_EGREP_CPP and grep
-for 'yes'. Unfortunately, my path to buildroot contains the string
-yes. Therefore, this test always return true :-\
-I'm going to patch this test, then send the patch to Erlang upstream
-and to buildroot.
--- 
-Johan
+A custom Freescale i.MX28 board.
