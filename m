@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 00:55:35 +0100
-Subject: [Buildroot] [PATCH] which: bump to version 2.21
-In-Reply-To: <1427200289-28332-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427200289-28332-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150325005535.1e48fa85@free-electrons.com>
+Date: Wed, 25 Mar 2015 00:57:55 +0100
+Subject: [Buildroot] [PATCH] linux: add an option to install kernel
+ headers into staging
+In-Reply-To: <1427191230-23152-1-git-send-email-nicolas.serafini@sensefly.com>
+References: <1427191230-23152-1-git-send-email-nicolas.serafini@sensefly.com>
+Message-ID: <20150325005755.0033da35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Nicolas Serafini,
 
-On Tue, 24 Mar 2015 09:31:29 -0300, Gustavo Zacarias wrote:
-> Add hash file and switch to gnu mirror.
+On Tue, 24 Mar 2015 11:00:30 +0100, Nicolas Serafini wrote:
+> The kernel headers are installed into /usr/src/linux-headers-version
+> of the staging folder.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/which/which.hash | 2 ++
->  package/which/which.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
->  create mode 100644 package/which/which.hash
+> These headers can be used, for example, by a post build script to
+> install or update some new headers from the kernel in /usr/include of
+> the staging.
 
-Applied, thanks.
+Can you give some more details and background about the issue you're
+trying to solve? You're only explaining what your solution is, but not
+what the original problem is.
+
+Best regards,
 
 Thomas
 -- 
