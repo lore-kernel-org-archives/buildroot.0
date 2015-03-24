@@ -1,58 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Mar 2015 23:54:55 +0100
-Subject: [Buildroot] [PATCH v1] evtest: fix
-	program_invocation_short_name undeclared
-In-Reply-To: <20150324002632.3aeef6e7@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 24 Mar 2015 00:26:32 +0100")
-References: <1426803498-18890-1-git-send-email-ps.report@gmx.net>
- <20150320140947.38980613@free-electrons.com>
- <1426881775.2897.10.camel@synopsys.com>
- <20150320212213.21f2881e@free-electrons.com>
- <87bnjjgx9n.fsf@dell.be.48ers.dk>
- <20150324002632.3aeef6e7@free-electrons.com>
-Message-ID: <874mpagg5c.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 25 Mar 2015 00:22:38 +0100
+Subject: [Buildroot] [PATCH 1/5 v2] package infra: add patch-dependencies
+In-Reply-To: <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+References: <cover.1426342904.git.yann.morin.1998@free.fr>
+ <a51d416e81f55374ba749baa81222bfe0c52782b.1426342904.git.yann.morin.1998@free.fr>
+Message-ID: <5511F1BE.2080700@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Yann, All
 
- > Dear Peter Korsgaard,
- > On Mon, 23 Mar 2015 23:32:52 +0100, Peter Korsgaard wrote:
+Rather than dropping reviewed and tested tag without a word, I prefer to write
+what I understand.
+I tested the series up to patch 3/5 with xenomai extension.
 
- >> > Yes, it works. In the mean time, there is a way to avoid the build
- >> > errors: add an exception to the autobuilder script. See
- >> > http://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run#n346
- >> > for a bunch of examples.
- >> 
- >> Or simply make the packages depend on
- >> !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12. Peter will you send
- >> patches to do that for evtest and libevdev?
+Le 14/03/2015 15:25, Yann E. MORIN a ?crit :
+> Some packages need to vampirise files from one or more other packages.
+> This is the case, for example, of the Linux kernel and its /extensions/.
+> 
+> Add a new type of dependencies, that are guaranteed to be extracted and
+> patched before a package is patched.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-generic.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index c1b379b..018f048 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -427,6 +427,7 @@ endif
+>  
+>  # Eliminate duplicates in dependencies
+>  $(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
+> +$(2)_FINAL_PATCH_DEPENDENCIES = $$(sort $$($(2)_PATCH_DEPENDENCIES))
 
- > This is indeed OK for packages such as evtest that don't have, or don't
- > have many, reverse dependencies. But this is hardly a sustainable
- > solution in general, especially for packages that have a high number of
- > reverse dependencies.
+After patch 3/5 applied and if xenomai extension is selected, we have "xenomai"
+in LINUX_FINAL_PATCH_DEPENDENCIES.
 
-True, with lots of reverse deps it becomes very painful.
+>  
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+> @@ -538,6 +539,8 @@ $$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_PATCH)
+>  
+>  $(1)-patch:		$$($(2)_TARGET_PATCH)
+>  $$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
+> +# Order-only dependency
+> +$$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
 
- > We simply can't handle all the little possible variations of uClibc
- > configurations that exist in every external toolchain, it's not
- > workable in a general fashion.
+Here LINUX_TARGET_PATCH is appended with xenomai-patch, so linux-patch can start
+as soon as xenomai-patch is done.
+'|' is used to not restart the build for each make invocation.
 
-We don't support that many external uClibc based toolchains (only arc,
-bfin and sh) so I think it's still doable, but ok.
+>  
+>  $(1)-extract:			$$($(2)_TARGET_EXTRACT)
+>  $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+> @@ -568,8 +571,12 @@ endif
+>  $(1)-show-version:
+>  			@echo $$($(2)_VERSION)
+>  
+> -$(1)-show-depends:
+> +$(1)-show-build-depends:
+>  			@echo $$($(2)_FINAL_DEPENDENCIES)
+> +$(1)-show-patch-depends:
+> +			@echo $$($(2)_FINAL_PATCH_DEPENDENCIES)
+> +$(1)-show-depends:
+> +			@echo $$(sort $$($(2)_FINAL_DEPENDENCIES) $$($(2)_FINAL_PATCH_DEPENDENCIES))
 
- > I know we're already doing it to some extent, but I'd like to avoid
- > doing it when possible, especially when we have a good cooperation with
- > the upstream developers (in this case, the Synopsys folks).
+Here LINUX_FINAL_PATCH_DEPENDENCIES is taken into account for linux-show-depends
 
-If we can remove the arc 2014.12 toolchain and add the new 2015 one
-before 2015.05-rc1 (E.G. end of April) then I'm fine with just disabling
-it in the autobuilders for now, otherwise I still think we should add
-the depends on !arc-2014-12 to not break it for users.
+Before and after the patch 3/5 the result is the same for linux-show-depends:
+make O=test/xenomai/ linux-show-depends
+host-kmod host-lzop toolchain xenomai
 
--- 
-Bye, Peter Korsgaard 
+After the patch 3/5, we can see that xenomai is no longer part of build
+dependencies.
+make O=test/xenomai/ linux-show-build-depends
+host-kmod host-lzop toolchain
+
+But it's now a patch dependencies:
+make O=test/xenomai/ linux-show-patch-depends
+xenomai
+
+
+>  
+>  $(1)-graph-depends: graph-depends-requirements
+>  			@$$(INSTALL) -d $$(O)/graphs
+> 
+
+So,
+    Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+    Tested-by: Romain Naour <romain.naour@openwide.fr>
+
+Best regards,
+Romain
