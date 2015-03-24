@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 24 Mar 2015 20:47:48 +0000 (UTC)
+Date: Tue, 24 Mar 2015 20:48:42 +0000 (UTC)
 Subject: [Buildroot] [Bug 7971] python-flask,
-	python-flask. No module named zlib
+	python-werkzeug. No module named zlib
 In-Reply-To: <bug-7971-163@https.bugs.busybox.net/>
 References: <bug-7971-163@https.bugs.busybox.net/>
-Message-ID: <20150324204748.EC4E58188F@busybox.osuosl.org>
+Message-ID: <20150324204842.9F0DC8188F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,8 +17,9 @@ Nikita <nikita_23k@mail.ru> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-           Priority|P5                          |P2
-           Severity|normal                      |major
+            Summary|python-flask, python-flask. |python-flask,
+                   |No module named zlib        |python-werkzeug. No module
+                   |                            |named zlib
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
