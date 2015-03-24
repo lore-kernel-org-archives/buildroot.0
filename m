@@ -1,52 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 00:31:26 +0100
-Subject: [Buildroot] [git commit] package/libxml2: add optional LZMA support
-Message-ID: <20150324233138.BA891800EB@busybox.osuosl.org>
+Date: Wed, 25 Mar 2015 00:32:40 +0100
+Subject: [Buildroot] [git commit] package/powertop: needs gettextize
+Message-ID: <20150324233243.720828180C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26ee3d49cd244041cc7c86afa8cde38ed60d284c
+commit: http://git.buildroot.net/buildroot/commit/?id=87f228a4e1654fccaec5593d2340811ee35a899b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LZMA support is provided by xz, since liblzma is long dead.
+Fixes
+http://autobuild.buildroot.net/results/8e7/8e7d1f039b57400b1a6f9c14755b35528a457031/
+http://autobuild.buildroot.net/results/4e5/4e5a8f49c80c363b5fb35332e34206c9a4fe4120/
+http://autobuild.buildroot.net/results/658/658e11f5b0bf3347a50a387b6271eb43c45025fb/
+and many others
 
-Contrary to zlib, liblzma uses pkg-config, so we do not need to add the
-full path to libzma.
-
-Reported-by: vdm on IRC
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxml2/libxml2.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+ package/powertop/powertop.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 354c178..264e437 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -16,7 +16,7 @@ ifneq ($(BR2_LARGEFILE),y)
- LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
+index b253a56..4446bc9 100644
+--- a/package/powertop/powertop.mk
++++ b/package/powertop/powertop.mk
+@@ -13,6 +13,7 @@ POWERTOP_LICENSE_FILES = COPYING
+ POWERTOP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT),y)
++POWERTOP_GETTEXTIZE = YES
+ POWERTOP_DEPENDENCIES += gettext
+ POWERTOP_CONF_ENV += LIBS='-lintl'
  endif
- 
--LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug --without-lzma
-+LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
- 
- HOST_LIBXML2_DEPENDENCIES = host-pkgconf
- LIBXML2_DEPENDENCIES = host-pkgconf
-@@ -30,6 +30,13 @@ else
- LIBXML2_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+LIBXML2_DEPENDENCIES += xz
-+LIBXML2_CONF_OPTS += --with-lzma
-+else
-+LIBXML2_CONF_OPTS += --without-lzma
-+endif
-+
- LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
