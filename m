@@ -1,32 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 24 Mar 2015 22:34:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump version to
-	0.4.7
-Message-ID: <1427232867-1030-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Mar 2015 22:40:20 +0100
+Subject: [Buildroot] [PATCH] package/libxml2: add optional LZMA support
+Message-ID: <1427233220-24907-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+LZMA support is provided by xz, since liblzma is long dead.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reported-by: vdm on IRC
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libxml2/libxml2.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index e4a2dff..fde95e8 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 354c178..6bd73a4 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -16,7 +16,7 @@ ifneq ($(BR2_LARGEFILE),y)
+ LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+ endif
  
--DOVECOT_PIGEONHOLE_VERSION = 0.4.6
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.7
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+-LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug --without-lzma
++LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
+ 
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+ LIBXML2_DEPENDENCIES = host-pkgconf
+@@ -30,6 +30,13 @@ else
+ LIBXML2_CONF_OPTS += --without-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++LIBXML2_DEPENDENCIES += xz
++LIBXML2_CONF_OPTS += --with-lzma=$(STAGING_DIR)/usr
++else
++LIBXML2_CONF_OPTS += --without-lzma
++endif
++
+ LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+ ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
 -- 
-1.7.10.4
+1.9.1
