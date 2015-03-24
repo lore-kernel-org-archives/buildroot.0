@@ -1,129 +1,57 @@
-From: github at wilberforce.co.nz <github@wilberforce.co.nz>
-Date: Tue, 24 Mar 2015 22:39:29 +1300
-Subject: [Buildroot] [PATCH v3] lirc-tools: new package
-Message-ID: <700a74f7$7d4735db$6227ce58$@com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 24 Mar 2015 12:51:43 +0300
+Subject: [Buildroot] [PATCH] autobuild-run: do not build evtest using
+	extrenal arc-2014.12 toolchain
+Message-ID: <1427190703-2935-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This external arc-2014.12 toolchain has uClibc with disabled
+UCLIBC_HAS_PROGRAM_INVOCATION_NAME.
 
->>In this case the package should depend on BR2_LINUX_KERNEL. But are you 
-sure 
-of this? The text at http://www.lirc.org/html/install.html
+Because of this following build failure happens in autobuilder -
+http://autobuild.buildroot.net/results/0fd/0fd36a0d79c4d82aedebb5aca8d3ce4214b1ed61/
+--->8---
+evtest.c: In function 'version':
+evtest.c:730:20: error: 'program_invocation_short_name' undeclared (first use in this function)
+  printf("%s %s\n", program_invocation_short_name, PACKAGE_VERSION);
+                    ^
+evtest.c:730:20: note: each undeclared identifier is reported only once for each function it appears in
+evtest.c: In function 'usage':
+evtest.c:742:38: error: 'program_invocation_short_name' undeclared (first use in this function)
+  printf("   %s /dev/input/eventX\n", program_invocation_short_name);
+--->8---
 
+Mentioned config option was recently enabled in uClibc's defconfig for ARC:
+https://github.com/foss-for-synopsys-dwc-arc-processors/uClibc/commit/c2460b9b7b8c76098dfb1313be4aa4a4a65ff619
 
-What I'm trying to say is that there is no point in selecting tools 
-package, untless you have selected the lirc
+So newer ARC uClibc toolchains should build evtest perfectly well.
 
-Kernel package.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+ scripts/autobuild-run | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-
-
-Thanks
-Rhys
-
-----------------------------------------
-From: "Baruch Siach" <baruch@tkos.co.il>
-Sent: Tuesday, March 24, 2015 7:17 PM
-To: "Rhys Williams" <github@wilberforce.co.nz>
-Subject: Re: [Buildroot] [PATCH v3] lirc-tools: new package 
-
-Hi Rhys,
-
-On Tue, Mar 24, 2015 at 02:40:08AM +1300, Rhys Williams wrote:
-> This package adds the userspace tools LIRC - Linux remote control.
-> The Kernel package will need to be selected.
-
-In this case the package should depend on BR2_LINUX_KERNEL. But are you 
-sure 
-of this? The text at http://www.lirc.org/html/install.html#compiling says:
-
-	As of 0.9.1+, lirc uses the kernel modules from the official kernel. Some 
-
-	of these are formerly lirc modules which are now part of the kernel. Thus, 
-
-	building lirc does not involve building kernel modules (as it used to 
-be).
-
-> Thanks to Baruch for help so far.
-
-This line should not be part of the commit log that is kept forever in the 
-
-Buildroot git history. You may add "personal" comments below the --- 
-separator...
-
-> Signed-off-by: Rhys Williams 
-> ---
-
-... here.
-
->  package/Config.in                  |  1 +
->  package/lirc-tools/Config.in       | 15 +++++++++++++++
->  package/lirc-tools/S25lircd        | 38 
-++++++++++++++++++++++++++++++++++++++
->  package/lirc-tools/lirc-tools.hash |  2 ++
->  package/lirc-tools/lirc-tools.mk   | 20 ++++++++++++++++++++
->  5 files changed, 76 insertions(+)
->  create mode 100644 package/lirc-tools/Config.in
->  create mode 100755 package/lirc-tools/S25lircd
->  create mode 100644 package/lirc-tools/lirc-tools.hash
->  create mode 100644 package/lirc-tools/lirc-tools.mk
-
-[...]
-
-> diff --git a/package/lirc-tools/lirc-tools.mk 
-> b/package/lirc-tools/lirc-tools.mk
-> new file mode 100644
-> index 0000000..791ed8d
-> --- /dev/null
-> +++ b/package/lirc-tools/lirc-tools.mk
-> @@ -0,0 +1,20 @@
-> 
-+###########################################################################
-#####
-> +#
-> +# lirc-tools
-> +#
-> 
-+###########################################################################
-#####
-> +
-> +LIRC_TOOLS_VERSION = 0.9.2
-> +LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
-> +LIRC_TOOLS_SITE = 
-http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
-
-I forgot to mention that earlier, but please add license information here. 
-See 
-the description of _LICENSE and _LICENSE_FILES in the manual at 
-http://nightly.buildroot.org/manual.html#_infrastructure_for_packages_with_s
-pecific_build_systems.
-
-> +
-> +LIRC_TOOLS_CONF_OPTS = --without-x --enable-sandboxed 
---with-driver=userspace
-> +
-> +define LIRC_TOOLS_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/lirc-tools/S25lircd 
-$(TARGET_DIR)/etc/init.d/
-> +endef
-> +
-> +$(eval $(autotools-package))
-> +#
-> +# lcdproc
-
-> +#
-
-Please remove this part.
-
-baruch
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 872ee9d..69637f2 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -420,6 +420,10 @@ def fixup_config(**kwargs):
+     if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
+        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
+         return False
++    # This ARC uClibc toolchain fails to build the evtest package
++    if 'BR2_PACKAGE_EVTEST=y\n' in configlines and \
++       'BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12=y\n' in configlines:
++        return False
+ 
+     with open(os.path.join(outputdir, ".config"), "w+") as configf:
+         configf.writelines(configlines)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open 
-Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-
-
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.0
