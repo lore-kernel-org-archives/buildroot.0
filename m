@@ -1,67 +1,144 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 24 Mar 2015 18:22:51 +0200
-Subject: [Buildroot] [PATCH] jsoncpp: fix build
-Message-ID: <d6210b774fe3742376af62da3878a787570309be.1427214171.git.baruch@tkos.co.il>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 24 Mar 2015 17:41:27 +0100
+Subject: [Buildroot] [PATCH 1/1] erlang: Fix incorrect use of AC_EGREP_CPP.
+Message-ID: <1427215287-28980-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch removing reference to non-existent std::snprintf.
+Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
+true if it runs from a path containing the string 'yes'.
 
-Fixes:
-http://autobuild.buildroot.net/results/b39/b390beeb9a6fea12f1a4d9f2ff9a8a483628cad2/
-http://autobuild.buildroot.net/results/d18/d18b3e116b680a3897fbea296938e900a1e5e80a/
-http://autobuild.buildroot.net/results/1b2/1b20a2f81dd2b409785930705222bc03576c4907/
-
-and many more.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- ...001-Revert-Use-std-namespace-for-snprintf.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+ ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch | 117 +++++++++++++++++++++
+ 1 file changed, 117 insertions(+)
+ create mode 100644 package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
 
-diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+diff --git a/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
 new file mode 100644
-index 000000000000..1ffba9e3acfc
+index 0000000..ca5a88d
 --- /dev/null
-+++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-@@ -0,0 +1,34 @@
-+From ce9b8553fe6741a935079ce94f8b29a26af1887f Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Subject: [PATCH] Revert "Use std namespace for snprintf."
-+
-+This reverts commit 1c58876185d2a4ed87dac4a54b82f607e74f55fd.
-+
-+snprintf() is not in the std namespace. This fixes the build error below:
-+
-+src/lib_json/json_writer.cpp:33:18: error: 'snprintf' is not a member of 'std'
-+
-+Upstream status: sent upstream
-+https://github.com/open-source-parsers/jsoncpp/pull/227
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ src/lib_json/json_writer.cpp | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
-+index 83102fd2bb86..f7ad1e21bbc0 100644
-+--- a/src/lib_json/json_writer.cpp
-++++ b/src/lib_json/json_writer.cpp
-+@@ -29,8 +29,6 @@
++++ b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
+@@ -0,0 +1,117 @@
++diff -uprN erlang-17.4.orig/aclocal.m4 erlang-17.4.fixed/aclocal.m4
++--- erlang-17.4.orig/aclocal.m4	2015-03-24 14:42:36.176568511 +0100
+++++ erlang-17.4.fixed/aclocal.m4	2015-03-24 14:59:22.463659414 +0100
++@@ -559,7 +559,7 @@ dnl
 + 
-+ #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
-+ #define snprintf _snprintf
-+-#else
-+-#define snprintf std::snprintf
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++diff -uprN erlang-17.4.orig/erts/aclocal.m4 erlang-17.4.fixed/erts/aclocal.m4
++--- erlang-17.4.orig/erts/aclocal.m4	2015-03-24 14:42:36.904562066 +0100
+++++ erlang-17.4.fixed/erts/aclocal.m4	2015-03-24 14:59:55.563366368 +0100
++@@ -559,7 +559,7 @@ dnl
++ 
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++diff -uprN erlang-17.4.orig/erts/configure.in erlang-17.4.fixed/erts/configure.in
++--- erlang-17.4.orig/erts/configure.in	2015-03-24 14:42:36.800562987 +0100
+++++ erlang-17.4.fixed/erts/configure.in	2015-03-24 15:05:25.441505273 +0100
++@@ -1555,10 +1555,11 @@ if test "$have_gethostbyname_r" = yes; t
++ 				    [Define to flavour of gethostbyname_r]))
++ 		;;
++ 		*)
++-			AC_EGREP_CPP(yes,[#include <stdio.h>
++-			  #ifdef __GLIBC__
++-			  yes
++-			  #endif
+++			AC_EGREP_CPP(^yes$,[
+++#include <stdio.h>
+++#ifdef __GLIBC__
+++yes
+++#endif
++ 			  ], AC_DEFINE(HAVE_GETHOSTBYNAME_R, GHBN_R_GLIBC,
++ 				[Define to flavour of gethostbyname_r]))
++ 		;;
++@@ -4303,10 +4304,10 @@ case "$erl_xcomp_without_sysroot-$with_s
++ 			SSL_INCLUDE="-I$dir/include"
++ 			old_CPPFLAGS=$CPPFLAGS
++ 			CPPFLAGS=$SSL_INCLUDE
++-			AC_EGREP_CPP(yes,[
+++			AC_EGREP_CPP(^yes$,[
++ #include <openssl/opensslv.h>
++ #if OPENSSL_VERSION_NUMBER >= 0x0090700fL
++-  yes
+++yes
 + #endif
++ 			],[
++ 			ssl_found=yes
++@@ -4501,10 +4502,10 @@ if test "x$SSL_APP" != "x" ; then
++     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
++     old_CPPFLAGS=$CPPFLAGS
++     CPPFLAGS=$SSL_INCLUDE
++-    AC_EGREP_CPP(yes,[
+++    AC_EGREP_CPP(^yes$,[
++ #include <openssl/opensslconf.h>
++ #ifndef OPENSSL_NO_KRB5
++-  yes
+++yes
++ #endif
++       ],[
++       AC_MSG_RESULT([yes])
++diff -uprN erlang-17.4.orig/lib/erl_interface/aclocal.m4 erlang-17.4.fixed/lib/erl_interface/aclocal.m4
++--- erlang-17.4.orig/lib/erl_interface/aclocal.m4	2015-03-24 14:42:33.828589299 +0100
+++++ erlang-17.4.fixed/lib/erl_interface/aclocal.m4	2015-03-24 15:07:07.057508803 +0100
++@@ -559,7 +559,7 @@ dnl
 + 
-+ #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
-+-- 
-+2.1.4
-+
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++diff -uprN erlang-17.4.orig/lib/megaco/aclocal.m4 erlang-17.4.fixed/lib/megaco/aclocal.m4
++--- erlang-17.4.orig/lib/megaco/aclocal.m4	2015-03-24 14:42:35.528574248 +0100
+++++ erlang-17.4.fixed/lib/megaco/aclocal.m4	2015-03-24 15:06:18.081509514 +0100
++@@ -559,7 +559,7 @@ dnl
++ 
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++diff -uprN erlang-17.4.orig/lib/odbc/aclocal.m4 erlang-17.4.fixed/lib/odbc/aclocal.m4
++--- erlang-17.4.orig/lib/odbc/aclocal.m4	2015-03-24 14:42:34.388584341 +0100
+++++ erlang-17.4.fixed/lib/odbc/aclocal.m4	2015-03-24 15:06:41.993509724 +0100
++@@ -559,7 +559,7 @@ dnl
++ 
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++diff -uprN erlang-17.4.orig/lib/wx/aclocal.m4 erlang-17.4.fixed/lib/wx/aclocal.m4
++--- erlang-17.4.orig/lib/wx/aclocal.m4	2015-03-24 14:42:34.928579560 +0100
+++++ erlang-17.4.fixed/lib/wx/aclocal.m4	2015-03-24 15:07:36.105506283 +0100
++@@ -559,7 +559,7 @@ dnl
++ 
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
 -- 
-2.1.4
+2.1.0
