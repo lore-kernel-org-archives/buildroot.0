@@ -1,7 +1,7 @@
 From: github at wilberforce.co.nz <github@wilberforce.co.nz>
-Date: Tue, 24 Mar 2015 22:36:31 +1300
+Date: Tue, 24 Mar 2015 22:39:29 +1300
 Subject: [Buildroot] [PATCH v3] lirc-tools: new package
-Message-ID: <6ca4104b$164a68c3$5a5357dd$@com>
+Message-ID: <700a74f7$7d4735db$6227ce58$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +9,17 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-1. What I was trying to say, that there is no point in using this package 
-unless the lirc kernel package has been selected.
-
-Should this be added as a dependency, rather than just on 
-BR2_LINUX_KERNEL?
+>>In this case the package should depend on BR2_LINUX_KERNEL. But are you 
+sure 
+of this? The text at http://www.lirc.org/html/install.html
 
 
-2. Noted re the personal notes.
+What I'm trying to say is that there is no point in selecting tools 
+package, untless you have selected the lirc
 
-3. I'll look at added the license details
+Kernel package.
 
-4.
->Please remove this part 
-Is this the part you mean?
 
- >. > +# lcdproc
-> +#
 
 Thanks
 Rhys
@@ -119,6 +113,7 @@ $(TARGET_DIR)/etc/init.d/
 > +$(eval $(autotools-package))
 > +#
 > +# lcdproc
+
 > +#
 
 Please remove this part.
