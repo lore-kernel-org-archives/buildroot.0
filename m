@@ -1,33 +1,49 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 24 Mar 2015 13:51:08 +0000
-Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
-In-Reply-To: <1002870381.1069734.1426237851891.JavaMail.root@openwide.fr>
-References: <1002870381.1069734.1426237851891.JavaMail.root@openwide.fr>
-Message-ID: <1427205068.13499.9.camel@synopsys.com>
+From: ir. Tjeerd Pinkert <t.j.pinkert@vu.nl>
+Date: Tue, 24 Mar 2015 14:54:46 +0100
+Subject: [Buildroot] ipython segfaults on history when no SQLite
+	available
+In-Reply-To: <5509AA8E.6000409@vu.nl>
+References: <1426695479-12524-1-git-send-email-gwenj@trabucayre.com>
+ <5509AA8E.6000409@vu.nl>
+Message-ID: <55116CA6.5050806@vu.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This appears to be a bug in readline, see:
+https://github.com/ipython/ipython/issues/8087#issuecomment-83660592
 
-On Fri, 2015-03-13 at 10:10 +0100, Romain Naour wrote:
-> Hi Alexey,
-> 
-> ----- Mail original -----
-> | De: "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>
-> | ?: "romain naour" <romain.naour@openwide.fr>, "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
-> | Cc: buildroot at uclibc.org
-> | Envoy?: Vendredi 13 Mars 2015 10:00:34
-> | Objet: Re: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
-> | 
-> | On Fri, 2015-03-13 at 09:19 +0100, Romain Naour wrote:
-> | > Hi Alexey,
-> | > Can you have a look at this patch:
-> | > https://patchwork.ozlabs.org/patch/449686/
-
-Do you think the patch Romain mentioned may fix
-http://autobuild.buildroot.org/results/d62/d62f472d70f60281dfe94cffc46a3e0566fd4a3d ?
-
--Alexey
+On 18-03-15 17:40, ir. Tjeerd Pinkert wrote:
+> I notice that ipython segfaults on the following conditions:
+> - no SQLite
+> - a command is not found in the history list when arrow-up is pressed.
+>
+> The following snapshots apply:
+> ------------------------------
+> # ipython
+> WARNING: IPython History requires SQLite, your history will not be saved
+> Python 2.7.9 (default, Mar 17 2015, 11:45:11)
+>
+>
+>
+> It crashes in this case nothing with "rela" is found in the history:
+> --------------------------------------------------------------------
+> In [17]: relapython[1380]: unhandled signal 11 at 00000000 nip b6b10940
+> lr b6b10934 code 30001
+> Segmentation fault
+> #
+>
+>
+> System is MPC8313E, powerpc
+> This might be an upstream issue.
+>
+> Best regards,
+>
+>
+> Tjeerd
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
