@@ -1,68 +1,42 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 24 Mar 2015 16:55:15 +0300
-Subject: [Buildroot] [PATCH v5] gcc: explicitly use C{XX}FLAGS_FOR_TARGET
-	instead of --enable-target-optspace
-Message-ID: <1427205315-13864-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Mar 2015 16:31:27 +0100
+Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
+In-Reply-To: <1427205068.13499.9.camel@synopsys.com>
+References: <1002870381.1069734.1426237851891.JavaMail.root@openwide.fr>
+ <1427205068.13499.9.camel@synopsys.com>
+Message-ID: <20150324163127.417da43d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gcc.mk file is passing --enable-target-optspace to gcc configure
-script, to ask for space-optimized (-Os) target libraries. However,
-passing this option has the effect of overriding any custom
-CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
+Dear Alexey Brodkin,
 
-These are some situations when it is required to pass custom flags on
-buildong
-of libgcc:
- * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
-(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
- * Particular CPU requires specific instructions for HW support
- * Deep optimizations
+On Tue, 24 Mar 2015 13:51:08 +0000, Alexey Brodkin wrote:
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
-Compared to v3 use "=" instead of ":=" which is not actually required here.
-Compared to v4 simply rebased on top of today's master
----
- package/gcc/gcc.mk | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+> On Fri, 2015-03-13 at 10:10 +0100, Romain Naour wrote:
+> > Hi Alexey,
+> > 
+> > ----- Mail original -----
+> > | De: "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>
+> > | ?: "romain naour" <romain.naour@openwide.fr>, "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
+> > | Cc: buildroot at uclibc.org
+> > | Envoy?: Vendredi 13 Mars 2015 10:00:34
+> > | Objet: Re: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
+> > | 
+> > | On Fri, 2015-03-13 at 09:19 +0100, Romain Naour wrote:
+> > | > Hi Alexey,
+> > | > Can you have a look at this patch:
+> > | > https://patchwork.ozlabs.org/patch/449686/
+> 
+> Do you think the patch Romain mentioned may fix
+> http://autobuild.buildroot.org/results/d62/d62f472d70f60281dfe94cffc46a3e0566fd4a3d ?
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b5d2ddb..7086969 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -100,16 +100,22 @@ HOST_GCC_COMMON_CONF_OPTS = \
- HOST_GCC_COMMON_CONF_ENV = \
- 	MAKEINFO=missing
- 
-+GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
-+GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
- # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
- # Workaround until it's fixed in 4.5.4 or later
- ifeq ($(ARCH),powerpc)
- ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
--HOST_GCC_COMMON_CONF_OPTS += --disable-target-optspace
-+GCC_COMMON_TARGET_CFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
-+GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
- endif
--else
--HOST_GCC_COMMON_CONF_OPTS += --enable-target-optspace
- endif
- 
-+# Propagate options used for target software building to GCC target libs
-+HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-+HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-+
- # libitm needs sparc V9+
- ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
- HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
+Yes, most likely it will fix this problem.
+
+Thomas
 -- 
-2.1.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
