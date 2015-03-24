@@ -1,130 +1,113 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 24 Mar 2015 21:01:48 +0100
-Subject: [Buildroot] [PATCH] mc: new package
-In-Reply-To: <CAHXCMM+U2GnW5Bb6rhgCyc__nRsTGd0KzzQRHUhz62ihrONLFg@mail.gmail.com>
-References: <1427142983-26051-1-git-send-email-yegorslists@googlemail.com>
- <CAHXCMM+U2GnW5Bb6rhgCyc__nRsTGd0KzzQRHUhz62ihrONLFg@mail.gmail.com>
-Message-ID: <CAGm1_ksaQNtwm-B2S0EujFpU=AqToUnvxF0z=PmU+7t6CXWwJg@mail.gmail.com>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Tue, 24 Mar 2015 22:23:02 +0200
+Subject: [Buildroot] [PATCH] help entries for Init system config menu
+Message-ID: <20150324202302.GA4645@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 23, 2015 at 10:04 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi Yegor,
->
-> On Mon, Mar 23, 2015 at 9:36 PM, Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
->> From: Mauro Condarelli <mc5686@mclink.it>
->>
->> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> Since you did the below changes, you should add your SoB line.
-> Also, don't forget the -v2 on git format-patch ;-)
+Primary focus is on (auto-)respawning and runtime control.
 
-Thanks. See v3.
+Systemd entry describes current state, with several daemons
+configured as forking.
 
->> ---
->> Changes since original patch from Mauro Condarelli
->>         - add mc.hash
->>         - bump to 4.8.14
->>         - implement comments from Baruch Siach and Thomas Petazzoni
->>
->>  package/Config.in    |  1 +
->>  package/mc/Config.in | 15 +++++++++++++++
->>  package/mc/mc.hash   |  2 ++
->>  package/mc/mc.mk     | 26 ++++++++++++++++++++++++++
->>  4 files changed, 44 insertions(+)
->>  create mode 100644 package/mc/Config.in
->>  create mode 100644 package/mc/mc.hash
->>  create mode 100644 package/mc/mc.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 93fde92..a013db6 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1363,6 +1363,7 @@ menu "Text editors and viewers"
->>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->>         source "package/less/Config.in"
->>  endif
->> +       source "package/mc/Config.in"
->>         source "package/nano/Config.in"
->>         source "package/uemacs/Config.in"
->>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->> diff --git a/package/mc/Config.in b/package/mc/Config.in
->> new file mode 100644
->> index 0000000..b2bb8ea
->> --- /dev/null
->> +++ b/package/mc/Config.in
->> @@ -0,0 +1,15 @@
->> +config BR2_PACKAGE_MC
->> +       bool "mc"
->> +       depends on BR2_USE_WCHAR # libglib2
->> +        depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->> +        depends on BR2_USE_MMU # libglib2, slang
->> +       select BR2_PACKAGE_LIBGLIB2
->> +       # mc prefers slang, but can use ncurses too
->> +       select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
->> +       help
->> +         GNU Midnight Commander is a visual file manager, licensed under
->> +         GNU General Public License. It can use either SLang(preferred)
->> +         or ncurses for screen handling; if neither is enabled SLang
->> +         will be automatically chosen.
->> +
->> +         https://www.midnight-commander.org/
->> diff --git a/package/mc/mc.hash b/package/mc/mc.hash
->> new file mode 100644
->> index 0000000..5d14f5a
->> --- /dev/null
->> +++ b/package/mc/mc.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed:
->> +sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
-> Please use those provided upstream [1].
->
->> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
->> new file mode 100644
->> index 0000000..dd74d0c
->> --- /dev/null
->> +++ b/package/mc/mc.mk
->> @@ -0,0 +1,26 @@
->> +################################################################################
->> +#
->> +# mc
->> +#
->> +################################################################################
->> +
->> +MC_VERSION = 4.8.14
->> +MC_SOURCE = mc-$(MC_VERSION).tar.bz2
->> +MC_SITE = http://ftp.midnight-commander.org
->> +MC_LICENSE =  GPLv3
->> +MC_LICENSE_FILES = COPYING
->> +MC_INSTALL_STAGING = YES
->> +MC_DEPENDENCIES = libglib2 host-pkgconf
->> +
->> +# mc prefers slang, so use that if enabled, otherwise
->> +# fallback to using ncurses.
->> +# Either or both will be enabled, but we prefer slang.
->> +ifeq ($(BR2_PACKAGE_SLANG),y)
->> +MC_DEPENDENCIES += slang
->> +MC_CONF_OPTS += --with-screen=slang
->> +else
->> +MC_DEPENDENCIES += ncurses
->> +MC_CONF_OPTS += --with-screen=ncurses
->> +endif
->> +
->> +$(eval $(autotools-package))
->> --
->> 2.1.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> [1] http://ftp.midnight-commander.org/mc-4.8.14.sha256
->
-> Regards,
->
-> --
-> Samuel
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+---
+Patch split from the series since it does not depend on any
+of the changes there.
+
+ system/Config.in | 54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/system/Config.in b/system/Config.in
+index 9973cc2..59c759a 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -75,15 +75,40 @@ config BR2_TARGET_GENERIC_PASSWD_METHOD
+ choice
+ 	prompt "Init system"
+ 	default BR2_INIT_BUSYBOX
++	help
++	  Upon bootup, kernel spawns init and init is expected
++	  to spawn anything else.
++
++	  Buildroot supports several alternative init implementations
++	  providing varying degrees of control over the spawned processes.
+ 
+ config BR2_INIT_BUSYBOX
+ 	bool "BusyBox"
+ 	select BR2_PACKAGE_BUSYBOX
++	help
++	  Minimalistic init implementation from busybox
++	  with systemV-style init scripts.
++
++	  Runlevels are not supported.
++
++	  Daemons are started in background using scripts
++	  from /etc/init.d. Failed processes are not respawned.
++	  Pid files provide some control over running processes.
+ 
+ config BR2_INIT_SYSV
+ 	bool "systemV"
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+ 	select BR2_PACKAGE_SYSVINIT
++	help
++	  System V init, probably the best-known init implementation
++	  in Linux, with simplified SysV-style initscripts.
++
++	  Supports runlevels, but buildroot does not use them.
++	  The system boots into the default runlevel and stays there.
++
++	  Daemons are started in background using scripts
++	  from /etc/init.d. Failed processes are not respawned.
++	  Pid files provide some control over running processes.
+ 
+ config BR2_INIT_SYSTEMD
+ 	bool "systemd"
+@@ -98,6 +123,29 @@ config BR2_INIT_SYSTEMD
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	select BR2_PACKAGE_SYSTEMD
++	help
++	  systemd is more that just an init implementation.
++	  It is a composite package handling most aspects
++	  of system initialization and daemon supervision.
++
++	  Systemd uses arbitrary-named "targets" instead
++	  of systemV-style runlevels. Daemons may be stopped
++	  and restarted using systemctl command. If configured
++	  so, failed processes are respawned.
++
++	  Whenever possible, package-supplied service files
++	  are used. Some daemons are configured to run in
++	  foreground and some run as background processes.
++
++	  Due its pervasiveness and extensive feature range,
++	  choosing systemd shapes the rest of the system.
++	  A systemd-based buildroot will differ little
++	  from any major systemd-based Linux distribution
++	  in pretty much any aspects of the boot process,
++	  initialization, runtime configuration and process
++	  supervision.
++
++	  Beware of its large size and numerous dependencies.
+ 
+ comment 'systemd needs an (e)glibc toolchain, headers >= 3.7'
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+@@ -105,6 +153,12 @@ comment 'systemd needs an (e)glibc toolchain, headers >= 3.7'
+ 
+ config BR2_INIT_NONE
+ 	bool "None"
++	help
++	  Do not install any kind of init system.
++
++	  Make sure your initrd and/or root fs skeleton provide
++	  some executable for kernel to start, otherwise
++	  the system will panic at boot.
+ 
+ endchoice
+ 
+-- 
+2.0.3
