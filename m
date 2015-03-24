@@ -1,113 +1,127 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Tue, 24 Mar 2015 22:23:02 +0200
-Subject: [Buildroot] [PATCH] help entries for Init system config menu
-Message-ID: <20150324202302.GA4645@vostro>
+From: Rhys Williams <github@wilberforce.co.nz>
+Date: Wed, 25 Mar 2015 09:34:48 +1300
+Subject: [Buildroot] [PATCH v4] lirc-tools: new package
+Message-ID: <1427229288-13440-1-git-send-email-github@wilberforce.co.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Primary focus is on (auto-)respawning and runtime control.
+This package adds the userspace tools and daemons LIRC -
+Linux remote control
 
-Systemd entry describes current state, with several daemons
-configured as forking.
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Rhys Williams <github@wilberforce.co.nz>
 ---
-Patch split from the series since it does not depend on any
-of the changes there.
+ package/lirc-tools/Config.in       | 17 +++++++++++++++++
+ package/lirc-tools/S25lircd        | 38 ++++++++++++++++++++++++++++++++++++++
+ package/lirc-tools/lirc-tools.hash |  2 ++
+ package/lirc-tools/lirc-tools.mk   | 19 +++++++++++++++++++
+ 4 files changed, 76 insertions(+)
+ create mode 100644 package/lirc-tools/Config.in
+ create mode 100755 package/lirc-tools/S25lircd
+ create mode 100644 package/lirc-tools/lirc-tools.hash
+ create mode 100644 package/lirc-tools/lirc-tools.mk
 
- system/Config.in | 54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
-
-diff --git a/system/Config.in b/system/Config.in
-index 9973cc2..59c759a 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -75,15 +75,40 @@ config BR2_TARGET_GENERIC_PASSWD_METHOD
- choice
- 	prompt "Init system"
- 	default BR2_INIT_BUSYBOX
+diff --git a/package/lirc-tools/Config.in b/package/lirc-tools/Config.in
+new file mode 100644
+index 0000000..f29724b
+--- /dev/null
++++ b/package/lirc-tools/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIRC_TOOLS
++	bool "lirc-tools"
 +	help
-+	  Upon bootup, kernel spawns init and init is expected
-+	  to spawn anything else.
++	  Linux Infrared Remote Control IR receiver/transmitter Daemon and tools
++	  LIRC is a package that supports receiving and sending IR
++	  signals of the most common IR remote controls. It contains a
++	  daemon that decodes and sends IR signals, a mouse daemon
++	  that translates IR signals to mouse movements and a couple
++	  of user programs that allow to control your computer with a
++	  remote control.
++          
++	  lircd, irw, irrecord, mode2 etc
++	  
++	  http://www.lirc.org/
++	 
++	  Requires the kernel LIRC interface driver , add modules to support
++	  your hardware.
+diff --git a/package/lirc-tools/S25lircd b/package/lirc-tools/S25lircd
+new file mode 100755
+index 0000000..e4d98f5
+--- /dev/null
++++ b/package/lirc-tools/S25lircd
+@@ -0,0 +1,38 @@
++#!/bin/sh
++#
++# Start lirc
++#
++# Support for remotes - Add remotes to /etc/lirc/lircd.conf.d/
++#
 +
-+	  Buildroot supports several alternative init implementations
-+	  providing varying degrees of control over the spawned processes.
- 
- config BR2_INIT_BUSYBOX
- 	bool "BusyBox"
- 	select BR2_PACKAGE_BUSYBOX
-+	help
-+	  Minimalistic init implementation from busybox
-+	  with systemV-style init scripts.
++start() {
++	echo -n "Starting lirc: "
++	mkdir /var/run/lirc
++	ln -s /var/run/lirc/lircd /dev/lircd
++	start-stop-daemon -b -S -q -m -p /var/run/lirc.pid --exec /usr/sbin/lircd -- -O /etc/lirc/lirc_options.conf
++	echo "OK"
++}
 +
-+	  Runlevels are not supported.
++stop() {
++	echo -n "Stopping lirc: "
++	start-stop-daemon -K -q -p /var/run/lirc.pid
++	echo "OK"
++}
 +
-+	  Daemons are started in background using scripts
-+	  from /etc/init.d. Failed processes are not respawned.
-+	  Pid files provide some control over running processes.
- 
- config BR2_INIT_SYSV
- 	bool "systemV"
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
- 	select BR2_PACKAGE_SYSVINIT
-+	help
-+	  System V init, probably the best-known init implementation
-+	  in Linux, with simplified SysV-style initscripts.
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	stop
++	start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
 +
-+	  Supports runlevels, but buildroot does not use them.
-+	  The system boots into the default runlevel and stays there.
++exit $?
+diff --git a/package/lirc-tools/lirc-tools.hash b/package/lirc-tools/lirc-tools.hash
+new file mode 100644
+index 0000000..3986767
+--- /dev/null
++++ b/package/lirc-tools/lirc-tools.hash
+@@ -0,0 +1,2 @@
++#hash from http://sourceforge.net/projects/lirc/files/LIRC/0.9.2/
++sha1 585daed1eaa169b9683a507e26b1331a947a4dcd lirc-0.9.2.tar.bz2
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+new file mode 100644
+index 0000000..44e1848
+--- /dev/null
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# lirc-tools
++#
++################################################################################
 +
-+	  Daemons are started in background using scripts
-+	  from /etc/init.d. Failed processes are not respawned.
-+	  Pid files provide some control over running processes.
- 
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
-@@ -98,6 +123,29 @@ config BR2_INIT_SYSTEMD
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	select BR2_PACKAGE_SYSTEMD
-+	help
-+	  systemd is more that just an init implementation.
-+	  It is a composite package handling most aspects
-+	  of system initialization and daemon supervision.
++LIRC_TOOLS_VERSION = 0.9.2
++LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
++LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
++LIRC_TOOLS_LICENSE = GPLv2
++LIRC_TOOLS_LICENSE_FILES = COPYING
 +
-+	  Systemd uses arbitrary-named "targets" instead
-+	  of systemV-style runlevels. Daemons may be stopped
-+	  and restarted using systemctl command. If configured
-+	  so, failed processes are respawned.
++LIRC_TOOLS_CONF_OPTS = --without-x --enable-sandboxed --with-driver=userspace
 +
-+	  Whenever possible, package-supplied service files
-+	  are used. Some daemons are configured to run in
-+	  foreground and some run as background processes.
++define LIRC_TOOLS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/lirc-tools/S25lircd $(TARGET_DIR)/etc/init.d/
++endef
 +
-+	  Due its pervasiveness and extensive feature range,
-+	  choosing systemd shapes the rest of the system.
-+	  A systemd-based buildroot will differ little
-+	  from any major systemd-based Linux distribution
-+	  in pretty much any aspects of the boot process,
-+	  initialization, runtime configuration and process
-+	  supervision.
-+
-+	  Beware of its large size and numerous dependencies.
- 
- comment 'systemd needs an (e)glibc toolchain, headers >= 3.7'
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-@@ -105,6 +153,12 @@ comment 'systemd needs an (e)glibc toolchain, headers >= 3.7'
- 
- config BR2_INIT_NONE
- 	bool "None"
-+	help
-+	  Do not install any kind of init system.
-+
-+	  Make sure your initrd and/or root fs skeleton provide
-+	  some executable for kernel to start, otherwise
-+	  the system will panic at boot.
- 
- endchoice
- 
++$(eval $(autotools-package))
 -- 
-2.0.3
+2.3.2
