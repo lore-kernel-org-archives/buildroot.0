@@ -1,94 +1,134 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 24 Mar 2015 08:37:39 +0100
-Subject: [Buildroot] [PATCH v2 1/2] boot/uboot: add support for i.MX28
- SD format
-In-Reply-To: <1427030715-1737-2-git-send-email-arnout@mind.be>
-References: <1427030715-1737-1-git-send-email-arnout@mind.be>
- <1427030715-1737-2-git-send-email-arnout@mind.be>
-Message-ID: <1427182659.7694.0.camel@embedded.rocks>
+From: github at wilberforce.co.nz <github@wilberforce.co.nz>
+Date: Tue, 24 Mar 2015 22:36:31 +1300
+Subject: [Buildroot] [PATCH v3] lirc-tools: new package
+Message-ID: <6ca4104b$164a68c3$5a5357dd$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On So, 2015-03-22 at 14:25 +0100, Arnout Vandecappelle (Essensium/Mind)
-wrote:
-> From: Vincent Stehl? <vincent.stehle@freescale.com>
-> 
-> Allow to generate u-boot.sd, Freescale i.MX28 SB format with a header for
-> booting from an SD card.
-> 
-> U-boot includes an mxsboot tool to generate this format, starting from
-> v2011.12.
-> 
-> See u-boot doc/README.mxs (or doc/README.mx28_common before 2013.07).
-> 
-> [Arnout:
->  - Wrap Config.in help text at 72 columns.
->  - Remove v from U-Boot version specifier.
->  - Refer to different README name before 2013.07.
->  - Depend on host-elftosb
->  - Add comment to clarify sb -> sd conversion.]
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-> Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+1. What I was trying to say, that there is no point in using this package 
+unless the lirc kernel package has been selected.
+
+Should this be added as a dependency, rather than just on 
+BR2_LINUX_KERNEL?
+
+
+2. Noted re the personal notes.
+
+3. I'll look at added the license details
+
+4.
+>Please remove this part 
+Is this the part you mean?
+
+ >. > +# lcdproc
+> +#
+
+Thanks
+Rhys
+
+----------------------------------------
+From: "Baruch Siach" <baruch@tkos.co.il>
+Sent: Tuesday, March 24, 2015 7:17 PM
+To: "Rhys Williams" <github@wilberforce.co.nz>
+Subject: Re: [Buildroot] [PATCH v3] lirc-tools: new package 
+
+Hi Rhys,
+
+On Tue, Mar 24, 2015 at 02:40:08AM +1300, Rhys Williams wrote:
+> This package adds the userspace tools LIRC - Linux remote control.
+> The Kernel package will need to be selected.
+
+In this case the package should depend on BR2_LINUX_KERNEL. But are you 
+sure 
+of this? The text at http://www.lirc.org/html/install.html#compiling says:
+
+	As of 0.9.1+, lirc uses the kernel modules from the official kernel. Some 
+
+	of these are formerly lirc modules which are now part of the kernel. Thus, 
+
+	building lirc does not involve building kernel modules (as it used to 
+be).
+
+> Thanks to Baruch for help so far.
+
+This line should not be part of the commit log that is kept forever in the 
+
+Buildroot git history. You may add "personal" comments below the --- 
+separator...
+
+> Signed-off-by: Rhys Williams 
 > ---
->  boot/uboot/Config.in | 12 ++++++++++++
->  boot/uboot/uboot.mk  |  7 +++++++
->  2 files changed, 19 insertions(+)
+
+... here.
+
+>  package/Config.in                  |  1 +
+>  package/lirc-tools/Config.in       | 15 +++++++++++++++
+>  package/lirc-tools/S25lircd        | 38 
+++++++++++++++++++++++++++++++++++++++
+>  package/lirc-tools/lirc-tools.hash |  2 ++
+>  package/lirc-tools/lirc-tools.mk   | 20 ++++++++++++++++++++
+>  5 files changed, 76 insertions(+)
+>  create mode 100644 package/lirc-tools/Config.in
+>  create mode 100755 package/lirc-tools/S25lircd
+>  create mode 100644 package/lirc-tools/lirc-tools.hash
+>  create mode 100644 package/lirc-tools/lirc-tools.mk
+
+[...]
+
+> diff --git a/package/lirc-tools/lirc-tools.mk 
+> b/package/lirc-tools/lirc-tools.mk
+> new file mode 100644
+> index 0000000..791ed8d
+> --- /dev/null
+> +++ b/package/lirc-tools/lirc-tools.mk
+> @@ -0,0 +1,20 @@
 > 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 03e6acc..3f39ee8 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -117,6 +117,18 @@ config BR2_TARGET_UBOOT_FORMAT_SB
->  	depends on BR2_arm
->  	bool "u-boot.sb"
->  
-> +config BR2_TARGET_UBOOT_FORMAT_SD
-> +	depends on BR2_arm
-> +	bool "u-boot.sd"
-> +	help
-> +	  This is Freescale i.MX28 SB format, with a header for booting
-> +	  from an SD card.
++###########################################################################
+#####
+> +#
+> +# lirc-tools
+> +#
+> 
++###########################################################################
+#####
 > +
-> +	  U-boot includes an mxsboot tool to generate this format,
-> +	  starting from 2011.12.
-> +
-> +	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
-> +
->  config BR2_TARGET_UBOOT_FORMAT_CUSTOM
->  	bool "Custom (specify below)"
->  	help
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a9ba054..630619a 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -49,6 +49,11 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
->  UBOOT_BIN = u-boot.sb
->  UBOOT_MAKE_TARGET = $(UBOOT_BIN)
->  UBOOT_DEPENDENCIES += host-elftosb
-> +else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SD),y)
-> +# BootStream (.sb) is generated by U-Boot, we convert it to SD format
-> +UBOOT_BIN = u-boot.sd
-> +UBOOT_MAKE_TARGET = u-boot.sb
-> +UBOOT_DEPENDENCIES += host-elftosb
->  else ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
->  UBOOT_BIN = $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
->  else
-> @@ -116,6 +121,8 @@ define UBOOT_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) 	\
->  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) 		\
->  		$(UBOOT_MAKE_TARGET)
-> +	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
-> +		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
->  endef
->  
->  define UBOOT_BUILD_OMAP_IFT
+> +LIRC_TOOLS_VERSION = 0.9.2
+> +LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
+> +LIRC_TOOLS_SITE = 
+http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
 
-After understanding that host-elftosb is needed for older U-Boot versions:
+I forgot to mention that earlier, but please add license information here. 
+See 
+the description of _LICENSE and _LICENSE_FILES in the manual at 
+http://nightly.buildroot.org/manual.html#_infrastructure_for_packages_with_s
+pecific_build_systems.
 
-Reviewed-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +
+> +LIRC_TOOLS_CONF_OPTS = --without-x --enable-sandboxed 
+--with-driver=userspace
+> +
+> +define LIRC_TOOLS_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 0755 package/lirc-tools/S25lircd 
+$(TARGET_DIR)/etc/init.d/
+> +endef
+> +
+> +$(eval $(autotools-package))
+> +#
+> +# lcdproc
+> +#
+
+Please remove this part.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open 
+Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+
+
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
