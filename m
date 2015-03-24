@@ -1,80 +1,64 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 24 Mar 2015 10:09:12 +0000
-Subject: [Buildroot] [PATCH] toolchain-external: fix gdbserver copying
- for ARC GNU tools
-In-Reply-To: <20150316230155.GF4271@free.fr>
-References: <1426539723-4010-1-git-send-email-abrodkin@synopsys.com>
- <20150316230155.GF4271@free.fr>
-Message-ID: <1427191751.13499.6.camel@synopsys.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 24 Mar 2015 11:39:27 +0100
+Subject: [Buildroot] package/erlang: OpenSSL is configured for kerberos but
+	no krb5.h found
+Message-ID: <CAJtjsKZajs_97abb1Nr=WzKoAQeuMokS0CzUF2bs-1U1nuKM_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi All,
 
-On Tue, 2015-03-17 at 00:01 +0100, Yann E. MORIN wrote:
-> Alexey, All,
-> 
-> On 2015-03-17 00:02 +0300, Alexey Brodkin spake thusly:
-> > Historically in pre-built ARC GNU tools gdbserver is located in
-> > top-level "target-bin" folder.
-> > 
-> > Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
-> > selected Buildroot won't find gdbserver (it looks within
-> > SYSROOT/ARCH_SYSROOT folder).
-> > 
-> > Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
-> > everything from "target-bin" foler into SYSROOT/usr/bin.
-> > 
-> > Reason to copy everything from "target-bin" is to enable possibility in
-> > the future to copy more pre-built target binaries onto target.
-> > 
-> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> However, a small suggestion (more of a question, in fact) below...
-> 
-> > ---
-> >  toolchain/toolchain-external/toolchain-external.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> > index c0429bb..d55b6de 100644
-> > --- a/toolchain/toolchain-external/toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/toolchain-external.mk
-> > @@ -396,6 +396,11 @@ else
-> >  TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
-> >  endif
-> >  TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
-> > +define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
-> > +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-> > +	mkdir -p $${SYSROOT_DIR}/usr/bin ; \
-> > +	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/* $${SYSROOT_DIR}/usr/bin
-> 
-> Waht about using 'cp -l' instead? That would create hardlinks instead of
-> actual copies.
-> 
-> I guess we do not really support building on a filesystem that does not
-> support hard links, do we?
-> 
-> Still, this should not be a blocker for inclusion.
+I'm having trouble to get the ssl.app from Erlang installed on my target.
+Since BR2_ERLANG_OPENSSL is activated, it does configure Erlang with
+--with-ssl but there is a test for krb5.h that fails in
+$BUILD_DIR/erlang-17.4/erts/configure.in
 
-Even though we may indeed create both hard- or synmlink, what do you
-think about use of "install" command?
+Actually, I don't even understand why it's trying to look for krb5.h
+since opensslconf.h defines OPENSSL_NO_KRB5. So, the test for kerberos
+support should fail.
+Here the extract from $BUILD_DIR/erlang-17.4/erts/config.log
+-----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
+configure:18537: checking for OpenSSL >= 0.9.7 in standard locations
+configure:18668: /path/to/buildroot/output/host/usr/bin/ccache
+/path/to/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+-o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64   -Os -g3 -fstack-protector-all
+-I/path/to/buildroot/output/build/erlang-17.4/erts/arm-buildroot-linux-uclibcgnueabi
+ -fno-tree-copyrename
+-I/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-D_GNU_SOURCE  -L/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
+conftest.c -lutil -ldl -lm -latomic_ops -lcrypto >&5
+/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.so:
+warning: gethostbyname is obsolescent, use getnameinfo() instead.
+configure:18668: $? = 0
+configure:18681: result:
+/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+configure:18843: checking for OpenSSL kerberos 5 support
+configure:18859: result: yes
+configure:18908: checking for krb5.h in standard locations
+configure:18923: result: not found
+configure:18928: WARNING: OpenSSL is configured for kerberos but no krb5.h found
+-----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
 
-Something like that:
---->8---
-install -m 0755 -D
-$(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/gdbserver
-$${SYSROOT_DIR}/usr/bin/gdbserver
---->8---
+The configure.in test that should fail is as follows:
+-----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
+if test "x$SSL_APP" != "x" ; then
+    dnl We found openssl, now check if we use kerberos 5 support
+    AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
+    old_CPPFLAGS=$CPPFLAGS
+    CPPFLAGS=$SSL_INCLUDE
+    AC_EGREP_CPP(yes,[
+#include <openssl/opensslconf.h>
+#ifndef OPENSSL_NO_KRB5
+  yes
+#endif
+-----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
 
-Compared to "cp" install with "-D" may create leading path itself, so we
-won't need additional "mkdir -p".
-
--Alexey
+Honestly, I don't understand how this test can succeed. Any idea what
+the problem could be?
+-- 
+Johan
