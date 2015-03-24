@@ -1,79 +1,146 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2015 19:54:15 +0100
-Subject: [Buildroot] [PATCH 1/2 v4] system: remove DES password encoding
+Date: Tue, 24 Mar 2015 19:54:16 +0100
+Subject: [Buildroot] [PATCH 2/2 v4] system: allow/disallow root login,
+	accept encoded passwords
 In-Reply-To: <cover.1427223149.git.yann.morin.1998@free.fr>
 References: <cover.1427223149.git.yann.morin.1998@free.fr>
-Message-ID: <840cc743b5a06c6b600d067bfb11d2eafe373b45.1427223149.git.yann.morin.1998@free.fr>
+Message-ID: <a13aae8e9670b5cb069379dee94735deb3663f21.1427223149.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DES is long dead, it is insecure as hell, and virtually all known
-crypt(3) implementations now all support at least md5.
+From: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
 
-Besides, the character-space of DES-encoded passwords are a sub-set
-of the character-space for a clear-text password, so we can't easily
-differentiate between the two. Since we're going to change the root
-password prompt to support settign encoded passwords (as well as
-clear-text passwords), we can't keep DES or we'd be unable to decide
-whether we'd need to encode the password or not.
+Currently, there is only three possibilities regarding the root account:
+  - it is enabled with no password (the default)
+  - it is enabled, using a clear-text, user-provided password
+  - it is disabled if the user sets the clear-text password to '*'
 
-Remove DES encoding altogether (and add a legacy entry). The default is
-still md5, and thus there's no backward-compatibility 'select' to add.
+This is deemed insufficient in many cases, especially when the .config
+file has to be published (e.g. for the GPL compliance, or any other
+reason.).
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Lorenzo Catucci <lorenzo@sancho.ccd.uniroma2.it>
+Fix that in two ways:
+
+  - add a bolean option that allows/diesaloows root login altogether,
+    which defaults to 'y' to keep backward compatibility;
+
+  - accept already-encoded passwords, which we recognise as starting
+    with either of $1$, $5$ or $6$ (resp. for md5, sha256 or sha512).
+    For backward-compatibility, we stil accept '*' to disable the
+    account.
+
+Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+[yann.morin.1998 at free.fr:
+  - don't add a choice to select between clear-text/encoded password,
+    use a single prompt;
+  - differentiate in the password hook itself;
+  - rewrite parts of the help entry;
+  - rewrite and expand the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
 ---
- Config.in.legacy | 7 +++++++
- system/Config.in | 9 ---------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+Note: this can only go in if DES encoded is ditched, because its
+character-space is the same as for clear-text passwords.
+---
+ system/Config.in | 28 +++++++++++++++++++---------
+ system/system.mk | 24 ++++++++++++++++++++----
+ 2 files changed, 39 insertions(+), 13 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 1f57671..2fad28f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.05"
- 
-+config BR2_TARGET_GENERIC_PASSWD_DES
-+	bool "Encoding passwords with DES has been removed"
-+	select BR2_LEGACY
-+	help
-+	  Paswords can now only be encoded with either of md5, sha256 or sha512.
-+	  The default is md5, which is stronger that DES (but still pretty weak).
-+
- config BR2_PACKAGE_VALGRIND_PTRCHECK
- 	bool "valgrind's PTRCheck was renamed to SGCheck"
- 	select BR2_LEGACY
 diff --git a/system/Config.in b/system/Config.in
-index 9973cc2..8621def 100644
+index 8621def..17a626b 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -27,14 +27,6 @@ choice
+@@ -179,26 +179,36 @@ endif
  
- 	  Note: this is used at build-time, and *not* at runtime.
+ if BR2_ROOTFS_SKELETON_DEFAULT
  
--config BR2_TARGET_GENERIC_PASSWD_DES
--	bool "des"
--	help
--	  Use standard 56-bit DES-based crypt(3) to encode passwords.
--
--	  Old, wildly available, but also the weakest, very susceptible to
--	  brute-force attacks.
--
- config BR2_TARGET_GENERIC_PASSWD_MD5
- 	bool "md5"
++config BR2_TARGET_ENABLE_ROOT_LOGIN
++	bool "Enable root login"
++	default "y"
++	help
++	  Enable root login password
++
+ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	string "Root password"
+ 	default ""
++	depends on BR2_TARGET_ENABLE_ROOT_LOGIN
  	help
-@@ -67,7 +59,6 @@ endchoice # Passwd encoding
+-	  Set the initial root password (in clear). It will be md5-encrypted.
++	  Set the initial root password.
  
- config BR2_TARGET_GENERIC_PASSWD_METHOD
- 	string
--	default "des"       if BR2_TARGET_GENERIC_PASSWD_DES
- 	default "md5"       if BR2_TARGET_GENERIC_PASSWD_MD5
- 	default "sha-256"   if BR2_TARGET_GENERIC_PASSWD_SHA256
- 	default "sha-512"   if BR2_TARGET_GENERIC_PASSWD_SHA512
+ 	  If set to empty (the default), then no root password will be set,
+ 	  and root will need no password to log in.
+ 
+-	  WARNING! WARNING!
+-	  Although pretty strong, MD5 is now an old hash function, and
+-	  suffers from some weaknesses, which makes it susceptible to attacks.
+-	  It is showing its age, so this root password should not be trusted
+-	  to properly secure any product that can be shipped to the wide,
+-	  hostile world.
++	  If the password starts with any of $1$, $5$ or $6$, it is considered
++	  to be already crypt-encoded with respectively md5, sha256 or sha512.
++	  Any other value is taken to be a clear-text value, and is crypt-encoded
++	  as per the "Passwords encoding" scheme, above.
++
++	  Note: "$" signs in the hashed password must be doubled. For example,
++	  if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0", then
++	  you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0".
+ 
+ 	  WARNING! WARNING!
+-	  The password appears in clear in the .config file, and may appear
++	  The password appears as-is in the .config file, and may appear
+ 	  in the build log! Avoid using a valuable password if either the
+-	  .config file or the build log may be distributed!
++	  .config file or the build log may be distributed, or at the
++	  very least use a strong cryptographic hash for your password!
+ 
+ choice
+ 	bool "/bin/sh"
+diff --git a/system/system.mk b/system/system.mk
+index 4a1eb4a..2ac5d08 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -34,7 +34,7 @@ endef
+ TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
+ endif
+ 
+-ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
++ifneq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),)
+ TARGETS += host-mkpasswd
+ endif
+ 
+@@ -70,9 +70,25 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
+ define SYSTEM_ROOT_PASSWD
+-	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
+-		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
+-	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
++	if [ "$(BR2_TARGET_ENABLE_ROOT_LOGIN)" = "y" ]; then \
++		case '$(TARGET_GENERIC_ROOT_PASSWD)' in \
++		("") \
++			ROOT_PASSWD=""; \
++		;; \
++		("$$1$$"*|"$$5$$"*|"$$6$$"*) \
++			ROOT_PASSWD='$(TARGET_GENERIC_ROOT_PASSWD)'; \
++		;; \
++		('*') \
++			ROOT_PASSWD='*'; \
++		;; \
++		(*) \
++			ROOT_PASSWD=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
++		;; \
++		esac; \
++	else \
++		ROOT_PASSWD='*'; \
++	fi; \
++	$(SED) "s,^root:[^:]*:,root:$${ROOT_PASSWD}:," $(TARGET_DIR)/etc/shadow
+ endef
+ TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
+ 
 -- 
 1.9.1
