@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 00:33:24 +0100
-Subject: [Buildroot] [PATCH v3] package/libxml2: add optional LZMA
- support
-In-Reply-To: <1427235587-18228-1-git-send-email-yann.morin.1998@free.fr>
-References: <1427235587-18228-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150325003324.29c1d913@free-electrons.com>
+Date: Wed, 25 Mar 2015 00:33:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/powertop: needs gettextize
+In-Reply-To: <1427230636-31933-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1427230636-31933-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150325003347.4e100f48@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Bernd Kuhls,
 
-On Tue, 24 Mar 2015 23:19:47 +0100, Yann E. MORIN wrote:
-> LZMA support is provided by xz, since liblzma is long dead.
+On Tue, 24 Mar 2015 21:57:16 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/8e7/8e7d1f039b57400b1a6f9c14755b35528a457031/
+> http://autobuild.buildroot.net/results/4e5/4e5a8f49c80c363b5fb35332e34206c9a4fe4120/
+> http://autobuild.buildroot.net/results/658/658e11f5b0bf3347a50a387b6271eb43c45025fb/
+> and many others
 > 
-> Contrary to zlib, liblzma uses pkg-config, so we do not need to add the
-> full path to libzma.
-> 
-> Reported-by: vdm on IRC
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Applied, thanks.
 
