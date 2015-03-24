@@ -1,64 +1,70 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 24 Mar 2015 11:39:27 +0100
-Subject: [Buildroot] package/erlang: OpenSSL is configured for kerberos but
-	no krb5.h found
-Message-ID: <CAJtjsKZajs_97abb1Nr=WzKoAQeuMokS0CzUF2bs-1U1nuKM_Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Mar 2015 08:31:15 -0300
+Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.13
+Message-ID: <1427196675-5815-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Patch now upstream so remove.
 
-I'm having trouble to get the ssl.app from Erlang installed on my target.
-Since BR2_ERLANG_OPENSSL is activated, it does configure Erlang with
---with-ssl but there is a test for krb5.h that fails in
-$BUILD_DIR/erlang-17.4/erts/configure.in
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../sudo/0001-make-signame-include-unistd_h.patch    | 20 --------------------
+ package/sudo/sudo.hash                               |  4 ++--
+ package/sudo/sudo.mk                                 |  2 +-
+ 3 files changed, 3 insertions(+), 23 deletions(-)
+ delete mode 100644 package/sudo/0001-make-signame-include-unistd_h.patch
 
-Actually, I don't even understand why it's trying to look for krb5.h
-since opensslconf.h defines OPENSSL_NO_KRB5. So, the test for kerberos
-support should fail.
-Here the extract from $BUILD_DIR/erlang-17.4/erts/config.log
------8<----------8<----------8<----------8<----------8<----------8<----------8<-----
-configure:18537: checking for OpenSSL >= 0.9.7 in standard locations
-configure:18668: /path/to/buildroot/output/host/usr/bin/ccache
-/path/to/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
--o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64   -Os -g3 -fstack-protector-all
--I/path/to/buildroot/output/build/erlang-17.4/erts/arm-buildroot-linux-uclibcgnueabi
- -fno-tree-copyrename
--I/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--D_GNU_SOURCE  -L/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
-conftest.c -lutil -ldl -lm -latomic_ops -lcrypto >&5
-/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.so:
-warning: gethostbyname is obsolescent, use getnameinfo() instead.
-configure:18668: $? = 0
-configure:18681: result:
-/path/to/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
-configure:18843: checking for OpenSSL kerberos 5 support
-configure:18859: result: yes
-configure:18908: checking for krb5.h in standard locations
-configure:18923: result: not found
-configure:18928: WARNING: OpenSSL is configured for kerberos but no krb5.h found
------8<----------8<----------8<----------8<----------8<----------8<----------8<-----
-
-The configure.in test that should fail is as follows:
------8<----------8<----------8<----------8<----------8<----------8<----------8<-----
-if test "x$SSL_APP" != "x" ; then
-    dnl We found openssl, now check if we use kerberos 5 support
-    AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
-    old_CPPFLAGS=$CPPFLAGS
-    CPPFLAGS=$SSL_INCLUDE
-    AC_EGREP_CPP(yes,[
-#include <openssl/opensslconf.h>
-#ifndef OPENSSL_NO_KRB5
-  yes
-#endif
------8<----------8<----------8<----------8<----------8<----------8<----------8<-----
-
-Honestly, I don't understand how this test can succeed. Any idea what
-the problem could be?
+diff --git a/package/sudo/0001-make-signame-include-unistd_h.patch b/package/sudo/0001-make-signame-include-unistd_h.patch
+deleted file mode 100644
+index 234cd71..0000000
+--- a/package/sudo/0001-make-signame-include-unistd_h.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-signame.c uses sudo_compat.h which in turn uses gid_t definitions
+-that are normally defined in unistd.h.
+-This doesn't seem to cause issues with (e)glibc systems, but it does break
+-uClibc-based builds.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura sudo-1.8.12.orig/lib/util/mksigname.c sudo-1.8.12/lib/util/mksigname.c
+---- sudo-1.8.12.orig/lib/util/mksigname.c	2015-02-09 15:40:10.000000000 -0300
+-+++ sudo-1.8.12/lib/util/mksigname.c	2015-02-17 09:20:05.126701093 -0300
+-@@ -44,6 +44,9 @@
+- 
+-     printf("#include <config.h>\n");
+-     printf("#include <signal.h>\n");
+-+    printf("#ifdef HAVE_UNISTD_H\n");
+-+    printf("#include <unistd.h>\n");
+-+    printf("#endif /* HAVE_UNISTD_H */\n");
+-     printf("#include \"sudo_compat.h\"\n\n");
+-     printf("const char *const sudo_sys_signame[NSIG] = {\n");
+-     for (i = 0; i < NSIG; i++) {
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 4f4df16..94b897d 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,2 +1,2 @@
+-# From http://www.sudo.ws/pipermail/sudo-announce/2015-February/000136.html
+-sha256	163b51841de8ad19276581a6782d61f5948f1f72a0a843371a1c167d3dc4f3b0	sudo-1.8.12.tar.gz
++# From http://www.sudo.ws/pipermail/sudo-announce/2015-March/000138.html
++sha256	e374e5edf2c11c00d6916a9f51cb0ad15e51c7b028370fa15169b07e61e05a25	sudo-1.8.13.tar.gz
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 3048557..a1a8328 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION = 1.8.12
++SUDO_VERSION = 1.8.13
+ SUDO_SITE = http://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC BSD-3c
+ SUDO_LICENSE_FILES = doc/LICENSE
 -- 
-Johan
+2.0.5
