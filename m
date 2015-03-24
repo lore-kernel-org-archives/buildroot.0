@@ -1,82 +1,58 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Wed, 25 Mar 2015 00:30:49 +0200
-Subject: [Buildroot] [PATCH] aiccu: musl patches
-Message-ID: <20150324223049.GA4134@vostro>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 Mar 2015 23:54:55 +0100
+Subject: [Buildroot] [PATCH v1] evtest: fix
+	program_invocation_short_name undeclared
+In-Reply-To: <20150324002632.3aeef6e7@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 24 Mar 2015 00:26:32 +0100")
+References: <1426803498-18890-1-git-send-email-ps.report@gmx.net>
+ <20150320140947.38980613@free-electrons.com>
+ <1426881775.2897.10.camel@synopsys.com>
+ <20150320212213.21f2881e@free-electrons.com>
+ <87bnjjgx9n.fsf@dell.be.48ers.dk>
+ <20150324002632.3aeef6e7@free-electrons.com>
+Message-ID: <874mpagg5c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/8c666ef11310868097601b6de1dd25779729b878/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-if_ether.h issue discussion: http://www.openwall.com/lists/musl/2012/10/11/1
+ > Dear Peter Korsgaard,
+ > On Mon, 23 Mar 2015 23:32:52 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
----
- package/aiccu/0004-if-ether-header.patch | 23 +++++++++++++++++++++++
- package/aiccu/0005-res-ninit.patch       | 22 ++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
- create mode 100644 package/aiccu/0004-if-ether-header.patch
- create mode 100644 package/aiccu/0005-res-ninit.patch
+ >> > Yes, it works. In the mean time, there is a way to avoid the build
+ >> > errors: add an exception to the autobuilder script. See
+ >> > http://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run#n346
+ >> > for a bunch of examples.
+ >> 
+ >> Or simply make the packages depend on
+ >> !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_2014_12. Peter will you send
+ >> patches to do that for evtest and libevdev?
 
-diff --git a/package/aiccu/0004-if-ether-header.patch b/package/aiccu/0004-if-ether-header.patch
-new file mode 100644
-index 0000000..e0ecd74
---- /dev/null
-+++ b/package/aiccu/0004-if-ether-header.patch
-@@ -0,0 +1,23 @@
-+musl does not allow using <netinet/*> together with <linux/*> headers.
-+Since there are both netinet/if_ether.h and linux/if_ether.h providing
-+the same definitions, use linux/if_ether.h whenever other linux/*
-+headers are included.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- aiccu/common/common.h
-++++ aiccu/common/common.h
-+@@ -91,11 +91,12 @@
-+ 	#include <sys/select.h>
-+ 
-+ 	#include <net/if.h>
-+-	#include <netinet/if_ether.h>
-+ #ifdef linux
-+ 	#include <netpacket/packet.h>
-++	#include <linux/if_ether.h>
-+ 	#include <linux/if_tun.h>
-+ #else
-++	#include <netinet/if_ether.h>
-+ #ifdef _DFBSD
-+ 	#include <net/tun/if_tun.h>
-+ #else
-diff --git a/package/aiccu/0005-res-ninit.patch b/package/aiccu/0005-res-ninit.patch
-new file mode 100644
-index 0000000..f25b53b
---- /dev/null
-+++ b/package/aiccu/0005-res-ninit.patch
-@@ -0,0 +1,22 @@
-+With _LINUX defined, getrrs uses res_ninit instead of res_init.
-+
-+Musl does not provide res_ninit.
-+
-+Since getrrs is only called from a single location before any threads
-+are spawned, it is actually safe to use res_init here.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- aiccu/common/resolver.c
-++++ aiccu/common/resolver.c
-+@@ -24,6 +24,10 @@
-+ #include <resolv.h>
-+ #include <netdb.h>
-+ 
-++#ifdef _LINUX
-++#undef _LINUX
-++#endif
-++
-+ int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
-+ {
-+ #ifdef _LINUX
+ > This is indeed OK for packages such as evtest that don't have, or don't
+ > have many, reverse dependencies. But this is hardly a sustainable
+ > solution in general, especially for packages that have a high number of
+ > reverse dependencies.
+
+True, with lots of reverse deps it becomes very painful.
+
+ > We simply can't handle all the little possible variations of uClibc
+ > configurations that exist in every external toolchain, it's not
+ > workable in a general fashion.
+
+We don't support that many external uClibc based toolchains (only arc,
+bfin and sh) so I think it's still doable, but ok.
+
+ > I know we're already doing it to some extent, but I'd like to avoid
+ > doing it when possible, especially when we have a good cooperation with
+ > the upstream developers (in this case, the Synopsys folks).
+
+If we can remove the arc 2014.12 toolchain and add the new 2015 one
+before 2015.05-rc1 (E.G. end of April) then I'm fine with just disabling
+it in the autobuilders for now, otherwise I still think we should add
+the depends on !arc-2014-12 to not break it for users.
+
 -- 
-2.0.3
+Bye, Peter Korsgaard 
