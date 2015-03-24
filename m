@@ -1,89 +1,105 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 25 Mar 2015 00:22:57 +0100
-Subject: [Buildroot] [PATCH 3/5 v2] linux: fix extensions
-In-Reply-To: <95ae759e2efb3ef5d0efb1553cd11c4273bd8b63.1426342904.git.yann.morin.1998@free.fr>
-References: <cover.1426342904.git.yann.morin.1998@free.fr>
- <95ae759e2efb3ef5d0efb1553cd11c4273bd8b63.1426342904.git.yann.morin.1998@free.fr>
-Message-ID: <5511F1D1.4050608@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Mar 2015 00:26:55 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-10-04
+In-Reply-To: <CANQCQpbYMUU64NYZshBXa-pMXJ2q1gB4pLZODUDB1V5Ch9yO1A@mail.gmail.com>
+References: <20141005063015.846CF101508@stock.ovh.net>
+ <CANQCQpYkPJATN4b8hYwCWtLpz3XhO5ZtESWb9crSChA2jYgrjQ@mail.gmail.com>
+ <20141007094832.01c0f443@free-electrons.com>
+ <CANQCQpZQ0PKOrMR_D-43oiUTQg3vvCub=i8aU=Wndx+FKdQvOQ@mail.gmail.com>
+ <CANQCQpbYMUU64NYZshBXa-pMXJ2q1gB4pLZODUDB1V5Ch9yO1A@mail.gmail.com>
+Message-ID: <20150325002655.1d4b2f3d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All
+Dear Matthew Weber,
 
-Le 14/03/2015 15:25, Yann E. MORIN a ?crit :
-> Since the move to the kconfig-package infra, linux extensions are
-> broken.
-> 
-> In our linux package, extensions are applied as pre-patch hooks.
-> 
-> Before the kconfig-package infra, we had custom rules for the
-> linux-*config targets, which were of the form:
-> 
->     linux-menuconfig: linux-configure
->         $(MAKE) -C $(LINUX_DIR) menuconfig
-> 
-> This caused the linux tree to be fully configured before running the
-> configurators, and thus linux dependencies were entirely fullfilled, and
-> extensions were properly applied.
-> 
-> Since we migrated (in dff25ea), the kconfig-package infra introduces a
-> (hidden, internal) intermediate step 'kconfig-fixup' and decorelates the
-> kconfig-part of the configuration from the actual package-part of the
-> configuration:
-> 
->     linux-configure -------> kconfig-fixup --> .config --> $(LINUX_CONFIG_FILE)
->                         /
->     linux-menuconfig --'
-> 
-> As thus, this (very useful!) use-case breaks (starting from a clean
-> Buildroot tree):
-> 
->     make menuconfig
->         -> enable a kernel and at least one extension
->         -> save and exit
->     make linux-menuconfig
->         -> extensions are not available
-> 
-> Fix that by using the newly-introduced patch-dependencies, so that
-> extensions are available before we try to patch the linux kernel.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
+On Tue, 7 Oct 2014 20:52:15 -0500, Matthew Weber wrote:
 
-I reproduced the issue with xenomai extension:
+> > Yeah, I believe the GCC version check is arbitrary.  I was going to
+> > take a look at the generic atomics implementations and see if they
+> > were stub functions.  If so, we could patch in a workaround to allow
+> > GCC  >= 4.3 to build (with that being an arbitrarily old compiler
+> > version.....)  or just open it up to any version and test if we get
+> > compiler failures.
+> 
+> It does look like the version check is correct.  They implemented
+> atomics in the latest release and the generic implementation for arch
+> not supporting the custom atomics uses the built-in GCC >= 4.7
+> functions.  I was looking at conditionally setting
+> BR2_ARCH_HAS_ATOMICS and to get it completely correct is quite
+> invasive like you mentioned.  What about if we just set it for
+> buildroot and external toolchains that we where we know if they are
+> >=4.7.  Leaving any user defined external toolchains to possibly run
+> into this issue, but maybe that's ok?
 
-$ make O=test/xenomai/ linux-menuconfig
-[...]
-/home/naourr/git/buildroot/test/xenomai/build/xenomai-2.6.4/scripts/prepare-kernel.sh
---linux=/home/naourr/git/buildroot/test/xenomai/build/linux-3.14.17 --arch=i386
---default --verbose
-make:
-/home/naourr/git/buildroot/test/xenomai/build/xenomai-2.6.4/scripts/prepare-kernel.sh
-: commande introuvable
-make: ***
-[/home/naourr/git/buildroot/test/xenomai/build/linux-3.14.17/.stamp_patched]
-Erreur 127
+Reviving an old discussion, but someone pinged me about this, so I had
+a second look. I looked at one of the build failures we originally
+discussed:
+http://autobuild.buildroot.net/results/3c1/3c1c620684a23b4cbb1cfa560096094cd9bf09ec/build-end.log.
+This is a PowerPC build, failing with:
 
-> diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-> index 84d2c17..f6a5ffd 100644
-> --- a/linux/linux-ext-xenomai.mk
-> +++ b/linux/linux-ext-xenomai.mk
-> @@ -6,7 +6,7 @@
->  
->  ifeq ($(BR2_LINUX_KERNEL_EXT_XENOMAI),y)
->  # Add dependency to xenomai (user-space) which provide ksrc part
-> -LINUX_DEPENDENCIES += xenomai
-> +LINUX_PATCH_DEPENDENCIES += xenomai
->  
-The issue is indeed fixed by this patch.
+./google/protobuf/stubs/platform_macros.h:77:2: error: #error Host architecture was not detected as supported by protobuf
 
-    Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-    Tested-by: Romain Naour <romain.naour@openwide.fr>
+And here is what the protobuf code looks like:
 
-Best regard,
-Romain
+#if defined(_M_X64) || defined(__x86_64__)
+#define GOOGLE_PROTOBUF_ARCH_X64 1
+#define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+#elif defined(_M_IX86) || defined(__i386__)
+#define GOOGLE_PROTOBUF_ARCH_IA32 1
+#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+#elif defined(__QNX__)
+#define GOOGLE_PROTOBUF_ARCH_ARM_QNX 1
+#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+#elif defined(__ARMEL__)
+#define GOOGLE_PROTOBUF_ARCH_ARM 1
+#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+#elif defined(__aarch64__)
+#define GOOGLE_PROTOBUF_ARCH_AARCH64 1
+#define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+#elif defined(__MIPSEL__)
+#if defined(__LP64__)
+#define GOOGLE_PROTOBUF_ARCH_MIPS64 1
+#define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+#else
+#define GOOGLE_PROTOBUF_ARCH_MIPS 1
+#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+#endif
+#elif defined(__pnacl__)
+#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+#elif defined(__ppc__)
+#define GOOGLE_PROTOBUF_ARCH_PPC 1
+#define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+#elif defined(__GNUC__) && \
+ (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4))
+// We fallback to the generic GCC >= 4.7 implementation in atomicops.h
+# if __LP64__
+#  define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+# else
+#  define GOOGLE_PROTOBUF_ARCH_32_BIT 1
+# endif
+#else
+#error Host architecture was not detected as supported by protobuf
+#endif
+
+So, when the architecture is not supported it indeed falls back on
+using atomic intrinsics provided by gcc >= 4.7. However, before that
+there is a:
+
+#elif defined(__ppc__)
+
+which should indicate that the PowerPC architecture specifically should
+be supported without having to rely on the compiler intrinsics. Do we
+know why this is not working?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
