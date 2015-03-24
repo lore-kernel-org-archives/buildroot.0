@@ -1,70 +1,139 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Mar 2015 08:31:15 -0300
-Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.13
-Message-ID: <1427196675-5815-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 24 Mar 2015 13:52:28 +0200
+Subject: [Buildroot] [PATCH v3] lirc-tools: new package
+In-Reply-To: <6ca4104b$164a68c3$5a5357dd$@com>
+References: <6ca4104b$164a68c3$5a5357dd$@com>
+Message-ID: <20150324115228.GQ2825@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch now upstream so remove.
+Hi Rhys,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../sudo/0001-make-signame-include-unistd_h.patch    | 20 --------------------
- package/sudo/sudo.hash                               |  4 ++--
- package/sudo/sudo.mk                                 |  2 +-
- 3 files changed, 3 insertions(+), 23 deletions(-)
- delete mode 100644 package/sudo/0001-make-signame-include-unistd_h.patch
+On Tue, Mar 24, 2015 at 10:36:31PM +1300, github at wilberforce.co.nz wrote:
+> 1. What I was trying to say, that there is no point in using this package 
+> unless the lirc kernel package has been selected.
 
-diff --git a/package/sudo/0001-make-signame-include-unistd_h.patch b/package/sudo/0001-make-signame-include-unistd_h.patch
-deleted file mode 100644
-index 234cd71..0000000
---- a/package/sudo/0001-make-signame-include-unistd_h.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--signame.c uses sudo_compat.h which in turn uses gid_t definitions
--that are normally defined in unistd.h.
--This doesn't seem to cause issues with (e)glibc systems, but it does break
--uClibc-based builds.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura sudo-1.8.12.orig/lib/util/mksigname.c sudo-1.8.12/lib/util/mksigname.c
----- sudo-1.8.12.orig/lib/util/mksigname.c	2015-02-09 15:40:10.000000000 -0300
--+++ sudo-1.8.12/lib/util/mksigname.c	2015-02-17 09:20:05.126701093 -0300
--@@ -44,6 +44,9 @@
-- 
--     printf("#include <config.h>\n");
--     printf("#include <signal.h>\n");
--+    printf("#ifdef HAVE_UNISTD_H\n");
--+    printf("#include <unistd.h>\n");
--+    printf("#endif /* HAVE_UNISTD_H */\n");
--     printf("#include \"sudo_compat.h\"\n\n");
--     printf("const char *const sudo_sys_signame[NSIG] = {\n");
--     for (i = 0; i < NSIG; i++) {
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index 4f4df16..94b897d 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,2 +1,2 @@
--# From http://www.sudo.ws/pipermail/sudo-announce/2015-February/000136.html
--sha256	163b51841de8ad19276581a6782d61f5948f1f72a0a843371a1c167d3dc4f3b0	sudo-1.8.12.tar.gz
-+# From http://www.sudo.ws/pipermail/sudo-announce/2015-March/000138.html
-+sha256	e374e5edf2c11c00d6916a9f51cb0ad15e51c7b028370fa15169b07e61e05a25	sudo-1.8.13.tar.gz
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 3048557..a1a8328 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUDO_VERSION = 1.8.12
-+SUDO_VERSION = 1.8.13
- SUDO_SITE = http://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC BSD-3c
- SUDO_LICENSE_FILES = doc/LICENSE
+So please add this note in the Config.in help section.
+
+> Should this be added as a dependency, rather than just on BR2_LINUX_KERNEL?
+
+No need to add a dependency on BR2_LINUX_KERNEL, since the lirc package does 
+not build kernel modules itself.
+
+> 2. Noted re the personal notes.
+> 
+> 3. I'll look at added the license details
+> 
+> 4.
+> >Please remove this part 
+> Is this the part you mean?
+> 
+>  >. > +# lcdproc
+> > +#
+
+Yes.
+
+baruch
+
+> ----------------------------------------
+> From: "Baruch Siach" <baruch@tkos.co.il>
+> Sent: Tuesday, March 24, 2015 7:17 PM
+> To: "Rhys Williams" <github@wilberforce.co.nz>
+> Subject: Re: [Buildroot] [PATCH v3] lirc-tools: new package 
+> 
+> Hi Rhys,
+> 
+> On Tue, Mar 24, 2015 at 02:40:08AM +1300, Rhys Williams wrote:
+> > This package adds the userspace tools LIRC - Linux remote control.
+> > The Kernel package will need to be selected.
+> 
+> In this case the package should depend on BR2_LINUX_KERNEL. But are you 
+> sure 
+> of this? The text at http://www.lirc.org/html/install.html#compiling says:
+> 
+> 	As of 0.9.1+, lirc uses the kernel modules from the official kernel. Some 
+> 
+> 	of these are formerly lirc modules which are now part of the kernel. Thus, 
+> 
+> 	building lirc does not involve building kernel modules (as it used to 
+> be).
+> 
+> > Thanks to Baruch for help so far.
+> 
+> This line should not be part of the commit log that is kept forever in the 
+> 
+> Buildroot git history. You may add "personal" comments below the --- 
+> separator...
+> 
+> > Signed-off-by: Rhys Williams 
+> > ---
+> 
+> ... here.
+> 
+> >  package/Config.in                  |  1 +
+> >  package/lirc-tools/Config.in       | 15 +++++++++++++++
+> >  package/lirc-tools/S25lircd        | 38 
+> ++++++++++++++++++++++++++++++++++++++
+> >  package/lirc-tools/lirc-tools.hash |  2 ++
+> >  package/lirc-tools/lirc-tools.mk   | 20 ++++++++++++++++++++
+> >  5 files changed, 76 insertions(+)
+> >  create mode 100644 package/lirc-tools/Config.in
+> >  create mode 100755 package/lirc-tools/S25lircd
+> >  create mode 100644 package/lirc-tools/lirc-tools.hash
+> >  create mode 100644 package/lirc-tools/lirc-tools.mk
+> 
+> [...]
+> 
+> > diff --git a/package/lirc-tools/lirc-tools.mk 
+> > b/package/lirc-tools/lirc-tools.mk
+> > new file mode 100644
+> > index 0000000..791ed8d
+> > --- /dev/null
+> > +++ b/package/lirc-tools/lirc-tools.mk
+> > @@ -0,0 +1,20 @@
+> > 
+> +###########################################################################
+> #####
+> > +#
+> > +# lirc-tools
+> > +#
+> > 
+> +###########################################################################
+> #####
+> > +
+> > +LIRC_TOOLS_VERSION = 0.9.2
+> > +LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
+> > +LIRC_TOOLS_SITE = 
+> http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
+> 
+> I forgot to mention that earlier, but please add license information here. 
+> See 
+> the description of _LICENSE and _LICENSE_FILES in the manual at 
+> http://nightly.buildroot.org/manual.html#_infrastructure_for_packages_with_s
+> pecific_build_systems.
+> 
+> > +
+> > +LIRC_TOOLS_CONF_OPTS = --without-x --enable-sandboxed 
+> --with-driver=userspace
+> > +
+> > +define LIRC_TOOLS_INSTALL_INIT_SYSV
+> > +	$(INSTALL) -D -m 0755 package/lirc-tools/S25lircd 
+> $(TARGET_DIR)/etc/init.d/
+> > +endef
+> > +
+> > +$(eval $(autotools-package))
+> > +#
+> > +# lcdproc
+> > +#
+> 
+> Please remove this part.
+> 
+> baruch
+
 -- 
-2.0.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
