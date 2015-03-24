@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 00:43:41 +0100
-Subject: [Buildroot] [PATCH] openocd: openjtag needs libusb-compat
-In-Reply-To: <72755ca3fda8465a03e156db60d3b035f1653e37.1427219379.git.baruch@tkos.co.il>
-References: <72755ca3fda8465a03e156db60d3b035f1653e37.1427219379.git.baruch@tkos.co.il>
-Message-ID: <20150325004341.6090cf1e@free-electrons.com>
+Date: Wed, 25 Mar 2015 00:47:03 +0100
+Subject: [Buildroot] [PATCH] jsoncpp: fix build
+In-Reply-To: <d6210b774fe3742376af62da3878a787570309be.1427214171.git.baruch@tkos.co.il>
+References: <d6210b774fe3742376af62da3878a787570309be.1427214171.git.baruch@tkos.co.il>
+Message-ID: <20150325004703.17cf63b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,25 @@ To: buildroot@busybox.net
 
 Dear Baruch Siach,
 
-On Tue, 24 Mar 2015 19:49:39 +0200, Baruch Siach wrote:
-> Since commit 9bdf5926 (package/openocd: depends on libftdi1 instead of
-> libftdi) the OpenJTAG Programmer can be built without libusb-compat, that is a
-> dependency of libftdi (but not libftdi1). This breaks the build, because
-> openjtag.c uses libusb-compat headers. Select BR2_PACKAGE_LIBUSB_COMPAT to fix
-> this.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d19/d1969e6df56835568fb908b7f252aec0915d9fa4/
-> http://autobuild.buildroot.net/results/f06/f06ed6df6138ab399036c397c3f72d33d64fe0a3/
-> http://autobuild.buildroot.net/results/bd7/bd7f90f3cc1d2b395f9849eb0630c2602a075bf5/
-> ...
-> 
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Tue, 24 Mar 2015 18:22:51 +0200, Baruch Siach wrote:
 
-Applied, thanks!
+> +snprintf() is not in the std namespace. This fixes the build error below:
+> +
+> +src/lib_json/json_writer.cpp:33:18: error: 'snprintf' is not a member of 'std'
+
+Well, in C++11, snprintf *is* in the std:: namespace. See
+http://en.cppreference.com/w/cpp/io/c/fprintf. However, if we can get
+along without using std::snprintf() and use the C library snprintf()
+instead as a work-around in Buildroot, then it's all great for me.
+
+But it would require a reworking of your patch, along the lines of:
+
+std::snprintf() is only available in C++11, which is not provided by
+all compilers. Since the C library snprintf() can easily be used as a
+replacement on Linux systems, this patch changes jsoncpp to use the C
+library snprintf() instead of C++11 std::snprintf().
+
+Thanks,
 
 Thomas
 -- 
