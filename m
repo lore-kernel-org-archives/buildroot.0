@@ -1,153 +1,32 @@
-From: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
-Date: Tue, 24 Mar 2015 13:13:44 +0100
-Subject: [Buildroot] [PATCH v3] Restructure root password handling
-In-Reply-To: <1427153435-31605-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
-References: <1427153435-31605-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
-Message-ID: <1427199224-16413-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Mar 2015 09:15:05 -0300
+Subject: [Buildroot] [PATCH 1/2] gcc: mark 4.5.x as deprecated
+Message-ID: <1427199306-24508-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Created a top level boolean entry to enable/disable root login
+It was kept for the internal blackfin toolchain which has been removed
+since because of lack of maintenance and testing.
 
-Allow choosing the root password input format only if root login
-is enabled.
-
-Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- system/Config.in | 66 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- system/system.mk | 21 ++++++++++++++++++
- 2 files changed, 87 insertions(+)
+ package/gcc/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/system/Config.in b/system/Config.in
-index 9973cc2..f3d67ed 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -188,6 +188,44 @@ endif
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 6d514af..cf96c73 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -16,6 +16,7 @@ choice
  
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
-+config BR2_TARGET_ENABLE_ROOT_LOGIN
-+	bool "Enable root login"
-+        default "y"
-+	help
-+	  Enable root login password
-+
-+if BR2_TARGET_ENABLE_ROOT_LOGIN
-+
-+choice
-+	prompt "Root password input"
-+
-+config BR2_TARGET_PLAINTEXT_ROOT_PASSWORD
-+	bool "cleartext format"
-+	help
-+	  Set the root password from plaintext input
-+
-+	  WARNING! WARNING!
-+	  The password appears in clear in the .config file, and may appear
-+	  in the build log! Avoid using a valuable password if either the
-+	  .config file or the build log may be distributed!
-+
-+config BR2_TARGET_HASHED_ROOT_PASSWORD
-+	bool "hashed format"
-+	help
-+	  Set the root password from prehashed input
-+
-+	  WARNING! WARNING!
-+	  The password's hash appears in the .config file, and may appear
-+	  in the build log! Avoid using a valuable password if either
-+	  the .config file or the build log may be distributed, or at the
-+	  very least use a strong cryptographic hash for your password!
-+
-+endchoice
-+
-+endif
-+
-+if BR2_TARGET_PLAINTEXT_ROOT_PASSWORD
-+
- config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	string "Root password"
- 	default ""
-@@ -208,6 +246,34 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	  The password appears in clear in the .config file, and may appear
- 	  in the build log! Avoid using a valuable password if either the
- 	  .config file or the build log may be distributed!
-+endif
-+
-+if BR2_TARGET_HASHED_ROOT_PASSWORD
-+
-+config BR2_TARGET_GENERIC_ROOT_PASSWD_HASH
-+	string "Hashed root password"
-+	default ""
-+	help
-+	  Set the crypt(3) encoded root password hash.
-+
-+	  If set to empty (the default), then no root password will be set,
-+	  and root will need no password to log in.
-+
-+	  An hashed root password of "*" will disable root logins.
-+
-+	  "$" signs in the hashed password must be doubled.
-+
-+	  For example, the MD5 hash for the password "mypass" salted with
-+	  the string "longsalt" is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
-+	  which must be written as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
-+
-+	  WARNING! WARNING!
-+	  The password's hash appears in the .config file, and may appear
-+	  in the build log! Avoid using a valuable password if either
-+	  the .config file or the build log may be distributed, or at the
-+	  very least use a strong cryptographic hash for your password!
-+
-+endif
- 
- choice
- 	bool "/bin/sh"
-diff --git a/system/system.mk b/system/system.mk
-index 4a1eb4a..c38b1e7 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -1,6 +1,10 @@
- TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
-+TARGET_ENABLE_ROOT_LOGIN = $(call qstrip, $(BR2_TARGET_ENABLE_ROOT_LOGIN))
-+TARGET_PLAINTEXT_ROOT_PASSWORD = $(call qstrip, $(BR2_TARGET_PLAINTEXT_ROOT_PASSWORD))
-+TARGET_HASHED_ROOT_PASSWORD = $(call qstrip, $(BR2_TARGET_HASHED_ROOT_PASSWORD))
- TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-+TARGET_GENERIC_ROOT_PASSWD_HASH = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD_HASH))
- TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
- TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
- TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
-@@ -69,11 +73,28 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
- 
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- 
-+ifeq ($(TARGET_ENABLE_ROOT_LOGIN),n)
-+
-+define SYSTEM_ROOT_PASSWD
-+	$(SED) 's,^root:[^:]*:,root:*:,' $(TARGET_DIR)/etc/shadow
-+endef
-+
-+else ifeq ($(TARGET_PLAINTEXT_ROOT_PASSWORD),y)
-+
- define SYSTEM_ROOT_PASSWD
- 	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
- 		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
- 	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
- endef
-+
-+else ifeq ($(BR2_TARGET_HASHED_ROOT_PASSWORD),y)
-+
-+define SYSTEM_ROOT_PASSWD
-+	$(SED) 's,^root:[^:]*:,root:$(TARGET_GENERIC_ROOT_PASSWD_HASH):,' $(TARGET_DIR)/etc/shadow
-+endef
-+
-+endif
-+
- TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
- 
- ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
+ 	config BR2_GCC_VERSION_4_5_X
+ 		bool "gcc 4.5.x"
++		depends on BR2_DEPRECATED_SINCE_2015_05
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+ 			&& !BR2_powerpc64le && !BR2_nios2
 -- 
-2.1.4
+2.0.5
