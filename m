@@ -1,42 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2015 23:16:51 +0100
-Subject: [Buildroot] [PATCH 4/4 v2] docs/manual: document new graph-depends
-	options
+Date: Tue, 24 Mar 2015 23:16:50 +0100
+Subject: [Buildroot] [PATCH 3/4 v2] support/graph-depends: add option to
+	completely exclude a package
 In-Reply-To: <cover.1427235377.git.yann.morin.1998@free.fr>
 References: <cover.1427235377.git.yann.morin.1998@free.fr>
-Message-ID: <8a743ff9947bda250791bb5032d62e288c30f7c5.1427235377.git.yann.morin.1998@free.fr>
+Message-ID: <7ad42b4a954851cc1d2e194022108b1666f995c5.1427235377.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Similar to --stop-on, but also omits the package from the graph.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Francois Perrad <fperrad@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/common-usage.txt | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ support/scripts/graph-depends | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 89cd9fe..5b27b1f 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -208,6 +208,14 @@ The +graph-depends+ behaviour can be controlled by setting options in the
- * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
-   default, +0+, means no limit.
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index b0202e6..c1fc042 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -46,6 +46,8 @@ parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", acti
+                     help="Do not graph past this package (can be given multiple times)." \
+                        + " Can be a package name or a glob, or" \
+                        + " 'virtual' to stop on virtual packages.")
++parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
++                    help="Like --stop-on, but do not add PACKAGE to the graph.")
+ parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
+                     default="lightblue,grey,gainsboro",
+                     help="Comma-separated list of the three colours to use" \
+@@ -71,6 +73,11 @@ if args.stop_list is None:
+ else:
+     stop_list = args.stop_list
  
-+* +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
-+  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
-+  (to stop on virtual packages). The package is still present on the
-+  graph, but its dependencies are not.
++if args.exclude_list is None:
++    exclude_list = []
++else:
++    exclude_list = args.exclude_list
 +
-+* +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-+  the graph.
-+
- * +--transitive+, +--no-transitive+, to draw (or not) the transitive
-   dependencies. The default is to not draw transitive dependencies.
+ transitive = args.transitive
  
+ # Get the colours: we need exactly three colours,
+@@ -321,8 +328,14 @@ def print_pkg_deps(depth, pkg):
+         return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+-            print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
+-            print_pkg_deps(depth+1, d)
++            add = True
++            for p in exclude_list:
++                if fnmatch(d,p):
++                    add = False
++                    break
++            if add:
++                print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
++                print_pkg_deps(depth+1, d)
+ 
+ # Start printing the graph data
+ print("digraph G {")
 -- 
 1.9.1
