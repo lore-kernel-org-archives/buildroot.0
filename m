@@ -1,29 +1,72 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 24 Mar 2015 22:52:51 +0100
-Subject: [Buildroot] [PATCH 3/4] support/graph-depends: add option to
- completely exclude a package
-In-Reply-To: <100d0a72f6020c541498afd3cc54163bf4dbd53b.1427150990.git.yann.morin.1998@free.fr>
-References: <cover.1427150990.git.yann.morin.1998@free.fr>
- <100d0a72f6020c541498afd3cc54163bf4dbd53b.1427150990.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMKYQfxD1bW0f8M07L0bk4MO6OgFW0TMVHEQ8brTrrYkSQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Mar 2015 22:53:34 +0100
+Subject: [Buildroot] [PATCH v2] package/libxml2: add optional LZMA
+	support
+In-Reply-To: <1427233787-8456-1-git-send-email-yann.morin.1998@free.fr>
+References: <1427233787-8456-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150324215334.GD4023@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, all,
+All,
 
-On Mon, Mar 23, 2015 at 11:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Similar to --stop-on, but also omits the package from the graph.
->
+On 2015-03-24 22:49 +0100, Yann E. MORIN spake thusly:
+> LZMA support is provided by xz, since liblzma is long dead.
+> 
+> Contrary to zlib, liblzma uses pkg-config, so we do not need to add the
+> full path to libzma.
+> 
+> Reported-by: vdm on IRC
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Francois Perrad <fperrad@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/libxml2/libxml2.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+> index 354c178..6bd73a4 100644
+> --- a/package/libxml2/libxml2.mk
+> +++ b/package/libxml2/libxml2.mk
+> @@ -16,7 +16,7 @@ ifneq ($(BR2_LARGEFILE),y)
+>  LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+>  endif
+>  
+> -LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug --without-lzma
+> +LIBXML2_CONF_OPTS = --with-gnu-ld --without-python --without-debug
+>  
+>  HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+>  LIBXML2_DEPENDENCIES = host-pkgconf
+> @@ -30,6 +30,13 @@ else
+>  LIBXML2_CONF_OPTS += --without-zlib
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_XZ),y)
+> +LIBXML2_DEPENDENCIES += xz
+> +LIBXML2_CONF_OPTS += --with-lzma=$(STAGING_DIR)/usr
+
+Grr... I once again forgot to commit before I sent the patch...
+Sorry for the noise... :-/
 
 Regards,
+Yann E. MORIN.
 
+> +else
+> +LIBXML2_CONF_OPTS += --without-lzma
+> +endif
+> +
+>  LIBXML2_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>  
+>  ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
+> -- 
+> 1.9.1
+> 
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
