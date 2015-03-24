@@ -1,144 +1,100 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 24 Mar 2015 17:41:27 +0100
-Subject: [Buildroot] [PATCH 1/1] erlang: Fix incorrect use of AC_EGREP_CPP.
-Message-ID: <1427215287-28980-1-git-send-email-johan.oudinet@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Mar 2015 18:40:27 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: fix gdbserver copying
+ for ARC GNU tools
+In-Reply-To: <1427191751.13499.6.camel@synopsys.com>
+References: <1426539723-4010-1-git-send-email-abrodkin@synopsys.com>
+ <20150316230155.GF4271@free.fr>
+ <1427191751.13499.6.camel@synopsys.com>
+Message-ID: <20150324174027.GA4023@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
-true if it runs from a path containing the string 'yes'.
+Alexey, All,
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
- ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch | 117 +++++++++++++++++++++
- 1 file changed, 117 insertions(+)
- create mode 100644 package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
+On 2015-03-24 10:09 +0000, Alexey Brodkin spake thusly:
+> On Tue, 2015-03-17 at 00:01 +0100, Yann E. MORIN wrote:
+> > Alexey, All,
+> > 
+> > On 2015-03-17 00:02 +0300, Alexey Brodkin spake thusly:
+> > > Historically in pre-built ARC GNU tools gdbserver is located in
+> > > top-level "target-bin" folder.
+> > > 
+> > > Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
+> > > selected Buildroot won't find gdbserver (it looks within
+> > > SYSROOT/ARCH_SYSROOT folder).
+> > > 
+> > > Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
+> > > everything from "target-bin" foler into SYSROOT/usr/bin.
+> > > 
+> > > Reason to copy everything from "target-bin" is to enable possibility in
+> > > the future to copy more pre-built target binaries onto target.
+> > > 
+> > > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> > 
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > However, a small suggestion (more of a question, in fact) below...
+> > 
+> > > ---
+> > >  toolchain/toolchain-external/toolchain-external.mk | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> > > index c0429bb..d55b6de 100644
+> > > --- a/toolchain/toolchain-external/toolchain-external.mk
+> > > +++ b/toolchain/toolchain-external/toolchain-external.mk
+> > > @@ -396,6 +396,11 @@ else
+> > >  TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+> > >  endif
+> > >  TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
+> > > +define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+> > > +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+> > > +	mkdir -p $${SYSROOT_DIR}/usr/bin ; \
+> > > +	cp $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/* $${SYSROOT_DIR}/usr/bin
+> > 
+> > Waht about using 'cp -l' instead? That would create hardlinks instead of
+> > actual copies.
+> > 
+> > I guess we do not really support building on a filesystem that does not
+> > support hard links, do we?
+> > 
+> > Still, this should not be a blocker for inclusion.
+> 
+> Even though we may indeed create both hard- or synmlink, what do you
+> think about use of "install" command?
+> 
+> Something like that:
+> --->8---
+> install -m 0755 -D
+> $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/gdbserver
+> $${SYSROOT_DIR}/usr/bin/gdbserver
+> --->8---
+> 
+> Compared to "cp" install with "-D" may create leading path itself, so we
+> won't need additional "mkdir -p".
 
-diff --git a/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-new file mode 100644
-index 0000000..ca5a88d
---- /dev/null
-+++ b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-@@ -0,0 +1,117 @@
-+diff -uprN erlang-17.4.orig/aclocal.m4 erlang-17.4.fixed/aclocal.m4
-+--- erlang-17.4.orig/aclocal.m4	2015-03-24 14:42:36.176568511 +0100
-++++ erlang-17.4.fixed/aclocal.m4	2015-03-24 14:59:22.463659414 +0100
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+diff -uprN erlang-17.4.orig/erts/aclocal.m4 erlang-17.4.fixed/erts/aclocal.m4
-+--- erlang-17.4.orig/erts/aclocal.m4	2015-03-24 14:42:36.904562066 +0100
-++++ erlang-17.4.fixed/erts/aclocal.m4	2015-03-24 14:59:55.563366368 +0100
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+diff -uprN erlang-17.4.orig/erts/configure.in erlang-17.4.fixed/erts/configure.in
-+--- erlang-17.4.orig/erts/configure.in	2015-03-24 14:42:36.800562987 +0100
-++++ erlang-17.4.fixed/erts/configure.in	2015-03-24 15:05:25.441505273 +0100
-+@@ -1555,10 +1555,11 @@ if test "$have_gethostbyname_r" = yes; t
-+ 				    [Define to flavour of gethostbyname_r]))
-+ 		;;
-+ 		*)
-+-			AC_EGREP_CPP(yes,[#include <stdio.h>
-+-			  #ifdef __GLIBC__
-+-			  yes
-+-			  #endif
-++			AC_EGREP_CPP(^yes$,[
-++#include <stdio.h>
-++#ifdef __GLIBC__
-++yes
-++#endif
-+ 			  ], AC_DEFINE(HAVE_GETHOSTBYNAME_R, GHBN_R_GLIBC,
-+ 				[Define to flavour of gethostbyname_r]))
-+ 		;;
-+@@ -4303,10 +4304,10 @@ case "$erl_xcomp_without_sysroot-$with_s
-+ 			SSL_INCLUDE="-I$dir/include"
-+ 			old_CPPFLAGS=$CPPFLAGS
-+ 			CPPFLAGS=$SSL_INCLUDE
-+-			AC_EGREP_CPP(yes,[
-++			AC_EGREP_CPP(^yes$,[
-+ #include <openssl/opensslv.h>
-+ #if OPENSSL_VERSION_NUMBER >= 0x0090700fL
-+-  yes
-++yes
-+ #endif
-+ 			],[
-+ 			ssl_found=yes
-+@@ -4501,10 +4502,10 @@ if test "x$SSL_APP" != "x" ; then
-+     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
-+     old_CPPFLAGS=$CPPFLAGS
-+     CPPFLAGS=$SSL_INCLUDE
-+-    AC_EGREP_CPP(yes,[
-++    AC_EGREP_CPP(^yes$,[
-+ #include <openssl/opensslconf.h>
-+ #ifndef OPENSSL_NO_KRB5
-+-  yes
-++yes
-+ #endif
-+       ],[
-+       AC_MSG_RESULT([yes])
-+diff -uprN erlang-17.4.orig/lib/erl_interface/aclocal.m4 erlang-17.4.fixed/lib/erl_interface/aclocal.m4
-+--- erlang-17.4.orig/lib/erl_interface/aclocal.m4	2015-03-24 14:42:33.828589299 +0100
-++++ erlang-17.4.fixed/lib/erl_interface/aclocal.m4	2015-03-24 15:07:07.057508803 +0100
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+diff -uprN erlang-17.4.orig/lib/megaco/aclocal.m4 erlang-17.4.fixed/lib/megaco/aclocal.m4
-+--- erlang-17.4.orig/lib/megaco/aclocal.m4	2015-03-24 14:42:35.528574248 +0100
-++++ erlang-17.4.fixed/lib/megaco/aclocal.m4	2015-03-24 15:06:18.081509514 +0100
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+diff -uprN erlang-17.4.orig/lib/odbc/aclocal.m4 erlang-17.4.fixed/lib/odbc/aclocal.m4
-+--- erlang-17.4.orig/lib/odbc/aclocal.m4	2015-03-24 14:42:34.388584341 +0100
-++++ erlang-17.4.fixed/lib/odbc/aclocal.m4	2015-03-24 15:06:41.993509724 +0100
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+diff -uprN erlang-17.4.orig/lib/wx/aclocal.m4 erlang-17.4.fixed/lib/wx/aclocal.m4
-+--- erlang-17.4.orig/lib/wx/aclocal.m4	2015-03-24 14:42:34.928579560 +0100
-++++ erlang-17.4.fixed/lib/wx/aclocal.m4	2015-03-24 15:07:36.105506283 +0100
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
+I rev-ed the patch, because it was copying with a glob, and thus doing
+the mkdir+cp dance is OK in taht case. However, if gdbserver is the only
+thing we need to copy, then using install -D is indeed much better.
+
+So, consider my rev-tag to still be valid if you resubmit with the
+install -D dance instead.
+
+Thank you! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
