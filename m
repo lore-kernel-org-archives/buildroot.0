@@ -1,36 +1,72 @@
-From: Lou Crittenden <loucrittenden63@gmail.com>
-Date: Mon, 23 Mar 2015 21:58:17 -0500
-Subject: [Buildroot] stuttering usb audio raspberry pi
-Message-ID: <CAFGceHE6mHrtyBd3wYYWymQssVPXTzRd_EZ2_3ee4bTnU+=3Qg@mail.gmail.com>
+From: Mr Anthony Arnold <anthony.arnold@uqconnect.edu.au>
+Date: Tue, 24 Mar 2015 04:16:27 +0000
+Subject: [Buildroot] package/glog
+In-Reply-To: <1427161798142.23284@uqconnect.edu.au>
+References: <1427161798142.23284@uqconnect.edu.au>
+Message-ID: <1427170586986.25469@uqconnect.edu.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all. How do I get rid of stuttering audio on a usb audio device that
-is connected to a raspberry pi? My system uses a waveshare32b screen for
-the console output that is connected to the gpio ports, and the audio
-stuttering happens the worst when there is activity on the screen, like the
-output of an mplayer session, to the point the audio is garbled, but not so
-much when the console is quiet, but the stuttering is still there, just
-intermittently.
+Signed-off-by: Anthony Arnold <anthony.arnold@uqconnect.edu.au>
+---
+ package/Config.in      |  1 +
+ package/glog/Config.in | 11 +++++++++++
+ package/glog/glog.mk   | 13 +++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/glog/Config.in
+ create mode 100644 package/glog/glog.mk
 
-I suspect that the culprit could be an IRQ conflict between the usb and
-gpio ports or something like that, according to this page:
-http://www.linuxjournal.com/node/1000262
+diff --git a/package/Config.in b/package/Config.in
+index d6a5ad3..3128cc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -836,6 +836,7 @@ menu "Logging"
+        source "package/log4cplus/Config.in"
+        source "package/log4cxx/Config.in"
+        source "package/zlog/Config.in"
++       source "package/glog/Config.in"
+ endmenu
 
-Is this the issue, and if yes, how could I reassign them?
-
-
-I have my current buildroot configuration if this helps.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150323/fe802de6/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 78559 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150323/fe802de6/attachment-0001.obj>
+ menu "Multimedia"
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+new file mode 100644
+index 0000000..ae528bd
+--- /dev/null
++++ b/package/glog/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_GLOG
++       bool "glog"
++       depends on BR2_INSTALL_LIBSTDCPP
++       depends on BR2_TOOLCHAIN_HAS_THREADS
++       help
++        C++ implementation of the Google logging module
++
++        https://github.com/google/glog
++
++comment "glog needs a toolchain w/ C++, threads"
++       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+\ No newline at end of file
+diff --git a/package/glog/glog.mk b/package/glog/glog.mk
+new file mode 100644
+index 0000000..b955bbf
+--- /dev/null
++++ b/package/glog/glog.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# glog
++#
++################################################################################
++
++GLOG_VERSION = v0.3.4
++GLOG_LICENSE = New BSD License
++GLOG_LICENSE_FILES = COPYING
++GLOG_SITE = $(call github,google,glog,$(GLOG_VERSION))
++GLOG_SITE_METHOD = git
++
++$(eval $(autotools-package))
+--
+1.9.1
