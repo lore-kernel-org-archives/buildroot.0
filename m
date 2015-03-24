@@ -1,56 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 24 Mar 2015 14:46:11 +0200
-Subject: [Buildroot] [PATCH] dhcpcd: fix wrong macro name
-Message-ID: <68989afc433713e1841d679f3d47ed235bebfe93.1427201171.git.baruch@tkos.co.il>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 24 Mar 2015 13:47:46 +0100
+Subject: [Buildroot] package/erlang: OpenSSL is configured for kerberos
+	but no krb5.h found
+In-Reply-To: <CAJtjsKZajs_97abb1Nr=WzKoAQeuMokS0CzUF2bs-1U1nuKM_Q@mail.gmail.com>
+References: <CAJtjsKZajs_97abb1Nr=WzKoAQeuMokS0CzUF2bs-1U1nuKM_Q@mail.gmail.com>
+Message-ID: <CAJtjsKaHd35k+F7Y2XyDWcDN4KdCxFONB-n6iD2S1Z1ftN4NBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/788/788e7103c7c7c0199f221f42be6c22cc9eac3e0b/
-http://autobuild.buildroot.net/results/673/673d4a0a334c4694cc4dd05ef99069f681f98f0a/
-http://autobuild.buildroot.net/results/4bb/4bbf9e785eb9cb0f916f0a2bdaf7a6a5f639f7ea/
+Hi again,
 
-and many more.
+On Tue, Mar 24, 2015 at 11:39 AM, Johan Oudinet <johan.oudinet@gmail.com> wrote:
+> I'm having trouble to get the ssl.app from Erlang installed on my target.
+> Since BR2_ERLANG_OPENSSL is activated, it does configure Erlang with
+> --with-ssl but there is a test for krb5.h that fails in
+> $BUILD_DIR/erlang-17.4/erts/configure.in
+>
+> Actually, I don't even understand why it's trying to look for krb5.h
+> since opensslconf.h defines OPENSSL_NO_KRB5. So, the test for kerberos
+> support should fail.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/dhcpcd/0001-fix-linux-macro-name.patch | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/dhcpcd/0001-fix-linux-macro-name.patch
+>
+> The configure.in test that should fail is as follows:
+> -----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
+> if test "x$SSL_APP" != "x" ; then
+>     dnl We found openssl, now check if we use kerberos 5 support
+>     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
+>     old_CPPFLAGS=$CPPFLAGS
+>     CPPFLAGS=$SSL_INCLUDE
+>     AC_EGREP_CPP(yes,[
+> #include <openssl/opensslconf.h>
+> #ifndef OPENSSL_NO_KRB5
+>   yes
+> #endif
+> -----8<----------8<----------8<----------8<----------8<----------8<----------8<-----
 
-diff --git a/package/dhcpcd/0001-fix-linux-macro-name.patch b/package/dhcpcd/0001-fix-linux-macro-name.patch
-new file mode 100644
-index 000000000000..18dbb10dfda2
---- /dev/null
-+++ b/package/dhcpcd/0001-fix-linux-macro-name.patch
-@@ -0,0 +1,25 @@
-+Fix Linux define
-+
-+Fetched from upstream:
-+http://roy.marples.name/projects/dhcpcd/ci/2cabc3efee4c18ca?sbs=0
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+Index: dhcpcd.h
-+==================================================================
-+--- /dhcpcd.h
-++++ /dhcpcd.h
-+@@ -58,11 +58,11 @@
-+ 
-+ struct interface {
-+ 	struct dhcpcd_ctx *ctx;
-+ 	TAILQ_ENTRY(interface) next;
-+ 	char name[IF_NAMESIZE];
-+-#ifdef __linux
-++#ifdef __linux__
-+ 	char alias[IF_NAMESIZE];
-+ #endif
-+ 	unsigned int index;
-+ 	unsigned int flags;
-+ 	sa_family_t family;
-+
+I found out why the test doesn't fail. it uses AC_EGREP_CPP and grep
+for 'yes'. Unfortunately, my path to buildroot contains the string
+yes. Therefore, this test always return true :-\
+I'm going to patch this test, then send the patch to Erlang upstream
+and to buildroot.
 -- 
-2.1.4
+Johan
