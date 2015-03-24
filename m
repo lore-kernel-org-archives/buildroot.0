@@ -1,45 +1,67 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 24 Mar 2015 16:03:40 +0000
-Subject: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
-In-Reply-To: <20150324163127.417da43d@free-electrons.com>
-References: <1002870381.1069734.1426237851891.JavaMail.root@openwide.fr>
- <1427205068.13499.9.camel@synopsys.com>
- <20150324163127.417da43d@free-electrons.com>
-Message-ID: <1427213019.13499.10.camel@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 24 Mar 2015 18:22:51 +0200
+Subject: [Buildroot] [PATCH] jsoncpp: fix build
+Message-ID: <d6210b774fe3742376af62da3878a787570309be.1427214171.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Add a patch removing reference to non-existent std::snprintf.
 
-On Tue, 2015-03-24 at 16:31 +0100, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 24 Mar 2015 13:51:08 +0000, Alexey Brodkin wrote:
-> 
-> > On Fri, 2015-03-13 at 10:10 +0100, Romain Naour wrote:
-> > > Hi Alexey,
-> > > 
-> > > ----- Mail original -----
-> > > | De: "Alexey Brodkin" <Alexey.Brodkin@synopsys.com>
-> > > | ?: "romain naour" <romain.naour@openwide.fr>, "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
-> > > | Cc: buildroot at uclibc.org
-> > > | Envoy?: Vendredi 13 Mars 2015 10:00:34
-> > > | Objet: Re: [Buildroot] [PATCH] ARC: bump tools to 2014.12 release
-> > > | 
-> > > | On Fri, 2015-03-13 at 09:19 +0100, Romain Naour wrote:
-> > > | > Hi Alexey,
-> > > | > Can you have a look at this patch:
-> > > | > https://patchwork.ozlabs.org/patch/449686/
-> > 
-> > Do you think the patch Romain mentioned may fix
-> > http://autobuild.buildroot.org/results/d62/d62f472d70f60281dfe94cffc46a3e0566fd4a3d ?
-> 
-> Yes, most likely it will fix this problem.
+Fixes:
+http://autobuild.buildroot.net/results/b39/b390beeb9a6fea12f1a4d9f2ff9a8a483628cad2/
+http://autobuild.buildroot.net/results/d18/d18b3e116b680a3897fbea296938e900a1e5e80a/
+http://autobuild.buildroot.net/results/1b2/1b20a2f81dd2b409785930705222bc03576c4907/
 
-Are you going to apply it or we'll need to find somebody to try it
-first?
+and many more.
 
--Alexey
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...001-Revert-Use-std-namespace-for-snprintf.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+
+diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+new file mode 100644
+index 000000000000..1ffba9e3acfc
+--- /dev/null
++++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+@@ -0,0 +1,34 @@
++From ce9b8553fe6741a935079ce94f8b29a26af1887f Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Subject: [PATCH] Revert "Use std namespace for snprintf."
++
++This reverts commit 1c58876185d2a4ed87dac4a54b82f607e74f55fd.
++
++snprintf() is not in the std namespace. This fixes the build error below:
++
++src/lib_json/json_writer.cpp:33:18: error: 'snprintf' is not a member of 'std'
++
++Upstream status: sent upstream
++https://github.com/open-source-parsers/jsoncpp/pull/227
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ src/lib_json/json_writer.cpp | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
++index 83102fd2bb86..f7ad1e21bbc0 100644
++--- a/src/lib_json/json_writer.cpp
+++++ b/src/lib_json/json_writer.cpp
++@@ -29,8 +29,6 @@
++ 
++ #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
++ #define snprintf _snprintf
++-#else
++-#define snprintf std::snprintf
++ #endif
++ 
++ #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
++-- 
++2.1.4
++
+-- 
+2.1.4
