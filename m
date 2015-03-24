@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 00:54:47 +0100
-Subject: [Buildroot] [PATCH] sudo: bump to version 1.8.13
-In-Reply-To: <1427196675-5815-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427196675-5815-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150325005447.316fdf8c@free-electrons.com>
+Date: Wed, 25 Mar 2015 00:55:35 +0100
+Subject: [Buildroot] [PATCH] which: bump to version 2.21
+In-Reply-To: <1427200289-28332-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427200289-28332-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150325005535.1e48fa85@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,15 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 24 Mar 2015 08:31:15 -0300, Gustavo Zacarias wrote:
-> Patch now upstream so remove.
+On Tue, 24 Mar 2015 09:31:29 -0300, Gustavo Zacarias wrote:
+> Add hash file and switch to gnu mirror.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  .../sudo/0001-make-signame-include-unistd_h.patch    | 20 --------------------
->  package/sudo/sudo.hash                               |  4 ++--
->  package/sudo/sudo.mk                                 |  2 +-
->  3 files changed, 3 insertions(+), 23 deletions(-)
->  delete mode 100644 package/sudo/0001-make-signame-include-unistd_h.patch
+>  package/which/which.hash | 2 ++
+>  package/which/which.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>  create mode 100644 package/which/which.hash
 
 Applied, thanks.
 
