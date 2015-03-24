@@ -1,73 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 24 Mar 2015 20:43:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 7971] New: python-flask,
-	python-flask. No module named zlib
-Message-ID: <bug-7971-163@https.bugs.busybox.net/>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Tue, 24 Mar 2015 22:43:57 +0200
+Subject: [Buildroot] [RFC 02/11] per-package .users and .files lists
+In-Reply-To: <550ED31D.6040902@mind.be>
+References: <cover.1426960081.git.alex.suykov@gmail.com>
+ <e1c1a71680aa988903d278c9413cef7b48bad2ad.1426960081.git.alex.suykov@gmail.com>
+ <550ED31D.6040902@mind.be>
+Message-ID: <20150324204357.GA4906@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7971
+Sun, Mar 22, 2015 at 03:35:09PM +0100, Arnout Vandecappelle wrote:
 
-           Summary: python-flask, python-flask. No module named zlib
-           Product: buildroot
-           Version: 2015.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: nikita_23k at mail.ru
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> > With this patch, the data is stored outside of make, possibly
+> > allowing one make invocation per package .mk file in the future.
+> 
+>  So, is there any reason left to move USERS and PERMS to a file?
 
+No, none at present, so I'm dropping this idea completely.
 
-Target: raspberry pi 1
-Host: Linux Mint 17.1
+> It has one big disadvantage: it spreads out the package logic over different
+> files. We currently only have a separate file for the hashes, and that was
+> probably a bad idea to begin with (as witnessed by the many version bumps that
+> forget to update the hash file).
 
-I'm trying to run a web-server using python-flask. A similar problem with
-http://git.buildroot.net/buildroot/commit/?id=82e23f15a11c2cd66d0f6c6397906663c9c9e1d7
-
-My steps:
-1. cd /home/n1/test
-2. download buildroot
-3. cd buildroot
-4. make nconfig # add nano, python (2.*), python-flask (zlib added auto)
-,wchar, etc (for rpi)
-6. make
-7. upload to sd card
-
-When I run the project (python-flask) on rpi:
-
-from flask import Flask
-app = Flask(__name__)
-@app.route("/")
-def hello():
-  return "Hello World!"
-  app.run()
-
-I get an error:
- traceback (most recent call last):
-   File "test.py", line 1 in, in <module>
-     from flask import Flask
-      File
-"home/n1/test/buildroot/output/target/usr/lib/python2.7/site-packeges/flask/__init__.py,
-line 17, in <module>
-      File
-"home/n1/test/buildroot/output/target/usr/lib/python2.7/site-packeges/werkzeug/__init__.py,
-line 154, in <module>
-...
-   ImportError: No module named zlib
-
-I tried to compile with the help of https://github.com/gamaral/rpi-buildroot ,
-but got the same error. My bug report:
-https://github.com/gamaral/rpi-buildroot/issues/34
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Ok, that was for the large part to match current .hash handling.
+I wonder if it makes sense to move hashes into .mk files then, Arch-style.
