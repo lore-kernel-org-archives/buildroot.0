@@ -1,139 +1,153 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 24 Mar 2015 13:52:28 +0200
-Subject: [Buildroot] [PATCH v3] lirc-tools: new package
-In-Reply-To: <6ca4104b$164a68c3$5a5357dd$@com>
-References: <6ca4104b$164a68c3$5a5357dd$@com>
-Message-ID: <20150324115228.GQ2825@tarshish>
+From: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+Date: Tue, 24 Mar 2015 13:13:44 +0100
+Subject: [Buildroot] [PATCH v3] Restructure root password handling
+In-Reply-To: <1427153435-31605-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
+References: <1427153435-31605-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
+Message-ID: <1427199224-16413-1-git-send-email-lorenzo@sancho.ccd.uniroma2.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rhys,
+Created a top level boolean entry to enable/disable root login
 
-On Tue, Mar 24, 2015 at 10:36:31PM +1300, github at wilberforce.co.nz wrote:
-> 1. What I was trying to say, that there is no point in using this package 
-> unless the lirc kernel package has been selected.
+Allow choosing the root password input format only if root login
+is enabled.
 
-So please add this note in the Config.in help section.
+Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
+---
+ system/Config.in | 66 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ system/system.mk | 21 ++++++++++++++++++
+ 2 files changed, 87 insertions(+)
 
-> Should this be added as a dependency, rather than just on BR2_LINUX_KERNEL?
-
-No need to add a dependency on BR2_LINUX_KERNEL, since the lirc package does 
-not build kernel modules itself.
-
-> 2. Noted re the personal notes.
-> 
-> 3. I'll look at added the license details
-> 
-> 4.
-> >Please remove this part 
-> Is this the part you mean?
-> 
->  >. > +# lcdproc
-> > +#
-
-Yes.
-
-baruch
-
-> ----------------------------------------
-> From: "Baruch Siach" <baruch@tkos.co.il>
-> Sent: Tuesday, March 24, 2015 7:17 PM
-> To: "Rhys Williams" <github@wilberforce.co.nz>
-> Subject: Re: [Buildroot] [PATCH v3] lirc-tools: new package 
-> 
-> Hi Rhys,
-> 
-> On Tue, Mar 24, 2015 at 02:40:08AM +1300, Rhys Williams wrote:
-> > This package adds the userspace tools LIRC - Linux remote control.
-> > The Kernel package will need to be selected.
-> 
-> In this case the package should depend on BR2_LINUX_KERNEL. But are you 
-> sure 
-> of this? The text at http://www.lirc.org/html/install.html#compiling says:
-> 
-> 	As of 0.9.1+, lirc uses the kernel modules from the official kernel. Some 
-> 
-> 	of these are formerly lirc modules which are now part of the kernel. Thus, 
-> 
-> 	building lirc does not involve building kernel modules (as it used to 
-> be).
-> 
-> > Thanks to Baruch for help so far.
-> 
-> This line should not be part of the commit log that is kept forever in the 
-> 
-> Buildroot git history. You may add "personal" comments below the --- 
-> separator...
-> 
-> > Signed-off-by: Rhys Williams 
-> > ---
-> 
-> ... here.
-> 
-> >  package/Config.in                  |  1 +
-> >  package/lirc-tools/Config.in       | 15 +++++++++++++++
-> >  package/lirc-tools/S25lircd        | 38 
-> ++++++++++++++++++++++++++++++++++++++
-> >  package/lirc-tools/lirc-tools.hash |  2 ++
-> >  package/lirc-tools/lirc-tools.mk   | 20 ++++++++++++++++++++
-> >  5 files changed, 76 insertions(+)
-> >  create mode 100644 package/lirc-tools/Config.in
-> >  create mode 100755 package/lirc-tools/S25lircd
-> >  create mode 100644 package/lirc-tools/lirc-tools.hash
-> >  create mode 100644 package/lirc-tools/lirc-tools.mk
-> 
-> [...]
-> 
-> > diff --git a/package/lirc-tools/lirc-tools.mk 
-> > b/package/lirc-tools/lirc-tools.mk
-> > new file mode 100644
-> > index 0000000..791ed8d
-> > --- /dev/null
-> > +++ b/package/lirc-tools/lirc-tools.mk
-> > @@ -0,0 +1,20 @@
-> > 
-> +###########################################################################
-> #####
-> > +#
-> > +# lirc-tools
-> > +#
-> > 
-> +###########################################################################
-> #####
-> > +
-> > +LIRC_TOOLS_VERSION = 0.9.2
-> > +LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
-> > +LIRC_TOOLS_SITE = 
-> http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)/
-> 
-> I forgot to mention that earlier, but please add license information here. 
-> See 
-> the description of _LICENSE and _LICENSE_FILES in the manual at 
-> http://nightly.buildroot.org/manual.html#_infrastructure_for_packages_with_s
-> pecific_build_systems.
-> 
-> > +
-> > +LIRC_TOOLS_CONF_OPTS = --without-x --enable-sandboxed 
-> --with-driver=userspace
-> > +
-> > +define LIRC_TOOLS_INSTALL_INIT_SYSV
-> > +	$(INSTALL) -D -m 0755 package/lirc-tools/S25lircd 
-> $(TARGET_DIR)/etc/init.d/
-> > +endef
-> > +
-> > +$(eval $(autotools-package))
-> > +#
-> > +# lcdproc
-> > +#
-> 
-> Please remove this part.
-> 
-> baruch
-
+diff --git a/system/Config.in b/system/Config.in
+index 9973cc2..f3d67ed 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -188,6 +188,44 @@ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
++config BR2_TARGET_ENABLE_ROOT_LOGIN
++	bool "Enable root login"
++        default "y"
++	help
++	  Enable root login password
++
++if BR2_TARGET_ENABLE_ROOT_LOGIN
++
++choice
++	prompt "Root password input"
++
++config BR2_TARGET_PLAINTEXT_ROOT_PASSWORD
++	bool "cleartext format"
++	help
++	  Set the root password from plaintext input
++
++	  WARNING! WARNING!
++	  The password appears in clear in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either the
++	  .config file or the build log may be distributed!
++
++config BR2_TARGET_HASHED_ROOT_PASSWORD
++	bool "hashed format"
++	help
++	  Set the root password from prehashed input
++
++	  WARNING! WARNING!
++	  The password's hash appears in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either
++	  the .config file or the build log may be distributed, or at the
++	  very least use a strong cryptographic hash for your password!
++
++endchoice
++
++endif
++
++if BR2_TARGET_PLAINTEXT_ROOT_PASSWORD
++
+ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	string "Root password"
+ 	default ""
+@@ -208,6 +246,34 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	  The password appears in clear in the .config file, and may appear
+ 	  in the build log! Avoid using a valuable password if either the
+ 	  .config file or the build log may be distributed!
++endif
++
++if BR2_TARGET_HASHED_ROOT_PASSWORD
++
++config BR2_TARGET_GENERIC_ROOT_PASSWD_HASH
++	string "Hashed root password"
++	default ""
++	help
++	  Set the crypt(3) encoded root password hash.
++
++	  If set to empty (the default), then no root password will be set,
++	  and root will need no password to log in.
++
++	  An hashed root password of "*" will disable root logins.
++
++	  "$" signs in the hashed password must be doubled.
++
++	  For example, the MD5 hash for the password "mypass" salted with
++	  the string "longsalt" is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
++	  which must be written as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
++
++	  WARNING! WARNING!
++	  The password's hash appears in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either
++	  the .config file or the build log may be distributed, or at the
++	  very least use a strong cryptographic hash for your password!
++
++endif
+ 
+ choice
+ 	bool "/bin/sh"
+diff --git a/system/system.mk b/system/system.mk
+index 4a1eb4a..c38b1e7 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -1,6 +1,10 @@
+ TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
++TARGET_ENABLE_ROOT_LOGIN = $(call qstrip, $(BR2_TARGET_ENABLE_ROOT_LOGIN))
++TARGET_PLAINTEXT_ROOT_PASSWORD = $(call qstrip, $(BR2_TARGET_PLAINTEXT_ROOT_PASSWORD))
++TARGET_HASHED_ROOT_PASSWORD = $(call qstrip, $(BR2_TARGET_HASHED_ROOT_PASSWORD))
+ TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
++TARGET_GENERIC_ROOT_PASSWD_HASH = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD_HASH))
+ TARGET_GENERIC_PASSWD_METHOD = $(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
+ TARGET_GENERIC_BIN_SH = $(call qstrip,$(BR2_SYSTEM_BIN_SH))
+ TARGET_GENERIC_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+@@ -69,11 +73,28 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
+ 
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ 
++ifeq ($(TARGET_ENABLE_ROOT_LOGIN),n)
++
++define SYSTEM_ROOT_PASSWD
++	$(SED) 's,^root:[^:]*:,root:*:,' $(TARGET_DIR)/etc/shadow
++endef
++
++else ifeq ($(TARGET_PLAINTEXT_ROOT_PASSWORD),y)
++
+ define SYSTEM_ROOT_PASSWD
+ 	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
+ 		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
+ 	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
+ endef
++
++else ifeq ($(BR2_TARGET_HASHED_ROOT_PASSWORD),y)
++
++define SYSTEM_ROOT_PASSWD
++	$(SED) 's,^root:[^:]*:,root:$(TARGET_GENERIC_ROOT_PASSWD_HASH):,' $(TARGET_DIR)/etc/shadow
++endef
++
++endif
++
+ TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
+ 
+ ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
