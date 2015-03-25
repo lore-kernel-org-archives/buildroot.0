@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 00:57:55 +0100
-Subject: [Buildroot] [PATCH] linux: add an option to install kernel
- headers into staging
-In-Reply-To: <1427191230-23152-1-git-send-email-nicolas.serafini@sensefly.com>
-References: <1427191230-23152-1-git-send-email-nicolas.serafini@sensefly.com>
-Message-ID: <20150325005755.0033da35@free-electrons.com>
+Date: Wed, 25 Mar 2015 01:02:09 +0100
+Subject: [Buildroot] [PATCH v5] configs: add defconfig for Freescale
+ i.MX31 PDK
+In-Reply-To: <1427223197-14064-1-git-send-email-vincent.stehle@freescale.com>
+References: <550DAA15.7070103@mind.be>
+ <1427223197-14064-1-git-send-email-vincent.stehle@freescale.com>
+Message-ID: <20150325010209.61f0db90@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Serafini,
+Dear Vincent Stehl?,
 
-On Tue, 24 Mar 2015 11:00:30 +0100, Nicolas Serafini wrote:
-> The kernel headers are installed into /usr/src/linux-headers-version
-> of the staging folder.
+On Tue, 24 Mar 2015 19:53:17 +0100, Vincent Stehl? wrote:
+> The i.MX31 Product Development Kit (or PDK) is Freescale development board
+> based on the i.MX31 application processor.
 > 
-> These headers can be used, for example, by a post build script to
-> install or update some new headers from the kernel in /usr/include of
-> the staging.
+> This defconfig is based on mainline kernel v3.15.10, and is aimed at a PDK in
+> "3 stack" configuration, with CPU engine board, personality board and debug
+> board.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Can you give some more details and background about the issue you're
-trying to solve? You're only explaining what your solution is, but not
-what the original problem is.
-
-Best regards,
+Applied, thanks!
 
 Thomas
 -- 
