@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 20:04:08 +0100
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,18}.x series
-In-Reply-To: <1427283189-20503-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427283189-20503-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150325200408.37897fe8@free-electrons.com>
+Date: Wed, 25 Mar 2015 20:05:01 +0100
+Subject: [Buildroot] [PATCH] busybox: bump to version 1.23.2
+In-Reply-To: <1427296681-7053-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427296681-7053-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150325200501.68180ec9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,24 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 25 Mar 2015 08:33:09 -0300, Gustavo Zacarias wrote:
+On Wed, 25 Mar 2015 12:18:01 -0300, Gustavo Zacarias wrote:
+> Drop upstream patches.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/linux-headers/Config.in.host | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/busybox/0002-modprobe-small.patch | 171 ---------------------------
+>  package/busybox/0003-dc.patch             | 163 --------------------------
+>  package/busybox/0004-wget.patch           | 185 ------------------------------
+>  package/busybox/0005-modinfo.patch        |  17 ---
+>  package/busybox/busybox.hash              |   6 +-
+>  package/busybox/busybox.mk                |   2 +-
+>  6 files changed, 4 insertions(+), 540 deletions(-)
+>  delete mode 100644 package/busybox/0002-modprobe-small.patch
+>  delete mode 100644 package/busybox/0003-dc.patch
+>  delete mode 100644 package/busybox/0004-wget.patch
+>  delete mode 100644 package/busybox/0005-modinfo.patch
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
