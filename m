@@ -1,107 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 20:07:34 +0100
-Subject: [Buildroot] [git commit] erlang: fix incorrect use of AC_EGREP_CPP
-Message-ID: <20150325190736.2B8E58040A@busybox.osuosl.org>
+Date: Wed, 25 Mar 2015 19:47:53 +0100
+Subject: [Buildroot] [PATCH v8] package/sysdig: New package
+In-Reply-To: <CAMQcK5+519qW9bQRgMw1MxdFk4Xu7Ap-NRTtr5aqmHChOkGraQ@mail.gmail.com>
+References: <1427280821-2909-1-git-send-email-angelo.compagnucci@gmail.com>
+ <CAMQcK5KooYkSGu9CZ78Z871DALorZK7GsYv39XAjnK=kLa7O1w@mail.gmail.com>
+ <CAMQcK5+519qW9bQRgMw1MxdFk4Xu7Ap-NRTtr5aqmHChOkGraQ@mail.gmail.com>
+Message-ID: <20150325194753.3cf82e93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cef48576380f4541935695159a07eedc6358b4c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Ryan Barnett,
 
-Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
-true if it runs from a path containing the string 'yes'.
+On Wed, 25 Mar 2015 13:29:56 -0500, Ryan Barnett wrote:
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch |   79 ++++++++++++++++++++
- 1 files changed, 79 insertions(+), 0 deletions(-)
+> In your previous email you gave a link to saying why luajit is required:
+> 
+> [1] http://www.sysdig.org/wiki/how-to-install-sysdig-from-the-source-code/
+> 
+> However, from reading the documentation it says that you can use the
+> bundled luajit. Quoting from the site you provided:
+> 
+> ---
+> By default the bundled version of LuaJIT will be built and linked
+> statically. If you prefer to use the system one, then you can do:
+> 
+> cmake -DUSE_BUNDLED_LUAJIT=OFF ..
+> ---
+> 
+> This would imply that we can make an optional dependency on luajit by
+> doing something like this:
+> 
+> ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> SYSDIG_CONF_OPTS += DUSE_BUNDLED_LUAJIT=OFF
+> SYSDIG_DEPENDENCIES += luajit
+> endif
+> 
+> I don't think it make sense to have an else case here since it doesn't
+> mention having to define BUNDLED_LUAJIT as on.
+> 
+> It appears that you can the same for zlib and jsoncpp as well. I have
+> not tried this yet but from reading the documentation it appears that
+> this all possible.
 
-diff --git a/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-new file mode 100644
-index 0000000..bc08697
---- /dev/null
-+++ b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-@@ -0,0 +1,79 @@
-+Status: upstream
-+https://github.com/erlang/otp/pull/658
-+
-+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-+
-+From 73392fcb6f8fddba57de6fb7ae6eeafa0e444686 Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Tue, 24 Mar 2015 15:54:31 +0100
-+Subject: [PATCH] erts: Fix incorrect use of AC_EGREP_CPP
-+
-+Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
-+true if it runs from a path containing the string 'yes'.
-+---
-+ erts/aclocal.m4   |  2 +-
-+ erts/configure.in | 17 +++++++++--------
-+ 2 files changed, 10 insertions(+), 9 deletions(-)
-+
-+diff --git a/erts/aclocal.m4 b/erts/aclocal.m4
-+index 5735cde..70a5b40 100644
-+--- a/erts/aclocal.m4
-++++ b/erts/aclocal.m4
-+@@ -559,7 +559,7 @@ dnl
-+ 
-+ AC_DEFUN(LM_SYS_MULTICAST,
-+ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-+-[AC_EGREP_CPP(yes,
-++[AC_EGREP_CPP(^yes$,
-+ [#include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <netinet/in.h>
-+diff --git a/erts/configure.in b/erts/configure.in
-+index b3fe48d..9e19e33 100644
-+--- a/erts/configure.in
-++++ b/erts/configure.in
-+@@ -1555,10 +1555,11 @@ if test "$have_gethostbyname_r" = yes; then
-+ 				    [Define to flavour of gethostbyname_r]))
-+ 		;;
-+ 		*)
-+-			AC_EGREP_CPP(yes,[#include <stdio.h>
-+-			  #ifdef __GLIBC__
-+-			  yes
-+-			  #endif
-++			AC_EGREP_CPP(^yes$,[
-++#include <stdio.h>
-++#ifdef __GLIBC__
-++yes
-++#endif
-+ 			  ], AC_DEFINE(HAVE_GETHOSTBYNAME_R, GHBN_R_GLIBC,
-+ 				[Define to flavour of gethostbyname_r]))
-+ 		;;
-+@@ -4303,10 +4304,10 @@ case "$erl_xcomp_without_sysroot-$with_ssl" in
-+ 			SSL_INCLUDE="-I$dir/include"
-+ 			old_CPPFLAGS=$CPPFLAGS
-+ 			CPPFLAGS=$SSL_INCLUDE
-+-			AC_EGREP_CPP(yes,[
-++			AC_EGREP_CPP(^yes$,[
-+ #include <openssl/opensslv.h>
-+ #if OPENSSL_VERSION_NUMBER >= 0x0090700fL
-+-  yes
-++yes
-+ #endif
-+ 			],[
-+ 			ssl_found=yes
-+@@ -4501,10 +4502,10 @@ if test "x$SSL_APP" != "x" ; then
-+     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
-+     old_CPPFLAGS=$CPPFLAGS
-+     CPPFLAGS=$SSL_INCLUDE
-+-    AC_EGREP_CPP(yes,[
-++    AC_EGREP_CPP(^yes$,[
-+ #include <openssl/opensslconf.h>
-+ #ifndef OPENSSL_NO_KRB5
-+-  yes
-++yes
-+ #endif
-+       ],[
-+       AC_MSG_RESULT([yes])
-+-- 
-+2.1.0
-+
+Well, it depends. If those dependencies are indeed mandatory (i.e
+sysdig always needs LuaJIT, be it a bundled version or a
+system-provided version), I believe we generally prefer to always use
+the system-generated version. Using bundling version is not really nice
+to make sure that the latest versions of LuaJit/zlib/jsoncpp are used.
+
+So, in general, I think we prefer to use system-provided versions,
+unless using the bundled version is absolutely necessary (tight version
+dependency, specific hacks done, etc.).
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
