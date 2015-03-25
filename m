@@ -1,47 +1,49 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 25 Mar 2015 07:49:24 +0000
-Subject: [Buildroot] [PATCH] uclibc: clean-up test suite build command
-In-Reply-To: <20140630200719.1339a6ed@free-electrons.com>
-References: <1404149181-18586-1-git-send-email-abrodkin@synopsys.com>
- <20140630200719.1339a6ed@free-electrons.com>
-Message-ID: <1427269764.2718.4.camel@synopsys.com>
+Date: Wed, 25 Mar 2015 11:11:11 +0300
+Subject: [Buildroot] [PATCH v2] toolchain-external: fix gdbserver copying
+	for external arc-2014.12 tools
+Message-ID: <1427271071-9541-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Historically in pre-built ARC GNU tools gdbserver is located in
+top-level "target-bin" folder.
 
-On Mon, 2014-06-30 at 20:07 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Mon, 30 Jun 2014 21:26:21 +0400, Alexey Brodkin wrote:
-> > Starting from uClibc 0.9.32 this cleaned-up command builds tests flawlessly.
-> > For 0.9.31 it lead to build failure, but assuming there're close to zero
-> > users who is going to test outdated uClibc library on obsolete
-> > (in Buildroot) AVR32 architecture I thin it worth applying.
-> > 
-> > Still it's possible to have 2 variants at the same time until AVR32 is not gone:
-> > 1. Old implementation used strictly for uClibc 0.9.31
-> > 2. New implementation for all other versions
-> > 
-> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Unfortunately, unless this cleaned-up version brings significant
-> benefits, I believe the best option is to keep things as is until AVR32
-> support is really deprecated and removed from Buildroot, so that we can
-> drop support for 0.9.31.
+Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
+selected Buildroot won't find gdbserver (it looks within
+SYSROOT/ARCH_SYSROOT folder).
 
-Now when AVR32 support is finally dropped do you think this patch might
-be accepted?
+Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
+gdbserver from "target-bin" folder into SYSROOT/usr/bin.
 
-It still applies flawlessly on current master.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Changes in v2:
+ [1] "install" command is used instead of "cp"
+ [2] copy only "gdbserver" instead of everything from "target_bin" to sysroot
+---
+ toolchain/toolchain-external/toolchain-external.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I build tested it on ARC and ARM. Note on ARM uClibc tests
-(BR2_UCLIBC_INSTALL_TEST_SUITE) will be only compiled without errors
-with uClibc-ng (BR2_UCLIBC_VERSION_NG), either BR2_UCLIBC_VERSION_0_9_33
-or BR2_UCLIBC_VERSION_SNAPSHOT will fail on testsuite compilation but
-that has nothing to do with current patch.
-
--Alexey
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c0429bb..fe709db 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -396,6 +396,10 @@ else
+ TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS = be
+ endif
+ TOOLCHAIN_EXTERNAL_SOURCE = arc_gnu_2014.12_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_CORE)_linux_install.tar.gz
++define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
++	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
++	install -m 0755 -D $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/target-bin/gdbserver $${SYSROOT_DIR}/usr/bin/gdbserver
++endef
+ else
+ # Custom toolchain
+ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+-- 
+2.1.0
