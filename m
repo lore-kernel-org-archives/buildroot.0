@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 20:08:09 +0100
-Subject: [Buildroot] [PATCH v2 1/1] erlang: fix incorrect use of
- AC_EGREP_CPP
-In-Reply-To: <1427296020-12945-1-git-send-email-johan.oudinet@gmail.com>
-References: <1427296020-12945-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150325200809.3beab93d@free-electrons.com>
+Date: Wed, 25 Mar 2015 20:09:55 +0100
+Subject: [Buildroot] [PATCH] aiccu: musl patches
+In-Reply-To: <20150324223049.GA4134@vostro>
+References: <20150324223049.GA4134@vostro>
+Message-ID: <20150325200955.6a0e54c7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+Dear Alex Suykov,
 
-On Wed, 25 Mar 2015 16:06:59 +0100, Johan Oudinet wrote:
-> Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
-> true if it runs from a path containing the string 'yes'.
+On Wed, 25 Mar 2015 00:30:49 +0200, Alex Suykov wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/8c666ef11310868097601b6de1dd25779729b878/
 > 
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+> if_ether.h issue discussion: http://www.openwall.com/lists/musl/2012/10/11/1
+> 
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 > ---
->  ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch | 79 ++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
->  create mode 100644 package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
+>  package/aiccu/0004-if-ether-header.patch | 23 +++++++++++++++++++++++
+>  package/aiccu/0005-res-ninit.patch       | 22 ++++++++++++++++++++++
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 package/aiccu/0004-if-ether-header.patch
+>  create mode 100644 package/aiccu/0005-res-ninit.patch
 
-Applied! Thanks a lot for having quickly posted an updated version of
-the patch!
+Thanks. What is the upstreaming plan for those patches?
 
 Thomas
 -- 
