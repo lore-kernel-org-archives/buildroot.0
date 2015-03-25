@@ -1,54 +1,106 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Mar 2015 11:07:29 -0300
-Subject: [Buildroot] [Bug-readline] IPython/readline segfaults
-In-Reply-To: <5512BF40.5000702@vu.nl>
-References: <55116D12.1000106@vu.nl> <5511B114.60704@case.edu>
- <20150325003203.GL10761@vapier> <5512940B.60808@vu.nl>
- <5512B650.1020006@zacarias.com.ar> <5512BF40.5000702@vu.nl>
-Message-ID: <5512C121.7040707@zacarias.com.ar>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 25 Mar 2015 16:06:59 +0100
+Subject: [Buildroot] [PATCH v2 1/1] erlang: fix incorrect use of AC_EGREP_CPP
+Message-ID: <1427296020-12945-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/25/2015 10:59 AM, ir. Tjeerd Pinkert wrote:
+Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
+true if it runs from a path containing the string 'yes'.
 
-> On 25-03-15 14:21, Gustavo Zacarias wrote:
->> On 03/25/2015 07:55 AM, ir. Tjeerd Pinkert wrote:
->>
->>> Thanks, indeed, buildroot 2015.02 has 6.3 with no patches, although it
->>> downloads the latest tar file. I'm trying to see if patching helps.
->>
->> I've sent a patch to bump it to patchlevel 8 after the 2015.02 release
->> for another bug in commit b817e8c58117402561a61c0d749337f415c9c985
->> (bash-related).
->> So it'll be part of the 2015.05 release, or if you're in a rush just
->> apply that patch to your tree.
-> 
-> I have tested it, and the patch works, no more segfaults so far.
-> 
-> I attach the patch file for buildroot, Gustavo, can you tell me if I did
-> it in a correct way? Did you already include this one in buildroot too?
-> I could not get the original patch working with the buildroot system so
-> I generated my own diff which works for buildroot (that is
-> readline-0001-63-002.patch). I saw there are more patches for readline
-> 6.3 available.
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch | 79 ++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
 
-Hi.
-No need to CC Mike or the readline list, as far as they're concerned
-this was already fixed with the patches upstream.
-Well, it's easy, fetch the patch:
-
-$ wget
-"http://git.buildroot.net/buildroot/patch/?id=b817e8c58117402561a61c0d749337f415c9c985"
--O readline.patch
-
-Apply the patch:
-
-buildroot-2015.02 $ patch -p1 <readline.patch
-
-And yes, the patches need a little tweak to apply cleanly (the patch
-prefixing is done in a somewhat odd way), but i've handled that in the
-patch i've sent for buildroot inclusion.
-Regards.
+diff --git a/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
+new file mode 100644
+index 0000000..934b863
+--- /dev/null
++++ b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
+@@ -0,0 +1,79 @@
++Status: upstream
++https://github.com/erlang/otp/pull/658
++
++Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
++
++From 73392fcb6f8fddba57de6fb7ae6eeafa0e444686 Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Tue, 24 Mar 2015 15:54:31 +0100
++Subject: [PATCH] erts: Fix incorrect use of AC_EGREP_CPP
++
++Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
++true if it runs from a path containing the string 'yes'.
++---
++ erts/aclocal.m4   |  2 +-
++ erts/configure.in | 17 +++++++++--------
++ 2 files changed, 10 insertions(+), 9 deletions(-)
++
++diff --git a/erts/aclocal.m4 b/erts/aclocal.m4
++index 5735cde..70a5b40 100644
++--- a/erts/aclocal.m4
+++++ b/erts/aclocal.m4
++@@ -559,7 +559,7 @@ dnl
++ 
++ AC_DEFUN(LM_SYS_MULTICAST,
++ [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
++-[AC_EGREP_CPP(yes,
+++[AC_EGREP_CPP(^yes$,
++ [#include <sys/types.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++diff --git a/erts/configure.in b/erts/configure.in
++index b3fe48d..9e19e33 100644
++--- a/erts/configure.in
+++++ b/erts/configure.in
++@@ -1555,10 +1555,11 @@ if test "$have_gethostbyname_r" = yes; then
++ 				    [Define to flavour of gethostbyname_r]))
++ 		;;
++ 		*)
++-			AC_EGREP_CPP(yes,[#include <stdio.h>
++-			  #ifdef __GLIBC__
++-			  yes
++-			  #endif
+++			AC_EGREP_CPP(^yes$,[
+++#include <stdio.h>
+++#ifdef __GLIBC__
+++yes
+++#endif
++ 			  ], AC_DEFINE(HAVE_GETHOSTBYNAME_R, GHBN_R_GLIBC,
++ 				[Define to flavour of gethostbyname_r]))
++ 		;;
++@@ -4303,10 +4304,10 @@ case "$erl_xcomp_without_sysroot-$with_ssl" in
++ 			SSL_INCLUDE="-I$dir/include"
++ 			old_CPPFLAGS=$CPPFLAGS
++ 			CPPFLAGS=$SSL_INCLUDE
++-			AC_EGREP_CPP(yes,[
+++			AC_EGREP_CPP(^yes$,[
++ #include <openssl/opensslv.h>
++ #if OPENSSL_VERSION_NUMBER >= 0x0090700fL
++-  yes
+++yes
++ #endif
++ 			],[
++ 			ssl_found=yes
++@@ -4501,10 +4502,10 @@ if test "x$SSL_APP" != "x" ; then
++     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
++     old_CPPFLAGS=$CPPFLAGS
++     CPPFLAGS=$SSL_INCLUDE
++-    AC_EGREP_CPP(yes,[
+++    AC_EGREP_CPP(^yes$,[
++ #include <openssl/opensslconf.h>
++ #ifndef OPENSSL_NO_KRB5
++-  yes
+++yes
++ #endif
++       ],[
++       AC_MSG_RESULT([yes])
++-- 
++2.1.0
++
+-- 
+2.1.0
