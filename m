@@ -1,35 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Mar 2015 17:39:19 +0100
-Subject: [Buildroot] [PATCH] uclibc: clean-up test suite build command
-In-Reply-To: <1427269764.2718.4.camel@synopsys.com>
-References: <1404149181-18586-1-git-send-email-abrodkin@synopsys.com>
- <20140630200719.1339a6ed@free-electrons.com>
- <1427269764.2718.4.camel@synopsys.com>
-Message-ID: <20150325173919.0b2d0528@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 25 Mar 2015 19:35:15 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-03-24
+In-Reply-To: <20150325073018.8670F100F03@stock.ovh.net>
+References: <20150325073018.8670F100F03@stock.ovh.net>
+Message-ID: <20150325173515.GC2825@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Hi Buildroot list,
 
-On Wed, 25 Mar 2015 07:49:24 +0000, Alexey Brodkin wrote:
+On Wed, Mar 25, 2015 at 08:30:18AM +0100, Thomas Petazzoni wrote:
+>      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/329042ec45398798793619fc2b8ff09ff8cbf3bb/
+>      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/788e7103c7c7c0199f221f42be6c22cc9eac3e0b/
+>      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/a88ca776366a4cc3cab3272d18c002f72a0a92d8/
+>      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/8ac1da09ce34d3ebcbcc3a78aafd3d2643a79621/
+>      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/673d4a0a334c4694cc4dd05ef99069f681f98f0a/
+>      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/4bbf9e785eb9cb0f916f0a2bdaf7a6a5f639f7ea/
+>          arc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/5909fe683311d135b273562fdb5d34a245da7766/
 
-> > Unfortunately, unless this cleaned-up version brings significant
-> > benefits, I believe the best option is to keep things as is until AVR32
-> > support is really deprecated and removed from Buildroot, so that we can
-> > drop support for 0.9.31.
-> 
-> Now when AVR32 support is finally dropped do you think this patch might
-> be accepted?
+Should be fixed by http://patchwork.ozlabs.org/patch/453810/.
 
-Yes, sure! AVR32 / supporting old uClibc versions was the only reason
-to keep the old way around. Now that AVR32 is gone, all clean-ups we
-can do following this removal are very welcome.
+baruch
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
