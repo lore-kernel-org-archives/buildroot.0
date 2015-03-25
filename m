@@ -1,32 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 25 Mar 2015 19:35:15 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-03-24
-In-Reply-To: <20150325073018.8670F100F03@stock.ovh.net>
-References: <20150325073018.8670F100F03@stock.ovh.net>
-Message-ID: <20150325173515.GC2825@tarshish>
+From: Steve Kenton <skenton@ou.edu>
+Date: Wed, 25 Mar 2015 12:44:58 -0500
+Subject: [Buildroot] Where is /dev/console created when using devtmpfs?
+Message-ID: <5512F41A.3080208@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+I'm currently running with devtmpfs only but am looking into using mdev
+so I spent some time looking at my device usage and for the life of me
+I can't find where /dev/console gets created during the build process.
+Looking at the root filesystem when it's not running shows this in /dev
 
-On Wed, Mar 25, 2015 at 08:30:18AM +0100, Thomas Petazzoni wrote:
->      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/329042ec45398798793619fc2b8ff09ff8cbf3bb/
->      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/788e7103c7c7c0199f221f42be6c22cc9eac3e0b/
->      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/a88ca776366a4cc3cab3272d18c002f72a0a92d8/
->      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/8ac1da09ce34d3ebcbcc3a78aafd3d2643a79621/
->      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/673d4a0a334c4694cc4dd05ef99069f681f98f0a/
->      powerpc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/4bbf9e785eb9cb0f916f0a2bdaf7a6a5f639f7ea/
->          arc |                   dhcpcd-6.7.1 | NOK | http://autobuild.buildroot.net/results/5909fe683311d135b273562fdb5d34a245da7766/
+drwxrwxr-x 2 root root 4096 Mar  1 15:26 pts
+lrwxrwxrwx 1 root root   10 Mar  1 15:26 log -> ../tmp/log
+crw--w--w- 1 root root 5, 1 Mar 22 21:52 console
 
-Should be fixed by http://patchwork.ozlabs.org/patch/453810/.
+and I see that pts and log come from the skeleton but I can't find console.
+I'm running an x86_64 system using the default vga console if that matters.
+I'm obviously missing something but I can't find a mknod or mkdevs for it.
 
-baruch
+Where is /dev/console created when using devtmpfs?
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thanks,
+
+Steve
