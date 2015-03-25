@@ -1,32 +1,34 @@
-From: Alexey Mednyy <swexru@gmail.com>
-Date: Wed, 25 Mar 2015 23:10:33 +0300
-Subject: [Buildroot] wpa_supplicant not starting correctly
-Message-ID: <55131639.9040408@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Mar 2015 21:39:06 +0100
+Subject: [Buildroot] [git commit] gcc: mark 4.5.x as deprecated
+Message-ID: <20150325203909.78AB280179@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello there,
+commit: http://git.buildroot.net/buildroot/commit/?id=89854b0f792553786fa3aac4966fb63e60844b7a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've got configuration with eudev,dbus and  busybox init.
-Previously everything worked fine, but now wpa_supplicant not starting.
-and I see this in /var/log/messages :
+It was kept for the internal blackfin toolchain which has been removed
+since because of lack of maintenance and testing.
 
-Mar 25 22:56:25 hostname daemon.notice dbus[120]: [system] Activating
-service name='fi.w1.wpa_supplicant1' (using servicehelper)
-Mar 25 22:56:26 hostname daemon.info init: starting pideudev 146, tty
-'/dev/ttyS0': '/sbin/getty -L  ttyS0 0 vt100 '
-Mar 25 22:56:26 hostname daemon.notice dbus[120]: [system] Activated
-service 'fi.w1.wpa_supplicant1' failed: Failed to execute program
-fi.w1.wpa_supplicant1: Success
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-I'm not an expert in dbus, so asking for help what causes such problem?
-I think before some recent commit wpa_supplicant started by init script
-not by dbus is it true?
-
-
--- 
-_________________________________
-Best regards, Mednyy Alexey.
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 6d514af..cf96c73 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -16,6 +16,7 @@ choice
+ 
+ 	config BR2_GCC_VERSION_4_5_X
+ 		bool "gcc 4.5.x"
++		depends on BR2_DEPRECATED_SINCE_2015_05
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+ 			&& !BR2_powerpc64le && !BR2_nios2
