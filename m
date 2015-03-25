@@ -1,7 +1,7 @@
 From: Paul Cercueil <paul.cercueil@analog.com>
-Date: Wed, 25 Mar 2015 10:00:37 +0100
-Subject: [Buildroot] [PATCH v3] libiio: Bump version to 0.5
-Message-ID: <1427274037-22340-1-git-send-email-paul.cercueil@analog.com>
+Date: Wed, 25 Mar 2015 09:54:49 +0100
+Subject: [Buildroot] [PATCH v2] libiio: Bump version to 0.5
+Message-ID: <1427273689-20475-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,14 @@ The package now offers the possibility to install Python and/or C#
 bindings if the Python and Mono packages are detected.
 
 v2: Patch generated with 'git format-patch -M' and fix indentation in libiio.mk
-v3: Updated libiio.hash file
 
 Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 ---
  ...UILD_SHARED_LIBS-drive-the-type-of-librar.patch | 29 --------------------
  ...2-detection-try-first-the-CMake-module-f.patch} |  0
  package/libiio/Config.in                           | 12 ++++++++
- package/libiio/libiio.hash                         |  4 +--
  package/libiio/libiio.mk                           | 32 ++++++++++++++++++++--
- 5 files changed, 43 insertions(+), 34 deletions(-)
+ 4 files changed, 41 insertions(+), 32 deletions(-)
  delete mode 100644 package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
  rename package/libiio/{0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch => 0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch} (100%)
 
@@ -85,15 +83,6 @@ index 680d5dc..21496ed 100644
 +	  Install the Python bindings.
 +
  endif
-diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-index bbca4c8..28b9c63 100644
---- a/package/libiio/libiio.hash
-+++ b/package/libiio/libiio.hash
-@@ -1,2 +1,2 @@
--# From https://github.com/analogdevicesinc/libiio/archive/v0.3/
--sha256	a3571bbf7e80b9e0a8d6bd4b39a5bcd18f80a3d36c4a6f2092dfeefc98e20e07	libiio-v0.3.tar.gz
-+# From https://github.com/analogdevicesinc/libiio/archive/v0.5/
-+sha256	c41cdcfeae8717e72f1100b4dac9d7cc9d86f4e0731da3354149cb7e051666f3	libiio-0.5.tar.gz
 diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
 index 7082e89..802cc03 100644
 --- a/package/libiio/libiio.mk
