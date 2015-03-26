@@ -1,39 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Mar 2015 16:30:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 7976] mkuser script fails with: user already
- exists with group nogroup
-In-Reply-To: <bug-7976-163@https.bugs.busybox.net/>
-References: <bug-7976-163@https.bugs.busybox.net/>
-Message-ID: <20150326163027.78E05818CA@busybox.osuosl.org>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Thu, 26 Mar 2015 17:57:43 +0100
+Subject: [Buildroot] Naming convention for patches
+Message-ID: <CAJtjsKaG8QfL5ZHcZ7osJ0+T=eJTFgHxhCfqe=QWBDHa0z9q0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7976
+Hi All,
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-03-26 16:30:27 UTC ---
-Created attachment 5956
-  --> https://bugs.busybox.net/attachment.cgi?id=5956
-Enhance error messages
+In 9.8. Adding project-specific patches:
+"Otherwise, patch files matching <packagename>-*.patch are applied in
+alphabetical order."
 
-Hello!
+This naming convention has been changed in buildroot, so we can use
+the name provided by git format-patch (i.e., without prefixing it by
+the package name).
+Is this pattern still required for patches inside
+BR2_GLOBAL_PATCH_DIR, or is it simply a mistake from the
+documentation?
 
-The only package we have that wants to add a user with group 'nogroup' is
-the mysql package, and it builds just fine here.
-
-Do you have a custom users table? Do you have a local package that wants
-to add another user with group 'nogroup'?
-
-In any case, care to apply the attached patch and report on the new error
-message, please?  (note: this patch only expands the error message, and
-does not attempt to provide a fix, since I can't reproduce).
-
-Regards,
-Yann E. MORIN.
-
+Thanks.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Johan
