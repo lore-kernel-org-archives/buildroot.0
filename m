@@ -1,95 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Mar 2015 23:26:02 +0100
-Subject: [Buildroot] [PATCH] support/mkusers: enhance error messages
-Message-ID: <1427408762-31507-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 26 Mar 2015 23:45:15 +0100
+Subject: [Buildroot] [PATCH] linux-ext: update Xenomai help text
+Message-ID: <1427409915-14913-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current error messages are a bit terse, and do not provide all the
-required information.
+Reword the help text and get ride of the supported kernel
+version list which is outdated since Xenomai version bump.
 
-Expand them to provide more context.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Tom Elliott <tommygunsster@gmail.com>
-
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-Thanks to Tom for fixing the typoes. :-)
+ linux/Config.ext.in | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-Note: this is not a fix for Tom's issue; however, it still good to have
-explicit error messages.
----
- support/scripts/mkusers | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
-
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index b003330..026519e 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -129,47 +129,53 @@ check_user_validity() {
-     fi
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 8f15687..22c0bef 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -8,13 +8,20 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI
+ 		   BR2_bfin || BR2_powerpc || BR2_sh4
+ 	select BR2_PACKAGE_XENOMAI
+ 	help
+-	  Xenomai Kernel part.
++	  Xenomai is split in two parts: a kernel part and an userspace part.
++	  Enabling this option automatically select the Xenomai package and help
++	  to patch the linux kernel build by Builroot with the Xenomai kernel
++	  part (ie ADEOS/IPIPE).
  
-     if [ ${gid} -lt -1 -o ${gid} -eq 0 ]; then
--        fail "invalid gid '%d'\n" ${gid}
-+        fail "invalid gid '%d' for '%s'\n" ${gid} "${username}"
-     elif [ ${gid} -ne -1 ]; then
-         # check the gid is not already used for another group
-         if [ -n "${_group}" -a "${_group}" != "${group}" ]; then
--            fail "gid is already used by group '${_group}'\n"
-+            fail "gid '%d' for '%s' is already used by group '%s'\n" \
-+                 ${gid} "${username}" "${_group}"
-         fi
+-	  In the current version of Xenomai, the following kernel
+-	  versions are supported: on Blackfin, 2.6.34 and 2.6.36.9, on
+-	  SH4, 2.6.32.10, on x86, 2.6.35.9, 2.6.37.6, 2.6.38.8, on
+-	  ARM, 2.6.35.9, 2.6.37.6, 2.6.38.8, on NIOS2, 2.6.35, on
+-	  PowerPC, 2.6.35.7, 2.6.36.4, 3.0.8.
++	  You can find the currently supported kernel list by looking at the
++	  available patches in the Xenomai sources tree:
++	  ksrc/arch/$(ARCH)/patches
++
++	  However, It's recommended to use the latest version of the adeos/ipipe
++	  which is available at http://download.gna.org/adeos/patches
++
++	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2 and PowerPC
++	  architectures.
  
-         # check the group does not already exists with another gid
-         # Need to split the check in two, otherwise '[' complains it
-         # is missing arguments when _gid is empty
-         if [ -n "${_gid}" ] && [ ${_gid} -ne ${gid} ]; then
--            fail "group already exists with gid '${_gid}'\n"
-+            fail "group '%s' for '%s' already exists with gid '%d' (wants '%d')\n" \
-+                 "${group}" "${username}" ${_gid} ${gid}
-         fi
+ comment "xenomai needs a toolchain w/ threads"
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || \
+@@ -26,7 +33,7 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+ 	string "Path for Adeos patch file"
+ 	help
+ 	  Optionally, explicitly specify the Adeos patch to use.
+-	  Download it at http://download.gna.org/adeos/patches/v2.6/$(ARCH)/
++	  Download it at http://download.gna.org/adeos/patches
+ 	  and verify that your kernel version in buildroot matches.
  
-         # check the user does not already exists with another gid
-         # Need to split the check in two, otherwise '[' complains it
-         # is missing arguments when _ugid is empty
-         if [ -n "${_ugid}" ] && [ ${_ugid} -ne ${gid} ]; then
--            fail "user already exists with gid '${_ugid}'\n"
-+            fail "user '%s' already exists with gid '%d' (wants '%d')\n" \
-+                 "${username}" ${_ugid} ${gid}
-         fi
-     fi
- 
-     if [ ${uid} -lt -1 -o ${uid} -eq 0 ]; then
--        fail "invalid uid '%d'\n" ${uid}
-+        fail "invalid uid '%d' for '%s'\n" ${uid} "${username}"
-     elif [ ${uid} -ne -1 ]; then
-         # check the uid is not already used for another user
-         if [ -n "${_username}" -a "${_username}" != "${username}" ]; then
--            fail "uid is already used by user '${_username}'\n"
-+            fail "uid '%d' for '%s' already used by user '%s'\n" \
-+                 ${uid} "${username}" "${_username}"
-         fi
- 
-         # check the user does not already exists with another uid
-         # Need to split the check in two, otherwise '[' complains it
-         # is missing arguments when _uid is empty
-         if [ -n "${_uid}" ] && [ ${_uid} -ne ${uid} ]; then
--            fail "user already exists with uid '${_uid}'\n"
-+            fail "user '%s' already exists with uid '%d' (wants '%d')\n" \
-+                 "${username}" ${_uid} ${uid}
-         fi
-     fi
- 
-     # check the user does not already exist in another group
-     if [ -n "${_ugroup}" -a "${_ugroup}" != "${group}" ]; then
--        fail "user already exists with group '${_ugroup}'\n"
-+        fail "user '%s' already exists with group '%s' (wants '%s')\n" \
-+             "${username}" "${_ugroup}" "${group}"
-     fi
- 
-     return 0
+ # RTAI
 -- 
-1.9.1
+1.9.3
