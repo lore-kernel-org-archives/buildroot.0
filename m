@@ -1,34 +1,95 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 26 Mar 2015 22:55:57 +0100
-Subject: [Buildroot] [PATCH 5/5 v2] linux: migrate extensions to use the
- new infrastructure
-In-Reply-To: <724c084b0e9f1d98670184ab5e77a2381e04d67c.1426342904.git.yann.morin.1998@free.fr>
-References: <cover.1426342904.git.yann.morin.1998@free.fr>
- <724c084b0e9f1d98670184ab5e77a2381e04d67c.1426342904.git.yann.morin.1998@free.fr>
-Message-ID: <5514806D.2030701@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 26 Mar 2015 23:26:02 +0100
+Subject: [Buildroot] [PATCH] support/mkusers: enhance error messages
+Message-ID: <1427408762-31507-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+The current error messages are a bit terse, and do not provide all the
+required information.
 
-Le 14/03/2015 15:25, Yann E. MORIN a ?crit :
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  linux/linux-ext-fbtft.mk   | 8 +-------
->  linux/linux-ext-rtai.mk    | 8 +-------
->  linux/linux-ext-xenomai.mk | 8 +-------
->  3 files changed, 3 insertions(+), 21 deletions(-)
-> 
+Expand them to provide more context.
 
-    Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Tom Elliott <tommygunsster@gmail.com>
 
-Tested with Xenomai extensions.
+---
+Thanks to Tom for fixing the typoes. :-)
 
-    Tested-by: Romain Naour <romain.naour@openwide.fr>
+Note: this is not a fix for Tom's issue; however, it still good to have
+explicit error messages.
+---
+ support/scripts/mkusers | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-Best regards,
-Romain
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index b003330..026519e 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -129,47 +129,53 @@ check_user_validity() {
+     fi
+ 
+     if [ ${gid} -lt -1 -o ${gid} -eq 0 ]; then
+-        fail "invalid gid '%d'\n" ${gid}
++        fail "invalid gid '%d' for '%s'\n" ${gid} "${username}"
+     elif [ ${gid} -ne -1 ]; then
+         # check the gid is not already used for another group
+         if [ -n "${_group}" -a "${_group}" != "${group}" ]; then
+-            fail "gid is already used by group '${_group}'\n"
++            fail "gid '%d' for '%s' is already used by group '%s'\n" \
++                 ${gid} "${username}" "${_group}"
+         fi
+ 
+         # check the group does not already exists with another gid
+         # Need to split the check in two, otherwise '[' complains it
+         # is missing arguments when _gid is empty
+         if [ -n "${_gid}" ] && [ ${_gid} -ne ${gid} ]; then
+-            fail "group already exists with gid '${_gid}'\n"
++            fail "group '%s' for '%s' already exists with gid '%d' (wants '%d')\n" \
++                 "${group}" "${username}" ${_gid} ${gid}
+         fi
+ 
+         # check the user does not already exists with another gid
+         # Need to split the check in two, otherwise '[' complains it
+         # is missing arguments when _ugid is empty
+         if [ -n "${_ugid}" ] && [ ${_ugid} -ne ${gid} ]; then
+-            fail "user already exists with gid '${_ugid}'\n"
++            fail "user '%s' already exists with gid '%d' (wants '%d')\n" \
++                 "${username}" ${_ugid} ${gid}
+         fi
+     fi
+ 
+     if [ ${uid} -lt -1 -o ${uid} -eq 0 ]; then
+-        fail "invalid uid '%d'\n" ${uid}
++        fail "invalid uid '%d' for '%s'\n" ${uid} "${username}"
+     elif [ ${uid} -ne -1 ]; then
+         # check the uid is not already used for another user
+         if [ -n "${_username}" -a "${_username}" != "${username}" ]; then
+-            fail "uid is already used by user '${_username}'\n"
++            fail "uid '%d' for '%s' already used by user '%s'\n" \
++                 ${uid} "${username}" "${_username}"
+         fi
+ 
+         # check the user does not already exists with another uid
+         # Need to split the check in two, otherwise '[' complains it
+         # is missing arguments when _uid is empty
+         if [ -n "${_uid}" ] && [ ${_uid} -ne ${uid} ]; then
+-            fail "user already exists with uid '${_uid}'\n"
++            fail "user '%s' already exists with uid '%d' (wants '%d')\n" \
++                 "${username}" ${_uid} ${uid}
+         fi
+     fi
+ 
+     # check the user does not already exist in another group
+     if [ -n "${_ugroup}" -a "${_ugroup}" != "${group}" ]; then
+-        fail "user already exists with group '${_ugroup}'\n"
++        fail "user '%s' already exists with group '%s' (wants '%s')\n" \
++             "${username}" "${_ugroup}" "${group}"
+     fi
+ 
+     return 0
+-- 
+1.9.1
