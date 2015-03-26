@@ -1,89 +1,100 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 26 Mar 2015 13:52:45 -0500
-Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
-	w/threads
-In-Reply-To: <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
-References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
- <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
-Message-ID: <CANQCQpaJObqR6poUyh5FMm58vPFGyruJm=JBWBbQtPgsP8pf1g@mail.gmail.com>
+From: Rob Landley <rob@landley.net>
+Date: Thu, 26 Mar 2015 14:51:46 -0500
+Subject: [Buildroot] Where is /dev/console created when using devtmpfs?
+In-Reply-To: <5512F41A.3080208@ou.edu>
+References: <5512F41A.3080208@ou.edu>
+Message-ID: <CAOS_Y6SpQXSC3z2AEBH3j9wgqbbtC6=LDNb8p3fk_s0YyMe2Tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan,
+On Wed, Mar 25, 2015 at 12:44 PM, Steve Kenton <skenton@ou.edu> wrote:
+> I'm currently running with devtmpfs only but am looking into using mdev
 
-On Thu, Mar 26, 2015 at 1:16 PM, Ryan Barnett
-<ryan.barnett@rockwellcollins.com> wrote:
-> Matt,
->
-> On Thu, Mar 26, 2015 at 10:54 AM, Matt Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->
-> Why does jamvm need threads? I don't see any issues with toolchains on
-> the autobuilders needing threads to build this package.
->
-> http://autobuild.buildroot.org/?reason=jamvm-2.0.0
->
-> Could you please elaborate more why jamvm needs a toolchain with
-> threads and how you discovered this?
+As the original author of mdev and the guy who did:
 
-While running an autobuilder internally.  It's a arm uclibc build
-failure looking for pthreads.
+http://lkml.iu.edu/hypermail/linux/kernel/1306.3/04204.html
 
-Here's some of the build end
-http://climbi.com/b/3851/0
+I should probably poke my nose in here. :)
 
-The config...
-http://climbi.com/b/3852/0
+> so I spent some time looking at my device usage and for the life of me
+> I can't find where /dev/console gets created during the build process.
 
+The console PID 1 inherits at process launch is the /dev/console in
+initramfs. When you don't have initramfs, the init/noinitramfs.c code
+literally does:
+
+        err = sys_mkdir((const char __user __force *) "/dev", 0755);
+        if (err < 0)
+                goto out;
+
+        err = sys_mknod((const char __user __force *) "/dev/console",
+                        S_IFCHR | S_IRUSR | S_IWUSR,
+                        new_encode_dev(MKDEV(5, 1)));
+
+And then init/main.c does:
+
+        /* Open the /dev/console on the rootfs, this should never fail */
+        if (sys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0)
+                printk(KERN_WARNING "Warning: unable to open an
+initial console.\n");
+
+        (void) sys_dup(0);
+        (void) sys_dup(0);
+
+The devtmpfs mount happens later in the boot, and in fact I have a
+pending todo item to submit a patch to make the kernel DEVTMPFS_MOUNT
+config option actually _apply_ to initramfs. (Last I checked it would
+only mount devtmpfs on /dev in the fallback root that root= switches
+you to when you didn't have an executable /init in initramfs. I should
+make it so that if it's about to exec /init out of rootfs, it does the
+above mknod /dev trick (ignore failure if it's already there) and then
+mounts devtmpfs on it (and if _that_ fails some crazy person probably
+made a file called /dev and they get to keep the pieces).
+
+> Looking at the root filesystem when it's not running shows this in /dev
 >
->> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->> ---
->>  package/jamvm/Config.in | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
->> index f480995..1e33f42 100644
->> --- a/package/jamvm/Config.in
->> +++ b/package/jamvm/Config.in
->> @@ -5,13 +5,15 @@ config BR2_PACKAGE_JAMVM
->>                 || BR2_mips || BR2_mipsel || BR2_powerpc
->>         select BR2_PACKAGE_ZLIB
->>         select BR2_PACKAGE_CLASSPATH
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS
->>         help
->>           JamVM is a new Java Virtual Machine which conforms to the
->>           JVM specification version 2 (blue book).
->>
->>           http://jamvm.sf.net
->>
->> -comment "jamvm needs a toolchain w/ IPv6"
->> +comment "jamvm needs a toolchain w/ IPv6 and threads"
->>         depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
->>                 || BR2_mips || BR2_mipsel || BR2_powerpc
->>         depends on !BR2_INET_IPV6
->> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> drwxrwxr-x 2 root root 4096 Mar  1 15:26 pts
+> lrwxrwxrwx 1 root root   10 Mar  1 15:26 log -> ../tmp/log
+> crw--w--w- 1 root root 5, 1 Mar 22 21:52 console
 >
+> and I see that pts and log come from the skeleton but I can't find console.
+
+Possibly I'm answering the wrong question.
+
+devtmpfs is a synthetic filesystem, like /proc or /sys. You're not
+talking to any sort of backing store when you mount it, instead the
+driver is hallucinating contents for you to read and write from on the
+fly, and when you interact with it you talk to functions in the driver
+that send/receive some data they just made up to humor your request.
+
+I wrote a thing about the four different types of filesystems a while back:
+
+http://landley.livejournal.com/52326.html
+
+> I'm running an x86_64 system using the default vga console if that matters.
+> I'm obviously missing something but I can't find a mknod or mkdevs for it.
+>
+> Where is /dev/console created when using devtmpfs?
+
+The same place /proc/mounts is created on procfs?
+
+The name "console" comes from drivers/tty/tty_io.c:
+
+        consdev = device_create(tty_class, NULL, MKDEV(TTYAUX_MAJOR, 1), NULL,
+                              "console");
+
+That sticks an entry into some kernel linked list (or possibly tree),
+which is interpreted by devtmpfs to give you a console device. It's
+also interpreted by sysfs to give you a "console" directory under
+/sys/class/tty. Both filesystem drivers are parsing the same kernel
+internal data to produce different types of output. They do so on the
+fly, when you open the relevant directory and list its contents.
+
 > Thanks,
-> -Ryan
 >
-> --
-> Ryan Barnett / Sr Software Engineer
-> Airborne Information Systems / Security Systems and Software
-> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-> ryan.barnett at rockwellcollins.com
-> www.rockwellcollins.com
+> Steve
 
-
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+Rob
