@@ -1,60 +1,70 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 26 Mar 2015 23:45:15 +0100
-Subject: [Buildroot] [PATCH] linux-ext: update Xenomai help text
-Message-ID: <1427409915-14913-1-git-send-email-romain.naour@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Mar 2015 20:01:01 -0300
+Subject: [Buildroot] [PATCH 1/3] gdb: add version 7.9
+Message-ID: <1427410863-7574-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reword the help text and get ride of the supported kernel
-version list which is outdated since Xenomai version bump.
+Add gdb version 7.9, and adjust the tarball logic to default to .tar.xz
+(for 7.8 & 7.9), fall back to .tar.bz2 for 7.7.x and leave the rest
+alone.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/Config.ext.in | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ package/gdb/Config.in.host | 4 ++++
+ package/gdb/gdb.mk         | 9 ++++-----
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 8f15687..22c0bef 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -8,13 +8,20 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI
- 		   BR2_bfin || BR2_powerpc || BR2_sh4
- 	select BR2_PACKAGE_XENOMAI
- 	help
--	  Xenomai Kernel part.
-+	  Xenomai is split in two parts: a kernel part and an userspace part.
-+	  Enabling this option automatically select the Xenomai package and help
-+	  to patch the linux kernel build by Builroot with the Xenomai kernel
-+	  part (ie ADEOS/IPIPE).
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 2a03939..cda9d12 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -37,6 +37,9 @@ choice
+ 	config BR2_GDB_VERSION_7_8
+ 		bool "gdb 7.8.x"
  
--	  In the current version of Xenomai, the following kernel
--	  versions are supported: on Blackfin, 2.6.34 and 2.6.36.9, on
--	  SH4, 2.6.32.10, on x86, 2.6.35.9, 2.6.37.6, 2.6.38.8, on
--	  ARM, 2.6.35.9, 2.6.37.6, 2.6.38.8, on NIOS2, 2.6.35, on
--	  PowerPC, 2.6.35.7, 2.6.36.4, 3.0.8.
-+	  You can find the currently supported kernel list by looking at the
-+	  available patches in the Xenomai sources tree:
-+	  ksrc/arch/$(ARCH)/patches
++	config BR2_GDB_VERSION_7_9
++		bool "gdb 7.9.x"
 +
-+	  However, It's recommended to use the latest version of the adeos/ipipe
-+	  which is available at http://download.gna.org/adeos/patches
-+
-+	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2 and PowerPC
-+	  architectures.
+ endchoice
  
- comment "xenomai needs a toolchain w/ threads"
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || \
-@@ -26,7 +33,7 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
- 	string "Path for Adeos patch file"
- 	help
- 	  Optionally, explicitly specify the Adeos patch to use.
--	  Download it at http://download.gna.org/adeos/patches/v2.6/$(ARCH)/
-+	  Download it at http://download.gna.org/adeos/patches
- 	  and verify that your kernel version in buildroot matches.
+ endif
+@@ -49,3 +52,4 @@ config BR2_GDB_VERSION
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
++	default "7.9"      if BR2_GDB_VERSION_7_9
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 58f0631..3ae473f 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -6,6 +6,7 @@
  
- # RTAI
+ GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
+ GDB_SITE = $(BR2_GNU_MIRROR)/gdb
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
+ 
+ ifeq ($(BR2_arc),y)
+ GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
+@@ -19,13 +20,11 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ GDB_FROM_GIT = y
+ endif
+ 
+-# Starting from 7.8.x, bz2 tarballs no longer available, use .tar.xz
+-# instead.
+-ifneq ($(filter 7.8.%,$(GDB_VERSION)),)
+-GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
++# Use .tar.bz2 for 7.7.x since there was no .tar.xz release back then
++ifneq ($(filter 7.7.%,$(GDB_VERSION)),)
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
+ endif
+ 
+-GDB_SOURCE ?= gdb-$(GDB_VERSION).tar.bz2
+ GDB_LICENSE = GPLv2+ LGPLv2+ GPLv3+ LGPLv3+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ 
 -- 
-1.9.3
+2.0.5
