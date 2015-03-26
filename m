@@ -1,31 +1,62 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Mar 2015 17:37:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 7976] mkuser script fails with: user already
- exists with group nogroup
-In-Reply-To: <bug-7976-163@https.bugs.busybox.net/>
-References: <bug-7976-163@https.bugs.busybox.net/>
-Message-ID: <20150326173724.B3DDE818D4@busybox.osuosl.org>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 26 Mar 2015 13:16:23 -0500
+Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
+	w/threads
+In-Reply-To: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7976
+Matt,
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-03-26 17:37:24 UTC ---
-Hello,
+On Thu, Mar 26, 2015 at 10:54 AM, Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
 
-Do not forget to apply the patch I attached, so that you can see
-more details about the failure if it happens again; this will be
-extra useful to help debug the issue.
+Why does jamvm need threads? I don't see any issues with toolchains on
+the autobuilders needing threads to build this package.
 
-Thanks!
+http://autobuild.buildroot.org/?reason=jamvm-2.0.0
 
-Regards,
-Yann E. MORIN.
+Could you please elaborate more why jamvm needs a toolchain with
+threads and how you discovered this?
+
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/jamvm/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+> index f480995..1e33f42 100644
+> --- a/package/jamvm/Config.in
+> +++ b/package/jamvm/Config.in
+> @@ -5,13 +5,15 @@ config BR2_PACKAGE_JAMVM
+>                 || BR2_mips || BR2_mipsel || BR2_powerpc
+>         select BR2_PACKAGE_ZLIB
+>         select BR2_PACKAGE_CLASSPATH
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>         help
+>           JamVM is a new Java Virtual Machine which conforms to the
+>           JVM specification version 2 (blue book).
+>
+>           http://jamvm.sf.net
+>
+> -comment "jamvm needs a toolchain w/ IPv6"
+> +comment "jamvm needs a toolchain w/ IPv6 and threads"
+>         depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+>                 || BR2_mips || BR2_mipsel || BR2_powerpc
+>         depends on !BR2_INET_IPV6
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+Thanks,
+-Ryan
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
