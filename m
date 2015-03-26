@@ -1,154 +1,89 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 26 Mar 2015 13:38:14 -0500
-Subject: [Buildroot] [PATCH v9] package/sysdig: New package
-In-Reply-To: <1427356117-27840-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1427356117-27840-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <CAMQcK5KZ89uEWt_9BqZ=Cdo2JXHfzKsMaaSAZoN71bdkEvNi9Q@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 26 Mar 2015 13:52:45 -0500
+Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
+	w/threads
+In-Reply-To: <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
+References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
+Message-ID: <CANQCQpaJObqR6poUyh5FMm58vPFGyruJm=JBWBbQtPgsP8pf1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+Ryan,
 
-On Thu, Mar 26, 2015 at 2:48 AM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> Sysdig is open source, system-level exploration:
-> capture system state and activity from a running Linux
-> instance, then save, filter and analyze.
+On Thu, Mar 26, 2015 at 1:16 PM, Ryan Barnett
+<ryan.barnett@rockwellcollins.com> wrote:
+> Matt,
 >
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> On Thu, Mar 26, 2015 at 10:54 AM, Matt Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>
+> Why does jamvm need threads? I don't see any issues with toolchains on
+> the autobuilders needing threads to build this package.
+>
+> http://autobuild.buildroot.org/?reason=jamvm-2.0.0
+>
+> Could you please elaborate more why jamvm needs a toolchain with
+> threads and how you discovered this?
 
-It would be good to carry forward previous reviews when you submit a
-new version of a patch. In your v8 of this patch Yegor Yefremov
-reviewed your patch so after your Signed-off-by line you should put
-this:
+While running an autobuilder internally.  It's a arm uclibc build
+failure looking for pthreads.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Here's some of the build end
+http://climbi.com/b/3851/0
 
-I have a found a few other things when testing v9 and I have listed them below.
+The config...
+http://climbi.com/b/3852/0
 
-[...]
+>
+>> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>> ---
+>>  package/jamvm/Config.in | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+>> index f480995..1e33f42 100644
+>> --- a/package/jamvm/Config.in
+>> +++ b/package/jamvm/Config.in
+>> @@ -5,13 +5,15 @@ config BR2_PACKAGE_JAMVM
+>>                 || BR2_mips || BR2_mipsel || BR2_powerpc
+>>         select BR2_PACKAGE_ZLIB
+>>         select BR2_PACKAGE_CLASSPATH
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>>         help
+>>           JamVM is a new Java Virtual Machine which conforms to the
+>>           JVM specification version 2 (blue book).
+>>
+>>           http://jamvm.sf.net
+>>
+>> -comment "jamvm needs a toolchain w/ IPv6"
+>> +comment "jamvm needs a toolchain w/ IPv6 and threads"
+>>         depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+>>                 || BR2_mips || BR2_mipsel || BR2_powerpc
+>>         depends on !BR2_INET_IPV6
+>> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+>
+> Thanks,
+> -Ryan
+>
+> --
+> Ryan Barnett / Sr Software Engineer
+> Airborne Information Systems / Security Systems and Software
+> MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+> ryan.barnett at rockwellcollins.com
+> www.rockwellcollins.com
 
-> diff --git a/package/sysdig/0002-remove-dkms-module-updater.patch b/package/sysdig/0002-remove-dkms-module-updater.patch
-> new file mode 100644
-> index 0000000..8c0e739
-> --- /dev/null
-> +++ b/package/sysdig/0002-remove-dkms-module-updater.patch
-> @@ -0,0 +1,31 @@
-> +Rmove DKMS module updater
 
-Minor typo: 'Rmove' should be 'Remove'.
-
-> +
-> +This patch disables the in target installation of DKMS module updater
-> +mechanism unneeded in buildroot.
-> +
-> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> +
-> +--- a/driver/CMakeLists.txt
-> ++++ b/driver/CMakeLists.txt
-> +@@ -39,21 +39,3 @@ add_custom_target(install_driver
-> +       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-> +       VERBATIM)
-> +
-> +-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Makefile.dkms
-> +-      RENAME Makefile
-> +-      DESTINATION "src/sysdig-${SYSDIG_VERSION}")
-> +-
-> +-install(FILES
-> +-      ${CMAKE_CURRENT_BINARY_DIR}/dkms.conf
-> +-      dynamic_params_table.c
-> +-      event_table.c
-> +-      flags_table.c
-> +-      main.c
-> +-      ppm.h
-> +-      ppm_events.c
-> +-      ppm_events.h
-> +-      ppm_events_public.h
-> +-      ppm_fillers.c
-> +-      ppm_ringbuffer.h
-> +-      syscall_table.c
-> +-      DESTINATION "src/sysdig-${SYSDIG_VERSION}")
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> new file mode 100644
-> index 0000000..caf7ef8
-> --- /dev/null
-> +++ b/package/sysdig/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_SYSDIG
-> +       bool "sysdig"
-> +       select BR2_PACKAGE_ZLIB
-> +       select BR2_PACKAGE_LUAJIT
-> +       select BR2_PACKAGE_JSONCPP
-> +       depends on BR2_LINUX_KERNEL
-> +       depends on BR2_INSTALL_LIBSTDCPP # libjson
-> +       depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> +       help
-> +         Sysdig is open source, system-level exploration:
-> +         capture system state and activity from a running Linux instance,
-> +         then save, filter and analyze.
-> +         Think of it as strace + tcpdump + lsof + awesome sauce.
-> +         With a little Lua cherry on top.
-> +
-> +         http://sysdig.org
-> +
-> +comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
-> +       depends on !BR2_LINUX_KERNEL
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-
-When you have a toolchain that doesn't have one of the required
-dependencies, this comment doesn't show up. This is due to have 3
-separate depends. Instead the depends should look like this:
-
-comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
-        depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
-                  || !BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-
-(Note indentation above should be tabs instead of spaces)
-
-> diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-> new file mode 100644
-> index 0000000..e05124b
-> --- /dev/null
-> +++ b/package/sysdig/sysdig.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# sysdig
-> +#
-> +################################################################################
-> +
-> +SYSDIG_VERSION = 0.1.99
-> +SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
-> +SYSDIG_LICENSE = GPLv2
-> +SYSDIG_LICENSE_FILES = COPYING
-> +SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
-> +       -DUSE_BUNDLED_JSONCPP=OFF
-> +SYSDIG_DEPENDENCIES = zlib luajit jsoncpp linux
-> +SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
-> +
-> +SYSDIG_MAKE_ENV = LINUX_DIR='$(LINUX_DIR)' LINUX_MAKE_FLAGS='$(LINUX_MAKE_FLAGS)'
-> +
-> +define SYSDIG_INSTALL_DRIVER
-> +       cd $(@D)/buildroot-build; $(MAKE) $(SYSDIG_MAKE_ENV) install_driver
-> +endef
-> +
-> +SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
-> +
-> +$(eval $(cmake-package))
-
-With these final fixups I think we are about done with some issues. I
-will look for you v10
-
-Thanks,
--Ryan
 
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
 MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
 www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
