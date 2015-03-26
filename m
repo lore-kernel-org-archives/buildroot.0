@@ -1,33 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Mar 2015 21:11:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 7976] mkuser script fails with: user already
- exists with group nogroup
-In-Reply-To: <bug-7976-163@https.bugs.busybox.net/>
-References: <bug-7976-163@https.bugs.busybox.net/>
-Message-ID: <20150326211134.CF54380E25@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Mar 2015 18:30:07 -0300
+Subject: [Buildroot] [PATCH] e2tools/host: remove hyphen
+Message-ID: <1427405407-6338-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7976
+All the other host packages that have a menu entry use a space, so make
+it consistent.
 
-Tom Elliott <tommygunsster@gmail.com> changed:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/e2tools/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #5961|0                           |1
-        is obsolete|                            |
-
---- Comment #6 from Tom Elliott <tommygunsster@gmail.com> 2015-03-26 21:11:34 UTC ---
-Created attachment 5971
-  --> https://bugs.busybox.net/attachment.cgi?id=5971
-mkusers patch corrected 2
-
-Found another issue in the patch and just corrected again.
-
+diff --git a/package/e2tools/Config.in.host b/package/e2tools/Config.in.host
+index 772262a..859c47b 100644
+--- a/package/e2tools/Config.in.host
++++ b/package/e2tools/Config.in.host
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_HOST_E2TOOLS
+-	bool "host-e2tools"
++	bool "host e2tools"
+ 	select BR2_PACKAGE_HOST_E2FSPROGS
+ 	help
+ 	  E2tools is a simple set of GPL'ed utilities to read, write,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.0.5
