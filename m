@@ -1,12 +1,15 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 27 Mar 2015 15:20:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/powertop: needs gettextize, 2nd try
-Message-ID: <1427466030-10274-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Mar 2015 16:36:42 +0100
+Subject: [Buildroot] [git commit] package/powertop: needs gettextize, 2nd try
+Message-ID: <20150327153700.4E178818D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=5f0127bbead5ef251f3a70f953d6b667001d8efb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 If host-gettext was compiled before powertop it is picked up by autoreconf which
 leads to a broken compile. To fix this unconditionally include host-gettext as
@@ -24,9 +27,10 @@ http://autobuild.buildroot.net/results/652/65246f6f71e67c2637efbe8bb6e501750629d
 and many others
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/powertop/powertop.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
 index 4446bc9..331edc9 100644
@@ -49,5 +53,3 @@ index 4446bc9..331edc9 100644
  POWERTOP_DEPENDENCIES += gettext
  POWERTOP_CONF_ENV += LIBS='-lintl'
  endif
--- 
-1.7.10.4
