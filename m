@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 27 Mar 2015 17:41:14 +0100
-Subject: [Buildroot] [git commit] package/kodi-audioencoder-flac: bump
-	version
-Message-ID: <20150327164118.4FA78818E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: add hash
+Message-ID: <20150327164118.673E8818E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e581fd62e3eddf419d86f8fae92e7381192a51e
+commit: http://git.buildroot.net/buildroot/commit/?id=be18d6d69975dce22bf245d04e4767d4242ae886
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../kodi-audioencoder-flac.mk                      |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index c5115c4..2ccc1b7 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_AUDIOENCODER_FLAC_VERSION = 62c2cc876b572dd8fd9b85d708f86ec9a9d2ffc7
-+KODI_AUDIOENCODER_FLAC_VERSION = 84acb14101b9114472cd20f6a0f8fdefbb376113
- KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
- KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
- KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+new file mode 100644
+index 0000000..6353a86
+--- /dev/null
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	04a13ec11652cbff812519eacf4db7dda648ab5c4c5f63b43a437d1fb0cc8d2a	dovecot-2.2-pigeonhole-0.4.7.tar.gz
