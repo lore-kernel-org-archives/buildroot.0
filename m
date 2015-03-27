@@ -1,28 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Mar 2015 17:45:47 +0100
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10, 14,
- 19}.x series
-In-Reply-To: <1427380283-8432-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427380283-8432-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150327174547.4de5c5d3@free-electrons.com>
+Date: Fri, 27 Mar 2015 17:46:20 +0100
+Subject: [Buildroot] [git commit] haserl: bump to version 0.9.35
+Message-ID: <20150327164802.3FD4081890@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=6d05b4fb18859c7cc54517d63fe40f10815c2ca1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Mar 2015 11:31:22 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/haserl/haserl.hash |    4 ++--
+ package/haserl/haserl.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
+index 7b1bfa2..2b23a6c 100644
+--- a/package/haserl/haserl.hash
++++ b/package/haserl/haserl.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/haserl/files/haserl-devel/
+-md5	a9decddb508944d56f71dd2f821e2ec5	haserl-0.9.33.tar.gz
+-sha1	bbb5d55db911fdb854828794181e57a1a275e65d	haserl-0.9.33.tar.gz
++md5	918f0b4f6cec0b438c8b5c78f2989010	haserl-0.9.35.tar.gz
++sha1	9a331d41e9d47a81e81e158f9a16bf5443347cd4	haserl-0.9.35.tar.gz
+diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
+index 4985c09..05a1a2a 100644
+--- a/package/haserl/haserl.mk
++++ b/package/haserl/haserl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HASERL_VERSION = 0.9.33
++HASERL_VERSION = 0.9.35
+ HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
+ HASERL_LICENSE = GPLv2
+ HASERL_LICENSE_FILES = COPYING
