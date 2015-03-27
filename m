@@ -1,49 +1,26 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 27 Mar 2015 18:16:47 +0100
-Subject: [Buildroot] [PATCH 1/2] package/powertop: needs ncursesw
-References: <1427472097-30708-1-git-send-email-bernd.kuhls@t-online.de>
- <20150327173446.779683cf@free-electrons.com>
-Message-ID: <XnsA46AB9F2F3F85berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Fri, 27 Mar 2015 18:18:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: fix hash typo
+Message-ID: <1427476684-4684-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150327173446.779683cf at free-electrons.com:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dovecot/dovecot.hash |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Am I missing something?
-
-Hi,
-
-powertop is a weird piece of code;)
-
-Using this defconfig
-
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_POWERTOP=y
-
-configure works
-
-checking for NCURSES... no
-checking for library containing delwin... -lncurses
-[...]
-
-but then this happens:
-
-lib.cpp: In function 'void align_string(char*, size_t, size_t)':
-lib.cpp:271:59: error: 'mbsrtowcs' was not declared in this scope
-  sz = mbsrtowcs(NULL, (const char **)&buffer, max_sz, NULL);
-
-Afaics mbsrtowcs() is a function which is only available with a wchar-enabled 
-toolchain, so my patch does the right thing, but the description needs some 
-additions.
-
-Regards, Bernd
-
-PS: Upstream of the powertop tarball is problematic:
-http://autobuild.buildroot.net/results/50e/50e70b0c7c3533ddb7397fa7542a9369bf
-7a7249/build-end.log
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 7f2f9b1..bcfffbb 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256sum	56ce1287a17fa88a2083116db00200deff1a5390af5eac1c8ae3f59a2079cff0	dovecot-2.2.16.tar.gz
++sha256	56ce1287a17fa88a2083116db00200deff1a5390af5eac1c8ae3f59a2079cff0	dovecot-2.2.16.tar.gz
+-- 
+1.7.10.4
