@@ -1,27 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 27 Mar 2015 17:39:40 +0100
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: add hash
-Message-ID: <1427474381-577-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Mar 2015 17:41:14 +0100
+Subject: [Buildroot] [git commit] package/kodi-audioencoder-vorbis: bump
+	version
+Message-ID: <20150327164118.40972818E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=3f98853bdc2a11750c69900544e373d18bf67485
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dovecot/dovecot.hash |    2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/dovecot/dovecot.hash
+ .../kodi-audioencoder-vorbis.mk                    |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-new file mode 100644
-index 0000000..7f2f9b1
---- /dev/null
-+++ b/package/dovecot/dovecot.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256sum	56ce1287a17fa88a2083116db00200deff1a5390af5eac1c8ae3f59a2079cff0	dovecot-2.2.16.tar.gz
--- 
-1.7.10.4
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index 1e5523c..493fcbf 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_VORBIS_VERSION = dbf5c62c088283143c7ad530b106f3cc0c9392e9
++KODI_AUDIOENCODER_VORBIS_VERSION = d556a6872e59806526f208e8d0af5f886a6c67bb
+ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
