@@ -1,42 +1,33 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri, 27 Mar 2015 17:21:36 +0100
-Subject: [Buildroot] wpa_supplicant not starting correctly
-In-Reply-To: <55131639.9040408@gmail.com>
-References: <55131639.9040408@gmail.com>
-Message-ID: <55158390.2020102@green-communications.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 27 Mar 2015 17:29:30 +0100
+Subject: [Buildroot] [PATCH 2/4] package/kodi-pvr-addons: bump version
+In-Reply-To: <1427473772-26171-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1427473772-26171-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427473772-26171-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/03/2015 21:10, Alexey Mednyy wrote:
-> Hello there,
-> 
-> I've got configuration with eudev,dbus and  busybox init.
-> Previously everything worked fine, but now wpa_supplicant not starting.
-> and I see this in /var/log/messages :
-> 
-> Mar 25 22:56:25 hostname daemon.notice dbus[120]: [system] Activating
-> service name='fi.w1.wpa_supplicant1' (using servicehelper)
-> Mar 25 22:56:26 hostname daemon.info init: starting pideudev 146, tty
-> '/dev/ttyS0': '/sbin/getty -L  ttyS0 0 vt100 '
-> Mar 25 22:56:26 hostname daemon.notice dbus[120]: [system] Activated
-> service 'fi.w1.wpa_supplicant1' failed: Failed to execute program
-> fi.w1.wpa_supplicant1: Success
-> 
-> I'm not an expert in dbus, so asking for help what causes such problem?
-> I think before some recent commit wpa_supplicant started by init script
-> not by dbus is it true?
 
-If you use network-manager or something managing wpa_supplicant, then
-they have always relied on D-Bus activation to start wpa_supplicant.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-addons/kodi-pvr-addons.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You seem to not run systemd, so the standard D-Bus activation should
-work.  Check that you can run wpa_supplicant normally (i.e. by running
-it with the same parameters as specified in
-/usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service ).  If
-it does, there is another problem.
-
-My current supposition is that your wpa_supplicant was built without
-D-Bus support.
+diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+index 2db8d3a..1a09265 100644
+--- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
++++ b/package/kodi-pvr-addons/kodi-pvr-addons.mk
+@@ -6,7 +6,7 @@
+ 
+ # This cset is on the branch 'helix'
+ # When Kodi is updated, this should be updated to the corresponding branch
+-KODI_PVR_ADDONS_VERSION = a0a437eac14c9532ea0c6d38f8f222a612aea147
++KODI_PVR_ADDONS_VERSION = 4854fbe9dc0499ca8d1e10e8c18e329d3eb48814
+ KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
+ KODI_PVR_ADDONS_LICENSE = GPLv3+
+ KODI_PVR_ADDONS_LICENSE_FILES = COPYING
+-- 
+1.7.10.4
