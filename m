@@ -1,33 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Mar 2015 16:37:25 +0100
-Subject: [Buildroot] [git commit] e2tools/host: remove hyphen
-Message-ID: <20150327153739.22CB2818D6@busybox.osuosl.org>
+Date: Fri, 27 Mar 2015 16:37:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/powertop: needs gettextize,
+ 2nd try
+In-Reply-To: <1427466030-10274-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1427466030-10274-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150327163705.73e4bd34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f38ed2f227dfe28637816842355b5ebb33a0225
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-All the other host packages that have a menu entry use a space, so make
-it consistent.
+On Fri, 27 Mar 2015 15:20:30 +0100, Bernd Kuhls wrote:
+> If host-gettext was compiled before powertop it is picked up by autoreconf which
+> leads to a broken compile. To fix this unconditionally include host-gettext as
+> dependency and move
+> 
+> POWERTOP_GETTEXTIZE = YES
+> 
+> outside the if-clause for BR2_NEEDS_GETTEXT
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/24e/24e312271cf07a8dd966b43f153a06ddc858a786/
+> http://autobuild.buildroot.net/results/511/511a1c76bfd0ebf637e5abcd6fecc4d6a683ed3e/
+> http://autobuild.buildroot.net/results/652/65246f6f71e67c2637efbe8bb6e501750629d5fb/
+> 
+> and many others
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/e2tools/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks!
 
-diff --git a/package/e2tools/Config.in.host b/package/e2tools/Config.in.host
-index 772262a..859c47b 100644
---- a/package/e2tools/Config.in.host
-+++ b/package/e2tools/Config.in.host
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_HOST_E2TOOLS
--	bool "host-e2tools"
-+	bool "host e2tools"
- 	select BR2_PACKAGE_HOST_E2FSPROGS
- 	help
- 	  E2tools is a simple set of GPL'ed utilities to read, write,
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
