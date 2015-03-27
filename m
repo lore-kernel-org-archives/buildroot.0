@@ -1,39 +1,28 @@
 From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 26 Mar 2015 19:46:51 -0500
-Subject: [Buildroot] [PATCH v9] package/sysdig: New package
-In-Reply-To: <CA+TH9Vn6t-bT78+Z8iGFq7X3ftnbZqk0-mzoQJgVODDLpQmG-Q@mail.gmail.com>
-References: <1427356117-27840-1-git-send-email-angelo.compagnucci@gmail.com>
- <CAMQcK5KZ89uEWt_9BqZ=Cdo2JXHfzKsMaaSAZoN71bdkEvNi9Q@mail.gmail.com>
- <CA+TH9Vn6t-bT78+Z8iGFq7X3ftnbZqk0-mzoQJgVODDLpQmG-Q@mail.gmail.com>
-Message-ID: <CAMQcK5KVoXokrFxJUT0wogWZFwOXtoNT3c+sWS2nPKQzrM04DA@mail.gmail.com>
+Date: Thu, 26 Mar 2015 19:47:04 -0500
+Subject: [Buildroot] [PATCH v10] package/sysdig: New package
+In-Reply-To: <1427402489-28313-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1427402489-28313-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <CAMQcK5LGLfHET7vHSEhGYVoTZsC04jRD9aqd3B7Sc54Vc20dvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 26, 2015 at 3:37 PM, Angelo Compagnucci
+Angelo,
+
+On Thu, Mar 26, 2015 at 3:41 PM, Angelo Compagnucci
 <angelo.compagnucci@gmail.com> wrote:
-> Dear Ryan Barnett,
+> Sysdig is open source, system-level exploration:
+> capture system state and activity from a running Linux
+> instance, then save, filter and analyze.
 >
-> Are you sure? IMO, If the patch changes it should be reviewed again.
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-You do bring up a good point. However, I was basing this on what Yann
-did with his hash improvement series:
-
-http://patchwork.ozlabs.org/patch/453147/
-
-> Good catch, but the message should be viewed only on supported arhcs,
-> so it should be:
->
->  comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
->          depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP
->          depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-
-Yes I agree with this.
-
-Thanks,
--Ryan
+Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 
 -- 
 Ryan Barnett / Sr Software Engineer
