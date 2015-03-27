@@ -1,28 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Mar 2015 17:50:19 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to
- version 3.19
-In-Reply-To: <1427406776-9971-1-git-send-email-picmaster@mail.bg>
-References: <1427406776-9971-1-git-send-email-picmaster@mail.bg>
-Message-ID: <20150327175019.60d3837f@free-electrons.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri, 27 Mar 2015 17:50:36 +0100
+Subject: [Buildroot] [PATCH 1/1] mjpg-streamer: Fix build with ccache
+	enabled.
+Message-ID: <1427475036-10363-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nikolay Dimitrov,
+Quote the TARGET_CC variable, otherwise, if ccache is enabled:
 
-On Thu, 26 Mar 2015 23:52:56 +0200, Nikolay Dimitrov wrote:
-> Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
-> ---
->  configs/riotboard_defconfig |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+[...] make CC=$TARGET_CC [...]
+is expanded to e.g.
+[...] make CC=ccache gcc [...]
 
-Applied, thanks!
+The build succeeds with "make[2]: Nothing to be done for '[...]gcc'".
+and the program is compiled at "make install" time, with the default
+host compiler, resulting in a binary that does not run on the target.
 
-Thomas
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/mjpg-streamer/mjpg-streamer.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index 2385429..e10e9a8 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
+@@ -15,7 +15,7 @@ MJPG_STREAMER_LICENSE_FILES = LICENSE
+ MJPG_STREAMER_DEPENDENCIES = jpeg
+ 
+ define MJPG_STREAMER_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D)
+ endef
+ 
+ define MJPG_STREAMER_INSTALL_TARGET_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
