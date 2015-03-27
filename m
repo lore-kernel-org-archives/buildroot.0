@@ -1,53 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Mar 2015 22:31:02 +0100
-Subject: [Buildroot] [PATCH 1/7 v3] support/download: make hash file
- optional
-In-Reply-To: <CAMQcK5JmZ=r6U7eV4pR_GYa3-eP_VhXu-QBRf-WtvGdcUZTFDw@mail.gmail.com>
-References: <cover.1427037564.git.yann.morin.1998@free.fr>
- <5f50190fe62d33438bfe4c68ab566698c63d5102.1427037564.git.yann.morin.1998@free.fr>
- <CAMQcK5JmZ=r6U7eV4pR_GYa3-eP_VhXu-QBRf-WtvGdcUZTFDw@mail.gmail.com>
-Message-ID: <5515CC16.9030506@mind.be>
+Date: Fri, 27 Mar 2015 22:57:20 +0100
+Subject: [Buildroot] [PATCH v9] package/sysdig: New package
+In-Reply-To: <CA+TH9Vn6t-bT78+Z8iGFq7X3ftnbZqk0-mzoQJgVODDLpQmG-Q@mail.gmail.com>
+References: <1427356117-27840-1-git-send-email-angelo.compagnucci@gmail.com>
+ <CAMQcK5KZ89uEWt_9BqZ=Cdo2JXHfzKsMaaSAZoN71bdkEvNi9Q@mail.gmail.com>
+ <CA+TH9Vn6t-bT78+Z8iGFq7X3ftnbZqk0-mzoQJgVODDLpQmG-Q@mail.gmail.com>
+Message-ID: <5515D240.9070200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/03/15 20:03, Ryan Barnett wrote:
-> Yann,
+On 26/03/15 21:37, Angelo Compagnucci wrote:
+> Dear Ryan Barnett,
 > 
-> On Sun, Mar 22, 2015 at 10:21 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Currently, specifying a hash file for our download wrapper is mandatory.
->>
->> However, when we download a git, svn, bzr, hg or cvs tree, there's by
->> design no hash to check the download against.
-> 
-> I was thinking about hashes for the git/svn/(other VCS) and how these
-> sources could be provided by the buildroot sources mirror -
-> http://sources.buildroot.org/ or a primary download site. Do you have
-> an idea of how we could utilize hash checking if buildroot were to
-> pull the sources from one of these methods? There could be a "man in
-> the middle" attack since the sources mirror or the primary site just
-> provides a tar of these VCS repositories
-> 
-> This could be especially useful for when the BR2_PRIMARY_SITE_ONLY is
-> used. This wouldn't necessarily for "man in the middle" attacks but
-> for ensure that your downloads don't get corrupt.
+> 2015-03-26 19:38 GMT+01:00 Ryan Barnett <ryan.barnett@rockwellcollins.com>:
+>> > Hi Angelo,
+>> >
+>> > On Thu, Mar 26, 2015 at 2:48 AM, Angelo Compagnucci
+>> > <angelo.compagnucci@gmail.com> wrote:
+>>> >> Sysdig is open source, system-level exploration:
+>>> >> capture system state and activity from a running Linux
+>>> >> instance, then save, filter and analyze.
+>>> >>
+>>> >> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> >
+>> > It would be good to carry forward previous reviews when you submit a
+>> > new version of a patch. In your v8 of this patch Yegor Yefremov
+>> > reviewed your patch so after your Signed-off-by line you should put
+>> > this:
+>> >
+>> > Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Are you sure? IMO, If the patch changes it should be reviewed again.
 
- Yes, I had exactly the same concept in mind. The Debian Reproducible Builds
-Wiki [1] has some interesting leads. It basically boils down to adding --owner,
---group and --mtime options to tar, and making sure that the list of files is
-passed explicitly instead of relying on directory order.
+ It basically depends on how much you still changed after that reviewed-by was
+given. In this case, it indeed probably changed too much to keep the tag.
 
- One difficulty is git archive, because AFAIK it doesn't support passing extra
-arguments to tar or choosing the ordering of the files.
+ For Yegor's convenience, however, it could be good to add something like:
+
+Previous-version-reviewed-by: ...
+
+(At least in my case, I tend to look more carefully at the patches I reviewed
+before, and I tend to forget which ones I reviewed in the past.)
 
 
  Regards,
  Arnout
-
-
-[1] https://wiki.debian.org/ReproducibleBuilds/Howto
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
