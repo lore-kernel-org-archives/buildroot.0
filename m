@@ -1,100 +1,58 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 27 Mar 2015 22:20:26 +0100
-Subject: [Buildroot] package/glog
-In-Reply-To: <1427170586986.25469@uqconnect.edu.au>
-References: <1427161798142.23284@uqconnect.edu.au>
- <1427170586986.25469@uqconnect.edu.au>
-Message-ID: <CAGm1_kv3ArTGv2W9usiUdYOsVF1_kksZ7xjZ2GVAQtKYbczy3Q@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 27 Mar 2015 22:31:02 +0100
+Subject: [Buildroot] [PATCH 1/7 v3] support/download: make hash file
+ optional
+In-Reply-To: <CAMQcK5JmZ=r6U7eV4pR_GYa3-eP_VhXu-QBRf-WtvGdcUZTFDw@mail.gmail.com>
+References: <cover.1427037564.git.yann.morin.1998@free.fr>
+ <5f50190fe62d33438bfe4c68ab566698c63d5102.1427037564.git.yann.morin.1998@free.fr>
+ <CAMQcK5JmZ=r6U7eV4pR_GYa3-eP_VhXu-QBRf-WtvGdcUZTFDw@mail.gmail.com>
+Message-ID: <5515CC16.9030506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anthony,
+On 24/03/15 20:03, Ryan Barnett wrote:
+> Yann,
+> 
+> On Sun, Mar 22, 2015 at 10:21 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> Currently, specifying a hash file for our download wrapper is mandatory.
+>>
+>> However, when we download a git, svn, bzr, hg or cvs tree, there's by
+>> design no hash to check the download against.
+> 
+> I was thinking about hashes for the git/svn/(other VCS) and how these
+> sources could be provided by the buildroot sources mirror -
+> http://sources.buildroot.org/ or a primary download site. Do you have
+> an idea of how we could utilize hash checking if buildroot were to
+> pull the sources from one of these methods? There could be a "man in
+> the middle" attack since the sources mirror or the primary site just
+> provides a tar of these VCS repositories
+> 
+> This could be especially useful for when the BR2_PRIMARY_SITE_ONLY is
+> used. This wouldn't necessarily for "man in the middle" attacks but
+> for ensure that your downloads don't get corrupt.
 
-thanks for your contribution. Below my comments.
+ Yes, I had exactly the same concept in mind. The Debian Reproducible Builds
+Wiki [1] has some interesting leads. It basically boils down to adding --owner,
+--group and --mtime options to tar, and making sure that the list of files is
+passed explicitly instead of relying on directory order.
 
-On Tue, Mar 24, 2015 at 5:16 AM, Mr Anthony Arnold
-<anthony.arnold@uqconnect.edu.au> wrote:
-> Signed-off-by: Anthony Arnold <anthony.arnold@uqconnect.edu.au>
-> ---
->  package/Config.in      |  1 +
->  package/glog/Config.in | 11 +++++++++++
->  package/glog/glog.mk   | 13 +++++++++++++
+ One difficulty is git archive, because AFAIK it doesn't support passing extra
+arguments to tar or choosing the ordering of the files.
 
-Please add a hash file
-(http://nightly.buildroot.org/manual.html#adding-packages-hash)
 
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/glog/Config.in
->  create mode 100644 package/glog/glog.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d6a5ad3..3128cc9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -836,6 +836,7 @@ menu "Logging"
->         source "package/log4cplus/Config.in"
->         source "package/log4cxx/Config.in"
->         source "package/zlog/Config.in"
-> +       source "package/glog/Config.in"
+ Regards,
+ Arnout
 
-Entries should be sorted alphabetically
 
->  endmenu
->
->  menu "Multimedia"
-> diff --git a/package/glog/Config.in b/package/glog/Config.in
-> new file mode 100644
-> index 0000000..ae528bd
-> --- /dev/null
-> +++ b/package/glog/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_GLOG
-> +       bool "glog"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       help
-> +        C++ implementation of the Google logging module
-> +
-> +        https://github.com/google/glog
+[1] https://wiki.debian.org/ReproducibleBuilds/Howto
 
-Help text should have one tab and two spaces as indentation
-
-> +
-> +comment "glog needs a toolchain w/ C++, threads"
-> +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
-> \ No newline at end of file
-> diff --git a/package/glog/glog.mk b/package/glog/glog.mk
-> new file mode 100644
-> index 0000000..b955bbf
-> --- /dev/null
-> +++ b/package/glog/glog.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# glog
-> +#
-> +################################################################################
-> +
-> +GLOG_VERSION = v0.3.4
-> +GLOG_LICENSE = New BSD License
-> +GLOG_LICENSE_FILES = COPYING
-> +GLOG_SITE = $(call github,google,glog,$(GLOG_VERSION))
-> +GLOG_SITE_METHOD = git
-
-No need for site method for github helper
-
-As it is a library you need GLOG_INSTALL_STAGING = YES
-
-Yegor
-
-> +
-> +$(eval $(autotools-package))
-> --
-> 1.9.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
