@@ -1,38 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Mar 2015 18:10:50 +0100
-Subject: [Buildroot] [PATCH 1/1] mjpg-streamer: Fix build with ccache
- enabled.
-In-Reply-To: <1427475036-10363-1-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <1427475036-10363-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <20150327181050.45256b69@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 27 Mar 2015 18:16:47 +0100
+Subject: [Buildroot] [PATCH 1/2] package/powertop: needs ncursesw
+References: <1427472097-30708-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150327173446.779683cf@free-electrons.com>
+Message-ID: <XnsA46AB9F2F3F85berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Cavallari,
+[posted and mailed]
 
-On Fri, 27 Mar 2015 17:50:36 +0100, Nicolas Cavallari wrote:
-> Quote the TARGET_CC variable, otherwise, if ccache is enabled:
-> 
-> [...] make CC=$TARGET_CC [...]
-> is expanded to e.g.
-> [...] make CC=ccache gcc [...]
-> 
-> The build succeeds with "make[2]: Nothing to be done for '[...]gcc'".
-> and the program is compiled at "make install" time, with the default
-> host compiler, resulting in a binary that does not run on the target.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  package/mjpg-streamer/mjpg-streamer.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20150327173446.779683cf at free-electrons.com:
 
-Applied, thanks.
+> Am I missing something?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi,
+
+powertop is a weird piece of code;)
+
+Using this defconfig
+
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_POWERTOP=y
+
+configure works
+
+checking for NCURSES... no
+checking for library containing delwin... -lncurses
+[...]
+
+but then this happens:
+
+lib.cpp: In function 'void align_string(char*, size_t, size_t)':
+lib.cpp:271:59: error: 'mbsrtowcs' was not declared in this scope
+  sz = mbsrtowcs(NULL, (const char **)&buffer, max_sz, NULL);
+
+Afaics mbsrtowcs() is a function which is only available with a wchar-enabled 
+toolchain, so my patch does the right thing, but the description needs some 
+additions.
+
+Regards, Bernd
+
+PS: Upstream of the powertop tarball is problematic:
+http://autobuild.buildroot.net/results/50e/50e70b0c7c3533ddb7397fa7542a9369bf
+7a7249/build-end.log
