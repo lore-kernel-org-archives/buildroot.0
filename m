@@ -1,69 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 27 Mar 2015 17:01:37 +0100
-Subject: [Buildroot] [PATCH 2/2] package/powertop: depends on c++
-In-Reply-To: <1427472097-30708-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427472097-30708-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427472097-30708-2-git-send-email-bernd.kuhls@t-online.de>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri, 27 Mar 2015 17:21:36 +0100
+Subject: [Buildroot] wpa_supplicant not starting correctly
+In-Reply-To: <55131639.9040408@gmail.com>
+References: <55131639.9040408@gmail.com>
+Message-ID: <55158390.2020102@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes configure error due to missing c++
+On 25/03/2015 21:10, Alexey Mednyy wrote:
+> Hello there,
+> 
+> I've got configuration with eudev,dbus and  busybox init.
+> Previously everything worked fine, but now wpa_supplicant not starting.
+> and I see this in /var/log/messages :
+> 
+> Mar 25 22:56:25 hostname daemon.notice dbus[120]: [system] Activating
+> service name='fi.w1.wpa_supplicant1' (using servicehelper)
+> Mar 25 22:56:26 hostname daemon.info init: starting pideudev 146, tty
+> '/dev/ttyS0': '/sbin/getty -L  ttyS0 0 vt100 '
+> Mar 25 22:56:26 hostname daemon.notice dbus[120]: [system] Activated
+> service 'fi.w1.wpa_supplicant1' failed: Failed to execute program
+> fi.w1.wpa_supplicant1: Success
+> 
+> I'm not an expert in dbus, so asking for help what causes such problem?
+> I think before some recent commit wpa_supplicant started by init script
+> not by dbus is it true?
 
-checking for library containing pthread_create... no
-configure: error: libpthread is required but was not found
+If you use network-manager or something managing wpa_supplicant, then
+they have always relied on D-Bus activation to start wpa_supplicant.
 
-Quote from config.log:
+You seem to not run systemd, so the standard D-Bus activation should
+work.  Check that you can run wpa_supplicant normally (i.e. by running
+it with the same parameters as specified in
+/usr/share/dbus-1/system-services/fi.w1.wpa_supplicant1.service ).  If
+it does, there is another problem.
 
-configure:21552: checking for library containing pthread_create
-configure:21583: false -o conftest    -Os    conftest.cpp -lintl  >&5
-[...]
-ac_cv_env_CXX_set=set
-ac_cv_env_CXX_value=false
-
-using this defconfig
-
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_POWERTOP=y
-
-Please note the number of .cpp files belonging to powertop
-
-output/build/powertop-2.7$ find -iname *.cpp | wc -l
-59
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/powertop/Config.in |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/powertop/Config.in b/package/powertop/Config.in
-index cee78e5..398764e 100644
---- a/package/powertop/Config.in
-+++ b/package/powertop/Config.in
-@@ -1,9 +1,8 @@
- config BR2_PACKAGE_POWERTOP
- 	bool "powertop"
--	# pciutils dependency
--	depends on !BR2_bfin
--	# libnl dependency
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_bfin # pciutils
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
- 	depends on BR2_USE_WCHAR # ncurses
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_NCURSES_WCHAR
-@@ -15,6 +14,7 @@ config BR2_PACKAGE_POWERTOP
- 
- 	  https://01.org/powertop/
- 
--comment "powertop needs a toolchain w/ threads, wchar"
-+comment "powertop needs a toolchain w/ C++, threads, wchar"
- 	depends on !BR2_bfin
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
--- 
-1.7.10.4
+My current supposition is that your wpa_supplicant was built without
+D-Bus support.
