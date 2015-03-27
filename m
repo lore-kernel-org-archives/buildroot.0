@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Mar 2015 18:09:36 +0100
-Subject: [Buildroot] [git commit] mjpg-streamer: Fix build with ccache
-	enabled.
-Message-ID: <20150327170942.EB8E0817A0@busybox.osuosl.org>
+Date: Fri, 27 Mar 2015 17:49:59 +0100
+Subject: [Buildroot] [git commit] configs/riotboard: bump kernel to version
+	3.19
+Message-ID: <20150327170942.DFA44817A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16359f0facbefd73179ffb9616594e0ebfbb5367
+commit: http://git.buildroot.net/buildroot/commit/?id=d13aa2f9e0c33c573fcf9d998475271910e73207
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quote the TARGET_CC variable, otherwise, if ccache is enabled:
-
-[...] make CC=$TARGET_CC [...]
-is expanded to e.g.
-[...] make CC=ccache gcc [...]
-
-The build succeeds with "make[2]: Nothing to be done for '[...]gcc'".
-and the program is compiled at "make install" time, with the default
-host compiler, resulting in a binary that does not run on the target.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mjpg-streamer/mjpg-streamer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/riotboard_defconfig |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index 2385429..e10e9a8 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -15,7 +15,7 @@ MJPG_STREAMER_LICENSE_FILES = LICENSE
- MJPG_STREAMER_DEPENDENCIES = jpeg
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+index 034bf40..fc25249 100644
+--- a/configs/riotboard_defconfig
++++ b/configs/riotboard_defconfig
+@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
  
- define MJPG_STREAMER_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D)
- endef
+ # kernel headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="3.19"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
  
- define MJPG_STREAMER_INSTALL_TARGET_CMDS
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
