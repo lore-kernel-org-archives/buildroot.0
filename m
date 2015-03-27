@@ -1,93 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 28 Mar 2015 00:20:20 +0100
-Subject: [Buildroot] [PATCH 3/3] toolchain/external: add Linaro AArch64
-	2014.11
-In-Reply-To: <cover.1427498258.git.yann.morin.1998@free.fr>
-References: <cover.1427498258.git.yann.morin.1998@free.fr>
-Message-ID: <247483b4380ee25909381aceec19c224712b3627.1427498258.git.yann.morin.1998@free.fr>
+From: Steve Kenton <skenton@ou.edu>
+Date: Fri, 27 Mar 2015 18:35:47 -0500
+Subject: [Buildroot] Where is /dev/console created when using devtmpfs?
+In-Reply-To: <5515D638.9090502@mind.be>
+References: <5512F41A.3080208@ou.edu>
+ <CAOS_Y6SpQXSC3z2AEBH3j9wgqbbtC6=LDNb8p3fk_s0YyMe2Tw@mail.gmail.com>
+ <5514D92B.4050305@ou.edu> <5515D638.9090502@mind.be>
+Message-ID: <5515E953.2010207@ou.edu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suffers from the same deficiencies as the just-introduced ARMv7 variants.
+On 03/27/2015 05:14 PM, Arnout Vandecappelle wrote:
+> On 27/03/15 05:14, Steve Kenton wrote:
+>> On 03/26/2015 02:51 PM, Rob Landley wrote:
+>>> On Wed, Mar 25, 2015 at 12:44 PM, Steve Kenton <skenton@ou.edu> wrote:
+> [snip]
+>>>> so I spent some time looking at my device usage and for the life of me
+>>>> I can't find where /dev/console gets created during the build process.
+>>>
+>>> The console PID 1 inherits at process launch is the /dev/console in
+>>> initramfs. When you don't have initramfs, the init/noinitramfs.c code
+>>> literally does:
+>> Yes, this is my configuration - initramfs not linked into kernel by buildroot
+>> # BR2_TARGET_ROOTFS_INITRAMFS is not set
+> 
+>  Just to be clear "initramfs not linked into kernel" is BR2_TARGET_ROOTFS_CPIO,
+> "initramfs linked into the kernel" is BR2_TARGET_ROOTFS_INITRAMFS. But for the
+> purpose of the contents of the rootfs, that doesn't make a difference.
+> 
+>  But so in your case, Steve, I believe you _do_ have an initramfs, i.e. you have
+> selected BR2_TARGET_ROOTFS_CPIO. Otherwise /dev/console wouldn't have been
+> created :-).
+I've been known to be confused once or twice :-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in               | 19 +++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.hash |  2 ++
- toolchain/toolchain-external/toolchain-external.mk   |  7 +++++++
- 3 files changed, 28 insertions(+)
+Yes, BR2_TARGET_ROOTFS_CPIO was still explicitly set in my config from previous testing
+and experimentation with initramfs even though BR2_TARGET_ROOTFS_INITRAMFS was not set.
+Since BR2_TARGET_ROOTFS_INITRAMFS selects BR2_TARGET_ROOTFS_CPIO I must have been confused :-(
+So even though I am currently using the tar version of the rootfs there is indeed
+also a cpio version getting created and that process is where /dev/console comes from in
+my on-disk rootfs. It should disappear when I clear the unneeded BR2_TARGET_ROOTFS_CPIO.
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c1ed5c2..f32504b 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -882,6 +882,24 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	  Toolchain for the Blackfin architecture, from
- 	  http://blackfin.uclinux.org.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_2014_11
-+	bool "Linaro AArch64 14.11"
-+	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH = "x86_64"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	help
-+	  Toolchain for the AArch64 architecture, from
-+	  http://www.linaro.org/engineering/armv8/
-+
-+comment "Linaro toolchain 2014.11 available only on x86_64 hosts"
-+	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH != "x86_64"
-+	depends on !BR2_STATIC_LIBS
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	bool "Linaro AArch64 14.09"
- 	depends on BR2_aarch64
-@@ -1009,6 +1027,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
-+	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_2014_11
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index d1cf56a..15de8e3 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -57,6 +57,8 @@ sha256 f1b8cc025864d0213e88f0821b50d663d2428d31ea78eb38446d2042c8a49a74  gcc-lin
- sha256 56a75abfb229d2d2f05a884212669a543a873c76aab4c0c8d1ebe71b8074803d  sysroot-linaro-eglibc-gcc4.9-2014.11-armeb-linux-gnueabihf.tar.xz
- sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-+sha256 56d9f810fe48826d1247a0c44f4f5847ff9a092c45b9a0678253f04c17329596  gcc-linaro-4.9-2014.11-x86_64_aarch64-linux-gnu.tar.xz
-+sha256 4c8022e271ba1d75eb722623a94f6e63ab0a08048a2a6c2fce32ed13aece58eb  sysroot-linaro-eglibc-gcc4.9-2014.11-aarch64-linux-gnu.tar.xz
- sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
- 
- # Synopsys DesignWare ARC toolchains
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 8643047..e23f5e5 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -379,6 +379,13 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
- TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386
- TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_2014_11),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.11/components/toolchain/binaries/aarch64-linux-gnu
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-4.9-2014.11-x86_64_aarch64-linux-gnu.tar.xz
-+TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = sysroot-linaro-eglibc-gcc4.9-2014.11-aarch64-linux-gnu.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_LINARO_2014_11_EXTRACT_SYSROOT \
-+	TOOLCHAIN_EXTERNAL_LINARO_2014_11_FIX_TYPES
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
--- 
-1.9.1
+
+.../buildroot-2015.02/output/images$ ls -l
+total 548980
+-rw-rw-r-- 1 steve steve   5896640 Mar 26 22:44 bzImage
+-rw-rw-r-- 1 steve steve    139560 Mar 22 19:59 grub.img
+-rw-rw-r-- 1 steve steve 183162368 Mar 26 22:44 rootfs.cpio
+-rw-rw-r-- 1 steve steve 213949440 Mar 26 22:44 rootfs.ext2
+lrwxrwxrwx 1 steve steve        11 Mar 26 22:44 rootfs.ext4 -> rootfs.ext2
+-rw-rw-r-- 1 steve steve 185610240 Mar 26 22:44 rootfs.tar
+drwxr-xr-x 2 steve steve      4096 Mar 22 20:01 syslinux
+
+Oops!
+
+.../dev$ ls -l
+total 4
+crw--w--w- 1 root root 5, 1 Mar 25 22:54 console
+lrwxrwxrwx 1 root root   10 Mar  1 15:26 log -> ../tmp/log
+drwxrwxr-x 2 root root 4096 Mar  1 15:26 pts
+
+And it makes sense now.
+
+
+> 
+>>
+>>>
+>>>         err = sys_mkdir((const char __user __force *) "/dev", 0755);
+>>>         if (err < 0)
+>>>                 goto out;
+>>>
+>>>         err = sys_mknod((const char __user __force *) "/dev/console",
+>>>                         S_IFCHR | S_IRUSR | S_IWUSR,
+>>>                         new_encode_dev(MKDEV(5, 1)));
+> 
+>  Note again that this stuff is only done when there is no initramfs. In other
+> words, when there is an initramfs, this initramfs must contain /dev/console or
+> you have no console.
+> 
+>  That's why buildroot adds it explicitly in fs/cpio/cpio.mk:
+> 
+> PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
+
+Ahhh! and that answers my original question of where the on-disk /dev/console come from.
+
+Thanks everyone for the information.
+
+Rob, my 2 cents worth says that todo item of yours is a good idea.
+
+Steve
+
+[snip]
