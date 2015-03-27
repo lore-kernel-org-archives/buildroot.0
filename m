@@ -1,34 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Mar 2015 20:01:03 -0300
-Subject: [Buildroot] [PATCH 3/3] gdb: deprecate version 7.7.x
-In-Reply-To: <1427410863-7574-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427410863-7574-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427410863-7574-3-git-send-email-gustavo@zacarias.com.ar>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 26 Mar 2015 19:46:51 -0500
+Subject: [Buildroot] [PATCH v9] package/sysdig: New package
+In-Reply-To: <CA+TH9Vn6t-bT78+Z8iGFq7X3ftnbZqk0-mzoQJgVODDLpQmG-Q@mail.gmail.com>
+References: <1427356117-27840-1-git-send-email-angelo.compagnucci@gmail.com>
+ <CAMQcK5KZ89uEWt_9BqZ=Cdo2JXHfzKsMaaSAZoN71bdkEvNi9Q@mail.gmail.com>
+ <CA+TH9Vn6t-bT78+Z8iGFq7X3ftnbZqk0-mzoQJgVODDLpQmG-Q@mail.gmail.com>
+Message-ID: <CAMQcK5KVoXokrFxJUT0wogWZFwOXtoNT3c+sWS2nPKQzrM04DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that 7.9 was added and 7.8.x is default we don't want to have a
-dozen versions so mark it as deprecated.
+On Thu, Mar 26, 2015 at 3:37 PM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> Dear Ryan Barnett,
+>
+> Are you sure? IMO, If the patch changes it should be reviewed again.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gdb/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+You do bring up a good point. However, I was basing this on what Yann
+did with his hash improvement series:
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 3a0baa1..6b0ca9b 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -33,6 +33,7 @@ choice
- 
- 	config BR2_GDB_VERSION_7_7
- 		bool "gdb 7.7.x"
-+		depends on BR2_DEPRECATED_SINCE_2015_05
- 
- 	config BR2_GDB_VERSION_7_8
- 		bool "gdb 7.8.x"
+http://patchwork.ozlabs.org/patch/453147/
+
+> Good catch, but the message should be viewed only on supported arhcs,
+> so it should be:
+>
+>  comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
+>          depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP
+>          depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+
+Yes I agree with this.
+
+Thanks,
+-Ryan
+
 -- 
-2.0.5
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
