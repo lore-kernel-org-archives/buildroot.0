@@ -1,45 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Mar 2015 23:23:39 +0100
-Subject: [Buildroot] package/glog
-In-Reply-To: <CAGm1_kv3ArTGv2W9usiUdYOsVF1_kksZ7xjZ2GVAQtKYbczy3Q@mail.gmail.com>
-References: <1427161798142.23284@uqconnect.edu.au>
- <1427170586986.25469@uqconnect.edu.au>
- <CAGm1_kv3ArTGv2W9usiUdYOsVF1_kksZ7xjZ2GVAQtKYbczy3Q@mail.gmail.com>
-Message-ID: <5515D86B.8080009@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Mar 2015 00:20:16 +0100
+Subject: [Buildroot] [PATCH 0/3] toolchain/external: add Linaro 2014.11
+	(branch yem/toolchain-linaro-2014.11)
+Message-ID: <cover.1427498258.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/03/15 22:20, Yegor Yefremov wrote:
-> Hi Anthony,
-> 
-> thanks for your contribution. Below my comments.
-> 
-> On Tue, Mar 24, 2015 at 5:16 AM, Mr Anthony Arnold
-> <anthony.arnold@uqconnect.edu.au> wrote:
->> Signed-off-by: Anthony Arnold <anthony.arnold@uqconnect.edu.au>
->> ---
->>  package/Config.in      |  1 +
->>  package/glog/Config.in | 11 +++++++++++
->>  package/glog/glog.mk   | 13 +++++++++++++
-> 
-> Please add a hash file
-> (http://nightly.buildroot.org/manual.html#adding-packages-hash)
+Hello All!
 
- Actually, no. It's missing in the manual, but hash files should not be added
-for packages using the github helper. The problem is that the archive is created
-on the fly, and will be different at different times (even for the same commit).
+This series introduces the Linaro 2014.11 toolchains, for ARM (LE),
+ARM (EB) and AArch64.
 
- Regards,
- Arnout
+See the commit log of patch 1 for the gory details... :-/
 
+ARM (LE) and AArch64 toolchains tested with a minimalist setup, based on
+qemu_arm_vexpress_defconfig, with just a switch to use EABIhf and this
+toolchain (rather than the default EABI and internal toolchain).
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 9c820091d1a1813e6de4016ea510a047847f9648:
+
+  package/dovecot: fix hash typo (2015-03-27 18:47:38 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/toolchain-linaro-2014.11
+
+for you to fetch changes up to 247483b4380ee25909381aceec19c224712b3627:
+
+  toolchain/external: add Linaro AArch64 2014.11 (2015-03-28 00:16:42 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      toolchain/external: add Linaro ARM 2014.11 ARMv7 EABIhf
+      toolchain/external: add Linaro ARM BE 2014.11 ARMv7 EABIhf
+      toolchain/external: add Linaro AArch64 2014.11
+
+ toolchain/toolchain-external/Config.in             | 73 ++++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  6 ++
+ toolchain/toolchain-external/toolchain-external.mk | 38 +++++++++++
+ 3 files changed, 117 insertions(+)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
