@@ -1,35 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Mar 2015 16:15:54 +0100
-Subject: [Buildroot] [PATCH 4/4] package/powertop: Fix download problems
-In-Reply-To: <1427543281-11901-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1427543281-11901-1-git-send-email-bernd.kuhls@t-online.de>
- <1427543281-11901-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150328161554.36e131b8@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Mar 2015 16:27:08 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] toolchain/external: add Linaro 2014.11
+	(branch yem/toolchain-linaro-2014.11)
+Message-ID: <cover.1427556250.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello All!
 
-On Sat, 28 Mar 2015 12:48:01 +0100, Bernd Kuhls wrote:
+This series introduces the Linaro 2014.11 toolchains, for ARM (LE and
+BE) and AArch64.
 
->  POWERTOP_VERSION = 2.7
->  POWERTOP_SITE = https://01.org/sites/default/files/downloads/powertop/
-> -POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-gettext host-pkgconf
-> +POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-gettext host-pkgconf host-wget
+See the commit log of patch 1 for the gory details... :-/
 
-This cannot work, because <pkg>_DEPENDENCIES are only guaranteed to be
-built and installed before the configure step of <pkg>. And here, you
-need host-wget before powertop gets downloaded.
+ARM (LE) toolchain was tested with a minimalist setup, based on
+qemu_arm_vexpress_defconfig, with just a switch to use EABIhf and this
+toolchain (rather than the default EABI and internal toolchain), while
+the AArch64 toolchain was tested in a similar way, based on
+qemu_aarch64_virt_defconfig.
 
-So another solution is needed. Not sure which one, though.
 
-Best regards,
+Changes v1 -> v2:
+  - remove stray backup file
 
-Thomas
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 9c820091d1a1813e6de4016ea510a047847f9648:
+
+  package/dovecot: fix hash typo (2015-03-27 18:47:38 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/toolchain-linaro-2014.11
+
+for you to fetch changes up to f236047e897f67361e28b321b0e9e326c012b802:
+
+  toolchain/external: add Linaro AArch64 2014.11 (2015-03-28 16:12:13 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      toolchain/external: add Linaro ARM 2014.11 ARMv7 EABIhf
+      toolchain/external: add Linaro ARM BE 2014.11 ARMv7 EABIhf
+      toolchain/external: add Linaro AArch64 2014.11
+
+ toolchain/toolchain-external/Config.in             | 73 ++++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  6 ++
+ toolchain/toolchain-external/toolchain-external.mk | 47 ++++++++++++++
+ 3 files changed, 126 insertions(+)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
