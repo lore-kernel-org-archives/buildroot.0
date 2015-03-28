@@ -1,26 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 28 Mar 2015 13:01:56 -0300
-Subject: [Buildroot] [PATCH 4/4] package/powertop: Fix download problems
-In-Reply-To: <20150328161554.36e131b8@free-electrons.com>
-References: <1427543281-11901-1-git-send-email-bernd.kuhls@t-online.de>
- <1427543281-11901-4-git-send-email-bernd.kuhls@t-online.de>
- <20150328161554.36e131b8@free-electrons.com>
-Message-ID: <5516D074.2030907@zacarias.com.ar>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sat, 28 Mar 2015 20:34:32 +0100
+Subject: [Buildroot] [PATCH] yaml-cpp: requires boost
+Message-ID: <1427571272-8465-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/28/2015 12:15 PM, Thomas Petazzoni wrote:
+The Boost C++ library is already selected in the Config.in but it was
+missing in the yaml-cpp.mk file.
 
-> This cannot work, because <pkg>_DEPENDENCIES are only guaranteed to be
-> built and installed before the configure step of <pkg>. And here, you
-> need host-wget before powertop gets downloaded.
-> 
-> So another solution is needed. Not sure which one, though.
+Fix build failure:
+CMake Error at /home/tetsuya/buildroot/br/output/host/usr/share/cmake-3.1/Modules/FindBoost.cmake:1182 (message):
+  Unable to find the requested Boost libraries.
+<snip>
+make: *** [/home/tetsuya/buildroot/br/output/build/yaml-cpp-0.5.1/.stamp_configured] Error 1
 
-Hi.
-wget --no-check-certificate looks like the best solution, and rely on
-our hashes for authentication/consistency.
-Regards.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ package/yaml-cpp/yaml-cpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
+index 5ebdb23..afc70bd 100644
+--- a/package/yaml-cpp/yaml-cpp.mk
++++ b/package/yaml-cpp/yaml-cpp.mk
+@@ -10,4 +10,6 @@ YAML_CPP_INSTALL_STAGING = YES
+ YAML_CPP_LICENSE = MIT
+ YAML_CPP_LICENSE_FILES = license.txt
+ 
++YAML_CPP_DEPENDENCIES = boost
++
+ $(eval $(cmake-package))
+-- 
+2.3.4
