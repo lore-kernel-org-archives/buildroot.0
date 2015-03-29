@@ -1,33 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 13:44:21 +0200
-Subject: [Buildroot] [PATCH] yaml-cpp: requires boost
-In-Reply-To: <1427571272-8465-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1427571272-8465-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150329134421.23a336d2@free-electrons.com>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Sun, 29 Mar 2015 13:52:04 +0200
+Subject: [Buildroot] [PATCH] package/ccache: bump version to 3.1.11
+Message-ID: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
 
-On Sat, 28 Mar 2015 20:34:32 +0100, Fabio Porcedda wrote:
-> The Boost C++ library is already selected in the Config.in but it was
-> missing in the yaml-cpp.mk file.
-> 
-> Fix build failure:
-> CMake Error at /home/tetsuya/buildroot/br/output/host/usr/share/cmake-3.1/Modules/FindBoost.cmake:1182 (message):
->   Unable to find the requested Boost libraries.
-> <snip>
-> make: *** [/home/tetsuya/buildroot/br/output/build/yaml-cpp-0.5.1/.stamp_configured] Error 1
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+---
+ package/ccache/ccache.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks!
-
-Thomas
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 270ea4b..893b6ae 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.1.8
++CCACHE_VERSION = 3.1.11
+ CCACHE_SITE = http://samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPLv3+, others
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
