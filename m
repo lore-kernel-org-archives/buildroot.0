@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2015 23:40:38 +0200
-Subject: [Buildroot] [PATCH 09/35] docs/manual: update documentation
- about applying patches
-In-Reply-To: <1427650429-9293-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Mar 2015 23:44:10 +0200
+Subject: [Buildroot] [PATCH 10/35] pkg-generic: implement a
+ <pkg>-external-deps target
+In-Reply-To: <1427650429-9293-11-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-10-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150329214038.GJ4093@free.fr>
+ <1427650429-9293-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150329214410.GK4093@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,61 +15,55 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> The Buildroot manual is currently wrong when describing how patches
-> are applied: it says that <packagename>-*.patch is applied, and that
-> <packagename>-<seq>-*.patch is the recommended name for patches. This
-> is incorrect, since we're now using just <seq>-*.patch. This commit
-> adjusts the documentation accordingly.
+> This commit implements a new <pkg>-external-deps target in the
+> pkg-generic package infrastructure. This target simply displays the
+> list of file names that are needed for <pkg> to build (source tarball,
+> patches, extra downloads).
+> 
+> In the case of the usage of <pkg>_OVERRIDE_SRCDIR, the path to the
+> overriden source directory is displayed, prepended by file://. This
+> matches what the code is currently doing in .stamp_rsync_sourced.
+> 
+> This new target is not currently being used in this commit, but
+> followup commits will make use of it.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  docs/manual/adding-packages-generic.txt |  2 +-
->  docs/manual/customize-patches.txt       | 11 +++++------
->  2 files changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 85c9ccd..1aa6def 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -219,7 +219,7 @@ information is (assuming the package name is +libfoo+) :
->    +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
->    to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
->    itself use a different mechanism: all files of the form
-> -  +<packagename>-*.patch+ present in the package directory inside
-> +  +*.patch+ present in the package directory inside
->    Buildroot will be applied to the package after extraction (see
->    xref:patch-policy[patching a package]). Finally, patches listed in
->    the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
-> diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
-> index e129a64..fa63541 100644
-> --- a/docs/manual/customize-patches.txt
-> +++ b/docs/manual/customize-patches.txt
-> @@ -33,12 +33,11 @@ follows:
->  * If a +series+ file exists in the package directory, then patches are
->    applied according to the +series+ file;
->  +
-> -* Otherwise, patch files matching +<packagename>-*.patch+
-> -  are applied in alphabetical order.
-> -  So, to ensure they are applied in the right order, it is highly
-> -  recommended to name the patch files like this:
-> -  +<packagename>-<number>-<description>.patch+, where +<number>+
-> -  refers to the 'apply order'.
-> +* Otherwise, patch files matching +*.patch+ are applied in
-> +  alphabetical order.  So, to ensure they are applied in the right
-> +  order, it is highly recommended to name the patch files like this:
-> +  +<number>-<description>.patch+, where +<number>+ refers to the
-> +  'apply order'.
-
-Patches bundled in Buildroot have a four-number sequence. Should we
-suggest this as well for patches in BR2_GLOBAL_PATCH_DIR ?
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  For information about how patches are applied for a package, see
->  xref:patch-apply-order[]
+> ---
+>  package/pkg-generic.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 22b3fb9..08e4cad 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -546,6 +546,11 @@ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+>  $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+>  
+>  $(1)-source:		$$($(2)_TARGET_SOURCE)
+> +
+> +$(1)-external-deps:
+> +	@for p in $$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS) ; do \
+> +		echo `basename $$$$p` ; \
+> +	done
+>  else
+>  # In the package override case, the sequence of steps
+>  #  source, by rsyncing
+> @@ -564,6 +569,9 @@ $(1)-extract:		$(1)-rsync
+>  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+>  
+>  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+> +
+> +$(1)-external-deps:
+> +	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
+>  endif
+>  
+>  $(1)-show-version:
 > -- 
 > 2.1.0
 > 
