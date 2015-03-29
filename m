@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:18 +0200
-Subject: [Buildroot] [PATCH 02/18] package/mplayer: add optional giflib
+Date: Sun, 29 Mar 2015 19:11:24 +0200
+Subject: [Buildroot] [PATCH 08/18] package/mplayer: add optional libass
 	support
 In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427649094-1240-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,28 +18,21 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 192a42e..f004ca9 100644
+index 900a6ce..245ed91 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -100,6 +100,11 @@ else
- MPLAYER_CONF_OPTS += --disable-live
+@@ -110,6 +110,12 @@ else
+ MPLAYER_CONF_OPTS += --disable-mencoder
  endif
  
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+MPLAYER_DEPENDENCIES += giflib
-+MPLAYER_EXTRA_LIBS += -lgif
++ifeq ($(BR2_PACKAGE_LIBASS),y)
++MPLAYER_DEPENDENCIES += libass
++MPLAYER_EXTRA_LIBS += -lass
++MPLAYER_CONF_OPTS += --disable-ass-internal --enable-ass
 +endif
 +
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-@@ -145,6 +150,7 @@ define MPLAYER_CONFIGURE_CMDS
- 		--yasm='' \
- 		--enable-fbdev \
- 		$(MPLAYER_CONF_OPTS) \
-+		--extra-libs="$(MPLAYER_EXTRA_LIBS)" \
- 		--enable-cross-compile \
- 		--disable-ivtv \
- 		--enable-dynamic-plugins \
+ ifeq ($(BR2_PACKAGE_TREMOR),y)
+ MPLAYER_DEPENDENCIES += tremor
+ MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
 -- 
 1.7.10.4
