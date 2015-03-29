@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Mar 2015 00:16:39 +0200
-Subject: [Buildroot] [PATCH 16/35] fs: declare phony targets as such
-In-Reply-To: <1427650429-9293-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Mar 2015 00:22:41 +0200
+Subject: [Buildroot] [PATCH 17/35] Makefile: targets are now declared
+ phony by the appropriate infrastructures
+In-Reply-To: <1427650429-9293-18-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-17-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150329221639.GQ4093@free.fr>
+ <1427650429-9293-18-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150329222241.GR4093@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,64 +15,51 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> This commit improves the filesystem handling code to declare its
-> various targets as PHONY when appropriate.
+> The main Makefile was declaring a subset of the per-package targets as
+> being PHONY, but not all of them. Now that the pkg-generic package
+> infrastructure is taking care of that in a much more systematic
+> fashion, this commit gets rid of the unneeded code from the main
+> Makefile.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  fs/common.mk              | 2 ++
->  fs/initramfs/initramfs.mk | 2 ++
->  fs/iso9660/iso9660.mk     | 2 ++
+>  Makefile | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 56477bb..15341be 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -395,7 +395,6 @@ include fs/common.mk
+>  include $(BR2_EXTERNAL)/external.mk
+>  
+>  TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
+> -TARGETS_DIRCLEAN := $(patsubst %,%-dirclean,$(TARGETS))
+>  
+>  # host-* dependencies have to be handled specially, as those aren't
+>  # visible in Kconfig and hence not added to a variable like TARGETS.
+> @@ -431,9 +430,7 @@ world: target-post-image
+>  
+>  .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+>  	legal-info legal-info-prepare legal-info-clean printvars \
+> -	target-finalize target-post-image \
+> -	$(TARGETS) $(TARGETS_ROOTFS) \
+> -	$(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO)
 
-You're missing a kludge in ext2:
+Not true, wince your previous patch forgot to add $(1)-legal-info as
+.PHONY.
 
-    rootfs-ext2-symlink:
-        ln -sf blablabla...
+However, when that's fixed in the previous patch:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  3 files changed, 6 insertions(+)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 5d07f00..cac127f 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -102,6 +102,8 @@ rootfs-$(1)-show-depends:
+> +	target-finalize target-post-image
 >  
->  rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
->  
-> +.PHONY: rootfs-$(1) rootfs-$(1)-show-depends
-> +
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
->  TARGETS_ROOTFS += rootfs-$(1)
->  endif
-> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-> index 308924d..db50812 100644
-> --- a/fs/initramfs/initramfs.mk
-> +++ b/fs/initramfs/initramfs.mk
-> @@ -17,6 +17,8 @@ rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGE
->  rootfs-initramfs-show-depends:
->  	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
->  
-> +.PHONY: rootfs-initramfs rootfs-initramfs-show-depends
-> +
->  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
->  TARGETS_ROOTFS += rootfs-initramfs
->  endif
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 5b44ba4..4ccfce9 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -48,6 +48,8 @@ rootfs-iso9660: $(BINARIES_DIR)/rootfs.iso9660
->  rootfs-iso9660-show-depends:
->  	@echo $(ROOTFS_ISO9660_DEPENDENCIES)
->  
-> +.PHONY: rootfs-iso9660 rootfs-iso9660-show-depends
-> +
 >  ################################################################################
 >  #
->  # Toplevel Makefile options
 > -- 
 > 2.1.0
 > 
