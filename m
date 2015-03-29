@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2015 23:35:51 +0200
-Subject: [Buildroot] [PATCH 08/35] packages: apply custom patches using
- *.patch instead of <pkg>-*.patch
-In-Reply-To: <1427650429-9293-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Mar 2015 23:40:38 +0200
+Subject: [Buildroot] [PATCH 09/35] docs/manual: update documentation
+ about applying patches
+In-Reply-To: <1427650429-9293-10-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-9-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150329213551.GI4093@free.fr>
+ <1427650429-9293-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150329214038.GJ4093@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,142 +15,61 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> Several packages have some logic to apply custom patches that existed
-> before the BR2_GLOBAL_PATCH_DIR mechanism: at91bootstrap,
-> at91bootstrap3, barebox, uboot and linux. Currently, the logic of
-> those packages to apply custom patches is to match
-> <package-name>-*.patch, which is not consistent with what we've done
-> for patches stored in the package directory, and for patches stored in
-> BR2_GLOBAL_PATCH_DIR: in such cases, we simply apply *.patch.
+> The Buildroot manual is currently wrong when describing how patches
+> are applied: it says that <packagename>-*.patch is applied, and that
+> <packagename>-<seq>-*.patch is the recommended name for patches. This
+> is incorrect, since we're now using just <seq>-*.patch. This commit
+> adjusts the documentation accordingly.
 > 
-> Therefore, for consistency reasons, this commit changes these packages
-> to also apply *.patch.
-
-At first, I was wondering if we could not simply get rid of al those
-custom hooks, and do something like:
-
-    BR2_GLOBAL_PATCH_DIR += $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)
-
-and so on for the others.
-
-But it turns out that we're only looking into sub-directories of
-BR2_GLOBAL_PATCH_DIR, so the above sould not work.
-
-Second, I'm afraid this would break the case where someone has all the
-patches in a single directory, and use the 'package' prefix to
-differentiate what package a patch would apply, like so:
-
-    /path/to/my/patches/at91bootstrap-patch-1.patch
-    /path/to/my/patches/at91bootstrap3-patch-1.patch
-    /path/to/my/patches/barebox-patch-1.patch
-    /path/to/my/patches/linux-patch-1.patch
-    ...
-
-This change would break that setup, would it not?
-
-Still, I think the change is a good and sound improvement in principle,
-so I would not care much about the use-case above.
-
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/adding-packages-generic.txt |  2 +-
+>  docs/manual/customize-patches.txt       | 11 +++++------
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 85c9ccd..1aa6def 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -219,7 +219,7 @@ information is (assuming the package name is +libfoo+) :
+>    +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
+>    to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
+>    itself use a different mechanism: all files of the form
+> -  +<packagename>-*.patch+ present in the package directory inside
+> +  +*.patch+ present in the package directory inside
+>    Buildroot will be applied to the package after extraction (see
+>    xref:patch-policy[patching a package]). Finally, patches listed in
+>    the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
+> diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+> index e129a64..fa63541 100644
+> --- a/docs/manual/customize-patches.txt
+> +++ b/docs/manual/customize-patches.txt
+> @@ -33,12 +33,11 @@ follows:
+>  * If a +series+ file exists in the package directory, then patches are
+>    applied according to the +series+ file;
+>  +
+> -* Otherwise, patch files matching +<packagename>-*.patch+
+> -  are applied in alphabetical order.
+> -  So, to ensure they are applied in the right order, it is highly
+> -  recommended to name the patch files like this:
+> -  +<packagename>-<number>-<description>.patch+, where +<number>+
+> -  refers to the 'apply order'.
+> +* Otherwise, patch files matching +*.patch+ are applied in
+> +  alphabetical order.  So, to ensure they are applied in the right
+> +  order, it is highly recommended to name the patch files like this:
+> +  +<number>-<description>.patch+, where +<number>+ refers to the
+> +  'apply order'.
+
+Patches bundled in Buildroot have a four-number sequence. Should we
+suggest this as well for patches in BR2_GLOBAL_PATCH_DIR ?
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  boot/at91bootstrap/at91bootstrap.mk   | 3 +--
->  boot/at91bootstrap3/at91bootstrap3.mk | 3 +--
->  boot/barebox/barebox.mk               | 5 ++---
->  boot/uboot/uboot.mk                   | 3 +--
->  linux/Config.in                       | 2 +-
->  linux/linux.mk                        | 2 +-
->  6 files changed, 7 insertions(+), 11 deletions(-)
-> 
-> diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-> index 50bbc26..802e85e 100644
-> --- a/boot/at91bootstrap/at91bootstrap.mk
-> +++ b/boot/at91bootstrap/at91bootstrap.mk
-> @@ -24,8 +24,7 @@ endef
->  
->  ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
->  define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
-> -	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \
-> -		at91bootstrap-$(AT91BOOTSTRAP_VERSION)-\*.patch
-> +	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \*.patch
->  endef
->  
->  AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
-> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-> index 098e7bf..b780617 100644
-> --- a/boot/at91bootstrap3/at91bootstrap3.mk
-> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
-> @@ -21,8 +21,7 @@ AT91BOOTSTRAP3_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
->  
->  ifneq ($(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR),)
->  define AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
-> -	$(APPLY_PATCHES) $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \
-> -		at91bootstrap3-\*.patch
-> +	$(APPLY_PATCHES) $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \*.patch
->  endef
->  
->  AT91BOOTSTRAP3_POST_PATCH_HOOKS += AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 5809fb0..98cb04e 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -26,9 +26,8 @@ BAREBOX_LICENSE_FILES = COPYING
->  
->  ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
->  define BAREBOX_APPLY_CUSTOM_PATCHES
-> -	$(APPLY_PATCHES) $(@D) \
-> -		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
-> -		barebox-$(BAREBOX_VERSION)-\*.patch
-> +	$(APPLY_PATCHES) $(@D)
-> +		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \*.patch
->  endef
->  
->  BAREBOX_POST_PATCH_HOOKS += BAREBOX_APPLY_CUSTOM_PATCHES
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a9ba054..8da2272 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -86,8 +86,7 @@ UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
->  
->  ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
->  define UBOOT_APPLY_CUSTOM_PATCHES
-> -	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
-> -		uboot-\*.patch
-> +	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \*.patch
->  endef
->  
->  UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
-> diff --git a/linux/Config.in b/linux/Config.in
-> index a1113dd..c83a3f5 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -129,7 +129,7 @@ config BR2_LINUX_KERNEL_PATCH
->  	  A space-separated list of patches to apply to the
->  	  kernel. Each patch can be described as an URL, a local file
->  	  path, or a directory. In the case of a directory, all files
-> -	  matching linux-*.patch in the directory will be applied.
-> +	  matching *.patch in the directory will be applied.
->  
->  #
->  # Configuration selection
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index c25d106..e239ff7 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -158,7 +158,7 @@ endif # BR2_LINUX_KERNEL_VMLINUX
->  define LINUX_APPLY_LOCAL_PATCHES
->  	for p in $(filter-out ftp://% http://% https://%,$(LINUX_PATCHES)) ; do \
->  		if test -d $$p ; then \
-> -			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch || exit 1 ; \
-> +			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
->  		else \
->  			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
->  		fi \
+>  For information about how patches are applied for a package, see
+>  xref:patch-apply-order[]
 > -- 
 > 2.1.0
 > 
