@@ -1,51 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 19:33:21 +0200
-Subject: [Buildroot] [PATCH 07/35] perl: use <pkg>_EXTRA_DOWNLOADS
+Date: Sun, 29 Mar 2015 19:33:23 +0200
+Subject: [Buildroot] [PATCH 09/35] docs/manual: update documentation about
+	applying patches
 In-Reply-To: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1427650429-9293-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1427650429-9293-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of manually using the DOWNLOAD macro (which should remain an
-internal macro), this commit converts the Perl package to use
-<pkg>_EXTRA_DOWNLOADS, now that it has been extended to allow full
-URLs.
+The Buildroot manual is currently wrong when describing how patches
+are applied: it says that <packagename>-*.patch is applied, and that
+<packagename>-<seq>-*.patch is the recommended name for patches. This
+is incorrect, since we're now using just <seq>-*.patch. This commit
+adjusts the documentation accordingly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/perl/perl.mk | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ docs/manual/adding-packages-generic.txt |  2 +-
+ docs/manual/customize-patches.txt       | 11 +++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 133e8aa..fb3ae6d 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -17,19 +17,11 @@ PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
- PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_EXTRA_DOWNLOADS = $(PERL_CROSS_SITE)/$(PERL_CROSS_SOURCE)
-+
- PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
- PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 85c9ccd..1aa6def 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -219,7 +219,7 @@ information is (assuming the package name is +libfoo+) :
+   +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
+   to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
+   itself use a different mechanism: all files of the form
+-  +<packagename>-*.patch+ present in the package directory inside
++  +*.patch+ present in the package directory inside
+   Buildroot will be applied to the package after extraction (see
+   xref:patch-policy[patching a package]). Finally, patches listed in
+   the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
+diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+index e129a64..fa63541 100644
+--- a/docs/manual/customize-patches.txt
++++ b/docs/manual/customize-patches.txt
+@@ -33,12 +33,11 @@ follows:
+ * If a +series+ file exists in the package directory, then patches are
+   applied according to the +series+ file;
+ +
+-* Otherwise, patch files matching +<packagename>-*.patch+
+-  are applied in alphabetical order.
+-  So, to ensure they are applied in the right order, it is highly
+-  recommended to name the patch files like this:
+-  +<packagename>-<number>-<description>.patch+, where +<number>+
+-  refers to the 'apply order'.
++* Otherwise, patch files matching +*.patch+ are applied in
++  alphabetical order.  So, to ensure they are applied in the right
++  order, it is highly recommended to name the patch files like this:
++  +<number>-<description>.patch+, where +<number>+ refers to the
++  'apply order'.
  
--# We use the perlcross hack to cross-compile perl. It should
--# be extracted over the perl sources, so we don't define that
--# as a separate package. Instead, it is downloaded and extracted
--# together with perl
--
--define PERL_CROSS_DOWNLOAD
--	$(call DOWNLOAD,$(PERL_CROSS_SITE:/=)/$(PERL_CROSS_SOURCE))
--endef
--PERL_POST_DOWNLOAD_HOOKS += PERL_CROSS_DOWNLOAD
--
- define PERL_CROSS_EXTRACT
- 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+ For information about how patches are applied for a package, see
+ xref:patch-apply-order[]
 -- 
 2.1.0
