@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:19 +0200
-Subject: [Buildroot] [PATCH 03/18] package/mplayer: add optional ncurses
+Date: Sun, 29 Mar 2015 19:11:21 +0200
+Subject: [Buildroot] [PATCH 05/18] package/mplayer: add optional libbluray
 	support
 In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427649094-1240-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/mplayer/mplayer.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index f004ca9..5ecd25a 100644
+index 1dbad7d..7992c4c 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -45,6 +45,14 @@ else
- MPLAYER_CONF_OPTS += --disable-freetype
+@@ -60,6 +60,13 @@ else
+ MPLAYER_CONF_OPTS += --disable-smb
  endif
  
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+MPLAYER_CONF_OPTS += --enable-termcap
-+MPLAYER_DEPENDENCIES += ncurses
-+MPLAYER_EXTRA_LIBS += -lncurses
++ifeq ($(BR2_PACKAGE_LIBBLURAY),y)
++MPLAYER_CONF_OPTS += --enable-bluray
++MPLAYER_DEPENDENCIES += libbluray
 +else
-+MPLAYER_CONF_OPTS += --disable-termcap
++MPLAYER_CONF_OPTS += --disable-bluray
 +endif
 +
  ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
