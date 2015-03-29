@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 19:33:41 +0200
-Subject: [Buildroot] [PATCH 27/35] Makefile: implement a package based
-	source-check target
+Date: Sun, 29 Mar 2015 19:33:29 +0200
+Subject: [Buildroot] [PATCH 15/35] pkg-kconfig: declare phony targets as such
 In-Reply-To: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1427650429-9293-28-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1427650429-9293-16-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit switches the implementation of the global source-check
-target to use a package infrastructure based mechanism, using the
-$(1)-all-source-check target added in the previous commit.
+Just like the previous commit did for the pkg-generic infrastructure,
+this commit improves the pkg-kconfig infrastructure to declare its
+custom <pkg>-<something> targets as PHONY.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/pkg-kconfig.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 9b44181..cbfdc0b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -622,8 +622,7 @@ external-deps:
- 	@$(MAKE1) -Bs $(EXTRAMAKEARGS) _external-deps | sort -u
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 04ac37d..69e7dc5 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -100,6 +100,8 @@ $(1)-update-defconfig: $(1)-savedefconfig
  
- # check if download URLs are outdated
--source-check:
--	$(MAKE1) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
-+source-check: $(foreach p,$(PACKAGES),$(p)-all-source-check)
+ endif # package enabled
  
- legal-info-clean:
- 	@rm -fr $(LEGAL_INFO_DIR)
++.PHONY: $(1)-update-config $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS))
++
+ endef # inner-kconfig-package
+ 
+ ################################################################################
 -- 
 2.1.0
