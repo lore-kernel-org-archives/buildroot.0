@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2015 22:50:25 +0200
-Subject: [Buildroot] [PATCH 04/35] pkg-generic: refactor the
- "Downloading" message logic
-In-Reply-To: <1427650429-9293-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Mar 2015 23:08:31 +0200
+Subject: [Buildroot] [PATCH 05/35] pkg-generic: allow full URLs for
+ <pkg>_EXTRA_DOWNLOADS
+In-Reply-To: <1427650429-9293-6-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150329205025.GE4093@free.fr>
+ <1427650429-9293-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150329210831.GF4093@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +15,57 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> In the .stamp_downloaded hook, the logic to decide whether or not to
-> display the "Downloading" message is treating the check of
-> <pkg>_SOURCE as a special case. But in fact, there is no real reason
-> to do so: the existing loop used for <pkg>_PATCH and
-> <pkg>_EXTRA_DOWNLOADS could work just as well.
+> The current logic for <pkg>_EXTRA_DOWNLOADS assumes that it is a list
+> of files, all hosted at <pkg>_SITE. However, just like for
+> <pkg>_PATCH, it may be useful to specify <pkg>_EXTRA_DOWNLOADS entries
+> that are hosted on a different site than the package <pkg>_SITE.
 > 
-> This commit therefore refactors this piece of code, to have a single
-> loop checking <pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS.
+> This commit implements this, by re-using the same logic as the one
+> used for <pkg>_PATCH.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/pkg-generic.mk | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 3c86878..22b3fb9 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -81,7 +81,12 @@ ifeq ($(DL_MODE),DOWNLOAD)
+>  	done
+>  endif
+>  	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
+> -	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
+> +	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),\
+> +		$(if $(findstring ://,$(p)),\
+> +			$(call DOWNLOAD,$(p)),\
+> +			$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))\
+> +		)\
+> +	$(sep))
+>  	$(foreach p,$($(PKG)_PATCH),\
+>  		$(if $(findstring ://,$(p)),\
+>  			$(call DOWNLOAD,$(p)),\
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+And here I was going to suggest you could squash the two together,
+because they're basically doing exactly the same thing, but on
+different sets. So I wondered why you did not catch this, even
+though you state it explicitly in the commit log.
+
+It would have been just possible to extend the existing loop over
+_PATCH like so:
+
+    $(foreach p,$($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS),\
+
+And then, I noticed patch 33, which eventually gets rid of it anyway.
+So, OK.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/pkg-generic.mk | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 003fd69..3c86878 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -73,16 +73,12 @@ $(BUILD_DIR)/%/.stamp_downloaded:
->  	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
->  ifeq ($(DL_MODE),DOWNLOAD)
->  # Only show the download message if it isn't already downloaded
-> -	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-> -		$(call MESSAGE,"Downloading") ; \
-> -	else \
-> -		for p in $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
-> -			if test ! -e $(DL_DIR)/`basename $$p` ; then \
-> -				$(call MESSAGE,"Downloading") ; \
-> -				break ; \
-> -			fi ; \
-> -		done ; \
-> -	fi
-> +	$(Q)for p in $($(PKG)_SOURCE) $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
-> +		if test ! -e $(DL_DIR)/`basename $$p` ; then \
-> +			$(call MESSAGE,"Downloading") ; \
-> +			break ; \
-> +		fi ; \
-> +	done
->  endif
->  	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE)))
->  	$(foreach p,$($(PKG)_EXTRA_DOWNLOADS),$(call DOWNLOAD,$($(PKG)_SITE:/=)/$(p))$(sep))
 > -- 
 > 2.1.0
 > 
