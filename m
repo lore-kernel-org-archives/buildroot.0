@@ -1,30 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 15:10:13 +0200
-Subject: [Buildroot] [PATCH] gstreamer/gst-plugin-x170: requires the
- Linux kernel
-In-Reply-To: <1427609657-9715-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1427609657-9715-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20150329151013.69859d5c@free-electrons.com>
+From: Karoly Kasza <kaszak@gmail.com>
+Date: Sun, 29 Mar 2015 15:16:50 +0200
+Subject: [Buildroot] [PATCH] package/ccache: add hash file
+Message-ID: <1427635010-14959-1-git-send-email-kaszak@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
 
-On Sun, 29 Mar 2015 08:14:17 +0200, Fabio Porcedda wrote:
-> Add a missing reverse depency from the on2-8170-libs package.
-> 
-> Fixes warning:
-> warning: (BR2_PACKAGE_GST_PLUGIN_X170) selects BR2_PACKAGE_ON2_8170_LIBS which has unmet direct dependencies (BR2_arm926t && BR2_TOOLCHAIN_USES_GLIBC && BR2_LINUX_KERNEL)
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+---
+ package/ccache/ccache.hash |    2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/ccache/ccache.hash
 
-Applied, thanks!
-
-Thomas
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+new file mode 100644
+index 0000000..10caac8
+--- /dev/null
++++ b/package/ccache/ccache.hash
+@@ -0,0 +1,2 @@
++# Verified key http://samba.org/ftp/ccache/ccache-3.1.11.tar.xz.asc - sha256 computed locally
++sha256	60e9f3f1e60f528cfce910f3224bcc698029320f6ab77ec09a7b46bda2bc678e	ccache-3.1.11.tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
