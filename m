@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:22 +0200
-Subject: [Buildroot] [PATCH 06/18] package/mplayer: add optional fontconfig
+Date: Sun, 29 Mar 2015 19:11:31 +0200
+Subject: [Buildroot] [PATCH 15/18] package/mplayer: disable optional libcdio
 	support
 In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427649094-1240-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/mplayer/mplayer.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 7992c4c..db6bbd9 100644
+index 6d9c4f4..76c53d7 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -45,6 +45,14 @@ else
- MPLAYER_CONF_OPTS += --disable-freetype
+@@ -98,6 +98,11 @@ else
+ MPLAYER_CONF_OPTS += --disable-bluray
  endif
  
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+MPLAYER_CONF_OPTS += --enable-fontconfig
-+MPLAYER_DEPENDENCIES += fontconfig
-+MPLAYER_EXTRA_LIBS += -lfontconfig
-+else
-+MPLAYER_CONF_OPTS += --disable-fontconfig
-+endif
++# cdio support is broken in buildroot atm due to missing libcdio-paranoia
++# package and this patch
++# https://github.com/pld-linux/mplayer/blob/master/mplayer-libcdio.patch
++MPLAYER_CONF_OPTS += --disable-libcdio
 +
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- MPLAYER_CONF_OPTS += --enable-termcap
- MPLAYER_DEPENDENCIES += ncurses
+ ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
+ MPLAYER_CONF_OPTS +=  \
+ 	--enable-dvdread \
 -- 
 1.7.10.4
