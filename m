@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:25 +0200
-Subject: [Buildroot] [PATCH 09/18] package/mplayer: add optional libenca
-	support
+Date: Sun, 29 Mar 2015 19:11:17 +0200
+Subject: [Buildroot] [PATCH 01/18] package/mplayer: needs host-pkgconf
 In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427649094-1240-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/mplayer/mplayer.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 245ed91..6fbdd72 100644
+index b2530e4..192a42e 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -61,6 +61,13 @@ else
- MPLAYER_CONF_OPTS += --disable-fribidi
- endif
+@@ -11,6 +11,8 @@ MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+ MPLAYER_CFLAGS = $(TARGET_CFLAGS)
+ MPLAYER_LDFLAGS = $(TARGET_LDFLAGS)
  
-+ifeq ($(BR2_PACKAGE_LIBENCA),y)
-+MPLAYER_CONF_OPTS += --enable-enca
-+MPLAYER_DEPENDENCIES += libenca
-+else
-+MPLAYER_CONF_OPTS += --disable-enca
-+endif
++MPLAYER_DEPENDENCIES += host-pkgconf
 +
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- MPLAYER_CONF_OPTS += --enable-termcap
- MPLAYER_DEPENDENCIES += ncurses
+ # mplayer needs pcm+mixer support, but configure fails to check for it
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
+ MPLAYER_DEPENDENCIES += alsa-lib
 -- 
 1.7.10.4
