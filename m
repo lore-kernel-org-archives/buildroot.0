@@ -1,87 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 19:33:20 +0200
-Subject: [Buildroot] [PATCH 06/35] docs/manual: update documentation about
-	<pkg>_SOURCE, <pkg>_PATCH and <pkg>_EXTRA_DOWNLOADS
+Date: Sun, 29 Mar 2015 19:33:22 +0200
+Subject: [Buildroot] [PATCH 08/35] packages: apply custom patches using
+	*.patch instead of <pkg>-*.patch
 In-Reply-To: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1427650429-9293-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1427650429-9293-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the Buildroot manual for the variables used to
-indicate where to download the source code from:
+Several packages have some logic to apply custom patches that existed
+before the BR2_GLOBAL_PATCH_DIR mechanism: at91bootstrap,
+at91bootstrap3, barebox, uboot and linux. Currently, the logic of
+those packages to apply custom patches is to match
+<package-name>-*.patch, which is not consistent with what we've done
+for patches stored in the package directory, and for patches stored in
+BR2_GLOBAL_PATCH_DIR: in such cases, we simply apply *.patch.
 
- - It updates the description of <pkg>_SOURCE to make it clear that
-   Buildroot assume that the tarball is hosted at <pkg>_SITE.
-
- - It updates the description of <pkg>_PATCH to indicate that not only
-   file names (assumed to be hosted at <pkg>_SITE) can be used, but
-   also full URLs. This allows to match with what the current code is
-   doing.
-
- - It updates the description of <pkg>_EXTRA_DOWNLOADS to also
-   indicate that full URLs are now accepted, following the change made
-   in the previous commit.
+Therefore, for consistency reasons, this commit changes these packages
+to also apply *.patch.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 ---
- docs/manual/adding-packages-generic.txt | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk   | 3 +--
+ boot/at91bootstrap3/at91bootstrap3.mk | 3 +--
+ boot/barebox/barebox.mk               | 5 ++---
+ boot/uboot/uboot.mk                   | 3 +--
+ linux/Config.in                       | 2 +-
+ linux/linux.mk                        | 2 +-
+ 6 files changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 6150bf7..85c9ccd 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -204,18 +204,20 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+ +
-     +LIBFOO_VERSION = stable+
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 50bbc26..802e85e 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -24,8 +24,7 @@ endef
  
--* +LIBFOO_SOURCE+ may contain the name of the tarball of
--  the package. If +HOST_LIBFOO_SOURCE+ is not specified, it
--  defaults to +LIBFOO_SOURCE+. If none are specified, then
--  the value is assumed to be
--  +libfoo-$(LIBFOO_VERSION).tar.gz+. +
-+* +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
-+  which Buildroot will use to download the tarball from
-+  +LIBFOO_SITE+. If +HOST_LIBFOO_SOURCE+ is not specified, it defaults
-+  to +LIBFOO_SOURCE+. If none are specified, then the value is assumed
-+  to be +libfoo-$(LIBFOO_VERSION).tar.gz+. +
-   Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
+ ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
+ define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
+-	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \
+-		at91bootstrap-$(AT91BOOTSTRAP_VERSION)-\*.patch
++	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \*.patch
+ endef
  
- * +LIBFOO_PATCH+ may contain a space-separated list of patch file
--  names, that will be downloaded from the same location as the tarball
--  indicated in +LIBFOO_SOURCE+, and then applied to the package source
--  code. If +HOST_LIBFOO_PATCH+ is not specified, it defaults to
--  +LIBFOO_PATCH+. Note that patches that are included in Buildroot
-+  names, that Buildroot will download and apply to the package source
-+  code. If an entry contains +://+, then Buildroot will assume it is a
-+  full URL and download the patch from this location. Otherwise,
-+  Buildroot will assume that the patch should be downloaded from
-+  +LIBFOO_SITE+. If +HOST_LIBFOO_PATCH+ is not specified, it defaults
-+  to +LIBFOO_PATCH+. Note that patches that are included in Buildroot
-   itself use a different mechanism: all files of the form
-   +<packagename>-*.patch+ present in the package directory inside
-   Buildroot will be applied to the package after extraction (see
-@@ -246,10 +248,12 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
-     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
+ AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 098e7bf..b780617 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -21,8 +21,7 @@ AT91BOOTSTRAP3_MAKE_OPTS = CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
  
--* +LIBFOO_EXTRA_DOWNLOADS+ lists a number of additional files that
--  Buildroot should download from +LIBFOO_SITE+ in addition to the main
--  +LIBFOO_SOURCE+ (which usually is a tarball). Buildroot will not do
--  anything with those additional files, except download files: it will
-+* +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
-+  files that Buildroot should download. If an entry contains +://+
-+  then Buildroot will assume it is a complete URL and will download
-+  the file using this URL. Otherwise, Buildroot will assume the file
-+  to be downloaded is located at +LIBFOO_SITE+. Buildroot will not do
-+  anything with those additional files, except download them: it will
-   be up to the package recipe to use them from +$(BR2_DL_DIR)+.
+ ifneq ($(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR),)
+ define AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
+-	$(APPLY_PATCHES) $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \
+-		at91bootstrap3-\*.patch
++	$(APPLY_PATCHES) $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \*.patch
+ endef
  
- * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+ AT91BOOTSTRAP3_POST_PATCH_HOOKS += AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 5809fb0..98cb04e 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -26,9 +26,8 @@ BAREBOX_LICENSE_FILES = COPYING
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+ define BAREBOX_APPLY_CUSTOM_PATCHES
+-	$(APPLY_PATCHES) $(@D) \
+-		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
+-		barebox-$(BAREBOX_VERSION)-\*.patch
++	$(APPLY_PATCHES) $(@D)
++		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \*.patch
+ endef
+ 
+ BAREBOX_POST_PATCH_HOOKS += BAREBOX_APPLY_CUSTOM_PATCHES
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a9ba054..8da2272 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -86,8 +86,7 @@ UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
+ define UBOOT_APPLY_CUSTOM_PATCHES
+-	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
+-		uboot-\*.patch
++	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \*.patch
+ endef
+ 
+ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+diff --git a/linux/Config.in b/linux/Config.in
+index a1113dd..c83a3f5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -129,7 +129,7 @@ config BR2_LINUX_KERNEL_PATCH
+ 	  A space-separated list of patches to apply to the
+ 	  kernel. Each patch can be described as an URL, a local file
+ 	  path, or a directory. In the case of a directory, all files
+-	  matching linux-*.patch in the directory will be applied.
++	  matching *.patch in the directory will be applied.
+ 
+ #
+ # Configuration selection
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c25d106..e239ff7 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -158,7 +158,7 @@ endif # BR2_LINUX_KERNEL_VMLINUX
+ define LINUX_APPLY_LOCAL_PATCHES
+ 	for p in $(filter-out ftp://% http://% https://%,$(LINUX_PATCHES)) ; do \
+ 		if test -d $$p ; then \
+-			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch || exit 1 ; \
++			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
+ 		else \
+ 			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
+ 		fi \
 -- 
 2.1.0
