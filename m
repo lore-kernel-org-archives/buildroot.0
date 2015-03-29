@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 13:41:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: Add
- gettext/iconv support
-In-Reply-To: <1427628199-21758-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427628199-21758-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150329134114.7d71836b@free-electrons.com>
+Date: Sun, 29 Mar 2015 13:41:34 +0200
+Subject: [Buildroot] [git commit] package/irqbalance: bump to 1.0.9
+Message-ID: <20150329114139.97A20807EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=6b5513b2578c43b98e414fe289b38826f382cb60
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Mar 2015 13:23:19 +0200, Bernd Kuhls wrote:
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/irqbalance/irqbalance.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> diff --git a/package/x11r7/xlib_libXpm/Config.in b/package/x11r7/xlib_libXpm/Config.in
-> index 528498c..73da0c2 100644
-> --- a/package/x11r7/xlib_libXpm/Config.in
-> +++ b/package/x11r7/xlib_libXpm/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_XLIB_LIBXPM
->  	bool "libXpm"
-> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-
-Maybe this also needs a:
-
-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-
-But it would be to check if gettext and libiconv support is actually
-mandatory, or only optional.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index 4e6b181..1872c88 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRQBALANCE_VERSION = v1.0.8
++IRQBALANCE_VERSION = v1.0.9
+ IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,$(IRQBALANCE_VERSION))
+ IRQBALANCE_LICENSE = GPLv2
+ IRQBALANCE_LICENSE_FILES = COPYING
