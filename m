@@ -1,29 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 29 Mar 2015 12:03:03 -0300
-Subject: [Buildroot] [PATCH 1/2] squid: bump to version 3.5.3
-In-Reply-To: <20150329145243.GF12479@tarshish>
-References: <1427639612-25592-1-git-send-email-gustavo@zacarias.com.ar>
- <20150329145243.GF12479@tarshish>
-Message-ID: <55181427.1020109@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 29 Mar 2015 15:37:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 7976] mkuser script fails with: user already
+ exists with group nogroup
+In-Reply-To: <bug-7976-163@https.bugs.busybox.net/>
+References: <bug-7976-163@https.bugs.busybox.net/>
+Message-ID: <20150329153747.5C4D580E3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/29/2015 11:52 AM, Baruch Siach wrote:
+https://bugs.busybox.net/show_bug.cgi?id=7976
 
-> Hi Gustavo,
-> 
-> On Sun, Mar 29, 2015 at 11:33:31AM -0300, Gustavo Zacarias wrote:
->> +# Atomics support requires __sync_add_and_fetch_8 (64-bits)
->> +# That's only handled in gcc's libatomic for 32-bit arches
-> 
-> Maybe you mean "64-bit arches"? Otherwise the code does not match.
+--- Comment #7 from Tom Elliott <tommygunsster@gmail.com> 2015-03-29 15:37:47 UTC ---
+So while the patch is great to lead us to find the cause of the problem (in our
+case it looks like it's the openssh package I have building with it) is there
+anything I should look into further to help troubleshoot why this, seemingly,
+small issue is occurring and the first place?
 
-Hi Baruch.
-Actually no, that's exactly what i mean.
-Native atomics don't need libatomic, atomics that aren't supported by
-said arch are, for example 8-byte atomics on 32-bit (4-byte) architectures.
-That's cared for in gcc's libatomic, but we don't build it, hence this.
-Regards.
+Is there also anything wrong with commenting the fail part of this so the
+rootfs file can actually be built?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
