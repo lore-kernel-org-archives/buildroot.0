@@ -1,40 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:30 +0200
-Subject: [Buildroot] [PATCH 14/18] package/mplayer: add optional libiconv
-	support
-In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-15-git-send-email-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 29 Mar 2015 17:18:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 7976] mkuser script fails with: user already
+ exists with group nogroup
+In-Reply-To: <bug-7976-163@https.bugs.busybox.net/>
+References: <bug-7976-163@https.bugs.busybox.net/>
+Message-ID: <20150329171857.58CC48046A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=7976
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mplayer/mplayer.mk |    8 ++++++++
- 1 file changed, 8 insertions(+)
+--- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-03-29 17:18:57 UTC ---
+Tom,
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 631e2fe..6d9c4f4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -68,6 +68,14 @@ else
- MPLAYER_CONF_OPTS += --disable-enca
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+MPLAYER_CONF_OPTS += --enable-iconv
-+MPLAYER_DEPENDENCIES += libiconv
-+MPLAYER_EXTRA_LIBS += -liconv
-+else
-+MPLAYER_CONF_OPTS += --disable-iconv
-+endif
-+
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- MPLAYER_CONF_OPTS += --enable-termcap
- MPLAYER_DEPENDENCIES += ncurses
+Could you attach your .config pleae, so I can try to reproduce here?
+
+And yes, this check is here on purpose: we do not want two packages
+to try to install the same user with different groups. For example,
+the following is clearly wrong:
+
+    define FOO_USERS
+        foo_u - foo_g - * - - -
+    endef
+
+    define BAR_USERS
+        foo_u - bar_g - * - - -
+    endef
+
+because the user 'foo_u' can have only one main group. And we want to
+catch this.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
