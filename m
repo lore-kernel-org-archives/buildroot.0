@@ -1,34 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 29 Mar 2015 10:41:09 -0300
-Subject: [Buildroot] [PATCH] arch/sparc: doesn't have atomics
-Message-ID: <1427636469-9491-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Mar 2015 16:00:49 +0200
+Subject: [Buildroot] [PATCH 1/1] allow xserver without the systemd login
+	daemon.
+References: <1427548538-7789-1-git-send-email-sagaert.johan@proximus.be>
+ <20150329150827.4491e5d4@free-electrons.com>
+Message-ID: <XnsA46CA2E642553berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cores older than v9 don't seem to have atomics so remove it.
-Fixes a test build of pulseaudio for example.
+[posted and mailed]
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- arch/Config.in.sparc | 3 ---
- 1 file changed, 3 deletions(-)
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20150329150827.4491e5d4 at free-electrons.com:
 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index 4e502d5..cc10e8d 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -17,9 +17,6 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "BIG"
- 
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_CPU
- 	default "leon3"		if BR2_sparc_leon3
- 	default "v8"		if BR2_sparc_v8
--- 
-2.0.5
+> You should pass both the enabling and disabling options, and use
+> BR2_PACKAGE_SYSTEMD for the condition.
+> 
+> I believe something like:
+> 
+> ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> XSERVER_XORG_CONF_OPTS += \
+>      --with-systemd-daemon \
+>      --enable-systemd-logind
+> else
+> XSERVER_XORG_CONF_OPTS += \
+>      --without-systemd-daemon \
+>      --disable-systemd-logind
+> endif
+> 
+> would be more appropriate, but I'd like to have some feedback from a
+> X.org person. Bernd, can you comment on this?
+
+Hi,
+
+unfortunately I have no experience in this matter, because I am not using 
+systemd in my buildroot environment. But your proposal looks sane.
+
+Regards, Bernd
