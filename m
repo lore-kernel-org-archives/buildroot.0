@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 29 Mar 2015 13:17:38 -0300
-Subject: [Buildroot] [PATCH 06/28] x11r7/xproto_xf86bigfontproto: add hash
-	file
+Date: Sun, 29 Mar 2015 13:17:39 -0300
+Subject: [Buildroot] [PATCH 07/28] x11r7/xproto_xextproto: add hash file
 In-Reply-To: <1427645880-8531-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1427645880-8531-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427645880-8531-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1427645880-8531-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.hash
+ package/x11r7/xproto_xextproto/xproto_xextproto.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/x11r7/xproto_xextproto/xproto_xextproto.hash
 
-diff --git a/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.hash b/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.hash
+diff --git a/package/x11r7/xproto_xextproto/xproto_xextproto.hash b/package/x11r7/xproto_xextproto/xproto_xextproto.hash
 new file mode 100644
-index 0000000..b0ab8ae
+index 0000000..258c4ec
 --- /dev/null
-+++ b/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.hash
-@@ -0,0 +1,3 @@
-+# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/734
-+md5	120e226ede5a4687b25dd357cc9b8efe	xf86bigfontproto-1.2.0.tar.bz2
-+sha1	312a2ea708b257520c1af4393b69d73a393a478f	xf86bigfontproto-1.2.0.tar.bz2
++++ b/package/x11r7/xproto_xextproto/xproto_xextproto.hash
+@@ -0,0 +1,2 @@
++# From http://lists.freedesktop.org/pipermail/xorg/2013-December/056256.html
++sha256	f3f4b23ac8db9c3a9e0d8edb591713f3d70ef9c3b175970dd8823dfc92aa5bb0	xextproto-7.3.0.tar.bz2
 -- 
 2.0.5
