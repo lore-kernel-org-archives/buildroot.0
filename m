@@ -1,33 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 14:57:14 +0200
-Subject: [Buildroot] [PATCH] package/ccache: bump version to 3.1.11
-In-Reply-To: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
-References: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
-Message-ID: <20150329145714.39bcdfa6@free-electrons.com>
+Date: Sun, 29 Mar 2015 15:08:27 +0200
+Subject: [Buildroot] [PATCH 1/1] allow xserver without the systemd login
+ daemon.
+In-Reply-To: <1427548538-7789-1-git-send-email-sagaert.johan@proximus.be>
+References: <1427548538-7789-1-git-send-email-sagaert.johan@proximus.be>
+Message-ID: <20150329150827.4491e5d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Karoly Kasza,
+Dear Sagaert Johan,
 
-On Sun, 29 Mar 2015 13:52:04 +0200, Karoly Kasza wrote:
-> 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+On Sat, 28 Mar 2015 14:15:38 +0100, Sagaert Johan wrote:
+> Thanks to Noel Vellemans for the hint.
+> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
 > ---
->  package/ccache/ccache.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index bb5381c..db2e653 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> @@ -64,6 +64,11 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
+>  	--with-fontrootdir=/usr/share/fonts/X11/ \
+>  	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+>  
+> +ifneq ($(BR2_INIT_SYSTEMD),y)
+> +	XSERVER_XORG_SERVER_CONF_OPTS += \
+> +	--disable-systemd-logind
+> +endif
 
-Applied, thanks. If you feel like it, sending a patch adding a hash
-file would be good.
+This seems good, but I'd like to see a more complete solution, that
+takes care of both --{enable,disable}-systemd-login and
+--{with,without}-systemd-daemon.
 
-Also, there is still quite a lot of things to fix to get our ccache
-support to a sane state. If you have some time, you could look at
-http://patchwork.ozlabs.org/patch/287383/, especially the comments made
-by Arnout, and try to improve the ccache support based on that.
+You should pass both the enabling and disabling options, and use
+BR2_PACKAGE_SYSTEMD for the condition.
 
-Thanks a lot!
+I believe something like:
+
+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+XSERVER_XORG_CONF_OPTS += \
+	--with-systemd-daemon \
+	--enable-systemd-logind
+else
+XSERVER_XORG_CONF_OPTS += \
+	--without-systemd-daemon \
+	--disable-systemd-logind
+endif
+
+would be more appropriate, but I'd like to have some feedback from a
+X.org person. Bernd, can you comment on this?
+
+Thanks,
 
 Thomas
 -- 
