@@ -1,32 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 13:52:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXpm: Add
-	gettext/iconv support
-References: <1427628199-21758-1-git-send-email-bernd.kuhls@t-online.de>
- <20150329134114.7d71836b@free-electrons.com>
-Message-ID: <XnsA46C8D150BAB6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Mar 2015 13:56:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package/uclibc: libm: Add missing C99
+ float/ld wrappers (backport)
+In-Reply-To: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150329135608.38d08f5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Dear Bernd Kuhls,
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20150329134114.7d71836b at free-electrons.com:
+On Sun, 29 Mar 2015 01:29:07 +0100, Bernd Kuhls wrote:
+> This commit adds a patch to uclibc with a backport from upstream
+> to provide a proper fix for mesa3d which depends on fminf.
+> Also remove the mesa3d patch which provided a crappy workaround.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0002-Fix-runtime-error-with-uClibc.patch       |   58 --
+>  .../0069-Add-missing-C99-float-ld-wrappers.patch   |  870 ++++++++++++++++++++
+>  2 files changed, 870 insertions(+), 58 deletions(-)
+>  delete mode 100644 package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
+>  create mode 100644 package/uclibc/0.9.33.2/0069-Add-missing-C99-float-ld-wrappers.patch
 
-> But it would be to check if gettext and libiconv support is actually
-> mandatory, or only optional.
+I think we might need to keep the crappy workaround, or an improved
+version of it. The problem with doing a uClibc patch is that it will
+only work with internal uClibc toolchains: all uClibc toolchains will
+continue to be broken.
 
-Hi Thomas,
+So we might want to do both:
 
-according to the source code there is no mandatory check for libiconv.
+ 1/ Fix uClibc properly, so that in the future (3-6 months from now),
+ we can get rid of the mesa3d specific fix, after most of the external
+ uClibc toolchains have been updated.
 
-Quoting line 32 from configure.ac
+ 2/ Keep a mesa3d workaround for a little while.
 
-AC_SEARCH_LIBS([gettext], [intl], [USE_GETTEXT="yes"], [USE_GETTEXT="no"])
-
-so gettext is optional.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
