@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2015 22:48:21 +0200
-Subject: [Buildroot] [PATCH 02/35] pkg-generic: fix the logic showing
- the "Downloading" message
-In-Reply-To: <1427650429-9293-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Mar 2015 22:49:15 +0200
+Subject: [Buildroot] [PATCH 03/35] pkg-generic: take into account
+ <pkg>_EXTRA_DOWNLOADS to display "Downloading" message
+In-Reply-To: <1427650429-9293-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150329204821.GC4093@free.fr>
+ <1427650429-9293-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150329204915.GD4093@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +15,14 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> Even though the .stamp_downloaded target is executed for each package
-> being built, the pkg-generic infrastructure tries to not display the
-> "Downloading" message when there is in fact nothing to download.
+> The .stamp_downloaded target displays the "Downloading" message even
+> if there is really something to download. However, this logic only
+> checks for <pkg>_SOURCE and <pkg>_PATCH: it does not check if
+> something needs to be downloaded in <pkg>_EXTRA_DOWNLOADS.
 > 
-> Unfortunately, the logic was incorrect for the patch download: it
-> forgot the fact that <pkg>_PATCH can contain either file names (in
-> which case we assume the patch should be downloaded from <pkg>_SITE),
-> or full URLs. The latter case was not properly handled, as we were
-> checking if $(DL_DIR)/<full URL> existed, while we should be testing
-> if $(DL_DIR)/`basename <full URL>` exists.
-> 
-> This patch fixes that, which makes sure the "Downloading" message is
-> displayed only when necessary.
+> This commit fixes that, which makes sure that the "Downloading"
+> message is displayed if one of the items in <pkg>_EXTRA_DOWNLOADS has
+> not yet been downloaded.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Reviewed-by: Romain Naour <romain.naour@openwide.fr>
@@ -43,18 +38,18 @@ Yann E. MORIN.
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index c1b379b..b44d476 100644
+> index b44d476..003fd69 100644
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -77,7 +77,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+> @@ -76,7 +76,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+>  	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
 >  		$(call MESSAGE,"Downloading") ; \
 >  	else \
->  		for p in $($(PKG)_PATCH) ; do \
-> -			if test ! -e $(DL_DIR)/$$p ; then \
-> +			if test ! -e $(DL_DIR)/`basename $$p` ; then \
+> -		for p in $($(PKG)_PATCH) ; do \
+> +		for p in $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+>  			if test ! -e $(DL_DIR)/`basename $$p` ; then \
 >  				$(call MESSAGE,"Downloading") ; \
 >  				break ; \
->  			fi ; \
 > -- 
 > 2.1.0
 > 
