@@ -1,965 +1,182 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 01:29:07 +0100
-Subject: [Buildroot] [PATCH 1/2] package/uclibc: libm: Add missing C99
-	float/ld wrappers (backport)
-Message-ID: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 29 Mar 2015 01:29:08 +0100
+Subject: [Buildroot] [PATCH 2/2] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.5.2
+In-Reply-To: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427588948-13933-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to uclibc with a backport from upstream
-to provide a proper fix for mesa3d which depends on fminf.
-Also remove the mesa3d patch which provided a crappy workaround.
+Add two patches to remove dependency on host-python.
+
+0002-disable-python2.patch
+is a patch fixing the remaining problems of patch #3
+
+0003-configure.ac-error-out-if-python-mako-is-not-found-when-required.patch
+was ported from an upstream patch proposal to 10.5 branch
+
+Fixes python3-related build error
+http://autobuild.buildroot.net/results/1ce/1ce2509c8abb7483397c7d0f21c299095e94a254/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-Fix-runtime-error-with-uClibc.patch       |   58 --
- .../0069-Add-missing-C99-float-ld-wrappers.patch   |  870 ++++++++++++++++++++
- 2 files changed, 870 insertions(+), 58 deletions(-)
- delete mode 100644 package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
- create mode 100644 package/uclibc/0.9.33.2/0069-Add-missing-C99-float-ld-wrappers.patch
+ package/mesa3d-headers/mesa3d-headers.mk           |    2 +-
+ package/mesa3d/0002-disable-python2.patch          |   29 ++++++++++
+ ...if-python-mako-is-not-found-when-required.patch |   61 ++++++++++++++++++++
+ package/mesa3d/mesa3d.hash                         |    4 +-
+ package/mesa3d/mesa3d.mk                           |    3 +-
+ 5 files changed, 94 insertions(+), 5 deletions(-)
+ create mode 100644 package/mesa3d/0002-disable-python2.patch
+ create mode 100644 package/mesa3d/0003-configure.ac-error-out-if-python-mako-is-not-found-when-required.patch
 
-diff --git a/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch b/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
-deleted file mode 100644
-index 6fca65f..0000000
---- a/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--Fix runtime error with uClibc
--
--Patch sent upstream:
--http://lists.freedesktop.org/archives/mesa-dev/2015-March/079431.html
--
--
--From b1dae3cae9df36d9c4f64c342cfe7c106e34ec72 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 15 Mar 2015 12:23:26 +0100
--Subject: [PATCH 1/1] Fix runtime error with uClibc
--
--Patch inspired by
--https://www.winehq.org/pipermail/wine-bugs/2011-September/288987.html
--http://git.alpinelinux.org/cgit/aports/tree/main/wine/uclibc-fmaxf-fminf.patch?id=c9b491b6099eec02a835ffd05539b5c783c6c43a
--
--Starting an app using mesa3d 10.5.x, Kodi for example, fails:
--
--/usr/lib/kodi/kodi.bin: symbol 'fminf': can't resolve symbol in lib '/usr/lib/dri/i965_dri.so'.
--libGL error: unable to load driver: i965_dri.so
--libGL error: driver pointer missing
--libGL error: failed to load driver: i965
--libGL error: unable to load driver: swrast_dri.so
--libGL error: failed to load driver: swrast
--
--Here is some background information about the fminf/fmaxf situation in uClibc:
--http://thread.gmane.org/gmane.comp.lib.uclibc.general/24189
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/glsl/nir/nir_constant_expressions.py |   12 ++++++++++++
-- 1 file changed, 12 insertions(+)
--
--diff --git a/src/glsl/nir/nir_constant_expressions.py b/src/glsl/nir/nir_constant_expressions.py
--index 22bc4f0..139c25a 100644
----- a/src/glsl/nir/nir_constant_expressions.py
--+++ b/src/glsl/nir/nir_constant_expressions.py
--@@ -50,6 +50,18 @@ static double copysign(double x, double y)
-- }
-- #endif
-- 
--+#ifdef __UCLIBC__
--+float fmaxf(float a, float b)
--+{
--+	return (a > b) ? a : b;
--+}
--+
--+float fminf(float a, float b)
--+{
--+	return (a < b) ? a : b;
--+}
--+#endif
--+
-- /**
--  * Evaluate one component of packSnorm4x8.
--  */
---- 
--1.7.10.4
--
-diff --git a/package/uclibc/0.9.33.2/0069-Add-missing-C99-float-ld-wrappers.patch b/package/uclibc/0.9.33.2/0069-Add-missing-C99-float-ld-wrappers.patch
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0708a0f..3eec2c8 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.5.1
++MESA3D_HEADERS_VERSION = 10.5.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/0002-disable-python2.patch b/package/mesa3d/0002-disable-python2.patch
 new file mode 100644
-index 0000000..c19d5d7
+index 0000000..b09561c
 --- /dev/null
-+++ b/package/uclibc/0.9.33.2/0069-Add-missing-C99-float-ld-wrappers.patch
-@@ -0,0 +1,870 @@
-+From 6c4538905e65ceb203f59aaa9a61728e81c6bc0a Mon Sep 17 00:00:00 2001
-+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+Date: Wed, 18 Mar 2015 21:32:22 +0000
-+Subject: libm: Add missing C99 float/ld wrappers
-+
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+
-+Status: upstream [uClibc]
-+http://git.uclibc.org/uClibc/commit/?id=6c4538905e65ceb203f59aaa9a61728e81c6bc0a
-+
-+Removed patch for ./TODO.
-+Needed to avoid run-time errors with mesa3d which depends on fminf
++++ b/package/mesa3d/0002-disable-python2.patch
+@@ -0,0 +1,29 @@
++Upstream tarball provides all files generated by python,
++this patch convinces the build system that host-python
++is not needed anymore ;)
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+diff --git a/include/complex.h b/include/complex.h
-+index 91efc0d..ed7e502 100644
-+--- a/include/complex.h
-++++ b/include/complex.h
-+@@ -79,6 +79,7 @@ __BEGIN_DECLS
-+ #endif
-+ #include <bits/cmathcalls.h>
-+ #undef	_Mdouble_
-++#undef	_Mfloat_
-+ #undef	__MATH_PRECNAME
++
++diff -uNr mesa-10.5.2.org/configure.ac mesa-10.5.2/configure.ac
++--- mesa-10.5.2.org/configure.ac	2015-03-28 19:20:39.000000000 +0100
+++++ mesa-10.5.2/configure.ac	2015-03-28 21:41:01.743499679 +0100
++@@ -87,7 +87,6 @@
++ AM_PROG_CC_C_O
++ AM_PROG_AS
++ AX_CHECK_GNU_MAKE
++-AC_CHECK_PROGS([PYTHON2], [python2 python])
++ AC_PROG_SED
++ AC_PROG_MKDIR_P
 + 
-+ /* And the long double versions.  It is non-critical to define them
-+@@ -97,6 +98,7 @@ __BEGIN_DECLS
-+ # include <bits/cmathcalls.h>
-+ #endif
-+ #undef	_Mdouble_
-++#undef	_Mlong_double_
-+ #undef	__MATH_PRECNAME
-+ #undef	__MATHDECL_1
-+ #undef	__MATHDECL
-+diff --git a/include/math.h b/include/math.h
-+index ecb9aa6..1b54c9e 100644
-+--- a/include/math.h
-++++ b/include/math.h
-+@@ -129,6 +129,7 @@ __BEGIN_DECLS
-+ # undef	_Mdouble_
-+ # undef _Mdouble_BEGIN_NAMESPACE
-+ # undef _Mdouble_END_NAMESPACE
-++# undef _Mfloat_
-+ # undef	__MATH_PRECNAME
-+ # undef __MATH_maybe_libm_hidden_proto
++diff -uNr mesa-10.5.2.org/src/mesa/drivers/dri/common/xmlpool/Makefile.am mesa-10.5.2/src/mesa/drivers/dri/common/xmlpool/Makefile.am
++--- mesa-10.5.2.org/src/mesa/drivers/dri/common/xmlpool/Makefile.am	2015-03-21 01:51:19.000000000 +0100
+++++ mesa-10.5.2/src/mesa/drivers/dri/common/xmlpool/Makefile.am	2015-03-28 22:01:54.279952601 +0100
++@@ -63,7 +63,7 @@
 + 
-+@@ -176,6 +177,7 @@ extern long double __REDIRECT_NTH (nexttowardl, (long double __x, long double __
-+ #  undef _Mdouble_
-+ #  undef _Mdouble_BEGIN_NAMESPACE
-+ #  undef _Mdouble_END_NAMESPACE
-++#  undef _Mlong_double_
-+ #  undef __MATH_PRECNAME
-+ #  undef __MATH_maybe_libm_hidden_proto
++ # Default target options.h
++ options.h: LOCALEDIR := .
++-options.h: t_options.h $(MOS)
+++options.h: t_options.h
++ 	$(AM_V_GEN) $(PYTHON2) $(PYTHON_FLAGS) $(srcdir)/gen_xmlpool.py $(srcdir)/t_options.h $(LOCALEDIR) $(LANGS) > options.h
 + 
-+diff --git a/libc/sysdeps/linux/common/bits/mathcalls.h b/libc/sysdeps/linux/common/bits/mathcalls.h
-+index 84b793c..9bebb51 100644
-+--- a/libc/sysdeps/linux/common/bits/mathcalls.h
-++++ b/libc/sysdeps/linux/common/bits/mathcalls.h
-+@@ -74,8 +74,22 @@ __MATHCALLI (atan2,, (_Mdouble_ __y, _Mdouble_ __x))
++ # Update .mo files from the corresponding .po files.
+diff --git a/package/mesa3d/0003-configure.ac-error-out-if-python-mako-is-not-found-when-required.patch b/package/mesa3d/0003-configure.ac-error-out-if-python-mako-is-not-found-when-required.patch
+new file mode 100644
+index 0000000..a6aef51
+--- /dev/null
++++ b/package/mesa3d/0003-configure.ac-error-out-if-python-mako-is-not-found-when-required.patch
+@@ -0,0 +1,61 @@
++[Mesa-dev,2/2] configure.ac: error out if python/mako is not found when required
++
++Ported upstream patch proposal to 10.5 branch:
++https://freedesktop.org/patch/45469/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr mesa-10.5.2.org/configure.ac mesa-10.5.2/configure.ac
++--- mesa-10.5.2.org/configure.ac	2015-03-28 19:20:39.000000000 +0100
+++++ mesa-10.5.2/configure.ac	2015-03-29 00:02:41.479890004 +0100
++@@ -115,8 +114,48 @@
++ fi
 + 
-+ /* Cosine of X.  */
-+ __MATHCALLI (cos,, (_Mdouble_ __x))
-++# if defined _LIBC && defined _Mlong_double_
-++libm_hidden_proto(cosl)
-++# endif
-++# if defined _LIBC && defined _Mfloat_
-++libm_hidden_proto(cosf)
-++# endif
++ AX_CHECK_PYTHON_MAKO_MODULE($PYTHON_MAKO_REQUIRED)
++-if test -n "$PYTHON2" -a "x$acv_mako_found" != "xyes"; then
++-    AC_MSG_ERROR([Python mako module v$PYTHON_MAKO_REQUIRED or higher not found])
 ++
-+ /* Sine of X.  */
-+ __MATHCALLI (sin,, (_Mdouble_ __x))
-++# if defined _LIBC && defined _Mlong_double_
-++libm_hidden_proto(sinl)
-++# endif
-++# if defined _LIBC && defined _Mfloat_
-++libm_hidden_proto(sinf)
-++# endif
-++
-+ /* Tangent of X.  */
-+ __MATHCALLI (tan,, (_Mdouble_ __x))
-+ 
-+@@ -111,6 +125,9 @@ __END_NAMESPACE_C99
-+ _Mdouble_BEGIN_NAMESPACE
-+ /* Exponential function of X.  */
-+ __MATHCALLI (exp,, (_Mdouble_ __x))
-++# if defined _LIBC && defined _Mlong_double_
-++libm_hidden_proto(expl)
-++# endif
-+ 
-+ /* Break VALUE into a normalized fraction and an integral power of 2.  */
-+ __MATHCALLI (frexp,, (_Mdouble_ __x, int *__exponent))
-+@@ -173,6 +190,9 @@ _Mdouble_END_NAMESPACE
-+ __BEGIN_NAMESPACE_C99
-+ /* Return `sqrt(X*X + Y*Y)'.  */
-+ __MATHCALLI (hypot,, (_Mdouble_ __x, _Mdouble_ __y))
-++# if defined _LIBC && defined _Mlong_double_
-++libm_hidden_proto(hypotl)
-++# endif
-+ __END_NAMESPACE_C99
-+ #endif
-+ 
-+@@ -298,6 +318,9 @@ __MATHCALLI (rint,, (_Mdouble_ __x))
-+ 
-+ /* Return X + epsilon if X < Y, X - epsilon if X > Y.  */
-+ __MATHCALLX (nextafter,, (_Mdouble_ __x, _Mdouble_ __y), (__const__))
-++# if defined _LIBC && defined _Mlong_double_
-++libm_hidden_proto(nextafterl)
-++# endif
-+ # if defined __USE_ISOC99 && !defined __LDBL_COMPAT
-+ __MATHCALLX (nexttoward,, (_Mdouble_ __x, long double __y), (__const__))
-+ # endif
-+diff --git a/libm/Makefile.in b/libm/Makefile.in
-+index 7511706..d886cdb 100644
-+--- a/libm/Makefile.in
-++++ b/libm/Makefile.in
-+@@ -75,9 +75,6 @@ libm_CSRC := \
-+ 	s_remquo.c w_exp2.c \
-+ 	cexp.c sincos.c
-+ 
-+-# Not implemented [yet?], see comment in float_wrappers.c:
-+-# fdimf.o fmaf.o fmaxf.o fminf.o
-+-# nearbyintf.o remquof.o scalblnf.o tgammaf.o
-+ FL_MOBJ := \
-+ 	acosf.o \
-+ 	acoshf.o \
-+@@ -98,7 +95,11 @@ FL_MOBJ := \
-+ 	expf.o \
-+ 	expm1f.o \
-+ 	fabsf.o \
-++	fdimf.o \
-+ 	floorf.o \
-++	fmaf.o \
-++	fmaxf.o \
-++	fminf.o \
-+ 	fmodf.o \
-+ 	frexpf.o \
-+ 	gammaf.o \
-+@@ -116,11 +117,14 @@ FL_MOBJ := \
-+ 	lrintf.o \
-+ 	lroundf.o \
-+ 	modff.o \
-++	nearbyintf.o \
-++	nexttowardf.o \
-+ 	powf.o \
-+ 	remainderf.o \
-++	remquof.o \
-+ 	rintf.o \
-+ 	roundf.o \
-+-	scalbf.o \
-++	scalblnf.o \
-+ 	scalbnf.o \
-+ 	significandf.o \
-+ 	sinf.o \
-+@@ -128,9 +132,24 @@ FL_MOBJ := \
-+ 	sqrtf.o \
-+ 	tanf.o \
-+ 	tanhf.o \
-++	tgammaf.o \
-+ 	truncf.o \
-+ 
-+-# Not implemented [yet?]: nexttowardl.o
-++ifeq ($(UCLIBC_SUSV3_LEGACY),y)
-++FL_MOBJ += scalbf.o
-++endif
-++
-++# Do not (yet?) implement the float variants of bessel functions
-++ifeq (not-yet-implemented-$(DO_XSI_MATH),y)
-++FL_MOBJ += \
-++	j0f.o \
-++	j1f.o \
-++	jnf.o \
-++	y0f.o \
-++	y1f.o \
-++	ynf.o
-++endif
-++
-+ LD_MOBJ := \
-+ 	__finitel.o \
-+ 	__fpclassifyl.o \
-+@@ -180,6 +199,7 @@ LD_MOBJ := \
-+ 	modfl.o \
-+ 	nearbyintl.o \
-+ 	nextafterl.o \
-++	nexttowardl.o \
-+ 	powl.o \
-+ 	remainderl.o \
-+ 	remquol.o \
-+@@ -196,6 +216,17 @@ LD_MOBJ := \
-+ 	tgammal.o \
-+ 	truncl.o \
-+ 
-++# Do not (yet?) implement the long double variants of bessel functions
-++ifeq (not-yet-implemented-$(DO_XSI_MATH),y)
-++LD_MOBJ += \
-++	j0l.o \
-++	j1l.o \
-++	jnl.o \
-++	y0l.o \
-++	y1l.o \
-++	ynl.o
-++endif
-++
-+ else
-+ 
-+ # This list of math functions was taken from POSIX/IEEE 1003.1b-1993
-+diff --git a/libm/float_wrappers.c b/libm/float_wrappers.c
-+index 82b7963..105486e 100644
-+--- a/libm/float_wrappers.c
-++++ b/libm/float_wrappers.c
-+@@ -38,19 +38,14 @@ long long func##f (float x) \
-+ 	return func((double)x); \
-+ }
-+ 
-+-
-+-/* For the time being, do _NOT_ implement these functions
-+- * that are defined by SuSv3 [because we don't need them
-+- * and nobody asked to include them] */
-+-#undef L_fdimf         /*float       fdimf(float, float);*/
-+-#undef L_fmaf          /*float       fmaf(float, float, float);*/
-+-#undef L_fmaxf         /*float       fmaxf(float, float);*/
-+-#undef L_fminf         /*float       fminf(float, float);*/
-+-#undef L_nearbyintf    /*float       nearbyintf(float);*/
-+-#undef L_nexttowardf   /*float       nexttowardf(float, long double);*/
-+-#undef L_remquof       /*float       remquof(float, float, int *);*/
-+-#undef L_scalblnf      /*float       scalblnf(float, long);*/
-+-#undef L_tgammaf       /*float       tgammaf(float);*/
-++#ifndef __DO_XSI_MATH__
-++# undef L_j0f	/* float j0f(float x); */
-++# undef L_j1f	/* float j1f(float x); */
-++# undef L_jnf	/* float jnf(int n, float x); */
-++# undef L_y0f	/* float y0f(float x); */
-++# undef L_y1f	/* float y1f(float x); */
-++# undef L_ynf	/* float ynf(int n, float x); */
-++#endif
-+ 
-+ /* Implement the following, as defined by SuSv3 */
-+ #if 0
-+@@ -155,6 +150,7 @@ float copysignf (float x, float y)
-+ 
-+ #ifdef L_cosf
-+ WRAPPER1(cos)
-++libm_hidden_def(cosf)
-+ #endif
-+ 
-+ #ifdef L_coshf
-+@@ -242,6 +238,21 @@ float hypotf (float x, float y)
-+ int_WRAPPER1(ilogb)
-+ #endif
-+ 
-++#ifdef L_j0f
-++WRAPPER1(j0)
-++#endif
-++
-++#ifdef L_j1f
-++WRAPPER1(j1)
-++#endif
-++
-++#ifdef L_jnf
-++float jnf(int n, float x)
-++{
-++	return (float) jn(n, (double)x);
-++}
-++#endif
-++
-+ #ifdef L_ldexpf
-+ float ldexpf (float x, int _exp)
-+ {
-+@@ -306,7 +317,7 @@ WRAPPER1(nearbyint)
-+ #ifdef L_nexttowardf
-+ float nexttowardf (float x, long double y)
-+ {
-+-	return (float) nexttoward( (double)x, (double)y );
-++	return (float) nexttoward( (double)x, (long double)y );
-+ }
-+ #endif
-+ 
-+@@ -355,6 +366,7 @@ float scalbnf (float x, int _exp)
-+ 
-+ #ifdef L_sinf
-+ WRAPPER1(sin)
-++libm_hidden_def(sinf)
-+ #endif
-+ 
-+ #ifdef L_sinhf
-+@@ -381,13 +393,6 @@ WRAPPER1(tgamma)
-+ WRAPPER1(trunc)
-+ #endif
-+ 
-+-#ifdef L_fmaf
-+-float fmaf (float x, float y, float z)
-+-{
-+-	return (float) fma( (double)x, (double)y, (double)z );
-+-}
-+-#endif
-+-
-+ #if defined L_scalbf && defined __UCLIBC_SUSV3_LEGACY__
-+ float scalbf (float x, float y)
-+ {
-+@@ -402,3 +407,18 @@ WRAPPER1(gamma)
-+ #ifdef L_significandf
-+ WRAPPER1(significand)
-+ #endif
-++
-++#ifdef L_y0f
-++WRAPPER1(y0)
-++#endif
-++
-++#ifdef L_y1f
-++WRAPPER1(y1)
-++#endif
-++
-++#ifdef L_ynf
-++float ynf(int n, float x)
-++{
-++	return (float) yn(n, (double)x);
-++}
-++#endif
-+diff --git a/libm/ldouble_wrappers.c b/libm/ldouble_wrappers.c
-+index 118a78f..b4215cb 100644
-+--- a/libm/ldouble_wrappers.c
-++++ b/libm/ldouble_wrappers.c
-+@@ -42,6 +42,15 @@ long long func##l(long double x) \
-+ 	return func((double) x); \
-+ }
-+ 
-++#ifndef __DO_XSI_MATH__
-++# undef L_j0l  /* long double j0l(long double x); */
-++# undef L_j1l  /* long double j1l(long double x); */
-++# undef L_jnl  /* long double jnl(int n, long double x); */
-++# undef L_y0l  /* long double y0l(long double x); */
-++# undef L_y1l  /* long double y1l(long double x); */
-++# undef L_ynl  /* long double ynl(int n, long double x); */
-++#endif
-++
-+ /* Implement the following, as defined by SuSv3 */
-+ #if 0
-+ long double acoshl(long double);
-+@@ -156,6 +165,7 @@ WRAPPER1(cosh)
-+ 
-+ #ifdef L_cosl
-+ WRAPPER1(cos)
-++libm_hidden_def(cosl)
-+ #endif
-+ 
-+ #ifdef L_erfcl
-+@@ -172,6 +182,7 @@ WRAPPER1(exp2)
-+ 
-+ #ifdef L_expl
-+ WRAPPER1(exp)
-++libm_hidden_def(expl)
-+ #endif
-+ 
-+ #ifdef L_expm1l
-+@@ -222,12 +233,28 @@ WRAPPER1(gamma)
-+ 
-+ #ifdef L_hypotl
-+ WRAPPER2(hypot)
-++libm_hidden_def(hypotl)
-+ #endif
-+ 
-+ #ifdef L_ilogbl
-+ int_WRAPPER1(ilogb)
-+ #endif
-+ 
-++#ifdef L_j0l
-++	WRAPPER1(j0)
-++#endif
-++
-++#ifdef L_j1l
-++	WRAPPER1(j1)
-++#endif
-++
-++#ifdef L_jnl
-++long double jnl(int n, long double x)
-++{
-++	return (long double) jn(n, (double)x);
-++}
-++#endif
-++
-+ #ifdef L_ldexpl
-+ long double ldexpl (long double x, int ex)
-+ {
-+@@ -291,12 +318,18 @@ WRAPPER1(nearbyint)
-+ 
-+ #ifdef L_nextafterl
-+ WRAPPER2(nextafter)
-++libm_hidden_def(nextafterl)
-+ #endif
-+ 
-+-/* Disabled in Makefile.in */
-+-#if 0 /* def L_nexttowardl */
-+-WRAPPER2(nexttoward)
-+-libm_hidden_def(nexttowardl)
-++#ifdef L_nexttowardl
-++# if 0 /* TODO */
-++strong_alias(nextafterl, nexttowardl)
-++# else
-++long double nexttowardl(long double x, long double y)
-++{
-++	return nextafterl(x, y);
-++}
-++#endif
-+ #endif
-+ 
-+ #ifdef L_powl
-+@@ -344,6 +377,7 @@ WRAPPER1(sinh)
-+ 
-+ #ifdef L_sinl
-+ WRAPPER1(sin)
-++libm_hidden_def(sinl)
-+ #endif
-+ 
-+ #ifdef L_sqrtl
-+@@ -370,6 +404,22 @@ WRAPPER1(trunc)
-+ WRAPPER1(significand)
-+ #endif
-+ 
-++#ifdef L_y0l
-++WRAPPER1(y0)
-++#endif
-++
-++#ifdef L_y1l
-++WRAPPER1(y1)
-++#endif
-++
-++#ifdef L_ynl
-++long double ynl(int n, long double x)
-++{
-++	return (long double) yn(n, (double)x);
-++}
-++#endif
-++
-++
-+ #if defined __DO_C99_MATH__ && !defined __NO_LONG_DOUBLE_MATH
-+ 
-+ # ifdef L___fpclassifyl
-+diff --git a/libm/s_fdim.c b/libm/s_fdim.c
-+index 6249219..6ed695c 100644
-+--- a/libm/s_fdim.c
-++++ b/libm/s_fdim.c
-+@@ -6,13 +6,22 @@
-+ 
-+ #include "math.h"
-+ #include "math_private.h"
-++#include <errno.h>
-+ 
-+ double fdim(double x, double y)
-+ {
-+-  int c = __fpclassify(x);
-+-  if (c == FP_NAN || c == FP_INFINITE)
-+-    return HUGE_VAL;
-++  int cx = __fpclassify(x); /* need both NAN and INF */
-++  int cy = __fpclassify(y); /* need both NAN and INF */
-++  if (cx == FP_NAN || cy == NAN)
-++    return x - y;
-+ 
-+-  return x > y ? x - y : 0.0;
-++  if (x <= y)
-++	  return .0;
-++
-++  double z = x - y;
-++  if (isinf(z) && cx != FP_INFINITE && cy != FP_INFINITE)
-++	  __set_errno(ERANGE);
-++
-++  return z;
-+ }
-+ libm_hidden_def(fdim)
-+diff --git a/libm/s_fmax.c b/libm/s_fmax.c
-+index 21dfaa9..5f29ad8 100644
-+--- a/libm/s_fmax.c
-++++ b/libm/s_fmax.c
-+@@ -9,10 +9,10 @@
-+ 
-+ double fmax(double x, double y)
-+ {
-+-  if (__fpclassify(x) == FP_NAN)
-+-    return x;
-+-  if (__fpclassify(y) == FP_NAN)
-++  if (isnan(x))
-+     return y;
-++  if (isnan(y))
-++    return x;
-+ 
-+   return x > y ? x : y;
-+ }
-+diff --git a/libm/s_fmin.c b/libm/s_fmin.c
-+index 674d9a5..a549678 100644
-+--- a/libm/s_fmin.c
-++++ b/libm/s_fmin.c
-+@@ -9,10 +9,10 @@
-+ 
-+ double fmin(double x, double y)
-+ {
-+-  if (__fpclassify(x) == FP_NAN)
-+-    return x;
-+-  if (__fpclassify(y) == FP_NAN)
-++  if (isnan(x))
-+     return y;
-++  if (isnan(y))
-++    return x;
-+ 
-+   return x < y ? x : y;
-+ }
-+diff --git a/libm/s_nextafter.c b/libm/s_nextafter.c
-+index ee4621c..73a8ab2 100644
-+--- a/libm/s_nextafter.c
-++++ b/libm/s_nextafter.c
-+@@ -32,7 +32,7 @@ double nextafter(double x, double y)
-+ 	if(((ix>=0x7ff00000)&&((ix-0x7ff00000)|lx)!=0) ||   /* x is nan */
-+ 	   ((iy>=0x7ff00000)&&((iy-0x7ff00000)|ly)!=0))     /* y is nan */
-+ 	   return x+y;
-+-	if(x==y) return x;		/* x=y, return x */
-++	if(x==y) return y;		/* x=y, return y */
-+ 	if((ix|lx)==0) {			/* x == 0 */
-+ 	    INSERT_WORDS(x,hy&0x80000000,1);	/* return +-minsubnormal */
-+ 	    y = x*x;
-+@@ -68,3 +68,5 @@ double nextafter(double x, double y)
-+ 	return x;
-+ }
-+ libm_hidden_def(nextafter)
-++strong_alias_untyped(nextafter, nexttoward)
-++libm_hidden_def(nexttoward)
-+diff --git a/test/math/compile_test.c b/test/math/compile_test.c
-+index ab8c40c..aedfde6 100644
-+--- a/test/math/compile_test.c
-++++ b/test/math/compile_test.c
-+@@ -22,11 +22,11 @@ r += exp2f(float_x);
-+ r += expf(float_x);
-+ r += expm1f(float_x);
-+ r += fabsf(float_x);
-+-/*r += fdimf(float_x, float_x); - uclibc does not have it (yet?) */
-++r += fdimf(float_x, float_x);
-+ r += floorf(float_x);
-+-/*r += fmaf(float_x, float_x, float_x); - uclibc does not have it (yet?) */
-+-/*r += fmaxf(float_x, float_x); - uclibc does not have it (yet?) */
-+-/*r += fminf(float_x, float_x); - uclibc does not have it (yet?) */
-++r += fmaf(float_x, float_x, float_x);
-++r += fmaxf(float_x, float_x);
-++r += fminf(float_x, float_x);
-+ r += fmodf(float_x, float_x);
-+ r += frexpf(float_x, &int_x);
-+ r += gammaf(float_x);
-+@@ -44,17 +44,17 @@ r += logf(float_x);
-+ r += lrintf(float_x);
-+ r += lroundf(float_x);
-+ r += modff(float_x, &float_x);
-+-/*r += nearbyintf(float_x); - uclibc does not have it (yet?) */
-+-/*r += nexttowardf(float_x, long_double_x); - uclibc does not have it (yet?) */
-++r += nearbyintf(float_x);
-++r += nexttowardf(float_x, long_double_x);
-+ r += powf(float_x, float_x);
-+ r += remainderf(float_x, float_x);
-+-/*r += remquof(float_x, float_x, &int_x); - uclibc does not have it (yet?) */
-++r += remquof(float_x, float_x, &int_x);
-+ r += rintf(float_x);
-+ r += roundf(float_x);
-+ #ifdef __UCLIBC_SUSV3_LEGACY__
-+ r += scalbf(float_x, float_x);
-+ #endif
-+-/*r += scalblnf(float_x, long_x); - uclibc does not have it (yet?) */
-++r += scalblnf(float_x, long_x);
-+ r += scalbnf(float_x, int_x);
-+ r += significandf(float_x);
-+ r += sinf(float_x);
-+@@ -62,7 +62,7 @@ r += sinhf(float_x);
-+ r += sqrtf(float_x);
-+ r += tanf(float_x);
-+ r += tanhf(float_x);
-+-/*r += tgammaf(float_x); - uclibc does not have it (yet?) */
-++r += tgammaf(float_x);
-+ r += truncf(float_x);
-+ return r;
-+ }
-+@@ -116,7 +116,7 @@ r += lroundl(long_double_x);
-+ r += modfl(long_double_x, &long_double_x);
-+ r += nearbyintl(long_double_x);
-+ r += nextafterl(long_double_x, long_double_x);
-+-/* r += nexttowardl(long_double_x, long_double_x); - uclibc doesn't provide this [yet?] */
-++r += nexttowardl(long_double_x, long_double_x);
-+ r += powl(long_double_x, long_double_x);
-+ r += remainderl(long_double_x, long_double_x);
-+ r += remquol(long_double_x, long_double_x, &int_x);
-+diff --git a/test/math/libm-test.inc b/test/math/libm-test.inc
-+index d0f0a0c..8f0db3c 100644
-+--- a/test/math/libm-test.inc
-++++ b/test/math/libm-test.inc
-+@@ -115,6 +115,9 @@
-+ # define _GNU_SOURCE
-+ #endif
-+ 
-++#undef __CHK_COMPLEX_STUFF
-++#define __CHK_COMPLEX_STUFF 0
-++
-+ #include "libm-test-ulps.h"
-+ #include <complex.h>
-+ #include <math.h>
-+@@ -1120,8 +1123,10 @@ cacosh_test (void)
-+ 
-+   END (cacosh, complex);
-+ }
-++#endif
-+ 
-+ 
-++#if __CHK_COMPLEX_STUFF
-+ static void
-+ carg_test (void)
-+ {
-+@@ -1188,7 +1193,9 @@ carg_test (void)
-+ 
-+   END (carg);
-+ }
-++#endif /* __CHK_COMPLEX_STUFF */
-+ 
-++#if 0
-+ static void
-+ casin_test (void)
-+ {
-+@@ -1683,7 +1690,7 @@ ceil_test (void)
-+ }
-+ 
-+ 
-+-#if 0
-++#if __CHK_COMPLEX_STUFF
-+ static void
-+ cexp_test (void)
-+ {
-+@@ -1746,8 +1753,9 @@ cexp_test (void)
-+ 
-+   END (cexp, complex);
-+ }
-++#endif /* __CHK_COMPLEX_STUFF */
-+ 
-+-
-++#if 0
-+ static void
-+ cimag_test (void)
-+ {
-+@@ -2588,7 +2596,6 @@ fabs_test (void)
-+ }
-+ 
-+ 
-+-#if 0
-+ static void
-+ fdim_test (void)
-+ {
-+@@ -2624,7 +2631,6 @@ fdim_test (void)
-+ 
-+   END (fdim);
-+ }
-+-#endif
-+ 
-+ 
-+ static void
-+@@ -2694,7 +2700,6 @@ floor_test (void)
-+ }
-+ 
-+ 
-+-#if 0
-+ static void
-+ fma_test (void)
-+ {
-+@@ -2797,7 +2802,6 @@ fmin_test (void)
-+ 
-+   END (fmin);
-+ }
-+-#endif
-+ 
-+ 
-+ static void
-+@@ -3002,7 +3006,7 @@ isnormal_test (void)
-+   END (isnormal);
-+ }
-+ 
-+-#if defined __DO_XSI_MATH__
-++#if defined __DO_XSI_MATH__ && !(defined TEST_LDOUBLE || defined TEST_FLOAT)
-+ static void
-+ j0_test (void)
-+ {
-+@@ -3629,7 +3633,6 @@ modf_test (void)
-+ }
-+ 
-+ 
-+-#if 0
-+ static void
-+ nearbyint_test (void)
-+ {
-+@@ -3710,7 +3713,6 @@ nexttoward_test (void)
-+ 
-+   END (nexttoward);
-+ }
-+-#endif
-+ 
-+ 
-+ static void
-+@@ -3950,7 +3952,6 @@ remainder_test (void)
-+   END (remainder);
-+ }
-+ 
-+-#if 0
-+ static void
-+ remquo_test (void)
-+ {
-+@@ -3981,7 +3982,6 @@ remquo_test (void)
-+ 
-+   END (remquo);
-+ }
-+-#endif
-+ 
-+ static void
-+ rint_test (void)
-+@@ -4229,12 +4229,12 @@ round_test (void)
-+ #endif
-+ 
-+ 
-++#ifdef __UCLIBC_SUSV3_LEGACY__
-+ static void
-+ scalb_test (void)
-+ {
-+   START (scalb);
-+ #ifndef TEST_LDOUBLE /* uclibc doesn't have scalbl */
-+-#ifdef __UCLIBC_SUSV3_LEGACY__ /* scalbf is susv3 legacy */
-+ 
-+   TEST_ff_f (scalb, 2.0, 0.5, nan_value, INVALID_EXCEPTION);
-+   TEST_ff_f (scalb, 3.0, -2.5, nan_value, INVALID_EXCEPTION);
-+@@ -4285,11 +4285,10 @@ scalb_test (void)
-+ 
-+   TEST_ff_f (scalb, 0.8L, 4, 12.8L);
-+   TEST_ff_f (scalb, -0.854375L, 5, -27.34L);
-+-#endif /* __UCLIBC_SUSV3_LEGACY__ */
-+ #endif /* TEST_LDOUBLE */
-+   END (scalb);
-+ }
-+-
-++#endif
-+ 
-+ static void
-+ scalbn_test (void)
-+@@ -4313,7 +4312,6 @@ scalbn_test (void)
-+ }
-+ 
-+ 
-+-#if 0
-+ static void
-+ scalbln_test (void)
-+ {
-+@@ -4334,7 +4332,6 @@ scalbln_test (void)
-+ 
-+   END (scalbn);
-+ }
-+-#endif
-+ 
-+ 
-+ static void
-+@@ -4539,7 +4536,6 @@ tanh_test (void)
-+   END (tanh);
-+ }
-+ 
-+-#if 0
-+ static void
-+ tgamma_test (void)
-+ {
-+@@ -4571,7 +4567,6 @@ tgamma_test (void)
-+ 
-+   END (tgamma);
-+ }
-+-#endif
-+ 
-+ 
-+ #if 0
-+@@ -4651,7 +4646,7 @@ trunc_test (void)
-+ }
-+ #endif
-+ 
-+-#if defined __DO_XSI_MATH__
-++#if defined __DO_XSI_MATH__ && !(defined TEST_LDOUBLE || defined TEST_FLOAT)
-+ static void
-+ y0_test (void)
-+ {
-+@@ -4979,11 +4974,11 @@ main (int argc, char **argv)
-+   logb_test ();
-+   modf_test ();
-+   ilogb_test ();
-++#ifdef __UCLIBC_SUSV3_LEGACY__
-+   scalb_test ();
-++#endif
-+   scalbn_test ();
-+-#if 0
-+   scalbln_test ();
-+-#endif
-+   significand_test ();
-+ 
-+   /* Power and absolute value functions:  */
-+@@ -4998,16 +4993,12 @@ main (int argc, char **argv)
-+   erfc_test ();
-+   gamma_test ();
-+   lgamma_test ();
-+-#if 0
-+   tgamma_test ();
-+-#endif
-+ 
-+   /* Nearest integer functions:  */
-+   ceil_test ();
-+   floor_test ();
-+-#if 0
-+   nearbyint_test ();
-+-#endif
-+   rint_test ();
-+ #if 0
-+   rint_test_tonearest ();
-+@@ -5025,13 +5016,10 @@ main (int argc, char **argv)
-+   /* Remainder functions:  */
-+   fmod_test ();
-+   remainder_test ();
-+-#if 0
-+   remquo_test ();
-+-#endif
-+ 
-+   /* Manipulation functions:  */
-+   copysign_test ();
-+-#if 0
-+   nextafter_test ();
-+   nexttoward_test ();
-+ 
-+@@ -5043,24 +5031,29 @@ main (int argc, char **argv)
-+   /* Multiply and add:  */
-+   fma_test ();
-+ 
-++
-+   /* Complex functions:  */
-+   cabs_test ();
-++#if __CHK_COMPLEX_STUFF
-++#if 0
-+   cacos_test ();
-+   cacosh_test ();
-++#endif
-+   carg_test ();
-++#if 0
-+   casin_test ();
-+   casinh_test ();
-+   catan_test ();
-+   catanh_test ();
-+   ccos_test ();
-+   ccosh_test ();
-++#endif
-+   cexp_test ();
-++#if 0
-+   cimag_test ();
-+   clog10_test ();
-+   clog_test ();
-+-#if 0
-+   conj_test ();
-+-#endif
-+   cpow_test ();
-+   cproj_test ();
-+   creal_test ();
-+@@ -5070,9 +5063,10 @@ main (int argc, char **argv)
-+   ctan_test ();
-+   ctanh_test ();
-+ #endif
-++#endif /* __CHK_COMPLEX_STUFF */
-+ 
-+   /* Bessel functions:  */
-+-#if defined __DO_XSI_MATH__
-++#if defined __DO_XSI_MATH__ && !(defined TEST_LDOUBLE || defined TEST_FLOAT)
-+   j0_test ();
-+   j1_test ();
-+   jn_test ();
-+--
-+cgit v0.9.1
+++if test -z "$PYTHON2"; then
+++    if test ! -f "$srcdir/src/gallium/auxiliary/indices/u_indices_gen.c" -o \
+++            ! -f "$srcdir/src/gallium/auxiliary/indices/u_unfilled_gen.c" -o \
+++            ! -f "$srcdir/src/gallium/auxiliary/util/u_format_table.c" -o \
+++            ! -f "$srcdir/src/glx/indirect.c" -o \
+++            ! -f "$srcdir/src/glx/indirect.h" -o \
+++            ! -f "$srcdir/src/glx/indirect_init.c" -o \
+++            ! -f "$srcdir/src/glx/indirect_size.c" -o \
+++            ! -f "$srcdir/src/glx/indirect_size.h" -o \
+++            ! -f "$srcdir/src/mapi/es1api/glapi_mapi_tmp.h" -o \
+++            ! -f "$srcdir/src/mapi/es2api/glapi_mapi_tmp.h" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapi_mapi_tmp.h" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glprocs.h" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapitemp.h" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapitable.h" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapi_gentable.c" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapi_x86.S" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapi_x86-64.S" -o \
+++            ! -f "$srcdir/src/mapi/glapi/glapi_sparc.S" -o \
+++            ! -f "$srcdir/src/mapi/shared-glapi/glapi_mapi_tmp.h" -o \
+++            ! -f "$srcdir/src/mesa/drivers/dri/common/xmlpool/options.h" -o \
+++            ! -f "$srcdir/src/mesa/main/enums.c" -o \
+++            ! -f "$srcdir/src/mesa/main/api_exec.c" -o \
+++            ! -f "$srcdir/src/mesa/main/dispatch.h" -o \
+++            ! -f "$srcdir/src/mesa/main/format_info.h" -o \
+++            ! -f "$srcdir/src/mesa/main/get_hash.h" -o \
+++            ! -f "$srcdir/src/mesa/main/remap_helper.h" -o \
+++            ! -f "$srcdir/src/util/format_srgb.c"; then
+++        AC_MSG_ERROR([Python not found - unable to generate sources])
+++    fi
+++else
+++    if test "x$acv_mako_found" = xno; then
+++        if test ! -f "$srcdir/src/glsl/nir/nir_constant_expressions.c" -o \
+++                ! -f "$srcdir/src/glsl/nir/nir_opcodes.c" -o \
+++                ! -f "$srcdir/src/glsl/nir/nir_opcodes.h" -o \
+++                ! -f "$srcdir/src/glsl/nir/nir_opt_algebraic.c" -o \
+++                ! -f "$srcdir/src/mesa/main/format_pack.c" -o \
+++                ! -f "$srcdir/src/mesa/main/format_unpack.c"; then
+++            AC_MSG_ERROR([Python mako module v$PYTHON_MAKO_REQUIRED or higher not found])
+++        fi
+++    fi
++ fi
++ 
++ AC_PROG_INSTALL
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index f562469..f619f52 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-March/000146.html
+-sha256	ffc51943d15c6812ee7611d053d8980a683fbd6a4986cff567b12cc66637d679	mesa-10.5.1.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-March/000148.html
++sha256	2f4b6fb77c3e7d6f861558d0884a3073f575e1e673dad8d1b0624e78e9c4dd44	mesa-10.5.2.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index fc82227..efda874 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.5.1
++MESA3D_VERSION = 10.5.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -19,7 +19,6 @@ MESA3D_PROVIDES =
+ MESA3D_DEPENDENCIES = \
+ 	expat \
+ 	host-gettext \
+-	host-python-mako \
+ 	libdrm
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
 -- 
 1.7.10.4
