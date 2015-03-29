@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 14:54:50 +0200
-Subject: [Buildroot] [git commit] package/ccache: bump version to 3.1.11
-Message-ID: <20150329125454.D6777807EC@busybox.osuosl.org>
+Date: Sun, 29 Mar 2015 14:57:14 +0200
+Subject: [Buildroot] [PATCH] package/ccache: bump version to 3.1.11
+In-Reply-To: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
+References: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20150329145714.39bcdfa6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b1b3f49e8482bd1d5da8a2845edd49681c1ccdce
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Karoly Kasza,
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ccache/ccache.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 29 Mar 2015 13:52:04 +0200, Karoly Kasza wrote:
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+>  package/ccache/ccache.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 270ea4b..893b6ae 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.1.8
-+CCACHE_VERSION = 3.1.11
- CCACHE_SITE = http://samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
+Applied, thanks. If you feel like it, sending a patch adding a hash
+file would be good.
+
+Also, there is still quite a lot of things to fix to get our ccache
+support to a sane state. If you have some time, you could look at
+http://patchwork.ozlabs.org/patch/287383/, especially the comments made
+by Arnout, and try to improve the ccache support based on that.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
