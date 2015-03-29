@@ -1,64 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 15:08:27 +0200
-Subject: [Buildroot] [PATCH 1/1] allow xserver without the systemd login
- daemon.
-In-Reply-To: <1427548538-7789-1-git-send-email-sagaert.johan@proximus.be>
-References: <1427548538-7789-1-git-send-email-sagaert.johan@proximus.be>
-Message-ID: <20150329150827.4491e5d4@free-electrons.com>
+Date: Sun, 29 Mar 2015 15:09:33 +0200
+Subject: [Buildroot] [git commit] gstreamer/gst-plugin-x170: requires the
+	Linux kernel
+Message-ID: <20150329130939.EB844807AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+commit: http://git.buildroot.net/buildroot/commit/?id=c93abc163960141158e984511a110d9816384c67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 28 Mar 2015 14:15:38 +0100, Sagaert Johan wrote:
-> Thanks to Noel Vellemans for the hint.
-> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index bb5381c..db2e653 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -64,6 +64,11 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
->  	--with-fontrootdir=/usr/share/fonts/X11/ \
->  	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
->  
-> +ifneq ($(BR2_INIT_SYSTEMD),y)
-> +	XSERVER_XORG_SERVER_CONF_OPTS += \
-> +	--disable-systemd-logind
-> +endif
+Add a missing reverse depency from the on2-8170-libs package.
 
-This seems good, but I'd like to see a more complete solution, that
-takes care of both --{enable,disable}-systemd-login and
---{with,without}-systemd-daemon.
+Fixes warning:
+warning: (BR2_PACKAGE_GST_PLUGIN_X170) selects BR2_PACKAGE_ON2_8170_LIBS which has unmet direct dependencies (BR2_arm926t && BR2_TOOLCHAIN_USES_GLIBC && BR2_LINUX_KERNEL)
 
-You should pass both the enabling and disabling options, and use
-BR2_PACKAGE_SYSTEMD for the condition.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer/gst-plugin-x170/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-I believe something like:
-
-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-XSERVER_XORG_CONF_OPTS += \
-	--with-systemd-daemon \
-	--enable-systemd-logind
-else
-XSERVER_XORG_CONF_OPTS += \
-	--without-systemd-daemon \
-	--disable-systemd-logind
-endif
-
-would be more appropriate, but I'd like to have some feedback from a
-X.org person. Bernd, can you comment on this?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer/gst-plugin-x170/Config.in b/package/gstreamer/gst-plugin-x170/Config.in
+index ed668c6..09b44be 100644
+--- a/package/gstreamer/gst-plugin-x170/Config.in
++++ b/package/gstreamer/gst-plugin-x170/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_GST_PLUGIN_X170
+ 	depends on BR2_arm926t
+ 	# glibc toolchain includes WCHAR and threading for libglib2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # on2-8170-libs
++	depends on BR2_LINUX_KERNEL # on2-8170-libs
+ 	select BR2_PACKAGE_ON2_8170_LIBS
+ 	help
+ 	  GStreamer plug-in to use the Hantro X170 video decoder present on
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_GST_PLUGIN_X170
+ 
+ 	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SAM9M10Gstreamer
+ 
+-comment "gst-plugin-x170 needs an (e)glibc toolchain"
++comment "gst-plugin-x170 needs an (e)glibc toolchain and a Linux kernel to be built"
+ 	depends on BR2_arm926t
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_USES_GLIBC
