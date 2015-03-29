@@ -1,46 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 13:56:08 +0200
-Subject: [Buildroot] [PATCH 1/2] package/uclibc: libm: Add missing C99
- float/ld wrappers (backport)
-In-Reply-To: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427588948-13933-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150329135608.38d08f5e@free-electrons.com>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Sun, 29 Mar 2015 13:58:42 +0200
+Subject: [Buildroot] [PATCH] package/ccache: bump version to 3.1.11
+In-Reply-To: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
+References: <1427629924-75317-1-git-send-email-kaszak@gmail.com>
+Message-ID: <CABbD_XCbKZswz-ssTq1bjah+DNBO+i1QYsvpw11nijNZhafXGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi all,
 
-On Sun, 29 Mar 2015 01:29:07 +0100, Bernd Kuhls wrote:
-> This commit adds a patch to uclibc with a backport from upstream
-> to provide a proper fix for mesa3d which depends on fminf.
-> Also remove the mesa3d patch which provided a crappy workaround.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0002-Fix-runtime-error-with-uClibc.patch       |   58 --
->  .../0069-Add-missing-C99-float-ld-wrappers.patch   |  870 ++++++++++++++++++++
->  2 files changed, 870 insertions(+), 58 deletions(-)
->  delete mode 100644 package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
->  create mode 100644 package/uclibc/0.9.33.2/0069-Add-missing-C99-float-ld-wrappers.patch
+based on the release notes at ccache.samba.org, there are only bugfix
+releases since 3.1.x (hence the above patch should be safe to apply), but
+the 3.2.x line are already exists. Should we start moving on to that major
+version?
 
-I think we might need to keep the crappy workaround, or an improved
-version of it. The problem with doing a uClibc patch is that it will
-only work with internal uClibc toolchains: all uClibc toolchains will
-continue to be broken.
+Regards,
+Karoly
 
-So we might want to do both:
 
- 1/ Fix uClibc properly, so that in the future (3-6 months from now),
- we can get rid of the mesa3d specific fix, after most of the external
- uClibc toolchains have been updated.
-
- 2/ Keep a mesa3d workaround for a little while.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> -CCACHE_VERSION = 3.1.8
+> +CCACHE_VERSION = 3.1.11
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150329/8036e84a/attachment.html>
