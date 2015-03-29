@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:32 +0200
-Subject: [Buildroot] [PATCH 16/18] package/mplayer: add optional bzip2
-	support
+Date: Sun, 29 Mar 2015 19:11:33 +0200
+Subject: [Buildroot] [PATCH 17/18] package/mplayer: add optional lame support
 In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427649094-1240-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk |    1 +
- 1 file changed, 1 insertion(+)
+ package/mplayer/mplayer.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 76c53d7..97e6a5d 100644
+index 97e6a5d..da6e468 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -198,6 +198,7 @@ else
- MPLAYER_CONF_OPTS += --disable-liblzo
+@@ -137,6 +137,13 @@ else
+ MPLAYER_CONF_OPTS += --disable-faad
  endif
  
-+MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_BZIP2),bzip2)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
++ifeq ($(BR2_PACKAGE_LAME),y)
++MPLAYER_DEPENDENCIES += lame
++MPLAYER_CONF_OPTS += --enable-mp3lame
++else
++MPLAYER_CONF_OPTS += --disable-mp3lame
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBASS),y)
+ MPLAYER_DEPENDENCIES += libass
+ MPLAYER_EXTRA_LIBS += -lass
 -- 
 1.7.10.4
