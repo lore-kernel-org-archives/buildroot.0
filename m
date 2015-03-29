@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2015 19:11:24 +0200
-Subject: [Buildroot] [PATCH 08/18] package/mplayer: add optional libass
+Date: Sun, 29 Mar 2015 19:11:25 +0200
+Subject: [Buildroot] [PATCH 09/18] package/mplayer: add optional libenca
 	support
 In-Reply-To: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427649094-1240-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427649094-1240-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mplayer/mplayer.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+ package/mplayer/mplayer.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 900a6ce..245ed91 100644
+index 245ed91..6fbdd72 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -110,6 +110,12 @@ else
- MPLAYER_CONF_OPTS += --disable-mencoder
+@@ -61,6 +61,13 @@ else
+ MPLAYER_CONF_OPTS += --disable-fribidi
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBASS),y)
-+MPLAYER_DEPENDENCIES += libass
-+MPLAYER_EXTRA_LIBS += -lass
-+MPLAYER_CONF_OPTS += --disable-ass-internal --enable-ass
++ifeq ($(BR2_PACKAGE_LIBENCA),y)
++MPLAYER_CONF_OPTS += --enable-enca
++MPLAYER_DEPENDENCIES += libenca
++else
++MPLAYER_CONF_OPTS += --disable-enca
 +endif
 +
- ifeq ($(BR2_PACKAGE_TREMOR),y)
- MPLAYER_DEPENDENCIES += tremor
- MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ MPLAYER_CONF_OPTS += --enable-termcap
+ MPLAYER_DEPENDENCIES += ncurses
 -- 
 1.7.10.4
