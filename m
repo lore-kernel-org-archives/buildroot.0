@@ -1,71 +1,165 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Mar 2015 19:33:40 +0200
-Subject: [Buildroot] [PATCH 26/35] pkg-generic: implement source-check
-	targets
+Date: Sun, 29 Mar 2015 19:33:37 +0200
+Subject: [Buildroot] [PATCH 23/35] pkg-download: remove support for the
+	SHOW_EXTERNAL_DEPS DL_MODE
 In-Reply-To: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1427650429-9293-27-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1427650429-9293-24-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commits extends the common package infrastructure with the
-$(1)-source-check and $(1)-all-source-check targets.
-
-The $(1)-source-check target simply calls the newly added
-SOURCE_CHECK macro on all items to be downloaded.
-
-The $(1)-all-source-check target will depend on the
-$(1)-all-source-check targets of all dependent packages and the
-$(1)-source-check target of the current package, which allows to do a
-recursive source-check in the dependency tree.
+Now that the external-deps implementation relies on the per-package
+<pkg>-all-external-deps and <pkg>-external-deps targets and no longer
+on the 'source' target with a custom DL_MODE, we can get rid of the
+support for the SHOW_EXTERNAL_DEPS DL_MODE value in the pkg-download
+logic.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 45 ++-------------------------------------------
+ package/pkg-generic.mk  |  5 +----
+ 2 files changed, 3 insertions(+), 47 deletions(-)
 
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 5e74519..20923e9 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -20,9 +20,8 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ 
+ DL_WRAPPER = support/download/dl-wrapper
+ 
+-# Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+-# used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+-# external-deps target.
++# Default spider mode is 'DOWNLOAD'. Other possible value is
++# 'SOURCE_CHECK' used by the _source-check target.
+ DL_MODE = DOWNLOAD
+ 
+ # DL_DIR may have been set already from the environment
+@@ -71,11 +70,6 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ # The SOURCE_CHECK_* helpers are in charge of simply checking that the source
+ # is available for download. This can be used to make sure one will be able
+ # to get all the sources needed for one's build configuration.
+-#
+-# The SHOW_EXTERNAL_DEPS_* helpers simply output to the console the names
+-# of the files that will be downloaded, or path and revision of the
+-# source repositories, producing a list of all the "external dependencies"
+-# of a given build configuration.
+ ################################################################################
+ 
+ # Try a shallow clone - but that only works if the version is a ref (tag or
+@@ -101,11 +95,6 @@ define SOURCE_CHECK_GIT
+   $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_GIT
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+-
+ define DOWNLOAD_BZR
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b bzr \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+@@ -121,10 +110,6 @@ define SOURCE_CHECK_BZR
+ 	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_BZR
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+ define DOWNLOAD_CVS
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cvs \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+@@ -142,10 +127,6 @@ define SOURCE_CHECK_CVS
+ 	$(CVS) -d:pserver:anonymous:@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) login
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_CVS
+-	echo $($(PKG)_SOURCE)
+-endef
+-
+ define DOWNLOAD_SVN
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b svn \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+@@ -161,10 +142,6 @@ define SOURCE_CHECK_SVN
+   $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_SVN
+-  echo $($(PKG)_SOURCE)
+-endef
+-
+ # SCP URIs should be of the form scp://[user@]host:filepath
+ # Note that filepath is relative to the user's home directory, so you may want
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+@@ -181,11 +158,6 @@ define SOURCE_CHECK_SCP
+ 	$(SSH) $(call domain,$(1),:) ls '$(call notdomain,$(1),:)' > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_SCP
+-	echo $(2)
+-endef
+-
+-
+ define DOWNLOAD_HG
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b hg \
+ 		-o $(DL_DIR)/$($(PKG)_SOURCE) \
+@@ -203,11 +175,6 @@ define SOURCE_CHECK_HG
+   $(HG) incoming --force -l1 $($(PKG)_SITE) > /dev/null
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_HG
+-  echo $($(PKG)_SOURCE)
+-endef
+-
+-
+ define DOWNLOAD_WGET
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b wget \
+ 		-o $(DL_DIR)/$(2) \
+@@ -221,10 +188,6 @@ define SOURCE_CHECK_WGET
+   $(WGET) --spider '$(call qstrip,$(1))'
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_WGET
+-  echo $(2)
+-endef
+-
+ define DOWNLOAD_LOCALFILES
+ 	$(EXTRA_ENV) $(DL_WRAPPER) -b cp \
+ 		-o $(DL_DIR)/$(2) \
+@@ -238,10 +201,6 @@ define SOURCE_CHECK_LOCALFILES
+   test -e $(call stripurischeme,$(call qstrip,$(1)))
+ endef
+ 
+-define SHOW_EXTERNAL_DEPS_LOCALFILES
+-  echo $(2)
+-endef
+-
+ ################################################################################
+ # DOWNLOAD -- Download helper. Will try to download source from:
+ # 1) BR2_PRIMARY_SITE if enabled
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 4ec9a06..8afcff1 100644
+index f87ef0b..4ec9a06 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -574,6 +574,16 @@ endif
- $(1)-show-version:
- 			@echo $$($(2)_VERSION)
+@@ -122,13 +122,10 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
-+$(1)-source-check:
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+	$$(foreach p,$$($(2)_SOURCE) $$($(2)_EXTRA_DOWNLOADS) $$($(2)_PATCH),\
-+		$$(if $$(findstring ://,$(p)),\
-+			$$(call SOURCE_CHECK,$(p)),\
-+			$$(call SOURCE_CHECK,$$($(2)_SITE:/=)/$(p))))
-+else
-+	test -d $$($(2)_OVERRIDE_SRCDIR)
-+endif
-+
- $(1)-show-depends:
- 			@echo $$($(2)_FINAL_DEPENDENCIES)
- 
-@@ -586,6 +596,8 @@ $(1)-graph-depends: graph-depends-requirements
- 
- $(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
- 
-+$(1)-all-source-check:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source-check) $(1)-source-check
-+
- $(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
- 
- $(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
-@@ -781,7 +793,8 @@ endif
- 	$(1)-source $(1)-rsync $(1)-show-depends $(1)-graph-depends \
- 	$(1)-external-deps $(1)-all-source $(1)-all-external-deps \
- 	$(1)-all-legal-info $(1)-dirclean $(1)-clean-for-rebuild \
--	$(1)-rebuild $(1)-clean-for-reconfigure $(1)-reconfigure
-+	$(1)-rebuild $(1)-clean-for-reconfigure $(1)-reconfigure \
-+	$(1)-source-check $(1)-all-source-check
- 
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
+-# Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
+-# packages
++# Handle the SOURCE_CHECK case for rsynced packages
+ $(BUILD_DIR)/%/.stamp_rsync_sourced:
+ ifeq ($(DL_MODE),SOURCE_CHECK)
+ 	test -d $(SRCDIR)
+-else ifeq ($(DL_MODE),SHOW_EXTERNAL_DEPS)
+-	echo "file://$(SRCDIR)"
+ else
+ 	@true # Nothing to do to source a local package
+ endif
 -- 
 2.1.0
