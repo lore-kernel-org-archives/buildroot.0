@@ -1,38 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 18:07:21 -0300
-Subject: [Buildroot] [PATCH v3 02/15] toolchain/helpers: make LFS mandatory
-	for uclibc toolchains
-In-Reply-To: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427749654-30153-3-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Mar 2015 23:07:48 +0200
+Subject: [Buildroot] [git commit] arch: BINFMT_FLAT_SHARED is not really
+	shared for buildroot purposes
+Message-ID: <20150330210809.B618D817A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed on the mailing list drop the non-largefile option for
-toolchains.
-The size delta is minimal and it just complicates package dependencies.
+commit: http://git.buildroot.net/buildroot/commit/?id=1b171af3b3b4e0f0537173c7b9703c729915a6ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Although BINFMT_FLAT_SHARED is indeed a shared library format, it does
+not support dynamic library loading with dlopen(). So for buildroot
+purposes, BR2_STATIC_LIBS shouldn't be selected.
+
+As it happens, the compiler options that are added for
+BINFMT_FLAT_SHARED also make the compiler ignore the -static option, so
+we can simply force BR2_STATIC_LIBS and things work out perfectly.
+
+Therefore, remove the select of BR2_BINFMT_SUPPORTS_SHARED from
+BINFMT_FLAT_SHARED, which in turn makes sure that BR2_STATIC_LIBS is
+selected.
+
+[Arnout: rewrite commit message, add explanatory comment]
+
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 5d6390e..2e6b500 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -281,7 +281,7 @@ check_uclibc = \
- 	fi; \
- 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
- 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
--- 
-2.0.5
+diff --git a/arch/Config.in b/arch/Config.in
+index 16ad8be..59bf84a 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -295,7 +295,12 @@ config BR2_BINFMT_FLAT_SEP_DATA
+ 
+ config BR2_BINFMT_FLAT_SHARED
+ 	bool "Shared binary"
+-	select BR2_BINFMT_SUPPORTS_SHARED
++	# Even though this really generates shared binaries, there is no libdl
++	# and dlopen() cannot be used. So packages that require shared
++	# libraries cannot be built. Therefore, we don't select
++	# BR2_BINFMT_SUPPORTS_SHARED and therefore force BR2_STATIC_LIBS.
++	# Although this adds -static to the compilation, that's not a problem
++	# because the -mid-shared-library option overrides it.
+ 	help
+ 	  Allow to load and link indiviual FLAT binaries at run time.
+ 
