@@ -1,83 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 18:16:30 -0300
-Subject: [Buildroot] [PATCH v2 3/3] libgtk2: adjust style
-In-Reply-To: <1427750190-10801-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427750190-10801-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427750190-10801-3-git-send-email-gustavo@zacarias.com.ar>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Mon, 30 Mar 2015 23:20:40 +0200
+Subject: [Buildroot] [PATCH 1/1] mongoose: add hash file
+Message-ID: <1427750440-5020-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cleanup indentation and mention why we need AUTORECONF.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
 ---
- package/libgtk2/libgtk2.mk | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ package/mongoose/mongoose.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/mongoose/mongoose.hash
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index c92bbd2..fbc0d08 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -11,7 +11,7 @@ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJ
- LIBGTK2_INSTALL_STAGING = YES
- LIBGTK2_LICENSE = LGPLv2+
- LIBGTK2_LICENSE_FILES = COPYING
--
-+# For 0001-reduce-dependencies.patch
- LIBGTK2_AUTORECONF = YES
- 
- LIBGTK2_CONF_ENV = \
-@@ -85,37 +85,37 @@ LIBGTK2_DEPENDENCIES += \
- 	fontconfig xlib_libX11 xlib_libXext xlib_libXrender
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
--	LIBGTK2_CONF_OPTS += --enable-xinerama
--	LIBGTK2_DEPENDENCIES += xlib_libXinerama
-+LIBGTK2_CONF_OPTS += --enable-xinerama
-+LIBGTK2_DEPENDENCIES += xlib_libXinerama
- else
--	LIBGTK2_CONF_OPTS += --disable-xinerama
-+LIBGTK2_CONF_OPTS += --disable-xinerama
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
--	LIBGTK2_CONF_OPTS += --with-xinput=yes
--	LIBGTK2_DEPENDENCIES += xlib_libXi
-+LIBGTK2_CONF_OPTS += --with-xinput=yes
-+LIBGTK2_DEPENDENCIES += xlib_libXi
- else
--	LIBGTK2_CONF_OPTS += --with-xinput=no
-+LIBGTK2_CONF_OPTS += --with-xinput=no
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXrandr
-+LIBGTK2_DEPENDENCIES += xlib_libXrandr
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXcursor
-+LIBGTK2_DEPENDENCIES += xlib_libXcursor
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXfixes
-+LIBGTK2_DEPENDENCIES += xlib_libXfixes
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXcomposite
-+LIBGTK2_DEPENDENCIES += xlib_libXcomposite
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXdamage
-+LIBGTK2_DEPENDENCIES += xlib_libXdamage
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+new file mode 100644
+index 0000000..b7e758c
+--- /dev/null
++++ b/package/mongoose/mongoose.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++cc2557c7cf9f15e1e691f285a4c6c705cc7e56cb70c64cb49703a428a0677065  mongoose-5.6.tar.gz
 -- 
-2.0.5
+2.1.4
