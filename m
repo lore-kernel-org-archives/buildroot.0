@@ -1,63 +1,26 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 30 Mar 2015 23:45:22 +0200
-Subject: [Buildroot] [PATCH v10] package/sysdig: New package
-In-Reply-To: <20150330223326.7b21a348@free-electrons.com>
-References: <1427402489-28313-1-git-send-email-angelo.compagnucci@gmail.com>
- <20150330223326.7b21a348@free-electrons.com>
-Message-ID: <CA+TH9VnW8d7fKt5JGdre5HsZbvJHk-mUgPddNQVpARGrui8STA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 30 Mar 2015 19:28:53 -0300
+Subject: [Buildroot] [PATCH] pixman: add hash file
+Message-ID: <1427754533-4907-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/pixman/pixman.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/pixman/pixman.hash
 
-2015-03-30 22:33 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Thu, 26 Mar 2015 21:41:29 +0100, Angelo Compagnucci wrote:
->> Sysdig is open source, system-level exploration:
->> capture system state and activity from a running Linux
->> instance, then save, filter and analyze.
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Thanks, applied. But I did a number of changes before applying:
->
->     [Thomas:
->      - remove unneeded 0001-makefile-driver-compile-options.patch, instead
->        pass KERNELDIR in the make options when building the driver, and
->        pass the contents of $(LINUX_MAKE_FLAGS) directly.
->      - use $(SYSDIG_BUILDDIR) instead of $(@D)/buildroot-build, so that
->        the package does not depend on the package infra using specifically
->        buildroot-build as the build subdirectory.
->      - use $(MAKE) -C <foo> instead of cd <foo>; $(MAKE).
->      - rename 0002 patch to 0001, since the 0001 patch is removed.]
->
-> I think the most annoying part was the over-complicated solution to
-> build the driver. My solution is simpler in the .mk file, and does not
-> require patching.
->
-> Can you look at submitting upstream a solution for the DKMS patch, like
-> a new CMake option to enable/disable the DKMS stuff ?
-
-Of course!
-
-Thank you for submitting!
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
+diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
+new file mode 100644
+index 0000000..c6ec14e
+--- /dev/null
++++ b/package/pixman/pixman.hash
+@@ -0,0 +1,2 @@
++# From http://cairographics.org/releases/pixman-0.32.6.tar.gz.sha1
++sha1	8791343cbf6d99451f4d08e8209d6ac11bf96df2	pixman-0.32.6.tar.gz
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.0.5
