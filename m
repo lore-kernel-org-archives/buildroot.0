@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 18:07:28 -0300
-Subject: [Buildroot] [PATCH v3 09/15] system: drop largefile depends
+Date: Mon, 30 Mar 2015 18:07:29 -0300
+Subject: [Buildroot] [PATCH v3 10/15] boot/gummiboot: drop largefile depends
 In-Reply-To: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427749654-30153-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1427749654-30153-11-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,38 +16,28 @@ being removed.
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- system/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ boot/gummiboot/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 9973cc2..3516056 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -89,7 +89,6 @@ config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -124,15 +123,14 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
+diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
+index 8d70680..ad49793 100644
+--- a/boot/gummiboot/Config.in
++++ b/boot/gummiboot/Config.in
+@@ -4,7 +4,6 @@ config BR2_TARGET_GUMMIBOOT
+ 	select BR2_PACKAGE_GNU_EFI
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	help
+ 	  gummiboot is a simple UEFI boot manager which executes
+@@ -24,5 +23,5 @@ config BR2_TARGET_GUMMIBOOT
  
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
- 	bool "Dynamic using eudev"
--	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # eudev
- 	select BR2_PACKAGE_EUDEV
+ 	  http://freedesktop.org/wiki/Software/gummiboot/
  
--comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
-+comment "eudev needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
- 
- endchoice
- 
+-comment "gummiboot needs a toolchain w/ largefile, wchar"
+-	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
++comment "gummiboot needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
 -- 
 2.0.5
