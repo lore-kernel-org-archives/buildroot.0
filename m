@@ -1,41 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 20:56:46 +0200
-Subject: [Buildroot] [PATCH 11/35] pkg-generic: implement
- <pkg>-all-{source, legal-info, external-deps} targets
-In-Reply-To: <20150330174512.GD4318@free.fr>
-References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-12-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150329214739.GL4093@free.fr> <20150330174512.GD4318@free.fr>
-Message-ID: <20150330205646.7f919e51@free-electrons.com>
+Date: Mon, 30 Mar 2015 21:05:15 +0200
+Subject: [Buildroot] [git commit] x11r7/xproto_xproto: add hash file
+Message-ID: <20150330190753.23F2081809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=5f2011848f84985246edd5d79aaee7d01c514929
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Mar 2015 19:45:12 +0200, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xproto_xproto/xproto_xproto.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-> Actually, I may have to withdraw that reviewed tag of mine...
-> 
-> Testing patch 20/35 (Makefile: use <pkg>-all-legal-info to implement the
-> legal-info target) does not give the same result as previously:
-> 
->   - some packages that are not enabled get their legal-info "installed"
->   - some non-existing or disabled host packages have their legal-info
->     isntalled as well...
-> 
-> Not sure this is due to theis patch 11/35, or really due to 20/35 (even
-> though I have some clues as to incriminate patch 11...).
-> 
-> I'll be investigating this a bit later...
-
-Can you give some specific example, i.e a defconfig that exhibits the
-problem?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
+new file mode 100644
+index 0000000..6c5a24d
+--- /dev/null
++++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
+@@ -0,0 +1,2 @@
++# From http://comments.gmane.org/gmane.comp.freedesktop.xorg.announce/2243
++sha256	246f23a6b235c8008183deeb1dcd76d529a099f93600b648b399811b10ea110c	xproto-7.0.27.tar.bz2
