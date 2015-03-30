@@ -1,57 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 09:29:51 +0200
-Subject: [Buildroot] [PATCH 08/35] packages: apply custom patches using
- *.patch instead of <pkg>-*.patch
-In-Reply-To: <20150329213551.GI4093@free.fr>
-References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150329213551.GI4093@free.fr>
-Message-ID: <20150330092951.7ec4a63d@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 30 Mar 2015 10:03:52 +0200
+Subject: [Buildroot] [PATCH v3] gst1-imx: add package
+In-Reply-To: <55094E57.8080706@lucaceresoli.net>
+References: <1426614168.3279.10.camel@jablotron.cz>
+ <55094E57.8080706@lucaceresoli.net>
+Message-ID: <55190368.4010400@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Luca, Rostislav, All,
 
-On Sun, 29 Mar 2015 23:35:51 +0200, Yann E. MORIN wrote:
+On 03/18/2015 11:07 AM, Luca Ceresoli wrote:
+> Dear Rostislav,
+>
+> Rostislav Lisovy wrote:
+>> Hello everyone;
+>> Is there any chance the patch (in $subject)
+>> https://www.marc.info/?l=buildroot&m=141550615919434
+>> will be merged into the mainline Buildroot?
+>>
+>> After changing the GST1_IMX_VERSION to the newest 0.10.1
+>> everything compiles fine (the patch applies to the master as well).
+>
+> I agree it should be merged. Or rejected, it there's a reason to do so.
+>
+> Did you run-test it? Please specify what you tested, and formally add
+> your Tested-by tag. This makes it more likely for a patch to be merged.
+> See the manual [1] for details about reviewers tags.
+>
+> Then Gary or you could resend the patch with the version updated.
+>
+> [1]
+> http://buildroot.net/downloads/manual/manual.html#_reviewing_and_testing_patches
 
-> At first, I was wondering if we could not simply get rid of al those
-> custom hooks, and do something like:
-> 
->     BR2_GLOBAL_PATCH_DIR += $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)
-> 
-> and so on for the others.
-> 
-> But it turns out that we're only looking into sub-directories of
-> BR2_GLOBAL_PATCH_DIR, so the above sould not work.
-
-No, it does not work, because BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
-is directly the directory where the patches are, while
-BR2_GLOBAL_PATCH_DIR expects the at91bootstrap patches to be in an
-at91boostrap/ directory.
-
-> Second, I'm afraid this would break the case where someone has all the
-> patches in a single directory, and use the 'package' prefix to
-> differentiate what package a patch would apply, like so:
-> 
->     /path/to/my/patches/at91bootstrap-patch-1.patch
->     /path/to/my/patches/at91bootstrap3-patch-1.patch
->     /path/to/my/patches/barebox-patch-1.patch
->     /path/to/my/patches/linux-patch-1.patch
->     ...
-> 
-> This change would break that setup, would it not?
-
-Yes, it would. But on the previous iterations of those patches, Arnout
-said it was OK to break this setup. See
-http://lists.busybox.net/pipermail/buildroot/2015-March/123006.html.
+I will resend the updated patch today.
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Gary
