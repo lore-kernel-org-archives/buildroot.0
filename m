@@ -1,48 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Mar 2015 19:59:34 +0300
-Subject: [Buildroot] [PATCH 1/1] gnuradio: depends on shared libs
-In-Reply-To: <1427737015-12068-1-git-send-email-gwenj@trabucayre.com>
-References: <1427737015-12068-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20150330165934.GJ12479@tarshish>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Mon, 30 Mar 2015 18:59:34 +0200
+Subject: [Buildroot] [PATCH] logrotate: Bump version to 3.8.9
+In-Reply-To: <20150330175237.530fba0d@free-electrons.com>
+References: <1427675556-9240-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+ <20150330175237.530fba0d@free-electrons.com>
+Message-ID: <CA+sos784ChOKF0_Mbzm__caPV3CSmmG0+0R-GfKYdngBktkJXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gwenhael Goavec-Merou,
+Dear Thomas Petazzoni,
 
-On Mon, Mar 30, 2015 at 07:36:55PM +0200, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> volk must be compiled with toolchain built with shared lib to avoid :
-> attempted static link of dynamic object `../lib/libvolk.so.0.0.0'
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/gnuradio/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-> index 274afaa..bdf701c 100644
-> --- a/package/gnuradio/Config.in
-> +++ b/package/gnuradio/Config.in
-> @@ -1,5 +1,6 @@
-> -comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar"
-> +comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar and shared libs"
->  	depends on BR2_USE_MMU
-> +	depends on BR2_STATIC_LIBS
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_LARGEFILE || \
->  		!BR2_INET_IPV6
+On Mon, Mar 30, 2015 at 5:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Beno?t Th?baudeau,
+>
+> On Mon, 30 Mar 2015 02:32:36 +0200, Beno?t Th?baudeau wrote:
+>
+>>  LOGROTATE_DEPENDENCIES = popt host-pkgconf
+>> +LOGROTATE_AUTORECONF = YES
+>
+> Why do we want to autoreconf ?
 
-Should add '|| BR2_STATIC_LIBS' to this list of ORed dependencies to get the 
-intended behaviour. Otherwise the comment will not be shown when 
-!BR2_STATIC_LIBS.
+Because there is no configure script coming with the package, only
+configure.ac. Another solution would be to run autogen.sh, which
+should avoid the need for 0001-make-autoreconfable.patch (required for
+the NEWS and the like files missing error, or these files could be
+touched as an alternative post-patch or pre-configure hook).
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards,
+Beno?t
