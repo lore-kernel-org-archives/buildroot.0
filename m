@@ -1,37 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 18:07:34 -0300
-Subject: [Buildroot] [PATCH v3 15/15] toolchain-common: drop BR2_LARGEFILE
-In-Reply-To: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427749654-30153-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427749654-30153-16-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Mar 2015 23:10:56 +0200
+Subject: [Buildroot] [PATCH] batctl: fix musl builds
+In-Reply-To: <20150327170415.GA4890@vostro>
+References: <20150327170415.GA4890@vostro>
+Message-ID: <20150330231056.503b3c3d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's now unused so remove it.
+Dear Alex Suykov,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- toolchain/toolchain-common.in | 4 ----
- 1 file changed, 4 deletions(-)
+On Fri, 27 Mar 2015 19:04:15 +0200, Alex Suykov wrote:
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 7eb22ce..13c684d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -5,10 +5,6 @@
- # so put it here instead
- source "package/gdb/Config.in.host"
- 
--config BR2_LARGEFILE
--	bool
--	default y
--
- config BR2_INET_IPV6
- 	bool
- 
+> diff --git a/package/batctl/0001-musl-netinet.patch b/package/batctl/0001-musl-netinet.patch
+
+This patch is badly named: 0001-musl-netinet, while it also fixes
+things unrelated to netinet: the __be16/__be32 types. So either name it
+0001-musl-fixes, or better maybe, split it in two patches.
+
+Also, can you submit the corresponding patches upstream?
+
+Thanks,
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
