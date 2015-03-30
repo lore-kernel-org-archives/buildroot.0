@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 23:30:28 +0200
-Subject: [Buildroot] [git commit] arch/sparc: doesn't have atomics
-Message-ID: <20150330213034.64D6081640@busybox.osuosl.org>
+Date: Mon, 30 Mar 2015 23:30:44 +0200
+Subject: [Buildroot] [PATCH] arch/sparc: doesn't have atomics
+In-Reply-To: <1427636469-9491-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427636469-9491-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150330233044.591124bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7428ffe3375712871a83355b2752096f35992025
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Cores older than v9 don't seem to have atomics so remove it.
-Fixes a test build of pulseaudio for example.
+On Sun, 29 Mar 2015 10:41:09 -0300, Gustavo Zacarias wrote:
+> Cores older than v9 don't seem to have atomics so remove it.
+> Fixes a test build of pulseaudio for example.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  arch/Config.in.sparc | 3 ---
+>  1 file changed, 3 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.sparc |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+Applied, thanks.
 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index 4e502d5..cc10e8d 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -17,9 +17,6 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "BIG"
- 
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_CPU
- 	default "leon3"		if BR2_sparc_leon3
- 	default "v8"		if BR2_sparc_v8
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
