@@ -1,43 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 17:43:36 -0300
-Subject: [Buildroot] [PATCH 1/3] libgtk2: bump to version 2.24.27
-Message-ID: <1427748218-24477-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 30 Mar 2015 17:43:37 -0300
+Subject: [Buildroot] [PATCH 2/3] libgtk2: drop libxcomposite duplicate dep
+In-Reply-To: <1427748218-24477-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427748218-24477-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1427748218-24477-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
+It's got a mandatory dependency on libxcomposite and an autodep on it.
+AFAIK it's mandatory so drop the autodep.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libgtk2/libgtk2.hash | 2 ++
- package/libgtk2/libgtk2.mk   | 3 +--
- 2 files changed, 3 insertions(+), 2 deletions(-)
- create mode 100644 package/libgtk2/libgtk2.hash
+ package/libgtk2/libgtk2.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
-new file mode 100644
-index 0000000..c2189f8
---- /dev/null
-+++ b/package/libgtk2/libgtk2.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.27.sha256sum
-+sha256	20cb10cae43999732a9af2e9aac4d1adebf2a9c2e1ba147050976abca5cd24f4	gtk+-2.24.27.tar.xz
 diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index f52dfaf..39c629c 100644
+index 39c629c..ceb4864 100644
 --- a/package/libgtk2/libgtk2.mk
 +++ b/package/libgtk2/libgtk2.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+@@ -111,10 +111,6 @@ ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
+ 	LIBGTK2_DEPENDENCIES += xlib_libXfixes
+ endif
  
- LIBGTK2_VERSION_MAJOR = 2.24
--LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).18
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
+-	LIBGTK2_DEPENDENCIES += xlib_libXcomposite
+-endif
 -
-+LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).27
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
- LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
+ 	LIBGTK2_DEPENDENCIES += xlib_libXdamage
+ endif
 -- 
 2.0.5
