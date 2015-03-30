@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 23:31:14 +0200
-Subject: [Buildroot] [git commit] logrotate: add hash file
-Message-ID: <20150330213411.0C0A38181B@busybox.osuosl.org>
+Date: Mon, 30 Mar 2015 23:34:39 +0200
+Subject: [Buildroot] [PATCH v2] logrotate: add hash file
+In-Reply-To: <1427748845-10587-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+References: <1427748845-10587-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
+Message-ID: <20150330233439.043b5073@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38a79a4685b5ece68263f2defb0858a56bb76a1c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Beno?t Th?baudeau,
 
-Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/logrotate/logrotate.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Mon, 30 Mar 2015 22:54:05 +0200, Beno?t Th?baudeau wrote:
+> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
+> ---
+>  package/logrotate/logrotate.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/logrotate/logrotate.hash
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-new file mode 100644
-index 0000000..ef537a9
---- /dev/null
-+++ b/package/logrotate/logrotate.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 700ed7ce9072a1cca324779a74797dfaefdae37ac50a817134b947c4ded1dfa7 logrotate-3.8.9.tar.gz
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
