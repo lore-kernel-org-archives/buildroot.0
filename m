@@ -1,94 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Mar 2015 23:21:07 +0200
-Subject: [Buildroot] [PATCH 21/35] Makefile: simplify show-targets
-In-Reply-To: <1427650429-9293-22-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-22-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150330212107.GF4318@free.fr>
+Date: Mon, 30 Mar 2015 23:22:59 +0200
+Subject: [Buildroot] [PATCH v2 2/3] libgtk2: drop libxcomposite
+ mandatory dep
+In-Reply-To: <1427750190-10801-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1427750190-10801-1-git-send-email-gustavo@zacarias.com.ar>
+ <1427750190-10801-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150330212259.GG4318@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Gustavo, All,
 
-On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> show-targets is only used currently by the graph-depends script, which
-> already recurses into the dependencies of the selected packages to
-> build the dependency graph. Therefore, dumping the contents of
-> $(PACKAGES) and $(ROOTFS_TARGETS) is sufficient: $(HOST_DEPS) and
-> $(TARGET_HOST_DEPS) will contain packages that are dependencies of
-> packages already listed in $(PACKAGES), which graph-depends will
-> discover by itself.
+On 2015-03-30 18:16 -0300, Gustavo Zacarias spake thusly:
+> It's not selected, not required and duplicate with the autodep.
 > 
-> This allows to remove one more usage of $(HOST_DEPS) and
-> $(TARGET_HOST_DEPS), which is one more step towards their removal.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-This means a lot of host packages no longer show up in show-targets.
-
-See attached .config , and run show-targets before and after that patch
-is applied:
-
-    $ make show-targets |sed -r -e 's/ /\n/g' |sort >targets.before
-    [apply patch]
-    $ make show-targets |sed -r -e 's/ /\n/g' |sort >targets.after
-    $ diff -du targets.before targets.after |diffstat
-     targets.after |  110     0   110     0 ----------------------------------------------------------
-     1 file changed, 110 deletions(-)
-    $ diff -du targets.before targets.after
-    --- targets.before2015-03-30 23:11:42.295462498 +0200
-    +++ ta  rgets.after2015-03-30 23:11:51.587574784 +0200
-    @@ -154,133 +154,23  @@
-     hans
-     harfbuzz
-     /home/ymorin/dev/buildroot/buildroot
-    -host-autoconf
-    -host-autoconf
-    -host-autoconf-archive
-    -host-automake
-    -host-automake
-    -host-bdwgc
-    [--SNIP--]
-    -host-xutil_makedepend
-    -host-xz
-    -host-yasm
-    -host-zic
-    -host-zlib
-    -host-zlib
-     icu
-     igmpproxy
-     imagemagick
-
-I've done the same check with all your series applied, and those host
-packages do not reappear later...
-
-That's unfortunate, because a side effect is that graph-depends is now
-missing host packages (that do not have a Config.in entry).
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libgtk2/libgtk2.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index ab54dda..0709751 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -644,7 +644,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
->  	@rm -f $(LEGAL_WARNINGS)
+> diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+> index 39c629c..c92bbd2 100644
+> --- a/package/libgtk2/libgtk2.mk
+> +++ b/package/libgtk2/libgtk2.mk
+> @@ -82,8 +82,7 @@ LIBGTK2_CONF_OPTS += \
+>  	--x-libraries=$(STAGING_DIR)/usr/lib \
+>  	--with-gdktarget=x11
+>  LIBGTK2_DEPENDENCIES += \
+> -	xlib_libXcomposite fontconfig xlib_libX11 \
+> -	xlib_libXext xlib_libXrender
+> +	fontconfig xlib_libX11 xlib_libXext xlib_libXrender
 >  
->  show-targets:
-> -	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(PACKAGES) $(TARGETS_ROOTFS)
-> +	@echo $(PACKAGES) $(TARGETS_ROOTFS)
->  
->  graph-build: $(O)/build/build-time.log
->  	@install -d $(O)/graphs
+>  ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+>  	LIBGTK2_CONF_OPTS += --enable-xinerama
 > -- 
-> 2.1.0
+> 2.0.5
 > 
 > _______________________________________________
 > buildroot mailing list
