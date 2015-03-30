@@ -1,48 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 22:33:26 +0200
-Subject: [Buildroot] [PATCH v10] package/sysdig: New package
-In-Reply-To: <1427402489-28313-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1427402489-28313-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150330223326.7b21a348@free-electrons.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Mon, 30 Mar 2015 22:35:33 +0200
+Subject: [Buildroot] [PATCH] logrotate: add hash file
+Message-ID: <1427747733-8541-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
+---
+ package/logrotate/logrotate.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/logrotate/logrotate.hash
 
-On Thu, 26 Mar 2015 21:41:29 +0100, Angelo Compagnucci wrote:
-> Sysdig is open source, system-level exploration:
-> capture system state and activity from a running Linux
-> instance, then save, filter and analyze.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Thanks, applied. But I did a number of changes before applying:
-
-    [Thomas:
-     - remove unneeded 0001-makefile-driver-compile-options.patch, instead
-       pass KERNELDIR in the make options when building the driver, and
-       pass the contents of $(LINUX_MAKE_FLAGS) directly.
-     - use $(SYSDIG_BUILDDIR) instead of $(@D)/buildroot-build, so that
-       the package does not depend on the package infra using specifically
-       buildroot-build as the build subdirectory.
-     - use $(MAKE) -C <foo> instead of cd <foo>; $(MAKE).
-     - rename 0002 patch to 0001, since the 0001 patch is removed.]
-
-I think the most annoying part was the over-complicated solution to
-build the driver. My solution is simpler in the .mk file, and does not
-require patching.
-
-Can you look at submitting upstream a solution for the DKMS patch, like
-a new CMake option to enable/disable the DKMS stuff ?
-
-Thanks,
-
-Thomas
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+new file mode 100644
+index 0000000..8413081
+--- /dev/null
++++ b/package/logrotate/logrotate.hash
+@@ -0,0 +1,2 @@
++# No upstream hashes for the following:
++sha512 342533f321a1d77c0ca389fd0a393377ba73f10654aae163cbd35f8d5df25673f1aa6e44d0af42be5419d152a7dae11024d9005076bce0a3b3dad1f0e12b9c0d logrotate-3.8.9.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.0
