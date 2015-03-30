@@ -1,184 +1,147 @@
-From: =?windows-1252?Q?Guillaume_GARDET_-_Olis=E9o?= <guillaume.gardet@oliseo.fr>
-Date: Mon, 30 Mar 2015 11:33:30 +0200
-Subject: [Buildroot] [PATCH] sdl2: new package
-In-Reply-To: <20150313171451.197d5822@free-electrons.com>
-References: <1424944071-6473-1-git-send-email-guillaume.gardet@oliseo.fr>
- <20150313171451.197d5822@free-electrons.com>
-Message-ID: <5519186A.20503@oliseo.fr>
+From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Date: Mon, 30 Mar 2015 15:14:29 +0200
+Subject: [Buildroot] [PATCH V2] sdl2: new package
+In-Reply-To: <20150330145914.1f65f24c@free-electrons.com>
+References: <20150330145914.1f65f24c@free-electrons.com>
+Message-ID: <1427721269-8267-1-git-send-email-guillaume.gardet@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Changes in V2:
+* Fix SDL2 case: s/SDL2/sdl2/
+* Add dependency on toolchain with dynamic library
+* Remove unneeded 'SDL2' in sub-options names
+* Remove unneeded space after comma in if statement
+* Add explicit enable/disable options for tslib and alsa
+* Remove Mesa3D optional part
+* Move unconditionnal SDL2_CONF_OPTS upper
+* Remove host build
 
-Le 13/03/2015 17:14, Thomas Petazzoni a ?crit :
-> Dear Guillaume GARDET,
->
-> Sorry for not replying earlier. I had a look at your patch some time
-> ago and had some comments, but apparently never replied.
->
-> On Thu, 26 Feb 2015 10:47:51 +0100, Guillaume GARDET wrote:
->
->> diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
->> new file mode 100644
->> index 0000000..5d0fe01
->> --- /dev/null
->> +++ b/package/sdl2/Config.in
->> @@ -0,0 +1,22 @@
->> +config BR2_PACKAGE_SDL2
->> +	bool "SDL2"
-> I know it's not the case for the existing SDL package, but we generally
-> prefer to have package names in lower-case in menuconfig, for
-> consistency. So s/SDL2/sdl2/ here.
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-ok
+---
+ package/Config.in      |  1 +
+ package/sdl2/Config.in | 26 +++++++++++++++++++++
+ package/sdl2/sdl2.mk   | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 89 insertions(+)
+ create mode 100644 package/sdl2/Config.in
+ create mode 100644 package/sdl2/sdl2.mk
 
->
->> +	help
->> +	  Simple DirectMedia Layer 2 - SDL2 is a library that allows
->> +	  programs portable low level access to a video framebuffer,
->> +	  audio output, mouse, and keyboard. It is not compatible with SDL1.
->> +
->> +	  http://www.libsdl.org/
-> Did you check with very basic toolchains that SDL2 builds fine? I'm
-> surprised you have really zero dependency on toolchain features. Can
-> you check for example with the following configurations:
->
->    http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config
->    http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config
->    http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config
->    http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config
->
-> You may discover that sdl2 depends on certain toolchain options.
-
-I used sdl (1) as a template which has no wuch deps, but I will test.
-
->
->> +config BR2_PACKAGE_SDL2_DIRECTFB
->> +	bool "SDL2 DirectFB video driver"
->> +	depends on BR2_PACKAGE_DIRECTFB
-> No need to repeat "SDL2" here, since this option is indented below the
-> "sdl2" main option.
-
-ok
-
->
->> diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
->> new file mode 100644
->> index 0000000..b9aa907
->> --- /dev/null
->> +++ b/package/sdl2/sdl2.mk
->> @@ -0,0 +1,67 @@
->> +################################################################################
->> +#
->> +# sdl2
->> +#
->> +################################################################################
->> +
->> +SDL2_VERSION = 2.0.3
->> +SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
->> +SDL2_SITE = http://www.libsdl.org/release
->> +SDL2_LICENSE = zlib
->> +SDL2_LICENSE_FILES = COPYING
->> +SDL2_INSTALL_STAGING = YES
->> +
->> +# We must enable static build to get compilation successful.
->> +SDL2_CONF_OPTS = --enable-static
-> Hum, this is a bit annoying, but OK.
->
->> +
->> +ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
->> +SDL2_DEPENDENCIES += directfb
->> +SDL2_CONF_OPTS += --enable-video-directfb=yes
->> +SDL2_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
->> +else
->> +SDL2_CONF_OPTS += --enable-video-directfb=no
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_SDL2_X11),y)
->> +SDL2_CONF_OPTS += --enable-video-x11=yes
->> +SDL2_DEPENDENCIES += \
->> +	xlib_libX11 xlib_libXext \
->> +	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER), xlib_libXrender) \
->> +	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR), xlib_libXrandr)
-> No space after the comma.
-
-ok
-
->
->> +else
->> +SDL2_CONF_OPTS += --enable-video-x11=no
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_TSLIB),y)
->> +SDL2_DEPENDENCIES += tslib
->> +endif
-> Please explicit the --enable-input-tslib / --disable-input-tslib.
-
-ok
-
->
->> +ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
->> +SDL2_DEPENDENCIES += alsa-lib
->> +endif
-> Same: --enable-alsa / --disable-alsa.
-
-ok
-
->
->> +
->> +ifeq ($(BR2_PACKAGE_MESA3D),y)
->> +SDL_DEPENDENCIES += mesa3d
->> +endif
-> What feature is this supposed to be enabling? mesa3d is an OpenGL
-> implementation, but it's not the only one. So if it's OpenGL related,
-> most likely this is not the right thing to do.
-
-Here, I also used sdl (1) package as a template. So, sdl (1) should be fixed too.
-
->
->> +SDL2_CONF_OPTS += \
->> +	--enable-pulseaudio=no \
->> +	--disable-arts \
->> +	--disable-esd
-> Please put this earlier, where the first non-conditional SDL2_CONF_OPTS
-> definition is.
-
-ok
-
->
->> +HOST_SDL2_CONF_OPTS += \
->> +	--enable-pulseaudio=no \
->> +	--enable-video-x11=no \
->> +	--disable-arts \
->> +	--disable-esd
-> Not needed I believe.
-
-ok. sdl1 has it too.
-
->
->> +
->> +# Remove the -Wl,-rpath option.
->> +define SDL2_FIXUP_SDL2_CONFIG
->> +	$(SED) 's%-Wl,-rpath,\$${libdir}%%' \
->> +		$(STAGING_DIR)/usr/bin/sdl2-config
->> +endef
->> +
->> +SDL2_POST_INSTALL_STAGING_HOOKS += SDL2_FIXUP_SDL2_CONFIG
->> +
->> +$(eval $(autotools-package))
->> +$(eval $(host-autotools-package))
-> Why do you have a host package? There is nothing that depends on it.
-
-Indeed. I used sdl1 has a template as said earlier. :(
-
->
-> Could you look at those comments, and resubmit an updated version
-> and/or comment on them as needed?
-
-Will send a V2.
-
-
-Guillaume
+diff --git a/package/Config.in b/package/Config.in
+index 566a78a..cf4949a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -219,6 +219,7 @@ endif
+ 	source "package/psplash/Config.in"
+ 	source "package/sawman/Config.in"
+ 	source "package/sdl/Config.in"
++	source "package/sdl2/Config.in"
+ 	source "package/sdl_gfx/Config.in"
+ 	source "package/sdl_image/Config.in"
+ 	source "package/sdl_mixer/Config.in"
+diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
+new file mode 100644
+index 0000000..18e4f75
+--- /dev/null
++++ b/package/sdl2/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_SDL2
++	depends on !BR2_STATIC_LIBS
++	bool "sdl2"
++	help
++	  Simple DirectMedia Layer 2 - SDL2 is a library that allows
++	  programs portable low level access to a video framebuffer,
++	  audio output, mouse, and keyboard. It is not compatible with SDL1.
++
++	  http://www.libsdl.org/
++
++comment "sdl2 needs a toolchain w/ dynamic library"
++        depends on BR2_STATIC_LIBS
++
++if BR2_PACKAGE_SDL2
++
++config BR2_PACKAGE_SDL2_DIRECTFB
++	bool "DirectFB video driver"
++	depends on BR2_PACKAGE_DIRECTFB
++
++config BR2_PACKAGE_SDL2_X11
++	bool "X11 video driver"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++
++endif
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+new file mode 100644
+index 0000000..6a3caaf
+--- /dev/null
++++ b/package/sdl2/sdl2.mk
+@@ -0,0 +1,62 @@
++################################################################################
++#
++# sdl2
++#
++################################################################################
++
++SDL2_VERSION = 2.0.3
++SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
++SDL2_SITE = http://www.libsdl.org/release
++SDL2_LICENSE = zlib
++SDL2_LICENSE_FILES = COPYING
++SDL2_INSTALL_STAGING = YES
++
++SDL2_CONF_OPTS += \
++	--enable-pulseaudio=no \
++	--disable-arts \
++	--disable-esd
++
++# We must enable static build to get compilation succesful.
++SDL2_CONF_OPTS += --enable-static
++
++ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
++SDL2_DEPENDENCIES += directfb
++SDL2_CONF_OPTS += --enable-video-directfb=yes
++SDL2_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
++else
++SDL2_CONF_OPTS += --enable-video-directfb=no
++endif
++
++ifeq ($(BR2_PACKAGE_SDL2_X11),y)
++SDL2_CONF_OPTS += --enable-video-x11=yes
++SDL2_DEPENDENCIES += \
++	xlib_libX11 xlib_libXext \
++	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER),xlib_libXrender) \
++	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR),xlib_libXrandr)
++else
++SDL2_CONF_OPTS += --enable-video-x11=no
++endif
++
++ifeq ($(BR2_PACKAGE_TSLIB),y)
++SDL2_DEPENDENCIES += tslib
++SDL2_CONF_OPTS += --enable-input-tslib
++else
++SDL2_CONF_OPTS += --disable-input-tslib
++endif
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++SDL2_DEPENDENCIES += alsa-lib
++SDL2_CONF_OPTS += --enable-alsa
++else
++SDL2_CONF_OPTS += --disable-alsa
++endif
++
++# Remove the -Wl,-rpath option.
++define SDL2_FIXUP_SDL2_CONFIG
++	$(SED) 's%-Wl,-rpath,\$${libdir}%%' \
++		$(STAGING_DIR)/usr/bin/sdl2-config
++endef
++
++SDL2_POST_INSTALL_STAGING_HOOKS += SDL2_FIXUP_SDL2_CONFIG
++
++$(eval $(autotools-package))
+-- 
+1.8.4.5
