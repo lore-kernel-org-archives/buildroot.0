@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 17:54:48 +0200
-Subject: [Buildroot] [PATCH] aiccu: fix uclibc builds
-In-Reply-To: <20150330111339.GA30483@vostro>
-References: <20150330111339.GA30483@vostro>
-Message-ID: <20150330175448.16518da9@free-electrons.com>
+Date: Mon, 30 Mar 2015 17:54:55 +0200
+Subject: [Buildroot] [git commit] musl: security bump to version 1.1.8
+Message-ID: <20150330155458.CD274803BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Suykov,
+commit: http://git.buildroot.net/buildroot/commit/?id=e0a944fad87c4e459d3c68df47e72a9f7e227c79
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Mar 2015 14:13:39 +0300, Alex Suykov wrote:
-> uClibc defines __GLIBC__ but does not provide res_nquery.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/17248fa7f4deaacdab9bb22a777f51209af11e60/
-> http://autobuild.buildroot.net/results/bf155246563e2f6c44e18f7ee423305600a68b7e/
-> http://autobuild.buildroot.net/results/32a8c566604e79bf2de7d7236b49b6ab40b8cefd/
-> http://autobuild.buildroot.net/results/4093e4679412b50048860299dcfc301927e2cabc/
-> 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/aiccu/0005-res-ninit.patch | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+CVE-2015-1817 - stack-based buffer overflow in IPv6 literal parsing.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/musl.hash |    2 +-
+ package/musl/musl.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 0e6a2f9..20bb2f8 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	d8e0aae287ecf8aa6500d3ed4131f33d216a7857dc7649a89125ffca6bf91599	musl-1.1.7.tar.gz
++sha256	fa928506415b9c555977daaf874c190eaf7fbbd16028cc5c5f33a00a83227813	musl-1.1.8.tar.gz
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 86674ca..6cba5bb 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUSL_VERSION = 1.1.7
++MUSL_VERSION = 1.1.8
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
