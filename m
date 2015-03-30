@@ -1,47 +1,54 @@
 From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
-Date: Mon, 30 Mar 2015 13:54:00 +0200
-Subject: [Buildroot] [PATCH 1/2] imx6sabresd: rename to imx6sabre
-In-Reply-To: <550D8D41.3080504@mind.be>
+Date: Mon, 30 Mar 2015 13:59:28 +0200
+Subject: [Buildroot] [PATCH 2/2] configs: add Freescale SABRE Auto board
+ support
+In-Reply-To: <550D9052.2000204@mind.be>
 References: <1426873317-22471-1-git-send-email-vincent.stehle@freescale.com>
- <550D8D41.3080504@mind.be>
-Message-ID: <55193958.2080806@freescale.com>
+ <1426873317-22471-2-git-send-email-vincent.stehle@freescale.com>
+ <550D9052.2000204@mind.be>
+Message-ID: <55193AA0.6030302@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/21/2015 04:24 PM, Arnout Vandecappelle wrote:
+On 03/21/2015 04:37 PM, Arnout Vandecappelle wrote:
+(board/freescale/imx6sabre/readme.txt)
 ..
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  I would introduce subheadings here for the two boards, so
+> 
+> Boot the SABRE board
+> ====================
+> 
+> SABRE SD
+> --------
+> ...
+> 
+> SABRE Auto
+> ----------
+> ...
 
 Hi Arnout,
 
-Thank you very much for reviewing!
+Thank you for your review; I will add the headings in v2 of both patches
+then.
 
-(too big a patch)
+(readme.txt)
 ..
-> So to simplify the review, I've replaced your mail below with the result of git
-> format-patch -M
+>> +- connect an RS-232 UART cable to CPU card debug port J18 and connect using a
+>  Shouldn't that be Debug UART DB9? I'm just looking at the quick start guide here...
 
-Thanks for the tips. I updated my git config as per your comments; my
-next patches should be better.
+You are right, J18 is indeed the DB9. I will mention both in the
+readme.txt in v2, so that it be completely unambiguous.
 
-(create-boot-sd.sh)
+(Freescale community webpages on buildroot on Sabre SD)
 ..
->  Since it is also used by imx53loco, perhaps it's better to put this script in
-> the freescale directory instead?
+>  I don't suppose you've created similar pages for the auto?
 
-That makes sense; I will send a v2 patch with the create-boot-sd.sh
-script in board/freescale/ then.
-
-(readme.txt mentioning sabre auto)
-..
->> +  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb or imx6q-sabreauto.dtb or
->> +    imx6dl-sabreauto.dtb
->  The auto things are only added by the second patch...
-
-Sorry, this is a mistake; thank you for spotting that.
+For the moment I do not have any page about Sabre Auto, sorry. Probably
+I should rather update and re-title the existing pages. This way, the
+DOC numbers referenced in the readme.txt would stay the same.
 
 Best regards,
 
