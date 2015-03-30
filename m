@@ -1,47 +1,41 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 30 Mar 2015 20:10:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] gnuradio: depends on shared libs
-Message-ID: <1427739026-13418-1-git-send-email-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Mar 2015 20:56:46 +0200
+Subject: [Buildroot] [PATCH 11/35] pkg-generic: implement
+ <pkg>-all-{source, legal-info, external-deps} targets
+In-Reply-To: <20150330174512.GD4318@free.fr>
+References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1427650429-9293-12-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150329214739.GL4093@free.fr> <20150330174512.GD4318@free.fr>
+Message-ID: <20150330205646.7f919e51@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Dear Yann E. MORIN,
 
-volk must be compiled with toolchain built with shared lib to avoid :
-attempted static link of dynamic object `../lib/libvolk.so.0.0.0'
+On Mon, 30 Mar 2015 19:45:12 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v1 -> v2:
- * Fix comment depend (Baruch)
----
- package/gnuradio/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> Actually, I may have to withdraw that reviewed tag of mine...
+> 
+> Testing patch 20/35 (Makefile: use <pkg>-all-legal-info to implement the
+> legal-info target) does not give the same result as previously:
+> 
+>   - some packages that are not enabled get their legal-info "installed"
+>   - some non-existing or disabled host packages have their legal-info
+>     isntalled as well...
+> 
+> Not sure this is due to theis patch 11/35, or really due to 20/35 (even
+> though I have some clues as to incriminate patch 11...).
+> 
+> I'll be investigating this a bit later...
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 274afaa..fe89c01 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -1,14 +1,15 @@
--comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar"
-+comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar and shared libs"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_LARGEFILE || \
--		!BR2_INET_IPV6
-+		!BR2_INET_IPV6 || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GNURADIO
- 	bool "gnuradio"
- 	depends on BR2_INET_IPV6 # boost
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # boost
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
+Can you give some specific example, i.e a defconfig that exhibits the
+problem?
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
