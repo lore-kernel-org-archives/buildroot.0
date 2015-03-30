@@ -1,65 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Mar 2015 18:33:36 +0200
-Subject: [Buildroot] [PATCH 19/35] fs: add rootfs dependencies to
-	PACKAGES
-In-Reply-To: <1427650429-9293-20-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-20-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150330163336.GC4318@free.fr>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 30 Mar 2015 19:36:55 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: depends on shared libs
+Message-ID: <1427737015-12068-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> The logic for creating most of the filesystem images requires a
-> certain number of host packages to be built. However, those packages
-> are not currently listed in the global PACKAGES variables, and they
-> are not dependencies of any other package listed in the PACKAGES
-> variable.
-> 
-> While it does not have any practical implications, it makes sense to
-> have those packages listed in the global PACKAGES variable, which this
-> commit implements.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+volk must be compiled with toolchain built with shared lib to avoid :
+attempted static link of dynamic object `../lib/libvolk.so.0.0.0'
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/gnuradio/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  fs/common.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index cac127f..41ee86d 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -106,6 +106,7 @@ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
->  
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
->  TARGETS_ROOTFS += rootfs-$(1)
-> +PACKAGES += $$(ROOTFS_$(2)_DEPENDENCIES)
->  endif
->  endef
->  
-> -- 
-> 2.1.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 274afaa..bdf701c 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -1,5 +1,6 @@
+-comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar"
++comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar and shared libs"
+ 	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_LARGEFILE || \
+ 		!BR2_INET_IPV6
+@@ -9,6 +10,7 @@ config BR2_PACKAGE_GNURADIO
+ 	depends on BR2_INET_IPV6 # boost
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE # boost
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.5
