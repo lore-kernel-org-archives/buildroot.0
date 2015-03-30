@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 30 Mar 2015 21:05:15 +0200
-Subject: [Buildroot] [git commit] x11r7/xproto_resourceproto: add hash file
-Message-ID: <20150330190753.7FE7D7FB0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] x11r7/xproto_renderproto: add hash file
+Message-ID: <20150330190753.893F97FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=949a426bb51604a2894051c76b1e17fa5aefabb4
+commit: http://git.buildroot.net/buildroot/commit/?id=6cebeb531cbbb834eabe105caf10becc21ac5445
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xproto_resourceproto/xproto_resourceproto.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ .../xproto_renderproto/xproto_renderproto.hash     |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xproto_resourceproto/xproto_resourceproto.hash b/package/x11r7/xproto_resourceproto/xproto_resourceproto.hash
+diff --git a/package/x11r7/xproto_renderproto/xproto_renderproto.hash b/package/x11r7/xproto_renderproto/xproto_renderproto.hash
 new file mode 100644
-index 0000000..5ceb1c0
+index 0000000..92763da
 --- /dev/null
-+++ b/package/x11r7/xproto_resourceproto/xproto_resourceproto.hash
-@@ -0,0 +1,3 @@
-+# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/1404
-+md5	cfdb57dae221b71b2703f8e2980eaaf4	resourceproto-1.2.0.tar.bz2
-+sha1	9ff9bb9243b0474330959dc3853973523c9dd9ce	resourceproto-1.2.0.tar.bz2
++++ b/package/x11r7/xproto_renderproto/xproto_renderproto.hash
+@@ -0,0 +1,2 @@
++# From http://www.x.org/archive/current/src/everything/CHECKSUMS
++sha256	06735a5b92b20759204e4751ecd6064a2ad8a6246bb65b3078b862a00def2537	renderproto-0.11.1.tar.bz2
