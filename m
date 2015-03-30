@@ -1,54 +1,60 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 30 Mar 2015 15:30:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: Security bump to version
-	0.10.38
-Message-ID: <1427722244-11737-1-git-send-email-joerg.krause@embedded.rocks>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 30 Mar 2015 15:37:48 +0200
+Subject: [Buildroot] [PATCH] python modules search in non english locale
+ (zlib, ...)
+In-Reply-To: <20150330134929.09fc5de7@free-electrons.com>
+References: <5515E2AC.3010100@armadeus.com>
+ <20150329144607.0e60928f@free-electrons.com>
+ <55184DA0.1050901@armadeus.com> <20150329224013.0d330434@free-electrons.com>
+ <CAGm1_ktFjO8KyQTOTDnKo1bLbhjwBpyw7Li=T6sLAf=Vab71=w@mail.gmail.com>
+ <20150330134929.09fc5de7@free-electrons.com>
+Message-ID: <CAGm1_kv-5-ikeo+KLzPNHR2rEGm5zFO6PLJP0EiHdagfs+GDjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 0.10.38 upgrades OpenSSL to version 1.0.1m, which includes fixes for
-several CVEs:
-  - CVE-2015-0204
-  - CVE-2015-0286
-  - CVE-2015-0287
-  - CVE-2015-0289
-  - CVE-2015-0292
-  - CVE-2015-0293
-  - CVE-2015-0209
-  - CVE-2015-0288
+On Mon, Mar 30, 2015 at 1:49 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yegor Yefremov,
+>
+> On Mon, 30 Mar 2015 13:05:09 +0200, Yegor Yefremov wrote:
+>
+>> Can confirm, that I'm having the same issue with my German openSUSE
+>> 12.1 machine. Exporting LANGUAGE=en_US helped. haven't tried LC_ALL
+>> yet. Python 2.7.9.
+>
+> Ok.
+>
+>> The whole stuff got screwed only lately. I've been using python-dpkt,
+>> that requires PYTHON_ZLIB for ages and had no problems on this
+>> machine.
+>
+> Seems weird. Do we have an idea what broke things ? Can you try 2015.02,
+> 2014.11 and see if the issue also happens (or not) ?
 
-Version 0.10.37 comes with a fix for CVE-2015-0278.
+Hm. Strange. 2014.11 seem to have the same issue. Can it be the change
+from Python 2.7.8 to 2.7.9?
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+# cat /etc/os-release
+NAME=Buildroot
+VERSION=2014.11
+ID=buildroot
+VERSION_ID=2014.11
+PRETTY_NAME="Buildroot 2014.11"
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 5b868e9..792ebc1 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From upstream URL: http://nodejs.org/dist/v0.10.36/SHASUMS256.txt
--sha256	b9d7d1d0294bce46686b13a05da6fc5b1e7743b597544aa888e8e64a9f178c81  node-v0.10.36.tar.gz
-+# From upstream URL: http://nodejs.org/dist/v0.10.38/SHASUMS256.txt
-+sha256	513da8ed5e48abefdfab664f1cabc160238d314a0481148804aff8fc6552b78b  node-v0.10.38.tar.gz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 89faa6c..e8a2c27 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 0.10.36
-+NODEJS_VERSION = 0.10.38
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
--- 
-2.3.4
+I'm also working with en englich Xubuntu VM. I can imagine, that I
+haven't made updates/cleaning on my suse machine. Most upstream work
+was made with Xubuntu.
+
+>> I think this bug (https://bugs.busybox.net/show_bug.cgi?id=7971) is
+>> also locale related.
+>
+> Ok.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
