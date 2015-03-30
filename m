@@ -1,37 +1,19 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 14:59:14 +0200
-Subject: [Buildroot] [PATCH] sdl2: new package
-In-Reply-To: <551946AF.6090008@oliseo.fr>
-References: <1424944071-6473-1-git-send-email-guillaume.gardet@oliseo.fr>
- <20150313171451.197d5822@free-electrons.com>
- <551946AF.6090008@oliseo.fr>
-Message-ID: <20150330145914.1f65f24c@free-electrons.com>
+From: Al West <al.west@v-nova.com>
+Date: Mon, 30 Mar 2015 12:35:38 +0000
+Subject: [Buildroot] Building with CUDA but no X
+Message-ID: <AMSPR03MB0513F1D64EB83431C2B38D5CEF50@AMSPR03MB051.eurprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume GARDET - Olis?o,
+Hi,
 
-On Mon, 30 Mar 2015 14:50:55 +0200, Guillaume GARDET - Olis?o wrote:
-
-> >    http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config
-> 
-> This one fails with:
-> "dlfcn.h: No such file or directory"
-> 
-> WHat would be the right "dpends on" option?
-
-depends on !BR2_STATIC_LIBS
-
-and the appropriate comment. See section "17.2.2. Dependencies on
-target and toolchain options" in the Buildroot manual.
+I have a requirement where I want to build a system using Nvidia & CUDA.  However, in order to enable select of this option it is currently necessary to enable Modular X.org.  Would it be possible to use build root to install the Nvidia module and CUDA libraries without having to drag in a complete video rendering system.  I will try removing the requirement in package\nvidia-driver\Config.in
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Al
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150330/47903371/attachment.html>
