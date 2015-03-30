@@ -1,44 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 13:49:29 +0200
-Subject: [Buildroot] [PATCH] python modules search in non english locale
- (zlib, ...)
-In-Reply-To: <CAGm1_ktFjO8KyQTOTDnKo1bLbhjwBpyw7Li=T6sLAf=Vab71=w@mail.gmail.com>
-References: <5515E2AC.3010100@armadeus.com>
- <20150329144607.0e60928f@free-electrons.com>
- <55184DA0.1050901@armadeus.com>
- <20150329224013.0d330434@free-electrons.com>
- <CAGm1_ktFjO8KyQTOTDnKo1bLbhjwBpyw7Li=T6sLAf=Vab71=w@mail.gmail.com>
-Message-ID: <20150330134929.09fc5de7@free-electrons.com>
+From: =?UTF-8?B?VmluY2VudCBTdGVobMOp?= <vincent.stehle@freescale.com>
+Date: Mon, 30 Mar 2015 13:54:00 +0200
+Subject: [Buildroot] [PATCH 1/2] imx6sabresd: rename to imx6sabre
+In-Reply-To: <550D8D41.3080504@mind.be>
+References: <1426873317-22471-1-git-send-email-vincent.stehle@freescale.com>
+ <550D8D41.3080504@mind.be>
+Message-ID: <55193958.2080806@freescale.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+On 03/21/2015 04:24 PM, Arnout Vandecappelle wrote:
+..
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-On Mon, 30 Mar 2015 13:05:09 +0200, Yegor Yefremov wrote:
+Hi Arnout,
 
-> Can confirm, that I'm having the same issue with my German openSUSE
-> 12.1 machine. Exporting LANGUAGE=en_US helped. haven't tried LC_ALL
-> yet. Python 2.7.9.
+Thank you very much for reviewing!
 
-Ok.
+(too big a patch)
+..
+> So to simplify the review, I've replaced your mail below with the result of git
+> format-patch -M
 
-> The whole stuff got screwed only lately. I've been using python-dpkt,
-> that requires PYTHON_ZLIB for ages and had no problems on this
-> machine.
+Thanks for the tips. I updated my git config as per your comments; my
+next patches should be better.
 
-Seems weird. Do we have an idea what broke things ? Can you try 2015.02,
-2014.11 and see if the issue also happens (or not) ?
+(create-boot-sd.sh)
+..
+>  Since it is also used by imx53loco, perhaps it's better to put this script in
+> the freescale directory instead?
 
-> I think this bug (https://bugs.busybox.net/show_bug.cgi?id=7971) is
-> also locale related.
+That makes sense; I will send a v2 patch with the create-boot-sd.sh
+script in board/freescale/ then.
 
-Ok.
+(readme.txt mentioning sabre auto)
+..
+>> +  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb or imx6q-sabreauto.dtb or
+>> +    imx6dl-sabreauto.dtb
+>  The auto things are only added by the second patch...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Sorry, this is a mistake; thank you for spotting that.
+
+Best regards,
+
+V.
