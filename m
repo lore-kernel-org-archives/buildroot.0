@@ -1,13 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Mar 2015 18:22:53 +0200
-Subject: [Buildroot] [PATCH 08/35] packages: apply custom patches using
- *.patch instead of <pkg>-*.patch
-In-Reply-To: <20150330092951.7ec4a63d@free-electrons.com>
+Date: Mon, 30 Mar 2015 18:31:18 +0200
+Subject: [Buildroot] [PATCH 18/35] Makefile: rename TARGETS to PACKAGES
+In-Reply-To: <1427650429-9293-19-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150329213551.GI4093@free.fr>
- <20150330092951.7ec4a63d@free-electrons.com>
-Message-ID: <20150330162253.GA4318@free.fr>
+ <1427650429-9293-19-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150330163118.GB4318@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,48 +13,164 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2015-03-30 09:29 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 29 Mar 2015 23:35:51 +0200, Yann E. MORIN wrote:
+On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
+> For clarity, this commit renames the TARGETS variable to the more
+> meaningful PACKAGES variable. Indeed, only packages (handled by one of
+> the package infrastructures) should be list in this variable, and not
+
+... should be listed...
+
+> other random non-package targets.
 > 
-> > At first, I was wondering if we could not simply get rid of al those
-> > custom hooks, and do something like:
-> > 
-> >     BR2_GLOBAL_PATCH_DIR += $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)
-> > 
-> > and so on for the others.
-> > 
-> > But it turns out that we're only looking into sub-directories of
-> > BR2_GLOBAL_PATCH_DIR, so the above sould not work.
-> 
-> No, it does not work, because BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
-> is directly the directory where the patches are, while
-> BR2_GLOBAL_PATCH_DIR expects the at91bootstrap patches to be in an
-> at91boostrap/ directory.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile               | 22 +++++++++++-----------
+>  package/pkg-generic.mk |  2 +-
+>  system/system.mk       |  2 +-
 
-Yup, that was my conclusion, too.
+You're missing matchbox, which has (probably legacy) hand-written
+TARGETS:
 
-> > Second, I'm afraid this would break the case where someone has all the
-> > patches in a single directory, and use the 'package' prefix to
-> > differentiate what package a patch would apply, like so:
-> > 
-> >     /path/to/my/patches/at91bootstrap-patch-1.patch
-> >     /path/to/my/patches/at91bootstrap3-patch-1.patch
-> >     /path/to/my/patches/barebox-patch-1.patch
-> >     /path/to/my/patches/linux-patch-1.patch
-> >     ...
-> > 
-> > This change would break that setup, would it not?
-> 
-> Yes, it would. But on the previous iterations of those patches, Arnout
-> said it was OK to break this setup. See
-> http://lists.busybox.net/pipermail/buildroot/2015-March/123006.html.
+    ifeq ($(BR2_PACKAGE_MATCHBOX),y)
+    include $(sort $(wildcard package/matchbox/*/*.mk))
+    TARGETS += matchbox-lib matchbox-wm
+    endif
 
-Yup, that was my conclusion, too.
+This assignment should probably just go away now.
 
-:-)
+Also, there is a reference to TARGETS in support/scripts/graph-depends:
+
+    # Execute the "make show-targets" command to get the list of the main
+    # Buildroot TARGETS and return it formatted as a Python list. This
+    # list is used as the starting point for full dependency graphs
 
 Regards,
 Yann E. MORIN.
+
+>  3 files changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 15341be..0577b3f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -302,7 +302,7 @@ unexport MACHINE
+>  
+>  GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+>  
+> -TARGETS :=
+> +PACKAGES :=
+>  
+>  # silent mode requested?
+>  QUIET := $(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-q)
+> @@ -394,16 +394,16 @@ include fs/common.mk
+>  
+>  include $(BR2_EXTERNAL)/external.mk
+>  
+> -TARGETS_SOURCE := $(patsubst %,%-source,$(TARGETS))
+> +PACKAGES_SOURCE := $(patsubst %,%-source,$(PACKAGES))
+>  
+>  # host-* dependencies have to be handled specially, as those aren't
+> -# visible in Kconfig and hence not added to a variable like TARGETS.
+> +# visible in Kconfig and hence not added to a variable like PACKAGES.
+>  # instead, find all the host-* targets listed in each <PKG>_DEPENDENCIES
+>  # variable for each enabled target.
+>  # Notice: this only works for newstyle gentargets/autotargets packages
+>  TARGETS_HOST_DEPS = $(sort $(filter host-%,$(foreach dep,\
+>  		$(addsuffix _DEPENDENCIES,\
+> -			$(call UPPERCASE,$(TARGETS) $(TARGETS_ROOTFS))),\
+> +			$(call UPPERCASE,$(PACKAGES) $(TARGETS_ROOTFS))),\
+>  		$($(dep)))))
+>  # Host packages can in turn have their own dependencies. Likewise find
+>  # all the package names listed in the HOST_<PKG>_DEPENDENCIES for each
+> @@ -415,8 +415,8 @@ HOST_DEPS = $(sort $(foreach dep,\
+>  		$($(dep))))
+>  HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+>  
+> -TARGETS_LEGAL_INFO := $(patsubst %,%-legal-info,\
+> -		$(TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))
+> +PACKAGES_LEGAL_INFO := $(patsubst %,%-legal-info,\
+> +		$(PACKAGES) $(TARGETS_HOST_DEPS) $(HOST_DEPS))
+>  
+>  dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+>  	$(HOST_DIR) $(BINARIES_DIR)
+> @@ -510,7 +510,7 @@ endif
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+>  GLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
+>  ifneq ($(GLIBC_GENERATE_LOCALES),)
+> -TARGETS += host-localedef
+> +PACKAGES += host-localedef
+>  
+>  define GENERATE_GLIBC_LOCALES
+>  	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+> @@ -554,7 +554,7 @@ endif
+>  
+>  $(TARGETS_ROOTFS): target-finalize
+>  
+> -target-finalize: $(TARGETS)
+> +target-finalize: $(PACKAGES)
+>  	@$(call MESSAGE,"Finalizing target directory")
+>  	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+>  	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+> @@ -618,7 +618,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+>  		$(call MESSAGE,"Executing post-image script $(s)"); \
+>  		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+>  
+> -source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+> +source: $(PACKAGES_SOURCE) $(HOST_SOURCE)
+>  
+>  external-deps:
+>  	@$(MAKE1) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+> @@ -636,7 +636,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+>  	@$(call legal-warning,the toolchain has not been saved)
+>  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+>  
+> -legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+> +legal-info: dirs legal-info-clean legal-info-prepare $(PACKAGES_LEGAL_INFO) \
+>  		$(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST)
+>  	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
+>  	@if [ -r $(LEGAL_WARNINGS) ]; then \
+> @@ -647,7 +647,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+>  	@rm -f $(LEGAL_WARNINGS)
+>  
+>  show-targets:
+> -	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
+> +	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(PACKAGES) $(TARGETS_ROOTFS)
+>  
+>  graph-build: $(O)/build/build-time.log
+>  	@install -d $(O)/graphs
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index e1a51e4..f87ef0b 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -743,7 +743,7 @@ $(eval $(call check-deprecated-variable,$(2)_BUILD_OPT,$(2)_BUILD_OPTS))
+>  $(eval $(call check-deprecated-variable,$(2)_GETTEXTIZE_OPT,$(2)_GETTEXTIZE_OPTS))
+>  $(eval $(call check-deprecated-variable,$(2)_KCONFIG_OPT,$(2)_KCONFIG_OPTS))
+>  
+> -TARGETS += $(1)
+> +PACKAGES += $(1)
+>  
+>  ifneq ($$($(2)_PERMISSIONS),)
+>  PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+> diff --git a/system/system.mk b/system/system.mk
+> index 4a1eb4a..c95e436 100644
+> --- a/system/system.mk
+> +++ b/system/system.mk
+> @@ -35,7 +35,7 @@ TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
+>  endif
+>  
+>  ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+> -TARGETS += host-mkpasswd
+> +PACKAGES += host-mkpasswd
+>  endif
+>  
+>  define SET_NETWORK_LOCALHOST
+> -- 
+> 2.1.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
