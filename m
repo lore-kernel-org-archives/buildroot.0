@@ -1,46 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 23:29:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libseccomp: bump version to
- 2.2.0
-In-Reply-To: <1427638949-3191-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427638949-3191-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150330232926.2904e95b@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 30 Mar 2015 23:29:38 +0200
+Subject: [Buildroot] [PATCH v2 1/3] libgtk2: bump to version 2.24.27
+In-Reply-To: <1427750190-10801-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427750190-10801-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150330212938.GI4318@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Gustavo, All,
 
-On Sun, 29 Mar 2015 16:22:28 +0200, Bernd Kuhls wrote:
+On 2015-03-30 18:16 -0300, Gustavo Zacarias spake thusly:
+> Also add hash file.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-> diff --git a/package/libseccomp/0001-remove-static.patch b/package/libseccomp/0001-remove-static.patch
+Manually downloaded and checked the hash file.
 
-Do you think you could try to submit this upstream? If not, maybe we
-should just make the package depends on !BR2_STATIC_LIBS.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
-> index f87633e..6bca5c2 100644
-> --- a/package/libseccomp/libseccomp.hash
-> +++ b/package/libseccomp/libseccomp.hash
-> @@ -1,2 +1,2 @@
-> -# Locally computed:
-> -sha256  8812c11e407c383f5ad6afb84a88e5a0224477bcfe8ff03f0c548e5abaac841c  libseccomp-2.1.1.tar.gz
-> +# From https://github.com/seccomp/libseccomp/releases/tag/v2.2.0
-> +sha1	5aa8a230f8529d6ee777098550245e43d2247395fdfd5a2176e28cf7236f1b10	libseccomp-2.2.0.tar.gz
+Regards,
+Yann E. MORIN.
 
-Since you're switching to github, I've removed the hash file, because
-github does not guarantee to offer identical tarballs for a given
-release.
+> ---
+>  package/libgtk2/libgtk2.hash | 2 ++
+>  package/libgtk2/libgtk2.mk   | 3 +--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>  create mode 100644 package/libgtk2/libgtk2.hash
+> 
+> diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
+> new file mode 100644
+> index 0000000..c2189f8
+> --- /dev/null
+> +++ b/package/libgtk2/libgtk2.hash
+> @@ -0,0 +1,2 @@
+> +# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.27.sha256sum
+> +sha256	20cb10cae43999732a9af2e9aac4d1adebf2a9c2e1ba147050976abca5cd24f4	gtk+-2.24.27.tar.xz
+> diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+> index f52dfaf..39c629c 100644
+> --- a/package/libgtk2/libgtk2.mk
+> +++ b/package/libgtk2/libgtk2.mk
+> @@ -5,8 +5,7 @@
+>  ################################################################################
+>  
+>  LIBGTK2_VERSION_MAJOR = 2.24
+> -LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).18
+> -
+> +LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).27
+>  LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+>  LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+>  LIBGTK2_INSTALL_STAGING = YES
+> -- 
+> 2.0.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Committed with the hash file removed (for the static issue, I've kept
-your patch).
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150330/5a470665/attachment.asc>
