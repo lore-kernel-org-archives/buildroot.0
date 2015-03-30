@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 09:23:11 +0200
-Subject: [Buildroot] [PATCH 00/35] Package based 'source', 'legal-info',
- 'source-check' and 'external-deps'
-In-Reply-To: <20150329222805.GS4093@free.fr>
+Date: Mon, 30 Mar 2015 09:26:21 +0200
+Subject: [Buildroot] [PATCH 05/35] pkg-generic: allow full URLs for
+ <pkg>_EXTRA_DOWNLOADS
+In-Reply-To: <20150329210831.GF4093@free.fr>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150329222805.GS4093@free.fr>
-Message-ID: <20150330092311.0ea7e8a0@free-electrons.com>
+ <1427650429-9293-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150329210831.GF4093@free.fr>
+Message-ID: <20150330092621.46df4b0d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann E. MORIN,
 
-On Mon, 30 Mar 2015 00:28:05 +0200, Yann E. MORIN wrote:
+On Sun, 29 Mar 2015 23:08:31 +0200, Yann E. MORIN wrote:
 
-> Pfeww... I've gone through about half of it. I'll review the remaining
-> parts tomorow evening.
+> And here I was going to suggest you could squash the two together,
+> because they're basically doing exactly the same thing, but on
+> different sets. So I wondered why you did not catch this, even
+> though you state it explicitly in the commit log.
+> 
+> It would have been just possible to extend the existing loop over
+> _PATCH like so:
+> 
+>     $(foreach p,$($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS),\
+> 
+> And then, I noticed patch 33, which eventually gets rid of it anyway.
+> So, OK.
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks for the review!
+Yes, exactly, a later patch refactors completely this part of the code.
 
-> I will ask that you no longer fly too far away from .fr: when the
-> flights are too long, you come back with huge patch series. Come on,
-> drink a whiskey and look through the window, like anyone else! ;-)
-
-Actually, this series is not the result of one flight. I started it a
-long time ago, and never had the time of finishing it. The recent
-flights only allowed me to finalize the last bits of it.
-
-Regards,
+I must admit that the organization of the patches may not be optimal,
+but it's not easy to find a good split of things, while keeping patches
+small and minimal.
 
 Thomas
 -- 
