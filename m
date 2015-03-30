@@ -1,42 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 08:28:46 -0300
-Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.3.14
-Message-ID: <1427714926-13582-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Mar 2015 13:49:29 +0200
+Subject: [Buildroot] [PATCH] python modules search in non english locale
+ (zlib, ...)
+In-Reply-To: <CAGm1_ktFjO8KyQTOTDnKo1bLbhjwBpyw7Li=T6sLAf=Vab71=w@mail.gmail.com>
+References: <5515E2AC.3010100@armadeus.com>
+ <20150329144607.0e60928f@free-electrons.com>
+ <55184DA0.1050901@armadeus.com>
+ <20150329224013.0d330434@free-electrons.com>
+ <CAGm1_ktFjO8KyQTOTDnKo1bLbhjwBpyw7Li=T6sLAf=Vab71=w@mail.gmail.com>
+Message-ID: <20150330134929.09fc5de7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a two-byte stack overflow in DTLS 0.9 protocol (no CVE assigned
-yet).
+Dear Yegor Yefremov,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 30 Mar 2015 13:05:09 +0200, Yegor Yefremov wrote:
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 24da09d..53cf3fe 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	91bf1ef5c159b7f2176f972184545b287af6507ab55a543f6007d31406b97a99	gnutls-3.3.13.tar.xz
-+sha256	0dfa0030faad8909c1e904105198232d6bc0123cae8cf4933b2bac85ee7cec52	gnutls-3.3.14.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 0154b4d..0aee991 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+> Can confirm, that I'm having the same issue with my German openSUSE
+> 12.1 machine. Exporting LANGUAGE=en_US helped. haven't tried LC_ALL
+> yet. Python 2.7.9.
+
+Ok.
+
+> The whole stuff got screwed only lately. I've been using python-dpkt,
+> that requires PYTHON_ZLIB for ages and had no problems on this
+> machine.
+
+Seems weird. Do we have an idea what broke things ? Can you try 2015.02,
+2014.11 and see if the issue also happens (or not) ?
+
+> I think this bug (https://bugs.busybox.net/show_bug.cgi?id=7971) is
+> also locale related.
+
+Ok.
+
+Thomas
 -- 
-2.0.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
