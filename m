@@ -1,30 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 23:38:40 +0200
-Subject: [Buildroot] [git commit] pkg-generic: fix the logic showing the
-	"Downloading" message
-Message-ID: <20150330214111.759A17FB72@busybox.osuosl.org>
+Date: Mon, 30 Mar 2015 23:38:49 +0200
+Subject: [Buildroot] [git commit] pkg-generic: take into account
+	<pkg>_EXTRA_DOWNLOADS to display "Downloading" message
+Message-ID: <20150330214111.7FBE37FB72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=524a555ad1f81f132aaed0badaece1b8b95c8ae7
+commit: http://git.buildroot.net/buildroot/commit/?id=48296c5afd24cb7f81693fef70881b9737b55062
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though the .stamp_downloaded target is executed for each package
-being built, the pkg-generic infrastructure tries to not display the
-"Downloading" message when there is in fact nothing to download.
+The .stamp_downloaded target displays the "Downloading" message even
+if there is really something to download. However, this logic only
+checks for <pkg>_SOURCE and <pkg>_PATCH: it does not check if
+something needs to be downloaded in <pkg>_EXTRA_DOWNLOADS.
 
-Unfortunately, the logic was incorrect for the patch download: it
-forgot the fact that <pkg>_PATCH can contain either file names (in
-which case we assume the patch should be downloaded from <pkg>_SITE),
-or full URLs. The latter case was not properly handled, as we were
-checking if $(DL_DIR)/<full URL> existed, while we should be testing
-if $(DL_DIR)/`basename <full URL>` exists.
-
-This patch fixes that, which makes sure the "Downloading" message is
-displayed only when necessary.
+This commit fixes that, which makes sure that the "Downloading"
+message is displayed if one of the items in <pkg>_EXTRA_DOWNLOADS has
+not yet been downloaded.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
@@ -35,15 +30,15 @@ Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index c1b379b..b44d476 100644
+index b44d476..003fd69 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -77,7 +77,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+@@ -76,7 +76,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
  		$(call MESSAGE,"Downloading") ; \
  	else \
- 		for p in $($(PKG)_PATCH) ; do \
--			if test ! -e $(DL_DIR)/$$p ; then \
-+			if test ! -e $(DL_DIR)/`basename $$p` ; then \
+-		for p in $($(PKG)_PATCH) ; do \
++		for p in $($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS) ; do \
+ 			if test ! -e $(DL_DIR)/`basename $$p` ; then \
  				$(call MESSAGE,"Downloading") ; \
  				break ; \
- 			fi ; \
