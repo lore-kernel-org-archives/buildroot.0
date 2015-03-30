@@ -1,97 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Mar 2015 19:45:12 +0200
-Subject: [Buildroot] [PATCH 11/35] pkg-generic: implement
- <pkg>-all-{source, legal-info, external-deps} targets
-In-Reply-To: <20150329214739.GL4093@free.fr>
-References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-12-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150329214739.GL4093@free.fr>
-Message-ID: <20150330174512.GD4318@free.fr>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 30 Mar 2015 20:10:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] gnuradio: depends on shared libs
+Message-ID: <1427739026-13418-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On 2015-03-29 23:47 +0200, Yann E. MORIN spake thusly:
-> On 2015-03-29 19:33 +0200, Thomas Petazzoni spake thusly:
-> > In order to implement the global 'make source', 'make legal-info' and
-> > 'make external-deps' using the package infrastructure logic, this
-> > commit introduces a set of per-package targets that allow to
-> > recursively run the source/legal-info/external-deps actions on the
-> > dependencies of a given package.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+volk must be compiled with toolchain built with shared lib to avoid :
+attempted static link of dynamic object `../lib/libvolk.so.0.0.0'
 
-Actually, I may have to withdraw that reviewed tag of mine...
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+Changes v1 -> v2:
+ * Fix comment depend (Baruch)
+---
+ package/gnuradio/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Testing patch 20/35 (Makefile: use <pkg>-all-legal-info to implement the
-legal-info target) does not give the same result as previously:
-
-  - some packages that are not enabled get their legal-info "installed"
-  - some non-existing or disabled host packages have their legal-info
-    isntalled as well...
-
-Not sure this is due to theis patch 11/35, or really due to 20/35 (even
-though I have some clues as to incriminate patch 11...).
-
-I'll be investigating this a bit later...
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  package/pkg-generic.mk | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 08e4cad..ba24591 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -587,6 +587,12 @@ $(1)-graph-depends: graph-depends-requirements
-> >  			|tee $$(O)/graphs/$$(@).dot \
-> >  			|dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) -o $$(O)/graphs/$$(@).$$(BR_GRAPH_OUT)
-> >  
-> > +$(1)-all-source:       $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-source) $(1)-source
-> > +
-> > +$(1)-all-external-deps:        $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-external-deps) $(1)-external-deps
-> > +
-> > +$(1)-all-legal-info:   $$(foreach p,$$($(2)_FINAL_DEPENDENCIES),$$(p)-all-legal-info) $(1)-legal-info
-> > +
-> >  $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
-> >  
-> >  $(1)-clean-for-reinstall:
-> > -- 
-> > 2.1.0
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 274afaa..fe89c01 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -1,14 +1,15 @@
+-comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar"
++comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, largefile, wchar and shared libs"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_LARGEFILE || \
+-		!BR2_INET_IPV6
++		!BR2_INET_IPV6 || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_GNURADIO
+ 	bool "gnuradio"
+ 	depends on BR2_INET_IPV6 # boost
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE # boost
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.5
