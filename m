@@ -1,78 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Mar 2015 17:43:38 -0300
-Subject: [Buildroot] [PATCH 3/3] libgtk2: adjust style
-In-Reply-To: <1427748218-24477-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427748218-24477-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427748218-24477-3-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Mon, 30 Mar 2015 22:54:05 +0200
+Subject: [Buildroot] [PATCH v2] logrotate: add hash file
+Message-ID: <1427748845-10587-1-git-send-email-benoit.thebaudeau.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cleanup indentation and mention why we need AUTORECONF.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
 ---
- package/libgtk2/libgtk2.mk | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ package/logrotate/logrotate.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/logrotate/logrotate.hash
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index ceb4864..94d11f4 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -11,7 +11,7 @@ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJ
- LIBGTK2_INSTALL_STAGING = YES
- LIBGTK2_LICENSE = LGPLv2+
- LIBGTK2_LICENSE_FILES = COPYING
--
-+# For 0001-reduce-dependencies.patch
- LIBGTK2_AUTORECONF = YES
- 
- LIBGTK2_CONF_ENV = \
-@@ -86,33 +86,33 @@ LIBGTK2_DEPENDENCIES += \
- 	xlib_libXext xlib_libXrender
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
--	LIBGTK2_CONF_OPTS += --enable-xinerama
--	LIBGTK2_DEPENDENCIES += xlib_libXinerama
-+LIBGTK2_CONF_OPTS += --enable-xinerama
-+LIBGTK2_DEPENDENCIES += xlib_libXinerama
- else
--	LIBGTK2_CONF_OPTS += --disable-xinerama
-+LIBGTK2_CONF_OPTS += --disable-xinerama
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
--	LIBGTK2_CONF_OPTS += --with-xinput=yes
--	LIBGTK2_DEPENDENCIES += xlib_libXi
-+LIBGTK2_CONF_OPTS += --with-xinput=yes
-+LIBGTK2_DEPENDENCIES += xlib_libXi
- else
--	LIBGTK2_CONF_OPTS += --with-xinput=no
-+LIBGTK2_CONF_OPTS += --with-xinput=no
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXrandr
-+LIBGTK2_DEPENDENCIES += xlib_libXrandr
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXcursor
-+LIBGTK2_DEPENDENCIES += xlib_libXcursor
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXfixes
-+LIBGTK2_DEPENDENCIES += xlib_libXfixes
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
--	LIBGTK2_DEPENDENCIES += xlib_libXdamage
-+LIBGTK2_DEPENDENCIES += xlib_libXdamage
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+new file mode 100644
+index 0000000..ef537a9
+--- /dev/null
++++ b/package/logrotate/logrotate.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 700ed7ce9072a1cca324779a74797dfaefdae37ac50a817134b947c4ded1dfa7 logrotate-3.8.9.tar.gz
 -- 
-2.0.5
+2.1.0
