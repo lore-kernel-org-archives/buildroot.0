@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 22:57:38 +0200
-Subject: [Buildroot] [git commit] package/mplayer: add optional giflib
-	support
-Message-ID: <20150330210702.843138177F@busybox.osuosl.org>
+Date: Mon, 30 Mar 2015 22:39:43 +0200
+Subject: [Buildroot] [git commit] package/mplayer: needs host-pkgconf
+Message-ID: <20150330210702.7B5B08177F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c7373b370ca0edf54ebc3cc3f7cc67055219f55
+commit: http://git.buildroot.net/buildroot/commit/?id=6fb0b019221383b6bdc3820821c755e6d548709a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: Use --enable-gif / --disable-gif, and do not pass
---extra-libs.]
+mplayer's custom configure script can use pkg-config to discover
+dependencies.
+
+[Thomas: improve commit log.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/mplayer/mplayer.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
 diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 192a42e..70a8842 100644
+index b2530e4..192a42e 100644
 --- a/package/mplayer/mplayer.mk
 +++ b/package/mplayer/mplayer.mk
-@@ -100,6 +100,13 @@ else
- MPLAYER_CONF_OPTS += --disable-live
- endif
+@@ -11,6 +11,8 @@ MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+ MPLAYER_CFLAGS = $(TARGET_CFLAGS)
+ MPLAYER_LDFLAGS = $(TARGET_LDFLAGS)
  
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+MPLAYER_DEPENDENCIES += giflib
-+MPLAYER_CONF_OPTS += --enable-gif
-+else
-+MPLAYER_CONF_OPTS += --disable-gif
-+endif
++MPLAYER_DEPENDENCIES += host-pkgconf
 +
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
+ # mplayer needs pcm+mixer support, but configure fails to check for it
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
+ MPLAYER_DEPENDENCIES += alsa-lib
