@@ -1,56 +1,42 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 30 Mar 2015 14:13:39 +0300
-Subject: [Buildroot] [PATCH] aiccu: fix uclibc builds
-Message-ID: <20150330111339.GA30483@vostro>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 30 Mar 2015 08:23:41 -0300
+Subject: [Buildroot] [PATCH] musl: security bump to version 1.1.8
+Message-ID: <1427714621-13289-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc defines __GLIBC__ but does not provide res_nquery.
-
 Fixes:
-http://autobuild.buildroot.net/results/17248fa7f4deaacdab9bb22a777f51209af11e60/
-http://autobuild.buildroot.net/results/bf155246563e2f6c44e18f7ee423305600a68b7e/
-http://autobuild.buildroot.net/results/32a8c566604e79bf2de7d7236b49b6ab40b8cefd/
-http://autobuild.buildroot.net/results/4093e4679412b50048860299dcfc301927e2cabc/
+CVE-2015-1817 - stack-based buffer overflow in IPv6 literal parsing.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/aiccu/0005-res-ninit.patch | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/musl/musl.hash | 2 +-
+ package/musl/musl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/aiccu/0005-res-ninit.patch b/package/aiccu/0005-res-ninit.patch
-index 89770fb..faf38df 100644
---- a/package/aiccu/0005-res-ninit.patch
-+++ b/package/aiccu/0005-res-ninit.patch
-@@ -9,7 +9,7 @@
-  int getrrs(const char *label, int rrtype, void gotrec(unsigned int num, int type, const char *record))
-  {
- -#ifdef _LINUX
--+#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-  	struct __res_state	res;
-  #endif
-  	unsigned char		answer[8192];
-@@ -18,7 +18,7 @@
-  	uint32_t		ttl = 0;
-  
- -#ifdef _LINUX
--+#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-  	memset(&res, 0, sizeof(res));
-  	res.options = RES_DEBUG;
-  	res_ninit(&res);
-@@ -27,7 +27,7 @@
-  
-  	memset(answer, 0, sizeof(answer));
- -#ifdef _LINUX
--+#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-  	ret = res_nquery(&res, label, C_IN, rrtype, answer, sizeof(answer));
-  #else
-  	ret = res_query(label, C_IN, rrtype, answer, sizeof(answer));
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 0e6a2f9..20bb2f8 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	d8e0aae287ecf8aa6500d3ed4131f33d216a7857dc7649a89125ffca6bf91599	musl-1.1.7.tar.gz
++sha256	fa928506415b9c555977daaf874c190eaf7fbbd16028cc5c5f33a00a83227813	musl-1.1.8.tar.gz
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 86674ca..6cba5bb 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUSL_VERSION = 1.1.7
++MUSL_VERSION = 1.1.8
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
 -- 
-2.0.3
+2.0.5
