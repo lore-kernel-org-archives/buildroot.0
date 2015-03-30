@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Mar 2015 09:26:21 +0200
-Subject: [Buildroot] [PATCH 05/35] pkg-generic: allow full URLs for
- <pkg>_EXTRA_DOWNLOADS
-In-Reply-To: <20150329210831.GF4093@free.fr>
+Date: Mon, 30 Mar 2015 09:29:51 +0200
+Subject: [Buildroot] [PATCH 08/35] packages: apply custom patches using
+ *.patch instead of <pkg>-*.patch
+In-Reply-To: <20150329213551.GI4093@free.fr>
 References: <1427650429-9293-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1427650429-9293-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150329210831.GF4093@free.fr>
-Message-ID: <20150330092621.46df4b0d@free-electrons.com>
+ <1427650429-9293-9-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150329213551.GI4093@free.fr>
+Message-ID: <20150330092951.7ec4a63d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,40 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sun, 29 Mar 2015 23:08:31 +0200, Yann E. MORIN wrote:
+On Sun, 29 Mar 2015 23:35:51 +0200, Yann E. MORIN wrote:
 
-> And here I was going to suggest you could squash the two together,
-> because they're basically doing exactly the same thing, but on
-> different sets. So I wondered why you did not catch this, even
-> though you state it explicitly in the commit log.
+> At first, I was wondering if we could not simply get rid of al those
+> custom hooks, and do something like:
 > 
-> It would have been just possible to extend the existing loop over
-> _PATCH like so:
+>     BR2_GLOBAL_PATCH_DIR += $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)
 > 
->     $(foreach p,$($(PKG)_PATCH) $($(PKG)_EXTRA_DOWNLOADS),\
+> and so on for the others.
 > 
-> And then, I noticed patch 33, which eventually gets rid of it anyway.
-> So, OK.
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> But it turns out that we're only looking into sub-directories of
+> BR2_GLOBAL_PATCH_DIR, so the above sould not work.
 
-Yes, exactly, a later patch refactors completely this part of the code.
+No, it does not work, because BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
+is directly the directory where the patches are, while
+BR2_GLOBAL_PATCH_DIR expects the at91bootstrap patches to be in an
+at91boostrap/ directory.
 
-I must admit that the organization of the patches may not be optimal,
-but it's not easy to find a good split of things, while keeping patches
-small and minimal.
+> Second, I'm afraid this would break the case where someone has all the
+> patches in a single directory, and use the 'package' prefix to
+> differentiate what package a patch would apply, like so:
+> 
+>     /path/to/my/patches/at91bootstrap-patch-1.patch
+>     /path/to/my/patches/at91bootstrap3-patch-1.patch
+>     /path/to/my/patches/barebox-patch-1.patch
+>     /path/to/my/patches/linux-patch-1.patch
+>     ...
+> 
+> This change would break that setup, would it not?
+
+Yes, it would. But on the previous iterations of those patches, Arnout
+said it was OK to break this setup. See
+http://lists.busybox.net/pipermail/buildroot/2015-March/123006.html.
+
+Thanks,
 
 Thomas
 -- 
