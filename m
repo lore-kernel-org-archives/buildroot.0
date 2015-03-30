@@ -1,44 +1,34 @@
-From: Ernest Williams <realcontrols@gmail.com>
-Date: Mon, 30 Mar 2015 07:51:07 -0700
-Subject: [Buildroot] clapack libraries missing?: buildroot-2014.11
-Message-ID: <CADDnATcLG1SbgVZ8TB08J_yHU5vF7vKTPdwUZnFvcgewoUFdEg@mail.gmail.com>
+From: Rostislav Lisovy <lisovy@jablotron.cz>
+Date: Mon, 30 Mar 2015 17:33:21 +0200
+Subject: [Buildroot] [PATCH v4] gst1-imx: add package
+In-Reply-To: <1427710343-23255-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1427710343-23255-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1427729601.28675.3.camel@jablotron.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, 2015-03-30 at 12:12 +0200, Gary Bisson wrote:
+> Open-source GStreamer 1.0 plugins for i.MX6 platforms.
+> More info at https://github.com/Freescale/gstreamer-imx
+> 
+> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-I am using "buildroot-2014.11"
-I am using glibc and my target is INTEL x86_64
-Version of CLAPACK:
-CLAPACK_VERSION = 3.2.1
+Tested-by: Rostislav Lisovy <lisovy@jablotron.cz>
 
-I would like to use clapack but missing the following libraries after the
-install:
+My test scenario:
+gst-launch-1.0 -e v4l2src device=/dev/video0 ! \
+video/x-raw,width=640,height=480,framerate=15/1 ! \
+imxipuvideotransform ! \
+imxvpuenc_h264 idr-interval=16 bitrate=512 ! \
+rtph264pay config-interval=5 pt=96 ! \
+udpsink host=10.203.100.24 port=11111 sync=false
 
-***********************
-(1) lapack_LINUX.a
-(2) blas_LINUX.a
-(3) libF77.a
-(4) libI77.a
-************************
+CPU usage -- cca 15 % on single core (imx6).
 
-For includes I am also missing:
-*************************************
-"f2c.h"
-**************************************
-
-
-The only library, I see in the staging area is the following shared library:
-=============================
-liblapack.so
-=============================
-
-
-Cheers,
-Ernesto
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150330/003f090d/attachment.html>
+Best regards;
+Rostislav Lisovy
