@@ -1,33 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 13:56:36 +0200
-Subject: [Buildroot] [PATCH] jsoncpp: fix build for non C++11 toolchains
-In-Reply-To: <37b3e007267cbef5bd458fc06e21e9893f3eb0a4.1427778355.git.baruch@tkos.co.il>
-References: <37b3e007267cbef5bd458fc06e21e9893f3eb0a4.1427778355.git.baruch@tkos.co.il>
-Message-ID: <20150331135636.441fb8a4@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 31 Mar 2015 08:56:52 -0300
+Subject: [Buildroot] [PATCH] mesa3d: specify llvm-prefix
+In-Reply-To: <20150331135520.1e5d2744@free-electrons.com>
+References: <1427757360-20575-1-git-send-email-gustavo@zacarias.com.ar>	<20150331112525.5db42fa3@free-electrons.com>	<551A7CE6.2070701@zacarias.com.ar>
+ <20150331135520.1e5d2744@free-electrons.com>
+Message-ID: <551A8B84.50407@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On 03/31/2015 08:55 AM, Thomas Petazzoni wrote:
 
-On Tue, 31 Mar 2015 08:05:55 +0300, Baruch Siach wrote:
-> Add a patch removing reference to std::snprintf that is only in C++11.
+> Well what I meant is that since we don't have a LLVM option right now,
+> we should display LLVM support completely.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/b39/b390beeb9a6fea12f1a4d9f2ff9a8a483628cad2/
-> http://autobuild.buildroot.net/results/d18/d18b3e116b680a3897fbea296938e900a1e5e80a/
-> http://autobuild.buildroot.net/results/1b2/1b20a2f81dd2b409785930705222bc03576c4907/
-> 
-> and many more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> And we do have patches in patchwork to add LLVM.
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi.
+I missed that.
+I'm just fighting some windmills in doing the webkit/midori revamp and
+fixing accordingly ;)
+Regards.
