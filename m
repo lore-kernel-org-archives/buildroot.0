@@ -1,58 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 31 Mar 2015 20:14:28 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] allow xserver without the systemd
- login daemon.
-In-Reply-To: <1427664298-11629-1-git-send-email-sagaert.johan@proximus.be>
-References: <1427664298-11629-1-git-send-email-sagaert.johan@proximus.be>
-Message-ID: <551AE404.7090208@mind.be>
+Date: Tue, 31 Mar 2015 20:38:57 +0200
+Subject: [Buildroot] [PATCH 02/18] package/mplayer: add optional giflib
+ support
+In-Reply-To: <20150330230606.2702a000@free-electrons.com>
+References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
+ <1427649094-1240-3-git-send-email-bernd.kuhls@t-online.de>
+ <20150330225658.091b8e72@free-electrons.com>
+ <20150330230606.2702a000@free-electrons.com>
+Message-ID: <551AE9C1.70701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Sorry, I should have replied here of course...
-
-On 29/03/15 23:24, Sagaert Johan wrote:
+On 30/03/15 23:06, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Thanks to Noel Vellemans for the hint.
-> Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
-> ---
-> Patch v1->v2 :
-> 	added else clause as suggested by Thomas.
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> On Mon, 30 Mar 2015 22:56:58 +0200, Thomas Petazzoni wrote:
 > 
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index bb5381c..c290734 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -64,6 +64,16 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
->  	--with-fontrootdir=/usr/share/fonts/X11/ \
->  	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +XSERVER_XORG_CONF_OPTS += \
-> +	--with-systemd-daemon \
-> +	--enable-systemd-logind
+>>> +ifeq ($(BR2_PACKAGE_GIFLIB),y)
+>>> +MPLAYER_DEPENDENCIES += giflib
+>>> +MPLAYER_EXTRA_LIBS += -lgif
+>>> +endif
+>>
+>> Any reason not to use --enable-gif / --disable-gif here? Then you don't
+>> need to pass a --extra-libs value. I've applied the patch with this
+>> change, as it seems to build fine. Let me know if that causes a problem.
+> 
+> Hum, looking at the ncurses case, things seem to be a bit annoying:
+> 
+> echocheck "termcap"
+> if test "$_termcap" = auto ; then
+>   _termcap=no
+>   for ld_tmp in "-lncurses" "-ltinfo" "-ltermcap"; do
+>     statement_check term.h 'tgetent(0, 0)' $ld_tmp &&
+>       extra_ldflags="$extra_ldflags $ld_tmp" && _termcap=yes && break
+>   done
+> fi
+> if test "$_termcap" = yes ; then
+>   def_termcap='#define HAVE_TERMCAP 1'
+>   test $ld_tmp && res_comment="using $ld_tmp"
+> else
+>   def_termcap='#undef HAVE_TERMCAP'
+> fi
+> echores "$_termcap"
+> 
+> So, if you explicitly pass --enable-termcap, autodetection is not done,
+> and you have to pass -lncurses explicitly in --extra-libs. Otherwise,
+> if you don't use --enable-termcap and let the autodetection do its
+> work, it detects -lncurses automatically.
+> 
+> So I'm not sure which one to choose:
+> 
+>  *) Autodetection, which avoids the need for passing explicit -l<foo>
+>  values, but has the drawback of autodetection: we're not explicitly
+>  saying which features we want to enable, which may cause mis-use of
+>  certain libraries.
+> 
+>  *) No autodetection, which forces us to pass the proper -l<foo> value
+>  for each dependency.
+> 
+> Opinions?
 
-XSERVER_XORG_DEPENDENCIES += systemd
+ For the positive case (--enable-termcap), autodetection should be fine. What we
+want to catch is that termcap happens to have been built before, so we want an
+explicit --disable-termcap.
 
+ Of course, there should be a comment why we don't put the --enable-termcap.
 
  Regards,
  Arnout
 
-> +else
-> +XSERVER_XORG_CONF_OPTS += \
-> +	--without-systemd-daemon \
-> +	--disable-systemd-logind
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
->  XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
-> 
 
 
 -- 
