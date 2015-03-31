@@ -1,52 +1,67 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 31 Mar 2015 08:41:52 -0300
-Subject: [Buildroot] [PATCH 1/2] harfbuzz: bump to version 0.9.40
-Message-ID: <1427802113-31270-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 31 Mar 2015 08:41:53 -0300
+Subject: [Buildroot] [PATCH 2/2] harfbuzz: adjust indentation
+In-Reply-To: <1427802113-31270-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427802113-31270-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1427802113-31270-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
-And do an autoreconf run since otherwise the libtool patch fails.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/harfbuzz/harfbuzz.hash | 2 ++
- package/harfbuzz/harfbuzz.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
- create mode 100644 package/harfbuzz/harfbuzz.hash
+ package/harfbuzz/harfbuzz.mk | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-new file mode 100644
-index 0000000..131e8d3
---- /dev/null
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -0,0 +1,2 @@
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.40.tar.bz2.sha256
-+sha256	1771d53583be6d91ca961854b2a24fb239ef0545eed221ae3349abae0ab8321f	harfbuzz-0.9.40.tar.bz2
 diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 0a1b5a0..d392270 100644
+index d392270..0a69b09 100644
 --- a/package/harfbuzz/harfbuzz.mk
 +++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,14 +4,15 @@
- #
- ################################################################################
+@@ -20,31 +20,31 @@ HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
+ endif
  
--HARFBUZZ_VERSION = 0.9.22
-+HARFBUZZ_VERSION = 0.9.40
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
- HARFBUZZ_LICENSE_FILES = COPYING src/hb-ucdn/COPYING
- HARFBUZZ_INSTALL_STAGING = YES
--
- HARFBUZZ_CONF_OPTS = --without-coretext --without-uniscribe --without-graphite2
-+# beta libtool version
-+HARFBUZZ_AUTORECONF = YES
+ ifeq ($(BR2_PACKAGE_CAIRO),y)
+-	HARFBUZZ_DEPENDENCIES += cairo
+-	HARFBUZZ_CONF_OPTS += --with-cairo=yes
++HARFBUZZ_DEPENDENCIES += cairo
++HARFBUZZ_CONF_OPTS += --with-cairo=yes
+ else
+-	HARFBUZZ_CONF_OPTS += --with-cairo=no
++HARFBUZZ_CONF_OPTS += --with-cairo=no
+ endif
  
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- # forgets to link test programs with -pthread breaking static link
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+-	HARFBUZZ_DEPENDENCIES += freetype
+-	HARFBUZZ_CONF_OPTS += --with-freetype=yes
++HARFBUZZ_DEPENDENCIES += freetype
++HARFBUZZ_CONF_OPTS += --with-freetype=yes
+ else
+-	HARFBUZZ_CONF_OPTS += --with-freetype=no
++HARFBUZZ_CONF_OPTS += --with-freetype=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+-	HARFBUZZ_DEPENDENCIES += libglib2
+-	HARFBUZZ_CONF_OPTS += --with-glib=yes
++HARFBUZZ_DEPENDENCIES += libglib2
++HARFBUZZ_CONF_OPTS += --with-glib=yes
+ else
+-	HARFBUZZ_CONF_OPTS += --with-glib=no
++HARFBUZZ_CONF_OPTS += --with-glib=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ICU),y)
+-	HARFBUZZ_DEPENDENCIES += icu
+-	HARFBUZZ_CONF_OPTS += --with-icu=yes
++HARFBUZZ_DEPENDENCIES += icu
++HARFBUZZ_CONF_OPTS += --with-icu=yes
+ else
+-	HARFBUZZ_CONF_OPTS += --with-icu=no
++HARFBUZZ_CONF_OPTS += --with-icu=no
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
 2.0.5
