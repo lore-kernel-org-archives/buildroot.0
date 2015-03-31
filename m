@@ -1,87 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 31 Mar 2015 19:48:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 7981] New: Target file system skeleton permissions
-	hazard
-Message-ID: <bug-7981-163@https.bugs.busybox.net/>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Tue, 31 Mar 2015 22:50:55 +0300
+Subject: [Buildroot] [PATCH] batctl: fix musl builds
+In-Reply-To: <20150330231056.503b3c3d@free-electrons.com>
+References: <20150327170415.GA4890@vostro>
+ <20150330231056.503b3c3d@free-electrons.com>
+Message-ID: <20150331195055.GA2344@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7981
+Mon, Mar 30, 2015 at 11:10:56PM +0200, Thomas Petazzoni wrote:
 
-           Summary: Target file system skeleton permissions hazard
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: juju at cotds.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> > diff --git a/package/batctl/0001-musl-netinet.patch b/package/batctl/0001-musl-netinet.patch
+> 
+> This patch is badly named: 0001-musl-netinet, while it also fixes
+> things unrelated to netinet: the __be16/__be32 types. So either name it
+> 0001-musl-fixes, or better maybe, split it in two patches.
+Those are related changes actually. It looks like this:
 
+linux/if_ether.h:
+	struct ethhdr { ...  __be16 h_proto; }
 
-The content of the file "system/device_table.txt" is a subset of filesystem
-structure present in "system/skeleton/".
+netinet/if_ether.h (musl):
+	struct ethhdr { ...  uint16_t h_proto; }
 
-Permissions of entries in the skeleton that are not in the device_table.txt
-will inherits their permission from the building user environment. Those
-permissions will mainly depends of the developer's umask at the moment of the
-git checkout (or tar extraction).
+and that's where batctl code gets __be* types from if I got it right,
+because it was written with linux/if_ether.h in mind.
 
-This could lead to some file permissions hazard, especially when the
-developer's umask is not 0022 AND a user is added to the buildroot target
-system (with mkusers). Basically, this user account won't be usable if it
-cannot access to its home directory or binaries.
+Anyway, this is non-obvious and -musl-fixes.patch would work just as well,
+so I'm sending v2 with the patch renamed.
 
-How to reproduce:
-tested with master branch at commit 6202592
-
-cd /var/tmp/
-umask 0077
-git clone git://git.buildroot.net/buildroot
-make qemu_x86_defconfig   # Any defconfig will be fine
-make
-ls -al output/target/
-
-Actual result:
-The following target filesystem entries won't be accessible by a user other
-than root:
-
-/bin
-/home
-/lib
-/media
-/mnt
-/opt
-/proc
-/run
-/sbin
-/sys
-/usr
-/usr/bin
-/usr/lib
-/usr/sbin
-/var
-/var/lib
-
-
-Expected result:
-Default target file system permissions should be stable and usable by a user,
-unrelated to the build user umask.
-
-I would suggest to add relevant entries to the device_table.txt file. If not
-possible, a sanity check, a warning or a note in the documentation would be
-fine.
-
-Thanks.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> Also, can you submit the corresponding patches upstream?
+No problem, patch sent upstream.
