@@ -1,51 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Mar 2015 19:45:27 +0200
-Subject: [Buildroot] [PATCH 0/2] package/nvidia-driver: CUDA can be used
-	without X.org (branch yem/nvidia-cuda)
-Message-ID: <cover.1427823846.git.yann.morin.1998@free.fr>
+Date: Tue, 31 Mar 2015 19:45:35 +0200
+Subject: [Buildroot] [PATCH 2/2] package/nvidia-driver: add option to
+	install CUDA MPS server
+In-Reply-To: <cover.1427823846.git.yann.morin.1998@free.fr>
+References: <cover.1427823846.git.yann.morin.1998@free.fr>
+Message-ID: <c5c6f5405c36249f6d67a8180e8502e17f59e01a.1427823846.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Using CUDA with NVidia requires those two programs if one wants to use
+more than one program doing CUDA at the same time.
 
-This series allows one to use nvidia-driver to do CUDA without requiring
-the X.org stack.
+This is only available on x86_64.
 
-Thanks to Al for reporting the issue and testing the patches out-of-band!
-;-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Al West <al.west@v-nova.com>
+---
+ package/nvidia-driver/Config.in        | 13 ++++++++++++-
+ package/nvidia-driver/nvidia-driver.mk |  7 +++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 8ef3745617ca48c683480223fe851eeb72f115ea:
-
-  libgtk3: bump to version 3.14.11 (2015-03-31 14:00:51 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/nvidia-cuda
-
-for you to fetch changes up to c5c6f5405c36249f6d67a8180e8502e17f59e01a:
-
-  package/nvidia-driver: add option to install CUDA MPS server (2015-03-31 19:34:02 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/nvidia-driver: CUDA support does not require X.org
-      package/nvidia-driver: add option to install CUDA MPS server
-
- package/nvidia-driver/Config.in        | 53 ++++++++++++++++++++++++----------
- package/nvidia-driver/nvidia-driver.mk | 29 +++++++++++++------
- 2 files changed, 57 insertions(+), 25 deletions(-)
-
+diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
+index a63576c..b50e2c3 100644
+--- a/package/nvidia-driver/Config.in
++++ b/package/nvidia-driver/Config.in
+@@ -55,9 +55,20 @@ endif # BR2_PACKAGE_NVIDIA_DRIVER_XORG
+ config BR2_PACKAGE_NVIDIA_DRIVER_CUDA
+ 	bool "CUDA support"
+ 
++if BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++
+ config BR2_PACKAGE_NVIDIA_DRIVER_OPENCL
+ 	bool "OpenCL support"
+-	depends on BR2_PACKAGE_NVIDIA_DRIVER_CUDA
++
++config BR2_PACKAGE_NVIDIA_DRIVER_CUDA_PROGS
++	bool "CUDA MPS server and control"
++	depends on BR2_x86_64
++	help
++	  Say 'y' here if you need to run more than one program
++	  doing CUDA at the same time. The MPS server will be
++	  launched automatically when needed.
++
++endif # BR2_PACKAGE_NVIDIA_DRIVER_CUDA
+ 
+ comment "nvidia kernel module needs a kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index 454209a..a85cc1c 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -57,6 +57,9 @@ endif # X drivers
+ 
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA),y)
+ NVIDIA_DRIVER_LIBS += libcuda libnvidia-compiler libnvcuvid libnvidia-encode
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_CUDA_PROGS),y)
++NVIDIA_DRIVER_PROGS = nvidia-cuda-mps-control nvidia-cuda-mps-server
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_OPENCL),y)
+@@ -165,6 +168,10 @@ define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
+ 		$(INSTALL) -D -m 0644 $(@D)/$${m##*/} \
+ 			$(TARGET_DIR)/usr/lib/xorg/modules/$${m}; \
+ 	done
++	for p in $(NVIDIA_DRIVER_PROGS); do \
++		$(INSTALL) -D -m 0755 $(@D)/$${p} \
++			$(TARGET_DIR)/usr/bin/$${p}; \
++	done
+ 	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
