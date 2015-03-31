@@ -1,40 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Apr 2015 00:20:29 +0200
-Subject: [Buildroot] [PATCH 0/4 v2] misc graph-depends enhancements
- (branch yem/graph-depends)
-In-Reply-To: <20150401000203.0811afe2@free-electrons.com>
-References: <cover.1427235377.git.yann.morin.1998@free.fr>
- <20150401000203.0811afe2@free-electrons.com>
-Message-ID: <20150331222029.GI3912@free.fr>
+Date: Wed,  1 Apr 2015 00:34:14 +0200
+Subject: [Buildroot] [PATCH] support/graph-depends: allow excluding virtual
+	packages
+Message-ID: <1427841254-2807-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Like for --stop-on, make --exclude recognise the keyword 'virtual',
+to stop on virtual packages (as explained in the help...).
 
-On 2015-04-01 00:02 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 24 Mar 2015 23:16:47 +0100, Yann E. MORIN wrote:
-> > This series introduces a few enhancements to graph-depends, with two new
-> > options:
-> >   - --stop-on/-s PKG: to stop graphing on package PKG;
-> >   - --exclude/-x PKG: like --stop-on, but also omit PKG from the graph.
-[--SNIP--]
-> One thing that bothered me a bit is that --stop-on supports the keyword
-> 'virtual', but not --exclude.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/scripts/graph-depends | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Right, I'll fix that.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index c1fc042..08ecc5a 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -333,6 +333,10 @@ def print_pkg_deps(depth, pkg):
+                 if fnmatch(d,p):
+                     add = False
+                     break
++                if dict_version.get(d) == "virtual" \
++                and "virtual" in exclude_list:
++                    add = False
++                    break
+             if add:
+                 print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
+                 print_pkg_deps(depth+1, d)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
