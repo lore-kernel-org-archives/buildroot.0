@@ -1,39 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  1 Apr 2015 00:15:07 +0200
-Subject: [Buildroot] [PATCH 7/7 v4] support/download: warn when there's no
-	.hash file
+Date: Wed,  1 Apr 2015 00:15:05 +0200
+Subject: [Buildroot] [PATCH 5/7 v4] support/download: properly catch missing
+	hashes
 In-Reply-To: <cover.1427840060.git.yann.morin.1998@free.fr>
 References: <cover.1427840060.git.yann.morin.1998@free.fr>
-Message-ID: <4a4bae18e06b5e4205eb64c1384485c920325aa3.1427840060.git.yann.morin.1998@free.fr>
+Message-ID: <18560e5c069e66377924024a0ae5fbc0fe9b672c.1427840060.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of silently accepting a missing .hash file, print a warning.
-
-This can be grepped from a build log, to find packages that still have
-no hash, with the long-term goal of adding hashes for all packages.
+When checking hashes reports no hash for a file, and this is treated as
+an error (now: because BR2_ENFORCE_CHECK_HASH is set; later: because
+that will be the new and only behaviour), exit promptly in error.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- support/download/check-hash | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 13a76b8..3483077 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -33,6 +33,7 @@ base="${3}"
+---
+Changes v2 -> v3:
+  - change the exit code to 1 (no need to differentiate exit codes here)
+---
+ support/download/dl-wrapper | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 514118c..ef2d872 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -45,10 +45,19 @@ main() {
+         error "no output specified, use -o\n"
+     fi
  
- # Does the hash-file exist?
- if [ -z "${h_file}" -o ! -f "${h_file}" ]; then
-+    printf "WARNING: no hash file for %s\n" "${base}" >&2
-     exit 0
- fi
- 
+-    # If the output file already exists, do not download it again
++    # If the output file already exists and:
++    # - there's no .hash file: do not download it again and exit promptly
++    # - matches all its hashes: do not download it again and exit promptly
++    # - fails at least one of its hashes: force a re-download
++    # - there's no hash (but a .hash file): consider it a hard error
+     if [ -e "${output}" ]; then
+         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
+             exit 0
++        elif [ ${?} -ne 2 ]; then
++            # Do not remove the file, otherwise it might get re-downloaded
++            # from a later location (i.e. primary -> upstream -> mirror).
++            # Do not print a message, check-hash already did.
++            exit 1
+         fi
+         rm -f "${output}"
+         warn "Re-downloading '%s'...\n" "${output##*/}"
 -- 
 1.9.1
