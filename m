@@ -1,73 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 13:55:52 +0200
-Subject: [Buildroot] [git commit] jsoncpp: fix build for non C++11 toolchains
-Message-ID: <20150331115925.4E8B67FA85@busybox.osuosl.org>
+Date: Tue, 31 Mar 2015 13:57:41 +0200
+Subject: [Buildroot] [git commit] packages: indentation cleanup
+Message-ID: <20150331115925.66C387FA85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42bb259af5ce66a8b74f6d00b9e4cfd81922e0e1
+commit: http://git.buildroot.net/buildroot/commit/?id=bd8c733fb4a0ca6ca1aa72f8b549d53dcd37f4ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch removing reference to std::snprintf that is only in C++11.
+This commit doesn't touch infra packages.
 
-Fixes:
-http://autobuild.buildroot.net/results/b39/b390beeb9a6fea12f1a4d9f2ff9a8a483628cad2/
-http://autobuild.buildroot.net/results/d18/d18b3e116b680a3897fbea296938e900a1e5e80a/
-http://autobuild.buildroot.net/results/1b2/1b20a2f81dd2b409785930705222bc03576c4907/
-
-and many more.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...001-Revert-Use-std-namespace-for-snprintf.patch |   39 ++++++++++++++++++++
- 1 files changed, 39 insertions(+), 0 deletions(-)
+ boot/mxs-bootlets/mxs-bootlets.mk          |   30 +++---
+ linux/linux.mk                             |    2 +-
+ package/aircrack-ng/aircrack-ng.mk         |   26 +++---
+ package/bind/bind.mk                       |   37 ++++----
+ package/botan/botan.mk                     |   18 ++--
+ package/cairo/cairo.mk                     |   78 ++++++++--------
+ package/ccache/ccache.mk                   |   10 +-
+ package/civetweb/civetweb.mk               |   14 ++--
+ package/collectd/collectd.mk               |   18 ++--
+ package/cups/cups.mk                       |   18 ++--
+ package/dbus-cpp/dbus-cpp.mk               |   25 ++++--
+ package/dhcpcd/dhcpcd.mk                   |    6 +-
+ package/dillo/dillo.mk                     |   24 +++---
+ package/dnsmasq/dnsmasq.mk                 |   30 +++---
+ package/ecryptfs-utils/ecryptfs-utils.mk   |    6 +-
+ package/enscript/enscript.mk               |    4 +-
+ package/fmlib/fmlib.mk                     |    2 +-
+ package/gdb/gdb.mk                         |   20 ++--
+ package/git/git.mk                         |   43 +++++-----
+ package/gnutls/gnutls.mk                   |    9 +-
+ package/gpsd/gpsd.mk                       |  108 +++++++++++-----------
+ package/harfbuzz/harfbuzz.mk               |   24 +++---
+ package/haserl/haserl.mk                   |    8 +-
+ package/hostapd/hostapd.mk                 |   32 ++++----
+ package/hplip/hplip.mk                     |    6 +-
+ package/ifplugd/ifplugd.mk                 |    2 +-
+ package/imlib2/imlib2.mk                   |   36 ++++----
+ package/kismet/kismet.mk                   |   12 ++--
+ package/lcms2/lcms2.mk                     |   18 ++--
+ package/libbluray/libbluray.mk             |   10 +-
+ package/libcap/libcap.mk                   |    6 +-
+ package/libcgroup/libcgroup.mk             |    6 +-
+ package/libgcrypt/libgcrypt.mk             |    2 +-
+ package/libglib2/libglib2.mk               |   90 ++++++++++++------
+ package/libplayer/libplayer.mk             |   16 ++--
+ package/linux-pam/linux-pam.mk             |    4 +-
+ package/lua/lua.mk                         |   26 +++---
+ package/luarocks/luarocks.mk               |    2 +-
+ package/make/make.mk                       |    2 +-
+ package/modem-manager/modem-manager.mk     |   12 ++--
+ package/nano/nano.mk                       |   12 ++--
+ package/nbd/nbd.mk                         |    4 +-
+ package/ncftp/ncftp.mk                     |   16 ++--
+ package/ncurses/ncurses.mk                 |    5 +-
+ package/neard/neard.mk                     |    2 +-
+ package/neardal/neardal.mk                 |    2 +-
+ package/net-tools/net-tools.mk             |    2 +-
+ package/netatalk/netatalk.mk               |   21 +++--
+ package/netsnmp/netsnmp.mk                 |   32 ++++----
+ package/network-manager/network-manager.mk |   18 ++--
+ package/nodejs/nodejs.mk                   |    2 +-
+ package/ntfs-3g/ntfs-3g.mk                 |   14 ++--
+ package/ntp/ntp.mk                         |   22 +++---
+ package/ofono/ofono.mk                     |   12 ++--
+ package/open2300/open2300.mk               |    8 +-
+ package/openssl/openssl.mk                 |   20 ++--
+ package/openswan/openswan.mk               |   10 +-
+ package/openvpn/openvpn.mk                 |   20 +++--
+ package/pango/pango.mk                     |    3 +-
+ package/pciutils/pciutils.mk               |   18 ++--
+ package/perf/perf.mk                       |    6 +-
+ package/php/php.mk                         |  135 ++++++++++++++--------------
+ package/pkgconf/pkgconf.mk                 |    4 +-
+ package/poppler/poppler.mk                 |   48 +++++-----
+ package/postgresql/postgresql.mk           |   24 +++---
+ package/pppd/pppd.mk                       |    6 +-
+ package/ptpd2/ptpd2.mk                     |    8 +-
+ package/qwt/qwt.mk                         |   12 ++--
+ package/rsync/rsync.mk                     |    4 +-
+ package/ruby/ruby.mk                       |   23 +++---
+ package/sconeserver/sconeserver.mk         |   83 +++++++++---------
+ package/slang/slang.mk                     |   32 ++++----
+ package/snmppp/snmppp.mk                   |    6 +-
+ package/socat/socat.mk                     |    8 +-
+ package/speex/speex.mk                     |    4 +-
+ package/tiff/tiff.mk                       |   32 ++++----
+ package/tn5250/tn5250.mk                   |    6 +-
+ package/transmission/transmission.mk       |   22 +++---
+ package/ulogd/ulogd.mk                     |   10 +-
+ package/usb_modeswitch/usb_modeswitch.mk   |    6 +-
+ package/usbutils/usbutils.mk               |    2 +-
+ package/wget/wget.mk                       |   17 ++--
+ package/wireless_tools/wireless_tools.mk   |    4 +-
+ package/wpa_supplicant/wpa_supplicant.mk   |   54 ++++++------
+ package/wvstreams/wvstreams.mk             |   20 ++--
+ package/zeromq/zeromq.mk                   |    6 +-
+ 86 files changed, 861 insertions(+), 806 deletions(-)
 
-diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-new file mode 100644
-index 0000000..6c6ae2d
---- /dev/null
-+++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-@@ -0,0 +1,39 @@
-+From 29bfb6ac06b7304d326e3b70fc0209a702b89d83 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Subject: [PATCH] Revert "Use std namespace for snprintf."
-+
-+This reverts commit 1c58876185d2a4ed87dac4a54b82f607e74f55fd.
-+
-+std::snprintf() is only available in C++11, which is not provided by
-+all compilers. Since the C library snprintf() can easily be used as a
-+replacement on Linux systems, this patch changes jsoncpp to use the C
-+library snprintf() instead of C++11 std::snprintf(), fixing the build error
-+below:
-+
-+src/lib_json/json_writer.cpp:33:18: error: 'snprintf' is not a member of 'std'
-+
-+Upstream status: sent upstream
-+package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+
-+ src/lib_json/json_writer.cpp | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
-+index 83102fd2bb86..f7ad1e21bbc0 100644
-+--- a/src/lib_json/json_writer.cpp
-++++ b/src/lib_json/json_writer.cpp
-+@@ -29,8 +29,6 @@
-+ 
-+ #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
-+ #define snprintf _snprintf
-+-#else
-+-#define snprintf std::snprintf
-+ #endif
-+ 
-+ #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
-+-- 
-+2.1.4
-+
+Patch is too large, so refusing to show it
