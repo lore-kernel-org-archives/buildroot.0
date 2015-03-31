@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 14:02:02 +0200
-Subject: [Buildroot] [PATCH 2/2] harfbuzz: adjust indentation
-In-Reply-To: <1427802113-31270-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1427802113-31270-1-git-send-email-gustavo@zacarias.com.ar>
- <1427802113-31270-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150331140202.503642b8@free-electrons.com>
+Date: Tue, 31 Mar 2015 14:02:34 +0200
+Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.14.11
+In-Reply-To: <1427802148-31314-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427802148-31314-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150331140234.3037c11a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,18 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 31 Mar 2015 08:41:53 -0300, Gustavo Zacarias wrote:
+On Tue, 31 Mar 2015 08:42:28 -0300, Gustavo Zacarias wrote:
+> Remove upstream patch.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/harfbuzz/harfbuzz.mk | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
+>  ...lug-is-conditionally-supported-on-X11-onl.patch | 57 ----------------------
+>  package/libgtk3/libgtk3.hash                       |  4 +-
+>  package/libgtk3/libgtk3.mk                         |  2 +-
+>  3 files changed, 3 insertions(+), 60 deletions(-)
+>  delete mode 100644 package/libgtk3/0006-window-GtkPlug-is-conditionally-supported-on-X11-onl.patch
 
-I haven't applied this one, since it came after Jerzy's patch that
-fixed up a lot of indentation all over the place, including in this
-package.
+Applied, thanks!
 
 Thomas
 -- 
