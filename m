@@ -1,28 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 31 Mar 2015 10:51:46 -0300
-Subject: [Buildroot] polarssl https download cercificate error.
-In-Reply-To: <551AA350.1060203@proximus.be>
-References: <551A6805.9050003@proximus.be> <551A7D32.7000404@zacarias.com.ar>
- <551AA350.1060203@proximus.be>
-Message-ID: <551AA672.4000301@zacarias.com.ar>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 31 Mar 2015 16:31:37 +0200
+Subject: [Buildroot] [PATCH 1/1] ccache: fix the indentation
+Message-ID: <1427812297-6496-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/31/2015 10:38 AM, Johan Sagaert wrote:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/ccache/ccache.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> Dear
-> 
-> That patch is not solving the problem :
-> It still reverts to downloading from buildroot.
-> As said before : https://tls.mbed.org/code/releases/polarssl-1.2.13-gpl.tgz
-> is  working in the browser but buildroot fails to download the file.
-
-Hi.
-That's because the wget version on your distribution is old and doesn't
-understand alt names.
-We're looking into a better solution, but for the time being using
-sources.buildroot.net as a fallback works.
-Regards.
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index ac2eaab..893b6ae 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -66,10 +66,10 @@ ccache-stats: host-ccache
+ 
+ ccache-options: host-ccache
+ ifeq ($(CCACHE_OPTIONS),)
+-$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
+-$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
+-"(see ccache help text below)"
+-$(Q)echo
++	$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
++	$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
++	"(see ccache help text below)"
++	$(Q)echo
+ endif
+-$(Q)$(CCACHE) $(CCACHE_OPTIONS)
++	$(Q)$(CCACHE) $(CCACHE_OPTIONS)
+ endif
+-- 
+1.9.1
