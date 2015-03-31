@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 14:01:06 +0200
-Subject: [Buildroot] [PATCH] polarssl: switch download URL
-In-Reply-To: <1427799560-9170-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427799560-9170-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150331140106.4344566c@free-electrons.com>
+Date: Tue, 31 Mar 2015 14:01:19 +0200
+Subject: [Buildroot] [PATCH] hicolor-icon-theme: bump to version 0.15
+In-Reply-To: <1427801967-31098-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427801967-31098-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150331140119.575840c7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,15 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 31 Mar 2015 07:59:20 -0300, Gustavo Zacarias wrote:
-> Old wget versions aren't very happy with https moves/alt names hence
-> complain when trying to download from said sites.
-> Since polarssl is now mbed tls and everything got renamed switch to the
-> new URL to avoid this.
+On Tue, 31 Mar 2015 08:39:27 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/polarssl/Config.in   | 2 +-
->  package/polarssl/polarssl.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/hicolor-icon-theme/hicolor-icon-theme.hash | 2 ++
+>  package/hicolor-icon-theme/hicolor-icon-theme.mk   | 3 ++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>  create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.hash
 
 Applied, thanks!
 
