@@ -1,92 +1,104 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  1 Apr 2015 00:15:04 +0200
-Subject: [Buildroot] [PATCH 4/7 v4] support/download: return different exit
-	codes for different failures
+Date: Wed,  1 Apr 2015 00:15:03 +0200
+Subject: [Buildroot] [PATCH 3/7 v4] support/download: add explicit no-hash
+	support
 In-Reply-To: <cover.1427840060.git.yann.morin.1998@free.fr>
 References: <cover.1427840060.git.yann.morin.1998@free.fr>
-Message-ID: <404de8633ddc3c6120c89ef457413ad9c5fd6a2d.1427840060.git.yann.morin.1998@free.fr>
+Message-ID: <5abc8202906d4fd56d76ac14d1c9199ed0569a03.1427840060.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Return different exit codes depending on the error that occured:
+Add support to explicitly state that an archive has no hash.
 
-  0: no error (hash file missing, or all hashes match)
-  1: unknown option
-  2: hash file exists, but at least one hash in error
-  3: hash file exists, but no hash for file to check
-  4: hash file exists, but at least one hash type unknown
+This can be used for archives downloaded from a repository, like a
+git-clone or a subversion checkout, or using the github helper.
 
-This will be used in a later patch to decide whether the downloaded file
-should be kept or removed.
+This will come in handy when we'll eventually make hashes mandatory as
+soon as a .hash file exists: for some packages, like gcc, some versions
+are downloaded as archives from upstream, while other versions may come
+from a GitHub repository (via the github herlper).
+
+In this case, a .hash file would exist, that contains hashes for the
+downloaded tarballs, but archives downloaded from the repository would
+not have a hash (since it is currently not possible to have reproducible
+such archives). So, we'd need a way to explicitly state there is no
+hash, on purpose, for those archives.
+
+So, add 'none' as a new type of hash.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 Changes v3 -> v4:
-  - typo in comment  (Samuel)
-
-Changes v2 -> v3:
-  - further differentiate errors for unknown hashes and unknown
-    command-line options  (Arnout)
-
-Changes v1 -> v2:
-  - typoes in script and commit  (Samuel)
+  - code formatting  (Arnout)
 ---
- support/download/check-hash | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-directory.txt | 13 +++++++++++--
+ support/download/check-hash               |  4 ++++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 132c702..0f8bb64 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -423,8 +423,9 @@ The format of this file is one line for each file for which to check the
+ hash, each line being space-separated, with these three fields:
+ 
+ * the type of hash, one of:
+-** +sha1+, +sha224+, +sha256+, +sha384+, +sha512+
++** +sha1+, +sha224+, +sha256+, +sha384+, +sha512+, +none+
+ * the hash of the file:
++** for +none+, one or more non-space chars, usually just the string +xxx+
+ ** for +sha1+, 40 hexadecimal characters
+ ** for +sha224+, 56 hexadecimal characters
+ ** for +sha256+, 64 hexadecimal characters
+@@ -448,9 +449,14 @@ comment line above the hashes.
+ *Note:* the number of spaces does not matter, so one can use spaces to
+ properly align the different fields.
+ 
++The +none+ hash type is reserved to those archives downloaded from a
++repository, like a 'git clone', a 'subversion checkout'... or archives
++downloaded with the xref:github-download-url[github helper].
++
+ The example below defines a +sha1+ and a +sha256+ published by upstream for
+ the main +libfoo-1.2.3.tar.bz2+ tarball, plus two locally-computed hashes,
+-a +sha256+ for a downloaded patch, and a +sha1+ for a downloaded binary blob:
++a +sha256+ for a downloaded patch, a +sha1+ for a downloaded binary blob,
++and an archive with no hash:
+ 
+ ----
+ # Hashes from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.{sha1,sha256}:
+@@ -460,6 +466,9 @@ sha256 efc8103cc3bcb06bda6a781532d12701eb081ad83e8f90004b39ab81b65d4369 libfoo-1
+ # No upstream hashes for the following:
+ sha256 ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9 libfoo-fix-blabla.patch
+ sha1   2d608f3c318c6b7557d551a5a09314f03452f1a1                         libfoo-data.bin
++
++# Explicitly no hash for that file, comes from a git-clone:
++none   xxx                                                              libfoo-1234.tar.gz
+ ----
+ 
+ If the +.hash+ file is present, and it contains one or more hashes for a
 diff --git a/support/download/check-hash b/support/download/check-hash
-index 7a30d5b..ab416c7 100755
+index cee64ef..7a30d5b 100755
 --- a/support/download/check-hash
 +++ b/support/download/check-hash
-@@ -9,6 +9,15 @@ set -e
- #   $3: the final basename of the file, to which it will be ultimately
- #       saved as, to be able to match it to the corresponding hashes
- #       in the .hash file
-+#
-+# Exit codes:
-+#   0:  the hash file exists and the file to check matches all its hashes,
-+#       or the hash file does not exist
-+#   1:  unknown command-line option
-+#   2:  the hash file exists and the file to check does not match at least
-+#       one of its hashes
-+#   3:  the hash file exists and there was no hash to check the file against
-+#   4:  the hash file exists and at least one hash type is unknown
- 
- while getopts :q OPT; do
-     case "${OPT}" in
-@@ -48,7 +57,7 @@ check_one_hash() {
+@@ -38,7 +38,11 @@ check_one_hash() {
+     # Note: md5 is supported, but undocumented on purpose.
+     # Note: sha3 is not supported, since there is currently no implementation
+     #       (the NIST has yet to publish the parameters).
++    # Note: 'none' means there is explicitly no hash for that file.
+     case "${_h}" in
++        none)
++            return 0
++            ;;
+         md5|sha1)                       ;;
+         sha224|sha256|sha384|sha512)    ;;
          *) # Unknown hash, exit with error
-             printf "ERROR: unknown hash '%s' for '%s'\n"  \
-                    "${_h}" "${base}" >&2
--            exit 1
-+            exit 4
-             ;;
-     esac
- 
-@@ -64,7 +73,7 @@ check_one_hash() {
-     printf "ERROR: got     : %s\n" "${_hash}" >&2
-     printf "ERROR: Incomplete download, or man-in-the-middle (MITM) attack\n" >&2
- 
--    exit 1
-+    exit 2
- }
- 
- # Do we know one or more hashes for that file?
-@@ -87,7 +96,7 @@ done <"${h_file}"
- if [ ${nb_checks} -eq 0 ]; then
-     if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
-         printf "ERROR: No hash found for %s\n" "${base}" >&2
--        exit 1
-+        exit 3
-     else
-         printf "WARNING: No hash found for %s\n" "${base}" >&2
-     fi
 -- 
 1.9.1
