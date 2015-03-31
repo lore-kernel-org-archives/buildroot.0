@@ -1,68 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 31 Mar 2015 22:06:59 +0200
-Subject: [Buildroot] clapack libraries missing?: buildroot-2014.11
-In-Reply-To: <CADDnATcLG1SbgVZ8TB08J_yHU5vF7vKTPdwUZnFvcgewoUFdEg@mail.gmail.com>
-References: <CADDnATcLG1SbgVZ8TB08J_yHU5vF7vKTPdwUZnFvcgewoUFdEg@mail.gmail.com>
-Message-ID: <551AFE63.6050009@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 31 Mar 2015 22:07:34 +0200
+Subject: [Buildroot] [PATCH 02/18] package/mplayer: add optional giflib
+	support
+References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
+ <1427649094-1240-3-git-send-email-bernd.kuhls@t-online.de>
+ <20150330225658.091b8e72@free-electrons.com>
+ <20150330230606.2702a000@free-electrons.com> <551AE9C1.70701@mind.be>
+Message-ID: <XnsA46EE11448266berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/03/15 16:51, Ernest Williams wrote:
-> Hi,
-> 
-> I am using "buildroot-2014.11"
-> I am using glibc and my target is INTEL x86_64
-> Version of CLAPACK:
-> CLAPACK_VERSION = 3.2.1
-> 
-> I would like to use clapack but missing the following libraries after the install:
-> 
-> ***********************
-> (1) lapack_LINUX.a
-> (2) blas_LINUX.a
-> (3) libF77.a
-> (4) libI77.a
-> ************************
-> 
-> For includes I am also missing:
-> *************************************
-> "f2c.h"
-> **************************************
-> 
-> 
-> The only library, I see in the staging area is the following shared library:
-> =============================
-> liblapack.so
-> =============================
+Arnout Vandecappelle <arnout@mind.be> wrote in 
+news:551AE9C1.70701 at mind.be:
 
- libblas.so should also be installed. And the header file is called clapack.h
+>  For the positive case (--enable-termcap), autodetection should be fine. 
 
- The f2c functionality is linked into these shared libraries, it shouldn't be
-necessary to include or link with anything else.
+Hi,
 
- Regards,
- Arnout
+no, it is broken:
 
-> 
-> 
-> Cheers,
-> Ernesto
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+osdep/`termcap_addgetch2.o:': In
+getch2.c function:( .text`termcap_add+0x15':):
+getch2.c undefined:(.text+ reference0x15) to:  `undefined tgetstr'
+osdep/getch2.o: In function reference to `tgetstr'
+osdep`load_termcap/getch2.o'::
+getch2.c:In (.function text+`load_termcap0x9f)'::
+getch2.cundefined :(reference .textto +0x9f`tgetent): undefined reference' to
+getch2.c `:(tgetent'.text
+getch2.c+0xdb:():.text undefined+0xdb reference): to undefined ` 
+referencetgetnum' to
+getch2.c:( .text`tgetnum+0xec'
+):getch2.c: undefined (.reference textto +0xec`tgetnum):'
+ undefinedgetch2.c: reference(.text+ to0x132) : `tgetnumundefined '
+reference getch2.cto:( `.texttgetstr'+0x132)
+: undefined reference to `tgetstr'
 
+using this defconfig:
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_PACKAGE_MPLAYER=y
+BR2_PACKAGE_MPLAYER_MENCODER=y
+BR2_PACKAGE_NCURSES=y
+
+Regards, Bernd
