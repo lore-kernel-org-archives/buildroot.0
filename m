@@ -1,146 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 31 Mar 2015 15:45:40 -0300
-Subject: [Buildroot] [PATCH 10/10] matchbox: adjust style
-In-Reply-To: <1427827540-15836-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427827540-15836-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1427827540-15836-10-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Tue, 31 Mar 2015 21:17:33 +0200
+Subject: [Buildroot] [git commit] packages: indentation cleanup
+In-Reply-To: <20150331115925.66C387FA85@busybox.osuosl.org>
+References: <20150331115925.66C387FA85@busybox.osuosl.org>
+Message-ID: <CABbD_XC1Dqku9OV7tRnqOVO0OoNo34pAUs+4So7WPJXJOpLEdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove stray comments, adjust indentation, kill empty defines.
+Hello Thomas, Jerzy, all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/matchbox/matchbox-common/matchbox-common.mk                   | 4 +---
- package/matchbox/matchbox-desktop/matchbox-desktop.mk                 | 4 ----
- package/matchbox/matchbox-fakekey/matchbox-fakekey.mk                 | 2 --
- package/matchbox/matchbox-keyboard/matchbox-keyboard.mk               | 4 ----
- package/matchbox/matchbox-lib/matchbox-lib.mk                         | 4 ----
- package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk | 3 ---
- package/matchbox/matchbox-wm/matchbox-wm.mk                           | 4 ----
- 7 files changed, 1 insertion(+), 24 deletions(-)
+since this commit ccache ceased to work.
+The indentation cleanup in ccache.mk seems to add some weird make error:
 
-diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
-index 74bbebb..da6bec7 100644
---- a/package/matchbox/matchbox-common/matchbox-common.mk
-+++ b/package/matchbox/matchbox-common/matchbox-common.mk
-@@ -13,9 +13,7 @@ MATCHBOX_COMMON_LICENSE_FILES = COPYING
- MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
- 
- ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
--	MATCHBOX_COMMON_CONF_OPTS += --enable-pda-folders
-+MATCHBOX_COMMON_CONF_OPTS += --enable-pda-folders
- endif
- 
--################################################################################
--
- $(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-index 2ea8866..a703a18 100644
---- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-+++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-@@ -18,8 +18,6 @@ MATCHBOX_DESKTOP_CONF_OPTS = --enable-expat
- # configure.ac/Makefile.am.
- MATCHBOX_DESKTOP_AUTORECONF = YES
- 
--################################################################################
--
- ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
- MATCHBOX_DESKTOP_CONF_OPTS += --enable-startup-notification
- MATCHBOX_DESKTOP_DEPENDENCIES += startup-notification
-@@ -27,6 +25,4 @@ else
- MATCHBOX_DESKTOP_CONF_OPTS += --disable-startup-notification
- endif
- 
--################################################################################
--
- $(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
-index f687ca0..ea8e6dc 100644
---- a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
-+++ b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
-@@ -20,6 +20,4 @@ endef
- 
- MATCHBOX_FAKEKEY_POST_CONFIGURE_HOOKS += MATCHBOX_FAKEKEY_POST_CONFIGURE_FIXES
- 
--################################################################################
--
- $(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index bdcc32f..2017730 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -20,8 +20,6 @@ endef
- 
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
- 
--################################################################################
--
- ifeq ($(BR2_PACKAGE_CAIRO),y)
- MATCHBOX_KEYBOARD_CONF_OPTS += --enable-cairo
- MATCHBOX_KEYBOARD_DEPENDENCIES += cairo
-@@ -29,6 +27,4 @@ else
- MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
- endif
- 
--################################################################################
--
- $(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
-index 3149bbb..3b697bb 100644
---- a/package/matchbox/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
-@@ -20,8 +20,6 @@ endef
- 
- MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
- 
--################################################################################
--
- ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
- ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
- MATCHBOX_LIB_DEPENDENCIES += xlib_libXpm
-@@ -56,6 +54,4 @@ else
- MATCHBOX_LIB_CONF_OPTS += --disable-xft
- endif
- 
--################################################################################
--
- $(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
-index c6298d8..be57239 100644
---- a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
-+++ b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
-@@ -10,8 +10,5 @@ MATCHBOX_STARTUP_MONITOR_SITE = http://downloads.yoctoproject.org/releases/match
- MATCHBOX_STARTUP_MONITOR_LICENSE = GPLv2+
- MATCHBOX_STARTUP_MONITOR_LICENSE_FILES = COPYING
- MATCHBOX_STARTUP_MONITOR_DEPENDENCIES = matchbox-lib startup-notification
--MATCHBOX_STARTUP_MONITOR_CONF_OPTS =
--
--################################################################################
- 
- $(eval $(autotools-package))
-diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
-index 2ccb16e..16f1417 100644
---- a/package/matchbox/matchbox-wm/matchbox-wm.mk
-+++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
-@@ -16,8 +16,6 @@ MATCHBOX_WM_CONF_OPTS = --enable-expat
- # Workaround bug in configure script
- MATCHBOX_WM_CONF_ENV = expat=yes
- 
--################################################################################
--
- ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
- ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
- MATCHBOX_WM_CONF_OPTS += --enable-composite
-@@ -40,6 +38,4 @@ else
- MATCHBOX_WM_CONF_OPTS += --disable-startup-notification
- endif
- 
--################################################################################
--
- $(eval $(autotools-package))
--- 
-2.0.5
+scythe at buildroot-vm:~/buildroot$ make clean
+package/ccache/ccache.mk:70: *** missing separator.  Stop.
+
+If I add back the tabs before the lines, it works again. If I add a '; \'
+on the end of the first 4 lines, the only line 74 produces the error.
+I think tab acts as a separator in makefiles.
+I recommend reversing the patch on just this on file.
+
+On Tue, Mar 31, 2015 at 1:57 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> commit:
+> http://git.buildroot.net/buildroot/commit/?id=bd8c733fb4a0ca6ca1aa72f8b549d53dcd37f4ee
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> This commit doesn't touch infra packages.
+>
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+
+snip
+
+>  package/ccache/ccache.mk                   |   10 +-
+>
+
+Regards,
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150331/ad8ecf8e/attachment.html>
