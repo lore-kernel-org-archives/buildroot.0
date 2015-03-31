@@ -1,49 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 31 Mar 2015 07:59:20 -0300
-Subject: [Buildroot] [PATCH] polarssl: switch download URL
-Message-ID: <1427799560-9170-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 31 Mar 2015 08:39:27 -0300
+Subject: [Buildroot] [PATCH] hicolor-icon-theme: bump to version 0.15
+Message-ID: <1427801967-31098-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Old wget versions aren't very happy with https moves/alt names hence
-complain when trying to download from said sites.
-Since polarssl is now mbed tls and everything got renamed switch to the
-new URL to avoid this.
+Also add hash file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/polarssl/Config.in   | 2 +-
- package/polarssl/polarssl.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hicolor-icon-theme/hicolor-icon-theme.hash | 2 ++
+ package/hicolor-icon-theme/hicolor-icon-theme.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/hicolor-icon-theme/hicolor-icon-theme.hash
 
-diff --git a/package/polarssl/Config.in b/package/polarssl/Config.in
-index 90788d8..17125a3 100644
---- a/package/polarssl/Config.in
-+++ b/package/polarssl/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_POLARSSL
- 	  use it in your own proprietary applications, you have to
- 	  purchase a commercial license.
- 
--	  http://polarssl.org/
-+	  https://tls.mbed.org/
- 
- if BR2_PACKAGE_POLARSSL
- 
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index 83e1851..ebd0651 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.hash b/package/hicolor-icon-theme/hicolor-icon-theme.hash
+new file mode 100644
+index 0000000..522dcfc
+--- /dev/null
++++ b/package/hicolor-icon-theme/hicolor-icon-theme.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	9cc45ac3318c31212ea2d8cb99e64020732393ee7630fa6c1810af5f987033cc	hicolor-icon-theme-0.15.tar.xz
+diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.mk b/package/hicolor-icon-theme/hicolor-icon-theme.mk
+index cf4578e..5e00074 100644
+--- a/package/hicolor-icon-theme/hicolor-icon-theme.mk
++++ b/package/hicolor-icon-theme/hicolor-icon-theme.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--POLARSSL_SITE = https://polarssl.org/code/releases
-+POLARSSL_SITE = https://tls.mbed.org/code/releases
- POLARSSL_VERSION = 1.2.13
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPTS = \
+-HICOLOR_ICON_THEME_VERSION = 0.13
++HICOLOR_ICON_THEME_VERSION = 0.15
+ HICOLOR_ICON_THEME_SITE = http://icon-theme.freedesktop.org/releases
++HICOLOR_ICON_THEME_SOURCE = hicolor-icon-theme-$(HICOLOR_ICON_THEME_VERSION).tar.xz
+ HICOLOR_ICON_THEME_LICENSE = GPLv2
+ HICOLOR_ICON_THEME_LICENSE_FILES = COPYING
+ 
 -- 
 2.0.5
