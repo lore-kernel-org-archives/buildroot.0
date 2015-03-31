@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 23:42:23 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: add
- --enable-libdrm for udev
-In-Reply-To: <1427817030-27888-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1427817030-27888-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150331234223.69a55273@free-electrons.com>
+Date: Tue, 31 Mar 2015 23:42:36 +0200
+Subject: [Buildroot] [PATCH] glib-networking: bump to version 2.42.1
+In-Reply-To: <1427804681-23162-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427804681-23162-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150331234236.4c16cfe2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,17 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 31 Mar 2015 12:50:30 -0300, Gustavo Zacarias wrote:
-> If the libdrm package is enabled, the system is built with an udev
-> provider and MESA3D_DRI_DRIVER is disabled this adds a --disable-libdrm
-> to configure options, but udev still requires libdrm and results in a
-> build failure since libdrm include paths aren't filled in (missing drm.h
-> include error).
-> So add --enable-libdrm for the udev scenario to counteract the previous
-> --disable-libdrm.
+On Tue, 31 Mar 2015 09:24:41 -0300, Gustavo Zacarias wrote:
+> Add hash file and drop libgcrypt tweak since it's no longer required.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/glib-networking/glib-networking.hash |  2 ++
+>  package/glib-networking/glib-networking.mk   | 11 ++---------
+>  2 files changed, 4 insertions(+), 9 deletions(-)
+>  create mode 100644 package/glib-networking/glib-networking.hash
 
-Applied, thanks. You forgot PATCH v2 and a changelog, though :)
+Applied, thanks.
 
 Thomas
 -- 
