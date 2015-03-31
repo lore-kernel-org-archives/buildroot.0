@@ -1,54 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 23:40:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva-intel-driver: Fix build
-In-Reply-To: <1427818214-14760-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427818214-14760-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150331234038.5fe3b78b@free-electrons.com>
+Date: Tue, 31 Mar 2015 23:41:45 +0200
+Subject: [Buildroot] [git commit] glib-networking: bump to version 2.42.1
+Message-ID: <20150331214154.BEEC17FEB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=e032d8dcafdb97f2b874f47f6651fd7ab5a21480
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Mar 2015 18:10:14 +0200, Bernd Kuhls wrote:
-> Package needs autoreconf to produce a working configure script,
-> also fix a typo in .mk file
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/606/6061216fa6e2f4323117bb6cfb2b77753a89a679/
-> http://autobuild.buildroot.net/results/76d/76dc4b670e2131b94bd0c5cff45ccafd5e45033c/
-> http://autobuild.buildroot.net/results/d6f/d6f624baa3dde4fc4051d361ddaf98ecc5c84134/
-> http://autobuild.buildroot.net/results/91f/91f36f32ef43be897fef9352f97cc07781c4035a/
-> http://autobuild.buildroot.net/results/951/9517bb6d2c05c27cad0b24a4443021a34babedbd/
-> http://autobuild.buildroot.net/results/405/405dfffbcfdaa485d0000dad655b0c112688a58f/
-> http://autobuild.buildroot.net/results/925/92538fb07d5226bb8c3d3cc5e1429560b2e621f3/
-> http://autobuild.buildroot.net/results/d15/d154ca018da0c21762ed70acda4f224c50a1d808/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libva-intel-driver/libva-intel-driver.mk |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-> index 5755207..560ca28 100644
-> --- a/package/libva-intel-driver/libva-intel-driver.mk
-> +++ b/package/libva-intel-driver/libva-intel-driver.mk
-> @@ -9,6 +9,7 @@ LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar
->  LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
->  LIBVA_INTEL_DRIVER_LICENSE = MIT
->  LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
-> +LIBVA_INTEL_DRIVER_AUTORECONF = YES
+Add hash file and drop libgcrypt tweak since it's no longer required.
 
-Can you comment a bit more on why this is needed? Your commit lo says
-"needed to produce a working configure script", but a quick look at the
-build failures only points to the wayland dependency problem.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glib-networking/glib-networking.hash |    2 ++
+ package/glib-networking/glib-networking.mk   |   11 ++---------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+new file mode 100644
+index 0000000..0d85782
+--- /dev/null
++++ b/package/glib-networking/glib-networking.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.42/glib-networking-2.42.1.sha256sum
++sha256	c06bf76da3353695fcc791b7b02e5d60c01c379e554f7841dc6cbca32f65f3a0	glib-networking-2.42.1.tar.xz
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 2da7858..43536d9 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GLIB_NETWORKING_VERSION_MAJOR = 2.36
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).2
++GLIB_NETWORKING_VERSION_MAJOR = 2.42
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
+@@ -24,11 +24,4 @@ else
+ GLIB_NETWORKING_CONF_OPTS += --without-gnutls
+ endif
+ 
+-# gnutls 3.x+ doesn't use libgcrypt, it uses nettle/hogweed
+-define GLIB_NETWORKING_NO_LIBGCRYPT
+-	$(SED) 's:#include <gcrypt.h>::' $(@D)/tls/gnutls/gtlsbackend-gnutls.c
+-endef
+-
+-GLIB_NETWORKING_POST_EXTRACT_HOOKS += GLIB_NETWORKING_NO_LIBGCRYPT
+-
+ $(eval $(autotools-package))
