@@ -1,57 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  1 Apr 2015 00:15:05 +0200
-Subject: [Buildroot] [PATCH 5/7 v4] support/download: properly catch missing
-	hashes
+Date: Wed,  1 Apr 2015 00:15:06 +0200
+Subject: [Buildroot] [PATCH 6/7 v4] support/download: always fail when
+	there's no hash
 In-Reply-To: <cover.1427840060.git.yann.morin.1998@free.fr>
 References: <cover.1427840060.git.yann.morin.1998@free.fr>
-Message-ID: <18560e5c069e66377924024a0ae5fbc0fe9b672c.1427840060.git.yann.morin.1998@free.fr>
+Message-ID: <d9c2227b36d210797f4d2c83ec98d6401a15e745.1427840060.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When checking hashes reports no hash for a file, and this is treated as
-an error (now: because BR2_ENFORCE_CHECK_HASH is set; later: because
-that will be the new and only behaviour), exit promptly in error.
+At the time we introduced hashes, we did not want to be too harsh in the
+beginning, and give people some time to adapt and accept the hashes. So
+we so far only whined^Wwarned about a missing hash (when the .hash file
+exists).
+
+Some time has passed now, and people are still missing updating hashes
+when bumping packages.
+
+Let's make that warning a little bit more annoying...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 Changes v2 -> v3:
-  - change the exit code to 1 (no need to differentiate exit codes here)
+  - further improve the manual  (Arnout)
 ---
- support/download/dl-wrapper | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-directory.txt | 8 ++++----
+ support/download/check-hash               | 8 ++------
+ 2 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 514118c..ef2d872 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -45,10 +45,19 @@ main() {
-         error "no output specified, use -o\n"
-     fi
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 0f8bb64..0051fea 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -478,10 +478,10 @@ not match, Buildroot considers this an error, deletes the downloaded file,
+ and aborts.
  
--    # If the output file already exists, do not download it again
-+    # If the output file already exists and:
-+    # - there's no .hash file: do not download it again and exit promptly
-+    # - matches all its hashes: do not download it again and exit promptly
-+    # - fails at least one of its hashes: force a re-download
-+    # - there's no hash (but a .hash file): consider it a hard error
-     if [ -e "${output}" ]; then
-         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
-             exit 0
-+        elif [ ${?} -ne 2 ]; then
-+            # Do not remove the file, otherwise it might get re-downloaded
-+            # from a later location (i.e. primary -> upstream -> mirror).
-+            # Do not print a message, check-hash already did.
-+            exit 1
-         fi
-         rm -f "${output}"
-         warn "Re-downloading '%s'...\n" "${output##*/}"
+ If the +.hash+ file is present, but it does not contain a hash for a
+-downloaded file, no check is done for that file. If you set the
+-environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
+-there is no hash for a downloaded file, Buildroot considers this an
+-error, deletes the downloaded file, and aborts.
++downloaded file, Buildroot considers this an error and aborts. However,
++the downloaded file is left in the download directory since this
++typically indicates that the +.hash+ file is wrong but the downloaded
++file is probably OK.
+ 
+ Sources that are downloaded from a version control system (git, subversion,
+ etc...) can not have a hash, because the version control system and tar
+diff --git a/support/download/check-hash b/support/download/check-hash
+index ab416c7..13a76b8 100755
+--- a/support/download/check-hash
++++ b/support/download/check-hash
+@@ -94,10 +94,6 @@ while read t h f; do
+ done <"${h_file}"
+ 
+ if [ ${nb_checks} -eq 0 ]; then
+-    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
+-        printf "ERROR: No hash found for %s\n" "${base}" >&2
+-        exit 3
+-    else
+-        printf "WARNING: No hash found for %s\n" "${base}" >&2
+-    fi
++    printf "ERROR: No hash found for %s\n" "${base}" >&2
++    exit 3
+ fi
 -- 
 1.9.1
