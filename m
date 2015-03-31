@@ -1,40 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Mar 2015 22:13:19 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/raspberrypi2: update and fix
-	our defconfig
-References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
- <1424817743-3627-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <XnsA46EE20DEE8A9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 31 Mar 2015 17:15:17 -0300
+Subject: [Buildroot] (gtk)webkit 2.x anyone ?
+In-Reply-To: <551AD244.1000900@proximus.be>
+References: <551ABEA0.8080808@proximus.be>
+ <20150331174344.31147123@free-electrons.com>
+ <551ACBB1.7010808@zacarias.com.ar> <551AD244.1000900@proximus.be>
+Message-ID: <551B0055.5010702@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+On 03/31/2015 01:58 PM, Johan Sagaert wrote:
+> Hi Gustavo , all ,
+> 
+> Thanks for the info, this seems a huge effort , not sure if this : could
+> serve you any help :
+> https://github.com/Metrological/buildroot
+> Came across this, but did not dive into it.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:1424817743-3627-2-git-send-email-yann.morin.1998 at free.fr:
+From a quick look it seems somewhat useless, they've focused on their
+side of things (webkitgtk-shell) without considering anything else like
+midori.
+They're also using some snapshot version.
 
-> -BR2
-_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
-> +BR2
-_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
+> There are so many dependencies and there is always to a chance to break
+> something else
+> that depends on these.
+> I want a fullscreen html5 (+ websockets ) capable browser,and a virtual
+> keyboard
+> (matchbox-keyboard) that pop-ups when the focus is in a text field .....
 
-Hi Yann,
+Well, that's why it needs so much work :)
 
-downloading the kernel source fails seems to be broken:
+> I tried the qt5-kiosk package ,but for some reason is very slow.
+> (platform is imx6 dual lite  )
+> I did run the Qt5-cinematice experience demo, and that runs smooth, it
+> seems to push
+> the GPU to its limits , yielding a GPU too hot warning, but it proves
+> graphical accel. is working.
 
->>> linux 23c76b7f608e51258c6fca02aebeb5d588583149 Downloading
-Doing full clone
-Cloning into bare repository 'linux-
-23c76b7f608e51258c6fca02aebeb5d588583149'...
-POST git-upload-pack (gzip 1074 to 571 bytes)
-remote: Counting objects: 4091705, done.
-remote: Compressing objects: 100% (8/8), done.
-remote: Total 4091705 (delta 0), reused 0 (delta 0), pack-reused 4091697
-Receiving objects: 100% (4091705/4091705), 1.14 GiB | 5.51 MiB/s, done.
-Resolving deltas: 100% (3373468/3373468), done.
-fatal: not a tree object
+I dunno if you'll get better results with gtk+, a full ARM target image
+is ~270 MB with X11-modular and matchbox.
 
-Regards, Bernd
+> So i am wiling to test-drive if you have something to play with.
+
+At this point in time what i've got is a PoC qemu test image, the
+packaging and cleanup part is going along - however feature-wise it's
+still very lacking.
+Regards.
