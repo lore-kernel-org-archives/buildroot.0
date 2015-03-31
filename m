@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 23:35:04 +0200
-Subject: [Buildroot] Grub2 help for buildroot & EFI
-In-Reply-To: <20150331164315.GB22268@postdiluvian.org>
-References: <20150331164315.GB22268@postdiluvian.org>
-Message-ID: <20150331233504.6a34d107@free-electrons.com>
+Date: Tue, 31 Mar 2015 23:36:55 +0200
+Subject: [Buildroot] [git commit] ccache: fix the indentation
+Message-ID: <20150331213701.597B681E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mark Mason,
+commit: http://git.buildroot.net/buildroot/commit/?id=f3b44101d396d2794a35f11298fec5e288ec8893
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Mar 2015 12:43:15 -0400, Mark Mason wrote:
+Commit "packages: indentation cleanup" broke the build of master.
+This commit reverse the patch on just ccache package and fix that issue.
 
-> Can someone suggest where I can get some help getting buildroot to
-> boot off a thumb drive with grub2 in an x86 64 bit EFI environment?
-> The buildroot portion of the project went smoothly, as usual, but I'm
-> using grub instead of U-Boot this time and I'm mired in mysterious
-> failures when trying to do something that should be trivial.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ccache/ccache.mk |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-Did you look at the help text of the Grub 2 option in Buildroot? It
-contains a fairly comprehensive list of steps on how to install Grub 2
-EFI :
-
-  http://git.buildroot.net/buildroot/tree/boot/grub2/Config.in#n69
-
-The instructions were tested with Qemu, but they should apply with
-little or even no change to a real platform.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index ac2eaab..893b6ae 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -66,10 +66,10 @@ ccache-stats: host-ccache
+ 
+ ccache-options: host-ccache
+ ifeq ($(CCACHE_OPTIONS),)
+-$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
+-$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
+-"(see ccache help text below)"
+-$(Q)echo
++	$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
++	$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
++	"(see ccache help text below)"
++	$(Q)echo
+ endif
+-$(Q)$(CCACHE) $(CCACHE_OPTIONS)
++	$(Q)$(CCACHE) $(CCACHE_OPTIONS)
+ endif
