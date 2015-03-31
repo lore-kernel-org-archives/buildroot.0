@@ -1,48 +1,87 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Tue, 31 Mar 2015 21:17:33 +0200
-Subject: [Buildroot] [git commit] packages: indentation cleanup
-In-Reply-To: <20150331115925.66C387FA85@busybox.osuosl.org>
-References: <20150331115925.66C387FA85@busybox.osuosl.org>
-Message-ID: <CABbD_XC1Dqku9OV7tRnqOVO0OoNo34pAUs+4So7WPJXJOpLEdA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 31 Mar 2015 19:48:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 7981] New: Target file system skeleton permissions
+	hazard
+Message-ID: <bug-7981-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, Jerzy, all,
+https://bugs.busybox.net/show_bug.cgi?id=7981
 
-since this commit ccache ceased to work.
-The indentation cleanup in ccache.mk seems to add some weird make error:
+           Summary: Target file system skeleton permissions hazard
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: juju at cotds.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-scythe at buildroot-vm:~/buildroot$ make clean
-package/ccache/ccache.mk:70: *** missing separator.  Stop.
 
-If I add back the tabs before the lines, it works again. If I add a '; \'
-on the end of the first 4 lines, the only line 74 produces the error.
-I think tab acts as a separator in makefiles.
-I recommend reversing the patch on just this on file.
+The content of the file "system/device_table.txt" is a subset of filesystem
+structure present in "system/skeleton/".
 
-On Tue, Mar 31, 2015 at 1:57 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Permissions of entries in the skeleton that are not in the device_table.txt
+will inherits their permission from the building user environment. Those
+permissions will mainly depends of the developer's umask at the moment of the
+git checkout (or tar extraction).
 
-> commit:
-> http://git.buildroot.net/buildroot/commit/?id=bd8c733fb4a0ca6ca1aa72f8b549d53dcd37f4ee
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> This commit doesn't touch infra packages.
->
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
+This could lead to some file permissions hazard, especially when the
+developer's umask is not 0022 AND a user is added to the buildroot target
+system (with mkusers). Basically, this user account won't be usable if it
+cannot access to its home directory or binaries.
 
-snip
+How to reproduce:
+tested with master branch at commit 6202592
 
->  package/ccache/ccache.mk                   |   10 +-
->
+cd /var/tmp/
+umask 0077
+git clone git://git.buildroot.net/buildroot
+make qemu_x86_defconfig   # Any defconfig will be fine
+make
+ls -al output/target/
 
-Regards,
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150331/ad8ecf8e/attachment.html>
+Actual result:
+The following target filesystem entries won't be accessible by a user other
+than root:
+
+/bin
+/home
+/lib
+/media
+/mnt
+/opt
+/proc
+/run
+/sbin
+/sys
+/usr
+/usr/bin
+/usr/lib
+/usr/sbin
+/var
+/var/lib
+
+
+Expected result:
+Default target file system permissions should be stable and usable by a user,
+unrelated to the build user umask.
+
+I would suggest to add relevant entries to the device_table.txt file. If not
+possible, a sanity check, a warning or a note in the documentation would be
+fine.
+
+Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
