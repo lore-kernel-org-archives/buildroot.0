@@ -1,48 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Mar 2015 22:07:34 +0200
-Subject: [Buildroot] [PATCH 02/18] package/mplayer: add optional giflib
-	support
-References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <1427649094-1240-3-git-send-email-bernd.kuhls@t-online.de>
- <20150330225658.091b8e72@free-electrons.com>
- <20150330230606.2702a000@free-electrons.com> <551AE9C1.70701@mind.be>
-Message-ID: <XnsA46EE11448266berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Tue, 31 Mar 2015 22:13:19 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/raspberrypi2: update and fix
+	our defconfig
+References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
+ <1424817743-3627-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <XnsA46EE20DEE8A9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> wrote in 
-news:551AE9C1.70701 at mind.be:
+[posted and mailed]
 
->  For the positive case (--enable-termcap), autodetection should be fine. 
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:1424817743-3627-2-git-send-email-yann.morin.1998 at free.fr:
 
-Hi,
+> -BR2
+_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
+> +BR2
+_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
 
-no, it is broken:
+Hi Yann,
 
-osdep/`termcap_addgetch2.o:': In
-getch2.c function:( .text`termcap_add+0x15':):
-getch2.c undefined:(.text+ reference0x15) to:  `undefined tgetstr'
-osdep/getch2.o: In function reference to `tgetstr'
-osdep`load_termcap/getch2.o'::
-getch2.c:In (.function text+`load_termcap0x9f)'::
-getch2.cundefined :(reference .textto +0x9f`tgetent): undefined reference' to
-getch2.c `:(tgetent'.text
-getch2.c+0xdb:():.text undefined+0xdb reference): to undefined ` 
-referencetgetnum' to
-getch2.c:( .text`tgetnum+0xec'
-):getch2.c: undefined (.reference textto +0xec`tgetnum):'
- undefinedgetch2.c: reference(.text+ to0x132) : `tgetnumundefined '
-reference getch2.cto:( `.texttgetstr'+0x132)
-: undefined reference to `tgetstr'
+downloading the kernel source fails seems to be broken:
 
-using this defconfig:
-
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_PACKAGE_MPLAYER=y
-BR2_PACKAGE_MPLAYER_MENCODER=y
-BR2_PACKAGE_NCURSES=y
+>>> linux 23c76b7f608e51258c6fca02aebeb5d588583149 Downloading
+Doing full clone
+Cloning into bare repository 'linux-
+23c76b7f608e51258c6fca02aebeb5d588583149'...
+POST git-upload-pack (gzip 1074 to 571 bytes)
+remote: Counting objects: 4091705, done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 4091705 (delta 0), reused 0 (delta 0), pack-reused 4091697
+Receiving objects: 100% (4091705/4091705), 1.14 GiB | 5.51 MiB/s, done.
+Resolving deltas: 100% (3373468/3373468), done.
+fatal: not a tree object
 
 Regards, Bernd
