@@ -1,22 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 23:50:11 +0200
-Subject: [Buildroot] [git commit] support/graph-depends: add option to stop
-	on specific packages
-Message-ID: <20150331220030.5D14D81E2C@busybox.osuosl.org>
+Date: Tue, 31 Mar 2015 23:52:31 +0200
+Subject: [Buildroot] [git commit] support/graph-depends: accepts globs to
+	stop on package
+Message-ID: <20150331220030.6C7D07F980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5558a34e9ab8d53b4dafe3f760bff26d2df9c154
+commit: http://git.buildroot.net/buildroot/commit/?id=979267e8f7676a5eff216d35fd119db7d5432e32
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add a new option to graph-depends, that users can set to stop the graph
-on a specific (set of) package(s).
-
-This accepts any actual package name, or the 'virtual' keyword to stop
-on virtual packages.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -24,49 +18,38 @@ Cc: Francois Perrad <fperrad@gmail.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |   14 +++++++++++++-
- 1 files changed, 13 insertions(+), 1 deletions(-)
+ support/scripts/graph-depends |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 5b9b195..93844c7 100755
+index 93844c7..b0202e6 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -36,11 +36,14 @@ max_depth = 0
- # Whether to draw the transitive dependencies
- transitive = True
+@@ -24,6 +24,7 @@
+ import sys
+ import subprocess
+ import argparse
++from fnmatch import fnmatch
  
--parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
-+parser = argparse.ArgumentParser(description="Graph packages dependencies")
- parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
- parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+ # Modes of operation:
+ MODE_FULL = 1   # draw full dependency graph for all selected packages
+@@ -43,6 +44,7 @@ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, de
                      help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
-+parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
-+                    help="Do not graph past this package (can be given multiple times)." \
-+                       + " 'virtual' to stop on virtual packages.")
+ parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
+                     help="Do not graph past this package (can be given multiple times)." \
++                       + " Can be a package name or a glob, or" \
+                        + " 'virtual' to stop on virtual packages.")
  parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
                      default="lightblue,grey,gainsboro",
-                     help="Comma-separated list of the three colours to use" \
-@@ -61,6 +64,11 @@ else:
- 
- max_depth = args.depth
- 
-+if args.stop_list is None:
-+    stop_list = []
-+else:
-+    stop_list = args.stop_list
-+
- transitive = args.transitive
- 
- # Get the colours: we need exactly three colours,
-@@ -304,6 +312,10 @@ def print_pkg_deps(depth, pkg):
+@@ -312,8 +314,9 @@ def print_pkg_deps(depth, pkg):
      print_attrs(pkg)
      if pkg not in dict_deps:
          return
-+    if pkg in stop_list:
-+        return
-+    if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
-+        return
+-    if pkg in stop_list:
+-        return
++    for p in stop_list:
++        if fnmatch(pkg, p):
++            return
+     if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
+         return
      if max_depth == 0 or depth < max_depth:
-         for d in dict_deps[pkg]:
-             print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
