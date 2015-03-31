@@ -1,67 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 23:55:31 +0200
-Subject: [Buildroot] [git commit] support/graph-depends: add option to
-	completely exclude a package
-Message-ID: <20150331220030.777B67F980@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 31 Mar 2015 20:03:43 -0300
+Subject: [Buildroot] [PATCH 1/2] package/powertop: needs ncursesw
+In-Reply-To: <XnsA46AB9F2F3F85berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1427472097-30708-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150327173446.779683cf@free-electrons.com>
+ <XnsA46AB9F2F3F85berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <551B27CF.9050402@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64b70f55cbdd78063262f050b8eb6db71c8035e8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/27/2015 02:16 PM, Bernd Kuhls wrote:
 
-Similar to --stop-on, but also omits the package from the graph.
+> Hi,
+> 
+> powertop is a weird piece of code;)
+> 
+> Using this defconfig
+> 
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_POWERTOP=y
+> 
+> configure works
+> 
+> checking for NCURSES... no
+> checking for library containing delwin... -lncurses
+> [...]
+> 
+> but then this happens:
+> 
+> lib.cpp: In function 'void align_string(char*, size_t, size_t)':
+> lib.cpp:271:59: error: 'mbsrtowcs' was not declared in this scope
+>   sz = mbsrtowcs(NULL, (const char **)&buffer, max_sz, NULL);
+> 
+> Afaics mbsrtowcs() is a function which is only available with a wchar-enabled 
+> toolchain, so my patch does the right thing, but the description needs some 
+> additions.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Francois Perrad <fperrad@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/graph-depends |   17 +++++++++++++++--
- 1 files changed, 15 insertions(+), 2 deletions(-)
+Hi.
+Actually mb* and wc* usage is a pointer towards wchar, yes.
+But in ncurses-land there's no need for ncursesw since powertop doesn't
+use any of the wide (*_wch) variant functions.
+Hence it just sucks at finding libncurses: you can drop the
+NCURSES_WCHAR select and do something like:
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index b0202e6..c1fc042 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -46,6 +46,8 @@ parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", acti
-                     help="Do not graph past this package (can be given multiple times)." \
-                        + " Can be a package name or a glob, or" \
-                        + " 'virtual' to stop on virtual packages.")
-+parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
-+                    help="Like --stop-on, but do not add PACKAGE to the graph.")
- parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
-                     default="lightblue,grey,gainsboro",
-                     help="Comma-separated list of the three colours to use" \
-@@ -71,6 +73,11 @@ if args.stop_list is None:
- else:
-     stop_list = args.stop_list
- 
-+if args.exclude_list is None:
-+    exclude_list = []
-+else:
-+    exclude_list = args.exclude_list
-+
- transitive = args.transitive
- 
- # Get the colours: we need exactly three colours,
-@@ -321,8 +328,14 @@ def print_pkg_deps(depth, pkg):
-         return
-     if max_depth == 0 or depth < max_depth:
-         for d in dict_deps[pkg]:
--            print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
--            print_pkg_deps(depth+1, d)
-+            add = True
-+            for p in exclude_list:
-+                if fnmatch(d,p):
-+                    add = False
-+                    break
-+            if add:
-+                print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
-+                print_pkg_deps(depth+1, d)
- 
- # Start printing the graph data
- print("digraph G {")
+$(if $(BR2_PACKAGE_NCURSES_WCHAR),y)
+POWERTOP_CONF_ENV += ac_cv_search_delwin="-lncursesw"
+else
+POWERTOP_CONF_ENV += ac_cv_search_delwin="-lncurses"
+fi
+
+(or in a single if if you're so inclined).
+
+Regards.
