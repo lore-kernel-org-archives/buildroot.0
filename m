@@ -1,38 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 13:54:47 +0200
-Subject: [Buildroot] [git commit] mesa3d: specify llvm-prefix
-Message-ID: <20150331115925.46CDC7FA85@busybox.osuosl.org>
+Date: Tue, 31 Mar 2015 13:59:44 +0200
+Subject: [Buildroot] [PATCH 1/1] packages: indentation cleanup
+In-Reply-To: <1427786517-13745-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1427786517-13745-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20150331135944.2c62a71d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ea04028e1b2939fe32740c4ce34fe11b91ef617
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-When it's not defined an automatic search is triggered, which can find
-/usr/bin/llvm-config on distributions that include all development files
-(like gentoo) and have desktop packages installed.
-So point it towards the staging dir which is where it should live
-eventually if/when we've got it to avoid header/include path polution
-that otherwise leads to build failures.
+On Tue, 31 Mar 2015 09:21:57 +0200, Jerzy Grzegorek wrote:
+> This commit doesn't touch infra packages.
+> 
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/mesa3d.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index fc82227..7473110 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -128,4 +128,7 @@ else
- MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
- endif
- 
-+# Avoid automatic search of llvm-config
-+MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
-+
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
