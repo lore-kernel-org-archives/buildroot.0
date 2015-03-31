@@ -1,33 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Mar 2015 23:46:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libseccomp: needs headers >=
- 3.12
-In-Reply-To: <1427819637-2471-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1427819637-2471-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150331234626.045d04b4@free-electrons.com>
+Date: Tue, 31 Mar 2015 23:50:11 +0200
+Subject: [Buildroot] [git commit] support/graph-depends: add option to stop
+	on specific packages
+Message-ID: <20150331220030.5D14D81E2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=5558a34e9ab8d53b4dafe3f760bff26d2df9c154
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Mar 2015 18:33:57 +0200, Bernd Kuhls wrote:
+Add a new option to graph-depends, that users can set to stop the graph
+on a specific (set of) package(s).
 
-> +comment "libseccomp needs headers >= 3.12"
+This accepts any actual package name, or the 'virtual' keyword to stop
+on virtual packages.
 
-This should have been "libseccomp needs a tpolchain w/ headers >= 3.12"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Francois Perrad <fperrad@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/graph-depends |   14 +++++++++++++-
+ 1 files changed, 13 insertions(+), 1 deletions(-)
 
-I've committed your patch. Baruch, if you really want to have
-libseccomp on kernel olders than 3.12, do not hesitate to send a
-followup patch. Since the issue was affecting the autobuilders, I
-wanted to get rid of it as soon as possible.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 5b9b195..93844c7 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -36,11 +36,14 @@ max_depth = 0
+ # Whether to draw the transitive dependencies
+ transitive = True
+ 
+-parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
++parser = argparse.ArgumentParser(description="Graph packages dependencies")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
++parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
++                    help="Do not graph past this package (can be given multiple times)." \
++                       + " 'virtual' to stop on virtual packages.")
+ parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
+                     default="lightblue,grey,gainsboro",
+                     help="Comma-separated list of the three colours to use" \
+@@ -61,6 +64,11 @@ else:
+ 
+ max_depth = args.depth
+ 
++if args.stop_list is None:
++    stop_list = []
++else:
++    stop_list = args.stop_list
++
+ transitive = args.transitive
+ 
+ # Get the colours: we need exactly three colours,
+@@ -304,6 +312,10 @@ def print_pkg_deps(depth, pkg):
+     print_attrs(pkg)
+     if pkg not in dict_deps:
+         return
++    if pkg in stop_list:
++        return
++    if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
++        return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+             print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
