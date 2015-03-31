@@ -1,68 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Mar 2015 22:56:50 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/raspberrypi2: update and fix
- our defconfig
-In-Reply-To: <XnsA46EE20DEE8A9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1424817743-3627-1-git-send-email-yann.morin.1998@free.fr>
- <1424817743-3627-2-git-send-email-yann.morin.1998@free.fr>
- <XnsA46EE20DEE8A9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150331205650.GF3912@free.fr>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 31 Mar 2015 23:10:19 +0200
+Subject: [Buildroot] [PATCH v2 1/1] ccache: fix the indentation
+Message-ID: <1427836219-8527-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Commit "packages: indentation cleanup" broke the build of master.
+This commit reverse the patch on just ccache package and fix that issue. 
 
-On 2015-03-31 22:13 +0200, Bernd Kuhls spake thusly:
-> [posted and mailed]
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+Changes v1 -> v2:
+ - add commit log (Vincent)
 
-[That's a bit annoying: when I replied, the reply went to you only, and
-the list was not Cc-ed. Could you just use your mailer's "reply-all"
-feature?]
+ package/ccache/ccache.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:1424817743-3627-2-git-send-email-yann.morin.1998 at free.fr:
-> 
-> > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3c9fd364bfa6c0f6ef725d74b72a9b77dd0d0fb4"
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="23c76b7f608e51258c6fca02aebeb5d588583149"
-> 
-> Hi Yann,
-> 
-> downloading the kernel source fails seems to be broken:
-> 
-> >>> linux 23c76b7f608e51258c6fca02aebeb5d588583149 Downloading
-> Doing full clone
-> Cloning into bare repository 'linux-
-> 23c76b7f608e51258c6fca02aebeb5d588583149'...
-> POST git-upload-pack (gzip 1074 to 571 bytes)
-> remote: Counting objects: 4091705, done.
-> remote: Compressing objects: 100% (8/8), done.
-> remote: Total 4091705 (delta 0), reused 0 (delta 0), pack-reused 4091697
-> Receiving objects: 100% (4091705/4091705), 1.14 GiB | 5.51 MiB/s, done.
-> Resolving deltas: 100% (3373468/3373468), done.
-> fatal: not a tree object
-
-Yes, that's not surprising.
-
-The RPi folks are known to rebase their branch rather than merge
-upstream.
-
-Also, they do not tag it.
-
-So, we can only use sha1s, and those are prone to disapear from time to
-time (rather frequently) and that's a shame.
-
-I'll post an issue on their tracker to ask for tags.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index ac2eaab..893b6ae 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -66,10 +66,10 @@ ccache-stats: host-ccache
+ 
+ ccache-options: host-ccache
+ ifeq ($(CCACHE_OPTIONS),)
+-$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
+-$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
+-"(see ccache help text below)"
+-$(Q)echo
++	$(Q)echo "Usage: make ccache-options CCACHE_OPTIONS=\"opts\""
++	$(Q)echo "where 'opts' corresponds to one or more valid ccache options" \
++	"(see ccache help text below)"
++	$(Q)echo
+ endif
+-$(Q)$(CCACHE) $(CCACHE_OPTIONS)
++	$(Q)$(CCACHE) $(CCACHE_OPTIONS)
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
