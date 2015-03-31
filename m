@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 00:00:07 +0200
-Subject: [Buildroot] [git commit] docs/manual: document new graph-depends
-	options
-Message-ID: <20150331220030.7FC2B7F980@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 00:02:03 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] misc graph-depends enhancements
+ (branch yem/graph-depends)
+In-Reply-To: <cover.1427235377.git.yann.morin.1998@free.fr>
+References: <cover.1427235377.git.yann.morin.1998@free.fr>
+Message-ID: <20150401000203.0811afe2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d1919ab4a33c5248ee7d169732d28a34e9974c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Francois Perrad <fperrad@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/common-usage.txt |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+On Tue, 24 Mar 2015 23:16:47 +0100, Yann E. MORIN wrote:
+> Hello All!
+> 
+> This series introduces a few enhancements to graph-depends, with two new
+> options:
+>   - --stop-on/-s PKG: to stop graphing on package PKG;
+>   - --exclude/-x PKG: like --stop-on, but also omit PKG from the graph.
+> 
+> PKG can be one of an actual package name, a glob or the keyword
+> 'virtual' (to stop on / exclude virtual packages). Stoping on, or
+> excluding host packages can easily be done by using the glob 'host-*'
+> 
+> Note: I did not introduce the keyword 'host' because 'host' is an
+> existing package, and even though we do not package it so far, it
+> would have clashed, should we eventually have it.
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 89cd9fe..5b27b1f 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -208,6 +208,14 @@ The +graph-depends+ behaviour can be controlled by setting options in the
- * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
-   default, +0+, means no limit.
- 
-+* +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
-+  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
-+  (to stop on virtual packages). The package is still present on the
-+  graph, but its dependencies are not.
-+
-+* +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-+  the graph.
-+
- * +--transitive+, +--no-transitive+, to draw (or not) the transitive
-   dependencies. The default is to not draw transitive dependencies.
- 
+Series applied, thanks.
+
+One thing that bothered me a bit is that --stop-on supports the keyword
+'virtual', but not --exclude.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
