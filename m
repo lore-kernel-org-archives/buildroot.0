@@ -1,211 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 22:47:22 +0200
-Subject: [Buildroot] [git commit] packages: remove (non-)lfs dependencies
-	and tweaks
-Message-ID: <20150401205856.38DC181918@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 22:53:18 +0200
+Subject: [Buildroot] [git commit] package/uclibc: drop
+	BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
+Message-ID: <20150401205856.6028781918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4716f79a0145fe3f2bf0d2cfe9ccbfede36fc01
+commit: http://git.buildroot.net/buildroot/commit/?id=f526c75f3994acdd58c80afc15aba0789917502f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that largefile is mandatory removes package dependencies and
-conditionals.
+Kill the option to build the non-largefile variant and remove the hidden
+option since it's now unused.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/acl/Config.in                          |    4 ---
- package/aircrack-ng/Config.in                  |    5 +--
- package/alsa-utils/Config.in                   |    5 +--
- package/apr/apr.mk                             |    2 -
- package/armadillo/Config.in                    |    5 +--
- package/attr/Config.in                         |    4 ---
- package/avrdude/Config.in                      |    5 +--
- package/bcache-tools/Config.in                 |    5 +--
- package/bind/Config.in                         |    5 +--
- package/bluez_utils/Config.in                  |    4 ---
- package/boost/Config.in                        |    5 +--
- package/bootutils/Config.in                    |    4 ---
- package/btrfs-progs/Config.in                  |    6 +---
- package/cdrkit/Config.in                       |    5 +--
- package/civetweb/Config.in                     |    4 ---
- package/civetweb/civetweb.mk                   |    4 ---
- package/clapack/Config.in                      |    7 ------
- package/cmake/cmake.mk                         |    2 +-
- package/collectd/Config.in                     |    4 ---
- package/conntrack-tools/Config.in              |    4 +--
- package/cppzmq/Config.in                       |    7 ++---
- package/cryptsetup/Config.in                   |    6 +---
- package/curlftpfs/Config.in                    |    5 +--
- package/czmq/Config.in                         |    7 ++---
- package/dmraid/Config.in                       |    6 +---
- package/dnsmasq/Config.in                      |    4 ---
- package/dnsmasq/dnsmasq.mk                     |    4 ---
- package/dosfstools/Config.in                   |    5 +--
- package/dvb-apps/Config.in                     |    5 +--
- package/dvbsnoop/Config.in                     |    4 ---
- package/dvdauthor/Config.in                    |    5 +--
- package/dvdrw-tools/Config.in                  |    5 +--
- package/e2fsprogs/Config.in                    |    5 +--
- package/e2tools/Config.in                      |    6 +---
- package/ecryptfs-utils/Config.in               |    5 +--
- package/elfutils/Config.in                     |    5 +--
- package/elfutils/elfutils.mk                   |    2 -
- package/espeak/Config.in                       |    5 ----
- package/eudev/Config.in                        |    5 +--
- package/exfat-utils/Config.in                  |    5 +--
- package/exfat/Config.in                        |    5 +--
- package/exiv2/Config.in                        |    5 +--
- package/f2fs-tools/Config.in                   |    5 +--
- package/ffmpeg/Config.in                       |    5 +--
- package/filemq/Config.in                       |    7 ++---
- package/fio/Config.in                          |    9 +++----
- package/flashbench/Config.in                   |    4 ---
- package/ftop/Config.in                         |    4 ---
- package/gamin/gamin.mk                         |    4 ---
- package/genext2fs/Config.in                    |    4 ---
- package/git/Config.in                          |    5 ----
- package/glmark2/Config.in                      |    6 +---
- package/gnuradio/Config.in                     |    6 +---
- package/gptfdisk/Config.in                     |    5 +--
- package/gstreamer/gst-ffmpeg/Config.in         |    5 +--
- package/gstreamer/gst-plugins-bad/Config.in    |    4 ---
- package/gstreamer/gst-plugins-good/Config.in   |    5 +--
- package/gstreamer1/gst1-plugins-bad/Config.in  |    4 ---
- package/gstreamer1/gst1-plugins-good/Config.in |    5 +--
- package/gstreamer1/gst1-plugins-ugly/Config.in |    5 +--
- package/gvfs/Config.in                         |    5 +--
- package/hdparm/Config.in                       |    4 ---
- package/imagemagick/imagemagick.mk             |    4 ---
- package/inotify-tools/Config.in                |    5 ----
- package/ipset/Config.in                        |    4 ---
- package/jack2/Config.in                        |    6 +---
- package/kexec-lite/Config.in                   |    5 +--
- package/kmod/Config.in                         |    5 +--
- package/kodi/Config.in                         |    5 +--
- package/libdri2/Config.in                      |    5 +--
- package/libdrm/Config.in                       |    5 +--
- package/libdvdnav/Config.in                    |    5 +--
- package/libdvdread/Config.in                   |    5 +--
- package/libftdi1/Config.in                     |    5 +--
- package/libfuse/Config.in                      |    5 +--
- package/libmnl/Config.in                       |    4 ---
- package/libnetfilter_acct/Config.in            |    4 ---
- package/libnetfilter_conntrack/Config.in       |    4 ---
- package/libnetfilter_cthelper/Config.in        |    4 ---
- package/libnetfilter_cttimeout/Config.in       |    4 ---
- package/libnetfilter_queue/Config.in           |    5 +--
- package/libnfs/Config.in                       |    5 +--
- package/libnftnl/Config.in                     |    5 +--
- package/libnspr/Config.in                      |    5 +--
- package/libnss/Config.in                       |    6 +---
- package/libpciaccess/Config.in                 |    4 ---
- package/libplayer/Config.in                    |    7 +----
- package/libselinux/Config.in                   |    5 +--
- package/libsemanage/Config.in                  |    5 +--
- package/libsndfile/Config.in                   |    7 ------
- package/libupnp/Config.in                      |    5 +--
- package/libupnpp/Config.in                     |    6 +---
- package/libv4l/Config.in                       |    5 +--
- package/libva-intel-driver/Config.in           |    6 +---
- package/libva/Config.in                        |    6 +---
- package/libxml2/libxml2.mk                     |    4 ---
- package/lighttpd/lighttpd.mk                   |    3 +-
- package/lshw/Config.in                         |    5 +--
- package/lsof/lsof.mk                           |    3 --
- package/ltp-testsuite/Config.in                |    5 +--
- package/ltrace/Config.in                       |    5 +--
- package/lttng-babeltrace/Config.in             |    5 +--
- package/lttng-libust/Config.in                 |    8 ++----
- package/lttng-tools/Config.in                  |    6 +---
- package/lua/lua.mk                             |    4 ---
- package/luafilesystem/luafilesystem.mk         |    3 --
- package/luajit/luajit.mk                       |    5 ----
- package/lvm2/Config.in                         |    6 +---
- package/lxc/Config.in                          |    5 +--
- package/lz4/Config.in                          |    4 ---
- package/lzip/Config.in                         |    5 +--
- package/memtester/Config.in                    |    4 ---
- package/mesa3d/Config.in                       |    5 +--
- package/minidlna/Config.in                     |    5 +--
- package/mmc-utils/Config.in                    |    5 +--
- package/modem-manager/Config.in                |    5 +--
- package/mongoose/Config.in                     |    5 +--
- package/mongrel2/Config.in                     |    5 +--
- package/monit/monit.mk                         |    9 +------
- package/mp4v2/mp4v2.mk                         |    8 +------
- package/mpd/Config.in                          |   26 ++---------------------
- package/mplayer/Config.in                      |    7 ------
- package/mtd/Config.in                          |    5 +--
- package/nbd/nbd.mk                             |    2 +-
- package/network-manager/Config.in              |    5 +--
- package/nfacct/Config.in                       |    4 ---
- package/nfs-utils/Config.in                    |    8 +-----
- package/nftables/Config.in                     |    5 +--
- package/nginx/Config.in                        |    5 ----
- package/nginx/nginx.mk                         |    2 +-
- package/nodejs/Config.in                       |    5 +--
- package/ntfs-3g/Config.in                      |    5 +--
- package/numactl/Config.in                      |    6 -----
- package/ola/Config.in                          |    5 +--
- package/opencv/Config.in                       |    5 +--
- package/openvmtools/Config.in                  |    5 +--
- package/opusfile/Config.in                     |    4 ---
- package/parted/Config.in                       |    5 +--
- package/pax-utils/Config.in                    |    4 ---
- package/perf/Config.in                         |    5 +--
- package/perl/perl.mk                           |    4 ---
- package/php-zmq/Config.in                      |    5 +--
- package/php/php.mk                             |    3 --
- package/pifmrds/Config.in                      |    5 ----
- package/proftpd/proftpd.mk                     |    2 -
- package/pulseaudio/Config.in                   |    5 +--
- package/python-libconfig/Config.in             |    5 +--
- package/python-pyzmq/Config.in                 |    7 ++---
- package/qt/qt.mk                               |   14 ------------
- package/qt5/qt5base/qt5base.mk                 |    4 ---
- package/quota/Config.in                        |    6 +---
- package/redis/Config.in                        |    6 +---
- package/rpi-userland/Config.in                 |    5 +--
- package/sg3_utils/Config.in                    |    5 +--
- package/softether/Config.in                    |    5 +--
- package/sqlcipher/sqlcipher.mk                 |    7 ------
- package/sqlite/sqlite.mk                       |    7 ------
- package/squashfs/Config.in                     |    5 +--
- package/sshfs/Config.in                        |    5 +--
- package/strace/Config.in                       |    4 ---
- package/sysklogd/Config.in                     |    5 ----
- package/systemd/Config.in                      |    1 -
- package/thrift/Config.in                       |    5 +--
- package/trace-cmd/Config.in                    |    6 +---
- package/tstools/Config.in                      |    5 ----
- package/tvheadend/Config.in                    |    6 ++--
- package/twolame/Config.in                      |    4 ---
- package/udpcast/Config.in                      |    5 +--
- package/ulogd/Config.in                        |    5 +--
- package/unionfs/Config.in                      |    5 +--
- package/upmpdcli/Config.in                     |    6 +---
- package/ushare/Config.in                       |    6 +---
- package/ustr/Config.in                         |    4 ---
- package/util-linux/Config.in                   |    5 +--
- package/vlc/Config.in                          |    5 +--
- package/wvdial/Config.in                       |    5 +--
- package/wvstreams/Config.in                    |    5 +--
- package/x11r7/xserver_xorg-server/Config.in    |    6 ++--
- package/x264/Config.in                         |    4 ---
- package/xfsprogs/Config.in                     |    5 +--
- package/xorriso/Config.in                      |    5 +--
- package/xtables-addons/Config.in               |    6 +---
- package/yaml-cpp/Config.in                     |    5 +--
- package/ympd/Config.in                         |    5 +--
- package/zeromq/Config.in                       |    7 ++---
- package/zlog/Config.in                         |    5 +--
- package/zmqpp/Config.in                        |    7 ++---
- package/zyre/Config.in                         |    7 ++---
- 188 files changed, 263 insertions(+), 703 deletions(-)
+ package/uclibc/Config.in |    5 -----
+ package/uclibc/uclibc.mk |    7 -------
+ 2 files changed, 0 insertions(+), 12 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index e440559..fdf8351 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -86,11 +86,6 @@ config BR2_UCLIBC_CONFIG
+ 	  See also docs/README in this package.
+ 	  If unsure, use the default.
+ 
+-config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
+-	bool
+-	select BR2_LARGEFILE
+-	default y
+-
+ config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
+ 	bool "Enable IPv6 support"
+ 	select BR2_INET_IPV6
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 2b5a642..72a46d9 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -190,16 +190,9 @@ endif
+ # Largefile
+ #
+ 
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
+ define UCLIBC_LARGEFILE_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
+ endef
+-else
+-define UCLIBC_LARGEFILE_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_FOPEN_LARGEFILE_MODE,$(@D)/.config)
+-endef
+-endif
+ 
+ #
+ # MMU
