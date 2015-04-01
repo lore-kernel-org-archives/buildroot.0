@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Apr 2015 20:36:14 +0200
-Subject: [Buildroot] [PATCH/RFC 21/27] package/kodi-audiodecoder-vgmstream:
+Date: Wed,  1 Apr 2015 20:36:17 +0200
+Subject: [Buildroot] [PATCH/RFC 24/27] package/kodi-audiodecoder-nosefart:
 	new package
 In-Reply-To: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427913380-14808-22-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427913380-14808-25-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,70 +14,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-vgmstream/Config.in         |    7 +++++++
- .../kodi-audiodecoder-vgmstream.mk                    |   17 +++++++++++++++++
- package/kodi/Config.in                                |   13 +++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/kodi-audiodecoder-vgmstream/Config.in
- create mode 100644 package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+ package/kodi-audiodecoder-nosefart/Config.in          |    7 +++++++
+ .../kodi-audiodecoder-nosefart.mk                     |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-nosefart/Config.in
+ create mode 100644 package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
 
-diff --git a/package/kodi-audiodecoder-vgmstream/Config.in b/package/kodi-audiodecoder-vgmstream/Config.in
+diff --git a/package/kodi-audiodecoder-nosefart/Config.in b/package/kodi-audiodecoder-nosefart/Config.in
 new file mode 100644
-index 0000000..ebf83df
+index 0000000..96591aa
 --- /dev/null
-+++ b/package/kodi-audiodecoder-vgmstream/Config.in
++++ b/package/kodi-audiodecoder-nosefart/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM
-+	bool "kodi-audiodecoder-vgmstream"
++config BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART
++	bool "kodi-audiodecoder-nosefart"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  VGM decoder addon for Kodi
++	  Nosefart decoder addon for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.vgmstream
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++	  https://github.com/notspiff/audiodecoder.nosefart
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
 new file mode 100644
-index 0000000..acef3b0
+index 0000000..663a58f
 --- /dev/null
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-vgmstream
++# kodi-audiodecoder-nosefart
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 0c3a51a229de22f667e33208791052e8c00962d2
-+KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
-+KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPLv2+
-+KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
++KODI_AUDIODECODER_NOSEFART_VERSION = c77e5a126a89ed6923d96dce8bce9473685b059d
++KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
++KODI_AUDIODECODER_NOSEFART_LICENSE = GPLv2+
++KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
 +
-+KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
 +
-+KODI_AUDIODECODER_VGMSTREAM_CONF_OPTS += \
++KODI_AUDIODECODER_NOSEFART_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 62fae07..63771bf 100644
+index 8c99457..797e883 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -285,4 +285,17 @@ source "package/kodi-addon-xvdr/Config.in"
+@@ -295,6 +295,7 @@ if BR2_PACKAGE_KODI_AUDIO_DECODERS
+ comment "Kodi audio decoders"
  
- endif # BR2_PACKAGE_KODI_PVR_ADDONS
+ source "package/kodi-audiodecoder-modplug/Config.in"
++source "package/kodi-audiodecoder-nosefart/Config.in"
+ source "package/kodi-audiodecoder-snesapu/Config.in"
+ source "package/kodi-audiodecoder-vgmstream/Config.in"
  
-+config BR2_PACKAGE_KODI_AUDIO_DECODERS
-+	bool "kodi-audio-decoders"
-+	help
-+	  A collection of additional audio decoders
-+
-+if BR2_PACKAGE_KODI_AUDIO_DECODERS
-+
-+comment "Kodi audio decoders"
-+
-+source "package/kodi-audiodecoder-vgmstream/Config.in"
-+
-+endif # BR2_PACKAGE_KODI_AUDIO_DECODERS
-+
- endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
