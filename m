@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 20:03:54 +0200
-Subject: [Buildroot] [git commit] vala: bump to version 0.26.2
-Message-ID: <20150401181230.E8C28801F7@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 20:04:29 +0200
+Subject: [Buildroot] [git commit] atk: bump to version 2.16
+Message-ID: <20150401181231.090EA81916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1bf60478d51ef0168d49e0e643c4ea11090bce7a
+commit: http://git.buildroot.net/buildroot/commit/?id=1f47535a3e4af48b80db8c33a80ec45cbb495dfe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash file.
+Also update hash file.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala.hash |    2 ++
- package/vala/vala.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/atk/atk.hash |    4 ++--
+ package/atk/atk.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-new file mode 100644
-index 0000000..fcaa0e1
---- /dev/null
-+++ b/package/vala/vala.hash
-@@ -0,0 +1,2 @@
-+# From https://download.gnome.org/sources/vala/0.26/vala-0.26.2.sha256sum
-+sha256	37f13f430c56a93b6dac85239084681fd8f31c407d386809c43bc2f2836e03c4	vala-0.26.2.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 9b0fd31..292ea7e 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
+index fe35585..4f905f2 100644
+--- a/package/atk/atk.hash
++++ b/package/atk/atk.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atk/2.14/atk-2.14.0.sha256sum
+-sha256	2875cc0b32bfb173c066c22a337f79793e0c99d2cc5e81c4dac0d5a523b8fbad	atk-2.14.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.sha256sum
++sha256 095f986060a6a0b22eb15eef84ae9f14a1cf8082488faa6886d94c37438ae562 atk-2.16.0.tar.xz
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 2cea550..53365e0 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VALA_VERSION_MAJOR = 0.18
--VALA_VERSION = $(VALA_VERSION_MAJOR).1
-+VALA_VERSION_MAJOR = 0.26
-+VALA_VERSION = $(VALA_VERSION_MAJOR).2
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+-ATK_VERSION_MAJOR = 2.14
++ATK_VERSION_MAJOR = 2.16
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
