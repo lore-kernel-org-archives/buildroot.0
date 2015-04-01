@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  1 Apr 2015 20:36:02 +0200
-Subject: [Buildroot] [PATCH/RFC 09/27] package/kodi-pvr-filmon: new package
+Date: Wed,  1 Apr 2015 20:36:15 +0200
+Subject: [Buildroot] [PATCH/RFC 22/27] package/kodi-audiodecoder-modplug:
+	new package
 In-Reply-To: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1427913380-14808-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1427913380-14808-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1427913380-14808-23-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,61 +14,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-filmon/Config.in          |    8 ++++++++
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk |   17 +++++++++++++++++
- package/kodi/Config.in                     |    1 +
+ package/kodi-audiodecoder-modplug/Config.in           |    8 ++++++++
+ .../kodi-audiodecoder-modplug.mk                      |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
  3 files changed, 26 insertions(+)
- create mode 100644 package/kodi-pvr-filmon/Config.in
- create mode 100644 package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+ create mode 100644 package/kodi-audiodecoder-modplug/Config.in
+ create mode 100644 package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 
-diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
+diff --git a/package/kodi-audiodecoder-modplug/Config.in b/package/kodi-audiodecoder-modplug/Config.in
 new file mode 100644
-index 0000000..0b662df
+index 0000000..0269973
 --- /dev/null
-+++ b/package/kodi-pvr-filmon/Config.in
++++ b/package/kodi-audiodecoder-modplug/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_PVR_FILMON
-+	bool "kodi-pvr-filmon"
-+	select BR2_PACKAGE_JSONCPP
++config BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG
++	bool "kodi-audiodecoder-modplug"
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBMODPLUG
 +	help
-+	  Filmon PVR client addon for Kodi
++	  Modplug decoder addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.filmon
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
++	  https://github.com/notspiff/audiodecoder.modplug
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 new file mode 100644
-index 0000000..3a7d673
+index 0000000..5598f4a
 --- /dev/null
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-filmon
++# kodi-audiodecoder-modplug
 +#
 +################################################################################
 +
-+KODI_PVR_FILMON_VERSION = 413fe9eca6f4a202e678e2dcc7dbf59f19e35164
-+KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
-+KODI_PVR_FILMON_LICENSE = GPLv2+
-+KODI_PVR_FILMON_LICENSE_FILES = src/client.cpp
++KODI_AUDIODECODER_MODPLUG_VERSION = c7e8ca82cc00def42452308fd3d49ec4e81b0f2b
++KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
++KODI_AUDIODECODER_MODPLUG_LICENSE = GPLv2+
++KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
 +
-+KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi-platform
++KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi-platform libmodplug
 +
-+KODI_PVR_FILMON_CONF_OPTS += \
++KODI_AUDIODECODER_MODPLUG_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index e2170f8..ad8cab4 100644
+index 63771bf..e86c14e 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -270,6 +270,7 @@ comment "Kodi PVR addons"
- source "package/kodi-pvr-argustv/Config.in"
- source "package/kodi-pvr-dvblink/Config.in"
- source "package/kodi-pvr-dvbviewer/Config.in"
-+source "package/kodi-pvr-filmon/Config.in"
- source "package/kodi-addon-xvdr/Config.in"
+@@ -294,6 +294,7 @@ if BR2_PACKAGE_KODI_AUDIO_DECODERS
  
- endif # BR2_PACKAGE_KODI_PVR_ADDONS
+ comment "Kodi audio decoders"
+ 
++source "package/kodi-audiodecoder-modplug/Config.in"
+ source "package/kodi-audiodecoder-vgmstream/Config.in"
+ 
+ endif # BR2_PACKAGE_KODI_AUDIO_DECODERS
 -- 
 1.7.10.4
