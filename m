@@ -1,47 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 16:44:28 +0200
-Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
- w/threads
-In-Reply-To: <CAMQcK5Lsur2cCryZ=fTGeeWRQzwCtaErkP-Of9auJ+-s6cHkEQ@mail.gmail.com>
-References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
- <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
- <CANQCQpaJObqR6poUyh5FMm58vPFGyruJm=JBWBbQtPgsP8pf1g@mail.gmail.com>
- <CAMQcK5Lsur2cCryZ=fTGeeWRQzwCtaErkP-Of9auJ+-s6cHkEQ@mail.gmail.com>
-Message-ID: <20150401164428.7fcc4854@free-electrons.com>
+From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
+Date: Wed, 1 Apr 2015 14:37:15 +0000
+Subject: [Buildroot] Build embedded system for x86 device
+In-Reply-To: <AMXPR04MB10385410B37EA5F396EE688EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
+References: <AMXPR04MB10385410B37EA5F396EE688EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
+Message-ID: <AMXPR04MB103B46C4493795E70A219D7EAF30@AMXPR04MB103.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
 
-On Wed, 1 Apr 2015 09:28:12 -0500, Ryan Barnett wrote:
+Von: buildroot [mailto:buildroot-bounces at busybox.net] Im Auftrag von Fabrice Mousset | GEOCEPT GmbH
+Gesendet: Mittwoch, 1. April 2015 15:33
+An: buildroot at busybox.net
+Betreff: [Buildroot] Build embedded system for x86 device
 
-> > While running an autobuilder internally.  It's a arm uclibc build
-> > failure looking for pthreads.
-> 
-> I am curious about the Buildroot autobuilders then if they don't have
-> javac available on them to build.
-> 
-> Thomas - are there autobuilders that have javac installed on them?
+Hi all,
 
-The autobuild-run script detects whether javac is available or not. If
-it's not available, it makes sure to not attempt a build that has the
-Buildroot packages that require javac to be installed.
+I have some questions about Buildroot and x86 support.
+I want to create a Linux/Buildroot BSP for our "old" HW (Intel Celeron M) which is actually running Windows XP.
+My goal is to have Linux, X11/Wayland, Qt5 and Wine on an 4 GB CompactFlash and booting my embedded PC on it.
 
-On the Free Electrons build server, javac is not installed. On gcc75,
-javac is installed.
+I have some experience in Linux BSP build for ARM architecture but not really with x86... Sounds strange I known, but x86 is complicated for me ;-)
 
-See
-http://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run#n196
-and
-http://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run#n339.
+So I have ask the Big Oracle (Google) to find some information but they are all quiet old or incomprehensible.
 
-Best regards,
+To get a working starting point, I have first installed a stripped Xubuntu with the net installer iso, so I know it is possible to made my target software work on it ;-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Now the real work begins, and based on my ARM experience (RPi/Wandboard/BeagleBone and some internal HW),  I have tried to create a x86 BSP.
+
+I have "cherry-picked" from "next" the wine package for Buildroot and apply the patch on my buildroot 2015.02.
+For the Linux configuration, I have used the linux configuration from Xubuntu. But I don't know if it was a good idea.
+I have select bzImage as kernel image format.
+I have used GCC 4.9, glibc 2.20 and binutils 2.25 as toolchain
+I have selected Grub2 as bootloader.
+
+I have selected the target packages I need to fit my needs (Qt5, X11, Wine, etc).
+
+As rootfs format: ext3 and iso
+
+And at least starts the BSP build... all build fine, I have create a USB key with the ISO file and "Linux Live USB Creator" to check the build.
+
+My device boot on the USB Stick... to be correct, GRUB is starting, but I can't boot my Linux, it stops with a Kernel panic unable to mount root fs...
+
+What do I wrong?
+Do I need to create an init RAM fs?
+
+Is there a tutorial I have missed?
+
+Best regards
+
+Fabrice Mousset
+
+One last thing, my system starts with qemu... I just need help to install it on "real HW"
+
+Best regards
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150401/bb1f5d0f/attachment.html>
