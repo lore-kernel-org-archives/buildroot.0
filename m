@@ -1,43 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 01 Apr 2015 21:28:21 +0200
-Subject: [Buildroot] [PATCH 02/18] package/mplayer: add optional giflib
- support
-In-Reply-To: <XnsA46EE11448266berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1427649094-1240-1-git-send-email-bernd.kuhls@t-online.de>
- <1427649094-1240-3-git-send-email-bernd.kuhls@t-online.de>
- <20150330225658.091b8e72@free-electrons.com>
- <20150330230606.2702a000@free-electrons.com> <551AE9C1.70701@mind.be>
- <XnsA46EE11448266berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <551C46D5.2020501@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Apr 2015 21:43:23 +0200
+Subject: [Buildroot] [PATCH 1/1] elfutils: Add a --{enable,
+ disable}-backends option
+In-Reply-To: <1427911925-7424-1-git-send-email-heyleke@gmail.com>
+References: <1427911925-7424-1-git-send-email-heyleke@gmail.com>
+Message-ID: <20150401214323.4e340217@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31/03/15 22:07, Bernd Kuhls wrote:
-> Arnout Vandecappelle <arnout@mind.be> wrote in 
-> news:551AE9C1.70701 at mind.be:
-> 
->>  For the positive case (--enable-termcap), autodetection should be fine. 
-> 
-> Hi,
-> 
-> no, it is broken:
+Dear Jan Heylen,
 
- I meant, in case termcap is available, it should be OK to build without
---enable-termcap because in that case the configure script adds the required libs.
+On Wed,  1 Apr 2015 20:12:05 +0200, Jan Heylen wrote:
 
+> diff --git a/package/elfutils/0007-backends-configurable.patch b/package/elfutils/0007-backends-configurable.patch
+> new file mode 100644
+> index 0000000..b93e2da
+> --- /dev/null
+> +++ b/package/elfutils/0007-backends-configurable.patch
 
- Regards,
- Arnout
+Patches should have a description and a Signed-off-by line.
 
+Also, could you submit this patch upstream? I'd like to see if upstream
+is willing to accept such a patch, since it is more or less a "feature"
+patch, and we prefer to not have to carry such patches forever.
 
+> +config BR2_PACKAGE_ELFUTILS_BACKENDS
+> +	bool "Build and install backend shared libraries"
+> +	default y
+> +	help
+> +	  This option tells elfutils to not only install the libelf
+> +	  libraries, but also the libebl backend shared libraries
+> +	  with architecture specific code to read elf files. If you
+> +	  intend to use libelf/libebl at-runtime, say 'y' here.
+> +	  If you only need to link against libelf at-compile-time,
+> +	  but not really using it, you can leave the architecture
+> +	  specific backends uninstalled. Loading of the backend library
+> +	  by libebl will fail in that case.
 
+This explanation seems weird: why would you link against libelf and not
+use it?
+
+Thanks,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
