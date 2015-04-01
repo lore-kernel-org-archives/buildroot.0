@@ -1,33 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 01 Apr 2015 10:41:31 -0300
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server:
- Glamor depends on dri3
-In-Reply-To: <1426429839-6908-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1426429839-6908-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <551BF58B.1060805@zacarias.com.ar>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 1 Apr 2015 09:28:12 -0500
+Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
+	w/threads
+In-Reply-To: <CANQCQpaJObqR6poUyh5FMm58vPFGyruJm=JBWBbQtPgsP8pf1g@mail.gmail.com>
+References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <CAMQcK5KRF47ZyTyzfj1e+xcDO0V_J8oUUXEgUiqF3zR6VYv7Qw@mail.gmail.com>
+ <CANQCQpaJObqR6poUyh5FMm58vPFGyruJm=JBWBbQtPgsP8pf1g@mail.gmail.com>
+Message-ID: <CAMQcK5Lsur2cCryZ=fTGeeWRQzwCtaErkP-Of9auJ+-s6cHkEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/15/2015 11:30 AM, Bernd Kuhls wrote:
+Matt,
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu, Mar 26, 2015 at 1:52 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> While running an autobuilder internally.  It's a arm uclibc build
+> failure looking for pthreads.
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I am curious about the Buildroot autobuilders then if they don't have
+javac available on them to build.
 
-Found it via another defconfig (simplified) when testing EGL/GLES
-webkitgtk mojo:
+Thomas - are there autobuilders that have javac installed on them?
 
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
+Thanks,
+-Ryan
 
-Thanks.
-Regards.
+-- 
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
