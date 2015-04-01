@@ -1,63 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 23:43:40 +0200
-Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
- w/threads
-In-Reply-To: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20150401234340.1717eaf2@free-electrons.com>
+Date: Wed, 1 Apr 2015 23:45:45 +0200
+Subject: [Buildroot] [git commit] gnuradio: depends on shared libs
+Message-ID: <20150401214614.45D4381903@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+commit: http://git.buildroot.net/buildroot/commit/?id=7ed9815830bbd6551fd502ddfa5073892883bbeb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Mar 2015 10:54:40 -0500, Matt Weber wrote:
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/jamvm/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
-> index f480995..1e33f42 100644
-> --- a/package/jamvm/Config.in
-> +++ b/package/jamvm/Config.in
-> @@ -5,13 +5,15 @@ config BR2_PACKAGE_JAMVM
->  		|| BR2_mips || BR2_mipsel || BR2_powerpc
->  	select BR2_PACKAGE_ZLIB
->  	select BR2_PACKAGE_CLASSPATH
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+volk must be compiled with toolchain built with shared lib to avoid :
+attempted static link of dynamic object `../lib/libvolk.so.0.0.0'
 
-This should have been grouped closer to the BR2_INET_IPV6 dependency.
+[Thomas:
+ - rebase after the non-largefile removal.
+ - comment must be "dynamic library" not "shared library".]
 
->  	help
->  	  JamVM is a new Java Virtual Machine which conforms to the
->  	  JVM specification version 2 (blue book).
->  
->  	  http://jamvm.sf.net
->  
-> -comment "jamvm needs a toolchain w/ IPv6"
-> +comment "jamvm needs a toolchain w/ IPv6 and threads"
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnuradio/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-This should have been "IPv6, threads".
-
-Applied with these minor details fixed.
-
-Also, there's something fishy between jamvm and classpath.
-
-jamvm does select BR2_PACKAGE_CLASSPATH and has classpath in
-JAMVM_DEPENDENCIES.
-
-But classpath has depends on BR2_PACKAGE_JAMVM in its Config.in.
-
-Does not make much sense. Peter, you followed the JamVM/Classpath
-stuff. What do you think?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 856bf8d..a33deeb 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -1,12 +1,14 @@
+-comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, wchar"
++comment "gnuradio needs a toolchain w/ C++, IPV6, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INET_IPV6
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INET_IPV6 || \
++		BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_GNURADIO
+ 	bool "gnuradio"
+ 	depends on BR2_INET_IPV6 # boost
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
