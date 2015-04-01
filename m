@@ -1,70 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Feb 2015 00:21:10 +0100
-Subject: [Buildroot] [git commit] libzip: new package
-Message-ID: <20150131232144.0AE818046F@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 31 Mar 2015 21:47:09 -0300
+Subject: [Buildroot] [PATCH] vala: bump to version 0.26.2
+Message-ID: <1427849229-702-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=083f853801afab95aee8e4e9a30c57c69f7f379a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also add hash file.
 
-[Peter: license is BSD-3c]
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in        |    1 +
- package/libzip/Config.in |    8 ++++++++
- package/libzip/libzip.mk |   15 +++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
+ package/vala/vala.hash | 2 ++
+ package/vala/vala.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+ create mode 100644 package/vala/vala.hash
 
-diff --git a/package/Config.in b/package/Config.in
-index 095126d..88a37d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -605,6 +605,7 @@ endmenu
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+new file mode 100644
+index 0000000..fcaa0e1
+--- /dev/null
++++ b/package/vala/vala.hash
+@@ -0,0 +1,2 @@
++# From https://download.gnome.org/sources/vala/0.26/vala-0.26.2.sha256sum
++sha256	37f13f430c56a93b6dac85239084681fd8f31c407d386809c43bc2f2836e03c4	vala-0.26.2.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 9b0fd31..292ea7e 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- menu "Compression and decompression"
- 	source "package/libarchive/Config.in"
-+	source "package/libzip/Config.in"
- 	source "package/lzo/Config.in"
- 	source "package/snappy/Config.in"
- 	source "package/szip/Config.in"
-diff --git a/package/libzip/Config.in b/package/libzip/Config.in
-new file mode 100644
-index 0000000..54de9e5
---- /dev/null
-+++ b/package/libzip/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBZIP
-+	bool "libzip"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  C library for reading, creating, and modifying zip archives. This
-+	  package also contains zipcmp, ziptorrent and zipmerge utilities.
-+
-+	  http://www.nih.at/libzip/
-diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-new file mode 100644
-index 0000000..e5d8e26
---- /dev/null
-+++ b/package/libzip/libzip.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libzip
-+#
-+################################################################################
-+
-+LIBZIP_VERSION = 0.11.2
-+LIBZIP_SITE = http://www.nih.at/libzip/
-+LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
-+LIBZIP_LICENSE = BSD-3c
-+LIBZIP_LICENSE_FILES = LICENSE
-+LIBZIP_INSTALL_STAGING = YES
-+LIBZIP_DEPENDENCIES = zlib
-+
-+$(eval $(autotools-package))
+-VALA_VERSION_MAJOR = 0.18
+-VALA_VERSION = $(VALA_VERSION_MAJOR).1
++VALA_VERSION_MAJOR = 0.26
++VALA_VERSION = $(VALA_VERSION_MAJOR).2
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
+-- 
+2.0.5
