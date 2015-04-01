@@ -1,61 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 22:53:18 +0200
-Subject: [Buildroot] [git commit] package/uclibc: drop
-	BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
-Message-ID: <20150401205856.6028781918@busybox.osuosl.org>
+Date: Wed, 1 Apr 2015 22:44:15 +0200
+Subject: [Buildroot] [git commit] boot/gummiboot: drop largefile depends
+Message-ID: <20150401205856.0F46E81918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f526c75f3994acdd58c80afc15aba0789917502f
+commit: http://git.buildroot.net/buildroot/commit/?id=f8518c47ab785ac5bd6a4aedf78db94d576ffe23
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kill the option to build the non-largefile variant and remove the hidden
-option since it's now unused.
+Drop the buildroot toolchain non-largefile support option since it's
+being removed.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in |    5 -----
- package/uclibc/uclibc.mk |    7 -------
- 2 files changed, 0 insertions(+), 12 deletions(-)
+ boot/gummiboot/Config.in |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e440559..fdf8351 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -86,11 +86,6 @@ config BR2_UCLIBC_CONFIG
- 	  See also docs/README in this package.
- 	  If unsure, use the default.
+diff --git a/boot/gummiboot/Config.in b/boot/gummiboot/Config.in
+index 8d70680..ad49793 100644
+--- a/boot/gummiboot/Config.in
++++ b/boot/gummiboot/Config.in
+@@ -4,7 +4,6 @@ config BR2_TARGET_GUMMIBOOT
+ 	select BR2_PACKAGE_GNU_EFI
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	help
+ 	  gummiboot is a simple UEFI boot manager which executes
+@@ -24,5 +23,5 @@ config BR2_TARGET_GUMMIBOOT
  
--config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
--	bool
--	select BR2_LARGEFILE
--	default y
--
- config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
- 	bool "Enable IPv6 support"
- 	select BR2_INET_IPV6
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 2b5a642..72a46d9 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -190,16 +190,9 @@ endif
- # Largefile
- #
+ 	  http://freedesktop.org/wiki/Software/gummiboot/
  
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
- define UCLIBC_LARGEFILE_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
- endef
--else
--define UCLIBC_LARGEFILE_CONFIG
--	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_LFS,$(@D)/.config)
--	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_FOPEN_LARGEFILE_MODE,$(@D)/.config)
--endef
--endif
- 
- #
- # MMU
+-comment "gummiboot needs a toolchain w/ largefile, wchar"
+-	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
++comment "gummiboot needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
