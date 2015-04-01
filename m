@@ -1,44 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Apr 2015 00:01:58 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] build host lz4 to support lz4
- compression in the kernel.
-In-Reply-To: <551C6935.3050401@mind.be>
-References: <1427919153-16080-1-git-send-email-sagaert.johan@proximus.be>
- <20150401223752.0fd358cf@free-electrons.com>
- <551C6935.3050401@mind.be>
-Message-ID: <20150402000158.0b85c847@free-electrons.com>
+Date: Thu, 2 Apr 2015 00:05:38 +0200
+Subject: [Buildroot] [git commit] package/powertop: depends on c++
+Message-ID: <20150401220606.C13C5800C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+commit: http://git.buildroot.net/buildroot/commit/?id=a5a96576fae05bd5b0076112f79aefc9d401efb2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 01 Apr 2015 23:55:01 +0200, Arnout Vandecappelle wrote:
+Fixes configure error due to missing c++
 
->  Well, I'm in agreement with Johan's earlier statement that the overhead of the
-> host-lz4 build is negligible. It takes 20 seconds on my laptop, of which 6 are
-> buildroot overhead from parsing package/*/*.mk.
+checking for library containing pthread_create... no
+configure: error: libpthread is required but was not found
 
-20 seconds, plus the host-lzop build time that we already build
-unconditionally.
+Quote from config.log:
 
->  Peter said before that all this hacking of linux (or other) config files should
-> be avoided, and I agree.
+configure:21552: checking for library containing pthread_create
+configure:21583: false -o conftest    -Os    conftest.cpp -lintl  >&5
+[...]
+ac_cv_env_CXX_set=set
+ac_cv_env_CXX_value=false
 
-Correct, except when it's related to needed dependencies in Buildroot.
+using this defconfig
 
-But if that's fine for everyone, I'm OK with merging an unconditional
-host-lz4 dependency. I'll just follow what the consensus is on this
-matter, since I don't feel like arguing too much on this
-not-so-important issue.
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_POWERTOP=y
 
-Thanks for the feedback, definitely very useful to have the opinion of
-others to help take a decision.
+Please note the number of .cpp files belonging to powertop
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+output/build/powertop-2.7$ find -iname *.cpp | wc -l
+59
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/powertop/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/powertop/Config.in b/package/powertop/Config.in
+index 5ba83b3..a532302 100644
+--- a/package/powertop/Config.in
++++ b/package/powertop/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_POWERTOP
+ 	bool "powertop"
+-	# pciutils dependency
+-	depends on !BR2_bfin
+-	# libnl dependency
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_bfin # pciutils
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_PCIUTILS
+@@ -14,6 +13,7 @@ config BR2_PACKAGE_POWERTOP
+ 
+ 	  https://01.org/powertop/
+ 
+-comment "powertop needs a toolchain w/ threads, wchar"
++comment "powertop needs a toolchain w/ C++, threads, wchar"
+ 	depends on !BR2_bfin
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
