@@ -1,64 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 15:02:37 +0200
+Date: Wed, 1 Apr 2015 15:17:39 +0200
 Subject: [Buildroot] [PATCH 1/1] build host lz4 to support lz4
  compression in the kernel.
-In-Reply-To: <551BE3C2.8020508@proximus.be>
+In-Reply-To: <20150401150237.4cabd12a@free-electrons.com>
 References: <1427884257-20151-1-git-send-email-sagaert.johan@proximus.be>
  <20150401133722.6d6ab6c9@free-electrons.com>
  <551BE3C2.8020508@proximus.be>
-Message-ID: <20150401150237.4cabd12a@free-electrons.com>
+ <20150401150237.4cabd12a@free-electrons.com>
+Message-ID: <20150401151739.2d66d685@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Sagaert,
+Hello,
 
-On Wed, 01 Apr 2015 14:25:38 +0200, Johan Sagaert wrote:
+On Wed, 1 Apr 2015 15:02:37 +0200, Thomas Petazzoni wrote:
 
-> > I think it's time to add some Config.in options in linux/Config.in to
-> > select the compression tools to be made available, and enforce their
-> > usage/availability in the Linux .config file. It is annoying to bvuild
-> > host-lzop and host-lz4 every time you're building a kernel if you don't
-> > care about those compressions algos.
-> I am not sure if all kernel releases have the lz4 compression option, so 
-> this
-> seemed the most simple solution, lz4 is not taking large resources in 
-> terms of build time
-> This works fine for me now.
+> Yes, it works. But everyone now needs to build host-lzop and host-lz4
+> before building a kernel even if they don't work.
 
-Yes, it works. But everyone now needs to build host-lzop and host-lz4
-before building a kernel even if they don't work.
+s/work/need them/.
 
-> Not sure about this : could host-lz4 be build in a kernel_pre_build hook ?
-> checking the kernels .config  before the kernel build starts.
-
-Unfortunately, no. The dependencies have to be known before the kernel
-configuration is generated.
-
-> I don't want lz4 on the target , that is why i have done it this way,  
-> lz4 that can be selected via the menu
-> if needed on the target , and a host-lz4 that is always build when 
-> building a kernel.
-> Sent me your suggestion, and i will try to fix this patch. (have to do 
-> all buildroot patchwork in free-time )
-
-Just don't do *any* change to the lz4 package. Add your host-lz4
-dependency to LINUX_DEPENDENCIES, and this is enough. It will only
-build the host variant of lz4. The target variant will only be built if
-BR2_PACKAGE_LZ4 is enabled in your Buildroot .config.
-
-You seem to believe that because the target and host variant of lz4 are
-implemented in the same .mk file, both of them are always built
-together. But this is not the case. Even with both defined in the
-same .mk file, it perfectly supports building only the host variant,
-only the target variant, or both.
-
-So your change to lz4.mk and creating a host-lz4.mk is completely
-unnecessary.
-
-Best regards,
+I should _really_ stop doing 3 things at the same time. My context
+switching logic is so broken that I should do only one thing at once,
+not more.
 
 Thomas
 -- 
