@@ -1,24 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Apr 2015 20:03:45 +0200
-Subject: [Buildroot] [PATCH] support/graph-depends: allow excluding
- virtual packages
-In-Reply-To: <1427841254-2807-1-git-send-email-yann.morin.1998@free.fr>
-References: <1427841254-2807-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150401200345.19d00ac7@free-electrons.com>
+Date: Wed, 1 Apr 2015 20:04:58 +0200
+Subject: [Buildroot] [PATCH] vala: bump to version 0.26.2
+In-Reply-To: <1427849229-702-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1427849229-702-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150401200458.7decd1f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gustavo Zacarias,
 
-On Wed,  1 Apr 2015 00:34:14 +0200, Yann E. MORIN wrote:
-> Like for --stop-on, make --exclude recognise the keyword 'virtual',
-> to stop on virtual packages (as explained in the help...).
+On Tue, 31 Mar 2015 21:47:09 -0300, Gustavo Zacarias wrote:
+> Also add hash file.
 > 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/vala/vala.hash | 2 ++
+>  package/vala/vala.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>  create mode 100644 package/vala/vala.hash
 
 Applied, thanks!
 
