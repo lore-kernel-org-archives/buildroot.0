@@ -1,35 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 Apr 2015 23:48:49 +0200
-Subject: [Buildroot] [PATCH 1/1] jamvm: add depends on toolchain
-	w/threads
-In-Reply-To: <20150401234340.1717eaf2@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 1 Apr 2015 23:43:40 +0200")
-References: <1427385280-63133-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20150401234340.1717eaf2@free-electrons.com>
-Message-ID: <871tk3r03i.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  1 Apr 2015 23:54:54 +0200
+Subject: [Buildroot] [PATCH 0/2 v3] package/linux-firmware: install AMD
+	Radeon firmware (branch yem/lnx-fw)
+Message-ID: <cover.1427925170.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello All!
 
-Hi,
+This quick series is a cleanup and respin of David's initial patch to
+install AMD Radeon firmware files from the linux-firmware package.
 
-> Also, there's something fishy between jamvm and classpath.
 
- > jamvm does select BR2_PACKAGE_CLASSPATH and has classpath in
- > JAMVM_DEPENDENCIES.
+Changes v2 -> v3:
+  - add support for copying complete directories,
+  - use that to copy the Radeon FW files, instead of an awfully-long
+    list of files.
 
- > But classpath has depends on BR2_PACKAGE_JAMVM in its Config.in.
 
- > Does not make much sense. Peter, you followed the JamVM/Classpath
- > stuff. What do you think?
+Regards,
+Yann E. MORIN.
 
-Hmm, that indeed doesn't sound right. I think the jamvm select should be
-dropped from classpath.
+
+The following changes since commit 7ed9815830bbd6551fd502ddfa5073892883bbeb:
+
+  gnuradio: depends on shared libs (2015-04-01 23:45:45 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/lnx-fw
+
+for you to fetch changes up to 249b813439492f82e8fd47af7a5f9b778535f7b8:
+
+  package/linux-firmware: install AMD Radeon firmware (2015-04-01 23:48:18 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (1):
+      package/linux-firmware: add support to copy entire directories
+
+david.barbion at ext.leroymerlin.fr (1):
+      package/linux-firmware: install AMD Radeon firmware
+
+ package/linux-firmware/Config.in         |  9 +++++++++
+ package/linux-firmware/linux-firmware.mk | 30 ++++++++++++++++++++++++++----
+ 2 files changed, 35 insertions(+), 4 deletions(-)
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
